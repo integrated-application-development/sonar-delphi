@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<project name = "myProject" default = "" basedir = ".">
+
+	<target name="sonar">
+		<!-- The workDir directory is used by Sonar to store temporary files -->
+		<sonar:sonar workDir="." key="myProject.key" version="0.1" xmlns:sonar="antlib:org.sonar.ant">
+
+		  <!-- source directories (required) -->
+		  <sources>
+				<path location="." />
+		  </sources>
+
+		  <!-- code coverage -->
+		 <property key="sonar.delphi.codecoverage.aqtime.jdbc.url" 		value="jdbc:jtds:sqlserver://my-aqtime.server" />
+		 <property key="sonar.delphi.codecoverage.aqtime.jdbc.driver" 	value="net.sourceforge.jtds.jdbc.Driver" />	      	 
+		 <property key="sonar.delphi.codecoverage.aqtime.jdbc.user" 	value="admin" />
+		 <property key="sonar.delphi.codecoverage.aqtime.jdbc.password" value="admin_password" />
+		 <property key="sonar.delphi.codecoverage.aqtime.jdbc.prefix" 	value="" />		<!-- table name prefix, example: "CC.dbo." on Oracle-->
+
+		 <property key="sonar.language" value="delph" />								<!-- project language -->
+		 <property key="sonar.surefire.reportsPath" value=".\surefire" />				<!-- path to DUnit reports -->
+		 <property key="sonar.delphi.codecoverage.excluded" value=".\Testing" />		<!-- code coverage excluded directories -->
+		 
+		 <property key="sonar.importSources" value="true" />		    				<!-- should we show sources or not? -->
+		
+		 <property key="sonar.delphi.sources.excluded" value=".\dir1,.\dir2" />		    <!-- excluded directories -->
+		 
+		 
+		 <property key="sonar.delphi.sources.include" value=".\include1,.\include2" />			<!-- include directories -->
+		 <property key="sonar.delphi.sources.include.extend" value="true" />					<!-- should we extend includes in files? -->
+		 
+		 <property key="sonar.delphi.sources.tests" value=".\tests" />							<!-- test directories -->
+		 
+		</sonar:sonar>
+	</target>
+
+</project>

@@ -1,0 +1,336 @@
+<ruleset>
+	<description></description>
+	
+  	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ThenTryRule" message="No 'begin' before 'try' at 'if' statement" 
+  	name="Then Try Rule">
+	    <description>You always should place 'begin' statement after 'try', this helps to prevent errors.</description>
+ 		<example><![CDATA[
+<b>try</b>
+( ... )		//WRONG, no begin statement
+<b>except</b>
+( ... )
+<b>end;</b>
+
+<b>try</b>
+	<b>begin</b>	//GOOD
+	(...)
+	<b>end;</b>
+<b>except</b>
+(...)
+<b>end;
+ 		]]></example>
+	</rule>
+
+  	<!--  YOU CAN COPY THIS RULE, JUST CHANGE THE PARAMETERS YOU WISH TO SEARCH FOR -->
+  	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.CountRule" message="Only one class in a file" 
+  	name="One Class Per File Rule">
+	    <description>On class should be included in one file, for clarity reasons.</description>
+    	<properties>
+	    	<property name="search"><value>class</value></property>
+	    	<property name="limit"><value>1</value></property>   	
+    	</properties>   	
+	</rule>
+	
+	<!--  YOU CAN COPY THIS RULE, JUST CHANGE THE PARAMETERS YOU WISH TO SEARCH FOR -->
+  	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule" message="Inherited method, with no additional code." 
+  	name="Inherited Method With No Code Rule">
+	    <description>Some methods that only inherits parent method behaviour are not needed (redundant). </description>
+    	<properties>
+	    	<property name="sequence"><value>begin,inherited,;,end</value></property>
+    	</properties>   	
+	</rule>
+	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule" message="Empty 'except' block" 
+  	name="Empty Except Block Rule">
+	    <description>Empty 'except' block, you should catch some exceptions.</description>
+    	<properties>
+	    	<property name="sequence"><value>except,end</value></property>
+    	</properties> 
+    	<example><![CDATA[
+<b>try</b>
+( ... code ... )
+<b>except</b>	//WRONG, except statement does not catch anything
+<b>end;</b>
+ 		]]></example>  	
+	</rule>
+	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Empty interface declaration" 
+  	name="Empty Interface Rule">
+	    <description>You may have forgotten to fill some interface with methods.</description>
+    	<properties>
+    		<property name="xpath"><value>//TkNewType/*/interface[count(following-sibling::*) &lt; 4]</value></property>
+    	</properties> 	
+	</rule>
+		
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.TooLongMethodRule" message="Too long method" 
+  	name="Too Long Method Rule">
+	    <description>Function may be too long, if so you should shorten it.</description>
+    	<properties>
+	    	<property name="limit"><value>30</value></property>
+	    	<property name="start"><value>begin</value></property>
+	    	<property name="end"><value>end</value></property>
+    	</properties>   	
+	</rule>		
+	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.VariableCounter" message="Too many arguments" 
+ 	name="Too Many Arguments Rule">
+    <description>Function may have too many arguments, maximum number of arguments is 6</description>
+   	<properties>
+    	<property name="limit"><value>6</value></property>
+    	<property name="start"><value>TkFunctionArgs</value></property>    	
+    	<property name="what"><value>arguments</value></property>
+   	</properties>   	
+	</rule>	
+
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.VariableCounter" message="Too many variables" 
+ 	name="Too Many Variables Rule">
+    <description>Function may have too many variables, maximum number of variables is 10</description>
+   	<properties>
+   		<property name="limit"><value>10</value></property>
+    	<property name="start"><value>var</value></property>
+    	<property name="what"><value>variables</value></property>
+   	</properties>   	
+	</rule>	
+				
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="No semi after 'overload'" 
+	name="No Semi After Overload Rule">
+	    <description>You should put semicolon ';' after 'overload' keyword, at the end of method declaration.</description>
+    	<properties>
+	    	<property name="xpath"><value>//procedure/overload[count(following-sibling::*)=0] | //function/overload[count(following-sibling::*)=0]</value></property>
+    	</properties>   	
+    	<example><![CDATA[
+<b>procedure</b> foo1(x: integer); <b>overload</b>	//WRONG, no ; at end
+
+<b>procedure</b> foo2(x: integer); <b>overload</b>;	//GOOD
+ 		]]></example>      	
+	</rule>
+	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="No function return type specified" 
+	name="No Function Return Type Rule">
+	    <description>All functions should have return type specified.</description>
+    	<properties>
+    		<property name="xpath"><value>//function/TkFunctionReturn[count(child::*)=0]</value></property>
+    	</properties>
+    	<example><![CDATA[
+<b>function</b> TMainWindow.foo(x : byte);		//WRONG, no return type
+
+<b>function</b> TMainWindow.foo(x : byte): integer;	//GOOD
+ 		]]></example>      	  	
+	</rule>
+	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Interface name must begin with 'I' letter" 
+	name="Interface Name Rule">
+	    <description>Interface name should began with 'I' letter.</description>
+    	<properties>
+    			<property name="xpath"><value>//TkNewType/*/interface[parent::*[1][ substring(name(),1,1) != 'I' ] ]</value></property>
+    	</properties>   	
+	</rule>
+	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Class name must begin with 'T' letter" 
+	name="Class Name Rule">
+	    <description>Class name should began with 'T' letter.</description>
+    	<properties>
+    			<property name="xpath"><value>//TkNewType/*/class[parent::*[1][ substring(name(),1,1) != 'T' ] ]</value></property>
+    	</properties>   	
+	</rule>
+		
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Record name must begin with 'T' letter" 
+	name="Record Name Rule">
+	    <description>Record name should began with 'T' letter.</description>
+    	<properties>
+    			<property name="xpath"><value>//TkNewType/*/record[parent::*[1][ substring(name(),1,1) != 'T' ] ]</value></property>
+    	</properties>   	
+	</rule>
+		
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule" message="Catching general exception" 
+  	name="Catching General Exception Rule">
+	    <description>You should not catch general exceptions but descendants of Exception class.</description>
+    	<properties>
+	    	<property name="sequence"><value>:,exception,do</value></property>
+    	</properties>
+    	<example><![CDATA[
+<b>except</b>
+<b>on</b> e : Exception <b>do</b>		//WRONG, catching general Exception class
+
+<b>except</b>
+<b>on</b> e : MyException <b>do</b>		//GOOD, catching specific exception type
+ 		]]></example>      	   	
+	</rule>
+	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule" message="Raising general exception" 
+  	name="Raising General Exception Rule">
+	    <description>You should not raise a general Exception class.</description>
+    	<properties>
+	    	<property name="sequence"><value>raise,exception,.,create</value></property>
+    	</properties>
+    	<example><![CDATA[
+<b>raise</b> Exception.create('blah');		//WRONG, raising general exception class
+
+<b>raise</b> MyException.create('blah');	//GOOD, raising specific exception
+ 		]]></example>      	 	
+	</rule>
+
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Avoid 'out' parameters, they are evil" 
+	name="Avoid Out Parameter Rule">
+	    <description>Avoid 'out' variable parameters. Nasty.</description>
+    	<properties>
+	    	<property name="xpath"><value>//TkVariableParam/out</value></property>
+    	</properties>   	
+    	<example><![CDATA[
+<b>function</b> TMainWindow.foo(<u>out</u> x : byte);	//WRONG, using 'out' parameter
+ 		]]></example>
+	</rule>
+	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.IfTrueRule" message="Change from 'if (x=true)' to 'if x'" 
+  	name="If True Rule">
+	    <description>You don't need to write 'if x = true', this is redundant. Instead write 'if x'.</description>
+	   	<properties>
+	    	<property name="limit"><value>0</value></property>
+	    	<property name="start"><value>if</value></property>
+	    	<property name="end"><value>then</value></property>
+	    	<property name="search"><value>true</value></property>
+	   	</properties>
+    	<example><![CDATA[
+<b>if</b> (x = true) <b>or</b> (y.designator = true) <b>then</b> ...		//WRONG
+
+<b>if</b> (x) <b>or</b> (y) <b>then</b> ...		//GOOD
+ 		]]></example>	   	
+	</rule>	
+	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.IfNotFalseRule" message="Change from 'if not (x=false)' to 'if not x'" 
+  	name="If Not False Rule">
+	    <description>You don't need to write 'if not (x = false)', this is redundant. Instead write 'if x'.</description>
+	   	<properties>
+	    	<property name="limit"><value>0</value></property>
+	    	<property name="start"><value>if</value></property>
+	    	<property name="end"><value>then</value></property>
+	    	<property name="search"><value>false</value></property>
+	   	</properties>
+	   	<example><![CDATA[
+<b>if</b> <b>not</b> (x = false) <b>then</b> ...	//WRONG
+
+<b>if</b>(x) <b>then</b> ...	//GOOD
+ 		]]></example>	   
+	</rule>	
+	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.PublicFieldsRule" message="Avoid using public fields" 
+  	name="Public Fields Rule">
+	    <description>You shouldn't make public fields. Make them private/protected and add a getter/setter methods.</description>
+	</rule>	
+	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.UnusedArgumentsRule" message="" 
+  	name="Unused Arguments Rule">
+	    <description>You should always use every passed function argument.</description>
+	</rule>	
+	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="No Guid in interface declaration" 
+	name="No Guid Rule">
+	    <description>Every interface should contain unique Guid.</description>
+    	<properties>
+    			<property name="xpath"><value>//TkNewType/*/interface[following-sibling::*[2][count(child::*)=0]]</value></property>
+    	</properties>   	
+	</rule>
+
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.AssignedAndFreeRule" message="You don't have to check for assignement when calling Free" 
+	name="Assigned And Free Rule">
+	    <description>Free() method does check if the freed variable is not nil, you don't have to do it manually.</description>  	
+	   	<example><![CDATA[
+<b>if</b> <b>Assigned</b>(x) <b>then</b> x.Free;		//WRONG
+
+<b>if</b> x &lt;&gt; <b>nil</b> <b>then</b> x.Free;		//WRONG
+
+x.Free;			//GOOD, sufficent enough
+ 		]]></example>	
+	</rule>	
+	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Empty 'else' statement" 
+	name="Empty Else Statement Rule">
+	    <description>You should not write an empty 'else' statement.</description>
+    	<properties>
+    			<property name="xpath"><value>//else[following-sibling::*[1][name()='end']]</value></property>
+    	</properties>   	
+	</rule>
+	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Empty 'begin' statement" 
+	name="Empty Begin Statement Rule">
+	    <description>You should not write an empty 'begin' statement.</description>
+    	<properties>
+    			<property name="xpath"><value>//begin[count(child::*) &lt; 3]</value></property>
+    	</properties>   	
+	</rule>
+	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.DprFunctionRule" message=".dpr/.dpk file should not have procedures/functions." 
+	name="Project File No Functions Rule">
+	    <description>.dpr/.dpk files should not have procedures/functions.</description>
+	</rule>
+
+  <rule since="" class="org.sonar.plugins.delphi.pmd.rules.DprVariableRule" message=".dpr/.dpk file should not have variables." 
+  name="Project File No Variables Rule">
+      <description>.dpr/.dpk files should not have variables.</description>
+  </rule>
+
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Do not use type aliases" 
+	name="Type Alias Rule">
+	    <description>You should not use type aliases.</description>
+    	<properties>
+    			<property name="xpath"><value>//TkNewType/*[count(descendant::*) &lt; 3 and name(descendant::*) != 'class' and name(descendant::*) != 'record' and name(descendant::*) != 'array' and name(descendant::*) != 'set' and name(descendant::*) != 'dash_pointer']</value></property>
+    	</properties>   	
+	</rule>
+
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.UppercaseReservedWordsRule" message="Avoid using uppercase reserverd keywords." 
+	name="Uppercase Reserved Keywords Rule">
+	    <description>Avoid using uppercase reserverd keywords.</description> 	
+	</rule>	
+	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.MixedNamesRule" message="Avoid using mixed names for functions / variables." 
+	name="Mixed Names Rule">
+	    <description>Avoid using uppercase reserverd keywords.</description> 	
+	</rule>		
+
+    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.DelphiRule" message="Unused unit." 
+    name="Unused Unit Rule">
+        <description>Unused unit. No other unit has this unit in it's uses section. Probably you could remove this unit from project.</description>  
+    </rule>   	
+    
+    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.DelphiRule" message="Unused function/procedure." 
+    name="Unused Function Rule">
+        <description></description>  
+    </rule> 
+    
+    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.NoInheritedStatementRule" message="Constructor without 'inherited' statement." 
+    name="Constructor Without Inherited Statement Rule">
+	    <description>Constructor without 'inherited' statement.</description>
+    	<properties>
+    			<property name="lookFor"><value>constructor</value></property>
+    	</properties>   
+    </rule> 
+    
+    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.NoInheritedStatementRule" message="Destructor without 'inherited' statement." 
+    name="Destructor Without Inherited Statement Rule">
+	    <description>Destructor without 'inherited' statement.</description>
+    	<properties>
+    			<property name="lookFor"><value>destructor</value></property>
+    	</properties>   
+    </rule>
+    
+    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.NoBeginAfterDoRule" message="No 'begin' after 'do' statement" 
+    name="No 'begin' after 'do' Rule">
+	    <description>'Begin' statement should be placed after 'do' statement to prevent errors.</description>
+    </rule>
+    
+    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.WithAfterDoThenRule" message="'with' statement after 'do', 'begin' omitted" 
+    name="With After Do/Then Rule">
+	    <description>'with' statement directly after 'do' or 'then', 'begin' was omited</description>
+    </rule>
+    
+    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.NoSemicolonRule" message="No semicolon at the end of code block." 
+    name="No Semicolon Rule">
+	    <description>No semicolon at the end of code block.</description>
+    </rule>
+    
+    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.CastAndFreeRule" message="Don't cast then free." 
+    name="Cast And Free Rule">
+	    <description>You should not cast an object before freeing it.</description>
+    </rule>   
+    
+</ruleset>
