@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name = "myProject" default = "" basedir = ".">
+<project name = "myProject" default = "sonar" basedir = ".">
 
 	<target name="sonar">
 		<!-- The workDir directory is used by Sonar to store temporary files -->
