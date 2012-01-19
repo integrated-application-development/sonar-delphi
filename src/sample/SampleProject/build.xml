@@ -18,7 +18,7 @@
 		 <property key="sonar.delphi.codecoverage.aqtime.jdbc.prefix" 	value="" />		-->
 
 		 <property key="sonar.language" value="delph" />								<!-- project language -->
-		 <property key="sonar.surefire.reportsPath" value=".\surefire" />				<!-- path to DUnit reports -->
+		 <property key="sonar.surefire.reportsPath" value=".\reports" />				<!-- path to DUnit reports -->
 		 <property key="sonar.delphi.codecoverage.excluded" value="" />					<!-- code coverage excluded directories -->
 		 
 		 <property key="sonar.importSources" value="true" />		    				<!-- should we show sources or not? -->		
