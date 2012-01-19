@@ -55,7 +55,7 @@ public class DelphiCpdMapping implements CpdMapping {
   /**
    * @return The language tokenizer
    */
-  @Override
+
   public Tokenizer getTokenizer() {
     ProjectFileSystem fileSystem = project.getFileSystem();
     return new DelphiCpdTokenizer(fileSystem, DelphiProjectHelper.getInstance().getExcludedSources(fileSystem));
@@ -66,7 +66,7 @@ public class DelphiCpdMapping implements CpdMapping {
    * 
    * @return DelphiFile
    */
-  @Override
+
   public Resource createResource(File file, List<File> sourceDirs) {
     return DelphiFile.fromIOFile(file, sourceDirs);
   }
@@ -74,7 +74,7 @@ public class DelphiCpdMapping implements CpdMapping {
   /**
    * @return Delphi language instance
    */
-  @Override
+
   public Language getLanguage() {
     return DelphiLanguage.instance;
   }

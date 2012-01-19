@@ -63,7 +63,7 @@ class RuleData {
   public static Comparator<RuleData> getComparator() {
     return new Comparator<RuleData>() {
 
-      @Override
+      
       public int compare(RuleData o1, RuleData o2) {
         return o1.getLine() - o2.getLine();
       }

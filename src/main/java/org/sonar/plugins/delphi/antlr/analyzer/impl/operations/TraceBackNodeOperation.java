@@ -29,7 +29,6 @@ import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
  */
 public class TraceBackNodeOperation implements NodeOperation {
 
-  @Override
   public CodeNode<Tree> execute(Tree node) {
     if (node == null) {
       return new CodeNode<Tree>(null);

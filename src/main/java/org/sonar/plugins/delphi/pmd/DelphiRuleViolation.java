@@ -190,7 +190,7 @@ public class DelphiRuleViolation implements IRuleViolation {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public String getFilename() {
     return filename;
   }
@@ -198,7 +198,7 @@ public class DelphiRuleViolation implements IRuleViolation {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public int getBeginLine() {
     return beginLine;
   }
@@ -206,7 +206,7 @@ public class DelphiRuleViolation implements IRuleViolation {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public int getBeginColumn() {
     return beginColumn;
   }
@@ -214,7 +214,7 @@ public class DelphiRuleViolation implements IRuleViolation {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public int getEndLine() {
     return endLine;
   }
@@ -222,7 +222,7 @@ public class DelphiRuleViolation implements IRuleViolation {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public int getEndColumn() {
     return endColumn;
   }
@@ -230,7 +230,7 @@ public class DelphiRuleViolation implements IRuleViolation {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public Rule getRule() {
     return rule;
   }
@@ -238,7 +238,7 @@ public class DelphiRuleViolation implements IRuleViolation {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public String getDescription() {
     return description;
   }
@@ -246,7 +246,7 @@ public class DelphiRuleViolation implements IRuleViolation {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public String getPackageName() {
     return packageName;
   }
@@ -254,7 +254,7 @@ public class DelphiRuleViolation implements IRuleViolation {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public String getMethodName() {
     return methodName;
   }
@@ -262,7 +262,7 @@ public class DelphiRuleViolation implements IRuleViolation {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public String getClassName() {
     return className;
   }
@@ -270,7 +270,7 @@ public class DelphiRuleViolation implements IRuleViolation {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public boolean isSuppressed() {
     return false;
   }
@@ -278,7 +278,7 @@ public class DelphiRuleViolation implements IRuleViolation {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public String getVariableName() {
     return "";
   }

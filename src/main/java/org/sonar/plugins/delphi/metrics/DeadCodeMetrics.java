@@ -79,7 +79,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void analyse(DelphiFile resource, SensorContext sensorContext, List<ClassInterface> classes, List<FunctionInterface> functions,
       List<UnitInterface> units) {
     if ( !isCalculated) { // calculate only once
@@ -96,7 +96,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void save(Resource resource, SensorContext sensorContext) {
     DelphiFile delphiFile = (DelphiFile) resource;
     if (delphiFile.isUnitTest()) {
@@ -225,7 +225,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public boolean executeOnResource(DelphiFile resource) {
     String[] endings = DelphiLanguage.instance.getFileSuffixes();
     for (String ending : endings) {

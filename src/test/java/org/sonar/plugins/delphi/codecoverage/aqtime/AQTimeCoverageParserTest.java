@@ -44,7 +44,6 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
-import org.sonar.plugins.delphi.core.helpers.DatabaseConnectionProperties;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.HSQLServerUtil;
@@ -64,7 +63,7 @@ public class AQTimeCoverageParserTest extends DBTestCase {
     System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD, "");
   }
 
-  @Override
+  
   public void setUp() throws Exception {
 
     HSQLServerUtil.getInstance().start("CC", 7654);
@@ -84,15 +83,14 @@ public class AQTimeCoverageParserTest extends DBTestCase {
         .append("CREATE TABLE LIGHT_COVERAGE_PROFILER_LINES ( INST_ID INT, ID INT, REC_ID INT, PARENT_ID INT, COL_MARK INT, COL_SOURCE_LINE INT, PRIMARY KEY(ID) );");
     query
         .append("CREATE TABLE LIGHT_COVERAGE_PROFILER_SOURCE_FILES_DATA ( INST_ID INT, ID INT, REC_ID INT, PARENT_ID INT, COL_MARK INT, COL_FILE_NAME VARCHAR(255), COL_CALCULATED INT, COL_SKIP_COUNT INT, COL____COVERED FLOAT, PRIMARY KEY(ID) );");
+    
     stmt.executeQuery(query.toString());
     stmt.close();
     super.setUp();
-    DatabaseConnectionProperties properties = mock(DatabaseConnectionProperties.class);
-    when(properties.getJDBCProperties()).thenReturn(connectionProps);
 
     parser = new AQTimeCoverageParser();
-    parser.setConnectionProperties(properties);
-    parser.setPrefix("");
+    parser.setConnectionProperties(connectionProps);
+    parser.setDbTablePrefix("");
   }
 
   private Properties getDatabaseProperties() {
@@ -103,7 +101,7 @@ public class AQTimeCoverageParserTest extends DBTestCase {
     return properties;
   }
 
-  @Override
+  
   public void tearDown() throws Exception {
     super.tearDown();
     HSQLServerUtil.getInstance().stop();
@@ -147,17 +145,17 @@ public class AQTimeCoverageParserTest extends DBTestCase {
     }
   }
 
-  @Override
+  
   protected IDataSet getDataSet() throws Exception {
     return new FlatXmlDataSet(DelphiUtils.getResource(DB_FILE));
   }
 
-  @Override
+  
   protected DatabaseOperation getSetUpOperation() throws Exception {
     return DatabaseOperation.REFRESH;
   }
 
-  @Override
+  
   protected DatabaseOperation getTearDownOperation() throws Exception {
     return DatabaseOperation.NONE;
   }

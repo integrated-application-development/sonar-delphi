@@ -56,22 +56,18 @@ public class DelphiClassField extends DelphiArgument implements ClassFieldInterf
     visibility = fieldVisibility;
   }
 
-  @Override
   public void setParent(ClassInterface cl) {
     parent = cl;
   }
 
-  @Override
   public ClassInterface getParent() {
     return parent;
   }
 
-  @Override
   public int getVisibility() {
     return visibility;
   }
 
-  @Override
   public void setVisibility(int value) {
     visibility = value;
   }

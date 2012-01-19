@@ -87,7 +87,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public String getFileName() {
     return fileName;
   }
@@ -95,7 +95,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public boolean isError() {
     return isError;
   }
@@ -105,7 +105,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
    * 
    * @return XML file
    */
-  @Override
+
   public File generateXML(String fileName) {
     Source source = new DOMSource(generateDocument());
 
@@ -129,7 +129,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
    * 
    * @return XML document
    */
-  @Override
+
   public Document generateDocument() {
     try {
       return generateDocument(createNewDocument(), "file");
@@ -209,12 +209,11 @@ public class DelphiAST extends CommonTree implements ASTTree {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public String getFileSource() {
     return fileStream.toString();
   }
 
-  @Override
   public String getFileSourceLine(int lineNr) {
     if (lineNr < 1) {
       throw new IllegalArgumentException(toString() + " Source code line cannot be less than 1");

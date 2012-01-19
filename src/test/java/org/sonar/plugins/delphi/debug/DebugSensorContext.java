@@ -52,7 +52,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * {@inheritDoc}
    */
-  @Override
+  
   public void saveViolation(Violation violation) {
     violations.add(violation);
   }
@@ -78,7 +78,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public Measure getMeasure(Metric metric) {
     return null;
   }
@@ -104,7 +104,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public <M> M getMeasures(MeasuresFilter<M> filter) {
     return null;
   }
@@ -121,7 +121,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * {@inheritDoc}
    */
-  @Override
+  
   public Measure saveMeasure(Resource resource, Metric metric, Double value) {
     data.put(resource.getName() + ".pas:" + metric.getKey(), value);
     return null;
@@ -130,7 +130,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * {@inheritDoc}
    */
-  @Override
+  
   public Measure saveMeasure(Resource resource, Measure measure) {
     if (resource == null || measure == null) {
       return null;
@@ -146,7 +146,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public Measure saveMeasure(Measure measure) {
     return null;
   }
@@ -154,7 +154,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public Measure saveMeasure(Metric metric, Double value) {
     return null;
   }
@@ -162,7 +162,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public Measure getMeasure(Resource resource, Metric metric) {
     return null;
   }
@@ -170,7 +170,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public String saveResource(Resource resource) {
     return null;
   }
@@ -178,7 +178,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public <M> M getMeasures(Resource resource, MeasuresFilter<M> filter) {
     return null;
   }
@@ -186,14 +186,14 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public void saveViolations(Collection<Violation> violations) {
   }
 
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public Dependency saveDependency(Dependency dependency) {
     return null;
   }
@@ -201,7 +201,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public Set<Dependency> getDependencies() {
     return null;
   }
@@ -209,7 +209,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public Collection<Dependency> getIncomingDependencies(Resource to) {
     return null;
   }
@@ -217,7 +217,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public Collection<Dependency> getOutgoingDependencies(Resource from) {
     return null;
   }
@@ -225,7 +225,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public void saveSource(Resource resource, String source) {
 
   }
@@ -233,21 +233,21 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public void saveLink(ProjectLink link) {
   }
 
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public void deleteLink(String key) {
   }
 
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public List<Event> getEvents(Resource resource) {
     return null;
   }
@@ -255,7 +255,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public Event createEvent(Resource resource, String name, String description, String category, Date date) {
     return null;
   }
@@ -263,14 +263,14 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public void deleteEvent(Event event) {
   }
 
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public boolean index(Resource resource) {
     return false;
   }
@@ -278,7 +278,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public boolean index(Resource resource, Resource parentReference) {
     return false;
   }
@@ -286,7 +286,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public boolean isExcluded(Resource reference) {
     return false;
   }
@@ -294,7 +294,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public boolean isIndexed(Resource reference, boolean acceptExcluded) {
     return false;
   }
@@ -302,7 +302,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public Resource getResource(Resource reference) {
     return null;
   }
@@ -310,7 +310,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public Resource getParent(Resource reference) {
     return null;
   }
@@ -318,7 +318,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
-  @Override
+  
   public Collection<Resource> getChildren(Resource reference) {
     return null;
   }
@@ -326,7 +326,7 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Save forced violation
    */
-  @Override
+  
   public void saveViolation(Violation violation, boolean force) {
     saveViolation(violation);
   }

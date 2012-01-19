@@ -62,7 +62,7 @@ public class LCOM4Metrics extends DefaultMetrics implements MetricsInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void save(Resource resource, SensorContext sensorContext) {
     sensorContext.saveMeasure(resource, CoreMetrics.LCOM4, getMetric("loc4"));
     sensorContext.saveMeasure(resource, distribution.build().setPersistenceMode(PersistenceMode.MEMORY));
@@ -122,7 +122,7 @@ public class LCOM4Metrics extends DefaultMetrics implements MetricsInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void analyse(DelphiFile resource, SensorContext sensorContext, List<ClassInterface> classes, List<FunctionInterface> functions,
       List<UnitInterface> units) {
     double gLOC4 = 0; // global for whole file
@@ -183,7 +183,7 @@ public class LCOM4Metrics extends DefaultMetrics implements MetricsInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public boolean executeOnResource(DelphiFile resource) {
     String[] endings = DelphiLanguage.instance.getFileSuffixes();
     for (String ending : endings) {

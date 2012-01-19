@@ -44,6 +44,7 @@ public class UnusedDirective extends CommonCompilerDirective {
   /**
    * returns UNUSED
    */
+
   @Override
   public CompilerDirectiveType getType() {
     return CompilerDirectiveType.UNUSED;

@@ -54,7 +54,7 @@ public class IntegerSubRange implements SubRange {
    *          Value to check
    * @return True if value >= begin && value <= end, false otherwise
    */
-  @Override
+
   public boolean inRange(int value) {
     return value >= begin && value <= end;
   }
@@ -66,7 +66,7 @@ public class IntegerSubRange implements SubRange {
    *          Range to check
    * @return True if range includes itself in current range, false otherwise
    */
-  @Override
+
   public boolean inRange(SubRange range) {
     return range.getBegin() >= begin && range.getEnd() <= end;
   }
@@ -76,7 +76,7 @@ public class IntegerSubRange implements SubRange {
    * 
    * @return Beggining of the range
    */
-  @Override
+
   public int getBegin() {
     return begin;
   }
@@ -86,7 +86,7 @@ public class IntegerSubRange implements SubRange {
    * 
    * @return End of the range
    */
-  @Override
+
   public int getEnd() {
     return end;
   }
@@ -96,7 +96,6 @@ public class IntegerSubRange implements SubRange {
     return "[" + begin + ", " + end + "]";
   }
 
-  @Override
   public void setEnd(int value) {
     if (value < begin) {
       throw new IllegalArgumentException("Cannot set range end value less than begin value.");
@@ -104,7 +103,6 @@ public class IntegerSubRange implements SubRange {
     end = value;
   }
 
-  @Override
   public void setBegin(int value) {
     if (value > end) {
       throw new IllegalArgumentException("Cannot set range begin value grater than end value");

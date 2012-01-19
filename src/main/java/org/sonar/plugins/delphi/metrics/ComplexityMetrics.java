@@ -102,7 +102,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
    * @param functions
    *          Functions that were found in that file
    */
-  @Override
+
   public void analyse(DelphiFile resource, SensorContext sensorContext, List<ClassInterface> classes, List<FunctionInterface> functions,
       List<UnitInterface> units) {
     reset();
@@ -184,7 +184,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void save(Resource resource, SensorContext sensorContext) {
     if (resource == null || sensorContext == null) {
       return;
@@ -265,7 +265,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public boolean executeOnResource(DelphiFile resource) {
     String[] endings = DelphiLanguage.instance.getFileSuffixes();
     for (String ending : endings) {

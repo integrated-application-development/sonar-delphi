@@ -73,8 +73,8 @@ import org.sonar.plugins.delphi.surefire.SurefireSensor;
         project = true),
     @Property(key = DelphiPlugin.JDBC_PASSWORD_KEY, defaultValue = "", name = "User password", description = "Database user password",
         global = true, project = true),
-    @Property(key = DelphiPlugin.AQTIME_DB_TABLE_PREFIX_KEY, defaultValue = "", name = "AQTime database table prefix", description = "AQTime database table prefix",
-            global = true, project = true),    
+    @Property(key = DelphiPlugin.AQTIME_DB_TABLE_PREFIX_KEY, defaultValue = "", name = "AQTime database table prefix",
+        description = "AQTime database table prefix", global = true, project = true),
     @Property(key = DelphiPlugin.TEST_DIRECTORIES_KEY, defaultValue = "", name = "Test directories",
         description = "List of unit test directories", global = true, project = true) })
 public class DelphiPlugin extends SonarPlugin {
@@ -95,7 +95,7 @@ public class DelphiPlugin extends SonarPlugin {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public List<Class<? extends Extension>> getExtensions() {
     List<Class<? extends Extension>> list = new ArrayList<Class<? extends Extension>>();
 

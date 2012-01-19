@@ -62,7 +62,7 @@ public class DelphiStatement implements StatementInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public final int getLine() {
     return line;
   }
@@ -70,7 +70,7 @@ public class DelphiStatement implements StatementInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public final int getColumn() {
     return column;
   }
@@ -78,7 +78,7 @@ public class DelphiStatement implements StatementInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public final String getText() {
     return text;
   }
@@ -86,7 +86,7 @@ public class DelphiStatement implements StatementInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public final void setText(String value) {
     text = value;
   }
@@ -94,7 +94,7 @@ public class DelphiStatement implements StatementInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public final void setLine(int value) {
     line = value;
   }
@@ -102,7 +102,7 @@ public class DelphiStatement implements StatementInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public final void setColumn(int value) {
     column = value;
   }
@@ -110,7 +110,7 @@ public class DelphiStatement implements StatementInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public ClassFieldInterface[] getFields(ClassInterface fromClass) {
     if (fromClass == null) {
       return null;
@@ -135,7 +135,7 @@ public class DelphiStatement implements StatementInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public final void setComplexity(boolean isComplex) {
     complex = isComplex;
   }
@@ -143,7 +143,7 @@ public class DelphiStatement implements StatementInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public final boolean isComplex() {
     return complex;
   }

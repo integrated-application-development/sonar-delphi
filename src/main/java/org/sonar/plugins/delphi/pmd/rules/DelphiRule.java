@@ -48,6 +48,7 @@ public class DelphiRule extends AbstractJavaRule {
   /**
    * Visits all nodes in a file
    */
+
   @Override
   protected void visitAll(List acus, RuleContext ctx) {
     lastLineParsed = -1;

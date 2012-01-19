@@ -41,7 +41,7 @@ public class DebugRuleFinder implements org.sonar.api.rules.RuleFinder {
   /**
    * {@inheritDoc}
    */
-  @Override
+  
   public Rule find(RuleQuery query) {
     Rule rule = Rule.create(query.getRepositoryKey(), query.getConfigKey(), query.getKey());
     return rule;
@@ -50,7 +50,7 @@ public class DebugRuleFinder implements org.sonar.api.rules.RuleFinder {
   /**
    * {@inheritDoc}
    */
-  @Override
+  
   public Rule findById(int ruleId) {
     return null;
   }
@@ -58,7 +58,7 @@ public class DebugRuleFinder implements org.sonar.api.rules.RuleFinder {
   /**
    * {@inheritDoc}
    */
-  @Override
+  
   public Rule findByKey(String repositoryKey, String key) {
     return null;
   }
@@ -66,7 +66,7 @@ public class DebugRuleFinder implements org.sonar.api.rules.RuleFinder {
   /**
    * {@inheritDoc}
    */
-  @Override
+  
   public Collection<Rule> findAll(RuleQuery query) {
     return null;
   }

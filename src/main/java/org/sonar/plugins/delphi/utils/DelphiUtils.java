@@ -46,7 +46,6 @@ import org.sonar.plugins.delphi.core.DelphiFile;
  */
 class DirectoryFileFilter implements FileFilter {
 
-  @Override
   public boolean accept(File pathname) {
     return pathname.isDirectory() && !pathname.getName().equals(".svn");
   }
@@ -63,7 +62,6 @@ class CustomFileFilter implements FileFilter {
     suffix = filterSuffix.clone();
   }
 
-  @Override
   public boolean accept(File pathname) {
     for (String ending : suffix) {
       if (pathname.getAbsolutePath().endsWith(ending)) {

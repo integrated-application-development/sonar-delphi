@@ -49,7 +49,7 @@ public class SurefireSensor implements Sensor {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public boolean shouldExecuteOnProject(Project project) {
     return project.getAnalysisType().isDynamic(true) && DelphiLanguage.KEY.equals(project.getLanguageKey());
   }
@@ -57,7 +57,7 @@ public class SurefireSensor implements Sensor {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void analyse(Project project, SensorContext context) {
     String[] paths = DelphiProjectHelper.getInstance().getSurefireDirectories();
 

@@ -34,7 +34,7 @@ public class TraceBackNodeOperationTest extends OperationsTestsCommon {
     super(new TraceBackNodeOperation());
   }
 
-  @Override
+  
   @Before
   public void init() {
     super.init();

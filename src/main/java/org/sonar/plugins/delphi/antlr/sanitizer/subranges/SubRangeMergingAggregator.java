@@ -29,6 +29,7 @@ public class SubRangeMergingAggregator extends SubRangeAggregator {
   /**
    * {@inheritDoc}
    */
+
   @Override
   public void add(SubRange newRange) {
     if (newRange == null) {

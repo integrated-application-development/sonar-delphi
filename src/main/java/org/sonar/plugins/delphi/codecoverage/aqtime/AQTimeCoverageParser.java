@@ -34,7 +34,6 @@ import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.resources.InputFile;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.core.DelphiFile;
-import org.sonar.plugins.delphi.core.helpers.DatabaseConnectionProperties;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
@@ -48,7 +47,7 @@ public class AQTimeCoverageParser {
   private List<InputFile> sourceFiles;
   private List<File> sourceDirs;
   private List<File> excludedDirs;
-  private DatabaseConnectionProperties connectionProperties;
+  private Map<String, String> connectionProperties;
 
   /**
    * set database tables prefix
@@ -56,7 +55,7 @@ public class AQTimeCoverageParser {
    * @param strPrefix
    *          prefix
    */
-  public void setPrefix(String strPrefix) {
+  public void setDbTablePrefix(String strPrefix) {
     prefix = strPrefix;
   }
 
@@ -67,7 +66,7 @@ public class AQTimeCoverageParser {
     DelphiUtils.getDebugLog().println(">> CODE COVERAGE STARTING");
     try {
       AQTimeCoverageDao aqTimeCoverageDao = new AQTimeCoverageDao();
-      aqTimeCoverageDao.setJdbcProps(connectionProperties.getJDBCProperties());
+      aqTimeCoverageDao.setJdbcProps(connectionProperties);
       aqTimeCoverageDao.setDatabasePrefix(prefix);
       List<AQTimeCodeCoverage> aqTimeCodeCoverages = aqTimeCoverageDao.readAQTimeCodeCoverage();
       saveCoverageData(processFiles(aqTimeCodeCoverages), context);
@@ -83,7 +82,7 @@ public class AQTimeCoverageParser {
     {
       if (DelphiProjectHelper.getInstance().isExcluded(data.getResource().getPath(), excludedDirs)) {
         continue; // do NOT save, in excluded
-      }      
+      }
       Measure overallCoverage = new Measure(CoreMetrics.COVERAGE, data.getCoverage());
       Measure lineCoverage = new Measure(CoreMetrics.LINE_COVERAGE, data.getCoverage());
       Measure linesToCover = new Measure(CoreMetrics.LINES_TO_COVER, data.getTotalLines());
@@ -99,18 +98,18 @@ public class AQTimeCoverageParser {
 
   private Map<DelphiFile, CoverageFileData> processFiles(List<AQTimeCodeCoverage> aqTimeCodeCoverages) throws SQLException {
     DelphiUtils.getDebugLog().println("Processing files...");
-    
+
     Map<DelphiFile, CoverageFileData> savedResources = new HashMap<DelphiFile, CoverageFileData>(); // map of our sources and their data
     DelphiFile resource = null; // current file
-    
-    for (AQTimeCodeCoverage aqTimeCodeCoverage : aqTimeCodeCoverages) {                  
+
+    for (AQTimeCodeCoverage aqTimeCodeCoverage : aqTimeCodeCoverages) {
       String path = processFileName(aqTimeCodeCoverage.getCoveredFileName(), sourceFiles); // convert relative file name to absolute path
       if (resource == null || !resource.getPath().equals(path)) {
         resource = DelphiFile.fromAbsolutePath(path, sourceDirs, false);
         if (resource == null) {
           continue;
         }
-        
+
         savedResources.put(resource, new CoverageFileData(resource));
       }
       calculateCoverageData(savedResources.get(resource), aqTimeCodeCoverage.getLineNumber(), aqTimeCodeCoverage.getLineHits());
@@ -167,7 +166,7 @@ public class AQTimeCoverageParser {
     this.excludedDirs = excludedDirs;
   }
 
-  public void setConnectionProperties(DatabaseConnectionProperties connectionProperties) {
+  public void setConnectionProperties(Map<String, String> connectionProperties) {
     this.connectionProperties = connectionProperties;
   }
 }

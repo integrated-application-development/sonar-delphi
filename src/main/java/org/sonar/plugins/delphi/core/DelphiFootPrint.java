@@ -33,7 +33,6 @@ import org.sonar.squid.recognizer.LanguageFootprint;
  */
 public class DelphiFootPrint implements LanguageFootprint {
 
-  @Override
   public Set<Detector> getDetectors() {
     return Collections.emptySet();
   }

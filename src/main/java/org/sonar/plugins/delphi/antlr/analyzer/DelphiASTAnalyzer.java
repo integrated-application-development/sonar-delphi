@@ -44,7 +44,6 @@ public class DelphiASTAnalyzer implements ASTAnalyzer {
   private CodeAnalysisResults result;
   private CodeTree code;
 
-  @Override
   public void analyze(ASTTree tree) {
     result = new CodeAnalysisResults();
     code = new CodeTree(new CodeNode<ASTTree>(tree), new CodeNode<Tree>(tree.getChild(0)));
@@ -63,12 +62,10 @@ public class DelphiASTAnalyzer implements ASTAnalyzer {
     }
   }
 
-  @Override
   public CodeAnalysisResults getResults() {
     return result;
   }
 
-  @Override
   public CodeTree getCode() {
     return code;
   }

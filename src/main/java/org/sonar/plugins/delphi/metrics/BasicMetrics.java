@@ -54,7 +54,6 @@ public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
     super(delphiProject);
   }
 
-  @Override
   public void analyse(DelphiFile resource, SensorContext sensorContext, List<ClassInterface> classes, List<FunctionInterface> functions,
       List<UnitInterface> units) {
     clearMetrics();
@@ -78,7 +77,7 @@ public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void save(Resource resource, SensorContext sensorContext) {
     sensorContext.saveMeasure(resource, CoreMetrics.LINES, getMetric("LINES")); // Number of carriage returns
     sensorContext.saveMeasure(resource, CoreMetrics.NCLOC, getMetric("NCLOC")); // Number of physical lines of code - number of blank lines
@@ -96,7 +95,7 @@ public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public boolean executeOnResource(DelphiFile resource) {
     String[] endings = DelphiLanguage.instance.getFileSuffixes();
     for (String ending : endings) {

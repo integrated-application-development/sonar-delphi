@@ -52,22 +52,18 @@ public class DelphiArgument implements ArgumentInterface {
     type = argType.toLowerCase();
   }
 
-  @Override
   public String getName() {
     return name;
   }
 
-  @Override
   public void setName(String value) {
     name = value;
   }
 
-  @Override
   public String getType() {
     return type;
   }
 
-  @Override
   public void setType(String value) {
     type = value;
   }

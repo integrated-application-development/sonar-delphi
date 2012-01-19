@@ -102,6 +102,7 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
   /**
    * Overrides AntlrStringStream LookAhead for case insensitivity.
    */
+
   @Override
   public int LA(int i) {
     int offset = i;
@@ -120,6 +121,7 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
   /**
    * Overloading the load method from ANTRLFileStream, to add whitespace where it is required (':', '..'), and preform additional actions
    */
+
   @Override
   public void load(String fileName, String encoding) throws IOException {
     if (fileName == null) {

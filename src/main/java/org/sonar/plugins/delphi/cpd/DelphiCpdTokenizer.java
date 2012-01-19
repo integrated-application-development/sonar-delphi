@@ -65,7 +65,7 @@ public class DelphiCpdTokenizer implements Tokenizer {
    * @param cpdTokens
    *          Where tokens will be held
    */
-  @Override
+
   public final void tokenize(SourceCode source, Tokens cpdTokens) {
     String fileName = source.getFileName();
     if ( !canTokenize(fileName)) {

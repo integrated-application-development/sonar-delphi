@@ -52,7 +52,7 @@ public class DelphiClassProperty extends DelphiClassField implements ClassProper
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public FunctionInterface getReadFunction() {
     return readFunction;
   }
@@ -60,7 +60,7 @@ public class DelphiClassProperty extends DelphiClassField implements ClassProper
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public FunctionInterface getWriteFunction() {
     return writeFunction;
   }
@@ -68,7 +68,7 @@ public class DelphiClassProperty extends DelphiClassField implements ClassProper
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public boolean hasFunction(FunctionInterface function) {
     FunctionInterface func = new DelphiFunction(function.getShortName());
     boolean b1 = false;
@@ -85,7 +85,7 @@ public class DelphiClassProperty extends DelphiClassField implements ClassProper
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void setReadFunction(FunctionInterface newFunction) {
     readFunction = newFunction;
   }
@@ -93,7 +93,7 @@ public class DelphiClassProperty extends DelphiClassField implements ClassProper
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void setWriteFunction(FunctionInterface newFunction) {
     writeFunction = newFunction;
   }

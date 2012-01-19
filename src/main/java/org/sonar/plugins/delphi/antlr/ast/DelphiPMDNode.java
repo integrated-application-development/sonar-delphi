@@ -63,21 +63,21 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void jjtOpen() { // unused
   }
 
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void jjtClose() { // unused
   }
 
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void jjtSetParent(Node n) { // unused
 
   }
@@ -85,7 +85,7 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public Node jjtGetParent() { // unused
     return null;
   }
@@ -93,14 +93,14 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void jjtAddChild(Node n, int i) { // unused
   }
 
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public Node jjtGetChild(int i) { // unused
     return null;
   }
@@ -108,7 +108,7 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public int jjtGetNumChildren() { // unused
     return 0;
   }
@@ -123,7 +123,7 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public Object jjtAccept(JavaParserVisitor visitor, Object data) {
     return jjtAccept((DelphiParserVisitor) visitor, data);
   }

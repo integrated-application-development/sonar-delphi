@@ -54,6 +54,7 @@ class DelphiTreeAdaptor extends CommonTreeAdaptor {
   /**
    * When creating imaginary Tokens (such as TkReturnType etc) we need to set its parameters manually.
    */
+
   @Override
   public Token createToken(int tokenType, String text) {
     CommonToken imaginaryToken = new CommonToken(tokenType, text);

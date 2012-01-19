@@ -73,7 +73,6 @@ public class DelphiPmdXmlReportParser {
   public void parse(File xmlFile) {
     StaxParser parser = new StaxParser(new StaxParser.XmlStreamHandler() {
 
-      @Override
       public void stream(SMHierarchicCursor rootCursor) throws XMLStreamException {
         rootCursor.advance();
 

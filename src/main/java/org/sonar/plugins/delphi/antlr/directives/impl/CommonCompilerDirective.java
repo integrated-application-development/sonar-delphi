@@ -54,27 +54,22 @@ public class CommonCompilerDirective implements CompilerDirective {
     this.lastCharPos = lastCharPos;
   }
 
-  @Override
   public String getName() {
     return name;
   }
 
-  @Override
   public String getItem() {
     return item;
   }
 
-  @Override
   public int getFirstCharPosition() {
     return firstCharPos;
   }
 
-  @Override
   public int getLastCharPosition() {
     return lastCharPos;
   }
 
-  @Override
   public CompilerDirectiveType getType() {
     return CompilerDirectiveType.UNKNOWN;
   }
@@ -97,7 +92,6 @@ public class CommonCompilerDirective implements CompilerDirective {
     return name + " " + item;
   }
 
-  @Override
   public int getLength() {
     return lastCharPos - firstCharPos;
   }

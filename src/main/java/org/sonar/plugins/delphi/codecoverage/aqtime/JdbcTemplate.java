@@ -56,7 +56,7 @@ public class JdbcTemplate {
     return connection;
   }
 
-  public <T> List<T> query(String queryString, RowMapper<T> rowMapper) {    
+  public <T> List<T> query(String queryString, RowMapper<T> rowMapper) {
     List<T> result = new ArrayList<T>();
     try {
       Statement statement = getConnection().createStatement();
@@ -70,7 +70,7 @@ public class JdbcTemplate {
       DelphiUtils.getDebugLog().println("AQTime SQL error: " + e.getMessage());
 
     }
-    
+
     return result;
   }
 

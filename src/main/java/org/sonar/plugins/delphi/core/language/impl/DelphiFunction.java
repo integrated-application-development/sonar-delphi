@@ -86,7 +86,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public boolean isAccessor() {
     return isAccessor;
   }
@@ -94,7 +94,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void setDeclaration(boolean value) {
     isDeclaration = value;
   }
@@ -102,7 +102,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public int getVisibility() {
     return visibility;
   }
@@ -110,7 +110,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void setVisibility(int value) {
     visibility = value;
   }
@@ -118,7 +118,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public boolean isDeclaration() {
     return isDeclaration;
   }
@@ -126,7 +126,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void increaseComplexity() {
     complexity++;
   }
@@ -134,7 +134,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public int getComplexity() {
     return complexity;
   }
@@ -142,7 +142,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void setComplexity(int complexity) {
     this.complexity = complexity;
   }
@@ -150,7 +150,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public int getLine() {
     return line;
   }
@@ -158,7 +158,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void setLine(int line) {
     this.line = line;
   }
@@ -166,7 +166,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public int getColumn() {
     return column;
   }
@@ -174,7 +174,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void setColumn(int column) {
     this.column = column;
   }
@@ -182,7 +182,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public final String getName() {
     return name;
   }
@@ -190,7 +190,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public final void setName(String name) {
     this.name = name;
     if (longName == null) {
@@ -207,7 +207,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void addStatement(StatementInterface st) {
     statements.add(st);
   }
@@ -215,7 +215,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public List<StatementInterface> getStatements() {
     return statements;
   }
@@ -223,7 +223,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public FunctionInterface[] getCalledFunctions() {
     return called.toArray(new FunctionInterface[called.size()]);
   }
@@ -231,7 +231,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void addCalledFunction(FunctionInterface function) {
     if (function != null && !function.equals(this)) {
       called.add(function);
@@ -241,7 +241,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public boolean isCalling(FunctionInterface calledFunc) {
     return called.contains(calledFunc);
   }
@@ -249,7 +249,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public String getShortName() {
     int dot = name.lastIndexOf('.');
     if (dot != -1) {
@@ -279,7 +279,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public boolean hasBody() {
     return complexity != 0 && !isDeclaration();
   }
@@ -287,7 +287,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public boolean isGlobal() {
     return parentClass == null;
   }
@@ -295,7 +295,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void setParentClass(ClassInterface parent) {
     parentClass = parent;
   }
@@ -303,7 +303,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public ClassInterface getParentClass() {
     return parentClass;
   }
@@ -311,7 +311,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public ArgumentInterface[] getArguments() {
     return args.toArray(new ArgumentInterface[args.size()]);
   }
@@ -319,7 +319,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void addArgument(ArgumentInterface arg) {
     args.add(arg);
   }
@@ -327,7 +327,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void setLongName(String functionLongName) {
     longName = functionLongName;
   }
@@ -335,7 +335,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public String getLongName() {
     return longName;
   }
@@ -343,7 +343,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public int getOverloadsCount() {
     if (overloads < 0) {
       return 0;
@@ -354,7 +354,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void increaseFunctionOverload() {
     ++overloads;
   }
@@ -362,7 +362,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void addOverloadFunction(FunctionInterface func) {
     overFunc.add(func);
   }
@@ -370,7 +370,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public FunctionInterface[] getOverloadedFunctions() {
     return overFunc.toArray(new FunctionInterface[overFunc.size()]);
   }
@@ -378,7 +378,7 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public UnitInterface getUnit() {
     return parentUnit;
   }
@@ -386,37 +386,31 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void setUnit(UnitInterface functionUnit) {
     parentUnit = functionUnit;
   }
 
-  @Override
   public void setVirtual(boolean value) {
     virtual = value;
   }
 
-  @Override
   public boolean isVirtual() {
     return virtual;
   }
 
-  @Override
   public void setMessage(boolean value) {
     message = value;
   }
 
-  @Override
   public boolean isMessage() {
     return message;
   }
 
-  @Override
   public final String getRealName() {
     return realName;
   }
 
-  @Override
   public final void setRealName(String name) {
     realName = name;
   }

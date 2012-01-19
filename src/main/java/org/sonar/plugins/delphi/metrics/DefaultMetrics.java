@@ -47,7 +47,7 @@ public abstract class DefaultMetrics implements MetricsInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public String[] getMetricKeys() {
     return metrics.keySet().toArray(new String[metrics.keySet().size()]);
   }
@@ -55,7 +55,7 @@ public abstract class DefaultMetrics implements MetricsInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public double getMetric(String metric) {
     if ( !metrics.containsKey(metric)) {
       throw new IllegalStateException("No metric (" + metric + ") for " + this);

@@ -78,7 +78,7 @@ public class DelphiSensor implements Sensor {
    * 
    * @return true if we are analysing DelphiLanguage project, false otherwise
    */
-  @Override
+
   public boolean shouldExecuteOnProject(Project project) {
     return project.getLanguage().getKey().equals(DelphiLanguage.KEY);
   }
@@ -86,7 +86,7 @@ public class DelphiSensor implements Sensor {
   /**
    * Analyses whole project with all metrics
    */
-  @Override
+
   public void analyse(Project sonarProject, SensorContext sensorContext) {
     project = sonarProject; // project to analyse
     context = sensorContext; // sensor context

@@ -51,6 +51,7 @@ public class XPathRule extends DelphiRule {
    * @param data
    *          Data
    */
+
   @Override
   public Object visit(DelphiPMDNode node, Object data) {
     String xPathString = getStringProperty("xpath"); // get xpath string
@@ -90,6 +91,7 @@ public class XPathRule extends DelphiRule {
   /**
    * Preform only one visit per file, not per node cause we parse the whole file nodes at a time
    */
+
   @Override
   protected void visitAll(List acus, RuleContext ctx) {
     init();

@@ -34,7 +34,7 @@ public class AQTimeCoverageDao {
 
   private static final String TABLE1 = "LIGHT_COVERAGE_PROFILER_LINES";
   private static final String TABLE2 = "LIGHT_COVERAGE_PROFILER_SOURCE_FILES_DATA";
-  
+
   private Map<String, String> jdbcProps;
   private String databasePrefix = "CC.dbo.";
   private JdbcTemplate jdbcTemplate;
@@ -55,7 +55,6 @@ public class AQTimeCoverageDao {
         "SELECT l.ID, COL_FILE_NAME, l.COL_MARK, l.COL_SOURCE_LINE, f.COL____COVERED FROM " + databasePrefix + TABLE1 + " l inner join "
             + databasePrefix + TABLE2 + " f on l.PARENT_ID = f.ID " + "ORDER BY COL_FILE_NAME", new RowMapper<AQTimeCodeCoverage>() {
 
-          @Override
           public AQTimeCodeCoverage mapRow(ResultSet resultSet) throws SQLException {
             AQTimeCodeCoverage result = new AQTimeCodeCoverage();
             result.setCoveredFileName(resultSet.getString("COL_FILE_NAME"));

@@ -62,6 +62,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
+
   @Override
   public boolean equals(Object o) {
     if (o == null) {
@@ -84,7 +85,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public int getAccessorCount() {
     int accessorsCount = 0;
     for (FunctionInterface function : functions) {
@@ -98,7 +99,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public int getVisibility() {
     return visibility;
   }
@@ -106,7 +107,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void addParent(ClassInterface parent) {
     parents.add(parent);
     parent.addChild(this);
@@ -115,7 +116,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public ClassInterface[] getParents() {
     ClassInterface p[] = new ClassInterface[parents.size()];
     parents.toArray(p);
@@ -142,7 +143,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public int getDit() {
     return calculateDepth(this);
   }
@@ -150,7 +151,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void setVisibility(int value) {
     visibility = value;
   }
@@ -158,7 +159,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public int getPublicApiCount() {
     int publicApiCount = 0;
     if (visibility == DelphiParser.PUBLIC) { // count class if public
@@ -186,7 +187,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public String getName() {
     return name;
   }
@@ -194,7 +195,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void addField(ClassFieldInterface field) {
     fields.add(field);
   }
@@ -202,7 +203,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public ClassFieldInterface[] getFields() {
     return fields.toArray(new ClassFieldInterface[fields.size()]);
   }
@@ -222,7 +223,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public int getComplexity() {
     int complexity = 0;
     for (FunctionInterface func : functions) {
@@ -234,7 +235,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public FunctionInterface[] getFunctions() {
     return functions.toArray(new FunctionInterface[functions.size()]);
   }
@@ -242,7 +243,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public FunctionInterface[] getDeclarations() {
     return declarations.toArray(new FunctionInterface[declarations.size()]);
   }
@@ -250,7 +251,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void addFunction(FunctionInterface func) {
     if (functions.contains(func)) {
       return; // function already registered in class
@@ -265,7 +266,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void addChild(ClassInterface child) {
     children.add(child);
   }
@@ -273,7 +274,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public ClassInterface[] getDescendants() {
     List<ClassInterface> allChildren = new ArrayList<ClassInterface>();
     for (ClassInterface child : children) {
@@ -285,7 +286,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public ClassInterface[] getChildren() {
     return children.toArray(new ClassInterface[children.size()]);
   }
@@ -300,7 +301,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public int getRfc() {
     int rfc = 0;
     Set<FunctionInterface> visited = new HashSet<FunctionInterface>();
@@ -339,7 +340,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public boolean hasFunction(FunctionInterface func) {
     boolean b1 = functions.contains(func);
 
@@ -355,7 +356,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void setFileName(String fileName) {
     this.fileName = fileName;
   }
@@ -363,7 +364,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public String getFileName() {
     return fileName;
   }
@@ -379,7 +380,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public String getShortName() {
     return name;
   }
@@ -387,7 +388,7 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void addProperty(ClassPropertyInterface property) {
     properties.add(property);
   }
@@ -395,22 +396,19 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public ClassPropertyInterface[] getProperties() {
     return properties.toArray(new ClassPropertyInterface[properties.size()]);
   }
 
-  @Override
   public void setName(String name) {
     this.name = name;
   }
 
-  @Override
   public String getRealName() {
     return realName;
   }
 
-  @Override
   public void setRealName(String name) {
     realName = name;
   }

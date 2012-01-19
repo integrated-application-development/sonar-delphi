@@ -43,7 +43,7 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 /**
  * Class that helps get the maven/ant configuration from .xml file
  */
-public class DelphiProjectHelper extends DelphiFileHelper implements DatabaseConnectionProperties, BatchExtension {
+public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtension {
 
   private RuleFinder finder;
   private static DelphiProjectHelper instance = new DelphiProjectHelper();
@@ -94,29 +94,6 @@ public class DelphiProjectHelper extends DelphiFileHelper implements DatabaseCon
     }
     String str = configuration.getString(DelphiPlugin.INCLUDE_EXTEND_KEY);
     return (str == null || str.equals("true"));
-  }
-
-  /**
-   * Get a map of JDBC properties, example: ("sonar.delphi.jdbc.driver" = "net.sourceforge.jtds.jdbc.Driver", "sonar.delphi.jdbc.url" =
-   * "http://localhost" "sonar.delphi.jdbc.user = "admin" "sonar.delphi.jdbc.password = "pass")
-   * 
-   * @return Map of JDBC properties, or empty list if no properties
-   */
-  @Override
-  public Map<String, String> getJDBCProperties() {
-    Map<String, String> result = new HashMap<String, String>();
-    if (configuration == null) {
-      return result;
-    }
-    String driver = configuration.getString(DelphiPlugin.JDBC_DRIVER_KEY);
-    if (driver == null) {
-      driver = "net.sourceforge.jtds.jdbc.Driver"; // default value
-    }
-    result.put(DelphiPlugin.JDBC_DRIVER_KEY, driver);
-    result.put(DelphiPlugin.JDBC_URL_KEY, configuration.getString(DelphiPlugin.JDBC_URL_KEY));
-    result.put(DelphiPlugin.JDBC_USER_KEY, configuration.getString(DelphiPlugin.JDBC_USER_KEY));
-    result.put(DelphiPlugin.JDBC_PASSWORD_KEY, configuration.getString(DelphiPlugin.JDBC_PASSWORD_KEY));
-    return result;
   }
 
   /**

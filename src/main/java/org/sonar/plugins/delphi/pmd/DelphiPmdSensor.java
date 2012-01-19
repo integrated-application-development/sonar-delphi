@@ -64,7 +64,7 @@ public class DelphiPmdSensor implements Sensor {
   /**
    * Analyses a project
    */
-  @Override
+
   public void analyse(Project project, SensorContext context) {
     // creating report
     DelphiUtils.getDebugLog().println(">> PMD STARTING");
@@ -142,7 +142,7 @@ public class DelphiPmdSensor implements Sensor {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public boolean shouldExecuteOnProject(Project project) {
     return DelphiLanguage.KEY.equals(project.getLanguageKey());
   }

@@ -242,7 +242,6 @@ public class DelphiFile extends Resource<DelphiPackage> {
   public static FileFilter getFileFilter() {
     return new FileFilter() {
 
-      @Override
       public boolean accept(File pathname) {
         if ( !pathname.isFile()) {
           return false;
@@ -266,7 +265,6 @@ public class DelphiFile extends Resource<DelphiPackage> {
   public static FileFilter getDirectoryFilter() {
     return new FileFilter() {
 
-      @Override
       public boolean accept(File pathname) {
         return pathname.isDirectory();
       }

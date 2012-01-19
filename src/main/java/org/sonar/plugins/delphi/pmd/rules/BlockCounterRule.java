@@ -52,6 +52,7 @@ public class BlockCounterRule extends CountRule {
    * @param node
    *          Node to check
    */
+
   @Override
   protected boolean shouldCount(DelphiPMDNode node) {
     if ( !isCounting && isStartNode(node)) { // begin counting
@@ -78,6 +79,7 @@ public class BlockCounterRule extends CountRule {
   /**
    * Overload, so we could pass the firstNode
    */
+
   @Override
   protected void addViolation(Object data, DelphiPMDNode node) {
     super.addViolation(data, firstNode);

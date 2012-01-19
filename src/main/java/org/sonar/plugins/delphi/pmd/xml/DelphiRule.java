@@ -130,7 +130,7 @@ public class DelphiRule implements Comparable<String> {
    * @return the value 0 if the argument string is equal to this string; a value less than 0 if this string is lexicographically less than
    *         the string argument; and a value greater than 0 if this string is lexicographically greater than the string argument.
    */
-  @Override
+
   public int compareTo(String o) {
     return o.compareTo(clazz);
   }

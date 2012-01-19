@@ -66,7 +66,7 @@ public class DelphiUnit implements UnitInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public String getFileName() {
     return file.getName();
   }
@@ -91,7 +91,7 @@ public class DelphiUnit implements UnitInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void setPath(String path) {
     file = new File(path);
 
@@ -100,7 +100,7 @@ public class DelphiUnit implements UnitInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public String getPath() {
     return file.getAbsolutePath();
   }
@@ -108,7 +108,7 @@ public class DelphiUnit implements UnitInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void setName(String unitName) {
     name = unitName;
   }
@@ -116,7 +116,7 @@ public class DelphiUnit implements UnitInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public String getName() {
     return name;
   }
@@ -124,7 +124,7 @@ public class DelphiUnit implements UnitInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void addClass(ClassInterface cl) {
     classes.add(cl);
   }
@@ -132,7 +132,7 @@ public class DelphiUnit implements UnitInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public ClassInterface[] getClasses() {
     return classes.toArray(new ClassInterface[classes.size()]);
   }
@@ -140,7 +140,7 @@ public class DelphiUnit implements UnitInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void addFunction(FunctionInterface func) {
     functions.add(func);
   }
@@ -148,7 +148,7 @@ public class DelphiUnit implements UnitInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public FunctionInterface[] getFunctions() {
     return functions.toArray(new FunctionInterface[functions.size()]);
   }
@@ -156,7 +156,7 @@ public class DelphiUnit implements UnitInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void addIncludes(String includeName) {
     includes.add(includeName);
   }
@@ -164,7 +164,7 @@ public class DelphiUnit implements UnitInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public String[] getIncludes() {
     return includes.toArray(new String[includes.size()]);
   }
@@ -172,7 +172,7 @@ public class DelphiUnit implements UnitInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public ClassInterface findClass(String classShortName) {
     for (ClassInterface cl : classes) {
       if (cl.getShortName().equals(classShortName)) {
@@ -185,7 +185,7 @@ public class DelphiUnit implements UnitInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public FunctionInterface findFunction(String functionName) {
     for (FunctionInterface func : functions) {
       if (func.getName().equals(functionName)) {
@@ -221,7 +221,7 @@ public class DelphiUnit implements UnitInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public boolean isIncluding(UnitInterface unit) {
     for (String includeName : includes) {
       if (unit.getName().equals(includeName)) {
@@ -235,7 +235,7 @@ public class DelphiUnit implements UnitInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public void setLine(int lineNumber) {
     line = lineNumber;
   }
@@ -243,7 +243,7 @@ public class DelphiUnit implements UnitInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public int getLine() {
     return line;
   }
@@ -251,7 +251,7 @@ public class DelphiUnit implements UnitInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public FunctionInterface[] getAllFunctions() {
     Set<FunctionInterface> result = new HashSet<FunctionInterface>();
     for (FunctionInterface globalFunction : functions) { // add global functions
@@ -270,7 +270,7 @@ public class DelphiUnit implements UnitInterface {
   /**
    * {@inheritDoc}
    */
-  @Override
+
   public Set<UnitInterface> getIncludedUnits(Set<UnitInterface> allUnits) {
     Set<UnitInterface> result = new HashSet<UnitInterface>();
     if (allUnits == null) {
