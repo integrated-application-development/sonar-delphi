@@ -45,7 +45,6 @@ public class DelphiSureFireParser extends AbstractSurefireParser {
   private static final String ERROR_MSG = "Unit test file not found: ";
   private Project project;
   private SensorContext context;
-  private List<File> testSources;
 
   /**
    * ctor
@@ -58,54 +57,57 @@ public class DelphiSureFireParser extends AbstractSurefireParser {
   public DelphiSureFireParser(Project delphiProject, SensorContext sensorContext) {
     project = delphiProject;
     context = sensorContext;
-    testSources = DelphiProjectHelper.getInstance().getTestDirectories(project);
+  }
+
+  private void indexFileSourceCode(DelphiFile file, SensorContext sensorContext) throws IOException
+  {
+    if ( !sensorContext.isIndexed(file, true) && DelphiProjectHelper.getInstance().getImportSources()) {
+      BufferedReader br = new BufferedReader(new FileReader( new File(file.getPath()) ));
+      StringBuilder source = new StringBuilder();
+      String line;
+      while ((line = br.readLine()) != null) {
+        source.append(line).append('\n');
+      }
+      br.close();
+      sensorContext.saveSource(file, source.toString());
+    }
   }
 
   @Override
   protected Resource<?> getUnitTestResource(String classKey) {
-    try {
-      if (testSources == null) {
-        return new DelphiFile(classKey, true); // default behavior
+    try { 
+      File testFile = findFileInTestDirectories(classKey + FILE_EXT, project.getFileSystem().getTestDirs() );
+      DelphiFile resourceFile = DelphiFile.fromIOFile(testFile, project.getFileSystem().getTestDirs(), true);
+      if (resourceFile != null) {
+        // resource source code not saved, because tests files were
+        // excluded from analysis, so read the test file and save its source code
+        // so Sonar could show it
+        indexFileSourceCode(resourceFile, context);
+        return resourceFile;
       }
-      for (File parent : testSources) {
-        String path = parent.getAbsolutePath() + "\\" + classKey + FILE_EXT;
-        File testFile = new File(path);
-        if ( !testFile.exists()) {
-          continue; // look further
-        }
-        if (testFile != null) {
-          DelphiFile resourceFile = DelphiFile.fromIOFile(testFile, project.getFileSystem().getSourceDirs(), true);
-          if (resourceFile != null) {
-            // resource source code not saved, because tests files were
-            // excluded from analysis, so read the test file and save its source code
-            // so Sonar could show it
-            if ( !context.isIndexed(resourceFile, true) && DelphiProjectHelper.getInstance().getImportSources()) {
-              BufferedReader br = new BufferedReader(new FileReader(testFile));
-              StringBuilder source = new StringBuilder();
-              String line;
-              while ((line = br.readLine()) != null) {
-                source.append(line).append('\n');
-              }
-              br.close();
-              context.saveSource(resourceFile, source.toString());
-            }
-
-            return resourceFile;
-          }
-        }
-      } // for
-
       throw new FileNotFoundException(); // no file found
-
     } catch (FileNotFoundException e) {
       DelphiUtils.LOG.warn(ERROR_MSG + classKey + FILE_EXT);
       DelphiUtils.getDebugLog().println(ERROR_MSG + classKey + FILE_EXT);
-      return new DelphiFile(classKey, true); // default behavior
     } catch (IOException e) {
       DelphiUtils.LOG.warn(ERROR_MSG + classKey + FILE_EXT);
       DelphiUtils.getDebugLog().println(ERROR_MSG + classKey + FILE_EXT);
-      return new DelphiFile(classKey, true); // default behavior
     }
+
+    return new DelphiFile(classKey, true); // default behavior
+  }
+
+  private File findFileInTestDirectories(String fileName, List<File> testDirs) throws FileNotFoundException {
+    for(File dir : testDirs) {
+      String dirPath = dir.getAbsolutePath();
+      String fullPath = dirPath + File.separator + fileName;
+      File result = new File(fullPath);
+      if(result.exists()) {
+        return result;
+      }
+    }
+    
+    throw new FileNotFoundException(fileName);
   }
 
 }

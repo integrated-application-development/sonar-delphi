@@ -32,7 +32,9 @@ import java.io.PrintStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,24 +91,26 @@ public final class DelphiUtils {
    * Debug output to file
    */
 
-  private static PrintStream debug = null;
+  private static PrintStream debugLog = null;
 
   /**
    * Gets the debug log associated with file
    * 
    * @return Debug log print stream
-   */
-  public static PrintStream getDebugLog() {
-    if (debug == null) {
+   */  
+  public static PrintStream getDebugLog()
+  {
+    if (debugLog == null) {
       try {
-        debug = new PrintStream(new FileOutputStream("debug_log.txt"));
-        debug.println(new Date());
-        System.setErr(debug); // redirect system.err to file
+        debugLog = new PrintStream(new FileOutputStream("debug_log.txt"));
+        debugLog.println(new Date());
+        System.setErr(debugLog); // redirect system.err to file
       } catch (FileNotFoundException e) {
         LOG.error("Could not create debug log!");
       }
     }
-    return debug;
+    
+    return debugLog;
   }
 
   /**
@@ -282,12 +286,12 @@ public final class DelphiUtils {
    * @return Resolved file
    */
   public static File resolveAbsolutePath(String root, String path) {
-    File file = new File(path);
-
+    File file = new File(path.replaceAll("\\\\", "/") );
+    
     if ( !file.isAbsolute()) {
-      String rootPath = root;
-      if ( !rootPath.endsWith("\\")) {
-        rootPath = rootPath.concat("\\");
+      String rootPath = root.replaceAll("\\\\", "/");
+      if ( !rootPath.endsWith("/")) {
+        rootPath = rootPath.concat("/");
       }
       file = new File(rootPath + path);
     }

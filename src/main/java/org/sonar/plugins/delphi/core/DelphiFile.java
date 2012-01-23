@@ -200,18 +200,19 @@ public class DelphiFile extends Resource<DelphiPackage> {
       return null;
     }
 
-    String relativePath = DefaultProjectFileSystem.getRelativePath(file, sourceDirs);
+    String relativePath = DefaultProjectFileSystem.getRelativePath(file, sourceDirs);    
     if (relativePath != null) {
-      String pacname = null;
-      String classname = relativePath;
+      String packageName = null;
+      String className = relativePath;
 
       if (relativePath.indexOf('/') >= 0) {
-        pacname = StringUtils.substringBeforeLast(relativePath, "/");
-        pacname = StringUtils.replace(pacname, "/", ".");
-        classname = StringUtils.substringAfterLast(relativePath, "/");
+        packageName = StringUtils.substringBeforeLast(relativePath, "/");
+        packageName = StringUtils.replace(packageName, "/", ".");
+        className = StringUtils.substringAfterLast(relativePath, "/");
       }
-      classname = StringUtils.substringBeforeLast(classname, ".");
-      DelphiFile newFile = new DelphiFile(pacname, classname, unitTest);
+      className = StringUtils.substringBeforeLast(className, ".");
+      DelphiFile newFile = new DelphiFile(packageName, className, unitTest);
+       
       newFile.setPath(file.getAbsolutePath());
       return newFile;
     }

@@ -21,21 +21,64 @@
  */
 package org.sonar.plugins.delphi.surefire;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.CoreProperties;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Project.AnalysisType;
+import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.plugins.delphi.debug.DebugConfiguration;
+import org.sonar.plugins.delphi.debug.DebugSensorContext;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class SurefireSensorTest {
 
+  private static final String PROJECT_DIR = "/org/sonar/plugins/delphi/SimpleDelphiProject";
+  private static final String PROJECT_TEST_DIR = "/org/sonar/plugins/delphi/SimpleDelphiProject/tests";
+  private static final String SUREFIRE_REPORT_DIR = "./reports";
+  
+  private Project project;
+  private DebugConfiguration configuration;
+  
+  @Before
+  public void setup()
+  {
+    List<File> testDirs = new ArrayList<File>();
+    testDirs.add( DelphiUtils.getResource(PROJECT_TEST_DIR) );
+    
+    ProjectFileSystem fileSystem = mock(ProjectFileSystem.class);
+    when(fileSystem.getBasedir()).thenReturn( DelphiUtils.getResource(PROJECT_DIR) );
+    when(fileSystem.getTestDirs()).thenReturn(testDirs);
+    
+    project = mock(Project.class);
+    when(project.getLanguageKey()).thenReturn("delph");
+    when(project.getAnalysisType()).thenReturn(AnalysisType.DYNAMIC);    
+    when(project.getFileSystem()).thenReturn(fileSystem);
+    
+    configuration = new DebugConfiguration();
+    configuration.addProperty(CoreProperties.SUREFIRE_REPORTS_PATH_PROPERTY, SUREFIRE_REPORT_DIR);
+  }
+  
   @Test
   public void shouldExecuteOnProjectTest() {
-    Project project = mock(Project.class);
-    when(project.getLanguageKey()).thenReturn("delph");
-    when(project.getAnalysisType()).thenReturn(AnalysisType.DYNAMIC);
-    assertTrue(new SurefireSensor().shouldExecuteOnProject(project));
+    assertTrue(new SurefireSensor(configuration).shouldExecuteOnProject(project));
   }
+  
+  @Test
+  public void analyzeTest() {
+    DebugSensorContext context = new DebugSensorContext();
+    SurefireSensor sensor = new SurefireSensor(configuration);
+    sensor.analyse(project, context);
+    assertEquals(12, context.getMeasuresKeys().size());
+  }
+  
 }

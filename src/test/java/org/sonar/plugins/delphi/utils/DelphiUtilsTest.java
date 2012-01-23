@@ -23,21 +23,28 @@ package org.sonar.plugins.delphi.utils;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.junit.Test;
 
 public class DelphiUtilsTest {
 
   @Test
-  public void getAbsolutePathTest() {
-    String root = "C:\\test";
+  public void getAbsolutePathTest() throws IOException 
+  {
+    File tempFile = File.createTempFile("testFile", "tmp");
+    tempFile.deleteOnExit();
+    
+    String rootPath = tempFile.getParent();
+     
+    String str1 = DelphiUtils.resolveAbsolutePath(rootPath, tempFile.getName()).getAbsolutePath();
+    String str2 = DelphiUtils.resolveAbsolutePath(rootPath, "tempDir").getAbsolutePath();
+    String str3 = DelphiUtils.resolveAbsolutePath(rootPath, rootPath).getAbsolutePath();
 
-    String str1 = DelphiUtils.resolveAbsolutePath(root, "branch").getAbsolutePath();
-    String str2 = DelphiUtils.resolveAbsolutePath(root, "C:\\test\\directory").getAbsolutePath();
-    String str3 = DelphiUtils.resolveAbsolutePath(root, "branch\\tools").getAbsolutePath();
-
-    assertEquals("C:\\test\\branch", str1);
-    assertEquals("C:\\test\\directory", str2);
-    assertEquals("C:\\test\\branch\\tools", str3);
+    assertEquals(rootPath + File.separatorChar + tempFile.getName(), str1);
+    assertEquals(rootPath + File.separatorChar + "tempDir", str2);
+    assertEquals(rootPath, str3);
   }
 
   @Test

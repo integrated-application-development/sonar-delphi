@@ -95,7 +95,6 @@ public class DelphiSensor implements Sensor {
 
     // creates and resets analyser
     ASTAnalyzer analyzer = new DelphiASTAnalyzer();
-
     List<DelphiProject> projects = DelphiProjectHelper.getInstance().getWorkgroupProjects(project); // get workspace projects
     for (DelphiProject delphiProject : projects) // for every .dproj file
     {
@@ -203,7 +202,7 @@ public class DelphiSensor implements Sensor {
       parseSourceFile(delphiFile, excludedDirs, importSources, analyser);
 
       if (--oneFourth == 0) { // % of completion info
-        percent += PROGRESS_PERCENT;
+        percent += Math.min(percent+PROGRESS_PERCENT, 100);
         oneFourth = sourceFiles.size() / PROGRESS_PARTS;
         DelphiUtils.LOG.info(percent + "% done...");
       }

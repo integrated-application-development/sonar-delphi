@@ -67,7 +67,6 @@ public class DelphiPmdSensor implements Sensor {
 
   public void analyse(Project project, SensorContext context) {
     // creating report
-    DelphiUtils.getDebugLog().println(">> PMD STARTING");
     File reportFile = createPmdReport(project);
 
     // analysing report

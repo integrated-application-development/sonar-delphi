@@ -23,6 +23,8 @@ package org.sonar.plugins.delphi.surefire;
 
 import java.io.File;
 
+import org.apache.commons.configuration.Configuration;
+import org.sonar.api.CoreProperties;
 import org.sonar.api.batch.AbstractCoverageExtension;
 import org.sonar.api.batch.DependsUpon;
 import org.sonar.api.batch.Sensor;
@@ -38,6 +40,8 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  */
 public class SurefireSensor implements Sensor {
 
+  private Configuration configuration;
+  
   /**
    * @return Sonar's abstract coverage extension class
    */
@@ -47,9 +51,17 @@ public class SurefireSensor implements Sensor {
   }
 
   /**
+   * Ctor
+   * @param configuration Configuration provided by Sonar
+   */
+  public SurefireSensor(Configuration configuration)
+  {
+    this.configuration = configuration;
+  }
+  
+  /**
    * {@inheritDoc}
    */
-
   public boolean shouldExecuteOnProject(Project project) {
     return project.getAnalysisType().isDynamic(true) && DelphiLanguage.KEY.equals(project.getLanguageKey());
   }
@@ -59,10 +71,9 @@ public class SurefireSensor implements Sensor {
    */
 
   public void analyse(Project project, SensorContext context) {
-    String[] paths = DelphiProjectHelper.getInstance().getSurefireDirectories();
+    String[] paths = configuration.getStringArray(CoreProperties.SUREFIRE_REPORTS_PATH_PROPERTY);
 
-    if (paths == null || paths.length == 0) // no directory was specified
-    {
+    if (paths == null || paths.length == 0) {       // no directory was specified
       DelphiUtils.LOG.warn("No Surefire reports directory found!");
       return;
     }
@@ -70,13 +81,13 @@ public class SurefireSensor implements Sensor {
     String mainPath = project.getFileSystem().getBasedir().getAbsolutePath();
     for (String path : paths) // cover each path
     {
-      File reportFile = DelphiUtils.resolveAbsolutePath(mainPath, path);
-      if ( !reportFile.exists()) { // directory does not exist
-        DelphiUtils.LOG.info("surefire report path not found {}", reportFile.getAbsolutePath());
+      File reportDirectory = DelphiUtils.resolveAbsolutePath(mainPath, path);
+      if ( !reportDirectory.exists()) { // directory does not exist
+        DelphiUtils.LOG.warn("surefire report path not found {}", reportDirectory.getAbsolutePath());
         continue;
       }
 
-      collect(project, context, reportFile);
+      collect(project, context, reportDirectory);
     }
   }
 
@@ -88,6 +99,6 @@ public class SurefireSensor implements Sensor {
 
   @Override
   public String toString() {
-    return "DelphiLanguage SurefireSensor";
+    return "Delphi SurefireSensor";
   }
 }
