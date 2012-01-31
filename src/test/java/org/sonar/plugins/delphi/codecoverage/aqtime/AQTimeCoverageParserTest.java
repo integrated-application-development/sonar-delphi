@@ -73,6 +73,7 @@ public class AQTimeCoverageParserTest extends DBTestCase {
     connectionProps.put(DelphiPlugin.JDBC_PASSWORD_KEY, "");
     connectionProps.put(DelphiPlugin.JDBC_DRIVER_KEY, "org.hsqldb.jdbcDriver");
     connectionProps.put(DelphiPlugin.JDBC_URL_KEY, "jdbc:hsqldb:mem:CC");
+    connectionProps.put(DelphiPlugin.JDBC_DB_TABLE_PREFIX_KEY, "");
     Class.forName("org.hsqldb.jdbcDriver");
     connection = DriverManager.getConnection("jdbc:hsqldb:mem:CC", getDatabaseProperties());
 
@@ -90,7 +91,6 @@ public class AQTimeCoverageParserTest extends DBTestCase {
 
     parser = new AQTimeCoverageParser();
     parser.setConnectionProperties(connectionProps);
-    parser.setDbTablePrefix("");
   }
 
   private Properties getDatabaseProperties() {
@@ -140,8 +140,8 @@ public class AQTimeCoverageParserTest extends DBTestCase {
     String lineHits_values[] = { "32=1;33=1", "13=1;14=0" };
 
     for (int i = 0; i < coverage_names.length; ++i) { // % of coverage
-      assertEquals(coverage_values[i], context.getMeasure(coverage_names[i]).getValue(), 0.0);
-      assertEquals(lineHits_values[i], context.getMeasure(lineHits_names[i]).getData());
+      assertEquals(coverage_names[i], coverage_values[i], context.getMeasure(coverage_names[i]).getValue(), 0.0);
+      assertEquals(coverage_names[i], lineHits_values[i], context.getMeasure(lineHits_names[i]).getData());
     }
   }
 

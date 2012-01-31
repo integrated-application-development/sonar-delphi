@@ -29,6 +29,7 @@ import java.util.List;
 import javax.xml.stream.XMLStreamException;
 
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.xml.sax.SAXException;
 
 /**
  * DelphiLanguage project class, it holds values parsed from *.dproj file.
@@ -67,10 +68,12 @@ public class DelphiProject {
     } catch (IllegalArgumentException e) {
       DelphiUtils.LOG.error("No .dproj file to parse. (null)");
       DelphiUtils.getDebugLog().println("No .dproj file to parse. (null)");
-
     } catch (XMLStreamException e) {
       DelphiUtils.LOG.error(".dproj xml error: " + e.getMessage());
       DelphiUtils.getDebugLog().println(".dproj xml error: " + e.getMessage());
+    } catch (SAXException e) {
+    DelphiUtils.LOG.error(".dproj xml error: " + e.getMessage());
+    DelphiUtils.getDebugLog().println(".dproj xml error: " + e.getMessage());
     }
   }
 
@@ -129,10 +132,11 @@ public class DelphiProject {
    *          File to parse
    * @throws IOException
    *           If file not found
+   * @throws SAXException when parsing error occurs
    * @throws IllegalArgumentException
    *           If file == null
    */
-  private void parseFile(File xml) throws IOException, XMLStreamException {
+  private void parseFile(File xml) throws IOException, XMLStreamException, SAXException {
     if (xml == null) {
       throw new IllegalArgumentException("No xml file passed");
     } else if ( !xml.exists()) {

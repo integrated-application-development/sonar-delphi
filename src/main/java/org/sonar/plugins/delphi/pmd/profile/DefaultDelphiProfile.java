@@ -51,7 +51,7 @@ public class DefaultDelphiProfile extends ProfileDefinition {
     Reader reader = new InputStreamReader(getClass().getResourceAsStream("/org/sonar/plugins/delphi/pmd/default-delphi-profile.xml"));
     RulesProfile profile = importer.importProfile(reader, messages);
     profile.setLanguage(DelphiLanguage.KEY);
-    profile.setName("Default DelphiLanguage Profile");
+    profile.setName("Delphi Default Profile");
     return profile;
   }
 

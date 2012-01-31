@@ -50,7 +50,8 @@ public class DelphiWorkgroupXmlParser extends DefaultHandler {
   public DelphiWorkgroupXmlParser(File xmlFile, DelphiWorkgroup delphiWorkGroup) {
     xml = xmlFile;
     workGroup = delphiWorkGroup;
-    currentDir = xml.getAbsolutePath().substring(0, xml.getAbsolutePath().lastIndexOf("\\"));
+    currentDir = DelphiUtils.normalizeFileName(xml.getAbsolutePath());
+    currentDir = currentDir.substring(0, currentDir.lastIndexOf("/"));
   }
 
   /**

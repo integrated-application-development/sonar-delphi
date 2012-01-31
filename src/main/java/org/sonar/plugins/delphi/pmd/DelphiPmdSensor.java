@@ -46,6 +46,8 @@ import org.sonar.plugins.delphi.pmd.profile.DelphiRuleSets;
 import org.sonar.plugins.delphi.pmd.xml.DelphiPmdXmlReportParser;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.sonar.plugins.delphi.utils.ProgressReporter;
+import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
 
 /**
  * PMD sensor
@@ -95,13 +97,14 @@ public class DelphiPmdSensor implements Sensor {
       for (DelphiProject delphiProject : projects) // for every .dproj file
       {
         DelphiUtils.LOG.info("PMD Parsing project " + delphiProject.getName());
+        ProgressReporter progressReporter = new ProgressReporter(delphiProject.getSourceFiles().size(), 10, new ProgressReporterLogger(DelphiUtils.LOG) );
         for (File pmdFile : delphiProject.getSourceFiles()) {
+          progressReporter.progress();
           if (DelphiProjectHelper.getInstance().isExcluded(pmdFile, excluded)) {
             continue;
           }
           pmd.processFile(pmdFile, ruleSets, ruleContext);
         }
-
       }
 
       // write xml report

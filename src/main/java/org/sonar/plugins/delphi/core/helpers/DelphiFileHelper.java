@@ -62,7 +62,9 @@ public class DelphiFileHelper {
       return false;
     }
     for (File excludedDir : excludedSources) {
-      if (fileName.toLowerCase().startsWith(excludedDir.getAbsolutePath().toLowerCase())) {
+      String normalizedFileName = DelphiUtils.normalizeFileName(fileName.toLowerCase());
+      String excludedDirNormalizedPath = DelphiUtils.normalizeFileName(excludedDir.getAbsolutePath().toLowerCase());
+      if (normalizedFileName.startsWith(excludedDirNormalizedPath) ) {
         return true;
       }
     }
@@ -122,6 +124,17 @@ public class DelphiFileHelper {
    * @return Test directories, or empty list
    */
   public List<File> getTestDirectories(Project project) {
+    
+    List<File> testDirs = project.getFileSystem().getTestDirs();
+    for(File directory : testDirs) {
+      if(!directory.exists()) {
+        DelphiUtils.LOG.warn("Test path does not exist: " + directory.getAbsolutePath());
+        DelphiUtils.getDebugLog().println("Test path does not exist: " + directory.getAbsolutePath());
+      }
+    }
+    
+    return testDirs;
+    /*
     List<File> result = new ArrayList<File>();
     if (configuration == null || project == null) {
       return result;
@@ -144,7 +157,7 @@ public class DelphiFileHelper {
       result.add(testDir);
     }
 
-    return result;
+    return result; */
   }
 
   /**

@@ -73,7 +73,7 @@ import org.sonar.plugins.delphi.surefire.SurefireSensor;
         project = true),
     @Property(key = DelphiPlugin.JDBC_PASSWORD_KEY, defaultValue = "", name = "User password", description = "Database user password",
         global = true, project = true),
-    @Property(key = DelphiPlugin.AQTIME_DB_TABLE_PREFIX_KEY, defaultValue = "", name = "AQTime database table prefix",
+    @Property(key = DelphiPlugin.JDBC_DB_TABLE_PREFIX_KEY, defaultValue = "", name = "AQTime database table prefix",
         description = "AQTime database table prefix", global = true, project = true),
     @Property(key = DelphiPlugin.TEST_DIRECTORIES_KEY, defaultValue = "", name = "Test directories",
         description = "List of unit test directories", global = true, project = true) })
@@ -90,7 +90,7 @@ public class DelphiPlugin extends SonarPlugin {
   public static final String JDBC_URL_KEY = "sonar.delphi.codecoverage.aqtime.jdbc.url";
   public static final String JDBC_USER_KEY = "sonar.delphi.codecoverage.aqtime.jdbc.user";
   public static final String JDBC_PASSWORD_KEY = "sonar.delphi.codecoverage.aqtime.jdbc.password";
-  public static final String AQTIME_DB_TABLE_PREFIX_KEY = "sonar.delphi.codecoverage.aqtime.jdbc.prefix";
+  public static final String JDBC_DB_TABLE_PREFIX_KEY = "sonar.delphi.codecoverage.aqtime.jdbc.prefix";
 
   /**
    * {@inheritDoc}

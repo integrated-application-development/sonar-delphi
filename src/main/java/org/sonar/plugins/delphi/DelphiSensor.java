@@ -54,14 +54,14 @@ import org.sonar.plugins.delphi.metrics.LCOM4Metrics;
 import org.sonar.plugins.delphi.metrics.MetricsInterface;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.sonar.plugins.delphi.utils.ProgressReporter;
+import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
 
 /**
  * Main DelphiLanguage sensor class, it executes on DelphiLanguage project and gathers all data through metrics.
  */
 public class DelphiSensor implements Sensor {
 
-  private static final int PROGRESS_PARTS = 4;
-  private static final int PROGRESS_PERCENT = 100 / PROGRESS_PARTS;
   private int scannedFiles = 0; // number of scanned files
   private Project project = null; // project
   private SensorContext context = null; // sensor context
@@ -118,9 +118,8 @@ public class DelphiSensor implements Sensor {
    */
   private void processFiles(MetricsInterface[] metrics, SensorContext sensorContext) {
     DelphiUtils.LOG.info("Processing...");
-
-    int percent = 0;
-    int progress = resourceList.size() / PROGRESS_PARTS;
+    ProgressReporter progressReporter = new ProgressReporter(resourceList.size(), 10, new ProgressReporterLogger(DelphiUtils.LOG) );
+    
     for (DelphiFile resource : resourceList) { // for every resource
       DelphiUtils.getDebugLog().println(">> PROCESSING " + resource.getPath());
       for (MetricsInterface metric : metrics) { // for every metric
@@ -128,7 +127,6 @@ public class DelphiSensor implements Sensor {
           metric.analyse(resource, sensorContext, fileClasses.get(resource), fileFunctions.get(resource), units);
           metric.save(resource, sensorContext);
         }
-
       } // metric
 
       // calculating undocumented api
@@ -136,12 +134,7 @@ public class DelphiSensor implements Sensor {
           Double.MAX_VALUE);
       sensorContext.saveMeasure(resource, CoreMetrics.PUBLIC_UNDOCUMENTED_API, udApi); // Number of public API without a Javadoc block
 
-      if (--progress == 0) {
-        percent += PROGRESS_PERCENT;
-        DelphiUtils.LOG.info(percent + "% done...");
-        progress = resourceList.size() / PROGRESS_PARTS;
-      }
-
+      progressReporter.progress();
     }
 
     DelphiUtils.LOG.info("Done");
@@ -195,18 +188,12 @@ public class DelphiSensor implements Sensor {
     DelphiUtils.LOG.info("Parsing project " + delphiProject.getName());
     DelphiUtils.getDebugLog().println(">> PARSING PROJECT " + delphiProject.getName());
 
-    int percent = 0;
-    int oneFourth = sourceFiles.size() / PROGRESS_PARTS;
-
+    ProgressReporter progressReporter = new ProgressReporter(sourceFiles.size(), 10, new ProgressReporterLogger(DelphiUtils.LOG) );
+    DelphiUtils.LOG.info("Files to parse: " + sourceFiles.size());
+    
     for (File delphiFile : sourceFiles) {
       parseSourceFile(delphiFile, excludedDirs, importSources, analyser);
-
-      if (--oneFourth == 0) { // % of completion info
-        percent += Math.min(percent+PROGRESS_PERCENT, 100);
-        oneFourth = sourceFiles.size() / PROGRESS_PARTS;
-        DelphiUtils.LOG.info(percent + "% done...");
-      }
-
+      progressReporter.progress();
     }
 
     units = analyser.getResults().getCachedUnitsAsList();
@@ -252,7 +239,6 @@ public class DelphiSensor implements Sensor {
       try {
         String source = ast.getFileSource(); // getting file source
         context.saveSource(resource, source); // adding source to the resource file
-        DelphiUtils.getDebugLog().println("Saving source...");
       } catch (DuplicatedSourceException e) {
         DelphiUtils.getDebugLog().println("Source already saved, skipping...");
       }

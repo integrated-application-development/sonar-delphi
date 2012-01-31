@@ -32,9 +32,7 @@ import java.io.PrintStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,6 +109,15 @@ public final class DelphiUtils {
     }
     
     return debugLog;
+  }
+  
+  /**
+   * Normalizes file name, changes all '\' into '/'
+   * @param fileName  file name to normalize
+   * @return  normalized file name
+   */
+  public static String normalizeFileName(String fileName) {
+    return fileName.replaceAll("\\\\", "/");
   }
 
   /**
@@ -286,10 +293,10 @@ public final class DelphiUtils {
    * @return Resolved file
    */
   public static File resolveAbsolutePath(String root, String path) {
-    File file = new File(path.replaceAll("\\\\", "/") );
+    File file = new File( normalizeFileName(path) );
     
     if ( !file.isAbsolute()) {
-      String rootPath = root.replaceAll("\\\\", "/");
+      String rootPath = normalizeFileName(root);
       if ( !rootPath.endsWith("/")) {
         rootPath = rootPath.concat("/");
       }
@@ -301,7 +308,7 @@ public final class DelphiUtils {
 
   /**
    * Resolves ..\ in a path to a file, backtraces the currentDir the number of '..' in a path. Example: currentDir = 'C:\my\dir' fileName =
-   * '..\file.txt'; return = 'C:\my\file.txt'
+   * '..\file.txt'; return = 'C:/my/file.txt'
    * 
    * @param currentDir
    *          Current directory of a file
@@ -310,15 +317,15 @@ public final class DelphiUtils {
    * @return Resolved file name
    */
   public static String resolveBacktracePath(String currentDir, String fileName) {
-    String result = fileName;
+    String result = normalizeFileName(fileName);
     int dotdotCount = DelphiUtils.countSubstrings(result, ".."); // number of '..' in file name
-    result = result.replaceAll("\\.\\.\\\\", ""); // get rid of '..\'
+    result = result.replaceAll("\\.\\./", ""); // get rid of '../'
 
     for (int i = 0; i < dotdotCount; ++i) {
-      currentDir = currentDir.substring(0, currentDir.lastIndexOf('\\'));
+      currentDir = currentDir.substring(0, currentDir.lastIndexOf('/'));
     }
 
-    return currentDir + "\\" + result;
+    return currentDir + "/" + result;
   }
 
   /**

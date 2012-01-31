@@ -31,6 +31,7 @@ import org.sonar.api.resources.DefaultProjectFileSystem;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.WildcardPattern;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 /**
  * File for DelphiLanguage language to be parsed (*.pas)
@@ -213,7 +214,7 @@ public class DelphiFile extends Resource<DelphiPackage> {
       className = StringUtils.substringBeforeLast(className, ".");
       DelphiFile newFile = new DelphiFile(packageName, className, unitTest);
        
-      newFile.setPath(file.getAbsolutePath());
+      newFile.setPath( DelphiUtils.normalizeFileName(file.getAbsolutePath()) );
       return newFile;
     }
     return null;

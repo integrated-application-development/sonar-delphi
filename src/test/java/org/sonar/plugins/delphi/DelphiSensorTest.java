@@ -59,7 +59,7 @@ public class DelphiSensorTest {
     ProjectFileSystem pfs = mock(ProjectFileSystem.class);
 
     baseDir = DelphiUtils.getResource(ROOT_NAME);
-    File reportDir = new File(baseDir.getAbsolutePath() + "\\reports");
+    File reportDir = new File(baseDir.getAbsolutePath() + "/reports");
 
     File[] dirs = baseDir.listFiles(DelphiFile.getDirectoryFilter()); // get all directories
 
@@ -99,7 +99,7 @@ public class DelphiSensorTest {
   public void analyseTest() {
     createKeyMetricIndexMap();
 
-    ProjectMetricsXMLParser xmlParser = new ProjectMetricsXMLParser(new File(baseDir.getAbsolutePath() + "\\values.xml")); // xml file for
+    ProjectMetricsXMLParser xmlParser = new ProjectMetricsXMLParser(new File(baseDir.getAbsolutePath() + "/values.xml")); // xml file for
                                                                                                                            // expected
                                                                                                                            // metrics for
                                                                                                                            // files

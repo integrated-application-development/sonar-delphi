@@ -1,0 +1,101 @@
+/*
+ * Sonar Delphi Plugin
+ * Copyright (C) 2011 Sabre Airline Solutions
+ * Author(s):
+ * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
+ * Michal Wojcik (michal.wojcik@sabre.com)
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
+ */
+package org.sonar.plugins.delphi.utils;
+
+/**
+ * Class used to report some progress
+ */
+public class ProgressReporter
+{
+  private int currentProgress = 0;
+  private int currentPercent  = 0;
+  private int reportProgress  = 25;
+  private int targetProgress  = 100;
+  private int percentProgress = 25;
+  private ProgressReporterLogger logger = null;
+  private boolean firstProgress = true;
+  
+  /**
+   * Default ctor, no logging!
+   */
+  public ProgressReporter() {
+    logger = new ProgressReporterLogger();
+  }
+  
+  /**
+   * Ctor
+   * @param targetProgress  Target progress we want to achieve
+   * @param parts           How many parts of progress we should report, ex. 4 will report every 25%
+   * @param printStream     report will be written to this print stream
+   */
+  public ProgressReporter(int targetProgress, int parts, ProgressReporterLogger logger) {
+    this.targetProgress = targetProgress;
+    this.reportProgress = targetProgress / parts;
+    this.percentProgress = 100 / parts;
+    this.logger = logger;
+  }
+  
+  /**
+   * Progress by one
+   * @return true if progress was reported
+   */
+  public boolean progress() {
+    return progress(1);
+  }
+  
+  /**
+   * Progress by amount
+   * @param amount  amount we want to progress
+   * @return true if progress was reported
+   */
+  public boolean progress(int amount) 
+  {
+    reportZeroPercent();
+    currentProgress += amount;
+    if(currentProgress >= reportProgress) {
+      currentProgress -= reportProgress;
+      currentPercent = Math.min(currentPercent + percentProgress, 100);
+      report();
+      return true;
+    }
+    return false;
+  }
+
+  private void reportZeroPercent() {
+    if(firstProgress) {
+      firstProgress = false;
+      report();
+    }
+  }
+  
+  private void report() {
+    logger.log(currentPercent + "% done...");
+  }
+
+  /**
+   * @return  target progress
+   */
+  public int getTargetProgress() {
+    return targetProgress;
+  }
+  
+}

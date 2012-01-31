@@ -42,8 +42,9 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 public class CodeCoverageSensor implements Sensor {
 
   private static final String DEFAULT_DRIVER = "net.sourceforge.jtds.jdbc.Driver";
-  private static final String PROPERTY_KEYS[]   = {DelphiPlugin.JDBC_DRIVER_KEY, DelphiPlugin.JDBC_URL_KEY, DelphiPlugin.JDBC_USER_KEY, DelphiPlugin.JDBC_PASSWORD_KEY};
-  private static final String DEFAULT_VALUES[]  = {DEFAULT_DRIVER, "", "", "", ""};
+  private static final String PROPERTY_KEYS[]   = {DelphiPlugin.JDBC_DRIVER_KEY, DelphiPlugin.JDBC_URL_KEY, 
+    DelphiPlugin.JDBC_USER_KEY, DelphiPlugin.JDBC_PASSWORD_KEY, DelphiPlugin.JDBC_DB_TABLE_PREFIX_KEY};
+  private static final String DEFAULT_VALUES[]  = {DEFAULT_DRIVER, "", "", "", "", ""};
   private Map<String, String> jdbcProperties = new HashMap<String, String>();
 
   public CodeCoverageSensor(Configuration configuration) {
@@ -89,7 +90,6 @@ public class CodeCoverageSensor implements Sensor {
     List<File> excludedDirs = DelphiProjectHelper.getInstance().getCodeCoverageExcludedDirectories(project);
     excludedDirs.addAll(DelphiProjectHelper.getInstance().getExcludedSources(project.getFileSystem())); // we exclude also excluded sources
     parser.setExcludeDirectories(excludedDirs);
-    parser.setDbTablePrefix( jdbcProperties.get(DelphiPlugin.AQTIME_DB_TABLE_PREFIX_KEY) ); // prefix for DB table name
     return parser;
   }
 

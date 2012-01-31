@@ -75,7 +75,7 @@ public class DelphiPmdSensorTest {
 
   private static final String ROOT_NAME = "/org/sonar/plugins/delphi/PMDTest";
   private static final String TEST_FILE = "/org/sonar/plugins/delphi/PMDTest/pmd.pas";
-
+  
   private Project project;
   private DelphiPmdSensor sensor;
 
@@ -137,7 +137,7 @@ public class DelphiPmdSensorTest {
       Violation violation = debugContext.getViolation(i); // violation
       assertEquals(ruleData[i].getName(), violation.getRule().getName()); // rule name
       assertEquals("LINE AT " + ruleData[i].getName(), ruleData[i].getLine(), violation.getLineId().intValue()); // rule line
-      // System.out.println((i+1) + ": " + violation.getRule().getName() + ", line " + violation.getLineId() );
+      //System.out.println((i+1) + ": " + violation.getRule().getName() + ", line " + violation.getLineId() );
     }
   }
 

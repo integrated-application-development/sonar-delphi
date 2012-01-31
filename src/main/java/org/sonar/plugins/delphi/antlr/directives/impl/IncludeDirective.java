@@ -52,8 +52,8 @@ public class IncludeDirective extends CommonCompilerDirective {
   @Override
   public String getItem() {
     String result = String.copyValueOf(item.toCharArray());
-    result = result.replaceAll(" ", ""); // get rid of ' '
-    result = result.replaceAll("\\.\\.\\\\", ""); // get rid of '..\'
+    result = result.replaceAll(" ", "").replaceAll("\\\\", "/") ; // get rid of ' ', \ -> /
+    result = result.replaceAll("\\.\\./", ""); // get rid of '../'
     return result;
   }
 }

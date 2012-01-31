@@ -77,7 +77,7 @@ public class IncludeResolver extends SourceResolver {
   /**
    * Resolve includes
    * 
-   * @param baseFile
+   * @param baseFileName
    *          base file name
    * @param baseFileData
    *          base file character data
@@ -85,10 +85,12 @@ public class IncludeResolver extends SourceResolver {
    *          list of excluded areas (won't be parsed: strings, comments etc.)
    * @return new file character data
    */
-  private StringBuilder resolveIncludes(String baseFile, StringBuilder baseFileData, SubRangeAggregator excludes) {
-    if (baseFile == null || baseFileData == null) {
+  private StringBuilder resolveIncludes(String baseFileName, StringBuilder baseFileData, SubRangeAggregator excludes) {
+    if (baseFileName == null || baseFileData == null) {
       return baseFileData;
     }
+    
+    baseFileName = DelphiUtils.normalizeFileName(baseFileName);
 
     StringBuilder newData = new StringBuilder(baseFileData); // new data
     List<ReplacementSubRange> dataToInclude = new ArrayList<ReplacementSubRange>();
@@ -103,7 +105,7 @@ public class IncludeResolver extends SourceResolver {
         }
 
         String includeFileName = directive.getItem();
-        String currentDir = baseFile.substring(0, baseFile.lastIndexOf('\\')); // gets the dir of current file
+        String currentDir   = baseFileName.substring(0, baseFileName.lastIndexOf('/')); // gets the dir of current file
         currentDir = backtrackDirectory(currentDir, DelphiUtils.countSubstrings(includeFileName, ".."));
 
         try // read the file into string
@@ -148,7 +150,7 @@ public class IncludeResolver extends SourceResolver {
 
   private String backtrackDirectory(String currentDir, int dotdotCount) {
     for (int i = 0; i < dotdotCount; ++i) {
-      currentDir = currentDir.substring(0, currentDir.lastIndexOf('\\'));
+      currentDir = currentDir.substring(0, currentDir.lastIndexOf('/'));
     }
     return currentDir;
   }
@@ -173,7 +175,7 @@ public class IncludeResolver extends SourceResolver {
 
   private File resolveIncludeFile(String fileName, List<File> directories) throws IncludeResolverException {
     for (File dir : directories) {
-      DelphiUtils.getDebugLog().println("Trying to include " + dir.getAbsolutePath() + "\\" + fileName);
+      DelphiUtils.getDebugLog().println("Trying to include " + dir.getAbsolutePath() + File.separator + fileName);
       File file = getExistingFile(dir.getAbsolutePath(), fileName);
       if (file != null) {
         return file;
@@ -183,7 +185,7 @@ public class IncludeResolver extends SourceResolver {
   }
 
   private File getExistingFile(String directory, String fileName) {
-    File file = new File(directory + "\\" + fileName);
+    File file = new File(directory + File.separator + fileName);
     if (file.exists() && file.isFile()) {
       return file;
     }

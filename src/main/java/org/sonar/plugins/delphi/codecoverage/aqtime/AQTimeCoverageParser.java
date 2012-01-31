@@ -33,9 +33,12 @@ import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.resources.InputFile;
 import org.sonar.api.resources.Project;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiFile;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.sonar.plugins.delphi.utils.ProgressReporter;
+import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
 
 /**
  * AQTime purifier
@@ -50,27 +53,17 @@ public class AQTimeCoverageParser {
   private Map<String, String> connectionProperties;
 
   /**
-   * set database tables prefix
-   * 
-   * @param strPrefix
-   *          prefix
-   */
-  public void setDbTablePrefix(String strPrefix) {
-    prefix = strPrefix;
-  }
-
-  /**
    * {@inheritDoc}
    */
   public void parse(Project project, SensorContext context) {
     DelphiUtils.getDebugLog().println(">> CODE COVERAGE STARTING");
+    DelphiUtils.getDebugLog().println(">> DB PREFIX: " + prefix);
     try {
       AQTimeCoverageDao aqTimeCoverageDao = new AQTimeCoverageDao();
       aqTimeCoverageDao.setJdbcProps(connectionProperties);
       aqTimeCoverageDao.setDatabasePrefix(prefix);
       List<AQTimeCodeCoverage> aqTimeCodeCoverages = aqTimeCoverageDao.readAQTimeCodeCoverage();
       saveCoverageData(processFiles(aqTimeCodeCoverages), context);
-
     } catch (SQLException e) {
       DelphiUtils.LOG.error("AQTime SQL error: " + e.getMessage());
       DelphiUtils.getDebugLog().println("AQTime SQL error: " + e.getMessage());
@@ -98,20 +91,23 @@ public class AQTimeCoverageParser {
 
   private Map<DelphiFile, CoverageFileData> processFiles(List<AQTimeCodeCoverage> aqTimeCodeCoverages) throws SQLException {
     DelphiUtils.getDebugLog().println("Processing files...");
-
+    
+    ProgressReporter progressReporter = new ProgressReporter(aqTimeCodeCoverages.size(), 10, new ProgressReporterLogger(DelphiUtils.LOG) );
+    
     Map<DelphiFile, CoverageFileData> savedResources = new HashMap<DelphiFile, CoverageFileData>(); // map of our sources and their data
     DelphiFile resource = null; // current file
 
     for (AQTimeCodeCoverage aqTimeCodeCoverage : aqTimeCodeCoverages) {
+      progressReporter.progress();
       String path = processFileName(aqTimeCodeCoverage.getCoveredFileName(), sourceFiles); // convert relative file name to absolute path
       if (resource == null || !resource.getPath().equals(path)) {
         resource = DelphiFile.fromAbsolutePath(path, sourceDirs, false);
         if (resource == null) {
           continue;
         }
-
         savedResources.put(resource, new CoverageFileData(resource));
       }
+      
       calculateCoverageData(savedResources.get(resource), aqTimeCodeCoverage.getLineNumber(), aqTimeCodeCoverage.getLineHits());
 
     }
@@ -141,12 +137,14 @@ public class AQTimeCoverageParser {
    * @return Full path to file name
    */
   private String processFileName(String fileName, List<InputFile> sourceFiles) {
-    String path = fileName.replaceAll("\\\\\\.\\.", ""); // erase '\..' prefixes
-    path = path.replaceAll("\\.\\.", ""); // erase '..' prefixes
+    String path = DelphiUtils.normalizeFileName(fileName);
+    path = path.replaceAll("\\\\\\.\\.", ""); // erase '\..' prefixes
+    path = path.replaceAll("\\.\\.", "");     // erase '..' prefixes
 
     for (InputFile source : sourceFiles) { // searching for a proper file in files list
-      if (source.getFile().getAbsolutePath().endsWith(path)) {
-        path = source.getFile().getAbsolutePath();
+      String sourcePath = DelphiUtils.normalizeFileName(source.getFile().getAbsolutePath());
+      if (sourcePath.endsWith(path)) {
+        path = sourcePath;
         break;
       }
     }
@@ -168,5 +166,6 @@ public class AQTimeCoverageParser {
 
   public void setConnectionProperties(Map<String, String> connectionProperties) {
     this.connectionProperties = connectionProperties;
+    prefix = connectionProperties.get(DelphiPlugin.JDBC_DB_TABLE_PREFIX_KEY);
   }
 }

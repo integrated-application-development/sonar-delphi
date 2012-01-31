@@ -294,7 +294,7 @@ x.Free;			//GOOD, sufficent enough
     
     <rule since="" class="org.sonar.plugins.delphi.pmd.rules.DelphiRule" message="Unused function/procedure." 
     name="Unused Function Rule">
-        <description></description>  
+        <description>Unused function/procedure. No other unit uses this function/procedure in it's uses section. Probably you could remove it from project.</description>  
     </rule> 
     
     <rule since="" class="org.sonar.plugins.delphi.pmd.rules.NoInheritedStatementRule" message="Constructor without 'inherited' statement." 
@@ -320,7 +320,7 @@ x.Free;			//GOOD, sufficent enough
     
     <rule since="" class="org.sonar.plugins.delphi.pmd.rules.WithAfterDoThenRule" message="'with' statement after 'do', 'begin' omitted" 
     name="With After Do/Then Rule">
-	    <description>'with' statement directly after 'do' or 'then', 'begin' was omited</description>
+	    <description>'with' statement used directly after 'do' or 'then' statements. You should place 'begin' directly after 'do' or 'then' statements.</description>
     </rule>
     
     <rule since="" class="org.sonar.plugins.delphi.pmd.rules.NoSemicolonRule" message="No semicolon at the end of code block." 

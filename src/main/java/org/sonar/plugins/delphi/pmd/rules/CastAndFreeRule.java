@@ -52,13 +52,17 @@ public class CastAndFreeRule extends DelphiRule {
 
   private int processSequence(LexerMetrics sequence[], int sequenceIndex, DelphiPMDNode node, Object data) {
     int resultIndex = sequenceIndex;
-    if (sequence[resultIndex].toMetrics() == node.getType()) {
+    if(resultIndex >= sequence.length) {
+      resultIndex = 0;
+    } 
+    else if (sequence[resultIndex].toMetrics() == node.getType()) {
       ++resultIndex;
       if (isCorrectSequence(sequence, resultIndex, node)) {
         resultIndex = 0;
         addViolation(data, node);
       }
-    } else {
+    }
+    else {
       resultIndex = 0;
     }
 
@@ -66,11 +70,6 @@ public class CastAndFreeRule extends DelphiRule {
   }
 
   private boolean isCorrectSequence(LexerMetrics sequence[], int index, Tree lastNode) {
-    return index >= sequence.length && isFreeStatement(lastNode);
+    return index >= sequence.length && lastNode.getText().equalsIgnoreCase("free");
   }
-
-  private boolean isFreeStatement(Tree node) {
-    return node.getText().equalsIgnoreCase("free");
-  }
-
 }

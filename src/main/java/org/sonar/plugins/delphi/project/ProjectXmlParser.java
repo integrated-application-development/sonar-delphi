@@ -50,24 +50,21 @@ public class ProjectXmlParser extends DefaultHandler {
    *          DelphiProject class to modify
    */
   public ProjectXmlParser(File xml, DelphiProject delphiProject) {
-    fileName = xml.getAbsolutePath();
-    currentDir = fileName.substring(0, fileName.lastIndexOf('\\'));
+    fileName = DelphiUtils.normalizeFileName(xml.getAbsolutePath());
+    currentDir = fileName.substring(0, fileName.lastIndexOf('/'));
     project = delphiProject;
   }
 
   /**
    * Parses the document
+   * @throws IOException 
+   * @throws SAXException 
    */
-  public void parse() {
-    try {
+  public void parse() throws SAXException, IOException {
       SAXParser parser = new SAXParser();
       parser.setContentHandler(this);
       parser.setErrorHandler(this);
       parser.parse(fileName);
-    } catch (Exception ex) {
-      DelphiUtils.getDebugLog().println(ex.getMessage());
-    }
-
   }
 
   @Override
