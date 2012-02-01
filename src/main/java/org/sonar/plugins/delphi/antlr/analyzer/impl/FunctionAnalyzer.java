@@ -24,6 +24,7 @@ package org.sonar.plugins.delphi.antlr.analyzer.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
@@ -69,7 +70,7 @@ public class FunctionAnalyzer extends CodeAnalyzer {
     }
 
     functionRealName = getFunctionName((CommonTree) codeTree.getCurrentCodeNode().getNode());
-    if (functionRealName.isEmpty()) { // no name => no function
+    if (StringUtils.isEmpty(functionRealName)) { // no name => no function
       return;
     }
     functionName = functionRealName.toLowerCase(); // gets function name

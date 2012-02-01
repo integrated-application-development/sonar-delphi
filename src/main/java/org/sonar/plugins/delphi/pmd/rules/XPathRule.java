@@ -25,6 +25,7 @@ import java.util.List;
 
 import net.sourceforge.pmd.RuleContext;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.xml.dtm.DTM;
 import org.apache.xpath.XPathAPI;
 import org.apache.xpath.objects.XNodeSet;
@@ -55,7 +56,7 @@ public class XPathRule extends DelphiRule {
   @Override
   public Object visit(DelphiPMDNode node, Object data) {
     String xPathString = getStringProperty("xpath"); // get xpath string
-    if (xPathString == null || xPathString.isEmpty()) {
+    if (StringUtils.isEmpty(xPathString)) {
       return data;
     }
     Document doc = getCachedDocument(node.getASTTree());

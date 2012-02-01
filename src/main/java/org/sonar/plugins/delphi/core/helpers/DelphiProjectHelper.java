@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.lang.StringUtils;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.CoreProperties;
 import org.sonar.api.resources.Project;
@@ -111,7 +112,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
     String[] includedDirs = configuration.getStringArray(DelphiPlugin.INCLUDED_DIRECTORIES_KEY);
     if (includedDirs != null && includedDirs.length > 0) {
       for (String path : includedDirs) {
-        if (path.isEmpty()) {
+        if (StringUtils.isEmpty(path)) {
           continue;
         }
         File included = DelphiUtils.resolveAbsolutePath(fileSystem.getBasedir().getAbsolutePath(), path.trim());
@@ -144,7 +145,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
     String[] excludedNames = configuration.getStringArray(DelphiPlugin.EXCLUDED_DIRECTORIES_KEY);
     if (excludedNames != null && excludedNames.length > 0) {
       for (String path : excludedNames) {
-        if (path.isEmpty()) {
+        if (StringUtils.isEmpty(path)) {
           continue;
         }
         File excluded = DelphiUtils.resolveAbsolutePath(fileSystem.getBasedir().getAbsolutePath(), path.trim());
@@ -220,7 +221,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
     String dprojPath = getProjectFile();
     String gprojPath = getWorkgroupFile();
 
-    if (gprojPath != null && !gprojPath.isEmpty()) // Single workgroup file, containing list of .dproj files
+    if (!StringUtils.isEmpty(gprojPath)) // Single workgroup file, containing list of .dproj files
     {
       try {
         DelphiUtils.getDebugLog().println(".groupproj file found: " + gprojPath);
@@ -240,7 +241,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
       }
     }
 
-    else if (dprojPath != null && !dprojPath.isEmpty()) // Single .dproj file
+    else if (!StringUtils.isEmpty(dprojPath)) // Single .dproj file
     {
       File dprojFile = DelphiUtils.resolveAbsolutePath(fileSystem.getBasedir().getAbsolutePath(), dprojPath);
       DelphiUtils.getDebugLog().println(".dproj file found: " + gprojPath);

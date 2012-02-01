@@ -21,6 +21,7 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import org.apache.commons.lang.StringUtils;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
@@ -49,7 +50,7 @@ public class UppercaseReservedWordsRule extends DelphiRule {
 
   @Override
   public Object visit(DelphiPMDNode node, Object data) {
-    if (node.getText().isEmpty()) {
+    if (StringUtils.isEmpty(node.getText())) {
       return data;
     }
     char firstChar = node.getText().charAt(0);

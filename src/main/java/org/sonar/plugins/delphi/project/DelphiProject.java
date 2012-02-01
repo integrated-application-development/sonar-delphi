@@ -28,6 +28,7 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.lang.StringUtils;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.xml.sax.SAXException;
 
@@ -100,7 +101,7 @@ public class DelphiProject {
    *          Preprocessor definition
    */
   public void addDefinition(String definition) {
-    if ( !definition.isEmpty()) {
+    if ( !StringUtils.isEmpty(definition)) {
       defs.add(definition);
     }
   }
@@ -114,7 +115,7 @@ public class DelphiProject {
    *           if directory is invalid
    */
   public void addIncludeDirectory(String directory) throws IOException {
-    if ( !directory.isEmpty()) {
+    if ( !StringUtils.isEmpty(directory)) {
       File dir = new File(directory);
 
       if ( !dir.exists() || !dir.isDirectory()) {

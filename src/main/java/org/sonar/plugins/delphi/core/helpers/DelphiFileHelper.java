@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.lang.StringUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.delphi.DelphiPlugin;
@@ -101,7 +102,7 @@ public class DelphiFileHelper {
     }
     ProjectFileSystem fileSystem = project.getFileSystem();
     for (String path : sources) {
-      if (path.isEmpty()) {
+      if (StringUtils.isEmpty(path)) {
         continue;
       }
       File excluded = DelphiUtils.resolveAbsolutePath(fileSystem.getBasedir().getAbsolutePath(), path.trim());

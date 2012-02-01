@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.lang.StringUtils;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
@@ -74,7 +75,7 @@ public class CodeCoverageSensor implements Sensor {
 
   private boolean areJdbcPropertiesValid() {
     for(int i = 0; i < PROPERTY_KEYS.length - 1; i++) { //don't include db table prefix
-      if(jdbcProperties.get(PROPERTY_KEYS[i]).isEmpty()) {
+      if (StringUtils.isEmpty(jdbcProperties.get(PROPERTY_KEYS[i]))) {
         DelphiUtils.LOG.warn("Empty jdbc property " + PROPERTY_KEYS[i] + ", code coverage skipped.");
         return false;
       }

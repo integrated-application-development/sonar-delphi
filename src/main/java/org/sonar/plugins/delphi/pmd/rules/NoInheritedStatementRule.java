@@ -21,6 +21,7 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import org.apache.commons.lang.StringUtils;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
@@ -35,7 +36,7 @@ public class NoInheritedStatementRule extends DelphiRule {
   @Override
   public Object visit(DelphiPMDNode node, Object data) {
     String lookFor = getStringProperty("lookFor");
-    if (lookFor == null || lookFor.isEmpty()) {
+    if (StringUtils.isEmpty(lookFor)) {
       return data;
     }
 
