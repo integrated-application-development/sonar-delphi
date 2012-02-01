@@ -227,24 +227,6 @@
           <header>/src/LICENSE.txt</header>
         </configuration>
       </plugin>
-
-      <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>2.4.1</version>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>.</directory>
-              <includes>
-                <include>debug_log.txt</include>
-                <include>pmd-report.xml</include>
-                <include>CC.*</include>
-              </includes>
-              <followSymlinks>false</followSymlinks>
-            </fileset>
-          </filesets>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 
