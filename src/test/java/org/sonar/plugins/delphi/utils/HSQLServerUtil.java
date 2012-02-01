@@ -29,10 +29,9 @@ import org.hsqldb.persist.HsqlProperties;
 
 /**
  * Utility to start the HSQL server.
- * 
+ *
  * @author Denis Pavlov
  * @since 1.0.0
- * 
  */
 public final class HSQLServerUtil {
 
@@ -68,7 +67,7 @@ public final class HSQLServerUtil {
 
   /**
    * start the server with a database configuration.
-   * 
+   *
    * @param dbName
    *          the name of database
    * @param port
@@ -77,20 +76,22 @@ public final class HSQLServerUtil {
   public void start(final String dbName, final int port) {
     HsqlProperties props = new HsqlProperties();
     props.setProperty("server.port", port);
-    props.setProperty("server.database.0", dbName);
+    // Usage of prefix "target/" is important in order to not pollute working directory
+    props.setProperty("server.database.0", "target/" + dbName);
     props.setProperty("server.dbname.0", dbName);
     doStart(props);
   }
 
   /**
    * start the server with a database configuration.
-   * 
+   *
    * @param dbName
    *          the name of database
    */
   public void start(final String dbName) {
     HsqlProperties props = new HsqlProperties();
-    props.setProperty("server.database.0", dbName);
+    // Usage of prefix "target/" is important in order to not pollute working directory
+    props.setProperty("server.database.0", "target/" + dbName);
     props.setProperty("server.dbname.0", dbName);
     doStart(props);
   }

@@ -84,6 +84,9 @@ public class DelphiPmdSensorTest {
     project = mock(Project.class);
     ProjectFileSystem pfs = mock(ProjectFileSystem.class);
 
+    // Don't pollute current working directory
+    when(pfs.getSonarWorkingDirectory()).thenReturn(new File("target"));
+
     File baseDir = DelphiUtils.getResource(ROOT_NAME);
 
     when(project.getLanguage()).thenReturn(new DelphiLanguage());
