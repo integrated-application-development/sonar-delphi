@@ -76,9 +76,20 @@ public class TypeInheritanceAnalyzerTest {
 
     ClassInterface parents[] = clazz.getParents();
     assertEquals(3, parents.length);
-    assertEquals("tmyancestor", parents[0].getName());
-    assertEquals("tmyclass", parents[1].getName());
-    assertEquals("tmyelder", parents[2].getName());
+    
+    String parentNames[] = {"TMyAncestor", "TMyClass", "TMyElder"};
+    for(ClassInterface parent : parents) {  //we got no constant ordering of parents array, 
+                                            //so we have to check every parent against every name
+      boolean isParentNameOk = false;
+      for(String parentName : parentNames) {
+        if(parent.getName().equalsIgnoreCase(parentName)) {
+          isParentNameOk = true;
+          break;
+        }
+      }
+      assertTrue("Parent name not recognized: " + parent.getName(), isParentNameOk);
+    }
+    
   }
 
   @Test

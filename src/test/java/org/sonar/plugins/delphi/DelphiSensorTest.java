@@ -99,7 +99,7 @@ public class DelphiSensorTest {
   public void analyseTest() {
     createKeyMetricIndexMap();
 
-    ProjectMetricsXMLParser xmlParser = new ProjectMetricsXMLParser(new File(baseDir.getAbsolutePath() + "/values.xml")); // xml file for
+    ProjectMetricsXMLParser xmlParser = new ProjectMetricsXMLParser(new File(baseDir.getAbsolutePath() + File.separator + "values.xml")); // xml file for
                                                                                                                            // expected
                                                                                                                            // metrics for
                                                                                                                            // files
@@ -114,6 +114,7 @@ public class DelphiSensorTest {
     for (String key : context.getMeasuresKeys()) { // check each measure if it is correct
       String fileKey = key.substring(0, key.lastIndexOf(':')); // get file name
       String metricKey = key.substring(key.lastIndexOf(':') + 1, key.length()); // get metric key
+      
       if ( !expectedValues.containsKey(fileKey)) {
         continue; // skip [default] package
       }

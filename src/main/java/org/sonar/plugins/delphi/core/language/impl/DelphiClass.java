@@ -307,9 +307,12 @@ public class DelphiClass implements ClassInterface {
     Set<FunctionInterface> visited = new HashSet<FunctionInterface>();
     for (FunctionInterface func : functions) {
       if (func.isAccessor()) {
+        System.out.println(this.getName() + " : " + func.getName() + " is accessor");
         continue;
       }
-      rfc += analyseFunction(func, visited);
+      int value = analyseFunction(func, visited); 
+      System.out.println(getName() + " : " + func.getName() + " = " + value);
+      rfc += value;
     }
     return rfc; // rfc = number of local methods + number of remote methods
   }
