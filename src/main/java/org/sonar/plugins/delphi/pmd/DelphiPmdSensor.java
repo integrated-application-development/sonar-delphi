@@ -111,7 +111,6 @@ public class DelphiPmdSensor implements Sensor {
       return writeXmlReport(project, pmd.getReport());
     } catch (IOException e) {
       DelphiUtils.LOG.error("Could not generate PMD report file.");
-      DelphiUtils.getDebugLog().println("Could not generate PMD report file.");
       return null;
     }
   }

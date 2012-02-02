@@ -84,7 +84,6 @@ public class ProjectXmlParser extends DefaultHandler {
         project.addFile(path);
       } catch (IOException e) {
         DelphiUtils.LOG.error(e.getMessage());
-        DelphiUtils.getDebugLog().println(e.getMessage());
         throw new SAXException(e);
       }
     } else if (rawName.equals("VersionInfoKeys")) { // project name
@@ -135,7 +134,6 @@ public class ProjectXmlParser extends DefaultHandler {
           project.addIncludeDirectory(path);
         } catch (IOException e) {
           DelphiUtils.LOG.error(e.getMessage());
-          DelphiUtils.getDebugLog().println(e.getMessage());
           throw new SAXException(e);
         }
       }

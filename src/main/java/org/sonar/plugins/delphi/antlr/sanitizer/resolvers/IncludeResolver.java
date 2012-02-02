@@ -129,7 +129,7 @@ public class IncludeResolver extends SourceResolver {
 
       } // for
     } catch (CompilerDirectiveFactorySyntaxException e) {
-      DelphiUtils.getDebugLog().println(e.getMessage());
+      DelphiUtils.LOG.debug(e.getMessage());
     }
 
     return introduceIncludedData(newData, dataToInclude);
@@ -175,7 +175,7 @@ public class IncludeResolver extends SourceResolver {
 
   private File resolveIncludeFile(String fileName, List<File> directories) throws IncludeResolverException {
     for (File dir : directories) {
-      DelphiUtils.getDebugLog().println("Trying to include " + dir.getAbsolutePath() + File.separator + fileName);
+      DelphiUtils.LOG.debug("Trying to include " + dir.getAbsolutePath() + File.separator + fileName);
       File file = getExistingFile(dir.getAbsolutePath(), fileName);
       if (file != null) {
         return file;

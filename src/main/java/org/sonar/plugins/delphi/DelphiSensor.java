@@ -121,7 +121,7 @@ public class DelphiSensor implements Sensor {
     ProgressReporter progressReporter = new ProgressReporter(resourceList.size(), 10, new ProgressReporterLogger(DelphiUtils.LOG) );
     
     for (DelphiFile resource : resourceList) { // for every resource
-      DelphiUtils.getDebugLog().println(">> PROCESSING " + resource.getPath());
+      DelphiUtils.LOG.debug(">> PROCESSING " + resource.getPath());
       for (MetricsInterface metric : metrics) { // for every metric
         if (metric.executeOnResource(resource)) {
           metric.analyse(resource, sensorContext, fileClasses.get(resource), fileFunctions.get(resource), units);
@@ -157,7 +157,7 @@ public class DelphiSensor implements Sensor {
   // for debugging, prints file paths with message to debug file
   private void printFileList(String msg, List<File> list) {
     for (File f : list) {
-      DelphiUtils.getDebugLog().println(msg + f.getAbsolutePath());
+      DelphiUtils.LOG.debug(msg + f.getAbsolutePath());
     }
   }
 
@@ -186,7 +186,6 @@ public class DelphiSensor implements Sensor {
 
     // for every source file
     DelphiUtils.LOG.info("Parsing project " + delphiProject.getName());
-    DelphiUtils.getDebugLog().println(">> PARSING PROJECT " + delphiProject.getName());
 
     ProgressReporter progressReporter = new ProgressReporter(sourceFiles.size(), 10, new ProgressReporterLogger(DelphiUtils.LOG) );
     DelphiUtils.LOG.info("Files to parse: " + sourceFiles.size());
@@ -224,7 +223,7 @@ public class DelphiSensor implements Sensor {
     DelphiPackage pack = new DelphiPackage(resource.getParent().getKey());
     packageList.add(pack); // new pack
 
-    DelphiUtils.getDebugLog().println(">> PARSING " + resource.getPath() + " test: " + isTest);
+    DelphiUtils.LOG.debug(">> PARSING " + resource.getPath() + " test: " + isTest);
 
     if (filesCount.containsKey(pack)) {
       filesCount.put(pack, filesCount.get(pack) + 1); // files count
@@ -240,7 +239,7 @@ public class DelphiSensor implements Sensor {
         String source = ast.getFileSource(); // getting file source
         context.saveSource(resource, source); // adding source to the resource file
       } catch (DuplicatedSourceException e) {
-        DelphiUtils.getDebugLog().println("Source already saved, skipping...");
+        DelphiUtils.LOG.debug("Source already saved, skipping...");
       }
     }
 
@@ -265,8 +264,7 @@ public class DelphiSensor implements Sensor {
       analyser.analyze(ast); // parsing with ANTLR
       ++scannedFiles;
     } catch (Exception e) {
-      DelphiUtils.getDebugLog().println(">>>> ERROR PARSING FILE: " + e.getMessage() + " " + sourceFile.getAbsolutePath());
-      e.printStackTrace(DelphiUtils.getDebugLog());
+      DelphiUtils.LOG.error("Error parsing file: " + e.getMessage() + " " + sourceFile.getAbsolutePath());
     }
     return ast;
   }

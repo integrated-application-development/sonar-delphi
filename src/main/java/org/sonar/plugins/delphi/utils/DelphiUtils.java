@@ -84,32 +84,6 @@ public final class DelphiUtils {
    * Logger class, use it for logging/debugging at Sonar window
    */
   public static final Logger LOG = LoggerFactory.getLogger(DelphiPlugin.class.getName());
-
-  /**
-   * Debug output to file
-   */
-
-  private static PrintStream debugLog = null;
-
-  /**
-   * Gets the debug log associated with file
-   * 
-   * @return Debug log print stream
-   */  
-  public static PrintStream getDebugLog()
-  {
-    if (debugLog == null) {
-      try {
-        debugLog = new PrintStream(new FileOutputStream("debug_log.txt"));
-        debugLog.println(new Date());
-        System.setErr(debugLog); // redirect system.err to file
-      } catch (FileNotFoundException e) {
-        LOG.error("Could not create debug log!");
-      }
-    }
-    
-    return debugLog;
-  }
   
   /**
    * Normalizes file name, changes all '\' into '/'

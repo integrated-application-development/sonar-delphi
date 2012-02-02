@@ -88,10 +88,8 @@ public class DelphiSureFireParser extends AbstractSurefireParser {
       throw new FileNotFoundException(); // no file found
     } catch (FileNotFoundException e) {
       DelphiUtils.LOG.warn(ERROR_MSG + classKey + FILE_EXT);
-      DelphiUtils.getDebugLog().println(ERROR_MSG + classKey + FILE_EXT);
     } catch (IOException e) {
       DelphiUtils.LOG.warn(ERROR_MSG + classKey + FILE_EXT);
-      DelphiUtils.getDebugLog().println(ERROR_MSG + classKey + FILE_EXT);
     }
 
     return new DelphiFile(classKey, true); // default behavior

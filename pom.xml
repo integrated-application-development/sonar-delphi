@@ -67,7 +67,7 @@
     <sonar.pluginName>Delphi</sonar.pluginName>
     <sonar.pluginClass>org.sonar.plugins.delphi.DelphiPlugin</sonar.pluginClass>
     <sonar.exclusions>org.sonar.plugins.delphi.antlr.DelphiParser,org.sonar.plugins.delphi.antlr.DelphiLexer</sonar.exclusions>
-        <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
+    <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
   </properties>
 
   <dependencies>

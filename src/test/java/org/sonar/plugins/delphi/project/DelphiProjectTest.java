@@ -75,14 +75,6 @@ public class DelphiProjectTest {
   }
 
   @Test
-  public void catchTest() {
-    String emptyString = null;
-    File emptyFile = null;
-    project = new DelphiProject(emptyString);
-    project = new DelphiProject(emptyFile);
-  }
-
-  @Test
   public void parseFileTest() throws IllegalArgumentException, IOException {
     project = new DelphiProject(DelphiUtils.getResource(XML_FILE));
 

@@ -46,14 +46,12 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  */
 public class DelphiCpdTokenizer implements Tokenizer {
 
-  private ProjectFileSystem fileSystem = null;
   private static List<File> excluded = null;
 
   public DelphiCpdTokenizer() {
   }
 
-  public DelphiCpdTokenizer(ProjectFileSystem fileSystem, List<File> excluded) {
-    this.fileSystem = fileSystem;
+  public DelphiCpdTokenizer(List<File> excluded) {
     DelphiCpdTokenizer.excluded = excluded;
   }
 
@@ -83,11 +81,9 @@ public class DelphiCpdTokenizer implements Tokenizer {
         token = lexer.nextToken();
       }
     } catch (FileNotFoundException ex) {
-      DelphiUtils.LOG.error("Could not find : " + fileName, ex);
-      DelphiUtils.getDebugLog().println(">>!! Could not find : " + fileName);
+      DelphiUtils.LOG.error("Cpd could not find : " + fileName, ex);
     } catch (IOException ex) {
-      DelphiUtils.LOG.error("IO Exception on " + fileName, ex);
-      DelphiUtils.getDebugLog().println(">>!! IO Exception on " + fileName);
+      DelphiUtils.LOG.error("Cpd IO Exception on " + fileName, ex);
     }
     cpdTokens.add(TokenEntry.getEOF());
   }

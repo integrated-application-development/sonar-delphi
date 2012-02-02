@@ -56,8 +56,7 @@ public class AQTimeCoverageParser {
    * {@inheritDoc}
    */
   public void parse(Project project, SensorContext context) {
-    DelphiUtils.getDebugLog().println(">> CODE COVERAGE STARTING");
-    DelphiUtils.getDebugLog().println(">> DB PREFIX: " + prefix);
+    DelphiUtils.LOG.debug("Code Coverage starting...");
     try {
       AQTimeCoverageDao aqTimeCoverageDao = new AQTimeCoverageDao();
       aqTimeCoverageDao.setJdbcProps(connectionProperties);
@@ -66,7 +65,6 @@ public class AQTimeCoverageParser {
       saveCoverageData(processFiles(aqTimeCodeCoverages), context);
     } catch (SQLException e) {
       DelphiUtils.LOG.error("AQTime SQL error: " + e.getMessage());
-      DelphiUtils.getDebugLog().println("AQTime SQL error: " + e.getMessage());
     }
   }
 
@@ -90,8 +88,6 @@ public class AQTimeCoverageParser {
   }
 
   private Map<DelphiFile, CoverageFileData> processFiles(List<AQTimeCodeCoverage> aqTimeCodeCoverages) throws SQLException {
-    DelphiUtils.getDebugLog().println("Processing files...");
-    
     ProgressReporter progressReporter = new ProgressReporter(aqTimeCodeCoverages.size(), 10, new ProgressReporterLogger(DelphiUtils.LOG) );
     
     Map<DelphiFile, CoverageFileData> savedResources = new HashMap<DelphiFile, CoverageFileData>(); // map of our sources and their data

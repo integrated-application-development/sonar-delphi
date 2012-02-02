@@ -65,16 +65,12 @@ public class DelphiProject {
       parseFile(xml);
     } catch (IOException e) {
       DelphiUtils.LOG.error("Could not find .dproj file: " + xml.getAbsolutePath());
-      DelphiUtils.getDebugLog().println("Could not find .dproj file: " + xml.getAbsolutePath());
     } catch (IllegalArgumentException e) {
       DelphiUtils.LOG.error("No .dproj file to parse. (null)");
-      DelphiUtils.getDebugLog().println("No .dproj file to parse. (null)");
     } catch (XMLStreamException e) {
       DelphiUtils.LOG.error(".dproj xml error: " + e.getMessage());
-      DelphiUtils.getDebugLog().println(".dproj xml error: " + e.getMessage());
     } catch (SAXException e) {
-    DelphiUtils.LOG.error(".dproj xml error: " + e.getMessage());
-    DelphiUtils.getDebugLog().println(".dproj xml error: " + e.getMessage());
+      DelphiUtils.LOG.error(".dproj xml error: " + e.getMessage());
     }
   }
 

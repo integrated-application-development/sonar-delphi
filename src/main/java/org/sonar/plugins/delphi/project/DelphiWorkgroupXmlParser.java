@@ -64,7 +64,7 @@ public class DelphiWorkgroupXmlParser extends DefaultHandler {
       parser.setErrorHandler(this);
       parser.parse(xml.getAbsolutePath());
     } catch (Exception ex) {
-      DelphiUtils.getDebugLog().println(ex.getMessage());
+      DelphiUtils.LOG.error(ex.getMessage());
     }
   }
 

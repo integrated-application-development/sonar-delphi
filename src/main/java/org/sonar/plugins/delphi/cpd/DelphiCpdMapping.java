@@ -29,7 +29,6 @@ import net.sourceforge.pmd.cpd.Tokenizer;
 import org.sonar.api.batch.CpdMapping;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
 import org.sonar.plugins.delphi.core.DelphiFile;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
@@ -57,8 +56,7 @@ public class DelphiCpdMapping implements CpdMapping {
    */
 
   public Tokenizer getTokenizer() {
-    ProjectFileSystem fileSystem = project.getFileSystem();
-    return new DelphiCpdTokenizer(fileSystem, DelphiProjectHelper.getInstance().getExcludedSources(fileSystem));
+    return new DelphiCpdTokenizer(DelphiProjectHelper.getInstance().getExcludedSources(project.getFileSystem()));
   }
 
   /**

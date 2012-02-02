@@ -107,11 +107,9 @@ public class DelphiFileHelper {
       }
       File excluded = DelphiUtils.resolveAbsolutePath(fileSystem.getBasedir().getAbsolutePath(), path.trim());
       if ( !excluded.exists()) {
-        DelphiUtils.LOG.warn("Excluded CC path does not exist: " + excluded.getAbsolutePath());
-        DelphiUtils.getDebugLog().println("Excluded CC path does not exist: " + excluded.getAbsolutePath());
+        DelphiUtils.LOG.warn("Excluded code coverage path does not exist: " + excluded.getAbsolutePath());
       } else if ( !excluded.isDirectory()) {
-        DelphiUtils.LOG.warn("Excluded CC path is not a directory: " + excluded.getAbsolutePath());
-        DelphiUtils.getDebugLog().println("Excluded CC path is not a directory: " + excluded.getAbsolutePath());
+        DelphiUtils.LOG.warn("Excluded code coverage path is not a directory: " + excluded.getAbsolutePath());
       } else {
         list.add(excluded);
       }
@@ -130,7 +128,6 @@ public class DelphiFileHelper {
     for(File directory : testDirs) {
       if(!directory.exists()) {
         DelphiUtils.LOG.warn("Test path does not exist: " + directory.getAbsolutePath());
-        DelphiUtils.getDebugLog().println("Test path does not exist: " + directory.getAbsolutePath());
       }
     }
     

@@ -118,16 +118,14 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
         File included = DelphiUtils.resolveAbsolutePath(fileSystem.getBasedir().getAbsolutePath(), path.trim());
         if ( !included.exists()) {
           DelphiUtils.LOG.warn("Include directory does not exist: " + included.getAbsolutePath());
-          DelphiUtils.getDebugLog().println("Include directory does not exist: " + included.getAbsolutePath());
         } else if ( !included.isDirectory()) {
           DelphiUtils.LOG.warn("Include path is not a directory: " + included.getAbsolutePath());
-          DelphiUtils.getDebugLog().println("Include path is not a directory: " + included.getAbsolutePath());
         } else {
           result.add(included);
         }
       }
     } else {
-      DelphiUtils.getDebugLog().println("No include directories found in project configuration.");
+      DelphiUtils.LOG.info("No include directories found in project configuration.");
     }
     return result;
   }
@@ -151,12 +149,11 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
         File excluded = DelphiUtils.resolveAbsolutePath(fileSystem.getBasedir().getAbsolutePath(), path.trim());
         result.add(excluded);
         if ( !excluded.exists()) {
-          // DelphiUtils.LOG.warn("Exclude directory does not exist: " + excluded.getAbsolutePath());
-          DelphiUtils.getDebugLog().println("Exclude directory does not exist: " + excluded.getAbsolutePath());
+          DelphiUtils.LOG.warn("Exclude directory does not exist: " + excluded.getAbsolutePath());
         }
       }
     } else {
-      DelphiUtils.getDebugLog().println("No exclude directories found in project configuration.");
+      DelphiUtils.LOG.info("No exclude directories found in project configuration.");
     }
     return result;
   }
@@ -224,7 +221,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
     if (!StringUtils.isEmpty(gprojPath)) // Single workgroup file, containing list of .dproj files
     {
       try {
-        DelphiUtils.getDebugLog().println(".groupproj file found: " + gprojPath);
+        DelphiUtils.LOG.debug(".groupproj file found: " + gprojPath);
         DelphiWorkgroup workGroup = new DelphiWorkgroup(new File(gprojPath));
         for (DelphiProject newProject : workGroup.getProjects()) {
           list.add(newProject);
@@ -232,7 +229,6 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
       } catch (IOException e) {
         DelphiUtils.LOG.error(e.getMessage());
         DelphiUtils.LOG.error("Skipping .groupproj reading, default configuration assumed.");
-        DelphiUtils.getDebugLog().println(e.getMessage());
         DelphiProject newProject = new DelphiProject("Default Project");
         newProject.setIncludeDirectories(getIncludeDirectories(project.getFileSystem()));
         newProject.setSourceFiles(fileSystem.getSourceFiles(DelphiLanguage.instance));
@@ -244,7 +240,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
     else if (!StringUtils.isEmpty(dprojPath)) // Single .dproj file
     {
       File dprojFile = DelphiUtils.resolveAbsolutePath(fileSystem.getBasedir().getAbsolutePath(), dprojPath);
-      DelphiUtils.getDebugLog().println(".dproj file found: " + gprojPath);
+      DelphiUtils.LOG.info(".dproj file found: " + gprojPath);
       DelphiProject newProject = new DelphiProject(dprojFile);
       list.add(newProject);
     }

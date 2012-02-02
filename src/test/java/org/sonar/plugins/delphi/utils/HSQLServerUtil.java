@@ -21,6 +21,8 @@
  */
 package org.sonar.plugins.delphi.utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.hsqldb.Server;
@@ -35,7 +37,7 @@ import org.hsqldb.persist.HsqlProperties;
  */
 public final class HSQLServerUtil {
 
-  private static final HSQLServerUtil UTIL = new HSQLServerUtil();
+  private static final HSQLServerUtil INSTANCE = new HSQLServerUtil();
   private Server hsqlServer;
 
   private HSQLServerUtil() {
@@ -46,7 +48,7 @@ public final class HSQLServerUtil {
    * @return utility instance.
    */
   public static HSQLServerUtil getInstance() {
-    return UTIL;
+    return INSTANCE;
   }
 
   private void doStart(final HsqlProperties props) {
@@ -54,15 +56,19 @@ public final class HSQLServerUtil {
     ServerConfiguration.translateDefaultDatabaseProperty(props);
 
     hsqlServer = new Server();
-    hsqlServer.setLogWriter(new PrintWriter(DelphiUtils.getDebugLog()));
-    hsqlServer.setErrWriter(new PrintWriter(DelphiUtils.getDebugLog()));
+    try {
+      File outputFile = File.createTempFile("HSQLServerUtil", ".temp");
+      outputFile.deleteOnExit();
+      hsqlServer.setLogWriter(new PrintWriter(outputFile));
+      hsqlServer.setErrWriter(new PrintWriter(outputFile));
+    } catch (IOException e) {
+      DelphiUtils.LOG.info("Could not create temporary output file for HSQLServerUtil class; output redirected to stdout");
+    }
+      
     hsqlServer.setRestartOnShutdown(false);
     hsqlServer.setNoSystemExit(true);
     hsqlServer.setProperties(props);
-
-    DelphiUtils.LOG.info("Configured the HSQLDB server...");
     hsqlServer.start();
-    DelphiUtils.LOG.info("HSQLDB server started on port " + hsqlServer.getPort() + "...");
   }
 
   /**

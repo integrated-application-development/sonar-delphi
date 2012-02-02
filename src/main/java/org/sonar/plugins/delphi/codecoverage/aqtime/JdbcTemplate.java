@@ -50,7 +50,6 @@ public class JdbcTemplate {
       connection = DriverManager.getConnection(databaseProperties.getHost(), databaseProperties.getConnectionProperties());
     } catch (Exception e) {
       DelphiUtils.LOG.error(e.getMessage());
-      DelphiUtils.getDebugLog().println(e.getMessage());
       return null;
     }
     return connection;
@@ -67,8 +66,6 @@ public class JdbcTemplate {
       statement.close();
     } catch (SQLException e) {
       DelphiUtils.LOG.error("AQTime SQL error: " + e.getMessage());
-      DelphiUtils.getDebugLog().println("AQTime SQL error: " + e.getMessage());
-
     }
 
     return result;

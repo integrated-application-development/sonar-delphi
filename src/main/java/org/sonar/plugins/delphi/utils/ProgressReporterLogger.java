@@ -21,8 +21,6 @@
  */
 package org.sonar.plugins.delphi.utils;
 
-import java.io.PrintStream;
-
 import org.slf4j.Logger;
 
 /**
@@ -30,7 +28,6 @@ import org.slf4j.Logger;
  */
 public class ProgressReporterLogger 
 {
-  private PrintStream printStream = null;
   private Logger log = null;
     
   /**
@@ -38,15 +35,7 @@ public class ProgressReporterLogger
    */
   public ProgressReporterLogger() {
   }
-  
-  /**
-   * Ctor, specify your own print stream to write to
-   * @param printStream print stream to write to
-   */
-  public ProgressReporterLogger(PrintStream printStream) {
-    this.printStream = printStream;
-  }
-  
+    
   /**
    * Ctor, specify your own logger to write to
    * @param log logger to write to
@@ -59,11 +48,7 @@ public class ProgressReporterLogger
    * log a message
    * @param msg message
    */
-  public void log(String msg) {
-    if(printStream != null) {
-      printStream.println(msg);
-    }
-    
+  public void log(String msg) {    
     if(log != null) {
       log.info(msg);
     }

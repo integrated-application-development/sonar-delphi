@@ -105,7 +105,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
 
     UnitInterface unit = findUnit(delphiFile.getName());
     if (unit == null) {
-      DelphiUtils.getDebugLog().println("No unit for " + delphiFile.getName() + "(" + delphiFile.getPath() + ")");
+      DelphiUtils.LOG.debug("No unit for " + delphiFile.getName() + "(" + delphiFile.getPath() + ")");
       return;
     }
 
@@ -208,7 +208,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
     Set<String> usedUnits = new HashSet<String>();
     List<String> result = new ArrayList<String>();
     for (UnitInterface unit : units) {
-      if (unit.getFileName().toLowerCase().endsWith(".pas")) { // TODO make it DelphiLanguage independable
+      if (unit.getFileName().toLowerCase().endsWith(".pas")) {
         result.add(unit.getName().toLowerCase()); // if not a .dpr, add it to unusedUnits
         allUnits.add(unit);
       }

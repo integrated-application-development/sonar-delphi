@@ -24,16 +24,18 @@ package org.sonar.plugins.delphi.antlr.analyzer.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.apache.commons.lang.StringUtils;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
+import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
+import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.core.language.impl.UnresolvedFunctionCall;
 
 /**
@@ -65,8 +67,12 @@ public class FunctionAnalyzer extends CodeAnalyzer {
   @Override
   protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
     ClassInterface currentClass = results.getActiveClass(); // null?
-    if (results.getActiveUnit() == null) {
-      throw new IllegalStateException("Cannot create function outside unit.");
+    if (results.getActiveUnit() == null) {      
+      UnitInterface defaultUnit = new DelphiUnit("Default");
+      if( !results.getCachedUnits().contains(defaultUnit) ) {
+        results.cacheUnit(defaultUnit);  
+      }
+      results.setActiveUnit(defaultUnit);
     }
 
     functionRealName = getFunctionName((CommonTree) codeTree.getCurrentCodeNode().getNode());

@@ -83,7 +83,7 @@ public class XPathRule extends DelphiRule {
         addViolation(data, violation);
       }
     } catch (Exception e) {
-      DelphiUtils.getDebugLog().println(">>!! XPath error: '" + e.getMessage() + "' at rule " + getName());
+      DelphiUtils.LOG.debug("XPath error: '" + e.getMessage() + "' at rule " + getName());
     }
 
     return data;

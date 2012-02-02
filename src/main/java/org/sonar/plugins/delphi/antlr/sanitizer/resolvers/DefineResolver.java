@@ -83,9 +83,9 @@ public class DefineResolver extends SourceResolver {
       SubRangeAggregator toDelete = processCompilerDirectives(allDirectives, defines, excluded);
       removeUnwantedDefinitions(str, toDelete);
     } catch (CompilerDirectiveFactorySyntaxException e) {
-      DelphiUtils.getDebugLog().println(e.getMessage());
+      DelphiUtils.LOG.debug(e.getMessage());
     } catch (DefineResolverException e) {
-      DelphiUtils.getDebugLog().println(e.getMessage());
+      DelphiUtils.LOG.debug(e.getMessage());
     }
 
     return str;
