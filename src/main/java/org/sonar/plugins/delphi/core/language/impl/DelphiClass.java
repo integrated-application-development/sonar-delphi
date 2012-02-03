@@ -301,18 +301,14 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-
   public int getRfc() {
     int rfc = 0;
     Set<FunctionInterface> visited = new HashSet<FunctionInterface>();
     for (FunctionInterface currentFunction : functions) {
       if (!currentFunction.isAccessor()) {
         visited.add(currentFunction);
-        int value = analyzeFunctionCalls(currentFunction, visited); 
-        System.out.println(getName() + " : " + currentFunction.getName() + " = " + value);
-        rfc += value;
+        rfc += analyzeFunctionCalls(currentFunction, visited);;
       } 
-      else System.out.println(this.getName() + " : " + currentFunction.getName() + " is accessor");
     }
     return rfc; // rfc = number of local methods + number of remote methods
   }
@@ -329,34 +325,23 @@ public class DelphiClass implements ClassInterface {
   private int analyzeFunctionCalls(FunctionInterface function, Set<FunctionInterface> visited) {
     int result = 1 + function.getOverloadsCount();
     for (FunctionInterface calledFunction : function.getCalledFunctions()) {
-      if (visited.contains(calledFunction) || calledFunction.isAccessor()) {
-        continue;
+      if (!calledFunction.isAccessor() && !visited.contains(calledFunction)) {
+        visited.add(calledFunction);
+        result += analyzeFunctionCalls(calledFunction, visited);
       }      
-      visited.add(calledFunction);
-      
-      int calledFuncValue = analyzeFunctionCalls(calledFunction, visited); 
-      
-      System.out.println(">>> " + function.getName() + " calls " + calledFunction.getName() + " with result = "+ calledFuncValue);
-      
-      result += calledFuncValue;
     }
-
     return result;
   }
 
   /**
    * {@inheritDoc}
    */
-
   public boolean hasFunction(FunctionInterface func) {
     boolean b1 = functions.contains(func);
-
     FunctionInterface foo1 = new DelphiFunction(func.getShortName());
     FunctionInterface foo2 = new DelphiFunction(name + "." + func.getShortName());
-
     boolean b2 = functions.contains(foo1);
     boolean b3 = functions.contains(foo2);
-
     return b1 || b2 || b3;
   }
 

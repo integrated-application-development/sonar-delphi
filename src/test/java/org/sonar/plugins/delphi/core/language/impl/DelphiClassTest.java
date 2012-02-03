@@ -48,7 +48,6 @@ public class DelphiClassTest {
   public void getFileNameTest() {
     parent.setFileName("MyFile.pas");
     assertEquals("MyFile.pas", parent.getFileName());
-
   }
 
   @Test
