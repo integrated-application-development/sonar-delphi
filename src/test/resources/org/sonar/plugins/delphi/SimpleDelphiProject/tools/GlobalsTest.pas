@@ -3,7 +3,7 @@ unit GlobalsTest;
 interface
 
 uses
-  Windows;
+  Windows, Globals;
 
 type
   TGlobalsTest = class
@@ -16,7 +16,7 @@ implementation
 
 {$R *.dfm}
 
-//rfc = 4: rfcFunction + globalProcedure (+1) + globalFunction
+//rfc = 3: self + globalProcedure (writeln in globalProcedure not counted) + globalFunction
 function TGlobalsTest.rfcFunction(xyz: integer): integer;
 begin
 	globalProcedure;

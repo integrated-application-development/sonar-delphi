@@ -101,7 +101,8 @@ public class UnresolvedFunctionCall {
   }
 
   /**
-   * Try to resolve called function call (check if provided function is not the called function)
+   * Try to resolve called function call (check if provided function is not the function
+   * called from other function)
    * 
    * @param functionToCheck
    *          Function we will be checking if not a called function

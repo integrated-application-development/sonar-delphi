@@ -305,36 +305,40 @@ public class DelphiClass implements ClassInterface {
   public int getRfc() {
     int rfc = 0;
     Set<FunctionInterface> visited = new HashSet<FunctionInterface>();
-    for (FunctionInterface func : functions) {
-      if (func.isAccessor()) {
-        System.out.println(this.getName() + " : " + func.getName() + " is accessor");
-        continue;
-      }
-      int value = analyseFunction(func, visited); 
-      System.out.println(getName() + " : " + func.getName() + " = " + value);
-      rfc += value;
+    for (FunctionInterface currentFunction : functions) {
+      if (!currentFunction.isAccessor()) {
+        visited.add(currentFunction);
+        int value = analyzeFunctionCalls(currentFunction, visited); 
+        System.out.println(getName() + " : " + currentFunction.getName() + " = " + value);
+        rfc += value;
+      } 
+      else System.out.println(this.getName() + " : " + currentFunction.getName() + " is accessor");
     }
     return rfc; // rfc = number of local methods + number of remote methods
   }
 
   /**
-   * Analyses function for its function calls (how many other function call are in this function)
-   * 
+   * Analyses function for its function calls (how many other function call are in this function),
+   * NOT including accessors (getters/setters)
    * @param function
    *          Function to analyse
    * @param visited
    *          Set of already visited functions (to not repeat visited ones)
    * @return Number of functions called within this function
    */
-  private int analyseFunction(FunctionInterface function, Set<FunctionInterface> visited) {
-
+  private int analyzeFunctionCalls(FunctionInterface function, Set<FunctionInterface> visited) {
     int result = 1 + function.getOverloadsCount();
-    for (FunctionInterface calledFunc : function.getCalledFunctions()) {
-      if (visited.contains(calledFunc) || function.isAccessor()) {
+    for (FunctionInterface calledFunction : function.getCalledFunctions()) {
+      if (visited.contains(calledFunction) || calledFunction.isAccessor()) {
         continue;
-      }
-      visited.add(calledFunc);
-      result += analyseFunction(calledFunc, visited);
+      }      
+      visited.add(calledFunction);
+      
+      int calledFuncValue = analyzeFunctionCalls(calledFunction, visited); 
+      
+      System.out.println(">>> " + function.getName() + " calls " + calledFunction.getName() + " with result = "+ calledFuncValue);
+      
+      result += calledFuncValue;
     }
 
     return result;

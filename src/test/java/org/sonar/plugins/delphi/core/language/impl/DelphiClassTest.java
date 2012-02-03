@@ -150,7 +150,7 @@ public class DelphiClassTest {
 
     ancestor.addFunction(func1);
     ancestor.addFunction(func5);
-    assertEquals(6, ancestor.getRfc());
+    assertEquals(5, ancestor.getRfc());
 
     DelphiFunction func7 = new DelphiFunction("f7");
     func7.addCalledFunction(func7);

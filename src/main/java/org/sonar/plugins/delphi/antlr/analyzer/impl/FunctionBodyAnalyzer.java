@@ -88,6 +88,10 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
     return hasActiveFunction && isFunctionBodyNode;
   }
 
+  /**
+   * Only functions existing in your project and in include directories are counted,
+   * so system functions like 'writeln' are NOT counted.
+   */
   private void countCalledFunctions(Tree node, FunctionInterface function, CodeAnalysisResults results) {
     CalledFunctionVerifier verifyer = new CalledFunctionVerifier(results);
     if (verifyer.verify(node)) {

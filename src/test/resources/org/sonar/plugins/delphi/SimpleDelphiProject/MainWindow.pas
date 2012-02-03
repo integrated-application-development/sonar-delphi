@@ -3,7 +3,7 @@ unit MainWindow;
 interface
 
 uses
-  Windows, GlobalsTest, FunctionTest, CommentsTest, AccessorsTest, StatementTest, OverloadTest;
+  Windows, GlobalsTest, Globals, FunctionTest, CommentsTest, AccessorsTest, StatementTest, OverloadTest;
 
 {** documented class **}
 type
