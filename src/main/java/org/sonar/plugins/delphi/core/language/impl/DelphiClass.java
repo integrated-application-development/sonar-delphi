@@ -159,7 +159,6 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-
   public int getPublicApiCount() {
     int publicApiCount = 0;
     if (visibility == DelphiParser.PUBLIC) { // count class if public
