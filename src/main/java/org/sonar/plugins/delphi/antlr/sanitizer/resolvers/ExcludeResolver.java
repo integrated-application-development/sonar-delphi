@@ -101,7 +101,7 @@ public class ExcludeResolver extends SourceResolver {
         continue; // count only those quotes, that begin and end in a single line
       }
       rangeAggregator.add(new IntegerSubRange(pos, pos2 + 1)); // new quote range
-      pos = pos2; // increase pos to get next '' pair
+      pos = pos2; // set current position to last ' position
     }
     return rangeAggregator;
   }
