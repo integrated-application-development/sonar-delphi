@@ -31,7 +31,7 @@ begin
 	
 	str = 'string to be {excluded}';	//comment
 	str2 = 'another string';
-	string := 'string''with''close''quotes';
+	string := '_¢Ã»Ã_''_¢Â_''_¢ Ã_''_¯Ã°Ã_';
 end;
 
 begin
