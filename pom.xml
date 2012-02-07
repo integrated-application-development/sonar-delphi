@@ -62,7 +62,6 @@
   </ciManagement>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <license.owner>Przemyslaw Kociolek, Michal Wojcik</license.owner>
     <sonar.version>2.10</sonar.version>
     <sonar.pluginName>Delphi</sonar.pluginName>
