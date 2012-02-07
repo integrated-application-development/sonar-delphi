@@ -21,17 +21,17 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.IOException;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRange;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl.IntegerSubRange;
 import org.sonar.plugins.delphi.debug.FileTestsCommon;
+
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class ExcludeResolverTest extends FileTestsCommon {
 
@@ -54,7 +54,7 @@ public class ExcludeResolverTest extends FileTestsCommon {
   @Test
   public void getAllExcludesTest() {
     SubRange expectedResults[] = { new IntegerSubRange(42, 60), new IntegerSubRange(62, 118), new IntegerSubRange(329, 365),
-        new IntegerSubRange(375, 400), new IntegerSubRange(402, 411), new IntegerSubRange(420, 436), new IntegerSubRange(449, 490) };
+      new IntegerSubRange(375, 400), new IntegerSubRange(402, 411), new IntegerSubRange(420, 436), new IntegerSubRange(449, 478)};
 
     SourceResolverResults result = new SourceResolverResults(testFile.getAbsolutePath(), testFileString);
     resolver.resolve(result);
