@@ -26,9 +26,9 @@ package org.sonar.plugins.delphi.utils;
  */
 public class ProgressReporter
 {
-  private int currentProgress = 0;
+  private double currentProgress = 0;
   private int currentPercent  = 0;
-  private int reportProgress  = 25;
+  private double reportProgress  = 25;
   private int targetProgress  = 100;
   private int percentProgress = 25;
   private ProgressReporterLogger logger = null;
@@ -49,42 +49,44 @@ public class ProgressReporter
    */
   public ProgressReporter(int targetProgress, int parts, ProgressReporterLogger logger) {
     this.targetProgress = targetProgress;
-    this.reportProgress = targetProgress / parts;
+    this.reportProgress = targetProgress / (double)parts;
     this.percentProgress = 100 / parts;
     this.logger = logger;
   }
   
   /**
    * Progress by one
-   * @return true if progress was reported
+   * @return number of reports printed
    */
-  public boolean progress() {
+  public int progress() {
     return progress(1);
   }
   
   /**
    * Progress by amount
    * @param amount  amount we want to progress
-   * @return true if progress was reported
+   * @return  number of reports printed
    */
-  public boolean progress(int amount) 
+  public int progress(int amount) 
   {
-    reportZeroPercent();
+    int reportCount = reportZeroPercent();
     currentProgress += amount;
-    if(currentProgress >= reportProgress) {
+    while(currentProgress >= reportProgress) {
       currentProgress -= reportProgress;
       currentPercent = Math.min(currentPercent + percentProgress, 100);
       report();
-      return true;
+      ++reportCount;
     }
-    return false;
+    return reportCount;
   }
 
-  private void reportZeroPercent() {
+  private int reportZeroPercent() {
     if(firstProgress) {
       firstProgress = false;
       report();
+      return 1;
     }
+    return 0;
   }
   
   private void report() {
