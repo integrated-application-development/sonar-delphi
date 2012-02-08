@@ -69,7 +69,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
    *           When no file found
    */
   public DelphiAST(File file) throws IOException, RecognitionException {
-    fileStream = new DelphiSourceSanitizer(file.getAbsolutePath());
+    fileStream = new DelphiSourceSanitizer(file.getAbsolutePath());    
     DelphiParser parser = new DelphiParser(new TokenRewriteStream(new DelphiLexer(fileStream)));
     parser.setTreeAdaptor(new DelphiTreeAdaptor(this));
     children = ((CommonTree) parser.file().getTree()).getChildren();

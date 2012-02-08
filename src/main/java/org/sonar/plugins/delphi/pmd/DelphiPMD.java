@@ -76,13 +76,12 @@ public class DelphiPMD {
         }
 
         List<CompilationUnit> nodes = getNodesFromAST(ast);
-
         ruleSets.apply(nodes, ctx, language);
       }
     } catch (ParseException e) {
-      DelphiUtils.LOG.error("PMD error while parsing " + pmdFile.getAbsolutePath() + ": " + e.getMessage());
+      DelphiUtils.LOG.debug("PMD error while parsing " + pmdFile.getAbsolutePath() + ": " + e.getMessage());
     } catch (Exception e) {
-      DelphiUtils.LOG.error("PMD error while processing " + pmdFile.getAbsolutePath() + ": " + e.getMessage());
+      DelphiUtils.LOG.debug("PMD error while processing " + pmdFile.getAbsolutePath() + ": " + e.getMessage());
     }
   }
 

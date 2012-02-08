@@ -264,7 +264,7 @@ public class DelphiSensor implements Sensor {
       analyser.analyze(ast); // parsing with ANTLR
       ++scannedFiles;
     } catch (Exception e) {
-      DelphiUtils.LOG.error("Error parsing file: " + e.getMessage() + " " + sourceFile.getAbsolutePath());
+      DelphiUtils.LOG.debug("Error parsing file: " + e.getMessage() + " " + sourceFile.getAbsolutePath());
     }
     return ast;
   }
