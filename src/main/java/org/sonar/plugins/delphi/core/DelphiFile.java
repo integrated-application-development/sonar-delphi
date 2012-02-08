@@ -85,31 +85,35 @@ public class DelphiFile extends Resource<DelphiPackage> {
   /**
    * Ctor
    * 
-   * @param packageKey
+   * @param filePackageKey
    *          Package name
    * @param className
    *          Class name
    * @param unitTest
    *          If in unit tests
    */
-  public DelphiFile(String packageKey, String className, boolean unitTest) {
+  public DelphiFile(String filePackageKey, String className, boolean unitTest) {
     super();
-    if (className != null && className.indexOf('$') >= 0) {
-      throw new IllegalArgumentException("DelphiLanguage inner classes are not supported : " + className);
+    if (className != null) {
+      this.filename = className.trim();
+      this.unitTest = unitTest;
+      
+      String key;
+      if (StringUtils.isBlank(filePackageKey)) {
+        this.packageKey = DelphiPackage.DEFAULT_PACKAGE_NAME;
+        this.longName = this.filename;
+        key = new StringBuilder().append(this.packageKey).append(".").append(this.filename).toString();
+      } else {
+        this.packageKey = filePackageKey.trim();
+        key = new StringBuilder().append(this.packageKey).append(".").append(this.filename).toString();
+        this.longName = key;
+      }
+      
+      setKey(key);
     }
-    this.filename = className.trim();
-    String key;
-    if (StringUtils.isBlank(packageKey)) {
-      this.packageKey = DelphiPackage.DEFAULT_PACKAGE_NAME;
-      this.longName = this.filename;
-      key = new StringBuilder().append(this.packageKey).append(".").append(this.filename).toString();
-    } else {
-      this.packageKey = packageKey.trim();
-      key = new StringBuilder().append(this.packageKey).append(".").append(this.filename).toString();
-      this.longName = key;
+    else {
+      throw new IllegalArgumentException("DelphiFile className cannot be null");
     }
-    setKey(key);
-    this.unitTest = unitTest;
   }
 
   @Override

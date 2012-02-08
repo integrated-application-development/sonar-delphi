@@ -94,7 +94,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
       return true; // process includes
     }
     String str = configuration.getString(DelphiPlugin.INCLUDE_EXTEND_KEY);
-    return (str == null || str.equals("true"));
+    return (str == null || "true".equals(str));
   }
 
   /**

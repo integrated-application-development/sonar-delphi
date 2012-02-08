@@ -70,6 +70,6 @@ public class CastAndFreeRule extends DelphiRule {
   }
 
   private boolean isCorrectSequence(LexerMetrics sequence[], int index, Tree lastNode) {
-    return index >= sequence.length && lastNode.getText().equalsIgnoreCase("free");
+    return index >= sequence.length && "free".equalsIgnoreCase(lastNode.getText());
   }
 }

@@ -55,15 +55,19 @@ public class JdbcTemplate {
     return connection;
   }
 
-  public <T> List<T> query(String queryString, RowMapper<T> rowMapper) {
+  public <T> List<T> query(final String queryString, RowMapper<T> rowMapper) {
     List<T> result = new ArrayList<T>();
     try {
       Statement statement = getConnection().createStatement();
-      ResultSet resultSet = statement.executeQuery(queryString);
-      while (resultSet.next()) {
-        result.add(rowMapper.mapRow(resultSet));
+      try {
+        ResultSet resultSet = statement.executeQuery(queryString);
+        while (resultSet.next()) {
+          result.add(rowMapper.mapRow(resultSet));
+        }
       }
-      statement.close();
+      finally {
+        statement.close();
+      }
     } catch (SQLException e) {
       DelphiUtils.LOG.error("AQTime SQL error: " + e.getMessage());
     }

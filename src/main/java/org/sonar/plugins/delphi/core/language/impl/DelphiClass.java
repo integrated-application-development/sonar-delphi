@@ -306,7 +306,7 @@ public class DelphiClass implements ClassInterface {
     for (FunctionInterface currentFunction : functions) {
       if (!currentFunction.isAccessor()) {
         visited.add(currentFunction);
-        rfc += analyzeFunctionCalls(currentFunction, visited);;
+        rfc += analyzeFunctionCalls(currentFunction, visited);
       } 
     }
     return rfc; // rfc = number of local methods + number of remote methods

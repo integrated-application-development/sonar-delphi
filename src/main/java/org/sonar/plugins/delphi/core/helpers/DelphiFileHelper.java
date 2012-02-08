@@ -132,30 +132,6 @@ public class DelphiFileHelper {
     }
     
     return testDirs;
-    /*
-    List<File> result = new ArrayList<File>();
-    if (configuration == null || project == null) {
-      return result;
-    }
-    String[] dirs = configuration.getStringArray(DelphiPlugin.TEST_DIRECTORIES_KEY);
-    if (dirs.length == 0) {
-      return result;
-    }
-    String mainPath = project.getFileSystem().getBasedir().getAbsolutePath();
-    for (String path : dirs) {
-      if (path.isEmpty()) {
-        continue;
-      }
-      File testDir = DelphiUtils.resolveAbsolutePath(mainPath, path.trim());
-      if ( !testDir.exists()) {
-        DelphiUtils.LOG.warn("Test path does not exist: " + testDir.getAbsolutePath());
-        DelphiUtils.getDebugLog().println("Test path does not exist: " + testDir.getAbsolutePath());
-        continue;
-      }
-      result.add(testDir);
-    }
-
-    return result; */
   }
 
   /**
@@ -170,7 +146,7 @@ public class DelphiFileHelper {
   public boolean isTestFile(File delphiFile, List<File> testDirectories) {
     if (delphiFile == null) {
       throw new IllegalStateException("No file passed to DelphiLanguage::isTestFile()");
-    } else if (testDirectories == null || testDirectories.size() == 0) {
+    } else if (testDirectories == null || testDirectories.isEmpty()) {
       return false;
     }
     for (File directory : testDirectories) {

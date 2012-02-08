@@ -137,10 +137,9 @@ public class LCOM4Metrics extends DefaultMetrics implements MetricsInterface {
           processFunction(function, nodes, cl, 0);
         }
 
-        for (String nodeName : nodes.keySet()) // process all nodes to create links
+        for(Map.Entry<String, DelphiLCOMNode> entry : nodes.entrySet()) 
         {
-          DelphiLCOMNode node = nodes.get(nodeName);
-
+          DelphiLCOMNode node = entry.getValue();
           Object reference = node.getReference();
           if (reference instanceof FunctionInterface) // if reference is function
           {
@@ -165,10 +164,8 @@ public class LCOM4Metrics extends DefaultMetrics implements MetricsInterface {
         }// nodes
 
         int index = 1;
-        for (String nodeName : nodes.keySet()) // process all nodes to calculate loc4
-        {
-          DelphiLCOMNode node = nodes.get(nodeName);
-          processNode(node, index++);
+        for(Map.Entry<String, DelphiLCOMNode> entry : nodes.entrySet()) { // process all nodes to calculate loc4
+          processNode(entry.getValue(), index++);
         }
 
         loc4 = tags.size();

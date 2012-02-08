@@ -83,7 +83,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
   public void analyse(DelphiFile resource, SensorContext sensorContext, List<ClassInterface> classes, List<FunctionInterface> functions,
       List<UnitInterface> units) {
     if ( !isCalculated) { // calculate only once
-      if (units == null || units.size() == 0) {
+      if (units == null || units.isEmpty()) {
         return;
       }
       unusedUnits = findUnusedUnits(units);

@@ -63,13 +63,17 @@ public class DelphiSureFireParser extends AbstractSurefireParser {
   {
     if ( !sensorContext.isIndexed(file, true) && DelphiProjectHelper.getInstance().getImportSources()) {
       BufferedReader br = new BufferedReader(new FileReader( new File(file.getPath()) ));
-      StringBuilder source = new StringBuilder();
-      String line;
-      while ((line = br.readLine()) != null) {
-        source.append(line).append('\n');
+      try {
+        StringBuilder source = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+          source.append(line).append('\n');
+        }
+        sensorContext.saveSource(file, source.toString());
       }
-      br.close();
-      sensorContext.saveSource(file, source.toString());
+      finally {
+        br.close();
+      }
     }
   }
 
@@ -104,7 +108,7 @@ public class DelphiSureFireParser extends AbstractSurefireParser {
         return result;
       }
     }
-    
+
     throw new FileNotFoundException(fileName);
   }
 

@@ -84,7 +84,7 @@ public class StatementVerifier {
     int nodeCode = node.getType();
     // special case for 'break' statement, since it went to 'usedKeywordsAsNames' rule and now
     // it is recognized as TkIdentifier
-    if (nodeCode == LexerMetrics.IDENT.toMetrics() && node.getText().equalsIgnoreCase("break")) {
+    if (nodeCode == LexerMetrics.IDENT.toMetrics() && "break".equalsIgnoreCase(node.getText())) {
       return true;
     } else if (nodeCode == LexerMetrics.FOR.toMetrics()) { // special case for "for" statement
       statementIndex.pop();

@@ -48,9 +48,9 @@ public class AssignedAndFreeRule extends DelphiRule {
     }
 
     if (started) { // looking for variables that were checked for assignement
-      if (node.getText().equalsIgnoreCase("assigned")) {
+      if ("assigned".equalsIgnoreCase(node.getText())) {
         parseAssigned(node);
-      } else if (node.getText().equals("nil")) {
+      } else if ("nil".equals(node.getText())) {
         parseNil(node);
       }
     }
@@ -62,7 +62,7 @@ public class AssignedAndFreeRule extends DelphiRule {
         }
       }
 
-      else if (node.getText().equalsIgnoreCase("free") && freeVariable(node)) {
+      else if ("free".equalsIgnoreCase(node.getText()) && freeVariable(node)) {
         addViolation(data, node);
       }
     }

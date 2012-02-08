@@ -38,7 +38,7 @@ public class IfTrueRule extends BlockCounterRule {
 
   @Override
   protected boolean accept(DelphiPMDNode node) {
-    if ( !wasEquals && node.getText().equals("=")) {
+    if ( !wasEquals && "=".equals(node.getText())) {
       wasEquals = true;
     } else if (wasEquals && node.getText().equals(str)) {
       firstNode = node; // save this node as violation

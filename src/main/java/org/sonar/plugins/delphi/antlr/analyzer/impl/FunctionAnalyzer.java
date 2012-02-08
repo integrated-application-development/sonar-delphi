@@ -92,9 +92,9 @@ public class FunctionAnalyzer extends CodeAnalyzer {
     List<String> props = new ArrayList<String>();
     for (int i = 0; i < node.getChildCount(); ++i) {
       Tree child = node.getChild(i);
-      if (child.getText().equalsIgnoreCase("override")) {
+      if ("override".equalsIgnoreCase(child.getText())) {
         props.add("virtual");
-      } else if (child.getText().equalsIgnoreCase("virtual")) {
+      } else if ("virtual".equalsIgnoreCase(child.getText())) {
         props.add("virtual");
       }
     }

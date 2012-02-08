@@ -22,7 +22,9 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
@@ -61,7 +63,7 @@ public class UnusedArgumentsRule extends DelphiRule {
         }
       } while (beginNode.getType() != DelphiLexer.BEGIN);
 
-      if (beginNode == null || beginNode.getType() != DelphiLexer.BEGIN || argsNode == null) {
+      if (beginNode == null || beginNode.getType() != DelphiLexer.BEGIN) {
         return data; // no begin..end for function
       }
 
@@ -87,9 +89,9 @@ public class UnusedArgumentsRule extends DelphiRule {
    * @param data
    */
   private void checkForUnusedArguments(Map<String, Integer> args, Object data, DelphiPMDNode node) {
-    for (String key : args.keySet()) {
-      if (args.get(key) == 0) {
-        addViolation(data, node, "Unused argument: '" + key + "' at " + methodName);
+    for(Map.Entry<String, Integer> entry : args.entrySet()) {
+      if(entry.getValue() == 0) {
+        addViolation(data, node, "Unused argument: '" + entry.getKey() + "' at " + methodName);
       }
     }
   }
@@ -137,7 +139,7 @@ public class UnusedArgumentsRule extends DelphiRule {
       }
 
       for (int c = 0; c < idents.getChildCount(); ++c) { // adding arguments to map
-        if ( !idents.getChild(c).getText().equals("sender")) {
+        if ( !"sender".equals(idents.getChild(c).getText())) {
           args.put(idents.getChild(c).getText(), Integer.valueOf(0));
         }
       }

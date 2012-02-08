@@ -24,7 +24,10 @@ package org.sonar.plugins.delphi.project;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.xerces.parsers.SAXParser;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -59,12 +62,15 @@ public class ProjectXmlParser extends DefaultHandler {
    * Parses the document
    * @throws IOException 
    * @throws SAXException 
+   * @throws ParserConfigurationException 
    */
   public void parse() throws SAXException, IOException {
-      SAXParser parser = new SAXParser();
-      parser.setContentHandler(this);
-      parser.setErrorHandler(this);
-      parser.parse(fileName);
+    try {
+      SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+      parser.parse(fileName, this);
+    } catch (ParserConfigurationException e) {
+      DelphiUtils.LOG.error(e.getMessage());
+    }  
   }
 
   @Override
@@ -78,7 +84,7 @@ public class ProjectXmlParser extends DefaultHandler {
   public void startElement(String uri, String localName, String rawName, Attributes attributes) throws SAXException {
     isReading = false;
 
-    if (rawName.equals("DCCReference")) { // new source file
+    if ("DCCReference".equals(rawName)) { // new source file
       String path = DelphiUtils.resolveBacktracePath(currentDir, attributes.getValue("Include"));
       try {
         project.addFile(path);
@@ -86,15 +92,15 @@ public class ProjectXmlParser extends DefaultHandler {
         DelphiUtils.LOG.error(e.getMessage());
         throw new SAXException(e);
       }
-    } else if (rawName.equals("VersionInfoKeys")) { // project name
+    } else if ("VersionInfoKeys".equals(rawName)) { // project name
 
       String name = attributes.getValue("Name");
-      if (name != null && name.equals("ProductName")) {
+      if (name != null && "ProductName".equals(name)) {
         isReading = true;
       }
-    } else if (rawName.equals("DCC_UnitSearchPath")) {
+    } else if ("DCC_UnitSearchPath".equals(rawName) ) {
       isReading = true;
-    } else if (rawName.equals("DCC_Define")) {
+    } else if ("DCC_Define".equals(rawName)) {
       isReading = true;
     }
 
@@ -102,27 +108,27 @@ public class ProjectXmlParser extends DefaultHandler {
 
   @Override
   public void endElement(String uri, String localName, String rawName) throws SAXException {
-    if ( !isReading) {
+    if (!isReading) {
       return;
     }
 
-    if (rawName.equals("VersionInfoKeys")) { // add project name
+    if ("VersionInfoKeys".equals(rawName)) { // add project name
       project.setName(readData);
     }
 
-    else if (rawName.equals("DCC_Define")) { // add define
+    else if ("DCC_Define".equals(rawName)) { // add define
       String[] defines = readData.split(";");
       for (String define : defines) {
         if (define.startsWith("$")) {
           continue;
-        } else if (define.equals("DEBUG")) {
+        } else if ("DEBUG".equals(define)) {
           continue;
         }
         project.addDefinition(define);
       }
     }
 
-    else if (rawName.equals("DCC_UnitSearchPath")) { // add include directories
+    else if ("DCC_UnitSearchPath".equals(rawName) ) { // add include directories
 
       String[] paths = readData.split(";");
       for (String path : paths) {

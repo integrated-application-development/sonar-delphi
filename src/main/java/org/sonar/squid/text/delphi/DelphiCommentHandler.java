@@ -117,7 +117,6 @@ public class DelphiCommentHandler extends LineContextHandler {
 
   private void initProperties() {
     commentStarted = false;
-    // isDoc = false;
     isLicenseHeader = false;
     currentLineComment = new StringBuilder();
     isFirstLineOfComment = false;

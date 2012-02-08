@@ -63,7 +63,7 @@ public class DelphiRule extends AbstractJavaRule {
         }
       }
 
-      if (node.getLine() >= lastLineParsed) { // optimization and //NOSONAR line skip
+      if (node.getLine() >= lastLineParsed) { // optimization and  / / NO SONAR line skip
         visit(node, ctx);
         lastLineParsed = node.getLine();
       }

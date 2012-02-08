@@ -42,7 +42,7 @@ public class IfDefDirective extends CommonCompilerDirective {
    */
   public IfDefDirective(String name, String item, int firstCharPos, int lastCharPos) {
     super(name, item, firstCharPos, lastCharPos);
-    positive = name.equalsIgnoreCase("ifdef");
+    positive = "ifdef".equalsIgnoreCase(name);
   }
 
   /**

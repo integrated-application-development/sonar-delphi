@@ -159,8 +159,7 @@ public final class DelphiRulesUtils {
   private static Rule createRepositoryRule(DelphiRule fRule) {
     RulePriority priority = severityFromLevel(fRule.getPriority());
 
-    Rule rule = Rule.create(DelphiPmdConstants.REPOSITORY_KEY, fRule.getName(), fRule.getName()).setPriority(priority);
-    // setSeverity(priority);
+    Rule rule = Rule.create(DelphiPmdConstants.REPOSITORY_KEY, fRule.getName(), fRule.getName()).setSeverity(priority);
     rule.setDescription(fRule.getDescription());
     List<RuleParam> ruleParams = new ArrayList<RuleParam>();
     if (fRule.getProperties() != null) {

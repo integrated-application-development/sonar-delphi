@@ -47,7 +47,7 @@ import org.sonar.plugins.delphi.core.DelphiFile;
 class DirectoryFileFilter implements FileFilter {
 
   public boolean accept(File pathname) {
-    return pathname.isDirectory() && !pathname.getName().equals(".svn");
+    return pathname.isDirectory() && !".svn".equals(pathname.getName());
   }
 }
 

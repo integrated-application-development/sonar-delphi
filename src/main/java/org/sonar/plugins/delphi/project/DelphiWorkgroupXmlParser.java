@@ -23,7 +23,9 @@ package org.sonar.plugins.delphi.project;
 
 import java.io.File;
 
-import org.apache.xerces.parsers.SAXParser;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -51,7 +53,7 @@ public class DelphiWorkgroupXmlParser extends DefaultHandler {
     xml = xmlFile;
     workGroup = delphiWorkGroup;
     currentDir = DelphiUtils.normalizeFileName(xml.getAbsolutePath());
-    currentDir = currentDir.substring(0, currentDir.lastIndexOf("/"));
+    currentDir = currentDir.substring(0, currentDir.lastIndexOf('/'));
   }
 
   /**
@@ -59,10 +61,8 @@ public class DelphiWorkgroupXmlParser extends DefaultHandler {
    */
   public void parse() {
     try {
-      SAXParser parser = new SAXParser();
-      parser.setContentHandler(this);
-      parser.setErrorHandler(this);
-      parser.parse(xml.getAbsolutePath());
+      SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+      parser.parse(xml.getAbsolutePath(), this);
     } catch (Exception ex) {
       DelphiUtils.LOG.error(ex.getMessage());
     }
@@ -70,7 +70,7 @@ public class DelphiWorkgroupXmlParser extends DefaultHandler {
 
   @Override
   public void startElement(String uri, String localName, String rawName, Attributes attributes) throws SAXException {
-    if (rawName.equals("Projects")) { // new .dproj file
+    if ("Projects".equals(rawName)) { // new .dproj file
       String projectPath = DelphiUtils.resolveBacktracePath(currentDir, attributes.getValue("Include"));
       workGroup.addProject(new DelphiProject(new File(projectPath)));
     }

@@ -38,7 +38,7 @@ public class IfNotFalseRule extends IfTrueRule {
 
   @Override
   protected boolean accept(DelphiPMDNode node) {
-    if ( !wasNot && node.getText().equals("not")) {
+    if ( !wasNot && "not".equals(node.getText())) {
       wasNot = true;
     } else {
       return super.accept(node);

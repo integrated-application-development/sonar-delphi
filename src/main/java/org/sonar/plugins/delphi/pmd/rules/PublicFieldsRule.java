@@ -46,7 +46,6 @@ public class PublicFieldsRule extends DelphiRule {
           addViolation(data, (DelphiPMDNode) child);
         }
       }
-      // return null;
     }
 
     return data;
