@@ -24,9 +24,7 @@ package org.sonar.plugins.delphi.core.helpers;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
@@ -60,7 +58,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
 
   /**
    * ctor used by Sonar
-   * 
+   *
    * @param configuration
    * @param ruleFinder
    */
@@ -86,20 +84,20 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
 
   /**
    * Should includes be copy-pasted to a file which tries to include them
-   * 
+   *
    * @return True if so, false otherwise
    */
   public boolean shouldExtendIncludes() {
     if (configuration == null) {
       return true; // process includes
     }
-    String str = configuration.getString(DelphiPlugin.INCLUDE_EXTEND_KEY);
-    return (str == null || "true".equals(str));
+    String str = configuration.getString(DelphiPlugin.INCLUDE_EXTEND_KEY, "true");
+    return "true".equals(str);
   }
 
   /**
    * Gets the include directories (directories that are looked for include files)
-   * 
+   *
    * @param fileSystem
    *          Project file system
    * @return List of include directories
@@ -132,7 +130,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
 
   /**
    * Gets the list of excluded source files and directories
-   * 
+   *
    * @return List of excluded source files and directories
    */
   public List<File> getExcludedSources(ProjectFileSystem fileSystem) {
@@ -160,7 +158,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
 
   /**
    * Gets the project file (.dproj)
-   * 
+   *
    * @return Path to project file
    */
   public String getProjectFile() {
@@ -172,7 +170,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
 
   /**
    * Gets the workgroup (.groupproj) file
-   * 
+   *
    * @return Path to workgroup file
    */
   public String getWorkgroupFile() {
@@ -184,31 +182,19 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
 
   /**
    * Should we import sources or not
-   * 
+   *
    * @return True if so, false otherwise
    */
   public boolean getImportSources() {
     if (configuration == null) {
       return CoreProperties.CORE_IMPORT_SOURCES_DEFAULT_VALUE;
     }
-    return configuration.getBoolean(CoreProperties.CORE_IMPORT_SOURCES_PROPERTY);
-  }
-
-  /**
-   * Gets Surefire reports directories
-   * 
-   * @return Surefire report directories
-   */
-  public String[] getSurefireDirectories() {
-    if (configuration == null) {
-      return null;
-    }
-    return configuration.getStringArray(CoreProperties.SUREFIRE_REPORTS_PATH_PROPERTY);
+    return configuration.getBoolean(CoreProperties.CORE_IMPORT_SOURCES_PROPERTY, CoreProperties.CORE_IMPORT_SOURCES_DEFAULT_VALUE);
   }
 
   /**
    * Create list of DelphiLanguage projects in a current workspace
-   * 
+   *
    * @return List of DelphiLanguage projects
    */
   public List<DelphiProject> getWorkgroupProjects(Project project) {

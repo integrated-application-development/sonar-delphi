@@ -74,15 +74,12 @@ import org.sonar.plugins.delphi.surefire.SurefireSensor;
     @Property(key = DelphiPlugin.JDBC_PASSWORD_KEY, defaultValue = "", name = "User password", description = "Database user password",
         global = true, project = true),
     @Property(key = DelphiPlugin.JDBC_DB_TABLE_PREFIX_KEY, defaultValue = "", name = "AQTime database table prefix",
-        description = "AQTime database table prefix", global = true, project = true),
-    @Property(key = DelphiPlugin.TEST_DIRECTORIES_KEY, defaultValue = "", name = "Test directories",
-        description = "List of unit test directories", global = true, project = true) })
+        description = "AQTime database table prefix", global = true, project = true) })
 public class DelphiPlugin extends SonarPlugin {
 
   public static final String EXCLUDED_DIRECTORIES_KEY = "sonar.delphi.sources.excluded";
   public static final String CC_EXCLUDED_KEY = "sonar.delphi.codecoverage.excluded";
   public static final String INCLUDED_DIRECTORIES_KEY = "sonar.delphi.sources.include";
-  public static final String TEST_DIRECTORIES_KEY = "sonar.delphi.sources.tests";
   public static final String INCLUDE_EXTEND_KEY = "sonar.delphi.sources.include.extend";
   public static final String PROJECT_FILE_KEY = "sonar.delphi.sources.project";
   public static final String WORKGROUP_FILE_KEY = "sonar.delphi.sources.workgroup";
