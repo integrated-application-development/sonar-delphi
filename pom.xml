@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>sonar-delphi-plugin</artifactId>
-  <version>0.1</version>
+  <version>0.2-SNAPSHOT</version>
   <packaging>sonar-plugin</packaging>
 
   <name>Sonar Delphi Plugin</name>
@@ -47,9 +47,9 @@
   </developers>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/tags/sonar-delphi-plugin-0.1</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/tags/sonar-delphi-plugin-0.1</developerConnection>
-    <url>scm:svn:https://svn.codehaus.org/sonar-plugins/tags/sonar-delphi-plugin-0.1</url>
+    <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/delphi</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/trunk/delphi</developerConnection>
+    <url>http://svn.sonar-plugins.codehaus.org</url>
   </scm>
   <issueManagement>
     <system>JIRA</system>
