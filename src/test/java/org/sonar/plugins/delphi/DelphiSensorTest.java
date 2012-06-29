@@ -79,7 +79,7 @@ public class DelphiSensorTest {
       sourceDirs.add(directory); // put all directories to list
     }
 
-    when(project.getLanguage()).thenReturn(new DelphiLanguage());
+    when(project.getLanguage()).thenReturn(DelphiLanguage.instance);
     when(project.getFileSystem()).thenReturn(pfs);
 
     when(pfs.getBasedir()).thenReturn(baseDir);

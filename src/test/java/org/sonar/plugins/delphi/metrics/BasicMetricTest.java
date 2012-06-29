@@ -56,7 +56,6 @@ public class BasicMetricTest {
 
   @Test
   public void executeOnResource() {
-    new DelphiLanguage(); // create language instance
     DelphiFile pasResource = mock(DelphiFile.class);
     DelphiFile dprResource = mock(DelphiFile.class);
     DelphiFile dpkResource = mock(DelphiFile.class);

@@ -43,7 +43,7 @@ public class DelphiClassTest {
     parent.addParent(ancestor);
     child.addParent(parent);
   }
-
+  
   @Test
   public void getFileNameTest() {
     parent.setFileName("MyFile.pas");
@@ -130,6 +130,9 @@ public class DelphiClassTest {
     assertEquals(0, ancestor.getDit());
     assertEquals(1, parent.getDit());
     assertEquals(2, child.getDit());
+    
+    child.addParent(child);
+    assertEquals(2, child.getDit());    
   }
 
   @Test

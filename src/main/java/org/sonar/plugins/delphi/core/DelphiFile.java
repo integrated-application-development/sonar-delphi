@@ -252,7 +252,7 @@ public class DelphiFile extends Resource<DelphiPackage> {
         if ( !pathname.isFile()) {
           return false;
         }
-        String[] endings = new DelphiLanguage().getFileSuffixes();
+        String[] endings = DelphiLanguage.instance.getFileSuffixes();
         for (String ending : endings) {
           if (pathname.getAbsolutePath().endsWith("." + ending)) {
             return true;

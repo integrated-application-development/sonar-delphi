@@ -89,7 +89,7 @@ public class DelphiPmdSensorTest {
 
     File baseDir = DelphiUtils.getResource(ROOT_NAME);
 
-    when(project.getLanguage()).thenReturn(new DelphiLanguage());
+    when(project.getLanguage()).thenReturn(DelphiLanguage.instance);
     when(project.getFileSystem()).thenReturn(pfs);
     when(project.getLanguageKey()).thenReturn(DelphiLanguage.KEY);
 

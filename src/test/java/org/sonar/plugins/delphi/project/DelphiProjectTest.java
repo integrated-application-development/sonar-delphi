@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiProjectTest {
@@ -46,6 +47,9 @@ public class DelphiProjectTest {
 
   @Test
   public void simpleProjectTest() throws IOException {
+    File sourceFile = File.createTempFile("tempfile", ".pas");
+    sourceFile.deleteOnExit();
+    
     assertEquals("simple project", project.getName());
     assertEquals(0, project.getDefinitions().size());
     assertEquals(0, project.getIncludeDirectories().size());
@@ -55,6 +59,8 @@ public class DelphiProjectTest {
     project.addDefinition("DEF");
     assertEquals(1, project.getDefinitions().size());
     project.addFile(DelphiUtils.getResource(XML_FILE).getAbsolutePath());
+    assertEquals(0, project.getSourceFiles().size());
+    project.addFile(sourceFile.getAbsolutePath());
     assertEquals(1, project.getSourceFiles().size());
     project.addIncludeDirectory(DelphiUtils.getResource(INC_DIR).getAbsolutePath());
     assertEquals(1, project.getIncludeDirectories().size());

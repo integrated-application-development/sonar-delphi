@@ -39,6 +39,8 @@ import org.sonar.plugins.delphi.core.language.FunctionInterface;
  */
 public class DelphiClass implements ClassInterface {
 
+  private static final String UNKNOWN_CLASS_NAME = "UnknownClass";
+  
   private String name = null; // class name
   private String fileName = null; // class filename (with path)
   private int visibility = DelphiParser.PRIVATE; // class default visibility scope
@@ -55,8 +57,13 @@ public class DelphiClass implements ClassInterface {
    * {@inheritDoc}
    */
   public DelphiClass(String newName) {
-    name = newName;
-    realName = newName;
+    if(newName == null) {
+      name = UNKNOWN_CLASS_NAME;
+      realName = UNKNOWN_CLASS_NAME;
+    } else {    
+      name = newName;
+      realName = newName;
+    }
   }
 
   /**
@@ -109,8 +116,10 @@ public class DelphiClass implements ClassInterface {
    */
 
   public void addParent(ClassInterface parent) {
-    parents.add(parent);
-    parent.addChild(this);
+    if (parent != null && !parent.equals(this)) {
+      parents.add(parent);
+      parent.addChild(this);
+    }
   }
 
   /**
@@ -266,8 +275,10 @@ public class DelphiClass implements ClassInterface {
    * {@inheritDoc}
    */
 
-  public void addChild(ClassInterface child) {
-    children.add(child);
+  public void addChild(ClassInterface child) {    
+    if(child != null && !this.equals(child)) {      
+      children.add(child);    
+    }
   }
 
   /**
