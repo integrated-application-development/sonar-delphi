@@ -26,9 +26,9 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 /**
  * Delphi pmd property class
- * 
+ *
  * @author SG0214809
- * 
+ *
  */
 @XStreamAlias("property")
 public class Property {
@@ -39,8 +39,14 @@ public class Property {
   private String value;
 
   /**
+   * Default ctor
+   */
+  public Property() {
+  }
+
+  /**
    * ctor
-   * 
+   *
    * @param name
    *          property name
    * @param value

@@ -61,6 +61,12 @@ public class DelphiRule implements Comparable<String> {
   private String example;
 
   /**
+   * Default ctor
+   */
+  public DelphiRule() {
+  }
+
+  /**
    * Ctor
    * 
    * @param clazz
