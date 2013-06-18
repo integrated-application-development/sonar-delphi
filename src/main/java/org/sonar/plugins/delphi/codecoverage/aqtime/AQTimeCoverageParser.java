@@ -34,6 +34,8 @@ import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.resources.InputFile;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.plugins.delphi.codecoverage.CoverageFileData;
+import org.sonar.plugins.delphi.codecoverage.DelphiCodeCoverageParser;
 import org.sonar.plugins.delphi.core.DelphiFile;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -43,7 +45,7 @@ import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
 /**
  * AQTime purifier
  */
-public class AQTimeCoverageParser {
+public class AQTimeCoverageParser implements DelphiCodeCoverageParser {
 
   private static final double ONE_HUNDRED = 100.00;
   private String prefix = ""; // table prefix
@@ -52,9 +54,6 @@ public class AQTimeCoverageParser {
   private List<File> excludedDirs;
   private Map<String, String> connectionProperties;
 
-  /**
-   * {@inheritDoc}
-   */
   public void parse(Project project, SensorContext context) {
     DelphiUtils.LOG.debug("Code Coverage starting...");
     try {

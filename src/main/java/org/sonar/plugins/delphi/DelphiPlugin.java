@@ -65,6 +65,10 @@ import org.sonar.plugins.delphi.surefire.SurefireSensor;
     @Property(key = DelphiPlugin.WORKGROUP_FILE_KEY, defaultValue = "", name = "Workgroup file",
         description = "Workgroup file. If provided, will be parsed, then all *.dproj files found in workgroup file will be parsed.",
         global = true, project = true),
+    @Property(key = DelphiPlugin.CODECOVERAGE_TOOL_KEY, defaultValue = "delphi code coverage", name = "Code coverage tool",
+        description = "Used code coverage tool (AQTime or Delphi Code Coverage)", global = false, project = true),    
+    @Property(key = DelphiPlugin.CODECOVERAGE_REPORT_KEY, defaultValue = "delphi code coverage report", name = "Code coverage report file",
+        description = "Code coverage report to be parsed by Delphi Code Coverage", global = false, project = true),        
     @Property(key = DelphiPlugin.JDBC_DRIVER_KEY, defaultValue = "net.sourceforge.jtds.jdbc.Driver", name = "JDBC Driver",
         description = "Class name for JDBC driver.", global = true, project = true),
     @Property(key = DelphiPlugin.JDBC_URL_KEY, defaultValue = "", name = "Connection host url", description = "Database host url",
@@ -83,6 +87,8 @@ public class DelphiPlugin extends SonarPlugin {
   public static final String INCLUDE_EXTEND_KEY = "sonar.delphi.sources.include.extend";
   public static final String PROJECT_FILE_KEY = "sonar.delphi.sources.project";
   public static final String WORKGROUP_FILE_KEY = "sonar.delphi.sources.workgroup";
+  public static final String CODECOVERAGE_TOOL_KEY = "sonar.delphi.codecoverage.tool";
+  public static final String CODECOVERAGE_REPORT_KEY = "sonar.delphi.codecoverage.report";
   public static final String JDBC_DRIVER_KEY = "sonar.delphi.codecoverage.aqtime.jdbc.driver";
   public static final String JDBC_URL_KEY = "sonar.delphi.codecoverage.aqtime.jdbc.url";
   public static final String JDBC_USER_KEY = "sonar.delphi.codecoverage.aqtime.jdbc.user";

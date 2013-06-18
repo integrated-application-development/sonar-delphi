@@ -38,6 +38,9 @@ public class DelphiRule extends AbstractJavaRule {
 
   protected int lastLineParsed;
 
+  public DelphiRule() {
+  }
+  
   /**
    * overload this method in derived class
    */
