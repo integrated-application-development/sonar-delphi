@@ -14,7 +14,7 @@
   <packaging>sonar-plugin</packaging>
 
   <name>Sonar Delphi Plugin</name>
-  <description>Enables analysis of Delphi projects into Sonar</description>
+  <description>Enables analysis of Delphi projects.</description>
 
   <inceptionYear>2011</inceptionYear>
   <url>http://docs.codehaus.org/display/SONAR/Delphi+plugin</url>
