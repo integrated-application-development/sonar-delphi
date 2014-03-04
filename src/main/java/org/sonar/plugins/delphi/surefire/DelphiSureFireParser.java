@@ -78,7 +78,7 @@ public class DelphiSureFireParser extends AbstractSurefireParser {
   }
 
   @Override
-  protected Resource<?> getUnitTestResource(String classKey) {
+  protected Resource getUnitTestResource(String classKey) {
     try { 
       File testFile = findFileInTestDirectories(classKey + FILE_EXT, project.getFileSystem().getTestDirs() );
       DelphiFile resourceFile = DelphiFile.fromIOFile(testFile, project.getFileSystem().getTestDirs(), true);

@@ -37,7 +37,7 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 /**
  * File for DelphiLanguage language to be parsed (*.pas)
  */
-public class DelphiFile extends Resource<DelphiPackage> {
+public class DelphiFile extends Resource {
 
 	private static final long serialVersionUID = 1L;
 

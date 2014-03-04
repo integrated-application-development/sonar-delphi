@@ -75,7 +75,7 @@ public class DelphiPackage extends Resource {
   }
 
   @Override
-  public Resource<?> getParent() {
+  public Resource getParent() {
     return null;
   }
 
