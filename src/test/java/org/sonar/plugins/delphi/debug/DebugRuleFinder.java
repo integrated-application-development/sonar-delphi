@@ -23,6 +23,9 @@ package org.sonar.plugins.delphi.debug;
 
 import java.util.Collection;
 
+import javax.annotation.CheckForNull;
+
+import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleQuery;
 
@@ -32,42 +35,50 @@ import org.sonar.api.rules.RuleQuery;
  */
 public class DebugRuleFinder implements org.sonar.api.rules.RuleFinder {
 
-  /**
-   * Default ctor
-   */
-  public DebugRuleFinder() {
-  }
+	/**
+	 * Default ctor
+	 */
+	public DebugRuleFinder() {
+	}
 
-  /**
-   * {@inheritDoc}
-   */
-  
-  public Rule find(RuleQuery query) {
-    Rule rule = Rule.create(query.getRepositoryKey(), query.getConfigKey(), query.getKey());
-    return rule;
-  }
+	/**
+	 * {@inheritDoc}
+	 */
 
-  /**
-   * {@inheritDoc}
-   */
-  
-  public Rule findById(int ruleId) {
-    return null;
-  }
+	public Rule find(RuleQuery query) {
+		Rule rule = Rule.create(query.getRepositoryKey(), query.getConfigKey(),
+				query.getKey());
+		return rule;
+	}
 
-  /**
-   * {@inheritDoc}
-   */
-  
-  public Rule findByKey(String repositoryKey, String key) {
-    return null;
-  }
+	/**
+	 * {@inheritDoc}
+	 */
 
-  /**
-   * {@inheritDoc}
-   */
-  
-  public Collection<Rule> findAll(RuleQuery query) {
-    return null;
-  }
+	public Rule findById(int ruleId) {
+		return null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+
+	public Rule findByKey(String repositoryKey, String key) {
+		return null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+
+	public Collection<Rule> findAll(RuleQuery query) {
+		return null;
+	}
+
+	@CheckForNull
+	public Rule findByKey(RuleKey key) {
+		return null;
+	}
+
+
 }

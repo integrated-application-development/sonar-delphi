@@ -65,7 +65,7 @@
   </ciManagement>
 
   <properties>
-    <sonar.version>3.3.2</sonar.version>
+    <sonar.version>3.7.3</sonar.version>
     <sonar.pluginName>Delphi</sonar.pluginName>
     <sonar.pluginClass>org.sonar.plugins.delphi.DelphiPlugin</sonar.pluginClass>
     <sonar.exclusions>org.sonar.plugins.delphi.antlr.DelphiParser,org.sonar.plugins.delphi.antlr.DelphiLexer</sonar.exclusions>
@@ -91,24 +91,24 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.sonar.plugins</groupId>
+      <groupId>org.codehaus.sonar-plugins.java</groupId>
       <artifactId>sonar-surefire-plugin</artifactId>
       <type>sonar-plugin</type>
-      <version>${sonar.version}</version>
+      <version>1.5</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.sonar.plugins</groupId>
+      <groupId>org.codehaus.sonar-plugins.java</groupId>
       <artifactId>sonar-cobertura-plugin</artifactId>
       <type>sonar-plugin</type>
-      <version>${sonar.version}</version>
+      <version>1.3</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.sonar.plugins</groupId>
+      <groupId>org.codehaus.sonar-plugins.java</groupId>
       <artifactId>sonar-pmd-plugin</artifactId>
       <type>sonar-plugin</type>
-      <version>${sonar.version}</version>
+      <version>1.5</version>
       <scope>provided</scope>
     </dependency>
     

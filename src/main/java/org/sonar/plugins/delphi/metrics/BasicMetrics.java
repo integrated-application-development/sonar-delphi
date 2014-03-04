@@ -59,7 +59,7 @@ public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
     clearMetrics();
     Reader reader = null;
     try {
-      reader = new StringReader(FileUtils.readFileToString(new File(resource.getPath()), null));
+      reader = new StringReader(FileUtils.readFileToString(new File(resource.getPath())));
       DelphiSource source = new DelphiSource(reader, new DelphiRecognizer());
       setMetric("LINES", source.getMeasure(Metric.LINES));
       setMetric("NCLOC", source.getMeasure(Metric.LINES_OF_CODE));

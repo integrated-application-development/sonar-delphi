@@ -39,6 +39,7 @@ import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.delphi.debug.DebugConfiguration;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.sonar.plugins.surefire.api.SurefireUtils;
 
 public class SurefireSensorTest {
 
@@ -65,7 +66,7 @@ public class SurefireSensorTest {
     when(project.getFileSystem()).thenReturn(fileSystem);
     
     configuration = new DebugConfiguration();
-    configuration.addProperty(CoreProperties.SUREFIRE_REPORTS_PATH_PROPERTY, SUREFIRE_REPORT_DIR);
+    configuration.addProperty(SurefireUtils.SUREFIRE_REPORTS_PATH_PROPERTY, SUREFIRE_REPORT_DIR);
   }
   
   @Test

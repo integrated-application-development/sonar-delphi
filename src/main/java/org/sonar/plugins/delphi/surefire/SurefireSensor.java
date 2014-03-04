@@ -24,15 +24,12 @@ package org.sonar.plugins.delphi.surefire;
 import java.io.File;
 
 import org.apache.commons.configuration.Configuration;
-import org.sonar.api.CoreProperties;
-import org.sonar.api.batch.AbstractCoverageExtension;
-import org.sonar.api.batch.DependsUpon;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.sonar.plugins.surefire.api.SurefireUtils;
 
 /**
  * Surefire sensor used to parse _TRANSFORMED_ DUnit report. You take a DUnit report, then transform it to format that is acceptable by
@@ -45,10 +42,10 @@ public class SurefireSensor implements Sensor {
   /**
    * @return Sonar's abstract coverage extension class
    */
-  @DependsUpon
-  public Class<?> dependsUponCoverageSensors() {
-    return AbstractCoverageExtension.class;
-  }
+//  @DependsUpon
+//  public Class<?> dependsUponCoverageSensors() {
+//    return AbstractCoverageExtension.class;
+//  }
 
   /**
    * Ctor
@@ -71,7 +68,7 @@ public class SurefireSensor implements Sensor {
    */
 
   public void analyse(Project project, SensorContext context) {
-    String[] paths = configuration.getStringArray(CoreProperties.SUREFIRE_REPORTS_PATH_PROPERTY);
+    String[] paths = configuration.getStringArray(SurefireUtils.SUREFIRE_REPORTS_PATH_PROPERTY);
 
     if (paths == null || paths.length == 0) {       // no directory was specified
       DelphiUtils.LOG.warn("No Surefire reports directory found!");

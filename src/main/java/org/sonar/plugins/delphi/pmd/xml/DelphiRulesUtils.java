@@ -178,7 +178,7 @@ public final class DelphiRulesUtils {
 
     for (Rule rule : rulesRepository) {
       if (rule.getName().equals(name)) {
-        RulePriority priority = fRulePriority != null ? fRulePriority : rule.getPriority();
+        RulePriority priority = fRulePriority != null ? fRulePriority : rule.getSeverity();
         ActiveRule activeRule = new ActiveRule(null, rule, priority);
         activeRule.setActiveRuleParams(buildActiveRuleParams(fRule, rule, activeRule));
         return activeRule;
