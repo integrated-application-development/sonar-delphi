@@ -29,8 +29,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.CheckForNull;
+
 import org.sonar.api.batch.Event;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.design.Dependency;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.MeasuresFilter;
@@ -329,6 +332,23 @@ public class DebugSensorContext implements SensorContext {
   
   public void saveViolation(Violation violation, boolean force) {
     saveViolation(violation);
+  }
+
+  public Measure saveMeasure(InputFile inputFile, Metric metric, Double value) {
+	data.put(inputFile.absolutePath() + ":" + metric.getKey(), value);
+	return null;
+  }
+
+  public Measure saveMeasure(InputFile inputFile, Measure measure) {
+    if (inputFile == null || measure == null) {
+        return null;
+      }
+      if (measure.getValue() != null) {
+        data.put(inputFile.absolutePath() + ":" + measure.getMetric().getKey(), measure.getValue());
+      } else {
+        sdata.put(inputFile.absolutePath() + ":" + measure.getMetric().getKey(), measure.getData());
+      }
+      return null;
   }
 
 }

@@ -181,9 +181,12 @@ public class DelphiFile extends Resource {
 	 * 
 	 * @param newPath
 	 *            New file path
+	 * @return 
 	 */
-	public void setPath(String newPath) {
+	public Resource setPath(String newPath) {
 		path = newPath;
+
+		return this;
 	}
 
 	@Override
