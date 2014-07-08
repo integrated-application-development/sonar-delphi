@@ -109,12 +109,15 @@ public final class DelphiRulesUtils {
   }
 
   private static final String RESOURCE_PATH = "/org/sonar/plugins/delphi/pmd/";
+  
+  public static final String RULES_PATH = RESOURCE_PATH + "rules.xml";
+  
 
   /**
    * @return rules xml file
    */
   public static List<Rule> getInitialReferential() {
-    return parseReferential(RESOURCE_PATH + "rules.xml");
+    return parseReferential(RULES_PATH);
   }
 
   /**

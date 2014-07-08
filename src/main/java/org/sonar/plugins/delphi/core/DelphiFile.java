@@ -159,7 +159,7 @@ public class DelphiFile extends Resource {
 
 	@Override
 	public String getQualifier() {
-		return unitTest ? Qualifiers.UNIT_TEST_FILE : Qualifiers.CLASS;
+		return unitTest ? Qualifiers.UNIT_TEST_FILE : Qualifiers.FILE;
 	}
 
 	/**

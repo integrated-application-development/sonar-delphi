@@ -107,6 +107,12 @@ public class DelphiPmdXmlReportParser {
       DelphiFile resource = DelphiFile.fromAbsolutePath(fileName, project.getFileSystem().getSourceDirs(), false);
       Violation violation = Violation.create(rule, resource).setLineId(line).setMessage(message);
       context.saveViolation(violation);
+      
+      DelphiUtils.LOG.info("Rule found: repository: {} rule: {}", rule.getRepositoryKey(), rule.getKey());
+      
+    }
+    else{
+    	DelphiUtils.LOG.error("Rule not found: repository: {} rule: {}", ruleQuery.getRepositoryKey(), ruleQuery.getKey());
     }
   }
 }
