@@ -94,7 +94,7 @@ public class XPathRule extends DelphiRule {
    */
 
   @Override
-  protected void visitAll(List acus, RuleContext ctx) {
+  protected void visitAll(@SuppressWarnings("rawtypes") List acus, RuleContext ctx) {
     init();
     if (acus.iterator().hasNext()) {
       visit((DelphiPMDNode) acus.iterator().next(), ctx);

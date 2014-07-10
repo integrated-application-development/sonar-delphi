@@ -21,11 +21,7 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
-import static junitx.framework.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.sonar.plugins.delphi.antlr.ast.NodeName.COLON;
 import static org.sonar.plugins.delphi.antlr.ast.NodeName.DASH;
 import static org.sonar.plugins.delphi.antlr.ast.NodeName.DASH_POINTER;

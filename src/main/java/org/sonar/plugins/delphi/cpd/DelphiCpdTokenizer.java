@@ -35,7 +35,6 @@ import net.sourceforge.pmd.cpd.Tokens;
 
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.Token;
-import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.sanitizer.DelphiSourceSanitizer;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;

@@ -53,10 +53,10 @@ public class DelphiRule extends AbstractJavaRule {
    */
 
   @Override
-  protected void visitAll(List acus, RuleContext ctx) {
+  protected void visitAll(@SuppressWarnings("rawtypes") List acus, RuleContext ctx) {
     lastLineParsed = -1;
     init();
-    for (Iterator i = acus.iterator(); i.hasNext();) {
+    for (Iterator<?> i = acus.iterator(); i.hasNext();) {
       DelphiPMDNode node = (DelphiPMDNode) i.next();
       ASTTree ast = node.getASTTree();
       if (ast != null) {

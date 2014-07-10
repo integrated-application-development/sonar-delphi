@@ -34,7 +34,12 @@ import org.sonar.api.utils.WildcardPattern;
  */
 public class DelphiPackage extends Resource {
 
-  public static final String DEFAULT_PACKAGE_NAME = "[default]";
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+public static final String DEFAULT_PACKAGE_NAME = "[default]";
 
   /**
    * ctor

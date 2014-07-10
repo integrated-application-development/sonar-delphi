@@ -21,23 +21,16 @@
  */
 package org.sonar.plugins.delphi.surefire;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.List;
 
-import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.SonarIndex;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.plugins.delphi.core.DelphiFile;
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.surefire.api.AbstractSurefireParser;
-
-import com.google.common.io.Files;
 
 /**
  * Parses unit test reports from XML file.
@@ -47,8 +40,6 @@ public class DelphiSureFireParser extends AbstractSurefireParser {
   private static final String FILE_EXT = ".pas";
   private static final String ERROR_MSG = "Unit test file not found: ";
   private Project project;
-  private SonarIndex sonarIndex;
-
   /**
    * ctor
    * 
@@ -59,7 +50,6 @@ public class DelphiSureFireParser extends AbstractSurefireParser {
    */
   public DelphiSureFireParser(Project delphiProject, SonarIndex sonarIndex) {
 	this.project = delphiProject;
-    this.sonarIndex = sonarIndex;
   }
 
   @Override
@@ -75,8 +65,6 @@ public class DelphiSureFireParser extends AbstractSurefireParser {
       }
       throw new FileNotFoundException(); // no file found
     } catch (FileNotFoundException e) {
-      DelphiUtils.LOG.warn(ERROR_MSG + classKey + FILE_EXT);
-    } catch (IOException e) {
       DelphiUtils.LOG.warn(ERROR_MSG + classKey + FILE_EXT);
     }
 

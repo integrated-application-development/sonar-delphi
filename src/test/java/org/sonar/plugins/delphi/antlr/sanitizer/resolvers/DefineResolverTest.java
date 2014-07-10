@@ -27,7 +27,6 @@ import java.util.HashSet;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRangeAggregator;
 import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
 public class DefineResolverTest extends FileTestsCommon {
@@ -54,7 +53,7 @@ public class DefineResolverTest extends FileTestsCommon {
   public void test() {
 
     resolver.resolve(results);
-    SubRangeAggregator excludes = results.getFileExcludes();
+    results.getFileExcludes();
 
     // TODO
   }

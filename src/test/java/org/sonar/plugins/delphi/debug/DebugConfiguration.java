@@ -68,11 +68,11 @@ public class DebugConfiguration implements Configuration {
     return values.get(key);
   }
 
-  public Iterator getKeys(String prefix) {
+  public Iterator<?> getKeys(String prefix) {
     throw new NotImplementedException("DebugConfiguration method not implemented.");
   }
 
-  public Iterator getKeys() {
+  public Iterator<?> getKeys() {
     throw new NotImplementedException("DebugConfiguration method not implemented.");
   }
 
@@ -209,10 +209,11 @@ public class DebugConfiguration implements Configuration {
     return str.split(",");
   }
 
-  public List getList(String key) {
+  public List<?> getList(String key) {
     throw new NotImplementedException("DebugConfiguration method not implemented.");
   }
 
+  @SuppressWarnings("rawtypes")
   public List getList(String key, List defaultValue) {
     throw new NotImplementedException("DebugConfiguration method not implemented.");
   }

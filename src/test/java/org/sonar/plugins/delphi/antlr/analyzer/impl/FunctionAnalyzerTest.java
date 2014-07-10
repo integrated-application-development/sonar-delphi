@@ -87,7 +87,6 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   public void analyseTest() {
     int index = 0;
     int lines[] = { 10, 11, 19, 20, 42, 48, 58, 69, 75, 89 };
-    boolean body[] = { false, false, false, false, false, true, true, false, true, true };
     String names[] = { "bShowTrackerClick", "getFunction", "myProcedure", "setSomething", "TDemo.getFunction", "TDemo.bShowTrackerClick",
         "TMyClass.myProcedure", "TMyClass.setSomething", "StandAloneProcedure", "StandAloneFunction" };
 

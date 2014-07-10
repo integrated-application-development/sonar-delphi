@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.sonar.api.CoreProperties;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.SonarIndex;
@@ -66,7 +65,6 @@ public class DelphiSensor implements Sensor {
 
   private int scannedFiles = 0; // number of scanned files
   private Project project = null; // project
-  private SensorContext context = null; // sensor context
   private Set<DelphiPackage> packageList = new HashSet<DelphiPackage>(); // package list
   private Map<DelphiPackage, Integer> filesCount = new HashMap<DelphiPackage, Integer>();
   private List<DelphiFile> resourceList = new ArrayList<DelphiFile>(); // list of resources to process for metrics
@@ -74,10 +72,7 @@ public class DelphiSensor implements Sensor {
   private Map<DelphiFile, List<FunctionInterface>> fileFunctions = new HashMap<DelphiFile, List<FunctionInterface>>();
   private List<UnitInterface> units = null; // project units
   private List<File> testDirectories = null; // test directories
-  private SonarIndex sonarIndex;
-
-  public DelphiSensor(SonarIndex sonarIndex) {
-	this.sonarIndex = sonarIndex;  
+  public DelphiSensor(SonarIndex sonarIndex) {  
   }
   
   /**
@@ -96,7 +91,6 @@ public class DelphiSensor implements Sensor {
 
   public void analyse(Project sonarProject, SensorContext sensorContext) {
     project = sonarProject; // project to analyse
-    context = sensorContext; // sensor context
     testDirectories = DelphiProjectHelper.getInstance().getTestDirectories(project);
     printFileList("Test dir: ", testDirectories);
 
@@ -243,8 +237,7 @@ public class DelphiSensor implements Sensor {
     if (importSources && ast != null) {
 
       try {
-        String source = ast.getFileSource(); // getting file source
-        //sonarIndex.setSource(resource, source);
+        ast.getFileSource();
       } catch (DuplicatedSourceException e) {
         DelphiUtils.LOG.debug("Source already saved, skipping...");
       }

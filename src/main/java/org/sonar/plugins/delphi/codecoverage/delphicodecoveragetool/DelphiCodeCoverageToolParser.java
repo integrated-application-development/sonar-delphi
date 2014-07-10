@@ -33,11 +33,9 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser 
 {
-	private final Project project;
 	private final File reportFile;
 	
 	public DelphiCodeCoverageToolParser(Project project, File reportFile) {
-		this.project = project;
 		this.reportFile = reportFile;
 	}
 

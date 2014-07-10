@@ -30,7 +30,6 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiProjectTest {

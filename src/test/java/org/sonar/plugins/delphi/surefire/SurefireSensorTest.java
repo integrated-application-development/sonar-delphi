@@ -32,7 +32,6 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.api.CoreProperties;
 import org.sonar.api.batch.SonarIndex;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Project.AnalysisType;

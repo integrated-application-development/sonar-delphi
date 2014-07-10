@@ -29,8 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.CheckForNull;
-
 import org.sonar.api.batch.Event;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
@@ -306,7 +304,7 @@ public class DebugSensorContext implements SensorContext {
    * Unused, not implemented
    */
   
-  public Resource getResource(Resource reference) {
+  public <R extends Resource> R getResource(R reference) {
     return null;
   }
 

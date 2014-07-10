@@ -21,7 +21,6 @@
  */
 package org.sonar.plugins.delphi.core;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -32,16 +31,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.*;
 
-import org.hamcrest.collection.IsMapContaining;
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.api.batch.SonarIndex;
 import org.sonar.api.resources.File;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
-import org.sonar.plugins.delphi.DelphiSensor;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 import com.google.common.collect.Maps;

@@ -36,7 +36,6 @@ import java.io.Reader;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.core.DelphiFile;
-import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.DelphiRecognizer;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.squid.measures.Metric;
