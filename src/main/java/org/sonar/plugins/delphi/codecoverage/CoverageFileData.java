@@ -23,7 +23,7 @@ package org.sonar.plugins.delphi.codecoverage;
 
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.PropertiesBuilder;
-import org.sonar.plugins.delphi.core.DelphiFile;
+import org.sonar.api.resources.Resource;
 
 /**
  * Class that holds coverage data for each source file, used in AQTime purifier
@@ -33,7 +33,7 @@ public class CoverageFileData {
   private double coverage = 0.0;
   private double totalLines = 0.0;
   private double uncoveredLines = 0.0;
-  private DelphiFile resource;
+  private Resource resource;
   private PropertiesBuilder<String, Integer> lineHitsBuilder;
 
   /**
@@ -42,7 +42,7 @@ public class CoverageFileData {
    * @param res
    *          Delphi file
    */
-  public CoverageFileData(DelphiFile res) {
+  public CoverageFileData(Resource res) {
     resource = res;
     lineHitsBuilder = new PropertiesBuilder<String, Integer>(CoreMetrics.COVERAGE_LINE_HITS_DATA);
   }
@@ -71,7 +71,7 @@ public class CoverageFileData {
   /**
    * @return the resource
    */
-  public DelphiFile getResource() {
+  public Resource getResource() {
     return resource;
   }
 

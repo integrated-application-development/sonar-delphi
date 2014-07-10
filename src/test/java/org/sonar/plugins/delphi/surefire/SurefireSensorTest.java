@@ -33,6 +33,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.CoreProperties;
+import org.sonar.api.batch.SonarIndex;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Project.AnalysisType;
 import org.sonar.api.resources.ProjectFileSystem;
@@ -49,6 +50,7 @@ public class SurefireSensorTest {
   
   private Project project;
   private DebugConfiguration configuration;
+  private SonarIndex sonarIndex;
   
   @Before
   public void setup()
@@ -65,19 +67,21 @@ public class SurefireSensorTest {
     when(project.getAnalysisType()).thenReturn(AnalysisType.DYNAMIC);    
     when(project.getFileSystem()).thenReturn(fileSystem);
     
+    sonarIndex = mock(SonarIndex.class);
+    
     configuration = new DebugConfiguration();
     configuration.addProperty(SurefireUtils.SUREFIRE_REPORTS_PATH_PROPERTY, SUREFIRE_REPORT_DIR);
   }
   
   @Test
   public void shouldExecuteOnProjectTest() {
-    assertTrue(new SurefireSensor(configuration).shouldExecuteOnProject(project));
+    assertTrue(new SurefireSensor(configuration, sonarIndex).shouldExecuteOnProject(project));
   }
   
   @Test
   public void analyzeTest() {
     DebugSensorContext context = new DebugSensorContext();
-    SurefireSensor sensor = new SurefireSensor(configuration);
+    SurefireSensor sensor = new SurefireSensor(configuration, sonarIndex);
     sensor.analyse(project, context);
     assertEquals(12, context.getMeasuresKeys().size());
   }

@@ -23,4 +23,15 @@
                 executed="True"/>
    </testsuite>   
    
+   <testsuite name="TEST_SUITE_3" success="True" time="0.005">
+      <testcase name="FunctionTest3"
+                success="True"
+                time="0.001"
+                executed="True"/>
+      <testcase name="ProcedureTest3"
+                success="True"
+                time="0.004"
+                executed="True"/>
+   </testsuite>      
+   
 </testsuites>

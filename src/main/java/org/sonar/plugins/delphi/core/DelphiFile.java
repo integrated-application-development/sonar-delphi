@@ -28,6 +28,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.sonar.api.resources.Language;
+import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.resources.Scopes;
@@ -47,6 +48,8 @@ public class DelphiFile extends Resource {
 	private String packageKey;
 	private boolean unitTest = false;
 	private DelphiPackage parent = null;
+
+	private String absolutePath;
 
 	/**
 	 * SONARPLUGINS-687: For backward compatibility
@@ -236,6 +239,9 @@ public class DelphiFile extends Resource {
 
 			newFile.setPath(DelphiUtils.normalizeFileName(file
 					.getAbsolutePath()));
+			newFile.absolutePath = file.getAbsolutePath();
+			newFile.setKey(file.getName());
+			
 			return newFile;
 		}
 		return null;
@@ -256,8 +262,11 @@ public class DelphiFile extends Resource {
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this).append("key", getKey())
-				.append("package", packageKey).append("longName", longName)
-				.append("unitTest", unitTest).toString();
+				.append("deprecatedKey", getDeprecatedKey())
+				.append("path", getPath())
+				.append("package", packageKey)
+				.append("longName", longName)
+				.append("unitTest", unitTest).toString();	
 	}
 
 	/**
@@ -296,6 +305,14 @@ public class DelphiFile extends Resource {
 				return pathname.isDirectory();
 			}
 		};
+	}
+
+	public org.sonar.api.resources.File toFile(Project module) {
+		return org.sonar.api.resources.File.fromIOFile(new File(getAbsolutePath()), module);
+	}
+
+	public String getAbsolutePath() {
+		return this.absolutePath;
 	}
 
 }

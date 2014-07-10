@@ -33,6 +33,7 @@ import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.resources.InputFile;
 import org.sonar.api.resources.Project;
+import org.sonar.api.resources.Resource;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.codecoverage.CoverageFileData;
 import org.sonar.plugins.delphi.codecoverage.DelphiCodeCoverageParser;
@@ -61,13 +62,13 @@ public class AQTimeCoverageParser implements DelphiCodeCoverageParser {
       aqTimeCoverageDao.setJdbcProps(connectionProperties);
       aqTimeCoverageDao.setDatabasePrefix(prefix);
       List<AQTimeCodeCoverage> aqTimeCodeCoverages = aqTimeCoverageDao.readAQTimeCodeCoverage();
-      saveCoverageData(processFiles(aqTimeCodeCoverages), context);
+      saveCoverageData(processFiles(aqTimeCodeCoverages, project), context);
     } catch (SQLException e) {
       DelphiUtils.LOG.error("AQTime SQL error: " + e.getMessage());
     }
   }
 
-  private void saveCoverageData(Map<DelphiFile, CoverageFileData> savedResources, SensorContext context) {
+  private void saveCoverageData(Map<Resource, CoverageFileData> savedResources, SensorContext context) {
     for (CoverageFileData data : savedResources.values()) // save all resources
     {
       if (DelphiProjectHelper.getInstance().isExcluded(data.getResource().getPath(), excludedDirs)) {
@@ -86,17 +87,17 @@ public class AQTimeCoverageParser implements DelphiCodeCoverageParser {
     }
   }
 
-  private Map<DelphiFile, CoverageFileData> processFiles(List<AQTimeCodeCoverage> aqTimeCodeCoverages) throws SQLException {
+  private Map<Resource, CoverageFileData> processFiles(List<AQTimeCodeCoverage> aqTimeCodeCoverages, Project project) throws SQLException {
     ProgressReporter progressReporter = new ProgressReporter(aqTimeCodeCoverages.size(), 10, new ProgressReporterLogger(DelphiUtils.LOG) );
     
-    Map<DelphiFile, CoverageFileData> savedResources = new HashMap<DelphiFile, CoverageFileData>(); // map of our sources and their data
-    DelphiFile resource = null; // current file
+    Map<Resource, CoverageFileData> savedResources = new HashMap<Resource, CoverageFileData>(); // map of our sources and their data
+    org.sonar.api.resources.File resource = null; // current file
 
     for (AQTimeCodeCoverage aqTimeCodeCoverage : aqTimeCodeCoverages) {
       progressReporter.progress();
-      String path = processFileName(aqTimeCodeCoverage.getCoveredFileName(), sourceFiles); // convert relative file name to absolute path
-      if (resource == null || !resource.getPath().equals(path)) {
-        resource = DelphiFile.fromAbsolutePath(path, sourceDirs, false);
+      String path = processFileName(aqTimeCodeCoverage.getCoveredFileName(), sourceFiles); // convert relative file name to absolute path      
+      if (resource == null || !resource.getLongName().equals(aqTimeCodeCoverage.getCoveredFileName())) {
+        resource = org.sonar.api.resources.File.fromIOFile(new File(path), project);
         if (resource == null) {
           continue;
         }

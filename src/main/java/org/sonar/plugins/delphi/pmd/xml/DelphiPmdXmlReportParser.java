@@ -29,6 +29,8 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
 import org.codehaus.staxmate.in.SMInputCursor;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.issue.Issue;
+import org.sonar.api.issue.internal.DefaultIssue;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
@@ -104,12 +106,11 @@ public class DelphiPmdXmlReportParser {
 
     Rule rule = ruleFinder.find(ruleQuery);
     if (rule != null) {
-      DelphiFile resource = DelphiFile.fromAbsolutePath(fileName, project.getFileSystem().getSourceDirs(), false);
-      Violation violation = Violation.create(rule, resource).setLineId(line).setMessage(message);
+      //DelphiFile delphiFile = DelphiFile.fromAbsolutePath(fileName, project.getFileSystem().getSourceDirs(), false);
+      org.sonar.api.resources.File file = org.sonar.api.resources.File.fromIOFile(new File(fileName), project);
+      
+      Violation violation = Violation.create(rule, file).setLineId(line).setMessage(message);
       context.saveViolation(violation);
-      
-      DelphiUtils.LOG.info("Rule found: repository: {} rule: {}", rule.getRepositoryKey(), rule.getKey());
-      
     }
     else{
     	DelphiUtils.LOG.error("Rule not found: repository: {} rule: {}", ruleQuery.getRepositoryKey(), ruleQuery.getKey());

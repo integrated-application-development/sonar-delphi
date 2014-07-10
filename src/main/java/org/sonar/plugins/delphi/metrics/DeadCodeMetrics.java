@@ -28,6 +28,7 @@ import java.util.Set;
 
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
+import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
@@ -98,18 +99,17 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
    */
 
   public void save(Resource resource, SensorContext sensorContext) {
-    DelphiFile delphiFile = (DelphiFile) resource;
-    if (delphiFile.isUnitTest()) {
+    if (resource.getQualifier().equals(Qualifiers.UNIT_TEST_FILE)) {
       return; // do not count unit tests
     }
 
-    UnitInterface unit = findUnit(delphiFile.getName());
+    UnitInterface unit = findUnit(resource.getName());
     if (unit == null) {
-      DelphiUtils.LOG.debug("No unit for " + delphiFile.getName() + "(" + delphiFile.getPath() + ")");
+      DelphiUtils.LOG.debug("No unit for " + resource.getName() + "(" + resource.getPath() + ")");
       return;
     }
 
-    if (unusedUnits.contains(delphiFile.getName().toLowerCase())) { // unused unit, add violation
+    if (unusedUnits.contains(resource.getName().toLowerCase())) { // unused unit, add violation
       int line = unit.getLine();
       Violation violation = Violation.create(unitRule, resource).setLineId(line).setMessage(unit.getName() + DEAD_UNIT_VIOLATION_MESSAGE);
       sensorContext.saveViolation(violation, true);

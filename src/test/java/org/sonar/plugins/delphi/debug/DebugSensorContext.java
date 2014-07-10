@@ -139,9 +139,9 @@ public class DebugSensorContext implements SensorContext {
       return null;
     }
     if (measure.getValue() != null) {
-      data.put(resource.getName() + ".pas:" + measure.getMetric().getKey(), measure.getValue());
+      data.put(resource.getKey() + ":" + measure.getMetric().getKey(), measure.getValue());
     } else {
-      sdata.put(resource.getName() + ".pas:" + measure.getMetric().getKey(), measure.getData());
+      sdata.put(resource.getKey() + ":" + measure.getMetric().getKey(), measure.getData());
     }
     return null;
   }

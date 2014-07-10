@@ -100,6 +100,7 @@ public class DelphiPmdSensorTest {
     sourceFiles.add(srcFile);
 
     when(pfs.getSourceFiles(DelphiLanguage.instance)).thenReturn(sourceFiles);
+    when(pfs.getSourceDirs()).thenReturn(sourceFiles);
 
     sensor = new DelphiPmdSensor(new DebugRuleFinder());
   }

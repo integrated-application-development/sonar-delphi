@@ -66,12 +66,16 @@ public class DelphiCoverageToolParserStreamHandler implements XmlStreamHandler
 		Measure linesToCover = new Measure(CoreMetrics.LINES_TO_COVER, data.getTotalLines());
 		Measure uncoveredLines = new Measure(CoreMetrics.UNCOVERED_LINES, data.getUncoveredLines());
 		Measure lineHits = data.getLineHitsBuilder().build().setPersistenceMode(PersistenceMode.DATABASE);
-		context.saveMeasure(data.getResource(), overallCoverage); // save overall file coverage
-		context.saveMeasure(data.getResource(), lineCoverage); // save file coverage
-		context.saveMeasure(data.getResource(), linesToCover); // save total lines to cover
-		context.saveMeasure(data.getResource(), uncoveredLines); // save uncovered lines
-		context.saveMeasure(data.getResource(), lineHits); // save line hits data
-		DelphiUtils.LOG.debug("Saving coverage to: " + data.getResource().getName());
+		try{
+			context.saveMeasure(data.getResource(), overallCoverage); // save overall file coverage
+			context.saveMeasure(data.getResource(), lineCoverage); // save file coverage
+			context.saveMeasure(data.getResource(), linesToCover); // save total lines to cover
+			context.saveMeasure(data.getResource(), uncoveredLines); // save uncovered lines
+			context.saveMeasure(data.getResource(), lineHits); // save line hits data
+			DelphiUtils.LOG.debug("Saving coverage to: " + data.getResource().getName());
+		}catch(Exception e){
+			DelphiUtils.LOG.error("Error saving coverage measure.", e);
+		}
 	}
 
 	private CoverageFileData collectCoverageData(SMInputCursor fileCursor) {  	  
@@ -86,7 +90,7 @@ public class DelphiCoverageToolParserStreamHandler implements XmlStreamHandler
 			int totalLines = 0;
 			int coveredLines = 0;
 			
-			CoverageFileData data = new CoverageFileData(resource);        
+			CoverageFileData data = new CoverageFileData(resource.toFile(project));        
 			SMInputCursor lineCursor = fileCursor.descendantElementCursor("line");        
 			while (lineCursor.getNext() != null) {          
 				if(!lineCursor.asEvent().isStartElement()) {

@@ -140,8 +140,8 @@ public class AQTimeCoverageParserTest extends DBTestCase {
     String lineHits_values[] = { "32=1;33=1", "13=1;14=0" };
 
     for (int i = 0; i < coverage_names.length; ++i) { // % of coverage
-      assertEquals(coverage_names[i], coverage_values[i], context.getMeasure(coverage_names[i]).getValue(), 0.0);
-      assertEquals(coverage_names[i], lineHits_values[i], context.getMeasure(lineHits_names[i]).getData());
+      assertEquals(coverage_names[i] + "-coverage", coverage_values[i], context.getMeasure(coverage_names[i]).getValue(), 0.0);
+      assertEquals(coverage_names[i] + "-lineHits", lineHits_values[i], context.getMeasure(lineHits_names[i]).getData());
     }
   }
 

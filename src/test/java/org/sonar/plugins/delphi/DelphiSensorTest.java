@@ -34,6 +34,7 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.batch.SonarIndex;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
@@ -57,6 +58,7 @@ public class DelphiSensorTest {
 
     project = mock(Project.class);
     ProjectFileSystem pfs = mock(ProjectFileSystem.class);
+    SonarIndex sonarIndex = mock(SonarIndex.class);
 
     baseDir = DelphiUtils.getResource(ROOT_NAME);
     File reportDir = new File(baseDir.getAbsolutePath() + "/reports");
@@ -87,7 +89,7 @@ public class DelphiSensorTest {
     when(pfs.getSourceDirs()).thenReturn(sourceDirs);
     when(pfs.getReportOutputDir()).thenReturn(reportDir);
 
-    sensor = new DelphiSensor();
+    sensor = new DelphiSensor(sonarIndex);
   }
 
   @Test

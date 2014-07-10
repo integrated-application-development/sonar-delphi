@@ -26,6 +26,7 @@ import java.io.File;
 import org.apache.commons.configuration.Configuration;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.SonarIndex;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -38,6 +39,7 @@ import org.sonar.plugins.surefire.api.SurefireUtils;
 public class SurefireSensor implements Sensor {
 
   private Configuration configuration;
+private SonarIndex sonarIndex;
   
   /**
    * @return Sonar's abstract coverage extension class
@@ -51,9 +53,10 @@ public class SurefireSensor implements Sensor {
    * Ctor
    * @param configuration Configuration provided by Sonar
    */
-  public SurefireSensor(Configuration configuration)
+  public SurefireSensor(Configuration configuration, SonarIndex sonarIndex)
   {
     this.configuration = configuration;
+    this.sonarIndex = sonarIndex;
   }
   
   /**
@@ -90,7 +93,7 @@ public class SurefireSensor implements Sensor {
 
   protected void collect(Project project, SensorContext context, File reportsDir) {
     DelphiUtils.LOG.info("parsing {}", reportsDir);
-    DelphiSureFireParser parser = new DelphiSureFireParser(project, context);
+    DelphiSureFireParser parser = new DelphiSureFireParser(project, sonarIndex);
     parser.collect(project, context, reportsDir);
   }
 

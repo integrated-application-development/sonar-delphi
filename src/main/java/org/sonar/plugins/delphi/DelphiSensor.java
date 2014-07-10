@@ -29,8 +29,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.sonar.api.CoreProperties;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.SonarIndex;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.resources.DuplicatedSourceException;
 import org.sonar.api.resources.Project;
@@ -72,7 +74,12 @@ public class DelphiSensor implements Sensor {
   private Map<DelphiFile, List<FunctionInterface>> fileFunctions = new HashMap<DelphiFile, List<FunctionInterface>>();
   private List<UnitInterface> units = null; // project units
   private List<File> testDirectories = null; // test directories
+  private SonarIndex sonarIndex;
 
+  public DelphiSensor(SonarIndex sonarIndex) {
+	this.sonarIndex = sonarIndex;  
+  }
+  
   /**
    * Determines if sensor should execute on project
    * 
@@ -117,7 +124,7 @@ public class DelphiSensor implements Sensor {
    *          Sensor context (provided by Sonar)
    */
   private void processFiles(MetricsInterface[] metrics, SensorContext sensorContext) {
-    DelphiUtils.LOG.info("Processing...");
+    DelphiUtils.LOG.info("Processing metrics...");
     ProgressReporter progressReporter = new ProgressReporter(resourceList.size(), 10, new ProgressReporterLogger(DelphiUtils.LOG) );
     
     for (DelphiFile resource : resourceList) { // for every resource
@@ -125,7 +132,7 @@ public class DelphiSensor implements Sensor {
       for (MetricsInterface metric : metrics) { // for every metric
         if (metric.executeOnResource(resource)) {
           metric.analyse(resource, sensorContext, fileClasses.get(resource), fileFunctions.get(resource), units);
-          metric.save(resource, sensorContext);
+          metric.save(resource.toFile(project), sensorContext);
         }
       } // metric
 
@@ -170,7 +177,6 @@ public class DelphiSensor implements Sensor {
    *          DelphiLanguage project to parse
    */
   protected void parseFiles(ASTAnalyzer analyser, DelphiProject delphiProject) {
-
     // project properties
     List<File> includedDirs = delphiProject.getIncludeDirectories();
     List<File> excludedDirs = DelphiProjectHelper.getInstance().getExcludedSources(project.getFileSystem());
@@ -231,13 +237,14 @@ public class DelphiSensor implements Sensor {
       filesCount.put(pack, Integer.valueOf(1));
     }
     resourceList.add(resource);
-
+    
+    //sonarIndex.index(resource);
     ASTTree ast = analyseSourceFile(sourceFile, analyzer);
     if (importSources && ast != null) {
 
       try {
         String source = ast.getFileSource(); // getting file source
-        context.saveSource(resource, source); // adding source to the resource file
+        //sonarIndex.setSource(resource, source);
       } catch (DuplicatedSourceException e) {
         DelphiUtils.LOG.debug("Source already saved, skipping...");
       }
