@@ -21,6 +21,7 @@
  */
 package org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -30,17 +31,15 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.plugins.delphi.core.DelphiFile;
-import org.sonar.plugins.delphi.core.DelphiLanguage;
+import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiCoverageToolParserTest 
 {
 	  private Project project;
-	  private SensorContext context;
+	  private DebugSensorContext context;
 	  private File baseDir;
 
 	  private static final String ROOT_NAME = "/org/sonar/plugins/delphi/SimpleDelphiProject";
@@ -49,39 +48,21 @@ public class DelphiCoverageToolParserTest
 	  @Before
 	  public void init() {
 
-		context = mock(SensorContext.class);
+		context = new DebugSensorContext();
 		  
 	    project = mock(Project.class);
 	    ProjectFileSystem pfs = mock(ProjectFileSystem.class);
 
 	    baseDir = DelphiUtils.getResource(ROOT_NAME);
-	    File reportDir = new File(baseDir.getAbsolutePath() + "/reports");
 
-	    File[] dirs = baseDir.listFiles(DelphiFile.getDirectoryFilter()); // get all directories
-
-	    List<File> sourceDirs = new ArrayList<File>(dirs.length);
-	    List<File> sourceFiles = new ArrayList<File>();
+	    List<File> sourceDirs = new ArrayList<File>();
 
 	    sourceDirs.add(baseDir); // include baseDir
-	    for (File source : baseDir.listFiles(DelphiFile.getFileFilter())) {
-	      sourceFiles.add(source);
-	    }
 
-	    for (File directory : dirs) { // get all source files from all directories
-	      File[] files = directory.listFiles(DelphiFile.getFileFilter());
-	      for (File sourceFile : files) {
-	        sourceFiles.add(sourceFile); // put all files to list
-	      }
-	      sourceDirs.add(directory); // put all directories to list
-	    }
-
-	    when(project.getLanguage()).thenReturn(DelphiLanguage.instance);
 	    when(project.getFileSystem()).thenReturn(pfs);
 
 	    when(pfs.getBasedir()).thenReturn(baseDir);
-	    when(pfs.getSourceFiles(DelphiLanguage.instance)).thenReturn(sourceFiles);
 	    when(pfs.getSourceDirs()).thenReturn(sourceDirs);
-	    when(pfs.getReportOutputDir()).thenReturn(reportDir);
 	 }
 	
 	
@@ -90,6 +71,16 @@ public class DelphiCoverageToolParserTest
 		File reportFile = DelphiUtils.getResource(REPORT_FILE);
 		DelphiCodeCoverageToolParser parser = new DelphiCodeCoverageToolParser(project, reportFile);		
 		parser.parse(project, context);
+
+	    String coverage_names[] = { "Globals.pas:coverage", "MainWindow.pas:coverage" };
+	    double coverage_values[] = { 100.00, 50.00 };
+	    String lineHits_names[] = { "Globals.pas:coverage_line_hits_data", "MainWindow.pas:coverage_line_hits_data" };
+	    String lineHits_values[] = { "19=1;20=1", "36=1;37=0;38=1;39=0" };
+
+	    for (int i = 0; i < coverage_names.length; ++i) { // % of coverage
+	      assertEquals(coverage_names[i] + "-coverage", coverage_values[i], context.getMeasure(coverage_names[i]).getValue(), 0.0);
+	      assertEquals(coverage_names[i] + "-lineHits", lineHits_values[i], context.getMeasure(lineHits_names[i]).getData());
+	    }
 	}
 	
 	

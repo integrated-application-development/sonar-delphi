@@ -72,7 +72,7 @@ public class DelphiCoverageToolParserStreamHandler implements XmlStreamHandler
 			context.saveMeasure(data.getResource(), linesToCover); // save total lines to cover
 			context.saveMeasure(data.getResource(), uncoveredLines); // save uncovered lines
 			context.saveMeasure(data.getResource(), lineHits); // save line hits data
-			DelphiUtils.LOG.debug("Saving coverage to: " + data.getResource().getName());
+			DelphiUtils.LOG.debug("Saving coverage to: " + data.getResource().getLongName());
 		}catch(Exception e){
 			DelphiUtils.LOG.error("Error saving coverage measure.", e);
 		}
@@ -104,9 +104,8 @@ public class DelphiCoverageToolParserStreamHandler implements XmlStreamHandler
 			}
 			
 			data.setTotalLines(totalLines);
-			data.setCoverage(coveredLines);
-			data.setUncoveredLines(totalLines - coveredLines);						
-			DelphiUtils.LOG.debug("Coverage (" + fileName + "): " + coveredLines + "/" + totalLines);
+			data.setUncoveredLines(totalLines - coveredLines);
+			DelphiUtils.LOG.debug("Coverage (" + fileName + "): " + coveredLines + "/" + totalLines + "(" + data.getCoverage() + "%)");
 			return data;
 		}
 		catch(Exception e) {

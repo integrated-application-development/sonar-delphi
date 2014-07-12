@@ -30,7 +30,8 @@ import org.sonar.api.resources.Resource;
  */
 public class CoverageFileData {
 
-  private double coverage = 0.0;
+  private static final double ONE_HUNDRED = 100.00;
+	  
   private double totalLines = 0.0;
   private double uncoveredLines = 0.0;
   private Resource resource;
@@ -51,7 +52,7 @@ public class CoverageFileData {
    * @return the coverage
    */
   public double getCoverage() {
-    return coverage;
+    return (totalLines - uncoveredLines) / totalLines * ONE_HUNDRED;
   }
 
   /**
@@ -80,14 +81,6 @@ public class CoverageFileData {
    */
   public PropertiesBuilder<String, Integer> getLineHitsBuilder() {
     return lineHitsBuilder;
-  }
-
-  /**
-   * @param coverage
-   *          the coverage to set
-   */
-  public void setCoverage(double coverage) {
-    this.coverage = coverage;
   }
 
   /**

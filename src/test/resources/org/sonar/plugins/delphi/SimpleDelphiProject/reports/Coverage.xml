@@ -39,16 +39,6 @@
               <line number="37" covered="False"/>
               <line number="38" covered="True"/>
               <line number="39" covered="False"/>
-              <line number="40" covered="True"/>
-              <line number="41" covered="False"/>
-              <line number="42" covered="False"/>
-              <line number="43" covered="True"/>
-			  <line number="44" covered="True"/>
-			  <line number="45" covered="True"/>
-			  <line number="46" covered="True"/>
-			  <line number="47" covered="True"/>
-			  <line number="48" covered="True"/>
-              <line number="49" covered="True"/>
             </method>
           </class>         
         </srcfile>
@@ -71,36 +61,6 @@
             </method>
           </class>         
         </srcfile>
-       <srcfile name="MainWindow.pas">
-          <coverage type="class, %" value="100%   (5/5)"/>
-          <coverage type="method, %" value="74%   (14/19)"/>
-          <coverage type="block, %" value="66%   (93/140)"/>
-          <coverage type="line, %" value="66%   (93/140)"/>
-          <class name="TMainWindow">
-            <coverage type="class, %" value="100%   (1/1)"/>
-            <coverage type="method, %" value="100%   (1/1)"/>
-            <coverage type="block, %" value="56%   (5/9)"/>
-            <coverage type="line, %" value="56%   (5/9)"/>
-            <method name="foo2">
-              <coverage type="method, %" value="100%   (1/1)"/>
-              <coverage type="block, %" value="56%   (5/9)"/>
-              <coverage type="line, %" value="56%   (5/9)"/>
-              <line number="36" covered="True"/>
-              <line number="37" covered="False"/>
-              <line number="38" covered="True"/>
-              <line number="39" covered="False"/>
-              <line number="40" covered="True"/>
-              <line number="41" covered="False"/>
-              <line number="42" covered="False"/>
-              <line number="43" covered="True"/>
-			  <line number="44" covered="True"/>
-			  <line number="45" covered="True"/>
-			  <line number="46" covered="True"/>
-			  <line number="47" covered="True"/>
-			  <line number="48" covered="True"/>
-              <line number="49" covered="True"/>
-            </method>
-          </class>     		
       </package>
     </all>
   </data>

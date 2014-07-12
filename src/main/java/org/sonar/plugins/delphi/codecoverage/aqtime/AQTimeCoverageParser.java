@@ -47,7 +47,6 @@ import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
  */
 public class AQTimeCoverageParser implements DelphiCodeCoverageParser {
 
-  private static final double ONE_HUNDRED = 100.00;
   private String prefix = ""; // table prefix
   private List<InputFile> sourceFiles;
   private List<File> excludedDirs;
@@ -113,11 +112,7 @@ public class AQTimeCoverageParser implements DelphiCodeCoverageParser {
     if (lineHits == 0) {
       fileData.setUncoveredLines(fileData.getUncoveredLines() + 1);
     }
-    if (fileData.getTotalLines() == 0) {
-      fileData.setCoverage(0.00);
-    } else {
-      fileData.setCoverage(((fileData.getTotalLines() - fileData.getUncoveredLines()) / fileData.getTotalLines()) * ONE_HUNDRED);
-    }
+
     fileData.getLineHitsBuilder().add(String.valueOf(lineNumber), lineHits); // add new line hit
   }
 
