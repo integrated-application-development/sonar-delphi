@@ -55,7 +55,7 @@ public class DelphiSureFireParser extends AbstractSurefireParser {
   @Override
   protected Resource getUnitTestResource(String classKey) {
     try { 
-      File testFile = findFileInTestDirectories(classKey + FILE_EXT, project.getFileSystem().getTestDirs() );
+      File testFile = DelphiFile.findFileInDirectories(classKey + FILE_EXT, project.getFileSystem().getTestDirs() );
       org.sonar.api.resources.File resourceFile = DelphiFile.fromIOFile(testFile, project.getFileSystem().getTestDirs(), true).toFile(project);
       if (resourceFile != null) {
         // resource source code not saved, because tests files were
@@ -69,19 +69,6 @@ public class DelphiSureFireParser extends AbstractSurefireParser {
     }
 
     return new DelphiFile(classKey, true); // default behavior
-  }
-
-  private File findFileInTestDirectories(String fileName, List<File> testDirs) throws FileNotFoundException {
-    for(File dir : testDirs) {
-      String dirPath = dir.getAbsolutePath();
-      String fullPath = dirPath + File.separator + fileName;
-      File result = new File(fullPath);
-      if(result.exists()) {
-        return result;
-      }
-    }
-
-    throw new FileNotFoundException(fileName);
   }
 
 }

@@ -92,6 +92,7 @@ public class DelphiSensor implements Sensor {
   public void analyse(Project sonarProject, SensorContext sensorContext) {
     project = sonarProject; // project to analyse
     testDirectories = DelphiProjectHelper.getInstance().getTestDirectories(project);
+    printFileList("Source dir: ", project.getFileSystem().getSourceDirs());
     printFileList("Test dir: ", testDirectories);
 
     // creates and resets analyser
@@ -158,7 +159,7 @@ public class DelphiSensor implements Sensor {
   // for debugging, prints file paths with message to debug file
   private void printFileList(String msg, List<File> list) {
     for (File f : list) {
-      DelphiUtils.LOG.debug(msg + f.getAbsolutePath());
+      DelphiUtils.LOG.info(msg + f.getAbsolutePath());
     }
   }
 

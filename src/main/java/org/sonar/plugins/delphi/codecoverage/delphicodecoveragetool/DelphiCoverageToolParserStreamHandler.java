@@ -81,7 +81,7 @@ public class DelphiCoverageToolParserStreamHandler implements XmlStreamHandler
 	private CoverageFileData collectCoverageData(SMInputCursor fileCursor) {  	  
 		try {
 			String fileName = fileCursor.getAttrValue("name");    	
-			File sourceFile = getSourceFileFromName(fileName);
+			File sourceFile = DelphiFile.findFileInDirectories(fileName, project.getFileSystem().getSourceDirs());
 			DelphiFile resource = DelphiFile.fromIOFile(sourceFile, project.getFileSystem().getSourceDirs(), false);
 			if(resource == null) {
 				DelphiUtils.LOG.warn("File not found for code coverage: " + fileName);
@@ -111,17 +111,6 @@ public class DelphiCoverageToolParserStreamHandler implements XmlStreamHandler
 		catch(Exception e) {
 			return null;
 		}
-	}
-
-	private File getSourceFileFromName(String fileName) {
-		for(File dir : project.getFileSystem().getSourceDirs()) {
-			for(File file : dir.listFiles()) {
-				if(file.getName().equalsIgnoreCase(fileName)) {
-					return file;
-				}        		
-			}
-		}
-		return null;
 	}
 
 }

@@ -23,6 +23,7 @@ package org.sonar.plugins.delphi.core;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -313,6 +314,32 @@ public class DelphiFile extends Resource {
 
 	public String getAbsolutePath() {
 		return this.absolutePath;
+	}
+	
+	public static File findFileInDirectories(String fileName, List<File> dirs) throws FileNotFoundException{
+		for (File dir : dirs) {
+			File result = getSourceFileFromName(dir, fileName);
+			if (result != null) {
+				return result;
+			}
+		}
+		
+		throw new FileNotFoundException(fileName);
+	}
+	
+	private static File getSourceFileFromName(File dir, String fileName) {
+		for (File file : dir.listFiles()) {
+			if (file.isDirectory()) {
+				File result = getSourceFileFromName(file, fileName);
+
+				if (result != null) {
+					return result;
+				}
+			} else if (file.getName().equalsIgnoreCase(fileName)) {
+				return file;
+			}
+		}
+		return null;
 	}
 
 }
