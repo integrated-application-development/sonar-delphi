@@ -32,6 +32,7 @@ import java.util.Set;
 import org.sonar.api.batch.Event;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.InputPath;
 import org.sonar.api.design.Dependency;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.MeasuresFilter;
@@ -311,6 +312,13 @@ public class DebugSensorContext implements SensorContext {
   /**
    * Unused, not implemented
    */
+  public Resource getResource(InputPath inputPath) {
+  	return null;
+  }
+  
+  /**
+   * Unused, not implemented
+   */
   
   public Resource getParent(Resource reference) {
     return null;
@@ -348,5 +356,7 @@ public class DebugSensorContext implements SensorContext {
       }
       return null;
   }
+
+
 
 }

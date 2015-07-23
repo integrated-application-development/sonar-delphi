@@ -37,9 +37,10 @@ import net.sourceforge.pmd.renderers.XMLRenderer;
 import org.apache.commons.io.FileUtils;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.api.rules.RuleFinder;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.pmd.profile.DelphiRuleSets;
@@ -54,106 +55,112 @@ import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
  */
 public class DelphiPmdSensor implements Sensor {
 
-  private RuleFinder rulesFinder;
+    private final FileSystem fs;
+    private final ResourcePerspectives perspectives;
 
-  /**
-   * C-tor
-   */
-  public DelphiPmdSensor(RuleFinder rulesFinder) {
-    this.rulesFinder = rulesFinder;
-  }
-
-  /**
-   * Analyses a project
-   */
-
-  public void analyse(Project project, SensorContext context) {
-    // creating report
-    File reportFile = createPmdReport(project);
-
-    // analysing report
-    DelphiPmdXmlReportParser parser = getStaxParser(project, context);
-    parser.parse(reportFile);
-  }
-
-  private RuleSets createRuleSets() {
-    RuleSets rulesets = new DelphiRuleSets();
-    RuleSetFactory ruleSetFactory = new RuleSetFactory();
-    rulesets.addRuleSet(ruleSetFactory.createRuleSet(getClass().getResourceAsStream("/org/sonar/plugins/delphi/pmd/rules.xml")));
-    return rulesets;
-  }
-
-  private File createPmdReport(Project project) {
-    try {
-      DelphiPMD pmd = new DelphiPMD();
-      RuleContext ruleContext = new RuleContext();
-      RuleSets ruleSets = createRuleSets();
-
-      // excluded files
-      ProjectFileSystem fileSystem = project.getFileSystem();
-      List<File> excluded = DelphiProjectHelper.getInstance().getExcludedSources(fileSystem);
-
-      List<DelphiProject> projects = DelphiProjectHelper.getInstance().getWorkgroupProjects(project); // get workspace projects
-      for (DelphiProject delphiProject : projects) // for every .dproj file
-      {
-        DelphiUtils.LOG.info("PMD Parsing project " + delphiProject.getName());
-        ProgressReporter progressReporter = new ProgressReporter(delphiProject.getSourceFiles().size(), 10, new ProgressReporterLogger(DelphiUtils.LOG) );
-        for (File pmdFile : delphiProject.getSourceFiles()) {
-          progressReporter.progress();
-          if (DelphiProjectHelper.getInstance().isExcluded(pmdFile, excluded)) {
-            continue;
-          }
-          pmd.processFile(pmdFile, ruleSets, ruleContext);
-        }
-      }
-
-      // write xml report
-      return writeXmlReport(project, pmd.getReport());
-    } catch (IOException e) {
-      DelphiUtils.LOG.error("Could not generate PMD report file.");
-      return null;
+    /**
+     * C-tor
+     */
+    public DelphiPmdSensor(FileSystem fs, ResourcePerspectives perspectives) {
+        this.fs = fs;
+        this.perspectives = perspectives;
     }
-  }
 
-  /**
-   * Generates an XML file from report
-   * 
-   * @param project
-   *          Project
-   * @param report
-   *          Report
-   * @return XML based on report
-   * @throws IOException
-   *           When report could not be generated
-   */
-  private File writeXmlReport(Project project, Report report) throws IOException {
-    Renderer xmlRenderer = new XMLRenderer();
-    Writer stringwriter = new StringWriter();
-    xmlRenderer.setWriter(stringwriter);
-    xmlRenderer.start();
-    xmlRenderer.renderFileReport(report);
-    xmlRenderer.end();
+    /**
+     * Analyses a project
+     */
 
-    File xmlReport = new File(project.getFileSystem().getSonarWorkingDirectory(), "pmd-report.xml");
-    DelphiUtils.LOG.info("PMD output report: " + xmlReport.getAbsolutePath());
-    FileUtils.writeStringToFile(xmlReport, stringwriter.toString());
-    return xmlReport;
-  }
+    public void analyse(Project project, SensorContext context) {
+        // creating report
+        File reportFile = createPmdReport(project);
 
-  /**
-   * {@inheritDoc}
-   */
+        // analysing report
+        DelphiPmdXmlReportParser parser = new DelphiPmdXmlReportParser(fs, perspectives);
+        parser.parse(reportFile);
+    }
 
-  public boolean shouldExecuteOnProject(Project project) {
-    return DelphiLanguage.KEY.equals(project.getLanguageKey());
-  }
+    private RuleSets createRuleSets() {
+        RuleSets rulesets = new DelphiRuleSets();
+        RuleSetFactory ruleSetFactory = new RuleSetFactory();
+        rulesets.addRuleSet(ruleSetFactory
+                .createRuleSet(getClass().getResourceAsStream(
+                        "/org/sonar/plugins/delphi/pmd/rules.xml")));
+        return rulesets;
+    }
 
-  private DelphiPmdXmlReportParser getStaxParser(Project project, SensorContext context) {
-    return new DelphiPmdXmlReportParser(project, context, rulesFinder);
-  }
+    private File createPmdReport(Project project) {
+        try {
+            DelphiPMD pmd = new DelphiPMD();
+            RuleContext ruleContext = new RuleContext();
+            RuleSets ruleSets = createRuleSets();
 
-  @Override
-  public String toString() {
-    return getClass().getSimpleName();
-  }
+            // excluded files
+            ProjectFileSystem fileSystem = project.getFileSystem();
+            List<File> excluded = DelphiProjectHelper.getInstance()
+                    .getExcludedSources(fileSystem);
+
+            List<DelphiProject> projects = DelphiProjectHelper.getInstance()
+                    .getWorkgroupProjects(project); // get workspace projects
+            for (DelphiProject delphiProject : projects) // for every .dproj
+                                                         // file
+            {
+                DelphiUtils.LOG.info("PMD Parsing project "
+                        + delphiProject.getName());
+                ProgressReporter progressReporter = new ProgressReporter(
+                        delphiProject.getSourceFiles().size(), 10,
+                        new ProgressReporterLogger(DelphiUtils.LOG));
+                for (File pmdFile : delphiProject.getSourceFiles()) {
+                    progressReporter.progress();
+                    if (DelphiProjectHelper.getInstance().isExcluded(pmdFile,
+                            excluded)) {
+                        continue;
+                    }
+                    pmd.processFile(pmdFile, ruleSets, ruleContext);
+                }
+            }
+
+            // write xml report
+            return writeXmlReport(project, pmd.getReport());
+        } catch (IOException e) {
+            DelphiUtils.LOG.error("Could not generate PMD report file.");
+            return null;
+        }
+    }
+
+    /**
+     * Generates an XML file from report
+     * 
+     * @param project Project
+     * @param report Report
+     * @return XML based on report
+     * @throws IOException When report could not be generated
+     */
+    private File writeXmlReport(Project project, Report report)
+            throws IOException {
+        Renderer xmlRenderer = new XMLRenderer();
+        Writer stringwriter = new StringWriter();
+        xmlRenderer.setWriter(stringwriter);
+        xmlRenderer.start();
+        xmlRenderer.renderFileReport(report);
+        xmlRenderer.end();
+
+        File xmlReport = new File(project.getFileSystem().getSonarWorkingDirectory(), "pmd-report.xml");
+        DelphiUtils.LOG.info("PMD output report: "
+                + xmlReport.getAbsolutePath());
+        FileUtils.writeStringToFile(xmlReport, stringwriter.toString());
+        return xmlReport;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public boolean shouldExecuteOnProject(Project project) {
+        return fs.hasFiles(fs.predicates().hasLanguage(DelphiLanguage.KEY));
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
 }

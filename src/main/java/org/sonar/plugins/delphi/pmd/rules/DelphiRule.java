@@ -32,92 +32,91 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 import org.sonar.plugins.delphi.pmd.DelphiRuleViolation;
 
 /**
- * Basic rule class, extend this class to make your own rules. Do NOT extend from AbstractRule.
+ * Basic rule class, extend this class to make your own rules. Do NOT extend
+ * from AbstractRule.
  */
 public class DelphiRule extends AbstractJavaRule {
 
-  protected int lastLineParsed;
+    protected int lastLineParsed;
 
-  public DelphiRule() {
-  }
-  
-  /**
-   * overload this method in derived class
-   */
-  public Object visit(DelphiPMDNode node, Object data) {
-    return data;
-  }
-
-  /**
-   * Visits all nodes in a file
-   */
-
-  @Override
-  protected void visitAll(@SuppressWarnings("rawtypes") List acus, RuleContext ctx) {
-    lastLineParsed = -1;
-    init();
-    for (Iterator<?> i = acus.iterator(); i.hasNext();) {
-      DelphiPMDNode node = (DelphiPMDNode) i.next();
-      ASTTree ast = node.getASTTree();
-      if (ast != null) {
-        String codeLine = node.getASTTree().getFileSourceLine(node.getLine());
-        if (codeLine.trim().endsWith("//NOSONAR") && node.getLine() + 1 > lastLineParsed) { // skip pmd analysis
-          lastLineParsed = node.getLine() + 1;
-        }
-      }
-
-      if (node.getLine() >= lastLineParsed) { // optimization and  / / NO SONAR line skip
-        visit(node, ctx);
-        lastLineParsed = node.getLine();
-      }
+    public DelphiRule() {
     }
-  }
 
-  /**
-   * Overload this method in derived class to initialize your rule instance with default values
-   */
-  protected void init() {
-  }
+    /**
+     * overload this method in derived class
+     */
+    public Object visit(DelphiPMDNode node, Object data) {
+        return data;
+    }
 
-  /**
-   * Adds violation, get violation data from node
-   * 
-   * @param data
-   *          Data
-   * @param node
-   *          Node
-   */
-  protected void addViolation(Object data, DelphiPMDNode node) {
-    RuleContext ctx = (RuleContext) data;
-    ctx.getReport().addRuleViolation(new DelphiRuleViolation(this, ctx, node));
-  }
+    /**
+     * Visits all nodes in a file
+     */
 
-  /**
-   * Adds violation, get violation data from node
-   * 
-   * @param data
-   *          Data
-   * @param node
-   *          Node
-   * @param msg
-   *          Violation message
-   */
-  protected void addViolation(Object data, DelphiPMDNode node, String msg) {
-    RuleContext ctx = (RuleContext) data;
-    ctx.getReport().addRuleViolation(new DelphiRuleViolation(this, ctx, node, msg));
-  }
+    @Override
+    protected void visitAll(@SuppressWarnings("rawtypes") List acus, RuleContext ctx) {
+        lastLineParsed = -1;
+        init();
+        for (Iterator<?> i = acus.iterator(); i.hasNext();) {
+            DelphiPMDNode node = (DelphiPMDNode) i.next();
+            ASTTree ast = node.getASTTree();
+            if (ast != null) {
+                String codeLine = node.getASTTree().getFileSourceLine(node.getLine());
+                if (codeLine.trim().endsWith("//NOSONAR") && node.getLine() + 1 > lastLineParsed) { // skip
+                                                                                                    // pmd
+                                                                                                    // analysis
+                    lastLineParsed = node.getLine() + 1;
+                }
+            }
 
-  /**
-   * Adds violation, used in XPathRule
-   * 
-   * @param data
-   *          Data
-   * @param violation
-   *          Violation
-   */
-  protected void addViolation(Object data, DelphiRuleViolation violation) {
-    RuleContext ctx = (RuleContext) data;
-    ctx.getReport().addRuleViolation(violation);
-  }
+            if (node.getLine() >= lastLineParsed) { // optimization and / / NO
+                                                    // SONAR line skip
+                visit(node, ctx);
+                lastLineParsed = node.getLine();
+            }
+        }
+    }
+
+    /**
+     * Overload this method in derived class to initialize your rule instance
+     * with default values
+     */
+    protected void init() {
+    }
+
+    /**
+     * Adds violation, get violation data from node
+     * 
+     * @param data Data
+     * @param node Node
+     */
+    protected void addViolation(Object data, DelphiPMDNode node) {
+        RuleContext ctx = (RuleContext) data;
+        ctx.getReport().addRuleViolation(new DelphiRuleViolation(this, ctx, node));
+    }
+
+    /**
+     * Adds violation, get violation data from node
+     * 
+     * @param data Data
+     * @param node Node
+     * @param msg Violation message
+     */
+    protected void addViolation(Object data, DelphiPMDNode node, String msg) {
+
+        RuleContext ctx = (RuleContext) data;
+        ctx.getReport().addRuleViolation(new DelphiRuleViolation(this, ctx, node, msg));
+    }
+
+    /**
+     * Adds violation, used in XPathRule
+     * 
+     * @param data Data
+     * @param violation Violation
+     */
+    protected void addViolation(Object data, DelphiRuleViolation violation) {
+        RuleContext ctx = (RuleContext) data;
+        ctx.getReport().addRuleViolation(violation);
+    }
 
 }

@@ -28,12 +28,12 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
 import org.codehaus.staxmate.in.SMInputCursor;
-import org.sonar.api.batch.SensorContext;
-import org.sonar.api.resources.Project;
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RuleFinder;
-import org.sonar.api.rules.RuleQuery;
-import org.sonar.api.rules.Violation;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.component.ResourcePerspectives;
+import org.sonar.api.issue.Issuable;
+import org.sonar.api.issue.Issue;
+import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.StaxParser;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -43,74 +43,63 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  */
 public class DelphiPmdXmlReportParser {
 
-  private Project project;
-  private SensorContext context;
-  private RuleFinder ruleFinder;
+    private FileSystem fs;
+    private ResourcePerspectives perspectives;
 
-  /**
-   * Ctor
-   * 
-   * @param project
-   *          Soanr DelphiLanguage project
-   * @param context
-   *          Sonar sensor context
-   * @param ruleFinder
-   *          Sonar rule finder
-   */
-  public DelphiPmdXmlReportParser(Project project, SensorContext context, RuleFinder ruleFinder) {
-    this.project = project;
-    this.context = context;
-    this.ruleFinder = ruleFinder;
-  }
+    public DelphiPmdXmlReportParser(FileSystem fs, ResourcePerspectives perspectives) {
+        this.fs = fs;
+        this.perspectives = perspectives;
+    }
 
-  /**
-   * Parses XML file
-   * 
-   * @param xmlFile
-   *          PMD xml file
-   */
-  public void parse(File xmlFile) {
-    StaxParser parser = new StaxParser(new StaxParser.XmlStreamHandler() {
+    /**
+     * Parses XML file
+     * 
+     * @param xmlFile PMD xml file
+     */
+    public void parse(File xmlFile) {
+        StaxParser parser = new StaxParser(new StaxParser.XmlStreamHandler() {
 
-      public void stream(SMHierarchicCursor rootCursor) throws XMLStreamException {
-        rootCursor.advance();
+            public void stream(SMHierarchicCursor rootCursor) throws XMLStreamException {
+                rootCursor.advance();
 
-        SMInputCursor fileCursor = rootCursor.descendantElementCursor("file");
-        while (fileCursor.getNext() != null) {
-          String fileName = fileCursor.getAttrValue("name");
+                SMInputCursor fileCursor = rootCursor.descendantElementCursor("file");
+                while (fileCursor.getNext() != null) {
+                    String fileName = fileCursor.getAttrValue("name");
 
-          SMInputCursor violationCursor = fileCursor.descendantElementCursor("violation");
-          while (violationCursor.getNext() != null) {
-            String beginLine = violationCursor.getAttrValue("beginline");
-            String ruleKey = violationCursor.getAttrValue("rule");
-            String message = StringUtils.trim(violationCursor.collectDescendantText());
+                    SMInputCursor violationCursor = fileCursor.descendantElementCursor("violation");
+                    while (violationCursor.getNext() != null) {
+                        String beginLine = violationCursor.getAttrValue("beginline");
+                        String ruleKey = violationCursor.getAttrValue("rule");
+                        String message = StringUtils.trim(violationCursor.collectDescendantText());
 
-            log(context, ruleKey, fileName, Integer.parseInt(beginLine), message);
-          }
+                        addIssue(ruleKey, fileName, Integer.parseInt(beginLine), message);
+                    }
+                }
+            }
+        });
+
+        try {
+            parser.parse(xmlFile);
+        } catch (XMLStreamException e) {
+            DelphiUtils.LOG.error("Error parsing file : {}", xmlFile);
         }
-      }
-    });
-
-    try {
-      parser.parse(xmlFile);
-    } catch (XMLStreamException e) {
-      DelphiUtils.LOG.error("Error parsing file : {}", xmlFile);
     }
-  }
 
-  private void log(SensorContext context, String ruleKey, String fileName, Integer line, String message) {
-    RuleQuery ruleQuery = RuleQuery.create().withRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY).withKey(ruleKey);
+    private void addIssue(String ruleKey, String fileName, Integer line, String message) {
 
-    Rule rule = ruleFinder.find(ruleQuery);
-    if (rule != null) {
-      //DelphiFile delphiFile = DelphiFile.fromAbsolutePath(fileName, project.getFileSystem().getSourceDirs(), false);
-      org.sonar.api.resources.File file = org.sonar.api.resources.File.fromIOFile(new File(fileName), project);
-      
-      Violation violation = Violation.create(rule, file).setLineId(line).setMessage(message);
-      context.saveViolation(violation);
+        DelphiUtils.LOG.debug("PMD Violation - rule: " + ruleKey + " file: " + fileName + " message: " + message);
+
+        InputFile inputFile = fs.inputFile(fs.predicates().is(new File(fileName)));
+
+        Issuable issuable = perspectives.as(Issuable.class, inputFile);
+        if (issuable != null) {
+            Issue issue = issuable.newIssueBuilder()
+                    .ruleKey(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, ruleKey))
+                    .line(line)
+                    .message(message)
+                    .build();
+            issuable.addIssue(issue);
+        }
+
     }
-    else{
-    	DelphiUtils.LOG.error("Rule not found: repository: {} rule: {}", ruleQuery.getRepositoryKey(), ruleQuery.getKey());
-    }
-  }
 }

@@ -35,27 +35,27 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRulesUtils;
  */
 public class DelphiPmdRuleRepository implements RulesDefinition {
 
-	public void define(Context context) {
-		NewRepository repository = context.createRepository(
-				DelphiPmdConstants.REPOSITORY_KEY, DelphiLanguage.KEY).setName(
-				DelphiPmdConstants.REPOSITORY_NAME);
-		
-		List<org.sonar.api.rules.Rule> rules = DelphiRulesUtils.getInitialReferential();
-		
-		for (org.sonar.api.rules.Rule rule : rules) {
-			NewRule newRule = repository.createRule(rule.getKey())
-							          .setName(rule.getName())
-							          .setHtmlDescription(rule.getDescription())
-							          .setSeverity(rule.getSeverity().name());
-			for (RuleParam param : rule.getParams()) {
-				newRule.createParam(param.getKey())
-				       .setDefaultValue(param.getDefaultValue())
-				       .setType(RuleParamType.INTEGER)
-				       .setDescription(param.getDescription());
-			}
-		}
-		
-		repository.done();
-	}
+    public void define(Context context) {
+        NewRepository repository = context.createRepository(
+                DelphiPmdConstants.REPOSITORY_KEY, DelphiLanguage.KEY).setName(
+                DelphiPmdConstants.REPOSITORY_NAME);
+
+        List<org.sonar.api.rules.Rule> rules = DelphiRulesUtils.getInitialReferential();
+
+        for (org.sonar.api.rules.Rule rule : rules) {
+            NewRule newRule = repository.createRule(rule.getKey())
+                    .setName(rule.getName())
+                    .setHtmlDescription(rule.getDescription())
+                    .setSeverity(rule.getSeverity().name());
+            for (RuleParam param : rule.getParams()) {
+                newRule.createParam(param.getKey())
+                        .setDefaultValue(param.getDefaultValue())
+                        .setType(RuleParamType.INTEGER)
+                        .setDescription(param.getDescription());
+            }
+        }
+
+        repository.done();
+    }
 
 }
