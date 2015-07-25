@@ -26,29 +26,31 @@ import java.io.File;
 import javax.xml.stream.XMLStreamException;
 
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.resources.Project;
+import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.utils.StaxParser;
 import org.sonar.plugins.delphi.codecoverage.DelphiCodeCoverageParser;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser 
+public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser
 {
-	private final File reportFile;
-	
-	public DelphiCodeCoverageToolParser(Project project, File reportFile) {
-		this.reportFile = reportFile;
-	}
+    private final File reportFile;
+    private final FileSystem fs;
 
-	public void parse(Project project, SensorContext context) {
-		if(!reportFile.exists()) {
-			return;
-		}
-		
-		try {
-			StaxParser parser = new StaxParser(new DelphiCoverageToolParserStreamHandler(project, context));
-			parser.parse(reportFile);
-		} catch (XMLStreamException e) {
-			DelphiUtils.LOG.error("Error parsing file : {}", reportFile);
-		}
-	}
+    public DelphiCodeCoverageToolParser(File reportFile, FileSystem fs) {
+        this.reportFile = reportFile;
+        this.fs = fs;
+    }
+
+    public void parse(SensorContext context) {
+        if (!reportFile.exists()) {
+            return;
+        }
+
+        try {
+            StaxParser parser = new StaxParser(new DelphiCoverageToolParserStreamHandler(context, fs));
+            parser.parse(reportFile);
+        } catch (XMLStreamException e) {
+            DelphiUtils.LOG.error("Error parsing file : {}", reportFile);
+        }
+    }
 }

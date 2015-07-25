@@ -26,17 +26,24 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.junit.Test;
+import org.sonar.api.batch.fs.FilePredicate;
+import org.sonar.api.batch.fs.FilePredicates;
+import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Project.AnalysisType;
+import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.debug.DebugConfiguration;
 
 public class CodeCoverageSensorTest {
 
-  @Test
-  public void shouldExecuteOnProjectTest() {
-    Project project = mock(Project.class);
-    when(project.getLanguageKey()).thenReturn("delph");
-    when(project.getAnalysisType()).thenReturn(AnalysisType.DYNAMIC);
-    assertTrue(new CodeCoverageSensor( new DebugConfiguration() ).shouldExecuteOnProject(project));
-  }
+    @Test
+    public void shouldExecuteOnProjectTest() {
+        Project project = mock(Project.class);
+        FileSystem fs = mock(FileSystem.class);
+        FilePredicates fp = mock(FilePredicates.class);
+        when(fs.predicates()).thenReturn(fp);
+        when(fs.hasFiles(org.mockito.Matchers.any(FilePredicate.class))).thenReturn(true);
+
+        fs.hasFiles(fs.predicates().hasLanguage(DelphiLanguage.KEY));
+        assertTrue(new CodeCoverageSensor(new DebugConfiguration(), fs).shouldExecuteOnProject(project));
+    }
 }

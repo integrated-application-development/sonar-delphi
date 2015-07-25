@@ -22,9 +22,8 @@
 package org.sonar.plugins.delphi.codecoverage;
 
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.resources.Project;
 
-public interface DelphiCodeCoverageParser 
+public interface DelphiCodeCoverageParser
 {
-	void parse(Project project, SensorContext context);
+    void parse(SensorContext context);
 }

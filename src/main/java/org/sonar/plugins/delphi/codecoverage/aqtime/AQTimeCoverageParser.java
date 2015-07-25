@@ -22,22 +22,19 @@
 package org.sonar.plugins.delphi.codecoverage.aqtime;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.PersistenceMode;
-import org.sonar.api.resources.InputFile;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Resource;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.codecoverage.CoverageFileData;
 import org.sonar.plugins.delphi.codecoverage.DelphiCodeCoverageParser;
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.ProgressReporter;
 import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
@@ -47,113 +44,120 @@ import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
  */
 public class AQTimeCoverageParser implements DelphiCodeCoverageParser {
 
-  private String prefix = ""; // table prefix
-  private List<InputFile> sourceFiles;
-  private List<File> excludedDirs;
-  private Map<String, String> connectionProperties;
+    private String prefix = ""; // table prefix
+    private List<InputFile> sourceFiles;
+    private Map<String, String> connectionProperties;
+    private FileSystem fs;
 
-  public void parse(Project project, SensorContext context) {
-    DelphiUtils.LOG.debug("Code Coverage starting...");
-    try {
-      AQTimeCoverageDao aqTimeCoverageDao = new AQTimeCoverageDao();
-      aqTimeCoverageDao.setJdbcProps(connectionProperties);
-      aqTimeCoverageDao.setDatabasePrefix(prefix);
-      List<AQTimeCodeCoverage> aqTimeCodeCoverages = aqTimeCoverageDao.readAQTimeCodeCoverage();
-      saveCoverageData(processFiles(aqTimeCodeCoverages, project), context);
-    } catch (SQLException e) {
-      DelphiUtils.LOG.error("AQTime SQL error: " + e.getMessage());
+    public AQTimeCoverageParser(FileSystem fs) {
+        this.fs = fs;
     }
-  }
 
-  private void saveCoverageData(Map<Resource, CoverageFileData> savedResources, SensorContext context) {
-    for (CoverageFileData data : savedResources.values()) // save all resources
-    {
-      if (DelphiProjectHelper.getInstance().isExcluded(data.getResource().getPath(), excludedDirs)) {
-        continue; // do NOT save, in excluded
-      }
-      Measure overallCoverage = new Measure(CoreMetrics.COVERAGE, data.getCoverage());
-      Measure lineCoverage = new Measure(CoreMetrics.LINE_COVERAGE, data.getCoverage());
-      Measure linesToCover = new Measure(CoreMetrics.LINES_TO_COVER, data.getTotalLines());
-      Measure uncoveredLines = new Measure(CoreMetrics.UNCOVERED_LINES, data.getUncoveredLines());
-      Measure lineHits = data.getLineHitsBuilder().build().setPersistenceMode(PersistenceMode.DATABASE);
-      context.saveMeasure(data.getResource(), overallCoverage); // save overall file coverage
-      context.saveMeasure(data.getResource(), lineCoverage); // save file coverage
-      context.saveMeasure(data.getResource(), linesToCover); // save total lines to cover
-      context.saveMeasure(data.getResource(), uncoveredLines); // save uncovered lines
-      context.saveMeasure(data.getResource(), lineHits); // save line hits data
+    public void parse(SensorContext context) {
+        DelphiUtils.LOG.debug("Code Coverage starting...");
+        AQTimeCoverageDao aqTimeCoverageDao = new AQTimeCoverageDao();
+        aqTimeCoverageDao.setJdbcProps(connectionProperties);
+        aqTimeCoverageDao.setDatabasePrefix(prefix);
+        List<AQTimeCodeCoverage> aqTimeCodeCoverages = aqTimeCoverageDao.readAQTimeCodeCoverage();
+        saveCoverageData(processFiles(aqTimeCodeCoverages), context);
     }
-  }
 
-  private Map<Resource, CoverageFileData> processFiles(List<AQTimeCodeCoverage> aqTimeCodeCoverages, Project project) throws SQLException {
-    ProgressReporter progressReporter = new ProgressReporter(aqTimeCodeCoverages.size(), 10, new ProgressReporterLogger(DelphiUtils.LOG) );
-    
-    Map<Resource, CoverageFileData> savedResources = new HashMap<Resource, CoverageFileData>(); // map of our sources and their data
-    org.sonar.api.resources.File resource = null; // current file
+    private void saveCoverageData(Map<InputFile, CoverageFileData> savedResources, SensorContext context) {
+        for (CoverageFileData data : savedResources.values()) // save all
+                                                              // resources
+        {
+            // TODO sonar.delphi.codecoverage.excluded property
+            // if
+            // (DelphiProjectHelper.getInstance().isExcluded(data.getResource().file().getPath(),
+            // excludedDirs)) {
+            // continue; // do NOT save, in excluded
+            // }
 
-    for (AQTimeCodeCoverage aqTimeCodeCoverage : aqTimeCodeCoverages) {
-      progressReporter.progress();
-      String path = processFileName(aqTimeCodeCoverage.getCoveredFileName(), sourceFiles); // convert relative file name to absolute path      
-      if (resource == null || !resource.getLongName().equals(aqTimeCodeCoverage.getCoveredFileName())) {
-        resource = org.sonar.api.resources.File.fromIOFile(new File(path), project);
-        if (resource == null) {
-          continue;
+            Measure<Double> overallCoverage = new Measure<Double>(CoreMetrics.COVERAGE, data.getCoverage());
+            Measure<Double> lineCoverage = new Measure<Double>(CoreMetrics.LINE_COVERAGE, data.getCoverage());
+            Measure<Double> linesToCover = new Measure<Double>(CoreMetrics.LINES_TO_COVER, data.getTotalLines());
+            Measure<Double> uncoveredLines = new Measure<Double>(CoreMetrics.UNCOVERED_LINES, data.getUncoveredLines());
+            Measure<?> lineHits = data.getLineHitsBuilder().build().setPersistenceMode(PersistenceMode.DATABASE);
+
+            context.saveMeasure(data.getResource(), overallCoverage);
+            context.saveMeasure(data.getResource(), lineCoverage);
+            context.saveMeasure(data.getResource(), linesToCover);
+            context.saveMeasure(data.getResource(), uncoveredLines);
+            context.saveMeasure(data.getResource(), lineHits);
         }
-        savedResources.put(resource, new CoverageFileData(resource));
-      }
-      
-      calculateCoverageData(savedResources.get(resource), aqTimeCodeCoverage.getLineNumber(), aqTimeCodeCoverage.getLineHits());
-
-    }
-    return savedResources;
-  }
-
-  private void calculateCoverageData(CoverageFileData fileData, int lineNumber, int lineHits) {
-    fileData.setTotalLines(fileData.getTotalLines() + 1);
-    if (lineHits == 0) {
-      fileData.setUncoveredLines(fileData.getUncoveredLines() + 1);
     }
 
-    fileData.getLineHitsBuilder().add(String.valueOf(lineNumber), lineHits); // add new line hit
-  }
+    private Map<InputFile, CoverageFileData> processFiles(List<AQTimeCodeCoverage> aqTimeCodeCoverages) {
+        ProgressReporter progressReporter = new ProgressReporter(aqTimeCodeCoverages.size(), 10,
+                new ProgressReporterLogger(DelphiUtils.LOG));
 
-  /**
-   * Gets source file path for file name
-   * 
-   * @param fileName
-   *          Short file name
-   * @param sourceFiles
-   *          List of source files
-   * @return Full path to file name
-   */
-  private String processFileName(String fileName, List<InputFile> sourceFiles) {
-    String path = DelphiUtils.normalizeFileName(fileName);
-    path = path.replaceAll("\\\\\\.\\.", ""); // erase '\..' prefixes
-    path = path.replaceAll("\\.\\.", "");     // erase '..' prefixes
+        Map<InputFile, CoverageFileData> savedResources = new HashMap<InputFile, CoverageFileData>();
 
-    for (InputFile source : sourceFiles) { // searching for a proper file in files list
-      String sourcePath = DelphiUtils.normalizeFileName(source.getFile().getAbsolutePath());
-      if (sourcePath.endsWith(path)) {
-        path = sourcePath;
-        break;
-      }
+        InputFile resource = null; // current file
+
+        for (AQTimeCodeCoverage aqTimeCodeCoverage : aqTimeCodeCoverages) {
+            progressReporter.progress();
+
+            // convert relative file name to absolute path
+            String path = processFileName(aqTimeCodeCoverage.getCoveredFileName(), sourceFiles);
+
+            if (resource == null || !resource.absolutePath().equals(aqTimeCodeCoverage.getCoveredFileName())) {
+                resource = fs.inputFile(fs.predicates().is(new File(path)));
+                if (resource == null) {
+                    continue;
+                }
+                savedResources.put(resource, new CoverageFileData(resource));
+            }
+
+            calculateCoverageData(savedResources.get(resource), aqTimeCodeCoverage.getLineNumber(),
+                    aqTimeCodeCoverage.getLineHits());
+
+        }
+        return savedResources;
     }
 
-    return path;
-  }
+    private void calculateCoverageData(CoverageFileData fileData, int lineNumber, int lineHits) {
+        fileData.setTotalLines(fileData.getTotalLines() + 1);
+        if (lineHits == 0) {
+            fileData.setUncoveredLines(fileData.getUncoveredLines() + 1);
+        }
 
-  public void setSourceFiles(List<InputFile> sourceFiles) {
-    this.sourceFiles = sourceFiles;
-  }
+        fileData.getLineHitsBuilder().add(String.valueOf(lineNumber), lineHits); // add
+                                                                                 // new
+                                                                                 // line
+                                                                                 // hit
+    }
 
-  public void setSourceDirectories(List<File> sourceDirs) {
-  }
+    /**
+     * Gets source file path for file name
+     * 
+     * @param fileName Short file name
+     * @param sourceFiles List of source files
+     * @return Full path to file name
+     */
+    private String processFileName(String fileName, List<InputFile> sourceFiles) {
+        String path = DelphiUtils.normalizeFileName(fileName);
+        path = path.replaceAll("\\\\\\.\\.", ""); // erase '\..' prefixes
+        path = path.replaceAll("\\.\\.", ""); // erase '..' prefixes
 
-  public void setExcludeDirectories(List<File> excludedDirs) {
-    this.excludedDirs = excludedDirs;
-  }
+        for (InputFile source : sourceFiles) { // searching for a proper file in
+                                               // files list
+            String sourcePath = DelphiUtils.normalizeFileName(source.file().getAbsolutePath());
+            if (sourcePath.endsWith(path)) {
+                path = sourcePath;
+                break;
+            }
+        }
 
-  public void setConnectionProperties(Map<String, String> connectionProperties) {
-    this.connectionProperties = connectionProperties;
-    prefix = connectionProperties.get(DelphiPlugin.JDBC_DB_TABLE_PREFIX_KEY);
-  }
+        return path;
+    }
+
+    public void setSourceFiles(List<InputFile> sourceFiles) {
+        this.sourceFiles = sourceFiles;
+    }
+
+    public void setConnectionProperties(Map<String, String> connectionProperties) {
+        this.connectionProperties = connectionProperties;
+        prefix = connectionProperties.get(DelphiPlugin.JDBC_DB_TABLE_PREFIX_KEY);
+    }
 }

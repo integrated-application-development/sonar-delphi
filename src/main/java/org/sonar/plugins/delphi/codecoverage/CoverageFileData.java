@@ -21,81 +21,78 @@
  */
 package org.sonar.plugins.delphi.codecoverage;
 
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.PropertiesBuilder;
-import org.sonar.api.resources.Resource;
 
 /**
  * Class that holds coverage data for each source file, used in AQTime purifier
  */
 public class CoverageFileData {
 
-  private static final double ONE_HUNDRED = 100.00;
-	  
-  private double totalLines = 0.0;
-  private double uncoveredLines = 0.0;
-  private Resource resource;
-  private PropertiesBuilder<String, Integer> lineHitsBuilder;
+    private static final double ONE_HUNDRED = 100.00;
 
-  /**
-   * ctor
-   * 
-   * @param res
-   *          Delphi file
-   */
-  public CoverageFileData(Resource res) {
-    resource = res;
-    lineHitsBuilder = new PropertiesBuilder<String, Integer>(CoreMetrics.COVERAGE_LINE_HITS_DATA);
-  }
+    private double totalLines = 0.0;
+    private double uncoveredLines = 0.0;
+    private InputFile resource;
+    private PropertiesBuilder<String, Integer> lineHitsBuilder;
 
-  /**
-   * @return the coverage
-   */
-  public double getCoverage() {
-    return (totalLines - uncoveredLines) / totalLines * ONE_HUNDRED;
-  }
+    /**
+     * ctor
+     * 
+     * @param resource2 Delphi file
+     */
+    public CoverageFileData(InputFile resource) {
+        this.resource = resource;
+        lineHitsBuilder = new PropertiesBuilder<String, Integer>(CoreMetrics.COVERAGE_LINE_HITS_DATA);
+    }
 
-  /**
-   * @return the totalLines
-   */
-  public double getTotalLines() {
-    return totalLines;
-  }
+    /**
+     * @return the coverage
+     */
+    public double getCoverage() {
+        return (totalLines - uncoveredLines) / totalLines * ONE_HUNDRED;
+    }
 
-  /**
-   * @return the uncoveredLines
-   */
-  public double getUncoveredLines() {
-    return uncoveredLines;
-  }
+    /**
+     * @return the totalLines
+     */
+    public double getTotalLines() {
+        return totalLines;
+    }
 
-  /**
-   * @return the resource
-   */
-  public Resource getResource() {
-    return resource;
-  }
+    /**
+     * @return the uncoveredLines
+     */
+    public double getUncoveredLines() {
+        return uncoveredLines;
+    }
 
-  /**
-   * @return the lineHitsBuilder
-   */
-  public PropertiesBuilder<String, Integer> getLineHitsBuilder() {
-    return lineHitsBuilder;
-  }
+    /**
+     * @return the resource
+     */
+    public InputFile getResource() {
+        return resource;
+    }
 
-  /**
-   * @param totalLines
-   *          the totalLines to set
-   */
-  public void setTotalLines(double totalLines) {
-    this.totalLines = totalLines;
-  }
+    /**
+     * @return the lineHitsBuilder
+     */
+    public PropertiesBuilder<String, Integer> getLineHitsBuilder() {
+        return lineHitsBuilder;
+    }
 
-  /**
-   * @param uncoveredLines
-   *          the uncoveredLines to set
-   */
-  public void setUncoveredLines(double uncoveredLines) {
-    this.uncoveredLines = uncoveredLines;
-  }
+    /**
+     * @param totalLines the totalLines to set
+     */
+    public void setTotalLines(double totalLines) {
+        this.totalLines = totalLines;
+    }
+
+    /**
+     * @param uncoveredLines the uncoveredLines to set
+     */
+    public void setUncoveredLines(double uncoveredLines) {
+        this.uncoveredLines = uncoveredLines;
+    }
 }

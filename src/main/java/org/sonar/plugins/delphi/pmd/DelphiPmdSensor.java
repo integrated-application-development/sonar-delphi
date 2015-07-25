@@ -40,7 +40,6 @@ import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.pmd.profile.DelphiRuleSets;
@@ -94,13 +93,9 @@ public class DelphiPmdSensor implements Sensor {
             RuleContext ruleContext = new RuleContext();
             RuleSets ruleSets = createRuleSets();
 
-            // excluded files
-            ProjectFileSystem fileSystem = project.getFileSystem();
-            List<File> excluded = DelphiProjectHelper.getInstance()
-                    .getExcludedSources(fileSystem);
+            List<File> excluded = DelphiProjectHelper.getInstance().getExcludedSources(fs);
 
-            List<DelphiProject> projects = DelphiProjectHelper.getInstance()
-                    .getWorkgroupProjects(project); // get workspace projects
+            List<DelphiProject> projects = DelphiProjectHelper.getInstance().getWorkgroupProjects(fs);
             for (DelphiProject delphiProject : projects) // for every .dproj
                                                          // file
             {

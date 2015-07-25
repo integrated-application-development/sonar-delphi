@@ -27,8 +27,8 @@ import java.util.List;
 import net.sourceforge.pmd.cpd.Tokenizer;
 
 import org.sonar.api.batch.CpdMapping;
+import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.resources.Language;
-import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.plugins.delphi.core.DelphiFile;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
@@ -39,42 +39,36 @@ import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
  */
 public class DelphiCpdMapping implements CpdMapping {
 
-  private Project project;
+    private final FileSystem fs;
 
-  /**
-   * Ctor
-   * 
-   * @param project
-   *          Sonar DelphiLanguage project
-   */
-  public DelphiCpdMapping(Project project) {
-    this.project = project;
-  }
+    public DelphiCpdMapping(FileSystem fs) {
+        this.fs = fs;
+    }
 
-  /**
-   * @return The language tokenizer
-   */
+    /**
+     * @return The language tokenizer
+     */
 
-  public Tokenizer getTokenizer() {
-    return new DelphiCpdTokenizer(DelphiProjectHelper.getInstance().getExcludedSources(project.getFileSystem()));
-  }
+    public Tokenizer getTokenizer() {
+        return new DelphiCpdTokenizer(DelphiProjectHelper.getInstance().getExcludedSources(fs));
+    }
 
-  /**
-   * Creates DelphiFile
-   * 
-   * @return DelphiFile
-   */
+    /**
+     * Creates DelphiFile
+     * 
+     * @return DelphiFile
+     */
 
-  public Resource createResource(File file, List<File> sourceDirs) {
-    return DelphiFile.fromIOFile(file, sourceDirs);
-  }
+    public Resource createResource(File file, List<File> sourceDirs) {
+        return DelphiFile.fromIOFile(file, sourceDirs);
+    }
 
-  /**
-   * @return Delphi language instance
-   */
+    /**
+     * @return Delphi language instance
+     */
 
-  public Language getLanguage() {
-    return DelphiLanguage.instance;
-  }
+    public Language getLanguage() {
+        return DelphiLanguage.instance;
+    }
 
 }

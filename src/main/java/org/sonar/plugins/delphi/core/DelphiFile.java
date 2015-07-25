@@ -28,12 +28,15 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.resources.Scopes;
 import org.sonar.api.utils.WildcardPattern;
+import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 /**
@@ -41,305 +44,314 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  */
 public class DelphiFile extends Resource {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private String filename;
-	private String longName;
-	private String path = "";
-	private String packageKey;
-	private boolean unitTest = false;
-	private DelphiPackage parent = null;
+    private String filename;
+    private String longName;
+    private String path = "";
+    private String packageKey;
+    private boolean unitTest = false;
+    private DelphiPackage parent = null;
 
-	private String absolutePath;
+    private String absolutePath;
 
-	/**
-	 * SONARPLUGINS-687: For backward compatibility
-	 */
-	public DelphiFile(String key) {
-		this(key, false);
-	}
+    /**
+     * SONARPLUGINS-687: For backward compatibility
+     */
+    public DelphiFile(String key) {
+        this(key, false);
+    }
 
-	/**
-	 * Ctor
-	 * 
-	 * @param key
-	 *            Resource key
-	 * @param unitTest
-	 *            If in unit tests
-	 */
-	public DelphiFile(String key, boolean unitTest) {
-		super();
-		if (key != null && key.indexOf('$') >= 0) {
-			throw new IllegalArgumentException(
-					"DelphiLanguage inner classes are not supported : " + key);
-		}
-		String realKey = StringUtils.trim(key);
-		this.unitTest = unitTest;
+    /**
+     * Ctor
+     * 
+     * @param key Resource key
+     * @param unitTest If in unit tests
+     */
+    public DelphiFile(String key, boolean unitTest) {
+        super();
+        if (key != null && key.indexOf('$') >= 0) {
+            throw new IllegalArgumentException(
+                    "DelphiLanguage inner classes are not supported : " + key);
+        }
+        String realKey = StringUtils.trim(key);
+        this.unitTest = unitTest;
 
-		if (realKey.contains(".")) {
-			this.filename = StringUtils.substringAfterLast(realKey, ".");
-			this.packageKey = StringUtils.substringBeforeLast(realKey, ".");
-			this.longName = realKey;
+        if (realKey.contains(".")) {
+            this.filename = StringUtils.substringAfterLast(realKey, ".");
+            this.packageKey = StringUtils.substringBeforeLast(realKey, ".");
+            this.longName = realKey;
 
-		} else {
-			this.filename = realKey;
-			this.longName = realKey;
-			this.packageKey = DelphiPackage.DEFAULT_PACKAGE_NAME;
-			realKey = new StringBuilder()
-					.append(DelphiPackage.DEFAULT_PACKAGE_NAME).append(".")
-					.append(realKey).toString();
-		}
-		setKey(realKey);
-	}
+        } else {
+            this.filename = realKey;
+            this.longName = realKey;
+            this.packageKey = DelphiPackage.DEFAULT_PACKAGE_NAME;
+            realKey = new StringBuilder()
+                    .append(DelphiPackage.DEFAULT_PACKAGE_NAME).append(".")
+                    .append(realKey).toString();
+        }
+        setKey(realKey);
+    }
 
-	/**
-	 * Ctor
-	 * 
-	 * @param filePackageKey
-	 *            Package name
-	 * @param className
-	 *            Class name
-	 * @param unitTest
-	 *            If in unit tests
-	 */
-	public DelphiFile(String filePackageKey, String className, boolean unitTest) {
-		super();
-		if (className != null) {
-			this.filename = className.trim();
-			this.unitTest = unitTest;
+    /**
+     * Ctor
+     * 
+     * @param filePackageKey Package name
+     * @param className Class name
+     * @param unitTest If in unit tests
+     */
+    public DelphiFile(String filePackageKey, String className, boolean unitTest) {
+        super();
+        if (className != null) {
+            this.filename = className.trim();
+            this.unitTest = unitTest;
 
-			String key;
-			if (StringUtils.isBlank(filePackageKey)) {
-				this.packageKey = DelphiPackage.DEFAULT_PACKAGE_NAME;
-				this.longName = this.filename;
-				key = new StringBuilder().append(this.packageKey).append(".")
-						.append(this.filename).toString();
-			} else {
-				this.packageKey = filePackageKey.trim();
-				key = new StringBuilder().append(this.packageKey).append(".")
-						.append(this.filename).toString();
-				this.longName = key;
-			}
+            String key;
+            if (StringUtils.isBlank(filePackageKey)) {
+                this.packageKey = DelphiPackage.DEFAULT_PACKAGE_NAME;
+                this.longName = this.filename;
+                key = new StringBuilder().append(this.packageKey).append(".")
+                        .append(this.filename).toString();
+            } else {
+                this.packageKey = filePackageKey.trim();
+                key = new StringBuilder().append(this.packageKey).append(".")
+                        .append(this.filename).toString();
+                this.longName = key;
+            }
 
-			setKey(key);
-		} else {
-			throw new IllegalArgumentException(
-					"DelphiFile className cannot be null");
-		}
-	}
+            setKey(key);
+        } else {
+            throw new IllegalArgumentException(
+                    "DelphiFile className cannot be null");
+        }
+    }
 
-	@Override
-	public DelphiPackage getParent() {
-		if (parent == null) {
-			parent = new DelphiPackage(packageKey);
-		}
-		return parent;
-	}
+    @Override
+    public DelphiPackage getParent() {
+        if (parent == null) {
+            parent = new DelphiPackage(packageKey);
+        }
+        return parent;
+    }
 
-	@Override
-	public String getDescription() {
-		return null;
-	}
+    @Override
+    public String getDescription() {
+        return null;
+    }
 
-	@Override
-	public Language getLanguage() {
-		return DelphiLanguage.instance;
-	}
+    @Override
+    public Language getLanguage() {
+        return DelphiLanguage.instance;
+    }
 
-	@Override
-	public String getName() {
-		return filename;
-	}
+    @Override
+    public String getName() {
+        return filename;
+    }
 
-	@Override
-	public String getLongName() {
-		return longName;
-	}
+    @Override
+    public String getLongName() {
+        return longName;
+    }
 
-	@Override
-	public String getScope() {
-		return Scopes.FILE;
-	}
+    @Override
+    public String getScope() {
+        return Scopes.FILE;
+    }
 
-	@Override
-	public String getQualifier() {
-		return unitTest ? Qualifiers.UNIT_TEST_FILE : Qualifiers.FILE;
-	}
+    @Override
+    public String getQualifier() {
+        return unitTest ? Qualifiers.UNIT_TEST_FILE : Qualifiers.FILE;
+    }
 
-	/**
-	 * @return True if used in unit tests, false othwerwise
-	 */
-	public boolean isUnitTest() {
-		return unitTest;
-	}
+    /**
+     * @return True if used in unit tests, false othwerwise
+     */
+    public boolean isUnitTest() {
+        return unitTest;
+    }
 
-	/**
-	 * @return File absolute path
-	 */
-	public String getPath() {
-		return path;
-	}
+    /**
+     * @return File absolute path
+     */
+    public String getPath() {
+        return path;
+    }
 
-	/**
-	 * Sets file path
-	 * 
-	 * @param newPath
-	 *            New file path
-	 * @return 
-	 */
-	public Resource setPath(String newPath) {
-		path = newPath;
+    /**
+     * Sets file path
+     * 
+     * @param newPath New file path
+     * @return
+     */
+    public Resource setPath(String newPath) {
+        path = newPath;
 
-		return this;
-	}
+        return this;
+    }
 
-	@Override
-	public boolean matchFilePattern(String antPattern) {
-		String patternWithoutFileSuffix = StringUtils.substringBeforeLast(
-				antPattern, ".");
-		WildcardPattern matcher = WildcardPattern.create(
-				patternWithoutFileSuffix, ".");
-		return matcher.match(getKey());
-	}
+    @Override
+    public boolean matchFilePattern(String antPattern) {
+        String patternWithoutFileSuffix = StringUtils.substringBeforeLast(
+                antPattern, ".");
+        WildcardPattern matcher = WildcardPattern.create(
+                patternWithoutFileSuffix, ".");
+        return matcher.match(getKey());
+    }
 
-	/**
-	 * SONARPLUGINS-687: For backward compatibility
-	 */
-	public static DelphiFile fromIOFile(File file, List<File> sourceDirs) {
-		return fromIOFile(file, sourceDirs, false);
-	}
+    /**
+     * SONARPLUGINS-687: For backward compatibility
+     */
+    public static DelphiFile fromIOFile(File file, List<File> sourceDirs) {
+        return fromIOFile(file, sourceDirs, false);
+    }
 
-	/**
-	 * Creates a {@link DelphiFile} from a file in the source directories.
-	 * 
-	 * @param unitTest
-	 *            whether it is a unit test file or a source file
-	 * @return the {@link DelphiFile} created if exists, null otherwise
-	 */
+    /**
+     * Creates a {@link DelphiFile} from a file in the source directories.
+     * 
+     * @param unitTest whether it is a unit test file or a source file
+     * @return the {@link DelphiFile} created if exists, null otherwise
+     */
 
-	public static DelphiFile fromIOFile(File file, List<File> sourceDirs,
-			boolean unitTest) {
-		if (file == null) {
-			return null;
-		}
+    public static DelphiFile fromIOFile(File file, List<File> sourceDirs,
+            boolean unitTest) {
+        if (file == null) {
+            return null;
+        }
 
-		String relativePath = DelphiUtils.getRelativePath(file, sourceDirs);
-		if (relativePath != null) {
-			String packageName = null;
-			String className = relativePath;
+        String relativePath = DelphiUtils.getRelativePath(file, sourceDirs);
+        if (relativePath != null) {
+            String packageName = null;
+            String className = relativePath;
 
-			if (relativePath.indexOf('/') >= 0) {
-				packageName = StringUtils
-						.substringBeforeLast(relativePath, "/");
-				packageName = StringUtils.replace(packageName, "/", ".");
-				className = StringUtils.substringAfterLast(relativePath, "/");
-			}
-			className = StringUtils.substringBeforeLast(className, ".");
-			DelphiFile newFile = new DelphiFile(packageName, className,
-					unitTest);
+            if (relativePath.indexOf('/') >= 0) {
+                packageName = StringUtils
+                        .substringBeforeLast(relativePath, "/");
+                packageName = StringUtils.replace(packageName, "/", ".");
+                className = StringUtils.substringAfterLast(relativePath, "/");
+            }
+            className = StringUtils.substringBeforeLast(className, ".");
+            DelphiFile newFile = new DelphiFile(packageName, className,
+                    unitTest);
 
-			newFile.setPath(DelphiUtils.normalizeFileName(file
-					.getAbsolutePath()));
-			newFile.absolutePath = file.getAbsolutePath();
-			newFile.setKey(file.getName());
-			
-			return newFile;
-		}
-		return null;
-	}
+            newFile.setPath(DelphiUtils.normalizeFileName(file
+                    .getAbsolutePath()));
+            newFile.absolutePath = file.getAbsolutePath();
+            newFile.setKey(file.getName());
 
-	/**
-	 * Shortcut to {@link #fromIOFile(File, List, boolean)} with an absolute
-	 * path.
-	 */
-	public static DelphiFile fromAbsolutePath(String path,
-			List<File> sourceDirs, boolean unitTest) {
-		if (path == null) {
-			return null;
-		}
-		return fromIOFile(new File(path), sourceDirs, unitTest);
-	}
+            return newFile;
+        }
+        return null;
+    }
 
-	@Override
-	public String toString() {
-		return new ToStringBuilder(this).append("key", getKey())
-				.append("deprecatedKey", getDeprecatedKey())
-				.append("path", getPath())
-				.append("package", packageKey)
-				.append("longName", longName)
-				.append("unitTest", unitTest).toString();	
-	}
+    /**
+     * Shortcut to {@link #fromIOFile(File, List, boolean)} with an absolute
+     * path.
+     */
+    public static DelphiFile fromAbsolutePath(String path,
+            List<File> sourceDirs, boolean unitTest) {
+        if (path == null) {
+            return null;
+        }
+        return fromIOFile(new File(path), sourceDirs, unitTest);
+    }
 
-	/**
-	 * Gets FileFilter associated with DelphiLanguage source files (*.pas,
-	 * *.dpr, *.dpk)
-	 * 
-	 * @return FileFilter
-	 */
-	public static FileFilter getFileFilter() {
-		return new FileFilter() {
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("key", getKey())
+                .append("deprecatedKey", getDeprecatedKey())
+                .append("path", getPath())
+                .append("package", packageKey)
+                .append("longName", longName)
+                .append("unitTest", unitTest).toString();
+    }
 
-			public boolean accept(File pathname) {
-				if (!pathname.isFile()) {
-					return false;
-				}
-				String[] endings = DelphiLanguage.instance.getFileSuffixes();
-				for (String ending : endings) {
-					if (pathname.getAbsolutePath().endsWith("." + ending)) {
-						return true;
-					}
-				}
-				return false;
-			}
-		};
-	}
+    /**
+     * Gets FileFilter associated with DelphiLanguage source files (*.pas,
+     * *.dpr, *.dpk)
+     * 
+     * @return FileFilter
+     */
+    public static FileFilter getFileFilter() {
+        return new FileFilter() {
 
-	/**
-	 * Gets FileFilter associated with directories
-	 * 
-	 * @return FileFilter
-	 */
-	public static FileFilter getDirectoryFilter() {
-		return new FileFilter() {
+            public boolean accept(File pathname) {
+                if (!pathname.isFile()) {
+                    return false;
+                }
+                String[] endings = DelphiLanguage.instance.getFileSuffixes();
+                for (String ending : endings) {
+                    if (pathname.getAbsolutePath().endsWith("." + ending)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        };
+    }
 
-			public boolean accept(File pathname) {
-				return pathname.isDirectory();
-			}
-		};
-	}
+    /**
+     * Gets FileFilter associated with directories
+     * 
+     * @return FileFilter
+     */
+    public static FileFilter getDirectoryFilter() {
+        return new FileFilter() {
 
-	public org.sonar.api.resources.File toFile(Project module) {
-		return org.sonar.api.resources.File.fromIOFile(new File(getAbsolutePath()), module);
-	}
+            public boolean accept(File pathname) {
+                return pathname.isDirectory();
+            }
+        };
+    }
 
-	public String getAbsolutePath() {
-		return this.absolutePath;
-	}
-	
-	public static File findFileInDirectories(String fileName, List<File> dirs) throws FileNotFoundException{
-		for (File dir : dirs) {
-			File result = getSourceFileFromName(dir, fileName);
-			if (result != null) {
-				return result;
-			}
-		}
-		
-		throw new FileNotFoundException(fileName);
-	}
-	
-	private static File getSourceFileFromName(File dir, String fileName) {
-		for (File file : dir.listFiles()) {
-			if (file.isDirectory()) {
-				File result = getSourceFileFromName(file, fileName);
+    public org.sonar.api.resources.File toFile(Project module) {
+        return org.sonar.api.resources.File.fromIOFile(new File(getAbsolutePath()), module);
+    }
 
-				if (result != null) {
-					return result;
-				}
-			} else if (file.getName().equalsIgnoreCase(fileName)) {
-				return file;
-			}
-		}
-		return null;
-	}
+    public String getAbsolutePath() {
+        return this.absolutePath;
+    }
+
+    /**
+     * @deprecated use the overload version with FileSystem
+     */
+    @Deprecated
+    public static File findFileInDirectories(String fileName, List<File> dirs) throws FileNotFoundException {
+        for (File dir : dirs) {
+            File result = getSourceFileFromName(dir, fileName);
+            if (result != null) {
+                return result;
+            }
+        }
+
+        throw new FileNotFoundException(fileName);
+    }
+
+    public static InputFile findFileInDirectories(String fileName, FileSystem fs) throws FileNotFoundException {
+        List<InputFile> mainFiles = DelphiProjectHelper.getInstance().mainFiles(fs);
+
+        for (InputFile inputFile : mainFiles) {
+            if (inputFile.file().getName().equalsIgnoreCase(fileName)) {
+                return inputFile;
+            }
+        }
+
+        throw new FileNotFoundException(fileName);
+    }
+
+    private static File getSourceFileFromName(File dir, String fileName) {
+        for (File file : dir.listFiles()) {
+            if (file.isDirectory()) {
+                File result = getSourceFileFromName(file, fileName);
+
+                if (result != null) {
+                    return result;
+                }
+            } else if (file.getName().equalsIgnoreCase(fileName)) {
+                return file;
+            }
+        }
+        return null;
+    }
 
 }

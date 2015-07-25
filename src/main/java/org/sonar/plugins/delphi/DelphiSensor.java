@@ -31,7 +31,7 @@ import java.util.Set;
 
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.batch.SonarIndex;
+import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.resources.DuplicatedSourceException;
 import org.sonar.api.resources.Project;
@@ -59,229 +59,241 @@ import org.sonar.plugins.delphi.utils.ProgressReporter;
 import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
 
 /**
- * Main DelphiLanguage sensor class, it executes on DelphiLanguage project and gathers all data through metrics.
+ * Main DelphiLanguage sensor class, it executes on DelphiLanguage project and
+ * gathers all data through metrics.
  */
 public class DelphiSensor implements Sensor {
 
-  private int scannedFiles = 0; // number of scanned files
-  private Project project = null; // project
-  private Set<DelphiPackage> packageList = new HashSet<DelphiPackage>(); // package list
-  private Map<DelphiPackage, Integer> filesCount = new HashMap<DelphiPackage, Integer>();
-  private List<DelphiFile> resourceList = new ArrayList<DelphiFile>(); // list of resources to process for metrics
-  private Map<DelphiFile, List<ClassInterface>> fileClasses = new HashMap<DelphiFile, List<ClassInterface>>();
-  private Map<DelphiFile, List<FunctionInterface>> fileFunctions = new HashMap<DelphiFile, List<FunctionInterface>>();
-  private List<UnitInterface> units = null; // project units
-  private List<File> testDirectories = null; // test directories
-  public DelphiSensor(SonarIndex sonarIndex) {  
-  }
-  
-  /**
-   * Determines if sensor should execute on project
-   * 
-   * @return true if we are analysing DelphiLanguage project, false otherwise
-   */
+    private int scannedFiles = 0; // number of scanned files
+    private Project project = null; // project
+    private Set<DelphiPackage> packageList = new HashSet<DelphiPackage>(); // package
+                                                                           // list
+    private Map<DelphiPackage, Integer> filesCount = new HashMap<DelphiPackage, Integer>();
+    private List<DelphiFile> resourceList = new ArrayList<DelphiFile>(); // list
+                                                                         // of
+                                                                         // resources
+                                                                         // to
+                                                                         // process
+                                                                         // for
+                                                                         // metrics
+    private Map<DelphiFile, List<ClassInterface>> fileClasses = new HashMap<DelphiFile, List<ClassInterface>>();
+    private Map<DelphiFile, List<FunctionInterface>> fileFunctions = new HashMap<DelphiFile, List<FunctionInterface>>();
+    private List<UnitInterface> units = null; // project units
+    private List<File> testDirectories = null; // test directories
+    private final FileSystem fs;
 
-  public boolean shouldExecuteOnProject(Project project) {
-    return project.getLanguage().getKey().equals(DelphiLanguage.KEY);
-  }
-
-  /**
-   * Analyses whole project with all metrics
-   */
-
-  public void analyse(Project sonarProject, SensorContext sensorContext) {
-    project = sonarProject; // project to analyse
-    testDirectories = DelphiProjectHelper.getInstance().getTestDirectories(project);
-    printFileList("Source dir: ", project.getFileSystem().getSourceDirs());
-    printFileList("Test dir: ", testDirectories);
-
-    // creates and resets analyser
-    ASTAnalyzer analyzer = new DelphiASTAnalyzer();
-    List<DelphiProject> projects = DelphiProjectHelper.getInstance().getWorkgroupProjects(project); // get workspace projects
-    for (DelphiProject delphiProject : projects) // for every .dproj file
-    {
-      CodeAnalysisCacheResults.resetCache();
-      parseFiles(analyzer, delphiProject);
-      parsePackages(sensorContext);
-
-      MetricsInterface metrics[] = { new BasicMetrics(project), new ComplexityMetrics(project), new LCOM4Metrics(project),
-          new DeadCodeMetrics(project) };
-      processFiles(metrics, sensorContext);
+    public DelphiSensor(FileSystem fs) {
+        this.fs = fs;
     }
-  }
 
-  /**
-   * Calculate metrics for project files
-   * 
-   * @param metrics
-   *          Metrics to calculate
-   * @param sensorContext
-   *          Sensor context (provided by Sonar)
-   */
-  private void processFiles(MetricsInterface[] metrics, SensorContext sensorContext) {
-    DelphiUtils.LOG.info("Processing metrics...");
-    ProgressReporter progressReporter = new ProgressReporter(resourceList.size(), 10, new ProgressReporterLogger(DelphiUtils.LOG) );
-    
-    for (DelphiFile resource : resourceList) { // for every resource
-      DelphiUtils.LOG.debug(">> PROCESSING " + resource.getPath());
-      for (MetricsInterface metric : metrics) { // for every metric
-        if (metric.executeOnResource(resource)) {
-          metric.analyse(resource, sensorContext, fileClasses.get(resource), fileFunctions.get(resource), units);
-          metric.save(resource.toFile(project), sensorContext);
+    /**
+     * Determines if sensor should execute on project
+     * 
+     * @return true if we are analysing DelphiLanguage project, false otherwise
+     */
+
+    public boolean shouldExecuteOnProject(Project project) {
+        return project.getLanguage().getKey().equals(DelphiLanguage.KEY);
+    }
+
+    /**
+     * Analyses whole project with all metrics
+     */
+
+    public void analyse(Project sonarProject, SensorContext sensorContext) {
+        project = sonarProject; // project to analyse
+        testDirectories = DelphiProjectHelper.getInstance().getTestDirectories(project);
+        printFileList("Source dir: ", project.getFileSystem().getSourceDirs());
+        printFileList("Test dir: ", testDirectories);
+
+        // creates and resets analyser
+        ASTAnalyzer analyzer = new DelphiASTAnalyzer();
+        List<DelphiProject> projects = DelphiProjectHelper.getInstance().getWorkgroupProjects(fs);
+        for (DelphiProject delphiProject : projects) // for every .dproj file
+        {
+            CodeAnalysisCacheResults.resetCache();
+            parseFiles(analyzer, delphiProject);
+            parsePackages(sensorContext);
+
+            MetricsInterface metrics[] = {new BasicMetrics(project), new ComplexityMetrics(project),
+                    new LCOM4Metrics(project),
+                    new DeadCodeMetrics(project)};
+            processFiles(metrics, sensorContext);
         }
-      } // metric
-
-      // calculating undocumented api
-      double udApi = DelphiUtils.checkRange(metrics[1].getMetric("PUBLIC_API") - metrics[0].getMetric("PUBLIC_DOC_API"), 0.0,
-          Double.MAX_VALUE);
-      sensorContext.saveMeasure(resource, CoreMetrics.PUBLIC_UNDOCUMENTED_API, udApi); // Number of public API without a Javadoc block
-
-      progressReporter.progress();
     }
 
-    DelphiUtils.LOG.info("Done");
-  }
+    /**
+     * Calculate metrics for project files
+     * 
+     * @param metrics Metrics to calculate
+     * @param sensorContext Sensor context (provided by Sonar)
+     */
+    private void processFiles(MetricsInterface[] metrics, SensorContext sensorContext) {
+        DelphiUtils.LOG.info("Processing metrics...");
+        ProgressReporter progressReporter = new ProgressReporter(resourceList.size(), 10, new ProgressReporterLogger(
+                DelphiUtils.LOG));
 
-  /**
-   * Count the metrics for packages
-   * 
-   * @param sensorContext
-   *          Sensor context (provided by Sonar)
-   */
-  private void parsePackages(SensorContext sensorContext) {
-    // for every package
-    for (DelphiPackage pack : packageList) {
-      sensorContext.saveMeasure(pack, CoreMetrics.PACKAGES, 1.0);
-      sensorContext.saveMeasure(pack, CoreMetrics.FILES, (double) filesCount.get(pack));
-    }
-  }
+        for (DelphiFile resource : resourceList) { // for every resource
+            DelphiUtils.LOG.debug(">> PROCESSING " + resource.getPath());
+            for (MetricsInterface metric : metrics) { // for every metric
+                if (metric.executeOnResource(resource)) {
+                    metric.analyse(resource, sensorContext, fileClasses.get(resource), fileFunctions.get(resource),
+                            units);
+                    metric.save(resource.toFile(project), sensorContext);
+                }
+            } // metric
 
-  // for debugging, prints file paths with message to debug file
-  private void printFileList(String msg, List<File> list) {
-    for (File f : list) {
-      DelphiUtils.LOG.info(msg + f.getAbsolutePath());
-    }
-  }
+            // calculating undocumented api
+            double udApi = DelphiUtils.checkRange(
+                    metrics[1].getMetric("PUBLIC_API") - metrics[0].getMetric("PUBLIC_DOC_API"), 0.0,
+                    Double.MAX_VALUE);
+            sensorContext.saveMeasure(resource, CoreMetrics.PUBLIC_UNDOCUMENTED_API, udApi); // Number
+                                                                                             // of
+                                                                                             // public
+                                                                                             // API
+                                                                                             // without
+                                                                                             // a
+                                                                                             // Javadoc
+                                                                                             // block
 
-  /**
-   * Parse files with ANTLR
-   * 
-   * @param analyser
-   *          Analyser to use
-   * @param delphiProject
-   *          DelphiLanguage project to parse
-   */
-  protected void parseFiles(ASTAnalyzer analyser, DelphiProject delphiProject) {
-    // project properties
-    List<File> includedDirs = delphiProject.getIncludeDirectories();
-    List<File> excludedDirs = DelphiProjectHelper.getInstance().getExcludedSources(project.getFileSystem());
-    List<File> sourceFiles = delphiProject.getSourceFiles();
-    List<String> definitions = delphiProject.getDefinitions();
-    boolean importSources = DelphiProjectHelper.getInstance().getImportSources();
+            progressReporter.progress();
+        }
 
-    DelphiSourceSanitizer.setIncludeDirectories(includedDirs);
-    DelphiSourceSanitizer.setDefinitions(definitions);
-
-    printFileList("Included: ", includedDirs);
-    printFileList("Excluded: ", excludedDirs);
-
-    // for every source file
-    DelphiUtils.LOG.info("Parsing project " + delphiProject.getName());
-
-    ProgressReporter progressReporter = new ProgressReporter(sourceFiles.size(), 10, new ProgressReporterLogger(DelphiUtils.LOG) );
-    DelphiUtils.LOG.info("Files to parse: " + sourceFiles.size());
-    
-    for (File delphiFile : sourceFiles) {
-      parseSourceFile(delphiFile, excludedDirs, importSources, analyser);
-      progressReporter.progress();
+        DelphiUtils.LOG.info("Done");
     }
 
-    units = analyser.getResults().getCachedUnitsAsList();
-    DelphiUtils.LOG.info("Done");
-  }
-
-  /**
-   * Parses a source file
-   * 
-   * @param sourceFile
-   *          Source file to parse
-   * @param excludedDirs
-   *          List of excluded dirs
-   * @param importSources
-   *          Should we import sources to Sonar
-   * @param analyzer
-   *          Source code analyser
-   */
-  private void parseSourceFile(File sourceFile, List<File> excludedDirs, boolean importSources, ASTAnalyzer analyzer) {
-    if (DelphiProjectHelper.getInstance().isExcluded(sourceFile, excludedDirs)) {
-      return; // in excluded, return
+    /**
+     * Count the metrics for packages
+     * 
+     * @param sensorContext Sensor context (provided by Sonar)
+     */
+    private void parsePackages(SensorContext sensorContext) {
+        // for every package
+        for (DelphiPackage pack : packageList) {
+            sensorContext.saveMeasure(pack, CoreMetrics.PACKAGES, 1.0);
+            sensorContext.saveMeasure(pack, CoreMetrics.FILES, (double) filesCount.get(pack));
+        }
     }
 
-    boolean isTest = DelphiProjectHelper.getInstance().isTestFile(sourceFile, testDirectories);
-
-    // adding file to package
-    DelphiFile resource = DelphiFile.fromIOFile(sourceFile, project.getFileSystem().getSourceDirs(), isTest);
-    DelphiPackage pack = new DelphiPackage(resource.getParent().getKey());
-    packageList.add(pack); // new pack
-
-    DelphiUtils.LOG.debug(">> PARSING " + resource.getPath() + " test: " + isTest);
-
-    if (filesCount.containsKey(pack)) {
-      filesCount.put(pack, filesCount.get(pack) + 1); // files count
-    } else {
-      filesCount.put(pack, Integer.valueOf(1));
-    }
-    resourceList.add(resource);
-    
-    //sonarIndex.index(resource);
-    ASTTree ast = analyseSourceFile(sourceFile, analyzer);
-    if (importSources && ast != null) {
-
-      try {
-        ast.getFileSource();
-      } catch (DuplicatedSourceException e) {
-        DelphiUtils.LOG.debug("Source already saved, skipping...");
-      }
+    // for debugging, prints file paths with message to debug file
+    private void printFileList(String msg, List<File> list) {
+        for (File f : list) {
+            DelphiUtils.LOG.info(msg + f.getAbsolutePath());
+        }
     }
 
-    fileClasses.put(resource, analyzer.getResults().getClasses());
-    fileFunctions.put(resource, analyzer.getResults().getFunctions());
-  }
+    /**
+     * Parse files with ANTLR
+     * 
+     * @param analyser Analyser to use
+     * @param delphiProject DelphiLanguage project to parse
+     */
+    protected void parseFiles(ASTAnalyzer analyser, DelphiProject delphiProject) {
+        // project properties
+        List<File> includedDirs = delphiProject.getIncludeDirectories();
+        List<File> excludedDirs = DelphiProjectHelper.getInstance().getExcludedSources(fs);
+        List<File> sourceFiles = delphiProject.getSourceFiles();
+        List<String> definitions = delphiProject.getDefinitions();
+        boolean importSources = DelphiProjectHelper.getInstance().getImportSources();
 
-  /**
-   * Analysing a source file with ANTLR
-   * 
-   * @param sourceFile
-   *          File to analyse
-   * @param analyser
-   *          Source code analyser
-   * @return AST Tree
-   */
-  private ASTTree analyseSourceFile(File sourceFile, ASTAnalyzer analyser) {
-    // analysing file
-    DelphiAST ast = null;
-    try {
-      ast = new DelphiAST(sourceFile); // ast tree for file
-      analyser.analyze(ast); // parsing with ANTLR
-      ++scannedFiles;
-    } catch (Exception e) {
-      DelphiUtils.LOG.debug("Error parsing file: " + e.getMessage() + " " + sourceFile.getAbsolutePath());
+        DelphiSourceSanitizer.setIncludeDirectories(includedDirs);
+        DelphiSourceSanitizer.setDefinitions(definitions);
+
+        printFileList("Included: ", includedDirs);
+        printFileList("Excluded: ", excludedDirs);
+
+        // for every source file
+        DelphiUtils.LOG.info("Parsing project " + delphiProject.getName());
+
+        ProgressReporter progressReporter = new ProgressReporter(sourceFiles.size(), 10, new ProgressReporterLogger(
+                DelphiUtils.LOG));
+        DelphiUtils.LOG.info("Files to parse: " + sourceFiles.size());
+
+        for (File delphiFile : sourceFiles) {
+            parseSourceFile(delphiFile, excludedDirs, importSources, analyser);
+            progressReporter.progress();
+        }
+
+        units = analyser.getResults().getCachedUnitsAsList();
+        DelphiUtils.LOG.info("Done");
     }
-    return ast;
-  }
 
-  /**
-   * Get the number of processed files
-   * 
-   * @return The number of processed files
-   */
-  public int getProcessedFilesCount() {
-    return scannedFiles;
-  }
+    /**
+     * Parses a source file
+     * 
+     * @param sourceFile Source file to parse
+     * @param excludedDirs List of excluded dirs
+     * @param importSources Should we import sources to Sonar
+     * @param analyzer Source code analyser
+     */
+    private void parseSourceFile(File sourceFile, List<File> excludedDirs, boolean importSources, ASTAnalyzer analyzer) {
+        if (DelphiProjectHelper.getInstance().isExcluded(sourceFile, excludedDirs)) {
+            return; // in excluded, return
+        }
 
-  @Override
-  public String toString() {
-    return getClass().getSimpleName();
-  }
+        boolean isTest = DelphiProjectHelper.getInstance().isTestFile(sourceFile, testDirectories);
+
+        // adding file to package
+        DelphiFile resource = DelphiFile.fromIOFile(sourceFile, project.getFileSystem().getSourceDirs(), isTest);
+        DelphiPackage pack = new DelphiPackage(resource.getParent().getKey());
+        packageList.add(pack); // new pack
+
+        DelphiUtils.LOG.debug(">> PARSING " + resource.getPath() + " test: " + isTest);
+
+        if (filesCount.containsKey(pack)) {
+            filesCount.put(pack, filesCount.get(pack) + 1); // files count
+        } else {
+            filesCount.put(pack, Integer.valueOf(1));
+        }
+        resourceList.add(resource);
+
+        // sonarIndex.index(resource);
+        ASTTree ast = analyseSourceFile(sourceFile, analyzer);
+        if (importSources && ast != null) {
+
+            try {
+                ast.getFileSource();
+            } catch (DuplicatedSourceException e) {
+                DelphiUtils.LOG.debug("Source already saved, skipping...");
+            }
+        }
+
+        fileClasses.put(resource, analyzer.getResults().getClasses());
+        fileFunctions.put(resource, analyzer.getResults().getFunctions());
+    }
+
+    /**
+     * Analysing a source file with ANTLR
+     * 
+     * @param sourceFile File to analyse
+     * @param analyser Source code analyser
+     * @return AST Tree
+     */
+    private ASTTree analyseSourceFile(File sourceFile, ASTAnalyzer analyser) {
+        // analysing file
+        DelphiAST ast = null;
+        try {
+            ast = new DelphiAST(sourceFile); // ast tree for file
+            analyser.analyze(ast); // parsing with ANTLR
+            ++scannedFiles;
+        } catch (Exception e) {
+            DelphiUtils.LOG.debug("Error parsing file: " + e.getMessage() + " " + sourceFile.getAbsolutePath());
+        }
+        return ast;
+    }
+
+    /**
+     * Get the number of processed files
+     * 
+     * @return The number of processed files
+     */
+    public int getProcessedFilesCount() {
+        return scannedFiles;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
 
 }
