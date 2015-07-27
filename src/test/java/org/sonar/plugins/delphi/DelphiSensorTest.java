@@ -35,7 +35,6 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.sonar.api.batch.SonarIndex;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.Project;
@@ -64,7 +63,6 @@ public class DelphiSensorTest {
         fs = mock(FileSystem.class);
 
         ProjectFileSystem pfs = mock(ProjectFileSystem.class);
-        SonarIndex sonarIndex = mock(SonarIndex.class);
 
         baseDir = DelphiUtils.getResource(ROOT_NAME);
         File reportDir = new File(baseDir.getAbsolutePath() + "/reports");
@@ -149,7 +147,7 @@ public class DelphiSensorTest {
                 continue;
             }
 
-            Measure measure = context.getMeasure(key);
+            Measure<?> measure = context.getMeasure(key);
             double currentValue = measure.getValue();
             double expectedValue = expectedValues.get(fileKey)[keyMetricIndex.get(metricKey)];
 

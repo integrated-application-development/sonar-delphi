@@ -23,6 +23,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;

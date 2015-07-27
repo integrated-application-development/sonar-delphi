@@ -24,7 +24,6 @@ package org.sonar.plugins.delphi.surefire;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
@@ -35,19 +34,16 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.SonarIndex;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.ParsingUtils;
-import org.sonar.api.utils.SonarException;
 import org.sonar.api.utils.StaxParser;
 import org.sonar.plugins.delphi.core.DelphiFile;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.surefire.data.SurefireStaxHandler;
 import org.sonar.plugins.surefire.data.UnitTestClassReport;
 import org.sonar.plugins.surefire.data.UnitTestIndex;
-import org.sonar.plugins.surefire.data.UnitTestResult;
 
 /**
  * Parses unit test reports from XML file.

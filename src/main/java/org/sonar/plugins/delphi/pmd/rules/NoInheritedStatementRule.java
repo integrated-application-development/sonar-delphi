@@ -21,8 +21,8 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import org.apache.commons.lang.StringUtils;
 import org.antlr.runtime.tree.Tree;
+import org.apache.commons.lang.StringUtils;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 

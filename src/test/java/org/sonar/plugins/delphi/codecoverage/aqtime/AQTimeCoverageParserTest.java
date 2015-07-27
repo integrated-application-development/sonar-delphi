@@ -112,7 +112,6 @@ public class AQTimeCoverageParserTest extends DBTestCase {
 
         Project project = mock(Project.class);
         ProjectFileSystem pfs = mock(ProjectFileSystem.class);
-        FileSystem fs = mock(FileSystem.class);
 
         File baseDir = DelphiUtils.getResource(FILE_NAME);
         when(project.getFileSystem()).thenReturn(pfs);
