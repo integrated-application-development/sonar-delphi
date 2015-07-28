@@ -29,19 +29,22 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRulesUtils;
+import org.sonar.squidbridge.rules.SqaleXmlLoader;
 
 /**
- * Delphi rules repository
+ * Delphi rules definition
  */
-public class DelphiPmdRuleRepository implements RulesDefinition {
+public class DelphiPmdRuleDefinition implements RulesDefinition {
 
     public void define(Context context) {
-        NewRepository repository = context.createRepository(
-                DelphiPmdConstants.REPOSITORY_KEY, DelphiLanguage.KEY).setName(
-                DelphiPmdConstants.REPOSITORY_NAME);
+        NewRepository repository = context
+                .createRepository(DelphiPmdConstants.REPOSITORY_KEY, DelphiLanguage.KEY)
+                .setName(DelphiPmdConstants.REPOSITORY_NAME);
 
         List<org.sonar.api.rules.Rule> rules = DelphiRulesUtils.getInitialReferential();
 
+        // TODO Review
+        // https://github.com/SonarCommunity/sonar-pmd/blob/master/src/main/java/org/sonar/plugins/pmd/PmdRulesDefinition.java
         for (org.sonar.api.rules.Rule rule : rules) {
             NewRule newRule = repository.createRule(rule.getKey())
                     .setName(rule.getName())
@@ -55,7 +58,10 @@ public class DelphiPmdRuleRepository implements RulesDefinition {
             }
         }
 
+        SqaleXmlLoader.load(repository, "/org/sonar/plugins/delphi/sqale/delphi-model.xml");
+
         repository.done();
+
     }
 
 }

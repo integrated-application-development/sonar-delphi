@@ -37,7 +37,7 @@ import org.sonar.plugins.delphi.pmd.DelphiPmdSensor;
 import org.sonar.plugins.delphi.pmd.profile.DefaultDelphiProfile;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileExporter;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileImporter;
-import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleRepository;
+import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleDefinition;
 import org.sonar.plugins.delphi.surefire.SurefireSensor;
 
 /**
@@ -117,7 +117,7 @@ public class DelphiPlugin extends SonarPlugin {
     list.add(SurefireSensor.class);
     // Pmd
     list.add(DelphiPmdSensor.class);
-    list.add(DelphiPmdRuleRepository.class);
+    list.add(DelphiPmdRuleDefinition.class);
     list.add(DefaultDelphiProfile.class);
     list.add(DelphiPmdProfileExporter.class);
     list.add(DelphiPmdProfileImporter.class);

@@ -1,0 +1,23 @@
+<sqale>
+  <chc>
+    <key>MAINTAINABILITY</key>
+    <name>Maintainability</name>
+    <chc>
+      <key>READABILITY</key>
+      <name>Readability</name>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>Mixed Names Rule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>5</val>
+          <txt>min</txt>
+        </prop>
+      </chc>      
+    </chc>
+  </chc>
+ </sqale>
