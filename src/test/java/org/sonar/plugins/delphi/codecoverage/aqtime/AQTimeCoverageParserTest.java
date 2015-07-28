@@ -40,11 +40,10 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Ignore;
-import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.HSQLServerUtil;
@@ -57,7 +56,7 @@ public class AQTimeCoverageParserTest extends DBTestCase {
     private AQTimeCoverageParser parser;
     private Connection connection;
     private Map<String, String> connectionProps;
-    private FileSystem fs;
+    private DelphiProjectHelper delphiProjectHelper;
 
     public AQTimeCoverageParserTest() {
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS, "org.hsqldb.jdbcDriver");
@@ -91,7 +90,7 @@ public class AQTimeCoverageParserTest extends DBTestCase {
         stmt.close();
         super.setUp();
 
-        parser = new AQTimeCoverageParser(fs);
+        parser = new AQTimeCoverageParser(delphiProjectHelper);
         parser.setConnectionProperties(connectionProps);
     }
 
@@ -111,15 +110,12 @@ public class AQTimeCoverageParserTest extends DBTestCase {
     public void testParse() {
 
         Project project = mock(Project.class);
-        ProjectFileSystem pfs = mock(ProjectFileSystem.class);
+        DelphiProjectHelper delphiProjectHelper = mock(DelphiProjectHelper.class);
 
         File baseDir = DelphiUtils.getResource(FILE_NAME);
-        when(project.getFileSystem()).thenReturn(pfs);
-        when(pfs.getBasedir()).thenReturn(baseDir);
 
         List<File> sourceFiles = DelphiUtils.getSourceFiles(project);
         List<File> sourceDirs = DelphiUtils.getSourceDirectories(project);
-        when(pfs.getSourceDirs()).thenReturn(sourceDirs);
 
         List<InputFile> inputSourceFiles = new ArrayList<InputFile>();
         for (File srcFile : sourceFiles) {

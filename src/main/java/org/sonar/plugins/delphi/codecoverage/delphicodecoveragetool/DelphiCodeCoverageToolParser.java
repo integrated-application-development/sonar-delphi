@@ -26,19 +26,19 @@ import java.io.File;
 import javax.xml.stream.XMLStreamException;
 
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.utils.StaxParser;
 import org.sonar.plugins.delphi.codecoverage.DelphiCodeCoverageParser;
+import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser
 {
     private final File reportFile;
-    private final FileSystem fs;
+    private final DelphiProjectHelper delphiProjectHelper;
 
-    public DelphiCodeCoverageToolParser(File reportFile, FileSystem fs) {
+    public DelphiCodeCoverageToolParser(File reportFile, DelphiProjectHelper delphiProjectHelper) {
         this.reportFile = reportFile;
-        this.fs = fs;
+        this.delphiProjectHelper = delphiProjectHelper;
     }
 
     public void parse(SensorContext context) {
@@ -47,7 +47,7 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser
         }
 
         try {
-            StaxParser parser = new StaxParser(new DelphiCoverageToolParserStreamHandler(context, fs));
+            StaxParser parser = new StaxParser(new DelphiCoverageToolParserStreamHandler(context, delphiProjectHelper));
             parser.parse(reportFile);
         } catch (XMLStreamException e) {
             DelphiUtils.LOG.error("Error parsing file : {}", reportFile);

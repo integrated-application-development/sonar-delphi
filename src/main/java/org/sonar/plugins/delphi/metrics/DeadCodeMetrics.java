@@ -37,7 +37,6 @@ import org.sonar.api.rules.Violation;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.core.DelphiFile;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.ClassPropertyInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
@@ -50,206 +49,218 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  */
 public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface {
 
-  private static final String DEAD_UNIT_VIOLATION_MESSAGE = " - unused unit. No other unit nor project has this unit in it's uses section. Probably you could remove this unit from project.";
-  private static final String DEAD_FUNCTION_VIOLATION_MESSAGE = " - unused function/procedure. No other function and procedure in a project refers to it. Probably you could remove it.";
+    private static final String DEAD_UNIT_VIOLATION_MESSAGE = " - unused unit. No other unit nor project has this unit in it's uses section. Probably you could remove this unit from project.";
+    private static final String DEAD_FUNCTION_VIOLATION_MESSAGE = " - unused function/procedure. No other function and procedure in a project refers to it. Probably you could remove it.";
 
-  private boolean isCalculated;
-  private List<String> unusedUnits;
-  private Set<FunctionInterface> unusedFunctions;
-  private List<UnitInterface> allUnits;
-  private Rule unitRule = null;
-  private Rule functionRule = null;
+    private boolean isCalculated;
+    private List<String> unusedUnits;
+    private Set<FunctionInterface> unusedFunctions;
+    private List<UnitInterface> allUnits;
+    private Rule unitRule = null;
+    private Rule functionRule = null;
 
-  /**
-   * {@inheritDoc}
-   */
-  public DeadCodeMetrics(Project delphiProject) {
-    super(delphiProject);
-    isCalculated = false;
-    allUnits = new ArrayList<UnitInterface>();
-    RuleFinder ruleFinder = DelphiProjectHelper.getInstance().getRuleFinder();
-    if (ruleFinder == null) {
-      return; // no rule finder
-    }
-    RuleQuery ruleQuery = RuleQuery.create().withRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY).withKey("Unused Unit Rule");
-    unitRule = ruleFinder.find(ruleQuery);
-    ruleQuery = RuleQuery.create().withRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY).withKey("Unused Function Rule");
-    functionRule = ruleFinder.find(ruleQuery);
-  }
+    /**
+     * {@inheritDoc}
+     */
+    public DeadCodeMetrics(Project delphiProject, RuleFinder ruleFinder) {
+        super(delphiProject);
+        isCalculated = false;
+        allUnits = new ArrayList<UnitInterface>();
 
-  /**
-   * {@inheritDoc}
-   */
-
-  public void analyse(DelphiFile resource, SensorContext sensorContext, List<ClassInterface> classes, List<FunctionInterface> functions,
-      List<UnitInterface> units) {
-    if ( !isCalculated) { // calculate only once
-      if (units == null || units.isEmpty()) {
-        return;
-      }
-      unusedUnits = findUnusedUnits(units);
-      unusedFunctions = findUnusedFunctions(units);
-      isCalculated = true;
-    }
-
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  public void save(Resource resource, SensorContext sensorContext) {
-    if (resource.getQualifier().equals(Qualifiers.UNIT_TEST_FILE)) {
-      return; // do not count unit tests
-    }
-
-    UnitInterface unit = findUnit(resource.getName());
-    if (unit == null) {
-      DelphiUtils.LOG.debug("No unit for " + resource.getName() + "(" + resource.getPath() + ")");
-      return;
-    }
-
-    if (unusedUnits.contains(resource.getName().toLowerCase())) { // unused unit, add violation
-      int line = unit.getLine();
-      Violation violation = Violation.create(unitRule, resource).setLineId(line).setMessage(unit.getName() + DEAD_UNIT_VIOLATION_MESSAGE);
-      sensorContext.saveViolation(violation, true);
-    }
-
-    for (FunctionInterface function : getUnitFunctions(unit)) {
-
-      if (function.isMessage() || function.isVirtual() || function.getVisibility() == DelphiLexer.PUBLISHED) {
-        continue; // function is either a virtual function or at published visibility or message function
-      }
-
-      if (function.getParentClass() != null) {
-        // check if function is not a interface implementation
-        boolean isImplementation = false;
-        for (ClassInterface parent : function.getParentClass().getParents()) {
-          if (parent.hasFunction(function)) {
-            isImplementation = true;
-            break;
-          }
+        if (ruleFinder == null) {
+            return; // no rule finder
         }
-        if (isImplementation) {
-          continue; // function used as interface implementation, surely not unused function
+        RuleQuery ruleQuery = RuleQuery.create().withRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY)
+                .withKey("Unused Unit Rule");
+        unitRule = ruleFinder.find(ruleQuery);
+        ruleQuery = RuleQuery.create().withRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY)
+                .withKey("Unused Function Rule");
+        functionRule = ruleFinder.find(ruleQuery);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public void analyse(DelphiFile resource, SensorContext sensorContext, List<ClassInterface> classes,
+            List<FunctionInterface> functions,
+            List<UnitInterface> units) {
+        if (!isCalculated) { // calculate only once
+            if (units == null || units.isEmpty()) {
+                return;
+            }
+            unusedUnits = findUnusedUnits(units);
+            unusedFunctions = findUnusedFunctions(units);
+            isCalculated = true;
         }
 
-        // check if function is used in property field
-        boolean usedInProperty = false;
-        for (ClassPropertyInterface property : function.getParentClass().getProperties()) {
-          if (property.hasFunction(function)) {
-            usedInProperty = true;
-            break;
-          }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public void save(Resource resource, SensorContext sensorContext) {
+        if (resource.getQualifier().equals(Qualifiers.UNIT_TEST_FILE)) {
+            return; // do not count unit tests
         }
-        if (usedInProperty) {
-          continue; // function used in property field, surely not unused function
+
+        UnitInterface unit = findUnit(resource.getName());
+        if (unit == null) {
+            DelphiUtils.LOG.debug("No unit for " + resource.getName() + "(" + resource.getPath() + ")");
+            return;
         }
-      }
 
-      if (unusedFunctions.contains(function)) { // unused function, add violation
-        int line = function.getLine();
-        Violation violation = Violation.create(functionRule, resource).setLineId(line)
-            .setMessage(function.getRealName() + DEAD_FUNCTION_VIOLATION_MESSAGE);
-        sensorContext.saveViolation(violation, true);
-        unusedFunctions.remove(function); // to avoid duplicated violations
-      }
-    }
-  }
-
-  /**
-   * @param unit
-   *          Unit
-   * @return List of all unit functions (global and class functions)
-   */
-  private List<FunctionInterface> getUnitFunctions(UnitInterface unit) {
-    List<FunctionInterface> result = new ArrayList<FunctionInterface>();
-    for (FunctionInterface globalFunction : unit.getFunctions()) { // add global functions
-      result.add(globalFunction);
-    }
-
-    for (ClassInterface clazz : unit.getClasses()) { // add class function
-      for (FunctionInterface function : clazz.getFunctions()) {
-        result.add(function);
-      }
-    }
-
-    return result;
-  }
-
-  /**
-   * Find unused functions in a unit
-   * 
-   * @param units
-   *          Unit array
-   * @return List of unused functions
-   */
-  protected Set<FunctionInterface> findUnusedFunctions(List<UnitInterface> units) {
-    Set<FunctionInterface> allFunctions = new HashSet<FunctionInterface>();
-    Set<FunctionInterface> usedFunctions = new HashSet<FunctionInterface>();
-    for (UnitInterface unit : units) {
-      List<FunctionInterface> unitFunctions = getUnitFunctions(unit);
-      allFunctions.addAll(unitFunctions);
-      for (FunctionInterface unitFunction : unitFunctions) {
-        for (FunctionInterface usedFunction : unitFunction.getCalledFunctions()) {
-          usedFunctions.add(usedFunction);
+        if (unusedUnits.contains(resource.getName().toLowerCase())) { // unused
+                                                                      // unit,
+                                                                      // add
+                                                                      // violation
+            int line = unit.getLine();
+            Violation violation = Violation.create(unitRule, resource).setLineId(line)
+                    .setMessage(unit.getName() + DEAD_UNIT_VIOLATION_MESSAGE);
+            sensorContext.saveViolation(violation, true);
         }
-      }
 
+        for (FunctionInterface function : getUnitFunctions(unit)) {
+
+            if (function.isMessage() || function.isVirtual() || function.getVisibility() == DelphiLexer.PUBLISHED) {
+                continue; // function is either a virtual function or at
+                          // published visibility or message function
+            }
+
+            if (function.getParentClass() != null) {
+                // check if function is not a interface implementation
+                boolean isImplementation = false;
+                for (ClassInterface parent : function.getParentClass().getParents()) {
+                    if (parent.hasFunction(function)) {
+                        isImplementation = true;
+                        break;
+                    }
+                }
+                if (isImplementation) {
+                    continue; // function used as interface implementation,
+                              // surely not unused function
+                }
+
+                // check if function is used in property field
+                boolean usedInProperty = false;
+                for (ClassPropertyInterface property : function.getParentClass().getProperties()) {
+                    if (property.hasFunction(function)) {
+                        usedInProperty = true;
+                        break;
+                    }
+                }
+                if (usedInProperty) {
+                    continue; // function used in property field, surely not
+                              // unused function
+                }
+            }
+
+            if (unusedFunctions.contains(function)) { // unused function, add
+                                                      // violation
+                int line = function.getLine();
+                Violation violation = Violation.create(functionRule, resource).setLineId(line)
+                        .setMessage(function.getRealName() + DEAD_FUNCTION_VIOLATION_MESSAGE);
+                sensorContext.saveViolation(violation, true);
+                unusedFunctions.remove(function); // to avoid duplicated
+                                                  // violations
+            }
+        }
     }
-    allFunctions.removeAll(usedFunctions);
-    return allFunctions;
-  }
 
-  /**
-   * Find unused units
-   */
-  protected List<String> findUnusedUnits(List<UnitInterface> units) {
-    Set<String> usedUnits = new HashSet<String>();
-    List<String> result = new ArrayList<String>();
-    for (UnitInterface unit : units) {
-      if (unit.getFileName().toLowerCase().endsWith(".pas")) {
-        result.add(unit.getName().toLowerCase()); // if not a .dpr, add it to unusedUnits
-        allUnits.add(unit);
-      }
+    /**
+     * @param unit Unit
+     * @return List of all unit functions (global and class functions)
+     */
+    private List<FunctionInterface> getUnitFunctions(UnitInterface unit) {
+        List<FunctionInterface> result = new ArrayList<FunctionInterface>();
+        for (FunctionInterface globalFunction : unit.getFunctions()) { // add
+                                                                       // global
+                                                                       // functions
+            result.add(globalFunction);
+        }
 
-      for (String usedUnit : unit.getIncludes()) {
-        usedUnits.add(usedUnit.toLowerCase());
-      }
+        for (ClassInterface clazz : unit.getClasses()) { // add class function
+            for (FunctionInterface function : clazz.getFunctions()) {
+                result.add(function);
+            }
+        }
+
+        return result;
     }
 
-    result.removeAll(usedUnits);
-    return result;
-  }
+    /**
+     * Find unused functions in a unit
+     * 
+     * @param units Unit array
+     * @return List of unused functions
+     */
+    protected Set<FunctionInterface> findUnusedFunctions(List<UnitInterface> units) {
+        Set<FunctionInterface> allFunctions = new HashSet<FunctionInterface>();
+        Set<FunctionInterface> usedFunctions = new HashSet<FunctionInterface>();
+        for (UnitInterface unit : units) {
+            List<FunctionInterface> unitFunctions = getUnitFunctions(unit);
+            allFunctions.addAll(unitFunctions);
+            for (FunctionInterface unitFunction : unitFunctions) {
+                for (FunctionInterface usedFunction : unitFunction.getCalledFunctions()) {
+                    usedFunctions.add(usedFunction);
+                }
+            }
 
-  /**
-   * {@inheritDoc}
-   */
-
-  public boolean executeOnResource(DelphiFile resource) {
-    String[] endings = DelphiLanguage.instance.getFileSuffixes();
-    for (String ending : endings) {
-      if (resource.getPath().endsWith("." + ending)) {
-        return true;
-      }
+        }
+        allFunctions.removeAll(usedFunctions);
+        return allFunctions;
     }
-    return false;
-  }
 
-  /**
-   * Searches for a unit by given unit name
-   * 
-   * @param unitName
-   *          Unit name
-   * @return Unit if found, null otherwise
-   */
-  private UnitInterface findUnit(String unitName) {
-    for (UnitInterface unit : allUnits) {
-      if (unit.getName().equalsIgnoreCase(unitName)) {
-        return unit;
-      }
+    /**
+     * Find unused units
+     */
+    protected List<String> findUnusedUnits(List<UnitInterface> units) {
+        Set<String> usedUnits = new HashSet<String>();
+        List<String> result = new ArrayList<String>();
+        for (UnitInterface unit : units) {
+            if (unit.getFileName().toLowerCase().endsWith(".pas")) {
+                result.add(unit.getName().toLowerCase()); // if not a .dpr, add
+                                                          // it to unusedUnits
+                allUnits.add(unit);
+            }
+
+            for (String usedUnit : unit.getIncludes()) {
+                usedUnits.add(usedUnit.toLowerCase());
+            }
+        }
+
+        result.removeAll(usedUnits);
+        return result;
     }
-    return null;
-  }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public boolean executeOnResource(DelphiFile resource) {
+        String[] endings = DelphiLanguage.instance.getFileSuffixes();
+        for (String ending : endings) {
+            if (resource.getPath().endsWith("." + ending)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Searches for a unit by given unit name
+     * 
+     * @param unitName Unit name
+     * @return Unit if found, null otherwise
+     */
+    private UnitInterface findUnit(String unitName) {
+        for (UnitInterface unit : allUnits) {
+            if (unit.getName().equalsIgnoreCase(unitName)) {
+                return unit;
+            }
+        }
+        return null;
+    }
 
 }

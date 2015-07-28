@@ -31,10 +31,10 @@ import java.util.Set;
 
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.resources.DuplicatedSourceException;
 import org.sonar.api.resources.Project;
+import org.sonar.api.rules.RuleFinder;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
 import org.sonar.plugins.delphi.antlr.analyzer.DelphiASTAnalyzer;
@@ -42,7 +42,6 @@ import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.sanitizer.DelphiSourceSanitizer;
 import org.sonar.plugins.delphi.core.DelphiFile;
-import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.DelphiPackage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
@@ -69,21 +68,19 @@ public class DelphiSensor implements Sensor {
     private Set<DelphiPackage> packageList = new HashSet<DelphiPackage>(); // package
                                                                            // list
     private Map<DelphiPackage, Integer> filesCount = new HashMap<DelphiPackage, Integer>();
-    private List<DelphiFile> resourceList = new ArrayList<DelphiFile>(); // list
-                                                                         // of
-                                                                         // resources
-                                                                         // to
-                                                                         // process
-                                                                         // for
-                                                                         // metrics
+    // list of resources to process for metrics
+    private List<DelphiFile> resourceList = new ArrayList<DelphiFile>();
     private Map<DelphiFile, List<ClassInterface>> fileClasses = new HashMap<DelphiFile, List<ClassInterface>>();
     private Map<DelphiFile, List<FunctionInterface>> fileFunctions = new HashMap<DelphiFile, List<FunctionInterface>>();
     private List<UnitInterface> units = null; // project units
     private List<File> testDirectories = null; // test directories
-    private final FileSystem fs;
 
-    public DelphiSensor(FileSystem fs) {
-        this.fs = fs;
+    private final DelphiProjectHelper delphiProjectHelper;
+    private final RuleFinder ruleFinder;
+
+    public DelphiSensor(DelphiProjectHelper delphiProjectHelper, RuleFinder ruleFinder) {
+        this.delphiProjectHelper = delphiProjectHelper;
+        this.ruleFinder = ruleFinder;
     }
 
     /**
@@ -93,7 +90,7 @@ public class DelphiSensor implements Sensor {
      */
 
     public boolean shouldExecuteOnProject(Project project) {
-        return project.getLanguage().getKey().equals(DelphiLanguage.KEY);
+        return delphiProjectHelper.shouldExecuteOnProject();
     }
 
     /**
@@ -102,13 +99,13 @@ public class DelphiSensor implements Sensor {
 
     public void analyse(Project sonarProject, SensorContext sensorContext) {
         project = sonarProject; // project to analyse
-        testDirectories = DelphiProjectHelper.getInstance().getTestDirectories(project);
+        testDirectories = delphiProjectHelper.getTestDirectories(project);
         printFileList("Source dir: ", project.getFileSystem().getSourceDirs());
         printFileList("Test dir: ", testDirectories);
 
         // creates and resets analyser
-        ASTAnalyzer analyzer = new DelphiASTAnalyzer();
-        List<DelphiProject> projects = DelphiProjectHelper.getInstance().getWorkgroupProjects(fs);
+        ASTAnalyzer analyzer = new DelphiASTAnalyzer(delphiProjectHelper);
+        List<DelphiProject> projects = delphiProjectHelper.getWorkgroupProjects();
         for (DelphiProject delphiProject : projects) // for every .dproj file
         {
             CodeAnalysisCacheResults.resetCache();
@@ -117,7 +114,7 @@ public class DelphiSensor implements Sensor {
 
             MetricsInterface metrics[] = {new BasicMetrics(project), new ComplexityMetrics(project),
                     new LCOM4Metrics(project),
-                    new DeadCodeMetrics(project)};
+                    new DeadCodeMetrics(project, ruleFinder)};
             processFiles(metrics, sensorContext);
         }
     }
@@ -147,14 +144,9 @@ public class DelphiSensor implements Sensor {
             double udApi = DelphiUtils.checkRange(
                     metrics[1].getMetric("PUBLIC_API") - metrics[0].getMetric("PUBLIC_DOC_API"), 0.0,
                     Double.MAX_VALUE);
-            sensorContext.saveMeasure(resource, CoreMetrics.PUBLIC_UNDOCUMENTED_API, udApi); // Number
-                                                                                             // of
-                                                                                             // public
-                                                                                             // API
-                                                                                             // without
-                                                                                             // a
-                                                                                             // Javadoc
-                                                                                             // block
+
+            // Number of public API without a Javadoc block
+            sensorContext.saveMeasure(resource, CoreMetrics.PUBLIC_UNDOCUMENTED_API, udApi);
 
             progressReporter.progress();
         }
@@ -191,10 +183,10 @@ public class DelphiSensor implements Sensor {
     protected void parseFiles(ASTAnalyzer analyser, DelphiProject delphiProject) {
         // project properties
         List<File> includedDirs = delphiProject.getIncludeDirectories();
-        List<File> excludedDirs = DelphiProjectHelper.getInstance().getExcludedSources(fs);
+        List<File> excludedDirs = delphiProjectHelper.getExcludedSources();
         List<File> sourceFiles = delphiProject.getSourceFiles();
         List<String> definitions = delphiProject.getDefinitions();
-        boolean importSources = DelphiProjectHelper.getInstance().getImportSources();
+        boolean importSources = delphiProjectHelper.getImportSources();
 
         DelphiSourceSanitizer.setIncludeDirectories(includedDirs);
         DelphiSourceSanitizer.setDefinitions(definitions);
@@ -227,11 +219,11 @@ public class DelphiSensor implements Sensor {
      * @param analyzer Source code analyser
      */
     private void parseSourceFile(File sourceFile, List<File> excludedDirs, boolean importSources, ASTAnalyzer analyzer) {
-        if (DelphiProjectHelper.getInstance().isExcluded(sourceFile, excludedDirs)) {
+        if (delphiProjectHelper.isExcluded(sourceFile, excludedDirs)) {
             return; // in excluded, return
         }
 
-        boolean isTest = DelphiProjectHelper.getInstance().isTestFile(sourceFile, testDirectories);
+        boolean isTest = delphiProjectHelper.isTestFile(sourceFile, testDirectories);
 
         // adding file to package
         DelphiFile resource = DelphiFile.fromIOFile(sourceFile, project.getFileSystem().getSourceDirs(), isTest);

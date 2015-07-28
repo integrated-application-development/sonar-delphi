@@ -27,7 +27,6 @@ import java.util.List;
 import net.sourceforge.pmd.cpd.Tokenizer;
 
 import org.sonar.api.batch.CpdMapping;
-import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Resource;
 import org.sonar.plugins.delphi.core.DelphiFile;
@@ -39,18 +38,17 @@ import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
  */
 public class DelphiCpdMapping implements CpdMapping {
 
-    private final FileSystem fs;
+    private final DelphiProjectHelper delphiProjectHelper;
 
-    public DelphiCpdMapping(FileSystem fs) {
-        this.fs = fs;
+    public DelphiCpdMapping(DelphiProjectHelper delphiProjectHelper) {
+        this.delphiProjectHelper = delphiProjectHelper;
     }
 
     /**
      * @return The language tokenizer
      */
-
     public Tokenizer getTokenizer() {
-        return new DelphiCpdTokenizer(DelphiProjectHelper.getInstance().getExcludedSources(fs));
+        return new DelphiCpdTokenizer(delphiProjectHelper);
     }
 
     /**
@@ -58,7 +56,6 @@ public class DelphiCpdMapping implements CpdMapping {
      * 
      * @return DelphiFile
      */
-
     public Resource createResource(File file, List<File> sourceDirs) {
         return DelphiFile.fromIOFile(file, sourceDirs);
     }
@@ -66,7 +63,6 @@ public class DelphiCpdMapping implements CpdMapping {
     /**
      * @return Delphi language instance
      */
-
     public Language getLanguage() {
         return DelphiLanguage.instance;
     }

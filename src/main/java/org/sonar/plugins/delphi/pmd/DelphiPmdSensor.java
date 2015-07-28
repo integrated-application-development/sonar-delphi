@@ -37,10 +37,8 @@ import net.sourceforge.pmd.renderers.XMLRenderer;
 import org.apache.commons.io.FileUtils;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.resources.Project;
-import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.pmd.profile.DelphiRuleSets;
 import org.sonar.plugins.delphi.pmd.xml.DelphiPmdXmlReportParser;
@@ -54,14 +52,14 @@ import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
  */
 public class DelphiPmdSensor implements Sensor {
 
-    private final FileSystem fs;
     private final ResourcePerspectives perspectives;
+    private final DelphiProjectHelper delphiProjectHelper;
 
     /**
      * C-tor
      */
-    public DelphiPmdSensor(FileSystem fs, ResourcePerspectives perspectives) {
-        this.fs = fs;
+    public DelphiPmdSensor(DelphiProjectHelper delphiProjectHelper, ResourcePerspectives perspectives) {
+        this.delphiProjectHelper = delphiProjectHelper;
         this.perspectives = perspectives;
     }
 
@@ -74,7 +72,7 @@ public class DelphiPmdSensor implements Sensor {
         File reportFile = createPmdReport(project);
 
         // analysing report
-        DelphiPmdXmlReportParser parser = new DelphiPmdXmlReportParser(fs, perspectives);
+        DelphiPmdXmlReportParser parser = new DelphiPmdXmlReportParser(delphiProjectHelper, perspectives);
         parser.parse(reportFile);
     }
 
@@ -93,9 +91,9 @@ public class DelphiPmdSensor implements Sensor {
             RuleContext ruleContext = new RuleContext();
             RuleSets ruleSets = createRuleSets();
 
-            List<File> excluded = DelphiProjectHelper.getInstance().getExcludedSources(fs);
+            List<File> excluded = delphiProjectHelper.getExcludedSources();
 
-            List<DelphiProject> projects = DelphiProjectHelper.getInstance().getWorkgroupProjects(fs);
+            List<DelphiProject> projects = delphiProjectHelper.getWorkgroupProjects();
             for (DelphiProject delphiProject : projects) // for every .dproj
                                                          // file
             {
@@ -106,8 +104,7 @@ public class DelphiPmdSensor implements Sensor {
                         new ProgressReporterLogger(DelphiUtils.LOG));
                 for (File pmdFile : delphiProject.getSourceFiles()) {
                     progressReporter.progress();
-                    if (DelphiProjectHelper.getInstance().isExcluded(pmdFile,
-                            excluded)) {
+                    if (delphiProjectHelper.isExcluded(pmdFile, excluded)) {
                         continue;
                     }
                     pmd.processFile(pmdFile, ruleSets, ruleContext);
@@ -151,7 +148,7 @@ public class DelphiPmdSensor implements Sensor {
      */
 
     public boolean shouldExecuteOnProject(Project project) {
-        return fs.hasFiles(fs.predicates().hasLanguage(DelphiLanguage.KEY));
+        return delphiProjectHelper.shouldExecuteOnProject();
     }
 
     @Override

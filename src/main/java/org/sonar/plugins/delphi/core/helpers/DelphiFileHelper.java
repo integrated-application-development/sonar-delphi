@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
+import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.delphi.DelphiPlugin;
@@ -37,124 +38,121 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  */
 public class DelphiFileHelper {
 
-  protected Configuration configuration;
+    private final Configuration configuration;
+    private final FileSystem fs;
 
-  /**
-   * ctor
-   * 
-   * @param conf
-   *          Configuration
-   */
-  public DelphiFileHelper(Configuration conf) {
-    configuration = conf;
-  }
-
-  /**
-   * Is file in excluded list?
-   * 
-   * @param delphiFile
-   *          File to check
-   * @param excludedSources
-   *          Excluded paths
-   * @return True if file is excluded, false otherwise
-   */
-  public boolean isExcluded(String fileName, List<File> excludedSources) {
-    if (excludedSources == null) {
-      return false;
-    }
-    for (File excludedDir : excludedSources) {
-      String normalizedFileName = DelphiUtils.normalizeFileName(fileName.toLowerCase());
-      String excludedDirNormalizedPath = DelphiUtils.normalizeFileName(excludedDir.getAbsolutePath().toLowerCase());
-      if (normalizedFileName.startsWith(excludedDirNormalizedPath) ) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Is file excluded?
-   * 
-   * @param delphiFile
-   *          File to check
-   * @param excludedSources
-   *          List of excluded sources
-   * @return True if file is excluded, false otherwise
-   */
-  public boolean isExcluded(File delphiFile, List<File> excludedSources) {
-    return isExcluded(delphiFile.getAbsolutePath(), excludedSources);
-  }
-
-  /**
-   * Gets code coverage excluded directories
-   * 
-   * @return List of excluded directories, empty list if none
-   */
-  public List<File> getCodeCoverageExcludedDirectories(Project project) {
-    List<File> list = new ArrayList<File>();
-    if (configuration == null) {
-      return list;
+    /**
+     * ctor
+     * 
+     * @param conf Configuration
+     */
+    public DelphiFileHelper(Configuration conf, FileSystem fs) {
+        this.configuration = conf;
+        this.fs = fs;
     }
 
-    String[] sources = configuration.getStringArray(DelphiPlugin.CC_EXCLUDED_KEY);
-    if (sources == null || sources.length == 0) {
-      return list;
+    /**
+     * Is file in excluded list?
+     * 
+     * @param delphiFile File to check
+     * @param excludedSources Excluded paths
+     * @return True if file is excluded, false otherwise
+     */
+    public boolean isExcluded(String fileName, List<File> excludedSources) {
+        if (excludedSources == null) {
+            return false;
+        }
+        for (File excludedDir : excludedSources) {
+            String normalizedFileName = DelphiUtils.normalizeFileName(fileName.toLowerCase());
+            String excludedDirNormalizedPath = DelphiUtils.normalizeFileName(excludedDir.getAbsolutePath()
+                    .toLowerCase());
+            if (normalizedFileName.startsWith(excludedDirNormalizedPath)) {
+                return true;
+            }
+        }
+        return false;
     }
-    ProjectFileSystem fileSystem = project.getFileSystem();
-    for (String path : sources) {
-      if (StringUtils.isEmpty(path)) {
-        continue;
-      }
-      File excluded = DelphiUtils.resolveAbsolutePath(fileSystem.getBasedir().getAbsolutePath(), path.trim());
-      if ( !excluded.exists()) {
-        DelphiUtils.LOG.warn("Excluded code coverage path does not exist: " + excluded.getAbsolutePath());
-      } else if ( !excluded.isDirectory()) {
-        DelphiUtils.LOG.warn("Excluded code coverage path is not a directory: " + excluded.getAbsolutePath());
-      } else {
-        list.add(excluded);
-      }
-    }
-    return list;
-  }
 
-  /**
-   * Get unit test directories
-   * 
-   * @return Test directories, or empty list
-   */
-  public List<File> getTestDirectories(Project project) {
-    
-    List<File> testDirs = project.getFileSystem().getTestDirs();
-    for(File directory : testDirs) {
-      if(!directory.exists()) {
-        DelphiUtils.LOG.warn("Test path does not exist: " + directory.getAbsolutePath());
-      }
+    /**
+     * Is file excluded?
+     * 
+     * @param delphiFile File to check
+     * @param excludedSources List of excluded sources
+     * @return True if file is excluded, false otherwise
+     */
+    public boolean isExcluded(File delphiFile, List<File> excludedSources) {
+        return isExcluded(delphiFile.getAbsolutePath(), excludedSources);
     }
-    
-    return testDirs;
-  }
 
-  /**
-   * Checks is providen file is a unit test file
-   * 
-   * @param delphiFile
-   *          File to check
-   * @param testDirectories
-   *          Test directories
-   * @return True if file is unit test, false otherwise
-   */
-  public boolean isTestFile(File delphiFile, List<File> testDirectories) {
-    if (delphiFile == null) {
-      throw new IllegalStateException("No file passed to DelphiLanguage::isTestFile()");
-    } else if (testDirectories == null || testDirectories.isEmpty()) {
-      return false;
+    /**
+     * Gets code coverage excluded directories
+     * 
+     * @return List of excluded directories, empty list if none
+     */
+    public List<File> getCodeCoverageExcludedDirectories(Project project) {
+        List<File> list = new ArrayList<File>();
+        if (configuration == null) {
+            return list;
+        }
+
+        String[] sources = configuration.getStringArray(DelphiPlugin.CC_EXCLUDED_KEY);
+        if (sources == null || sources.length == 0) {
+            return list;
+        }
+        ProjectFileSystem fileSystem = project.getFileSystem();
+        for (String path : sources) {
+            if (StringUtils.isEmpty(path)) {
+                continue;
+            }
+            File excluded = DelphiUtils.resolveAbsolutePath(fileSystem.getBasedir().getAbsolutePath(), path.trim());
+            if (!excluded.exists()) {
+                DelphiUtils.LOG.warn("Excluded code coverage path does not exist: " + excluded.getAbsolutePath());
+            } else if (!excluded.isDirectory()) {
+                DelphiUtils.LOG.warn("Excluded code coverage path is not a directory: " + excluded.getAbsolutePath());
+            } else {
+                list.add(excluded);
+            }
+        }
+        return list;
     }
-    for (File directory : testDirectories) {
-      if (directory.exists() && delphiFile.getAbsolutePath().toLowerCase().startsWith(directory.getAbsolutePath().toLowerCase())) {
-        return true;
-      }
+
+    /**
+     * Get unit test directories
+     * 
+     * @return Test directories, or empty list
+     */
+    public List<File> getTestDirectories(Project project) {
+
+        List<File> testDirs = project.getFileSystem().getTestDirs();
+        for (File directory : testDirs) {
+            if (!directory.exists()) {
+                DelphiUtils.LOG.warn("Test path does not exist: " + directory.getAbsolutePath());
+            }
+        }
+
+        return testDirs;
     }
-    return false;
-  }
+
+    /**
+     * Checks is providen file is a unit test file
+     * 
+     * @param delphiFile File to check
+     * @param testDirectories Test directories
+     * @return True if file is unit test, false otherwise
+     */
+    public boolean isTestFile(File delphiFile, List<File> testDirectories) {
+        if (delphiFile == null) {
+            throw new IllegalStateException("No file passed to DelphiLanguage::isTestFile()");
+        } else if (testDirectories == null || testDirectories.isEmpty()) {
+            return false;
+        }
+        for (File directory : testDirectories) {
+            if (directory.exists()
+                    && delphiFile.getAbsolutePath().toLowerCase().startsWith(directory.getAbsolutePath().toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

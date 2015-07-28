@@ -35,39 +35,47 @@ import org.sonar.plugins.delphi.antlr.analyzer.impl.UnitAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.impl.VisibilityAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.impl.operations.AdvanceNodeOperation;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
+import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 
 /**
  * Class for analyzing a DelphiLanguage AST tree
  */
 public class DelphiASTAnalyzer implements ASTAnalyzer {
 
-  private CodeAnalysisResults result;
-  private CodeTree code;
+    private CodeAnalysisResults result;
+    private CodeTree code;
+    private DelphiProjectHelper delphiProjectHelper;
 
-  public void analyze(ASTTree tree) {
-    result = new CodeAnalysisResults();
-    code = new CodeTree(new CodeNode<ASTTree>(tree), new CodeNode<Tree>(tree.getChild(0)));
-
-    CodeAnalyzer analyzer = new UnitAnalyzer();
-    analyzer.chain(new IncludeAnalyzer()).chain(new InterfaceAnalyzer()).chain(new VisibilityAnalyzer()).chain(new TypeAnalyzer())
-        .chain(new TypeInheritanceAnalyzer()).chain(new TypeFieldsAnalyzer()).chain(new TypePropertyAnalyzer())
-        .chain(new FunctionAnalyzer()).chain(new FunctionBodyAnalyzer(result)).chain(new FunctionParametersAnalyzer());
-
-    CodeNode<Tree> codeNode = code.getCurrentCodeNode();
-    AdvanceNodeOperation advance = new AdvanceNodeOperation();
-    while (codeNode.isValid()) {
-      analyzer.analyze(code, result);
-      codeNode = advance.execute(codeNode.getNode());
-      code.setCurrentNode(codeNode);
+    public DelphiASTAnalyzer(DelphiProjectHelper delphiProjectHelper) {
+        this.delphiProjectHelper = delphiProjectHelper;
     }
-  }
 
-  public CodeAnalysisResults getResults() {
-    return result;
-  }
+    public void analyze(ASTTree tree) {
+        result = new CodeAnalysisResults();
+        code = new CodeTree(new CodeNode<ASTTree>(tree), new CodeNode<Tree>(tree.getChild(0)));
 
-  public CodeTree getCode() {
-    return code;
-  }
+        CodeAnalyzer analyzer = new UnitAnalyzer();
+        analyzer.chain(new IncludeAnalyzer()).chain(new InterfaceAnalyzer()).chain(new VisibilityAnalyzer())
+                .chain(new TypeAnalyzer())
+                .chain(new TypeInheritanceAnalyzer()).chain(new TypeFieldsAnalyzer()).chain(new TypePropertyAnalyzer())
+                .chain(new FunctionAnalyzer()).chain(new FunctionBodyAnalyzer(result, delphiProjectHelper))
+                .chain(new FunctionParametersAnalyzer());
+
+        CodeNode<Tree> codeNode = code.getCurrentCodeNode();
+        AdvanceNodeOperation advance = new AdvanceNodeOperation();
+        while (codeNode.isValid()) {
+            analyzer.analyze(code, result);
+            codeNode = advance.execute(codeNode.getNode());
+            code.setCurrentNode(codeNode);
+        }
+    }
+
+    public CodeAnalysisResults getResults() {
+        return result;
+    }
+
+    public CodeTree getCode() {
+        return code;
+    }
 
 }

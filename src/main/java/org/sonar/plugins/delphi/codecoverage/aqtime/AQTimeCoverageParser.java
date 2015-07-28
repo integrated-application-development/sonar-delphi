@@ -21,13 +21,11 @@
  */
 package org.sonar.plugins.delphi.codecoverage.aqtime;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
@@ -35,6 +33,7 @@ import org.sonar.api.measures.PersistenceMode;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.codecoverage.CoverageFileData;
 import org.sonar.plugins.delphi.codecoverage.DelphiCodeCoverageParser;
+import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.ProgressReporter;
 import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
@@ -47,10 +46,10 @@ public class AQTimeCoverageParser implements DelphiCodeCoverageParser {
     private String prefix = ""; // table prefix
     private List<InputFile> sourceFiles;
     private Map<String, String> connectionProperties;
-    private FileSystem fs;
+    private DelphiProjectHelper delphiProjectHelper;
 
-    public AQTimeCoverageParser(FileSystem fs) {
-        this.fs = fs;
+    public AQTimeCoverageParser(DelphiProjectHelper delphiProjectHelper) {
+        this.delphiProjectHelper = delphiProjectHelper;
     }
 
     public void parse(SensorContext context) {
@@ -102,7 +101,7 @@ public class AQTimeCoverageParser implements DelphiCodeCoverageParser {
             String path = processFileName(aqTimeCodeCoverage.getCoveredFileName(), sourceFiles);
 
             if (resource == null || !resource.absolutePath().equals(aqTimeCodeCoverage.getCoveredFileName())) {
-                resource = fs.inputFile(fs.predicates().is(new File(path)));
+                resource = delphiProjectHelper.getFile(path);
                 if (resource == null) {
                     continue;
                 }

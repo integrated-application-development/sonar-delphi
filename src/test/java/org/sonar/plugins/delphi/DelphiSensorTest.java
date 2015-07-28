@@ -35,12 +35,13 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.api.rules.RuleFinder;
 import org.sonar.plugins.delphi.core.DelphiFile;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
+import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.debug.ProjectMetricsXMLParser;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -52,7 +53,8 @@ public class DelphiSensorTest {
     private DelphiSensor sensor = null;
     private File baseDir = null;
     private Map<String, Integer> keyMetricIndex = null;
-    private FileSystem fs;
+    private DelphiProjectHelper delphiProjectHelper;
+    private RuleFinder ruleFinder;
 
     private static final String ROOT_NAME = "/org/sonar/plugins/delphi/SimpleDelphiProject";
 
@@ -60,7 +62,6 @@ public class DelphiSensorTest {
     public void init() {
 
         project = mock(Project.class);
-        fs = mock(FileSystem.class);
 
         ProjectFileSystem pfs = mock(ProjectFileSystem.class);
 
@@ -96,7 +97,7 @@ public class DelphiSensorTest {
         when(pfs.getSourceDirs()).thenReturn(sourceDirs);
         when(pfs.getReportOutputDir()).thenReturn(reportDir);
 
-        sensor = new DelphiSensor(fs);
+        sensor = new DelphiSensor(delphiProjectHelper, ruleFinder);
     }
 
     @Test

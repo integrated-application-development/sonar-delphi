@@ -23,7 +23,6 @@ package org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,8 +31,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.sonar.api.batch.fs.FilePredicates;
-import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
@@ -41,7 +39,7 @@ public class DelphiCoverageToolParserTest
 {
     private DebugSensorContext context;
     private File baseDir;
-    private FileSystem fs;
+    private DelphiProjectHelper delphiProjectHelper;
 
     private static final String ROOT_NAME = "/org/sonar/plugins/delphi/SimpleDelphiProject";
     private static final String REPORT_FILE = "/org/sonar/plugins/delphi/SimpleDelphiProject/reports/Coverage.xml";
@@ -51,24 +49,20 @@ public class DelphiCoverageToolParserTest
 
         context = new DebugSensorContext();
 
-        FileSystem fs = mock(FileSystem.class);
-        FilePredicates p = mock(FilePredicates.class);
+        DelphiProjectHelper delphiProjectHelper = mock(DelphiProjectHelper.class);
 
         baseDir = DelphiUtils.getResource(ROOT_NAME);
 
         List<File> sourceDirs = new ArrayList<File>();
 
         sourceDirs.add(baseDir); // include baseDir
-
-        when(fs.baseDir()).thenReturn(baseDir);
-        when(fs.predicates()).thenReturn(p);
     }
 
     @Test
     @Ignore("Remove static method dependency. Use Dependency Injection")
     public void parseTest() {
         File reportFile = DelphiUtils.getResource(REPORT_FILE);
-        DelphiCodeCoverageToolParser parser = new DelphiCodeCoverageToolParser(reportFile, fs);
+        DelphiCodeCoverageToolParser parser = new DelphiCodeCoverageToolParser(reportFile, delphiProjectHelper);
         parser.parse(context);
 
         String coverage_names[] = {"Globals.pas:coverage", "MainWindow.pas:coverage"};

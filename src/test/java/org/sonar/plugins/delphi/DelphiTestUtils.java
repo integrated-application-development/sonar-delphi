@@ -19,23 +19,19 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.codecoverage;
+package org.sonar.plugins.delphi;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import org.junit.Test;
-import org.sonar.api.resources.Project;
-import org.sonar.plugins.delphi.DelphiTestUtils;
-import org.sonar.plugins.delphi.debug.DebugConfiguration;
+import org.mockito.Mockito;
+import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 
-public class CodeCoverageSensorTest {
+public class DelphiTestUtils {
 
-    @Test
-    public void shouldExecuteOnProjectTest() {
-        Project project = mock(Project.class);
-
-        assertTrue(new CodeCoverageSensor(new DebugConfiguration(), DelphiTestUtils.mockProjectHelper())
-                .shouldExecuteOnProject(project));
+    public static DelphiProjectHelper mockProjectHelper() {
+        DelphiProjectHelper mock = Mockito.mock(DelphiProjectHelper.class);
+        when(mock.shouldExecuteOnProject()).thenReturn(true);
+        return mock;
     }
+
 }

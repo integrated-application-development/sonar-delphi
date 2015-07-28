@@ -26,24 +26,23 @@ import javax.xml.stream.XMLStreamException;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
 import org.codehaus.staxmate.in.SMInputCursor;
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.utils.StaxParser.XmlStreamHandler;
 import org.sonar.plugins.delphi.codecoverage.CoverageFileData;
-import org.sonar.plugins.delphi.core.DelphiFile;
+import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiCoverageToolParserStreamHandler implements XmlStreamHandler
 {
     private final SensorContext context;
-    private final FileSystem fs;
+    private final DelphiProjectHelper delphiProjectHelper;
 
-    public DelphiCoverageToolParserStreamHandler(SensorContext context, FileSystem fs) {
+    public DelphiCoverageToolParserStreamHandler(SensorContext context, DelphiProjectHelper delphiProjectHelper) {
         this.context = context;
-        this.fs = fs;
+        this.delphiProjectHelper = delphiProjectHelper;
     }
 
     public void stream(SMHierarchicCursor rootCursor) throws XMLStreamException {
@@ -81,7 +80,7 @@ public class DelphiCoverageToolParserStreamHandler implements XmlStreamHandler
         try {
             String fileName = fileCursor.getAttrValue("name");
 
-            InputFile sourceFile = DelphiFile.findFileInDirectories(fileName, fs);
+            InputFile sourceFile = delphiProjectHelper.findFileInDirectories(fileName);
 
             int totalLines = 0;
             int coveredLines = 0;

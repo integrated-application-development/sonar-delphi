@@ -29,12 +29,10 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.codecoverage.aqtime.AQTimeCoverageParser;
 import org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
-import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
@@ -61,10 +59,11 @@ public class CodeCoverageSensor implements Sensor
     private Map<String, String> jdbcProperties = new HashMap<String, String>();
     private CodeCoverageTool usedCodeCoverageTool = CodeCoverageTool.None;
     private File codeCoverageFile;
-    private FileSystem fs;
 
-    public CodeCoverageSensor(Configuration configuration, FileSystem fs) {
-        this.fs = fs;
+    private final DelphiProjectHelper delphiProjectHelper;
+
+    public CodeCoverageSensor(Configuration configuration, DelphiProjectHelper delphiProjectHelper) {
+        this.delphiProjectHelper = delphiProjectHelper;
         readJdbcFromConfiguration(configuration);
         readCoverageToolFromConfiguration(configuration);
     }
@@ -73,7 +72,7 @@ public class CodeCoverageSensor implements Sensor
      * {@inheritDoc}
      */
     public boolean shouldExecuteOnProject(Project project) {
-        return fs.hasFiles(fs.predicates().hasLanguage(DelphiLanguage.KEY));
+        return delphiProjectHelper.shouldExecuteOnProject();
     }
 
     /**
@@ -134,16 +133,16 @@ public class CodeCoverageSensor implements Sensor
     private DelphiCodeCoverageParser createParser(CodeCoverageTool usedTool) {
         if (usedTool.equals(CodeCoverageTool.AQTime)) {
             if (areJdbcPropertiesValid()) {
-                AQTimeCoverageParser parser = new AQTimeCoverageParser(fs);
+                AQTimeCoverageParser parser = new AQTimeCoverageParser(delphiProjectHelper);
                 parser.setConnectionProperties(jdbcProperties);
-                parser.setSourceFiles(DelphiProjectHelper.getInstance().mainFiles(fs));
+                parser.setSourceFiles(delphiProjectHelper.mainFiles());
 
                 return parser;
             }
             return null;
         }
         if (usedTool.equals(CodeCoverageTool.DelphiCodeCoverage)) {
-            DelphiCodeCoverageParser parser = new DelphiCodeCoverageToolParser(codeCoverageFile, fs);
+            DelphiCodeCoverageParser parser = new DelphiCodeCoverageToolParser(codeCoverageFile, delphiProjectHelper);
             return parser;
         }
 

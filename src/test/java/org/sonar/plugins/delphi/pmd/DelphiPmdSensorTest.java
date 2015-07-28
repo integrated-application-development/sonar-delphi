@@ -41,6 +41,7 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.rules.Violation;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
+import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
@@ -81,6 +82,7 @@ public class DelphiPmdSensorTest {
     private DelphiPmdSensor sensor;
     private FileSystem fs;
     private ResourcePerspectives perspectives;
+    private DelphiProjectHelper delphiProjectHelper;
 
     @Before
     public void init() {
@@ -107,7 +109,7 @@ public class DelphiPmdSensorTest {
         when(pfs.getSourceFiles(DelphiLanguage.instance)).thenReturn(sourceFiles);
         when(pfs.getSourceDirs()).thenReturn(sourceFiles);
 
-        sensor = new DelphiPmdSensor(fs, perspectives);
+        sensor = new DelphiPmdSensor(delphiProjectHelper, perspectives);
     }
 
     @Test

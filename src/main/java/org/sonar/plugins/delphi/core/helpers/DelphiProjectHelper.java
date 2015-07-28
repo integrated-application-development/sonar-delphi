@@ -22,6 +22,7 @@
 package org.sonar.plugins.delphi.core.helpers;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,19 +46,12 @@ import com.google.common.collect.Lists;
 /**
  * Class that helps get the maven/ant configuration from .xml file
  */
+// TODO Replace inheritance by composition
 public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtension {
 
-    private RuleFinder finder;
-    private static DelphiProjectHelper instance = new DelphiProjectHelper();
-
-    /**
-     * Default ctor, set everything to null, used for Unit Tests
-     */
-    private DelphiProjectHelper() {
-        super(null);
-        finder = null;
-        instance = this;
-    }
+    private final Configuration configuration;
+    private final RuleFinder ruleFinder;
+    private final FileSystem fs;
 
     /**
      * ctor used by Sonar
@@ -65,24 +59,18 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
      * @param configuration
      * @param ruleFinder
      */
-    public DelphiProjectHelper(Configuration configuration, RuleFinder ruleFinder) {
-        super(configuration);
-        finder = ruleFinder;
-        instance = this;
-    }
-
-    /**
-     * @return singleton instance of class
-     */
-    public static DelphiProjectHelper getInstance() {
-        return instance;
+    public DelphiProjectHelper(Configuration configuration, RuleFinder ruleFinder, FileSystem fs) {
+        super(configuration, fs);
+        this.configuration = configuration;
+        this.ruleFinder = ruleFinder;
+        this.fs = fs;
     }
 
     /**
      * @return Rule finder
      */
     public RuleFinder getRuleFinder() {
-        return finder;
+        return ruleFinder;
     }
 
     /**
@@ -105,7 +93,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
      * @param fileSystem Project file system
      * @return List of include directories
      */
-    public List<File> getIncludeDirectories(FileSystem fileSystem) {
+    public List<File> getIncludeDirectories() {
         List<File> result = new ArrayList<File>();
         if (configuration == null) {
             return result;
@@ -116,7 +104,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
                 if (StringUtils.isEmpty(path)) {
                     continue;
                 }
-                File included = DelphiUtils.resolveAbsolutePath(fileSystem.baseDir().getAbsolutePath(), path.trim());
+                File included = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
                 if (!included.exists()) {
                     DelphiUtils.LOG.warn("Include directory does not exist: " + included.getAbsolutePath());
                 } else if (!included.isDirectory()) {
@@ -136,7 +124,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
      *
      * @return List of excluded source files and directories
      */
-    public List<File> getExcludedSources(FileSystem fileSystem) {
+    public List<File> getExcludedSources() {
         List<File> result = new ArrayList<File>();
         if (configuration == null) {
             return result;
@@ -147,7 +135,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
                 if (StringUtils.isEmpty(path)) {
                     continue;
                 }
-                File excluded = DelphiUtils.resolveAbsolutePath(fileSystem.baseDir().getAbsolutePath(), path.trim());
+                File excluded = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
                 result.add(excluded);
                 if (!excluded.exists()) {
                     DelphiUtils.LOG.warn("Exclude directory does not exist: " + excluded.getAbsolutePath());
@@ -201,7 +189,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
      *
      * @return List of DelphiLanguage projects
      */
-    public List<DelphiProject> getWorkgroupProjects(FileSystem fs) {
+    public List<DelphiProject> getWorkgroupProjects() {
         List<DelphiProject> list = new ArrayList<DelphiProject>();
 
         String dprojPath = getProjectFile();
@@ -220,8 +208,8 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
                 DelphiUtils.LOG.error(e.getMessage());
                 DelphiUtils.LOG.error("Skipping .groupproj reading, default configuration assumed.");
                 DelphiProject newProject = new DelphiProject("Default Project");
-                newProject.setIncludeDirectories(getIncludeDirectories(fs));
-                newProject.setSourceFiles(mainFiles(fs));
+                newProject.setIncludeDirectories(getIncludeDirectories());
+                newProject.setSourceFiles(mainFiles());
                 list.clear();
                 list.add(newProject);
             }
@@ -238,19 +226,37 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
         else // No .dproj files, create default project
         {
             DelphiProject newProject = new DelphiProject("Default Project");
-            newProject.setIncludeDirectories(getIncludeDirectories(fs));
-            newProject.setSourceFiles(mainFiles(fs));
+            newProject.setIncludeDirectories(getIncludeDirectories());
+            newProject.setSourceFiles(mainFiles());
             list.add(newProject);
         }
 
         return list;
     }
 
-    public List<InputFile> mainFiles(FileSystem fs) {
+    public List<InputFile> mainFiles() {
         FilePredicates p = fs.predicates();
         Iterable<InputFile> inputFiles = fs.inputFiles(p.and(p.hasLanguage(DelphiLanguage.KEY),
                 p.hasType(InputFile.Type.MAIN)));
         return Lists.newArrayList(inputFiles);
+    }
+
+    public boolean shouldExecuteOnProject() {
+        return fs.hasFiles(fs.predicates().hasLanguage(DelphiLanguage.KEY));
+    }
+
+    public InputFile getFile(String path) {
+        return fs.inputFile(fs.predicates().is(new File(path)));
+    }
+
+    public InputFile findFileInDirectories(String fileName) throws FileNotFoundException {
+        for (InputFile inputFile : mainFiles()) {
+            if (inputFile.file().getName().equalsIgnoreCase(fileName)) {
+                return inputFile;
+            }
+        }
+
+        throw new FileNotFoundException(fileName);
     }
 
 }

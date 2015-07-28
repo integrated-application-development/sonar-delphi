@@ -28,15 +28,12 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.resources.Scopes;
 import org.sonar.api.utils.WildcardPattern;
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 /**
@@ -321,18 +318,6 @@ public class DelphiFile extends Resource {
             File result = getSourceFileFromName(dir, fileName);
             if (result != null) {
                 return result;
-            }
-        }
-
-        throw new FileNotFoundException(fileName);
-    }
-
-    public static InputFile findFileInDirectories(String fileName, FileSystem fs) throws FileNotFoundException {
-        List<InputFile> mainFiles = DelphiProjectHelper.getInstance().mainFiles(fs);
-
-        for (InputFile inputFile : mainFiles) {
-            if (inputFile.file().getName().equalsIgnoreCase(fileName)) {
-                return inputFile;
             }
         }
 

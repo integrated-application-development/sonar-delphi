@@ -30,6 +30,7 @@ import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
@@ -39,46 +40,46 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
 
 public class FunctionBodyAnalyzerTest {
 
-  private static final Tree EMPTY_NODE = new CommonTree(new CommonToken(0, "nil"));
-  private static final Tree BEGIN_NODE = new CommonTree(new CommonToken(LexerMetrics.BEGIN.toMetrics(), "begin"));
+    private static final Tree EMPTY_NODE = new CommonTree(new CommonToken(0, "nil"));
+    private static final Tree BEGIN_NODE = new CommonTree(new CommonToken(LexerMetrics.BEGIN.toMetrics(), "begin"));
 
-  FunctionBodyAnalyzer analyzer;
-  CodeAnalysisResults results;
-  CodeTree codeTree;
+    FunctionBodyAnalyzer analyzer;
+    CodeAnalysisResults results;
+    CodeTree codeTree;
 
-  @Before
-  public void setup() {
-    ASTTree ast = mock(ASTTree.class);
+    @Before
+    public void setup() {
+        ASTTree ast = mock(ASTTree.class);
 
-    results = new CodeAnalysisResults();
-    analyzer = new FunctionBodyAnalyzer(results);
-    codeTree = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(EMPTY_NODE));
-  }
-
-  @Test
-  public void constructorTest() {
-    try {
-      new FunctionBodyAnalyzer(null);
-      fail("No exception was caught");
-    } catch (IllegalArgumentException e) {
-      assertEquals(IllegalArgumentException.class, e.getClass());
+        results = new CodeAnalysisResults();
+        analyzer = new FunctionBodyAnalyzer(results, DelphiTestUtils.mockProjectHelper());
+        codeTree = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(EMPTY_NODE));
     }
-  }
 
-  @Test
-  public void canAnalyzeTest() {
-    assertEquals(false, analyzer.canAnalyze(codeTree));
+    @Test
+    public void constructorTest() {
+        try {
+            new FunctionBodyAnalyzer(null, DelphiTestUtils.mockProjectHelper());
+            fail("No exception was caught");
+        } catch (IllegalArgumentException e) {
+            assertEquals(IllegalArgumentException.class, e.getClass());
+        }
+    }
 
-    results.setActiveFunction(new DelphiFunction("testFunction"));
-    assertEquals(false, analyzer.canAnalyze(codeTree));
+    @Test
+    public void canAnalyzeTest() {
+        assertEquals(false, analyzer.canAnalyze(codeTree));
 
-    codeTree.setCurrentNode(new CodeNode<Tree>(BEGIN_NODE));
-    assertEquals(true, analyzer.canAnalyze(codeTree));
-  }
+        results.setActiveFunction(new DelphiFunction("testFunction"));
+        assertEquals(false, analyzer.canAnalyze(codeTree));
 
-  @Test
-  public void doAnalyzeTest() {
+        codeTree.setCurrentNode(new CodeNode<Tree>(BEGIN_NODE));
+        assertEquals(true, analyzer.canAnalyze(codeTree));
+    }
 
-  }
+    @Test
+    public void doAnalyzeTest() {
+
+    }
 
 }
