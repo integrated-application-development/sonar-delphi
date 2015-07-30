@@ -1,26 +1,4 @@
 <ruleset>
-	<description></description>
-	
-  	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ThenTryRule" message="No 'begin' before 'try' at 'if' statement" 
-  	name="Then Try Rule">
-	    <description>You always should place 'begin' statement after 'try', this helps to prevent errors.</description>
- 		<example><![CDATA[
-<b>try</b>
-( ... )		//WRONG, no begin statement
-<b>except</b>
-( ... )
-<b>end;</b>
-
-<b>try</b>
-	<b>begin</b>	//GOOD
-	(...)
-	<b>end;</b>
-<b>except</b>
-(...)
-<b>end;
- 		]]></example>
-	</rule>
-
   	<!--  YOU CAN COPY THIS RULE, JUST CHANGE THE PARAMETERS YOU WISH TO SEARCH FOR -->
   	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.CountRule" message="Only one class in a file" 
   	name="One Class Per File Rule">
@@ -103,19 +81,6 @@
 
 <b>procedure</b> foo2(x: integer); <b>overload</b>;	//GOOD
  		]]></example>      	
-	</rule>
-	
-	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="No function return type specified" 
-	name="No Function Return Type Rule">
-	    <description>All functions should have return type specified.</description>
-    	<properties>
-    		<property name="xpath"><value>//function/TkFunctionReturn[count(child::*)=0]</value></property>
-    	</properties>
-    	<example><![CDATA[
-<b>function</b> TMainWindow.foo(x : byte);		//WRONG, no return type
-
-<b>function</b> TMainWindow.foo(x : byte): integer;	//GOOD
- 		]]></example>      	  	
 	</rule>
 	
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Interface name must begin with 'I' letter" 
