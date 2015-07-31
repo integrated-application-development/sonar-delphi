@@ -64,6 +64,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
         this.configuration = configuration;
         this.ruleFinder = ruleFinder;
         this.fs = fs;
+        DelphiUtils.LOG.info("Delphi Project Helper creation!!!");
     }
 
     /**
@@ -257,6 +258,14 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
         }
 
         throw new FileNotFoundException(fileName);
+    }
+
+    public File baseDir() {
+        return this.fs.baseDir();
+    }
+
+    public File workDir() {
+        return fs.workDir();
     }
 
 }

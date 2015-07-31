@@ -24,6 +24,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 import java.util.List;
 
 import net.sourceforge.pmd.RuleContext;
+import net.sourceforge.pmd.properties.StringProperty;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.xml.dtm.DTM;
@@ -41,79 +42,81 @@ import org.w3c.dom.Node;
  */
 public class XPathRule extends DelphiRule {
 
-  private static Document cachedData = null; // last cached document
-  private static String cachedFile = ""; // last cached file name
+    private static final StringProperty XPATH = new StringProperty("xpath", "The xpath expression", "", 1.0f);
 
-  /**
-   * Process the whole file with an XPath expression
-   * 
-   * @param node
-   *          Any node in an AST tree
-   * @param data
-   *          Data
-   */
+    private static Document cachedData = null; // last cached document
+    private static String cachedFile = ""; // last cached file name
 
-  @Override
-  public Object visit(DelphiPMDNode node, Object data) {
-    String xPathString = getStringProperty("xpath"); // get xpath string
-    if (StringUtils.isEmpty(xPathString)) {
-      return data;
-    }
-    Document doc = getCachedDocument(node.getASTTree());
-    try {
-      XNodeSet result = (XNodeSet) XPathAPI.eval(doc, xPathString);
-      int nodeIndex = 0;
-      int nodeId = DTM.NULL;
-      while ((nodeId = result.item(nodeIndex++)) != DTM.NULL) {
-        Node resultNode = result.getDTM(nodeId).getNode(nodeId);
-        String className = resultNode.getAttributes().getNamedItem("class").getTextContent();
-        String methodName = resultNode.getAttributes().getNamedItem("method").getTextContent();
-        String packageName = resultNode.getAttributes().getNamedItem("package").getTextContent();
-        int line = Integer.valueOf(resultNode.getAttributes().getNamedItem("line").getTextContent());
-        String codeLine = node.getASTTree().getFileSourceLine(line);
+    /**
+     * Process the whole file with an XPath expression
+     * 
+     * @param node Any node in an AST tree
+     * @param data Data
+     */
 
-        if (codeLine.trim().endsWith("//NOSONAR")) {
-          continue;
+    @Override
+    public Object visit(DelphiPMDNode node, Object data) {
+        String xPathString = getStringProperty(XPATH);
+        if (StringUtils.isEmpty(xPathString)) {
+            return data;
+        }
+        Document doc = getCachedDocument(node.getASTTree());
+        try {
+            XNodeSet result = (XNodeSet) XPathAPI.eval(doc, xPathString);
+            int nodeIndex = 0;
+            int nodeId = DTM.NULL;
+            while ((nodeId = result.item(nodeIndex++)) != DTM.NULL) {
+                Node resultNode = result.getDTM(nodeId).getNode(nodeId);
+                String className = resultNode.getAttributes().getNamedItem("class").getTextContent();
+                String methodName = resultNode.getAttributes().getNamedItem("method").getTextContent();
+                String packageName = resultNode.getAttributes().getNamedItem("package").getTextContent();
+                int line = Integer.valueOf(resultNode.getAttributes().getNamedItem("line").getTextContent());
+                String codeLine = node.getASTTree().getFileSourceLine(line);
+
+                if (codeLine.trim().endsWith("//NOSONAR")) {
+                    continue;
+                }
+
+                int column = Integer.valueOf(resultNode.getAttributes().getNamedItem("column").getTextContent());
+                String msg = this.getMessage().replaceAll("\\{\\}", resultNode.getTextContent()); // violation
+                                                                                                  // message
+                DelphiRuleViolation violation = new DelphiRuleViolation(this, (RuleContext) data, className,
+                        methodName, packageName, line, column,
+                        msg);
+                addViolation(data, violation);
+            }
+        } catch (Exception e) {
+            DelphiUtils.LOG.debug("XPath error: '" + e.getMessage() + "' at rule " + getName());
         }
 
-        int column = Integer.valueOf(resultNode.getAttributes().getNamedItem("column").getTextContent());
-        String msg = this.getMessage().replaceAll("\\{\\}", resultNode.getTextContent()); // violation message
-        DelphiRuleViolation violation = new DelphiRuleViolation(this, (RuleContext) data, className, methodName, packageName, line, column,
-            msg);
-        addViolation(data, violation);
-      }
-    } catch (Exception e) {
-      DelphiUtils.LOG.debug("XPath error: '" + e.getMessage() + "' at rule " + getName());
+        return data;
     }
 
-    return data;
-  }
+    /**
+     * Preform only one visit per file, not per node cause we parse the whole
+     * file nodes at a time
+     */
 
-  /**
-   * Preform only one visit per file, not per node cause we parse the whole file nodes at a time
-   */
-
-  @Override
-  protected void visitAll(@SuppressWarnings("rawtypes") List acus, RuleContext ctx) {
-    init();
-    if (acus.iterator().hasNext()) {
-      visit((DelphiPMDNode) acus.iterator().next(), ctx);
+    @Override
+    protected void visitAll(@SuppressWarnings("rawtypes") List acus, RuleContext ctx) {
+        init();
+        if (acus.iterator().hasNext()) {
+            visit((DelphiPMDNode) acus.iterator().next(), ctx);
+        }
     }
-  }
 
-  /**
-   * Gets the cached AST document, create new if not found in cache
-   * 
-   * @param astTree
-   *          AST tree
-   * @return AST tree document
-   */
-  private Document getCachedDocument(ASTTree astTree) {
-    if ( !astTree.getFileName().equals(cachedFile)) {
-      cachedData = astTree.generateDocument();
-      cachedFile = astTree.getFileName();
+    /**
+     * Gets the cached AST document, create new if not found in cache
+     * 
+     * @param astTree AST tree
+     * @return AST tree document
+     */
+    private Document getCachedDocument(ASTTree astTree) {
+        if (!astTree.getFileName().equals(cachedFile)) {
+            cachedData = astTree.generateDocument();
+            cachedFile = astTree.getFileName();
+        }
+        return cachedData;
     }
-    return cachedData;
-  }
 
 }

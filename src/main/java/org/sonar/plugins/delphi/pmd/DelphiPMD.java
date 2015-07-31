@@ -45,91 +45,82 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  */
 public class DelphiPMD {
 
-  private Report report = new Report();
+    private Report report = new Report();
 
-  /**
-   * Processes the file read by the reader against the rule set.
-   * 
-   * @param reader
-   *          input stream reader
-   * @param ruleSets
-   *          set of rules to process against the file
-   * @param ctx
-   *          context in which PMD is operating. This contains the Renderer and whatnot
-   * @param sourceType
-   *          the SourceType of the source
-   * @throws PMDException
-   *           if the input could not be parsed or processed
-   */
-  public void processFile(File pmdFile, RuleSets ruleSets, RuleContext ctx) {
-    try {
-      ctx.setSourceCodeFile(pmdFile);
-      ctx.setReport(report);
+    /**
+     * Processes the file read by the reader against the rule set.
+     * 
+     * @param reader input stream reader
+     * @param ruleSets set of rules to process against the file
+     * @param ctx context in which PMD is operating. This contains the Renderer
+     *            and whatnot
+     * @param sourceType the SourceType of the source
+     * @throws PMDException if the input could not be parsed or processed
+     */
+    public void processFile(File pmdFile, RuleSets ruleSets, RuleContext ctx) {
+        try {
+            ctx.setSourceCodeFile(pmdFile);
+            ctx.setReport(report);
 
-      if (ruleSets.applies(ctx.getSourceCodeFile())) {
-        Language language = Language.JAVA;
-        ctx.setSourceType(SourceType.JAVA_16);
+            if (ruleSets.applies(ctx.getSourceCodeFile())) {
+                Language language = Language.JAVA;
+                ctx.setSourceType(SourceType.JAVA_16);
 
-        DelphiAST ast = new DelphiAST(pmdFile);
-        if (ast.isError()) {
-          throw new ParseException("grammar error");
+                DelphiAST ast = new DelphiAST(pmdFile);
+                if (ast.isError()) {
+                    throw new ParseException("grammar error");
+                }
+
+                List<CompilationUnit> nodes = getNodesFromAST(ast);
+                ruleSets.apply(nodes, ctx, language);
+            }
+        } catch (ParseException e) {
+            DelphiUtils.LOG.warn("PMD error while parsing " + pmdFile.getAbsolutePath() + ": " + e.getMessage());
+        }
+    }
+
+    /**
+     * @param ast AST tree
+     * @return AST tree nodes ready for parsing by PMD
+     */
+    public List<CompilationUnit> getNodesFromAST(ASTTree ast) {
+        List<CompilationUnit> nodes = new ArrayList<CompilationUnit>();
+
+        for (int i = 0; i < ast.getChildCount(); ++i) {
+            indexNode((CommonTree) ast.getChild(i), nodes); // index all nodes
         }
 
-        List<CompilationUnit> nodes = getNodesFromAST(ast);
-        ruleSets.apply(nodes, ctx, language);
-      }
-    } catch (ParseException e) {
-      DelphiUtils.LOG.debug("PMD error while parsing " + pmdFile.getAbsolutePath() + ": " + e.getMessage());
-    } catch (Exception e) {
-      DelphiUtils.LOG.debug("PMD error while processing " + pmdFile.getAbsolutePath() + ": " + e.getMessage());
-    }
-  }
-
-  /**
-   * @param ast
-   *          AST tree
-   * @return AST tree nodes ready for parsing by PMD
-   */
-  public List<CompilationUnit> getNodesFromAST(ASTTree ast) {
-    List<CompilationUnit> nodes = new ArrayList<CompilationUnit>();
-
-    for (int i = 0; i < ast.getChildCount(); ++i) {
-      indexNode((CommonTree) ast.getChild(i), nodes); // index all nodes
+        return nodes;
     }
 
-    return nodes;
-  }
+    /**
+     * Adds children nodes to list
+     * 
+     * @param node Parent node
+     * @param list List
+     */
+    public void indexNode(CommonTree node, List<CompilationUnit> list) {
+        if (node == null) {
+            return;
+        }
 
-  /**
-   * Adds children nodes to list
-   * 
-   * @param node
-   *          Parent node
-   * @param list
-   *          List
-   */
-  public void indexNode(CommonTree node, List<CompilationUnit> list) {
-    if (node == null) {
-      return;
+        if (node instanceof DelphiPMDNode) {
+            list.add((DelphiPMDNode) node);
+        } else {
+            list.add(new DelphiPMDNode(node));
+        }
+
+        for (int i = 0; i < node.getChildCount(); ++i) {
+            indexNode((CommonTree) node.getChild(i), list);
+        }
     }
 
-    if (node instanceof DelphiPMDNode) {
-      list.add((DelphiPMDNode) node);
-    } else {
-      list.add(new DelphiPMDNode(node));
+    /**
+     * Gets generated report
+     * 
+     * @return Report
+     */
+    public Report getReport() {
+        return report;
     }
-
-    for (int i = 0; i < node.getChildCount(); ++i) {
-      indexNode((CommonTree) node.getChild(i), list);
-    }
-  }
-
-  /**
-   * Gets generated report
-   * 
-   * @return Report
-   */
-  public Report getReport() {
-    return report;
-  }
 }

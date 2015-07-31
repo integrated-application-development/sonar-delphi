@@ -25,7 +25,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sourceforge.pmd.AbstractJavaRule;
+import net.sourceforge.pmd.PropertyDescriptor;
 import net.sourceforge.pmd.RuleContext;
+import net.sourceforge.pmd.properties.IntegerProperty;
+import net.sourceforge.pmd.properties.StringProperty;
 
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
@@ -38,6 +41,11 @@ import org.sonar.plugins.delphi.pmd.DelphiRuleViolation;
 public class DelphiRule extends AbstractJavaRule {
 
     protected int lastLineParsed;
+
+    public static final PropertyDescriptor LIMIT = new IntegerProperty("limit", "The max limit.", 1, 1.0f);
+    public static final PropertyDescriptor START = new StringProperty("start", "The AST node to start from", "", 1.0f);
+    public static final PropertyDescriptor END = new StringProperty("end", "The AST node to stop the search", "", 1.0f);
+    public static final PropertyDescriptor LOOK_FOR = new StringProperty("lookFor", "What nodes look for", "", 1.0f);
 
     public DelphiRule() {
     }

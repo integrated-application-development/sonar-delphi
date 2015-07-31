@@ -19,19 +19,20 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi;
+package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+/**
+ * It counts how many classes there are in one file.
+ * 
+ * @author "Fabricio Colombo"
+ * @since 0.3
+ */
+public class ClassPerFileRule extends CountRule {
 
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
-
-public class DelphiTestUtils {
-
-    public static DelphiProjectHelper mockProjectHelper() {
-        DelphiProjectHelper mock = mock(DelphiProjectHelper.class);
-        when(mock.shouldExecuteOnProject()).thenReturn(true);
-        return mock;
+    @Override
+    protected void init() {
+        super.init();
+        setStringToSearch("class");
     }
 
 }

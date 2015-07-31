@@ -63,7 +63,7 @@
     <system>Bamboo</system>
     <url>http://ci.codehaus.org/browse/SONAR-DELPHI</url>
   </ciManagement>
-
+ 
   <properties>
     <sonar.version>4.5.4</sonar.version>
     <sonar.pluginName>Delphi</sonar.pluginName>
@@ -227,6 +227,11 @@
       <artifactId>sslr-squid-bridge</artifactId>
       <version>2.6</version>
     </dependency>
+    <dependency>
+    	<groupId>org.projectlombok</groupId>
+   		 <artifactId>lombok</artifactId>
+   		 <version>1.16.4</version>
+	</dependency>
     <!-- HSQL FOR AQTIME TESTING -->
     <dependency>
       <groupId>hsqldb</groupId>

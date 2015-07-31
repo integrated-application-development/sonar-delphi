@@ -24,50 +24,59 @@ package org.sonar.plugins.delphi.pmd.rules;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
- * Rule that counts the number of specified nodes, and if the count exceeds the specified limit, rule will produce a violation
+ * Rule that counts the number of specified nodes, and if the count exceeds the
+ * specified limit, rule will produce a violation
  */
 public class CountRule extends DelphiRule {
 
-  protected String str; // string to look for
-  protected int limit; // limit
-  protected int count; // number of hits
-  protected int strength = 1; // number to increase the count
-  protected boolean reset = true; // should we reset counter after exceeding the limit
-  protected Object dataRef = null; // data reference
+    private String stringToSearch;
+    protected int limit; // limit
+    protected int count; // number of hits
+    protected int strength = 1; // number to increase the count
+    protected boolean reset = true; // should we reset counter after exceeding
+                                    // the limit
+    protected Object dataRef = null; // data reference
 
-  @Override
-  public Object visit(DelphiPMDNode node, Object data) {
-    dataRef = data; // data reference
-    if (shouldCount(node)) {
-      increaseCounter(strength); // increase the counter
+    public String getStringToSearch() {
+        return stringToSearch;
     }
 
-    if (exceedsLimit()) { // if we exceeded the limit
-      addViolation(data, node); // add a violation
-      if (reset) {
+    public void setStringToSearch(String stringToSearch) {
+        this.stringToSearch = stringToSearch;
+    }
+
+    @Override
+    public Object visit(DelphiPMDNode node, Object data) {
+        dataRef = data; // data reference
+        if (shouldCount(node)) {
+            increaseCounter(strength); // increase the counter
+        }
+
+        if (exceedsLimit()) { // if we exceeded the limit
+            addViolation(data, node); // add a violation
+            if (reset) {
+                count = 0;
+            }
+        }
+        return data;
+    }
+
+    protected boolean shouldCount(DelphiPMDNode node) {
+        return node.getText().equals(stringToSearch);
+    }
+
+    protected void increaseCounter(int howMuch) {
+        count += howMuch;
+    }
+
+    protected boolean exceedsLimit() {
+        return count > limit;
+    }
+
+    @Override
+    protected void init() {
         count = 0;
-      }
+        strength = 1;
+        limit = getIntProperty(LIMIT);
     }
-    return data;
-  }
-
-  protected boolean shouldCount(DelphiPMDNode node) {
-    return node.getText().equals(str);
-  }
-
-  protected void increaseCounter(int howMuch) {
-    count += howMuch;
-  }
-
-  protected boolean exceedsLimit() {
-    return count > limit;
-  }
-
-  @Override
-  protected void init() {
-    count = 0;
-    strength = 1;
-    str = getStringProperty("search");
-    limit = Integer.valueOf(getStringProperty("limit"));
-  }
 }

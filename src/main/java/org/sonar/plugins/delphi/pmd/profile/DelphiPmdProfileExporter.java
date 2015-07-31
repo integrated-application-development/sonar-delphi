@@ -27,7 +27,6 @@ import java.io.Writer;
 
 import org.sonar.api.profiles.ProfileExporter;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRulesUtils;
@@ -37,35 +36,34 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRulesUtils;
  */
 public class DelphiPmdProfileExporter extends ProfileExporter {
 
-  /**
-   * ctor
-   */
-  public DelphiPmdProfileExporter() {
-    super(DelphiPmdConstants.REPOSITORY_KEY, DelphiPmdConstants.REPOSITORY_NAME);
-    setSupportedLanguages(DelphiLanguage.KEY);
-    setMimeType("application/xml");
-  }
-
-  @Override
-  public void exportProfile(RulesProfile profile, Writer writer) {
-    try {
-      writer.write(DelphiRulesUtils.exportConfiguration(profile));
-    } catch (IOException e) {
-      throw new SonarException("Fail to export profile " + profile, e);
+    /**
+     * ctor
+     */
+    public DelphiPmdProfileExporter() {
+        super(DelphiPmdConstants.REPOSITORY_KEY, DelphiPmdConstants.REPOSITORY_NAME);
+        setSupportedLanguages(DelphiLanguage.KEY);
+        setMimeType("application/xml");
     }
-  }
 
-  /**
-   * exports profile to string
-   * 
-   * @param profile
-   *          profile
-   * @return exported profile
-   */
-  public String exportProfileToString(RulesProfile profile) {
-    StringWriter writer = new StringWriter();
-    exportProfile(profile, writer);
-    return writer.toString();
-  }
+    @Override
+    public void exportProfile(RulesProfile profile, Writer writer) {
+        try {
+            writer.write(DelphiRulesUtils.exportConfiguration(profile));
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Fail to export profile " + profile, e);
+        }
+    }
+
+    /**
+     * exports profile to string
+     * 
+     * @param profile profile
+     * @return exported profile
+     */
+    public String exportProfileToString(RulesProfile profile) {
+        StringWriter writer = new StringWriter();
+        exportProfile(profile, writer);
+        return writer.toString();
+    }
 
 }

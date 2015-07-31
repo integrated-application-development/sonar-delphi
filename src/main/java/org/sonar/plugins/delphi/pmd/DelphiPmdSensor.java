@@ -136,7 +136,7 @@ public class DelphiPmdSensor implements Sensor {
         xmlRenderer.renderFileReport(report);
         xmlRenderer.end();
 
-        File xmlReport = new File(project.getFileSystem().getSonarWorkingDirectory(), "pmd-report.xml");
+        File xmlReport = new File(delphiProjectHelper.workDir().getAbsolutePath(), "pmd-report.xml");
         DelphiUtils.LOG.info("PMD output report: "
                 + xmlReport.getAbsolutePath());
         FileUtils.writeStringToFile(xmlReport, stringwriter.toString());

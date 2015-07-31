@@ -35,6 +35,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import lombok.SneakyThrows;
+
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenRewriteStream;
 import org.antlr.runtime.tree.CommonTree;
@@ -65,7 +67,8 @@ public class DelphiAST extends CommonTree implements ASTTree {
      * @throws RecognitionException At parsing exception
      * @throws IOException When no file found
      */
-    public DelphiAST(File file) throws IOException, RecognitionException {
+    @SneakyThrows
+    public DelphiAST(File file) {
         fileStream = new DelphiSourceSanitizer(file.getAbsolutePath());
         DelphiParser parser = new DelphiParser(new TokenRewriteStream(new DelphiLexer(fileStream)));
         parser.setTreeAdaptor(new DelphiTreeAdaptor(this));

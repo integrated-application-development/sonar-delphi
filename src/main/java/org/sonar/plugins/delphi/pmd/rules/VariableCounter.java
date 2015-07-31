@@ -26,29 +26,33 @@ import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
- * Rule that is checking how many arguments a function has - if too many, it triggers a violation
+ * Rule that is checking how many arguments a function has - if too many, it
+ * triggers a violation
  */
 public class VariableCounter extends DelphiRule {
 
-  @Override
-  public Object visit(DelphiPMDNode node, Object data) {
-    if (node.getText().equals(getStringProperty("start"))) { // if function arguments node
-      int count = 0;
+    @Override
+    public Object visit(DelphiPMDNode node, Object data) {
+        // if function arguments node
+        if (node.getText().equals(getStringProperty(START))) {
+            int count = 0;
 
-      for (int i = 0; i < node.getChildCount(); ++i) { // count num of arguments
-        Tree child = node.getChild(i);
-        if (child.getType() == DelphiLexer.TkVariableIdents) {
-          count += child.getChildCount();
+            // count num of arguments
+            for (int i = 0; i < node.getChildCount(); ++i) {
+                Tree child = node.getChild(i);
+                if (child.getType() == DelphiLexer.TkVariableIdents) {
+                    count += child.getChildCount();
+                }
+            }
+
+            int limit = getIntProperty(LIMIT);
+            if (count > limit) { // if exceeds limit
+                String msg = "Too many " + getStringProperty(LOOK_FOR) + ": " + count + " (max "
+                        + limit + ")";
+                addViolation(data, node, msg); // add violation
+            }
         }
-      }
-
-      int limit = getIntProperty("limit");
-      if (count > limit) { // if exceeds limit
-        String msg = "Too many " + getStringProperty("what") + ": " + count + " (max " + limit + ")";
-        addViolation(data, node, msg); // add violation
-      }
+        return data;
     }
-    return data;
-  }
 
 }

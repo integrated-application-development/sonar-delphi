@@ -21,39 +21,45 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import net.sourceforge.pmd.properties.StringProperty;
+
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
- * Rule that checks, if sequence of nodes occur in file. Sequence should be lowercase, since it is not case sensitive.
+ * Rule that checks, if sequence of nodes occur in file. Sequence should be
+ * lowercase, since it is not case sensitive.
  */
 public class NodeSequenceRule extends DelphiRule {
 
-  private String[] sequence;
-  private int count;
-  private DelphiPMDNode firstMatchNode;
+    private static final StringProperty SEQUENCE = new StringProperty("sequence", "The AST sequence nodes to find", "",
+            1.0f);
 
-  @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+    private String[] sequence;
+    private int count;
+    private DelphiPMDNode firstMatchNode;
 
-    if (node.getText().equalsIgnoreCase(sequence[count])) {
-      if (++count == 1) {
-        firstMatchNode = node; // save first match node
-      } else if (count >= sequence.length) { // end the sequence
-        addViolation(data, firstMatchNode);
-        count = 0; // reset
-      }
-    } else {
-      count = 0; // reset if we bumped out of the sequence
+    @Override
+    public Object visit(DelphiPMDNode node, Object data) {
+
+        if (node.getText().equalsIgnoreCase(sequence[count])) {
+            if (++count == 1) {
+                firstMatchNode = node; // save first match node
+            } else if (count >= sequence.length) { // end the sequence
+                addViolation(data, firstMatchNode);
+                count = 0; // reset
+            }
+        } else {
+            count = 0; // reset if we bumped out of the sequence
+        }
+
+        return data;
     }
 
-    return data;
-  }
-
-  @Override
-  protected void init() {
-    count = 0;
-    firstMatchNode = null;
-    sequence = getStringProperty("sequence").split(",");
-  }
+    @Override
+    protected void init() {
+        count = 0;
+        firstMatchNode = null;
+        sequence = getStringProperty(SEQUENCE).split(",");
+    }
 
 }

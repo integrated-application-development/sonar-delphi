@@ -24,98 +24,97 @@ package org.sonar.plugins.delphi.pmd.rules;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
- * Rule that count's the number of lines between to statement pairs. Produces a violation if the number of lines exceeds limit.
+ * Rule that count's the number of lines between to statement pairs. Produces a
+ * violation if the number of lines exceeds limit.
  */
 public class BlockCounterRule extends CountRule {
 
-  protected boolean isCounting;
-  protected int lastLine;
-  protected String start;
-  protected String end;
-  protected DelphiPMDNode firstNode;
-  protected int startIndex;
+    protected boolean isCounting;
+    protected int lastLine;
+    protected String start;
+    protected String end;
+    protected DelphiPMDNode firstNode;
+    protected int startIndex;
 
-  @Override
-  protected void init() {
-    super.init();
-    start = getStringProperty("start");
-    end = getStringProperty("end");
-    lastLine = 0;
-    startIndex = 0;
-    isCounting = false;
-    firstNode = null;
-  }
-
-  /**
-   * Should we count the current node?
-   * 
-   * @param node
-   *          Node to check
-   */
-
-  @Override
-  protected boolean shouldCount(DelphiPMDNode node) {
-    if ( !isCounting && isStartNode(node)) { // begin counting
-      isCounting = true;
-      count = 0;
-      lastLine = node.getLine();
-      firstNode = node;
-      startIndex = 1;
-    } else if (isCounting) { // already counting
-      if (isEndNode(node) && --startIndex == 0) { // stop counting and check for violation
-        isCounting = false;
+    @Override
+    protected void init() {
+        super.init();
+        start = getStringProperty(START);
+        end = getStringProperty(END);
         lastLine = 0;
-      } else if (isStartNode(node)) { // if another start node is encountered
-        ++startIndex;
-      } else if (accept(node)) {
-        lastLine = node.getLine();
-        return true; // increment counter
-      }
+        startIndex = 0;
+        isCounting = false;
+        firstNode = null;
     }
 
-    return false;
-  }
+    /**
+     * Should we count the current node?
+     * 
+     * @param node Node to check
+     */
 
-  /**
-   * Overload, so we could pass the firstNode
-   */
+    @Override
+    protected boolean shouldCount(DelphiPMDNode node) {
+        if (!isCounting && isStartNode(node)) { // begin counting
+            isCounting = true;
+            count = 0;
+            lastLine = node.getLine();
+            firstNode = node;
+            startIndex = 1;
+        } else if (isCounting) { // already counting
+            if (isEndNode(node) && --startIndex == 0) { // stop counting and
+                                                        // check for violation
+                isCounting = false;
+                lastLine = 0;
+            } else if (isStartNode(node)) { // if another start node is
+                                            // encountered
+                ++startIndex;
+            } else if (accept(node)) {
+                lastLine = node.getLine();
+                return true; // increment counter
+            }
+        }
 
-  @Override
-  protected void addViolation(Object data, DelphiPMDNode node) {
-    super.addViolation(data, firstNode);
-  }
+        return false;
+    }
 
-  /**
-   * Is current node the start node
-   * 
-   * @param node
-   *          Node
-   * @return True if so, false otherwise
-   */
-  protected boolean isStartNode(DelphiPMDNode node) {
-    return node.getText().equals(start);
-  }
+    /**
+     * Overload, so we could pass the firstNode
+     */
 
-  /**
-   * Is current node the end node
-   * 
-   * @param node
-   *          Node
-   * @return True if so, false otherwise
-   */
-  protected boolean isEndNode(DelphiPMDNode node) {
-    return node.getText().equals(end);
-  }
+    @Override
+    protected void addViolation(Object data, DelphiPMDNode node) {
+        super.addViolation(data, firstNode);
+    }
 
-  /**
-   * Should we accept the current node, and count it?
-   * 
-   * @param node
-   *          Node to count
-   * @return True if so, false otherwise
-   */
-  protected boolean accept(DelphiPMDNode node) {
-    return node.getLine() > lastLine;
-  }
+    /**
+     * Is current node the start node
+     * 
+     * @param node Node
+     * @return True if so, false otherwise
+     */
+    protected boolean isStartNode(DelphiPMDNode node) {
+        return node.getText().equals(start);
+    }
+
+    /**
+     * Is current node the end node
+     * 
+     * @param node Node
+     * @return True if so, false otherwise
+     */
+    protected boolean isEndNode(DelphiPMDNode node) {
+        return node.getText().equals(end);
+    }
+
+    /**
+     * Should we accept the current node, and count it?
+     * 
+     * @param node Node to count
+     * @return True if so, false otherwise
+     */
+    protected boolean accept(DelphiPMDNode node) {
+        return node.getLine() > lastLine;
+    }
 
 }
