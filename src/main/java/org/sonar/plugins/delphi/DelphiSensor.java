@@ -31,6 +31,8 @@ import java.util.Set;
 
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.resources.DuplicatedSourceException;
 import org.sonar.api.resources.Project;
@@ -77,10 +79,13 @@ public class DelphiSensor implements Sensor {
 
     private final DelphiProjectHelper delphiProjectHelper;
     private final RuleFinder ruleFinder;
+    private final ResourcePerspectives perspectives;
 
-    public DelphiSensor(DelphiProjectHelper delphiProjectHelper, RuleFinder ruleFinder) {
+    public DelphiSensor(DelphiProjectHelper delphiProjectHelper, RuleFinder ruleFinder,
+            ResourcePerspectives perspectives) {
         this.delphiProjectHelper = delphiProjectHelper;
         this.ruleFinder = ruleFinder;
+        this.perspectives = perspectives;
     }
 
     /**
@@ -114,7 +119,7 @@ public class DelphiSensor implements Sensor {
 
             MetricsInterface metrics[] = {new BasicMetrics(project), new ComplexityMetrics(project),
                     new LCOM4Metrics(project),
-                    new DeadCodeMetrics(project, ruleFinder)};
+                    new DeadCodeMetrics(project, ruleFinder, perspectives)};
             processFiles(metrics, sensorContext);
         }
     }
@@ -136,7 +141,8 @@ public class DelphiSensor implements Sensor {
                 if (metric.executeOnResource(resource)) {
                     metric.analyse(resource, sensorContext, fileClasses.get(resource), fileFunctions.get(resource),
                             units);
-                    metric.save(resource.toFile(project), sensorContext);
+                    InputFile inputFile = delphiProjectHelper.getFile(resource.getAbsolutePath());
+                    metric.save(inputFile, sensorContext);
                 }
             } // metric
 

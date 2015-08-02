@@ -35,6 +35,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
@@ -55,6 +56,7 @@ public class DelphiSensorTest {
     private Map<String, Integer> keyMetricIndex = null;
     private DelphiProjectHelper delphiProjectHelper;
     private RuleFinder ruleFinder;
+    private ResourcePerspectives perspectives;
 
     private static final String ROOT_NAME = "/org/sonar/plugins/delphi/SimpleDelphiProject";
 
@@ -97,7 +99,9 @@ public class DelphiSensorTest {
         when(pfs.getSourceDirs()).thenReturn(sourceDirs);
         when(pfs.getReportOutputDir()).thenReturn(reportDir);
 
-        sensor = new DelphiSensor(delphiProjectHelper, ruleFinder);
+        perspectives = mock(ResourcePerspectives.class);
+
+        sensor = new DelphiSensor(delphiProjectHelper, ruleFinder, perspectives);
     }
 
     @Test

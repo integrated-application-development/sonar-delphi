@@ -26,14 +26,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.FilenameUtils;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.InputFile.Type;
+import org.sonar.api.component.ResourcePerspectives;
+import org.sonar.api.issue.Issuable;
+import org.sonar.api.issue.Issue;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Qualifiers;
-import org.sonar.api.resources.Resource;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.RuleQuery;
-import org.sonar.api.rules.Violation;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.core.DelphiFile;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
@@ -58,24 +61,25 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
     private List<UnitInterface> allUnits;
     private Rule unitRule = null;
     private Rule functionRule = null;
+    private final ResourcePerspectives perspectives;
+
+    public static final RuleQuery RULE_QUERY_UNUSED_UNIT = RuleQuery.create()
+            .withRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY)
+            .withKey("Unused Unit Rule");
+    public static final RuleQuery RULE_QUERY_UNUSED_FUNCTION = RuleQuery.create()
+            .withRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY)
+            .withKey("Unused Function Rule");
 
     /**
      * {@inheritDoc}
      */
-    public DeadCodeMetrics(Project delphiProject, RuleFinder ruleFinder) {
+    public DeadCodeMetrics(Project delphiProject, RuleFinder ruleFinder, ResourcePerspectives perspectives) {
         super(delphiProject);
+        this.perspectives = perspectives;
         isCalculated = false;
         allUnits = new ArrayList<UnitInterface>();
-
-        if (ruleFinder == null) {
-            return; // no rule finder
-        }
-        RuleQuery ruleQuery = RuleQuery.create().withRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY)
-                .withKey("Unused Unit Rule");
-        unitRule = ruleFinder.find(ruleQuery);
-        ruleQuery = RuleQuery.create().withRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY)
-                .withKey("Unused Function Rule");
-        functionRule = ruleFinder.find(ruleQuery);
+        unitRule = ruleFinder.find(RULE_QUERY_UNUSED_UNIT);
+        functionRule = ruleFinder.find(RULE_QUERY_UNUSED_FUNCTION);
     }
 
     /**
@@ -90,6 +94,8 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
                 return;
             }
             unusedUnits = findUnusedUnits(units);
+
+            // TODO findUnusedFunctions always returns an empty list
             unusedFunctions = findUnusedFunctions(units);
             isCalculated = true;
         }
@@ -100,29 +106,32 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
      * {@inheritDoc}
      */
 
-    public void save(Resource resource, SensorContext sensorContext) {
-        if (resource.getQualifier().equals(Qualifiers.UNIT_TEST_FILE)) {
+    public void save(InputFile resource, SensorContext sensorContext) {
+        if (resource.type() == Type.TEST) {
             return; // do not count unit tests
         }
 
-        UnitInterface unit = findUnit(resource.getName());
+        String fileName = FilenameUtils.removeExtension(resource.file().getName());
+        UnitInterface unit = findUnit(fileName);
         if (unit == null) {
-            DelphiUtils.LOG.debug("No unit for " + resource.getName() + "(" + resource.getPath() + ")");
+            DelphiUtils.LOG.debug("No unit for " + fileName + "(" + resource.absolutePath() + ")");
             return;
         }
 
-        if (unusedUnits.contains(resource.getName().toLowerCase())) { // unused
-                                                                      // unit,
-                                                                      // add
-                                                                      // violation
-            int line = unit.getLine();
-            Violation violation = Violation.create(unitRule, resource).setLineId(line)
-                    .setMessage(unit.getName() + DEAD_UNIT_VIOLATION_MESSAGE);
-            sensorContext.saveViolation(violation, true);
+        // unused unit, add violation
+        if (unusedUnits.contains(fileName.toLowerCase())) {
+            Issuable issuable = perspectives.as(Issuable.class, resource);
+            if (issuable != null) {
+                Issue issue = issuable.newIssueBuilder()
+                        .ruleKey(unitRule.ruleKey())
+                        .line(unit.getLine())
+                        .message(unit.getName() + DEAD_UNIT_VIOLATION_MESSAGE)
+                        .build();
+                issuable.addIssue(issue);
+            }
         }
 
         for (FunctionInterface function : getUnitFunctions(unit)) {
-
             if (function.isMessage() || function.isVirtual() || function.getVisibility() == DelphiLexer.PUBLISHED) {
                 continue; // function is either a virtual function or at
                           // published visibility or message function
@@ -158,12 +167,18 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
 
             if (unusedFunctions.contains(function)) { // unused function, add
                                                       // violation
-                int line = function.getLine();
-                Violation violation = Violation.create(functionRule, resource).setLineId(line)
-                        .setMessage(function.getRealName() + DEAD_FUNCTION_VIOLATION_MESSAGE);
-                sensorContext.saveViolation(violation, true);
-                unusedFunctions.remove(function); // to avoid duplicated
-                                                  // violations
+                Issuable issuable = perspectives.as(Issuable.class, resource);
+                if (issuable != null) {
+                    Issue issue = issuable.newIssueBuilder()
+                            .ruleKey(functionRule.ruleKey())
+                            .line(function.getLine())
+                            .message(function.getRealName() + DEAD_FUNCTION_VIOLATION_MESSAGE)
+                            .build();
+
+                    // TODO Unused functions it's not working. There are many
+                    // false positives.
+                    // issuable.addIssue(issue);
+                }
             }
         }
     }
@@ -173,7 +188,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
      * @return List of all unit functions (global and class functions)
      */
     private List<FunctionInterface> getUnitFunctions(UnitInterface unit) {
-        List<FunctionInterface> result = new ArrayList<FunctionInterface>();
+        Set<FunctionInterface> result = new HashSet<FunctionInterface>();
         for (FunctionInterface globalFunction : unit.getFunctions()) { // add
                                                                        // global
                                                                        // functions
@@ -186,7 +201,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
             }
         }
 
-        return result;
+        return new ArrayList<FunctionInterface>(result);
     }
 
     /**

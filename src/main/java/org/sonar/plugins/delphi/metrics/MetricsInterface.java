@@ -24,7 +24,7 @@ package org.sonar.plugins.delphi.metrics;
 import java.util.List;
 
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.resources.Resource;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.delphi.core.DelphiFile;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
@@ -35,55 +35,48 @@ import org.sonar.plugins.delphi.core.language.UnitInterface;
  */
 public interface MetricsInterface {
 
-  /**
-   * Analyse given DelphiLanguage source file
-   * 
-   * @param resource
-   *          DelphiLanguage source file
-   * @param sensorContext
-   *          Given by Sonar
-   * @param classes
-   *          Classes in source file
-   * @param functions
-   *          Functions in source file
-   */
-  void analyse(DelphiFile resource, SensorContext sensorContext, List<ClassInterface> classes, List<FunctionInterface> functions,
-      List<UnitInterface> units);
+    /**
+     * Analyse given DelphiLanguage source file
+     * 
+     * @param resource DelphiLanguage source file
+     * @param sensorContext Given by Sonar
+     * @param classes Classes in source file
+     * @param functions Functions in source file
+     */
+    void analyse(DelphiFile resource, SensorContext sensorContext, List<ClassInterface> classes,
+            List<FunctionInterface> functions,
+            List<UnitInterface> units);
 
-  /**
-   * Saves analysis result from sensorContext and associates it with resource
-   * 
-   * @param resource
-   *          Resource to associate analysis results with
-   * @param sensorContext
-   *          Sensor context
-   */
-  void save(Resource resource, SensorContext sensorContext);
+    /**
+     * Saves analysis result from sensorContext and associates it with resource
+     * 
+     * @param inputFile Resource to associate analysis results with
+     * @param sensorContext Sensor context
+     */
+    void save(InputFile inputFile, SensorContext sensorContext);
 
-  /**
-   * Gets custom metric
-   * 
-   * @param metric
-   *          Metric name
-   * @throws IllegalStateException
-   *           if the metric was not set before while analysing
-   * @return double Metric value
-   */
-  double getMetric(String metric);
+    /**
+     * Gets custom metric
+     * 
+     * @param metric Metric name
+     * @throws IllegalStateException if the metric was not set before while
+     *             analysing
+     * @return double Metric value
+     */
+    double getMetric(String metric);
 
-  /**
-   * Gets the metric keys, for you to know what metrics are avaible
-   * 
-   * @return Metrics keys
-   */
-  String[] getMetricKeys();
+    /**
+     * Gets the metric keys, for you to know what metrics are avaible
+     * 
+     * @return Metrics keys
+     */
+    String[] getMetricKeys();
 
-  /**
-   * Should metric execute on provided resource?
-   * 
-   * @param resource
-   *          Resource to check
-   * @return True if metric should execute, false otherwise
-   */
-  boolean executeOnResource(DelphiFile resource);
+    /**
+     * Should metric execute on provided resource?
+     * 
+     * @param resource Resource to check
+     * @return True if metric should execute, false otherwise
+     */
+    boolean executeOnResource(DelphiFile resource);
 }

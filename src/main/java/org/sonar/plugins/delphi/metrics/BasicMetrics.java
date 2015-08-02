@@ -29,6 +29,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
@@ -78,7 +79,7 @@ public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
    * {@inheritDoc}
    */
 
-  public void save(Resource resource, SensorContext sensorContext) {
+  public void save(InputFile resource, SensorContext sensorContext) {
     sensorContext.saveMeasure(resource, CoreMetrics.LINES, getMetric("LINES")); // Number of carriage returns
     sensorContext.saveMeasure(resource, CoreMetrics.NCLOC, getMetric("NCLOC")); // Number of physical lines of code - number of blank lines
                                                                                 // - number of comment lines - number of header file
@@ -88,7 +89,6 @@ public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
                                                                                                 // like, header file comments (mainly used
                                                                                                 // to define the license) and commented-out
                                                                                                 // lines of code are not included.
-    sensorContext.saveMeasure(resource, CoreMetrics.COMMENT_BLANK_LINES, getMetric("COMMENT_BLANK_LINES")); // Blank lines in comments
     sensorContext.saveMeasure(resource, CoreMetrics.FILES, getMetric("FILES")); // Number of analyzed files (1 per resource, resource=file)
   }
 

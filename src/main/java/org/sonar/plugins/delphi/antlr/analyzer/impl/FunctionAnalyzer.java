@@ -43,145 +43,194 @@ import org.sonar.plugins.delphi.core.language.impl.UnresolvedFunctionCall;
  */
 public class FunctionAnalyzer extends CodeAnalyzer {
 
-  private static final LexerMetrics FUNCTION_NODE_TYPE[] = { LexerMetrics.FUNCTION, LexerMetrics.PROCEDURE, LexerMetrics.DESTRUCTOR,
-      LexerMetrics.CONSTRUCTOR };
+    private static final String PROP_MESSAGE = "message";
+    private static final String PROP_VIRTUAL = "virtual";
 
-  private String functionName;
-  private String functionRealName;
-  private List<String> functionProperties;
+    private static final LexerMetrics FUNCTION_NODE_TYPE[] = {LexerMetrics.FUNCTION, LexerMetrics.PROCEDURE,
+            LexerMetrics.DESTRUCTOR,
+            LexerMetrics.CONSTRUCTOR};
 
-  private int functionLine;
-  private int functionCharPosition;
+    private String functionName;
+    private String functionRealName;
+    private List<String> functionProperties;
 
-  @Override
-  public boolean canAnalyze(CodeTree codeTree) {
-    int type = codeTree.getCurrentCodeNode().getNode().getType();
-    for (LexerMetrics metric : FUNCTION_NODE_TYPE) {
-      if (type == metric.toMetrics()) {
-        return true;
-      }
-    }
-    return false;
-  }
+    private int functionLine;
+    private int functionCharPosition;
 
-  @Override
-  protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
-    ClassInterface currentClass = results.getActiveClass(); // null?
-    if (results.getActiveUnit() == null) {      
-      UnitInterface defaultUnit = new DelphiUnit("Default");
-      if( !results.getCachedUnits().contains(defaultUnit) ) {
-        results.cacheUnit(defaultUnit);  
-      }
-      results.setActiveUnit(defaultUnit);
-    }
-
-    functionRealName = getFunctionName((CommonTree) codeTree.getCurrentCodeNode().getNode());
-    if (StringUtils.isEmpty(functionRealName)) { // no name => no function
-      return;
-    }
-    functionName = functionRealName.toLowerCase(); // gets function name
-    functionName = checkFunctionName(functionName, currentClass, results);
-
-    functionProperties = getFunctionProperties(codeTree.getCurrentCodeNode().getNode());
-    FunctionInterface activeFunction = createFunction(results, currentClass);
-    processFunction(activeFunction, results, currentClass);
-    results.setActiveFunction(activeFunction);
-  }
-
-  private List<String> getFunctionProperties(Tree node) {
-    List<String> props = new ArrayList<String>();
-    for (int i = 0; i < node.getChildCount(); ++i) {
-      Tree child = node.getChild(i);
-      if ("override".equalsIgnoreCase(child.getText())) {
-        props.add("virtual");
-      } else if ("virtual".equalsIgnoreCase(child.getText())) {
-        props.add("virtual");
-      }
-    }
-    return props;
-  }
-
-  private String checkFunctionName(String functionName, ClassInterface currentClass, CodeAnalysisResults results) {
-    if (currentClass != null) {
-      return currentClass.getName() + '.' + functionName; // new name with class prefix
-    } else {
-      if (functionName.lastIndexOf('.') > -1) {
-        return functionName; // no new name
-      }
-
-      for (ClassInterface c : results.getClasses()) // check all classes
-      {
-        if (functionName.startsWith(c.getName() + ".")) {
-          return c.getName() + '.' + functionName; // new name with class prefix
+    @Override
+    public boolean canAnalyze(CodeTree codeTree) {
+        int type = codeTree.getCurrentCodeNode().getNode().getType();
+        for (LexerMetrics metric : FUNCTION_NODE_TYPE) {
+            if (type == metric.toMetrics()) {
+                return true;
+            }
         }
-      }
+        return false;
     }
 
-    return functionName; // no new name
-  }
+    @Override
+    protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
+        ClassInterface currentClass = results.getActiveClass(); // null?
+        if (results.getActiveUnit() == null) {
+            UnitInterface defaultUnit = new DelphiUnit("Default");
+            if (!results.getCachedUnits().contains(defaultUnit)) {
+                results.cacheUnit(defaultUnit);
+            }
+            results.setActiveUnit(defaultUnit);
+        }
 
-  private String getFunctionName(CommonTree functionNode) {
-    Tree nameNode = functionNode.getFirstChildWithType(LexerMetrics.FUNCTION_NAME.toMetrics());
-    if (nameNode == null) {
-      return "";
+        functionRealName = getFunctionName((CommonTree) codeTree.getCurrentCodeNode().getNode());
+        if (StringUtils.isEmpty(functionRealName)) { // no name => no function
+            return;
+        }
+
+        functionName = checkFunctionName(functionRealName.toLowerCase(), currentClass, results).toLowerCase();
+
+        functionProperties = getFunctionProperties(codeTree.getCurrentCodeNode().getNode());
+        FunctionInterface activeFunction = createFunction(results, currentClass);
+        processFunction(activeFunction, results, currentClass);
+        results.setActiveFunction(activeFunction);
     }
 
-    functionLine = nameNode.getLine();
-    functionCharPosition = nameNode.getCharPositionInLine();
-
-    StringBuilder str = new StringBuilder();
-    for (int i = 0; i < nameNode.getChildCount(); ++i) {
-      Tree child = nameNode.getChild(i);
-      str.append(child.getText());
-    }
-    return str.toString();
-  }
-
-  private FunctionInterface createFunction(CodeAnalysisResults results, ClassInterface currentClass) {
-    FunctionInterface activeFunction = results.getCachedFunction(functionName); // was function already created?
-    if (activeFunction == null) // NOT created, make a new one
-    {
-      activeFunction = new DelphiFunction(); // create a new function
-      activeFunction.setName(functionName.toLowerCase()); // function name
-      activeFunction.setRealName(functionRealName); // real name with no lowercase
-      activeFunction.setLine(functionLine); // fn line in file
-      activeFunction.setVisibility(results.getParseVisibility().toMetrics()); // sets the function visibility (private, public, protected)
-      activeFunction.setColumn(functionCharPosition); // fn column in file
-      activeFunction.setUnit(results.getActiveUnit()); // function unit
-      activeFunction.setParentClass(currentClass); // function parent class
-
-      if (functionProperties.contains("virtual")) {
-        activeFunction.setVirtual(true);
-      }
-
-      results.addFunction(activeFunction);
-      results.getActiveUnit().addFunction(activeFunction); // add function to unit
-      results.cacheFunction(functionName, activeFunction); // put to set of cached functions (ALL functions)
-
-      // check for unresolved function calls
-      UnresolvedFunctionCall unresolved = results.getUnresolvedCalls().get(activeFunction.getShortName());
-      if (unresolved != null && unresolved.resolve(activeFunction, results.getCachedUnits())) {
-        results.getUnresolvedCalls().remove(activeFunction.getShortName());
-      }
-    }
-    return activeFunction;
-  }
-
-  private void processFunction(FunctionInterface activeFunction, CodeAnalysisResults results, ClassInterface currentClass) {
-    if (activeFunction.isGlobal() && !results.hasFunction(activeFunction)) { // if we found an global function before,
-      results.addFunction(activeFunction); // add it to this file
+    private List<String> getFunctionProperties(Tree node) {
+        List<String> props = new ArrayList<String>();
+        for (int i = 0; i < node.getChildCount(); ++i) {
+            Tree child = node.getChild(i);
+            if ("override".equalsIgnoreCase(child.getText())) {
+                props.add(PROP_VIRTUAL);
+            } else if (PROP_VIRTUAL.equalsIgnoreCase(child.getText())) {
+                props.add(PROP_VIRTUAL);
+            } else if (PROP_MESSAGE.equalsIgnoreCase(child.getText())) {
+                props.add(PROP_MESSAGE);
+            }
+        }
+        return props;
     }
 
-    if (results.getParseVisibility() == LexerMetrics.PUBLIC) {
-      activeFunction.setVisibility(results.getParseVisibility().toMetrics()); // sets the function visibility (private, public, protected)
+    private String checkFunctionName(String functionName, ClassInterface currentClass, CodeAnalysisResults results) {
+        if (currentClass != null) {
+            if (functionName.startsWith(currentClass.getName().toLowerCase())) {
+                return functionName;
+            }
+            return currentClass.getName() + '.' + functionName; // new name with
+                                                                // class prefix
+        } else {
+            if (functionName.lastIndexOf('.') > -1) {
+                return functionName; // no new name
+            }
+
+            for (ClassInterface c : results.getClasses()) // check all classes
+            {
+                if (functionName.startsWith(c.getName() + ".")) {
+                    return c.getName() + '.' + functionName; // new name with
+                                                             // class prefix
+                }
+            }
+        }
+
+        return functionName; // no new name
     }
 
-    if (results.getParseStatus() == LexerMetrics.INTERFACE) // if in interface section
-    {
-      activeFunction.setDeclaration(true); // function is only a declaration
-      if (currentClass != null) {
-        currentClass.addFunction(activeFunction); // when adding declaration from interface
-      }
+    private String getFunctionName(CommonTree functionNode) {
+        Tree nameNode = functionNode.getFirstChildWithType(LexerMetrics.FUNCTION_NAME.toMetrics());
+        if (nameNode == null) {
+            return "";
+        }
+
+        functionLine = nameNode.getLine();
+        functionCharPosition = nameNode.getCharPositionInLine();
+
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < nameNode.getChildCount(); ++i) {
+            Tree child = nameNode.getChild(i);
+            str.append(child.getText());
+        }
+        return str.toString();
     }
-  }
+
+    private FunctionInterface createFunction(CodeAnalysisResults results, ClassInterface currentClass) {
+        FunctionInterface activeFunction = results.getCachedFunction(functionName); // was
+                                                                                    // function
+                                                                                    // already
+                                                                                    // created?
+        if (activeFunction == null) // NOT created, make a new one
+        {
+            activeFunction = new DelphiFunction(); // create a new function
+            activeFunction.setName(functionName.toLowerCase()); // function name
+            activeFunction.setRealName(functionRealName); // real name with no
+                                                          // lowercase
+            activeFunction.setLine(functionLine); // fn line in file
+            activeFunction.setVisibility(results.getParseVisibility().toMetrics()); // sets
+                                                                                    // the
+                                                                                    // function
+                                                                                    // visibility
+                                                                                    // (private,
+                                                                                    // public,
+                                                                                    // protected)
+            activeFunction.setColumn(functionCharPosition); // fn column in file
+            activeFunction.setUnit(results.getActiveUnit()); // function unit
+            activeFunction.setParentClass(currentClass); // function parent
+                                                         // class
+
+            if (functionProperties.contains(PROP_VIRTUAL)) {
+                activeFunction.setVirtual(true);
+            }
+
+            if (functionProperties.contains(PROP_MESSAGE)) {
+                activeFunction.setMessage(true);
+            }
+
+            results.addFunction(activeFunction);
+            results.getActiveUnit().addFunction(activeFunction); // add function
+                                                                 // to unit
+            results.cacheFunction(functionName, activeFunction); // put to set
+                                                                 // of cached
+                                                                 // functions
+                                                                 // (ALL
+                                                                 // functions)
+
+            // check for unresolved function calls
+            UnresolvedFunctionCall unresolved = results.getUnresolvedCalls().get(activeFunction.getShortName());
+            if (unresolved != null && unresolved.resolve(activeFunction, results.getCachedUnits())) {
+                results.getUnresolvedCalls().remove(activeFunction.getShortName());
+            }
+        }
+        return activeFunction;
+    }
+
+    private void processFunction(FunctionInterface activeFunction, CodeAnalysisResults results,
+            ClassInterface currentClass) {
+        if (activeFunction.isGlobal() && !results.hasFunction(activeFunction)) { // if
+                                                                                 // we
+                                                                                 // found
+                                                                                 // an
+                                                                                 // global
+                                                                                 // function
+                                                                                 // before,
+            results.addFunction(activeFunction); // add it to this file
+        }
+
+        if (results.getParseVisibility() == LexerMetrics.PUBLIC) {
+            activeFunction.setVisibility(results.getParseVisibility().toMetrics()); // sets
+                                                                                    // the
+                                                                                    // function
+                                                                                    // visibility
+                                                                                    // (private,
+                                                                                    // public,
+                                                                                    // protected)
+        }
+
+        if (results.getParseStatus() == LexerMetrics.INTERFACE) // if in
+                                                                // interface
+                                                                // section
+        {
+            activeFunction.setDeclaration(true); // function is only a
+                                                 // declaration
+            if (currentClass != null) {
+                currentClass.addFunction(activeFunction); // when adding
+                                                          // declaration from
+                                                          // interface
+            }
+        }
+    }
 }

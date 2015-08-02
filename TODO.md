@@ -13,3 +13,7 @@
  * http://docs.sonarqube.org/display/DEV/Internationalization
  * Excluded files and/or directories should be use org.sonar.api.scan.filesystem.FileExclusions api
  * Check http://docs.sonarqube.org/display/DEV/API+Changes and fix it
+ * DeadCodeMetrics seems not be working for unused units
+ * Metrics like DeadCode and Complexity should generates issues
+ * Create integration tests like other plugins
+ * Clean up dependencies to make plugin smaller

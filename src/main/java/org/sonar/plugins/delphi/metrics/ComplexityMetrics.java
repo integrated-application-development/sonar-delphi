@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.measures.RangeDistributionBuilder;
@@ -185,7 +186,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
    * {@inheritDoc}
    */
 
-  public void save(Resource resource, SensorContext sensorContext) {
+  public void save(InputFile resource, SensorContext sensorContext) {
     if (resource == null || sensorContext == null) {
       return;
     }

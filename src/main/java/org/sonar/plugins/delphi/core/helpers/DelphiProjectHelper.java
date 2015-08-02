@@ -52,6 +52,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
     private final Configuration configuration;
     private final RuleFinder ruleFinder;
     private final FileSystem fs;
+    private List<File> excludedSources;
 
     /**
      * ctor used by Sonar
@@ -65,6 +66,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
         this.ruleFinder = ruleFinder;
         this.fs = fs;
         DelphiUtils.LOG.info("Delphi Project Helper creation!!!");
+        this.excludedSources = detectExcludedSources();
     }
 
     /**
@@ -126,6 +128,10 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
      * @return List of excluded source files and directories
      */
     public List<File> getExcludedSources() {
+        return this.excludedSources;
+    }
+
+    private List<File> detectExcludedSources() {
         List<File> result = new ArrayList<File>();
         if (configuration == null) {
             return result;
