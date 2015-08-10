@@ -21,12 +21,9 @@
  */
 package org.sonar.plugins.delphi.metrics;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,7 +32,7 @@ import java.io.Reader;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.plugins.delphi.core.DelphiFile;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.delphi.core.DelphiRecognizer;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.squid.measures.Metric;
@@ -43,44 +40,44 @@ import org.sonar.squid.text.delphi.DelphiSource;
 
 public class BasicMetricTest {
 
-  private DelphiSource source;
-  private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/MetricsTest.pas";
+    private DelphiSource source;
+    private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/MetricsTest.pas";
 
-  @Before
-  public void setUp() throws Exception {
-    File testFile = DelphiUtils.getResource(FILE_NAME);
-    Reader reader = new BufferedReader(new FileReader(testFile));
-    source = new DelphiSource(reader, new DelphiRecognizer());
-  }
+    @Before
+    public void setUp() throws Exception {
+        File testFile = DelphiUtils.getResource(FILE_NAME);
+        Reader reader = new BufferedReader(new FileReader(testFile));
+        source = new DelphiSource(reader, new DelphiRecognizer());
+    }
 
-  @Test
-  public void executeOnResource() {
-    DelphiFile pasResource = mock(DelphiFile.class);
-    DelphiFile dprResource = mock(DelphiFile.class);
-    DelphiFile dpkResource = mock(DelphiFile.class);
-    DelphiFile cppResource = mock(DelphiFile.class);
-    when(pasResource.getPath()).thenReturn("source.pas");
-    when(dprResource.getPath()).thenReturn("source.dpr");
-    when(cppResource.getPath()).thenReturn("source.cpp");
-    when(dpkResource.getPath()).thenReturn("source.dpk");
+    @Test
+    public void executeOnResource() {
+        InputFile pasResource = mock(InputFile.class);
+        InputFile dprResource = mock(InputFile.class);
+        InputFile dpkResource = mock(InputFile.class);
+        InputFile cppResource = mock(InputFile.class);
+        when(pasResource.absolutePath()).thenReturn("source.pas");
+        when(dprResource.absolutePath()).thenReturn("source.dpr");
+        when(cppResource.absolutePath()).thenReturn("source.cpp");
+        when(dpkResource.absolutePath()).thenReturn("source.dpk");
 
-    assertTrue(new BasicMetrics(null).executeOnResource(pasResource));
-    assertTrue(new BasicMetrics(null).executeOnResource(dprResource));
-    assertTrue(new BasicMetrics(null).executeOnResource(dpkResource));
-    assertFalse(new BasicMetrics(null).executeOnResource(cppResource));
-  }
+        assertTrue(new BasicMetrics(null).executeOnResource(pasResource));
+        assertTrue(new BasicMetrics(null).executeOnResource(dprResource));
+        assertTrue(new BasicMetrics(null).executeOnResource(dpkResource));
+        assertFalse(new BasicMetrics(null).executeOnResource(cppResource));
+    }
 
-  @Test
-  public void testComments() {
-    assertThat((int) source.getMeasure(Metric.COMMENT_LINES), is(14));
-    assertThat((int) source.getMeasure(Metric.COMMENT_BLANK_LINES), is(1));
-    assertThat((int) source.getMeasure(Metric.PUBLIC_DOC_API), is(2));
-  }
+    @Test
+    public void testComments() {
+        assertThat((int) source.getMeasure(Metric.COMMENT_LINES), is(14));
+        assertThat((int) source.getMeasure(Metric.COMMENT_BLANK_LINES), is(1));
+        assertThat((int) source.getMeasure(Metric.PUBLIC_DOC_API), is(2));
+    }
 
-  @Test
-  public void testLines() {
-    assertThat((int) source.getMeasure(Metric.LINES), is(76));
-    assertThat((int) source.getMeasure(Metric.LINES_OF_CODE), is(46));
-  }
+    @Test
+    public void testLines() {
+        assertThat((int) source.getMeasure(Metric.LINES), is(76));
+        assertThat((int) source.getMeasure(Metric.LINES_OF_CODE), is(46));
+    }
 
 }

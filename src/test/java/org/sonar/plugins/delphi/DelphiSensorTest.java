@@ -21,33 +21,34 @@
  */
 package org.sonar.plugins.delphi;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.rules.RuleFinder;
-import org.sonar.plugins.delphi.core.DelphiFile;
-import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.debug.ProjectMetricsXMLParser;
+import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-@Ignore
 public class DelphiSensorTest {
 
     private Project project = null;
@@ -70,36 +71,64 @@ public class DelphiSensorTest {
         baseDir = DelphiUtils.getResource(ROOT_NAME);
         File reportDir = new File(baseDir.getAbsolutePath() + "/reports");
 
-        File[] dirs = baseDir.listFiles(DelphiFile.getDirectoryFilter()); // get
-                                                                          // all
-                                                                          // directories
+        File[] dirs = baseDir.listFiles(DelphiUtils.getDirectoryFilter()); // get
+                                                                           // all
+                                                                           // directories
 
         List<File> sourceDirs = new ArrayList<File>(dirs.length);
-        List<File> sourceFiles = new ArrayList<File>();
+        List<InputFile> sourceFiles = new ArrayList<InputFile>();
 
         sourceDirs.add(baseDir); // include baseDir
-        for (File source : baseDir.listFiles(DelphiFile.getFileFilter())) {
-            sourceFiles.add(source);
+        for (File source : baseDir.listFiles(DelphiUtils.getFileFilter())) {
+            sourceFiles.add(new DefaultInputFile(ROOT_NAME).setFile(source));
         }
 
         for (File directory : dirs) { // get all source files from all
                                       // directories
-            File[] files = directory.listFiles(DelphiFile.getFileFilter());
+            File[] files = directory.listFiles(DelphiUtils.getFileFilter());
             for (File sourceFile : files) {
-                sourceFiles.add(sourceFile); // put all files to list
+                sourceFiles.add(new DefaultInputFile(ROOT_NAME).setFile(sourceFile));
             }
             sourceDirs.add(directory); // put all directories to list
         }
 
-        when(project.getLanguage()).thenReturn(DelphiLanguage.instance);
         when(project.getFileSystem()).thenReturn(pfs);
 
         when(pfs.getBasedir()).thenReturn(baseDir);
-        when(pfs.getSourceFiles(DelphiLanguage.instance)).thenReturn(sourceFiles);
         when(pfs.getSourceDirs()).thenReturn(sourceDirs);
         when(pfs.getReportOutputDir()).thenReturn(reportDir);
 
         perspectives = mock(ResourcePerspectives.class);
+
+        delphiProjectHelper = mock(DelphiProjectHelper.class);
+        when(delphiProjectHelper.shouldExecuteOnProject()).thenReturn(Boolean.TRUE);
+
+        DelphiProject delphiProject = new DelphiProject("Default Project");
+        delphiProject.setSourceFiles(sourceFiles);
+
+        when(delphiProjectHelper.getWorkgroupProjects()).thenReturn(Arrays.asList(delphiProject));
+        when(delphiProjectHelper.getDirectory(any(File.class), any(Project.class))).thenCallRealMethod();
+        when(delphiProjectHelper.getFile(any(File.class))).thenAnswer(new Answer<InputFile>() {
+
+            @Override
+            public InputFile answer(InvocationOnMock invocation) throws Throwable {
+                InputFile inputFile = new DefaultInputFile(ROOT_NAME).setFile((File) invocation.getArguments()[0]);
+
+                return inputFile;
+            }
+        });
+        when(delphiProjectHelper.getFile(any(String.class))).thenAnswer(new Answer<InputFile>() {
+
+            @Override
+            public InputFile answer(InvocationOnMock invocation) throws Throwable {
+                InputFile inputFile = new DefaultInputFile(ROOT_NAME).setFile(new File((String) invocation
+                        .getArguments()[0]));
+
+                return inputFile;
+            }
+        });
+
+        ruleFinder = mock(RuleFinder.class);
 
         sensor = new DelphiSensor(delphiProjectHelper, ruleFinder, perspectives);
     }
@@ -182,6 +211,57 @@ public class DelphiSensorTest {
         keyMetricIndex.put("dit", 17);
         keyMetricIndex.put("public_api", 18);
         keyMetricIndex.put("comment_blank_lines", 19);
+    }
+
+    @Test
+    public void analyseFileOnRootDir() {
+        createKeyMetricIndexMap();
+
+        ProjectMetricsXMLParser xmlParser = new ProjectMetricsXMLParser(new File(baseDir.getAbsolutePath()
+                + File.separator + "values.xml")); // xml file for
+        // expected
+        // metrics for
+        // files
+        DebugSensorContext context = new DebugSensorContext(); // new debug
+                                                               // context for
+                                                               // debug
+                                                               // information
+        sensor.analyse(project, context); // analysing project
+
+        Map<String, Double[]> expectedValues = new HashMap<String, Double[]>(); // create
+                                                                                // a
+                                                                                // map
+                                                                                // of
+                                                                                // expected
+                                                                                // values
+                                                                                // for
+                                                                                // each
+                                                                                // file
+        for (String fileName : xmlParser.getFileNames()) {
+            expectedValues.put(fileName, xmlParser.getFileValues(fileName));
+        }
+
+        for (String key : context.getMeasuresKeys()) { // check each measure if
+                                                       // it is correct
+            String fileKey = key.substring(0, key.lastIndexOf(':')); // get file
+                                                                     // name
+            String metricKey = key.substring(key.lastIndexOf(':') + 1, key.length()); // get
+                                                                                      // metric
+                                                                                      // key
+
+            if (!expectedValues.containsKey(fileKey)) {
+                continue; // skip [default] package
+            }
+            if (keyMetricIndex.get(metricKey) == null) {
+                continue;
+            }
+
+            Measure<?> measure = context.getMeasure(key);
+            double currentValue = measure.getValue();
+            double expectedValue = expectedValues.get(fileKey)[keyMetricIndex.get(metricKey)];
+
+            assertEquals(fileKey + "@" + metricKey, expectedValue, currentValue, 0.0);
+        }
     }
 
 }

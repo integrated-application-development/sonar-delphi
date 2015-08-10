@@ -34,7 +34,6 @@ import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.measures.RangeDistributionBuilder;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.antlr.ast.DelphiLCOMNode;
-import org.sonar.plugins.delphi.core.DelphiFile;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.language.ClassFieldInterface;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
@@ -152,7 +151,7 @@ public class LCOM4Metrics extends DefaultMetrics implements MetricsInterface {
      * {@inheritDoc}
      */
 
-    public void analyse(DelphiFile resource, SensorContext sensorContext, List<ClassInterface> classes,
+    public void analyse(InputFile resource, SensorContext sensorContext, List<ClassInterface> classes,
             List<FunctionInterface> functions,
             List<UnitInterface> units) {
         double gLOC4 = 0; // global for whole file
@@ -227,10 +226,10 @@ public class LCOM4Metrics extends DefaultMetrics implements MetricsInterface {
      * {@inheritDoc}
      */
 
-    public boolean executeOnResource(DelphiFile resource) {
+    public boolean executeOnResource(InputFile resource) {
         String[] endings = DelphiLanguage.instance.getFileSuffixes();
         for (String ending : endings) {
-            if (resource.getPath().endsWith("." + ending)) {
+            if (resource.absolutePath().endsWith("." + ending)) {
                 return true;
             }
         }

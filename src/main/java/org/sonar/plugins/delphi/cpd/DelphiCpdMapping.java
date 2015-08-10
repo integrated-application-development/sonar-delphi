@@ -22,6 +22,7 @@
 package org.sonar.plugins.delphi.cpd;
 
 import java.io.File;
+import java.lang.annotation.Inherited;
 import java.util.List;
 
 import net.sourceforge.pmd.cpd.Tokenizer;
@@ -29,7 +30,6 @@ import net.sourceforge.pmd.cpd.Tokenizer;
 import org.sonar.api.batch.CpdMapping;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Resource;
-import org.sonar.plugins.delphi.core.DelphiFile;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 
@@ -52,12 +52,10 @@ public class DelphiCpdMapping implements CpdMapping {
     }
 
     /**
-     * Creates DelphiFile
-     * 
-     * @return DelphiFile
+     * {@link Inherited}
      */
     public Resource createResource(File file, List<File> sourceDirs) {
-        return DelphiFile.fromIOFile(file, sourceDirs);
+        throw new UnsupportedOperationException();
     }
 
     /**

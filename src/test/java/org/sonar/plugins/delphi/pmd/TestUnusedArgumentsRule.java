@@ -21,13 +21,10 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.util.Arrays;
@@ -52,10 +49,10 @@ import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-public class DelphiPmdSensorTest {
+public class TestUnusedArgumentsRule {
 
     private static final String ROOT_NAME = "/org/sonar/plugins/delphi/PMDTest";
-    private static final String TEST_FILE = "/org/sonar/plugins/delphi/PMDTest/pmd.pas";
+    private static final String TEST_FILE = "/org/sonar/plugins/delphi/PMDTest/UnusedARgumentRule.pas";
 
     private Project project;
     private DelphiPmdSensor sensor;
@@ -113,66 +110,22 @@ public class DelphiPmdSensorTest {
     }
 
     @Test
-    public void shouldExecuteOnProjectTest() {
-        assertTrue(sensor.shouldExecuteOnProject(project));
-    }
-
-    @Test
-    public void analyseTest() {
+    public void testUnusedArguments() {
         // TODO Create one test per violation
 
         DebugSensorContext debugContext = new DebugSensorContext();
         sensor.analyse(project, debugContext);
 
-        RuleData ruleData[] = // all expected rule violations and their lines
-        {new RuleData("Class Name Rule", 7),
-                new RuleData("No Semi After Overload Rule", 9),
-                new RuleData("Public Fields Rule", 10),
-                new RuleData("Type Alias Rule", 13),
-                new RuleData("Type Alias Rule", 14),
-                new RuleData("One Class Per File Rule", 19),
-                new RuleData("Empty Interface Rule", 25),
-                new RuleData("Interface Name Rule", 25),
-                new RuleData("No Guid Rule", 29),
-                new RuleData("Record Name Rule", 34),
-                new RuleData("Inherited Method With No Code Rule", 45),
-                new RuleData("Empty Except Block Rule", 54),
-                new RuleData("Too Many Arguments Rule", 58),
-                new RuleData("Too Long Method Rule", 58),
-                new RuleData("Too Many Variables Rule", 59),
-                new RuleData("Uppercase Reserved Keywords Rule", 63),
-                new RuleData("Avoid Out Parameter Rule", 98),
-                new RuleData("Catching General Exception Rule", 103),
-                new RuleData("Empty Begin Statement Rule", 104),
-                new RuleData("If True Rule", 109),
-                new RuleData("If True Rule", 110),
-                new RuleData("Raising General Exception Rule", 111),
-                new RuleData("If Not False Rule", 113),
-                new RuleData("Unused Arguments Rule", 117),
-                new RuleData("Assigned And Free Rule", 125),
-                new RuleData("Assigned And Free Rule", 126),
-                new RuleData("Empty Else Statement Rule", 135),
-                new RuleData("Assigned And Free Rule", 147),
-                new RuleData("Mixed Names Rule", 163),
-                new RuleData("Mixed Names Rule", 169),
-                new RuleData("Mixed Names Rule", 175),
-                new RuleData("Constructor Without Inherited Statement Rule", 190),
-                new RuleData("Destructor Without Inherited Statement Rule", 196),
-                new RuleData("No 'begin' after 'do' Rule", 228),
-                new RuleData("With After Do/Then Rule", 248),
-                new RuleData("No Semicolon Rule", 290),
-                new RuleData("No Semicolon Rule", 291),
-                new RuleData("No Semicolon Rule", 294),
-                new RuleData("Too Long Method Rule", 243),
-                new RuleData("With After Do/Then Rule", 262),
-                new RuleData("Cast And Free Rule", 302),
-                new RuleData("Cast And Free Rule", 303)};
+        // all expected rule violations and their lines
+        RuleData ruleData[] = {
+                new RuleData("Unused Arguments Rule", 31)
+        };
 
         // Sort the violations by line number, so we don't have to add
         // violations order
         Arrays.sort(ruleData, RuleData.getComparator());
 
-        assertThat("number of issues", issues, hasSize(42));
+        assertThat("number of issues", issues, hasSize(1));
 
         for (int i = 0; i < issues.size(); ++i) {
             Issue issue = issues.get(i);

@@ -34,6 +34,7 @@ import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.resources.Directory;
 import org.sonar.api.resources.DuplicatedSourceException;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.RuleFinder;
@@ -43,8 +44,6 @@ import org.sonar.plugins.delphi.antlr.analyzer.DelphiASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.sanitizer.DelphiSourceSanitizer;
-import org.sonar.plugins.delphi.core.DelphiFile;
-import org.sonar.plugins.delphi.core.DelphiPackage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
@@ -67,13 +66,13 @@ public class DelphiSensor implements Sensor {
 
     private int scannedFiles = 0; // number of scanned files
     private Project project = null; // project
-    private Set<DelphiPackage> packageList = new HashSet<DelphiPackage>(); // package
-                                                                           // list
-    private Map<DelphiPackage, Integer> filesCount = new HashMap<DelphiPackage, Integer>();
+    private Set<Directory> packageList = new HashSet<Directory>(); // package
+                                                                   // list
+    private Map<Directory, Integer> filesCount = new HashMap<Directory, Integer>();
     // list of resources to process for metrics
-    private List<DelphiFile> resourceList = new ArrayList<DelphiFile>();
-    private Map<DelphiFile, List<ClassInterface>> fileClasses = new HashMap<DelphiFile, List<ClassInterface>>();
-    private Map<DelphiFile, List<FunctionInterface>> fileFunctions = new HashMap<DelphiFile, List<FunctionInterface>>();
+    private List<InputFile> resourceList = new ArrayList<InputFile>();
+    private Map<InputFile, List<ClassInterface>> fileClasses = new HashMap<InputFile, List<ClassInterface>>();
+    private Map<InputFile, List<FunctionInterface>> fileFunctions = new HashMap<InputFile, List<FunctionInterface>>();
     private List<UnitInterface> units = null; // project units
     private List<File> testDirectories = null; // test directories
 
@@ -135,13 +134,13 @@ public class DelphiSensor implements Sensor {
         ProgressReporter progressReporter = new ProgressReporter(resourceList.size(), 10, new ProgressReporterLogger(
                 DelphiUtils.LOG));
 
-        for (DelphiFile resource : resourceList) { // for every resource
-            DelphiUtils.LOG.debug(">> PROCESSING " + resource.getPath());
+        for (InputFile resource : resourceList) { // for every resource
+            DelphiUtils.LOG.debug(">> PROCESSING " + resource.file().getPath());
             for (MetricsInterface metric : metrics) { // for every metric
                 if (metric.executeOnResource(resource)) {
                     metric.analyse(resource, sensorContext, fileClasses.get(resource), fileFunctions.get(resource),
                             units);
-                    InputFile inputFile = delphiProjectHelper.getFile(resource.getAbsolutePath());
+                    InputFile inputFile = delphiProjectHelper.getFile(resource.file().getAbsolutePath());
                     metric.save(inputFile, sensorContext);
                 }
             } // metric
@@ -167,8 +166,8 @@ public class DelphiSensor implements Sensor {
      */
     private void parsePackages(SensorContext sensorContext) {
         // for every package
-        for (DelphiPackage pack : packageList) {
-            sensorContext.saveMeasure(pack, CoreMetrics.PACKAGES, 1.0);
+        for (Directory pack : packageList) {
+            sensorContext.saveMeasure(pack, CoreMetrics.DIRECTORIES, 1.0);
             sensorContext.saveMeasure(pack, CoreMetrics.FILES, (double) filesCount.get(pack));
         }
     }
@@ -231,12 +230,24 @@ public class DelphiSensor implements Sensor {
 
         boolean isTest = delphiProjectHelper.isTestFile(sourceFile, testDirectories);
 
-        // adding file to package
-        DelphiFile resource = DelphiFile.fromIOFile(sourceFile, project.getFileSystem().getSourceDirs(), isTest);
-        DelphiPackage pack = new DelphiPackage(resource.getParent().getKey());
-        packageList.add(pack); // new pack
+        DelphiUtils.LOG.debug(">> PARSING " + sourceFile.getAbsolutePath() + " test: " + isTest + " directory: "
+                + sourceFile.getParentFile());
 
-        DelphiUtils.LOG.debug(">> PARSING " + resource.getPath() + " test: " + isTest);
+        // adding file to package
+        InputFile resource = delphiProjectHelper.getFile(sourceFile);
+        // DelphiFile resource = DelphiFile.fromIOFile(sourceFile,
+        // project.getFileSystem().getSourceDirs(), isTest);
+
+        Directory pack = delphiProjectHelper.getDirectory(sourceFile.getParentFile(), project);
+
+        if (pack == null) {
+            throw new IllegalArgumentException("Directory: " + sourceFile.getParentFile() + " not found.");
+            // DelphiUtils.LOG.debug("Directory: " + sourceFile.getParentFile()
+            // + " not found.");
+            // return;
+        }
+
+        packageList.add(pack); // new pack
 
         if (filesCount.containsKey(pack)) {
             filesCount.put(pack, filesCount.get(pack) + 1); // files count

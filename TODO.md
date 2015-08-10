@@ -17,3 +17,38 @@
  * Metrics like DeadCode and Complexity should generates issues
  * Create integration tests like other plugins
  * Clean up dependencies to make plugin smaller
+ * Update parent POM
+ * Update dependencies to latest version
+ * Add support to create [custom rules](http://docs.sonarqube.org/display/DEV/Extending+Coding+Rules)
+ * Make all test resources compilable on real delphi.
+ 
+ * Find Contributors
+   * http://stackoverflow.com/questions/29373268/which-version-of-sonarqube-for-depereciated-delphi-plugin
+   * http://sonarqube-archive.15.x6.nabble.com/Delphi-Language-td5031312.html
+   * http://sonarqube-archive.15.x6.nabble.com/sonar-dev-Sonar-delphi-plugin-no-longer-mantained-any-help-in-updating-it-td5029115.html
+   
+ * False positives
+   * Unused Arguments Rule
+	 * Ignore Sender parameter from TNotifyEvent 
+   * No Semicolon Rule:
+     * Pointing the incorrect line:
+		143	procedure TRel_Educacao.FormClose(Sender: TObject;
+		144	  var Action: TCloseAction);
+		145	begin
+		146	  RecArt77.close ----> This its the right line
+		147	end; ----> Pointing this line
+		
+	 * Must skip `end` followed by `else`
+		if true then
+		begin
+		end  ----> Pointing this line as missing semicolon
+		else
+		begin
+		end;
+  * Do not use type aliases (Why it is evil?)
+    * Class of class use case
+		 TMyComponentClass = class of TComponent;
+    * Defining array types
+         TCustomArray = array of byte;
+    * Defining derived type (Verify)
+	     TMyInteger = type Integer;

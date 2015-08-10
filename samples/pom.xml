@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>br.com.fabricio</groupId>
+  <artifactId>ProjectName</artifactId>
+  <version>1.0</version>
+  <packaging>pom</packaging>
+  <name>ProjectName</name>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+	<testSourceDirectory>unittest</testSourceDirectory>
+  </build>
+  <properties>
+    <sonar.language>delph</sonar.language>
+    <sonar.surefire.reportsPath>target\surefire-reports</sonar.surefire.reportsPath>
+	<sonar.junit.reportsPath>target\surefire-reports</sonar.junit.reportsPath>
+    <sonar.delphi.codecoverage.tool>delphi code coverage</sonar.delphi.codecoverage.tool>
+    <sonar.delphi.codecoverage.report>target\CoverageReports\CodeCoverage_Summary.xml</sonar.delphi.codecoverage.report>
+	<sonar.importSources>true</sonar.importSources>
+  </properties>
+  
+  <scm>
+	<connection>scm:svn:https://repository/project/trunk</connection>
+	<developerConnection>scm:svn:https://repository/project/trunk</developerConnection>
+	<url>https://repository/project/trunk</url>
+  </scm>
+  
+<profiles>
+	<profile>
+		<id>sonar</id>
+		<activation>
+			<activeByDefault>true</activeByDefault>
+		</activation>
+		<properties>
+			<sonar.jdbc.url>jdbc:postgresql://localhost/sonar</sonar.jdbc.url>
+			<sonar.jdbc.driver>org.postgresql.Driver</sonar.jdbc.driver>
+			<sonar.jdbc.username>sonar</sonar.jdbc.username>
+			<sonar.jdbc.password>sonar</sonar.jdbc.password>
+			<sonar.host.url>http://localhost:9000</sonar.host.url>
+		</properties>
+	</profile>
+</profiles>
+  
+</project>

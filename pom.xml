@@ -7,7 +7,7 @@
     <artifactId>parent</artifactId>
     <version>18</version>
     <relativePath>../parent</relativePath>
-  </parent>
+  </parent> 
 
   <artifactId>sonar-delphi-plugin</artifactId>
   <version>0.3-SNAPSHOT</version>
@@ -155,7 +155,8 @@
     <dependency>
       <groupId>org.codehaus.sonar</groupId>
       <artifactId>sonar-testing-harness</artifactId>
-      <version>${sonar.version}</version>
+<!--       <version>${sonar.version}</version> -->
+	  <version>4.5.4</version>
       <scope>test</scope>
       <exclusions>
       	<exclusion>
@@ -205,12 +206,6 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.sonar</groupId>
-      <artifactId>sonar-ws-client</artifactId>
-      <version>${sonar.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-project</artifactId>
       <version>2.0.7</version>
@@ -226,6 +221,12 @@
       <groupId>org.codehaus.sonar.sslr-squid-bridge</groupId>
       <artifactId>sslr-squid-bridge</artifactId>
       <version>2.6</version>
+      <exclusions>
+      	<exclusion>
+      		<artifactId>sonar-plugin-api</artifactId>
+      		<groupId>org.codehaus.sonar</groupId>
+      	</exclusion>
+      </exclusions>
     </dependency>
     <dependency>
     	<groupId>org.projectlombok</groupId>

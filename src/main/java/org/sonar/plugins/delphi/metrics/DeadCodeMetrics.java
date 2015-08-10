@@ -38,7 +38,6 @@ import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.RuleQuery;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
-import org.sonar.plugins.delphi.core.DelphiFile;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.ClassPropertyInterface;
@@ -86,7 +85,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
      * {@inheritDoc}
      */
 
-    public void analyse(DelphiFile resource, SensorContext sensorContext, List<ClassInterface> classes,
+    public void analyse(InputFile resource, SensorContext sensorContext, List<ClassInterface> classes,
             List<FunctionInterface> functions,
             List<UnitInterface> units) {
         if (!isCalculated) { // calculate only once
@@ -253,10 +252,11 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
      * {@inheritDoc}
      */
 
-    public boolean executeOnResource(DelphiFile resource) {
+    public boolean executeOnResource(InputFile resource) {
+        // TODO duplicated code between Metrics
         String[] endings = DelphiLanguage.instance.getFileSuffixes();
         for (String ending : endings) {
-            if (resource.getPath().endsWith("." + ending)) {
+            if (resource.absolutePath().endsWith("." + ending)) {
                 return true;
             }
         }

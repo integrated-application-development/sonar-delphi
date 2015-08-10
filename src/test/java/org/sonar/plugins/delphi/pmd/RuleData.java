@@ -19,39 +19,38 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.core;
 
-import org.sonar.api.resources.AbstractLanguage;
+package org.sonar.plugins.delphi.pmd;
 
-/**
- * Class representing Delphi language
- */
-public class DelphiLanguage extends AbstractLanguage {
+import java.util.Comparator;
 
-    public static final String KEY = "delph";
-    public static DelphiLanguage instance = new DelphiLanguage();
+import lombok.ToString;
 
-    public static final String FILE_SOURCE_CODE_SUFFIX = "pas";
-    public static final String FILE_PROJECT_SUFFIX = "dpr";
-    public static final String FILE_PACKAGE_SUFFIX = "dpk";
+@ToString
+class RuleData {
 
-    private static final String LANGUAGE_NAME = "Delphi";
+    private String name;
+    private int line;
 
-    private static final String[] FILE_SUFFIXES = {FILE_SOURCE_CODE_SUFFIX, FILE_PROJECT_SUFFIX, FILE_PACKAGE_SUFFIX};
-
-    /**
-     * Default ctor
-     */
-    public DelphiLanguage() {
-        super(KEY, LANGUAGE_NAME);
-        instance = this;
+    public RuleData(String _name, int _line) {
+        name = _name;
+        line = _line;
     }
 
-    /**
-     * @return Delphi source code file suffixes
-     */
+    public String getName() {
+        return name;
+    }
 
-    public String[] getFileSuffixes() {
-        return FILE_SUFFIXES;
+    public int getLine() {
+        return line;
+    }
+
+    public static Comparator<RuleData> getComparator() {
+        return new Comparator<RuleData>() {
+
+            public int compare(RuleData o1, RuleData o2) {
+                return o1.getLine() - o2.getLine();
+            }
+        };
     }
 }

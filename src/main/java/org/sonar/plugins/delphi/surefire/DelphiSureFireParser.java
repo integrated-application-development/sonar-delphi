@@ -32,13 +32,13 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.ParsingUtils;
 import org.sonar.api.utils.StaxParser;
-import org.sonar.plugins.delphi.core.DelphiFile;
+import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.surefire.data.SurefireStaxHandler;
 import org.sonar.plugins.surefire.data.UnitTestClassReport;
@@ -54,37 +54,34 @@ public class DelphiSureFireParser {
 
     private static final String FILE_EXT = ".pas";
     private static final String ERROR_MSG = "Unit test file not found: ";
-    private Project project;
+    private final Project project;
+    private final DelphiProjectHelper delphiProjectHelper;
 
     /**
      * ctor
      * 
      * @param delphiProject project provided by Sonar
      */
-    public DelphiSureFireParser(Project delphiProject) {
+    public DelphiSureFireParser(Project delphiProject, DelphiProjectHelper delphiProjectHelper) {
         this.project = delphiProject;
+        this.delphiProjectHelper = delphiProjectHelper;
     }
 
-    protected Resource getUnitTestResource(String classKey) {
+    protected InputFile getUnitTestResource(String filename) {
         try {
-            File testFile = DelphiFile.findFileInDirectories(classKey
-                    + FILE_EXT, project.getFileSystem().getTestDirs());
-            org.sonar.api.resources.File resourceFile = DelphiFile.fromIOFile(
-                    testFile, project.getFileSystem().getTestDirs(), true)
-                    .toFile(project);
-            if (resourceFile != null) {
+            InputFile testFile = delphiProjectHelper.findTestFileInDirectories(filename);
+            if (testFile != null) {
                 // resource source code not saved, because tests files were
                 // excluded from analysis, so read the test file and save its
                 // source code
                 // so Sonar could show it
-                return resourceFile;
+                return testFile;
             }
             throw new FileNotFoundException(); // no file found
         } catch (FileNotFoundException e) {
-            DelphiUtils.LOG.warn(ERROR_MSG + classKey + FILE_EXT);
+            DelphiUtils.LOG.warn(ERROR_MSG + filename + FILE_EXT);
         }
-
-        return new DelphiFile(classKey, true); // default behavior
+        return null;
     }
 
     public void collect(Project project, SensorContext context, File reportsDir) {
@@ -154,7 +151,7 @@ public class DelphiSureFireParser {
                 .getIndexByClassname().entrySet()) {
             UnitTestClassReport report = entry.getValue();
             if (report.getTests() > 0) {
-                Resource resource = getUnitTestResource(entry.getKey());
+                InputFile resource = getUnitTestResource(entry.getKey());
                 if (resource != null) {
                     save(entry.getValue(), resource, context);
                 } else {
@@ -164,7 +161,7 @@ public class DelphiSureFireParser {
         }
     }
 
-    private void save(UnitTestClassReport report, Resource resource,
+    private void save(UnitTestClassReport report, InputFile resource,
             SensorContext context) {
         double testsCount = report.getTests() - report.getSkipped();
         saveMeasure(context, resource, CoreMetrics.SKIPPED_TESTS,
@@ -185,7 +182,7 @@ public class DelphiSureFireParser {
         }
     }
 
-    private void saveMeasure(SensorContext context, Resource resource,
+    private void saveMeasure(SensorContext context, InputFile resource,
             Metric<? extends Number> metric, double value) {
         if (!Double.isNaN(value)) {
             context.saveMeasure(resource, metric, value);

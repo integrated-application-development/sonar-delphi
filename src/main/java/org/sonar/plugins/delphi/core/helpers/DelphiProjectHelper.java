@@ -34,6 +34,8 @@ import org.sonar.api.CoreProperties;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.resources.Directory;
+import org.sonar.api.resources.Project;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
@@ -48,6 +50,8 @@ import com.google.common.collect.Lists;
  */
 // TODO Replace inheritance by composition
 public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtension {
+
+    public static final String DEFAULT_PACKAGE_NAME = "[default]";
 
     private final Configuration configuration;
     private final RuleFinder ruleFinder;
@@ -248,12 +252,33 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
         return Lists.newArrayList(inputFiles);
     }
 
+    public List<InputFile> testFiles() {
+        FilePredicates p = fs.predicates();
+        Iterable<InputFile> inputFiles = fs.inputFiles(p.and(p.hasLanguage(DelphiLanguage.KEY),
+                p.hasType(InputFile.Type.TEST)));
+        return Lists.newArrayList(inputFiles);
+    }
+
     public boolean shouldExecuteOnProject() {
         return fs.hasFiles(fs.predicates().hasLanguage(DelphiLanguage.KEY));
     }
 
     public InputFile getFile(String path) {
-        return fs.inputFile(fs.predicates().is(new File(path)));
+        return getFile(new File(path));
+    }
+
+    public InputFile getFile(File file) {
+        return fs.inputFile(fs.predicates().is(file));
+    }
+
+    public Directory getDirectory(java.io.File dir, Project module) {
+        Directory directory = Directory.fromIOFile(dir, module);
+
+        if (directory.getKey() == null) {
+            return Directory.create(DEFAULT_PACKAGE_NAME);
+        }
+
+        return directory;
     }
 
     public InputFile findFileInDirectories(String fileName) throws FileNotFoundException {
@@ -264,6 +289,24 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
         }
 
         throw new FileNotFoundException(fileName);
+    }
+
+    public InputFile findTestFileInDirectories(String fileName) throws FileNotFoundException {
+        String unitFileName = normalize(fileName);
+        for (InputFile inputFile : testFiles()) {
+            if (inputFile.file().getName().equalsIgnoreCase(unitFileName)) {
+                return inputFile;
+            }
+        }
+
+        throw new FileNotFoundException(fileName);
+    }
+
+    private String normalize(String fileName) {
+        if (!fileName.contains(".")) {
+            return fileName + "." + DelphiLanguage.FILE_SOURCE_CODE_SUFFIX;
+        }
+        return fileName;
     }
 
     public File baseDir() {

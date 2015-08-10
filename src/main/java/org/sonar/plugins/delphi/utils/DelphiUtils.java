@@ -36,7 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.DelphiPlugin;
-import org.sonar.plugins.delphi.core.DelphiFile;
+import org.sonar.plugins.delphi.core.DelphiLanguage;
 
 /**
  * Class for directory filtering with File::listFiles()
@@ -181,9 +181,47 @@ public final class DelphiUtils {
         List<File> sourceFiles = new ArrayList<File>();
         File baseDir = project.getFileSystem().getBasedir();
 
-        collectFiles(baseDir, sourceFiles, DelphiFile.getFileFilter());
+        collectFiles(baseDir, sourceFiles, DelphiUtils.getFileFilter());
 
         return sourceFiles;
+    }
+
+    /**
+     * Gets FileFilter associated with DelphiLanguage source files (*.pas,
+     * *.dpr, *.dpk)
+     * 
+     * @return FileFilter
+     */
+    public static FileFilter getFileFilter() {
+        return new FileFilter() {
+
+            public boolean accept(File pathname) {
+                if (!pathname.isFile()) {
+                    return false;
+                }
+                String[] endings = DelphiLanguage.instance.getFileSuffixes();
+                for (String ending : endings) {
+                    if (pathname.getAbsolutePath().endsWith("." + ending)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        };
+    }
+
+    /**
+     * Gets FileFilter associated with directories
+     * 
+     * @return FileFilter
+     */
+    public static FileFilter getDirectoryFilter() {
+        return new FileFilter() {
+
+            public boolean accept(File pathname) {
+                return pathname.isDirectory();
+            }
+        };
     }
 
     private static void collectDirs(File baseDir, List<File> source) {

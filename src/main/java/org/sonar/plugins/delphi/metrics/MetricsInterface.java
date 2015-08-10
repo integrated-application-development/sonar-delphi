@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.plugins.delphi.core.DelphiFile;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
@@ -43,7 +42,7 @@ public interface MetricsInterface {
      * @param classes Classes in source file
      * @param functions Functions in source file
      */
-    void analyse(DelphiFile resource, SensorContext sensorContext, List<ClassInterface> classes,
+    void analyse(InputFile resource, SensorContext sensorContext, List<ClassInterface> classes,
             List<FunctionInterface> functions,
             List<UnitInterface> units);
 
@@ -78,5 +77,5 @@ public interface MetricsInterface {
      * @param resource Resource to check
      * @return True if metric should execute, false otherwise
      */
-    boolean executeOnResource(DelphiFile resource);
+    boolean executeOnResource(InputFile resource);
 }
