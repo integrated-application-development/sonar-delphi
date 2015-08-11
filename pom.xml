@@ -211,12 +211,7 @@
       <version>2.0.7</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-container-default</artifactId>
-      <version>1.0-alpha-9-stable-1</version>
-      <type>pom</type>
-    </dependency>
+    
     <dependency>
       <groupId>org.codehaus.sonar.sslr-squid-bridge</groupId>
       <artifactId>sslr-squid-bridge</artifactId>
@@ -232,6 +227,7 @@
     	<groupId>org.projectlombok</groupId>
    		 <artifactId>lombok</artifactId>
    		 <version>1.16.4</version>
+   		 <scope>provided</scope>
 	</dependency>
     <!-- HSQL FOR AQTIME TESTING -->
     <dependency>

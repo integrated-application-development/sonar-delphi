@@ -1,5 +1,4 @@
  * Remove static method dependency. Use Dependency Injection. 
-    * DelphiFile
 	* DelphiUtils 
  * Update to Java 7 - http://docs.sonarqube.org/display/SONAR/Requirements
  * Update plugin following the https://github.com/SonarSource/sonar-examples/blob/master/plugins/sonar-reference-plugin
