@@ -17,7 +17,7 @@
   <description>Enables analysis of Delphi projects.</description>
 
   <inceptionYear>2011</inceptionYear>
-  <url>http://docs.codehaus.org/display/SONAR/Delphi+plugin</url>
+  <url>http://docs.sonarqube.org/display/SONARQUBE45/Delphi+Plugin</url>
 
   <developers>
   	<developer>
@@ -51,17 +51,19 @@
   </developers>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/delphi</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/trunk/delphi</developerConnection>
-    <url>http://svn.sonar-plugins.codehaus.org</url>
+    <connection>scm:git:git@github.com:fabriciocolombo/sonar-delphi.git</connection>
+    <developerConnection>scm:git:git@github.com:fabriciocolombo/sonar-delphi.git</developerConnection>
+    <url>https://github.com/fabriciocolombo/sonar-delphi</url>
+    <tag>HEAD</tag>
   </scm>
+    
   <issueManagement>
-    <system>JIRA</system>
-    <url>http://jira.codehaus.org/browse/SONARPLUGINS/component/15459</url>
+    <system>GitHub</system>
+    <url>https://github.com/fabriciocolombo/sonar-delphi/issues</url>
   </issueManagement>
   <ciManagement>
-    <system>Bamboo</system>
-    <url>http://ci.codehaus.org/browse/SONAR-DELPHI</url>
+    <system>Travis</system>
+    <url>https://travis-ci.org/fabriciocolombo/sonar-delphi</url>
   </ciManagement>
  
   <properties>
