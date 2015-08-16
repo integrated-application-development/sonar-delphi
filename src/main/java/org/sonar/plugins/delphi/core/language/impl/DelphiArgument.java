@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,62 +29,60 @@ import org.sonar.plugins.delphi.core.language.ArgumentInterface;
  */
 public class DelphiArgument implements ArgumentInterface {
 
-  protected String name;
-  protected String type;
+    protected String name;
+    protected String type;
 
-  /**
-   * Default ctor, creates argument with default name and type
-   */
-  public DelphiArgument() {
-    name = "UNKNOWN_ARGUMENT";
-    type = "UNKNOWN_TYPE";
-  }
-
-  /**
-   * Creates an argument with provided name and type
-   * 
-   * @param argName
-   *          Argument name
-   * @param argType
-   *          Argument type
-   */
-  public DelphiArgument(String argName, String argType) {
-    name = argName.toLowerCase();
-    type = argType.toLowerCase();
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String value) {
-    name = value;
-  }
-
-  public String getType() {
-    return type;
-  }
-
-  public void setType(String value) {
-    type = value;
-  }
-
-  @Override
-  public String toString() {
-    return name + ":" + type;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (o == null) {
-      return false;
+    /**
+     * Default ctor, creates argument with default name and type
+     */
+    public DelphiArgument() {
+        name = "UNKNOWN_ARGUMENT";
+        type = "UNKNOWN_TYPE";
     }
-    return toString().equals(o.toString());
-  }
 
-  @Override
-  public int hashCode() {
-    return toString().hashCode();
-  }
+    /**
+     * Creates an argument with provided name and type
+     * 
+     * @param argName Argument name
+     * @param argType Argument type
+     */
+    public DelphiArgument(String argName, String argType) {
+        name = argName.toLowerCase();
+        type = argType.toLowerCase();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String value) {
+        name = value;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String value) {
+        type = value;
+    }
+
+    @Override
+    public String toString() {
+        return name + ":" + type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        return toString().equals(o.toString());
+    }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
 
 }

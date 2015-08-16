@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,25 +29,22 @@ import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
  */
 public class EndIfDirective extends CommonCompilerDirective {
 
-  private static final String DIRECTIVE_NAME = "endif";
+    private static final String DIRECTIVE_NAME = "endif";
 
-  /**
-   * ctor
-   * 
-   * @param item
-   *          directive item
-   * @param firstCharPos
-   *          first character position
-   * @param lastCharPos
-   *          last character position
-   */
-  public EndIfDirective(String item, int firstCharPos, int lastCharPos) {
-    super(DIRECTIVE_NAME, item, firstCharPos, lastCharPos);
-  }
+    /**
+     * ctor
+     * 
+     * @param item directive item
+     * @param firstCharPos first character position
+     * @param lastCharPos last character position
+     */
+    public EndIfDirective(String item, int firstCharPos, int lastCharPos) {
+        super(DIRECTIVE_NAME, item, firstCharPos, lastCharPos);
+    }
 
-  @Override
-  public CompilerDirectiveType getType() {
-    return CompilerDirectiveType.ENDIF;
-  }
+    @Override
+    public CompilerDirectiveType getType() {
+        return CompilerDirectiveType.ENDIF;
+    }
 
 }

@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,30 +25,30 @@ package org.sonar.plugins.delphi.antlr.directives.impl;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
 
 /**
- * Class for unused compiler directives, such as: {$I+-} {$WARN} and so on. They do not affect parsing and processing a certain file. This
- * class will prevent from writing CompilerDirectiveFactoryUnsupportedDirectiveException to log file.
+ * Class for unused compiler directives, such as: {$I+-} {$WARN} and so on. They
+ * do not affect parsing and processing a certain file. This class will prevent
+ * from writing CompilerDirectiveFactoryUnsupportedDirectiveException to log
+ * file.
  */
 public class UnusedDirective extends CommonCompilerDirective {
 
-  /**
-   * ctor
-   * 
-   * @param firstCharPos
-   *          first character position
-   * @param lastCharPos
-   *          last character position
-   */
-  public UnusedDirective(int firstCharPos, int lastCharPos) {
-    super("unused", "", firstCharPos, lastCharPos);
-  }
+    /**
+     * ctor
+     * 
+     * @param firstCharPos first character position
+     * @param lastCharPos last character position
+     */
+    public UnusedDirective(int firstCharPos, int lastCharPos) {
+        super("unused", "", firstCharPos, lastCharPos);
+    }
 
-  /**
-   * returns UNUSED
-   */
+    /**
+     * returns UNUSED
+     */
 
-  @Override
-  public CompilerDirectiveType getType() {
-    return CompilerDirectiveType.UNUSED;
-  }
+    @Override
+    public CompilerDirectiveType getType() {
+        return CompilerDirectiveType.UNUSED;
+    }
 
 }

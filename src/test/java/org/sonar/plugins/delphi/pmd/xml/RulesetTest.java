@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,8 +22,7 @@
  */
 package org.sonar.plugins.delphi.pmd.xml;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,38 +32,38 @@ import org.junit.Test;
 
 public class RulesetTest {
 
-  private Ruleset ruleset;
+    private Ruleset ruleset;
 
-  @Before
-  public void init() {
-    ruleset = new Ruleset("desc");
-  }
+    @Before
+    public void init() {
+        ruleset = new Ruleset("desc");
+    }
 
-  @Test
-  public void rulesetTest() {
-    assertFalse((new Ruleset().getDescription()) == ruleset.getDescription());
-  }
+    @Test
+    public void rulesetTest() {
+        assertFalse((new Ruleset().getDescription()) == ruleset.getDescription());
+    }
 
-  @Test
-  public void descriptionTest() {
-    assertEquals("desc", ruleset.getDescription());
-    ruleset.setDescription("desc2");
-    assertEquals("desc2", ruleset.getDescription());
-  }
+    @Test
+    public void descriptionTest() {
+        assertEquals("desc", ruleset.getDescription());
+        ruleset.setDescription("desc2");
+        assertEquals("desc2", ruleset.getDescription());
+    }
 
-  @Test
-  public void rulesTest() {
-    assertEquals(0, ruleset.getRules().size());
+    @Test
+    public void rulesTest() {
+        assertEquals(0, ruleset.getRules().size());
 
-    List<DelphiRule> rules = new ArrayList<DelphiRule>();
-    rules.add(new DelphiRule("testRule"));
-    ruleset.setRules(rules);
+        List<DelphiRule> rules = new ArrayList<DelphiRule>();
+        rules.add(new DelphiRule("testRule"));
+        ruleset.setRules(rules);
 
-    assertEquals(rules, ruleset.getRules());
-    assertEquals(1, ruleset.getRules().size());
+        assertEquals(rules, ruleset.getRules());
+        assertEquals(1, ruleset.getRules().size());
 
-    ruleset.addRule(new DelphiRule("testRule2"));
-    assertEquals(2, ruleset.getRules().size());
-  }
+        ruleset.addRule(new DelphiRule("testRule2"));
+        assertEquals(2, ruleset.getRules().size());
+    }
 
 }

@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,52 +30,48 @@ import org.antlr.runtime.tree.CommonTree;
  */
 public class DelphiNode extends CommonTree {
 
-  protected ASTTree mainTree = null;
+    protected ASTTree mainTree = null;
 
-  /**
-   * Default C-tor as in CommonTree
-   * 
-   * @param payload
-   *          Provided token
-   */
-  public DelphiNode(Token payload) {
-    super(payload);
-  }
-
-  /**
-   * C-tor with token and AST tree that has this node
-   * 
-   * @param payload
-   *          Provided token
-   * @param tree
-   *          AST Tree
-   */
-  public DelphiNode(Token payload, ASTTree tree) {
-    super(payload);
-    mainTree = tree;
-  }
-
-  /**
-   * Gets child type, or -1 if child does not exist
-   * 
-   * @param index
-   *          Child index
-   * @return Child type, or -1 if child is non existant
-   */
-  public int getChildType(int index) {
-    if (index > -1 && index < getChildCount()) {
-      return getChild(index).getType();
+    /**
+     * Default C-tor as in CommonTree
+     * 
+     * @param payload Provided token
+     */
+    public DelphiNode(Token payload) {
+        super(payload);
     }
-    return -1;
-  }
 
-  /**
-   * Gets the AST Tree associated with this node
-   * 
-   * @return AST Tree
-   */
-  public ASTTree getASTTree() {
-    return mainTree;
-  }
+    /**
+     * C-tor with token and AST tree that has this node
+     * 
+     * @param payload Provided token
+     * @param tree AST Tree
+     */
+    public DelphiNode(Token payload, ASTTree tree) {
+        super(payload);
+        mainTree = tree;
+    }
+
+    /**
+     * Gets child type, or -1 if child does not exist
+     * 
+     * @param index Child index
+     * @return Child type, or -1 if child is non existant
+     */
+    public int getChildType(int index) {
+        if (index > -1 && index < getChildCount()) {
+            return getChild(index).getType();
+        }
+        return -1;
+    }
+
+    /**
+     * Gets the AST Tree associated with this node
+     * 
+     * @return AST Tree
+     */
+    public ASTTree getASTTree() {
+        return mainTree;
+    }
 
 }

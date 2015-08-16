@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,29 +31,30 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class PublicFieldsRule extends DelphiRule {
 
-  @Override
-  public Object visit(DelphiPMDNode node, Object data) {
-    if (node.getType() == DelphiLexer.TkNewType) // encountering new type, checking for its fields
-    {
-      Tree parent = node.getChild(0);
-      boolean isPublic = false;
-      for (int i = 0; i < parent.getChildCount(); ++i) {
-        Tree child = parent.getChild(i);
-        if (child.getType() == DelphiLexer.PUBLIC) {
-          isPublic = true;
-        } else if (isNotPublic(child.getType())) {
-          isPublic = false;
-        } else if (child.getType() == DelphiLexer.TkClassField && isPublic) {
-          addViolation(data, (DelphiPMDNode) child);
+    @Override
+    public Object visit(DelphiPMDNode node, Object data) {
+        if (node.getType() == DelphiLexer.TkNewType) // encountering new type,
+                                                     // checking for its fields
+        {
+            Tree parent = node.getChild(0);
+            boolean isPublic = false;
+            for (int i = 0; i < parent.getChildCount(); ++i) {
+                Tree child = parent.getChild(i);
+                if (child.getType() == DelphiLexer.PUBLIC) {
+                    isPublic = true;
+                } else if (isNotPublic(child.getType())) {
+                    isPublic = false;
+                } else if (child.getType() == DelphiLexer.TkClassField && isPublic) {
+                    addViolation(data, (DelphiPMDNode) child);
+                }
+            }
         }
-      }
+
+        return data;
     }
 
-    return data;
-  }
-
-  private boolean isNotPublic(int type) {
-    return type == DelphiLexer.PRIVATE || type == DelphiLexer.PROTECTED || type == DelphiLexer.PROPERTY;
-  }
+    private boolean isNotPublic(int type) {
+        return type == DelphiLexer.PRIVATE || type == DelphiLexer.PROTECTED || type == DelphiLexer.PROPERTY;
+    }
 
 }

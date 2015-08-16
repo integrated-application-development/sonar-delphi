@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -35,50 +36,49 @@ import org.sonar.api.rules.RuleQuery;
  */
 public class DebugRuleFinder implements org.sonar.api.rules.RuleFinder {
 
-	/**
-	 * Default ctor
-	 */
-	public DebugRuleFinder() {
-	}
+    /**
+     * Default ctor
+     */
+    public DebugRuleFinder() {
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
+    /**
+     * {@inheritDoc}
+     */
 
-	public Rule find(RuleQuery query) {
-		Rule rule = Rule.create(query.getRepositoryKey(), query.getConfigKey(),
-				query.getKey());
-		return rule;
-	}
+    public Rule find(RuleQuery query) {
+        Rule rule = Rule.create(query.getRepositoryKey(), query.getConfigKey(),
+                query.getKey());
+        return rule;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
+    /**
+     * {@inheritDoc}
+     */
 
-	public Rule findById(int ruleId) {
-		return null;
-	}
+    public Rule findById(int ruleId) {
+        return null;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
+    /**
+     * {@inheritDoc}
+     */
 
-	public Rule findByKey(String repositoryKey, String key) {
-		return null;
-	}
+    public Rule findByKey(String repositoryKey, String key) {
+        return null;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
+    /**
+     * {@inheritDoc}
+     */
 
-	public Collection<Rule> findAll(RuleQuery query) {
-		return null;
-	}
+    public Collection<Rule> findAll(RuleQuery query) {
+        return null;
+    }
 
-	@CheckForNull
-	public Rule findByKey(RuleKey key) {
-		return null;
-	}
-
+    @CheckForNull
+    public Rule findByKey(RuleKey key) {
+        return null;
+    }
 
 }

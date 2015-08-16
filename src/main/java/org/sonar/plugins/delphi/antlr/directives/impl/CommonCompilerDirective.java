@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,71 +30,68 @@ import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
  */
 public class CommonCompilerDirective implements CompilerDirective {
 
-  protected String name;
-  protected String item;
-  protected int firstCharPos;
-  protected int lastCharPos;
+    protected String name;
+    protected String item;
+    protected int firstCharPos;
+    protected int lastCharPos;
 
-  /**
-   * ctor
-   * 
-   * @param name
-   *          directive name
-   * @param item
-   *          directive item
-   * @param firstCharPos
-   *          directive first character occurence
-   * @throws IllegalArgumentException
-   *           if name was null, or firstCharPos < 0, or firstCharPos < lastCharPos
-   */
-  public CommonCompilerDirective(String name, String item, int firstCharPos, int lastCharPos) {
-    assertValues(name, firstCharPos, lastCharPos);
-    this.name = name;
-    this.item = item;
-    this.firstCharPos = firstCharPos;
-    this.lastCharPos = lastCharPos;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public String getItem() {
-    return item;
-  }
-
-  public int getFirstCharPosition() {
-    return firstCharPos;
-  }
-
-  public int getLastCharPosition() {
-    return lastCharPos;
-  }
-
-  public CompilerDirectiveType getType() {
-    return CompilerDirectiveType.UNKNOWN;
-  }
-
-  private void assertValues(String name, int beginPos, int endPos) {
-    if (name == null) {
-      throw new IllegalArgumentException("Compiler directive name cannot be null!");
-    }
-    if (beginPos < 0 || endPos < 0) {
-      throw new IllegalArgumentException("Compiler directive first/last character occurence must be >= 0");
-    }
-    if (beginPos > endPos) {
-      throw new IllegalArgumentException("Compiler directive first character must be <= last character");
+    /**
+     * ctor
+     * 
+     * @param name directive name
+     * @param item directive item
+     * @param firstCharPos directive first character occurence
+     * @throws IllegalArgumentException if name was null, or firstCharPos < 0,
+     *             or firstCharPos < lastCharPos
+     */
+    public CommonCompilerDirective(String name, String item, int firstCharPos, int lastCharPos) {
+        assertValues(name, firstCharPos, lastCharPos);
+        this.name = name;
+        this.item = item;
+        this.firstCharPos = firstCharPos;
+        this.lastCharPos = lastCharPos;
     }
 
-  }
+    public String getName() {
+        return name;
+    }
 
-  @Override
-  public String toString() {
-    return name + " " + item;
-  }
+    public String getItem() {
+        return item;
+    }
 
-  public int getLength() {
-    return lastCharPos - firstCharPos;
-  }
+    public int getFirstCharPosition() {
+        return firstCharPos;
+    }
+
+    public int getLastCharPosition() {
+        return lastCharPos;
+    }
+
+    public CompilerDirectiveType getType() {
+        return CompilerDirectiveType.UNKNOWN;
+    }
+
+    private void assertValues(String name, int beginPos, int endPos) {
+        if (name == null) {
+            throw new IllegalArgumentException("Compiler directive name cannot be null!");
+        }
+        if (beginPos < 0 || endPos < 0) {
+            throw new IllegalArgumentException("Compiler directive first/last character occurence must be >= 0");
+        }
+        if (beginPos > endPos) {
+            throw new IllegalArgumentException("Compiler directive first character must be <= last character");
+        }
+
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + item;
+    }
+
+    public int getLength() {
+        return lastCharPos - firstCharPos;
+    }
 
 }

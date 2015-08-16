@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,35 +31,35 @@ import org.antlr.runtime.tree.CommonTreeAdaptor;
  */
 class DelphiTreeAdaptor extends CommonTreeAdaptor {
 
-  private ASTTree astTree;
-  private int lastLine = 0;
+    private ASTTree astTree;
+    private int lastLine = 0;
 
-  /**
-   * Adaptor ctor
-   * 
-   * @param tree
-   *          Tree
-   */
-  public DelphiTreeAdaptor(ASTTree tree) {
-    astTree = tree;
-  }
-
-  @Override
-  public Object create(Token payload) {
-    if (payload != null) {
-      lastLine = payload.getLine();
+    /**
+     * Adaptor ctor
+     * 
+     * @param tree Tree
+     */
+    public DelphiTreeAdaptor(ASTTree tree) {
+        astTree = tree;
     }
-    return new DelphiPMDNode(payload, astTree);
-  }
 
-  /**
-   * When creating imaginary Tokens (such as TkReturnType etc) we need to set its parameters manually.
-   */
+    @Override
+    public Object create(Token payload) {
+        if (payload != null) {
+            lastLine = payload.getLine();
+        }
+        return new DelphiPMDNode(payload, astTree);
+    }
 
-  @Override
-  public Token createToken(int tokenType, String text) {
-    CommonToken imaginaryToken = new CommonToken(tokenType, text);
-    imaginaryToken.setLine(lastLine);
-    return imaginaryToken;
-  }
+    /**
+     * When creating imaginary Tokens (such as TkReturnType etc) we need to set
+     * its parameters manually.
+     */
+
+    @Override
+    public Token createToken(int tokenType, String text) {
+        CommonToken imaginaryToken = new CommonToken(tokenType, text);
+        imaginaryToken.setLine(lastLine);
+        return imaginaryToken;
+    }
 }

@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.File;
 
@@ -32,18 +33,18 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class GrammarTest {
 
-  private static final String FILE_NAME = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
-  private File file = null;
+    private static final String FILE_NAME = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
+    private File file = null;
 
-  @Before
-  public void init() {
-    file = DelphiUtils.getResource(FILE_NAME);
-  }
+    @Before
+    public void init() {
+        file = DelphiUtils.getResource(FILE_NAME);
+    }
 
-  @Test
-  public void test() throws Exception {
-    DelphiAST ast = new DelphiAST(file);
-    assertEquals(false, ast.isError());
-  }
+    @Test
+    public void test() throws Exception {
+        DelphiAST ast = new DelphiAST(file);
+        assertEquals(false, ast.isError());
+    }
 
 }

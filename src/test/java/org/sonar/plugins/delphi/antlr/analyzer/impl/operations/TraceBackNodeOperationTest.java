@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,39 +22,36 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl.operations;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
 public class TraceBackNodeOperationTest extends OperationsTestsCommon {
 
-  public TraceBackNodeOperationTest() {
-    super(new TraceBackNodeOperation());
-  }
-
-  
-  @Before
-  public void init() {
-    super.init();
-  }
-
-  @Test
-  public void traceback() {
-    assertFalse(operation.execute(parent).isValid());
-    for (int i = 0; i < LAYER_NODES - 1; ++i) {
-
-      assertNotNull(operation.execute(parent.getChild(i)));
-      assertEquals(i + 2, operation.execute(parent.getChild(i)).getNode().getType());
-
-      assertNotNull(operation.execute(parent.getChild(i).getChild(0)));
-      assertEquals(i + 2, operation.execute(parent.getChild(i).getChild(0)).getNode().getType());
+    public TraceBackNodeOperationTest() {
+        super(new TraceBackNodeOperation());
     }
 
-    assertFalse(operation.execute(parent.getChild(LAYER_NODES - 1).getChild(0)).isValid());
-    assertFalse(operation.execute(parent.getChild(LAYER_NODES - 1)).isValid());
-  }
+    @Before
+    public void init() {
+        super.init();
+    }
+
+    @Test
+    public void traceback() {
+        assertFalse(operation.execute(parent).isValid());
+        for (int i = 0; i < LAYER_NODES - 1; ++i) {
+
+            assertNotNull(operation.execute(parent.getChild(i)));
+            assertEquals(i + 2, operation.execute(parent.getChild(i)).getNode().getType());
+
+            assertNotNull(operation.execute(parent.getChild(i).getChild(0)));
+            assertEquals(i + 2, operation.execute(parent.getChild(i).getChild(0)).getNode().getType());
+        }
+
+        assertFalse(operation.execute(parent.getChild(LAYER_NODES - 1).getChild(0)).isValid());
+        assertFalse(operation.execute(parent.getChild(LAYER_NODES - 1)).isValid());
+    }
 
 }

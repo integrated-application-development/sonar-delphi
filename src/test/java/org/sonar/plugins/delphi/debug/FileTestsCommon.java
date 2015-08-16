@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,26 +22,30 @@
  */
 package org.sonar.plugins.delphi.debug;
 
-import org.sonar.plugins.delphi.utils.DelphiUtils;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
-import java.io.*;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class FileTestsCommon {
 
-  protected static File testFile = null;
-  protected static StringBuilder testFileString = null;
+    protected static File testFile = null;
+    protected static StringBuilder testFileString = null;
 
-  protected static void loadFile(String fileName) throws IOException {
-    testFile = DelphiUtils.getResource(fileName);
-    testFileString = new StringBuilder();
+    protected static void loadFile(String fileName) throws IOException {
+        testFile = DelphiUtils.getResource(fileName);
+        testFileString = new StringBuilder();
 
-    String line;
-    BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(testFile), "UTF-8"));
-    while ((line = reader.readLine()) != null) {
-      testFileString.append(line);
-      testFileString.append('\n');
+        String line;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(testFile), "UTF-8"));
+        while ((line = reader.readLine()) != null) {
+            testFileString.append(line);
+            testFileString.append('\n');
+        }
+        reader.close();
     }
-    reader.close();
-  }
 
 }

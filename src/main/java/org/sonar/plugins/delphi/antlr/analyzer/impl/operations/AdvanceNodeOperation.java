@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,19 +26,20 @@ import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
 
 /**
- * Created by IntelliJ IDEA. User: sg0501095 Date: 11/30/11 Time: 10:32 AM To change this template use File | Settings | File Templates.
+ * Created by IntelliJ IDEA. User: sg0501095 Date: 11/30/11 Time: 10:32 AM To
+ * change this template use File | Settings | File Templates.
  */
 public class AdvanceNodeOperation implements NodeOperation {
 
-  public CodeNode<Tree> execute(Tree node) {
-    if (node == null) {
-      return new CodeNode<Tree>(null);
-    }
+    public CodeNode<Tree> execute(Tree node) {
+        if (node == null) {
+            return new CodeNode<Tree>(null);
+        }
 
-    if (node.getChildCount() == 0) { // no child, traceback to parent
-      return (new TraceBackNodeOperation().execute(node));
-    } else { // get first child
-      return new CodeNode<Tree>(node.getChild(0));
+        if (node.getChildCount() == 0) { // no child, traceback to parent
+            return (new TraceBackNodeOperation().execute(node));
+        } else { // get first child
+            return new CodeNode<Tree>(node.getChild(0));
+        }
     }
-  }
 };

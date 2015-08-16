@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,24 +32,24 @@ import org.sonar.plugins.delphi.DelphiPlugin;
  */
 public class DatabaseProperties {
 
-  private Map<String, String> jdbcProps;
+    private Map<String, String> jdbcProps;
 
-  public DatabaseProperties(Map<String, String> jdbcProps) {
-    this.jdbcProps = jdbcProps;
-  }
+    public DatabaseProperties(Map<String, String> jdbcProps) {
+        this.jdbcProps = jdbcProps;
+    }
 
-  public Properties getConnectionProperties() {
-    Properties connectionProps = new Properties();
-    connectionProps.put("user", jdbcProps.get(DelphiPlugin.JDBC_USER_KEY));
-    connectionProps.put("password", jdbcProps.get(DelphiPlugin.JDBC_PASSWORD_KEY));
-    return connectionProps;
-  }
+    public Properties getConnectionProperties() {
+        Properties connectionProps = new Properties();
+        connectionProps.put("user", jdbcProps.get(DelphiPlugin.JDBC_USER_KEY));
+        connectionProps.put("password", jdbcProps.get(DelphiPlugin.JDBC_PASSWORD_KEY));
+        return connectionProps;
+    }
 
-  public String getHost() {
-    return jdbcProps.get(DelphiPlugin.JDBC_URL_KEY);
-  }
+    public String getHost() {
+        return jdbcProps.get(DelphiPlugin.JDBC_URL_KEY);
+    }
 
-  public String getDriverName() {
-    return jdbcProps.get(DelphiPlugin.JDBC_DRIVER_KEY);
-  }
+    public String getDriverName() {
+        return jdbcProps.get(DelphiPlugin.JDBC_DRIVER_KEY);
+    }
 }

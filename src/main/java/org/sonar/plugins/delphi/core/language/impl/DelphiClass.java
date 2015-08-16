@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -39,380 +40,383 @@ import org.sonar.plugins.delphi.core.language.FunctionInterface;
  */
 public class DelphiClass implements ClassInterface {
 
-  private static final String UNKNOWN_CLASS_NAME = "UnknownClass";
-  
-  private String name = null; // class name
-  private String fileName = null; // class filename (with path)
-  private int visibility = DelphiParser.PRIVATE; // class default visibility scope
+    private static final String UNKNOWN_CLASS_NAME = "UnknownClass";
 
-  private List<ClassFieldInterface> fields = new ArrayList<ClassFieldInterface>();
-  private List<ClassPropertyInterface> properties = new ArrayList<ClassPropertyInterface>();
-  private Set<FunctionInterface> functions = new HashSet<FunctionInterface>();
-  private Set<FunctionInterface> declarations = new HashSet<FunctionInterface>();
-  private Set<ClassInterface> parents = new HashSet<ClassInterface>();
-  private Set<ClassInterface> children = new HashSet<ClassInterface>();
-  private String realName = null;
+    private String name = null; // class name
+    private String fileName = null; // class filename (with path)
+    private int visibility = DelphiParser.PRIVATE; // class default visibility
+                                                   // scope
 
-  /**
-   * {@inheritDoc}
-   */
-  public DelphiClass(String newName) {
-    if(newName == null) {
-      name = UNKNOWN_CLASS_NAME;
-      realName = UNKNOWN_CLASS_NAME;
-    } else {    
-      name = newName;
-      realName = newName;
-    }
-  }
+    private List<ClassFieldInterface> fields = new ArrayList<ClassFieldInterface>();
+    private List<ClassPropertyInterface> properties = new ArrayList<ClassPropertyInterface>();
+    private Set<FunctionInterface> functions = new HashSet<FunctionInterface>();
+    private Set<FunctionInterface> declarations = new HashSet<FunctionInterface>();
+    private Set<ClassInterface> parents = new HashSet<ClassInterface>();
+    private Set<ClassInterface> children = new HashSet<ClassInterface>();
+    private String realName = null;
 
-  /**
-   * {@inheritDoc}
-   */
-
-  @Override
-  public boolean equals(Object o) {
-    if (o == null) {
-      return false;
-    }
-    if (o instanceof ClassInterface) {
-      return name.equals(((ClassInterface) o).getName());
-    }
-    return toString().equals(o.toString());
-  }
-
-  @Override
-  public int hashCode() {
-    if (name == null) {
-      return 0;
-    }
-    return name.hashCode();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  public int getAccessorCount() {
-    int accessorsCount = 0;
-    for (FunctionInterface function : functions) {
-      if (function.isAccessor()) {
-        accessorsCount += 1 + function.getOverloadsCount();
-      }
-    }
-    return accessorsCount;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  public int getVisibility() {
-    return visibility;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  public void addParent(ClassInterface parent) {
-    if (parent != null && !parent.equals(this)) {
-      parents.add(parent);
-      parent.addChild(this);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  public ClassInterface[] getParents() {
-    ClassInterface p[] = new ClassInterface[parents.size()];
-    parents.toArray(p);
-    return p;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  private int calculateDepth(ClassInterface cl) {
-    int depth = 0;
-
-    for (int i = 0; i < cl.getParents().length; ++i) {
-      ClassInterface parent = cl.getParents()[i];
-      int pd = calculateDepth(parent) + 1;
-      if (pd > depth) {
-        depth = pd;
-      }
+    /**
+     * {@inheritDoc}
+     */
+    public DelphiClass(String newName) {
+        if (newName == null) {
+            name = UNKNOWN_CLASS_NAME;
+            realName = UNKNOWN_CLASS_NAME;
+        } else {
+            name = newName;
+            realName = newName;
+        }
     }
 
-    return depth;
-  }
+    /**
+     * {@inheritDoc}
+     */
 
-  /**
-   * {@inheritDoc}
-   */
-
-  public int getDit() {
-    return calculateDepth(this);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  public void setVisibility(int value) {
-    visibility = value;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public int getPublicApiCount() {
-    int publicApiCount = 0;
-    if (visibility == DelphiParser.PUBLIC) { // count class if public
-      ++publicApiCount;
-    }
-    for (FunctionInterface func : functions) {
-      if ( !func.isAccessor() && (func.getVisibility() == DelphiParser.PUBLIC || func.getVisibility() == DelphiParser.PUBLISHED)) {
-        publicApiCount += 1 + func.getOverloadsCount();
-      }
-    }
-    for (ClassFieldInterface field : fields) {
-      if (field.getVisibility() == DelphiParser.PUBLIC || field.getVisibility() == DelphiParser.PUBLISHED) {
-        ++publicApiCount;
-      }
-    }
-    for (ClassPropertyInterface property : properties) {
-      if (property.getVisibility() == DelphiParser.PUBLIC || property.getVisibility() == DelphiParser.PUBLISHED) {
-        ++publicApiCount;
-      }
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (o instanceof ClassInterface) {
+            return name.equals(((ClassInterface) o).getName());
+        }
+        return toString().equals(o.toString());
     }
 
-    return publicApiCount;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  public String getName() {
-    return name;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  public void addField(ClassFieldInterface field) {
-    fields.add(field);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  public ClassFieldInterface[] getFields() {
-    return fields.toArray(new ClassFieldInterface[fields.size()]);
-  }
-
-  // calculating function complexity with its overloaded functions
-  private int processFunctionComplexity(FunctionInterface func) {
-    if (func.isAccessor()) {
-      return 0;
+    @Override
+    public int hashCode() {
+        if (name == null) {
+            return 0;
+        }
+        return name.hashCode();
     }
-    int result = func.getComplexity();
-    for (FunctionInterface over : func.getOverloadedFunctions()) {
-      result += processFunctionComplexity(over);
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public int getAccessorCount() {
+        int accessorsCount = 0;
+        for (FunctionInterface function : functions) {
+            if (function.isAccessor()) {
+                accessorsCount += 1 + function.getOverloadsCount();
+            }
+        }
+        return accessorsCount;
     }
-    return result;
-  }
 
-  /**
-   * {@inheritDoc}
-   */
+    /**
+     * {@inheritDoc}
+     */
 
-  public int getComplexity() {
-    int complexity = 0;
-    for (FunctionInterface func : functions) {
-      complexity += processFunctionComplexity(func);
+    public int getVisibility() {
+        return visibility;
     }
-    return complexity;
-  }
 
-  /**
-   * {@inheritDoc}
-   */
+    /**
+     * {@inheritDoc}
+     */
 
-  public FunctionInterface[] getFunctions() {
-    return functions.toArray(new FunctionInterface[functions.size()]);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  public FunctionInterface[] getDeclarations() {
-    return declarations.toArray(new FunctionInterface[declarations.size()]);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  public void addFunction(FunctionInterface func) {
-    if (functions.contains(func)) {
-      return; // function already registered in class
+    public void addParent(ClassInterface parent) {
+        if (parent != null && !parent.equals(this)) {
+            parents.add(parent);
+            parent.addChild(this);
+        }
     }
-    functions.add(func); // add a function to class
-    func.setParentClass(this); // this class i a parent class of provided function
-    if (func.isDeclaration()) {
-      declarations.add(func); // add to declarations
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public ClassInterface[] getParents() {
+        ClassInterface p[] = new ClassInterface[parents.size()];
+        parents.toArray(p);
+        return p;
     }
-  }
 
-  /**
-   * {@inheritDoc}
-   */
+    /**
+     * {@inheritDoc}
+     */
+    private int calculateDepth(ClassInterface cl) {
+        int depth = 0;
 
-  public void addChild(ClassInterface child) {    
-    if(child != null && !this.equals(child)) {      
-      children.add(child);    
+        for (int i = 0; i < cl.getParents().length; ++i) {
+            ClassInterface parent = cl.getParents()[i];
+            int pd = calculateDepth(parent) + 1;
+            if (pd > depth) {
+                depth = pd;
+            }
+        }
+
+        return depth;
     }
-  }
 
-  /**
-   * {@inheritDoc}
-   */
+    /**
+     * {@inheritDoc}
+     */
 
-  public ClassInterface[] getDescendants() {
-    List<ClassInterface> allChildren = new ArrayList<ClassInterface>();
-    for (ClassInterface child : children) {
-      processChild((DelphiClass) child, allChildren);
+    public int getDit() {
+        return calculateDepth(this);
     }
-    return allChildren.toArray(new ClassInterface[allChildren.size()]);
-  }
 
-  /**
-   * {@inheritDoc}
-   */
+    /**
+     * {@inheritDoc}
+     */
 
-  public ClassInterface[] getChildren() {
-    return children.toArray(new ClassInterface[children.size()]);
-  }
-
-  private void processChild(DelphiClass parent, List<ClassInterface> list) {
-    list.add(parent);
-    for (ClassInterface child : parent.children) {
-      processChild((DelphiClass) child, list);
+    public void setVisibility(int value) {
+        visibility = value;
     }
-  }
 
-  /**
-   * {@inheritDoc}
-   */
-  public int getRfc() {
-    int rfc = 0;
-    Set<FunctionInterface> visited = new HashSet<FunctionInterface>();
-    for (FunctionInterface currentFunction : functions) {
-      if (!currentFunction.isAccessor()) {
-        visited.add(currentFunction);
-        rfc += analyzeFunctionCalls(currentFunction, visited);
-      } 
+    /**
+     * {@inheritDoc}
+     */
+    public int getPublicApiCount() {
+        int publicApiCount = 0;
+        if (visibility == DelphiParser.PUBLIC) { // count class if public
+            ++publicApiCount;
+        }
+        for (FunctionInterface func : functions) {
+            if (!func.isAccessor()
+                    && (func.getVisibility() == DelphiParser.PUBLIC || func.getVisibility() == DelphiParser.PUBLISHED)) {
+                publicApiCount += 1 + func.getOverloadsCount();
+            }
+        }
+        for (ClassFieldInterface field : fields) {
+            if (field.getVisibility() == DelphiParser.PUBLIC || field.getVisibility() == DelphiParser.PUBLISHED) {
+                ++publicApiCount;
+            }
+        }
+        for (ClassPropertyInterface property : properties) {
+            if (property.getVisibility() == DelphiParser.PUBLIC || property.getVisibility() == DelphiParser.PUBLISHED) {
+                ++publicApiCount;
+            }
+        }
+
+        return publicApiCount;
     }
-    return rfc; // rfc = number of local methods + number of remote methods
-  }
 
-  /**
-   * Analyses function for its function calls (how many other function call are in this function),
-   * NOT including accessors (getters/setters)
-   * @param function
-   *          Function to analyse
-   * @param visited
-   *          Set of already visited functions (to not repeat visited ones)
-   * @return Number of functions called within this function
-   */
-  private int analyzeFunctionCalls(FunctionInterface function, Set<FunctionInterface> visited) {
-    int result = 1 + function.getOverloadsCount();
-    for (FunctionInterface calledFunction : function.getCalledFunctions()) {
-      if (!calledFunction.isAccessor() && !visited.contains(calledFunction)) {
-        visited.add(calledFunction);
-        result += analyzeFunctionCalls(calledFunction, visited);
-      }      
+    /**
+     * {@inheritDoc}
+     */
+
+    public String getName() {
+        return name;
     }
-    return result;
-  }
 
-  /**
-   * {@inheritDoc}
-   */
-  public boolean hasFunction(FunctionInterface func) {
-    boolean b1 = functions.contains(func);
-    FunctionInterface foo1 = new DelphiFunction(func.getShortName());
-    FunctionInterface foo2 = new DelphiFunction(name + "." + func.getShortName());
-    boolean b2 = functions.contains(foo1);
-    boolean b3 = functions.contains(foo2);
-    return b1 || b2 || b3;
-  }
+    /**
+     * {@inheritDoc}
+     */
 
-  /**
-   * {@inheritDoc}
-   */
-
-  public void setFileName(String fileName) {
-    this.fileName = fileName;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  public String getFileName() {
-    return fileName;
-  }
-
-  @Override
-  public String toString() {
-    if (fileName != null) {
-      return fileName + ":" + name;
+    public void addField(ClassFieldInterface field) {
+        fields.add(field);
     }
-    return name;
-  }
 
-  /**
-   * {@inheritDoc}
-   */
+    /**
+     * {@inheritDoc}
+     */
 
-  public String getShortName() {
-    return name;
-  }
+    public ClassFieldInterface[] getFields() {
+        return fields.toArray(new ClassFieldInterface[fields.size()]);
+    }
 
-  /**
-   * {@inheritDoc}
-   */
+    // calculating function complexity with its overloaded functions
+    private int processFunctionComplexity(FunctionInterface func) {
+        if (func.isAccessor()) {
+            return 0;
+        }
+        int result = func.getComplexity();
+        for (FunctionInterface over : func.getOverloadedFunctions()) {
+            result += processFunctionComplexity(over);
+        }
+        return result;
+    }
 
-  public void addProperty(ClassPropertyInterface property) {
-    properties.add(property);
-  }
+    /**
+     * {@inheritDoc}
+     */
 
-  /**
-   * {@inheritDoc}
-   */
+    public int getComplexity() {
+        int complexity = 0;
+        for (FunctionInterface func : functions) {
+            complexity += processFunctionComplexity(func);
+        }
+        return complexity;
+    }
 
-  public ClassPropertyInterface[] getProperties() {
-    return properties.toArray(new ClassPropertyInterface[properties.size()]);
-  }
+    /**
+     * {@inheritDoc}
+     */
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public FunctionInterface[] getFunctions() {
+        return functions.toArray(new FunctionInterface[functions.size()]);
+    }
 
-  public String getRealName() {
-    return realName;
-  }
+    /**
+     * {@inheritDoc}
+     */
 
-  public void setRealName(String name) {
-    realName = name;
-  }
+    public FunctionInterface[] getDeclarations() {
+        return declarations.toArray(new FunctionInterface[declarations.size()]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public void addFunction(FunctionInterface func) {
+        if (functions.contains(func)) {
+            return; // function already registered in class
+        }
+        functions.add(func); // add a function to class
+        func.setParentClass(this); // this class i a parent class of provided
+                                   // function
+        if (func.isDeclaration()) {
+            declarations.add(func); // add to declarations
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public void addChild(ClassInterface child) {
+        if (child != null && !this.equals(child)) {
+            children.add(child);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public ClassInterface[] getDescendants() {
+        List<ClassInterface> allChildren = new ArrayList<ClassInterface>();
+        for (ClassInterface child : children) {
+            processChild((DelphiClass) child, allChildren);
+        }
+        return allChildren.toArray(new ClassInterface[allChildren.size()]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public ClassInterface[] getChildren() {
+        return children.toArray(new ClassInterface[children.size()]);
+    }
+
+    private void processChild(DelphiClass parent, List<ClassInterface> list) {
+        list.add(parent);
+        for (ClassInterface child : parent.children) {
+            processChild((DelphiClass) child, list);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int getRfc() {
+        int rfc = 0;
+        Set<FunctionInterface> visited = new HashSet<FunctionInterface>();
+        for (FunctionInterface currentFunction : functions) {
+            if (!currentFunction.isAccessor()) {
+                visited.add(currentFunction);
+                rfc += analyzeFunctionCalls(currentFunction, visited);
+            }
+        }
+        return rfc; // rfc = number of local methods + number of remote methods
+    }
+
+    /**
+     * Analyses function for its function calls (how many other function call
+     * are in this function), NOT including accessors (getters/setters)
+     * 
+     * @param function Function to analyse
+     * @param visited Set of already visited functions (to not repeat visited
+     *            ones)
+     * @return Number of functions called within this function
+     */
+    private int analyzeFunctionCalls(FunctionInterface function, Set<FunctionInterface> visited) {
+        int result = 1 + function.getOverloadsCount();
+        for (FunctionInterface calledFunction : function.getCalledFunctions()) {
+            if (!calledFunction.isAccessor() && !visited.contains(calledFunction)) {
+                visited.add(calledFunction);
+                result += analyzeFunctionCalls(calledFunction, visited);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean hasFunction(FunctionInterface func) {
+        boolean b1 = functions.contains(func);
+        FunctionInterface foo1 = new DelphiFunction(func.getShortName());
+        FunctionInterface foo2 = new DelphiFunction(name + "." + func.getShortName());
+        boolean b2 = functions.contains(foo1);
+        boolean b3 = functions.contains(foo2);
+        return b1 || b2 || b3;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    @Override
+    public String toString() {
+        if (fileName != null) {
+            return fileName + ":" + name;
+        }
+        return name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public String getShortName() {
+        return name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public void addProperty(ClassPropertyInterface property) {
+        properties.add(property);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public ClassPropertyInterface[] getProperties() {
+        return properties.toArray(new ClassPropertyInterface[properties.size()]);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String name) {
+        realName = name;
+    }
 
 }

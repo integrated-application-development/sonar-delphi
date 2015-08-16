@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,72 +28,72 @@ import java.io.StringReader;
 
 public class StringArrayReader extends Reader {
 
-  private final StringReader stringReader;
+    private final StringReader stringReader;
 
-  enum EndOfLineDelimiter {
-    LF, CR_PLUS_LF, CR
-  }
-
-  public StringArrayReader(String[] lines) {
-    this(lines, EndOfLineDelimiter.LF);
-  }
-
-  public StringArrayReader(String[] lines, EndOfLineDelimiter endOfLineDelimiter) {
-    if (lines == null) {
-      throw new IllegalStateException("lines object can't be null.");
+    enum EndOfLineDelimiter {
+        LF, CR_PLUS_LF, CR
     }
-    String content = convertArrayToStringAndAppendEndOfLine(lines, endOfLineDelimiter);
-    stringReader = new StringReader(content);
-  }
 
-  private String convertArrayToStringAndAppendEndOfLine(String[] lines, EndOfLineDelimiter endOfLineDelimiter) {
-    StringBuilder content = new StringBuilder();
-    for (int i = 0; i < lines.length; i++) {
-      content.append(lines[i]);
-      if (i != (lines.length - 1)) {
-        switch (endOfLineDelimiter) {
-          case LF:
-            content.append('\n');
-            break;
-          case CR:
-            content.append('\r');
-            break;
-          case CR_PLUS_LF:
-            content.append("\r\n");
-            break;
+    public StringArrayReader(String[] lines) {
+        this(lines, EndOfLineDelimiter.LF);
+    }
+
+    public StringArrayReader(String[] lines, EndOfLineDelimiter endOfLineDelimiter) {
+        if (lines == null) {
+            throw new IllegalStateException("lines object can't be null.");
         }
-      }
+        String content = convertArrayToStringAndAppendEndOfLine(lines, endOfLineDelimiter);
+        stringReader = new StringReader(content);
     }
-    return content.toString();
-  }
 
-  @Override
-  public void close() throws IOException {
-    stringReader.close();
-  }
+    private String convertArrayToStringAndAppendEndOfLine(String[] lines, EndOfLineDelimiter endOfLineDelimiter) {
+        StringBuilder content = new StringBuilder();
+        for (int i = 0; i < lines.length; i++) {
+            content.append(lines[i]);
+            if (i != (lines.length - 1)) {
+                switch (endOfLineDelimiter) {
+                case LF:
+                    content.append('\n');
+                    break;
+                case CR:
+                    content.append('\r');
+                    break;
+                case CR_PLUS_LF:
+                    content.append("\r\n");
+                    break;
+                }
+            }
+        }
+        return content.toString();
+    }
 
-  @Override
-  public boolean ready() throws IOException {
-    return stringReader.ready();
-  }
+    @Override
+    public void close() throws IOException {
+        stringReader.close();
+    }
 
-  @Override
-  public boolean markSupported() {
-    return stringReader.markSupported();
-  }
+    @Override
+    public boolean ready() throws IOException {
+        return stringReader.ready();
+    }
 
-  @Override
-  public void mark(int readAheadLimit) throws IOException {
-    stringReader.mark(readAheadLimit);
-  }
+    @Override
+    public boolean markSupported() {
+        return stringReader.markSupported();
+    }
 
-  @Override
-  public void reset() throws IOException {
-    stringReader.reset();
-  }
+    @Override
+    public void mark(int readAheadLimit) throws IOException {
+        stringReader.mark(readAheadLimit);
+    }
 
-  @Override
-  public int read(char[] cbuf, int off, int len) throws IOException {
-    return stringReader.read(cbuf, off, len);
-  }
+    @Override
+    public void reset() throws IOException {
+        stringReader.reset();
+    }
+
+    @Override
+    public int read(char[] cbuf, int off, int len) throws IOException {
+        return stringReader.read(cbuf, off, len);
+    }
 }

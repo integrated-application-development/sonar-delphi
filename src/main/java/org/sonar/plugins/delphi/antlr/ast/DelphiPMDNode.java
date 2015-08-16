@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -35,97 +36,94 @@ import org.sonar.plugins.delphi.pmd.DelphiParserVisitor;
  */
 public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUnit {
 
-  /**
-   * C-tor
-   * 
-   * @param payload
-   *          Token
-   * @param tree
-   *          AST Tree
-   */
-  public DelphiPMDNode(Token payload, ASTTree tree) {
-    super(payload, tree);
-  }
+    /**
+     * C-tor
+     * 
+     * @param payload Token
+     * @param tree AST Tree
+     */
+    public DelphiPMDNode(Token payload, ASTTree tree) {
+        super(payload, tree);
+    }
 
-  /**
-   * C-tor, used in DelphiPMD to safely cast from CommonTree to DelphiPMDNode
-   * 
-   * @param node
-   *          CommonTree node
-   */
-  public DelphiPMDNode(CommonTree node) {
-    super(node.getToken());
-    this.children = node.getChildren();
-    this.parent = (CommonTree) node.getParent();
-    this.childIndex = node.getChildIndex();
-  }
+    /**
+     * C-tor, used in DelphiPMD to safely cast from CommonTree to DelphiPMDNode
+     * 
+     * @param node CommonTree node
+     */
+    public DelphiPMDNode(CommonTree node) {
+        super(node.getToken());
+        this.children = node.getChildren();
+        this.parent = (CommonTree) node.getParent();
+        this.childIndex = node.getChildIndex();
+    }
 
-  /**
-   * {@inheritDoc}
-   */
+    /**
+     * {@inheritDoc}
+     */
 
-  public void jjtOpen() { // unused
-  }
+    public void jjtOpen() { // unused
+    }
 
-  /**
-   * {@inheritDoc}
-   */
+    /**
+     * {@inheritDoc}
+     */
 
-  public void jjtClose() { // unused
-  }
+    public void jjtClose() { // unused
+    }
 
-  /**
-   * {@inheritDoc}
-   */
+    /**
+     * {@inheritDoc}
+     */
 
-  public void jjtSetParent(Node n) { // unused
+    public void jjtSetParent(Node n) { // unused
 
-  }
+    }
 
-  /**
-   * {@inheritDoc}
-   */
+    /**
+     * {@inheritDoc}
+     */
 
-  public Node jjtGetParent() { // unused
-    return null;
-  }
+    public Node jjtGetParent() { // unused
+        return null;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
+    /**
+     * {@inheritDoc}
+     */
 
-  public void jjtAddChild(Node n, int i) { // unused
-  }
+    public void jjtAddChild(Node n, int i) { // unused
+    }
 
-  /**
-   * {@inheritDoc}
-   */
+    /**
+     * {@inheritDoc}
+     */
 
-  public Node jjtGetChild(int i) { // unused
-    return null;
-  }
+    public Node jjtGetChild(int i) { // unused
+        return null;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
+    /**
+     * {@inheritDoc}
+     */
 
-  public int jjtGetNumChildren() { // unused
-    return 0;
-  }
+    public int jjtGetNumChildren() { // unused
+        return 0;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  public Object jjtAccept(DelphiParserVisitor visitor, Object data) {
-    return visitor.visit(this, data);
-  }
+    /**
+     * {@inheritDoc}
+     */
+    public Object jjtAccept(DelphiParserVisitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
 
-  /**
-   * {@inheritDoc}
-   */
+    /**
+     * {@inheritDoc}
+     */
 
-  public Object jjtAccept(JavaParserVisitor visitor, Object data) {
-    return jjtAccept((DelphiParserVisitor) visitor, data);
-  }
+    public Object jjtAccept(JavaParserVisitor visitor, Object data) {
+        return jjtAccept((DelphiParserVisitor) visitor, data);
+    }
 
 }

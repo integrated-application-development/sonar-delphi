@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,31 +32,31 @@ import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
 public class DefineResolverTest extends FileTestsCommon {
 
-  private static final String FILE_NAME = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
-  private DefineResolver resolver;
-  private SourceResolverResults results;
+    private static final String FILE_NAME = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
+    private DefineResolver resolver;
+    private SourceResolverResults results;
 
-  @BeforeClass
-  public static void init() throws IOException {
-    loadFile(FILE_NAME);
-  }
+    @BeforeClass
+    public static void init() throws IOException {
+        loadFile(FILE_NAME);
+    }
 
-  @Before
-  public void setup() {
-    resolver = new DefineResolver(new HashSet<String>());
-    results = new SourceResolverResults(testFile.getAbsolutePath(), testFileString);
+    @Before
+    public void setup() {
+        resolver = new DefineResolver(new HashSet<String>());
+        results = new SourceResolverResults(testFile.getAbsolutePath(), testFileString);
 
-    ExcludeResolver excludeResolver = new ExcludeResolver();
-    excludeResolver.resolve(results);
-  }
+        ExcludeResolver excludeResolver = new ExcludeResolver();
+        excludeResolver.resolve(results);
+    }
 
-  @Test
-  public void test() {
+    @Test
+    public void test() {
 
-    resolver.resolve(results);
-    results.getFileExcludes();
+        resolver.resolve(results);
+        results.getFileExcludes();
 
-    // TODO
-  }
+        // TODO
+    }
 
 }

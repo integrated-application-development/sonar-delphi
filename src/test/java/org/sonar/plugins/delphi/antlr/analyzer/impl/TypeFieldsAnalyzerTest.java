@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,43 +46,43 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class TypeFieldsAnalyzerTest {
 
-  private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
-  private TypeFieldsAnalyzer analyzer;
-  private ASTTree ast;
-  private CodeAnalysisResults results;
-  private CodeTree code;
-  private AdvanceToNodeOperation advanceToOp;
+    private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
+    private TypeFieldsAnalyzer analyzer;
+    private ASTTree ast;
+    private CodeAnalysisResults results;
+    private CodeTree code;
+    private AdvanceToNodeOperation advanceToOp;
 
-  @Before
-  public void init() throws IOException, RecognitionException {
-    analyzer = new TypeFieldsAnalyzer();
-    results = new CodeAnalysisResults();
-    results.setActiveUnit(new DelphiUnit("test"));
+    @Before
+    public void init() throws IOException, RecognitionException {
+        analyzer = new TypeFieldsAnalyzer();
+        results = new CodeAnalysisResults();
+        results.setActiveUnit(new DelphiUnit("test"));
 
-    File file = DelphiUtils.getResource(FILE_NAME);
-    ast = new DelphiAST(file);
-    code = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
-    advanceToOp = new AdvanceToNodeOperation(LexerMetrics.CLASS_FIELD);
-  }
+        File file = DelphiUtils.getResource(FILE_NAME);
+        ast = new DelphiAST(file);
+        code = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
+        advanceToOp = new AdvanceToNodeOperation(LexerMetrics.CLASS_FIELD);
+    }
 
-  @Test
-  public void analyzeTest() {
-    code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));
-    ClassInterface clazz = new DelphiClass("test");
-    results.setActiveClass(clazz);
+    @Test
+    public void analyzeTest() {
+        code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));
+        ClassInterface clazz = new DelphiClass("test");
+        results.setActiveClass(clazz);
 
-    analyzer.analyze(code, results);
+        analyzer.analyze(code, results);
 
-    ClassFieldInterface fields[] = clazz.getFields();
-    assertEquals(1, fields.length);
-    assertEquals("bshowtracker", fields[0].getName());
-  }
+        ClassFieldInterface fields[] = clazz.getFields();
+        assertEquals(1, fields.length);
+        assertEquals("bshowtracker", fields[0].getName());
+    }
 
-  @Test
-  public void canAnalyzeTest() {
-    assertFalse(analyzer.canAnalyze(code));
-    code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));
-    assertTrue(analyzer.canAnalyze(code));
-  }
+    @Test
+    public void canAnalyzeTest() {
+        assertFalse(analyzer.canAnalyze(code));
+        code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));
+        assertTrue(analyzer.canAnalyze(code));
+    }
 
 }

@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -33,55 +34,53 @@ import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
  */
 public class AdvanceToNodeOperation implements NodeOperation {
 
-  private List<LexerMetrics> to = new ArrayList<LexerMetrics>();
+    private List<LexerMetrics> to = new ArrayList<LexerMetrics>();
 
-  /**
-   * ctor
-   * 
-   * @param to
-   *          Node type we want advance to
-   */
-  public AdvanceToNodeOperation(LexerMetrics to) {
-    this.to.add(to);
-  }
-
-  /**
-   * ctor
-   * 
-   * @param metricsList
-   *          List of nodes we want to advance to
-   */
-  public AdvanceToNodeOperation(List<LexerMetrics> metricsList) {
-    this.to = metricsList;
-  }
-
-  public CodeNode<Tree> execute(Tree node) {
-    CodeNode<Tree> atNode = new CodeNode<Tree>(node);
-    do {
-      atNode = new AdvanceNodeOperation().execute(atNode.getNode());
-      if (atNode == null || !atNode.isValid()) {
-        throw new IllegalStateException("Cannot advance to node type: " + createErrorMsg());
-      }
-    } while (shouldAdvanceFurther(atNode.getNode()));
-
-    return atNode;
-  }
-
-  private String createErrorMsg() {
-    StringBuilder str = new StringBuilder();
-    for (LexerMetrics metric : to) {
-      str.append(metric.toMetrics() + " ");
+    /**
+     * ctor
+     * 
+     * @param to Node type we want advance to
+     */
+    public AdvanceToNodeOperation(LexerMetrics to) {
+        this.to.add(to);
     }
-    return str.toString();
-  }
 
-  private boolean shouldAdvanceFurther(Tree atNode) {
-    int type = atNode.getType();
-    for (LexerMetrics metric : to) {
-      if (type == metric.toMetrics()) {
-        return false;
-      }
+    /**
+     * ctor
+     * 
+     * @param metricsList List of nodes we want to advance to
+     */
+    public AdvanceToNodeOperation(List<LexerMetrics> metricsList) {
+        this.to = metricsList;
     }
-    return true;
-  }
+
+    public CodeNode<Tree> execute(Tree node) {
+        CodeNode<Tree> atNode = new CodeNode<Tree>(node);
+        do {
+            atNode = new AdvanceNodeOperation().execute(atNode.getNode());
+            if (atNode == null || !atNode.isValid()) {
+                throw new IllegalStateException("Cannot advance to node type: " + createErrorMsg());
+            }
+        } while (shouldAdvanceFurther(atNode.getNode()));
+
+        return atNode;
+    }
+
+    private String createErrorMsg() {
+        StringBuilder str = new StringBuilder();
+        for (LexerMetrics metric : to) {
+            str.append(metric.toMetrics() + " ");
+        }
+        return str.toString();
+    }
+
+    private boolean shouldAdvanceFurther(Tree atNode) {
+        int type = atNode.getType();
+        for (LexerMetrics metric : to) {
+            if (type == metric.toMetrics()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

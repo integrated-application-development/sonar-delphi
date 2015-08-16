@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -37,78 +38,78 @@ import org.hsqldb.persist.HsqlProperties;
  */
 public final class HSQLServerUtil {
 
-  private static final HSQLServerUtil INSTANCE = new HSQLServerUtil();
-  private Server hsqlServer;
+    private static final HSQLServerUtil INSTANCE = new HSQLServerUtil();
+    private Server hsqlServer;
 
-  private HSQLServerUtil() {
-    // prevent instantiation
-  }
-
-  /**
-   * @return utility instance.
-   */
-  public static HSQLServerUtil getInstance() {
-    return INSTANCE;
-  }
-
-  private void doStart(final HsqlProperties props) {
-
-    ServerConfiguration.translateDefaultDatabaseProperty(props);
-
-    hsqlServer = new Server();
-    try {
-      File outputFile = File.createTempFile("HSQLServerUtil", ".temp");
-      outputFile.deleteOnExit();
-      hsqlServer.setLogWriter(new PrintWriter(outputFile));
-      hsqlServer.setErrWriter(new PrintWriter(outputFile));
-    } catch (IOException e) {
-      DelphiUtils.LOG.info("Could not create temporary output file for HSQLServerUtil class; output redirected to stdout");
+    private HSQLServerUtil() {
+        // prevent instantiation
     }
-      
-    hsqlServer.setRestartOnShutdown(false);
-    hsqlServer.setNoSystemExit(true);
-    hsqlServer.setProperties(props);
-    hsqlServer.start();
-  }
 
-  /**
-   * start the server with a database configuration.
-   *
-   * @param dbName
-   *          the name of database
-   * @param port
-   *          port to listen to
-   */
-  public void start(final String dbName, final int port) {
-    HsqlProperties props = new HsqlProperties();
-    props.setProperty("server.port", port);
-    // Usage of prefix "target/" is important in order to not pollute working directory
-    props.setProperty("server.database.0", "target/" + dbName);
-    props.setProperty("server.dbname.0", dbName);
-    doStart(props);
-  }
+    /**
+     * @return utility instance.
+     */
+    public static HSQLServerUtil getInstance() {
+        return INSTANCE;
+    }
 
-  /**
-   * start the server with a database configuration.
-   *
-   * @param dbName
-   *          the name of database
-   */
-  public void start(final String dbName) {
-    HsqlProperties props = new HsqlProperties();
-    // Usage of prefix "target/" is important in order to not pollute working directory
-    props.setProperty("server.database.0", "target/" + dbName);
-    props.setProperty("server.dbname.0", dbName);
-    doStart(props);
-  }
+    private void doStart(final HsqlProperties props) {
 
-  /**
-   * shutdown the started instance.
-   */
-  public void stop() {
-    DelphiUtils.LOG.info("HSQLDB server shutting down...");
-    hsqlServer.stop();
-    DelphiUtils.LOG.info("HSQLDB server shutting down... done");
-  }
+        ServerConfiguration.translateDefaultDatabaseProperty(props);
+
+        hsqlServer = new Server();
+        try {
+            File outputFile = File.createTempFile("HSQLServerUtil", ".temp");
+            outputFile.deleteOnExit();
+            hsqlServer.setLogWriter(new PrintWriter(outputFile));
+            hsqlServer.setErrWriter(new PrintWriter(outputFile));
+        } catch (IOException e) {
+            DelphiUtils.LOG
+                    .info("Could not create temporary output file for HSQLServerUtil class; output redirected to stdout");
+        }
+
+        hsqlServer.setRestartOnShutdown(false);
+        hsqlServer.setNoSystemExit(true);
+        hsqlServer.setProperties(props);
+        hsqlServer.start();
+    }
+
+    /**
+     * start the server with a database configuration.
+     *
+     * @param dbName the name of database
+     * @param port port to listen to
+     */
+    public void start(final String dbName, final int port) {
+        HsqlProperties props = new HsqlProperties();
+        props.setProperty("server.port", port);
+        // Usage of prefix "target/" is important in order to not pollute
+        // working directory
+        props.setProperty("server.database.0", "target/" + dbName);
+        props.setProperty("server.dbname.0", dbName);
+        doStart(props);
+    }
+
+    /**
+     * start the server with a database configuration.
+     *
+     * @param dbName the name of database
+     */
+    public void start(final String dbName) {
+        HsqlProperties props = new HsqlProperties();
+        // Usage of prefix "target/" is important in order to not pollute
+        // working directory
+        props.setProperty("server.database.0", "target/" + dbName);
+        props.setProperty("server.dbname.0", dbName);
+        doStart(props);
+    }
+
+    /**
+     * shutdown the started instance.
+     */
+    public void stop() {
+        DelphiUtils.LOG.info("HSQLDB server shutting down...");
+        hsqlServer.stop();
+        DelphiUtils.LOG.info("HSQLDB server shutting down... done");
+    }
 
 }

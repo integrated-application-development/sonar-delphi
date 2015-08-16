@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,46 +32,45 @@ import org.sonar.api.resources.Project;
  */
 public abstract class DefaultMetrics implements MetricsInterface {
 
-  protected Map<String, Double> metrics = new HashMap<String, Double>();
-  protected Project project = null;
+    protected Map<String, Double> metrics = new HashMap<String, Double>();
+    protected Project project = null;
 
-  /**
-   * Default ctor
-   * 
-   * @param project
-   *          Sonar project
-   */
-  public DefaultMetrics(Project delphiProject) {
-    project = delphiProject;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  public String[] getMetricKeys() {
-    return metrics.keySet().toArray(new String[metrics.keySet().size()]);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  public double getMetric(String metric) {
-    if ( !metrics.containsKey(metric)) {
-      throw new IllegalStateException("No metric (" + metric + ") for " + this);
+    /**
+     * Default ctor
+     * 
+     * @param project Sonar project
+     */
+    public DefaultMetrics(Project delphiProject) {
+        project = delphiProject;
     }
-    return metrics.get(metric);
-  }
 
-  /**
-   * {@inheritDoc}
-   */
-  public void setMetric(String metric, double value) {
-    metrics.put(metric, value);
-  }
+    /**
+     * {@inheritDoc}
+     */
 
-  protected void clearMetrics() {
-    metrics.clear();
-  }
+    public String[] getMetricKeys() {
+        return metrics.keySet().toArray(new String[metrics.keySet().size()]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public double getMetric(String metric) {
+        if (!metrics.containsKey(metric)) {
+            throw new IllegalStateException("No metric (" + metric + ") for " + this);
+        }
+        return metrics.get(metric);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setMetric(String metric, double value) {
+        metrics.put(metric, value);
+    }
+
+    protected void clearMetrics() {
+        metrics.clear();
+    }
 }

@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.project;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,75 +35,79 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiProjectTest {
 
-  private static String XML_FILE = "/org/sonar/plugins/delphi/SimpleDelphiProject/dproj/SimpleDelphiProject.dproj";
-  private static String INC_DIR = "/org/sonar/plugins/delphi/SimpleDelphiProject/includes1";
+    private static String XML_FILE = "/org/sonar/plugins/delphi/SimpleDelphiProject/dproj/SimpleDelphiProject.dproj";
+    private static String INC_DIR = "/org/sonar/plugins/delphi/SimpleDelphiProject/includes1";
 
-  private DelphiProject project;
+    private DelphiProject project;
 
-  @Before
-  public void init() {
-    project = new DelphiProject("simple project");
-  }
-
-  @Test
-  public void simpleProjectTest() throws IOException {
-    File sourceFile = File.createTempFile("tempfile", ".pas");
-    sourceFile.deleteOnExit();
-    
-    assertEquals("simple project", project.getName());
-    assertEquals(0, project.getDefinitions().size());
-    assertEquals(0, project.getIncludeDirectories().size());
-    assertEquals(0, project.getSourceFiles().size());
-    assertEquals(null, project.getXmlFile());
-
-    project.addDefinition("DEF");
-    assertEquals(1, project.getDefinitions().size());
-    project.addFile(DelphiUtils.getResource(XML_FILE).getAbsolutePath());
-    assertEquals(0, project.getSourceFiles().size());
-    project.addFile(sourceFile.getAbsolutePath());
-    assertEquals(1, project.getSourceFiles().size());
-    project.addIncludeDirectory(DelphiUtils.getResource(INC_DIR).getAbsolutePath());
-    assertEquals(1, project.getIncludeDirectories().size());
-  }
-
-  @Test
-  public void setDefinitionsTest() {
-    List<String> defs = new ArrayList<String>();
-    project.setDefinitions(defs);
-    assertEquals(defs, project.getDefinitions());
-  }
-
-  @Test
-  public void setFileTest() {
-    File file = DelphiUtils.getResource(XML_FILE);
-    project.setFile(file);
-    assertEquals(file, project.getXmlFile());
-  }
-
-  @Test
-  public void parseFileTest() throws IllegalArgumentException, IOException {
-    project = new DelphiProject(DelphiUtils.getResource(XML_FILE));
-
-    assertEquals("Simple Delphi Product", project.getName());
-
-    assertEquals(8, project.getSourceFiles().size()); // checking source files
-    String fileNames[] = { "Globals.pas", "MainWindow.pas", "OverloadTest.pas", "StatementTest.pas", "CommentsTest.pas",
-        "AccessorsTest.pas", "FunctionTest.pas", "GlobalsTest.pas" };
-    for (int i = 0; i < fileNames.length; ++i) {
-      assertEquals(fileNames[i], project.getSourceFiles().get(i).getName());
+    @Before
+    public void init() {
+        project = new DelphiProject("simple project");
     }
 
-    assertEquals(2, project.getIncludeDirectories().size()); // checking include directories
-    String includeNames[] = { "includes1", "includes2" };
-    for (int i = 0; i < includeNames.length; ++i) {
-      assertEquals(includeNames[i], project.getIncludeDirectories().get(i).getName());
+    @Test
+    public void simpleProjectTest() throws IOException {
+        File sourceFile = File.createTempFile("tempfile", ".pas");
+        sourceFile.deleteOnExit();
+
+        assertEquals("simple project", project.getName());
+        assertEquals(0, project.getDefinitions().size());
+        assertEquals(0, project.getIncludeDirectories().size());
+        assertEquals(0, project.getSourceFiles().size());
+        assertEquals(null, project.getXmlFile());
+
+        project.addDefinition("DEF");
+        assertEquals(1, project.getDefinitions().size());
+        project.addFile(DelphiUtils.getResource(XML_FILE).getAbsolutePath());
+        assertEquals(0, project.getSourceFiles().size());
+        project.addFile(sourceFile.getAbsolutePath());
+        assertEquals(1, project.getSourceFiles().size());
+        project.addIncludeDirectory(DelphiUtils.getResource(INC_DIR).getAbsolutePath());
+        assertEquals(1, project.getIncludeDirectories().size());
     }
 
-    assertEquals(4, project.getDefinitions().size());
-    String definitionNames[] = { "GGMSGDEBUGx", "LOGTOFILEx", "FullDebugMode", "RELEASE" };
-    for (int i = 0; i < definitionNames.length; ++i) {
-      assertEquals(definitionNames[i], project.getDefinitions().get(i));
+    @Test
+    public void setDefinitionsTest() {
+        List<String> defs = new ArrayList<String>();
+        project.setDefinitions(defs);
+        assertEquals(defs, project.getDefinitions());
     }
-  }
+
+    @Test
+    public void setFileTest() {
+        File file = DelphiUtils.getResource(XML_FILE);
+        project.setFile(file);
+        assertEquals(file, project.getXmlFile());
+    }
+
+    @Test
+    public void parseFileTest() throws IllegalArgumentException, IOException {
+        project = new DelphiProject(DelphiUtils.getResource(XML_FILE));
+
+        assertEquals("Simple Delphi Product", project.getName());
+
+        assertEquals(8, project.getSourceFiles().size()); // checking source
+                                                          // files
+        String fileNames[] = {"Globals.pas", "MainWindow.pas", "OverloadTest.pas", "StatementTest.pas",
+                "CommentsTest.pas",
+                "AccessorsTest.pas", "FunctionTest.pas", "GlobalsTest.pas"};
+        for (int i = 0; i < fileNames.length; ++i) {
+            assertEquals(fileNames[i], project.getSourceFiles().get(i).getName());
+        }
+
+        assertEquals(2, project.getIncludeDirectories().size()); // checking
+                                                                 // include
+                                                                 // directories
+        String includeNames[] = {"includes1", "includes2"};
+        for (int i = 0; i < includeNames.length; ++i) {
+            assertEquals(includeNames[i], project.getIncludeDirectories().get(i).getName());
+        }
+
+        assertEquals(4, project.getDefinitions().size());
+        String definitionNames[] = {"GGMSGDEBUGx", "LOGTOFILEx", "FullDebugMode", "RELEASE"};
+        for (int i = 0; i < definitionNames.length; ++i) {
+            assertEquals(definitionNames[i], project.getDefinitions().get(i));
+        }
+    }
 
 }

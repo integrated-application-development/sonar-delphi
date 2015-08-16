@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,47 +26,48 @@ import org.sonar.squid.measures.Metric;
 
 public class StringValueHandler extends LineContextHandler {
 
-  private static final int ALNUM_BEGIN_INDEX = 48;
-  private String str = null;
-  private Metric metric = null;
-  private boolean isMatch = false;
+    private static final int ALNUM_BEGIN_INDEX = 48;
+    private String str = null;
+    private Metric metric = null;
+    private boolean isMatch = false;
 
-  StringValueHandler(String value, Metric metric) {
-    str = value.toLowerCase();
-    this.metric = metric;
-  }
-
-  boolean isWhitespaceOrIsNotAlnum(char c) {
-    boolean whiteSpace = (c == '\n') || (c == ' ') || (c == '\r') || (c == '\0');
-    boolean notAlnum = c < ALNUM_BEGIN_INDEX;
-    return whiteSpace || notAlnum;
-  }
-
-  @Override
-  boolean matchToEnd(Line line, StringBuilder pendingLine) {
-    if (str == null) {
-      throw new IllegalStateException("Method StringValueHandler::matchToEnd has no string value.");
+    StringValueHandler(String value, Metric metric) {
+        str = value.toLowerCase();
+        this.metric = metric;
     }
 
-    if (isMatch && isWhitespaceOrIsNotAlnum(pendingLine.charAt(pendingLine.length() - 1))) {
-      line.setMeasure(metric, line.getInt(metric) + 1);
+    boolean isWhitespaceOrIsNotAlnum(char c) {
+        boolean whiteSpace = (c == '\n') || (c == ' ') || (c == '\r') || (c == '\0');
+        boolean notAlnum = c < ALNUM_BEGIN_INDEX;
+        return whiteSpace || notAlnum;
     }
 
-    return true; // always returns true, even if not found to finish checking further
-  }
+    @Override
+    boolean matchToEnd(Line line, StringBuilder pendingLine) {
+        if (str == null) {
+            throw new IllegalStateException("Method StringValueHandler::matchToEnd has no string value.");
+        }
 
-  @Override
-  boolean matchWithEndOfLine(Line line, StringBuilder pendingLine) {
-    return matchToEnd(line, pendingLine);
-  }
+        if (isMatch && isWhitespaceOrIsNotAlnum(pendingLine.charAt(pendingLine.length() - 1))) {
+            line.setMeasure(metric, line.getInt(metric) + 1);
+        }
 
-  @Override
-  boolean matchToBegin(Line line, StringBuilder pendingLine) {
-    if (str == null) {
-      throw new IllegalStateException("Method StringValueHandler::matchToBegin has no string value.");
+        return true; // always returns true, even if not found to finish
+                     // checking further
     }
-    isMatch = matchEndOfString(pendingLine.toString().toLowerCase(), str);
-    return isMatch;
-  }
+
+    @Override
+    boolean matchWithEndOfLine(Line line, StringBuilder pendingLine) {
+        return matchToEnd(line, pendingLine);
+    }
+
+    @Override
+    boolean matchToBegin(Line line, StringBuilder pendingLine) {
+        if (str == null) {
+            throw new IllegalStateException("Method StringValueHandler::matchToBegin has no string value.");
+        }
+        isMatch = matchEndOfString(pendingLine.toString().toLowerCase(), str);
+        return isMatch;
+    }
 
 }

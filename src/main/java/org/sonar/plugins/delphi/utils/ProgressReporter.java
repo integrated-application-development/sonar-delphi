@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,78 +27,82 @@ package org.sonar.plugins.delphi.utils;
  */
 public class ProgressReporter
 {
-  private double currentProgress = 0;
-  private int currentPercent  = 0;
-  private double reportProgress  = 25;
-  private int targetProgress  = 100;
-  private int percentProgress = 25;
-  private ProgressReporterLogger logger = null;
-  private boolean firstProgress = true;
-  
-  /**
-   * Default ctor, no logging!
-   */
-  public ProgressReporter() {
-    logger = new ProgressReporterLogger();
-  }
-  
-  /**
-   * Ctor
-   * @param targetProgress  Target progress we want to achieve
-   * @param parts           How many parts of progress we should report, ex. 4 will report every 25%
-   * @param printStream     report will be written to this print stream
-   */
-  public ProgressReporter(int targetProgress, int parts, ProgressReporterLogger logger) {
-    this.targetProgress = targetProgress;
-    this.reportProgress = targetProgress / (double)parts;
-    this.percentProgress = 100 / parts;
-    this.logger = logger;
-  }
-  
-  /**
-   * Progress by one
-   * @return number of reports printed
-   */
-  public int progress() {
-    return progress(1);
-  }
-  
-  /**
-   * Progress by amount
-   * @param amount  amount we want to progress
-   * @return  number of reports printed
-   */
-  public int progress(int amount) 
-  {
-    int reportCount = reportZeroPercent();
-    currentProgress += amount;
-    while(currentProgress >= reportProgress) {
-      currentProgress -= reportProgress;
-      currentPercent = Math.min(currentPercent + percentProgress, 100);
-      report();
-      ++reportCount;
-    }
-    return reportCount;
-  }
+    private double currentProgress = 0;
+    private int currentPercent = 0;
+    private double reportProgress = 25;
+    private int targetProgress = 100;
+    private int percentProgress = 25;
+    private ProgressReporterLogger logger = null;
+    private boolean firstProgress = true;
 
-  private int reportZeroPercent() {
-    if(firstProgress) {
-      firstProgress = false;
-      report();
-      return 1;
+    /**
+     * Default ctor, no logging!
+     */
+    public ProgressReporter() {
+        logger = new ProgressReporterLogger();
     }
-    return 0;
-  }
-  
-  private void report() {
-    logger.log(currentPercent + "% done...");
-  }
 
-  /**
-   * @return  target progress
-   */
-  public int getTargetProgress() {
-    return targetProgress;
-  }
-  
+    /**
+     * Ctor
+     * 
+     * @param targetProgress Target progress we want to achieve
+     * @param parts How many parts of progress we should report, ex. 4 will
+     *            report every 25%
+     * @param printStream report will be written to this print stream
+     */
+    public ProgressReporter(int targetProgress, int parts, ProgressReporterLogger logger) {
+        this.targetProgress = targetProgress;
+        this.reportProgress = targetProgress / (double) parts;
+        this.percentProgress = 100 / parts;
+        this.logger = logger;
+    }
+
+    /**
+     * Progress by one
+     * 
+     * @return number of reports printed
+     */
+    public int progress() {
+        return progress(1);
+    }
+
+    /**
+     * Progress by amount
+     * 
+     * @param amount amount we want to progress
+     * @return number of reports printed
+     */
+    public int progress(int amount)
+    {
+        int reportCount = reportZeroPercent();
+        currentProgress += amount;
+        while (currentProgress >= reportProgress) {
+            currentProgress -= reportProgress;
+            currentPercent = Math.min(currentPercent + percentProgress, 100);
+            report();
+            ++reportCount;
+        }
+        return reportCount;
+    }
+
+    private int reportZeroPercent() {
+        if (firstProgress) {
+            firstProgress = false;
+            report();
+            return 1;
+        }
+        return 0;
+    }
+
+    private void report() {
+        logger.log(currentPercent + "% done...");
+    }
+
+    /**
+     * @return target progress
+     */
+    public int getTargetProgress() {
+        return targetProgress;
+    }
+
 }

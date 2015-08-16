@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,11 +22,8 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 
@@ -43,45 +41,47 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 
 public class VisibilityAnalyzerTest {
 
-  private VisibilityAnalyzer analyzer;
-  private CodeAnalysisResults results;
-  private CodeTree code;
+    private VisibilityAnalyzer analyzer;
+    private CodeAnalysisResults results;
+    private CodeTree code;
 
-  @Before
-  public void init() throws IOException, RecognitionException {
-    code = mock(CodeTree.class);
-    analyzer = new VisibilityAnalyzer();
-    results = new CodeAnalysisResults();
-    results.setActiveUnit(new DelphiUnit("test"));
-  }
-
-  @Test
-  public void analyzeTest() {
-    LexerMetrics[] metrics = { LexerMetrics.PRIVATE, LexerMetrics.PUBLIC, LexerMetrics.PUBLISHED, LexerMetrics.PROTECTED };
-    for (LexerMetrics metric : metrics) {
-      when(code.getCurrentCodeNode()).thenReturn(new CodeNode<Tree>(new CommonTree(new CommonToken(metric.toMetrics(), "token"))));
-      analyzer.analyze(code, results);
-      assertEquals(metric, results.getParseVisibility());
+    @Before
+    public void init() throws IOException, RecognitionException {
+        code = mock(CodeTree.class);
+        analyzer = new VisibilityAnalyzer();
+        results = new CodeAnalysisResults();
+        results.setActiveUnit(new DelphiUnit("test"));
     }
-  }
 
-  @Test
-  public void canAnalyzeTest() {
-    when(code.getCurrentCodeNode()).thenReturn(
-        new CodeNode<Tree>(new CommonTree(new CommonToken(LexerMetrics.PRIVATE.toMetrics(), "private"))));
-    assertTrue(analyzer.canAnalyze(code));
-    when(code.getCurrentCodeNode()).thenReturn(
-        new CodeNode<Tree>(new CommonTree(new CommonToken(LexerMetrics.PUBLIC.toMetrics(), "public"))));
-    assertTrue(analyzer.canAnalyze(code));
-    when(code.getCurrentCodeNode()).thenReturn(
-        new CodeNode<Tree>(new CommonTree(new CommonToken(LexerMetrics.PUBLISHED.toMetrics(), "published"))));
-    assertTrue(analyzer.canAnalyze(code));
-    when(code.getCurrentCodeNode()).thenReturn(
-        new CodeNode<Tree>(new CommonTree(new CommonToken(LexerMetrics.PROTECTED.toMetrics(), "protected"))));
-    assertTrue(analyzer.canAnalyze(code));
-    when(code.getCurrentCodeNode()).thenReturn(
-        new CodeNode<Tree>(new CommonTree(new CommonToken(LexerMetrics.IMPLEMENTATION.toMetrics(), "impl"))));
-    assertFalse(analyzer.canAnalyze(code));
-  }
+    @Test
+    public void analyzeTest() {
+        LexerMetrics[] metrics = {LexerMetrics.PRIVATE, LexerMetrics.PUBLIC, LexerMetrics.PUBLISHED,
+                LexerMetrics.PROTECTED};
+        for (LexerMetrics metric : metrics) {
+            when(code.getCurrentCodeNode()).thenReturn(
+                    new CodeNode<Tree>(new CommonTree(new CommonToken(metric.toMetrics(), "token"))));
+            analyzer.analyze(code, results);
+            assertEquals(metric, results.getParseVisibility());
+        }
+    }
+
+    @Test
+    public void canAnalyzeTest() {
+        when(code.getCurrentCodeNode()).thenReturn(
+                new CodeNode<Tree>(new CommonTree(new CommonToken(LexerMetrics.PRIVATE.toMetrics(), "private"))));
+        assertTrue(analyzer.canAnalyze(code));
+        when(code.getCurrentCodeNode()).thenReturn(
+                new CodeNode<Tree>(new CommonTree(new CommonToken(LexerMetrics.PUBLIC.toMetrics(), "public"))));
+        assertTrue(analyzer.canAnalyze(code));
+        when(code.getCurrentCodeNode()).thenReturn(
+                new CodeNode<Tree>(new CommonTree(new CommonToken(LexerMetrics.PUBLISHED.toMetrics(), "published"))));
+        assertTrue(analyzer.canAnalyze(code));
+        when(code.getCurrentCodeNode()).thenReturn(
+                new CodeNode<Tree>(new CommonTree(new CommonToken(LexerMetrics.PROTECTED.toMetrics(), "protected"))));
+        assertTrue(analyzer.canAnalyze(code));
+        when(code.getCurrentCodeNode()).thenReturn(
+                new CodeNode<Tree>(new CommonTree(new CommonToken(LexerMetrics.IMPLEMENTATION.toMetrics(), "impl"))));
+        assertFalse(analyzer.canAnalyze(code));
+    }
 
 }

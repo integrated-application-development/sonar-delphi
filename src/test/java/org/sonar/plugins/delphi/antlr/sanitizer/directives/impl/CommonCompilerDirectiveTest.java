@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.directives.impl;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
@@ -29,39 +30,39 @@ import org.sonar.plugins.delphi.antlr.directives.impl.CommonCompilerDirective;
 
 public class CommonCompilerDirectiveTest {
 
-  private CommonCompilerDirective directive;
+    private CommonCompilerDirective directive;
 
-  @Test
-  public void getNameTest() {
-    directive = new CommonCompilerDirective("name", "item", 0, 0);
-    assertEquals("name", directive.getName());
+    @Test
+    public void getNameTest() {
+        directive = new CommonCompilerDirective("name", "item", 0, 0);
+        assertEquals("name", directive.getName());
 
-    directive = new CommonCompilerDirective("NewName", "item", 0, 0);
-    assertEquals("NewName", directive.getName());
-  }
+        directive = new CommonCompilerDirective("NewName", "item", 0, 0);
+        assertEquals("NewName", directive.getName());
+    }
 
-  @Test
-  public void getItemTest() {
-    directive = new CommonCompilerDirective("name", "item", 0, 0);
-    assertEquals("item", directive.getItem());
+    @Test
+    public void getItemTest() {
+        directive = new CommonCompilerDirective("name", "item", 0, 0);
+        assertEquals("item", directive.getItem());
 
-    directive = new CommonCompilerDirective("name", "NewItem", 0, 0);
-    assertEquals("NewItem", directive.getItem());
-  }
+        directive = new CommonCompilerDirective("name", "NewItem", 0, 0);
+        assertEquals("NewItem", directive.getItem());
+    }
 
-  @Test
-  public void getFirstCharPositionTest() {
-    directive = new CommonCompilerDirective("name", "item", 0, 0);
-    assertEquals(0, directive.getFirstCharPosition());
+    @Test
+    public void getFirstCharPositionTest() {
+        directive = new CommonCompilerDirective("name", "item", 0, 0);
+        assertEquals(0, directive.getFirstCharPosition());
 
-    directive = new CommonCompilerDirective("name", "item", 256, 256);
-    assertEquals(256, directive.getFirstCharPosition());
-  }
+        directive = new CommonCompilerDirective("name", "item", 256, 256);
+        assertEquals(256, directive.getFirstCharPosition());
+    }
 
-  @Test
-  public void getTypeTest() {
-    directive = new CommonCompilerDirective("name", "item", 0, 0);
-    assertEquals(CompilerDirectiveType.UNKNOWN, directive.getType());
-  }
+    @Test
+    public void getTypeTest() {
+        directive = new CommonCompilerDirective("name", "item", 0, 0);
+        assertEquals(CompilerDirectiveType.UNKNOWN, directive.getType());
+    }
 
 }

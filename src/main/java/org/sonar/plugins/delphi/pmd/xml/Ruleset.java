@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -34,90 +35,86 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
  */
 public class Ruleset {
 
-  private String description;
+    private String description;
 
-  @XStreamImplicit
-  private List<DelphiRule> delphiRules = new ArrayList<DelphiRule>();
+    @XStreamImplicit
+    private List<DelphiRule> delphiRules = new ArrayList<DelphiRule>();
 
-  @XStreamOmitField
-  @XStreamAlias(value = "exclude-pattern")
-  private String excludePattern;
+    @XStreamOmitField
+    @XStreamAlias(value = "exclude-pattern")
+    private String excludePattern;
 
-  @XStreamOmitField
-  @XStreamAlias(value = "include-pattern")
-  private String includePattern;
+    @XStreamOmitField
+    @XStreamAlias(value = "include-pattern")
+    private String includePattern;
 
-  /**
-   * Default ctor
-   */
-  public Ruleset() {
-  }
+    /**
+     * Default ctor
+     */
+    public Ruleset() {
+    }
 
-  /**
-   * Ctor with description
-   * 
-   * @param description
-   *          Rule set description
-   */
-  public Ruleset(String description) {
-    this.description = description;
-  }
+    /**
+     * Ctor with description
+     * 
+     * @param description Rule set description
+     */
+    public Ruleset(String description) {
+        this.description = description;
+    }
 
-  /**
-   * @return List of DelphiLanguage Rules
-   */
-  public List<DelphiRule> getRules() {
-    return delphiRules;
-  }
+    /**
+     * @return List of DelphiLanguage Rules
+     */
+    public List<DelphiRule> getRules() {
+        return delphiRules;
+    }
 
-  /**
-   * Sets list of rule
-   * 
-   * @param delphiRules
-   *          New rules
-   */
-  public void setRules(List<DelphiRule> delphiRules) {
-    this.delphiRules = delphiRules;
-  }
+    /**
+     * Sets list of rule
+     * 
+     * @param delphiRules New rules
+     */
+    public void setRules(List<DelphiRule> delphiRules) {
+        this.delphiRules = delphiRules;
+    }
 
-  /**
-   * @return Rule set description
-   */
-  public String getDescription() {
-    return description;
-  }
+    /**
+     * @return Rule set description
+     */
+    public String getDescription() {
+        return description;
+    }
 
-  /**
-   * Sets rule set description
-   * 
-   * @param description
-   *          new description
-   */
-  public void setDescription(String description) {
-    this.description = description;
-  }
+    /**
+     * Sets rule set description
+     * 
+     * @param description new description
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  /**
-   * Adds rule to set
-   * 
-   * @param delphiRule
-   *          DelphiLanguage Rule to add
-   */
-  public void addRule(DelphiRule delphiRule) {
-    delphiRules.add(delphiRule);
-  }
+    /**
+     * Adds rule to set
+     * 
+     * @param delphiRule DelphiLanguage Rule to add
+     */
+    public void addRule(DelphiRule delphiRule) {
+        delphiRules.add(delphiRule);
+    }
 
-  /**
-   * @return exclude pattern
-   */
-  public String getExcludePattern() {
-    return excludePattern;
-  }
+    /**
+     * @return exclude pattern
+     */
+    public String getExcludePattern() {
+        return excludePattern;
+    }
 
-  /**
-   * @return include pattern
-   */
-  public String getIncludePattern() {
-    return includePattern;
-  }
+    /**
+     * @return include pattern
+     */
+    public String getIncludePattern() {
+        return includePattern;
+    }
 }

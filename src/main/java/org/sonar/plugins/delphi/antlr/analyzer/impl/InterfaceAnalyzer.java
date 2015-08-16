@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,26 +31,28 @@ import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 
 /**
- * Set the section of file currently being parsed (interface / implementation sections)
+ * Set the section of file currently being parsed (interface / implementation
+ * sections)
  */
 public class InterfaceAnalyzer extends CodeAnalyzer {
 
-  @Override
-  public void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
-    LexerMetrics lexerMetrics = LexerMetrics.getLexerMetricsForType(codeTree.getCurrentCodeNode().getNode().getType());
-    if (lexerMetrics == LexerMetrics.IMPLEMENTATION) {
-      results.setActiveClass(null);
-      results.setParseVisibility(LexerMetrics.PRIVATE);
+    @Override
+    public void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
+        LexerMetrics lexerMetrics = LexerMetrics.getLexerMetricsForType(codeTree.getCurrentCodeNode().getNode()
+                .getType());
+        if (lexerMetrics == LexerMetrics.IMPLEMENTATION) {
+            results.setActiveClass(null);
+            results.setParseVisibility(LexerMetrics.PRIVATE);
+        }
+
+        results.setParseStatus(lexerMetrics);
     }
 
-    results.setParseStatus(lexerMetrics);
-  }
-
-  @Override
-  public boolean canAnalyze(CodeTree codeTree) {
-    Tree currentNode = codeTree.getCurrentCodeNode().getNode();
-    int type = currentNode.getType();
-    return (type == DelphiLexer.INTERFACE || type == DelphiParser.IMPLEMENTATION);
-  }
+    @Override
+    public boolean canAnalyze(CodeTree codeTree) {
+        Tree currentNode = codeTree.getCurrentCodeNode().getNode();
+        int type = currentNode.getType();
+        return (type == DelphiLexer.INTERFACE || type == DelphiParser.IMPLEMENTATION);
+    }
 
 }

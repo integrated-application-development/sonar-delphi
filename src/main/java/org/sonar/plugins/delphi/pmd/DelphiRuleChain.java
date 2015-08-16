@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -33,11 +34,11 @@ import net.sourceforge.pmd.ast.CompilationUnit;
  */
 public class DelphiRuleChain extends RuleChain {
 
-  private DelphiRuleChainVisitor visitor = new DelphiRuleChainVisitor();
+    private DelphiRuleChainVisitor visitor = new DelphiRuleChainVisitor();
 
-  @Override
-  public void apply(List<CompilationUnit> astCompilationUnits, RuleContext ctx, Language language) {
-    visitor.visitAll(astCompilationUnits, ctx);
-  }
+    @Override
+    public void apply(List<CompilationUnit> astCompilationUnits, RuleContext ctx, Language language) {
+        visitor.visitAll(astCompilationUnits, ctx);
+    }
 
 }

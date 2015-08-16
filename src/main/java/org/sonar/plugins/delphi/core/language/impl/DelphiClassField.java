@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,65 +33,62 @@ import org.sonar.plugins.delphi.core.language.ClassInterface;
  */
 public class DelphiClassField extends DelphiArgument implements ClassFieldInterface {
 
-  private ClassInterface parent = null;
-  private int visibility = DelphiParser.PRIVATE;
+    private ClassInterface parent = null;
+    private int visibility = DelphiParser.PRIVATE;
 
-  /**
-   * ctor
-   */
-  public DelphiClassField() {
-  }
-
-  /**
-   * ctor
-   * 
-   * @param name
-   *          filed name
-   * @param type
-   *          filed type
-   * @param fieldVisibility
-   *          field visibility
-   */
-  public DelphiClassField(String name, String type, int fieldVisibility) {
-    super(name, type);
-    visibility = fieldVisibility;
-  }
-
-  public void setParent(ClassInterface cl) {
-    parent = cl;
-  }
-
-  public ClassInterface getParent() {
-    return parent;
-  }
-
-  public int getVisibility() {
-    return visibility;
-  }
-
-  public void setVisibility(int value) {
-    visibility = value;
-  }
-
-  @Override
-  public String toString() {
-    if (parent == null) {
-      return name;
+    /**
+     * ctor
+     */
+    public DelphiClassField() {
     }
-    return parent.getName() + "." + name;
-  }
 
-  @Override
-  public boolean equals(Object o) {
-    if (o == null) {
-      return false;
+    /**
+     * ctor
+     * 
+     * @param name filed name
+     * @param type filed type
+     * @param fieldVisibility field visibility
+     */
+    public DelphiClassField(String name, String type, int fieldVisibility) {
+        super(name, type);
+        visibility = fieldVisibility;
     }
-    return toString().equals(o.toString());
-  }
 
-  @Override
-  public int hashCode() {
-    return toString().hashCode();
-  }
+    public void setParent(ClassInterface cl) {
+        parent = cl;
+    }
+
+    public ClassInterface getParent() {
+        return parent;
+    }
+
+    public int getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(int value) {
+        visibility = value;
+    }
+
+    @Override
+    public String toString() {
+        if (parent == null) {
+            return name;
+        }
+        return parent.getName() + "." + name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        return toString().equals(o.toString());
+    }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
 
 }

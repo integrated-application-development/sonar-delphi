@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,40 +27,41 @@ package org.sonar.plugins.delphi.antlr.directives;
  */
 public interface CompilerDirective {
 
-  /**
-   * example: '#include <iostream>' will return "include"
-   * 
-   * @return definition name
-   */
-  String getName();
+    /**
+     * example: '#include <iostream>' will return "include"
+     * 
+     * @return definition name
+     */
+    String getName();
 
-  /**
-   * example: '#include <iostream>' will return "iostream"
-   * 
-   * @return definition item
-   */
-  String getItem();
+    /**
+     * example: '#include <iostream>' will return "iostream"
+     * 
+     * @return definition item
+     */
+    String getItem();
 
-  /**
-   * @return first definition char position in whole file
-   */
-  int getFirstCharPosition();
+    /**
+     * @return first definition char position in whole file
+     */
+    int getFirstCharPosition();
 
-  /**
-   * @return last definition char position
-   */
-  int getLastCharPosition();
+    /**
+     * @return last definition char position
+     */
+    int getLastCharPosition();
 
-  /**
-   * @return preprocessor definition type
-   */
-  CompilerDirectiveType getType();
+    /**
+     * @return preprocessor definition type
+     */
+    CompilerDirectiveType getType();
 
-  /**
-   * Get length of the directive, that is: the span from first and last char position
-   * 
-   * @return directive length
-   */
-  int getLength();
+    /**
+     * Get length of the directive, that is: the span from first and last char
+     * position
+     * 
+     * @return directive length
+     */
+    int getLength();
 
 }

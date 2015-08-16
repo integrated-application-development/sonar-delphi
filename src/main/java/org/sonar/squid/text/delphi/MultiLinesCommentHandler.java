@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,81 +24,85 @@ package org.sonar.squid.text.delphi;
 
 public class MultiLinesCommentHandler extends LineContextHandler {
 
-  private StringBuilder currentLineComment;
-  private boolean isFirstLineOfComment = false;
+    private StringBuilder currentLineComment;
+    private boolean isFirstLineOfComment = false;
 
-  private boolean isJavadoc = false;
-  private boolean isLicenseHeader = false;
+    private boolean isJavadoc = false;
+    private boolean isLicenseHeader = false;
 
-  private boolean commentStarted = false;
+    private boolean commentStarted = false;
 
-  private static final String START_COMMENT_TAG = "/*";
-  private static final String START_JAVADOC_TAG = "/**";
-  private static final String START_GWT_NATIVE_CODE_TAG = "/*-{";
-  private static final String END_COMMENT_TAG = "*/";
+    private static final String START_COMMENT_TAG = "/*";
+    private static final String START_JAVADOC_TAG = "/**";
+    private static final String START_GWT_NATIVE_CODE_TAG = "/*-{";
+    private static final String END_COMMENT_TAG = "*/";
 
-  @Override
-  boolean matchToEnd(Line line, StringBuilder pendingLine) {
-    if ( !commentStarted) {
-      throw new IllegalStateException("Method doContextBegin(StringBuilder pendingLine) has not been called first (line = '" + pendingLine
-          + "').");
+    @Override
+    boolean matchToEnd(Line line, StringBuilder pendingLine) {
+        if (!commentStarted) {
+            throw new IllegalStateException(
+                    "Method doContextBegin(StringBuilder pendingLine) has not been called first (line = '"
+                            + pendingLine
+                            + "').");
+        }
+        currentLineComment.append(getLastCharacter(pendingLine));
+        if (isJavaDoc()) {
+            isJavadoc = true;
+        }
+        if (isGwtNativeCode()) {
+            initProperties();
+            return true;
+        }
+        boolean match = matchEndOfString(pendingLine, END_COMMENT_TAG);
+        if (match
+                && !(isFirstLineOfComment && pendingLine.indexOf(START_COMMENT_TAG) + 1 == pendingLine
+                        .indexOf(END_COMMENT_TAG))) {
+            endOfCommentLine(line);
+            initProperties();
+            return true;
+        }
+        return false;
     }
-    currentLineComment.append(getLastCharacter(pendingLine));
-    if (isJavaDoc()) {
-      isJavadoc = true;
+
+    private boolean isGwtNativeCode() {
+        return isFirstLineOfComment && currentLineComment.length() == START_GWT_NATIVE_CODE_TAG.length()
+                && currentLineComment.toString().equals(START_GWT_NATIVE_CODE_TAG);
     }
-    if (isGwtNativeCode()) {
-      initProperties();
-      return true;
+
+    private boolean isJavaDoc() {
+        return isFirstLineOfComment && currentLineComment.length() == START_JAVADOC_TAG.length()
+                && currentLineComment.toString().equals(START_JAVADOC_TAG);
     }
-    boolean match = matchEndOfString(pendingLine, END_COMMENT_TAG);
-    if (match && !(isFirstLineOfComment && pendingLine.indexOf(START_COMMENT_TAG) + 1 == pendingLine.indexOf(END_COMMENT_TAG))) {
-      endOfCommentLine(line);
-      initProperties();
-      return true;
+
+    @Override
+    boolean matchToBegin(Line line, StringBuilder pendingLine) {
+        boolean match = matchEndOfString(pendingLine, START_COMMENT_TAG);
+        if (match) {
+            isFirstLineOfComment = true;
+            commentStarted = true;
+            currentLineComment = new StringBuilder(START_COMMENT_TAG);
+            isLicenseHeader = (line.getLineIndex() == 1);
+        }
+        return match;
     }
-    return false;
-  }
 
-  private boolean isGwtNativeCode() {
-    return isFirstLineOfComment && currentLineComment.length() == START_GWT_NATIVE_CODE_TAG.length()
-        && currentLineComment.toString().equals(START_GWT_NATIVE_CODE_TAG);
-  }
-
-  private boolean isJavaDoc() {
-    return isFirstLineOfComment && currentLineComment.length() == START_JAVADOC_TAG.length()
-        && currentLineComment.toString().equals(START_JAVADOC_TAG);
-  }
-
-  @Override
-  boolean matchToBegin(Line line, StringBuilder pendingLine) {
-    boolean match = matchEndOfString(pendingLine, START_COMMENT_TAG);
-    if (match) {
-      isFirstLineOfComment = true;
-      commentStarted = true;
-      currentLineComment = new StringBuilder(START_COMMENT_TAG);
-      isLicenseHeader = (line.getLineIndex() == 1);
+    @Override
+    boolean matchWithEndOfLine(Line line, StringBuilder pendingLine) {
+        endOfCommentLine(line);
+        return false;
     }
-    return match;
-  }
 
-  @Override
-  boolean matchWithEndOfLine(Line line, StringBuilder pendingLine) {
-    endOfCommentLine(line);
-    return false;
-  }
+    private void endOfCommentLine(Line line) {
+        line.setComment(currentLineComment.toString(), isJavadoc, isLicenseHeader);
+        currentLineComment = new StringBuilder();
+        isFirstLineOfComment = false;
+    }
 
-  private void endOfCommentLine(Line line) {
-    line.setComment(currentLineComment.toString(), isJavadoc, isLicenseHeader);
-    currentLineComment = new StringBuilder();
-    isFirstLineOfComment = false;
-  }
-
-  private void initProperties() {
-    commentStarted = false;
-    isJavadoc = false;
-    isLicenseHeader = false;
-    currentLineComment = new StringBuilder();
-    isFirstLineOfComment = false;
-  }
+    private void initProperties() {
+        commentStarted = false;
+        isJavadoc = false;
+        isLicenseHeader = false;
+        currentLineComment = new StringBuilder();
+        isFirstLineOfComment = false;
+    }
 }

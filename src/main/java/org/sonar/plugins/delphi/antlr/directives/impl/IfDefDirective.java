@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,37 +29,34 @@ import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
  */
 public class IfDefDirective extends CommonCompilerDirective {
 
-  private boolean positive;
+    private boolean positive;
 
-  /**
-   * ctor
-   * 
-   * @param item
-   *          directive item
-   * @param firstCharPos
-   *          first character position
-   * @param lastCharPos
-   *          last character position
-   */
-  public IfDefDirective(String name, String item, int firstCharPos, int lastCharPos) {
-    super(name, item, firstCharPos, lastCharPos);
-    positive = "ifdef".equalsIgnoreCase(name);
-  }
+    /**
+     * ctor
+     * 
+     * @param item directive item
+     * @param firstCharPos first character position
+     * @param lastCharPos last character position
+     */
+    public IfDefDirective(String name, String item, int firstCharPos, int lastCharPos) {
+        super(name, item, firstCharPos, lastCharPos);
+        positive = "ifdef".equalsIgnoreCase(name);
+    }
 
-  /**
-   * Is compiler directive looking for positive checks?<br/>
-   * example: <code>{$ifdef XXX}</code> will return <b>true</b><br/>
-   * <code>{$ifNdef YYY}</code> will return <b>false</b><br/>
-   * 
-   * @return true if so, false otherwise
-   */
-  public boolean isPositive() {
-    return positive;
-  }
+    /**
+     * Is compiler directive looking for positive checks?<br/>
+     * example: <code>{$ifdef XXX}</code> will return <b>true</b><br/>
+     * <code>{$ifNdef YYY}</code> will return <b>false</b><br/>
+     * 
+     * @return true if so, false otherwise
+     */
+    public boolean isPositive() {
+        return positive;
+    }
 
-  @Override
-  public CompilerDirectiveType getType() {
-    return CompilerDirectiveType.IFDEF;
-  }
+    @Override
+    public CompilerDirectiveType getType() {
+        return CompilerDirectiveType.IFDEF;
+    }
 
 }

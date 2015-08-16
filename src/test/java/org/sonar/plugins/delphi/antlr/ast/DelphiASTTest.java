@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,30 +39,30 @@ import org.xml.sax.SAXException;
 
 public class DelphiASTTest {
 
-  private static final String TEST_FILE = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
-  private ASTTree ast;
+    private static final String TEST_FILE = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
+    private ASTTree ast;
 
-  @Before
-  public void setup() throws IOException, RecognitionException {
-    ast = new DelphiAST(DelphiUtils.getResource(TEST_FILE));
-  }
-
-  @Test
-  public void generateXMLTest() throws IOException {
-    File xml = File.createTempFile("DelphiAST", ".xml");
-    xml.deleteOnExit();
-
-    ast.generateXML(xml.getAbsolutePath());
-
-    try {
-      DocumentBuilder parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-      parser.parse(xml);
-    } catch (ParserConfigurationException e) {
-      fail("Could not parse generated XML document");
-    } catch (SAXException e) {
-      fail("Could not parse generated XML document");
+    @Before
+    public void setup() throws IOException, RecognitionException {
+        ast = new DelphiAST(DelphiUtils.getResource(TEST_FILE));
     }
 
-  }
+    @Test
+    public void generateXMLTest() throws IOException {
+        File xml = File.createTempFile("DelphiAST", ".xml");
+        xml.deleteOnExit();
+
+        ast.generateXML(xml.getAbsolutePath());
+
+        try {
+            DocumentBuilder parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            parser.parse(xml);
+        } catch (ParserConfigurationException e) {
+            fail("Could not parse generated XML document");
+        } catch (SAXException e) {
+            fail("Could not parse generated XML document");
+        }
+
+    }
 
 }

@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,56 +49,57 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class FunctionParametersAnalyzerTest {
 
-  private static final Tree EMPTY_NODE = new CommonTree(new CommonToken(0));
-  private static final Tree PARAMETERS_NODE = new CommonTree(new CommonToken(LexerMetrics.FUNCTION_ARGS.toMetrics()));
-  private static final String TEST_FILE = "/org/sonar/plugins/delphi/syntax/FunctionParametersAnalyzerTest.pas";
+    private static final Tree EMPTY_NODE = new CommonTree(new CommonToken(0));
+    private static final Tree PARAMETERS_NODE = new CommonTree(new CommonToken(LexerMetrics.FUNCTION_ARGS.toMetrics()));
+    private static final String TEST_FILE = "/org/sonar/plugins/delphi/syntax/FunctionParametersAnalyzerTest.pas";
 
-  private CodeTree code;
-  private CodeAnalysisResults results;
-  private FunctionParametersAnalyzer analyzer;
+    private CodeTree code;
+    private CodeAnalysisResults results;
+    private FunctionParametersAnalyzer analyzer;
 
-  @Before
-  public void setup() {
-    analyzer = new FunctionParametersAnalyzer();
-    results = new CodeAnalysisResults();
-    results.setActiveFunction(new DelphiFunction("myProcedure"));
-  }
-
-  @Test
-  public void canAnalyzeTest() {
-    code = new CodeTree(null, null);
-    code.setCurrentNode(new CodeNode<Tree>(EMPTY_NODE));
-    assertEquals(false, analyzer.canAnalyze(code));
-
-    code.setCurrentNode(new CodeNode<Tree>(PARAMETERS_NODE));
-    assertEquals(true, analyzer.canAnalyze(code));
-  }
-
-  @Test
-  public void doAnalyzeTest() throws IOException, RecognitionException {
-    File testFile = DelphiUtils.getResource(TEST_FILE);
-    ASTTree ast = new DelphiAST(testFile);
-    code = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
-
-    NodeOperation operation = new AdvanceToNodeOperation(LexerMetrics.FUNCTION_ARGS);
-    CodeNode<Tree> startNode = operation.execute(ast.getChild(0));
-    code.setCurrentNode(startNode);
-
-    assertEquals(true, startNode.isValid());
-    assertEquals(LexerMetrics.FUNCTION_ARGS.toMetrics(), startNode.getNode().getType());
-
-    analyzer.analyze(code, results);
-
-    ArgumentInterface expectedArgs[] = { new DelphiArgument("x", "real"), new DelphiArgument("y", "integer"),
-        new DelphiArgument("z", "integer"), new DelphiArgument("q", FunctionParametersAnalyzer.UNTYPED_PARAMETER_NAME) };
-
-    FunctionInterface function = results.getActiveFunction();
-    ArgumentInterface arguments[] = function.getArguments();
-
-    assertEquals(expectedArgs.length, arguments.length);
-    for (int i = 0; i < expectedArgs.length; ++i) {
-      assertEquals(expectedArgs[i], arguments[i]);
+    @Before
+    public void setup() {
+        analyzer = new FunctionParametersAnalyzer();
+        results = new CodeAnalysisResults();
+        results.setActiveFunction(new DelphiFunction("myProcedure"));
     }
 
-  }
+    @Test
+    public void canAnalyzeTest() {
+        code = new CodeTree(null, null);
+        code.setCurrentNode(new CodeNode<Tree>(EMPTY_NODE));
+        assertEquals(false, analyzer.canAnalyze(code));
+
+        code.setCurrentNode(new CodeNode<Tree>(PARAMETERS_NODE));
+        assertEquals(true, analyzer.canAnalyze(code));
+    }
+
+    @Test
+    public void doAnalyzeTest() throws IOException, RecognitionException {
+        File testFile = DelphiUtils.getResource(TEST_FILE);
+        ASTTree ast = new DelphiAST(testFile);
+        code = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
+
+        NodeOperation operation = new AdvanceToNodeOperation(LexerMetrics.FUNCTION_ARGS);
+        CodeNode<Tree> startNode = operation.execute(ast.getChild(0));
+        code.setCurrentNode(startNode);
+
+        assertEquals(true, startNode.isValid());
+        assertEquals(LexerMetrics.FUNCTION_ARGS.toMetrics(), startNode.getNode().getType());
+
+        analyzer.analyze(code, results);
+
+        ArgumentInterface expectedArgs[] = {new DelphiArgument("x", "real"), new DelphiArgument("y", "integer"),
+                new DelphiArgument("z", "integer"),
+                new DelphiArgument("q", FunctionParametersAnalyzer.UNTYPED_PARAMETER_NAME)};
+
+        FunctionInterface function = results.getActiveFunction();
+        ArgumentInterface arguments[] = function.getArguments();
+
+        assertEquals(expectedArgs.length, arguments.length);
+        for (int i = 0; i < expectedArgs.length; ++i) {
+            assertEquals(expectedArgs[i], arguments[i]);
+        }
+
+    }
 }

@@ -1,9 +1,10 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions
+ * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
  * Author(s):
  * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
  * Michal Wojcik (michal.wojcik@sabre.com)
+ * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,97 +30,99 @@ import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
- * Class for checking if we are using .Free with checking if variable is assigned (redundant): if assigned(x) then x.free; if x <> nil then
- * x.free;
+ * Class for checking if we are using .Free with checking if variable is
+ * assigned (redundant): if assigned(x) then x.free; if x <> nil then x.free;
  */
 public class AssignedAndFreeRule extends DelphiRule {
 
-  private static final int MIN_CHILD_COUNT = 5;
-  protected boolean started;
-  protected Set<String> variables;
+    private static final int MIN_CHILD_COUNT = 5;
+    protected boolean started;
+    protected Set<String> variables;
 
-  @Override
-  public Object visit(DelphiPMDNode node, Object data) {
-    if (node.getType() == DelphiLexer.IF) {
-      started = true;
-      variables.clear();
-    } else if (node.getType() == DelphiLexer.THEN) {
-      started = false;
-    }
-
-    if (started) { // looking for variables that were checked for assignement
-      if ("assigned".equalsIgnoreCase(node.getText())) {
-        parseAssigned(node);
-      } else if ("nil".equals(node.getText())) {
-        parseNil(node);
-      }
-    }
-
-    else { // checking for Free'd variables
-      if (node.getType() == DelphiLexer.BEGIN) {
-        if (node.getChildCount() > MIN_CHILD_COUNT) {
-          variables.clear();
+    @Override
+    public Object visit(DelphiPMDNode node, Object data) {
+        if (node.getType() == DelphiLexer.IF) {
+            started = true;
+            variables.clear();
+        } else if (node.getType() == DelphiLexer.THEN) {
+            started = false;
         }
-      }
 
-      else if ("free".equalsIgnoreCase(node.getText()) && freeVariable(node)) {
-        addViolation(data, node);
-      }
+        if (started) { // looking for variables that were checked for
+                       // assignement
+            if ("assigned".equalsIgnoreCase(node.getText())) {
+                parseAssigned(node);
+            } else if ("nil".equals(node.getText())) {
+                parseNil(node);
+            }
+        }
+
+        else { // checking for Free'd variables
+            if (node.getType() == DelphiLexer.BEGIN) {
+                if (node.getChildCount() > MIN_CHILD_COUNT) {
+                    variables.clear();
+                }
+            }
+
+            else if ("free".equalsIgnoreCase(node.getText()) && freeVariable(node)) {
+                addViolation(data, node);
+            }
+        }
+
+        return data;
     }
 
-    return data;
-  }
+    private boolean freeVariable(DelphiPMDNode node) {
+        StringBuilder variableName = new StringBuilder();
+        int index = node.getChildIndex();
+        Tree backwardNode;
+        while (((--index) > -1) && (backwardNode = node.getParent().getChild(index)).getText().equals(".")) {
+            variableName.insert(0, backwardNode.getText());
+            variableName.insert(0, node.getParent().getChild(--index).getText());
+        }
 
-  private boolean freeVariable(DelphiPMDNode node) {
-    StringBuilder variableName = new StringBuilder();
-    int index = node.getChildIndex();
-    Tree backwardNode;
-    while (((--index) > -1) && (backwardNode = node.getParent().getChild(index)).getText().equals(".")) {
-      variableName.insert(0, backwardNode.getText());
-      variableName.insert(0, node.getParent().getChild(--index).getText());
+        if (variableName.length() > 0) { // if some variable name was found
+            variableName.setLength(variableName.length() - 1); // terminate last
+                                                               // .
+            return variables.contains(variableName.toString());
+        } else {
+            return false;
+        }
     }
 
-    if (variableName.length() > 0) { // if some variable name was found
-      variableName.setLength(variableName.length() - 1); // terminate last .
-      return variables.contains(variableName.toString());
-    } else {
-      return false;
-    }
-  }
+    private void parseNil(DelphiPMDNode node) {
+        int index = node.getChildIndex();
+        if (!node.getParent().getChild(--index).getText().equals("<>")) {
+            return;
+        }
 
-  private void parseNil(DelphiPMDNode node) {
-    int index = node.getChildIndex();
-    if ( !node.getParent().getChild(--index).getText().equals("<>")) {
-      return;
-    }
+        StringBuilder variableName = new StringBuilder();
+        Tree backwardNode = node.getParent().getChild(--index);
+        variableName.insert(0, backwardNode.getText());
 
-    StringBuilder variableName = new StringBuilder();
-    Tree backwardNode = node.getParent().getChild(--index);
-    variableName.insert(0, backwardNode.getText());
+        while ((backwardNode = node.getParent().getChild(--index)).getText().equals(".")) {
+            variableName.insert(0, backwardNode.getText());
+            variableName.insert(0, node.getParent().getChild(--index).getText());
+        }
 
-    while ((backwardNode = node.getParent().getChild(--index)).getText().equals(".")) {
-      variableName.insert(0, backwardNode.getText());
-      variableName.insert(0, node.getParent().getChild(--index).getText());
+        variables.add(variableName.toString());
     }
 
-    variables.add(variableName.toString());
-  }
+    private void parseAssigned(DelphiPMDNode node) {
+        StringBuilder variableName = new StringBuilder();
+        int index = node.getChildIndex() + 1;
+        Tree forwardNode;
+        while (!(forwardNode = node.getParent().getChild(++index)).getText().equals(")")) {
+            variableName.append(forwardNode.getText());
+        }
 
-  private void parseAssigned(DelphiPMDNode node) {
-    StringBuilder variableName = new StringBuilder();
-    int index = node.getChildIndex() + 1;
-    Tree forwardNode;
-    while ( !(forwardNode = node.getParent().getChild(++index)).getText().equals(")")) {
-      variableName.append(forwardNode.getText());
+        variables.add(variableName.toString());
     }
 
-    variables.add(variableName.toString());
-  }
-
-  @Override
-  protected void init() {
-    started = false;
-    variables = new HashSet<String>();
-  }
+    @Override
+    protected void init() {
+        started = false;
+        variables = new HashSet<String>();
+    }
 
 }
