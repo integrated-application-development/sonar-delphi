@@ -276,6 +276,25 @@
           <header>/src/LICENSE.txt</header>
         </configuration>
       </plugin>
+      
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.5.1</version>
+          <configuration>
+            <autoVersionSubmodules>true</autoVersionSubmodules>
+            <useReleaseProfile>false</useReleaseProfile>
+            <localCheckout>true</localCheckout>
+            <pushChanges>false</pushChanges>
+            <mavenExecutorId>forked-path</mavenExecutorId>
+            <preparationGoals>clean install</preparationGoals>
+            <!--
+            Allows to activate release profile during release.
+            We don't use releaseProfiles parameter, because it affects only release:perform goal
+            -->
+            <arguments>-Prelease</arguments>
+          </configuration>
+        </plugin>
     </plugins>
   </build>
 

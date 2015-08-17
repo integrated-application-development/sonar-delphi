@@ -21,7 +21,7 @@ Steps to Analyze a Delphi Project
 ------------------------------------------------
 
 1. Install SonarQube Server (see [Setup and Upgrade](http://docs.sonarqube.org/display/SONAR/Setup+and+Upgrade) for more details)
-2. Install one of the supported [Runners](supported-runners) (see below) and be sure you can call it from the directory where you have your source code
+2. Install one of the supported [Runners](#supported-runners) (see below) and be sure you can call it from the directory where you have your source code
 3. Install Delphi Plugin (see [Installing a Plugin](http://docs.sonarqube.org/display/SONAR/Installing+a+Plugin)  for more details). By default Java Plugin is provided out of the box with SonarQube.
 4. Check the sample project corresponding to your Runner to know which config file you need to create. You can find the samples in `sonar-delphi/samples`.
 5. Run your Analyzer command from the project root dir
