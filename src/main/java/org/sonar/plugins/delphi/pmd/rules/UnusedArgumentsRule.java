@@ -22,11 +22,15 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import net.sourceforge.pmd.PropertyDescriptor;
+import net.sourceforge.pmd.properties.StringProperty;
+
 import org.antlr.runtime.tree.Tree;
-import org.apache.commons.lang.StringUtils;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
@@ -36,7 +40,13 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 public class UnusedArgumentsRule extends DelphiRule {
 
     private static final int MAX_LOOK_AHEAD = 3;
+
+    private static final PropertyDescriptor EXCLUDED_ARGS = new StringProperty("excluded_args",
+            "The argument names to ignore", new String[] {}, 1.0f, ',');
+
     private StringBuilder methodName;
+
+    private final List<String> excludedArgs = new ArrayList<String>();
 
     @Override
     public Object visit(DelphiPMDNode node, Object data) {
@@ -96,7 +106,7 @@ public class UnusedArgumentsRule extends DelphiRule {
     }
 
     private boolean ignoredArg(String arg) {
-        return StringUtils.endsWithIgnoreCase(arg, "Sender");
+        return excludedArgs.contains(arg);
     }
 
     /**
@@ -108,7 +118,7 @@ public class UnusedArgumentsRule extends DelphiRule {
     private void processFunctionBegin(Tree beginNode, Map<String, Integer> args) {
         for (int i = 0; i < beginNode.getChildCount(); ++i) {
             Tree child = beginNode.getChild(i);
-            String key = child.getText();
+            String key = child.getText().toLowerCase();
             if (args.containsKey(key)) { // if we are using a argument, increase
                                          // the counter
                 Integer newValue = args.get(key) + 1;
@@ -140,15 +150,19 @@ public class UnusedArgumentsRule extends DelphiRule {
                 }
             }
 
-            for (int c = 0; c < idents.getChildCount(); ++c) { // adding
-                                                               // arguments to
-                                                               // map
-                if (!"sender".equals(idents.getChild(c).getText())) {
-                    args.put(idents.getChild(c).getText(), Integer.valueOf(0));
-                }
+            for (int c = 0; c < idents.getChildCount(); ++c) {
+                args.put(idents.getChild(c).getText().toLowerCase(), Integer.valueOf(0));
             }
         }
         return args;
     }
 
+    @Override
+    protected void init() {
+        super.init();
+        String[] stringProperties = getStringProperties(EXCLUDED_ARGS);
+        for (String prop : stringProperties) {
+            excludedArgs.add(prop.toLowerCase());
+        }
+    }
 }

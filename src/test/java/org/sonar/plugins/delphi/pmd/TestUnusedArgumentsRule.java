@@ -133,8 +133,8 @@ public class TestUnusedArgumentsRule {
 
             System.out.println(issue.ruleKey().rule() + ":" + issue.line());
 
-            assertThat(ruleData[i].toString(), ruleData[i].getName(), is(issue.ruleKey().rule()));
-            assertThat(ruleData[i].toString(), ruleData[i].getLine(), is(issue.line()));
+            assertThat("rule " + ruleData[i].toString(), ruleData[i].getName(), is(issue.ruleKey().rule()));
+            assertThat("rule " + ruleData[i].toString() + "line ", ruleData[i].getLine(), is(issue.line()));
         }
     }
 }

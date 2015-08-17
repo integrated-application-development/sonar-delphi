@@ -11,10 +11,10 @@ type
     procedure OnEventB(ASender: TObject);
     procedure OnUnusedArg(x: Integer);
   public
+    procedure CaseInsensitive(Arg: Integer);
   end;
 
 implementation
-
 
 { TCustomComponent }
 
@@ -31,6 +31,11 @@ end;
 procedure TCustomComponent.OnUnusedArg(x: Integer);
 begin
   Writeln('dummy');
+end;
+
+procedure TCustomComponent.CaseInsensitive(Arg: Integer);
+begin
+  arg := arg + 1;
 end;
 
 end.

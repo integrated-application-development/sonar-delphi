@@ -183,6 +183,11 @@
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.UnusedArgumentsRule" message="" 
   	name="Unused Arguments Rule">
 	    <description>You should always use every passed function argument.</description>
+    	<properties>
+    			<property name="excluded_args">
+    				<value>Sender,ASender,DataSet,ADataSet</value>
+    			</property>
+    	</properties>	    
 	</rule>	
 	
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="No Guid in interface declaration" 
