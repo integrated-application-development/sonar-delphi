@@ -10,7 +10,7 @@
   </parent> 
 
   <artifactId>sonar-delphi-plugin</artifactId>
-  <version>0.3-SNAPSHOT</version>
+  <version>0.3</version>
   <packaging>sonar-plugin</packaging>
 
   <name>Sonar Delphi Plugin</name>
@@ -54,7 +54,7 @@
     <connection>scm:git:git@github.com:fabriciocolombo/sonar-delphi.git</connection>
     <developerConnection>scm:git:git@github.com:fabriciocolombo/sonar-delphi.git</developerConnection>
     <url>https://github.com/fabriciocolombo/sonar-delphi</url>
-    <tag>HEAD</tag>
+    <tag>0.3</tag>
   </scm>
     
   <issueManagement>
