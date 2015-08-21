@@ -26,10 +26,10 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.codecoverage.aqtime.AQTimeCoverageParser;
@@ -63,10 +63,10 @@ public class CodeCoverageSensor implements Sensor
 
     private final DelphiProjectHelper delphiProjectHelper;
 
-    public CodeCoverageSensor(Configuration configuration, DelphiProjectHelper delphiProjectHelper) {
+    public CodeCoverageSensor(Settings settings, DelphiProjectHelper delphiProjectHelper) {
         this.delphiProjectHelper = delphiProjectHelper;
-        readJdbcFromConfiguration(configuration);
-        readCoverageToolFromConfiguration(configuration);
+        readJdbcFromConfiguration(settings);
+        readCoverageToolFromConfiguration(settings);
     }
 
     /**
@@ -92,27 +92,28 @@ public class CodeCoverageSensor implements Sensor
         }
     }
 
-    private void readCoverageToolFromConfiguration(Configuration configuration) {
-        String value = configuration.getString(DelphiPlugin.CODECOVERAGE_TOOL_KEY, "").toLowerCase();
+    private void readCoverageToolFromConfiguration(Settings settings) {
+        String value = settings.getString(DelphiPlugin.CODECOVERAGE_TOOL_KEY);
         usedCodeCoverageTool = parseCodeCoverageToolUsed(value);
         DelphiUtils.LOG.info("Code coverage tool selected: " + usedCodeCoverageTool.name());
 
-        String fileName = configuration.getString(DelphiPlugin.CODECOVERAGE_REPORT_KEY, "");
+        String fileName = StringUtils.defaultString(settings.getString(DelphiPlugin.CODECOVERAGE_REPORT_KEY), "");
         codeCoverageFile = new File(fileName);
     }
 
-    private void readJdbcFromConfiguration(Configuration configuration) {
+    private void readJdbcFromConfiguration(Settings settings) {
         for (int i = 0; i < JDBC_PROPERTY_KEYS.length; ++i) {
-            jdbcProperties.put(JDBC_PROPERTY_KEYS[i],
-                    configuration.getString(JDBC_PROPERTY_KEYS[i], JDBC_DEFAULT_VALUES[i]));
+            String jdbcProperty = StringUtils.defaultIfBlank(settings.getString(JDBC_PROPERTY_KEYS[i]),
+                    JDBC_DEFAULT_VALUES[i]);
+            jdbcProperties.put(JDBC_PROPERTY_KEYS[i], jdbcProperty);
         }
     }
 
     private CodeCoverageTool parseCodeCoverageToolUsed(String usedTool) {
-        if (usedTool.equals("aqtime")) {
+        if ("aqtime".equals(usedTool)) {
             return CodeCoverageTool.AQTime;
         }
-        if (usedTool.equals("delphi code coverage")) {
+        if ("delphi code coverage".equals(usedTool)) {
             return CodeCoverageTool.DelphiCodeCoverage;
         }
         return CodeCoverageTool.None;

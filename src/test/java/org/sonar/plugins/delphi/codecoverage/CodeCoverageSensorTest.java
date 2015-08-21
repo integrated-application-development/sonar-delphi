@@ -26,9 +26,9 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.DelphiTestUtils;
-import org.sonar.plugins.delphi.debug.DebugConfiguration;
 
 public class CodeCoverageSensorTest {
 
@@ -36,7 +36,7 @@ public class CodeCoverageSensorTest {
     public void shouldExecuteOnProjectTest() {
         Project project = mock(Project.class);
 
-        assertTrue(new CodeCoverageSensor(new DebugConfiguration(), DelphiTestUtils.mockProjectHelper())
+        assertTrue(new CodeCoverageSensor(new Settings(), DelphiTestUtils.mockProjectHelper())
                 .shouldExecuteOnProject(project));
     }
 }

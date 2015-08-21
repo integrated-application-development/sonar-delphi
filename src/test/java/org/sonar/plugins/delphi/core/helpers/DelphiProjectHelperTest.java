@@ -24,28 +24,17 @@ package org.sonar.plugins.delphi.core.helpers;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
-import org.apache.commons.configuration.BaseConfiguration;
-import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
-import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.config.Settings;
 
 public class DelphiProjectHelperTest {
 
-    @Test
-    public void shouldExecuteOnProject() {
-        Configuration configuration = new BaseConfiguration();
-
-        FileSystem fs = mock(FileSystem.class);
-        DelphiProjectHelper helper = new DelphiProjectHelper(configuration, null, fs);
-        assertThat(helper.getImportSources(), is(true));
-    }
+    private final Settings settings = new Settings();
 
     @Test
     public void shouldReturnDefaultValueForImportSources() {
-        Configuration configuration = new BaseConfiguration();
-        DelphiProjectHelper helper = new DelphiProjectHelper(configuration, null, null);
+        DelphiProjectHelper helper = new DelphiProjectHelper(settings, null, null);
         assertThat(helper.getImportSources(), is(true));
     }
 

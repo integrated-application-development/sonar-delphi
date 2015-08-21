@@ -2,3 +2,5 @@ target
 .classpath
 .project
 .settings
+/.README.md.html
+/.TODO.md.html

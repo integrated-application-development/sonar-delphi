@@ -28,13 +28,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.CoreProperties;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Directory;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.RuleFinder;
@@ -54,7 +54,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
 
     public static final String DEFAULT_PACKAGE_NAME = "[default]";
 
-    private final Configuration configuration;
+    private final Settings settings;
     private final RuleFinder ruleFinder;
     private final FileSystem fs;
     private List<File> excludedSources;
@@ -62,12 +62,12 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
     /**
      * ctor used by Sonar
      *
-     * @param configuration
+     * @param settings
      * @param ruleFinder
      */
-    public DelphiProjectHelper(Configuration configuration, RuleFinder ruleFinder, FileSystem fs) {
-        super(configuration, fs);
-        this.configuration = configuration;
+    public DelphiProjectHelper(Settings settings, RuleFinder ruleFinder, FileSystem fs) {
+        super(settings, fs);
+        this.settings = settings;
         this.ruleFinder = ruleFinder;
         this.fs = fs;
         DelphiUtils.LOG.info("Delphi Project Helper creation!!!");
@@ -87,10 +87,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
      * @return True if so, false otherwise
      */
     public boolean shouldExtendIncludes() {
-        if (configuration == null) {
-            return true; // process includes
-        }
-        String str = configuration.getString(DelphiPlugin.INCLUDE_EXTEND_KEY, "true");
+        String str = settings.getString(DelphiPlugin.INCLUDE_EXTEND_KEY);
         return "true".equals(str);
     }
 
@@ -103,10 +100,10 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
      */
     public List<File> getIncludeDirectories() {
         List<File> result = new ArrayList<File>();
-        if (configuration == null) {
+        if (settings == null) {
             return result;
         }
-        String[] includedDirs = configuration.getStringArray(DelphiPlugin.INCLUDED_DIRECTORIES_KEY);
+        String[] includedDirs = settings.getStringArray(DelphiPlugin.INCLUDED_DIRECTORIES_KEY);
         if (includedDirs != null && includedDirs.length > 0) {
             for (String path : includedDirs) {
                 if (StringUtils.isEmpty(path)) {
@@ -138,10 +135,10 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
 
     private List<File> detectExcludedSources() {
         List<File> result = new ArrayList<File>();
-        if (configuration == null) {
+        if (settings == null) {
             return result;
         }
-        String[] excludedNames = configuration.getStringArray(DelphiPlugin.EXCLUDED_DIRECTORIES_KEY);
+        String[] excludedNames = settings.getStringArray(DelphiPlugin.EXCLUDED_DIRECTORIES_KEY);
         if (excludedNames != null && excludedNames.length > 0) {
             for (String path : excludedNames) {
                 if (StringUtils.isEmpty(path)) {
@@ -165,10 +162,10 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
      * @return Path to project file
      */
     public String getProjectFile() {
-        if (configuration == null) {
+        if (settings == null) {
             return null;
         }
-        return configuration.getString(DelphiPlugin.PROJECT_FILE_KEY);
+        return settings.getString(DelphiPlugin.PROJECT_FILE_KEY);
     }
 
     /**
@@ -177,10 +174,10 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
      * @return Path to workgroup file
      */
     public String getWorkgroupFile() {
-        if (configuration == null) {
+        if (settings == null) {
             return null;
         }
-        return configuration.getString(DelphiPlugin.WORKGROUP_FILE_KEY);
+        return settings.getString(DelphiPlugin.WORKGROUP_FILE_KEY);
     }
 
     /**
@@ -189,11 +186,9 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
      * @return True if so, false otherwise
      */
     public boolean getImportSources() {
-        if (configuration == null) {
-            return CoreProperties.CORE_IMPORT_SOURCES_DEFAULT_VALUE;
-        }
-        return configuration.getBoolean(CoreProperties.CORE_IMPORT_SOURCES_PROPERTY,
-                CoreProperties.CORE_IMPORT_SOURCES_DEFAULT_VALUE);
+        // Always import source code, see
+        // https://jira.sonarsource.com/browse/SONAR-5735
+        return CoreProperties.CORE_IMPORT_SOURCES_DEFAULT_VALUE;
     }
 
     /**

@@ -24,9 +24,9 @@ package org.sonar.plugins.delphi.surefire;
 
 import java.io.File;
 
-import org.apache.commons.configuration.Configuration;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -38,16 +38,16 @@ import org.sonar.plugins.surefire.api.SurefireUtils;
  */
 public class SurefireSensor implements Sensor {
 
-    private final Configuration configuration;
+    private final Settings settings;
     private final DelphiProjectHelper delphiProjectHelper;
 
     /**
      * Ctor
      * 
-     * @param configuration Configuration provided by Sonar
+     * @param settings Settings provided by Sonar
      */
-    public SurefireSensor(Configuration configuration, DelphiProjectHelper delphiProjectHelper) {
-        this.configuration = configuration;
+    public SurefireSensor(Settings settings, DelphiProjectHelper delphiProjectHelper) {
+        this.settings = settings;
         this.delphiProjectHelper = delphiProjectHelper;
     }
 
@@ -63,7 +63,7 @@ public class SurefireSensor implements Sensor {
      */
 
     public void analyse(Project project, SensorContext context) {
-        String[] paths = configuration.getStringArray(SurefireUtils.SUREFIRE_REPORTS_PATH_PROPERTY);
+        String[] paths = settings.getStringArray(SurefireUtils.SUREFIRE_REPORTS_PATH_PROPERTY);
 
         if (paths == null || paths.length == 0) { // no directory was specified
             DelphiUtils.LOG.warn("No Surefire reports directory found!");

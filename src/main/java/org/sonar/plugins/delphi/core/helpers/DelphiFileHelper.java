@@ -26,11 +26,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
@@ -39,16 +38,16 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  */
 public class DelphiFileHelper {
 
-    private final Configuration configuration;
+    private final Settings settings;
     private final FileSystem fs;
 
     /**
      * ctor
      * 
-     * @param conf Configuration
+     * @param settings Settings
      */
-    public DelphiFileHelper(Configuration conf, FileSystem fs) {
-        this.configuration = conf;
+    public DelphiFileHelper(Settings settings, FileSystem fs) {
+        this.settings = settings;
         this.fs = fs;
     }
 
@@ -92,20 +91,16 @@ public class DelphiFileHelper {
      */
     public List<File> getCodeCoverageExcludedDirectories(Project project) {
         List<File> list = new ArrayList<File>();
-        if (configuration == null) {
-            return list;
-        }
 
-        String[] sources = configuration.getStringArray(DelphiPlugin.CC_EXCLUDED_KEY);
+        String[] sources = settings.getStringArray(DelphiPlugin.CC_EXCLUDED_KEY);
         if (sources == null || sources.length == 0) {
             return list;
         }
-        ProjectFileSystem fileSystem = project.getFileSystem();
         for (String path : sources) {
             if (StringUtils.isEmpty(path)) {
                 continue;
             }
-            File excluded = DelphiUtils.resolveAbsolutePath(fileSystem.getBasedir().getAbsolutePath(), path.trim());
+            File excluded = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
             if (!excluded.exists()) {
                 DelphiUtils.LOG.warn("Excluded code coverage path does not exist: " + excluded.getAbsolutePath());
             } else if (!excluded.isDirectory()) {
@@ -123,6 +118,16 @@ public class DelphiFileHelper {
      * @return Test directories, or empty list
      */
     public List<File> getTestDirectories(Project project) {
+        // TODO Replace getTestDirs for predicate
+        // FilePredicates p = fs.predicates();
+        // fs.files(p.and(p.hasLanguage(DelphiLanguage.KEY),
+        // p.hasType(InputFile.Type.TEST),
+        // new FilePredicate() {
+        // @Override
+        // public boolean apply(InputFile inputFile) {
+        // return inputFile.file().isDirectory();
+        // }
+        // }));
 
         List<File> testDirs = project.getFileSystem().getTestDirs();
         for (File directory : testDirs) {

@@ -33,11 +33,11 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.api.batch.SonarIndex;
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Project.AnalysisType;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.delphi.DelphiTestUtils;
-import org.sonar.plugins.delphi.debug.DebugConfiguration;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.surefire.api.SurefireUtils;
@@ -49,7 +49,7 @@ public class SurefireSensorTest {
     private static final String SUREFIRE_REPORT_DIR = "./reports";
 
     private Project project;
-    private DebugConfiguration configuration;
+    private Settings settings;
     private SonarIndex sonarIndex;
 
     @Before
@@ -63,19 +63,18 @@ public class SurefireSensorTest {
         when(fileSystem.getTestDirs()).thenReturn(testDirs);
 
         project = mock(Project.class);
-        when(project.getLanguageKey()).thenReturn("delph");
         when(project.getAnalysisType()).thenReturn(AnalysisType.DYNAMIC);
         when(project.getFileSystem()).thenReturn(fileSystem);
 
         sonarIndex = mock(SonarIndex.class);
 
-        configuration = new DebugConfiguration();
-        configuration.addProperty(SurefireUtils.SUREFIRE_REPORTS_PATH_PROPERTY, SUREFIRE_REPORT_DIR);
+        settings = new Settings();
+        settings.setProperty(SurefireUtils.SUREFIRE_REPORTS_PATH_PROPERTY, SUREFIRE_REPORT_DIR);
     }
 
     @Test
     public void shouldExecuteOnProjectTest() {
-        assertTrue(new SurefireSensor(configuration, DelphiTestUtils.mockProjectHelper())
+        assertTrue(new SurefireSensor(settings, DelphiTestUtils.mockProjectHelper())
                 .shouldExecuteOnProject(project));
     }
 
@@ -83,7 +82,7 @@ public class SurefireSensorTest {
     @Ignore
     public void analyzeTest() {
         DebugSensorContext context = new DebugSensorContext();
-        SurefireSensor sensor = new SurefireSensor(configuration, DelphiTestUtils.mockProjectHelper());
+        SurefireSensor sensor = new SurefireSensor(settings, DelphiTestUtils.mockProjectHelper());
         sensor.analyse(project, context);
         assertEquals(12, context.getMeasuresKeys().size());
     }

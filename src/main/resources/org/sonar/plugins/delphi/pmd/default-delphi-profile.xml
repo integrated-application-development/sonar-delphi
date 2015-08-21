@@ -78,7 +78,7 @@
 	<priority>4</priority>
 	</rule>
 	
-	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.PublicFieldsRule" name="Public Field Rule">
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.PublicFieldsRule" name="Public Fields Rule">
 	<priority>4</priority>
 	</rule>
 	

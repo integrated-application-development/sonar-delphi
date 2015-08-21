@@ -55,13 +55,13 @@ Implemented Features
 * Rules
 * Code coverage reports
 * Source code highlight for unit tests
-* “Dead” code recognition
+* "Dead" code recognition
 * Unused files recognition
 
 Code Assumptions
 ----------------------------------
 
-* Grammar is NOT case insensitive, but Delphi code is. Plugin deals with it by DelphiSourceSanitizer class, which feeds ANTLR parser lowercase characters (the “LA” method)
+* Grammar is NOT case insensitive, but Delphi code is. Plugin deals with it by DelphiSourceSanitizer class, which feeds ANTLR parser lowercase characters (the "LA" method)
 * Number of classes includes: classes, records
 * Directory is count as a package. Number of packages equals number of directories.
 * Preprocessor definitions between {$if xxx} and {$ifend} are removed (DefineResolver class).
@@ -70,6 +70,16 @@ Code Assumptions
 DUnit Tests
 ----------------------
 
-You should put transformed DUnit xml files to directory specified using parameter `sonar.junit.reportsPath`. You can specify multiply directories separated by ‘,’. Then all specified directories will be parsed. The path can be either absolute or relative to the project main path.
-The xml files should be renamed with “TEST-“ prefix, example: “dunit.xml” -> “TEST-dunit.xml”.
+You should put transformed DUnit xml files to directory specified using parameter `sonar.junit.reportsPath`. 
+You can specify multiply directories separated by `,`. Then all specified directories will be parsed. 
+The path can be either absolute or relative to the project main path.
+The xml files should be renamed with `TEST-` prefix, example: `dunit.xml` -> `TEST-dunit.xml`.
 I recommend you to use [dunit-extension](https://github.com/fabriciocolombo/dunit-extension) to handle these details.
+
+Importing into Eclipse
+-------------------------------
+First run the eclipse maven goal:
+
+    mvn eclipse:eclipse
+
+The project can then be imported into Eclipse using File -> Import and then selecting General -> Existing Projects into Workspace.
