@@ -66,7 +66,6 @@ import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
 public class DelphiSensor implements Sensor {
 
     private int scannedFiles = 0; // number of scanned files
-    private Project project = null; // project
     private Set<Directory> packageList = new HashSet<Directory>(); // package
                                                                    // list
     private Map<Directory, Integer> filesCount = new HashMap<Directory, Integer>();
@@ -75,7 +74,6 @@ public class DelphiSensor implements Sensor {
     private Map<InputFile, List<ClassInterface>> fileClasses = new HashMap<InputFile, List<ClassInterface>>();
     private Map<InputFile, List<FunctionInterface>> fileFunctions = new HashMap<InputFile, List<FunctionInterface>>();
     private List<UnitInterface> units = null; // project units
-    private List<File> testDirectories = null; // test directories
 
     private final DelphiProjectHelper delphiProjectHelper;
     private final RuleFinder ruleFinder;
@@ -102,19 +100,14 @@ public class DelphiSensor implements Sensor {
      * Analyses whole project with all metrics
      */
 
-    public void analyse(Project sonarProject, SensorContext sensorContext) {
-        project = sonarProject; // project to analyse
-        testDirectories = delphiProjectHelper.getTestDirectories(project);
-        printFileList("Source dir: ", project.getFileSystem().getSourceDirs());
-        printFileList("Test dir: ", testDirectories);
-
+    public void analyse(Project project, SensorContext sensorContext) {
         // creates and resets analyser
         ASTAnalyzer analyzer = new DelphiASTAnalyzer(delphiProjectHelper);
         List<DelphiProject> projects = delphiProjectHelper.getWorkgroupProjects();
         for (DelphiProject delphiProject : projects) // for every .dproj file
         {
             CodeAnalysisCacheResults.resetCache();
-            parseFiles(analyzer, delphiProject);
+            parseFiles(analyzer, delphiProject, project);
             parsePackages(sensorContext);
 
             MetricsInterface metrics[] = {new BasicMetrics(project), new ComplexityMetrics(project),
@@ -185,8 +178,9 @@ public class DelphiSensor implements Sensor {
      * 
      * @param analyser Analyser to use
      * @param delphiProject DelphiLanguage project to parse
+     * @param project Project
      */
-    protected void parseFiles(ASTAnalyzer analyser, DelphiProject delphiProject) {
+    protected void parseFiles(ASTAnalyzer analyser, DelphiProject delphiProject, Project project) {
         // project properties
         List<File> includedDirs = delphiProject.getIncludeDirectories();
         List<File> excludedDirs = delphiProjectHelper.getExcludedSources();
@@ -208,7 +202,7 @@ public class DelphiSensor implements Sensor {
         DelphiUtils.LOG.info("Files to parse: " + sourceFiles.size());
 
         for (File delphiFile : sourceFiles) {
-            parseSourceFile(delphiFile, excludedDirs, importSources, analyser);
+            parseSourceFile(delphiFile, excludedDirs, importSources, analyser, project);
             progressReporter.progress();
         }
 
@@ -223,32 +217,26 @@ public class DelphiSensor implements Sensor {
      * @param excludedDirs List of excluded dirs
      * @param importSources Should we import sources to Sonar
      * @param analyzer Source code analyser
+     * @param project Project
      */
-    private void parseSourceFile(File sourceFile, List<File> excludedDirs, boolean importSources, ASTAnalyzer analyzer) {
+    private void parseSourceFile(File sourceFile, List<File> excludedDirs, boolean importSources, ASTAnalyzer analyzer,
+            Project project) {
         if (delphiProjectHelper.isExcluded(sourceFile, excludedDirs)) {
             return; // in excluded, return
         }
 
-        boolean isTest = delphiProjectHelper.isTestFile(sourceFile, testDirectories);
-
-        DelphiUtils.LOG.debug(">> PARSING " + sourceFile.getAbsolutePath() + " test: " + isTest + " directory: "
-                + sourceFile.getParentFile());
+        DelphiUtils.LOG.debug(">> PARSING " + sourceFile.getAbsolutePath());
 
         // adding file to package
         InputFile resource = delphiProjectHelper.getFile(sourceFile);
-        // DelphiFile resource = DelphiFile.fromIOFile(sourceFile,
-        // project.getFileSystem().getSourceDirs(), isTest);
 
         Directory pack = delphiProjectHelper.getDirectory(sourceFile.getParentFile(), project);
 
         if (pack == null) {
             throw new IllegalArgumentException("Directory: " + sourceFile.getParentFile() + " not found.");
-            // DelphiUtils.LOG.debug("Directory: " + sourceFile.getParentFile()
-            // + " not found.");
-            // return;
         }
 
-        packageList.add(pack); // new pack
+        packageList.add(pack); // new package
 
         if (filesCount.containsKey(pack)) {
             filesCount.put(pack, filesCount.get(pack) + 1); // files count

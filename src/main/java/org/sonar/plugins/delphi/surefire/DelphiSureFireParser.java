@@ -55,16 +55,14 @@ public class DelphiSureFireParser {
 
     private static final String FILE_EXT = ".pas";
     private static final String ERROR_MSG = "Unit test file not found: ";
-    private final Project project;
     private final DelphiProjectHelper delphiProjectHelper;
 
     /**
      * ctor
      * 
-     * @param delphiProject project provided by Sonar
+     * @param delphiProjectHelper DelphiProjectHelper
      */
-    public DelphiSureFireParser(Project delphiProject, DelphiProjectHelper delphiProjectHelper) {
-        this.project = delphiProject;
+    public DelphiSureFireParser(DelphiProjectHelper delphiProjectHelper) {
         this.delphiProjectHelper = delphiProjectHelper;
     }
 

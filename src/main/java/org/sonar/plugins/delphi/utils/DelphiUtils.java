@@ -155,24 +155,6 @@ public final class DelphiUtils {
     }
 
     /**
-     * Gets source directories of a project
-     * 
-     * @param project Project
-     * @return Source directories
-     */
-    public static List<File> getSourceDirectories(Project project) {
-        if (project == null) {
-            return null;
-        }
-        List<File> sourceDirs = new ArrayList<File>();
-        File baseDir = project.getFileSystem().getBasedir();
-
-        collectDirs(baseDir, sourceDirs);
-
-        return sourceDirs;
-    }
-
-    /**
      * Gets all source files from project
      * 
      * @param project DelphiLanguage project

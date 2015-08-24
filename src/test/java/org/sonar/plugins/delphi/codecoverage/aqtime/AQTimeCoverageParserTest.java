@@ -22,15 +22,15 @@
  */
 package org.sonar.plugins.delphi.codecoverage.aqtime;
 
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -39,8 +39,8 @@ import org.dbunit.PropertiesBasedJdbcDatabaseTester;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
-import org.junit.Ignore;
-import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
@@ -48,7 +48,6 @@ import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.HSQLServerUtil;
 
-@Ignore
 public class AQTimeCoverageParserTest extends DBTestCase {
 
     private static final String FILE_NAME = "/org/sonar/plugins/delphi/SimpleDelphiProject";
@@ -56,7 +55,7 @@ public class AQTimeCoverageParserTest extends DBTestCase {
     private AQTimeCoverageParser parser;
     private Connection connection;
     private Map<String, String> connectionProps;
-    private DelphiProjectHelper delphiProjectHelper;
+    private DelphiProjectHelper delphiProjectHelper = mock(DelphiProjectHelper.class);
 
     public AQTimeCoverageParserTest() {
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS, "org.hsqldb.jdbcDriver");
@@ -110,38 +109,37 @@ public class AQTimeCoverageParserTest extends DBTestCase {
     public void testParse() {
 
         Project project = mock(Project.class);
-        DelphiProjectHelper delphiProjectHelper = mock(DelphiProjectHelper.class);
 
         File baseDir = DelphiUtils.getResource(FILE_NAME);
 
-        List<File> sourceFiles = DelphiUtils.getSourceFiles(project);
-        List<File> sourceDirs = DelphiUtils.getSourceDirectories(project);
+        DefaultInputFile inputFileGlobals = new DefaultInputFile("Globals.pas").setAbsolutePath("Globals.pas");
+        DefaultInputFile inputFileMainWindow = new DefaultInputFile("MainWindow.pas")
+                .setFile(new File("MainWindow.pas"));
 
-        List<InputFile> inputSourceFiles = new ArrayList<InputFile>();
-        for (File srcFile : sourceFiles) {
-            InputFile iFile = mock(InputFile.class);
-            when(iFile.file()).thenReturn(srcFile);
-            inputSourceFiles.add(iFile);
-        }
-
-        // TODO fix test
-        // when(pfs.mainFiles(DelphiLanguage.KEY)).thenReturn(inputSourceFiles);
+        when(delphiProjectHelper.getFile("Globals.pas")).thenReturn(inputFileGlobals);
+        when(delphiProjectHelper.getFile("MainWindow.pas")).thenReturn(inputFileMainWindow);
 
         DebugSensorContext context = new DebugSensorContext();
-        parser.setSourceFiles(inputSourceFiles);
         parser.parse(context);
 
-        String coverage_names[] = {"Globals.pas:coverage", "MainWindow.pas:coverage"};
-        double coverage_values[] = {100.00, 50.00};
-        String lineHits_names[] = {"Globals.pas:coverage_line_hits_data", "MainWindow.pas:coverage_line_hits_data"};
-        String lineHits_values[] = {"32=1;33=1", "13=1;14=0"};
+        Measure<Double> globalMeasureCoverage = context.getMeasure(inputFileGlobals.absolutePath() + ":" + "coverage");
+        assertThat(globalMeasureCoverage, notNullValue());
+        assertThat(globalMeasureCoverage.getValue(), is(100.00));
 
-        for (int i = 0; i < coverage_names.length; ++i) { // % of coverage
-            assertEquals(coverage_names[i] + "-coverage", coverage_values[i], context.getMeasure(coverage_names[i])
-                    .getValue(), 0.0);
-            assertEquals(coverage_names[i] + "-lineHits", lineHits_values[i], context.getMeasure(lineHits_names[i])
-                    .getData());
-        }
+        Measure<String> globalMeasureLineHits = context.getMeasure(inputFileGlobals.absolutePath() + ":"
+                + "coverage_line_hits_data");
+        assertThat(globalMeasureLineHits, notNullValue());
+        assertThat(globalMeasureLineHits.getData(), is("32=1;33=1"));
+
+        Measure<Double> mainWindowMeasureCoverage = context.getMeasure(inputFileMainWindow.absolutePath() + ":"
+                + "coverage");
+        assertThat(mainWindowMeasureCoverage, notNullValue());
+        assertThat(mainWindowMeasureCoverage.getValue(), is(50.00));
+
+        Measure<String> mainWindowMeasureLineHits = context.getMeasure(inputFileMainWindow.absolutePath() + ":"
+                + "coverage_line_hits_data");
+        assertThat(mainWindowMeasureLineHits, notNullValue());
+        assertThat(mainWindowMeasureLineHits.getData(), is("13=1;14=0"));
     }
 
     protected IDataSet getDataSet() throws Exception {

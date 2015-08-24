@@ -137,7 +137,6 @@ public class CodeCoverageSensor implements Sensor
             if (areJdbcPropertiesValid()) {
                 AQTimeCoverageParser parser = new AQTimeCoverageParser(delphiProjectHelper);
                 parser.setConnectionProperties(jdbcProperties);
-                parser.setSourceFiles(delphiProjectHelper.mainFiles());
 
                 return parser;
             }

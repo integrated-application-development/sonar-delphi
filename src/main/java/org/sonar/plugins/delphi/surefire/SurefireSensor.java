@@ -85,7 +85,7 @@ public class SurefireSensor implements Sensor {
 
     protected void collect(Project project, SensorContext context, File reportsDir) {
         DelphiUtils.LOG.info("parsing {}", reportsDir);
-        DelphiSureFireParser parser = new DelphiSureFireParser(project, delphiProjectHelper);
+        DelphiSureFireParser parser = new DelphiSureFireParser(delphiProjectHelper);
         parser.collect(project, context, reportsDir);
     }
 

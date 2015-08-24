@@ -45,7 +45,6 @@ import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
 public class AQTimeCoverageParser implements DelphiCodeCoverageParser {
 
     private String prefix = ""; // table prefix
-    private List<InputFile> sourceFiles;
     private Map<String, String> connectionProperties;
     private DelphiProjectHelper delphiProjectHelper;
 
@@ -93,19 +92,17 @@ public class AQTimeCoverageParser implements DelphiCodeCoverageParser {
 
         Map<InputFile, CoverageFileData> savedResources = new HashMap<InputFile, CoverageFileData>();
 
-        InputFile resource = null; // current file
-
         for (AQTimeCodeCoverage aqTimeCodeCoverage : aqTimeCodeCoverages) {
             progressReporter.progress();
 
             // convert relative file name to absolute path
-            String path = processFileName(aqTimeCodeCoverage.getCoveredFileName(), sourceFiles);
+            String path = normalizeFileName(aqTimeCodeCoverage.getCoveredFileName());
 
-            if (resource == null || !resource.absolutePath().equals(aqTimeCodeCoverage.getCoveredFileName())) {
-                resource = delphiProjectHelper.getFile(path);
-                if (resource == null) {
-                    continue;
-                }
+            InputFile resource = delphiProjectHelper.getFile(path);
+            if (resource == null) {
+                continue;
+            }
+            if (!savedResources.containsKey(resource)) {
                 savedResources.put(resource, new CoverageFileData(resource));
             }
 
@@ -132,28 +129,14 @@ public class AQTimeCoverageParser implements DelphiCodeCoverageParser {
      * Gets source file path for file name
      * 
      * @param fileName Short file name
-     * @param sourceFiles List of source files
-     * @return Full path to file name
+     * @return Normalized file name
      */
-    private String processFileName(String fileName, List<InputFile> sourceFiles) {
+    private String normalizeFileName(String fileName) {
         String path = DelphiUtils.normalizeFileName(fileName);
         path = path.replaceAll("\\\\\\.\\.", ""); // erase '\..' prefixes
         path = path.replaceAll("\\.\\.", ""); // erase '..' prefixes
 
-        for (InputFile source : sourceFiles) { // searching for a proper file in
-                                               // files list
-            String sourcePath = DelphiUtils.normalizeFileName(source.file().getAbsolutePath());
-            if (sourcePath.endsWith(path)) {
-                path = sourcePath;
-                break;
-            }
-        }
-
         return path;
-    }
-
-    public void setSourceFiles(List<InputFile> sourceFiles) {
-        this.sourceFiles = sourceFiles;
     }
 
     public void setConnectionProperties(Map<String, String> connectionProperties) {
