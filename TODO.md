@@ -1,6 +1,5 @@
  * Remove static method dependency. Use Dependency Injection. 
 	* DelphiUtils 
- * Update to Java 7 - http://docs.sonarqube.org/display/SONAR/Requirements
  * Update plugin following the https://github.com/SonarSource/sonar-examples/blob/master/plugins/sonar-reference-plugin
  * Update antlr to version 4. See https://bitbucket.org/fabriciocolombo/delphiparser
  * Implements rules used by old delphi plugin. See elotech-pmd\src\main\resources\executorsets\delphiExecutorsBasic.xm
@@ -15,7 +14,6 @@
  * Metrics like DeadCode and Complexity should generates issues
  * Create integration tests like other plugins
  * Clean up dependencies to make plugin smaller
- * Update parent POM
  * Update dependencies to latest version
  * Add support to create [custom rules](http://docs.sonarqube.org/display/DEV/Extending+Coding+Rules)
  * Make all test resources compilable on real delphi.

@@ -35,7 +35,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 
@@ -155,21 +154,6 @@ public final class DelphiUtils {
     }
 
     /**
-     * Gets all source files from project
-     * 
-     * @param project DelphiLanguage project
-     * @return List of all source files (.pas)
-     */
-    public static List<File> getSourceFiles(Project project) {
-        List<File> sourceFiles = new ArrayList<File>();
-        File baseDir = project.getFileSystem().getBasedir();
-
-        collectFiles(baseDir, sourceFiles, DelphiUtils.getFileFilter());
-
-        return sourceFiles;
-    }
-
-    /**
      * Gets FileFilter associated with DelphiLanguage source files (*.pas,
      * *.dpr, *.dpk)
      * 
@@ -205,51 +189,6 @@ public final class DelphiUtils {
                 return pathname.isDirectory();
             }
         };
-    }
-
-    private static void collectDirs(File baseDir, List<File> source) {
-        if (baseDir == null || source == null) {
-            return;
-        }
-
-        FileFilter filter = new DirectoryFileFilter();
-        if (filter.accept(baseDir)) {
-            source.add(baseDir);
-            File[] children = baseDir.listFiles(filter);
-            for (File child : children) {
-                collectDirs(child, source);
-            }
-        }
-    }
-
-    // collecting files from dir, putting them to source, only files matching
-    // provided filter
-    private static void collectFiles(File baseFile, List<File> source,
-            FileFilter filter) {
-        if (baseFile == null || source == null || filter == null) {
-            return;
-        }
-
-        if (filter.accept(baseFile)) {
-            source.add(baseFile);
-        }
-
-        File[] content = baseFile.listFiles(filter); // get directory contents
-        if (content != null) {
-            for (File file : content) {
-                if (filter.accept(file)) {
-                    source.add(file); // add current file/folder
-                }
-            }
-        }
-
-        File[] dirs = baseFile.listFiles(getDirectoryFileFilter());
-        if (dirs == null) {
-            return;
-        }
-        for (File dir : dirs) {
-            collectFiles(dir, source, filter);
-        }
     }
 
     /**
