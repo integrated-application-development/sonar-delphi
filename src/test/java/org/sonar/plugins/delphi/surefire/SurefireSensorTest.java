@@ -74,7 +74,6 @@ public class SurefireSensorTest {
         });
 
         settings = new Settings();
-        settings.setProperty(SurefireUtils.SUREFIRE_REPORTS_PATH_PROPERTY, SUREFIRE_REPORT_DIR);
     }
 
     @Test
@@ -85,6 +84,20 @@ public class SurefireSensorTest {
 
     @Test
     public void analyzeTest() {
+        settings.setProperty(SurefireUtils.SUREFIRE_REPORTS_PATH_PROPERTY, SUREFIRE_REPORT_DIR);
+        DebugSensorContext context = new DebugSensorContext();
+        SurefireSensor sensor = new SurefireSensor(settings, delphiProjectHelper);
+        sensor.analyse(project, context);
+
+        for (String key : context.getMeasuresKeys()) {
+            System.out.println(key + ":" + context.getMeasure(key));
+        }
+
+        assertEquals(18, context.getMeasuresKeys().size());
+    }
+
+    @Test
+    public void analyzeTestUsingDefaultSurefireReportsPath() {
         DebugSensorContext context = new DebugSensorContext();
         SurefireSensor sensor = new SurefireSensor(settings, delphiProjectHelper);
         sensor.analyse(project, context);

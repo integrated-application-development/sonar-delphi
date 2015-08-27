@@ -38,6 +38,8 @@ import org.sonar.plugins.surefire.api.SurefireUtils;
  */
 public class SurefireSensor implements Sensor {
 
+    private static final String DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY = "target/surefire-reports";
+
     private final Settings settings;
     private final DelphiProjectHelper delphiProjectHelper;
 
@@ -66,8 +68,9 @@ public class SurefireSensor implements Sensor {
         String[] paths = settings.getStringArray(SurefireUtils.SUREFIRE_REPORTS_PATH_PROPERTY);
 
         if (paths == null || paths.length == 0) { // no directory was specified
-            DelphiUtils.LOG.warn("No Surefire reports directory found!");
-            return;
+            DelphiUtils.LOG.warn("No Surefire reports directory found! Using default directory: "
+                    + DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY);
+            paths = new String[] {DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY};
         }
 
         String mainPath = delphiProjectHelper.baseDir().getAbsolutePath();
