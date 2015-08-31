@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sourceforge.pmd.Language;
-import net.sourceforge.pmd.PMDException;
 import net.sourceforge.pmd.Report;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.RuleSets;
@@ -39,7 +38,6 @@ import org.antlr.runtime.tree.CommonTree;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 /**
  * Preforms PMD check for Delphi source files
@@ -56,28 +54,25 @@ public class DelphiPMD {
      * @param ctx context in which PMD is operating. This contains the Renderer
      *            and whatnot
      * @param sourceType the SourceType of the source
-     * @throws PMDException if the input could not be parsed or processed
+     * @throws ParseException if the input could not be parsed or processed
      */
     public void processFile(File pmdFile, RuleSets ruleSets, RuleContext ctx) {
-        try {
-            ctx.setSourceCodeFile(pmdFile);
-            ctx.setReport(report);
+        ctx.setSourceCodeFile(pmdFile);
+        ctx.setReport(report);
 
-            if (ruleSets.applies(ctx.getSourceCodeFile())) {
-                Language language = Language.JAVA;
-                ctx.setSourceType(SourceType.JAVA_16);
+        if (ruleSets.applies(ctx.getSourceCodeFile())) {
+            Language language = Language.JAVA;
+            ctx.setSourceType(SourceType.JAVA_16);
 
-                DelphiAST ast = new DelphiAST(pmdFile);
-                if (ast.isError()) {
-                    throw new ParseException("grammar error");
-                }
-
-                List<CompilationUnit> nodes = getNodesFromAST(ast);
-                ruleSets.apply(nodes, ctx, language);
+            DelphiAST ast = new DelphiAST(pmdFile);
+            if (ast.isError()) {
+                throw new ParseException("grammar error");
             }
-        } catch (ParseException e) {
-            DelphiUtils.LOG.warn("PMD error while parsing " + pmdFile.getAbsolutePath() + ": " + e.getMessage());
+
+            List<CompilationUnit> nodes = getNodesFromAST(ast);
+            ruleSets.apply(nodes, ctx, language);
         }
+
     }
 
     /**

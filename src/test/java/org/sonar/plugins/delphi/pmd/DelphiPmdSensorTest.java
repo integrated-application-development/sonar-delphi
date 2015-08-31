@@ -158,9 +158,9 @@ public class DelphiPmdSensorTest {
                 new RuleData("Destructor Without Inherited Statement Rule", 196),
                 new RuleData("No 'begin' after 'do' Rule", 228),
                 new RuleData("With After Do/Then Rule", 248),
-                new RuleData("No Semicolon Rule", 290),
+                new RuleData("No Semicolon Rule", 289),
                 new RuleData("No Semicolon Rule", 291),
-                new RuleData("No Semicolon Rule", 294),
+                new RuleData("No Semicolon Rule", 293),
                 new RuleData("Too Long Method Rule", 243),
                 new RuleData("With After Do/Then Rule", 262),
                 new RuleData("Cast And Free Rule", 302),
@@ -177,8 +177,8 @@ public class DelphiPmdSensorTest {
 
             System.out.println(issue.ruleKey().rule() + ":" + issue.line());
 
-            assertThat(ruleData[i].toString(), ruleData[i].getName(), is(issue.ruleKey().rule()));
-            assertThat(ruleData[i].toString(), ruleData[i].getLine(), is(issue.line()));
+            assertThat(ruleData[i].toString(), issue.ruleKey().rule(), is(ruleData[i].getName()));
+            assertThat(ruleData[i].toString(), issue.line(), is(ruleData[i].getLine()));
         }
     }
 }

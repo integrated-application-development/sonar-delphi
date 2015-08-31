@@ -24,23 +24,6 @@
    * http://sonarqube-archive.15.x6.nabble.com/sonar-dev-Sonar-delphi-plugin-no-longer-mantained-any-help-in-updating-it-td5029115.html
    
  * False positives
-   * Unused Arguments Rule
-	 * Ignore Sender parameter from TNotifyEvent 
-   * No Semicolon Rule:
-     * Pointing the incorrect line:
-		143	procedure TRel_Educacao.FormClose(Sender: TObject;
-		144	  var Action: TCloseAction);
-		145	begin
-		146	  RecArt77.close ----> This its the right line
-		147	end; ----> Pointing this line
-		
-	 * Must skip `end` followed by `else`
-		if true then
-		begin
-		end  ----> Pointing this line as missing semicolon
-		else
-		begin
-		end;
   * Do not use type aliases (Why it is evil?)
     * Class of class use case
 		 TMyComponentClass = class of TComponent;

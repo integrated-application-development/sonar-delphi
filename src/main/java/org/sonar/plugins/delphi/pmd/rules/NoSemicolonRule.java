@@ -53,7 +53,7 @@ public class NoSemicolonRule extends DelphiRule {
                         addViolation(data, node);
                     }
                 } else if (!isSemicolonNode(previousNode)) {
-                    addViolation(data, node);
+                    addViolation(data, (DelphiPMDNode) previousNode);
                 }
             }
 

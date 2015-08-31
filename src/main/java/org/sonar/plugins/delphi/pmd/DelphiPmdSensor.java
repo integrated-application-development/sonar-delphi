@@ -26,12 +26,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sourceforge.pmd.Report;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.RuleSetFactory;
 import net.sourceforge.pmd.RuleSets;
+import net.sourceforge.pmd.ast.ParseException;
 import net.sourceforge.pmd.renderers.Renderer;
 import net.sourceforge.pmd.renderers.XMLRenderer;
 
@@ -55,6 +57,7 @@ public class DelphiPmdSensor implements Sensor {
 
     private final ResourcePerspectives perspectives;
     private final DelphiProjectHelper delphiProjectHelper;
+    private final List<String> errors = new ArrayList<String>();
 
     /**
      * C-tor
@@ -108,7 +111,15 @@ public class DelphiPmdSensor implements Sensor {
                     if (delphiProjectHelper.isExcluded(pmdFile, excluded)) {
                         continue;
                     }
-                    pmd.processFile(pmdFile, ruleSets, ruleContext);
+
+                    try {
+                        pmd.processFile(pmdFile, ruleSets, ruleContext);
+                    } catch (ParseException e) {
+                        String errorMsg = "PMD error while parsing " + pmdFile.getAbsolutePath() + ": "
+                                + e.getMessage();
+                        DelphiUtils.LOG.warn(errorMsg);
+                        errors.add(errorMsg);
+                    }
                 }
             }
 
@@ -156,4 +167,9 @@ public class DelphiPmdSensor implements Sensor {
     public String toString() {
         return getClass().getSimpleName();
     }
+
+    public List<String> getErrors() {
+        return errors;
+    }
+
 }
