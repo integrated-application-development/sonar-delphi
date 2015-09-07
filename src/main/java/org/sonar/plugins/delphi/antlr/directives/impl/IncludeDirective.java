@@ -29,31 +29,31 @@ import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
  */
 public class IncludeDirective extends CommonCompilerDirective {
 
-    private static final String DIRECTIVE_NAME = "include";
+  private static final String DIRECTIVE_NAME = "include";
 
-    /**
-     * ctor
-     * 
-     * @param item directive item
-     * @param firstCharPos first character position
-     * @param lastCharPos last character position
-     */
-    public IncludeDirective(String item, int firstCharPos, int lastCharPos) {
-        super(DIRECTIVE_NAME, item, firstCharPos, lastCharPos);
-    }
+  /**
+   * ctor
+   * 
+   * @param item directive item
+   * @param firstCharPos first character position
+   * @param lastCharPos last character position
+   */
+  public IncludeDirective(String item, int firstCharPos, int lastCharPos) {
+    super(DIRECTIVE_NAME, item, firstCharPos, lastCharPos);
+  }
 
-    @Override
-    public CompilerDirectiveType getType() {
-        return CompilerDirectiveType.INCLUDE;
-    }
+  @Override
+  public CompilerDirectiveType getType() {
+    return CompilerDirectiveType.INCLUDE;
+  }
 
-    @Override
-    public String getItem() {
-        String result = String.copyValueOf(item.toCharArray());
-        result = result.replaceAll(" ", "").replaceAll("\\\\", "/"); // get rid
-                                                                     // of ' ',
-                                                                     // \ -> /
-        result = result.replaceAll("\\.\\./", ""); // get rid of '../'
-        return result;
-    }
+  @Override
+  public String getItem() {
+    String result = String.copyValueOf(item.toCharArray());
+    result = result.replaceAll(" ", "").replaceAll("\\\\", "/"); // get rid
+                                                                 // of ' ',
+                                                                 // \ -> /
+    result = result.replaceAll("\\.\\./", ""); // get rid of '../'
+    return result;
+  }
 }

@@ -27,25 +27,24 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class FileTestsCommon {
 
-    protected static File testFile = null;
-    protected static StringBuilder testFileString = null;
+  protected static File testFile = null;
+  protected static StringBuilder testFileString = null;
 
-    protected static void loadFile(String fileName) throws IOException {
-        testFile = DelphiUtils.getResource(fileName);
-        testFileString = new StringBuilder();
+  protected static void loadFile(String fileName) throws IOException {
+    testFile = DelphiUtils.getResource(fileName);
+    testFileString = new StringBuilder();
 
-        String line;
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(testFile), "UTF-8"));
-        while ((line = reader.readLine()) != null) {
-            testFileString.append(line);
-            testFileString.append('\n');
-        }
-        reader.close();
+    String line;
+    BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(testFile), "UTF-8"));
+    while ((line = reader.readLine()) != null) {
+      testFileString.append(line);
+      testFileString.append('\n');
     }
+    reader.close();
+  }
 
 }

@@ -22,42 +22,41 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
 import java.util.Arrays;
-
 import org.junit.Test;
 import org.sonar.api.issue.Issue;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
 
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+
 public class TestUnusedArgumentsRule extends BasePmdRuleTest {
 
-    @Test
-    public void testRule() {
-        configureTest(ROOT_DIR_NAME + "/UnusedARgumentRule.pas");
+  @Test
+  public void testRule() {
+    configureTest(ROOT_DIR_NAME + "/UnusedARgumentRule.pas");
 
-        DebugSensorContext debugContext = new DebugSensorContext();
-        sensor.analyse(project, debugContext);
+    DebugSensorContext debugContext = new DebugSensorContext();
+    sensor.analyse(project, debugContext);
 
-        // all expected rule violations and their lines
-        RuleData ruleData[] = {
-                new RuleData("Unused Arguments Rule", 31)
-        };
+    // all expected rule violations and their lines
+    RuleData ruleData[] = {
+      new RuleData("Unused Arguments Rule", 31)
+    };
 
-        // Sort the violations by line number, so we don't have to add
-        // violations order
-        Arrays.sort(ruleData, RuleData.getComparator());
+    // Sort the violations by line number, so we don't have to add
+    // violations order
+    Arrays.sort(ruleData, RuleData.getComparator());
 
-        assertThat("number of issues", issues, hasSize(1));
+    assertThat("number of issues", issues, hasSize(1));
 
-        for (int i = 0; i < issues.size(); ++i) {
-            Issue issue = issues.get(i);
+    for (int i = 0; i < issues.size(); ++i) {
+      Issue issue = issues.get(i);
 
-            System.out.println(issue.ruleKey().rule() + ":" + issue.line());
+      System.out.println(issue.ruleKey().rule() + ":" + issue.line());
 
-            assertThat("rule " + ruleData[i].toString(), ruleData[i].getName(), is(issue.ruleKey().rule()));
-            assertThat("rule " + ruleData[i].toString() + "line ", ruleData[i].getLine(), is(issue.line()));
-        }
+      assertThat("rule " + ruleData[i].toString(), ruleData[i].getName(), is(issue.ruleKey().rule()));
+      assertThat("rule " + ruleData[i].toString() + "line ", ruleData[i].getLine(), is(issue.line()));
     }
+  }
 }

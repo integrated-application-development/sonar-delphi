@@ -30,11 +30,11 @@ import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
  */
 public interface NodeOperation {
 
-    /**
-     * Executes operation
-     * 
-     * @param node Node to operate on
-     * @return resulting code node
-     */
-    CodeNode<Tree> execute(Tree node);
+  /**
+   * Executes operation
+   * 
+   * @param node Node to operate on
+   * @return resulting code node
+   */
+  CodeNode<Tree> execute(Tree node);
 }

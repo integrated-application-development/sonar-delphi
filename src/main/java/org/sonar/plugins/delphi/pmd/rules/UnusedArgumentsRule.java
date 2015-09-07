@@ -26,10 +26,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import net.sourceforge.pmd.PropertyDescriptor;
 import net.sourceforge.pmd.properties.StringProperty;
-
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
@@ -39,130 +37,130 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class UnusedArgumentsRule extends DelphiRule {
 
-    private static final int MAX_LOOK_AHEAD = 3;
+  private static final int MAX_LOOK_AHEAD = 3;
 
-    private static final PropertyDescriptor EXCLUDED_ARGS = new StringProperty("excluded_args",
-            "The argument names to ignore", new String[] {}, 1.0f, ',');
+  private static final PropertyDescriptor EXCLUDED_ARGS = new StringProperty("excluded_args",
+    "The argument names to ignore", new String[] {}, 1.0f, ',');
 
-    private StringBuilder methodName;
+  private StringBuilder methodName;
 
-    private final List<String> excludedArgs = new ArrayList<String>();
+  private final List<String> excludedArgs = new ArrayList<String>();
 
-    @Override
-    public Object visit(DelphiPMDNode node, Object data) {
-        if (node.getType() == DelphiLexer.PROCEDURE || node.getType() == DelphiLexer.FUNCTION) {
-            Tree nameNode = node.getFirstChildWithType(DelphiLexer.TkFunctionName);
-            if (nameNode != null) { // checking function name
-                methodName = new StringBuilder(); // building function name
-                for (int i = 0; i < nameNode.getChildCount(); ++i) {
-                    methodName.append(nameNode.getChild(i).getText());
-                }
-            }
-
-            Tree argsNode = node.getFirstChildWithType(DelphiLexer.TkFunctionArgs);
-            if (argsNode == null) {
-                return data;
-            }
-
-            int lookIndex = 0;
-            Tree beginNode = null; // looking for begin statement for function
-            do {
-                beginNode = node.getParent().getChild(node.getChildIndex() + (++lookIndex));
-                if (lookIndex > MAX_LOOK_AHEAD || beginNode == null) {
-                    break;
-                }
-            } while (beginNode.getType() != DelphiLexer.BEGIN);
-
-            if (beginNode == null || beginNode.getType() != DelphiLexer.BEGIN) {
-                return data; // no begin..end for function
-            }
-
-            Map<String, Integer> args = processFunctionArgs(argsNode);
-            if (args.isEmpty()) {
-                return data; // no arguments
-            }
-
-            processFunctionBegin(beginNode, args);
-            checkForUnusedArguments(args, data, node);
-
+  @Override
+  public Object visit(DelphiPMDNode node, Object data) {
+    if (node.getType() == DelphiLexer.PROCEDURE || node.getType() == DelphiLexer.FUNCTION) {
+      Tree nameNode = node.getFirstChildWithType(DelphiLexer.TkFunctionName);
+      if (nameNode != null) { // checking function name
+        methodName = new StringBuilder(); // building function name
+        for (int i = 0; i < nameNode.getChildCount(); ++i) {
+          methodName.append(nameNode.getChild(i).getText());
         }
+      }
 
+      Tree argsNode = node.getFirstChildWithType(DelphiLexer.TkFunctionArgs);
+      if (argsNode == null) {
         return data;
-    }
+      }
 
-    /**
-     * Checks if some argument is unused, if so makes a violation
-     * 
-     * @param args Argument map
-     * @param node
-     * @param data
-     */
-    private void checkForUnusedArguments(Map<String, Integer> args, Object data, DelphiPMDNode node) {
-        for (Map.Entry<String, Integer> entry : args.entrySet()) {
-            if (entry.getValue() == 0 && !ignoredArg(entry.getKey())) {
-                addViolation(data, node, "Unused argument: '" + entry.getKey() + "' at " + methodName);
-            }
+      int lookIndex = 0;
+      Tree beginNode = null; // looking for begin statement for function
+      do {
+        beginNode = node.getParent().getChild(node.getChildIndex() + (++lookIndex));
+        if (lookIndex > MAX_LOOK_AHEAD || beginNode == null) {
+          break;
         }
+      } while (beginNode.getType() != DelphiLexer.BEGIN);
+
+      if (beginNode == null || beginNode.getType() != DelphiLexer.BEGIN) {
+        return data; // no begin..end for function
+      }
+
+      Map<String, Integer> args = processFunctionArgs(argsNode);
+      if (args.isEmpty()) {
+        return data; // no arguments
+      }
+
+      processFunctionBegin(beginNode, args);
+      checkForUnusedArguments(args, data, node);
+
     }
 
-    private boolean ignoredArg(String arg) {
-        return excludedArgs.contains(arg);
+    return data;
+  }
+
+  /**
+   * Checks if some argument is unused, if so makes a violation
+   * 
+   * @param args Argument map
+   * @param node
+   * @param data
+   */
+  private void checkForUnusedArguments(Map<String, Integer> args, Object data, DelphiPMDNode node) {
+    for (Map.Entry<String, Integer> entry : args.entrySet()) {
+      if (entry.getValue() == 0 && !ignoredArg(entry.getKey())) {
+        addViolation(data, node, "Unused argument: '" + entry.getKey() + "' at " + methodName);
+      }
     }
+  }
 
-    /**
-     * Process begin node, to look for used arguments
-     * 
-     * @param beginNode Begin node
-     * @param args Argument map
-     */
-    private void processFunctionBegin(Tree beginNode, Map<String, Integer> args) {
-        for (int i = 0; i < beginNode.getChildCount(); ++i) {
-            Tree child = beginNode.getChild(i);
-            String key = child.getText().toLowerCase();
-            if (args.containsKey(key)) { // if we are using a argument, increase
-                                         // the counter
-                Integer newValue = args.get(key) + 1;
-                args.put(key, newValue);
-            }
+  private boolean ignoredArg(String arg) {
+    return excludedArgs.contains(arg);
+  }
 
-            if (child.getType() == DelphiLexer.BEGIN) {
-                processFunctionBegin(child, args);
-            }
+  /**
+   * Process begin node, to look for used arguments
+   * 
+   * @param beginNode Begin node
+   * @param args Argument map
+   */
+  private void processFunctionBegin(Tree beginNode, Map<String, Integer> args) {
+    for (int i = 0; i < beginNode.getChildCount(); ++i) {
+      Tree child = beginNode.getChild(i);
+      String key = child.getText().toLowerCase();
+      if (args.containsKey(key)) { // if we are using a argument, increase
+                                   // the counter
+        Integer newValue = args.get(key) + 1;
+        args.put(key, newValue);
+      }
+
+      if (child.getType() == DelphiLexer.BEGIN) {
+        processFunctionBegin(child, args);
+      }
+    }
+  }
+
+  /**
+   * Create argument map, and set their used count to 0
+   * 
+   * @param argsNode Function argument node
+   * @return Argument map
+   */
+  private Map<String, Integer> processFunctionArgs(Tree argsNode) {
+    Map<String, Integer> args = new HashMap<String, Integer>();
+    for (int i = 0; i < argsNode.getChildCount(); i += 2) {
+      Tree idents = argsNode.getChild(i); // TkVariableIdents node
+
+      if (idents.getType() != DelphiLexer.TkVariableIdents) { // check
+                                                              // type
+        idents = argsNode.getChild(++i);
+        if (idents == null || idents.getType() != DelphiLexer.TkVariableIdents) {
+          break;
         }
+      }
+
+      for (int c = 0; c < idents.getChildCount(); ++c) {
+        args.put(idents.getChild(c).getText().toLowerCase(), Integer.valueOf(0));
+      }
     }
+    return args;
+  }
 
-    /**
-     * Create argument map, and set their used count to 0
-     * 
-     * @param argsNode Function argument node
-     * @return Argument map
-     */
-    private Map<String, Integer> processFunctionArgs(Tree argsNode) {
-        Map<String, Integer> args = new HashMap<String, Integer>();
-        for (int i = 0; i < argsNode.getChildCount(); i += 2) {
-            Tree idents = argsNode.getChild(i); // TkVariableIdents node
-
-            if (idents.getType() != DelphiLexer.TkVariableIdents) { // check
-                                                                    // type
-                idents = argsNode.getChild(++i);
-                if (idents == null || idents.getType() != DelphiLexer.TkVariableIdents) {
-                    break;
-                }
-            }
-
-            for (int c = 0; c < idents.getChildCount(); ++c) {
-                args.put(idents.getChild(c).getText().toLowerCase(), Integer.valueOf(0));
-            }
-        }
-        return args;
+  @Override
+  protected void init() {
+    super.init();
+    String[] stringProperties = getStringProperties(EXCLUDED_ARGS);
+    for (String prop : stringProperties) {
+      excludedArgs.add(prop.toLowerCase());
     }
-
-    @Override
-    protected void init() {
-        super.init();
-        String[] stringProperties = getStringProperties(EXCLUDED_ARGS);
-        for (String prop : stringProperties) {
-            excludedArgs.add(prop.toLowerCase());
-        }
-    }
+  }
 }

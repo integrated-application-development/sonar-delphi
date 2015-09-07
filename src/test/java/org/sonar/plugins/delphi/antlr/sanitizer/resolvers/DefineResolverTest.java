@@ -24,7 +24,6 @@ package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
 
 import java.io.IOException;
 import java.util.HashSet;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -32,31 +31,31 @@ import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
 public class DefineResolverTest extends FileTestsCommon {
 
-    private static final String FILE_NAME = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
-    private DefineResolver resolver;
-    private SourceResolverResults results;
+  private static final String FILE_NAME = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
+  private DefineResolver resolver;
+  private SourceResolverResults results;
 
-    @BeforeClass
-    public static void init() throws IOException {
-        loadFile(FILE_NAME);
-    }
+  @BeforeClass
+  public static void init() throws IOException {
+    loadFile(FILE_NAME);
+  }
 
-    @Before
-    public void setup() {
-        resolver = new DefineResolver(new HashSet<String>());
-        results = new SourceResolverResults(testFile.getAbsolutePath(), testFileString);
+  @Before
+  public void setup() {
+    resolver = new DefineResolver(new HashSet<String>());
+    results = new SourceResolverResults(testFile.getAbsolutePath(), testFileString);
 
-        ExcludeResolver excludeResolver = new ExcludeResolver();
-        excludeResolver.resolve(results);
-    }
+    ExcludeResolver excludeResolver = new ExcludeResolver();
+    excludeResolver.resolve(results);
+  }
 
-    @Test
-    public void test() {
+  @Test
+  public void test() {
 
-        resolver.resolve(results);
-        results.getFileExcludes();
+    resolver.resolve(results);
+    results.getFileExcludes();
 
-        // TODO
-    }
+    // TODO
+  }
 
 }

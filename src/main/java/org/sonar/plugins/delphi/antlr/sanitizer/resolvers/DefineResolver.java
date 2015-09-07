@@ -24,7 +24,6 @@ package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
 
 import java.util.List;
 import java.util.Set;
-
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveFactory;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
@@ -44,154 +43,154 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  */
 public class DefineResolver extends SourceResolver {
 
-    private Set<String> definitions;
+  private Set<String> definitions;
 
-    /**
-     * ctor
-     * 
-     * @param definitions existing definitions in a file
-     */
-    public DefineResolver(Set<String> definitions) {
-        this.definitions = definitions;
+  /**
+   * ctor
+   * 
+   * @param definitions existing definitions in a file
+   */
+  public DefineResolver(Set<String> definitions) {
+    this.definitions = definitions;
+  }
+
+  @Override
+  protected void doResolve(SourceResolverResults results) {
+    StringBuilder newData = resolveDefines(results.getFileData(), results.getFileExcludes(), definitions);
+    results.setFileData(newData);
+  }
+
+  /**
+   * Resolve defines
+   * 
+   * @param str File data
+   * @param excluded Excluded areas, not to analyze
+   * @return New file data with parsed preprocesor defines
+   * @throws DefineResolverException when no matching {$ifdef} .. {$endif}
+   *             directives will be found
+   */
+  private StringBuilder resolveDefines(StringBuilder str, SubRangeAggregator excluded, Set<String> defines) {
+    if (str == null) {
+      return null;
     }
 
-    @Override
-    protected void doResolve(SourceResolverResults results) {
-        StringBuilder newData = resolveDefines(results.getFileData(), results.getFileExcludes(), definitions);
-        results.setFileData(newData);
+    try {
+      CompilerDirectiveFactory factory = new CompilerDirectiveFactory();
+      List<CompilerDirective> allDirectives = factory.produce(str.toString());
+      SubRangeAggregator toDelete = processCompilerDirectives(allDirectives, defines, excluded);
+      removeUnwantedDefinitions(str, toDelete);
+    } catch (CompilerDirectiveFactorySyntaxException e) {
+      DelphiUtils.LOG.debug(e.getMessage());
+    } catch (DefineResolverException e) {
+      DelphiUtils.LOG.debug(e.getMessage());
     }
 
-    /**
-     * Resolve defines
-     * 
-     * @param str File data
-     * @param excluded Excluded areas, not to analyze
-     * @return New file data with parsed preprocesor defines
-     * @throws DefineResolverException when no matching {$ifdef} .. {$endif}
-     *             directives will be found
-     */
-    private StringBuilder resolveDefines(StringBuilder str, SubRangeAggregator excluded, Set<String> defines) {
-        if (str == null) {
-            return null;
-        }
+    return str;
+  }
 
-        try {
-            CompilerDirectiveFactory factory = new CompilerDirectiveFactory();
-            List<CompilerDirective> allDirectives = factory.produce(str.toString());
-            SubRangeAggregator toDelete = processCompilerDirectives(allDirectives, defines, excluded);
-            removeUnwantedDefinitions(str, toDelete);
-        } catch (CompilerDirectiveFactorySyntaxException e) {
-            DelphiUtils.LOG.debug(e.getMessage());
-        } catch (DefineResolverException e) {
-            DelphiUtils.LOG.debug(e.getMessage());
-        }
+  private SubRangeAggregator processCompilerDirectives(List<CompilerDirective> directives, Set<String> defines,
+    SubRangeAggregator excluded)
+    throws DefineResolverException {
+    SubRangeMergingAggregator toDelete = new SubRangeMergingAggregator();
 
-        return str;
+    for (int i = 0; i < directives.size(); ++i) {
+
+      CompilerDirective directive = directives.get(i);
+      CompilerDirectiveType type = directive.getType();
+
+      if (type == CompilerDirectiveType.DEFINE) {
+        defines.add(directive.getItem());
+      } else if (type == CompilerDirectiveType.UNDEFINE) {
+        defines.remove(directive.getItem());
+      } else if (type == CompilerDirectiveType.IF) {
+        toDelete.add(getMatchingEndIfCutRange(directives, i, excluded, true)); // mark
+                                                                               // places
+                                                                               // to
+                                                                               // cut
+                                                                               // off
+      } else if (type == CompilerDirectiveType.IFDEF) {
+        boolean isDefined = defines.contains(directive.getItem());
+        boolean isPositive = ((IfDefDirective) directive).isPositive();
+        boolean shouldCut = (isDefined == isPositive);
+        toDelete.add(getMatchingEndIfCutRange(directives, i, excluded, shouldCut));
+      }
     }
 
-    private SubRangeAggregator processCompilerDirectives(List<CompilerDirective> directives, Set<String> defines,
-            SubRangeAggregator excluded)
-            throws DefineResolverException {
-        SubRangeMergingAggregator toDelete = new SubRangeMergingAggregator();
+    return toDelete;
+  }
 
-        for (int i = 0; i < directives.size(); ++i) {
+  private SubRange getMatchingEndIfCutRange(List<CompilerDirective> directives, int startDirectiveIndex,
+    SubRangeAggregator excluded,
+    boolean shouldCut) throws DefineResolverException {
+    CompilerDirective firstDirective = directives.get(startDirectiveIndex);
+    CompilerDirective lastDirective = null;
+    CompilerDirective elseDirective = null;
 
-            CompilerDirective directive = directives.get(i);
-            CompilerDirectiveType type = directive.getType();
+    int index = startDirectiveIndex;
+    int branchCount = 1; // how many $ifdef..$endif we must skip
 
-            if (type == CompilerDirectiveType.DEFINE) {
-                defines.add(directive.getItem());
-            } else if (type == CompilerDirectiveType.UNDEFINE) {
-                defines.remove(directive.getItem());
-            } else if (type == CompilerDirectiveType.IF) {
-                toDelete.add(getMatchingEndIfCutRange(directives, i, excluded, true)); // mark
-                                                                                       // places
-                                                                                       // to
-                                                                                       // cut
-                                                                                       // off
-            } else if (type == CompilerDirectiveType.IFDEF) {
-                boolean isDefined = defines.contains(directive.getItem());
-                boolean isPositive = ((IfDefDirective) directive).isPositive();
-                boolean shouldCut = (isDefined == isPositive);
-                toDelete.add(getMatchingEndIfCutRange(directives, i, excluded, shouldCut));
-            }
-        }
+    while (branchCount > 0) {
 
-        return toDelete;
+      if (++index >= directives.size()) {
+        throw new DefineResolverException("No matching {$ifdef}...{$endif} pair found for {" + firstDirective
+          + "}");
+      }
+
+      lastDirective = directives.get(index);
+      if (excluded.inRange(lastDirective.getFirstCharPosition())) {
+        continue; // if in excluded range, continue
+      }
+
+      CompilerDirectiveType type = lastDirective.getType();
+      if (type == CompilerDirectiveType.IFDEF) {
+        ++branchCount;
+      } else if (type == CompilerDirectiveType.ENDIF) {
+        --branchCount;
+      } else if (type == CompilerDirectiveType.ELSE && branchCount == 1) {
+        elseDirective = lastDirective;
+      }
     }
 
-    private SubRange getMatchingEndIfCutRange(List<CompilerDirective> directives, int startDirectiveIndex,
-            SubRangeAggregator excluded,
-            boolean shouldCut) throws DefineResolverException {
-        CompilerDirective firstDirective = directives.get(startDirectiveIndex);
-        CompilerDirective lastDirective = null;
-        CompilerDirective elseDirective = null;
+    return calculateCutSubRange(firstDirective, lastDirective, elseDirective, shouldCut);
+  }
 
-        int index = startDirectiveIndex;
-        int branchCount = 1; // how many $ifdef..$endif we must skip
-
-        while (branchCount > 0) {
-
-            if (++index >= directives.size()) {
-                throw new DefineResolverException("No matching {$ifdef}...{$endif} pair found for {" + firstDirective
-                        + "}");
-            }
-
-            lastDirective = directives.get(index);
-            if (excluded.inRange(lastDirective.getFirstCharPosition())) {
-                continue; // if in excluded range, continue
-            }
-
-            CompilerDirectiveType type = lastDirective.getType();
-            if (type == CompilerDirectiveType.IFDEF) {
-                ++branchCount;
-            } else if (type == CompilerDirectiveType.ENDIF) {
-                --branchCount;
-            } else if (type == CompilerDirectiveType.ELSE && branchCount == 1) {
-                elseDirective = lastDirective;
-            }
-        }
-
-        return calculateCutSubRange(firstDirective, lastDirective, elseDirective, shouldCut);
+  private SubRange calculateCutSubRange(CompilerDirective firstDirective, CompilerDirective lastDirective,
+    CompilerDirective elseDirective,
+    boolean shouldCut) {
+    int cutStart = firstDirective.getFirstCharPosition(); // starting
+                                                          // position to cut
+    int cutEnd = -1; // end position to cut
+    if (shouldCut) // statement not defined, cut not matching code
+    {
+      if (elseDirective == null) {
+        cutEnd = lastDirective.getLastCharPosition() + 1; // cut to
+                                                          // $endif
+      } else {
+        cutEnd = elseDirective.getLastCharPosition() + 1; // cut to
+                                                          // $else
+      }
+    } else { // statement defined, but need to cut else if present
+      if (elseDirective != null) {
+        cutStart = elseDirective.getFirstCharPosition(); // start with
+                                                         // $else
+      }
+      cutEnd = lastDirective.getLastCharPosition() + 1; // cut to $endif
     }
 
-    private SubRange calculateCutSubRange(CompilerDirective firstDirective, CompilerDirective lastDirective,
-            CompilerDirective elseDirective,
-            boolean shouldCut) {
-        int cutStart = firstDirective.getFirstCharPosition(); // starting
-                                                              // position to cut
-        int cutEnd = -1; // end position to cut
-        if (shouldCut) // statement not defined, cut not matching code
-        {
-            if (elseDirective == null) {
-                cutEnd = lastDirective.getLastCharPosition() + 1; // cut to
-                                                                  // $endif
-            } else {
-                cutEnd = elseDirective.getLastCharPosition() + 1; // cut to
-                                                                  // $else
-            }
-        } else { // statement defined, but need to cut else if present
-            if (elseDirective != null) {
-                cutStart = elseDirective.getFirstCharPosition(); // start with
-                                                                 // $else
-            }
-            cutEnd = lastDirective.getLastCharPosition() + 1; // cut to $endif
-        }
-
-        if (cutEnd != -1 && cutStart != -1) {
-            return new IntegerSubRange(cutStart, cutEnd);
-        }
-
-        return null;
+    if (cutEnd != -1 && cutStart != -1) {
+      return new IntegerSubRange(cutStart, cutEnd);
     }
 
-    private void removeUnwantedDefinitions(StringBuilder str, SubRangeAggregator toDelete) {
-        int deleted = 0; // number of deleted chars
-        toDelete.sort(new SubRangeFirstOccurenceComparator());// sort the list
-        for (SubRange range : toDelete.getRanges()) { // cut the code
-            str.delete(range.getBegin() - deleted, range.getEnd() - deleted);
-            deleted += range.getEnd() - range.getBegin();
-        }
+    return null;
+  }
+
+  private void removeUnwantedDefinitions(StringBuilder str, SubRangeAggregator toDelete) {
+    int deleted = 0; // number of deleted chars
+    toDelete.sort(new SubRangeFirstOccurenceComparator());// sort the list
+    for (SubRange range : toDelete.getRanges()) { // cut the code
+      str.delete(range.getBegin() - deleted, range.getEnd() - deleted);
+      deleted += range.getEnd() - range.getBegin();
     }
+  }
 
 }

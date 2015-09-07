@@ -40,135 +40,135 @@ import org.sonar.plugins.delphi.core.language.verifiers.StatementVerifier;
  */
 public class FunctionBodyAnalyzer extends CodeAnalyzer {
 
-    private CodeAnalysisResults results = null;
-    private StatementVerifier statementverifier;
+  private CodeAnalysisResults results = null;
+  private StatementVerifier statementverifier;
 
-    private static final LexerMetrics[] BRANCHING_NODES = {LexerMetrics.IF, LexerMetrics.FOR, LexerMetrics.WHILE,
-            LexerMetrics.CASE,
-            LexerMetrics.REPEAT, LexerMetrics.AND, LexerMetrics.OR};
+  private static final LexerMetrics[] BRANCHING_NODES = {LexerMetrics.IF, LexerMetrics.FOR, LexerMetrics.WHILE,
+    LexerMetrics.CASE,
+    LexerMetrics.REPEAT, LexerMetrics.AND, LexerMetrics.OR};
 
-    /**
-     * ctor
-     * 
-     * @param results
-     * @param delphiProjectHelper
-     */
-    public FunctionBodyAnalyzer(CodeAnalysisResults results, DelphiProjectHelper delphiProjectHelper) {
-        if (results == null) {
-            throw new IllegalArgumentException("FunctionBodyAnalyzer ctor 'results' parameter cannot be null.");
-        }
-        this.results = results;
-        this.statementverifier = new StatementVerifier(delphiProjectHelper);
+  /**
+   * ctor
+   * 
+   * @param results
+   * @param delphiProjectHelper
+   */
+  public FunctionBodyAnalyzer(CodeAnalysisResults results, DelphiProjectHelper delphiProjectHelper) {
+    if (results == null) {
+      throw new IllegalArgumentException("FunctionBodyAnalyzer ctor 'results' parameter cannot be null.");
+    }
+    this.results = results;
+    this.statementverifier = new StatementVerifier(delphiProjectHelper);
+  }
+
+  @Override
+  protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
+    FunctionInterface activeFunction = results.getActiveFunction();
+    FunctionInterface functionHolder = activeFunction; // which function to
+                                                       // update, main
+                                                       // function or one of
+                                                       // the overloads?
+    Tree beginNode = codeTree.getCurrentCodeNode().getNode();
+
+    activeFunction.increaseFunctionOverload(); // increases function
+                                               // overload, so the starting
+                                               // overload should be -1
+    if (activeFunction.getOverloadsCount() > 0) {
+      functionHolder = new DelphiFunction();
+      functionHolder.setName(activeFunction.getName());
+      functionHolder.setLongName(activeFunction.getLongName());
+      activeFunction.addOverloadFunction(functionHolder);
     }
 
-    @Override
-    protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
-        FunctionInterface activeFunction = results.getActiveFunction();
-        FunctionInterface functionHolder = activeFunction; // which function to
-                                                           // update, main
-                                                           // function or one of
-                                                           // the overloads?
-        Tree beginNode = codeTree.getCurrentCodeNode().getNode();
+    countStatements(beginNode, functionHolder); // counting statements and
+                                                // adding them to function
+                                                // and adding to list
+    countCalledFunctions(beginNode, functionHolder, results); // counting
+                                                              // called
+                                                              // functions
+                                                              // from
+                                                              // current
+                                                              // function
+                                                              // body and
+                                                              // adding to
+                                                              // set
 
-        activeFunction.increaseFunctionOverload(); // increases function
-                                                   // overload, so the starting
-                                                   // overload should be -1
-        if (activeFunction.getOverloadsCount() > 0) {
-            functionHolder = new DelphiFunction();
-            functionHolder.setName(activeFunction.getName());
-            functionHolder.setLongName(activeFunction.getLongName());
-            activeFunction.addOverloadFunction(functionHolder);
-        }
-
-        countStatements(beginNode, functionHolder); // counting statements and
-                                                    // adding them to function
-                                                    // and adding to list
-        countCalledFunctions(beginNode, functionHolder, results); // counting
-                                                                  // called
-                                                                  // functions
-                                                                  // from
-                                                                  // current
-                                                                  // function
-                                                                  // body and
-                                                                  // adding to
-                                                                  // set
-
-        if (!functionHolder.isAccessor()) { // counting branches and changing
-                                            // function complexity
-            functionHolder.increaseComplexity();
-            countBranches(beginNode, functionHolder);
-        }
-
-        results.setActiveFunction(null);
+    if (!functionHolder.isAccessor()) { // counting branches and changing
+                                        // function complexity
+      functionHolder.increaseComplexity();
+      countBranches(beginNode, functionHolder);
     }
 
-    @Override
-    public boolean canAnalyze(CodeTree codeTree) {
-        boolean hasActiveFunction = results.getActiveFunction() != null;
-        boolean isFunctionBodyNode = isBodyNode(codeTree.getCurrentCodeNode().getNode().getType());
-        return hasActiveFunction && isFunctionBodyNode;
+    results.setActiveFunction(null);
+  }
+
+  @Override
+  public boolean canAnalyze(CodeTree codeTree) {
+    boolean hasActiveFunction = results.getActiveFunction() != null;
+    boolean isFunctionBodyNode = isBodyNode(codeTree.getCurrentCodeNode().getNode().getType());
+    return hasActiveFunction && isFunctionBodyNode;
+  }
+
+  /**
+   * Only functions existing in your project and in include directories are
+   * counted, so system functions like 'writeln' are NOT counted.
+   */
+  private void countCalledFunctions(Tree node, FunctionInterface function, CodeAnalysisResults results) {
+    CalledFunctionVerifier verifyer = new CalledFunctionVerifier(results);
+    if (verifyer.verify(node)) {
+      FunctionInterface calledFunction = verifyer.fetchCalledFunction();
+      if (verifyer.isUnresolvedFunctionCall()) {
+        UnresolvedFunctionCall unresolvedCall = new UnresolvedFunctionCall(function, calledFunction,
+          results.getActiveUnit());
+        results.addUnresolvedCall(calledFunction.getName(), unresolvedCall);
+      } else {
+        function.addCalledFunction(calledFunction);
+      }
     }
 
-    /**
-     * Only functions existing in your project and in include directories are
-     * counted, so system functions like 'writeln' are NOT counted.
-     */
-    private void countCalledFunctions(Tree node, FunctionInterface function, CodeAnalysisResults results) {
-        CalledFunctionVerifier verifyer = new CalledFunctionVerifier(results);
-        if (verifyer.verify(node)) {
-            FunctionInterface calledFunction = verifyer.fetchCalledFunction();
-            if (verifyer.isUnresolvedFunctionCall()) {
-                UnresolvedFunctionCall unresolvedCall = new UnresolvedFunctionCall(function, calledFunction,
-                        results.getActiveUnit());
-                results.addUnresolvedCall(calledFunction.getName(), unresolvedCall);
-            } else {
-                function.addCalledFunction(calledFunction);
-            }
-        }
-
-        for (int i = 0; i < node.getChildCount(); ++i) { // do the same for all
-                                                         // children
-            countCalledFunctions(node.getChild(i), function, results);
-        }
-
+    for (int i = 0; i < node.getChildCount(); ++i) { // do the same for all
+                                                     // children
+      countCalledFunctions(node.getChild(i), function, results);
     }
 
-    private void countStatements(Tree node, FunctionInterface function) {
-        if (statementverifier.verify(node)) {
-            StatementInterface st = statementverifier.createStatement();
-            function.addStatement(st);
-        }
+  }
 
-        for (int i = 0; i < node.getChildCount(); ++i) {
-            countStatements(node.getChild(i), function);
-        }
+  private void countStatements(Tree node, FunctionInterface function) {
+    if (statementverifier.verify(node)) {
+      StatementInterface st = statementverifier.createStatement();
+      function.addStatement(st);
     }
 
-    private boolean isBodyNode(int type) {
-        return type == LexerMetrics.FUNCTION_BODY.toMetrics();
+    for (int i = 0; i < node.getChildCount(); ++i) {
+      countStatements(node.getChild(i), function);
+    }
+  }
+
+  private boolean isBodyNode(int type) {
+    return type == LexerMetrics.FUNCTION_BODY.toMetrics();
+  }
+
+  private void countBranches(Tree node, FunctionInterface function) {
+    if (node == null || function == null) {
+      return;
     }
 
-    private void countBranches(Tree node, FunctionInterface function) {
-        if (node == null || function == null) {
-            return;
-        }
-
-        if (isBranchingNode(node)) {
-            function.increaseComplexity();
-        }
-
-        for (int i = 0; i < node.getChildCount(); ++i) {
-            countBranches(node.getChild(i), function);
-        }
+    if (isBranchingNode(node)) {
+      function.increaseComplexity();
     }
 
-    private boolean isBranchingNode(Tree node) {
-        for (LexerMetrics metric : BRANCHING_NODES) {
-            if (metric.toMetrics() == node.getType()) {
-                return true;
-            }
-        }
-        return false;
+    for (int i = 0; i < node.getChildCount(); ++i) {
+      countBranches(node.getChild(i), function);
     }
+  }
+
+  private boolean isBranchingNode(Tree node) {
+    for (LexerMetrics metric : BRANCHING_NODES) {
+      if (metric.toMetrics() == node.getType()) {
+        return true;
+      }
+    }
+    return false;
+  }
 
 }

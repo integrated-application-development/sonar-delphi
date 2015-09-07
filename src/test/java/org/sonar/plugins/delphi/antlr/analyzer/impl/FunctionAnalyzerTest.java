@@ -22,12 +22,8 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
 import java.io.IOException;
 import java.util.Arrays;
-
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Test;
@@ -43,117 +39,120 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiClass;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+
 public class FunctionAnalyzerTest extends FileTestsCommon {
 
-    private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
-    private static final String FILE_NAME_MESSAGE_TEST = "/org/sonar/plugins/delphi/metrics/FunctionMessageTest.pas";
-    private static final String FILE_NAME_VIRTUAL_TEST = "/org/sonar/plugins/delphi/metrics/FunctionVirtualTest.pas";
+  private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
+  private static final String FILE_NAME_MESSAGE_TEST = "/org/sonar/plugins/delphi/metrics/FunctionMessageTest.pas";
+  private static final String FILE_NAME_VIRTUAL_TEST = "/org/sonar/plugins/delphi/metrics/FunctionVirtualTest.pas";
 
-    private final FunctionAnalyzer analyzer = new FunctionAnalyzer();
+  private final FunctionAnalyzer analyzer = new FunctionAnalyzer();
 
-    private CodeAnalysisResults results;
+  private CodeAnalysisResults results;
 
-    private DelphiAST ast;
-    private CodeTree code;
-    private AdvanceToNodeOperation advanceToFunction;
+  private DelphiAST ast;
+  private CodeTree code;
+  private AdvanceToNodeOperation advanceToFunction;
 
-    public void setupFile(String fileName) throws IOException, RecognitionException {
-        loadFile(fileName);
-        results = new CodeAnalysisResults();
-        results.setActiveUnit(new DelphiUnit("test"));
-        ast = new DelphiAST(testFile);
-        code = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
-        advanceToFunction = new AdvanceToNodeOperation(Arrays.asList(LexerMetrics.FUNCTION, LexerMetrics.PROCEDURE,
-                LexerMetrics.CONSTRUCTOR,
-                LexerMetrics.DESTRUCTOR));
+  public void setupFile(String fileName) throws IOException, RecognitionException {
+    loadFile(fileName);
+    results = new CodeAnalysisResults();
+    results.setActiveUnit(new DelphiUnit("test"));
+    ast = new DelphiAST(testFile);
+    code = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
+    advanceToFunction = new AdvanceToNodeOperation(Arrays.asList(LexerMetrics.FUNCTION, LexerMetrics.PROCEDURE,
+      LexerMetrics.CONSTRUCTOR,
+      LexerMetrics.DESTRUCTOR));
 
-        CodeAnalysisCacheResults.resetCache();
+    CodeAnalysisCacheResults.resetCache();
+  }
+
+  @Test
+  public void canAnalyzeTest() throws IOException, RecognitionException {
+    setupFile(FILE_NAME);
+    assertEquals(false, analyzer.canAnalyze(code));
+
+    CodeNode<Tree> currentNode = code.getCurrentCodeNode();
+    while (currentNode != null) {
+      try {
+        code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
+        ;
+        assertEquals(true, analyzer.canAnalyze(code));
+      } catch (IllegalStateException e) {
+        currentNode = null;
+      }
     }
+  }
 
-    @Test
-    public void canAnalyzeTest() throws IOException, RecognitionException {
-        setupFile(FILE_NAME);
-        assertEquals(false, analyzer.canAnalyze(code));
+  @Test
+  public void analyseTest() throws IOException, RecognitionException {
+    setupFile(FILE_NAME);
 
-        CodeNode<Tree> currentNode = code.getCurrentCodeNode();
-        while (currentNode != null) {
-            try {
-                code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
-                ;
-                assertEquals(true, analyzer.canAnalyze(code));
-            } catch (IllegalStateException e) {
-                currentNode = null;
-            }
-        }
+    int index = 0;
+    int lines[] = {10, 11, 19, 20, 42, 48, 58, 69, 75, 89};
+    String names[] = {"bShowTrackerClick", "getFunction", "myProcedure", "setSomething", "TDemo.getFunction",
+      "TDemo.bShowTrackerClick",
+      "TMyClass.myProcedure", "TMyClass.setSomething", "StandAloneProcedure", "StandAloneFunction"};
+
+    CodeNode<Tree> currentNode = code.getCurrentCodeNode();
+    while (currentNode != null) {
+      try {
+        code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
+        analyzer.analyze(code, results);
+        assertTrue(results.getActiveFunction() != null);
+        assertEquals(names[index], results.getActiveFunction().getRealName());
+        assertEquals(lines[index], results.getActiveFunction().getLine());
+        // assertEquals(body[index],
+        // results.getActiveFunction().hasBody() );
+        ++index;
+      } catch (IllegalStateException e) {
+        currentNode = null;
+      }
     }
+  }
 
-    @Test
-    public void analyseTest() throws IOException, RecognitionException {
-        setupFile(FILE_NAME);
+  @Test
+  public void analyseMessageFuncionTest() throws IOException, RecognitionException {
+    setupFile(FILE_NAME_MESSAGE_TEST);
 
-        int index = 0;
-        int lines[] = {10, 11, 19, 20, 42, 48, 58, 69, 75, 89};
-        String names[] = {"bShowTrackerClick", "getFunction", "myProcedure", "setSomething", "TDemo.getFunction",
-                "TDemo.bShowTrackerClick",
-                "TMyClass.myProcedure", "TMyClass.setSomething", "StandAloneProcedure", "StandAloneFunction"};
+    results.setActiveClass(new DelphiClass("TWithMessageFunction"));
 
-        CodeNode<Tree> currentNode = code.getCurrentCodeNode();
-        while (currentNode != null) {
-            try {
-                code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
-                analyzer.analyze(code, results);
-                assertTrue(results.getActiveFunction() != null);
-                assertEquals(names[index], results.getActiveFunction().getRealName());
-                assertEquals(lines[index], results.getActiveFunction().getLine());
-                // assertEquals(body[index],
-                // results.getActiveFunction().hasBody() );
-                ++index;
-            } catch (IllegalStateException e) {
-                currentNode = null;
-            }
-        }
+    CodeNode<Tree> currentNode = code.getCurrentCodeNode();
+    while (currentNode != null) {
+      try {
+        code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
+        analyzer.analyze(code, results);
+        assertTrue(results.getActiveFunction() != null);
+
+        assertThat(results.getActiveFunction().getRealName(), endsWith("CNCommand"));
+        assertThat(results.getActiveFunction().isMessage(), is(true));
+      } catch (IllegalStateException e) {
+        currentNode = null;
+      }
+
     }
+  }
 
-    @Test
-    public void analyseMessageFuncionTest() throws IOException, RecognitionException {
-        setupFile(FILE_NAME_MESSAGE_TEST);
+  @Test
+  public void analyseVirtualFuncionTest() throws IOException, RecognitionException {
+    setupFile(FILE_NAME_VIRTUAL_TEST);
 
-        results.setActiveClass(new DelphiClass("TWithMessageFunction"));
+    results.setActiveClass(new DelphiClass("TWithVirtualFunction"));
 
-        CodeNode<Tree> currentNode = code.getCurrentCodeNode();
-        while (currentNode != null) {
-            try {
-                code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
-                analyzer.analyze(code, results);
-                assertTrue(results.getActiveFunction() != null);
-
-                assertThat(results.getActiveFunction().getRealName(), endsWith("CNCommand"));
-                assertThat(results.getActiveFunction().isMessage(), is(true));
-            } catch (IllegalStateException e) {
-                currentNode = null;
-            }
-
-        }
+    CodeNode<Tree> currentNode = code.getCurrentCodeNode();
+    int count = 0;
+    while (currentNode != null) {
+      try {
+        code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
+        analyzer.analyze(code, results);
+        assertTrue(results.getActiveFunction() != null);
+        count++;
+        assertThat("counting " + count, results.getActiveFunction().isVirtual(), is(true));
+      } catch (IllegalStateException e) {
+        currentNode = null;
+      }
     }
-
-    @Test
-    public void analyseVirtualFuncionTest() throws IOException, RecognitionException {
-        setupFile(FILE_NAME_VIRTUAL_TEST);
-
-        results.setActiveClass(new DelphiClass("TWithVirtualFunction"));
-
-        CodeNode<Tree> currentNode = code.getCurrentCodeNode();
-        int count = 0;
-        while (currentNode != null) {
-            try {
-                code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
-                analyzer.analyze(code, results);
-                assertTrue(results.getActiveFunction() != null);
-                count++;
-                assertThat("counting " + count, results.getActiveFunction().isVirtual(), is(true));
-            } catch (IllegalStateException e) {
-                currentNode = null;
-            }
-        }
-    }
+  }
 }

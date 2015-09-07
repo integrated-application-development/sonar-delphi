@@ -27,5 +27,5 @@ package org.sonar.plugins.delphi.codecoverage.aqtime;
  */
 public interface RowMapper<T> {
 
-    T mapRow(java.sql.ResultSet resultSet) throws java.sql.SQLException;
+  T mapRow(java.sql.ResultSet resultSet) throws java.sql.SQLException;
 }

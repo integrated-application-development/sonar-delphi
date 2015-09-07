@@ -22,11 +22,8 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.io.IOException;
-
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
@@ -43,60 +40,62 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiClass;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
+import static org.junit.Assert.*;
+
 public class TypeInheritanceAnalyzerTest {
 
-    private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
+  private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
 
-    private TypeInheritanceAnalyzer analyzer;
-    private ASTTree ast;
-    private CodeAnalysisResults results;
-    private CodeTree code;
-    private AdvanceToNodeOperation advanceToOp;
+  private TypeInheritanceAnalyzer analyzer;
+  private ASTTree ast;
+  private CodeAnalysisResults results;
+  private CodeTree code;
+  private AdvanceToNodeOperation advanceToOp;
 
-    @Before
-    public void init() throws IOException, RecognitionException {
-        analyzer = new TypeInheritanceAnalyzer();
-        results = new CodeAnalysisResults();
-        results.setActiveUnit(new DelphiUnit("test"));
+  @Before
+  public void init() throws IOException, RecognitionException {
+    analyzer = new TypeInheritanceAnalyzer();
+    results = new CodeAnalysisResults();
+    results.setActiveUnit(new DelphiUnit("test"));
 
-        File file = DelphiUtils.getResource(FILE_NAME);
-        ast = new DelphiAST(file);
-        code = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
-        advanceToOp = new AdvanceToNodeOperation(LexerMetrics.CLASS_PARENTS);
-    }
+    File file = DelphiUtils.getResource(FILE_NAME);
+    ast = new DelphiAST(file);
+    code = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
+    advanceToOp = new AdvanceToNodeOperation(LexerMetrics.CLASS_PARENTS);
+  }
 
-    @Test
-    public void analyzeTest() {
-        code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));
+  @Test
+  public void analyzeTest() {
+    code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));
 
-        ClassInterface clazz = new DelphiClass("test");
-        results.setActiveClass(clazz);
-        analyzer.analyze(code, results);
+    ClassInterface clazz = new DelphiClass("test");
+    results.setActiveClass(clazz);
+    analyzer.analyze(code, results);
 
-        ClassInterface parents[] = clazz.getParents();
-        assertEquals(3, parents.length);
+    ClassInterface parents[] = clazz.getParents();
+    assertEquals(3, parents.length);
 
-        String parentNames[] = {"TMyAncestor", "TMyClass", "TMyElder"};
-        for (ClassInterface parent : parents) { // we got no constant ordering
-                                                // of parents array,
-                                                // so we have to check every
-                                                // parent against every name
-            boolean isParentNameOk = false;
-            for (String parentName : parentNames) {
-                if (parent.getName().equalsIgnoreCase(parentName)) {
-                    isParentNameOk = true;
-                    break;
-                }
-            }
-            assertTrue("Parent name not recognized: " + parent.getName(), isParentNameOk);
+    String parentNames[] = {"TMyAncestor", "TMyClass", "TMyElder"};
+    for (ClassInterface parent : parents) { // we got no constant ordering
+                                            // of parents array,
+                                            // so we have to check every
+                                            // parent against every name
+      boolean isParentNameOk = false;
+      for (String parentName : parentNames) {
+        if (parent.getName().equalsIgnoreCase(parentName)) {
+          isParentNameOk = true;
+          break;
         }
-
+      }
+      assertTrue("Parent name not recognized: " + parent.getName(), isParentNameOk);
     }
 
-    @Test
-    public void canAnalyzeTest() {
-        assertFalse(analyzer.canAnalyze(code));
-        code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));
-        assertTrue(analyzer.canAnalyze(code));
-    }
+  }
+
+  @Test
+  public void canAnalyzeTest() {
+    assertFalse(analyzer.canAnalyze(code));
+    code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));
+    assertTrue(analyzer.canAnalyze(code));
+  }
 }

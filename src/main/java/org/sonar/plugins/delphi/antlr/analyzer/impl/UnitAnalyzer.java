@@ -35,30 +35,30 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
  */
 public class UnitAnalyzer extends CodeAnalyzer {
 
-    @Override
-    public void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
-        results.setActiveUnit(createUnit(codeTree.getCurrentCodeNode().getNode(), codeTree.getRootCodeNode().getNode()
-                .getFileName()));
-        results.cacheUnit(results.getActiveUnit());
-    }
+  @Override
+  public void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
+    results.setActiveUnit(createUnit(codeTree.getCurrentCodeNode().getNode(), codeTree.getRootCodeNode().getNode()
+      .getFileName()));
+    results.cacheUnit(results.getActiveUnit());
+  }
 
-    @Override
-    public boolean canAnalyze(CodeTree codeTree) {
-        Tree currentNode = codeTree.getCurrentCodeNode().getNode();
-        int type = currentNode.getType();
-        return (type == DelphiParser.UNIT || type == DelphiParser.LIBRARY);
-    }
+  @Override
+  public boolean canAnalyze(CodeTree codeTree) {
+    Tree currentNode = codeTree.getCurrentCodeNode().getNode();
+    int type = currentNode.getType();
+    return (type == DelphiParser.UNIT || type == DelphiParser.LIBRARY);
+  }
 
-    private UnitInterface createUnit(Tree currentNode, String fileName) {
-        UnitInterface activeUnit = new DelphiUnit(); // creates new unit
-        activeUnit.setPath(fileName); // set unit file path
-        activeUnit.setName(getUnitName(currentNode));
-        activeUnit.setLine(currentNode.getLine());
-        return activeUnit;
-    }
+  private UnitInterface createUnit(Tree currentNode, String fileName) {
+    UnitInterface activeUnit = new DelphiUnit(); // creates new unit
+    activeUnit.setPath(fileName); // set unit file path
+    activeUnit.setName(getUnitName(currentNode));
+    activeUnit.setLine(currentNode.getLine());
+    return activeUnit;
+  }
 
-    private String getUnitName(Tree node) {
-        return node.getChild(0).getText();
-    }
+  private String getUnitName(Tree node) {
+    return node.getChild(0).getText();
+  }
 
 }

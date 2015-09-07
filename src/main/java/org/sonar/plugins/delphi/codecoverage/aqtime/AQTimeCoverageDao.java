@@ -34,43 +34,44 @@ import java.util.Map;
  */
 public class AQTimeCoverageDao {
 
-    private static final String TABLE1 = "LIGHT_COVERAGE_PROFILER_LINES";
-    private static final String TABLE2 = "LIGHT_COVERAGE_PROFILER_SOURCE_FILES_DATA";
+  private static final String TABLE1 = "LIGHT_COVERAGE_PROFILER_LINES";
+  private static final String TABLE2 = "LIGHT_COVERAGE_PROFILER_SOURCE_FILES_DATA";
 
-    private Map<String, String> jdbcProps;
-    private String databasePrefix = "CC.dbo.";
-    private JdbcTemplate jdbcTemplate;
+  private Map<String, String> jdbcProps;
+  private String databasePrefix = "CC.dbo.";
+  private JdbcTemplate jdbcTemplate;
 
-    public void setJdbcProps(Map<String, String> jdbcProps) {
-        this.jdbcProps = jdbcProps;
+  public void setJdbcProps(Map<String, String> jdbcProps) {
+    this.jdbcProps = jdbcProps;
+  }
+
+  public JdbcTemplate getJdbcTemplate() {
+    if (jdbcTemplate == null) {
+      jdbcTemplate = new JdbcTemplate(new DatabaseProperties(jdbcProps));
     }
+    return jdbcTemplate;
+  }
 
-    public JdbcTemplate getJdbcTemplate() {
-        if (jdbcTemplate == null) {
-            jdbcTemplate = new JdbcTemplate(new DatabaseProperties(jdbcProps));
+  public List<AQTimeCodeCoverage> readAQTimeCodeCoverage() {
+    return getJdbcTemplate().query(
+      "SELECT l.ID, COL_FILE_NAME, l.COL_MARK, l.COL_SOURCE_LINE, f.COL____COVERED FROM " + databasePrefix
+        + TABLE1 + " l inner join "
+        + databasePrefix + TABLE2 + " f on l.PARENT_ID = f.ID " + "ORDER BY COL_FILE_NAME",
+      new RowMapper<AQTimeCodeCoverage>() {
+
+        @Override
+        public AQTimeCodeCoverage mapRow(ResultSet resultSet) throws SQLException {
+          AQTimeCodeCoverage result = new AQTimeCodeCoverage();
+          result.setCoveredFileName(resultSet.getString("COL_FILE_NAME"));
+          result.setLineNumber(resultSet.getInt("COL_SOURCE_LINE"));
+          result.setLineHits(resultSet.getInt("COL_MARK"));
+          return result;
         }
-        return jdbcTemplate;
-    }
+      });
 
-    public List<AQTimeCodeCoverage> readAQTimeCodeCoverage() {
-        return getJdbcTemplate().query(
-                "SELECT l.ID, COL_FILE_NAME, l.COL_MARK, l.COL_SOURCE_LINE, f.COL____COVERED FROM " + databasePrefix
-                        + TABLE1 + " l inner join "
-                        + databasePrefix + TABLE2 + " f on l.PARENT_ID = f.ID " + "ORDER BY COL_FILE_NAME",
-                new RowMapper<AQTimeCodeCoverage>() {
+  }
 
-                    public AQTimeCodeCoverage mapRow(ResultSet resultSet) throws SQLException {
-                        AQTimeCodeCoverage result = new AQTimeCodeCoverage();
-                        result.setCoveredFileName(resultSet.getString("COL_FILE_NAME"));
-                        result.setLineNumber(resultSet.getInt("COL_SOURCE_LINE"));
-                        result.setLineHits(resultSet.getInt("COL_MARK"));
-                        return result;
-                    }
-                });
-
-    }
-
-    public void setDatabasePrefix(String databasePrefix) {
-        this.databasePrefix = databasePrefix;
-    }
+  public void setDatabasePrefix(String databasePrefix) {
+    this.databasePrefix = databasePrefix;
+  }
 }

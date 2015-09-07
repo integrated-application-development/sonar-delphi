@@ -22,31 +22,29 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
 import net.sourceforge.pmd.ast.CompilationUnit;
-
 import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
+import static org.junit.Assert.*;
+
 public class DelphiPMDTest {
 
-    private static final String TEST_FILE = "/org/sonar/plugins/delphi/PMDTest/smallpmd.pas";
+  private static final String TEST_FILE = "/org/sonar/plugins/delphi/PMDTest/smallpmd.pas";
 
-    @Test
-    public void getNodesFromASTTest() throws IOException, RecognitionException {
-        File testFile = DelphiUtils.getResource(TEST_FILE);
-        DelphiPMD pmd = new DelphiPMD();
-        DelphiAST ast = new DelphiAST(testFile);
-        List<CompilationUnit> nodes = pmd.getNodesFromAST(ast);
+  @Test
+  public void getNodesFromASTTest() throws IOException, RecognitionException {
+    File testFile = DelphiUtils.getResource(TEST_FILE);
+    DelphiPMD pmd = new DelphiPMD();
+    DelphiAST ast = new DelphiAST(testFile);
+    List<CompilationUnit> nodes = pmd.getNodesFromAST(ast);
 
-        assertEquals(7, nodes.size());
-    }
+    assertEquals(7, nodes.size());
+  }
 
 }

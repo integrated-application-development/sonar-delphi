@@ -28,64 +28,64 @@ import java.io.IOException;
 
 public class DelphiUnitBuilderTest {
 
-    private StringBuilder declaration = new StringBuilder();
-    private StringBuilder implementation = new StringBuilder();
+  private StringBuilder declaration = new StringBuilder();
+  private StringBuilder implementation = new StringBuilder();
 
-    private int offset;
+  private int offset;
 
-    public String className = "TTest";
+  public String className = "TTest";
 
-    public DelphiUnitBuilderTest appendDecl(String value) {
-        declaration.append(value + "\n");
-        offset++;
-        return this;
+  public DelphiUnitBuilderTest appendDecl(String value) {
+    declaration.append(value + "\n");
+    offset++;
+    return this;
+  }
+
+  public DelphiUnitBuilderTest appendImpl(String value) {
+    implementation.append(value + "\n");
+    return this;
+  }
+
+  public String declaration() {
+    return declaration.toString();
+  }
+
+  public String implementation() {
+    return implementation.toString();
+  }
+
+  public File buildFile(File baseDir) {
+    offset = offset + 7;
+    StringBuilder source = new StringBuilder();
+    source.append("unit Unit1;\n");
+    source.append("interface\n");
+    source.append("type\n");
+    source.append(this.className + " = class\n");
+    source.append(this.declaration() + "\n");
+    source.append("end;\n");
+    source.append("implementation\n");
+    source.append(this.implementation() + "\n");
+    source.append("end.\n");
+
+    try {
+      File file = File.createTempFile("unit", ".pas", baseDir);
+      file.deleteOnExit();
+
+      FileWriter fileWriter = new FileWriter(file);
+      try {
+        fileWriter.write(source.toString());
+        fileWriter.flush();
+      } finally {
+        fileWriter.close();
+      }
+      return file;
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
 
-    public DelphiUnitBuilderTest appendImpl(String value) {
-        implementation.append(value + "\n");
-        return this;
-    }
+  }
 
-    public String declaration() {
-        return declaration.toString();
-    }
-
-    public String implementation() {
-        return implementation.toString();
-    }
-
-    public File buildFile(File baseDir) {
-        offset = offset + 7;
-        StringBuilder source = new StringBuilder();
-        source.append("unit Unit1;\n");
-        source.append("interface\n");
-        source.append("type\n");
-        source.append(this.className + " = class\n");
-        source.append(this.declaration() + "\n");
-        source.append("end;\n");
-        source.append("implementation\n");
-        source.append(this.implementation() + "\n");
-        source.append("end.\n");
-
-        try {
-            File file = File.createTempFile("unit", ".pas", baseDir);
-            file.deleteOnExit();
-
-            FileWriter fileWriter = new FileWriter(file);
-            try {
-                fileWriter.write(source.toString());
-                fileWriter.flush();
-            } finally {
-                fileWriter.close();
-            }
-            return file;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    protected int getOffSet() {
-        return offset;
-    }
+  protected int getOffSet() {
+    return offset;
+  }
 }

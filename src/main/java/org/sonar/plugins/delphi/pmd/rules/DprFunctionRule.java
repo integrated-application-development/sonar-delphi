@@ -30,42 +30,42 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class DprFunctionRule extends DelphiRule {
 
-    private int check; // check for .dpr
+  private int check; // check for .dpr
 
-    @Override
-    public void init() {
-        check = -1; // needs to check at new file
+  @Override
+  public void init() {
+    check = -1; // needs to check at new file
+  }
+
+  @Override
+  public Object visit(DelphiPMDNode node, Object data) {
+    if (check == -1) { // checking if we are on .dpr/.dpk
+      if (node.getASTTree().getFileName().endsWith(".dpr") || node.getASTTree().getFileName().endsWith(".dpk")) {
+        check = 1;
+      } else {
+        check = 0;
+      }
+    }
+    if (check != 1) {
+      return data; // not a .dpr/.dpk file
     }
 
-    @Override
-    public Object visit(DelphiPMDNode node, Object data) {
-        if (check == -1) { // checking if we are on .dpr/.dpk
-            if (node.getASTTree().getFileName().endsWith(".dpr") || node.getASTTree().getFileName().endsWith(".dpk")) {
-                check = 1;
-            } else {
-                check = 0;
-            }
-        }
-        if (check != 1) {
-            return data; // not a .dpr/.dpk file
-        }
-
-        if (isViolationNode(node)) {
-            addViolation(data, node);
-        }
-
-        return data;
+    if (isViolationNode(node)) {
+      addViolation(data, node);
     }
 
-    /**
-     * Check if node is a procedure/function node, or a variable node
-     * 
-     * @param node Node to check
-     * @return True if so, false otherwise
-     */
-    protected boolean isViolationNode(DelphiPMDNode node) {
-        int type = node.getType();
-        return type == DelphiLexer.PROCEDURE || type == DelphiLexer.FUNCTION;
-    }
+    return data;
+  }
+
+  /**
+   * Check if node is a procedure/function node, or a variable node
+   * 
+   * @param node Node to check
+   * @return True if so, false otherwise
+   */
+  protected boolean isViolationNode(DelphiPMDNode node) {
+    int type = node.getType();
+    return type == DelphiLexer.PROCEDURE || type == DelphiLexer.FUNCTION;
+  }
 
 }

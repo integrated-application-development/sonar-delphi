@@ -24,39 +24,39 @@ package org.sonar.squid.text.delphi;
 
 public class LiteralValueHandler extends LineContextHandler {
 
-    private final char delimiter;
+  private final char delimiter;
 
-    public LiteralValueHandler(char delimiter) {
-        this.delimiter = delimiter;
-    }
+  public LiteralValueHandler(char delimiter) {
+    this.delimiter = delimiter;
+  }
 
-    @Override
-    boolean matchToEnd(Line line, StringBuilder pendingLine) {
-        return matchEndOfString(pendingLine, delimiter) && evenNumberOfBackSlashBeforeDelimiter(pendingLine);
-    }
+  @Override
+  boolean matchToEnd(Line line, StringBuilder pendingLine) {
+    return matchEndOfString(pendingLine, delimiter) && evenNumberOfBackSlashBeforeDelimiter(pendingLine);
+  }
 
-    private boolean evenNumberOfBackSlashBeforeDelimiter(StringBuilder pendingLine) {
-        int numberOfBackSlashChar = 0;
-        for (int index = pendingLine.length() - 2; index >= 0; index--) {
-            if (pendingLine.charAt(index) == '\\') {
-                numberOfBackSlashChar++;
-            } else {
-                break;
-            }
-        }
-        return numberOfBackSlashChar % 2 == 0;
+  private boolean evenNumberOfBackSlashBeforeDelimiter(StringBuilder pendingLine) {
+    int numberOfBackSlashChar = 0;
+    for (int index = pendingLine.length() - 2; index >= 0; index--) {
+      if (pendingLine.charAt(index) == '\\') {
+        numberOfBackSlashChar++;
+      } else {
+        break;
+      }
     }
+    return numberOfBackSlashChar % 2 == 0;
+  }
 
-    @Override
-    boolean matchToBegin(Line line, StringBuilder pendingLine) {
-        if (matchEndOfString(pendingLine, delimiter)) {
-            return true;
-        }
-        return false;
+  @Override
+  boolean matchToBegin(Line line, StringBuilder pendingLine) {
+    if (matchEndOfString(pendingLine, delimiter)) {
+      return true;
     }
+    return false;
+  }
 
-    @Override
-    boolean matchWithEndOfLine(Line line, StringBuilder pendingLine) {
-        return true; // see http://jira.codehaus.org/browse/SONAR-1555
-    }
+  @Override
+  boolean matchWithEndOfLine(Line line, StringBuilder pendingLine) {
+    return true; // see http://jira.codehaus.org/browse/SONAR-1555
+  }
 }

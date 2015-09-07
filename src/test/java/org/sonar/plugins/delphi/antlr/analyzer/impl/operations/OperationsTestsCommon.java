@@ -29,22 +29,22 @@ import org.antlr.runtime.tree.Tree;
 class OperationsTestsCommon // private class
 {
 
-    protected final static int LAYER_NODES = 3;
+  protected final static int LAYER_NODES = 3;
 
-    protected NodeOperation operation;
-    protected Tree parent;
+  protected NodeOperation operation;
+  protected Tree parent;
 
-    public OperationsTestsCommon(NodeOperation op) {
-        operation = op;
+  public OperationsTestsCommon(NodeOperation op) {
+    operation = op;
+  }
+
+  public void init() {
+    parent = new CommonTree(new CommonToken(256, "parent"));
+    for (int i = 0; i < LAYER_NODES; ++i) {
+      CommonTree child = new CommonTree(new CommonToken(i + 1, "layer1"));
+      child.addChild(new CommonTree(new CommonToken(i + 100, "layer2")));
+      parent.addChild(child);
     }
-
-    public void init() {
-        parent = new CommonTree(new CommonToken(256, "parent"));
-        for (int i = 0; i < LAYER_NODES; ++i) {
-            CommonTree child = new CommonTree(new CommonToken(i + 1, "layer1"));
-            child.addChild(new CommonTree(new CommonToken(i + 100, "layer2")));
-            parent.addChild(child);
-        }
-    }
+  }
 
 }

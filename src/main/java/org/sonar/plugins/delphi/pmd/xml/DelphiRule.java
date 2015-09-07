@@ -22,12 +22,11 @@
  */
 package org.sonar.plugins.delphi.pmd.xml;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Delphi rule loaded from xml file
@@ -35,178 +34,179 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 @XStreamAlias("rule")
 public class DelphiRule implements Comparable<String> {
 
-    @XStreamAlias("class")
-    @XStreamAsAttribute
-    private String clazz;
+  @XStreamAlias("class")
+  @XStreamAsAttribute
+  private String clazz;
 
-    @XStreamAsAttribute
-    private String message;
+  @XStreamAsAttribute
+  private String message;
 
-    @XStreamAsAttribute
-    private String name;
+  @XStreamAsAttribute
+  private String name;
 
-    private String priority;
+  private String priority;
 
-    private List<Property> properties;
+  private List<Property> properties;
 
-    @XStreamOmitField
-    private String description;
+  @XStreamOmitField
+  private String description;
 
-    @XStreamOmitField
-    private String category;
+  @XStreamOmitField
+  private String category;
 
-    @XStreamOmitField
-    private String exclude;
+  @XStreamOmitField
+  private String exclude;
 
-    @XStreamOmitField
-    private String example;
+  @XStreamOmitField
+  private String example;
 
-    /**
-     * Default ctor
-     */
-    public DelphiRule() {
+  /**
+   * Default ctor
+   */
+  public DelphiRule() {
+  }
+
+  /**
+   * Ctor
+   * 
+   * @param clazz Rule class
+   */
+  public DelphiRule(String clazz) {
+    this(clazz, null);
+  }
+
+  /**
+   * Ctor
+   * 
+   * @param clazz Rule class
+   * @param priority Rule priority
+   */
+  public DelphiRule(String clazz, String priority) {
+    this.clazz = clazz;
+    this.priority = priority;
+  }
+
+  /**
+   * @return name
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * sets name
+   * 
+   * @param name new name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * @return rule class
+   */
+  public String getClazz() {
+    return clazz;
+  }
+
+  /**
+   * Sets properties
+   * 
+   * @param properties Properties to set
+   */
+  public void setProperties(List<Property> properties) {
+    this.properties = properties;
+  }
+
+  /**
+   * @return Properties
+   */
+  public List<Property> getProperties() {
+    return properties;
+  }
+
+  /**
+   * Compares two class names lexicographically
+   * 
+   * @return the value 0 if the argument string is equal to this string; a
+   *         value less than 0 if this string is lexicographically less than
+   *         the string argument; and a value greater than 0 if this string is
+   *         lexicographically greater than the string argument.
+   */
+
+  @Override
+  public int compareTo(String o) {
+    return o.compareTo(clazz);
+  }
+
+  /**
+   * @return rule priority
+   */
+  public String getPriority() {
+    return priority;
+  }
+
+  /**
+   * sets priority
+   * 
+   * @param priority new priority
+   */
+  public void setPriority(String priority) {
+    this.priority = priority;
+  }
+
+  /**
+   * adds property
+   */
+  public void addProperty(Property property) {
+    if (properties == null) {
+      properties = new ArrayList<Property>();
     }
+    properties.add(property);
+  }
 
-    /**
-     * Ctor
-     * 
-     * @param clazz Rule class
-     */
-    public DelphiRule(String clazz) {
-        this(clazz, null);
+  /**
+   * @return rule message
+   */
+  public String getMessage() {
+    return message;
+  }
+
+  /**
+   * sets message
+   * 
+   * @param message New rule message
+   */
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
+  /**
+   * @return rule description
+   */
+  public String getDescription() {
+    String desc = "";
+    if (description != null) {
+      desc += "<p>" + description + "</p>";
     }
-
-    /**
-     * Ctor
-     * 
-     * @param clazz Rule class
-     * @param priority Rule priority
-     */
-    public DelphiRule(String clazz, String priority) {
-        this.clazz = clazz;
-        this.priority = priority;
+    if (example != null) {
+      desc += "<pre>" + example + "</pre>";
     }
+    return desc;
+  }
 
-    /**
-     * @return name
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   * @return rule category
+   */
+  public String getCategory() {
+    return category;
+  }
 
-    /**
-     * sets name
-     * 
-     * @param name new name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * @return rule class
-     */
-    public String getClazz() {
-        return clazz;
-    }
-
-    /**
-     * Sets properties
-     * 
-     * @param properties Properties to set
-     */
-    public void setProperties(List<Property> properties) {
-        this.properties = properties;
-    }
-
-    /**
-     * @return Properties
-     */
-    public List<Property> getProperties() {
-        return properties;
-    }
-
-    /**
-     * Compares two class names lexicographically
-     * 
-     * @return the value 0 if the argument string is equal to this string; a
-     *         value less than 0 if this string is lexicographically less than
-     *         the string argument; and a value greater than 0 if this string is
-     *         lexicographically greater than the string argument.
-     */
-
-    public int compareTo(String o) {
-        return o.compareTo(clazz);
-    }
-
-    /**
-     * @return rule priority
-     */
-    public String getPriority() {
-        return priority;
-    }
-
-    /**
-     * sets priority
-     * 
-     * @param priority new priority
-     */
-    public void setPriority(String priority) {
-        this.priority = priority;
-    }
-
-    /**
-     * adds property
-     */
-    public void addProperty(Property property) {
-        if (properties == null) {
-            properties = new ArrayList<Property>();
-        }
-        properties.add(property);
-    }
-
-    /**
-     * @return rule message
-     */
-    public String getMessage() {
-        return message;
-    }
-
-    /**
-     * sets message
-     * 
-     * @param message New rule message
-     */
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    /**
-     * @return rule description
-     */
-    public String getDescription() {
-        String desc = "";
-        if (description != null) {
-            desc += "<p>" + description + "</p>";
-        }
-        if (example != null) {
-            desc += "<pre>" + example + "</pre>";
-        }
-        return desc;
-    }
-
-    /**
-     * @return rule category
-     */
-    public String getCategory() {
-        return category;
-    }
-
-    /**
-     * @return exclude string
-     */
-    public String getExclude() {
-        return exclude;
-    }
+  /**
+   * @return exclude string
+   */
+  public String getExclude() {
+    return exclude;
+  }
 
 }

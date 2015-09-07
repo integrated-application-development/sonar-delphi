@@ -31,15 +31,16 @@ import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
  */
 public class AdvanceNodeOperation implements NodeOperation {
 
-    public CodeNode<Tree> execute(Tree node) {
-        if (node == null) {
-            return new CodeNode<Tree>(null);
-        }
-
-        if (node.getChildCount() == 0) { // no child, traceback to parent
-            return (new TraceBackNodeOperation().execute(node));
-        } else { // get first child
-            return new CodeNode<Tree>(node.getChild(0));
-        }
+  @Override
+  public CodeNode<Tree> execute(Tree node) {
+    if (node == null) {
+      return new CodeNode<Tree>(null);
     }
+
+    if (node.getChildCount() == 0) { // no child, traceback to parent
+      return (new TraceBackNodeOperation().execute(node));
+    } else { // get first child
+      return new CodeNode<Tree>(node.getChild(0));
+    }
+  }
 };

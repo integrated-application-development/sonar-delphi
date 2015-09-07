@@ -22,61 +22,60 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.subranges;
 
-import static org.junit.Assert.*;
-
 import java.util.Arrays;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl.IntegerSubRange;
 
+import static org.junit.Assert.*;
+
 public class SubRangeAggregatorTest {
 
-    private SubRangeAggregator aggregator;
+  private SubRangeAggregator aggregator;
 
-    @Before
-    public void setup() {
-        aggregator = new SubRangeAggregator();
+  @Before
+  public void setup() {
+    aggregator = new SubRangeAggregator();
+  }
+
+  @Test
+  public void sortTest() {
+    SubRange data[] = {new IntegerSubRange(0, 10), new IntegerSubRange(-5, -1), new IntegerSubRange(12, 12),
+      new IntegerSubRange(15, 19),
+      new IntegerSubRange(-10, -6)};
+
+    for (SubRange range : data) {
+      aggregator.add(range);
     }
 
-    @Test
-    public void sortTest() {
-        SubRange data[] = {new IntegerSubRange(0, 10), new IntegerSubRange(-5, -1), new IntegerSubRange(12, 12),
-                new IntegerSubRange(15, 19),
-                new IntegerSubRange(-10, -6)};
+    Arrays.sort(data, new SubRangeFirstOccurenceComparator());
+    aggregator.sort(new SubRangeFirstOccurenceComparator());
 
-        for (SubRange range : data) {
-            aggregator.add(range);
-        }
-
-        Arrays.sort(data, new SubRangeFirstOccurenceComparator());
-        aggregator.sort(new SubRangeFirstOccurenceComparator());
-
-        int index = 0;
-        for (SubRange sortedRange : aggregator.getRanges()) {
-            assertEquals(data[index++], sortedRange);
-        }
-
+    int index = 0;
+    for (SubRange sortedRange : aggregator.getRanges()) {
+      assertEquals(data[index++], sortedRange);
     }
 
-    @Test
-    public void addTest() {
-        assertEquals(0, aggregator.getRanges().size());
+  }
 
-        aggregator.add(new IntegerSubRange(0, 5)); // should add
-        assertEquals(1, aggregator.getRanges().size());
+  @Test
+  public void addTest() {
+    assertEquals(0, aggregator.getRanges().size());
 
-        aggregator.add(new IntegerSubRange(6, 7)); // should add
-        assertEquals(2, aggregator.getRanges().size());
+    aggregator.add(new IntegerSubRange(0, 5)); // should add
+    assertEquals(1, aggregator.getRanges().size());
 
-        aggregator.add(new IntegerSubRange(5, 10)); // should add
-        assertEquals(3, aggregator.getRanges().size());
+    aggregator.add(new IntegerSubRange(6, 7)); // should add
+    assertEquals(2, aggregator.getRanges().size());
 
-        aggregator.add(new IntegerSubRange(0, 10)); // should add
-        assertEquals(4, aggregator.getRanges().size());
+    aggregator.add(new IntegerSubRange(5, 10)); // should add
+    assertEquals(3, aggregator.getRanges().size());
 
-        aggregator.add(new IntegerSubRange(2, 3)); // should not add
-        assertEquals(4, aggregator.getRanges().size());
-    }
+    aggregator.add(new IntegerSubRange(0, 10)); // should add
+    assertEquals(4, aggregator.getRanges().size());
+
+    aggregator.add(new IntegerSubRange(2, 3)); // should not add
+    assertEquals(4, aggregator.getRanges().size());
+  }
 
 }

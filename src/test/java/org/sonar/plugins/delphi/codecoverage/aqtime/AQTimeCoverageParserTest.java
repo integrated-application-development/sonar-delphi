@@ -22,10 +22,6 @@
  */
 package org.sonar.plugins.delphi.codecoverage.aqtime;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -33,7 +29,6 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
 import org.dbunit.DBTestCase;
 import org.dbunit.PropertiesBasedJdbcDatabaseTester;
 import org.dbunit.dataset.IDataSet;
@@ -48,109 +43,118 @@ import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.HSQLServerUtil;
 
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
 public class AQTimeCoverageParserTest extends DBTestCase {
 
-    private static final String FILE_NAME = "/org/sonar/plugins/delphi/SimpleDelphiProject";
-    private static final String DB_FILE = "/org/sonar/plugins/delphi/AQTimeDB/db.xml";
-    private AQTimeCoverageParser parser;
-    private Connection connection;
-    private Map<String, String> connectionProps;
-    private DelphiProjectHelper delphiProjectHelper = mock(DelphiProjectHelper.class);
+  private static final String FILE_NAME = "/org/sonar/plugins/delphi/SimpleDelphiProject";
+  private static final String DB_FILE = "/org/sonar/plugins/delphi/AQTimeDB/db.xml";
+  private AQTimeCoverageParser parser;
+  private Connection connection;
+  private Map<String, String> connectionProps;
+  private DelphiProjectHelper delphiProjectHelper = mock(DelphiProjectHelper.class);
 
-    public AQTimeCoverageParserTest() {
-        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS, "org.hsqldb.jdbcDriver");
-        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL, "jdbc:hsqldb:mem:CC");
-        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME, "sa");
-        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD, "");
+  public AQTimeCoverageParserTest() {
+    System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS, "org.hsqldb.jdbcDriver");
+    System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL, "jdbc:hsqldb:mem:CC");
+    System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME, "sa");
+    System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD, "");
+  }
+
+  @Override
+  public void setUp() throws Exception {
+
+    HSQLServerUtil.getInstance().start("CC", 7654);
+
+    connectionProps = new HashMap<String, String>();
+    connectionProps.put(DelphiPlugin.JDBC_USER_KEY, "sa");
+    connectionProps.put(DelphiPlugin.JDBC_PASSWORD_KEY, "");
+    connectionProps.put(DelphiPlugin.JDBC_DRIVER_KEY, "org.hsqldb.jdbcDriver");
+    connectionProps.put(DelphiPlugin.JDBC_URL_KEY, "jdbc:hsqldb:mem:CC");
+    connectionProps.put(DelphiPlugin.JDBC_DB_TABLE_PREFIX_KEY, "");
+    Class.forName("org.hsqldb.jdbcDriver");
+    connection = DriverManager.getConnection("jdbc:hsqldb:mem:CC", getDatabaseProperties());
+
+    // create tables for DB
+    Statement stmt = connection.createStatement();
+    StringBuilder query = new StringBuilder();
+    query
+      .append("CREATE TABLE LIGHT_COVERAGE_PROFILER_LINES ( INST_ID INT, ID INT, REC_ID INT, PARENT_ID INT, COL_MARK INT, COL_SOURCE_LINE INT, PRIMARY KEY(ID) );");
+    query
+      .append("CREATE TABLE LIGHT_COVERAGE_PROFILER_SOURCE_FILES_DATA ( INST_ID INT, ID INT, REC_ID INT, PARENT_ID INT, COL_MARK INT, COL_FILE_NAME VARCHAR(255), COL_CALCULATED INT, COL_SKIP_COUNT INT, COL____COVERED FLOAT, PRIMARY KEY(ID) );");
+
+    stmt.executeQuery(query.toString());
+    stmt.close();
+    super.setUp();
+
+    parser = new AQTimeCoverageParser(delphiProjectHelper);
+    parser.setConnectionProperties(connectionProps);
+  }
+
+  private Properties getDatabaseProperties() {
+    Properties properties = new Properties();
+    for (String key : connectionProps.keySet()) {
+      properties.put(key, connectionProps.get(key));
     }
+    return properties;
+  }
 
-    public void setUp() throws Exception {
+  @Override
+  public void tearDown() throws Exception {
+    super.tearDown();
+    HSQLServerUtil.getInstance().stop();
+  }
 
-        HSQLServerUtil.getInstance().start("CC", 7654);
+  public void testParse() {
 
-        connectionProps = new HashMap<String, String>();
-        connectionProps.put(DelphiPlugin.JDBC_USER_KEY, "sa");
-        connectionProps.put(DelphiPlugin.JDBC_PASSWORD_KEY, "");
-        connectionProps.put(DelphiPlugin.JDBC_DRIVER_KEY, "org.hsqldb.jdbcDriver");
-        connectionProps.put(DelphiPlugin.JDBC_URL_KEY, "jdbc:hsqldb:mem:CC");
-        connectionProps.put(DelphiPlugin.JDBC_DB_TABLE_PREFIX_KEY, "");
-        Class.forName("org.hsqldb.jdbcDriver");
-        connection = DriverManager.getConnection("jdbc:hsqldb:mem:CC", getDatabaseProperties());
+    Project project = mock(Project.class);
 
-        // create tables for DB
-        Statement stmt = connection.createStatement();
-        StringBuilder query = new StringBuilder();
-        query
-                .append("CREATE TABLE LIGHT_COVERAGE_PROFILER_LINES ( INST_ID INT, ID INT, REC_ID INT, PARENT_ID INT, COL_MARK INT, COL_SOURCE_LINE INT, PRIMARY KEY(ID) );");
-        query
-                .append("CREATE TABLE LIGHT_COVERAGE_PROFILER_SOURCE_FILES_DATA ( INST_ID INT, ID INT, REC_ID INT, PARENT_ID INT, COL_MARK INT, COL_FILE_NAME VARCHAR(255), COL_CALCULATED INT, COL_SKIP_COUNT INT, COL____COVERED FLOAT, PRIMARY KEY(ID) );");
+    File baseDir = DelphiUtils.getResource(FILE_NAME);
 
-        stmt.executeQuery(query.toString());
-        stmt.close();
-        super.setUp();
+    DefaultInputFile inputFileGlobals = new DefaultInputFile("Globals.pas").setAbsolutePath("Globals.pas");
+    DefaultInputFile inputFileMainWindow = new DefaultInputFile("MainWindow.pas")
+      .setFile(new File("MainWindow.pas"));
 
-        parser = new AQTimeCoverageParser(delphiProjectHelper);
-        parser.setConnectionProperties(connectionProps);
-    }
+    when(delphiProjectHelper.getFile("Globals.pas")).thenReturn(inputFileGlobals);
+    when(delphiProjectHelper.getFile("MainWindow.pas")).thenReturn(inputFileMainWindow);
 
-    private Properties getDatabaseProperties() {
-        Properties properties = new Properties();
-        for (String key : connectionProps.keySet()) {
-            properties.put(key, connectionProps.get(key));
-        }
-        return properties;
-    }
+    DebugSensorContext context = new DebugSensorContext();
+    parser.parse(context);
 
-    public void tearDown() throws Exception {
-        super.tearDown();
-        HSQLServerUtil.getInstance().stop();
-    }
+    Measure<Double> globalMeasureCoverage = context.getMeasure(inputFileGlobals.absolutePath() + ":" + "coverage");
+    assertThat(globalMeasureCoverage, notNullValue());
+    assertThat(globalMeasureCoverage.getValue(), is(100.00));
 
-    public void testParse() {
+    Measure<String> globalMeasureLineHits = context.getMeasure(inputFileGlobals.absolutePath() + ":"
+      + "coverage_line_hits_data");
+    assertThat(globalMeasureLineHits, notNullValue());
+    assertThat(globalMeasureLineHits.getData(), is("32=1;33=1"));
 
-        Project project = mock(Project.class);
+    Measure<Double> mainWindowMeasureCoverage = context.getMeasure(inputFileMainWindow.absolutePath() + ":"
+      + "coverage");
+    assertThat(mainWindowMeasureCoverage, notNullValue());
+    assertThat(mainWindowMeasureCoverage.getValue(), is(50.00));
 
-        File baseDir = DelphiUtils.getResource(FILE_NAME);
+    Measure<String> mainWindowMeasureLineHits = context.getMeasure(inputFileMainWindow.absolutePath() + ":"
+      + "coverage_line_hits_data");
+    assertThat(mainWindowMeasureLineHits, notNullValue());
+    assertThat(mainWindowMeasureLineHits.getData(), is("13=1;14=0"));
+  }
 
-        DefaultInputFile inputFileGlobals = new DefaultInputFile("Globals.pas").setAbsolutePath("Globals.pas");
-        DefaultInputFile inputFileMainWindow = new DefaultInputFile("MainWindow.pas")
-                .setFile(new File("MainWindow.pas"));
+  @Override
+  protected IDataSet getDataSet() throws Exception {
+    return new FlatXmlDataSet(DelphiUtils.getResource(DB_FILE));
+  }
 
-        when(delphiProjectHelper.getFile("Globals.pas")).thenReturn(inputFileGlobals);
-        when(delphiProjectHelper.getFile("MainWindow.pas")).thenReturn(inputFileMainWindow);
+  @Override
+  protected DatabaseOperation getSetUpOperation() throws Exception {
+    return DatabaseOperation.REFRESH;
+  }
 
-        DebugSensorContext context = new DebugSensorContext();
-        parser.parse(context);
-
-        Measure<Double> globalMeasureCoverage = context.getMeasure(inputFileGlobals.absolutePath() + ":" + "coverage");
-        assertThat(globalMeasureCoverage, notNullValue());
-        assertThat(globalMeasureCoverage.getValue(), is(100.00));
-
-        Measure<String> globalMeasureLineHits = context.getMeasure(inputFileGlobals.absolutePath() + ":"
-                + "coverage_line_hits_data");
-        assertThat(globalMeasureLineHits, notNullValue());
-        assertThat(globalMeasureLineHits.getData(), is("32=1;33=1"));
-
-        Measure<Double> mainWindowMeasureCoverage = context.getMeasure(inputFileMainWindow.absolutePath() + ":"
-                + "coverage");
-        assertThat(mainWindowMeasureCoverage, notNullValue());
-        assertThat(mainWindowMeasureCoverage.getValue(), is(50.00));
-
-        Measure<String> mainWindowMeasureLineHits = context.getMeasure(inputFileMainWindow.absolutePath() + ":"
-                + "coverage_line_hits_data");
-        assertThat(mainWindowMeasureLineHits, notNullValue());
-        assertThat(mainWindowMeasureLineHits.getData(), is("13=1;14=0"));
-    }
-
-    protected IDataSet getDataSet() throws Exception {
-        return new FlatXmlDataSet(DelphiUtils.getResource(DB_FILE));
-    }
-
-    protected DatabaseOperation getSetUpOperation() throws Exception {
-        return DatabaseOperation.REFRESH;
-    }
-
-    protected DatabaseOperation getTearDownOperation() throws Exception {
-        return DatabaseOperation.NONE;
-    }
+  @Override
+  protected DatabaseOperation getTearDownOperation() throws Exception {
+    return DatabaseOperation.NONE;
+  }
 }

@@ -22,20 +22,20 @@
  */
 package org.sonar.plugins.delphi.core.helpers;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 import org.sonar.api.config.Settings;
 
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+
 public class DelphiProjectHelperTest {
 
-    private final Settings settings = new Settings();
+  private final Settings settings = new Settings();
 
-    @Test
-    public void shouldReturnDefaultValueForImportSources() {
-        DelphiProjectHelper helper = new DelphiProjectHelper(settings, null, null);
-        assertThat(helper.getImportSources(), is(true));
-    }
+  @Test
+  public void shouldReturnDefaultValueForImportSources() {
+    DelphiProjectHelper helper = new DelphiProjectHelper(settings, null, null);
+    assertThat(helper.getImportSources(), is(true));
+  }
 
 }

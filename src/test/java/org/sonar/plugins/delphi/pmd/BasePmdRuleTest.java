@@ -22,14 +22,10 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.junit.After;
 import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
@@ -46,78 +42,81 @@ import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
+
 public abstract class BasePmdRuleTest {
 
-    protected static final String ROOT_DIR_NAME = "/org/sonar/plugins/delphi/PMDTest";
-    protected static final File ROOT_DIR = DelphiUtils.getResource(ROOT_DIR_NAME);
+  protected static final String ROOT_DIR_NAME = "/org/sonar/plugins/delphi/PMDTest";
+  protected static final File ROOT_DIR = DelphiUtils.getResource(ROOT_DIR_NAME);
 
-    private ResourcePerspectives perspectives;
-    private DelphiProjectHelper delphiProjectHelper;
-    private Issuable issuable;
+  private ResourcePerspectives perspectives;
+  private DelphiProjectHelper delphiProjectHelper;
+  private Issuable issuable;
 
-    protected DelphiPmdSensor sensor;
-    protected Project project;
-    protected List<Issue> issues = new LinkedList<Issue>();
-    private File testFile;
+  protected DelphiPmdSensor sensor;
+  protected Project project;
+  protected List<Issue> issues = new LinkedList<Issue>();
+  private File testFile;
 
-    protected void configureTest(DelphiUnitBuilderTest builder) {
-        testFile = builder.buildFile(ROOT_DIR);
-        String relativePathTestFile = DelphiUtils.getRelativePath(testFile, Arrays.asList(ROOT_DIR));
-        configureTest(ROOT_DIR_NAME + "/" + relativePathTestFile);
+  protected void configureTest(DelphiUnitBuilderTest builder) {
+    testFile = builder.buildFile(ROOT_DIR);
+    String relativePathTestFile = DelphiUtils.getRelativePath(testFile, Arrays.asList(ROOT_DIR));
+    configureTest(ROOT_DIR_NAME + "/" + relativePathTestFile);
+  }
+
+  protected void configureTest(String testFileName) {
+    project = mock(Project.class);
+    perspectives = mock(ResourcePerspectives.class);
+    delphiProjectHelper = DelphiTestUtils.mockProjectHelper();
+
+    // Don't pollute current working directory
+    when(delphiProjectHelper.workDir()).thenReturn(new File("target"));
+
+    File baseDir = DelphiUtils.getResource(ROOT_DIR_NAME);
+
+    File srcFile = DelphiUtils.getResource(testFileName);
+
+    InputFile inputFile = new DefaultInputFile(ROOT_DIR_NAME)
+      .setFile(srcFile);
+
+    DelphiProject delphiProject = new DelphiProject("Default Project");
+    delphiProject.setSourceFiles(Arrays.asList(inputFile));
+
+    issuable = mock(Issuable.class);
+
+    when(delphiProjectHelper.getWorkgroupProjects()).thenReturn(Arrays.asList(delphiProject));
+    when(delphiProjectHelper.getFile(anyString())).thenAnswer(new Answer<InputFile>() {
+      @Override
+      public InputFile answer(InvocationOnMock invocation) throws Throwable {
+        InputFile inputFile = new DefaultInputFile(ROOT_DIR_NAME).setFile(new File((String) invocation
+          .getArguments()[0]));
+
+        when(perspectives.as(Issuable.class, inputFile)).thenReturn(issuable);
+
+        when(issuable.newIssueBuilder()).thenReturn(new StubIssueBuilder());
+
+        return inputFile;
+      }
+    });
+
+    when(issuable.addIssue(Matchers.any(Issue.class))).then(new Answer<Boolean>() {
+      @Override
+      public Boolean answer(InvocationOnMock invocation) throws Throwable {
+        Issue issue = (Issue) invocation.getArguments()[0];
+        issues.add(issue);
+        return Boolean.TRUE;
+      }
+    });
+
+    sensor = new DelphiPmdSensor(delphiProjectHelper, perspectives);
+  }
+
+  @After
+  public void teardown() {
+    if (testFile != null) {
+      testFile.delete();
     }
-
-    protected void configureTest(String testFileName) {
-        project = mock(Project.class);
-        perspectives = mock(ResourcePerspectives.class);
-        delphiProjectHelper = DelphiTestUtils.mockProjectHelper();
-
-        // Don't pollute current working directory
-        when(delphiProjectHelper.workDir()).thenReturn(new File("target"));
-
-        File baseDir = DelphiUtils.getResource(ROOT_DIR_NAME);
-
-        File srcFile = DelphiUtils.getResource(testFileName);
-
-        InputFile inputFile = new DefaultInputFile(ROOT_DIR_NAME)
-                .setFile(srcFile);
-
-        DelphiProject delphiProject = new DelphiProject("Default Project");
-        delphiProject.setSourceFiles(Arrays.asList(inputFile));
-
-        issuable = mock(Issuable.class);
-
-        when(delphiProjectHelper.getWorkgroupProjects()).thenReturn(Arrays.asList(delphiProject));
-        when(delphiProjectHelper.getFile(anyString())).thenAnswer(new Answer<InputFile>() {
-            @Override
-            public InputFile answer(InvocationOnMock invocation) throws Throwable {
-                InputFile inputFile = new DefaultInputFile(ROOT_DIR_NAME).setFile(new File((String) invocation
-                        .getArguments()[0]));
-
-                when(perspectives.as(Issuable.class, inputFile)).thenReturn(issuable);
-
-                when(issuable.newIssueBuilder()).thenReturn(new StubIssueBuilder());
-
-                return inputFile;
-            }
-        });
-
-        when(issuable.addIssue(Matchers.any(Issue.class))).then(new Answer<Boolean>() {
-            @Override
-            public Boolean answer(InvocationOnMock invocation) throws Throwable {
-                Issue issue = (Issue) invocation.getArguments()[0];
-                issues.add(issue);
-                return Boolean.TRUE;
-            }
-        });
-
-        sensor = new DelphiPmdSensor(delphiProjectHelper, perspectives);
-    }
-
-    @After
-    public void teardown() {
-        if (testFile != null) {
-            testFile.delete();
-        }
-    }
+  }
 
 }

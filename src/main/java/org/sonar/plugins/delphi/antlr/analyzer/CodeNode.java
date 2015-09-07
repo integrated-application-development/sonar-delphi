@@ -27,38 +27,38 @@ package org.sonar.plugins.delphi.antlr.analyzer;
  */
 public class CodeNode<T> {
 
-    private T node;
+  private T node;
 
-    /**
-     * ctor
-     * 
-     * @param n node to hold
-     */
-    public CodeNode(T n) {
-        node = n;
-    }
+  /**
+   * ctor
+   * 
+   * @param n node to hold
+   */
+  public CodeNode(T n) {
+    node = n;
+  }
 
-    /**
-     * @return node
-     */
-    public T getNode() {
-        return node;
-    }
+  /**
+   * @return node
+   */
+  public T getNode() {
+    return node;
+  }
 
-    /**
-     * is node valid
-     * 
-     * @return
-     */
-    public boolean isValid() {
-        return node != null;
-    }
+  /**
+   * is node valid
+   * 
+   * @return
+   */
+  public boolean isValid() {
+    return node != null;
+  }
 
-    @Override
-    public String toString() {
-        if (node == null) {
-            return "null";
-        }
-        return node.toString();
+  @Override
+  public String toString() {
+    if (node == null) {
+      return "null";
     }
+    return node.toString();
+  }
 };

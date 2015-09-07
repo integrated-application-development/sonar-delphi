@@ -27,10 +27,10 @@ package org.sonar.plugins.delphi.pmd;
  */
 public final class DelphiPmdConstants {
 
-    public static final String REPOSITORY_KEY = "delph";
-    public static final String REPOSITORY_NAME = "Delphi PMD";
+  public static final String REPOSITORY_KEY = "delph";
+  public static final String REPOSITORY_NAME = "Delphi PMD";
 
-    private DelphiPmdConstants() {
-    }
+  private DelphiPmdConstants() {
+  }
 
 }

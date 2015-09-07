@@ -27,20 +27,20 @@ package org.sonar.plugins.delphi.antlr.directives.exceptions;
  */
 public class CompilerDirectiveFactorySyntaxException extends Exception {
 
-    private static final long serialVersionUID = -1053134005528284924L;
+  private static final long serialVersionUID = -1053134005528284924L;
 
-    /**
-     * {@inheritDoc}
-     */
-    public CompilerDirectiveFactorySyntaxException(String msg) {
-        super(msg);
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public CompilerDirectiveFactorySyntaxException(String msg) {
+    super(msg);
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public CompilerDirectiveFactorySyntaxException() {
-        super();
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public CompilerDirectiveFactorySyntaxException() {
+    super();
+  }
 
 }

@@ -22,21 +22,21 @@
  */
 package org.sonar.plugins.delphi.codecoverage;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
 import org.junit.Test;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.DelphiTestUtils;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
 public class CodeCoverageSensorTest {
 
-    @Test
-    public void shouldExecuteOnProjectTest() {
-        Project project = mock(Project.class);
+  @Test
+  public void shouldExecuteOnProjectTest() {
+    Project project = mock(Project.class);
 
-        assertTrue(new CodeCoverageSensor(new Settings(), DelphiTestUtils.mockProjectHelper())
-                .shouldExecuteOnProject(project));
-    }
+    assertTrue(new CodeCoverageSensor(new Settings(), DelphiTestUtils.mockProjectHelper())
+      .shouldExecuteOnProject(project));
+  }
 }

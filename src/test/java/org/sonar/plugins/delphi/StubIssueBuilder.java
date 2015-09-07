@@ -29,54 +29,54 @@ import org.sonar.api.rule.RuleKey;
 
 public class StubIssueBuilder implements IssueBuilder {
 
-    private RuleKey ruleKey;
-    private Integer line;
-    private String message;
+  private RuleKey ruleKey;
+  private Integer line;
+  private String message;
 
-    @Override
-    public IssueBuilder ruleKey(RuleKey ruleKey) {
-        this.ruleKey = ruleKey;
-        return this;
-    }
+  @Override
+  public IssueBuilder ruleKey(RuleKey ruleKey) {
+    this.ruleKey = ruleKey;
+    return this;
+  }
 
-    @Override
-    public IssueBuilder line(Integer line) {
-        this.line = line;
-        return this;
-    }
+  @Override
+  public IssueBuilder line(Integer line) {
+    this.line = line;
+    return this;
+  }
 
-    @Override
-    public IssueBuilder message(String message) {
-        this.message = message;
-        return this;
-    }
+  @Override
+  public IssueBuilder message(String message) {
+    this.message = message;
+    return this;
+  }
 
-    @Override
-    public IssueBuilder severity(String severity) {
-        return this;
-    }
+  @Override
+  public IssueBuilder severity(String severity) {
+    return this;
+  }
 
-    @Override
-    public IssueBuilder reporter(String reporter) {
-        return this;
-    }
+  @Override
+  public IssueBuilder reporter(String reporter) {
+    return this;
+  }
 
-    @Override
-    public IssueBuilder effortToFix(Double d) {
-        return this;
-    }
+  @Override
+  public IssueBuilder effortToFix(Double d) {
+    return this;
+  }
 
-    @Override
-    public IssueBuilder attribute(String key, String value) {
-        return this;
-    }
+  @Override
+  public IssueBuilder attribute(String key, String value) {
+    return this;
+  }
 
-    @Override
-    public Issue build() {
-        return new DefaultIssue()
-                .setRuleKey(ruleKey)
-                .setLine(line)
-                .setMessage(message);
-    }
+  @Override
+  public Issue build() {
+    return new DefaultIssue()
+      .setRuleKey(ruleKey)
+      .setLine(line)
+      .setMessage(message);
+  }
 
 }

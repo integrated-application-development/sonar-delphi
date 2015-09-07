@@ -24,7 +24,6 @@ package org.sonar.plugins.delphi.antlr.ast;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.antlr.runtime.tree.CommonTree;
 import org.sonar.plugins.delphi.core.language.ClassFieldInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
@@ -35,103 +34,103 @@ import org.sonar.plugins.delphi.core.language.FunctionInterface;
  */
 public class DelphiLCOMNode extends CommonTree {
 
-    private int tag = 0;
-    private Object ref = null;
-    private List<DelphiLCOMNode> children = null;
+  private int tag = 0;
+  private Object ref = null;
+  private List<DelphiLCOMNode> children = null;
 
-    /**
-     * Construtor, reference will hold a function
-     * 
-     * @param function Function to hold
-     */
-    public DelphiLCOMNode(FunctionInterface function) {
-        ref = function;
-    }
+  /**
+   * Construtor, reference will hold a function
+   * 
+   * @param function Function to hold
+   */
+  public DelphiLCOMNode(FunctionInterface function) {
+    ref = function;
+  }
 
-    /**
-     * Construtor, reference will hold an class field
-     * 
-     * @param field Field to hold
-     */
-    public DelphiLCOMNode(ClassFieldInterface field) {
-        ref = field;
-    }
+  /**
+   * Construtor, reference will hold an class field
+   * 
+   * @param field Field to hold
+   */
+  public DelphiLCOMNode(ClassFieldInterface field) {
+    ref = field;
+  }
 
-    /**
-     * Set LOC4 value
-     * 
-     * @param value Value to set
-     */
-    public void setTag(int value) {
-        tag = value;
-    }
+  /**
+   * Set LOC4 value
+   * 
+   * @param value Value to set
+   */
+  public void setTag(int value) {
+    tag = value;
+  }
 
-    /**
-     * Gets LOC4 value
-     * 
-     * @return LOC4 value
-     */
-    public int getLOC4() {
-        return tag;
-    }
+  /**
+   * Gets LOC4 value
+   * 
+   * @return LOC4 value
+   */
+  public int getLOC4() {
+    return tag;
+  }
 
-    /**
-     * Gets the reference
-     * 
-     * @return Reference to function or class field
-     */
-    public Object getReference() {
-        return ref;
-    }
+  /**
+   * Gets the reference
+   * 
+   * @return Reference to function or class field
+   */
+  public Object getReference() {
+    return ref;
+  }
 
-    /**
-     * adds child node to current node
-     * 
-     * @param child child node
-     */
-    public void addChild(DelphiLCOMNode child) {
-        if (child == null) {
-            return;
-        }
-        if (children == null) {
-            children = new ArrayList<DelphiLCOMNode>();
-        }
-        children.add(child);
-        child.setParent(this);
+  /**
+   * adds child node to current node
+   * 
+   * @param child child node
+   */
+  public void addChild(DelphiLCOMNode child) {
+    if (child == null) {
+      return;
     }
+    if (children == null) {
+      children = new ArrayList<DelphiLCOMNode>();
+    }
+    children.add(child);
+    child.setParent(this);
+  }
 
-    @Override
-    public DelphiLCOMNode getChild(int index) {
-        if (children == null || index < 0 || index > children.size()) {
-            return null;
-        }
-        return children.get(index);
+  @Override
+  public DelphiLCOMNode getChild(int index) {
+    if (children == null || index < 0 || index > children.size()) {
+      return null;
     }
+    return children.get(index);
+  }
 
-    @Override
-    public int getChildCount() {
-        if (children == null) {
-            return 0;
-        }
-        return children.size();
+  @Override
+  public int getChildCount() {
+    if (children == null) {
+      return 0;
     }
+    return children.size();
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null) {
-            return false;
-        }
-        return ref.toString().equals(o.toString());
+  @Override
+  public boolean equals(Object o) {
+    if (o == null) {
+      return false;
     }
+    return ref.toString().equals(o.toString());
+  }
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
+  @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
 
-    @Override
-    public String toString() {
-        return ref.toString();
-    }
+  @Override
+  public String toString() {
+    return ref.toString();
+  }
 
 }

@@ -23,9 +23,7 @@
 package org.sonar.plugins.delphi.pmd.xml;
 
 import java.io.File;
-
 import javax.xml.stream.XMLStreamException;
-
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
 import org.codehaus.staxmate.in.SMInputCursor;
@@ -44,63 +42,64 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  */
 public class DelphiPmdXmlReportParser {
 
-    private final DelphiProjectHelper delphiProjectHelper;
-    private final ResourcePerspectives perspectives;
+  private final DelphiProjectHelper delphiProjectHelper;
+  private final ResourcePerspectives perspectives;
 
-    public DelphiPmdXmlReportParser(DelphiProjectHelper delphiProjectHelper, ResourcePerspectives perspectives) {
-        this.delphiProjectHelper = delphiProjectHelper;
-        this.perspectives = perspectives;
-    }
+  public DelphiPmdXmlReportParser(DelphiProjectHelper delphiProjectHelper, ResourcePerspectives perspectives) {
+    this.delphiProjectHelper = delphiProjectHelper;
+    this.perspectives = perspectives;
+  }
 
-    /**
-     * Parses XML file
-     * 
-     * @param xmlFile PMD xml file
-     */
-    public void parse(File xmlFile) {
-        StaxParser parser = new StaxParser(new StaxParser.XmlStreamHandler() {
+  /**
+   * Parses XML file
+   * 
+   * @param xmlFile PMD xml file
+   */
+  public void parse(File xmlFile) {
+    StaxParser parser = new StaxParser(new StaxParser.XmlStreamHandler() {
 
-            public void stream(SMHierarchicCursor rootCursor) throws XMLStreamException {
-                rootCursor.advance();
+      @Override
+      public void stream(SMHierarchicCursor rootCursor) throws XMLStreamException {
+        rootCursor.advance();
 
-                SMInputCursor fileCursor = rootCursor.descendantElementCursor("file");
-                while (fileCursor.getNext() != null) {
-                    String fileName = fileCursor.getAttrValue("name");
+        SMInputCursor fileCursor = rootCursor.descendantElementCursor("file");
+        while (fileCursor.getNext() != null) {
+          String fileName = fileCursor.getAttrValue("name");
 
-                    SMInputCursor violationCursor = fileCursor.descendantElementCursor("violation");
-                    while (violationCursor.getNext() != null) {
-                        String beginLine = violationCursor.getAttrValue("beginline");
-                        String ruleKey = violationCursor.getAttrValue("rule");
-                        String message = StringUtils.trim(violationCursor.collectDescendantText());
+          SMInputCursor violationCursor = fileCursor.descendantElementCursor("violation");
+          while (violationCursor.getNext() != null) {
+            String beginLine = violationCursor.getAttrValue("beginline");
+            String ruleKey = violationCursor.getAttrValue("rule");
+            String message = StringUtils.trim(violationCursor.collectDescendantText());
 
-                        addIssue(ruleKey, fileName, Integer.parseInt(beginLine), message);
-                    }
-                }
-            }
-        });
-
-        try {
-            parser.parse(xmlFile);
-        } catch (XMLStreamException e) {
-            DelphiUtils.LOG.error("Error parsing file : {}", xmlFile);
+            addIssue(ruleKey, fileName, Integer.parseInt(beginLine), message);
+          }
         }
+      }
+    });
+
+    try {
+      parser.parse(xmlFile);
+    } catch (XMLStreamException e) {
+      DelphiUtils.LOG.error("Error parsing file : {}", xmlFile);
+    }
+  }
+
+  private void addIssue(String ruleKey, String fileName, Integer line, String message) {
+
+    DelphiUtils.LOG.debug("PMD Violation - rule: " + ruleKey + " file: " + fileName + " message: " + message);
+
+    InputFile inputFile = delphiProjectHelper.getFile(fileName);
+
+    Issuable issuable = perspectives.as(Issuable.class, inputFile);
+    if (issuable != null) {
+      Issue issue = issuable.newIssueBuilder()
+        .ruleKey(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, ruleKey))
+        .line(line)
+        .message(message)
+        .build();
+      issuable.addIssue(issue);
     }
 
-    private void addIssue(String ruleKey, String fileName, Integer line, String message) {
-
-        DelphiUtils.LOG.debug("PMD Violation - rule: " + ruleKey + " file: " + fileName + " message: " + message);
-
-        InputFile inputFile = delphiProjectHelper.getFile(fileName);
-
-        Issuable issuable = perspectives.as(Issuable.class, inputFile);
-        if (issuable != null) {
-            Issue issue = issuable.newIssueBuilder()
-                    .ruleKey(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, ruleKey))
-                    .line(line)
-                    .message(message)
-                    .build();
-            issuable.addIssue(issue);
-        }
-
-    }
+  }
 }

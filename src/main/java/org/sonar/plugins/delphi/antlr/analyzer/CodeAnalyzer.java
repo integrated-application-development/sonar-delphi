@@ -27,49 +27,49 @@ package org.sonar.plugins.delphi.antlr.analyzer;
  */
 public abstract class CodeAnalyzer {
 
-    private CodeAnalyzer successor;
+  private CodeAnalyzer successor;
 
-    /**
-     * add new CodeAnalyzer to chain
-     * 
-     * @param successor code analyzer we put into chain
-     * @return successor
-     */
-    public CodeAnalyzer chain(CodeAnalyzer successor) {
-        this.successor = successor;
-        return successor;
+  /**
+   * add new CodeAnalyzer to chain
+   * 
+   * @param successor code analyzer we put into chain
+   * @return successor
+   */
+  public CodeAnalyzer chain(CodeAnalyzer successor) {
+    this.successor = successor;
+    return successor;
+  }
+
+  /**
+   * analyes code tree with a set of chaied analyzers
+   * 
+   * @param codeTree code tree to analyze
+   * @param results code analysis results holder
+   */
+  public void analyze(CodeTree codeTree, CodeAnalysisResults results) {
+    if (canAnalyze(codeTree)) {
+      doAnalyze(codeTree, results);
     }
-
-    /**
-     * analyes code tree with a set of chaied analyzers
-     * 
-     * @param codeTree code tree to analyze
-     * @param results code analysis results holder
-     */
-    public void analyze(CodeTree codeTree, CodeAnalysisResults results) {
-        if (canAnalyze(codeTree)) {
-            doAnalyze(codeTree, results);
-        }
-        if (successor != null) {
-            successor.analyze(codeTree, results);
-        }
+    if (successor != null) {
+      successor.analyze(codeTree, results);
     }
+  }
 
-    protected CodeAnalyzer getSuccesor() {
-        return successor;
-    }
+  protected CodeAnalyzer getSuccesor() {
+    return successor;
+  }
 
-    protected boolean hasSucessor() {
-        return successor != null;
-    }
+  protected boolean hasSucessor() {
+    return successor != null;
+  }
 
-    protected abstract void doAnalyze(CodeTree codeTree, CodeAnalysisResults results);
+  protected abstract void doAnalyze(CodeTree codeTree, CodeAnalysisResults results);
 
-    /**
-     * can a current code analyzer analyze this code tree?
-     * 
-     * @param codeTree code tree to check
-     * @return true if can analyze, false otherwise
-     */
-    public abstract boolean canAnalyze(CodeTree codeTree);
+  /**
+   * can a current code analyzer analyze this code tree?
+   * 
+   * @param codeTree code tree to check
+   * @return true if can analyze, false otherwise
+   */
+  public abstract boolean canAnalyze(CodeTree codeTree);
 }

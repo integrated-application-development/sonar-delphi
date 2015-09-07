@@ -25,7 +25,6 @@ package org.sonar.plugins.delphi.codecoverage;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
@@ -42,117 +41,119 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  */
 public class CodeCoverageSensor implements Sensor
 {
-    private static final String JDBC_PROPERTY_KEYS[] = {
-            DelphiPlugin.JDBC_DRIVER_KEY,
-            DelphiPlugin.JDBC_URL_KEY,
-            DelphiPlugin.JDBC_USER_KEY,
-            DelphiPlugin.JDBC_PASSWORD_KEY,
-            DelphiPlugin.JDBC_DB_TABLE_PREFIX_KEY};
+  private static final String JDBC_PROPERTY_KEYS[] = {
+    DelphiPlugin.JDBC_DRIVER_KEY,
+    DelphiPlugin.JDBC_URL_KEY,
+    DelphiPlugin.JDBC_USER_KEY,
+    DelphiPlugin.JDBC_PASSWORD_KEY,
+    DelphiPlugin.JDBC_DB_TABLE_PREFIX_KEY};
 
-    private static final String JDBC_DEFAULT_VALUES[] = {
-            "net.sourceforge.jtds.jdbc.Driver",
-            "",
-            "",
-            "",
-            "",
-            ""};
+  private static final String JDBC_DEFAULT_VALUES[] = {
+    "net.sourceforge.jtds.jdbc.Driver",
+    "",
+    "",
+    "",
+    "",
+    ""};
 
-    private Map<String, String> jdbcProperties = new HashMap<String, String>();
-    private CodeCoverageTool usedCodeCoverageTool = CodeCoverageTool.None;
-    private File codeCoverageFile;
+  private Map<String, String> jdbcProperties = new HashMap<String, String>();
+  private CodeCoverageTool usedCodeCoverageTool = CodeCoverageTool.None;
+  private File codeCoverageFile;
 
-    private final DelphiProjectHelper delphiProjectHelper;
+  private final DelphiProjectHelper delphiProjectHelper;
 
-    public CodeCoverageSensor(Settings settings, DelphiProjectHelper delphiProjectHelper) {
-        this.delphiProjectHelper = delphiProjectHelper;
-        readJdbcFromConfiguration(settings);
-        readCoverageToolFromConfiguration(settings);
+  public CodeCoverageSensor(Settings settings, DelphiProjectHelper delphiProjectHelper) {
+    this.delphiProjectHelper = delphiProjectHelper;
+    readJdbcFromConfiguration(settings);
+    readCoverageToolFromConfiguration(settings);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean shouldExecuteOnProject(Project project) {
+    return delphiProjectHelper.shouldExecuteOnProject();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void analyse(Project project, SensorContext context) {
+
+    if (usedCodeCoverageTool.equals(CodeCoverageTool.None)) {
+      DelphiUtils.LOG.info("Skipping code coverage.");
+      return;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public boolean shouldExecuteOnProject(Project project) {
-        return delphiProjectHelper.shouldExecuteOnProject();
+    DelphiCodeCoverageParser parser = createParser(usedCodeCoverageTool);
+    if (parser != null) {
+      parser.parse(context);
+    }
+  }
+
+  private void readCoverageToolFromConfiguration(Settings settings) {
+    String value = settings.getString(DelphiPlugin.CODECOVERAGE_TOOL_KEY);
+    usedCodeCoverageTool = parseCodeCoverageToolUsed(value);
+    DelphiUtils.LOG.info("Code coverage tool selected: " + usedCodeCoverageTool.name());
+
+    String fileName = StringUtils.defaultString(settings.getString(DelphiPlugin.CODECOVERAGE_REPORT_KEY), "");
+    codeCoverageFile = new File(fileName);
+  }
+
+  private void readJdbcFromConfiguration(Settings settings) {
+    for (int i = 0; i < JDBC_PROPERTY_KEYS.length; ++i) {
+      String jdbcProperty = StringUtils.defaultIfBlank(settings.getString(JDBC_PROPERTY_KEYS[i]),
+        JDBC_DEFAULT_VALUES[i]);
+      jdbcProperties.put(JDBC_PROPERTY_KEYS[i], jdbcProperty);
+    }
+  }
+
+  private CodeCoverageTool parseCodeCoverageToolUsed(String usedTool) {
+    if ("aqtime".equals(usedTool)) {
+      return CodeCoverageTool.AQTime;
+    }
+    if ("delphi code coverage".equals(usedTool)) {
+      return CodeCoverageTool.DelphiCodeCoverage;
+    }
+    return CodeCoverageTool.None;
+  }
+
+  private boolean areJdbcPropertiesValid() {
+    for (int i = 0; i < JDBC_PROPERTY_KEYS.length - 1; i++) { // don't
+                                                              // include db
+                                                              // table
+                                                              // prefix
+      if (StringUtils.isEmpty(jdbcProperties.get(JDBC_PROPERTY_KEYS[i]))) {
+        DelphiUtils.LOG.warn("Empty jdbc property " + JDBC_PROPERTY_KEYS[i] + ", code coverage skipped.");
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private DelphiCodeCoverageParser createParser(CodeCoverageTool usedTool) {
+    if (usedTool.equals(CodeCoverageTool.AQTime)) {
+      if (areJdbcPropertiesValid()) {
+        AQTimeCoverageParser parser = new AQTimeCoverageParser(delphiProjectHelper);
+        parser.setConnectionProperties(jdbcProperties);
+
+        return parser;
+      }
+      return null;
+    }
+    if (usedTool.equals(CodeCoverageTool.DelphiCodeCoverage)) {
+      DelphiCodeCoverageParser parser = new DelphiCodeCoverageToolParser(codeCoverageFile, delphiProjectHelper);
+      return parser;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void analyse(Project project, SensorContext context) {
+    return null;
+  }
 
-        if (usedCodeCoverageTool.equals(CodeCoverageTool.None)) {
-            DelphiUtils.LOG.info("Skipping code coverage.");
-            return;
-        }
-
-        DelphiCodeCoverageParser parser = createParser(usedCodeCoverageTool);
-        if (parser != null) {
-            parser.parse(context);
-        }
-    }
-
-    private void readCoverageToolFromConfiguration(Settings settings) {
-        String value = settings.getString(DelphiPlugin.CODECOVERAGE_TOOL_KEY);
-        usedCodeCoverageTool = parseCodeCoverageToolUsed(value);
-        DelphiUtils.LOG.info("Code coverage tool selected: " + usedCodeCoverageTool.name());
-
-        String fileName = StringUtils.defaultString(settings.getString(DelphiPlugin.CODECOVERAGE_REPORT_KEY), "");
-        codeCoverageFile = new File(fileName);
-    }
-
-    private void readJdbcFromConfiguration(Settings settings) {
-        for (int i = 0; i < JDBC_PROPERTY_KEYS.length; ++i) {
-            String jdbcProperty = StringUtils.defaultIfBlank(settings.getString(JDBC_PROPERTY_KEYS[i]),
-                    JDBC_DEFAULT_VALUES[i]);
-            jdbcProperties.put(JDBC_PROPERTY_KEYS[i], jdbcProperty);
-        }
-    }
-
-    private CodeCoverageTool parseCodeCoverageToolUsed(String usedTool) {
-        if ("aqtime".equals(usedTool)) {
-            return CodeCoverageTool.AQTime;
-        }
-        if ("delphi code coverage".equals(usedTool)) {
-            return CodeCoverageTool.DelphiCodeCoverage;
-        }
-        return CodeCoverageTool.None;
-    }
-
-    private boolean areJdbcPropertiesValid() {
-        for (int i = 0; i < JDBC_PROPERTY_KEYS.length - 1; i++) { // don't
-                                                                  // include db
-                                                                  // table
-                                                                  // prefix
-            if (StringUtils.isEmpty(jdbcProperties.get(JDBC_PROPERTY_KEYS[i]))) {
-                DelphiUtils.LOG.warn("Empty jdbc property " + JDBC_PROPERTY_KEYS[i] + ", code coverage skipped.");
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private DelphiCodeCoverageParser createParser(CodeCoverageTool usedTool) {
-        if (usedTool.equals(CodeCoverageTool.AQTime)) {
-            if (areJdbcPropertiesValid()) {
-                AQTimeCoverageParser parser = new AQTimeCoverageParser(delphiProjectHelper);
-                parser.setConnectionProperties(jdbcProperties);
-
-                return parser;
-            }
-            return null;
-        }
-        if (usedTool.equals(CodeCoverageTool.DelphiCodeCoverage)) {
-            DelphiCodeCoverageParser parser = new DelphiCodeCoverageToolParser(codeCoverageFile, delphiProjectHelper);
-            return parser;
-        }
-
-        return null;
-    }
-
-    @Override
-    public String toString() {
-        return "Delphi Code Coverage Sensor";
-    }
+  @Override
+  public String toString() {
+    return "Delphi Code Coverage Sensor";
+  }
 
 }

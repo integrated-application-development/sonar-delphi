@@ -30,23 +30,23 @@ import org.sonar.plugins.delphi.antlr.sanitizer.SourceResolver;
  */
 public class SourceFixerResolver extends SourceResolver {
 
-    @Override
-    protected void doResolve(SourceResolverResults results) {
-        results.setFileData(fixSource(results.getFileData()));
-    }
+  @Override
+  protected void doResolve(SourceResolverResults results) {
+    results.setFileData(fixSource(results.getFileData()));
+  }
 
-    /**
-     * Fixes source
-     * 
-     * @param fileData file character data to fix
-     * @return String containing fixed source code
-     */
-    private StringBuilder fixSource(StringBuilder fileData) {
-        String fixed = fileData.toString();
-        fixed = fixed.replaceAll(":", " :"); // replace ':' with ' :'
-        fixed = fixed.replaceAll("\\.\\.", " .. "); // replace '..' with ' .. '
-        fixed = fixed.concat("\n"); // adds '\n' before EOF
-        return new StringBuilder(fixed);
-    }
+  /**
+   * Fixes source
+   * 
+   * @param fileData file character data to fix
+   * @return String containing fixed source code
+   */
+  private StringBuilder fixSource(StringBuilder fileData) {
+    String fixed = fileData.toString();
+    fixed = fixed.replaceAll(":", " :"); // replace ':' with ' :'
+    fixed = fixed.replaceAll("\\.\\.", " .. "); // replace '..' with ' .. '
+    fixed = fixed.concat("\n"); // adds '\n' before EOF
+    return new StringBuilder(fixed);
+  }
 
 }

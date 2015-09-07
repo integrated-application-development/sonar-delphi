@@ -29,21 +29,21 @@ import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
  */
 public class IfDirective extends CommonCompilerDirective {
 
-    private static final String DIRECTIVE_NAME = "if";
+  private static final String DIRECTIVE_NAME = "if";
 
-    /**
-     * ctor
-     * 
-     * @param item directive item
-     * @param firstCharPos first character position
-     * @param lastCharPos last character position
-     */
-    public IfDirective(String item, int firstCharPos, int lastCharPos) {
-        super(DIRECTIVE_NAME, item, firstCharPos, lastCharPos);
-    }
+  /**
+   * ctor
+   * 
+   * @param item directive item
+   * @param firstCharPos first character position
+   * @param lastCharPos last character position
+   */
+  public IfDirective(String item, int firstCharPos, int lastCharPos) {
+    super(DIRECTIVE_NAME, item, firstCharPos, lastCharPos);
+  }
 
-    @Override
-    public CompilerDirectiveType getType() {
-        return CompilerDirectiveType.IF;
-    }
+  @Override
+  public CompilerDirectiveType getType() {
+    return CompilerDirectiveType.IF;
+  }
 }

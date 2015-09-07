@@ -24,7 +24,6 @@ package org.sonar.plugins.delphi.core.language.verifiers;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
@@ -38,68 +37,68 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
  */
 public class CalledFunctionVerifier {
 
-    private boolean isUnresolved = true;
-    private CodeAnalysisResults results;
-    private FunctionInterface calledFunction = null;
+  private boolean isUnresolved = true;
+  private CodeAnalysisResults results;
+  private FunctionInterface calledFunction = null;
 
-    /**
-     * ctor
-     * 
-     * @param results
-     */
-    public CalledFunctionVerifier(CodeAnalysisResults results) {
-        if (results == null) {
-            throw new IllegalArgumentException("CalledFunctionVeifyer ctor param 'results' cannot be null.");
+  /**
+   * ctor
+   * 
+   * @param results
+   */
+  public CalledFunctionVerifier(CodeAnalysisResults results) {
+    if (results == null) {
+      throw new IllegalArgumentException("CalledFunctionVeifyer ctor param 'results' cannot be null.");
+    }
+    this.results = results;
+  }
+
+  public boolean verify(Tree node) {
+    CommonTree nextNode = (CommonTree) node.getParent().getChild(node.getChildIndex() + 1);
+
+    // if we are on a ident token and it is not last
+    if (node.getType() == LexerMetrics.IDENT.toMetrics()
+      && nextNode != null
+      && (nextNode.getType() == LexerMetrics.LPAREN.toMetrics() || nextNode.getType() == LexerMetrics.SEMI
+        .toMetrics())) {
+      String functionName = node.getText().toLowerCase();
+      List<UnitInterface> unitsToLook = new ArrayList<UnitInterface>();
+      unitsToLook.add(results.getActiveUnit()); // first we look in
+                                                // current unit for
+                                                // function reference
+      unitsToLook.addAll(results.getActiveUnit().getIncludedUnits(results.getCachedUnits()));
+
+      // looking for called function units
+      for (UnitInterface unit : unitsToLook) {
+        FunctionInterface[] functions = unit.getAllFunctions();
+        for (FunctionInterface func : functions) {
+          if (func.getShortName().equalsIgnoreCase(functionName)) {
+            calledFunction = func;
+            isUnresolved = false;
+            return true;
+          }
         }
-        this.results = results;
+      }
+
+      calledFunction = new DelphiFunction(node.getText().toLowerCase()); // create
+                                                                         // a
+                                                                         // new
+                                                                         // unresolved
+                                                                         // function
+      isUnresolved = true; // no function found, but this was a function
+                           // call
+      return true; // so we return true
     }
 
-    public boolean verify(Tree node) {
-        CommonTree nextNode = (CommonTree) node.getParent().getChild(node.getChildIndex() + 1);
+    return false; // not a function call (not like "foo(args);" or "foo;"
+  }
 
-        // if we are on a ident token and it is not last
-        if (node.getType() == LexerMetrics.IDENT.toMetrics()
-                && nextNode != null
-                && (nextNode.getType() == LexerMetrics.LPAREN.toMetrics() || nextNode.getType() == LexerMetrics.SEMI
-                        .toMetrics())) {
-            String functionName = node.getText().toLowerCase();
-            List<UnitInterface> unitsToLook = new ArrayList<UnitInterface>();
-            unitsToLook.add(results.getActiveUnit()); // first we look in
-                                                      // current unit for
-                                                      // function reference
-            unitsToLook.addAll(results.getActiveUnit().getIncludedUnits(results.getCachedUnits()));
+  public FunctionInterface fetchCalledFunction() {
+    return calledFunction;
+  }
 
-            // looking for called function units
-            for (UnitInterface unit : unitsToLook) {
-                FunctionInterface[] functions = unit.getAllFunctions();
-                for (FunctionInterface func : functions) {
-                    if (func.getShortName().equalsIgnoreCase(functionName)) {
-                        calledFunction = func;
-                        isUnresolved = false;
-                        return true;
-                    }
-                }
-            }
-
-            calledFunction = new DelphiFunction(node.getText().toLowerCase()); // create
-                                                                               // a
-                                                                               // new
-                                                                               // unresolved
-                                                                               // function
-            isUnresolved = true; // no function found, but this was a function
-                                 // call
-            return true; // so we return true
-        }
-
-        return false; // not a function call (not like "foo(args);" or "foo;"
-    }
-
-    public FunctionInterface fetchCalledFunction() {
-        return calledFunction;
-    }
-
-    public boolean isUnresolvedFunctionCall() {
-        return isUnresolved;
-    }
+  public boolean isUnresolvedFunctionCall() {
+    return isUnresolved;
+  }
 
 }

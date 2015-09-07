@@ -24,5 +24,5 @@ package org.sonar.plugins.delphi.codecoverage;
 
 public enum CodeCoverageTool
 {
-    None, DelphiCodeCoverage, AQTime;
+  None, DelphiCodeCoverage, AQTime;
 }

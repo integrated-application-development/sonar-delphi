@@ -24,7 +24,6 @@ package org.sonar.plugins.delphi.pmd.profile;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
-
 import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.utils.ValidationMessages;
@@ -35,25 +34,25 @@ import org.sonar.plugins.delphi.core.DelphiLanguage;
  */
 public class DefaultDelphiProfile extends ProfileDefinition {
 
-    private DelphiPmdProfileImporter importer;
+  private DelphiPmdProfileImporter importer;
 
-    /**
-     * ctor
-     * 
-     * @param importer delphi pmd profile importer provided by Sonar
-     */
-    public DefaultDelphiProfile(DelphiPmdProfileImporter importer) {
-        this.importer = importer;
-    }
+  /**
+   * ctor
+   * 
+   * @param importer delphi pmd profile importer provided by Sonar
+   */
+  public DefaultDelphiProfile(DelphiPmdProfileImporter importer) {
+    this.importer = importer;
+  }
 
-    @Override
-    public RulesProfile createProfile(ValidationMessages messages) {
-        Reader reader = new InputStreamReader(getClass().getResourceAsStream(
-                "/org/sonar/plugins/delphi/pmd/default-delphi-profile.xml"));
-        RulesProfile profile = importer.importProfile(reader, messages);
-        profile.setLanguage(DelphiLanguage.KEY);
-        profile.setName("Delphi Default Profile");
-        return profile;
-    }
+  @Override
+  public RulesProfile createProfile(ValidationMessages messages) {
+    Reader reader = new InputStreamReader(getClass().getResourceAsStream(
+      "/org/sonar/plugins/delphi/pmd/default-delphi-profile.xml"));
+    RulesProfile profile = importer.importProfile(reader, messages);
+    profile.setLanguage(DelphiLanguage.KEY);
+    profile.setName("Delphi Default Profile");
+    return profile;
+  }
 
 }

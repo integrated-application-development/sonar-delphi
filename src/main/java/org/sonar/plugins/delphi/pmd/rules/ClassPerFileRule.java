@@ -30,10 +30,10 @@ package org.sonar.plugins.delphi.pmd.rules;
  */
 public class ClassPerFileRule extends CountRule {
 
-    @Override
-    protected void init() {
-        super.init();
-        setStringToSearch("class");
-    }
+  @Override
+  protected void init() {
+    super.init();
+    setStringToSearch("class");
+  }
 
 }

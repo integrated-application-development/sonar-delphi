@@ -34,39 +34,39 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 @XStreamAlias("property")
 public class Property {
 
-    @XStreamAsAttribute
-    private String name;
+  @XStreamAsAttribute
+  private String name;
 
-    private String value;
+  private String value;
 
-    /**
-     * Default ctor
-     */
-    public Property() {
-    }
+  /**
+   * Default ctor
+   */
+  public Property() {
+  }
 
-    /**
-     * ctor
-     *
-     * @param name property name
-     * @param value property value
-     */
-    public Property(String name, String value) {
-        this.name = name;
-        this.value = value;
-    }
+  /**
+   * ctor
+   *
+   * @param name property name
+   * @param value property value
+   */
+  public Property(String name, String value) {
+    this.name = name;
+    this.value = value;
+  }
 
-    /**
-     * @return property name
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   * @return property name
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * @return property value
-     */
-    public String getValue() {
-        return value;
-    }
+  /**
+   * @return property value
+   */
+  public String getValue() {
+    return value;
+  }
 }

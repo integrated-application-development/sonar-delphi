@@ -22,8 +22,6 @@
  */
 package org.sonar.plugins.delphi.metrics;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
@@ -31,20 +29,22 @@ import org.sonar.plugins.delphi.antlr.analyzer.DelphiASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
+import static org.junit.Assert.*;
+
 public class LCOM4MetricsTest {
 
-    private final static String FILE_NAME = "/org/sonar/plugins/delphi/metrics/LCOM4MetricsTest.pas";
+  private final static String FILE_NAME = "/org/sonar/plugins/delphi/metrics/LCOM4MetricsTest.pas";
 
-    @Test
-    public void analyseTest() throws Exception {
-        DelphiAST ast = new DelphiAST(DelphiUtils.getResource(FILE_NAME));
-        ASTAnalyzer analyzer = new DelphiASTAnalyzer(DelphiTestUtils.mockProjectHelper());
-        analyzer.analyze(ast);
+  @Test
+  public void analyseTest() throws Exception {
+    DelphiAST ast = new DelphiAST(DelphiUtils.getResource(FILE_NAME));
+    ASTAnalyzer analyzer = new DelphiASTAnalyzer(DelphiTestUtils.mockProjectHelper());
+    analyzer.analyze(ast);
 
-        LCOM4Metrics metric = new LCOM4Metrics(null);
-        metric.analyse(null, null, analyzer.getResults().getClasses(), analyzer.getResults().getFunctions(), null);
+    LCOM4Metrics metric = new LCOM4Metrics(null);
+    metric.analyse(null, null, analyzer.getResults().getClasses(), analyzer.getResults().getFunctions(), null);
 
-        double LOC4 = metric.getMetric("loc4");
-        assertEquals(3.0, LOC4, 0.0);
-    }
+    double LOC4 = metric.getMetric("loc4");
+    assertEquals(3.0, LOC4, 0.0);
+  }
 }

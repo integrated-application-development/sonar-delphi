@@ -4,3 +4,4 @@ target
 .settings
 /.README.md.html
 /.TODO.md.html
+/hot-deploy.bat

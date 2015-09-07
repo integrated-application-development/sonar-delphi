@@ -25,7 +25,6 @@ package org.sonar.plugins.delphi.core.helpers;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Settings;
@@ -38,78 +37,78 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  */
 public class DelphiFileHelper {
 
-    private final Settings settings;
-    private final FileSystem fs;
+  private final Settings settings;
+  private final FileSystem fs;
 
-    /**
-     * ctor
-     * 
-     * @param settings Settings
-     */
-    public DelphiFileHelper(Settings settings, FileSystem fs) {
-        this.settings = settings;
-        this.fs = fs;
+  /**
+   * ctor
+   * 
+   * @param settings Settings
+   */
+  public DelphiFileHelper(Settings settings, FileSystem fs) {
+    this.settings = settings;
+    this.fs = fs;
+  }
+
+  /**
+   * Is file in excluded list?
+   * 
+   * @param delphiFile File to check
+   * @param excludedSources Excluded paths
+   * @return True if file is excluded, false otherwise
+   */
+  public boolean isExcluded(String fileName, List<File> excludedSources) {
+    if (excludedSources == null) {
+      return false;
     }
-
-    /**
-     * Is file in excluded list?
-     * 
-     * @param delphiFile File to check
-     * @param excludedSources Excluded paths
-     * @return True if file is excluded, false otherwise
-     */
-    public boolean isExcluded(String fileName, List<File> excludedSources) {
-        if (excludedSources == null) {
-            return false;
-        }
-        for (File excludedDir : excludedSources) {
-            String normalizedFileName = DelphiUtils.normalizeFileName(fileName.toLowerCase());
-            String excludedDirNormalizedPath = DelphiUtils.normalizeFileName(excludedDir.getAbsolutePath()
-                    .toLowerCase());
-            if (normalizedFileName.startsWith(excludedDirNormalizedPath)) {
-                return true;
-            }
-        }
-        return false;
+    for (File excludedDir : excludedSources) {
+      String normalizedFileName = DelphiUtils.normalizeFileName(fileName.toLowerCase());
+      String excludedDirNormalizedPath = DelphiUtils.normalizeFileName(excludedDir.getAbsolutePath()
+        .toLowerCase());
+      if (normalizedFileName.startsWith(excludedDirNormalizedPath)) {
+        return true;
+      }
     }
+    return false;
+  }
 
-    /**
-     * Is file excluded?
-     * 
-     * @param delphiFile File to check
-     * @param excludedSources List of excluded sources
-     * @return True if file is excluded, false otherwise
-     */
-    public boolean isExcluded(File delphiFile, List<File> excludedSources) {
-        return isExcluded(delphiFile.getAbsolutePath(), excludedSources);
+  /**
+   * Is file excluded?
+   * 
+   * @param delphiFile File to check
+   * @param excludedSources List of excluded sources
+   * @return True if file is excluded, false otherwise
+   */
+  public boolean isExcluded(File delphiFile, List<File> excludedSources) {
+    return isExcluded(delphiFile.getAbsolutePath(), excludedSources);
+  }
+
+  /**
+   * Gets code coverage excluded directories
+   * 
+   * @return List of excluded directories, empty list if none
+   */
+  public List<File> getCodeCoverageExcludedDirectories(Project project) {
+    List<File> list = new ArrayList<File>();
+
+    String[] sources = settings.getStringArray(DelphiPlugin.CC_EXCLUDED_KEY);
+    if (sources == null || sources.length == 0) {
+      return list;
     }
-
-    /**
-     * Gets code coverage excluded directories
-     * 
-     * @return List of excluded directories, empty list if none
-     */
-    public List<File> getCodeCoverageExcludedDirectories(Project project) {
-        List<File> list = new ArrayList<File>();
-
-        String[] sources = settings.getStringArray(DelphiPlugin.CC_EXCLUDED_KEY);
-        if (sources == null || sources.length == 0) {
-            return list;
-        }
-        for (String path : sources) {
-            if (StringUtils.isEmpty(path)) {
-                continue;
-            }
-            File excluded = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
-            if (!excluded.exists()) {
-                DelphiUtils.LOG.warn("Excluded code coverage path does not exist: " + excluded.getAbsolutePath());
-            } else if (!excluded.isDirectory()) {
-                DelphiUtils.LOG.warn("Excluded code coverage path is not a directory: " + excluded.getAbsolutePath());
-            } else {
-                list.add(excluded);
-            }
-        }
-        return list;
+    for (String path : sources) {
+      if (StringUtils.isEmpty(path)) {
+        continue;
+      }
+      File excluded = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
+      if (!excluded.exists()) {
+        DelphiUtils.LOG.warn("Excluded code coverage path does not exist: " + excluded.getAbsolutePath());
+      } else if (!excluded.isDirectory()) {
+        DelphiUtils.LOG.warn("Excluded code coverage path is not a directory: " + excluded.getAbsolutePath());
+      } else {
+        list.add(excluded);
+      }
     }
+    return list;
+  }
 
 }

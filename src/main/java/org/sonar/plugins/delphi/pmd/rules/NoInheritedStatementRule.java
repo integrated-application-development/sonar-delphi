@@ -33,43 +33,43 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class NoInheritedStatementRule extends DelphiRule {
 
-    private static final int MAX_LOOK_AHEAD = 3;
+  private static final int MAX_LOOK_AHEAD = 3;
 
-    @Override
-    public Object visit(DelphiPMDNode node, Object data) {
-        String lookFor = getStringProperty(LOOK_FOR);
-        if (StringUtils.isEmpty(lookFor)) {
-            return data;
-        }
-
-        if (node.getText().equalsIgnoreCase(lookFor)) {
-            Tree beginNode = null;
-            for (int i = node.getChildIndex() + 1; i < node.getChildIndex() + MAX_LOOK_AHEAD
-                    && i < node.getParent().getChildCount(); ++i) // look
-                                                                  // for
-                                                                  // begin
-            {
-                if (node.getParent().getChild(i).getType() == DelphiLexer.BEGIN) {
-                    beginNode = node.getParent().getChild(i);
-                    break;
-                }
-            }
-            if (beginNode != null) {
-                boolean wasInherited = false;
-                for (int c = 0; c < beginNode.getChildCount(); c++) {
-                    if (beginNode.getChild(c).getType() == DelphiLexer.INHERITED) {
-                        wasInherited = true;
-                        break;
-                    }
-                }
-
-                if (!wasInherited) {
-                    addViolation(data, node);
-                }
-            }
-        }
-
-        return data;
+  @Override
+  public Object visit(DelphiPMDNode node, Object data) {
+    String lookFor = getStringProperty(LOOK_FOR);
+    if (StringUtils.isEmpty(lookFor)) {
+      return data;
     }
+
+    if (node.getText().equalsIgnoreCase(lookFor)) {
+      Tree beginNode = null;
+      for (int i = node.getChildIndex() + 1; i < node.getChildIndex() + MAX_LOOK_AHEAD
+        && i < node.getParent().getChildCount(); ++i) // look
+                                                      // for
+                                                      // begin
+      {
+        if (node.getParent().getChild(i).getType() == DelphiLexer.BEGIN) {
+          beginNode = node.getParent().getChild(i);
+          break;
+        }
+      }
+      if (beginNode != null) {
+        boolean wasInherited = false;
+        for (int c = 0; c < beginNode.getChildCount(); c++) {
+          if (beginNode.getChild(c).getType() == DelphiLexer.INHERITED) {
+            wasInherited = true;
+            break;
+          }
+        }
+
+        if (!wasInherited) {
+          addViolation(data, node);
+        }
+      }
+    }
+
+    return data;
+  }
 
 }

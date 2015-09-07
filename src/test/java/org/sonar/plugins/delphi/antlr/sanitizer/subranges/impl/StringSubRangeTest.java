@@ -22,34 +22,34 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRange;
 
+import static org.junit.Assert.*;
+
 public class StringSubRangeTest {
 
-    private SubRange range;
-    private String str;
+  private SubRange range;
+  private String str;
 
-    @Before
-    public void setup() {
-        str = "!This is a test string!";
-        range = new StringSubRange(0, str.length(), str);
-    }
+  @Before
+  public void setup() {
+    str = "!This is a test string!";
+    range = new StringSubRange(0, str.length(), str);
+  }
 
-    @Test
-    public void toStringTest() {
-        assertEquals("[0, 23] !This is a test string!", range.toString());
+  @Test
+  public void toStringTest() {
+    assertEquals("[0, 23] !This is a test string!", range.toString());
 
-        range.setBegin(0);
-        range.setEnd(10);
-        assertEquals("[0, 10] !This is a", range.toString());
+    range.setBegin(0);
+    range.setEnd(10);
+    assertEquals("[0, 10] !This is a", range.toString());
 
-        range.setEnd(15);
-        range.setBegin(11);
-        assertEquals("[11, 15] test", range.toString());
-    }
+    range.setEnd(15);
+    range.setBegin(11);
+    assertEquals("[11, 15] test", range.toString());
+  }
 
 }

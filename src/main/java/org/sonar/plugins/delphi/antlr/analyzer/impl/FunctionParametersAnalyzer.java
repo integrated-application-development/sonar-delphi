@@ -24,7 +24,6 @@ package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalyzer;
@@ -39,63 +38,63 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiArgument;
  */
 public class FunctionParametersAnalyzer extends CodeAnalyzer {
 
-    public static final String UNTYPED_PARAMETER_NAME = "UntypedParameter";
+  public static final String UNTYPED_PARAMETER_NAME = "UntypedParameter";
 
-    @Override
-    protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
-        StringBuilder argumentTypes = new StringBuilder("(");
+  @Override
+  protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
+    StringBuilder argumentTypes = new StringBuilder("(");
 
-        FunctionInterface activeFunction = results.getActiveFunction();
-        List<ArgumentInterface> arguments = getFunctionArguments(codeTree);
-        for (ArgumentInterface argument : arguments) {
-            activeFunction.addArgument(argument);
-            argumentTypes.append(argument.getType() + "; ");
-        }
-
-        argumentTypes.append(")");
-        activeFunction.setLongName(activeFunction.getName() + argumentTypes.toString());
+    FunctionInterface activeFunction = results.getActiveFunction();
+    List<ArgumentInterface> arguments = getFunctionArguments(codeTree);
+    for (ArgumentInterface argument : arguments) {
+      activeFunction.addArgument(argument);
+      argumentTypes.append(argument.getType() + "; ");
     }
 
-    private List<ArgumentInterface> getFunctionArguments(CodeTree codeTree) {
-        List<ArgumentInterface> result = new ArrayList<ArgumentInterface>();
-        Tree parentNode = codeTree.getCurrentCodeNode().getNode();
+    argumentTypes.append(")");
+    activeFunction.setLongName(activeFunction.getName() + argumentTypes.toString());
+  }
 
-        for (int i = 0; i < parentNode.getChildCount(); ++i) {
-            Tree childNode = parentNode.getChild(i);
-            int type = childNode.getType();
-            if (type != LexerMetrics.VARIABLE_IDENTS.toMetrics()) {
-                continue;
-            }
+  private List<ArgumentInterface> getFunctionArguments(CodeTree codeTree) {
+    List<ArgumentInterface> result = new ArrayList<ArgumentInterface>();
+    Tree parentNode = codeTree.getCurrentCodeNode().getNode();
 
-            List<String> argumentNames = getArgumentNames(childNode);
-            String argumentType = getArgumentTypes(childNode);
-            for (String name : argumentNames) {
-                result.add(new DelphiArgument(name, argumentType));
-            }
-        }
+    for (int i = 0; i < parentNode.getChildCount(); ++i) {
+      Tree childNode = parentNode.getChild(i);
+      int type = childNode.getType();
+      if (type != LexerMetrics.VARIABLE_IDENTS.toMetrics()) {
+        continue;
+      }
 
-        return result;
+      List<String> argumentNames = getArgumentNames(childNode);
+      String argumentType = getArgumentTypes(childNode);
+      for (String name : argumentNames) {
+        result.add(new DelphiArgument(name, argumentType));
+      }
     }
 
-    private String getArgumentTypes(Tree nameNode) {
-        Tree typeNode = nameNode.getParent().getChild(nameNode.getChildIndex() + 1);
-        if (typeNode.getChildCount() > 0) {
-            return typeNode.getChild(0).getText();
-        }
-        return UNTYPED_PARAMETER_NAME;
-    }
+    return result;
+  }
 
-    private List<String> getArgumentNames(Tree nameNode) {
-        List<String> names = new ArrayList<String>();
-        for (int i = 0; i < nameNode.getChildCount(); ++i) {
-            names.add(nameNode.getChild(i).getText());
-        }
-        return names;
+  private String getArgumentTypes(Tree nameNode) {
+    Tree typeNode = nameNode.getParent().getChild(nameNode.getChildIndex() + 1);
+    if (typeNode.getChildCount() > 0) {
+      return typeNode.getChild(0).getText();
     }
+    return UNTYPED_PARAMETER_NAME;
+  }
 
-    @Override
-    public boolean canAnalyze(CodeTree codeTree) {
-        return codeTree.getCurrentCodeNode().getNode().getType() == LexerMetrics.FUNCTION_ARGS.toMetrics();
+  private List<String> getArgumentNames(Tree nameNode) {
+    List<String> names = new ArrayList<String>();
+    for (int i = 0; i < nameNode.getChildCount(); ++i) {
+      names.add(nameNode.getChild(i).getText());
     }
+    return names;
+  }
+
+  @Override
+  public boolean canAnalyze(CodeTree codeTree) {
+    return codeTree.getCurrentCodeNode().getNode().getType() == LexerMetrics.FUNCTION_ARGS.toMetrics();
+  }
 
 }

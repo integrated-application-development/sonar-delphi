@@ -28,14 +28,14 @@ package org.sonar.plugins.delphi.antlr.directives.exceptions;
  */
 public class CompilerDirectiveFactoryUnsupportedDirectiveException extends Exception {
 
-    private static final long serialVersionUID = -5165381856939059460L;
+  private static final long serialVersionUID = -5165381856939059460L;
 
-    /**
-     * ctor
-     * 
-     * @param msg Error message
-     */
-    public CompilerDirectiveFactoryUnsupportedDirectiveException(String msg) {
-        super(msg);
-    }
+  /**
+   * ctor
+   * 
+   * @param msg Error message
+   */
+  public CompilerDirectiveFactoryUnsupportedDirectiveException(String msg) {
+    super(msg);
+  }
 }

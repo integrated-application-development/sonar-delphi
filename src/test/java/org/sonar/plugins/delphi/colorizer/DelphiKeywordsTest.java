@@ -22,15 +22,15 @@
  */
 package org.sonar.plugins.delphi.colorizer;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class DelphiKeywordsTest {
 
-    @Test
-    public void delphiKeywordsTest() {
-        assertEquals(183, DelphiKeywords.get().size());
-    }
+  @Test
+  public void delphiKeywordsTest() {
+    assertEquals(183, DelphiKeywords.get().size());
+  }
 
 }

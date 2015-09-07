@@ -24,7 +24,6 @@ package org.sonar.plugins.delphi.antlr.analyzer;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 
@@ -33,54 +32,54 @@ import org.sonar.plugins.delphi.core.language.FunctionInterface;
  */
 public class CodeAnalysisResults extends CodeAnalysisState {
 
-    protected List<FunctionInterface> functions = new ArrayList<FunctionInterface>(); // functions
-                                                                                      // at
-                                                                                      // current
-                                                                                      // file
-    protected List<ClassInterface> classes = new ArrayList<ClassInterface>(); // classes
-                                                                              // at
-                                                                              // current
-                                                                              // file
+  protected List<FunctionInterface> functions = new ArrayList<FunctionInterface>(); // functions
+                                                                                    // at
+                                                                                    // current
+                                                                                    // file
+  protected List<ClassInterface> classes = new ArrayList<ClassInterface>(); // classes
+                                                                            // at
+                                                                            // current
+                                                                            // file
 
-    /**
-     * @return class list in current file
-     */
-    public List<ClassInterface> getClasses() {
-        return classes;
-    }
+  /**
+   * @return class list in current file
+   */
+  public List<ClassInterface> getClasses() {
+    return classes;
+  }
 
-    /**
-     * @return function list in current file
-     */
-    public List<FunctionInterface> getFunctions() {
-        return functions;
-    }
+  /**
+   * @return function list in current file
+   */
+  public List<FunctionInterface> getFunctions() {
+    return functions;
+  }
 
-    /**
-     * add function to current file
-     * 
-     * @param activeFunction function to add
-     */
-    public void addFunction(FunctionInterface activeFunction) {
-        functions.add(activeFunction);
-    }
+  /**
+   * add function to current file
+   * 
+   * @param activeFunction function to add
+   */
+  public void addFunction(FunctionInterface activeFunction) {
+    functions.add(activeFunction);
+  }
 
-    /**
-     * add class to current file
-     * 
-     * @param clazz class to add
-     */
-    public void addClass(ClassInterface clazz) {
-        classes.add(clazz);
-    }
+  /**
+   * add class to current file
+   * 
+   * @param clazz class to add
+   */
+  public void addClass(ClassInterface clazz) {
+    classes.add(clazz);
+  }
 
-    /**
-     * check, if there is a certain function in current file
-     * 
-     * @param activeFunction function to find
-     * @return true if function is present, false otherwise
-     */
-    public boolean hasFunction(FunctionInterface activeFunction) {
-        return functions.contains(activeFunction);
-    }
+  /**
+   * check, if there is a certain function in current file
+   * 
+   * @param activeFunction function to find
+   * @return true if function is present, false otherwise
+   */
+  public boolean hasFunction(FunctionInterface activeFunction) {
+    return functions.contains(activeFunction);
+  }
 }

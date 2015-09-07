@@ -27,82 +27,82 @@ package org.sonar.plugins.delphi.utils;
  */
 public class ProgressReporter
 {
-    private double currentProgress = 0;
-    private int currentPercent = 0;
-    private double reportProgress = 25;
-    private int targetProgress = 100;
-    private int percentProgress = 25;
-    private ProgressReporterLogger logger = null;
-    private boolean firstProgress = true;
+  private double currentProgress = 0;
+  private int currentPercent = 0;
+  private double reportProgress = 25;
+  private int targetProgress = 100;
+  private int percentProgress = 25;
+  private ProgressReporterLogger logger = null;
+  private boolean firstProgress = true;
 
-    /**
-     * Default ctor, no logging!
-     */
-    public ProgressReporter() {
-        logger = new ProgressReporterLogger();
-    }
+  /**
+   * Default ctor, no logging!
+   */
+  public ProgressReporter() {
+    logger = new ProgressReporterLogger();
+  }
 
-    /**
-     * Ctor
-     * 
-     * @param targetProgress Target progress we want to achieve
-     * @param parts How many parts of progress we should report, ex. 4 will
-     *            report every 25%
-     * @param printStream report will be written to this print stream
-     */
-    public ProgressReporter(int targetProgress, int parts, ProgressReporterLogger logger) {
-        this.targetProgress = targetProgress;
-        this.reportProgress = targetProgress / (double) parts;
-        this.percentProgress = 100 / parts;
-        this.logger = logger;
-    }
+  /**
+   * Ctor
+   * 
+   * @param targetProgress Target progress we want to achieve
+   * @param parts How many parts of progress we should report, ex. 4 will
+   *            report every 25%
+   * @param printStream report will be written to this print stream
+   */
+  public ProgressReporter(int targetProgress, int parts, ProgressReporterLogger logger) {
+    this.targetProgress = targetProgress;
+    this.reportProgress = targetProgress / (double) parts;
+    this.percentProgress = 100 / parts;
+    this.logger = logger;
+  }
 
-    /**
-     * Progress by one
-     * 
-     * @return number of reports printed
-     */
-    public int progress() {
-        return progress(1);
-    }
+  /**
+   * Progress by one
+   * 
+   * @return number of reports printed
+   */
+  public int progress() {
+    return progress(1);
+  }
 
-    /**
-     * Progress by amount
-     * 
-     * @param amount amount we want to progress
-     * @return number of reports printed
-     */
-    public int progress(int amount)
-    {
-        int reportCount = reportZeroPercent();
-        currentProgress += amount;
-        while (currentProgress >= reportProgress) {
-            currentProgress -= reportProgress;
-            currentPercent = Math.min(currentPercent + percentProgress, 100);
-            report();
-            ++reportCount;
-        }
-        return reportCount;
+  /**
+   * Progress by amount
+   * 
+   * @param amount amount we want to progress
+   * @return number of reports printed
+   */
+  public int progress(int amount)
+  {
+    int reportCount = reportZeroPercent();
+    currentProgress += amount;
+    while (currentProgress >= reportProgress) {
+      currentProgress -= reportProgress;
+      currentPercent = Math.min(currentPercent + percentProgress, 100);
+      report();
+      ++reportCount;
     }
+    return reportCount;
+  }
 
-    private int reportZeroPercent() {
-        if (firstProgress) {
-            firstProgress = false;
-            report();
-            return 1;
-        }
-        return 0;
+  private int reportZeroPercent() {
+    if (firstProgress) {
+      firstProgress = false;
+      report();
+      return 1;
     }
+    return 0;
+  }
 
-    private void report() {
-        logger.log(currentPercent + "% done...");
-    }
+  private void report() {
+    logger.log(currentPercent + "% done...");
+  }
 
-    /**
-     * @return target progress
-     */
-    public int getTargetProgress() {
-        return targetProgress;
-    }
+  /**
+   * @return target progress
+   */
+  public int getTargetProgress() {
+    return targetProgress;
+  }
 
 }

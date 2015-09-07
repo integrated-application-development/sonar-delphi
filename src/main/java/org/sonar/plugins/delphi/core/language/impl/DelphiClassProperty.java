@@ -32,95 +32,100 @@ import org.sonar.plugins.delphi.core.language.FunctionInterface;
  */
 public class DelphiClassProperty extends DelphiClassField implements ClassPropertyInterface {
 
-    FunctionInterface readFunction = null;
-    FunctionInterface writeFunction = null;
+  FunctionInterface readFunction = null;
+  FunctionInterface writeFunction = null;
 
-    /**
-     * Default ctor
-     */
-    public DelphiClassProperty() {
+  /**
+   * Default ctor
+   */
+  public DelphiClassProperty() {
+  }
+
+  /**
+   * Ctor
+   */
+  public DelphiClassProperty(String name, String type, int visibility, FunctionInterface read, FunctionInterface write) {
+    super(name, type, visibility);
+    readFunction = read;
+    writeFunction = write;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+
+  @Override
+  public FunctionInterface getReadFunction() {
+    return readFunction;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+
+  @Override
+  public FunctionInterface getWriteFunction() {
+    return writeFunction;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+
+  @Override
+  public boolean hasFunction(FunctionInterface function) {
+    FunctionInterface func = new DelphiFunction(function.getShortName());
+    boolean b1 = false;
+    boolean b2 = false;
+    if (writeFunction != null) {
+      b1 = writeFunction.equals(func);
     }
-
-    /**
-     * Ctor
-     */
-    public DelphiClassProperty(String name, String type, int visibility, FunctionInterface read, FunctionInterface write) {
-        super(name, type, visibility);
-        readFunction = read;
-        writeFunction = write;
+    if (readFunction != null) {
+      b2 = readFunction.equals(func);
     }
+    return b1 || b2;
+  }
 
-    /**
-     * {@inheritDoc}
-     */
+  /**
+   * {@inheritDoc}
+   */
 
-    public FunctionInterface getReadFunction() {
-        return readFunction;
+  @Override
+  public void setReadFunction(FunctionInterface newFunction) {
+    readFunction = newFunction;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+
+  @Override
+  public void setWriteFunction(FunctionInterface newFunction) {
+    writeFunction = newFunction;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder suffix = new StringBuilder();
+    if (writeFunction != null) {
+      suffix.append("@" + writeFunction.toString());
     }
-
-    /**
-     * {@inheritDoc}
-     */
-
-    public FunctionInterface getWriteFunction() {
-        return writeFunction;
+    if (readFunction != null) {
+      suffix.append("@" + readFunction.toString());
     }
+    return super.toString() + suffix.toString();
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-
-    public boolean hasFunction(FunctionInterface function) {
-        FunctionInterface func = new DelphiFunction(function.getShortName());
-        boolean b1 = false;
-        boolean b2 = false;
-        if (writeFunction != null) {
-            b1 = writeFunction.equals(func);
-        }
-        if (readFunction != null) {
-            b2 = readFunction.equals(func);
-        }
-        return b1 || b2;
+  @Override
+  public boolean equals(Object o) {
+    if (o == null) {
+      return false;
     }
+    return toString().equals(o.toString());
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-
-    public void setReadFunction(FunctionInterface newFunction) {
-        readFunction = newFunction;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-
-    public void setWriteFunction(FunctionInterface newFunction) {
-        writeFunction = newFunction;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder suffix = new StringBuilder();
-        if (writeFunction != null) {
-            suffix.append("@" + writeFunction.toString());
-        }
-        if (readFunction != null) {
-            suffix.append("@" + readFunction.toString());
-        }
-        return super.toString() + suffix.toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null) {
-            return false;
-        }
-        return toString().equals(o.toString());
-    }
-
-    @Override
-    public int hashCode() {
-        return toString().hashCode();
-    }
+  @Override
+  public int hashCode() {
+    return toString().hashCode();
+  }
 }

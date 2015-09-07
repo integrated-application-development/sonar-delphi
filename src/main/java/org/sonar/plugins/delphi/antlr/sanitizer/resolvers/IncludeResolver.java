@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveFactory;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
@@ -45,173 +44,173 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  */
 public class IncludeResolver extends SourceResolver {
 
-    private static final int REPLACEMENT_OFFSET = 2;
-    private boolean extendIncludes = true;
-    private List<File> includes = null;
-    private List<String> includedFiles = new ArrayList<String>();
+  private static final int REPLACEMENT_OFFSET = 2;
+  private boolean extendIncludes = true;
+  private List<File> includes = null;
+  private List<String> includedFiles = new ArrayList<String>();
 
-    /**
-     * ctor
-     * 
-     * @param shouldExtend should we add includes, or just cut their
-     *            deffinitions out?
-     * @param includesList list of included dirs
-     */
-    public IncludeResolver(boolean shouldExtend, List<File> includesList) {
-        extendIncludes = shouldExtend;
-        includes = includesList;
+  /**
+   * ctor
+   * 
+   * @param shouldExtend should we add includes, or just cut their
+   *            deffinitions out?
+   * @param includesList list of included dirs
+   */
+  public IncludeResolver(boolean shouldExtend, List<File> includesList) {
+    extendIncludes = shouldExtend;
+    includes = includesList;
+  }
+
+  /**
+   * @return list of directories holding include files
+   */
+  public List<String> getIncludedFilesPath() {
+    return includedFiles;
+  }
+
+  @Override
+  protected void doResolve(SourceResolverResults results) {
+    resolveIncludes(results.getFileName(), results.getFileData(), results.getFileExcludes());
+  }
+
+  /**
+   * Resolve includes
+   * 
+   * @param baseFileName base file name
+   * @param baseFileData base file character data
+   * @param excludes list of excluded areas (won't be parsed: strings,
+   *            comments etc.)
+   * @return new file character data
+   */
+  private StringBuilder resolveIncludes(String baseFileName, StringBuilder baseFileData, SubRangeAggregator excludes) {
+    if (baseFileName == null || baseFileData == null) {
+      return baseFileData;
     }
 
-    /**
-     * @return list of directories holding include files
-     */
-    public List<String> getIncludedFilesPath() {
-        return includedFiles;
-    }
+    baseFileName = DelphiUtils.normalizeFileName(baseFileName);
 
-    @Override
-    protected void doResolve(SourceResolverResults results) {
-        resolveIncludes(results.getFileName(), results.getFileData(), results.getFileExcludes());
-    }
+    StringBuilder newData = new StringBuilder(baseFileData); // new data
+    List<ReplacementSubRange> dataToInclude = new ArrayList<ReplacementSubRange>();
 
-    /**
-     * Resolve includes
-     * 
-     * @param baseFileName base file name
-     * @param baseFileData base file character data
-     * @param excludes list of excluded areas (won't be parsed: strings,
-     *            comments etc.)
-     * @return new file character data
-     */
-    private StringBuilder resolveIncludes(String baseFileName, StringBuilder baseFileData, SubRangeAggregator excludes) {
-        if (baseFileName == null || baseFileData == null) {
-            return baseFileData;
+    try {
+      CompilerDirectiveFactory factory = new CompilerDirectiveFactory();
+      List<CompilerDirective> allDirectives = factory.produce(baseFileData.toString());
+
+      for (CompilerDirective directive : allDirectives) {
+        if (excludes.inRange(directive.getFirstCharPosition())
+          || directive.getType() != CompilerDirectiveType.INCLUDE) {
+          continue;
         }
 
-        baseFileName = DelphiUtils.normalizeFileName(baseFileName);
+        String includeFileName = directive.getItem();
+        String currentDir = baseFileName.substring(0, baseFileName.lastIndexOf('/')); // gets
+                                                                                      // the
+                                                                                      // dir
+                                                                                      // of
+                                                                                      // current
+                                                                                      // file
+        currentDir = backtrackDirectory(currentDir, DelphiUtils.countSubstrings(includeFileName, ".."));
 
-        StringBuilder newData = new StringBuilder(baseFileData); // new data
-        List<ReplacementSubRange> dataToInclude = new ArrayList<ReplacementSubRange>();
+        try // read the file into string
+        {
+          String copyData = ""; // string, that will be inserted in
+                                // replacement of include statement
+          if (extendIncludes) {
+            File includeFile = resolveIncludeFile(includeFileName, currentDir, includes);
+            includedFiles.add(includeFile.getAbsolutePath());
+            copyData = readFileIncludeData(includeFile);
+          }
+          dataToInclude.add(new ReplacementSubRange(directive.getFirstCharPosition(), directive
+            .getFirstCharPosition()
+            + directive.getLength() + REPLACEMENT_OFFSET, copyData));
 
-        try {
-            CompilerDirectiveFactory factory = new CompilerDirectiveFactory();
-            List<CompilerDirective> allDirectives = factory.produce(baseFileData.toString());
-
-            for (CompilerDirective directive : allDirectives) {
-                if (excludes.inRange(directive.getFirstCharPosition())
-                        || directive.getType() != CompilerDirectiveType.INCLUDE) {
-                    continue;
-                }
-
-                String includeFileName = directive.getItem();
-                String currentDir = baseFileName.substring(0, baseFileName.lastIndexOf('/')); // gets
-                                                                                              // the
-                                                                                              // dir
-                                                                                              // of
-                                                                                              // current
-                                                                                              // file
-                currentDir = backtrackDirectory(currentDir, DelphiUtils.countSubstrings(includeFileName, ".."));
-
-                try // read the file into string
-                {
-                    String copyData = ""; // string, that will be inserted in
-                                          // replacement of include statement
-                    if (extendIncludes) {
-                        File includeFile = resolveIncludeFile(includeFileName, currentDir, includes);
-                        includedFiles.add(includeFile.getAbsolutePath());
-                        copyData = readFileIncludeData(includeFile);
-                    }
-                    dataToInclude.add(new ReplacementSubRange(directive.getFirstCharPosition(), directive
-                            .getFirstCharPosition()
-                            + directive.getLength() + REPLACEMENT_OFFSET, copyData));
-
-                } catch (IncludeResolverException e) { // if no file found
-                    DelphiUtils.LOG.warn(e.getMessage());
-                    continue;
-                } catch (IOException e) {
-                    DelphiUtils.LOG.warn(e.getMessage());
-                    continue;
-                }
-
-            } // for
-        } catch (CompilerDirectiveFactorySyntaxException e) {
-            DelphiUtils.LOG.debug(e.getMessage());
+        } catch (IncludeResolverException e) { // if no file found
+          DelphiUtils.LOG.warn(e.getMessage());
+          continue;
+        } catch (IOException e) {
+          DelphiUtils.LOG.warn(e.getMessage());
+          continue;
         }
 
-        return introduceIncludedData(newData, dataToInclude);
+      } // for
+    } catch (CompilerDirectiveFactorySyntaxException e) {
+      DelphiUtils.LOG.debug(e.getMessage());
     }
 
-    private String readFileIncludeData(File includeFile) throws IncludeResolverException, IOException {
-        StringBuilder includeData = new StringBuilder(DelphiUtils.readFileContent(includeFile, null)); // get
-                                                                                                       // include
-                                                                                                       // file
-                                                                                                       // content
-        SourceResolverResults includedResults = new SourceResolverResults(includeFile.getAbsolutePath(), includeData);
+    return introduceIncludedData(newData, dataToInclude);
+  }
 
-        ExcludeResolver excludeResolver = new ExcludeResolver();
-        excludeResolver.resolve(includedResults);
-        SubRangeAggregator newExcluded = includedResults.getFileExcludes();
+  private String readFileIncludeData(File includeFile) throws IncludeResolverException, IOException {
+    StringBuilder includeData = new StringBuilder(DelphiUtils.readFileContent(includeFile, null)); // get
+                                                                                                   // include
+                                                                                                   // file
+                                                                                                   // content
+    SourceResolverResults includedResults = new SourceResolverResults(includeFile.getAbsolutePath(), includeData);
 
-        includeData = resolveIncludes(includeFile.getAbsolutePath(), includeData, newExcluded); // do
-                                                                                                // the
-                                                                                                // same
-                                                                                                // for
-                                                                                                // include
-                                                                                                // file,
-                                                                                                // it
-                                                                                                // could
-                                                                                                // also
-                                                                                                // have
-                                                                                                // includes
-        return includeData.toString();
+    ExcludeResolver excludeResolver = new ExcludeResolver();
+    excludeResolver.resolve(includedResults);
+    SubRangeAggregator newExcluded = includedResults.getFileExcludes();
+
+    includeData = resolveIncludes(includeFile.getAbsolutePath(), includeData, newExcluded); // do
+                                                                                            // the
+                                                                                            // same
+                                                                                            // for
+                                                                                            // include
+                                                                                            // file,
+                                                                                            // it
+                                                                                            // could
+                                                                                            // also
+                                                                                            // have
+                                                                                            // includes
+    return includeData.toString();
+  }
+
+  private String backtrackDirectory(String currentDir, int dotdotCount) {
+    for (int i = 0; i < dotdotCount; ++i) {
+      currentDir = currentDir.substring(0, currentDir.lastIndexOf('/'));
     }
+    return currentDir;
+  }
 
-    private String backtrackDirectory(String currentDir, int dotdotCount) {
-        for (int i = 0; i < dotdotCount; ++i) {
-            currentDir = currentDir.substring(0, currentDir.lastIndexOf('/'));
-        }
-        return currentDir;
+  private StringBuilder introduceIncludedData(StringBuilder newData, List<ReplacementSubRange> dataToInclude) {
+    int replacedCharsShift = 0;
+    Collections.sort(dataToInclude, new SubRangeFirstOccurenceComparator());
+    for (SubRange range : dataToInclude) {
+      newData.replace(range.getBegin() + replacedCharsShift, range.getEnd() + replacedCharsShift,
+        range.toString());
+      replacedCharsShift += range.toString().length() - (range.getEnd() - range.getBegin());
     }
+    return newData;
+  }
 
-    private StringBuilder introduceIncludedData(StringBuilder newData, List<ReplacementSubRange> dataToInclude) {
-        int replacedCharsShift = 0;
-        Collections.sort(dataToInclude, new SubRangeFirstOccurenceComparator());
-        for (SubRange range : dataToInclude) {
-            newData.replace(range.getBegin() + replacedCharsShift, range.getEnd() + replacedCharsShift,
-                    range.toString());
-            replacedCharsShift += range.toString().length() - (range.getEnd() - range.getBegin());
-        }
-        return newData;
+  private File resolveIncludeFile(String fileName, String directory, List<File> includes)
+    throws IncludeResolverException {
+    File resolved = getExistingFile(directory, fileName);
+    if (resolved != null) {
+      return resolved;
     }
+    return resolveIncludeFile(fileName, includes);
+  }
 
-    private File resolveIncludeFile(String fileName, String directory, List<File> includes)
-            throws IncludeResolverException {
-        File resolved = getExistingFile(directory, fileName);
-        if (resolved != null) {
-            return resolved;
-        }
-        return resolveIncludeFile(fileName, includes);
+  private File resolveIncludeFile(String fileName, List<File> directories) throws IncludeResolverException {
+    for (File dir : directories) {
+      DelphiUtils.LOG.debug("Trying to include " + dir.getAbsolutePath() + File.separator + fileName);
+      File file = getExistingFile(dir.getAbsolutePath(), fileName);
+      if (file != null) {
+        return file;
+      }
     }
+    throw new IncludeResolverException("Could not resolve include file: " + fileName); // no
+                                                                                       // file
+                                                                                       // found
+  }
 
-    private File resolveIncludeFile(String fileName, List<File> directories) throws IncludeResolverException {
-        for (File dir : directories) {
-            DelphiUtils.LOG.debug("Trying to include " + dir.getAbsolutePath() + File.separator + fileName);
-            File file = getExistingFile(dir.getAbsolutePath(), fileName);
-            if (file != null) {
-                return file;
-            }
-        }
-        throw new IncludeResolverException("Could not resolve include file: " + fileName); // no
-                                                                                           // file
-                                                                                           // found
+  private File getExistingFile(String directory, String fileName) {
+    File file = new File(directory + File.separator + fileName);
+    if (file.exists() && file.isFile()) {
+      return file;
     }
-
-    private File getExistingFile(String directory, String fileName) {
-        File file = new File(directory + File.separator + fileName);
-        if (file.exists() && file.isFile()) {
-            return file;
-        }
-        return null;
-    }
+    return null;
+  }
 
 }

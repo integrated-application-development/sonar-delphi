@@ -28,15 +28,15 @@ package org.sonar.plugins.delphi.core.language.verifiers;
  */
 public class StatementVerifierException extends Exception {
 
-    private static final long serialVersionUID = 6052651134635021666L;
+  private static final long serialVersionUID = 6052651134635021666L;
 
-    /**
-     * ctor
-     * 
-     * @param msg error message
-     */
-    public StatementVerifierException(String msg) {
-        super(msg);
-    }
+  /**
+   * ctor
+   * 
+   * @param msg error message
+   */
+  public StatementVerifierException(String msg) {
+    super(msg);
+  }
 
 }

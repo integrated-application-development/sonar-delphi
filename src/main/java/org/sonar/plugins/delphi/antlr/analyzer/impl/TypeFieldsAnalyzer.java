@@ -36,50 +36,50 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiClassField;
  */
 public class TypeFieldsAnalyzer extends CodeAnalyzer {
 
-    @Override
-    protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
-        if (results.getActiveClass() == null) {
-            throw new IllegalStateException("Cannot parse class fields for no active class");
-        }
-
-        String varTypeName = getClassVarTypeName((CommonTree) codeTree.getCurrentCodeNode().getNode());
-        String varNames = getClassVarName((CommonTree) codeTree.getCurrentCodeNode().getNode());
-        String[] names = varNames.split(",");
-        for (String name : names) {
-            ClassFieldInterface field = new DelphiClassField(name, varTypeName, results.getParseVisibility()
-                    .toMetrics());
-            field.setParent(results.getActiveClass());
-            results.getActiveClass().addField(field);
-        }
+  @Override
+  protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
+    if (results.getActiveClass() == null) {
+      throw new IllegalStateException("Cannot parse class fields for no active class");
     }
 
-    @Override
-    public boolean canAnalyze(CodeTree codeTree) {
-        return codeTree.getCurrentCodeNode().getNode().getType() == LexerMetrics.CLASS_FIELD.toMetrics();
+    String varTypeName = getClassVarTypeName((CommonTree) codeTree.getCurrentCodeNode().getNode());
+    String varNames = getClassVarName((CommonTree) codeTree.getCurrentCodeNode().getNode());
+    String[] names = varNames.split(",");
+    for (String name : names) {
+      ClassFieldInterface field = new DelphiClassField(name, varTypeName, results.getParseVisibility()
+        .toMetrics());
+      field.setParent(results.getActiveClass());
+      results.getActiveClass().addField(field);
     }
+  }
 
-    private String getClassVarName(CommonTree variableNode) {
-        StringBuilder name = new StringBuilder();
-        CommonTree nameNode = (CommonTree) variableNode.getFirstChildWithType(LexerMetrics.VARIABLE_IDENTS.toMetrics());
-        if (nameNode != null) {
-            Tree node = nameNode;
-            while ((node = node.getChild(0)) != null) {
-                name.append(node.getText());
-                if (node.getChildCount() != 0) {
-                    name.append(',');
-                }
-            }
-        }
-        return name.toString();
-    }
+  @Override
+  public boolean canAnalyze(CodeTree codeTree) {
+    return codeTree.getCurrentCodeNode().getNode().getType() == LexerMetrics.CLASS_FIELD.toMetrics();
+  }
 
-    private String getClassVarTypeName(CommonTree node) {
-        StringBuilder name = new StringBuilder();
-        Tree typeNode = node.getFirstChildWithType(LexerMetrics.VARIABLE_TYPE.toMetrics());
-        for (int i = 0; i < typeNode.getChildCount(); ++i) {
-            name.append(typeNode.getChild(i).getText());
+  private String getClassVarName(CommonTree variableNode) {
+    StringBuilder name = new StringBuilder();
+    CommonTree nameNode = (CommonTree) variableNode.getFirstChildWithType(LexerMetrics.VARIABLE_IDENTS.toMetrics());
+    if (nameNode != null) {
+      Tree node = nameNode;
+      while ((node = node.getChild(0)) != null) {
+        name.append(node.getText());
+        if (node.getChildCount() != 0) {
+          name.append(',');
         }
-        return name.toString();
+      }
     }
+    return name.toString();
+  }
+
+  private String getClassVarTypeName(CommonTree node) {
+    StringBuilder name = new StringBuilder();
+    Tree typeNode = node.getFirstChildWithType(LexerMetrics.VARIABLE_TYPE.toMetrics());
+    for (int i = 0; i < typeNode.getChildCount(); ++i) {
+      name.append(typeNode.getChild(i).getText());
+    }
+    return name.toString();
+  }
 
 }

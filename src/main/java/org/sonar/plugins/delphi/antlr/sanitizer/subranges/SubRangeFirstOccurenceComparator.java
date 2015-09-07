@@ -27,7 +27,8 @@ package org.sonar.plugins.delphi.antlr.sanitizer.subranges;
  */
 public class SubRangeFirstOccurenceComparator implements java.util.Comparator<SubRange> {
 
-    public int compare(SubRange o1, SubRange o2) {
-        return o1.getBegin() - o2.getBegin();
-    }
+  @Override
+  public int compare(SubRange o1, SubRange o2) {
+    return o1.getBegin() - o2.getBegin();
+  }
 }

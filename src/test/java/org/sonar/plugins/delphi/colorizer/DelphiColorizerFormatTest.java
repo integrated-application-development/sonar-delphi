@@ -22,16 +22,16 @@
  */
 package org.sonar.plugins.delphi.colorizer;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class DelphiColorizerFormatTest {
 
-    @Test
-    public void getTokenizersTest() {
-        DelphiColorizerFormat format = new DelphiColorizerFormat();
-        assertTrue(format.getTokenizers().size() >= 5);
-    }
+  @Test
+  public void getTokenizersTest() {
+    DelphiColorizerFormat format = new DelphiColorizerFormat();
+    assertTrue(format.getTokenizers().size() >= 5);
+  }
 
 }

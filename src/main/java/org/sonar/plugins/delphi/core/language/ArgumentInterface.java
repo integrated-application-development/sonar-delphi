@@ -27,31 +27,31 @@ package org.sonar.plugins.delphi.core.language;
  */
 public interface ArgumentInterface {
 
-    /**
-     * Sets name
-     * 
-     * @param newName New name
-     */
-    void setName(String newName);
+  /**
+   * Sets name
+   * 
+   * @param newName New name
+   */
+  void setName(String newName);
 
-    /**
-     * Sets type
-     * 
-     * @param newType New type
-     */
-    void setType(String newType);
+  /**
+   * Sets type
+   * 
+   * @param newType New type
+   */
+  void setType(String newType);
 
-    /**
-     * Gets name
-     * 
-     * @return Argument name
-     */
-    String getName();
+  /**
+   * Gets name
+   * 
+   * @return Argument name
+   */
+  String getName();
 
-    /**
-     * Gets type
-     * 
-     * @return Argument type
-     */
-    String getType();
+  /**
+   * Gets type
+   * 
+   * @return Argument type
+   */
+  String getType();
 }

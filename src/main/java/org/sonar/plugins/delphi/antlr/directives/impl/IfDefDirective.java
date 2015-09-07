@@ -29,34 +29,34 @@ import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
  */
 public class IfDefDirective extends CommonCompilerDirective {
 
-    private boolean positive;
+  private boolean positive;
 
-    /**
-     * ctor
-     * 
-     * @param item directive item
-     * @param firstCharPos first character position
-     * @param lastCharPos last character position
-     */
-    public IfDefDirective(String name, String item, int firstCharPos, int lastCharPos) {
-        super(name, item, firstCharPos, lastCharPos);
-        positive = "ifdef".equalsIgnoreCase(name);
-    }
+  /**
+   * ctor
+   * 
+   * @param item directive item
+   * @param firstCharPos first character position
+   * @param lastCharPos last character position
+   */
+  public IfDefDirective(String name, String item, int firstCharPos, int lastCharPos) {
+    super(name, item, firstCharPos, lastCharPos);
+    positive = "ifdef".equalsIgnoreCase(name);
+  }
 
-    /**
-     * Is compiler directive looking for positive checks?<br/>
-     * example: <code>{$ifdef XXX}</code> will return <b>true</b><br/>
-     * <code>{$ifNdef YYY}</code> will return <b>false</b><br/>
-     * 
-     * @return true if so, false otherwise
-     */
-    public boolean isPositive() {
-        return positive;
-    }
+  /**
+   * Is compiler directive looking for positive checks?<br/>
+   * example: <code>{$ifdef XXX}</code> will return <b>true</b><br/>
+   * <code>{$ifNdef YYY}</code> will return <b>false</b><br/>
+   * 
+   * @return true if so, false otherwise
+   */
+  public boolean isPositive() {
+    return positive;
+  }
 
-    @Override
-    public CompilerDirectiveType getType() {
-        return CompilerDirectiveType.IFDEF;
-    }
+  @Override
+  public CompilerDirectiveType getType() {
+    return CompilerDirectiveType.IFDEF;
+  }
 
 }

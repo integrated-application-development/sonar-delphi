@@ -26,5 +26,5 @@ import org.sonar.api.batch.SensorContext;
 
 public interface DelphiCodeCoverageParser
 {
-    void parse(SensorContext context);
+  void parse(SensorContext context);
 }

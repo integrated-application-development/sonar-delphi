@@ -24,7 +24,6 @@ package org.sonar.plugins.delphi.metrics;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.sonar.api.resources.Project;
 
 /**
@@ -32,45 +31,47 @@ import org.sonar.api.resources.Project;
  */
 public abstract class DefaultMetrics implements MetricsInterface {
 
-    protected Map<String, Double> metrics = new HashMap<String, Double>();
-    protected Project project = null;
+  protected Map<String, Double> metrics = new HashMap<String, Double>();
+  protected Project project = null;
 
-    /**
-     * Default ctor
-     * 
-     * @param project Sonar project
-     */
-    public DefaultMetrics(Project delphiProject) {
-        project = delphiProject;
+  /**
+   * Default ctor
+   * 
+   * @param project Sonar project
+   */
+  public DefaultMetrics(Project delphiProject) {
+    project = delphiProject;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+
+  @Override
+  public String[] getMetricKeys() {
+    return metrics.keySet().toArray(new String[metrics.keySet().size()]);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+
+  @Override
+  public double getMetric(String metric) {
+    if (!metrics.containsKey(metric)) {
+      throw new IllegalStateException("No metric (" + metric + ") for " + this);
     }
+    return metrics.get(metric);
+  }
 
-    /**
-     * {@inheritDoc}
-     */
+  /**
+   * {@inheritDoc}
+   */
+  public void setMetric(String metric, double value) {
+    metrics.put(metric, value);
+  }
 
-    public String[] getMetricKeys() {
-        return metrics.keySet().toArray(new String[metrics.keySet().size()]);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-
-    public double getMetric(String metric) {
-        if (!metrics.containsKey(metric)) {
-            throw new IllegalStateException("No metric (" + metric + ") for " + this);
-        }
-        return metrics.get(metric);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setMetric(String metric, double value) {
-        metrics.put(metric, value);
-    }
-
-    protected void clearMetrics() {
-        metrics.clear();
-    }
+  protected void clearMetrics() {
+    metrics.clear();
+  }
 }

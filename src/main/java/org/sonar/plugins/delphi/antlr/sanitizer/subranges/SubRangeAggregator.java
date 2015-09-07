@@ -32,67 +32,67 @@ import java.util.List;
  */
 public class SubRangeAggregator {
 
-    protected ArrayList<SubRange> data = new ArrayList<SubRange>();
+  protected ArrayList<SubRange> data = new ArrayList<SubRange>();
 
-    /**
-     * add a new sub range
-     * 
-     * @param newRange new sub range
-     */
-    public void add(SubRange newRange) {
-        if (newRange == null) {
-            return;
-        }
-
-        for (SubRange range : data) {
-            if (range.inRange(newRange)) {
-                return;
-            }
-        }
-
-        data.add(newRange);
+  /**
+   * add a new sub range
+   * 
+   * @param newRange new sub range
+   */
+  public void add(SubRange newRange) {
+    if (newRange == null) {
+      return;
     }
 
-    /**
-     * check if providen value is in range of all agregated ranges
-     * 
-     * @param value value to check
-     * @return true if so, false otherwise
-     */
-    public boolean inRange(int value) {
-        for (SubRange range : data) {
-            if (range.inRange(value)) {
-                return true;
-            }
-        }
-        return false;
+    for (SubRange range : data) {
+      if (range.inRange(newRange)) {
+        return;
+      }
     }
 
-    /**
-     * adds all elements from another aggregator, check for duplications and
-     * merges them
-     * 
-     * @param subRangeAggregator another aggregator
-     */
-    public void addAll(SubRangeAggregator subRangeAggregator) {
-        for (SubRange newRange : subRangeAggregator.getRanges()) {
-            add(newRange);
-        }
-    }
+    data.add(newRange);
+  }
 
-    /**
-     * sort aggregated sub ranges with providen comparator
-     * 
-     * @param comparator Sub range comparator
-     */
-    public void sort(Comparator<? super SubRange> comparator) {
-        Collections.sort(data, comparator);
+  /**
+   * check if providen value is in range of all agregated ranges
+   * 
+   * @param value value to check
+   * @return true if so, false otherwise
+   */
+  public boolean inRange(int value) {
+    for (SubRange range : data) {
+      if (range.inRange(value)) {
+        return true;
+      }
     }
+    return false;
+  }
 
-    /**
-     * @return get the list of all aggregated sub ranges
-     */
-    public List<SubRange> getRanges() {
-        return data;
+  /**
+   * adds all elements from another aggregator, check for duplications and
+   * merges them
+   * 
+   * @param subRangeAggregator another aggregator
+   */
+  public void addAll(SubRangeAggregator subRangeAggregator) {
+    for (SubRange newRange : subRangeAggregator.getRanges()) {
+      add(newRange);
     }
+  }
+
+  /**
+   * sort aggregated sub ranges with providen comparator
+   * 
+   * @param comparator Sub range comparator
+   */
+  public void sort(Comparator<? super SubRange> comparator) {
+    Collections.sort(data, comparator);
+  }
+
+  /**
+   * @return get the list of all aggregated sub ranges
+   */
+  public List<SubRange> getRanges() {
+    return data;
+  }
 }

@@ -22,47 +22,45 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.io.IOException;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.antlr.runtime.RecognitionException;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.xml.sax.SAXException;
 
+import static org.junit.Assert.*;
+
 public class DelphiASTTest {
 
-    private static final String TEST_FILE = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
-    private ASTTree ast;
+  private static final String TEST_FILE = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
+  private ASTTree ast;
 
-    @Before
-    public void setup() throws IOException, RecognitionException {
-        ast = new DelphiAST(DelphiUtils.getResource(TEST_FILE));
+  @Before
+  public void setup() throws IOException, RecognitionException {
+    ast = new DelphiAST(DelphiUtils.getResource(TEST_FILE));
+  }
+
+  @Test
+  public void generateXMLTest() throws IOException {
+    File xml = File.createTempFile("DelphiAST", ".xml");
+    xml.deleteOnExit();
+
+    ast.generateXML(xml.getAbsolutePath());
+
+    try {
+      DocumentBuilder parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+      parser.parse(xml);
+    } catch (ParserConfigurationException e) {
+      fail("Could not parse generated XML document");
+    } catch (SAXException e) {
+      fail("Could not parse generated XML document");
     }
 
-    @Test
-    public void generateXMLTest() throws IOException {
-        File xml = File.createTempFile("DelphiAST", ".xml");
-        xml.deleteOnExit();
-
-        ast.generateXML(xml.getAbsolutePath());
-
-        try {
-            DocumentBuilder parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            parser.parse(xml);
-        } catch (ParserConfigurationException e) {
-            fail("Could not parse generated XML document");
-        } catch (SAXException e) {
-            fail("Could not parse generated XML document");
-        }
-
-    }
+  }
 
 }

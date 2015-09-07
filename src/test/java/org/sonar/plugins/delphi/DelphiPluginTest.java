@@ -22,27 +22,27 @@
  */
 package org.sonar.plugins.delphi;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 /**
  * @author Evgeny Mandrikov
  */
 public class DelphiPluginTest {
 
-    private DelphiPlugin plugin;
+  private DelphiPlugin plugin;
 
-    @Before
-    public void setUp() {
-        plugin = new DelphiPlugin();
-    }
+  @Before
+  public void setUp() {
+    plugin = new DelphiPlugin();
+  }
 
-    @Test
-    public void testExtensions() {
-        assertThat(plugin.getExtensions().size(), greaterThan(0));
-    }
+  @Test
+  public void testExtensions() {
+    assertThat(plugin.getExtensions().size(), greaterThan(0));
+  }
 
 }

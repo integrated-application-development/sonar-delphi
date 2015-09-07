@@ -22,120 +22,119 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.subranges;
 
-import static org.junit.Assert.*;
-
 import java.util.Arrays;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl.IntegerSubRange;
 
+import static org.junit.Assert.*;
+
 public class SubRangeMergingAggregatorTest {
 
-    private SubRangeMergingAggregator aggregator;
+  private SubRangeMergingAggregator aggregator;
 
-    @Before
-    public void setup() {
-        aggregator = new SubRangeMergingAggregator();
+  @Before
+  public void setup() {
+    aggregator = new SubRangeMergingAggregator();
+  }
+
+  @Test
+  public void shouldMergeTest() {
+    assertTrue(aggregator.shouldMerge(new IntegerSubRange(0, 5), new IntegerSubRange(5, 10)));
+    assertTrue(aggregator.shouldMerge(new IntegerSubRange(5, 10), new IntegerSubRange(0, 5)));
+
+    assertTrue(aggregator.shouldMerge(new IntegerSubRange(0, 10), new IntegerSubRange(4, 5)));
+    assertTrue(aggregator.shouldMerge(new IntegerSubRange(4, 5), new IntegerSubRange(0, 10)));
+
+    assertFalse(aggregator.shouldMerge(new IntegerSubRange(5, 10), new IntegerSubRange(11, 11)));
+    assertFalse(aggregator.shouldMerge(new IntegerSubRange(11, 11), new IntegerSubRange(5, 10)));
+
+    assertFalse(aggregator.shouldMerge(new IntegerSubRange(0, 1), new IntegerSubRange(2, 3)));
+    assertFalse(aggregator.shouldMerge(new IntegerSubRange(2, 3), new IntegerSubRange(0, 1)));
+  }
+
+  @Test
+  public void mergeTest() {
+    SubRange result = aggregator.mergeRanges(new IntegerSubRange(0, 5), new IntegerSubRange(5, 10));
+    assertEquals(0, result.getBegin());
+    assertEquals(10, result.getEnd());
+
+    result = aggregator.mergeRanges(new IntegerSubRange(5, 10), new IntegerSubRange(5, 10));
+    assertEquals(5, result.getBegin());
+    assertEquals(10, result.getEnd());
+
+    result = aggregator.mergeRanges(new IntegerSubRange(-5, 5), new IntegerSubRange(2, 5));
+    assertEquals(-5, result.getBegin());
+    assertEquals(5, result.getEnd());
+
+    result = aggregator.mergeRanges(new IntegerSubRange(0, 2), new IntegerSubRange(1, 1));
+    assertEquals(0, result.getBegin());
+    assertEquals(2, result.getEnd());
+  }
+
+  @Test
+  public void addAllTest() {
+    SubRangeAggregator aggregator2 = new SubRangeMergingAggregator();
+    aggregator.add(new IntegerSubRange(0, 10));
+    assertEquals(1, aggregator.getRanges().size());
+
+    aggregator2.add(new IntegerSubRange(1, 2));
+    aggregator2.add(new IntegerSubRange(3, 5));
+    aggregator2.add(new IntegerSubRange(6, 11));
+    assertEquals(3, aggregator2.getRanges().size());
+
+    aggregator.addAll(aggregator2); // should not add repeating ranges and
+                                    // merge other
+    assertEquals(1, aggregator.getRanges().size());
+  }
+
+  @Test
+  public void sortTest() {
+    SubRange data[] = {new IntegerSubRange(0, 10), new IntegerSubRange(-5, -1), new IntegerSubRange(12, 12),
+      new IntegerSubRange(15, 19),
+      new IntegerSubRange(-10, -6)};
+
+    for (SubRange range : data) {
+      aggregator.add(range);
     }
 
-    @Test
-    public void shouldMergeTest() {
-        assertTrue(aggregator.shouldMerge(new IntegerSubRange(0, 5), new IntegerSubRange(5, 10)));
-        assertTrue(aggregator.shouldMerge(new IntegerSubRange(5, 10), new IntegerSubRange(0, 5)));
+    Arrays.sort(data, new SubRangeFirstOccurenceComparator());
+    aggregator.sort(new SubRangeFirstOccurenceComparator());
 
-        assertTrue(aggregator.shouldMerge(new IntegerSubRange(0, 10), new IntegerSubRange(4, 5)));
-        assertTrue(aggregator.shouldMerge(new IntegerSubRange(4, 5), new IntegerSubRange(0, 10)));
-
-        assertFalse(aggregator.shouldMerge(new IntegerSubRange(5, 10), new IntegerSubRange(11, 11)));
-        assertFalse(aggregator.shouldMerge(new IntegerSubRange(11, 11), new IntegerSubRange(5, 10)));
-
-        assertFalse(aggregator.shouldMerge(new IntegerSubRange(0, 1), new IntegerSubRange(2, 3)));
-        assertFalse(aggregator.shouldMerge(new IntegerSubRange(2, 3), new IntegerSubRange(0, 1)));
+    int index = 0;
+    for (SubRange sortedRange : aggregator.getRanges()) {
+      assertEquals(data[index++], sortedRange);
     }
 
-    @Test
-    public void mergeTest() {
-        SubRange result = aggregator.mergeRanges(new IntegerSubRange(0, 5), new IntegerSubRange(5, 10));
-        assertEquals(0, result.getBegin());
-        assertEquals(10, result.getEnd());
+  }
 
-        result = aggregator.mergeRanges(new IntegerSubRange(5, 10), new IntegerSubRange(5, 10));
-        assertEquals(5, result.getBegin());
-        assertEquals(10, result.getEnd());
+  @Test
+  public void addTest() {
+    assertEquals(0, aggregator.getRanges().size());
 
-        result = aggregator.mergeRanges(new IntegerSubRange(-5, 5), new IntegerSubRange(2, 5));
-        assertEquals(-5, result.getBegin());
-        assertEquals(5, result.getEnd());
+    aggregator.add(new IntegerSubRange(0, 5)); // should add
+    assertEquals(1, aggregator.getRanges().size());
 
-        result = aggregator.mergeRanges(new IntegerSubRange(0, 2), new IntegerSubRange(1, 1));
-        assertEquals(0, result.getBegin());
-        assertEquals(2, result.getEnd());
-    }
+    aggregator.add(new IntegerSubRange(6, 7)); // should add
+    assertEquals(2, aggregator.getRanges().size());
 
-    @Test
-    public void addAllTest() {
-        SubRangeAggregator aggregator2 = new SubRangeMergingAggregator();
-        aggregator.add(new IntegerSubRange(0, 10));
-        assertEquals(1, aggregator.getRanges().size());
+    aggregator.add(new IntegerSubRange(5, 10)); // should merge
+    assertEquals(1, aggregator.getRanges().size());
 
-        aggregator2.add(new IntegerSubRange(1, 2));
-        aggregator2.add(new IntegerSubRange(3, 5));
-        aggregator2.add(new IntegerSubRange(6, 11));
-        assertEquals(3, aggregator2.getRanges().size());
+    aggregator.add(new IntegerSubRange(2, 7)); // shouldn't be added
+    assertEquals(1, aggregator.getRanges().size());
 
-        aggregator.addAll(aggregator2); // should not add repeating ranges and
-                                        // merge other
-        assertEquals(1, aggregator.getRanges().size());
-    }
+    aggregator.add(new IntegerSubRange(-1, -1)); // should add
+    assertEquals(2, aggregator.getRanges().size());
 
-    @Test
-    public void sortTest() {
-        SubRange data[] = {new IntegerSubRange(0, 10), new IntegerSubRange(-5, -1), new IntegerSubRange(12, 12),
-                new IntegerSubRange(15, 19),
-                new IntegerSubRange(-10, -6)};
+    aggregator.add(new IntegerSubRange(-2, -2)); // should add
+    assertEquals(3, aggregator.getRanges().size());
 
-        for (SubRange range : data) {
-            aggregator.add(range);
-        }
+    aggregator.add(new IntegerSubRange(-2, -1)); // should merge
+    assertEquals(2, aggregator.getRanges().size());
 
-        Arrays.sort(data, new SubRangeFirstOccurenceComparator());
-        aggregator.sort(new SubRangeFirstOccurenceComparator());
-
-        int index = 0;
-        for (SubRange sortedRange : aggregator.getRanges()) {
-            assertEquals(data[index++], sortedRange);
-        }
-
-    }
-
-    @Test
-    public void addTest() {
-        assertEquals(0, aggregator.getRanges().size());
-
-        aggregator.add(new IntegerSubRange(0, 5)); // should add
-        assertEquals(1, aggregator.getRanges().size());
-
-        aggregator.add(new IntegerSubRange(6, 7)); // should add
-        assertEquals(2, aggregator.getRanges().size());
-
-        aggregator.add(new IntegerSubRange(5, 10)); // should merge
-        assertEquals(1, aggregator.getRanges().size());
-
-        aggregator.add(new IntegerSubRange(2, 7)); // shouldn't be added
-        assertEquals(1, aggregator.getRanges().size());
-
-        aggregator.add(new IntegerSubRange(-1, -1)); // should add
-        assertEquals(2, aggregator.getRanges().size());
-
-        aggregator.add(new IntegerSubRange(-2, -2)); // should add
-        assertEquals(3, aggregator.getRanges().size());
-
-        aggregator.add(new IntegerSubRange(-2, -1)); // should merge
-        assertEquals(2, aggregator.getRanges().size());
-
-        aggregator.add(new IntegerSubRange(-100, 100)); // should merge
-        assertEquals(1, aggregator.getRanges().size());
-    }
+    aggregator.add(new IntegerSubRange(-100, 100)); // should merge
+    assertEquals(1, aggregator.getRanges().size());
+  }
 
 }

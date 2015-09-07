@@ -22,36 +22,35 @@
  */
 package org.sonar.plugins.delphi.project;
 
-import static org.junit.Assert.*;
-
 import java.io.IOException;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
+import static org.junit.Assert.*;
+
 public class DelphiWorkgroupTest {
 
-    private static String XML_FILE = "/org/sonar/plugins/delphi/SimpleDelphiProject/dproj/workgroup/All.groupproj";
-    private DelphiWorkgroup workGroup;
+  private static String XML_FILE = "/org/sonar/plugins/delphi/SimpleDelphiProject/dproj/workgroup/All.groupproj";
+  private DelphiWorkgroup workGroup;
 
-    @Before
-    public void init() {
-        workGroup = new DelphiWorkgroup();
-    }
+  @Before
+  public void init() {
+    workGroup = new DelphiWorkgroup();
+  }
 
-    @Test
-    public void simpleWorkgroupTest() {
-        assertEquals(0, workGroup.getProjects().size());
-        workGroup.addProject(new DelphiProject("Sample"));
-        assertEquals(1, workGroup.getProjects().size());
-    }
+  @Test
+  public void simpleWorkgroupTest() {
+    assertEquals(0, workGroup.getProjects().size());
+    workGroup.addProject(new DelphiProject("Sample"));
+    assertEquals(1, workGroup.getProjects().size());
+  }
 
-    @Test
-    public void xmlWorkgroupTest() throws IOException {
-        DelphiWorkgroup workGroup = new DelphiWorkgroup(DelphiUtils.getResource(XML_FILE));
-        assertEquals(1, workGroup.getProjects().size());
-        assertEquals("Simple Delphi Product", workGroup.getProjects().get(0).getName());
-    }
+  @Test
+  public void xmlWorkgroupTest() throws IOException {
+    DelphiWorkgroup workGroup = new DelphiWorkgroup(DelphiUtils.getResource(XML_FILE));
+    assertEquals(1, workGroup.getProjects().size());
+    assertEquals("Simple Delphi Product", workGroup.getProjects().get(0).getName());
+  }
 
 }

@@ -29,21 +29,21 @@ import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
  */
 public class ElseDirective extends CommonCompilerDirective {
 
-    private static final String DIRECTIVE_NAME = "else";
+  private static final String DIRECTIVE_NAME = "else";
 
-    /**
-     * ctor
-     * 
-     * @param item item
-     * @param firstCharPos first character position
-     * @param lastCharPos last character position
-     */
-    public ElseDirective(String item, int firstCharPos, int lastCharPos) {
-        super(DIRECTIVE_NAME, item, firstCharPos, lastCharPos);
-    }
+  /**
+   * ctor
+   * 
+   * @param item item
+   * @param firstCharPos first character position
+   * @param lastCharPos last character position
+   */
+  public ElseDirective(String item, int firstCharPos, int lastCharPos) {
+    super(DIRECTIVE_NAME, item, firstCharPos, lastCharPos);
+  }
 
-    @Override
-    public CompilerDirectiveType getType() {
-        return CompilerDirectiveType.ELSE;
-    }
+  @Override
+  public CompilerDirectiveType getType() {
+    return CompilerDirectiveType.ELSE;
+  }
 }

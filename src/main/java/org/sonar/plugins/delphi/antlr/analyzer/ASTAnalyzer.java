@@ -29,21 +29,21 @@ import org.sonar.plugins.delphi.antlr.ast.ASTTree;
  */
 public interface ASTAnalyzer {
 
-    /**
-     * Analyse an AST tree
-     * 
-     * @param ast AST Tree
-     */
-    void analyze(ASTTree ast);
+  /**
+   * Analyse an AST tree
+   * 
+   * @param ast AST Tree
+   */
+  void analyze(ASTTree ast);
 
-    /**
-     * @return Results of code analysis
-     */
-    CodeAnalysisResults getResults();
+  /**
+   * @return Results of code analysis
+   */
+  CodeAnalysisResults getResults();
 
-    /**
-     * @return code being analyzed
-     */
-    CodeTree getCode();
+  /**
+   * @return code being analyzed
+   */
+  CodeTree getCode();
 
 }

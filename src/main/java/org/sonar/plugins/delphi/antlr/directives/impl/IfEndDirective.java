@@ -29,22 +29,22 @@ import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
  */
 public class IfEndDirective extends CommonCompilerDirective {
 
-    private static final String DIRECTIVE_NAME = "ifend";
+  private static final String DIRECTIVE_NAME = "ifend";
 
-    /**
-     * ctor
-     * 
-     * @param item directive item
-     * @param firstCharPos first character position
-     * @param lastCharPos last character position
-     */
-    public IfEndDirective(String item, int firstCharPos, int lastCharPos) {
-        super(DIRECTIVE_NAME, item, firstCharPos, lastCharPos);
-    }
+  /**
+   * ctor
+   * 
+   * @param item directive item
+   * @param firstCharPos first character position
+   * @param lastCharPos last character position
+   */
+  public IfEndDirective(String item, int firstCharPos, int lastCharPos) {
+    super(DIRECTIVE_NAME, item, firstCharPos, lastCharPos);
+  }
 
-    @Override
-    public CompilerDirectiveType getType() {
-        return CompilerDirectiveType.IFEND;
-    }
+  @Override
+  public CompilerDirectiveType getType() {
+    return CompilerDirectiveType.IFEND;
+  }
 
 }

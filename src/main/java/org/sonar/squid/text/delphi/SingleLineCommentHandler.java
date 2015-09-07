@@ -24,54 +24,54 @@ package org.sonar.squid.text.delphi;
 
 public class SingleLineCommentHandler extends LineContextHandler {
 
-    private StringBuilder comment;
+  private StringBuilder comment;
 
-    private final String commentStartTag;
-    private final String commentNotStartTag;
+  private final String commentStartTag;
+  private final String commentNotStartTag;
 
-    public SingleLineCommentHandler(String commentStartTag) {
-        this(commentStartTag, null);
+  public SingleLineCommentHandler(String commentStartTag) {
+    this(commentStartTag, null);
+  }
+
+  public SingleLineCommentHandler(String commentStartTag, String commentNotStartTag) {
+    this.commentStartTag = commentStartTag;
+    this.commentNotStartTag = commentNotStartTag;
+  }
+
+  @Override
+  boolean matchToEnd(Line line, StringBuilder pendingLine) {
+    if (comment == null) {
+      throw new IllegalStateException("Method doContextBegin(StringBuilder pendingLine) has not been called.");
+    }
+    comment.append(getLastCharacter(pendingLine));
+    line.isThereCode();
+
+    return false;
+  }
+
+  @Override
+  boolean matchToBegin(Line line, StringBuilder pendingLine) {
+    boolean doContextBegin = matchEndOfString(pendingLine, commentStartTag)
+      && (commentNotStartTag == null || !matchEndOfString(pendingLine, commentNotStartTag));
+    if (doContextBegin) {
+      comment = new StringBuilder(commentStartTag);
+    }
+    return doContextBegin;
+  }
+
+  @Override
+  boolean matchWithEndOfLine(Line line, StringBuilder pendingLine) {
+    String newComment = "";
+    String oldComment = line.getComment();
+
+    if (oldComment != null) {
+      newComment = oldComment.concat(comment.toString());
+    } else {
+      newComment = comment.toString();
     }
 
-    public SingleLineCommentHandler(String commentStartTag, String commentNotStartTag) {
-        this.commentStartTag = commentStartTag;
-        this.commentNotStartTag = commentNotStartTag;
-    }
-
-    @Override
-    boolean matchToEnd(Line line, StringBuilder pendingLine) {
-        if (comment == null) {
-            throw new IllegalStateException("Method doContextBegin(StringBuilder pendingLine) has not been called.");
-        }
-        comment.append(getLastCharacter(pendingLine));
-        line.isThereCode();
-
-        return false;
-    }
-
-    @Override
-    boolean matchToBegin(Line line, StringBuilder pendingLine) {
-        boolean doContextBegin = matchEndOfString(pendingLine, commentStartTag)
-                && (commentNotStartTag == null || !matchEndOfString(pendingLine, commentNotStartTag));
-        if (doContextBegin) {
-            comment = new StringBuilder(commentStartTag);
-        }
-        return doContextBegin;
-    }
-
-    @Override
-    boolean matchWithEndOfLine(Line line, StringBuilder pendingLine) {
-        String newComment = "";
-        String oldComment = line.getComment();
-
-        if (oldComment != null) {
-            newComment = oldComment.concat(comment.toString());
-        } else {
-            newComment = comment.toString();
-        }
-
-        line.setComment(newComment);
-        comment = null;
-        return true;
-    }
+    line.setComment(newComment);
+    comment = null;
+    return true;
+  }
 }

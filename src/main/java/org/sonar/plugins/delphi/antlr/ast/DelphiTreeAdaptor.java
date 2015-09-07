@@ -31,35 +31,35 @@ import org.antlr.runtime.tree.CommonTreeAdaptor;
  */
 class DelphiTreeAdaptor extends CommonTreeAdaptor {
 
-    private ASTTree astTree;
-    private int lastLine = 0;
+  private ASTTree astTree;
+  private int lastLine = 0;
 
-    /**
-     * Adaptor ctor
-     * 
-     * @param tree Tree
-     */
-    public DelphiTreeAdaptor(ASTTree tree) {
-        astTree = tree;
+  /**
+   * Adaptor ctor
+   * 
+   * @param tree Tree
+   */
+  public DelphiTreeAdaptor(ASTTree tree) {
+    astTree = tree;
+  }
+
+  @Override
+  public Object create(Token payload) {
+    if (payload != null) {
+      lastLine = payload.getLine();
     }
+    return new DelphiPMDNode(payload, astTree);
+  }
 
-    @Override
-    public Object create(Token payload) {
-        if (payload != null) {
-            lastLine = payload.getLine();
-        }
-        return new DelphiPMDNode(payload, astTree);
-    }
+  /**
+   * When creating imaginary Tokens (such as TkReturnType etc) we need to set
+   * its parameters manually.
+   */
 
-    /**
-     * When creating imaginary Tokens (such as TkReturnType etc) we need to set
-     * its parameters manually.
-     */
-
-    @Override
-    public Token createToken(int tokenType, String text) {
-        CommonToken imaginaryToken = new CommonToken(tokenType, text);
-        imaginaryToken.setLine(lastLine);
-        return imaginaryToken;
-    }
+  @Override
+  public Token createToken(int tokenType, String text) {
+    CommonToken imaginaryToken = new CommonToken(tokenType, text);
+    imaginaryToken.setLine(lastLine);
+    return imaginaryToken;
+  }
 }

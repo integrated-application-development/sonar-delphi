@@ -24,7 +24,6 @@ package org.sonar.plugins.delphi.codecoverage.aqtime;
 
 import java.util.Map;
 import java.util.Properties;
-
 import org.sonar.plugins.delphi.DelphiPlugin;
 
 /**
@@ -32,24 +31,24 @@ import org.sonar.plugins.delphi.DelphiPlugin;
  */
 public class DatabaseProperties {
 
-    private Map<String, String> jdbcProps;
+  private Map<String, String> jdbcProps;
 
-    public DatabaseProperties(Map<String, String> jdbcProps) {
-        this.jdbcProps = jdbcProps;
-    }
+  public DatabaseProperties(Map<String, String> jdbcProps) {
+    this.jdbcProps = jdbcProps;
+  }
 
-    public Properties getConnectionProperties() {
-        Properties connectionProps = new Properties();
-        connectionProps.put("user", jdbcProps.get(DelphiPlugin.JDBC_USER_KEY));
-        connectionProps.put("password", jdbcProps.get(DelphiPlugin.JDBC_PASSWORD_KEY));
-        return connectionProps;
-    }
+  public Properties getConnectionProperties() {
+    Properties connectionProps = new Properties();
+    connectionProps.put("user", jdbcProps.get(DelphiPlugin.JDBC_USER_KEY));
+    connectionProps.put("password", jdbcProps.get(DelphiPlugin.JDBC_PASSWORD_KEY));
+    return connectionProps;
+  }
 
-    public String getHost() {
-        return jdbcProps.get(DelphiPlugin.JDBC_URL_KEY);
-    }
+  public String getHost() {
+    return jdbcProps.get(DelphiPlugin.JDBC_URL_KEY);
+  }
 
-    public String getDriverName() {
-        return jdbcProps.get(DelphiPlugin.JDBC_DRIVER_KEY);
-    }
+  public String getDriverName() {
+    return jdbcProps.get(DelphiPlugin.JDBC_DRIVER_KEY);
+  }
 }

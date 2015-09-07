@@ -30,10 +30,10 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class DprVariableRule extends DprFunctionRule {
 
-    @Override
-    protected boolean isViolationNode(DelphiPMDNode node) {
-        int type = node.getType();
-        return type == DelphiLexer.TkVariableIdents;
-    }
+  @Override
+  protected boolean isViolationNode(DelphiPMDNode node) {
+    int type = node.getType();
+    return type == DelphiLexer.TkVariableIdents;
+  }
 
 }

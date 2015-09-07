@@ -22,11 +22,8 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl.operations;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.io.IOException;
-
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
@@ -37,47 +34,50 @@ import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
+import static org.junit.Assert.*;
+
 public class AdvanceNodeOperationTest extends OperationsTestsCommon {
 
-    private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/ComplexityMetricsTest.pas";
+  private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/ComplexityMetricsTest.pas";
 
-    public AdvanceNodeOperationTest() {
-        super(new AdvanceNodeOperation());
-    }
+  public AdvanceNodeOperationTest() {
+    super(new AdvanceNodeOperation());
+  }
 
-    @Before
-    public void init() {
-        super.init();
-    }
+  @Override
+  @Before
+  public void init() {
+    super.init();
+  }
 
-    @Test
-    public void executeTest() {
-        int parsedCount = 0;
-        int types[] = {256, 1, 100, 2, 101, 3, 102};
+  @Test
+  public void executeTest() {
+    int parsedCount = 0;
+    int types[] = {256, 1, 100, 2, 101, 3, 102};
 
-        CodeNode<Tree> codeNode = new CodeNode<Tree>(parent);
-        do {
-            assertEquals(types[parsedCount++], codeNode.getNode().getType());
-            codeNode = operation.execute(codeNode.getNode());
-        } while (codeNode.isValid());
+    CodeNode<Tree> codeNode = new CodeNode<Tree>(parent);
+    do {
+      assertEquals(types[parsedCount++], codeNode.getNode().getType());
+      codeNode = operation.execute(codeNode.getNode());
+    } while (codeNode.isValid());
 
-        assertEquals(7, parsedCount);
-    }
+    assertEquals(7, parsedCount);
+  }
 
-    @Test
-    public void executeOnFileTest() throws IOException, RecognitionException {
-        File astFile = DelphiUtils.getResource(FILE_NAME);
-        ASTTree ast = new DelphiAST(astFile);
-        CodeTree codeTree = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
+  @Test
+  public void executeOnFileTest() throws IOException, RecognitionException {
+    File astFile = DelphiUtils.getResource(FILE_NAME);
+    ASTTree ast = new DelphiAST(astFile);
+    CodeTree codeTree = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
 
-        int lastLine = -1;
-        CodeNode<Tree> codeNode = codeTree.getCurrentCodeNode();
-        do {
-            assertTrue(lastLine <= codeNode.getNode().getLine());
-            lastLine = codeNode.getNode().getLine();
-            codeNode = operation.execute(codeNode.getNode());
-        } while (codeNode.isValid());
+    int lastLine = -1;
+    CodeNode<Tree> codeNode = codeTree.getCurrentCodeNode();
+    do {
+      assertTrue(lastLine <= codeNode.getNode().getLine());
+      lastLine = codeNode.getNode().getLine();
+      codeNode = operation.execute(codeNode.getNode());
+    } while (codeNode.isValid());
 
-    }
+  }
 
 }

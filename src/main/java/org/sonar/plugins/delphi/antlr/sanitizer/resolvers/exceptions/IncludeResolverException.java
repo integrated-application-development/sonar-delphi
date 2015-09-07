@@ -27,21 +27,21 @@ package org.sonar.plugins.delphi.antlr.sanitizer.resolvers.exceptions;
  */
 public class IncludeResolverException extends Exception {
 
-    private static final long serialVersionUID = 8547740813940921496L;
+  private static final long serialVersionUID = 8547740813940921496L;
 
-    /**
-     * default ctor with no message
-     */
-    public IncludeResolverException() {
-        super();
-    }
+  /**
+   * default ctor with no message
+   */
+  public IncludeResolverException() {
+    super();
+  }
 
-    /**
-     * ctor
-     * 
-     * @param msg Error message
-     */
-    public IncludeResolverException(String msg) {
-        super(msg);
-    }
+  /**
+   * ctor
+   * 
+   * @param msg Error message
+   */
+  public IncludeResolverException(String msg) {
+    super(msg);
+  }
 }

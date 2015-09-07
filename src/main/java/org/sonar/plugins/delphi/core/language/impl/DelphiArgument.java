@@ -29,60 +29,64 @@ import org.sonar.plugins.delphi.core.language.ArgumentInterface;
  */
 public class DelphiArgument implements ArgumentInterface {
 
-    protected String name;
-    protected String type;
+  protected String name;
+  protected String type;
 
-    /**
-     * Default ctor, creates argument with default name and type
-     */
-    public DelphiArgument() {
-        name = "UNKNOWN_ARGUMENT";
-        type = "UNKNOWN_TYPE";
-    }
+  /**
+   * Default ctor, creates argument with default name and type
+   */
+  public DelphiArgument() {
+    name = "UNKNOWN_ARGUMENT";
+    type = "UNKNOWN_TYPE";
+  }
 
-    /**
-     * Creates an argument with provided name and type
-     * 
-     * @param argName Argument name
-     * @param argType Argument type
-     */
-    public DelphiArgument(String argName, String argType) {
-        name = argName.toLowerCase();
-        type = argType.toLowerCase();
-    }
+  /**
+   * Creates an argument with provided name and type
+   * 
+   * @param argName Argument name
+   * @param argType Argument type
+   */
+  public DelphiArgument(String argName, String argType) {
+    name = argName.toLowerCase();
+    type = argType.toLowerCase();
+  }
 
-    public String getName() {
-        return name;
-    }
+  @Override
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String value) {
-        name = value;
-    }
+  @Override
+  public void setName(String value) {
+    name = value;
+  }
 
-    public String getType() {
-        return type;
-    }
+  @Override
+  public String getType() {
+    return type;
+  }
 
-    public void setType(String value) {
-        type = value;
-    }
+  @Override
+  public void setType(String value) {
+    type = value;
+  }
 
-    @Override
-    public String toString() {
-        return name + ":" + type;
-    }
+  @Override
+  public String toString() {
+    return name + ":" + type;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null) {
-            return false;
-        }
-        return toString().equals(o.toString());
+  @Override
+  public boolean equals(Object o) {
+    if (o == null) {
+      return false;
     }
+    return toString().equals(o.toString());
+  }
 
-    @Override
-    public int hashCode() {
-        return toString().hashCode();
-    }
+  @Override
+  public int hashCode() {
+    return toString().hashCode();
+  }
 
 }

@@ -22,12 +22,12 @@
  */
 package org.sonar.plugins.delphi.core.helpers;
 
+import com.google.common.collect.Lists;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.CoreProperties;
@@ -44,273 +44,271 @@ import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.project.DelphiWorkgroup;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-import com.google.common.collect.Lists;
-
 /**
  * Class that helps get the maven/ant configuration from .xml file
  */
 // TODO Replace inheritance by composition
 public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtension {
 
-    public static final String DEFAULT_PACKAGE_NAME = "[default]";
+  public static final String DEFAULT_PACKAGE_NAME = "[default]";
 
-    private final Settings settings;
-    private final RuleFinder ruleFinder;
-    private final FileSystem fs;
-    private List<File> excludedSources;
+  private final Settings settings;
+  private final RuleFinder ruleFinder;
+  private final FileSystem fs;
+  private List<File> excludedSources;
 
-    /**
-     * ctor used by Sonar
-     *
-     * @param settings
-     * @param ruleFinder
-     */
-    public DelphiProjectHelper(Settings settings, RuleFinder ruleFinder, FileSystem fs) {
-        super(settings, fs);
-        this.settings = settings;
-        this.ruleFinder = ruleFinder;
-        this.fs = fs;
-        DelphiUtils.LOG.info("Delphi Project Helper creation!!!");
-        this.excludedSources = detectExcludedSources();
+  /**
+   * ctor used by Sonar
+   *
+   * @param settings
+   * @param ruleFinder
+   */
+  public DelphiProjectHelper(Settings settings, RuleFinder ruleFinder, FileSystem fs) {
+    super(settings, fs);
+    this.settings = settings;
+    this.ruleFinder = ruleFinder;
+    this.fs = fs;
+    DelphiUtils.LOG.info("Delphi Project Helper creation!!!");
+    this.excludedSources = detectExcludedSources();
+  }
+
+  /**
+   * @return Rule finder
+   */
+  public RuleFinder getRuleFinder() {
+    return ruleFinder;
+  }
+
+  /**
+   * Should includes be copy-pasted to a file which tries to include them
+   *
+   * @return True if so, false otherwise
+   */
+  public boolean shouldExtendIncludes() {
+    String str = settings.getString(DelphiPlugin.INCLUDE_EXTEND_KEY);
+    return "true".equals(str);
+  }
+
+  /**
+   * Gets the include directories (directories that are looked for include
+   * files)
+   *
+   * @param fileSystem Project file system
+   * @return List of include directories
+   */
+  public List<File> getIncludeDirectories() {
+    List<File> result = new ArrayList<File>();
+    if (settings == null) {
+      return result;
     }
-
-    /**
-     * @return Rule finder
-     */
-    public RuleFinder getRuleFinder() {
-        return ruleFinder;
-    }
-
-    /**
-     * Should includes be copy-pasted to a file which tries to include them
-     *
-     * @return True if so, false otherwise
-     */
-    public boolean shouldExtendIncludes() {
-        String str = settings.getString(DelphiPlugin.INCLUDE_EXTEND_KEY);
-        return "true".equals(str);
-    }
-
-    /**
-     * Gets the include directories (directories that are looked for include
-     * files)
-     *
-     * @param fileSystem Project file system
-     * @return List of include directories
-     */
-    public List<File> getIncludeDirectories() {
-        List<File> result = new ArrayList<File>();
-        if (settings == null) {
-            return result;
+    String[] includedDirs = settings.getStringArray(DelphiPlugin.INCLUDED_DIRECTORIES_KEY);
+    if (includedDirs != null && includedDirs.length > 0) {
+      for (String path : includedDirs) {
+        if (StringUtils.isEmpty(path)) {
+          continue;
         }
-        String[] includedDirs = settings.getStringArray(DelphiPlugin.INCLUDED_DIRECTORIES_KEY);
-        if (includedDirs != null && includedDirs.length > 0) {
-            for (String path : includedDirs) {
-                if (StringUtils.isEmpty(path)) {
-                    continue;
-                }
-                File included = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
-                if (!included.exists()) {
-                    DelphiUtils.LOG.warn("Include directory does not exist: " + included.getAbsolutePath());
-                } else if (!included.isDirectory()) {
-                    DelphiUtils.LOG.warn("Include path is not a directory: " + included.getAbsolutePath());
-                } else {
-                    result.add(included);
-                }
-            }
+        File included = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
+        if (!included.exists()) {
+          DelphiUtils.LOG.warn("Include directory does not exist: " + included.getAbsolutePath());
+        } else if (!included.isDirectory()) {
+          DelphiUtils.LOG.warn("Include path is not a directory: " + included.getAbsolutePath());
         } else {
-            DelphiUtils.LOG.info("No include directories found in project configuration.");
+          result.add(included);
         }
-        return result;
+      }
+    } else {
+      DelphiUtils.LOG.info("No include directories found in project configuration.");
     }
+    return result;
+  }
 
-    /**
-     * Gets the list of excluded source files and directories
-     *
-     * @return List of excluded source files and directories
-     */
-    public List<File> getExcludedSources() {
-        return this.excludedSources;
+  /**
+   * Gets the list of excluded source files and directories
+   *
+   * @return List of excluded source files and directories
+   */
+  public List<File> getExcludedSources() {
+    return this.excludedSources;
+  }
+
+  private List<File> detectExcludedSources() {
+    List<File> result = new ArrayList<File>();
+    if (settings == null) {
+      return result;
     }
-
-    private List<File> detectExcludedSources() {
-        List<File> result = new ArrayList<File>();
-        if (settings == null) {
-            return result;
+    String[] excludedNames = settings.getStringArray(DelphiPlugin.EXCLUDED_DIRECTORIES_KEY);
+    if (excludedNames != null && excludedNames.length > 0) {
+      for (String path : excludedNames) {
+        if (StringUtils.isEmpty(path)) {
+          continue;
         }
-        String[] excludedNames = settings.getStringArray(DelphiPlugin.EXCLUDED_DIRECTORIES_KEY);
-        if (excludedNames != null && excludedNames.length > 0) {
-            for (String path : excludedNames) {
-                if (StringUtils.isEmpty(path)) {
-                    continue;
-                }
-                File excluded = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
-                result.add(excluded);
-                if (!excluded.exists()) {
-                    DelphiUtils.LOG.warn("Exclude directory does not exist: " + excluded.getAbsolutePath());
-                }
-            }
-        } else {
-            DelphiUtils.LOG.info("No exclude directories found in project configuration.");
+        File excluded = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
+        result.add(excluded);
+        if (!excluded.exists()) {
+          DelphiUtils.LOG.warn("Exclude directory does not exist: " + excluded.getAbsolutePath());
         }
-        return result;
+      }
+    } else {
+      DelphiUtils.LOG.info("No exclude directories found in project configuration.");
     }
+    return result;
+  }
 
-    /**
-     * Gets the project file (.dproj)
-     *
-     * @return Path to project file
-     */
-    public String getProjectFile() {
-        if (settings == null) {
-            return null;
+  /**
+   * Gets the project file (.dproj)
+   *
+   * @return Path to project file
+   */
+  public String getProjectFile() {
+    if (settings == null) {
+      return null;
+    }
+    return settings.getString(DelphiPlugin.PROJECT_FILE_KEY);
+  }
+
+  /**
+   * Gets the workgroup (.groupproj) file
+   *
+   * @return Path to workgroup file
+   */
+  public String getWorkgroupFile() {
+    if (settings == null) {
+      return null;
+    }
+    return settings.getString(DelphiPlugin.WORKGROUP_FILE_KEY);
+  }
+
+  /**
+   * Should we import sources or not
+   *
+   * @return True if so, false otherwise
+   */
+  public boolean getImportSources() {
+    // Always import source code, see
+    // https://jira.sonarsource.com/browse/SONAR-5735
+    return CoreProperties.CORE_IMPORT_SOURCES_DEFAULT_VALUE;
+  }
+
+  /**
+   * Create list of DelphiLanguage projects in a current workspace
+   *
+   * @return List of DelphiLanguage projects
+   */
+  public List<DelphiProject> getWorkgroupProjects() {
+    List<DelphiProject> list = new ArrayList<DelphiProject>();
+
+    String dprojPath = getProjectFile();
+    String gprojPath = getWorkgroupFile();
+
+    if (!StringUtils.isEmpty(gprojPath)) // Single workgroup file,
+                                         // containing list of .dproj files
+    {
+      try {
+        DelphiUtils.LOG.debug(".groupproj file found: " + gprojPath);
+        DelphiWorkgroup workGroup = new DelphiWorkgroup(new File(gprojPath));
+        for (DelphiProject newProject : workGroup.getProjects()) {
+          list.add(newProject);
         }
-        return settings.getString(DelphiPlugin.PROJECT_FILE_KEY);
+      } catch (IOException e) {
+        DelphiUtils.LOG.error(e.getMessage());
+        DelphiUtils.LOG.error("Skipping .groupproj reading, default configuration assumed.");
+        DelphiProject newProject = new DelphiProject("Default Project");
+        newProject.setIncludeDirectories(getIncludeDirectories());
+        newProject.setSourceFiles(mainFiles());
+        list.clear();
+        list.add(newProject);
+      }
     }
 
-    /**
-     * Gets the workgroup (.groupproj) file
-     *
-     * @return Path to workgroup file
-     */
-    public String getWorkgroupFile() {
-        if (settings == null) {
-            return null;
-        }
-        return settings.getString(DelphiPlugin.WORKGROUP_FILE_KEY);
+    else if (!StringUtils.isEmpty(dprojPath)) // Single .dproj file
+    {
+      File dprojFile = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), dprojPath);
+      DelphiUtils.LOG.info(".dproj file found: " + gprojPath);
+      DelphiProject newProject = new DelphiProject(dprojFile);
+      list.add(newProject);
     }
 
-    /**
-     * Should we import sources or not
-     *
-     * @return True if so, false otherwise
-     */
-    public boolean getImportSources() {
-        // Always import source code, see
-        // https://jira.sonarsource.com/browse/SONAR-5735
-        return CoreProperties.CORE_IMPORT_SOURCES_DEFAULT_VALUE;
+    else // No .dproj files, create default project
+    {
+      DelphiProject newProject = new DelphiProject("Default Project");
+      newProject.setIncludeDirectories(getIncludeDirectories());
+      newProject.setSourceFiles(mainFiles());
+      list.add(newProject);
     }
 
-    /**
-     * Create list of DelphiLanguage projects in a current workspace
-     *
-     * @return List of DelphiLanguage projects
-     */
-    public List<DelphiProject> getWorkgroupProjects() {
-        List<DelphiProject> list = new ArrayList<DelphiProject>();
+    return list;
+  }
 
-        String dprojPath = getProjectFile();
-        String gprojPath = getWorkgroupFile();
+  public List<InputFile> mainFiles() {
+    FilePredicates p = fs.predicates();
+    Iterable<InputFile> inputFiles = fs.inputFiles(p.and(p.hasLanguage(DelphiLanguage.KEY),
+      p.hasType(InputFile.Type.MAIN)));
+    return Lists.newArrayList(inputFiles);
+  }
 
-        if (!StringUtils.isEmpty(gprojPath)) // Single workgroup file,
-                                             // containing list of .dproj files
-        {
-            try {
-                DelphiUtils.LOG.debug(".groupproj file found: " + gprojPath);
-                DelphiWorkgroup workGroup = new DelphiWorkgroup(new File(gprojPath));
-                for (DelphiProject newProject : workGroup.getProjects()) {
-                    list.add(newProject);
-                }
-            } catch (IOException e) {
-                DelphiUtils.LOG.error(e.getMessage());
-                DelphiUtils.LOG.error("Skipping .groupproj reading, default configuration assumed.");
-                DelphiProject newProject = new DelphiProject("Default Project");
-                newProject.setIncludeDirectories(getIncludeDirectories());
-                newProject.setSourceFiles(mainFiles());
-                list.clear();
-                list.add(newProject);
-            }
-        }
+  public List<InputFile> testFiles() {
+    FilePredicates p = fs.predicates();
+    Iterable<InputFile> inputFiles = fs.inputFiles(p.and(p.hasLanguage(DelphiLanguage.KEY),
+      p.hasType(InputFile.Type.TEST)));
+    return Lists.newArrayList(inputFiles);
+  }
 
-        else if (!StringUtils.isEmpty(dprojPath)) // Single .dproj file
-        {
-            File dprojFile = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), dprojPath);
-            DelphiUtils.LOG.info(".dproj file found: " + gprojPath);
-            DelphiProject newProject = new DelphiProject(dprojFile);
-            list.add(newProject);
-        }
+  public boolean shouldExecuteOnProject() {
+    return fs.hasFiles(fs.predicates().hasLanguage(DelphiLanguage.KEY));
+  }
 
-        else // No .dproj files, create default project
-        {
-            DelphiProject newProject = new DelphiProject("Default Project");
-            newProject.setIncludeDirectories(getIncludeDirectories());
-            newProject.setSourceFiles(mainFiles());
-            list.add(newProject);
-        }
+  public InputFile getFile(String path) {
+    return getFile(new File(path));
+  }
 
-        return list;
+  public InputFile getFile(File file) {
+    return fs.inputFile(fs.predicates().is(file));
+  }
+
+  public Directory getDirectory(java.io.File dir, Project module) {
+    Directory directory = Directory.fromIOFile(dir, module);
+
+    if (directory.getKey() == null) {
+      return Directory.create(DEFAULT_PACKAGE_NAME);
     }
 
-    public List<InputFile> mainFiles() {
-        FilePredicates p = fs.predicates();
-        Iterable<InputFile> inputFiles = fs.inputFiles(p.and(p.hasLanguage(DelphiLanguage.KEY),
-                p.hasType(InputFile.Type.MAIN)));
-        return Lists.newArrayList(inputFiles);
+    return directory;
+  }
+
+  public InputFile findFileInDirectories(String fileName) throws FileNotFoundException {
+    for (InputFile inputFile : mainFiles()) {
+      if (inputFile.file().getName().equalsIgnoreCase(fileName)) {
+        return inputFile;
+      }
     }
 
-    public List<InputFile> testFiles() {
-        FilePredicates p = fs.predicates();
-        Iterable<InputFile> inputFiles = fs.inputFiles(p.and(p.hasLanguage(DelphiLanguage.KEY),
-                p.hasType(InputFile.Type.TEST)));
-        return Lists.newArrayList(inputFiles);
+    throw new FileNotFoundException(fileName);
+  }
+
+  public InputFile findTestFileInDirectories(String fileName) throws FileNotFoundException {
+    String unitFileName = normalize(fileName);
+    for (InputFile inputFile : testFiles()) {
+      if (inputFile.file().getName().equalsIgnoreCase(unitFileName)) {
+        return inputFile;
+      }
     }
 
-    public boolean shouldExecuteOnProject() {
-        return fs.hasFiles(fs.predicates().hasLanguage(DelphiLanguage.KEY));
+    throw new FileNotFoundException(fileName);
+  }
+
+  private String normalize(String fileName) {
+    if (!fileName.contains(".")) {
+      return fileName + "." + DelphiLanguage.FILE_SOURCE_CODE_SUFFIX;
     }
+    return fileName;
+  }
 
-    public InputFile getFile(String path) {
-        return getFile(new File(path));
-    }
+  public File baseDir() {
+    return this.fs.baseDir();
+  }
 
-    public InputFile getFile(File file) {
-        return fs.inputFile(fs.predicates().is(file));
-    }
-
-    public Directory getDirectory(java.io.File dir, Project module) {
-        Directory directory = Directory.fromIOFile(dir, module);
-
-        if (directory.getKey() == null) {
-            return Directory.create(DEFAULT_PACKAGE_NAME);
-        }
-
-        return directory;
-    }
-
-    public InputFile findFileInDirectories(String fileName) throws FileNotFoundException {
-        for (InputFile inputFile : mainFiles()) {
-            if (inputFile.file().getName().equalsIgnoreCase(fileName)) {
-                return inputFile;
-            }
-        }
-
-        throw new FileNotFoundException(fileName);
-    }
-
-    public InputFile findTestFileInDirectories(String fileName) throws FileNotFoundException {
-        String unitFileName = normalize(fileName);
-        for (InputFile inputFile : testFiles()) {
-            if (inputFile.file().getName().equalsIgnoreCase(unitFileName)) {
-                return inputFile;
-            }
-        }
-
-        throw new FileNotFoundException(fileName);
-    }
-
-    private String normalize(String fileName) {
-        if (!fileName.contains(".")) {
-            return fileName + "." + DelphiLanguage.FILE_SOURCE_CODE_SUFFIX;
-        }
-        return fileName;
-    }
-
-    public File baseDir() {
-        return this.fs.baseDir();
-    }
-
-    public File workDir() {
-        return fs.workDir();
-    }
+  public File workDir() {
+    return fs.workDir();
+  }
 
 }

@@ -30,54 +30,54 @@ import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRangeMergingAggrega
  */
 public class SourceResolverResults {
 
-    private String fileName;
-    private StringBuilder data;
-    private SubRangeAggregator excludes = new SubRangeMergingAggregator();
+  private String fileName;
+  private StringBuilder data;
+  private SubRangeAggregator excludes = new SubRangeMergingAggregator();
 
-    /**
-     * ctor
-     * 
-     * @param data file data
-     */
-    public SourceResolverResults(String fileName, StringBuilder data) {
-        this.data = data;
-        this.fileName = fileName;
-    }
+  /**
+   * ctor
+   * 
+   * @param data file data
+   */
+  public SourceResolverResults(String fileName, StringBuilder data) {
+    this.data = data;
+    this.fileName = fileName;
+  }
 
-    /**
-     * @return string data
-     */
-    public StringBuilder getFileData() {
-        return data;
-    }
+  /**
+   * @return string data
+   */
+  public StringBuilder getFileData() {
+    return data;
+  }
 
-    /**
-     * sets new file data
-     * 
-     * @param newData new data to set
-     */
-    public void setFileData(StringBuilder newData) {
-        data = newData;
-    }
+  /**
+   * sets new file data
+   * 
+   * @param newData new data to set
+   */
+  public void setFileData(StringBuilder newData) {
+    data = newData;
+  }
 
-    /**
-     * @return exludes
-     */
-    public SubRangeAggregator getFileExcludes() {
-        return excludes;
-    }
+  /**
+   * @return exludes
+   */
+  public SubRangeAggregator getFileExcludes() {
+    return excludes;
+  }
 
-    /**
-     * set the excludes
-     * 
-     * @param newExcludes excludes to set
-     */
-    public void setFileExcludes(SubRangeAggregator newExcludes) {
-        excludes = newExcludes;
-    }
+  /**
+   * set the excludes
+   * 
+   * @param newExcludes excludes to set
+   */
+  public void setFileExcludes(SubRangeAggregator newExcludes) {
+    excludes = newExcludes;
+  }
 
-    public String getFileName() {
-        return fileName;
-    }
+  public String getFileName() {
+    return fileName;
+  }
 
 }

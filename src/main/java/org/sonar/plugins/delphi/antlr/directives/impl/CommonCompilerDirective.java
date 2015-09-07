@@ -30,68 +30,74 @@ import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
  */
 public class CommonCompilerDirective implements CompilerDirective {
 
-    protected String name;
-    protected String item;
-    protected int firstCharPos;
-    protected int lastCharPos;
+  protected String name;
+  protected String item;
+  protected int firstCharPos;
+  protected int lastCharPos;
 
-    /**
-     * ctor
-     * 
-     * @param name directive name
-     * @param item directive item
-     * @param firstCharPos directive first character occurence
-     * @throws IllegalArgumentException if name was null, or firstCharPos < 0,
-     *             or firstCharPos < lastCharPos
-     */
-    public CommonCompilerDirective(String name, String item, int firstCharPos, int lastCharPos) {
-        assertValues(name, firstCharPos, lastCharPos);
-        this.name = name;
-        this.item = item;
-        this.firstCharPos = firstCharPos;
-        this.lastCharPos = lastCharPos;
+  /**
+   * ctor
+   * 
+   * @param name directive name
+   * @param item directive item
+   * @param firstCharPos directive first character occurence
+   * @throws IllegalArgumentException if name was null, or firstCharPos < 0,
+   *             or firstCharPos < lastCharPos
+   */
+  public CommonCompilerDirective(String name, String item, int firstCharPos, int lastCharPos) {
+    assertValues(name, firstCharPos, lastCharPos);
+    this.name = name;
+    this.item = item;
+    this.firstCharPos = firstCharPos;
+    this.lastCharPos = lastCharPos;
+  }
+
+  @Override
+  public String getName() {
+    return name;
+  }
+
+  @Override
+  public String getItem() {
+    return item;
+  }
+
+  @Override
+  public int getFirstCharPosition() {
+    return firstCharPos;
+  }
+
+  @Override
+  public int getLastCharPosition() {
+    return lastCharPos;
+  }
+
+  @Override
+  public CompilerDirectiveType getType() {
+    return CompilerDirectiveType.UNKNOWN;
+  }
+
+  private void assertValues(String name, int beginPos, int endPos) {
+    if (name == null) {
+      throw new IllegalArgumentException("Compiler directive name cannot be null!");
+    }
+    if (beginPos < 0 || endPos < 0) {
+      throw new IllegalArgumentException("Compiler directive first/last character occurence must be >= 0");
+    }
+    if (beginPos > endPos) {
+      throw new IllegalArgumentException("Compiler directive first character must be <= last character");
     }
 
-    public String getName() {
-        return name;
-    }
+  }
 
-    public String getItem() {
-        return item;
-    }
+  @Override
+  public String toString() {
+    return name + " " + item;
+  }
 
-    public int getFirstCharPosition() {
-        return firstCharPos;
-    }
-
-    public int getLastCharPosition() {
-        return lastCharPos;
-    }
-
-    public CompilerDirectiveType getType() {
-        return CompilerDirectiveType.UNKNOWN;
-    }
-
-    private void assertValues(String name, int beginPos, int endPos) {
-        if (name == null) {
-            throw new IllegalArgumentException("Compiler directive name cannot be null!");
-        }
-        if (beginPos < 0 || endPos < 0) {
-            throw new IllegalArgumentException("Compiler directive first/last character occurence must be >= 0");
-        }
-        if (beginPos > endPos) {
-            throw new IllegalArgumentException("Compiler directive first character must be <= last character");
-        }
-
-    }
-
-    @Override
-    public String toString() {
-        return name + " " + item;
-    }
-
-    public int getLength() {
-        return lastCharPos - firstCharPos;
-    }
+  @Override
+  public int getLength() {
+    return lastCharPos - firstCharPos;
+  }
 
 }

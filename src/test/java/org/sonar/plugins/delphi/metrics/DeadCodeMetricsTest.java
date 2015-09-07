@@ -22,14 +22,9 @@
  */
 package org.sonar.plugins.delphi.metrics;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.antlr.runtime.RecognitionException;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -60,127 +55,131 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
 @Ignore("Unused functions it's not working. There are many false positives.")
 public class DeadCodeMetricsTest {
 
-    private static final String TEST_FILE = "/org/sonar/plugins/delphi/metrics/DeadCodeMetricsTest.pas";
-    private static final String DEAD_FILE = "/org/sonar/plugins/delphi/metrics/DeadCodeUnit.pas";
+  private static final String TEST_FILE = "/org/sonar/plugins/delphi/metrics/DeadCodeMetricsTest.pas";
+  private static final String DEAD_FILE = "/org/sonar/plugins/delphi/metrics/DeadCodeUnit.pas";
 
-    private DeadCodeMetrics metrics;
-    private List<UnitInterface> units;
-    private List<ClassInterface> classes;
-    private List<FunctionInterface> functions;
-    private ResourcePerspectives perspectives;
-    private Issuable issuable;
-    private final List<Issue> issues = new ArrayList<Issue>();
-    private RuleFinder ruleFinder;
+  private DeadCodeMetrics metrics;
+  private List<UnitInterface> units;
+  private List<ClassInterface> classes;
+  private List<FunctionInterface> functions;
+  private ResourcePerspectives perspectives;
+  private Issuable issuable;
+  private final List<Issue> issues = new ArrayList<Issue>();
+  private RuleFinder ruleFinder;
 
-    @Before
-    public void init() {
-        functions = new ArrayList<FunctionInterface>();
-        classes = new ArrayList<ClassInterface>();
-        units = new ArrayList<UnitInterface>();
+  @Before
+  public void init() {
+    functions = new ArrayList<FunctionInterface>();
+    classes = new ArrayList<ClassInterface>();
+    units = new ArrayList<UnitInterface>();
 
-        FunctionInterface f1 = new DelphiFunction("function1");
-        FunctionInterface f2 = new DelphiFunction("function2");
-        FunctionInterface f3 = new DelphiFunction("function3");
-        f1.addCalledFunction(f2);
-        f2.addCalledFunction(f1);
-        f3.setLine(321);
+    FunctionInterface f1 = new DelphiFunction("function1");
+    FunctionInterface f2 = new DelphiFunction("function2");
+    FunctionInterface f3 = new DelphiFunction("function3");
+    f1.addCalledFunction(f2);
+    f2.addCalledFunction(f1);
+    f3.setLine(321);
 
-        ClassPropertyInterface p1 = new DelphiClassProperty();
-        p1.setReadFunction(f1);
-        p1.setWriteFunction(f2);
+    ClassPropertyInterface p1 = new DelphiClassProperty();
+    p1.setReadFunction(f1);
+    p1.setWriteFunction(f2);
 
-        ClassInterface c1 = new DelphiClass("class1");
-        ClassInterface c2 = new DelphiClass("class2");
-        c1.addFunction(f1);
-        c2.addFunction(f2);
-        c2.addFunction(f3);
-        c2.addProperty(p1);
+    ClassInterface c1 = new DelphiClass("class1");
+    ClassInterface c2 = new DelphiClass("class2");
+    c1.addFunction(f1);
+    c2.addFunction(f2);
+    c2.addFunction(f3);
+    c2.addProperty(p1);
 
-        UnitInterface u1 = new DelphiUnit("unit1");
-        UnitInterface u2 = new DelphiUnit("unit2");
-        UnitInterface u3 = new DelphiUnit("unit3");
-        u1.setPath("unit1.dpr");
-        u2.setPath("unit2.pas");
-        u3.setPath("unit3.pas");
+    UnitInterface u1 = new DelphiUnit("unit1");
+    UnitInterface u2 = new DelphiUnit("unit2");
+    UnitInterface u3 = new DelphiUnit("unit3");
+    u1.setPath("unit1.dpr");
+    u2.setPath("unit2.pas");
+    u3.setPath("unit3.pas");
 
-        u1.addIncludes("unit2");
-        u2.addIncludes("unit1");
-        u3.setLine(123);
-        u1.addClass(c1);
-        u2.addClass(c2);
+    u1.addIncludes("unit2");
+    u2.addIncludes("unit1");
+    u3.setLine(123);
+    u1.addClass(c1);
+    u2.addClass(c2);
 
-        units.add(u1);
-        units.add(u2);
-        units.add(u3);
+    units.add(u1);
+    units.add(u2);
+    units.add(u3);
 
-        perspectives = mock(ResourcePerspectives.class);
+    perspectives = mock(ResourcePerspectives.class);
 
-        issuable = mock(Issuable.class);
+    issuable = mock(Issuable.class);
 
-        when(perspectives.as(Matchers.eq(Issuable.class), Matchers.isA(InputFile.class))).thenReturn(issuable);
+    when(perspectives.as(Matchers.eq(Issuable.class), Matchers.isA(InputFile.class))).thenReturn(issuable);
 
-        when(issuable.newIssueBuilder()).thenReturn(new StubIssueBuilder());
+    when(issuable.newIssueBuilder()).thenReturn(new StubIssueBuilder());
 
-        when(issuable.addIssue(Matchers.any(Issue.class))).then(new Answer<Boolean>() {
-            @Override
-            public Boolean answer(InvocationOnMock invocation) throws Throwable {
-                Issue issue = (Issue) invocation.getArguments()[0];
-                issues.add(issue);
-                return Boolean.TRUE;
-            }
-        });
+    when(issuable.addIssue(Matchers.any(Issue.class))).then(new Answer<Boolean>() {
+      @Override
+      public Boolean answer(InvocationOnMock invocation) throws Throwable {
+        Issue issue = (Issue) invocation.getArguments()[0];
+        issues.add(issue);
+        return Boolean.TRUE;
+      }
+    });
 
-        ruleFinder = mock(RuleFinder.class);
-        when(ruleFinder.find(DeadCodeMetrics.RULE_QUERY_UNUSED_UNIT)).thenReturn(
-                Rule.create(DeadCodeMetrics.RULE_QUERY_UNUSED_UNIT.getRepositoryKey(),
-                        DeadCodeMetrics.RULE_QUERY_UNUSED_UNIT.getKey()));
-        when(ruleFinder.find(DeadCodeMetrics.RULE_QUERY_UNUSED_FUNCTION)).thenReturn(
-                Rule.create(DeadCodeMetrics.RULE_QUERY_UNUSED_FUNCTION.getRepositoryKey(),
-                        DeadCodeMetrics.RULE_QUERY_UNUSED_FUNCTION.getKey()));
+    ruleFinder = mock(RuleFinder.class);
+    when(ruleFinder.find(DeadCodeMetrics.RULE_QUERY_UNUSED_UNIT)).thenReturn(
+      Rule.create(DeadCodeMetrics.RULE_QUERY_UNUSED_UNIT.getRepositoryKey(),
+        DeadCodeMetrics.RULE_QUERY_UNUSED_UNIT.getKey()));
+    when(ruleFinder.find(DeadCodeMetrics.RULE_QUERY_UNUSED_FUNCTION)).thenReturn(
+      Rule.create(DeadCodeMetrics.RULE_QUERY_UNUSED_FUNCTION.getRepositoryKey(),
+        DeadCodeMetrics.RULE_QUERY_UNUSED_FUNCTION.getKey()));
 
-        metrics = new DeadCodeMetrics(null, ruleFinder, perspectives);
+    metrics = new DeadCodeMetrics(null, ruleFinder, perspectives);
+  }
+
+  @Test
+  public void analyseTest() {
+    DebugSensorContext context = new DebugSensorContext();
+    metrics.analyse(null, context, classes, functions, units);
+    metrics.save(new DefaultInputFile("unit3").setAbsolutePath(pathTo("unit3.pas")), context);
+    metrics.save(new DefaultInputFile("unit2").setAbsolutePath(pathTo("unit2.pas")), context);
+
+    assertThat(issues, hasSize(2));
+    int lines[] = {123, 321};
+    for (int i = 0; i < issues.size(); ++i) {
+      assertEquals("Invalid unit line", lines[i], issues.get(i).line().intValue());
     }
 
-    @Test
-    public void analyseTest() {
-        DebugSensorContext context = new DebugSensorContext();
-        metrics.analyse(null, context, classes, functions, units);
-        metrics.save(new DefaultInputFile("unit3").setAbsolutePath(pathTo("unit3.pas")), context);
-        metrics.save(new DefaultInputFile("unit2").setAbsolutePath(pathTo("unit2.pas")), context);
+  }
 
-        assertThat(issues, hasSize(2));
-        int lines[] = {123, 321};
-        for (int i = 0; i < issues.size(); ++i) {
-            assertEquals("Invalid unit line", lines[i], issues.get(i).line().intValue());
-        }
+  private String pathTo(String file) {
+    return "/org/sonar/plugins/delphi/metrics/" + file;
+  }
 
+  @Test
+  public void analyseFileTest() throws IllegalStateException, IOException, RecognitionException {
+    DebugSensorContext context = new DebugSensorContext();
+    DelphiAST ast = new DelphiAST(DelphiUtils.getResource(TEST_FILE));
+    ASTAnalyzer analyser = new DelphiASTAnalyzer(DelphiTestUtils.mockProjectHelper());
+    assertFalse("Grammar error", ast.isError());
+    analyser.analyze(ast);
+    metrics.analyse(null, context, analyser.getResults().getClasses(), analyser.getResults().getFunctions(),
+      analyser.getResults()
+        .getCachedUnitsAsList());
+
+    metrics.save(new DefaultInputFile("DeadCodeUnit").setAbsolutePath(DEAD_FILE), context);
+
+    for (Issue issue : issues) {
+      System.out.println("issue: " + issue.key() + " line: " + issue.line() + " message: " + issue.message());
     }
 
-    private String pathTo(String file) {
-        return "/org/sonar/plugins/delphi/metrics/" + file;
-    }
-
-    @Test
-    public void analyseFileTest() throws IllegalStateException, IOException, RecognitionException {
-        DebugSensorContext context = new DebugSensorContext();
-        DelphiAST ast = new DelphiAST(DelphiUtils.getResource(TEST_FILE));
-        ASTAnalyzer analyser = new DelphiASTAnalyzer(DelphiTestUtils.mockProjectHelper());
-        assertFalse("Grammar error", ast.isError());
-        analyser.analyze(ast);
-        metrics.analyse(null, context, analyser.getResults().getClasses(), analyser.getResults().getFunctions(),
-                analyser.getResults()
-                        .getCachedUnitsAsList());
-
-        metrics.save(new DefaultInputFile("DeadCodeUnit").setAbsolutePath(DEAD_FILE), context);
-
-        for (Issue issue : issues) {
-            System.out.println("issue: " + issue.key() + " line: " + issue.line() + " message: " + issue.message());
-        }
-
-        assertThat(issues, hasSize(2));
-    }
+    assertThat(issues, hasSize(2));
+  }
 
 }

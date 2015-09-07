@@ -43,40 +43,43 @@ import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
  */
 public class DelphiASTAnalyzer implements ASTAnalyzer {
 
-    private CodeAnalysisResults result;
-    private CodeTree code;
-    private DelphiProjectHelper delphiProjectHelper;
+  private CodeAnalysisResults result;
+  private CodeTree code;
+  private DelphiProjectHelper delphiProjectHelper;
 
-    public DelphiASTAnalyzer(DelphiProjectHelper delphiProjectHelper) {
-        this.delphiProjectHelper = delphiProjectHelper;
+  public DelphiASTAnalyzer(DelphiProjectHelper delphiProjectHelper) {
+    this.delphiProjectHelper = delphiProjectHelper;
+  }
+
+  @Override
+  public void analyze(ASTTree tree) {
+    result = new CodeAnalysisResults();
+    code = new CodeTree(new CodeNode<ASTTree>(tree), new CodeNode<Tree>(tree.getChild(0)));
+
+    CodeAnalyzer analyzer = new UnitAnalyzer();
+    analyzer.chain(new IncludeAnalyzer()).chain(new InterfaceAnalyzer()).chain(new VisibilityAnalyzer())
+      .chain(new TypeAnalyzer())
+      .chain(new TypeInheritanceAnalyzer()).chain(new TypeFieldsAnalyzer()).chain(new TypePropertyAnalyzer())
+      .chain(new FunctionAnalyzer()).chain(new FunctionBodyAnalyzer(result, delphiProjectHelper))
+      .chain(new FunctionParametersAnalyzer());
+
+    CodeNode<Tree> codeNode = code.getCurrentCodeNode();
+    AdvanceNodeOperation advance = new AdvanceNodeOperation();
+    while (codeNode.isValid()) {
+      analyzer.analyze(code, result);
+      codeNode = advance.execute(codeNode.getNode());
+      code.setCurrentNode(codeNode);
     }
+  }
 
-    public void analyze(ASTTree tree) {
-        result = new CodeAnalysisResults();
-        code = new CodeTree(new CodeNode<ASTTree>(tree), new CodeNode<Tree>(tree.getChild(0)));
+  @Override
+  public CodeAnalysisResults getResults() {
+    return result;
+  }
 
-        CodeAnalyzer analyzer = new UnitAnalyzer();
-        analyzer.chain(new IncludeAnalyzer()).chain(new InterfaceAnalyzer()).chain(new VisibilityAnalyzer())
-                .chain(new TypeAnalyzer())
-                .chain(new TypeInheritanceAnalyzer()).chain(new TypeFieldsAnalyzer()).chain(new TypePropertyAnalyzer())
-                .chain(new FunctionAnalyzer()).chain(new FunctionBodyAnalyzer(result, delphiProjectHelper))
-                .chain(new FunctionParametersAnalyzer());
-
-        CodeNode<Tree> codeNode = code.getCurrentCodeNode();
-        AdvanceNodeOperation advance = new AdvanceNodeOperation();
-        while (codeNode.isValid()) {
-            analyzer.analyze(code, result);
-            codeNode = advance.execute(codeNode.getNode());
-            code.setCurrentNode(codeNode);
-        }
-    }
-
-    public CodeAnalysisResults getResults() {
-        return result;
-    }
-
-    public CodeTree getCode() {
-        return code;
-    }
+  @Override
+  public CodeTree getCode() {
+    return code;
+  }
 
 }

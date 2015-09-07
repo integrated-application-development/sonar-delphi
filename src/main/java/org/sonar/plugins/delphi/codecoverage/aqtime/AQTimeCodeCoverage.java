@@ -25,31 +25,31 @@ package org.sonar.plugins.delphi.codecoverage.aqtime;
 
 public class AQTimeCodeCoverage {
 
-    private String coveredFileName;
-    private int lineNumber;
-    private int lineHits;
+  private String coveredFileName;
+  private int lineNumber;
+  private int lineHits;
 
-    public void setCoveredFileName(String coveredFileName) {
-        this.coveredFileName = coveredFileName;
-    }
+  public void setCoveredFileName(String coveredFileName) {
+    this.coveredFileName = coveredFileName;
+  }
 
-    public void setLineNumber(int lineNumber) {
-        this.lineNumber = lineNumber;
-    }
+  public void setLineNumber(int lineNumber) {
+    this.lineNumber = lineNumber;
+  }
 
-    public void setLineHits(int lineHits) {
-        this.lineHits = lineHits;
-    }
+  public void setLineHits(int lineHits) {
+    this.lineHits = lineHits;
+  }
 
-    public String getCoveredFileName() {
-        return coveredFileName;
-    }
+  public String getCoveredFileName() {
+    return coveredFileName;
+  }
 
-    public int getLineNumber() {
-        return lineNumber;
-    }
+  public int getLineNumber() {
+    return lineNumber;
+  }
 
-    public int getLineHits() {
-        return lineHits;
-    }
+  public int getLineHits() {
+    return lineHits;
+  }
 }

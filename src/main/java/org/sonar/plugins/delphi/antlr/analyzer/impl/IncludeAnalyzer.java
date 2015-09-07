@@ -35,36 +35,36 @@ import org.sonar.plugins.delphi.core.language.UnitInterface;
  */
 public class IncludeAnalyzer extends CodeAnalyzer {
 
-    private int includeIndex;
+  private int includeIndex;
 
-    @Override
-    public void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
-        analyzeIncludes(codeTree.getCurrentCodeNode().getNode(), results.getActiveUnit());
-    }
+  @Override
+  public void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
+    analyzeIncludes(codeTree.getCurrentCodeNode().getNode(), results.getActiveUnit());
+  }
 
-    @Override
-    public boolean canAnalyze(CodeTree codeTree) {
-        int type = codeTree.getCurrentCodeNode().getNode().getType();
-        return (type == DelphiParser.USES || type == DelphiParser.UNIT || type == DelphiParser.LIBRARY);
-    }
+  @Override
+  public boolean canAnalyze(CodeTree codeTree) {
+    int type = codeTree.getCurrentCodeNode().getNode().getType();
+    return (type == DelphiParser.USES || type == DelphiParser.UNIT || type == DelphiParser.LIBRARY);
+  }
 
-    private void analyzeIncludes(Tree includeNode, UnitInterface activeUnit) {
-        if (activeUnit == null || includeNode == null) {
-            return;
-        }
-        includeIndex = 0;
-        CommonTree node;
-        while ((node = getNextUnitIncludeNode(includeNode)) != null) {
-            activeUnit.addIncludes(node.getText());
-        }
+  private void analyzeIncludes(Tree includeNode, UnitInterface activeUnit) {
+    if (activeUnit == null || includeNode == null) {
+      return;
     }
+    includeIndex = 0;
+    CommonTree node;
+    while ((node = getNextUnitIncludeNode(includeNode)) != null) {
+      activeUnit.addIncludes(node.getText());
+    }
+  }
 
-    protected CommonTree getNextUnitIncludeNode(Tree node) {
-        CommonTree result = (CommonTree) node.getChild(includeIndex++);
-        if (result == null) {
-            includeIndex = 0;
-        }
-        return result;
+  protected CommonTree getNextUnitIncludeNode(Tree node) {
+    CommonTree result = (CommonTree) node.getChild(includeIndex++);
+    if (result == null) {
+      includeIndex = 0;
     }
+    return result;
+  }
 
 }

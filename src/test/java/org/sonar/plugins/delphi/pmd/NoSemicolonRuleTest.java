@@ -22,123 +22,122 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.Test;
 import org.sonar.api.issue.Issue;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
 
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+
 public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
-    @Test
-    public void testRule() {
-        DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-        builder.appendImpl("procedure NoSemicolonsAfterLastInstruction;");
-        builder.appendImpl("begin");
-        builder.appendImpl("  x := 5");
-        builder.appendImpl("end;");
+  @Test
+  public void testRule() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendImpl("procedure NoSemicolonsAfterLastInstruction;");
+    builder.appendImpl("begin");
+    builder.appendImpl("  x := 5");
+    builder.appendImpl("end;");
 
-        configureTest(builder);
+    configureTest(builder);
 
-        DebugSensorContext debugContext = new DebugSensorContext();
-        sensor.analyse(project, debugContext);
+    DebugSensorContext debugContext = new DebugSensorContext();
+    sensor.analyse(project, debugContext);
 
-        assertThat(issues, not(empty()));
-        List<Issue> matchIssues = new ArrayList<Issue>();
-        for (Issue issue : issues) {
-            if (issue.ruleKey().rule().equals("No Semicolon Rule")) {
-                matchIssues.add(issue);
-            }
-        }
-        assertThat(matchIssues, hasSize(1));
-        assertThat(matchIssues.get(0).line(), is(builder.getOffSet() + 3));
+    assertThat(issues, not(empty()));
+    List<Issue> matchIssues = new ArrayList<Issue>();
+    for (Issue issue : issues) {
+      if (issue.ruleKey().rule().equals("No Semicolon Rule")) {
+        matchIssues.add(issue);
+      }
     }
+    assertThat(matchIssues, hasSize(1));
+    assertThat(matchIssues.get(0).line(), is(builder.getOffSet() + 3));
+  }
 
-    @Test
-    public void testInsideWhile() {
-        DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-        builder.appendImpl("procedure NoSemicolonsAfterLastInstruction;");
-        builder.appendImpl("var");
-        builder.appendImpl("  x: integer;");
-        builder.appendImpl("begin");
-        builder.appendImpl("  while x <> 0 do");
-        builder.appendImpl("  begin");
-        builder.appendImpl("    writeln('test')");
-        builder.appendImpl("  end;");
-        builder.appendImpl("end;");
+  @Test
+  public void testInsideWhile() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendImpl("procedure NoSemicolonsAfterLastInstruction;");
+    builder.appendImpl("var");
+    builder.appendImpl("  x: integer;");
+    builder.appendImpl("begin");
+    builder.appendImpl("  while x <> 0 do");
+    builder.appendImpl("  begin");
+    builder.appendImpl("    writeln('test')");
+    builder.appendImpl("  end;");
+    builder.appendImpl("end;");
 
-        configureTest(builder);
+    configureTest(builder);
 
-        DebugSensorContext debugContext = new DebugSensorContext();
-        sensor.analyse(project, debugContext);
+    DebugSensorContext debugContext = new DebugSensorContext();
+    sensor.analyse(project, debugContext);
 
-        assertThat(issues, not(empty()));
-        List<Issue> matchIssues = new ArrayList<Issue>();
-        for (Issue issue : issues) {
-            if (issue.ruleKey().rule().equals("No Semicolon Rule")) {
-                matchIssues.add(issue);
-            }
-        }
-        assertThat(matchIssues, hasSize(1));
-        assertThat(matchIssues.get(0).line(), is(builder.getOffSet() + 7));
+    assertThat(issues, not(empty()));
+    List<Issue> matchIssues = new ArrayList<Issue>();
+    for (Issue issue : issues) {
+      if (issue.ruleKey().rule().equals("No Semicolon Rule")) {
+        matchIssues.add(issue);
+      }
     }
+    assertThat(matchIssues, hasSize(1));
+    assertThat(matchIssues.get(0).line(), is(builder.getOffSet() + 7));
+  }
 
-    @Test
-    public void testOnEndOfWhile() {
-        DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-        builder.appendImpl("procedure NoSemicolonsAfterLastInstruction;");
-        builder.appendImpl("var");
-        builder.appendImpl("  x: integer;");
-        builder.appendImpl("begin");
-        builder.appendImpl("  while x <> 0 do");
-        builder.appendImpl("  begin");
-        builder.appendImpl("    writeln('test');");
-        builder.appendImpl("  end");
-        builder.appendImpl("end;");
+  @Test
+  public void testOnEndOfWhile() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendImpl("procedure NoSemicolonsAfterLastInstruction;");
+    builder.appendImpl("var");
+    builder.appendImpl("  x: integer;");
+    builder.appendImpl("begin");
+    builder.appendImpl("  while x <> 0 do");
+    builder.appendImpl("  begin");
+    builder.appendImpl("    writeln('test');");
+    builder.appendImpl("  end");
+    builder.appendImpl("end;");
 
-        configureTest(builder);
+    configureTest(builder);
 
-        DebugSensorContext debugContext = new DebugSensorContext();
-        sensor.analyse(project, debugContext);
+    DebugSensorContext debugContext = new DebugSensorContext();
+    sensor.analyse(project, debugContext);
 
-        assertThat(issues, not(empty()));
-        List<Issue> matchIssues = new ArrayList<Issue>();
-        for (Issue issue : issues) {
-            if (issue.ruleKey().rule().equals("No Semicolon Rule")) {
-                matchIssues.add(issue);
-            }
-        }
-        assertThat(matchIssues, hasSize(1));
-        // TODO The correct line is 15
-        assertThat(matchIssues.get(0).line(), is(builder.getOffSet() + 9));
+    assertThat(issues, not(empty()));
+    List<Issue> matchIssues = new ArrayList<Issue>();
+    for (Issue issue : issues) {
+      if (issue.ruleKey().rule().equals("No Semicolon Rule")) {
+        matchIssues.add(issue);
+      }
     }
+    assertThat(matchIssues, hasSize(1));
+    // TODO The correct line is 15
+    assertThat(matchIssues.get(0).line(), is(builder.getOffSet() + 9));
+  }
 
-    @Test
-    public void shouldSkipEndFollowedByElse() {
-        DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-        builder.appendImpl("procedure NoSemicolonsAfterLastInstruction(val: Boolean);");
-        builder.appendImpl("begin");
-        builder.appendImpl("  if val then");
-        builder.appendImpl("  begin");
-        builder.appendImpl("    writeln('test');");
-        builder.appendImpl("  end");
-        builder.appendImpl("  else");
-        builder.appendImpl("  begin");
-        builder.appendImpl("    writeln('test');");
-        builder.appendImpl("  end;");
-        builder.appendImpl("end;");
+  @Test
+  public void shouldSkipEndFollowedByElse() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendImpl("procedure NoSemicolonsAfterLastInstruction(val: Boolean);");
+    builder.appendImpl("begin");
+    builder.appendImpl("  if val then");
+    builder.appendImpl("  begin");
+    builder.appendImpl("    writeln('test');");
+    builder.appendImpl("  end");
+    builder.appendImpl("  else");
+    builder.appendImpl("  begin");
+    builder.appendImpl("    writeln('test');");
+    builder.appendImpl("  end;");
+    builder.appendImpl("end;");
 
-        configureTest(builder);
+    configureTest(builder);
 
-        DebugSensorContext debugContext = new DebugSensorContext();
-        sensor.analyse(project, debugContext);
+    DebugSensorContext debugContext = new DebugSensorContext();
+    sensor.analyse(project, debugContext);
 
-        assertThat(sensor.getErrors(), empty());
-        assertThat(issues, empty());
-    }
+    assertThat(sensor.getErrors(), empty());
+    assertThat(issues, empty());
+  }
 
 }

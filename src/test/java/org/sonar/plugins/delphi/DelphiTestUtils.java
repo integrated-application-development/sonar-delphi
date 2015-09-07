@@ -22,16 +22,16 @@
  */
 package org.sonar.plugins.delphi;
 
-import static org.mockito.Mockito.*;
-
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
+
+import static org.mockito.Mockito.*;
 
 public class DelphiTestUtils {
 
-    public static DelphiProjectHelper mockProjectHelper() {
-        DelphiProjectHelper mock = mock(DelphiProjectHelper.class);
-        when(mock.shouldExecuteOnProject()).thenReturn(true);
-        return mock;
-    }
+  public static DelphiProjectHelper mockProjectHelper() {
+    DelphiProjectHelper mock = mock(DelphiProjectHelper.class);
+    when(mock.shouldExecuteOnProject()).thenReturn(true);
+    return mock;
+  }
 
 }

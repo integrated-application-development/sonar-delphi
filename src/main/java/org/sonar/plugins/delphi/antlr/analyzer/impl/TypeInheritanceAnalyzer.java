@@ -37,62 +37,62 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiClass;
  */
 public class TypeInheritanceAnalyzer extends CodeAnalyzer {
 
-    @Override
-    protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
-        if (results.getActiveClass() == null) {
-            throw new IllegalStateException("Analyzing class parents for no active class");
-        }
-
-        for (int i = 0; i < codeTree.getCurrentCodeNode().getNode().getChildCount(); ++i) {
-            CommonTree parentNode = (CommonTree) codeTree.getCurrentCodeNode().getNode().getChild(i);
-            String parentName = parentNode.getText().toLowerCase();
-            ClassInterface parentClass = checkParentInFile(parentName, results);
-            if (parentClass == null) {
-                parentClass = checkParentInUnits(parentName, results);
-            }
-
-            if (parentClass == null) { // not found, create a new one
-                parentClass = new DelphiClass(parentName);
-            }
-
-            results.getActiveClass().addParent(parentClass);
-            results.cacheClass(parentClass.toString(), parentClass);
-        }
+  @Override
+  protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
+    if (results.getActiveClass() == null) {
+      throw new IllegalStateException("Analyzing class parents for no active class");
     }
 
-    @Override
-    public boolean canAnalyze(CodeTree codeTree) {
-        return codeTree.getCurrentCodeNode().getNode().getType() == LexerMetrics.CLASS_PARENTS.toMetrics();
-    }
+    for (int i = 0; i < codeTree.getCurrentCodeNode().getNode().getChildCount(); ++i) {
+      CommonTree parentNode = (CommonTree) codeTree.getCurrentCodeNode().getNode().getChild(i);
+      String parentName = parentNode.getText().toLowerCase();
+      ClassInterface parentClass = checkParentInFile(parentName, results);
+      if (parentClass == null) {
+        parentClass = checkParentInUnits(parentName, results);
+      }
 
-    /**
-     * check if parent is in one of the parsed units
-     */
-    private ClassInterface checkParentInUnits(String parentName, CodeAnalysisResults results) {
-        for (UnitInterface unit : results.getCachedUnits()) {
-            if (!results.getActiveUnit().isIncluding(unit)) {
-                continue; // if not in this unit, continue
-            }
-            ClassInterface found = unit.findClass(parentName); // check for
-                                                               // class in a
-                                                               // unit
-            if (found != null) {
-                return found;
-            }
-        }
-        return null;
-    }
+      if (parentClass == null) { // not found, create a new one
+        parentClass = new DelphiClass(parentName);
+      }
 
-    /**
-     * check if parent is in one of classes in current file
-     */
-    private ClassInterface checkParentInFile(String parentName, CodeAnalysisResults results) {
-        for (ClassInterface clazz : results.getClasses()) {
-            if (!clazz.equals(results.getActiveClass()) && clazz.getShortName().equalsIgnoreCase(parentName)) {
-                return clazz;
-            }
-        }
-        return null;
+      results.getActiveClass().addParent(parentClass);
+      results.cacheClass(parentClass.toString(), parentClass);
     }
+  }
+
+  @Override
+  public boolean canAnalyze(CodeTree codeTree) {
+    return codeTree.getCurrentCodeNode().getNode().getType() == LexerMetrics.CLASS_PARENTS.toMetrics();
+  }
+
+  /**
+   * check if parent is in one of the parsed units
+   */
+  private ClassInterface checkParentInUnits(String parentName, CodeAnalysisResults results) {
+    for (UnitInterface unit : results.getCachedUnits()) {
+      if (!results.getActiveUnit().isIncluding(unit)) {
+        continue; // if not in this unit, continue
+      }
+      ClassInterface found = unit.findClass(parentName); // check for
+                                                         // class in a
+                                                         // unit
+      if (found != null) {
+        return found;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * check if parent is in one of classes in current file
+   */
+  private ClassInterface checkParentInFile(String parentName, CodeAnalysisResults results) {
+    for (ClassInterface clazz : results.getClasses()) {
+      if (!clazz.equals(results.getActiveClass()) && clazz.getShortName().equalsIgnoreCase(parentName)) {
+        return clazz;
+      }
+    }
+    return null;
+  }
 
 }

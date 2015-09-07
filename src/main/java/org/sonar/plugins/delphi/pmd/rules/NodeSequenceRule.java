@@ -23,7 +23,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.properties.StringProperty;
-
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
@@ -32,35 +31,35 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class NodeSequenceRule extends DelphiRule {
 
-    private static final StringProperty SEQUENCE = new StringProperty("sequence", "The AST sequence nodes to find", "",
-            1.0f);
+  private static final StringProperty SEQUENCE = new StringProperty("sequence", "The AST sequence nodes to find", "",
+    1.0f);
 
-    private String[] sequence;
-    private int count;
-    private DelphiPMDNode firstMatchNode;
+  private String[] sequence;
+  private int count;
+  private DelphiPMDNode firstMatchNode;
 
-    @Override
-    public Object visit(DelphiPMDNode node, Object data) {
+  @Override
+  public Object visit(DelphiPMDNode node, Object data) {
 
-        if (node.getText().equalsIgnoreCase(sequence[count])) {
-            if (++count == 1) {
-                firstMatchNode = node; // save first match node
-            } else if (count >= sequence.length) { // end the sequence
-                addViolation(data, firstMatchNode);
-                count = 0; // reset
-            }
-        } else {
-            count = 0; // reset if we bumped out of the sequence
-        }
-
-        return data;
+    if (node.getText().equalsIgnoreCase(sequence[count])) {
+      if (++count == 1) {
+        firstMatchNode = node; // save first match node
+      } else if (count >= sequence.length) { // end the sequence
+        addViolation(data, firstMatchNode);
+        count = 0; // reset
+      }
+    } else {
+      count = 0; // reset if we bumped out of the sequence
     }
 
-    @Override
-    protected void init() {
-        count = 0;
-        firstMatchNode = null;
-        sequence = getStringProperty(SEQUENCE).split(",");
-    }
+    return data;
+  }
+
+  @Override
+  protected void init() {
+    count = 0;
+    firstMatchNode = null;
+    sequence = getStringProperty(SEQUENCE).split(",");
+  }
 
 }

@@ -22,11 +22,8 @@
  */
 package org.sonar.plugins.delphi.core.language.impl.verifiers;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.io.IOException;
-
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
@@ -43,68 +40,70 @@ import org.sonar.plugins.delphi.core.language.verifiers.StatementVerifier;
 import org.sonar.plugins.delphi.core.language.verifiers.StatementVerifierException;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
+import static org.junit.Assert.*;
+
 public class StatementVerifierTest {
 
-    private static final int FILE_COMPLEX_STMT_COUNT = 11;
-    private static final int FILE_STATEMENT_LINES[] = {27, 34, 41, 44, 50, 50, 51, 51, 52, 52, 59, 60, 61, 63, 63, 64,
-            64, 70, 70, 71};
-    private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/ComplexityMetricsTest.pas";
+  private static final int FILE_COMPLEX_STMT_COUNT = 11;
+  private static final int FILE_STATEMENT_LINES[] = {27, 34, 41, 44, 50, 50, 51, 51, 52, 52, 59, 60, 61, 63, 63, 64,
+    64, 70, 70, 71};
+  private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/ComplexityMetricsTest.pas";
 
-    private StatementVerifier verifier;
-    private ASTTree ast;
-    private CodeTree codeTree;
+  private StatementVerifier verifier;
+  private ASTTree ast;
+  private CodeTree codeTree;
 
-    @Before
-    public void setup() throws IOException, RecognitionException {
-        File astFile = DelphiUtils.getResource(FILE_NAME);
-        ast = new DelphiAST(astFile);
-        codeTree = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
-        verifier = new StatementVerifier(DelphiTestUtils.mockProjectHelper());
-    }
+  @Before
+  public void setup() throws IOException, RecognitionException {
+    File astFile = DelphiUtils.getResource(FILE_NAME);
+    ast = new DelphiAST(astFile);
+    codeTree = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
+    verifier = new StatementVerifier(DelphiTestUtils.mockProjectHelper());
+  }
 
-    @Test
-    public void createStatementTest() throws StatementVerifierException {
-        int statementCount = 0;
-        int complexStatementsCount = 0;
+  @Test
+  public void createStatementTest() throws StatementVerifierException {
+    int statementCount = 0;
+    int complexStatementsCount = 0;
 
-        AdvanceNodeOperation operation = new AdvanceNodeOperation();
-        CodeNode<Tree> currentNode = codeTree.getCurrentCodeNode();
-        int lastLineParsed = -1;
-        while (currentNode.isValid()) {
+    AdvanceNodeOperation operation = new AdvanceNodeOperation();
+    CodeNode<Tree> currentNode = codeTree.getCurrentCodeNode();
+    int lastLineParsed = -1;
+    while (currentNode.isValid()) {
 
-            if (currentNode.getNode().getType() == LexerMetrics.FUNCTION_BODY.toMetrics()
-                    && lastLineParsed <= currentNode.getNode().getLine()) {
-                int beginCount = 1;
-                CodeNode<Tree> atNode = currentNode;
-                do {
-                    if (verifier.verify(atNode.getNode())) {
+      if (currentNode.getNode().getType() == LexerMetrics.FUNCTION_BODY.toMetrics()
+        && lastLineParsed <= currentNode.getNode().getLine()) {
+        int beginCount = 1;
+        CodeNode<Tree> atNode = currentNode;
+        do {
+          if (verifier.verify(atNode.getNode())) {
 
-                        StatementInterface statement = verifier.createStatement();
-                        assertEquals(FILE_STATEMENT_LINES[statementCount], statement.getLine());
-                        ++statementCount;
+            StatementInterface statement = verifier.createStatement();
+            assertEquals(FILE_STATEMENT_LINES[statementCount], statement.getLine());
+            ++statementCount;
 
-                        if (verifier.isComplexStatement()) {
-                            ++complexStatementsCount;
-                        }
-                    }
-
-                    atNode = operation.execute(atNode.getNode());
-                    lastLineParsed = atNode.getNode().getLine();
-
-                    if (atNode.getNode().getType() == LexerMetrics.END.toMetrics()) {
-                        --beginCount;
-                    } else if (atNode.getNode().getType() == LexerMetrics.BEGIN.toMetrics()) {
-                        ++beginCount;
-                    }
-
-                } while (atNode.isValid() && beginCount > 0);
+            if (verifier.isComplexStatement()) {
+              ++complexStatementsCount;
             }
-            currentNode = operation.execute(currentNode.getNode());
-            codeTree.setCurrentNode(currentNode);
-        }
+          }
 
-        assertEquals(FILE_STATEMENT_LINES.length, statementCount);
-        assertEquals(FILE_COMPLEX_STMT_COUNT, complexStatementsCount);
+          atNode = operation.execute(atNode.getNode());
+          lastLineParsed = atNode.getNode().getLine();
+
+          if (atNode.getNode().getType() == LexerMetrics.END.toMetrics()) {
+            --beginCount;
+          } else if (atNode.getNode().getType() == LexerMetrics.BEGIN.toMetrics()) {
+            ++beginCount;
+          }
+
+        } while (atNode.isValid() && beginCount > 0);
+      }
+      currentNode = operation.execute(currentNode.getNode());
+      codeTree.setCurrentNode(currentNode);
     }
+
+    assertEquals(FILE_STATEMENT_LINES.length, statementCount);
+    assertEquals(FILE_COMPLEX_STMT_COUNT, complexStatementsCount);
+  }
 
 }

@@ -34,17 +34,17 @@ import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
  */
 public class VisibilityAnalyzer extends CodeAnalyzer {
 
-    @Override
-    protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
-        Tree currentNode = codeTree.getCurrentCodeNode().getNode();
-        results.setParseVisibility(LexerMetrics.getLexerMetricsForType(currentNode.getType()));
-    }
+  @Override
+  protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
+    Tree currentNode = codeTree.getCurrentCodeNode().getNode();
+    results.setParseVisibility(LexerMetrics.getLexerMetricsForType(currentNode.getType()));
+  }
 
-    @Override
-    public boolean canAnalyze(CodeTree codeTree) {
-        Tree currentNode = codeTree.getCurrentCodeNode().getNode();
-        int type = currentNode.getType();
-        return type == DelphiParser.PUBLIC || type == DelphiParser.PRIVATE || type == DelphiParser.PROTECTED
-                || type == DelphiParser.PUBLISHED;
-    }
+  @Override
+  public boolean canAnalyze(CodeTree codeTree) {
+    Tree currentNode = codeTree.getCurrentCodeNode().getNode();
+    int type = currentNode.getType();
+    return type == DelphiParser.PUBLIC || type == DelphiParser.PRIVATE || type == DelphiParser.PROTECTED
+      || type == DelphiParser.PUBLISHED;
+  }
 }

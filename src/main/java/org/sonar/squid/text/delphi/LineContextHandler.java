@@ -24,39 +24,39 @@ package org.sonar.squid.text.delphi;
 
 public abstract class LineContextHandler {
 
-    abstract boolean matchToEnd(Line line, StringBuilder pendingLine);
+  abstract boolean matchToEnd(Line line, StringBuilder pendingLine);
 
-    abstract boolean matchWithEndOfLine(Line line, StringBuilder pendingLine);
+  abstract boolean matchWithEndOfLine(Line line, StringBuilder pendingLine);
 
-    abstract boolean matchToBegin(Line line, StringBuilder pendingLine);
+  abstract boolean matchToBegin(Line line, StringBuilder pendingLine);
 
-    static boolean matchEndOfString(CharSequence pendingLine, String end) {
-        int pendingLineIndex = pendingLine.length() - end.length();
-        if (pendingLineIndex < 0) {
-            return false;
-        }
-        for (int endIndex = 0; endIndex < end.length(); endIndex++) {
-            char endChar = end.charAt(endIndex);
-            char pendingLineChar = pendingLine.charAt(pendingLineIndex + endIndex);
-            if (endChar != pendingLineChar) {
-                return false;
-            }
-        }
-        return true;
+  static boolean matchEndOfString(CharSequence pendingLine, String end) {
+    int pendingLineIndex = pendingLine.length() - end.length();
+    if (pendingLineIndex < 0) {
+      return false;
     }
-
-    static boolean matchEndOfString(StringBuilder pendingLine, char endChar) {
-        if (pendingLine.length() < 1) {
-            return false;
-        }
-        return pendingLine.charAt(pendingLine.length() - 1) == endChar;
+    for (int endIndex = 0; endIndex < end.length(); endIndex++) {
+      char endChar = end.charAt(endIndex);
+      char pendingLineChar = pendingLine.charAt(pendingLineIndex + endIndex);
+      if (endChar != pendingLineChar) {
+        return false;
+      }
     }
+    return true;
+  }
 
-    static char getLastCharacter(StringBuilder pendingLine) {
-        if (pendingLine.length() < 1) {
-            throw new IllegalStateException("The pending line is empty.");
-        }
-        return pendingLine.charAt(pendingLine.length() - 1);
+  static boolean matchEndOfString(StringBuilder pendingLine, char endChar) {
+    if (pendingLine.length() < 1) {
+      return false;
     }
+    return pendingLine.charAt(pendingLine.length() - 1) == endChar;
+  }
+
+  static char getLastCharacter(StringBuilder pendingLine) {
+    if (pendingLine.length() < 1) {
+      throw new IllegalStateException("The pending line is empty.");
+    }
+    return pendingLine.charAt(pendingLine.length() - 1);
+  }
 
 }

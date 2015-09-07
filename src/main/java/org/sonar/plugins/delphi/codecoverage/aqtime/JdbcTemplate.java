@@ -30,7 +30,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 /**
@@ -38,42 +37,42 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  */
 public class JdbcTemplate {
 
-    private Connection connection = null;
-    DatabaseProperties databaseProperties = null;
+  private Connection connection = null;
+  DatabaseProperties databaseProperties = null;
 
-    public JdbcTemplate(DatabaseProperties databaseProperties) {
-        this.databaseProperties = databaseProperties;
+  public JdbcTemplate(DatabaseProperties databaseProperties) {
+    this.databaseProperties = databaseProperties;
+  }
+
+  public Connection getConnection() {
+    try {
+      Class.forName(databaseProperties.getDriverName());
+      connection = DriverManager.getConnection(databaseProperties.getHost(),
+        databaseProperties.getConnectionProperties());
+    } catch (Exception e) {
+      DelphiUtils.LOG.error(e.getMessage());
+      return null;
     }
+    return connection;
+  }
 
-    public Connection getConnection() {
-        try {
-            Class.forName(databaseProperties.getDriverName());
-            connection = DriverManager.getConnection(databaseProperties.getHost(),
-                    databaseProperties.getConnectionProperties());
-        } catch (Exception e) {
-            DelphiUtils.LOG.error(e.getMessage());
-            return null;
+  public <T> List<T> query(final String queryString, RowMapper<T> rowMapper) {
+    List<T> result = new ArrayList<T>();
+    try {
+      Statement statement = getConnection().createStatement();
+      try {
+        ResultSet resultSet = statement.executeQuery(queryString);
+        while (resultSet.next()) {
+          result.add(rowMapper.mapRow(resultSet));
         }
-        return connection;
+      } finally {
+        statement.close();
+      }
+    } catch (SQLException e) {
+      DelphiUtils.LOG.error("AQTime SQL error: " + e.getMessage());
     }
 
-    public <T> List<T> query(final String queryString, RowMapper<T> rowMapper) {
-        List<T> result = new ArrayList<T>();
-        try {
-            Statement statement = getConnection().createStatement();
-            try {
-                ResultSet resultSet = statement.executeQuery(queryString);
-                while (resultSet.next()) {
-                    result.add(rowMapper.mapRow(resultSet));
-                }
-            } finally {
-                statement.close();
-            }
-        } catch (SQLException e) {
-            DelphiUtils.LOG.error("AQTime SQL error: " + e.getMessage());
-        }
-
-        return result;
-    }
+    return result;
+  }
 
 }

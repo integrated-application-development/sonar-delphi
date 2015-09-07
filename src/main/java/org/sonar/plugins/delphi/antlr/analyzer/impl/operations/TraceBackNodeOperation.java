@@ -31,21 +31,22 @@ import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
  */
 public class TraceBackNodeOperation implements NodeOperation {
 
-    public CodeNode<Tree> execute(Tree node) {
-        if (node == null) {
-            return new CodeNode<Tree>(null);
-        }
-
-        Tree parent = node.getParent();
-        if (parent == null) {
-            return new CodeNode<Tree>(null);
-        }
-
-        Tree nextNode = parent.getChild(node.getChildIndex() + 1);
-        if (nextNode != null) {
-            return new CodeNode<Tree>(nextNode); // if child found
-        }
-
-        return execute(parent); // if no child found, trace back again
+  @Override
+  public CodeNode<Tree> execute(Tree node) {
+    if (node == null) {
+      return new CodeNode<Tree>(null);
     }
+
+    Tree parent = node.getParent();
+    if (parent == null) {
+      return new CodeNode<Tree>(null);
+    }
+
+    Tree nextNode = parent.getChild(node.getChildIndex() + 1);
+    if (nextNode != null) {
+      return new CodeNode<Tree>(nextNode); // if child found
+    }
+
+    return execute(parent); // if no child found, trace back again
+  }
 }

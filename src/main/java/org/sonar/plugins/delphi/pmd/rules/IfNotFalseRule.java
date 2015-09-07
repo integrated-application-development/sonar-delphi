@@ -29,23 +29,23 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class IfNotFalseRule extends IfTrueRule {
 
-    protected boolean wasNot;
+  protected boolean wasNot;
 
-    @Override
-    protected void init() {
-        super.init();
-        wasNot = false;
-        setStringToSearch("false");
-    }
+  @Override
+  protected void init() {
+    super.init();
+    wasNot = false;
+    setStringToSearch("false");
+  }
 
-    @Override
-    protected boolean accept(DelphiPMDNode node) {
-        if (!wasNot && "not".equals(node.getText())) {
-            wasNot = true;
-        } else {
-            return super.accept(node);
-        }
-        return false;
+  @Override
+  protected boolean accept(DelphiPMDNode node) {
+    if (!wasNot && "not".equals(node.getText())) {
+      wasNot = true;
+    } else {
+      return super.accept(node);
     }
+    return false;
+  }
 
 }

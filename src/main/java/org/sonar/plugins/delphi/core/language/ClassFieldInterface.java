@@ -27,29 +27,29 @@ package org.sonar.plugins.delphi.core.language;
  */
 public interface ClassFieldInterface extends ArgumentInterface {
 
-    /**
-     * Sets field parent (class it resides in)
-     * 
-     * @param cl Parent class
-     */
-    void setParent(ClassInterface cl);
+  /**
+   * Sets field parent (class it resides in)
+   * 
+   * @param cl Parent class
+   */
+  void setParent(ClassInterface cl);
 
-    /**
-     * Get parent (class it resides in)
-     * 
-     * @return Parent class
-     */
-    ClassInterface getParent();
+  /**
+   * Get parent (class it resides in)
+   * 
+   * @return Parent class
+   */
+  ClassInterface getParent();
 
-    /**
-     * @return Fields visibility (, protected or private)
-     */
-    int getVisibility();
+  /**
+   * @return Fields visibility (, protected or private)
+   */
+  int getVisibility();
 
-    /**
-     * Sets class field visibility
-     * 
-     * @param value , protected of private
-     */
-    void setVisibility(int value);
+  /**
+   * Sets class field visibility
+   * 
+   * @param value , protected of private
+   */
+  void setVisibility(int value);
 }

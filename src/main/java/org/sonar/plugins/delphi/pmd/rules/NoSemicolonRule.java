@@ -31,63 +31,63 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class NoSemicolonRule extends DelphiRule {
 
-    private boolean inImplementation = false;
+  private boolean inImplementation = false;
 
-    @Override
-    public void init() {
-        inImplementation = false;
+  @Override
+  public void init() {
+    inImplementation = false;
+  }
+
+  @Override
+  public Object visit(DelphiPMDNode node, Object data) {
+    if (!inImplementation) {
+      inImplementation = node.getType() == LexerMetrics.IMPLEMENTATION.toMetrics();
+      return data;
     }
 
-    @Override
-    public Object visit(DelphiPMDNode node, Object data) {
-        if (!inImplementation) {
-            inImplementation = node.getType() == LexerMetrics.IMPLEMENTATION.toMetrics();
-            return data;
+    if (node.getType() == LexerMetrics.END.toMetrics()) {
+      Tree previousNode = getPreviousNode(node);
+      if (isValidNode(previousNode)) {
+        if (isBlockNode(previousNode)) {
+          if (isMissingSemicolonInBlock(previousNode)) {
+            addViolation(data, node);
+          }
+        } else if (!isSemicolonNode(previousNode)) {
+          addViolation(data, (DelphiPMDNode) previousNode);
         }
+      }
 
-        if (node.getType() == LexerMetrics.END.toMetrics()) {
-            Tree previousNode = getPreviousNode(node);
-            if (isValidNode(previousNode)) {
-                if (isBlockNode(previousNode)) {
-                    if (isMissingSemicolonInBlock(previousNode)) {
-                        addViolation(data, node);
-                    }
-                } else if (!isSemicolonNode(previousNode)) {
-                    addViolation(data, (DelphiPMDNode) previousNode);
-                }
-            }
+    }
+    return data;
+  }
 
-        }
-        return data;
+  private boolean isValidNode(Tree node) {
+    return node != null && node.getType() != LexerMetrics.ELSE.toMetrics()
+      && node.getType() != LexerMetrics.IMPLEMENTATION.toMetrics();
+  }
+
+  private Tree getPreviousNode(DelphiPMDNode node) {
+    int index = node.getChildIndex() - 1;
+    if (index < 0 || node.getParent() == null) {
+      return null;
     }
 
-    private boolean isValidNode(Tree node) {
-        return node != null && node.getType() != LexerMetrics.ELSE.toMetrics()
-                && node.getType() != LexerMetrics.IMPLEMENTATION.toMetrics();
-    }
+    return node.getParent().getChild(index);
+  }
 
-    private Tree getPreviousNode(DelphiPMDNode node) {
-        int index = node.getChildIndex() - 1;
-        if (index < 0 || node.getParent() == null) {
-            return null;
-        }
+  private boolean isBlockNode(Tree node) {
+    return node != null
+      && (node.getType() == LexerMetrics.BEGIN.toMetrics() || node.getType() == LexerMetrics.EXCEPT
+        .toMetrics());
+  }
 
-        return node.getParent().getChild(index);
-    }
+  private boolean isMissingSemicolonInBlock(Tree beginNode) {
+    Tree lastChild = beginNode.getChild(beginNode.getChildCount() - 1);
+    return lastChild != null && !isSemicolonNode(lastChild);
+  }
 
-    private boolean isBlockNode(Tree node) {
-        return node != null
-                && (node.getType() == LexerMetrics.BEGIN.toMetrics() || node.getType() == LexerMetrics.EXCEPT
-                        .toMetrics());
-    }
-
-    private boolean isMissingSemicolonInBlock(Tree beginNode) {
-        Tree lastChild = beginNode.getChild(beginNode.getChildCount() - 1);
-        return lastChild != null && !isSemicolonNode(lastChild);
-    }
-
-    private boolean isSemicolonNode(Tree node) {
-        return node != null && node.getType() == LexerMetrics.SEMI.toMetrics();
-    }
+  private boolean isSemicolonNode(Tree node) {
+    return node != null && node.getType() == LexerMetrics.SEMI.toMetrics();
+  }
 
 }

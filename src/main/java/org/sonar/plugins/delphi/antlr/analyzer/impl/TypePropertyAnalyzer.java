@@ -38,73 +38,73 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
  */
 public class TypePropertyAnalyzer extends CodeAnalyzer {
 
-    @Override
-    protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
-        if (results.getActiveClass() == null) {
-            throw new IllegalStateException("Cannot parse class fields for no active class");
-        }
-
-        String varType = getPropertyType((CommonTree) codeTree.getCurrentCodeNode().getNode());
-        if (varType == null) {
-            return;
-        }
-
-        String varName = getPropertyName((CommonTree) codeTree.getCurrentCodeNode().getNode());
-        FunctionInterface read = getPropertyReadFunction((CommonTree) codeTree.getCurrentCodeNode().getNode());
-        FunctionInterface write = getPropertyWriteFunction((CommonTree) codeTree.getCurrentCodeNode().getNode());
-
-        if (read != null) {
-            read.setParentClass(results.getActiveClass());
-        }
-
-        if (write != null) {
-            write.setParentClass(results.getActiveClass());
-        }
-
-        ClassPropertyInterface property = new DelphiClassProperty(varName, varType, results.getParseVisibility()
-                .toMetrics(), read, write);
-        property.setParent(results.getActiveClass());
-        results.getActiveClass().addProperty(property);
+  @Override
+  protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
+    if (results.getActiveClass() == null) {
+      throw new IllegalStateException("Cannot parse class fields for no active class");
     }
 
-    @Override
-    public boolean canAnalyze(CodeTree codeTree) {
-        return codeTree.getCurrentCodeNode().getNode().getType() == LexerMetrics.PROPERTY.toMetrics();
+    String varType = getPropertyType((CommonTree) codeTree.getCurrentCodeNode().getNode());
+    if (varType == null) {
+      return;
     }
 
-    private FunctionInterface getPropertyReadFunction(CommonTree node) {
-        Tree functionNode = node.getFirstChildWithType(LexerMetrics.READ.toMetrics());
-        if (functionNode != null) {
-            String functionName = functionNode.getChild(0).getText();
-            FunctionInterface function = new DelphiFunction();
-            function.setName(functionName);
-            return function;
-        }
-        return null;
+    String varName = getPropertyName((CommonTree) codeTree.getCurrentCodeNode().getNode());
+    FunctionInterface read = getPropertyReadFunction((CommonTree) codeTree.getCurrentCodeNode().getNode());
+    FunctionInterface write = getPropertyWriteFunction((CommonTree) codeTree.getCurrentCodeNode().getNode());
+
+    if (read != null) {
+      read.setParentClass(results.getActiveClass());
     }
 
-    private FunctionInterface getPropertyWriteFunction(CommonTree node) {
-        Tree functionNode = node.getFirstChildWithType(LexerMetrics.WRITE.toMetrics());
-        if (functionNode != null) {
-            String functionName = functionNode.getChild(0).getText();
-            FunctionInterface function = new DelphiFunction();
-            function.setName(functionName);
-            return function;
-        }
-        return null;
+    if (write != null) {
+      write.setParentClass(results.getActiveClass());
     }
 
-    private String getPropertyName(CommonTree node) {
-        Tree nameNode = node.getFirstChildWithType(LexerMetrics.VARIABLE_IDENTS.toMetrics());
-        return nameNode.getChild(0).getText();
-    }
+    ClassPropertyInterface property = new DelphiClassProperty(varName, varType, results.getParseVisibility()
+      .toMetrics(), read, write);
+    property.setParent(results.getActiveClass());
+    results.getActiveClass().addProperty(property);
+  }
 
-    private String getPropertyType(CommonTree node) {
-        Tree typeNode = node.getFirstChildWithType(LexerMetrics.VARIABLE_TYPE.toMetrics()).getChild(0);
-        if (typeNode != null) {
-            return typeNode.getText();
-        }
-        return null;
+  @Override
+  public boolean canAnalyze(CodeTree codeTree) {
+    return codeTree.getCurrentCodeNode().getNode().getType() == LexerMetrics.PROPERTY.toMetrics();
+  }
+
+  private FunctionInterface getPropertyReadFunction(CommonTree node) {
+    Tree functionNode = node.getFirstChildWithType(LexerMetrics.READ.toMetrics());
+    if (functionNode != null) {
+      String functionName = functionNode.getChild(0).getText();
+      FunctionInterface function = new DelphiFunction();
+      function.setName(functionName);
+      return function;
     }
+    return null;
+  }
+
+  private FunctionInterface getPropertyWriteFunction(CommonTree node) {
+    Tree functionNode = node.getFirstChildWithType(LexerMetrics.WRITE.toMetrics());
+    if (functionNode != null) {
+      String functionName = functionNode.getChild(0).getText();
+      FunctionInterface function = new DelphiFunction();
+      function.setName(functionName);
+      return function;
+    }
+    return null;
+  }
+
+  private String getPropertyName(CommonTree node) {
+    Tree nameNode = node.getFirstChildWithType(LexerMetrics.VARIABLE_IDENTS.toMetrics());
+    return nameNode.getChild(0).getText();
+  }
+
+  private String getPropertyType(CommonTree node) {
+    Tree typeNode = node.getFirstChildWithType(LexerMetrics.VARIABLE_TYPE.toMetrics()).getChild(0);
+    if (typeNode != null) {
+      return typeNode.getText();
+    }
+    return null;
+  }
 
 }

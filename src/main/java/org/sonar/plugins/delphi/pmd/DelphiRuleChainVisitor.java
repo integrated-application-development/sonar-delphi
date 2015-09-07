@@ -23,7 +23,6 @@
 package org.sonar.plugins.delphi.pmd;
 
 import java.util.List;
-
 import net.sourceforge.pmd.AbstractRuleChainVisitor;
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleContext;
@@ -36,14 +35,14 @@ import net.sourceforge.pmd.ast.SimpleNode;
  */
 public class DelphiRuleChainVisitor extends AbstractRuleChainVisitor {
 
-    @Override
-    protected void visit(Rule rule, SimpleNode node, RuleContext ctx) {
-        ((JavaNode) node).jjtAccept((DelphiParserVisitor) rule, ctx);
-    }
+  @Override
+  protected void visit(Rule rule, SimpleNode node, RuleContext ctx) {
+    ((JavaNode) node).jjtAccept((DelphiParserVisitor) rule, ctx);
+  }
 
-    @Override
-    protected void indexNodes(List<CompilationUnit> astCompilationUnits, RuleContext ctx) {
+  @Override
+  protected void indexNodes(List<CompilationUnit> astCompilationUnits, RuleContext ctx) {
 
-    }
+  }
 
 }

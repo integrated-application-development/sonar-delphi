@@ -26,7 +26,6 @@ import java.io.File;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.List;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.sonar.api.batch.SensorContext;
@@ -48,119 +47,122 @@ import org.sonar.squid.text.delphi.DelphiSource;
  */
 public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
 
-    /**
-     * {@inheritDoc}
-     */
-    public BasicMetrics(Project delphiProject) {
-        super(delphiProject);
+  /**
+   * {@inheritDoc}
+   */
+  public BasicMetrics(Project delphiProject) {
+    super(delphiProject);
+  }
+
+  @Override
+  public void analyse(InputFile resource, SensorContext sensorContext, List<ClassInterface> classes,
+    List<FunctionInterface> functions,
+    List<UnitInterface> units) {
+    clearMetrics();
+    Reader reader = null;
+    try {
+      reader = new StringReader(FileUtils.readFileToString(new File(resource.absolutePath())));
+      DelphiSource source = new DelphiSource(reader, new DelphiRecognizer());
+      setMetric("LINES", source.getMeasure(Metric.LINES));
+      setMetric("NCLOC", source.getMeasure(Metric.LINES_OF_CODE));
+      setMetric("COMMENT_LINES", source.getMeasure(Metric.COMMENT_LINES));
+      setMetric("COMMENT_BLANK_LINES", source.getMeasure(Metric.COMMENT_BLANK_LINES));
+      setMetric("PUBLIC_DOC_API", source.getMeasure(Metric.PUBLIC_DOC_API));
+      setMetric("FILES", 1.0);
+    } catch (Exception e) {
+      DelphiUtils.LOG.error("BasicMetrics::analyse() -- Can not analyse the file " + resource.absolutePath(), e);
+    } finally {
+      IOUtils.closeQuietly(reader);
     }
+  }
 
-    public void analyse(InputFile resource, SensorContext sensorContext, List<ClassInterface> classes,
-            List<FunctionInterface> functions,
-            List<UnitInterface> units) {
-        clearMetrics();
-        Reader reader = null;
-        try {
-            reader = new StringReader(FileUtils.readFileToString(new File(resource.absolutePath())));
-            DelphiSource source = new DelphiSource(reader, new DelphiRecognizer());
-            setMetric("LINES", source.getMeasure(Metric.LINES));
-            setMetric("NCLOC", source.getMeasure(Metric.LINES_OF_CODE));
-            setMetric("COMMENT_LINES", source.getMeasure(Metric.COMMENT_LINES));
-            setMetric("COMMENT_BLANK_LINES", source.getMeasure(Metric.COMMENT_BLANK_LINES));
-            setMetric("PUBLIC_DOC_API", source.getMeasure(Metric.PUBLIC_DOC_API));
-            setMetric("FILES", 1.0);
-        } catch (Exception e) {
-            DelphiUtils.LOG.error("BasicMetrics::analyse() -- Can not analyse the file " + resource.absolutePath(), e);
-        } finally {
-            IOUtils.closeQuietly(reader);
-        }
+  /**
+   * {@inheritDoc}
+   */
+
+  @Override
+  public void save(InputFile resource, SensorContext sensorContext) {
+    sensorContext.saveMeasure(resource, CoreMetrics.LINES, getMetric("LINES")); // Number
+                                                                                // of
+                                                                                // carriage
+                                                                                // returns
+    sensorContext.saveMeasure(resource, CoreMetrics.NCLOC, getMetric("NCLOC")); // Number
+                                                                                // of
+                                                                                // physical
+                                                                                // lines
+                                                                                // of
+                                                                                // code
+                                                                                // -
+                                                                                // number
+                                                                                // of
+                                                                                // blank
+                                                                                // lines
+                                                                                // -
+                                                                                // number
+                                                                                // of
+                                                                                // comment
+                                                                                // lines
+                                                                                // -
+                                                                                // number
+                                                                                // of
+                                                                                // header
+                                                                                // file
+                                                                                // comments
+                                                                                // -
+                                                                                // commented-out
+                                                                                // lines
+                                                                                // of
+                                                                                // code
+    sensorContext.saveMeasure(resource, CoreMetrics.COMMENT_LINES, getMetric("COMMENT_LINES")); // Number
+                                                                                                // of
+                                                                                                // javadoc,
+                                                                                                // multi-comment
+                                                                                                // and
+                                                                                                // single-comment
+                                                                                                // lines.
+                                                                                                // Empty
+                                                                                                // comment
+                                                                                                // lines
+                                                                                                // like,
+                                                                                                // header
+                                                                                                // file
+                                                                                                // comments
+                                                                                                // (mainly
+                                                                                                // used
+                                                                                                // to
+                                                                                                // define
+                                                                                                // the
+                                                                                                // license)
+                                                                                                // and
+                                                                                                // commented-out
+                                                                                                // lines
+                                                                                                // of
+                                                                                                // code
+                                                                                                // are
+                                                                                                // not
+                                                                                                // included.
+    sensorContext.saveMeasure(resource, CoreMetrics.FILES, getMetric("FILES")); // Number
+                                                                                // of
+                                                                                // analyzed
+                                                                                // files
+                                                                                // (1
+                                                                                // per
+                                                                                // resource,
+                                                                                // resource=file)
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+
+  @Override
+  public boolean executeOnResource(InputFile resource) {
+    String[] endings = DelphiLanguage.instance.getFileSuffixes();
+    for (String ending : endings) {
+      if (resource.absolutePath().endsWith("." + ending)) {
+        return true;
+      }
     }
-
-    /**
-     * {@inheritDoc}
-     */
-
-    public void save(InputFile resource, SensorContext sensorContext) {
-        sensorContext.saveMeasure(resource, CoreMetrics.LINES, getMetric("LINES")); // Number
-                                                                                    // of
-                                                                                    // carriage
-                                                                                    // returns
-        sensorContext.saveMeasure(resource, CoreMetrics.NCLOC, getMetric("NCLOC")); // Number
-                                                                                    // of
-                                                                                    // physical
-                                                                                    // lines
-                                                                                    // of
-                                                                                    // code
-                                                                                    // -
-                                                                                    // number
-                                                                                    // of
-                                                                                    // blank
-                                                                                    // lines
-                                                                                    // -
-                                                                                    // number
-                                                                                    // of
-                                                                                    // comment
-                                                                                    // lines
-                                                                                    // -
-                                                                                    // number
-                                                                                    // of
-                                                                                    // header
-                                                                                    // file
-                                                                                    // comments
-                                                                                    // -
-                                                                                    // commented-out
-                                                                                    // lines
-                                                                                    // of
-                                                                                    // code
-        sensorContext.saveMeasure(resource, CoreMetrics.COMMENT_LINES, getMetric("COMMENT_LINES")); // Number
-                                                                                                    // of
-                                                                                                    // javadoc,
-                                                                                                    // multi-comment
-                                                                                                    // and
-                                                                                                    // single-comment
-                                                                                                    // lines.
-                                                                                                    // Empty
-                                                                                                    // comment
-                                                                                                    // lines
-                                                                                                    // like,
-                                                                                                    // header
-                                                                                                    // file
-                                                                                                    // comments
-                                                                                                    // (mainly
-                                                                                                    // used
-                                                                                                    // to
-                                                                                                    // define
-                                                                                                    // the
-                                                                                                    // license)
-                                                                                                    // and
-                                                                                                    // commented-out
-                                                                                                    // lines
-                                                                                                    // of
-                                                                                                    // code
-                                                                                                    // are
-                                                                                                    // not
-                                                                                                    // included.
-        sensorContext.saveMeasure(resource, CoreMetrics.FILES, getMetric("FILES")); // Number
-                                                                                    // of
-                                                                                    // analyzed
-                                                                                    // files
-                                                                                    // (1
-                                                                                    // per
-                                                                                    // resource,
-                                                                                    // resource=file)
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-
-    public boolean executeOnResource(InputFile resource) {
-        String[] endings = DelphiLanguage.instance.getFileSuffixes();
-        for (String ending : endings) {
-            if (resource.absolutePath().endsWith("." + ending)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    return false;
+  }
 }

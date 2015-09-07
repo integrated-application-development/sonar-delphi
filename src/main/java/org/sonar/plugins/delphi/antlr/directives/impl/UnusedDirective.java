@@ -32,23 +32,23 @@ import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
  */
 public class UnusedDirective extends CommonCompilerDirective {
 
-    /**
-     * ctor
-     * 
-     * @param firstCharPos first character position
-     * @param lastCharPos last character position
-     */
-    public UnusedDirective(int firstCharPos, int lastCharPos) {
-        super("unused", "", firstCharPos, lastCharPos);
-    }
+  /**
+   * ctor
+   * 
+   * @param firstCharPos first character position
+   * @param lastCharPos last character position
+   */
+  public UnusedDirective(int firstCharPos, int lastCharPos) {
+    super("unused", "", firstCharPos, lastCharPos);
+  }
 
-    /**
-     * returns UNUSED
-     */
+  /**
+   * returns UNUSED
+   */
 
-    @Override
-    public CompilerDirectiveType getType() {
-        return CompilerDirectiveType.UNUSED;
-    }
+  @Override
+  public CompilerDirectiveType getType() {
+    return CompilerDirectiveType.UNUSED;
+  }
 
 }

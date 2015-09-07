@@ -22,12 +22,9 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
@@ -43,56 +40,58 @@ import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
+import static org.junit.Assert.*;
+
 public class IncludeAnalyzerTest {
 
-    private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/MetricsTest.pas";
+  private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/MetricsTest.pas";
 
-    private IncludeAnalyzer analyzer;
-    private ASTTree ast;
-    private CodeAnalysisResults results;
-    private CodeTree code;
-    private AdvanceToNodeOperation advanceToUses;
-    private AdvanceToNodeOperation advanceToImpl;
+  private IncludeAnalyzer analyzer;
+  private ASTTree ast;
+  private CodeAnalysisResults results;
+  private CodeTree code;
+  private AdvanceToNodeOperation advanceToUses;
+  private AdvanceToNodeOperation advanceToImpl;
 
-    @Before
-    public void init() throws IOException, RecognitionException {
-        analyzer = new IncludeAnalyzer();
-        results = new CodeAnalysisResults();
-        results.setActiveUnit(new DelphiUnit("test"));
+  @Before
+  public void init() throws IOException, RecognitionException {
+    analyzer = new IncludeAnalyzer();
+    results = new CodeAnalysisResults();
+    results.setActiveUnit(new DelphiUnit("test"));
 
-        File file = DelphiUtils.getResource(FILE_NAME);
-        ast = new DelphiAST(file);
-        code = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
-        advanceToUses = new AdvanceToNodeOperation(LexerMetrics.USES);
-        advanceToImpl = new AdvanceToNodeOperation(LexerMetrics.PROCEDURE);
+    File file = DelphiUtils.getResource(FILE_NAME);
+    ast = new DelphiAST(file);
+    code = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
+    advanceToUses = new AdvanceToNodeOperation(LexerMetrics.USES);
+    advanceToImpl = new AdvanceToNodeOperation(LexerMetrics.PROCEDURE);
+  }
+
+  @Test
+  public void analyzeTest() {
+    code.setCurrentNode(advanceToUses.execute(code.getCurrentCodeNode().getNode()));
+    analyzer.analyze(code, results);
+
+    UnitInterface unit = results.getActiveUnit();
+    String includes[] = unit.getIncludes();
+    String expected[] = {"Windows", "Messages", "SysUtils", "Variants", "Classes", "Graphics", "Controls", "Forms",
+      "Dialogs", "StdCtrls",
+      "FastMMUsageTracker"};
+    Arrays.sort(includes);
+    Arrays.sort(expected);
+    int index = 0;
+    assertEquals(11, includes.length);
+    for (String exp : expected) {
+      assertEquals(exp, includes[index++]);
     }
+  }
 
-    @Test
-    public void analyzeTest() {
-        code.setCurrentNode(advanceToUses.execute(code.getCurrentCodeNode().getNode()));
-        analyzer.analyze(code, results);
+  @Test
+  public void canAnalyzeTest() {
+    code.setCurrentNode(advanceToUses.execute(code.getCurrentCodeNode().getNode()));
+    assertTrue(analyzer.canAnalyze(code));
+    code.setCurrentNode(advanceToImpl.execute(code.getCurrentCodeNode().getNode()));
+    assertFalse(analyzer.canAnalyze(code));
 
-        UnitInterface unit = results.getActiveUnit();
-        String includes[] = unit.getIncludes();
-        String expected[] = {"Windows", "Messages", "SysUtils", "Variants", "Classes", "Graphics", "Controls", "Forms",
-                "Dialogs", "StdCtrls",
-                "FastMMUsageTracker"};
-        Arrays.sort(includes);
-        Arrays.sort(expected);
-        int index = 0;
-        assertEquals(11, includes.length);
-        for (String exp : expected) {
-            assertEquals(exp, includes[index++]);
-        }
-    }
-
-    @Test
-    public void canAnalyzeTest() {
-        code.setCurrentNode(advanceToUses.execute(code.getCurrentCodeNode().getNode()));
-        assertTrue(analyzer.canAnalyze(code));
-        code.setCurrentNode(advanceToImpl.execute(code.getCurrentCodeNode().getNode()));
-        assertFalse(analyzer.canAnalyze(code));
-
-    }
+  }
 
 }

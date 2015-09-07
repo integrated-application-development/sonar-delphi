@@ -25,12 +25,12 @@ package org.sonar.plugins.delphi.antlr.ast.exceptions;
 
 public class NodeNameForCodeDoesNotExistException extends RuntimeException {
 
-    /**
-	 * 
-	 */
-    private static final long serialVersionUID = 1L;
+  /**
+  * 
+  */
+  private static final long serialVersionUID = 1L;
 
-    public NodeNameForCodeDoesNotExistException(String message) {
-        super(message);
-    }
+  public NodeNameForCodeDoesNotExistException(String message) {
+    super(message);
+  }
 }

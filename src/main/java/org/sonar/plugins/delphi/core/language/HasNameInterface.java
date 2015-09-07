@@ -28,31 +28,31 @@ package org.sonar.plugins.delphi.core.language;
  */
 public interface HasNameInterface {
 
-    /**
-     * Gets function name (lowercase)
-     * 
-     * @return Function name
-     */
-    String getName();
+  /**
+   * Gets function name (lowercase)
+   * 
+   * @return Function name
+   */
+  String getName();
 
-    /**
-     * Sets function name
-     * 
-     * @param name New function name
-     */
-    void setName(String name);
+  /**
+   * Sets function name
+   * 
+   * @param name New function name
+   */
+  void setName(String name);
 
-    /**
-     * Gets function real name (not converted to lowercase)
-     * 
-     * @return Function real name
-     */
-    String getRealName();
+  /**
+   * Gets function real name (not converted to lowercase)
+   * 
+   * @return Function real name
+   */
+  String getRealName();
 
-    /**
-     * Sets function real name
-     * 
-     * @param name New function real name
-     */
-    void setRealName(String name);
+  /**
+   * Sets function real name
+   * 
+   * @param name New function real name
+   */
+  void setRealName(String name);
 }
