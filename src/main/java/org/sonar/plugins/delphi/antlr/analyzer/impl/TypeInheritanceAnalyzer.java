@@ -51,7 +51,7 @@ public class TypeInheritanceAnalyzer extends CodeAnalyzer {
         parentClass = checkParentInUnits(parentName, results);
       }
 
-      if (parentClass == null) { // not found, create a new one
+      if (parentClass == null) {
         parentClass = new DelphiClass(parentName);
       }
 
@@ -70,12 +70,11 @@ public class TypeInheritanceAnalyzer extends CodeAnalyzer {
    */
   private ClassInterface checkParentInUnits(String parentName, CodeAnalysisResults results) {
     for (UnitInterface unit : results.getCachedUnits()) {
+      // if not in this unit, continue
       if (!results.getActiveUnit().isIncluding(unit)) {
-        continue; // if not in this unit, continue
+        continue;
       }
-      ClassInterface found = unit.findClass(parentName); // check for
-                                                         // class in a
-                                                         // unit
+      ClassInterface found = unit.findClass(parentName);
       if (found != null) {
         return found;
       }

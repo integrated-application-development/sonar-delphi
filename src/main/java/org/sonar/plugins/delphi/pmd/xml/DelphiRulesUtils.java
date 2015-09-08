@@ -208,7 +208,7 @@ public final class DelphiRulesUtils {
     for (ActiveRule activeRule : activeRules) {
       if (activeRule.getRule().getRepositoryKey().equals(DelphiPmdConstants.REPOSITORY_KEY)) {
         String key = activeRule.getRule().getKey();
-        String priority = severityToLevel(activeRule.getPriority()); // getSeverity
+        String priority = severityToLevel(activeRule.getPriority());
         DelphiRule delphiRule = new DelphiRule(key, priority);
         List<Property> properties = new ArrayList<Property>();
         for (ActiveRuleParam activeRuleParam : activeRule.getActiveRuleParams()) {

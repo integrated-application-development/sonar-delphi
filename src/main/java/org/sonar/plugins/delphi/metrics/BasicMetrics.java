@@ -82,73 +82,18 @@ public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
 
   @Override
   public void save(InputFile resource, SensorContext sensorContext) {
-    sensorContext.saveMeasure(resource, CoreMetrics.LINES, getMetric("LINES")); // Number
-                                                                                // of
-                                                                                // carriage
-                                                                                // returns
-    sensorContext.saveMeasure(resource, CoreMetrics.NCLOC, getMetric("NCLOC")); // Number
-                                                                                // of
-                                                                                // physical
-                                                                                // lines
-                                                                                // of
-                                                                                // code
-                                                                                // -
-                                                                                // number
-                                                                                // of
-                                                                                // blank
-                                                                                // lines
-                                                                                // -
-                                                                                // number
-                                                                                // of
-                                                                                // comment
-                                                                                // lines
-                                                                                // -
-                                                                                // number
-                                                                                // of
-                                                                                // header
-                                                                                // file
-                                                                                // comments
-                                                                                // -
-                                                                                // commented-out
-                                                                                // lines
-                                                                                // of
-                                                                                // code
-    sensorContext.saveMeasure(resource, CoreMetrics.COMMENT_LINES, getMetric("COMMENT_LINES")); // Number
-                                                                                                // of
-                                                                                                // javadoc,
-                                                                                                // multi-comment
-                                                                                                // and
-                                                                                                // single-comment
-                                                                                                // lines.
-                                                                                                // Empty
-                                                                                                // comment
-                                                                                                // lines
-                                                                                                // like,
-                                                                                                // header
-                                                                                                // file
-                                                                                                // comments
-                                                                                                // (mainly
-                                                                                                // used
-                                                                                                // to
-                                                                                                // define
-                                                                                                // the
-                                                                                                // license)
-                                                                                                // and
-                                                                                                // commented-out
-                                                                                                // lines
-                                                                                                // of
-                                                                                                // code
-                                                                                                // are
-                                                                                                // not
-                                                                                                // included.
-    sensorContext.saveMeasure(resource, CoreMetrics.FILES, getMetric("FILES")); // Number
-                                                                                // of
-                                                                                // analyzed
-                                                                                // files
-                                                                                // (1
-                                                                                // per
-                                                                                // resource,
-                                                                                // resource=file)
+    sensorContext.saveMeasure(resource, CoreMetrics.LINES, getMetric("LINES"));
+    // Number of physical lines of code -
+    // number of blank lines -
+    // number of comment lines -
+    // number of header file comments -
+    // commented-out lines of code
+    sensorContext.saveMeasure(resource, CoreMetrics.NCLOC, getMetric("NCLOC"));
+    // Number of javadoc, multi-comment and single-comment lines.
+    // Empty comment lines like, header file comments (mainly used to define the license)
+    // and commented-out lines of code are not included.
+    sensorContext.saveMeasure(resource, CoreMetrics.COMMENT_LINES, getMetric("COMMENT_LINES"));
+    sensorContext.saveMeasure(resource, CoreMetrics.FILES, getMetric("FILES"));
   }
 
   /**

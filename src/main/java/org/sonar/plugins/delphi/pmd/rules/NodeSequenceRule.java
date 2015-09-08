@@ -43,13 +43,15 @@ public class NodeSequenceRule extends DelphiRule {
 
     if (node.getText().equalsIgnoreCase(sequence[count])) {
       if (++count == 1) {
-        firstMatchNode = node; // save first match node
-      } else if (count >= sequence.length) { // end the sequence
+        // save first match node
+        firstMatchNode = node;
+      } else if (count >= sequence.length) {
         addViolation(data, firstMatchNode);
-        count = 0; // reset
+        count = 0;
       }
     } else {
-      count = 0; // reset if we bumped out of the sequence
+      // reset if we bumped out of the sequence
+      count = 0;
     }
 
     return data;

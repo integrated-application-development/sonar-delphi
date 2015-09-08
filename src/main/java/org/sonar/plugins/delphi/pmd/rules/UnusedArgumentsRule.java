@@ -50,8 +50,8 @@ public class UnusedArgumentsRule extends DelphiRule {
   public Object visit(DelphiPMDNode node, Object data) {
     if (node.getType() == DelphiLexer.PROCEDURE || node.getType() == DelphiLexer.FUNCTION) {
       Tree nameNode = node.getFirstChildWithType(DelphiLexer.TkFunctionName);
-      if (nameNode != null) { // checking function name
-        methodName = new StringBuilder(); // building function name
+      if (nameNode != null) {
+        methodName = new StringBuilder();
         for (int i = 0; i < nameNode.getChildCount(); ++i) {
           methodName.append(nameNode.getChild(i).getText());
         }
@@ -63,7 +63,8 @@ public class UnusedArgumentsRule extends DelphiRule {
       }
 
       int lookIndex = 0;
-      Tree beginNode = null; // looking for begin statement for function
+      Tree beginNode = null;
+      // looking for begin statement for function
       do {
         beginNode = node.getParent().getChild(node.getChildIndex() + (++lookIndex));
         if (lookIndex > MAX_LOOK_AHEAD || beginNode == null) {
@@ -72,12 +73,14 @@ public class UnusedArgumentsRule extends DelphiRule {
       } while (beginNode.getType() != DelphiLexer.BEGIN);
 
       if (beginNode == null || beginNode.getType() != DelphiLexer.BEGIN) {
-        return data; // no begin..end for function
+        // no begin..end for function
+        return data;
       }
 
       Map<String, Integer> args = processFunctionArgs(argsNode);
       if (args.isEmpty()) {
-        return data; // no arguments
+        // no arguments
+        return data;
       }
 
       processFunctionBegin(beginNode, args);
@@ -117,8 +120,8 @@ public class UnusedArgumentsRule extends DelphiRule {
     for (int i = 0; i < beginNode.getChildCount(); ++i) {
       Tree child = beginNode.getChild(i);
       String key = child.getText().toLowerCase();
-      if (args.containsKey(key)) { // if we are using a argument, increase
-                                   // the counter
+      if (args.containsKey(key)) {
+        // if we are using a argument, increase the counter
         Integer newValue = args.get(key) + 1;
         args.put(key, newValue);
       }
@@ -138,10 +141,9 @@ public class UnusedArgumentsRule extends DelphiRule {
   private Map<String, Integer> processFunctionArgs(Tree argsNode) {
     Map<String, Integer> args = new HashMap<String, Integer>();
     for (int i = 0; i < argsNode.getChildCount(); i += 2) {
-      Tree idents = argsNode.getChild(i); // TkVariableIdents node
+      Tree idents = argsNode.getChild(i);
 
-      if (idents.getType() != DelphiLexer.TkVariableIdents) { // check
-                                                              // type
+      if (idents.getType() != DelphiLexer.TkVariableIdents) {
         idents = argsNode.getChild(++i);
         if (idents == null || idents.getType() != DelphiLexer.TkVariableIdents) {
           break;

@@ -52,12 +52,12 @@ public class DelphiLinesFactory {
   DelphiLinesFactory(Reader reader) {
     List<LineContextHandler> tmpHandlers = new ArrayList<LineContextHandler>();
 
-    tmpHandlers.add(new SingleLineCommentHandler("//", "*//")); // //comment
-    tmpHandlers.add(new DelphiCommentHandler("{", "}", true)); // {comment}
-                                                               // and {**
-                                                               // documentation
-                                                               // **}
-    tmpHandlers.add(new DelphiCommentHandler("(*", "*)", false)); // (*comment*)
+    // //comment
+    tmpHandlers.add(new SingleLineCommentHandler("//", "*//"));
+    // {comment} and {** documentation **}
+    tmpHandlers.add(new DelphiCommentHandler("{", "}", true));
+    // (*comment*)
+    tmpHandlers.add(new DelphiCommentHandler("(*", "*)", false));
     tmpHandlers.add(new LiteralValueHandler('\''));
     tmpHandlers.add(new LiteralValueHandler('"'));
     this.handlers = tmpHandlers.toArray(new LineContextHandler[tmpHandlers.size()]);

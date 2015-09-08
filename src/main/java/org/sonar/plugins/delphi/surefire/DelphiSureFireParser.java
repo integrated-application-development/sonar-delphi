@@ -74,7 +74,7 @@ public class DelphiSureFireParser {
         // so Sonar could show it
         return testFile;
       }
-      throw new FileNotFoundException(); // no file found
+      throw new FileNotFoundException();
     } catch (FileNotFoundException e) {
       DelphiUtils.LOG.warn(ERROR_MSG + filename + FILE_EXT);
     }
@@ -136,16 +136,14 @@ public class DelphiSureFireParser {
     for (String classname : index.getClassnames()) {
       if (StringUtils.contains(classname, "$")) {
         // Surefire reports classes whereas sonar supports files
-        String parentClassName = StringUtils.substringBefore(classname,
-          "$");
+        String parentClassName = StringUtils.substringBefore(classname, "$");
         index.merge(classname, parentClassName);
       }
     }
   }
 
   private void save(UnitTestIndex index, SensorContext context) {
-    for (Map.Entry<String, UnitTestClassReport> entry : index
-      .getIndexByClassname().entrySet()) {
+    for (Map.Entry<String, UnitTestClassReport> entry : index.getIndexByClassname().entrySet()) {
       UnitTestClassReport report = entry.getValue();
       if (report.getTests() > 0) {
         InputFile resource = getUnitTestResource(entry.getKey());
@@ -161,21 +159,15 @@ public class DelphiSureFireParser {
   private void save(UnitTestClassReport report, InputFile resource,
     SensorContext context) {
     double testsCount = report.getTests() - report.getSkipped();
-    saveMeasure(context, resource, CoreMetrics.SKIPPED_TESTS,
-      report.getSkipped());
+    saveMeasure(context, resource, CoreMetrics.SKIPPED_TESTS, report.getSkipped());
     saveMeasure(context, resource, CoreMetrics.TESTS, testsCount);
-    saveMeasure(context, resource, CoreMetrics.TEST_ERRORS,
-      report.getErrors());
-    saveMeasure(context, resource, CoreMetrics.TEST_FAILURES,
-      report.getFailures());
-    saveMeasure(context, resource, CoreMetrics.TEST_EXECUTION_TIME,
-      report.getDurationMilliseconds());
-    double passedTests = testsCount - report.getErrors()
-      - report.getFailures();
+    saveMeasure(context, resource, CoreMetrics.TEST_ERRORS, report.getErrors());
+    saveMeasure(context, resource, CoreMetrics.TEST_FAILURES, report.getFailures());
+    saveMeasure(context, resource, CoreMetrics.TEST_EXECUTION_TIME, report.getDurationMilliseconds());
+    double passedTests = testsCount - report.getErrors() - report.getFailures();
     if (testsCount > 0) {
       double percentage = passedTests * 100d / testsCount;
-      saveMeasure(context, resource, CoreMetrics.TEST_SUCCESS_DENSITY,
-        ParsingUtils.scaleValue(percentage));
+      saveMeasure(context, resource, CoreMetrics.TEST_SUCCESS_DENSITY, ParsingUtils.scaleValue(percentage));
     }
   }
 

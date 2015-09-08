@@ -88,13 +88,13 @@ public class UnresolvedFunctionCall {
     for (UnitInterface unit : includedUnits) {
       FunctionInterface[] unitFunctions = unit.getAllFunctions();
       for (FunctionInterface function : unitFunctions) {
-        if (function.getName().toLowerCase().endsWith(called.getName().toLowerCase())) { // found
+        if (function.getName().toLowerCase().endsWith(called.getName().toLowerCase())) {
           caller.addCalledFunction(function);
           return true;
         }
       }
     }
-    return false; // function NOT resolved
+    return false;
   }
 
   /**
@@ -109,7 +109,7 @@ public class UnresolvedFunctionCall {
   public boolean resolve(FunctionInterface functionToCheck, Set<UnitInterface> allUnits) {
     Set<UnitInterface> includedUnits = callerUnit.getIncludedUnits(allUnits);
     if (!includedUnits.contains(functionToCheck.getUnit())) {
-      return false; // if not in included units
+      return false;
     }
     if (functionToCheck.getName().toLowerCase().endsWith(called.getName().toLowerCase())) {
       caller.addCalledFunction(functionToCheck);

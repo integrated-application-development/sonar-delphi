@@ -47,16 +47,15 @@ public class AssignedAndFreeRule extends DelphiRule {
       started = false;
     }
 
-    if (started) { // looking for variables that were checked for
-                   // assignement
+    // looking for variables that were checked for assignement
+    if (started) {
       if ("assigned".equalsIgnoreCase(node.getText())) {
         parseAssigned(node);
       } else if ("nil".equals(node.getText())) {
         parseNil(node);
       }
-    }
-
-    else { // checking for Free'd variables
+    } else {
+      // checking for Free'd variables
       if (node.getType() == DelphiLexer.BEGIN) {
         if (node.getChildCount() > MIN_CHILD_COUNT) {
           variables.clear();
@@ -80,9 +79,10 @@ public class AssignedAndFreeRule extends DelphiRule {
       variableName.insert(0, node.getParent().getChild(--index).getText());
     }
 
-    if (variableName.length() > 0) { // if some variable name was found
-      variableName.setLength(variableName.length() - 1); // terminate last
-                                                         // .
+    // if some variable name was found
+    if (variableName.length() > 0) {
+      // terminate last .
+      variableName.setLength(variableName.length() - 1);
       return variables.contains(variableName.toString());
     } else {
       return false;

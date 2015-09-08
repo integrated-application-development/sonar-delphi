@@ -104,9 +104,7 @@ public class DelphiRuleViolation implements IRuleViolation {
     this.filename = ctx.getSourceCodeFile().getAbsolutePath();
     this.description = message;
 
-    if (node != null) // there is node to analyse
-    {
-      // gets class name
+    if (node != null) {
       Tree classTypeNode = node.getAncestor(DelphiLexer.TkNewType);
       if (classTypeNode != null) {
         Tree classNameNode = classTypeNode.getChild(0);
@@ -115,15 +113,13 @@ public class DelphiRuleViolation implements IRuleViolation {
         className = "";
       }
 
-      // gets method node
       Tree methodNode = node.getAncestor(DelphiLexer.FUNCTION);
       if (methodNode == null) {
         methodNode = node.getAncestor(DelphiLexer.PROCEDURE);
       }
 
-      if (methodNode == null) // look for method from begin...end
-                              // statements
-      {
+      // look for method from begin...end statements
+      if (methodNode == null) {
         Tree currentNode = node;
         Tree beginNode = null;
         while ((beginNode = currentNode.getAncestor(DelphiLexer.BEGIN)) != null) {
@@ -151,9 +147,8 @@ public class DelphiRuleViolation implements IRuleViolation {
         }
         methodName = name.toString();
         if (nameNode.getChildCount() > 1) {
-          className = nameNode.getChild(0).getText(); // class name
-                                                      // from function
-                                                      // name
+          // class name from function name
+          className = nameNode.getChild(0).getText();
         }
       } else {
         methodName = "";
@@ -166,8 +161,7 @@ public class DelphiRuleViolation implements IRuleViolation {
       beginColumn = node.getCharPositionInLine();
       endColumn = beginColumn;
 
-    } else // no node to analyse
-    {
+    } else {
       className = "";
       methodName = "";
       packageName = "";

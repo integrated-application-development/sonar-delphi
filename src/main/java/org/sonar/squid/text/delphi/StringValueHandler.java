@@ -52,8 +52,8 @@ public class StringValueHandler extends LineContextHandler {
       line.setMeasure(metric, line.getInt(metric) + 1);
     }
 
-    return true; // always returns true, even if not found to finish
-                 // checking further
+    // always returns true, even if not found to finish checking further
+    return true;
   }
 
   @Override

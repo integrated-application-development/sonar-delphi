@@ -89,7 +89,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
   public void analyse(InputFile resource, SensorContext sensorContext, List<ClassInterface> classes,
     List<FunctionInterface> functions,
     List<UnitInterface> units) {
-    if (!isCalculated) { // calculate only once
+    if (!isCalculated) {
       if (units == null || units.isEmpty()) {
         return;
       }
@@ -109,7 +109,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
   @Override
   public void save(InputFile resource, SensorContext sensorContext) {
     if (resource.type() == Type.TEST) {
-      return; // do not count unit tests
+      return;
     }
 
     String fileName = FilenameUtils.removeExtension(resource.file().getName());
@@ -119,7 +119,6 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
       return;
     }
 
-    // unused unit, add violation
     if (unusedUnits.contains(fileName.toLowerCase())) {
       Issuable issuable = perspectives.as(Issuable.class, resource);
       if (issuable != null) {
@@ -134,8 +133,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
 
     for (FunctionInterface function : getUnitFunctions(unit)) {
       if (function.isMessage() || function.isVirtual() || function.getVisibility() == DelphiLexer.PUBLISHED) {
-        continue; // function is either a virtual function or at
-                  // published visibility or message function
+        continue;
       }
 
       if (function.getParentClass() != null) {
@@ -148,8 +146,8 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
           }
         }
         if (isImplementation) {
-          continue; // function used as interface implementation,
-                    // surely not unused function
+          // function used as interface implementation, surely not unused function
+          continue;
         }
 
         // check if function is used in property field
@@ -161,13 +159,12 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
           }
         }
         if (usedInProperty) {
-          continue; // function used in property field, surely not
-                    // unused function
+          // function used in property field, surely not unused function
+          continue;
         }
       }
 
-      if (unusedFunctions.contains(function)) { // unused function, add
-                                                // violation
+      if (unusedFunctions.contains(function)) {
         Issuable issuable = perspectives.as(Issuable.class, resource);
         if (issuable != null) {
           Issue issue = issuable.newIssueBuilder()
@@ -190,13 +187,11 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
    */
   private List<FunctionInterface> getUnitFunctions(UnitInterface unit) {
     Set<FunctionInterface> result = new HashSet<FunctionInterface>();
-    for (FunctionInterface globalFunction : unit.getFunctions()) { // add
-                                                                   // global
-                                                                   // functions
+    for (FunctionInterface globalFunction : unit.getFunctions()) {
       result.add(globalFunction);
     }
 
-    for (ClassInterface clazz : unit.getClasses()) { // add class function
+    for (ClassInterface clazz : unit.getClasses()) {
       for (FunctionInterface function : clazz.getFunctions()) {
         result.add(function);
       }
@@ -236,8 +231,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
     List<String> result = new ArrayList<String>();
     for (UnitInterface unit : units) {
       if (unit.getFileName().toLowerCase().endsWith(".pas")) {
-        result.add(unit.getName().toLowerCase()); // if not a .dpr, add
-                                                  // it to unusedUnits
+        result.add(unit.getName().toLowerCase());
         allUnits.add(unit);
       }
 

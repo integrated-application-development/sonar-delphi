@@ -82,7 +82,8 @@ public class ProjectXmlParser extends DefaultHandler {
   public void startElement(String uri, String localName, String rawName, Attributes attributes) throws SAXException {
     isReading = false;
 
-    if ("DCCReference".equals(rawName)) { // new source file
+    if ("DCCReference".equals(rawName)) {
+      // new source file
       String path = DelphiUtils.resolveBacktracePath(currentDir, attributes.getValue("Include"));
       try {
         project.addFile(path);
@@ -90,8 +91,8 @@ public class ProjectXmlParser extends DefaultHandler {
         DelphiUtils.LOG.error(e.getMessage());
         throw new SAXException(e);
       }
-    } else if ("VersionInfoKeys".equals(rawName)) { // project name
-
+    } else if ("VersionInfoKeys".equals(rawName)) {
+      // project name
       String name = attributes.getValue("Name");
       if (name != null && "ProductName".equals(name)) {
         isReading = true;
@@ -110,11 +111,13 @@ public class ProjectXmlParser extends DefaultHandler {
       return;
     }
 
-    if ("VersionInfoKeys".equals(rawName)) { // add project name
+    if ("VersionInfoKeys".equals(rawName)) {
+      // add project name
       project.setName(readData);
     }
 
-    else if ("DCC_Define".equals(rawName)) { // add define
+    else if ("DCC_Define".equals(rawName)) {
+      // add define
       String[] defines = readData.split(";");
       for (String define : defines) {
         if (define.startsWith("$")) {
@@ -126,9 +129,8 @@ public class ProjectXmlParser extends DefaultHandler {
       }
     }
 
-    else if ("DCC_UnitSearchPath".equals(rawName)) { // add include
-                                                     // directories
-
+    else if ("DCC_UnitSearchPath".equals(rawName)) {
+      // add include directories
       String[] paths = readData.split(";");
       for (String path : paths) {
         if (path.startsWith("$")) {

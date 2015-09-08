@@ -22,6 +22,7 @@
  */
 package org.sonar.squid.text.delphi;
 
+//TODO It seems dead code
 public class MultiLinesCommentHandler extends LineContextHandler {
 
   private StringBuilder currentLineComment;

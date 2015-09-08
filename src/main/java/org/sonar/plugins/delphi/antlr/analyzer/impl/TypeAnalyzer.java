@@ -60,37 +60,22 @@ public class TypeAnalyzer extends CodeAnalyzer {
       throw new IllegalStateException("AbstractAnalyser::parseClass() - Cannot get class name.");
     }
 
-    ClassInterface active = results.getCachedClass(nameNode.getText().toLowerCase()); // check
-                                                                                      // if
-                                                                                      // class
-                                                                                      // wasn't
-                                                                                      // created
-                                                                                      // before
+    ClassInterface active = results.getCachedClass(nameNode.getText().toLowerCase());
     if (active == null) {
-      active = new DelphiClass(nameNode.getText().toLowerCase()); // create
-                                                                  // new
-                                                                  // class
-      results.cacheClass(active.toString(), active); // add to global
-                                                     // class map
+      active = new DelphiClass(nameNode.getText().toLowerCase());
+      results.cacheClass(active.toString(), active);
       results.getActiveUnit().addClass(active);
     }
 
-    active.setFileName(codeTree.getRootCodeNode().getNode().getFileName().toLowerCase()); // assign
-                                                                                          // package
-                                                                                          // to
-                                                                                          // class
+    active.setFileName(codeTree.getRootCodeNode().getNode().getFileName().toLowerCase());
 
     if (results.getParseStatus() == LexerMetrics.IMPLEMENTATION) {
       active.setVisibility(LexerMetrics.PRIVATE.toMetrics());
     } else {
-      active.setVisibility(LexerMetrics.PUBLIC.toMetrics()); // set class
-                                                             // visibility
+      active.setVisibility(LexerMetrics.PUBLIC.toMetrics());
     }
 
-    results.setParseVisibility(LexerMetrics.PUBLISHED); // default field and
-                                                        // methods
-                                                        // visibility is
-                                                        // published
+    results.setParseVisibility(LexerMetrics.PUBLISHED);
     results.getClasses().add(active);
     results.setActiveClass(active);
   }

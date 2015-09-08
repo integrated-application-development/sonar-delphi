@@ -81,7 +81,7 @@ public class DelphiPMD {
     List<CompilationUnit> nodes = new ArrayList<CompilationUnit>();
 
     for (int i = 0; i < ast.getChildCount(); ++i) {
-      indexNode((CommonTree) ast.getChild(i), nodes); // index all nodes
+      indexNode((CommonTree) ast.getChild(i), nodes);
     }
 
     return nodes;

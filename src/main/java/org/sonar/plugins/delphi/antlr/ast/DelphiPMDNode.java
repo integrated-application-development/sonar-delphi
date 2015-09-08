@@ -62,7 +62,7 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
    */
 
   @Override
-  public void jjtOpen() { // unused
+  public void jjtOpen() {
   }
 
   /**
@@ -70,7 +70,7 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
    */
 
   @Override
-  public void jjtClose() { // unused
+  public void jjtClose() {
   }
 
   /**
@@ -78,7 +78,7 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
    */
 
   @Override
-  public void jjtSetParent(Node n) { // unused
+  public void jjtSetParent(Node n) {
 
   }
 
@@ -87,7 +87,7 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
    */
 
   @Override
-  public Node jjtGetParent() { // unused
+  public Node jjtGetParent() {
     return null;
   }
 
@@ -96,7 +96,7 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
    */
 
   @Override
-  public void jjtAddChild(Node n, int i) { // unused
+  public void jjtAddChild(Node n, int i) {
   }
 
   /**
@@ -104,7 +104,7 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
    */
 
   @Override
-  public Node jjtGetChild(int i) { // unused
+  public Node jjtGetChild(int i) {
     return null;
   }
 
@@ -113,7 +113,7 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
    */
 
   @Override
-  public int jjtGetNumChildren() { // unused
+  public int jjtGetNumChildren() {
     return 0;
   }
 

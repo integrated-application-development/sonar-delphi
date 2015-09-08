@@ -38,11 +38,11 @@ import org.xml.sax.SAXException;
  */
 public class DelphiProject {
 
-  private String name = ""; // project name
-  private List<String> defs = new ArrayList<String>(); // project definitions
-  private List<File> files = new ArrayList<File>(); // project files
-  private List<File> includes = new ArrayList<File>(); // include directories
-  private File file = null; // .dproj file
+  private String name = "";
+  private List<String> definitions = new ArrayList<String>();
+  private List<File> files = new ArrayList<File>();
+  private List<File> includeDirectories = new ArrayList<File>();
+  private File file = null;
 
   /**
    * C-tor, initializes project with name and empty files and definitions
@@ -107,7 +107,7 @@ public class DelphiProject {
    */
   public void addDefinition(String definition) {
     if (!StringUtils.isEmpty(definition)) {
-      defs.add(definition);
+      definitions.add(definition);
     }
   }
 
@@ -125,7 +125,7 @@ public class DelphiProject {
         throw new IOException("Invalid include directory: " + dir.getAbsolutePath());
       }
 
-      includes.add(dir);
+      includeDirectories.add(dir);
     }
   }
 
@@ -154,7 +154,7 @@ public class DelphiProject {
   }
 
   public List<String> getDefinitions() {
-    return defs;
+    return definitions;
   }
 
   public List<File> getSourceFiles() {
@@ -162,7 +162,7 @@ public class DelphiProject {
   }
 
   public List<File> getIncludeDirectories() {
-    return includes;
+    return includeDirectories;
   }
 
   public File getXmlFile() {
@@ -174,11 +174,11 @@ public class DelphiProject {
   }
 
   public void setDefinitions(List<String> defs) {
-    this.defs = defs;
+    this.definitions = defs;
   }
 
   public void setIncludeDirectories(List<File> includes) {
-    this.includes = includes;
+    this.includeDirectories = includes;
   }
 
   public void setFile(File file) {

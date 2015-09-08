@@ -41,10 +41,9 @@ public class DelphiClass implements ClassInterface {
 
   private static final String UNKNOWN_CLASS_NAME = "UnknownClass";
 
-  private String name = null; // class name
-  private String fileName = null; // class filename (with path)
-  private int visibility = DelphiParser.PRIVATE; // class default visibility
-                                                 // scope
+  private String name = null;
+  private String fileName = null;
+  private int visibility = DelphiParser.PRIVATE;
 
   private List<ClassFieldInterface> fields = new ArrayList<ClassFieldInterface>();
   private List<ClassPropertyInterface> properties = new ArrayList<ClassPropertyInterface>();
@@ -178,7 +177,7 @@ public class DelphiClass implements ClassInterface {
   @Override
   public int getPublicApiCount() {
     int publicApiCount = 0;
-    if (visibility == DelphiParser.PUBLIC) { // count class if public
+    if (visibility == DelphiParser.PUBLIC) {
       ++publicApiCount;
     }
     for (FunctionInterface func : functions) {
@@ -228,7 +227,11 @@ public class DelphiClass implements ClassInterface {
     return fields.toArray(new ClassFieldInterface[fields.size()]);
   }
 
-  // calculating function complexity with its overloaded functions
+  /**
+   * Calculating function Cyclomatic Complexity with its overloaded functions.
+   * @param func The function
+   * @return Cyclomatic Complexity
+   */
   private int processFunctionComplexity(FunctionInterface func) {
     if (func.isAccessor()) {
       return 0;
@@ -278,13 +281,12 @@ public class DelphiClass implements ClassInterface {
   @Override
   public void addFunction(FunctionInterface func) {
     if (functions.contains(func)) {
-      return; // function already registered in class
+      return;
     }
-    functions.add(func); // add a function to class
-    func.setParentClass(this); // this class i a parent class of provided
-                               // function
+    functions.add(func);
+    func.setParentClass(this);
     if (func.isDeclaration()) {
-      declarations.add(func); // add to declarations
+      declarations.add(func);
     }
   }
 
@@ -341,7 +343,8 @@ public class DelphiClass implements ClassInterface {
         rfc += analyzeFunctionCalls(currentFunction, visited);
       }
     }
-    return rfc; // rfc = number of local methods + number of remote methods
+    // rfc = number of local methods + number of remote methods
+    return rfc;
   }
 
   /**

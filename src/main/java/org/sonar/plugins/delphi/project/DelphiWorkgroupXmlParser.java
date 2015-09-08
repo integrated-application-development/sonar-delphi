@@ -67,7 +67,8 @@ public class DelphiWorkgroupXmlParser extends DefaultHandler {
 
   @Override
   public void startElement(String uri, String localName, String rawName, Attributes attributes) throws SAXException {
-    if ("Projects".equals(rawName)) { // new .dproj file
+    if ("Projects".equals(rawName)) {
+      // new .dproj file
       String projectPath = DelphiUtils.resolveBacktracePath(currentDir, attributes.getValue("Include"));
       workGroup.addProject(new DelphiProject(new File(projectPath)));
     }

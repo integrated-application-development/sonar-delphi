@@ -64,15 +64,11 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
   @Override
   protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
     FunctionInterface activeFunction = results.getActiveFunction();
-    FunctionInterface functionHolder = activeFunction; // which function to
-                                                       // update, main
-                                                       // function or one of
-                                                       // the overloads?
+    FunctionInterface functionHolder = activeFunction;
     Tree beginNode = codeTree.getCurrentCodeNode().getNode();
 
-    activeFunction.increaseFunctionOverload(); // increases function
-                                               // overload, so the starting
-                                               // overload should be -1
+    // increases function overload, so the starting overload should be -1
+    activeFunction.increaseFunctionOverload();
     if (activeFunction.getOverloadsCount() > 0) {
       functionHolder = new DelphiFunction();
       functionHolder.setName(activeFunction.getName());
@@ -80,21 +76,10 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
       activeFunction.addOverloadFunction(functionHolder);
     }
 
-    countStatements(beginNode, functionHolder); // counting statements and
-                                                // adding them to function
-                                                // and adding to list
-    countCalledFunctions(beginNode, functionHolder, results); // counting
-                                                              // called
-                                                              // functions
-                                                              // from
-                                                              // current
-                                                              // function
-                                                              // body and
-                                                              // adding to
-                                                              // set
+    countStatements(beginNode, functionHolder);
+    countCalledFunctions(beginNode, functionHolder, results);
 
-    if (!functionHolder.isAccessor()) { // counting branches and changing
-                                        // function complexity
+    if (!functionHolder.isAccessor()) {
       functionHolder.increaseComplexity();
       countBranches(beginNode, functionHolder);
     }
@@ -126,8 +111,8 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
       }
     }
 
-    for (int i = 0; i < node.getChildCount(); ++i) { // do the same for all
-                                                     // children
+    // do the same for all children
+    for (int i = 0; i < node.getChildCount(); ++i) {
       countCalledFunctions(node.getChild(i), function, results);
     }
 

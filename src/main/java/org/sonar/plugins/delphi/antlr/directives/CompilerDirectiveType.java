@@ -30,9 +30,16 @@ import java.util.Map;
  * UNUSED name string - it will automaticaly supress warnings
  */
 public enum CompilerDirectiveType {
-  UNKNOWN(0, "unknown_directive"), DEFINE(1, "define"), UNDEFINE(2, "undef"), IF(3, "if"), ELSE(4, "else,elseif"),
-  ENDIF(5, "endif"), IFDEF(
-    6, "ifdef,ifndef"), IFEND(7, "ifend"), INCLUDE(8, "include,i"), UNUSED(100, "warn,r,h+,h-,i+,i-,m+,m-");
+  UNKNOWN(0, "unknown_directive"),
+  DEFINE(1, "define"),
+  UNDEFINE(2, "undef"),
+  IF(3, "if"),
+  ELSE(4, "else,elseif"),
+  ENDIF(5, "endif"),
+  IFDEF(6, "ifdef,ifndef"),
+  IFEND(7, "ifend"),
+  INCLUDE(8, "include,i"),
+  UNUSED(100, "warn,r,h+,h-,i+,i-,m+,m-");
 
   private int number;
   private String name;

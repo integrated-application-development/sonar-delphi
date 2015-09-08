@@ -77,7 +77,7 @@ class CustomFileFilter implements FileFilter {
 public final class DelphiUtils {
 
   private DelphiUtils() {
-  } // only static methods
+  }
 
   /**
    * Logger class, use it for logging/debugging at Sonar window
@@ -243,13 +243,10 @@ public final class DelphiUtils {
    */
   public static String resolveBacktracePath(String currentDir, String fileName) {
     String result = normalizeFileName(fileName);
-    int dotdotCount = DelphiUtils.countSubstrings(result, ".."); // number
-                                                                 // of
-                                                                 // '..'
-                                                                 // in
-                                                                 // file
-                                                                 // name
-    result = result.replaceAll("\\.\\./", ""); // get rid of '../'
+    // number of '..' in file name
+    int dotdotCount = DelphiUtils.countSubstrings(result, "..");
+    // get rid of '../'
+    result = result.replaceAll("\\.\\./", "");
 
     for (int i = 0; i < dotdotCount; ++i) {
       currentDir = currentDir.substring(0, currentDir.lastIndexOf('/'));

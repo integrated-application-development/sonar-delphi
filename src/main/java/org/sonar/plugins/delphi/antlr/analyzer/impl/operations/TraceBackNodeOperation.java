@@ -44,9 +44,10 @@ public class TraceBackNodeOperation implements NodeOperation {
 
     Tree nextNode = parent.getChild(node.getChildIndex() + 1);
     if (nextNode != null) {
-      return new CodeNode<Tree>(nextNode); // if child found
+      return new CodeNode<Tree>(nextNode);
     }
 
-    return execute(parent); // if no child found, trace back again
+    // No child found, trace back again
+    return execute(parent);
   }
 }

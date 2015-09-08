@@ -35,16 +35,14 @@ public class ThenTryRule extends DelphiRule {
   @Override
   public Object visit(DelphiPMDNode node, Object data) {
     if (node.getType() != DelphiLexer.THEN) {
-      return data; // if not "THEN" node
+      return data;
     }
 
-    // get parent
     DelphiNode parent = (DelphiNode) node.getParent();
 
     // get next node ident
     int nextNode = parent.getChildType(node.getChildIndex() + 1);
 
-    // if next node is "TRY"
     if (nextNode == DelphiLexer.TRY) {
       addViolation(data, node);
     }

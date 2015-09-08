@@ -93,9 +93,8 @@ public class StatementVerifier {
     // it is recognized as TkIdentifier
     if (nodeCode == LexerMetrics.IDENT.toMetrics() && "break".equalsIgnoreCase(node.getText())) {
       return true;
-    } else if (nodeCode == LexerMetrics.FOR.toMetrics()) { // special case
-                                                           // for "for"
-                                                           // statement
+    } else if (nodeCode == LexerMetrics.FOR.toMetrics()) {
+      // special case for "for" statement
       statementIndex.pop();
       statementIndex.push(node.getChildIndex() + 1);
       lastStatementText = node.getText();
@@ -111,21 +110,21 @@ public class StatementVerifier {
   }
 
   private boolean isComplexStatementNode(Tree node) {
-    if (isBeginEndNode(node)) { // are we on a new block? (begin..end)
+    // are we on a new block? (begin..end)
+    if (isBeginEndNode(node)) {
       return false;
     }
     int childIndex = node.getChildIndex();
     if (childIndex <= statementIndex.peek()) {
-      return false; // optimization
+      // optimization
+      return false;
     }
     if (node.getType() != LexerMetrics.IDENT.toMetrics()) {
-      return false; // we are not on an variable id
+      // we are not on an variable id
+      return false;
     }
 
-    StringBuilder wholeLine = new StringBuilder(node.getText()); // builder
-                                                                 // for our
-                                                                 // statement
-                                                                 // text
+    StringBuilder wholeLine = new StringBuilder(node.getText());
     CommonTree parent = (CommonTree) node.getParent();
     CommonTree assign = (CommonTree) parent.getChild(childIndex + 1);
     if (assign.getType() != LexerMetrics.ASSIGN.toMetrics()) {
@@ -134,13 +133,10 @@ public class StatementVerifier {
 
     CommonTree actualNode = null;
     while ((actualNode = (CommonTree) parent.getChild(++childIndex)) != null) {
-      isBeginEndNode(node); // are we on a new block? (begin..end)
+      isBeginEndNode(node);
+      // while ; or ELSE
       if (actualNode.getType() == LexerMetrics.SEMI.toMetrics()
-        || actualNode.getType() == LexerMetrics.ELSE.toMetrics()) // while
-                                                                  // ;
-                                                                  // or
-                                                                  // ELSE
-      {
+        || actualNode.getType() == LexerMetrics.ELSE.toMetrics()) {
         statementIndex.push(childIndex);
         break;
       }
@@ -150,7 +146,8 @@ public class StatementVerifier {
 
     List<Token> tokens = new DelphiCpdTokenizer(delphiProjectHelper).tokenize(new String[] {wholeLine.toString()});
     if (tokens.size() < MIN_TOKENS_FOR_COMPLEX_STMT) {
-      return false; // at least 4 tokens: id, :=, id, ;
+      // at least 4 tokens: id, :=, id, ;
+      return false;
     }
     Token second = tokens.get(1);
     if (second.getType() == LexerMetrics.ASSIGN.toMetrics()) {

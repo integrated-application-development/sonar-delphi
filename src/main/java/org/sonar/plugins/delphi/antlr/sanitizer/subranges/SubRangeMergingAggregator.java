@@ -42,7 +42,7 @@ public class SubRangeMergingAggregator extends SubRangeAggregator {
         return;
       }
 
-      if (shouldMerge(range, newRange)) { // merging two ranges
+      if (shouldMerge(range, newRange)) {
         range = mergeRanges(range, newRange);
         removeDuplications(range);
         return;

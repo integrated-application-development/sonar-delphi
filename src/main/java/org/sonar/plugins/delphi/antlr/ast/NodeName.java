@@ -25,9 +25,13 @@ package org.sonar.plugins.delphi.antlr.ast;
 import org.sonar.plugins.delphi.antlr.ast.exceptions.NodeNameForCodeDoesNotExistException;
 
 public enum NodeName {
-  UNKNOWN("unknown", ""), SEMI("semi", ";"), DOT("dot", "\\."), COLON("colon", "[:()]"), GUID_IDENT("guid_ident",
-    "^'\\{.*"), DASH("dash",
-    ","), DASH_POINTER("dash_pointer", "\\^");
+  UNKNOWN("unknown", ""),
+  SEMI("semi", ";"),
+  DOT("dot", "\\."),
+  COLON("colon", "[:()]"),
+  GUID_IDENT("guid_ident", "^'\\{.*"),
+  DASH("dash", ","),
+  DASH_POINTER("dash_pointer", "\\^");
 
   private String name;
   private String codeRegExpression;

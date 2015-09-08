@@ -64,15 +64,13 @@ import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
  */
 public class DelphiSensor implements Sensor {
 
-  private int scannedFiles = 0; // number of scanned files
-  private Set<Directory> packageList = new HashSet<Directory>(); // package
-                                                                 // list
+  private int scannedFiles = 0;
+  private Set<Directory> packageList = new HashSet<Directory>();
   private Map<Directory, Integer> filesCount = new HashMap<Directory, Integer>();
-  // list of resources to process for metrics
   private List<InputFile> resourceList = new ArrayList<InputFile>();
   private Map<InputFile, List<ClassInterface>> fileClasses = new HashMap<InputFile, List<ClassInterface>>();
   private Map<InputFile, List<FunctionInterface>> fileFunctions = new HashMap<InputFile, List<FunctionInterface>>();
-  private List<UnitInterface> units = null; // project units
+  private List<UnitInterface> units = null;
 
   private final DelphiProjectHelper delphiProjectHelper;
   private final RuleFinder ruleFinder;
@@ -102,10 +100,9 @@ public class DelphiSensor implements Sensor {
 
   @Override
   public void analyse(Project project, SensorContext sensorContext) {
-    // creates and resets analyser
     ASTAnalyzer analyzer = new DelphiASTAnalyzer(delphiProjectHelper);
     List<DelphiProject> projects = delphiProjectHelper.getWorkgroupProjects();
-    for (DelphiProject delphiProject : projects) // for every .dproj file
+    for (DelphiProject delphiProject : projects)
     {
       CodeAnalysisCacheResults.resetCache();
       parseFiles(analyzer, delphiProject, project);
@@ -129,24 +126,23 @@ public class DelphiSensor implements Sensor {
     ProgressReporter progressReporter = new ProgressReporter(resourceList.size(), 10, new ProgressReporterLogger(
       DelphiUtils.LOG));
 
-    for (InputFile resource : resourceList) { // for every resource
+    for (InputFile resource : resourceList) {
       DelphiUtils.LOG.debug(">> PROCESSING " + resource.file().getPath());
-      for (MetricsInterface metric : metrics) { // for every metric
+      for (MetricsInterface metric : metrics) {
         if (metric.executeOnResource(resource)) {
           metric.analyse(resource, sensorContext, fileClasses.get(resource), fileFunctions.get(resource),
             units);
           InputFile inputFile = delphiProjectHelper.getFile(resource.file().getAbsolutePath());
           metric.save(inputFile, sensorContext);
         }
-      } // metric
+      }
 
-      // calculating undocumented api
-      double udApi = DelphiUtils.checkRange(
+      double undocumentedApi = DelphiUtils.checkRange(
         metrics[1].getMetric("PUBLIC_API") - metrics[0].getMetric("PUBLIC_DOC_API"), 0.0,
         Double.MAX_VALUE);
 
       // Number of public API without a Javadoc block
-      sensorContext.saveMeasure(resource, CoreMetrics.PUBLIC_UNDOCUMENTED_API, udApi);
+      sensorContext.saveMeasure(resource, CoreMetrics.PUBLIC_UNDOCUMENTED_API, undocumentedApi);
 
       progressReporter.progress();
     }
@@ -160,7 +156,6 @@ public class DelphiSensor implements Sensor {
    * @param sensorContext Sensor context (provided by Sonar)
    */
   private void parsePackages(SensorContext sensorContext) {
-    // for every package
     for (Directory pack : packageList) {
       sensorContext.saveMeasure(pack, CoreMetrics.DIRECTORIES, 1.0);
       sensorContext.saveMeasure(pack, CoreMetrics.FILES, (double) filesCount.get(pack));
@@ -182,7 +177,6 @@ public class DelphiSensor implements Sensor {
    * @param project Project
    */
   protected void parseFiles(ASTAnalyzer analyser, DelphiProject delphiProject, Project project) {
-    // project properties
     List<File> includedDirs = delphiProject.getIncludeDirectories();
     List<File> excludedDirs = delphiProjectHelper.getExcludedSources();
     List<File> sourceFiles = delphiProject.getSourceFiles();
@@ -195,7 +189,6 @@ public class DelphiSensor implements Sensor {
     printFileList("Included: ", includedDirs);
     printFileList("Excluded: ", excludedDirs);
 
-    // for every source file
     DelphiUtils.LOG.info("Parsing project " + delphiProject.getName());
 
     ProgressReporter progressReporter = new ProgressReporter(sourceFiles.size(), 10, new ProgressReporterLogger(
@@ -223,12 +216,11 @@ public class DelphiSensor implements Sensor {
   private void parseSourceFile(File sourceFile, List<File> excludedDirs, boolean importSources, ASTAnalyzer analyzer,
     Project project) {
     if (delphiProjectHelper.isExcluded(sourceFile, excludedDirs)) {
-      return; // in excluded, return
+      return;
     }
 
     DelphiUtils.LOG.debug(">> PARSING " + sourceFile.getAbsolutePath());
 
-    // adding file to package
     InputFile resource = delphiProjectHelper.getFile(sourceFile);
 
     Directory pack = delphiProjectHelper.getDirectory(sourceFile.getParentFile(), project);
@@ -237,16 +229,15 @@ public class DelphiSensor implements Sensor {
       throw new IllegalArgumentException("Directory: " + sourceFile.getParentFile() + " not found.");
     }
 
-    packageList.add(pack); // new package
+    packageList.add(pack);
 
     if (filesCount.containsKey(pack)) {
-      filesCount.put(pack, filesCount.get(pack) + 1); // files count
+      filesCount.put(pack, filesCount.get(pack) + 1);
     } else {
       filesCount.put(pack, Integer.valueOf(1));
     }
     resourceList.add(resource);
 
-    // sonarIndex.index(resource);
     ASTTree ast = analyseSourceFile(sourceFile, analyzer);
     if (importSources && ast != null) {
 
@@ -269,11 +260,10 @@ public class DelphiSensor implements Sensor {
    * @return AST Tree
    */
   private ASTTree analyseSourceFile(File sourceFile, ASTAnalyzer analyser) {
-    // analysing file
     DelphiAST ast = null;
     try {
-      ast = new DelphiAST(sourceFile); // ast tree for file
-      analyser.analyze(ast); // parsing with ANTLR
+      ast = new DelphiAST(sourceFile);
+      analyser.analyze(ast);
       ++scannedFiles;
     } catch (Exception e) {
       DelphiUtils.LOG.debug("Error parsing file: " + e.getMessage() + " " + sourceFile.getAbsolutePath());

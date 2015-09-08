@@ -56,23 +56,24 @@ public class BlockCounterRule extends CountRule {
 
   @Override
   protected boolean shouldCount(DelphiPMDNode node) {
-    if (!isCounting && isStartNode(node)) { // begin counting
+    if (!isCounting && isStartNode(node)) {
       isCounting = true;
       count = 0;
       lastLine = node.getLine();
       firstNode = node;
       startIndex = 1;
-    } else if (isCounting) { // already counting
-      if (isEndNode(node) && --startIndex == 0) { // stop counting and
-                                                  // check for violation
+    } else if (isCounting) {
+      if (isEndNode(node) && --startIndex == 0) {
+        // stop counting and check for violation
         isCounting = false;
         lastLine = 0;
-      } else if (isStartNode(node)) { // if another start node is
-                                      // encountered
+      } else if (isStartNode(node)) {
+        // if another start node is encountered
         ++startIndex;
       } else if (accept(node)) {
         lastLine = node.getLine();
-        return true; // increment counter
+        // increment counter
+        return true;
       }
     }
 

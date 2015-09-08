@@ -89,7 +89,7 @@ public class IncludeResolver extends SourceResolver {
 
     baseFileName = DelphiUtils.normalizeFileName(baseFileName);
 
-    StringBuilder newData = new StringBuilder(baseFileData); // new data
+    StringBuilder newData = new StringBuilder(baseFileData);
     List<ReplacementSubRange> dataToInclude = new ArrayList<ReplacementSubRange>();
 
     try {
@@ -103,18 +103,14 @@ public class IncludeResolver extends SourceResolver {
         }
 
         String includeFileName = directive.getItem();
-        String currentDir = baseFileName.substring(0, baseFileName.lastIndexOf('/')); // gets
-                                                                                      // the
-                                                                                      // dir
-                                                                                      // of
-                                                                                      // current
-                                                                                      // file
+
+        String currentDir = baseFileName.substring(0, baseFileName.lastIndexOf('/'));
         currentDir = backtrackDirectory(currentDir, DelphiUtils.countSubstrings(includeFileName, ".."));
 
-        try // read the file into string
+        try
         {
-          String copyData = ""; // string, that will be inserted in
-                                // replacement of include statement
+          // string, that will be inserted in replacement of include statement
+          String copyData = "";
           if (extendIncludes) {
             File includeFile = resolveIncludeFile(includeFileName, currentDir, includes);
             includedFiles.add(includeFile.getAbsolutePath());
@@ -124,7 +120,7 @@ public class IncludeResolver extends SourceResolver {
             .getFirstCharPosition()
             + directive.getLength() + REPLACEMENT_OFFSET, copyData));
 
-        } catch (IncludeResolverException e) { // if no file found
+        } catch (IncludeResolverException e) {
           DelphiUtils.LOG.warn(e.getMessage());
           continue;
         } catch (IOException e) {
@@ -132,7 +128,7 @@ public class IncludeResolver extends SourceResolver {
           continue;
         }
 
-      } // for
+      }
     } catch (CompilerDirectiveFactorySyntaxException e) {
       DelphiUtils.LOG.debug(e.getMessage());
     }
@@ -141,27 +137,15 @@ public class IncludeResolver extends SourceResolver {
   }
 
   private String readFileIncludeData(File includeFile) throws IncludeResolverException, IOException {
-    StringBuilder includeData = new StringBuilder(DelphiUtils.readFileContent(includeFile, null)); // get
-                                                                                                   // include
-                                                                                                   // file
-                                                                                                   // content
+    StringBuilder includeData = new StringBuilder(DelphiUtils.readFileContent(includeFile, null));
     SourceResolverResults includedResults = new SourceResolverResults(includeFile.getAbsolutePath(), includeData);
 
     ExcludeResolver excludeResolver = new ExcludeResolver();
     excludeResolver.resolve(includedResults);
     SubRangeAggregator newExcluded = includedResults.getFileExcludes();
 
-    includeData = resolveIncludes(includeFile.getAbsolutePath(), includeData, newExcluded); // do
-                                                                                            // the
-                                                                                            // same
-                                                                                            // for
-                                                                                            // include
-                                                                                            // file,
-                                                                                            // it
-                                                                                            // could
-                                                                                            // also
-                                                                                            // have
-                                                                                            // includes
+    // do the same for include file, it could also have includes
+    includeData = resolveIncludes(includeFile.getAbsolutePath(), includeData, newExcluded);
     return includeData.toString();
   }
 
@@ -200,9 +184,7 @@ public class IncludeResolver extends SourceResolver {
         return file;
       }
     }
-    throw new IncludeResolverException("Could not resolve include file: " + fileName); // no
-                                                                                       // file
-                                                                                       // found
+    throw new IncludeResolverException("Could not resolve include file: " + fileName);
   }
 
   private File getExistingFile(String directory, String fileName) {

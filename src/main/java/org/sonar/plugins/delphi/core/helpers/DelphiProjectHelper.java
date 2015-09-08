@@ -200,9 +200,8 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
     String dprojPath = getProjectFile();
     String gprojPath = getWorkgroupFile();
 
-    if (!StringUtils.isEmpty(gprojPath)) // Single workgroup file,
-                                         // containing list of .dproj files
-    {
+    // Single workgroup file, containing list of .dproj files
+    if (!StringUtils.isEmpty(gprojPath)) {
       try {
         DelphiUtils.LOG.debug(".groupproj file found: " + gprojPath);
         DelphiWorkgroup workGroup = new DelphiWorkgroup(new File(gprojPath));
@@ -219,17 +218,15 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
         list.add(newProject);
       }
     }
-
-    else if (!StringUtils.isEmpty(dprojPath)) // Single .dproj file
-    {
+    // Single .dproj file
+    else if (!StringUtils.isEmpty(dprojPath)) {
       File dprojFile = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), dprojPath);
       DelphiUtils.LOG.info(".dproj file found: " + gprojPath);
       DelphiProject newProject = new DelphiProject(dprojFile);
       list.add(newProject);
     }
-
-    else // No .dproj files, create default project
-    {
+    else {
+      // No .dproj files, create default project
       DelphiProject newProject = new DelphiProject("Default Project");
       newProject.setIncludeDirectories(getIncludeDirectories());
       newProject.setSourceFiles(mainFiles());

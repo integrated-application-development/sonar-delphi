@@ -28,31 +28,56 @@ import org.sonar.plugins.delphi.antlr.DelphiLexer;
  * Enum class holing lexer metrics used during file analysis
  */
 public enum LexerMetrics {
-  PRIVATE(0, DelphiLexer.PRIVATE), PUBLIC(1, DelphiLexer.PUBLIC), PROTECTED(2, DelphiLexer.PROTECTED), PUBLISHED(3,
-    DelphiLexer.PUBLISHED), IMPLEMENTATION(
-    4, DelphiLexer.IMPLEMENTATION), INTERFACE(5, DelphiLexer.INTERFACE), FILE(6, DelphiLexer.FILE),
-  FUNCTION_BODY(7, DelphiLexer.BEGIN), IDENT(
-    8, DelphiLexer.TkIdentifier), UNIT(9, DelphiLexer.UNIT), LIBRARY(10, DelphiLexer.LIBRARY), CLASS_FIELD(11,
-    DelphiLexer.TkClassField), VARIABLE_TYPE(
-    12, DelphiLexer.TkVariableType), VARIABLE_IDENTS(13, DelphiLexer.TkVariableIdents), PROPERTY(14,
-    DelphiLexer.PROPERTY), FUNCTION(15,
-    DelphiLexer.FUNCTION), PROCEDURE(16, DelphiLexer.PROCEDURE), DESTRUCTOR(17, DelphiLexer.DESTRUCTOR),
-  CONSTRUCTOR(18,
-    DelphiLexer.CONSTRUCTOR), READ(19, DelphiLexer.READ), WRITE(20, DelphiLexer.WRITE), CLASS_PARENTS(21,
-    DelphiLexer.TkClassParents), FUNCTION_NAME(
-    22, DelphiLexer.TkFunctionName), VAR(23, DelphiLexer.VAR), FUNCTION_ARGS(24, DelphiLexer.TkFunctionArgs),
-  FOR(25, DelphiLexer.FOR), IF(
-    26, DelphiLexer.IF), WHILE(27, DelphiLexer.WHILE), REPEAT(28, DelphiLexer.REPEAT),
-  AND(29, DelphiLexer.AND), OR(30, DelphiLexer.OR), CASE(
-    31, DelphiLexer.CASE), BREAK(32, DelphiLexer.BREAK), CONTINUE(33, DelphiLexer.CONTINUE), ELSE(34,
-    DelphiLexer.ELSE), BEGIN(35,
-    DelphiLexer.BEGIN), END(36, DelphiLexer.END), TRY(37, DelphiLexer.TRY), ASSIGN(38, DelphiLexer.ASSIGN),
-  SEMI(39, DelphiLexer.SEMI), LPAREN(
-    40, DelphiLexer.LPAREN), RPAREN(41, DelphiLexer.RPAREN), USES(42, DelphiLexer.USES), NEW_TYPE(43,
-    DelphiLexer.TkNewType), EXCEPT(44,
-    DelphiLexer.EXCEPT), WITH(45, DelphiLexer.WITH), THEN(46, DelphiLexer.THEN), DO(47, DelphiLexer.DO), DOT(
-    48, DelphiLexer.DOT), AS(49,
-    DelphiLexer.AS);
+  PRIVATE(0, DelphiLexer.PRIVATE),
+  PUBLIC(1, DelphiLexer.PUBLIC),
+  PROTECTED(2, DelphiLexer.PROTECTED),
+  PUBLISHED(3, DelphiLexer.PUBLISHED),
+  IMPLEMENTATION(4, DelphiLexer.IMPLEMENTATION),
+  INTERFACE(5, DelphiLexer.INTERFACE),
+  FILE(6, DelphiLexer.FILE),
+  FUNCTION_BODY(7, DelphiLexer.BEGIN),
+  IDENT(8, DelphiLexer.TkIdentifier),
+  UNIT(9, DelphiLexer.UNIT),
+  LIBRARY(10, DelphiLexer.LIBRARY),
+  CLASS_FIELD(11, DelphiLexer.TkClassField),
+  VARIABLE_TYPE(12, DelphiLexer.TkVariableType),
+  VARIABLE_IDENTS(13, DelphiLexer.TkVariableIdents),
+  PROPERTY(14, DelphiLexer.PROPERTY),
+  FUNCTION(15, DelphiLexer.FUNCTION),
+  PROCEDURE(16, DelphiLexer.PROCEDURE),
+  DESTRUCTOR(17, DelphiLexer.DESTRUCTOR),
+  CONSTRUCTOR(18, DelphiLexer.CONSTRUCTOR),
+  READ(19, DelphiLexer.READ),
+  WRITE(20, DelphiLexer.WRITE),
+  CLASS_PARENTS(21, DelphiLexer.TkClassParents),
+  FUNCTION_NAME(22, DelphiLexer.TkFunctionName),
+  VAR(23, DelphiLexer.VAR),
+  FUNCTION_ARGS(24, DelphiLexer.TkFunctionArgs),
+  FOR(25, DelphiLexer.FOR),
+  IF(26, DelphiLexer.IF),
+  WHILE(27, DelphiLexer.WHILE),
+  REPEAT(28, DelphiLexer.REPEAT),
+  AND(29, DelphiLexer.AND),
+  OR(30, DelphiLexer.OR),
+  CASE(31, DelphiLexer.CASE),
+  BREAK(32, DelphiLexer.BREAK),
+  CONTINUE(33, DelphiLexer.CONTINUE),
+  ELSE(34, DelphiLexer.ELSE),
+  BEGIN(35, DelphiLexer.BEGIN),
+  END(36, DelphiLexer.END),
+  TRY(37, DelphiLexer.TRY),
+  ASSIGN(38, DelphiLexer.ASSIGN),
+  SEMI(39, DelphiLexer.SEMI),
+  LPAREN(40, DelphiLexer.LPAREN),
+  RPAREN(41, DelphiLexer.RPAREN),
+  USES(42, DelphiLexer.USES),
+  NEW_TYPE(43, DelphiLexer.TkNewType),
+  EXCEPT(44, DelphiLexer.EXCEPT),
+  WITH(45, DelphiLexer.WITH),
+  THEN(46, DelphiLexer.THEN),
+  DO(47, DelphiLexer.DO),
+  DOT(48, DelphiLexer.DOT),
+  AS(49, DelphiLexer.AS);
 
   private final int code;
   private final int metrics;

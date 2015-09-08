@@ -45,10 +45,7 @@ public class NoInheritedStatementRule extends DelphiRule {
     if (node.getText().equalsIgnoreCase(lookFor)) {
       Tree beginNode = null;
       for (int i = node.getChildIndex() + 1; i < node.getChildIndex() + MAX_LOOK_AHEAD
-        && i < node.getParent().getChildCount(); ++i) // look
-                                                      // for
-                                                      // begin
-      {
+        && i < node.getParent().getChildCount(); ++i) {
         if (node.getParent().getChild(i).getType() == DelphiLexer.BEGIN) {
           beginNode = node.getParent().getChild(i);
           break;

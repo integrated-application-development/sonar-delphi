@@ -43,7 +43,7 @@ import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
  */
 public class AQTimeCoverageParser implements DelphiCodeCoverageParser {
 
-  private String prefix = ""; // table prefix
+  private String tablePrefix = "";
   private Map<String, String> connectionProperties;
   private DelphiProjectHelper delphiProjectHelper;
 
@@ -56,15 +56,13 @@ public class AQTimeCoverageParser implements DelphiCodeCoverageParser {
     DelphiUtils.LOG.debug("Code Coverage starting...");
     AQTimeCoverageDao aqTimeCoverageDao = new AQTimeCoverageDao();
     aqTimeCoverageDao.setJdbcProps(connectionProperties);
-    aqTimeCoverageDao.setDatabasePrefix(prefix);
+    aqTimeCoverageDao.setDatabasePrefix(tablePrefix);
     List<AQTimeCodeCoverage> aqTimeCodeCoverages = aqTimeCoverageDao.readAQTimeCodeCoverage();
     saveCoverageData(processFiles(aqTimeCodeCoverages), context);
   }
 
   private void saveCoverageData(Map<InputFile, CoverageFileData> savedResources, SensorContext context) {
-    for (CoverageFileData data : savedResources.values()) // save all
-                                                          // resources
-    {
+    for (CoverageFileData data : savedResources.values()) {
       // TODO sonar.delphi.codecoverage.excluded property
       // if
       // (DelphiProjectHelper.getInstance().isExcluded(data.getResource().file().getPath(),
@@ -95,7 +93,6 @@ public class AQTimeCoverageParser implements DelphiCodeCoverageParser {
     for (AQTimeCodeCoverage aqTimeCodeCoverage : aqTimeCodeCoverages) {
       progressReporter.progress();
 
-      // convert relative file name to absolute path
       String path = normalizeFileName(aqTimeCodeCoverage.getCoveredFileName());
 
       InputFile resource = delphiProjectHelper.getFile(path);
@@ -119,28 +116,27 @@ public class AQTimeCoverageParser implements DelphiCodeCoverageParser {
       fileData.setUncoveredLines(fileData.getUncoveredLines() + 1);
     }
 
-    fileData.getLineHitsBuilder().add(String.valueOf(lineNumber), lineHits); // add
-                                                                             // new
-                                                                             // line
-                                                                             // hit
+    fileData.getLineHitsBuilder().add(String.valueOf(lineNumber), lineHits);
   }
 
   /**
-   * Gets source file path for file name
+   * Convert relative file name to absolute path
    * 
    * @param fileName Short file name
    * @return Normalized file name
    */
   private String normalizeFileName(String fileName) {
     String path = DelphiUtils.normalizeFileName(fileName);
-    path = path.replaceAll("\\\\\\.\\.", ""); // erase '\..' prefixes
-    path = path.replaceAll("\\.\\.", ""); // erase '..' prefixes
+    // erase '\..' prefixes
+    path = path.replaceAll("\\\\\\.\\.", "");
+    // erase '..' prefixes
+    path = path.replaceAll("\\.\\.", "");
 
     return path;
   }
 
   public void setConnectionProperties(Map<String, String> connectionProperties) {
     this.connectionProperties = connectionProperties;
-    prefix = connectionProperties.get(DelphiPlugin.JDBC_DB_TABLE_PREFIX_KEY);
+    tablePrefix = connectionProperties.get(DelphiPlugin.JDBC_DB_TABLE_PREFIX_KEY);
   }
 }

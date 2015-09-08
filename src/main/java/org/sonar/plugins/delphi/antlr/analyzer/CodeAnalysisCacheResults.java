@@ -39,20 +39,13 @@ import org.sonar.plugins.delphi.core.language.impl.UnresolvedFunctionCall;
 public class CodeAnalysisCacheResults {
 
   private static final int INITIAL_CAPACITY = 100;
-  protected static final Set<UnitInterface> allUnits = new HashSet<UnitInterface>(INITIAL_CAPACITY); // all
-                                                                                                     // parsed
-                                                                                                     // units
+  protected static final Set<UnitInterface> allUnits = new HashSet<UnitInterface>(INITIAL_CAPACITY);
   protected static final Map<String, ClassInterface> allClasses = new HashMap<String, ClassInterface>(
-    INITIAL_CAPACITY); // all parsed classes in
-  // // a project
+    INITIAL_CAPACITY);
   protected static final Map<String, FunctionInterface> allFunctions = new HashMap<String, FunctionInterface>(
-    INITIAL_CAPACITY); // all parsed
-  // functions in a
-  // project
+    INITIAL_CAPACITY);
   protected static final Map<String, UnresolvedFunctionCall> unresolvedCalls = new HashMap<String, UnresolvedFunctionCall>(
-    INITIAL_CAPACITY); // unresolved
-
-  // calls
+    INITIAL_CAPACITY);
 
   /**
    * resets results chache

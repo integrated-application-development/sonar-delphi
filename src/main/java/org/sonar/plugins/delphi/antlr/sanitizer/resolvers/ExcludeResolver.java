@@ -59,10 +59,10 @@ public class ExcludeResolver extends SourceResolver {
     SubRangeAggregator rangeAggregator = new SubRangeMergingAggregator();
     int pos = -1; // //...
     while ((pos = fileData.indexOf("//", pos + 1)) != -1) {
-      int pos2 = fileData.indexOf("\n", pos + 1); // EOL
+      int pos2 = fileData.indexOf("\n", pos + 1);
       if (pos2 != -1 && !rangeAggregator.inRange(pos)) {
-        rangeAggregator.add(new IntegerSubRange(pos, pos2)); // make new
-                                                             // subrange
+        // make new subrange
+        rangeAggregator.add(new IntegerSubRange(pos, pos2));
       }
     }
     return rangeAggregator;
@@ -74,9 +74,8 @@ public class ExcludeResolver extends SourceResolver {
     while ((pos = fileData.indexOf("(*", pos + 1)) != -1) {
       int pos2 = fileData.indexOf("*)", pos + 1);
       if (pos2 != -1 && !rangeAggregator.inRange(pos)) {
-        rangeAggregator.add(new IntegerSubRange(pos, pos2 + 2)); // make
-                                                                 // new
-                                                                 // subrange
+        // make new subrange
+        rangeAggregator.add(new IntegerSubRange(pos, pos2 + 2));
       }
     }
 
@@ -87,9 +86,8 @@ public class ExcludeResolver extends SourceResolver {
       }
       int pos2 = fileData.indexOf("}", pos + 1);
       if (pos2 != -1 && !rangeAggregator.inRange(pos)) {
-        rangeAggregator.add(new IntegerSubRange(pos, pos2 + 1)); // make
-                                                                 // new
-                                                                 // subrange
+        // make new subrange
+        rangeAggregator.add(new IntegerSubRange(pos, pos2 + 1));
       }
     }
     return rangeAggregator;
@@ -98,22 +96,24 @@ public class ExcludeResolver extends SourceResolver {
   private SubRangeAggregator getExcludedStrings(StringBuilder fileData) {
     SubRangeAggregator rangeAggregator = new SubRangeMergingAggregator();
     int pos = -1;
-    while ((pos = fileData.indexOf("'", pos + 1)) != -1) // parses strings
+    // parses strings
+    while ((pos = fileData.indexOf("'", pos + 1)) != -1)
     {
-      int pos2 = fileData.indexOf("'", pos + 1); // get next ' position
+      // get next ' position
+      int pos2 = fileData.indexOf("'", pos + 1);
       if (pos2 == -1) {
         break; // no pair
       }
-      int newLine = fileData.indexOf("\n", pos + 1); // get new line
-                                                     // position
+      // get new line position
+      int newLine = fileData.indexOf("\n", pos + 1);
       if (pos2 > newLine) {
-        continue; // count only those quotes, that begin and end in a
-                  // single line
+        // count only those quotes, that begin and end in a single line
+        continue;
       }
-      rangeAggregator.add(new IntegerSubRange(pos, pos2 + 1)); // new
-                                                               // quote
-                                                               // range
-      pos = pos2; // set current position to last ' position
+      // new quote range
+      rangeAggregator.add(new IntegerSubRange(pos, pos2 + 1));
+      // set current position to last ' position
+      pos = pos2;
     }
     return rangeAggregator;
   }

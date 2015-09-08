@@ -110,12 +110,12 @@ public class DelphiAST extends CommonTree implements ASTTree {
   public File generateXML(String fileName) {
     Source source = new DOMSource(generateDocument());
 
-    // Prepare the output file
     File file = new File(fileName);
     Result result = new StreamResult(file);
 
-    try // Write the DOM document to the file
+    try
     {
+      // Write the DOM document to the file
       Transformer xformer = TransformerFactory.newInstance().newTransformer();
       xformer.transform(source, result);
     } catch (TransformerException e) {
@@ -142,11 +142,12 @@ public class DelphiAST extends CommonTree implements ASTTree {
   }
 
   private Document generateDocument(Document doc, String rootName) {
-    Element root = doc.createElement(rootName); // create documents root
+    Element root = doc.createElement(rootName);
     doc.appendChild(root);
-    generateDocumentChildren(root, doc, this); // create root children, and
-                                               // their children, and so on
-    doc.getDocumentElement().normalize(); // normalize document
+
+    // create root children, and their children, and so on
+    generateDocumentChildren(root, doc, this);
+    doc.getDocumentElement().normalize();
     return doc;
   }
 
@@ -176,8 +177,8 @@ public class DelphiAST extends CommonTree implements ASTTree {
         child.setTextContent(childNode.getText());
         child.setAttribute("line", String.valueOf(childNode.getLine()));
         child.setAttribute("column", String.valueOf(childNode.getCharPositionInLine()));
-        child.setAttribute("class", ""); // not needed
-        child.setAttribute("method", ""); // not needed
+        child.setAttribute("class", "");
+        child.setAttribute("method", "");
         child.setAttribute("package", "");
         root.appendChild(child);
         generateDocumentChildren(child, doc, childNode);

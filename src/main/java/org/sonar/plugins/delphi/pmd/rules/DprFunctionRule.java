@@ -30,16 +30,21 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class DprFunctionRule extends DelphiRule {
 
-  private int check; // check for .dpr
+  /**
+   *  Check for *.dpr.
+   */
+  private int check;
 
   @Override
   public void init() {
-    check = -1; // needs to check at new file
+    // needs to check at new file
+    check = -1;
   }
 
   @Override
   public Object visit(DelphiPMDNode node, Object data) {
-    if (check == -1) { // checking if we are on .dpr/.dpk
+    // checking if we are on .dpr/.dpk
+    if (check == -1) {
       if (node.getASTTree().getFileName().endsWith(".dpr") || node.getASTTree().getFileName().endsWith(".dpk")) {
         check = 1;
       } else {
@@ -47,7 +52,8 @@ public class DprFunctionRule extends DelphiRule {
       }
     }
     if (check != 1) {
-      return data; // not a .dpr/.dpk file
+      // not a .dpr/.dpk file
+      return data;
     }
 
     if (isViolationNode(node)) {

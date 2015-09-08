@@ -59,16 +59,13 @@ public class CalledFunctionVerifier {
     // if we are on a ident token and it is not last
     if (node.getType() == LexerMetrics.IDENT.toMetrics()
       && nextNode != null
-      && (nextNode.getType() == LexerMetrics.LPAREN.toMetrics() || nextNode.getType() == LexerMetrics.SEMI
-        .toMetrics())) {
+      && (nextNode.getType() == LexerMetrics.LPAREN.toMetrics() || nextNode.getType() == LexerMetrics.SEMI.toMetrics())) {
       String functionName = node.getText().toLowerCase();
       List<UnitInterface> unitsToLook = new ArrayList<UnitInterface>();
-      unitsToLook.add(results.getActiveUnit()); // first we look in
-                                                // current unit for
-                                                // function reference
+      // first we look in current unit for function reference
+      unitsToLook.add(results.getActiveUnit());
       unitsToLook.addAll(results.getActiveUnit().getIncludedUnits(results.getCachedUnits()));
 
-      // looking for called function units
       for (UnitInterface unit : unitsToLook) {
         FunctionInterface[] functions = unit.getAllFunctions();
         for (FunctionInterface func : functions) {
@@ -80,14 +77,12 @@ public class CalledFunctionVerifier {
         }
       }
 
-      calledFunction = new DelphiFunction(node.getText().toLowerCase()); // create
-                                                                         // a
-                                                                         // new
-                                                                         // unresolved
-                                                                         // function
-      isUnresolved = true; // no function found, but this was a function
-                           // call
-      return true; // so we return true
+      // create a new unresolved function
+      calledFunction = new DelphiFunction(node.getText().toLowerCase());
+      // no function found, but this was a function call
+      isUnresolved = true;
+      // so we return true
+      return true;
     }
 
     return false; // not a function call (not like "foo(args);" or "foo;"

@@ -69,15 +69,14 @@ public class DelphiRule extends AbstractJavaRule {
       ASTTree ast = node.getASTTree();
       if (ast != null) {
         String codeLine = node.getASTTree().getFileSourceLine(node.getLine());
-        if (codeLine.trim().endsWith("//NOSONAR") && node.getLine() + 1 > lastLineParsed) { // skip
-                                                                                            // pmd
-                                                                                            // analysis
+        // skip pmd analysis
+        if (codeLine.trim().endsWith("//NOSONAR") && node.getLine() + 1 > lastLineParsed) {
           lastLineParsed = node.getLine() + 1;
         }
       }
 
-      if (node.getLine() >= lastLineParsed) { // optimization and / / NO
-                                              // SONAR line skip
+      // optimization and //NOSONAR line skip
+      if (node.getLine() >= lastLineParsed) {
         visit(node, ctx);
         lastLineParsed = node.getLine();
       }

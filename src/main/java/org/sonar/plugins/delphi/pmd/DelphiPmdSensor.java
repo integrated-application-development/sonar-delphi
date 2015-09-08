@@ -97,9 +97,7 @@ public class DelphiPmdSensor implements Sensor {
       List<File> excluded = delphiProjectHelper.getExcludedSources();
 
       List<DelphiProject> projects = delphiProjectHelper.getWorkgroupProjects();
-      for (DelphiProject delphiProject : projects) // for every .dproj
-                                                   // file
-      {
+      for (DelphiProject delphiProject : projects) {
         DelphiUtils.LOG.info("PMD Parsing project "
           + delphiProject.getName());
         ProgressReporter progressReporter = new ProgressReporter(
@@ -122,7 +120,6 @@ public class DelphiPmdSensor implements Sensor {
         }
       }
 
-      // write xml report
       return writeXmlReport(project, pmd.getReport());
     } catch (IOException e) {
       DelphiUtils.LOG.error("Could not generate PMD report file.");

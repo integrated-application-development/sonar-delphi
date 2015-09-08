@@ -270,12 +270,11 @@ public class DelphiUnit implements UnitInterface {
   @Override
   public FunctionInterface[] getAllFunctions() {
     Set<FunctionInterface> result = new HashSet<FunctionInterface>();
-    for (FunctionInterface globalFunction : functions) { // add global
-                                                         // functions
+    for (FunctionInterface globalFunction : functions) {
       result.add(globalFunction);
     }
 
-    for (ClassInterface clazz : classes) { // add class function
+    for (ClassInterface clazz : classes) {
       for (FunctionInterface function : clazz.getFunctions()) {
         result.add(function);
       }

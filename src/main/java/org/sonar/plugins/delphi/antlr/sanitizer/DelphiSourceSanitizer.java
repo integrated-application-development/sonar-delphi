@@ -43,9 +43,7 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  */
 public class DelphiSourceSanitizer extends ANTLRFileStream {
 
-  private static List<File> includes = new ArrayList<File>(); // list of
-                                                              // include
-                                                              // directories
+  private static List<File> includeDirectories = new ArrayList<File>();
   private static Set<String> includedFiles = new HashSet<String>();
   private static Set<String> definitions = new HashSet<String>();
 
@@ -78,8 +76,8 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
    * @param list List of include directories
    */
   public static void setIncludeDirectories(List<File> list) {
-    includes.clear();
-    includes.addAll(list);
+    includeDirectories.clear();
+    includeDirectories.addAll(list);
   }
 
   /**
@@ -103,10 +101,11 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
   public int LA(int i) {
     int offset = i;
     if (offset == 0) {
-      return 0; // undefined
+      return 0;
     }
     if (offset < 0) {
-      offset++; // e.g., translate LA(-1) to use offset 0
+      // e.g., translate LA(-1) to use offset 0
+      offset++;
     }
     if ((p + offset - 1) >= n) {
       return DelphiLexer.EOF;
@@ -125,19 +124,17 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
       return;
     }
 
-    Set<String> defs = new HashSet<String>(definitions); // preprocessor
-                                                         // definitions in
-                                                         // current file
+    Set<String> defs = new HashSet<String>(definitions);
 
-    boolean extendIncludes = true; // TODO
-                                   // delphiProjectHelper.shouldExtendIncludes();
+    // TODO delphiProjectHelper.shouldExtendIncludes();
+    boolean extendIncludes = true;
 
     StringBuilder fileData = new StringBuilder(DelphiUtils.readFileContent(new File(fileName), encoding));
 
     SourceResolverResults resolverResult = new SourceResolverResults(fileName, fileData);
 
     SourceResolver resolver = new ExcludeResolver();
-    resolver.chain(new IncludeResolver(extendIncludes, includes)).chain(new ExcludeResolver())
+    resolver.chain(new IncludeResolver(extendIncludes, includeDirectories)).chain(new ExcludeResolver())
       .chain(new DefineResolver(defs))
       .chain(new SourceFixerResolver());
 

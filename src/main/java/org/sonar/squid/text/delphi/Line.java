@@ -205,8 +205,8 @@ class Line implements Measurable<Metric> {
     }
 
     if (stringLine == null) {
-      return false; // when {comment} //comment this is empty, so preform
-                    // this check
+      // when {comment} //comment this is empty, so perform this check
+      return false;
     }
 
     boolean isThereCodeBeforeComment = false;

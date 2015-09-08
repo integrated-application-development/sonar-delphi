@@ -68,17 +68,15 @@ public class SurefireSensor implements Sensor {
   public void analyse(Project project, SensorContext context) {
     String[] paths = settings.getStringArray(SurefireUtils.SUREFIRE_REPORTS_PATH_PROPERTY);
 
-    if (paths == null || paths.length == 0) { // no directory was specified
-      DelphiUtils.LOG.warn("No Surefire reports directory found! Using default directory: "
-        + DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY);
+    if (paths == null || paths.length == 0) {
+      DelphiUtils.LOG.warn("No Surefire reports directory found! Using default directory: " + DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY);
       paths = new String[] {DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY};
     }
 
     String mainPath = delphiProjectHelper.baseDir().getAbsolutePath();
-    for (String path : paths) // cover each path
-    {
+    for (String path : paths) {
       File reportDirectory = DelphiUtils.resolveAbsolutePath(mainPath, path);
-      if (!reportDirectory.exists()) { // directory does not exist
+      if (!reportDirectory.exists()) {
         DelphiUtils.LOG.warn("surefire report path not found {}", reportDirectory.getAbsolutePath());
         continue;
       }

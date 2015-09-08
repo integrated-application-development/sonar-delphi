@@ -103,11 +103,8 @@ public class DefineResolver extends SourceResolver {
       } else if (type == CompilerDirectiveType.UNDEFINE) {
         defines.remove(directive.getItem());
       } else if (type == CompilerDirectiveType.IF) {
-        toDelete.add(getMatchingEndIfCutRange(directives, i, excluded, true)); // mark
-                                                                               // places
-                                                                               // to
-                                                                               // cut
-                                                                               // off
+        // mark places to cut off
+        toDelete.add(getMatchingEndIfCutRange(directives, i, excluded, true));
       } else if (type == CompilerDirectiveType.IFDEF) {
         boolean isDefined = defines.contains(directive.getItem());
         boolean isPositive = ((IfDefDirective) directive).isPositive();
@@ -127,7 +124,9 @@ public class DefineResolver extends SourceResolver {
     CompilerDirective elseDirective = null;
 
     int index = startDirectiveIndex;
-    int branchCount = 1; // how many $ifdef..$endif we must skip
+
+    // how many $ifdef..$endif we must skip
+    int branchCount = 1;
 
     while (branchCount > 0) {
 
@@ -138,7 +137,8 @@ public class DefineResolver extends SourceResolver {
 
       lastDirective = directives.get(index);
       if (excluded.inRange(lastDirective.getFirstCharPosition())) {
-        continue; // if in excluded range, continue
+        // if in excluded range, continue
+        continue;
       }
 
       CompilerDirectiveType type = lastDirective.getType();
@@ -157,24 +157,28 @@ public class DefineResolver extends SourceResolver {
   private SubRange calculateCutSubRange(CompilerDirective firstDirective, CompilerDirective lastDirective,
     CompilerDirective elseDirective,
     boolean shouldCut) {
-    int cutStart = firstDirective.getFirstCharPosition(); // starting
-                                                          // position to cut
-    int cutEnd = -1; // end position to cut
-    if (shouldCut) // statement not defined, cut not matching code
+    // starting position to cut
+    int cutStart = firstDirective.getFirstCharPosition();
+    // end position to cut
+    int cutEnd = -1;
+    // statement not defined, cut not matching code
+    if (shouldCut)
     {
       if (elseDirective == null) {
-        cutEnd = lastDirective.getLastCharPosition() + 1; // cut to
-                                                          // $endif
+        // cut to $endif
+        cutEnd = lastDirective.getLastCharPosition() + 1;
       } else {
-        cutEnd = elseDirective.getLastCharPosition() + 1; // cut to
-                                                          // $else
+        // cut to $else
+        cutEnd = elseDirective.getLastCharPosition() + 1;
       }
-    } else { // statement defined, but need to cut else if present
+    } else {
+      // statement defined, but need to cut else if present
       if (elseDirective != null) {
-        cutStart = elseDirective.getFirstCharPosition(); // start with
-                                                         // $else
+        // start with $else
+        cutStart = elseDirective.getFirstCharPosition();
       }
-      cutEnd = lastDirective.getLastCharPosition() + 1; // cut to $endif
+      // cut to $endif
+      cutEnd = lastDirective.getLastCharPosition() + 1;
     }
 
     if (cutEnd != -1 && cutStart != -1) {
@@ -185,11 +189,11 @@ public class DefineResolver extends SourceResolver {
   }
 
   private void removeUnwantedDefinitions(StringBuilder str, SubRangeAggregator toDelete) {
-    int deleted = 0; // number of deleted chars
-    toDelete.sort(new SubRangeFirstOccurenceComparator());// sort the list
-    for (SubRange range : toDelete.getRanges()) { // cut the code
-      str.delete(range.getBegin() - deleted, range.getEnd() - deleted);
-      deleted += range.getEnd() - range.getBegin();
+    int deletedChars = 0;
+    toDelete.sort(new SubRangeFirstOccurenceComparator());
+    for (SubRange range : toDelete.getRanges()) {
+      str.delete(range.getBegin() - deletedChars, range.getEnd() - deletedChars);
+      deletedChars += range.getEnd() - range.getBegin();
     }
   }
 

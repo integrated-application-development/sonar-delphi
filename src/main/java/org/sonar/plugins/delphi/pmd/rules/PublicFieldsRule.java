@@ -33,9 +33,8 @@ public class PublicFieldsRule extends DelphiRule {
 
   @Override
   public Object visit(DelphiPMDNode node, Object data) {
-    if (node.getType() == DelphiLexer.TkNewType) // encountering new type,
-                                                 // checking for its fields
-    {
+    if (node.getType() == DelphiLexer.TkNewType) {
+      // encountering new type, checking for its fields
       Tree parent = node.getChild(0);
       boolean isPublic = false;
       for (int i = 0; i < parent.getChildCount(); ++i) {

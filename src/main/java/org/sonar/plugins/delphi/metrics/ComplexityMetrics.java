@@ -64,44 +64,57 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
   private RangeDistributionBuilder rfcDist = new RangeDistributionBuilder(CoreMetrics.RFC_DISTRIBUTION,
     RFC_DISTRIB_BOTTOM_LIMITS);
 
-  private double fileComplexity = 0; // The Cyclomatic Complexity Number
-  private double functionComplexity = 0; // Average cyclomatic complexity
-                                         // number by method
-  private double classCount = 0; // Number of classes including nested
-                                 // classes, interfaces, enums and annotations
-  private double classComplexity = 0; // Average complexity by class
-  private double methodsCount = 0; // Number of Methods without including
-                                   // accessors. A constructor is considered
-                                   // to be a method.
-  private double accessorsCount = 0; // Number of getter and setter methods
-                                     // used to get(reading) or set(writing) a
-                                     // class' property .
-  private double statementsCount = 0; // Number of statements as defined in
-                                      // the DelphiLanguage Language
-                                      // Specification but without block
-                                      // definitions.
-  private double publicApi = 0; // Number of public classes, public methods
-                                // (without accessors) and public properties
-                                // (without public final
-                                // static ones)
-  private double dit = 0; // The depth of inheritance tree (DIT) metric
-                          // provides for each class a measure of the
-                          // inheritance levels from the
-                          // object hierarchy top.
-  private double noc = 0; // Number of children
+  /**
+   * The Cyclomatic Complexity Number.
+   */
+  private double fileComplexity = 0;
+  /**
+   * Average cyclomatic complexity number by method.
+   */
+  private double functionComplexity = 0;
+  /**
+   * Number of classes including nested classes, interfaces, enums and annotations.
+   */
+  private double classCount = 0;
+  /**
+   * Average complexity by class.
+   */
+  private double classComplexity = 0;
+  /**
+   * Number of Methods without including  accessors. A constructor is considered  to be a method.
+   */
+  private double methodsCount = 0;
+  /**
+   * Number of getter and setter methods used to get(reading) or set(writing) a class' property.
+   */
+  private double accessorsCount = 0;
+  /**
+   *  Number of statements as defined in the DelphiLanguage Language Specification but without block  definitions.
+   */
+  private double statementsCount = 0;
+  /**
+   * Number of public classes, public methods  (without accessors) and public properties  (without public final static ones).
+   */
+  private double publicApi = 0;
+  /**
+   * The depth of inheritance tree (DIT) metric  provides for each class a measure of the 
+   * inheritance levels from the  object hierarchy top.
+   */
+  private double dit = 0;
+  private double numberOfChildren = 0;
 
   /**
+   *  The response set of a class is a set of methods that can potentially be 
+   *  executed in response to a message received by an object of that class. 
+   *  RFC is simply the number of methods in the set.
+   * 
    * -- WARNING ACHTUNG UWAGA -- This method counts only functions, that are
    * in some unit that is in "used" section and were parsed by
    * AbstractAnalyser. That's why system function and procedures (such as
    * "writeln") are not counted, unless their unit is also parsed by ANTLR
    * analyser.
    */
-  private double rfc = 0; // The response set of a class is a set of methods
-                          // that can potentially be executed in response to a
-                          // message
-                          // received by an object of that class. RFC is
-                          // simply the number of methods in the set.
+  private double rfc = 0;
 
   /**
    * {@inheritDoc}
@@ -125,36 +138,30 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
     List<UnitInterface> units) {
     reset();
     Set<String> processedFunc = new HashSet<String>();
-    // for every class in file
     if (classes != null) {
       for (ClassInterface cl : classes) {
         if (cl == null) {
           continue;
         }
-        // basic stats
+
         ++classCount;
         fileComplexity += cl.getComplexity();
         classComplexity += cl.getComplexity();
         accessorsCount += cl.getAccessorCount();
         publicApi += cl.getPublicApiCount();
-        noc += cl.getDescendants().length;
+        numberOfChildren += cl.getDescendants().length;
         rfc += cl.getRfc();
         int clDit = cl.getDit();
         if (clDit > dit) {
           dit = clDit;
         }
 
-        // for every function in class
         for (FunctionInterface func : cl.getFunctions()) {
           processFunction(func);
-          processedFunc.add(func.getName()); // add function to
-                                             // processed
+          processedFunc.add(func.getName());
         }
-        classDist.add(Double.valueOf(cl.getComplexity())); // class
-                                                           // complexity
-                                                           // distribut
-        rfcDist.add(Double.valueOf(cl.getRfc())); // rfc complexity
-                                                  // distribut
+        classDist.add(Double.valueOf(cl.getComplexity()));
+        rfcDist.add(Double.valueOf(cl.getRfc()));
       }
     }
 
@@ -171,9 +178,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
         fileComplexity += func.getComplexity();
         functionComplexity += func.getComplexity();
         statementsCount += func.getStatements().size();
-        functionDist.add(Double.valueOf(func.getComplexity())); // function
-                                                                // complexity
-                                                                // distribution
+        functionDist.add(Double.valueOf(func.getComplexity()));
         if (func.getVisibility() == DelphiParser.PUBLIC) {
           ++publicApi;
         }
@@ -194,17 +199,15 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
   }
 
   private void processFunction(FunctionInterface func) {
-    if (!func.isAccessor()) { // is this a function, not a accessor
+    if (!func.isAccessor()) {
       methodsCount++;
       functionComplexity += func.getComplexity();
-      functionDist.add(Double.valueOf(func.getComplexity())); // function
-                                                              // complexity
-                                                              // distribution
+      functionDist.add(Double.valueOf(func.getComplexity()));
       for (FunctionInterface over : func.getOverloadedFunctions()) {
         processFunction(over);
       }
     }
-    statementsCount += func.getStatements().size(); // number of statements
+    statementsCount += func.getStatements().size();
   }
 
   /**
@@ -217,168 +220,30 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
       return;
     }
     try {
-      sensorContext.saveMeasure(resource, CoreMetrics.STATEMENTS, getMetric("STATEMENTS")); // Number
-                                                                                            // of
-                                                                                            // statements
-                                                                                            // as
-                                                                                            // defined
-                                                                                            // in
-                                                                                            // the
-                                                                                            // DelphiLanguage
-                                                                                            // Language
-                                                                                            // Specification
-                                                                                            // but
-                                                                                            // without
-                                                                                            // block
-                                                                                            // definitions.
-      sensorContext.saveMeasure(resource, CoreMetrics.COMPLEXITY, getMetric("COMPLEXITY")); // The
-                                                                                            // Cyclomatic
-                                                                                            // Complexity
-                                                                                            // Number
-      sensorContext.saveMeasure(resource, CoreMetrics.CLASS_COMPLEXITY, getMetric("CLASS_COMPLEXITY")); // Average
-                                                                                                        // complexity
-                                                                                                        // by
-                                                                                                        // class
-      sensorContext.saveMeasure(resource, CoreMetrics.FUNCTION_COMPLEXITY, getMetric("FUNCTION_COMPLEXITY")); // Average
-                                                                                                              // cyclomatic
-                                                                                                              // complexity
-                                                                                                              // number
-                                                                                                              // by
-                                                                                                              // method
-      sensorContext.saveMeasure(resource, CoreMetrics.CLASSES, getMetric("CLASSES")); // Number
-                                                                                      // of
-                                                                                      // classes
-                                                                                      // including
-                                                                                      // nested
-                                                                                      // classes,
-                                                                                      // interfaces,
-                                                                                      // enums
-                                                                                      // and
-                                                                                      // annotations
-      sensorContext.saveMeasure(resource, CoreMetrics.FUNCTIONS, getMetric("FUNCTIONS")); // Number
-                                                                                          // of
-                                                                                          // Methods
-                                                                                          // without
-                                                                                          // including
-                                                                                          // accessors.
-                                                                                          // A
-                                                                                          // constructor
-                                                                                          // is
-                                                                                          // considered
-                                                                                          // to
-                                                                                          // be
-                                                                                          // a
-                                                                                          // method.
-      sensorContext.saveMeasure(resource, CoreMetrics.ACCESSORS, getMetric("ACCESSORS")); // Number
-                                                                                          // of
-                                                                                          // getter
-                                                                                          // and
-                                                                                          // setter
-                                                                                          // methods
-                                                                                          // used
-                                                                                          // to
-                                                                                          // get(reading)
-                                                                                          // or
-                                                                                          // set(writing)
-                                                                                          // a
-                                                                                          // class'
-                                                                                          // property
-                                                                                          // .
-      sensorContext.saveMeasure(resource, CoreMetrics.PUBLIC_API, getMetric("PUBLIC_API")); // Number
-                                                                                            // of
-                                                                                            // public
-                                                                                            // classes,
-                                                                                            // public
-                                                                                            // methods
-                                                                                            // (without
-                                                                                            // accessors)
-                                                                                            // and
-                                                                                            // public
-                                                                                            // properties
-                                                                                            // (without
-                                                                                            // public
-                                                                                            // static
-                                                                                            // final
-                                                                                            // ones)
-      sensorContext.saveMeasure(resource, CoreMetrics.DEPTH_IN_TREE, getMetric("DEPTH_IN_TREE")); // The
-                                                                                                  // depth
-                                                                                                  // of
-                                                                                                  // inheritance
-                                                                                                  // tree
-                                                                                                  // (DIT)
-                                                                                                  // metric
-                                                                                                  // provides
-                                                                                                  // for
-                                                                                                  // each
-                                                                                                  // class
-                                                                                                  // a
-                                                                                                  // measure
-                                                                                                  // of
-                                                                                                  // the
-                                                                                                  // inheritance
-                                                                                                  // levels
-                                                                                                  // from
-                                                                                                  // the
-                                                                                                  // object
-                                                                                                  // hierarchy
-                                                                                                  // top.
-      sensorContext.saveMeasure(resource, CoreMetrics.NUMBER_OF_CHILDREN, getMetric("NUMBER_OF_CHILDREN")); // A
-                                                                                                            // class's
-                                                                                                            // number
-                                                                                                            // of
-                                                                                                            // children
-                                                                                                            // (NOC)
-                                                                                                            // metric
-                                                                                                            // simply
-                                                                                                            // measures
-                                                                                                            // the
-                                                                                                            // number
-                                                                                                            // of
-                                                                                                            // direct
-                                                                                                            // and
-                                                                                                            // indirect
-                                                                                                            // descendants
-                                                                                                            // of
-                                                                                                            // the
-                                                                                                            // class.
-      sensorContext.saveMeasure(resource, CoreMetrics.RFC, getMetric("RFC")); // The
-                                                                              // response
-                                                                              // set
-                                                                              // of
-                                                                              // a
-                                                                              // class
-                                                                              // is
-                                                                              // a
-                                                                              // set
-                                                                              // of
-                                                                              // methods
-                                                                              // that
-                                                                              // can
-                                                                              // potentially
-                                                                              // be
-                                                                              // executed
-                                                                              // in
-                                                                              // response
-                                                                              // to
-                                                                              // a
-                                                                              // message
-                                                                              // received
-                                                                              // by
-                                                                              // an
-                                                                              // object
-                                                                              // of
-                                                                              // that
-                                                                              // class.
-                                                                              // RFC
-                                                                              // is
-                                                                              // simply
-                                                                              // the
-                                                                              // number
-                                                                              // of
-                                                                              // methods
-                                                                              // in
-                                                                              // the
-                                                                              // set.
+      // Number of statements as defined in the DelphiLanguage Language Specification but without block definitions.
+      sensorContext.saveMeasure(resource, CoreMetrics.STATEMENTS, getMetric("STATEMENTS"));
+      // The Cyclomatic Complexity Number
+      sensorContext.saveMeasure(resource, CoreMetrics.COMPLEXITY, getMetric("COMPLEXITY"));
+      // Average complexity by class
+      sensorContext.saveMeasure(resource, CoreMetrics.CLASS_COMPLEXITY, getMetric("CLASS_COMPLEXITY"));
+      // Average cyclomatic complexity number by method
+      sensorContext.saveMeasure(resource, CoreMetrics.FUNCTION_COMPLEXITY, getMetric("FUNCTION_COMPLEXITY"));
+      // Number of classes including nested classes, interfaces, enums and annotations
+      sensorContext.saveMeasure(resource, CoreMetrics.CLASSES, getMetric("CLASSES"));
+      // Number of Methods without including accessors. A constructor is considered to be a method.
+      sensorContext.saveMeasure(resource, CoreMetrics.FUNCTIONS, getMetric("FUNCTIONS"));
+      // Number of getter and setter methods used to get(reading) or set(writing) a class' property .
+      sensorContext.saveMeasure(resource, CoreMetrics.ACCESSORS, getMetric("ACCESSORS"));
+      // Number of public classes, public methods (without accessors) and public properties (without public static final ones)
+      sensorContext.saveMeasure(resource, CoreMetrics.PUBLIC_API, getMetric("PUBLIC_API"));
+      // The depth of inheritance tree (DIT) metric provides for each class a measure of the inheritance levels from the object hierarchy
+      // top.
+      sensorContext.saveMeasure(resource, CoreMetrics.DEPTH_IN_TREE, getMetric("DEPTH_IN_TREE"));
+      // A class's number of children (NOC) metric simply measures the number of direct and indirect descendants of the class.
+      sensorContext.saveMeasure(resource, CoreMetrics.NUMBER_OF_CHILDREN, getMetric("NUMBER_OF_CHILDREN"));
+      // The response set of a class is a set of methods that can potentially be executed in response to a message received by an object of
+      // that class. RFC is simply the number of methods in the set.
+      sensorContext.saveMeasure(resource, CoreMetrics.RFC, getMetric("RFC"));
       sensorContext.saveMeasure(resource, functionDist.build().setPersistenceMode(PersistenceMode.MEMORY));
       sensorContext.saveMeasure(resource, classDist.build().setPersistenceMode(PersistenceMode.MEMORY));
       sensorContext.saveMeasure(resource, fileDist.build().setPersistenceMode(PersistenceMode.MEMORY));
@@ -398,8 +263,8 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
     setMetric("ACCESSORS", accessorsCount);
     setMetric("PUBLIC_API", publicApi);
     setMetric("DEPTH_IN_TREE", dit);
-    setMetric("NUMBER_OF_CHILDREN", noc);
-    setMetric("RFC", rfc); // look for note above
+    setMetric("NUMBER_OF_CHILDREN", numberOfChildren);
+    setMetric("RFC", rfc);
   }
 
   private void reset() {
@@ -411,7 +276,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
     accessorsCount = 0;
     statementsCount = 0;
     publicApi = 0;
-    noc = 0;
+    numberOfChildren = 0;
     rfc = 0;
     dit = 0;
     classDist.clear();

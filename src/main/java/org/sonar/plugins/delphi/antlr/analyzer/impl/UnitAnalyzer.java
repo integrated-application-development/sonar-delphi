@@ -50,8 +50,8 @@ public class UnitAnalyzer extends CodeAnalyzer {
   }
 
   private UnitInterface createUnit(Tree currentNode, String fileName) {
-    UnitInterface activeUnit = new DelphiUnit(); // creates new unit
-    activeUnit.setPath(fileName); // set unit file path
+    UnitInterface activeUnit = new DelphiUnit();
+    activeUnit.setPath(fileName);
     activeUnit.setName(getUnitName(currentNode));
     activeUnit.setLine(currentNode.getLine());
     return activeUnit;

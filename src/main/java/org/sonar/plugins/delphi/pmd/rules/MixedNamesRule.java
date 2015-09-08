@@ -66,7 +66,7 @@ public class MixedNamesRule extends DelphiRule {
       case DelphiLexer.TkNewType:
         typeName = node.getChild(0).getText() + ".";
         break;
-      case DelphiLexer.TkFunctionName: // processing function names
+      case DelphiLexer.TkFunctionName:
         if (onInterface) {
           functionNames.addAll(buildNames(node, false));
         } else {
@@ -93,27 +93,15 @@ public class MixedNamesRule extends DelphiRule {
   protected void checkVariableNames(DelphiPMDNode node, Object data, boolean clear) {
     for (int i = 0; i < node.getChildCount(); ++i) {
 
-      DelphiPMDNode child = new DelphiPMDNode((CommonTree) node.getChild(i)); // cast
-                                                                              // exception
-                                                                              // was
-                                                                              // thrown,
-                                                                              // so
-                                                                              // we
-                                                                              // use
-                                                                              // c-tor
-                                                                              // instead
-                                                                              // of
-                                                                              // casting
-                                                                              // to
-                                                                              // DelphiPMDNode
+      // Cast exception was thrown, so we use c-tor instead of casting to DelphiPMDNode
+      DelphiPMDNode child = new DelphiPMDNode((CommonTree) node.getChild(i));
       if (child.getLine() > lastLineParsed) {
         lastLineParsed = child.getLine();
       }
       if (child.getType() == DelphiLexer.BEGIN) {
         checkVariableNames(child, data, false);
       } else {
-        for (String globalName : variableNames) // in global names
-        {
+        for (String globalName : variableNames) {
           if (child.getText().equalsIgnoreCase(globalName.toLowerCase())
             && !child.getText().equals(globalName)) {
             addViolation(data, child, "Avoid mixing variable names (found: '" + child.getText()
@@ -124,7 +112,7 @@ public class MixedNamesRule extends DelphiRule {
     }
 
     if (clear) {
-      variableNames.clear(); // clear variable names
+      variableNames.clear();
     }
   }
 
@@ -133,11 +121,8 @@ public class MixedNamesRule extends DelphiRule {
    */
   protected void checkFunctionNames(DelphiPMDNode node, Object data) {
     List<String> currentNames = buildNames(node, false);
-    for (String name : currentNames) // check current function name
-    {
-      for (String globalName : functionNames) // with all global function
-                                              // names
-      {
+    for (String name : currentNames) {
+      for (String globalName : functionNames) {
         if (name.equalsIgnoreCase(globalName.toLowerCase()) && !name.equals(globalName)) {
           addViolation(data, node, "Avoid mixing function names (found: '" + name + "' expected: '"
             + globalName + "').");
@@ -159,17 +144,19 @@ public class MixedNamesRule extends DelphiRule {
     if (node == null) {
       return result;
     }
-    if (node.getChildCount() == 1 && !multiply) { // if function name from
-                                                  // new type declared
+    // if function name from new type declared
+    if (node.getChildCount() == 1 && !multiply) {
       result.add(typeName + node.getChild(0).getText());
       return result;
     }
 
     StringBuilder name = new StringBuilder();
     for (int i = 0; i < node.getChildCount(); ++i) {
-      if (multiply) { // variable names
+      if (multiply) {
+        // variable names
         result.add(node.getChild(i).getText());
-      } else { // function name from implementation section
+      } else {
+        // function name from implementation section
         name.append(node.getChild(i).getText());
       }
     }

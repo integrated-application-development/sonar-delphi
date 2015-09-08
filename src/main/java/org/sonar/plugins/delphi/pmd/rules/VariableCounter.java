@@ -47,10 +47,10 @@ public class VariableCounter extends DelphiRule {
       }
 
       int limit = getIntProperty(LIMIT);
-      if (count > limit) { // if exceeds limit
+      if (count > limit) {
         String msg = "Too many " + getStringProperty(LOOK_FOR) + ": " + count + " (max "
           + limit + ")";
-        addViolation(data, node, msg); // add violation
+        addViolation(data, node, msg);
       }
     }
     return data;

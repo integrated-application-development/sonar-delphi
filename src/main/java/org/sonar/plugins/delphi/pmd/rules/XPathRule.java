@@ -43,8 +43,14 @@ public class XPathRule extends DelphiRule {
 
   private static final StringProperty XPATH = new StringProperty("xpath", "The xpath expression", "", 1.0f);
 
-  private static Document cachedData = null; // last cached document
-  private static String cachedFile = ""; // last cached file name
+  /**
+   * Last cached document.
+   */
+  private static Document cachedData = null;
+  /**
+   * Last cached file name.
+   */
+  private static String cachedFile = "";
 
   /**
    * Process the whole file with an XPath expression
@@ -77,8 +83,7 @@ public class XPathRule extends DelphiRule {
         }
 
         int column = Integer.valueOf(resultNode.getAttributes().getNamedItem("column").getTextContent());
-        String msg = this.getMessage().replaceAll("\\{\\}", resultNode.getTextContent()); // violation
-                                                                                          // message
+        String msg = this.getMessage().replaceAll("\\{\\}", resultNode.getTextContent());
         DelphiRuleViolation violation = new DelphiRuleViolation(this, (RuleContext) data, className,
           methodName, packageName, line, column,
           msg);

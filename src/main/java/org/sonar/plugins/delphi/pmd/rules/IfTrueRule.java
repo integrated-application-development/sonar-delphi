@@ -43,10 +43,12 @@ public class IfTrueRule extends BlockCounterRule {
     if (!wasEquals && "=".equals(node.getText())) {
       wasEquals = true;
     } else if (wasEquals && node.getText().equals(getStringToSearch())) {
-      firstNode = node; // save this node as violation
+      // save this node as violation
+      firstNode = node;
       return true;
     } else {
-      wasEquals = false; // reset if 'true' is not directly after '='
+      // reset if 'true' is not directly after '='
+      wasEquals = false;
     }
 
     return false;

@@ -127,12 +127,11 @@ public class DelphiStatement implements StatementInterface {
 
     List<Token> tokens = new DelphiCpdTokenizer(delphiProjectHelper).tokenize(new String[] {text});
 
-    for (Token token : tokens) { // get the token
+    for (Token token : tokens) {
       if (token.getType() == DelphiLexer.TkIdentifier) {
-        for (ClassFieldInterface field : fields) { // compare token with
-                                                   // class fields
+        for (ClassFieldInterface field : fields) {
           if (field.getName().equals(token.getText())) {
-            result.add(field); // add a field
+            result.add(field);
           }
         }
       }

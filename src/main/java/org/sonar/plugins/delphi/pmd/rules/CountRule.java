@@ -31,12 +31,17 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 public class CountRule extends DelphiRule {
 
   private String stringToSearch;
-  protected int limit; // limit
-  protected int count; // number of hits
-  protected int strength = 1; // number to increase the count
-  protected boolean reset = true; // should we reset counter after exceeding
-                                  // the limit
-  protected Object dataRef = null; // data reference
+  protected int limit;
+  protected int count;
+  /**
+   * Number to increase the count. 
+   */
+  protected int strength = 1;
+  /**
+   * Should we reset counter after exceeding  the limit.
+   */
+  protected boolean reset = true;
+  protected Object dataRef = null;
 
   public String getStringToSearch() {
     return stringToSearch;
@@ -48,13 +53,13 @@ public class CountRule extends DelphiRule {
 
   @Override
   public Object visit(DelphiPMDNode node, Object data) {
-    dataRef = data; // data reference
+    dataRef = data;
     if (shouldCount(node)) {
-      increaseCounter(strength); // increase the counter
+      increaseCounter(strength);
     }
 
-    if (exceedsLimit()) { // if we exceeded the limit
-      addViolation(data, node); // add a violation
+    if (exceedsLimit()) {
+      addViolation(data, node);
       if (reset) {
         count = 0;
       }

@@ -121,10 +121,7 @@ public class CodeCoverageSensor implements Sensor
   }
 
   private boolean areJdbcPropertiesValid() {
-    for (int i = 0; i < JDBC_PROPERTY_KEYS.length - 1; i++) { // don't
-                                                              // include db
-                                                              // table
-                                                              // prefix
+    for (int i = 0; i < JDBC_PROPERTY_KEYS.length - 1; i++) {
       if (StringUtils.isEmpty(jdbcProperties.get(JDBC_PROPERTY_KEYS[i]))) {
         DelphiUtils.LOG.warn("Empty jdbc property " + JDBC_PROPERTY_KEYS[i] + ", code coverage skipped.");
         return false;
