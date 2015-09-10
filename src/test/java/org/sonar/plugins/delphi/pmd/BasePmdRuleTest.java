@@ -39,9 +39,12 @@ import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.StubIssueBuilder;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
+import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
@@ -59,7 +62,17 @@ public abstract class BasePmdRuleTest {
   protected List<Issue> issues = new LinkedList<Issue>();
   private File testFile;
 
-  protected void configureTest(DelphiUnitBuilderTest builder) {
+  public void analyse(DelphiUnitBuilderTest builder) {
+    configureTest(builder);
+
+    DebugSensorContext sensorContext = new DebugSensorContext();
+    sensor.analyse(project, sensorContext);
+
+    assertThat("Errors: " + sensor.getErrors(), sensor.getErrors(), is(empty()));
+
+  }
+
+  private void configureTest(DelphiUnitBuilderTest builder) {
     testFile = builder.buildFile(ROOT_DIR);
     String relativePathTestFile = DelphiUtils.getRelativePath(testFile, Arrays.asList(ROOT_DIR));
     configureTest(ROOT_DIR_NAME + "/" + relativePathTestFile);

@@ -14,7 +14,7 @@ type
   TMySecondAlias = type integer;
   tmaxpathchararray = array [0 .. max_path] of ansichar;
   timposeairportslotspublishtype = (sptsla, sptetd);
-  tlpattacharray = ^tattachaccessarray;
+  //tlpattacharray = ^tattachaccessarray;
   
   TSecondClass = class	//second class
   	constructor Create;

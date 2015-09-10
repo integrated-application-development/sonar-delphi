@@ -10,6 +10,8 @@ interface
 	} *)
 	
 type
+    PMyPointer = ^Integer;
+    
 	myRecord = record
 	private										//visibility not included in rules
 		function foo(x : byte = 7): boolean;

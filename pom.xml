@@ -285,6 +285,9 @@
 				<artifactId>maven-license-plugin</artifactId>
 				<configuration>
 					<header>/src/LICENSE.txt</header>
+					<validHeaders>
+						<value>/src/SABRE_AIRLINE_LICENSE.txt</value>
+					</validHeaders>
 				</configuration>
 			</plugin>
 		</plugins>

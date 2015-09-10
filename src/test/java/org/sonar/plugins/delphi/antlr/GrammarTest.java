@@ -44,6 +44,9 @@ public class GrammarTest {
   public void test() throws Exception {
     DelphiAST ast = new DelphiAST(file);
     assertEquals(false, ast.isError());
-  }
 
+    String fileName = File.createTempFile("ast", "").getParentFile().getAbsolutePath() + File.separatorChar + "ast.xml";
+    ast.generateXML(fileName);
+    System.out.println("Generated AST XML file at " + fileName);
+  }
 }

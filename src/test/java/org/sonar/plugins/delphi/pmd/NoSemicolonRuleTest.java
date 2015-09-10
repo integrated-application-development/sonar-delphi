@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 import org.sonar.api.issue.Issue;
-import org.sonar.plugins.delphi.debug.DebugSensorContext;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -41,10 +40,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
     builder.appendImpl("  x := 5");
     builder.appendImpl("end;");
 
-    configureTest(builder);
-
-    DebugSensorContext debugContext = new DebugSensorContext();
-    sensor.analyse(project, debugContext);
+    analyse(builder);
 
     assertThat(issues, not(empty()));
     List<Issue> matchIssues = new ArrayList<Issue>();
@@ -70,10 +66,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
     builder.appendImpl("  end;");
     builder.appendImpl("end;");
 
-    configureTest(builder);
-
-    DebugSensorContext debugContext = new DebugSensorContext();
-    sensor.analyse(project, debugContext);
+    analyse(builder);
 
     assertThat(issues, not(empty()));
     List<Issue> matchIssues = new ArrayList<Issue>();
@@ -99,10 +92,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
     builder.appendImpl("  end");
     builder.appendImpl("end;");
 
-    configureTest(builder);
-
-    DebugSensorContext debugContext = new DebugSensorContext();
-    sensor.analyse(project, debugContext);
+    analyse(builder);
 
     assertThat(issues, not(empty()));
     List<Issue> matchIssues = new ArrayList<Issue>();
@@ -131,10 +121,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
     builder.appendImpl("  end;");
     builder.appendImpl("end;");
 
-    configureTest(builder);
-
-    DebugSensorContext debugContext = new DebugSensorContext();
-    sensor.analyse(project, debugContext);
+    analyse(builder);
 
     assertThat(sensor.getErrors(), empty());
     assertThat(issues, empty());

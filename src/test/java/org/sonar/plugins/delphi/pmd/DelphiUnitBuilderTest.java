@@ -32,8 +32,8 @@ public class DelphiUnitBuilderTest {
   private StringBuilder implementation = new StringBuilder();
 
   private int offset;
-
-  public String className = "TTest";
+  private int offsetDecl;
+  private String unitName = "Unit1";
 
   public DelphiUnitBuilderTest appendDecl(String value) {
     declaration.append(value + "\n");
@@ -54,18 +54,37 @@ public class DelphiUnitBuilderTest {
     return implementation.toString();
   }
 
+  public DelphiUnitBuilderTest unitName(String unitName) {
+    this.unitName = unitName;
+    return this;
+  }
+
   public File buildFile(File baseDir) {
-    offset = offset + 7;
+    // fixed lines
+    offsetDecl = 4;
+    offset = offset + 6;
+
     StringBuilder source = new StringBuilder();
-    source.append("unit Unit1;\n");
+    source.append(String.format("unit %s;\n", this.unitName));
+    source.append("\n");
     source.append("interface\n");
-    source.append("type\n");
-    source.append(this.className + " = class\n");
-    source.append(this.declaration() + "\n");
-    source.append("end;\n");
+    source.append("\n");
+
+    if (this.declaration.length() > 0) {
+      source.append(this.declaration() + "\n");
+      source.append("\n");
+      offset++;
+    }
     source.append("implementation\n");
-    source.append(this.implementation() + "\n");
+    source.append("\n");
+
+    if (this.implementation.length() > 0) {
+      source.append(this.implementation() + "\n");
+      source.append("\n");
+    }
     source.append("end.\n");
+
+    System.out.println(source);
 
     try {
       File file = File.createTempFile("unit", ".pas", baseDir);
@@ -87,5 +106,9 @@ public class DelphiUnitBuilderTest {
 
   protected int getOffSet() {
     return offset;
+  }
+
+  public int getOffsetDecl() {
+    return offsetDecl;
   }
 }

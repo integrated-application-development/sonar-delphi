@@ -1,4 +1,5 @@
 <ruleset>
+
   	<!--  YOU CAN COPY THIS RULE, JUST CHANGE THE PARAMETERS YOU WISH TO SEARCH FOR -->
   	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ClassPerFileRule" message="Only one class in a file" 
   	name="One Class Per File Rule">
@@ -82,30 +83,59 @@
  		]]></example>      	
 	</rule>
 	
-	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Interface name must begin with 'I' letter" 
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Interface Name should comply with a naming convention" 
 	name="Interface Name Rule">
-	    <description>Interface name should began with 'I' letter.</description>
+	    <description>According to Object Pascal Style Guide interface name should begin with capital 'I' letter.</description>
     	<properties>
     			<property name="xpath"><value>//TkNewType/*/interface[parent::*[1][ substring(name(),1,1) != 'I' ] ]</value></property>
     	</properties>   	
 	</rule>
 	
-	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Class name must begin with 'T' letter" 
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Class Name should comply with a naming " 
 	name="Class Name Rule">
-	    <description>Class name should began with 'T' letter.</description>
+	    <description>According to Object Pascal Style Guide class name should begin with capital 'T' letter.</description>
     	<properties>
     			<property name="xpath"><value>//TkNewType/*/class[parent::*[1][ substring(name(),1,1) != 'T' ] ]</value></property>
     	</properties>   	
 	</rule>
 		
-	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Record name must begin with 'T' letter" 
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Record Name should comply with a naming convention" 
 	name="Record Name Rule">
-	    <description>Record name should began with 'T' letter.</description>
+	    <description>According to Object Pascal Style Guide record name should begin with capital 'T' letter.</description>
     	<properties>
     			<property name="xpath"><value>//TkNewType/*/record[parent::*[1][ substring(name(),1,1) != 'T' ] ]</value></property>
     	</properties>   	
 	</rule>
+
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Pointer Name should comply with a naming convention" 
+	name="PointerNameRule">
+	    <description>Pointer name should begin with 'P' letter.</description>
+    	<properties>
+    			<property name="xpath"><value>//TkNewType/*/dash_pointer[parent::*[1][ substring(name(),1,1) != 'P' ] ]</value></property>
+    	</properties>   	
+	</rule>
 		
+<!-- 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Method Name should comply with a naming convention"  -->
+<!-- 		name="MethodNameRule"> -->
+<!-- 	    <description>According to Object Pascal Style Guide method name should follow Pascal Case.</description> -->
+<!--     	<properties> -->
+<!--     			<property name="xpath"><value>//TkFunctionName/*/record[parent::*[1][substring(name(),1,1) != upper-case(substring(name(),1,1))] ]</value></property> -->
+<!--     	</properties>   	 -->
+<!-- 	</rule> -->
+
+<!-- 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Field names should comply with a naming convention"  -->
+<!-- 		name="FieldNameRule"> -->
+<!-- 	    <description>According to Object Pascal Style Guide field name should begin with 'F' letter..</description> -->
+<!--     	<properties> -->
+<!--     			<property name="xpath"><value>//TkClassField/*/record[parent::*[1][substring(name(),1,1) != 'F'] ]</value></property> -->
+<!--     	</properties>   	 -->
+<!-- 	</rule> -->
+
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.UnitNameRule" message="Unit names should comply with a naming convention" 
+		name="UnitNameRule">
+	    <description>According to Object Pascal Style Guide unit name should follow Pascal Case.</description>    
+	</rule>
+	
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule" message="Catching general exception" 
   	name="Catching General Exception Rule">
 	    <description>You should not catch general exceptions but descendants of Exception class.</description>
@@ -244,7 +274,7 @@ x.Free;			//GOOD, sufficent enough
     	</properties>   	
 	</rule>
 
-	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.UppercaseReservedWordsRule" message="Avoid using uppercase reserverd keywords." 
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.UppercaseReservedWordsRule" message="Keywords should comply with a naming convention." 
 	name="Uppercase Reserved Keywords Rule">
 	    <description>Avoid using uppercase reserverd keywords.</description> 	
 	</rule>	
