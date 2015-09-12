@@ -18,6 +18,7 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.api.issue.Issue;
 
@@ -82,4 +83,28 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
     assertThat(issue.ruleKey().rule(), equalTo("Class Name Rule"));
     assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
   }
+
+  @Test
+  @Ignore("One Class Per File Rule has a bug, and don't handle nested types")
+  // TODO Fix One Class Per File Rule
+  public void testNestedType() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendDecl("type");
+    builder.appendDecl("  TTestClass = class");
+    builder.appendDecl("  strict private");
+    builder.appendDecl("    type");
+    builder.appendDecl("      TValidClassName = class");
+    builder.appendDecl("      end;");
+    builder.appendDecl("      BadClassName = class");
+    builder.appendDecl("      end;");
+    builder.appendDecl("  end;");
+
+    analyse(builder);
+
+    assertThat(issues.toString(), issues, hasSize(1));
+    Issue issue = issues.get(0);
+    assertThat(issue.ruleKey().rule(), equalTo("Class Name Rule"));
+    assertThat(issue.line(), is(builder.getOffsetDecl() + 7));
+  }
+
 }

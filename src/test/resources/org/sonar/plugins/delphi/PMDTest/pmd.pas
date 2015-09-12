@@ -6,7 +6,7 @@ interface
 type
   XMainWindow = class(TForm)
   public
-    procedure foo1(x: integer; z: real); overload
+    procedure Foo1(x: integer; z: real); overload
 	publicField: integer;
   end;
 
@@ -27,8 +27,8 @@ type
   end;	
   
   INewfleetmxctrlitemview = interface (iftwizardview, blah2)
-    function  getselectedequipmentindex : integer;
-    function  getselectedequipmentindex : integer;
+    function  Getselectedequipmentindex : integer;
+    function  Getselectedequipmentindex : integer;
 	end;	
 	
   xRecord = record

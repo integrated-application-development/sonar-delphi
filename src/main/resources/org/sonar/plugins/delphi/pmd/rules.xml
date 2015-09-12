@@ -103,13 +103,10 @@
 	    <description>Pointer name should begin with 'P' letter.</description>
 	</rule>
 		
-<!-- 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Method Name should comply with a naming convention"  -->
-<!-- 		name="MethodNameRule"> -->
-<!-- 	    <description>According to Object Pascal Style Guide method name should follow Pascal Case.</description> -->
-<!--     	<properties> -->
-<!--     			<property name="xpath"><value>//TkFunctionName/*/record[parent::*[1][substring(name(),1,1) != upper-case(substring(name(),1,1))] ]</value></property> -->
-<!--     	</properties>   	 -->
-<!-- 	</rule> -->
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.MethodNameRule" message="Method Name should comply with a naming convention" 
+		name="MethodNameRule">
+	    <description>According to Object Pascal Style Guide method name should follow Pascal Case.</description>
+	</rule>
 
 <!-- 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Field names should comply with a naming convention"  -->
 <!-- 		name="FieldNameRule"> -->

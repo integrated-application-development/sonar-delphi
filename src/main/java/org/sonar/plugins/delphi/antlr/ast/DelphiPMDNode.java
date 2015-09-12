@@ -22,12 +22,16 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
+import java.util.ArrayList;
+import java.util.List;
 import net.sourceforge.pmd.ast.CompilationUnit;
 import net.sourceforge.pmd.ast.JavaNode;
 import net.sourceforge.pmd.ast.JavaParserVisitor;
 import net.sourceforge.pmd.ast.Node;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
+import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.pmd.DelphiParserVisitor;
 
 /**
@@ -131,6 +135,23 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
   @Override
   public Object jjtAccept(JavaParserVisitor visitor, Object data) {
     return jjtAccept((DelphiParserVisitor) visitor, data);
+  }
+
+  public List<Tree> findAllChilds(int type) {
+    return internalfindAllChilds(this, type);
+  }
+
+  public List<Tree> internalfindAllChilds(Tree node, int type) {
+    List<Tree> result = new ArrayList<Tree>();
+    for (int i = 0; i < node.getChildCount(); i++) {
+      Tree child = node.getChild(i);
+      if (child.getType() == DelphiLexer.TkFunctionName) {
+        result.add(child);
+      } else {
+        result.addAll(internalfindAllChilds(child, type));
+      }
+    }
+    return result;
   }
 
 }
