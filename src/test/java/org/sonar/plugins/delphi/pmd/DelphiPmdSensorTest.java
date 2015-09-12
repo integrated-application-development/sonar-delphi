@@ -70,8 +70,6 @@ public class DelphiPmdSensorTest {
     // Don't pollute current working directory
     when(delphiProjectHelper.workDir()).thenReturn(new File("target"));
 
-    File baseDir = DelphiUtils.getResource(ROOT_NAME);
-
     File srcFile = DelphiUtils.getResource(TEST_FILE);
 
     InputFile inputFile = new DefaultInputFile(ROOT_NAME)

@@ -12,6 +12,11 @@ interface
 type
     PMyPointer = ^Integer;
     
+	IMyInterface = interface
+		['{4690744C-D65D-4312-B8D3-B0FE916D724C}']
+		procedure Foo;
+	end;
+  
 	myRecord = record
 	private										//visibility not included in rules
 		function foo(x : byte = 7): boolean;

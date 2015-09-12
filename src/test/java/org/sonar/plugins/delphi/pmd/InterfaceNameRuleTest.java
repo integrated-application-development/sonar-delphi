@@ -24,13 +24,16 @@ import org.sonar.api.issue.Issue;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-public class PointerNameRuleTest extends BasePmdRuleTest {
+public class InterfaceNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testValidRule() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
-    builder.appendDecl("  PMyPointer = ^Integer;");
+    builder.appendDecl("  IMyInterface = interface");
+    builder.appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']");
+    builder.appendDecl("    procedure Foo;");
+    builder.appendDecl("  end;");
 
     analyse(builder);
 
@@ -38,16 +41,36 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInvalidRule() {
+  public void nameWithoutPrefixShouldAddIssue() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
-    builder.appendDecl("  pMyPointer = ^Integer;");
+    builder.appendDecl("  MyInterface = interface");
+    builder.appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']");
+    builder.appendDecl("    procedure Foo;");
+    builder.appendDecl("  end;");
 
     analyse(builder);
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("PointerNameRule"));
+    assertThat(issue.ruleKey().rule(), equalTo("Interface Name Rule"));
+    assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
+  }
+
+  @Test
+  public void nameDoNotStartsWithCapitalLetterShouldAddIssue() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendDecl("type");
+    builder.appendDecl("  ImyInterface = interface");
+    builder.appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']");
+    builder.appendDecl("    procedure Foo;");
+    builder.appendDecl("  end;");
+
+    analyse(builder);
+
+    assertThat(issues, hasSize(1));
+    Issue issue = issues.get(0);
+    assertThat(issue.ruleKey().rule(), equalTo("Interface Name Rule"));
     assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
   }
 
@@ -55,13 +78,16 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
   public void testAvoidFalsePositive() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
-    builder.appendDecl("  Pointer = ^Integer;");
+    builder.appendDecl("  IntInterface = interface");
+    builder.appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']");
+    builder.appendDecl("    procedure Foo;");
+    builder.appendDecl("  end;");
 
     analyse(builder);
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("PointerNameRule"));
+    assertThat(issue.ruleKey().rule(), equalTo("Interface Name Rule"));
     assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
   }
 }

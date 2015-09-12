@@ -86,8 +86,6 @@ public abstract class BasePmdRuleTest {
     // Don't pollute current working directory
     when(delphiProjectHelper.workDir()).thenReturn(new File("target"));
 
-    File baseDir = DelphiUtils.getResource(ROOT_DIR_NAME);
-
     File srcFile = DelphiUtils.getResource(testFileName);
 
     InputFile inputFile = new DefaultInputFile(ROOT_DIR_NAME)

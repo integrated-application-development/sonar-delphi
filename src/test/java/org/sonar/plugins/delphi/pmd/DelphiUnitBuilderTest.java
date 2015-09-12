@@ -22,9 +22,12 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
+import com.google.common.io.LineReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringReader;
+import lombok.SneakyThrows;
 
 public class DelphiUnitBuilderTest {
 
@@ -84,7 +87,7 @@ public class DelphiUnitBuilderTest {
     }
     source.append("end.\n");
 
-    System.out.println(source);
+    printSourceCode(source);
 
     try {
       File file = File.createTempFile("unit", ".pas", baseDir);
@@ -102,6 +105,17 @@ public class DelphiUnitBuilderTest {
       throw new RuntimeException(e);
     }
 
+  }
+
+  @SneakyThrows
+  private void printSourceCode(StringBuilder source) {
+    Readable reader = new StringReader(source.toString());
+    LineReader lineReader = new LineReader(reader);
+    String line = null;
+    int lineNumber = 0;
+    while ((line = lineReader.readLine()) != null) {
+      System.out.println(String.format("% 3d %s", ++lineNumber, line));
+    }
   }
 
   protected int getOffSet() {

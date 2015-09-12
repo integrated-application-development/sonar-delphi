@@ -24,13 +24,14 @@ import org.sonar.api.issue.Issue;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-public class PointerNameRuleTest extends BasePmdRuleTest {
+public class ClassNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testValidRule() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
-    builder.appendDecl("  PMyPointer = ^Integer;");
+    builder.appendDecl("  TMyClass = class");
+    builder.appendDecl("  end;");
 
     analyse(builder);
 
@@ -38,16 +39,32 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInvalidRule() {
+  public void classNameWithoutPrefixShouldAddIssue() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
-    builder.appendDecl("  pMyPointer = ^Integer;");
+    builder.appendDecl("  MyClass = class");
+    builder.appendDecl("  end;");
 
     analyse(builder);
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("PointerNameRule"));
+    assertThat(issue.ruleKey().rule(), equalTo("Class Name Rule"));
+    assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
+  }
+
+  @Test
+  public void classNameDoNotStartsWithCapitalLetterShouldAddIssue() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendDecl("type");
+    builder.appendDecl("  TmyClass = class");
+    builder.appendDecl("  end;");
+
+    analyse(builder);
+
+    assertThat(issues, hasSize(1));
+    Issue issue = issues.get(0);
+    assertThat(issue.ruleKey().rule(), equalTo("Class Name Rule"));
     assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
   }
 
@@ -55,13 +72,14 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
   public void testAvoidFalsePositive() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
-    builder.appendDecl("  Pointer = ^Integer;");
+    builder.appendDecl("  TestClass = class");
+    builder.appendDecl("  end;");
 
     analyse(builder);
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("PointerNameRule"));
+    assertThat(issue.ruleKey().rule(), equalTo("Class Name Rule"));
     assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
   }
 }
