@@ -108,13 +108,10 @@
 	    <description>According to Object Pascal Style Guide method name should follow Pascal Case.</description>
 	</rule>
 
-<!-- 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Field names should comply with a naming convention"  -->
-<!-- 		name="FieldNameRule"> -->
-<!-- 	    <description>According to Object Pascal Style Guide field name should begin with 'F' letter..</description> -->
-<!--     	<properties> -->
-<!--     			<property name="xpath"><value>//TkClassField/*/record[parent::*[1][substring(name(),1,1) != 'F'] ]</value></property> -->
-<!--     	</properties>   	 -->
-<!-- 	</rule> -->
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.FieldNameRule" message="Field names should comply with a naming convention" 
+		name="FieldNameRule">
+	    <description>According to Object Pascal Style Guide field name should begin with 'F' letter..</description>
+	</rule>
 
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.UnitNameRule" message="Unit names should comply with a naming convention" 
 		name="UnitNameRule">

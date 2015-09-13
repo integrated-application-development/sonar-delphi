@@ -5,17 +5,24 @@ interface
 {$deFIne XYZ}
 
 (* nasty
-	{ comment 
+	{ comment
 		//test {$include error.inc}
 	} *)
-	
+
 type
     PMyPointer = ^Integer;
-    
+
 	IMyInterface = interface
 		['{4690744C-D65D-4312-B8D3-B0FE916D724C}']
 		procedure Foo;
 	end;
+
+  TMyClass = class
+  private
+    FId: Integer;
+  protected
+    FName: string;
+  end;
   
 	myRecord = record
 	private										//visibility not included in rules
@@ -66,6 +73,8 @@ type
     	var pointertofree : pointerr
     ); 
     external 'ftsyscpi.dll';
+
+
 
 implementation
 

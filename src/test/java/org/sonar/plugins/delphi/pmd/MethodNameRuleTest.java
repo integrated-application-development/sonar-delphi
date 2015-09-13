@@ -19,7 +19,7 @@
 package org.sonar.plugins.delphi.pmd;
 
 import org.junit.Test;
-import org.sonar.api.issue.Issue;
+import org.sonar.plugins.delphi.IssueMatchers;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -47,14 +47,22 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("  IMyInterface = interface");
     builder.appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']");
     builder.appendDecl("    procedure foo;");
+    builder.appendDecl("    function bar: integer;");
     builder.appendDecl("  end;");
 
     analyse(builder);
 
-    assertThat(issues.toString(), issues, hasSize(1));
-    Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("MethodNameRule"));
-    assertThat(issue.line(), is(builder.getOffsetDecl() + 4));
+    assertThat(issues.toString(), issues, hasSize(2));
+
+    assertThat(issues, hasItem(allOf(
+      IssueMatchers.hasRuleKey("MethodNameRule"),
+      IssueMatchers.hasRuleLine(builder.getOffsetDecl() + 4)
+      )));
+
+    assertThat(issues, hasItem(allOf(
+      IssueMatchers.hasRuleKey("MethodNameRule"),
+      IssueMatchers.hasRuleLine(builder.getOffsetDecl() + 5)
+      )));
   }
 
 }

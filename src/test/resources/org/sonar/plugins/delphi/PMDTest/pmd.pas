@@ -7,7 +7,7 @@ type
   XMainWindow = class(TForm)
   public
     procedure Foo1(x: integer; z: real); overload
-	publicField: integer;
+	FPublicField: integer;
   end;
 
   TMyAlias = string;
