@@ -58,6 +58,22 @@
 	<priority>4</priority>
 	</rule>	
 	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.PointerNameRule" name="PointerNameRule">
+	<priority>4</priority>
+	</rule>
+		
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.MethodNameRule" name="MethodNameRule">
+	<priority>4</priority>
+	</rule>	
+	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.FieldNameRule" name="FieldNameRule">
+	<priority>4</priority>
+	</rule>	
+	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.UnitNameRule" name="UnitNameRule">
+	<priority>4</priority>
+	</rule>	
+	
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule" name="Catching General Exception Rule">
 	<priority>3</priority>
 	</rule>

@@ -10,7 +10,7 @@ interface
 	} *)
 
 type
-    PMyPointer = ^Integer;
+  PMyPointer = ^Integer;
 
 	IMyInterface = interface
 		['{4690744C-D65D-4312-B8D3-B0FE916D724C}']
@@ -18,12 +18,19 @@ type
 	end;
 
   TMyClass = class
+    FormField: Integer;
+  strict private
+    FStrictPrivateId: Integer;
   private
     FId: Integer;
+  strict protected
+    FStrictProtectedId: Integer;
   protected
     FName: string;
+  public
+    PublicField: Integer;
   end;
-  
+
 	myRecord = record
 	private										//visibility not included in rules
 		function foo(x : byte = 7): boolean;

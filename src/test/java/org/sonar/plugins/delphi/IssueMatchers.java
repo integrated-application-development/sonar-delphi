@@ -19,6 +19,7 @@
 package org.sonar.plugins.delphi;
 
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.sonar.api.issue.Issue;
 
 public class IssueMatchers {
@@ -30,4 +31,9 @@ public class IssueMatchers {
   public static <T extends Issue> Matcher<T> hasRuleLine(int line) {
     return HasRuleLineNumber.hasRuleLine(line);
   }
+
+  public static <T extends Issue> Matcher<T> hasRuleKeyAtLine(String key, int line) {
+    return Matchers.allOf(HasRuleKey.hasRuleKey(key), hasRuleLine(line));
+  }
+
 }

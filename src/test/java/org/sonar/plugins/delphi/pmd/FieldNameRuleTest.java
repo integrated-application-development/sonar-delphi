@@ -49,15 +49,38 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("  TMyClass = class");
     builder.appendDecl("    private");
     builder.appendDecl("     Id: Integer;");
+    builder.appendDecl("     Code: Integer;");
     builder.appendDecl("    protected");
     builder.appendDecl("     Name: String;");
     builder.appendDecl("  end;");
 
     analyse(builder);
 
-    assertThat(issues, hasSize(2));
-    assertThat(issues, hasItem(allOf(hasRuleKey("FieldNameRule"), hasRuleLine(builder.getOffsetDecl() + 4))));
-    assertThat(issues, hasItem(allOf(hasRuleKey("FieldNameRule"), hasRuleLine(builder.getOffsetDecl() + 6))));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4)));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7)));
+  }
+
+  @Test
+  public void validateOnlyPrivateAndProtectedFields() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendDecl("type");
+    builder.appendDecl("  TMyClass = class");
+    builder.appendDecl("     DefaultId: Integer;");
+    builder.appendDecl("    private");
+    builder.appendDecl("     Id: Integer;");
+    builder.appendDecl("    protected");
+    builder.appendDecl("     Name: String;");
+    builder.appendDecl("    public");
+    builder.appendDecl("     Name: String;");
+    builder.appendDecl("  end;");
+
+    analyse(builder);
+
+    assertThat(issues, not(hasItem(hasRuleLine(builder.getOffsetDecl() + 3))));
+    assertThat(issues, not(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 9))));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7)));
   }
 
   @Test

@@ -23,8 +23,23 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 public class PointerNameRule extends DelphiRule {
 
+  private boolean isImplementationSection;
+
+  @Override
+  protected void init() {
+    super.init();
+    isImplementationSection = false;
+  }
+
   @Override
   public Object visit(DelphiPMDNode node, Object data) {
+    if (!isImplementationSection) {
+      isImplementationSection = node.getType() == DelphiLexer.IMPLEMENTATION;
+    }
+
+    if (isImplementationSection) {
+      return data;
+    }
 
     if (node.getType() == DelphiLexer.POINTER2) {
       String name = node.getParent().getText();

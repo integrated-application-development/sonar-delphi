@@ -31,7 +31,7 @@ public class ClassNameRule extends DelphiRule {
 
       char firstCharAfterPrefix = name.charAt(1);
 
-      if (!name.startsWith("T") || firstCharAfterPrefix != Character.toUpperCase(firstCharAfterPrefix)) {
+      if ((!name.startsWith("T") && !name.startsWith("E")) || firstCharAfterPrefix != Character.toUpperCase(firstCharAfterPrefix)) {
         addViolation(data, node);
       }
     }

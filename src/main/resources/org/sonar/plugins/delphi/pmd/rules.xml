@@ -90,7 +90,7 @@
 	
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ClassNameRule" message="Class Name should comply with a naming " 
 	name="Class Name Rule">
-	    <description>According to Object Pascal Style Guide class name should begin with capital 'T' letter.</description>
+	    <description>According to Object Pascal Style Guide class name should begin with capital 'T' letter, less Exception classes, which starts with 'E'.</description>
 	</rule>
 		
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.RecordNameRule" message="Record Name should comply with a naming convention" 

@@ -64,4 +64,19 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
     assertThat(issue.ruleKey().rule(), equalTo("PointerNameRule"));
     assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
   }
+
+  @Test
+  public void shouldIgnorePointerAssignment() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendImpl("procedure Foo;");
+    builder.appendImpl("var");
+    builder.appendImpl("  MyInteger: Integer;");
+    builder.appendImpl("begin");
+    builder.appendImpl("  MyInteger := PInteger(1)^;");
+    builder.appendImpl("end;");
+
+    analyse(builder);
+
+    assertThat(issues, is(empty()));
+  }
 }

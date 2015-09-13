@@ -107,4 +107,15 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
     assertThat(issue.line(), is(builder.getOffsetDecl() + 7));
   }
 
+  @Test
+  public void acceptCapitalLetterEforExceptionClasses() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendDecl("type");
+    builder.appendDecl("  EMyCustomException = class(Exception)");
+    builder.appendDecl("  end;");
+
+    analyse(builder);
+
+    assertThat(issues, is(empty()));
+  }
 }
