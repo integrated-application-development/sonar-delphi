@@ -133,7 +133,6 @@ public class DelphiPmdSensorTest {
       new RuleData("Inherited Method With No Code Rule", 45),
       new RuleData("Empty Except Block Rule", 54),
       new RuleData("Too Many Arguments Rule", 58),
-      new RuleData("Too Long Method Rule", 58),
       new RuleData("Too Many Variables Rule", 59),
       new RuleData("Uppercase Reserved Keywords Rule", 63),
       new RuleData("Avoid Out Parameter Rule", 98),
@@ -158,7 +157,6 @@ public class DelphiPmdSensorTest {
       new RuleData("No Semicolon Rule", 289),
       new RuleData("No Semicolon Rule", 291),
       new RuleData("No Semicolon Rule", 293),
-      new RuleData("Too Long Method Rule", 243),
       new RuleData("With After Do/Then Rule", 262),
       new RuleData("Cast And Free Rule", 302),
       new RuleData("Cast And Free Rule", 303)};
@@ -167,7 +165,7 @@ public class DelphiPmdSensorTest {
     // violations order
     Arrays.sort(ruleData, RuleData.getComparator());
 
-    assertThat("number of issues", issues, hasSize(42));
+    assertThat("number of issues", issues, hasSize(40));
 
     for (int i = 0; i < issues.size(); ++i) {
       Issue issue = issues.get(i);

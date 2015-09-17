@@ -114,7 +114,7 @@ public class DelphiUnitBuilderTest {
     String line = null;
     int lineNumber = 0;
     while ((line = lineReader.readLine()) != null) {
-      System.out.println(String.format("% 3d %s", ++lineNumber, line));
+      System.out.println(String.format("%03d %s", ++lineNumber, line));
     }
   }
 

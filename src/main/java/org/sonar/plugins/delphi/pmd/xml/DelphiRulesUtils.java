@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.ActiveRuleParam;
@@ -159,11 +160,21 @@ public final class DelphiRulesUtils {
     Rule rule = Rule.create(DelphiPmdConstants.REPOSITORY_KEY, fRule.getName(), fRule.getName()).setSeverity(
       priority);
     rule.setDescription(fRule.getDescription());
+    rule.setTags(fRule.getTags());
     List<RuleParam> ruleParams = new ArrayList<RuleParam>();
     if (fRule.getProperties() != null) {
       for (Property property : fRule.getProperties()) {
-        RuleParam param = rule.createParameter().setKey(property.getName()).setDescription(property.getName())
-          .setType("i");
+        RuleParam param = rule.createParameter()
+          .setKey(property.getName())
+          .setDescription(property.getName())
+          .setType("s");
+
+        if (NumberUtils.isNumber(property.getValue())) {
+          param.setType("i");
+        }
+
+        param.setDefaultValue(property.getValue());
+
         ruleParams.add(param);
       }
     }

@@ -52,7 +52,7 @@ public class DelphiRule implements Comparable<String> {
   private String description;
 
   @XStreamOmitField
-  private String category;
+  private String tags;
 
   @XStreamOmitField
   private String exclude;
@@ -198,8 +198,11 @@ public class DelphiRule implements Comparable<String> {
   /**
    * @return rule category
    */
-  public String getCategory() {
-    return category;
+  public String[] getTags() {
+    if (tags == null) {
+      return new String[0];
+    }
+    return tags.split(",");
   }
 
   /**
@@ -209,4 +212,7 @@ public class DelphiRule implements Comparable<String> {
     return exclude;
   }
 
+  public void setTag(String tag) {
+    this.tags = tag;
+  }
 }

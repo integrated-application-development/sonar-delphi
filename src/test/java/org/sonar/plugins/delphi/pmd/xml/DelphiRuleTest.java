@@ -24,9 +24,11 @@ package org.sonar.plugins.delphi.pmd.xml;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 public class DelphiRuleTest {
@@ -91,7 +93,13 @@ public class DelphiRuleTest {
 
   @Test
   public void categoryTest() {
-    assertEquals(null, rule.getCategory());
+    rule.setTag("bug,size");
+    assertThat(rule.getTags(), Matchers.arrayContaining("bug", "size"));
+  }
+
+  @Test
+  public void emptyCategoryTest() {
+    assertThat(rule.getTags(), is(emptyArray()));
   }
 
 }

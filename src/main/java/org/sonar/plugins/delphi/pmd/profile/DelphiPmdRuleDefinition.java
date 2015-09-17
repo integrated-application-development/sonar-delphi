@@ -54,7 +54,7 @@ public class DelphiPmdRuleDefinition implements RulesDefinition {
       for (RuleParam param : rule.getParams()) {
         newRule.createParam(param.getKey())
           .setDefaultValue(param.getDefaultValue())
-          .setType(RuleParamType.INTEGER)
+          .setType(RuleParamType.parse(param.getType()))
           .setDescription(param.getDescription());
       }
     }
