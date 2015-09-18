@@ -29,14 +29,16 @@ public class MethodNameRule extends DelphiRule {
   public Object visit(DelphiPMDNode node, Object data) {
 
     if (node.getType() == DelphiLexer.TkNewType) {
-      List<Tree> methodNodes = node.findAllChilds(DelphiLexer.TkFunctionName);
+      if (isInterface(node) || !isPublished()) {
+        List<Tree> methodNodes = node.findAllChilds(DelphiLexer.TkFunctionName);
 
-      for (Tree method : methodNodes) {
-        String name = method.getChild(0).getText();
-        char firstChar = name.charAt(0);
+        for (Tree method : methodNodes) {
+          String name = method.getChild(0).getText();
+          char firstChar = name.charAt(0);
 
-        if (firstChar != Character.toUpperCase(firstChar)) {
-          addViolation(data, (DelphiPMDNode) method);
+          if (firstChar != Character.toUpperCase(firstChar)) {
+            addViolation(data, (DelphiPMDNode) method);
+          }
         }
       }
     }

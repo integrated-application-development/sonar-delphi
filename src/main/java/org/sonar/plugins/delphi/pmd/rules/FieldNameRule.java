@@ -24,20 +24,16 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 public class FieldNameRule extends DelphiRule {
 
-  private int currentVisibility;
-
   @Override
   protected void init() {
     super.init();
-    currentVisibility = -1;
   }
 
   @Override
   public Object visit(DelphiPMDNode node, Object data) {
     if (node.getType() == DelphiLexer.TkClassField) {
-      currentVisibility = getVisibility(node);
 
-      if ((currentVisibility == DelphiLexer.PRIVATE) || (currentVisibility == DelphiLexer.PROTECTED)) {
+      if (!isPublished()) {
         Tree variableIdentsNode = node.getChild(0);
         String name = variableIdentsNode.getChild(0).getText();
         char firstCharAfterPrefix = name.charAt(1);
@@ -49,20 +45,6 @@ public class FieldNameRule extends DelphiRule {
     }
 
     return data;
-  }
-
-  private int getVisibility(DelphiPMDNode node) {
-    Tree siblingNode = node.getParent().getChild(node.childIndex - 1);
-
-    switch (siblingNode.getType()) {
-      case DelphiLexer.PRIVATE:
-      case DelphiLexer.PROTECTED:
-      case DelphiLexer.PUBLIC:
-      case DelphiLexer.PUBLISHED:
-        return siblingNode.getType();
-      default:
-        return currentVisibility;
-    }
   }
 
 }

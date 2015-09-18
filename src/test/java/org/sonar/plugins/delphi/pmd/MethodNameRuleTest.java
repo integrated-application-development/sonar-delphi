@@ -65,4 +65,16 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
       )));
   }
 
+  @Test
+  public void publishedMethodsShouldBeSkipped() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendDecl("type");
+    builder.appendDecl("  TMyForm = class(TForm)");
+    builder.appendDecl("    procedure buttonOnClick(Sender: TNotifyEvent);");
+    builder.appendDecl("  end;");
+
+    analyse(builder);
+
+    assertThat(issues, is(empty()));
+  }
 }

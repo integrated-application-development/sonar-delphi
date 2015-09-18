@@ -62,7 +62,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void validateOnlyPrivateAndProtectedFields() {
+  public void publishedFieldsShouldBeSkipped() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
@@ -78,9 +78,9 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     analyse(builder);
 
     assertThat(issues, not(hasItem(hasRuleLine(builder.getOffsetDecl() + 3))));
-    assertThat(issues, not(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 9))));
     assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
     assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7)));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 9)));
   }
 
   @Test
