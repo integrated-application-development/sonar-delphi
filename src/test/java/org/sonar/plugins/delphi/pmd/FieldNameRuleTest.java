@@ -116,4 +116,19 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     assertThat(issues, hasItem(allOf(hasRuleKey("FieldNameRule"), hasRuleLine(builder.getOffsetDecl() + 4))));
   }
 
+  @Test
+  public void testOneLetterNameField() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendDecl("type");
+    builder.appendDecl("  TMyClass = class");
+    builder.appendDecl("    private");
+    builder.appendDecl("     x: Integer;");
+    builder.appendDecl("  end;");
+
+    analyse(builder);
+
+    assertThat(issues, hasSize(1));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4)));
+  }
+  
 }

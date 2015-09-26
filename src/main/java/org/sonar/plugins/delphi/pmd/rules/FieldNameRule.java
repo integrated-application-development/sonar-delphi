@@ -36,10 +36,15 @@ public class FieldNameRule extends DelphiRule {
       if (!isPublished()) {
         Tree variableIdentsNode = node.getChild(0);
         String name = variableIdentsNode.getChild(0).getText();
-        char firstCharAfterPrefix = name.charAt(1);
+        if (name.length() > 1) {
+	        char firstCharAfterPrefix = name.charAt(1);
 
-        if (!name.startsWith("F") || firstCharAfterPrefix != Character.toUpperCase(firstCharAfterPrefix)) {
-          addViolation(data, node);
+	        if (!name.startsWith("F") || firstCharAfterPrefix != Character.toUpperCase(firstCharAfterPrefix)) {
+	          addViolation(data, node);
+	        }
+        } else {
+        	// a single letter name has no prefix 
+        	addViolation(data, node);
         }
       }
     }
