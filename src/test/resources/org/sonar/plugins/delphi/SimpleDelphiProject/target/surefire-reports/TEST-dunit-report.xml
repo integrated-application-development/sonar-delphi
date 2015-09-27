@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="myTestSuites" total="3" date="2011-01-01" time="00:00:30">
+   
+   <testsuite name="TEST_SUITE_1" success="True" time="0.025">
+      <testcase name="FunctionTest" classname="MyTest1"
+                success="True"
+                time="0.020"
+                executed="True"/>
+      <testcase name="ProcedureTest" classname="MyTest1"
+                success="True"
+                time="0.05"
+                executed="True"/>
+   </testsuite>
+
+   <testsuite name="TEST_SUITE_2" success="True" time="0.005">
+      <testcase name="FunctionTest2" classname="MyTest2"
+                success="True"
+                time="0.001"
+                executed="True"/>
+      <testcase name="ProcedureTest2" classname="MyTest2"
+                success="True"
+                time="0.004"
+                executed="True"/>
+   </testsuite>   
+   
+   <testsuite name="TEST_SUITE_3" success="True" time="0.005">
+      <testcase name="FunctionTest3"
+                success="True"
+                time="0.001"
+                executed="True"/>
+      <testcase name="ProcedureTest3"
+                success="True"
+                time="0.004"
+                executed="True"/>
+   </testsuite>      
+
+   <testsuite name="TEST_SUITE_4" success="True" time="0.007">
+      <testcase name="FunctionTest4"
+                success="True"
+                time="0.002"
+                executed="True"/>
+      <testcase name="ProcedureTest4"
+                success="True"
+                time="0.005"
+                executed="True"/>
+   </testsuite>
+
+</testsuites>

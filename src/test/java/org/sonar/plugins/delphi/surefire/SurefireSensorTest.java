@@ -105,7 +105,7 @@ public class SurefireSensorTest {
       System.out.println(key + ":" + context.getMeasure(key));
     }
 
-    assertEquals(18, context.getMeasuresKeys().size());
+    assertEquals(24, context.getMeasuresKeys().size());
   }
 
 }

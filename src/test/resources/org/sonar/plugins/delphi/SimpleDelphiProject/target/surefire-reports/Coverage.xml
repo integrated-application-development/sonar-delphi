@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="Windows-1252" standalone="no"?>
+<report>
+  <stats>
+    <packages value="1"/>
+    <classes value="2"/>
+    <methods value="3"/>
+    <srcfiles value="4"/>
+    <srclines value="5"/>
+    <totallines value="6"/>
+    <coveredlines value="7"/>
+    <coveredpercent value="8"/>
+  </stats>
+  <data>
+    <all name="all classes">
+      <coverage type="class, %" value="41%   (41/101)"/>
+      <coverage type="method, %" value="18%   (112/636)"/>
+      <coverage type="block, %" value="12%   (815/6924)"/>
+      <coverage type="line, %" value="12%   (815/6924)"/>
+      <package name="[default]">
+        <coverage type="class, %" value="100%   (5/5)"/>
+        <coverage type="method, %" value="74%   (14/19)"/>
+        <coverage type="block, %" value="66%   (93/140)"/>
+        <coverage type="line, %" value="66%   (93/140)"/>
+        <srcfile name="MainWindow.pas">
+          <coverage type="class, %" value="100%   (5/5)"/>
+          <coverage type="method, %" value="74%   (14/19)"/>
+          <coverage type="block, %" value="66%   (93/140)"/>
+          <coverage type="line, %" value="66%   (93/140)"/>
+          <class name="TMainWindow">
+            <coverage type="class, %" value="100%   (1/1)"/>
+            <coverage type="method, %" value="100%   (1/1)"/>
+            <coverage type="block, %" value="56%   (5/9)"/>
+            <coverage type="line, %" value="56%   (5/9)"/>
+            <method name="foo2">
+              <coverage type="method, %" value="100%   (1/1)"/>
+              <coverage type="block, %" value="56%   (5/9)"/>
+              <coverage type="line, %" value="56%   (5/9)"/>
+              <line number="36" covered="True"/>
+              <line number="37" covered="False"/>
+              <line number="38" covered="True"/>
+              <line number="39" covered="False"/>
+            </method>
+          </class>         
+        </srcfile>
+        <srcfile name="Globals.pas">
+          <coverage type="class, %" value="100%   (5/5)"/>
+          <coverage type="method, %" value="74%   (14/19)"/>
+          <coverage type="block, %" value="66%   (93/140)"/>
+          <coverage type="line, %" value="66%   (93/140)"/>
+          <class name="TGlobals">
+            <coverage type="class, %" value="100%   (1/1)"/>
+            <coverage type="method, %" value="100%   (1/1)"/>
+            <coverage type="block, %" value="56%   (5/9)"/>
+            <coverage type="line, %" value="56%   (5/9)"/>
+            <method name="globalProcedure">
+              <coverage type="method, %" value="100%   (2/2)"/>
+              <coverage type="block, %" value="100%   (1/1)"/>
+              <coverage type="line, %" value="100%   (2/2)"/>
+			  <line number="19" covered="True"/>
+              <line number="20" covered="True"/>
+            </method>
+          </class>         
+        </srcfile>
+      </package>
+    </all>
+  </data>
+</report>
