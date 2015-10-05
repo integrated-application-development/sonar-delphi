@@ -64,4 +64,8 @@ public class NodeSequenceRule extends DelphiRule {
     sequence = getStringProperty(SEQUENCE).split(",");
   }
 
+  public void setSequence(String[] sequence) {
+    this.sequence = sequence;
+  }
+
 }

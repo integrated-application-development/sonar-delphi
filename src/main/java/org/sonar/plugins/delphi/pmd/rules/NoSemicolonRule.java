@@ -23,6 +23,7 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import org.antlr.runtime.tree.Tree;
+import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
@@ -62,7 +63,9 @@ public class NoSemicolonRule extends DelphiRule {
   }
 
   private boolean isValidNode(Tree node) {
-    return node != null && node.getType() != LexerMetrics.ELSE.toMetrics()
+    return node != null
+      && node.getType() != LexerMetrics.ELSE.toMetrics()
+      && node.getType() != DelphiLexer.FINALLY
       && node.getType() != LexerMetrics.IMPLEMENTATION.toMetrics();
   }
 

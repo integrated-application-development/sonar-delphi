@@ -22,7 +22,7 @@
   	name="Empty Except Block Rule">
 	    <description>Empty 'except' block, you should catch some exceptions.</description>
     	<properties>
-	    	<property name="sequence" internal="true"><value>except,end</value></property>
+	    	<property name="sequence"><value>except,end</value></property>
     	</properties> 
     	<example><![CDATA[
 <b>try</b>
@@ -32,6 +32,11 @@
  		]]></example>  	
 	</rule>
 	
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.EmptyFinallyBlockRule" message="Empty 'finally' block" 
+  	name="EmptyFinallyBlockRule">
+	    <description>Avoid empty finally blocks - these can be deleted.</description>
+	</rule>
+		
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Empty interface declaration" 
   	name="Empty Interface Rule">
 	    <description>You may have forgotten to fill some interface with methods.</description>

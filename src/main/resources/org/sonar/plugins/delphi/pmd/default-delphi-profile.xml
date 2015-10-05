@@ -21,6 +21,10 @@
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule" name="Empty Except Block Rule">
 	<priority>1</priority>
 	</rule>
+
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.EmptyFinallyBlockRule" name="EmptyFinallyBlockRule">
+	<priority>1</priority>
+	</rule>
 		
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" name="Empty Interface Rule">
 	<priority>2</priority>
