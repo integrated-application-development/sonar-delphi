@@ -23,7 +23,7 @@
 	</rule>
 
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.EmptyFinallyBlockRule" name="EmptyFinallyBlockRule">
-	<priority>1</priority>
+	<priority>2</priority>
 	</rule>
 		
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" name="Empty Interface Rule">
@@ -176,6 +176,10 @@
     
     <rule since="" class="org.sonar.plugins.delphi.pmd.rules.CastAndFreeRule" name="Cast And Free Rule">
     <priority>4</priority>
+    </rule>
+    
+    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.DelphiRule" name="MethodCyclomaticComplexityRule">
+    <priority>2</priority>
     </rule>
     
 </ruleset>

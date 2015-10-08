@@ -104,11 +104,18 @@ public interface FunctionInterface extends HasNameInterface {
   void setComplexity(int complexity);
 
   /**
-   * Gets function line in file
+   * Gets function declaration line in file
    * 
    * @return Function line
    */
   int getLine();
+
+  /**
+   * Gets function implementation line in file
+   * 
+   * @return Function Body line
+   */
+  int getBodyLine();
 
   /**
    * Sets function line
@@ -116,6 +123,13 @@ public interface FunctionInterface extends HasNameInterface {
    * @param line New line
    */
   void setLine(int line);
+
+  /**
+   * Sets function implementation line
+   * 
+   * @param line New body line
+   */
+  void setBodyLine(int line);
 
   /**
    * Gets function column in file

@@ -43,6 +43,7 @@ public class DelphiFunction implements FunctionInterface {
   private int complexity = 0;
   private int overloads = -1;
   private int line = -1;
+  private int bodyLine = -1;
   private int column = -1;
   private int visibility = DelphiParser.PRIVATE;
   private String name = null;
@@ -454,4 +455,13 @@ public class DelphiFunction implements FunctionInterface {
     realName = name;
   }
 
+  @Override
+  public int getBodyLine() {
+    return bodyLine;
+  }
+
+  @Override
+  public void setBodyLine(int line) {
+    bodyLine = line;
+  }
 }

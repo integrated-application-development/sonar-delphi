@@ -108,7 +108,7 @@ public class DelphiSensor implements Sensor {
       parseFiles(analyzer, delphiProject, project);
       parsePackages(sensorContext);
 
-      MetricsInterface metrics[] = {new BasicMetrics(project), new ComplexityMetrics(project),
+      MetricsInterface metrics[] = {new BasicMetrics(project), new ComplexityMetrics(project, ruleFinder, perspectives),
         new LCOM4Metrics(project),
         new DeadCodeMetrics(project, ruleFinder, perspectives)};
       processFiles(metrics, sensorContext);

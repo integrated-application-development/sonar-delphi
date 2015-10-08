@@ -38,10 +38,12 @@ import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.debug.ProjectMetricsXMLParser;
+import org.sonar.plugins.delphi.metrics.ComplexityMetrics;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
@@ -129,6 +131,12 @@ public class DelphiSensorTest {
     });
 
     ruleFinder = mock(RuleFinder.class);
+
+    ruleFinder = mock(RuleFinder.class);
+    Rule rule = Rule.create(ComplexityMetrics.RULE_QUERY_METHOD_CYCLOMATIC_COMPLEXITY.getRepositoryKey(),
+      ComplexityMetrics.RULE_QUERY_METHOD_CYCLOMATIC_COMPLEXITY.getKey());
+    rule.createParameter("Threshold").setDefaultValue("3");
+    when(ruleFinder.find(ComplexityMetrics.RULE_QUERY_METHOD_CYCLOMATIC_COMPLEXITY)).thenReturn(rule);
 
     sensor = new DelphiSensor(delphiProjectHelper, ruleFinder, perspectives);
   }

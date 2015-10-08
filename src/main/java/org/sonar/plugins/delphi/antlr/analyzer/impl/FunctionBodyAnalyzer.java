@@ -23,6 +23,7 @@
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
 import org.antlr.runtime.tree.Tree;
+import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
@@ -69,10 +70,14 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
 
     // increases function overload, so the starting overload should be -1
     activeFunction.increaseFunctionOverload();
+    activeFunction.setBodyLine(extractLine(codeTree.getCurrentCodeNode().getNode()));
+
     if (activeFunction.getOverloadsCount() > 0) {
       functionHolder = new DelphiFunction();
       functionHolder.setName(activeFunction.getName());
       functionHolder.setLongName(activeFunction.getLongName());
+      functionHolder.setLine(activeFunction.getLine());
+      functionHolder.setBodyLine(activeFunction.getBodyLine());
       activeFunction.addOverloadFunction(functionHolder);
     }
 
@@ -85,6 +90,20 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
     }
 
     results.setActiveFunction(null);
+  }
+
+  private int extractLine(Tree currentCodeNode) {
+    Tree parent = currentCodeNode.getParent();
+    for (int i = currentCodeNode.getChildIndex() - 1; i >= 0; i--) {
+      Tree child = parent.getChild(i);
+      if (child.getType() == DelphiLexer.FUNCTION
+        || child.getType() == DelphiLexer.PROCEDURE
+        || child.getType() == DelphiLexer.CONSTRUCTOR
+        || child.getType() == DelphiLexer.DESTRUCTOR) {
+        return child.getLine();
+      }
+    }
+    return -1;
   }
 
   @Override

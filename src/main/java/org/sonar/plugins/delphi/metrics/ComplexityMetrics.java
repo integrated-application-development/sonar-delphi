@@ -27,15 +27,22 @@ import java.util.List;
 import java.util.Set;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.component.ResourcePerspectives;
+import org.sonar.api.issue.Issuable;
+import org.sonar.api.issue.Issue;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.measures.RangeDistributionBuilder;
 import org.sonar.api.resources.Project;
+import org.sonar.api.rules.Rule;
+import org.sonar.api.rules.RuleFinder;
+import org.sonar.api.rules.RuleQuery;
 import org.sonar.plugins.delphi.antlr.DelphiParser;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
+import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 /**
@@ -47,6 +54,12 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
   private static final Number[] FILES_DISTRIB_BOTTOM_LIMITS = {1, 5, 10, 20, 30, 60, 90};
   private static final Number[] CLASS_DISTRIB_BOTTOM_LIMITS = {1, 2, 4, 6, 8, 10, 12, 15, 20, 30, 50};
   private static final Number[] RFC_DISTRIB_BOTTOM_LIMITS = {1, 5, 10, 20, 30, 40, 50, 70, 90, 100, 150};
+
+  public static final RuleQuery RULE_QUERY_METHOD_CYCLOMATIC_COMPLEXITY = RuleQuery.create()
+    .withRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY)
+    .withKey("MethodCyclomaticComplexityRule");
+
+  private Rule methodCyclomaticComplexityRule;
 
   // class_complexity_distribution = Number of classes for given complexities
   private RangeDistributionBuilder classDist = new RangeDistributionBuilder(
@@ -115,12 +128,18 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
    * analyser.
    */
   private double rfc = 0;
+  private ResourcePerspectives perspectives;
+  private Integer threshold;
 
   /**
    * {@inheritDoc}
    */
-  public ComplexityMetrics(Project delphiProject) {
+  public ComplexityMetrics(Project delphiProject, RuleFinder ruleFinder, ResourcePerspectives perspectives) {
     super(delphiProject);
+    this.perspectives = perspectives;
+    methodCyclomaticComplexityRule = ruleFinder.find(RULE_QUERY_METHOD_CYCLOMATIC_COMPLEXITY);
+    threshold = methodCyclomaticComplexityRule.getParam("Threshold").getDefaultValueAsInteger();
+
   }
 
   /**
@@ -157,7 +176,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
         }
 
         for (FunctionInterface func : cl.getFunctions()) {
-          processFunction(func);
+          processFunction(resource, func);
           processedFunc.add(func.getName());
         }
         classDist.add(Double.valueOf(cl.getComplexity()));
@@ -183,6 +202,8 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
           ++publicApi;
         }
         processedFunc.add(func.getName());
+
+        addIssue(resource, func);
       }
     }
 
@@ -198,13 +219,16 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
     saveAllMetrics();
   }
 
-  private void processFunction(FunctionInterface func) {
+  private void processFunction(InputFile resource, FunctionInterface func) {
     if (!func.isAccessor()) {
       methodsCount++;
       functionComplexity += func.getComplexity();
       functionDist.add(Double.valueOf(func.getComplexity()));
+
+      addIssue(resource, func);
+
       for (FunctionInterface over : func.getOverloadedFunctions()) {
-        processFunction(over);
+        processFunction(resource, over);
       }
     }
     statementsCount += func.getStatements().size();
@@ -226,8 +250,10 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
       sensorContext.saveMeasure(resource, CoreMetrics.COMPLEXITY, getMetric("COMPLEXITY"));
       // Average complexity by class
       sensorContext.saveMeasure(resource, CoreMetrics.CLASS_COMPLEXITY, getMetric("CLASS_COMPLEXITY"));
+
       // Average cyclomatic complexity number by method
       sensorContext.saveMeasure(resource, CoreMetrics.FUNCTION_COMPLEXITY, getMetric("FUNCTION_COMPLEXITY"));
+
       // Number of classes including nested classes, interfaces, enums and annotations
       sensorContext.saveMeasure(resource, CoreMetrics.CLASSES, getMetric("CLASSES"));
       // Number of Methods without including accessors. A constructor is considered to be a method.
@@ -300,4 +326,18 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
     return false;
   }
 
+  private void addIssue(InputFile resource, FunctionInterface func) {
+    if (func.getComplexity() > threshold.intValue()) {
+      Issuable issuable = perspectives.as(Issuable.class, resource);
+      if (issuable != null) {
+        Issue issue = issuable.newIssueBuilder()
+          .ruleKey(methodCyclomaticComplexityRule.ruleKey())
+          .line(func.getBodyLine())
+          .message(String.format("The Cyclomatic Complexity of this method \"%s\" is %d which is greater than %d authorized.",
+            func.getRealName(), func.getComplexity(), threshold))
+          .build();
+        issuable.addIssue(issue);
+      }
+    }
+  }
 }

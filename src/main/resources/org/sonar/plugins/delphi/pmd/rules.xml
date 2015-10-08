@@ -36,7 +36,7 @@
   	name="EmptyFinallyBlockRule">
 	    <description>Avoid empty finally blocks - these can be deleted.</description>
 	</rule>
-		
+	
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="Empty interface declaration" 
   	name="Empty Interface Rule">
 	    <description>You may have forgotten to fill some interface with methods.</description>
@@ -202,7 +202,7 @@
 	    <description>You shouldn't make public fields. Make them private/protected and add a getter/setter methods.</description>
 	</rule>	
 	
-	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.UnusedArgumentsRule" message="" 
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.UnusedArgumentsRule" message="Unused method parameters should be removed" 
   	name="Unused Arguments Rule">
 	    <description>You should always use every passed function argument.</description>
     	<properties>
@@ -320,6 +320,15 @@ x.Free;			//GOOD, sufficent enough
     <rule since="" class="org.sonar.plugins.delphi.pmd.rules.CastAndFreeRule" message="Don't cast then free." 
     name="Cast And Free Rule">
 	    <description>You should not cast an object before freeing it.</description>
+    </rule>   
+
+    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.DelphiRule" 
+    	message="Methods should not be too complex." 
+    	name="MethodCyclomaticComplexityRule">
+	    <description>The cyclomatic complexity of methods should not exceed a defined threshold. Complex code can perform poorly and will in any case be difficult to understand and therefore to maintain.</description>
+		<properties>
+			<property name="Threshold"><value>10</value></property>
+		</properties>	    
     </rule>   
     
 </ruleset>

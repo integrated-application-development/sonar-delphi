@@ -22,38 +22,63 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
+import java.io.IOException;
+import java.util.Arrays;
 import org.antlr.runtime.CommonToken;
+import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.DelphiTestUtils;
+import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
+import org.sonar.plugins.delphi.antlr.analyzer.impl.operations.AdvanceToNodeOperation;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
+import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
+import org.sonar.plugins.delphi.core.language.FunctionInterface;
+import org.sonar.plugins.delphi.core.language.impl.DelphiClass;
 import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
+import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
+import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class FunctionBodyAnalyzerTest {
+public class FunctionBodyAnalyzerTest extends FileTestsCommon {
+
+  private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
 
   private static final Tree EMPTY_NODE = new CommonTree(new CommonToken(0, "nil"));
   private static final Tree BEGIN_NODE = new CommonTree(new CommonToken(LexerMetrics.BEGIN.toMetrics(), "begin"));
 
-  FunctionBodyAnalyzer analyzer;
-  CodeAnalysisResults results;
-  CodeTree codeTree;
+  private FunctionBodyAnalyzer analyzer;
+  private CodeAnalysisResults results;
+  private CodeTree codeTree;
+
+  private ASTTree ast;
 
   @Before
   public void setup() {
-    ASTTree ast = mock(ASTTree.class);
+    ast = mock(ASTTree.class);
 
     results = new CodeAnalysisResults();
     analyzer = new FunctionBodyAnalyzer(results, DelphiTestUtils.mockProjectHelper());
     codeTree = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(EMPTY_NODE));
+  }
+
+  public void setupFile(String fileName) throws IOException, RecognitionException {
+    loadFile(fileName);
+
+    results.setActiveUnit(new DelphiUnit("test"));
+    ast = new DelphiAST(testFile);
+    codeTree = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
+
+    CodeAnalysisCacheResults.resetCache();
   }
 
   @Test
@@ -78,8 +103,38 @@ public class FunctionBodyAnalyzerTest {
   }
 
   @Test
-  public void doAnalyzeTest() {
+  public void captureFunctionBodyLine() throws IOException, RecognitionException {
+    setupFile(FILE_NAME);
 
+    results.setActiveClass(new DelphiClass("TDemo"));
+
+    FunctionInterface function = findFunction("getFunction");
+    assertThat(function, notNullValue());
+    assertThat(function.hasBody(), is(true));
+    assertThat(function.getBodyLine(), is(42));
+  }
+
+  private FunctionInterface findFunction(String functionName) {
+    DelphiFunction activeFunction = new DelphiFunction("getFunction");
+    final AdvanceToNodeOperation advanceToFunctionName = new AdvanceToNodeOperation(Arrays.asList(LexerMetrics.FUNCTION_NAME));
+    final AdvanceToNodeOperation advanceToFunctionBody = new AdvanceToNodeOperation(Arrays.asList(LexerMetrics.FUNCTION_BODY));
+
+    CodeNode<Tree> currentNode = codeTree.getCurrentCodeNode();
+    while (currentNode != null) {
+      try {
+        CodeNode<Tree> functionNode = advanceToFunctionName.execute(codeTree.getCurrentCodeNode().getNode());
+        codeTree.setCurrentNode(functionNode);
+        if (functionNode.getNode().getChild(0).getText().equalsIgnoreCase(functionName)) {
+          results.setActiveFunction(activeFunction);
+          codeTree.setCurrentNode(advanceToFunctionBody.execute(codeTree.getCurrentCodeNode().getNode()));
+          analyzer.analyze(codeTree, results);
+          return activeFunction;
+        }
+      } catch (IllegalStateException e) {
+        currentNode = null;
+      }
+    }
+    return null;
   }
 
 }
