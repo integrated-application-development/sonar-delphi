@@ -53,7 +53,7 @@ public class InterfaceNameRuleTest extends BasePmdRuleTest {
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("Interface Name Rule"));
+    assertThat(issue.ruleKey().rule(), equalTo("InterfaceNameRule"));
     assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
   }
 
@@ -70,7 +70,7 @@ public class InterfaceNameRuleTest extends BasePmdRuleTest {
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("Interface Name Rule"));
+    assertThat(issue.ruleKey().rule(), equalTo("InterfaceNameRule"));
     assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
   }
 
@@ -87,7 +87,7 @@ public class InterfaceNameRuleTest extends BasePmdRuleTest {
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("Interface Name Rule"));
+    assertThat(issue.ruleKey().rule(), equalTo("InterfaceNameRule"));
     assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
   }
 }

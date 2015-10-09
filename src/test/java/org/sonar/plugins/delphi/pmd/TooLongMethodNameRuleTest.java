@@ -51,6 +51,6 @@ public class TooLongMethodNameRuleTest extends BasePmdRuleTest {
 
     analyse(builder);
 
-    assertThat(issues, hasItem(IssueMatchers.hasRuleKeyAtLine("Too Long Method Rule", builder.getOffSet() + 1)));
+    assertThat(issues, hasItem(IssueMatchers.hasRuleKeyAtLine("TooLongMethodRule", builder.getOffSet() + 1)));
   }
 }

@@ -31,7 +31,7 @@
       <name>Language</name>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Empty Begin Statement Rule</rule-key>
+        <rule-key>EmptyFinallyBlockRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -44,7 +44,7 @@
       </chc>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Empty Else Statement Rule</rule-key>
+        <rule-key>WithAfterDoThenRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -57,7 +57,46 @@
       </chc>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>No Guid Rule</rule-key>
+        <rule-key>NoFunctionReturnTypeRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>10</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>EmptyBeginStatementRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>5</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>EmptyElseStatementRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>5</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>NoGuidRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -94,7 +133,7 @@
       <name>Maintainability Compliance</name>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Inherited Method With No Code Rule</rule-key>
+        <rule-key>NoBeginAfterDoRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -107,33 +146,7 @@
       </chc>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>No 'begin' after 'do' Rule</rule-key>
-        <prop>
-          <key>remediationFunction</key>
-          <txt>CONSTANT_ISSUE</txt>
-        </prop>
-        <prop>
-          <key>offset</key>
-          <val>10</val>
-          <txt>min</txt>
-        </prop>
-      </chc>
-      <chc>
-        <rule-repo>delph</rule-repo>
-        <rule-key>Too Many Variables Rule</rule-key>
-        <prop>
-          <key>remediationFunction</key>
-          <txt>CONSTANT_ISSUE</txt>
-        </prop>
-        <prop>
-          <key>offset</key>
-          <val>30</val>
-          <txt>min</txt>
-        </prop>
-      </chc>
-      <chc>
-        <rule-repo>delph</rule-repo>
-        <rule-key>Too Many Arguments Rule</rule-key>
+        <rule-key>TooManyArgumentsRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -144,13 +157,39 @@
           <txt>h</txt>
         </prop>
       </chc>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>InheritedMethodWithNoCodeRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>10</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>TooManyVariablesRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>30</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
     </chc>
     <chc>
       <key>READABILITY</key>
       <name>Readability</name>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>No Semi After Overload Rule</rule-key>
+        <rule-key>ThenTryRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -163,7 +202,72 @@
       </chc>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Interface Name Rule</rule-key>
+        <rule-key>RecordNameRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>30</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>NoSemiAfterOverloadRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>5</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>NoSemicolonRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>5</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>UppercaseReservedKeywordsRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>5</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>MixedNamesRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>5</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>InterfaceNameRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -176,7 +280,7 @@
       </chc>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Class Name Rule</rule-key>
+        <rule-key>ClassNameRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -189,33 +293,7 @@
       </chc>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Mixed Names Rule</rule-key>
-        <prop>
-          <key>remediationFunction</key>
-          <txt>CONSTANT_ISSUE</txt>
-        </prop>
-        <prop>
-          <key>offset</key>
-          <val>5</val>
-          <txt>min</txt>
-        </prop>
-      </chc>
-      <chc>
-        <rule-repo>delph</rule-repo>
-        <rule-key>No Semicolon Rule</rule-key>
-        <prop>
-          <key>remediationFunction</key>
-          <txt>CONSTANT_ISSUE</txt>
-        </prop>
-        <prop>
-          <key>offset</key>
-          <val>5</val>
-          <txt>min</txt>
-        </prop>
-      </chc>
-      <chc>
-        <rule-repo>delph</rule-repo>
-        <rule-key>Record Name Rule</rule-key>
+        <rule-key>TooLongMethodRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -228,7 +306,7 @@
       </chc>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Too Long Method Rule</rule-key>
+        <rule-key>PointerNameRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -241,7 +319,20 @@
       </chc>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Uppercase Reserved Keywords Rule</rule-key>
+        <rule-key>UnitNameRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>30</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>FieldNameRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -249,6 +340,19 @@
         <prop>
           <key>offset</key>
           <val>5</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>MethodNameRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>30</val>
           <txt>min</txt>
         </prop>
       </chc>
@@ -258,7 +362,7 @@
       <name>Understandability</name>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Unused Function Rule</rule-key>
+        <rule-key>ProjectFileNoFunctionsRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -271,7 +375,20 @@
       </chc>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Project File No Variables Rule</rule-key>
+        <rule-key>TypeAliasRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>10</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>UnusedFunctionRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -284,7 +401,7 @@
       </chc>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Avoid Out Parameter Rule</rule-key>
+        <rule-key>AvoidOutParameterRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -297,20 +414,7 @@
       </chc>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Project File No Functions Rule</rule-key>
-        <prop>
-          <key>remediationFunction</key>
-          <txt>CONSTANT_ISSUE</txt>
-        </prop>
-        <prop>
-          <key>offset</key>
-          <val>15</val>
-          <txt>min</txt>
-        </prop>
-      </chc>
-      <chc>
-        <rule-repo>delph</rule-repo>
-        <rule-key>Unused Arguments Rule</rule-key>
+        <rule-key>UnusedUnitRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -323,7 +427,20 @@
       </chc>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Unused Unit Rule</rule-key>
+        <rule-key>ProjectFileNoVariablesRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>15</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>UnusedArgumentsRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -404,20 +521,7 @@
       <name>Architecture</name>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Constructor Without Inherited Statement Rule</rule-key>
-        <prop>
-          <key>remediationFunction</key>
-          <txt>CONSTANT_ISSUE</txt>
-        </prop>
-        <prop>
-          <key>offset</key>
-          <val>5</val>
-          <txt>min</txt>
-        </prop>
-      </chc>
-      <chc>
-        <rule-repo>delph</rule-repo>
-        <rule-key>Destructor Without Inherited Statement Rule</rule-key>
+        <rule-key>DestructorWithoutInheritedStatementRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -430,7 +534,20 @@
       </chc>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Public Fields Rule</rule-key>
+        <rule-key>ConstructorWithoutInheritedStatementRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>5</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>PublicFieldsRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -455,7 +572,7 @@
       <name>Logic</name>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>If Not False Rule</rule-key>
+        <rule-key>IfTrueRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -468,7 +585,7 @@
       </chc>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>If True Rule</rule-key>
+        <rule-key>IfNotFalseRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -489,7 +606,7 @@
       <name>Architecture</name>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>One Class Per File Rule</rule-key>
+        <rule-key>OneClassPerFileRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -510,7 +627,33 @@
       <name>Exception handling</name>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Empty Except Block Rule</rule-key>
+        <rule-key>RaisingGeneralExceptionRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>15</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>CatchingGeneralExceptionRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>15</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>EmptyExceptBlockRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -518,32 +661,6 @@
         <prop>
           <key>offset</key>
           <val>10</val>
-          <txt>min</txt>
-        </prop>
-      </chc>
-      <chc>
-        <rule-repo>delph</rule-repo>
-        <rule-key>Raising General Exception Rule</rule-key>
-        <prop>
-          <key>remediationFunction</key>
-          <txt>CONSTANT_ISSUE</txt>
-        </prop>
-        <prop>
-          <key>offset</key>
-          <val>15</val>
-          <txt>min</txt>
-        </prop>
-      </chc>
-      <chc>
-        <rule-repo>delph</rule-repo>
-        <rule-key>Catching General Exception Rule</rule-key>
-        <prop>
-          <key>remediationFunction</key>
-          <txt>CONSTANT_ISSUE</txt>
-        </prop>
-        <prop>
-          <key>offset</key>
-          <val>15</val>
           <txt>min</txt>
         </prop>
       </chc>
@@ -565,7 +682,7 @@
       <name>Reliability Compliance</name>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Empty Interface Rule</rule-key>
+        <rule-key>EmptyInterfaceRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -582,7 +699,7 @@
       <name>Resource</name>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Assigned And Free Rule</rule-key>
+        <rule-key>AssignedAndFreeRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -595,7 +712,7 @@
       </chc>
       <chc>
         <rule-repo>delph</rule-repo>
-        <rule-key>Cast And Free Rule</rule-key>
+        <rule-key>CastAndFreeRule</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>CONSTANT_ISSUE</txt>
@@ -630,6 +747,19 @@
     <chc>
       <key>UNIT_TESTABILITY</key>
       <name>Unit level</name>
+      <chc>
+        <rule-repo>delph</rule-repo>
+        <rule-key>MethodCyclomaticComplexityRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>LINEAR</txt>
+        </prop>
+        <prop>
+          <key>remediationFactor</key>
+          <val>1</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
     </chc>
   </chc>
 </sqale>

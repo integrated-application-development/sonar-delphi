@@ -64,10 +64,10 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
 
   public static final RuleQuery RULE_QUERY_UNUSED_UNIT = RuleQuery.create()
     .withRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY)
-    .withKey("Unused Unit Rule");
+    .withKey("UnusedUnitRule");
   public static final RuleQuery RULE_QUERY_UNUSED_FUNCTION = RuleQuery.create()
     .withRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY)
-    .withKey("Unused Function Rule");
+    .withKey("UnusedFunctionRule");
 
   /**
    * {@inheritDoc}

@@ -50,7 +50,7 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("Class Name Rule"));
+    assertThat(issue.ruleKey().rule(), equalTo("ClassNameRule"));
     assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
   }
 
@@ -65,7 +65,7 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("Class Name Rule"));
+    assertThat(issue.ruleKey().rule(), equalTo("ClassNameRule"));
     assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
   }
 
@@ -80,7 +80,7 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("Class Name Rule"));
+    assertThat(issue.ruleKey().rule(), equalTo("ClassNameRule"));
     assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
   }
 
@@ -103,7 +103,7 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
 
     assertThat(issues.toString(), issues, hasSize(1));
     Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("Class Name Rule"));
+    assertThat(issue.ruleKey().rule(), equalTo("ClassNameRule"));
     assertThat(issue.line(), is(builder.getOffsetDecl() + 7));
   }
 

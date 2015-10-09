@@ -157,8 +157,9 @@ public final class DelphiRulesUtils {
   private static Rule createRepositoryRule(DelphiRule fRule) {
     RulePriority priority = severityFromLevel(fRule.getPriority());
 
-    Rule rule = Rule.create(DelphiPmdConstants.REPOSITORY_KEY, fRule.getName(), fRule.getName()).setSeverity(
+    Rule rule = Rule.create(DelphiPmdConstants.REPOSITORY_KEY, fRule.getName(), fRule.getMessage()).setSeverity(
       priority);
+
     rule.setDescription(fRule.getDescription());
     rule.setTags(fRule.getTags());
     List<RuleParam> ruleParams = new ArrayList<RuleParam>();
@@ -187,7 +188,7 @@ public final class DelphiRulesUtils {
     RulePriority fRulePriority = severityFromLevel(fRule.getPriority());
 
     for (Rule rule : rulesRepository) {
-      if (rule.getName().equals(name)) {
+      if (rule.getKey().equals(name)) {
         RulePriority priority = fRulePriority != null ? fRulePriority : rule.getSeverity();
         ActiveRule activeRule = new ActiveRule(null, rule, priority);
         activeRule.setActiveRuleParams(buildActiveRuleParams(fRule, rule, activeRule));

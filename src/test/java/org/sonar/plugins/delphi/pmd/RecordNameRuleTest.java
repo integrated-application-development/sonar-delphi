@@ -49,7 +49,7 @@ public class RecordNameRuleTest extends BasePmdRuleTest {
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("Record Name Rule"));
+    assertThat(issue.ruleKey().rule(), equalTo("RecordNameRule"));
     assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
   }
 
@@ -64,7 +64,7 @@ public class RecordNameRuleTest extends BasePmdRuleTest {
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("Record Name Rule"));
+    assertThat(issue.ruleKey().rule(), equalTo("RecordNameRule"));
     assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
   }
 
@@ -79,7 +79,7 @@ public class RecordNameRuleTest extends BasePmdRuleTest {
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("Record Name Rule"));
+    assertThat(issue.ruleKey().rule(), equalTo("RecordNameRule"));
     assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
   }
 }
