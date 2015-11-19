@@ -74,7 +74,13 @@ public abstract class BasePmdRuleTest {
 
   private void configureTest(DelphiUnitBuilderTest builder) {
     testFile = builder.buildFile(ROOT_DIR);
+
     String relativePathTestFile = DelphiUtils.getRelativePath(testFile, Arrays.asList(ROOT_DIR));
+
+    System.out.println("Absolute Path: " + testFile);
+    System.out.println("Relative Path: " + relativePathTestFile);
+    System.out.println("Test File: " + ROOT_DIR_NAME + "/" + relativePathTestFile);
+
     configureTest(ROOT_DIR_NAME + "/" + relativePathTestFile);
   }
 

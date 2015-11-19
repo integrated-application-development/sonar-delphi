@@ -103,7 +103,7 @@ public final class DelphiUtils {
    * @return Resource file
    */
   public static File getResource(String fileName) {
-    URL url = new DelphiUtils().getClass().getResource(fileName);
+    URL url = DelphiUtils.class.getResource(fileName);
     if (url == null) {
       throw new IllegalStateException("Resource file not found: "
         + fileName);
