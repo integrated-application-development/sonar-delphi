@@ -34,7 +34,7 @@ public class TestUnusedArgumentsRule extends BasePmdRuleTest {
 
   @Test
   public void testRule() {
-    configureTest(ROOT_DIR_NAME + "/UnusedARgumentRule.pas");
+    configureTest(ROOT_DIR_NAME + "/UnusedArgumentRule.pas");
 
     DebugSensorContext debugContext = new DebugSensorContext();
     sensor.analyse(project, debugContext);
