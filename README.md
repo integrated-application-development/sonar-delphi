@@ -5,9 +5,7 @@ This is the SonarQube Delphi Plugin.
 
 This plugin was originally a [Sabre Airline Solutions](http://www.sabreairlinesolutions.com/home/) donation.
 
-<!---
 [![Build Status](https://travis-ci.org/fabriciocolombo/sonar-delphi.svg?branch=master)](https://travis-ci.org/fabriciocolombo/sonar-delphi)
---->
 
 <!---
 Project homepage:
