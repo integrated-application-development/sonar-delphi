@@ -10,6 +10,9 @@ interface
 	} *)
 
 type
+  TMyChar = Char;
+  TMySetOfChar = set of Char;
+
   PMyPointer = ^Integer;
 
 	IMyInterface = interface
