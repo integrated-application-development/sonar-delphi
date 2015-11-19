@@ -2,4 +2,4 @@ language: java
 jdk:
   - openjdk7
   - oraclejdk8
-before_install: echo "MAVEN_OPTS='-Xmx512m -XX:MaxPermSize=128m'" > ~/.mavenrc
+before_install: echo "MAVEN_OPTS='-Xmx2048m -XX:MaxPermSize=256m'" > ~/.mavenrc
