@@ -23,7 +23,7 @@
 package org.sonar.plugins.delphi.antlr;
 
 import java.io.File;
-import org.junit.Before;
+import java.io.IOException;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -32,21 +32,33 @@ import static org.junit.Assert.*;
 
 public class GrammarTest {
 
-  private static final String FILE_NAME = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
-  private File file = null;
+  private static final String BASE_DIR = "/org/sonar/plugins/delphi/grammar/";
 
-  @Before
-  public void init() {
-    file = DelphiUtils.getResource(FILE_NAME);
+  private void parseFile(String fileName) throws IOException {
+    System.out.println("Parsing file: " + BASE_DIR + fileName);
+    DelphiAST ast = new DelphiAST(DelphiUtils.getResource(BASE_DIR + fileName));
+    assertEquals(false, ast.isError());
+
+    String name = fileName.replace(".pas", "");
+
+    String outputFileName = File.createTempFile(name, "").getParentFile().getAbsolutePath() + File.separatorChar + "AST_" + name + ".xml";
+    ast.generateXML(outputFileName);
+    System.out.println("Generated AST XML file at " + outputFileName);
   }
 
   @Test
   public void test() throws Exception {
-    DelphiAST ast = new DelphiAST(file);
-    assertEquals(false, ast.isError());
-
-    String fileName = File.createTempFile("ast", "").getParentFile().getAbsolutePath() + File.separatorChar + "ast.xml";
-    ast.generateXML(fileName);
-    System.out.println("Generated AST XML file at " + fileName);
+    parseFile("GrammarTest.pas");
   }
+
+  @Test
+  public void emptyBeginStatement() throws Exception {
+    parseFile("EmptyProcs.pas");
+  }
+
+  @Test
+  public void parseMultipleAttributes() throws Exception {
+    parseFile("MultipleAttributes.pas");
+  }
+
 }

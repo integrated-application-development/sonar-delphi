@@ -137,7 +137,6 @@ declSection                  : labelDeclSection
                              | methodDecl
                              | procDecl
                              | exportsSection
-                             | assemblyAttribute  			// .net only
                              ;
 interfaceDecl                : constSection
                              | typeSection
@@ -146,8 +145,7 @@ interfaceDecl                : constSection
                              | exportsSection
                              | procDecl
    			     			 | methodDecl
-                             | assemblyAttribute
-                             ;	// ? .net only
+                             ;
 labelDeclSection             : 'label' label (',' label)* ';'
                              ;
 constSection                 : constKey (constDeclaration)* -> ^(constKey (constDeclaration)*)	//CHANGED, erased one constDeclaration, for: "const {$include versioninfo.inc }"
@@ -452,15 +450,15 @@ procBody                     : 'forward' ';' (functionDirective)*   // CHECKEN ;
                              | block ';'
                              ;
 //****************************
-//section customAttributes // (.NET only)
+//section customAttributes
 //****************************
-customAttribute              : '[' customAttributeDecl ']'
-                             | assemblyAttribute
+customAttribute              : customAttributeList
                              ;
-assemblyAttribute            : '[' 'assembly' ':' customAttributeDecl ']'
+customAttributeList          : (customAttributeDecl)*
                              ;
-customAttributeDecl          :  namespacedQualifiedIdent '(' expressionList ')'
-                             ;
+customAttributeDecl          : '[' namespacedQualifiedIdent ('(' expressionList ')')? ']'  -> ^(TkCustomAttribute '[' namespacedQualifiedIdent ('(' expressionList ')')? ']')
+                             ;                             
+                
 //****************************
 //section expression
 //****************************
@@ -921,22 +919,26 @@ TkFunctionArgs		     	 : 'FUNCTION_ARGS'
 			     		 	 ;
 TkFunctionBody		     	 : 'FUNCTION_BODY'
 			     		 	 ;
-TkFunctionReturn	     	 : 'FUNCTION_RETURN'
-			     		 	 ;
+TkFunctionReturn			 : 'FUNCTION_RETURN'
+							 ;
+TkCustomAttribute			 : 'CUSTOM_ATTRIBUTE'
+							 ;
+TkCustomAttributeArgs		 : 'CUSTOM_ATTRIBUTE_ARGS'
+							 ;
 TkNewType				 	 : 'NEW_TYPE'
 						 	 ;
 TkClassOfType				 : 'CLASS_OF_TYPE'
-							 ;				
+							 ;
 TkVariableType				 : 'VARIABLE_TYPE'
-							 ;				
+							 ;
 TkVariableIdents			 : 'VARIABLE_IDENTS'
-							 ;		
+							 ;
 TkVariableParam				 : 'VARIABLE_PARAM'
-							 ;		
+							 ;
 TkGuid						 : 'INTERFACE_GUID'
-							 ;							 					 							 					 			 							 		 	 
+							 ;
 TkClassParents				 : 'CLASS_PARENTS'
-							 ;							 
+							 ;
 TkClassField				 : 'CLASS_FIELD'
 							 ;
 TkIdentifier                 : (Alpha | '_') (Alpha | Digit | '_')*
