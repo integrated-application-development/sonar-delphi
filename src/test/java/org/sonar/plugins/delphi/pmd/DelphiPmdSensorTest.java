@@ -149,6 +149,7 @@ public class DelphiPmdSensorTest {
       new RuleData("AssignedAndFreeRule", 126),
       new RuleData("EmptyElseStatementRule", 135),
       new RuleData("AssignedAndFreeRule", 147),
+      new RuleData("EmptyBeginStatementRule", 158),
       new RuleData("MixedNamesRule", 163),
       new RuleData("MixedNamesRule", 169),
       new RuleData("MixedNamesRule", 175),

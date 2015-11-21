@@ -75,7 +75,6 @@ public class DelphiUnitBuilderTest {
 
     if (this.declaration.length() > 0) {
       source.append(this.declaration() + "\n");
-      source.append("\n");
       offset++;
     }
     source.append("implementation\n");
@@ -83,7 +82,6 @@ public class DelphiUnitBuilderTest {
 
     if (this.implementation.length() > 0) {
       source.append(this.implementation() + "\n");
-      source.append("\n");
     }
     source.append("end.\n");
 

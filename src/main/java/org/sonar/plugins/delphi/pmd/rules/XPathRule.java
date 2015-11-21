@@ -27,6 +27,7 @@ import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.StringProperty;
 import org.apache.commons.lang.StringUtils;
 import org.apache.xml.dtm.DTM;
+import org.apache.xml.dtm.DTMIterator;
 import org.apache.xpath.XPathAPI;
 import org.apache.xpath.objects.XNodeSet;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
@@ -68,10 +69,12 @@ public class XPathRule extends DelphiRule {
     Document doc = getCachedDocument(node.getASTTree());
     try {
       XNodeSet result = (XNodeSet) XPathAPI.eval(doc, xPathString);
-      int nodeIndex = 0;
-      int nodeId = DTM.NULL;
-      while ((nodeId = result.item(nodeIndex++)) != DTM.NULL) {
-        Node resultNode = result.getDTM(nodeId).getNode(nodeId);
+
+      final DTMIterator iterator = result.iter();
+
+      while (iterator.nextNode() != DTM.NULL) {
+        final int nodeId = iterator.getCurrentNode();
+        Node resultNode = iterator.getDTM(nodeId).getNode(nodeId);
         String className = resultNode.getAttributes().getNamedItem("class").getTextContent();
         String methodName = resultNode.getAttributes().getNamedItem("method").getTextContent();
         String packageName = resultNode.getAttributes().getNamedItem("package").getTextContent();

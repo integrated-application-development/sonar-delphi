@@ -132,4 +132,18 @@ public abstract class BasePmdRuleTest {
     }
   }
 
+  public String toString(List<Issue> issues) {
+    StringBuilder builder = new StringBuilder();
+    builder.append("[");
+    for (Issue issue : issues) {
+      builder.append(toString(issue)).append(',');
+    }
+    builder.append("]");
+    return builder.toString();
+  }
+
+  public String toString(Issue issue) {
+    return "Issue [ruleKey=" + issue.ruleKey() + ", message=" + issue.message() + ", line=" + issue.line() + "]";
+  }
+
 }
