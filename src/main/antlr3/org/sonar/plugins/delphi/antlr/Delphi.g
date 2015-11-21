@@ -186,7 +186,7 @@ typeDecl                     : strucType
                              | ('type')? typeId (genericPostfix)?
                              | simpleType
                              ;
-strucType                    : ('packed')? strucTypePart -> strucTypePart		//CHANGED we dont need info if struct is packed or not for AST parsing
+strucType                    : ('packed')? strucTypePart -> strucTypePart
                              ;
 strucTypePart                : arrayType
                              | setType
@@ -206,7 +206,7 @@ arrayIndex                   : typeId
 arraySubType                 : 'const'
                              | typeDecl
                              ;
-setType                      : 'set' 'of' typeDecl -> typeDecl					//CHANGED we only need type info
+setType                      : 'set' 'of' typeDecl -> 'set' typeDecl					//CHANGED we only need type info
                              ;
 // set type alleen ordinal of subrange type
 fileType                     : 'file' ('of' typeDecl)?
