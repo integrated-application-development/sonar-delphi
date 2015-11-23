@@ -26,7 +26,7 @@ public class ClassNameRule extends DelphiRule {
   @Override
   public Object visit(DelphiPMDNode node, Object data) {
 
-    if (node.getType() == DelphiLexer.CLASS) {
+    if (node.getType() == DelphiLexer.TkClass) {
       String name = node.getParent().getText();
 
       char firstCharAfterPrefix = name.charAt(1);

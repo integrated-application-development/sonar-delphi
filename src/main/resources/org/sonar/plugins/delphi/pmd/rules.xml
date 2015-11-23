@@ -375,7 +375,8 @@ x.Free;			//GOOD, sufficent enough
 			<property name="xpath">
 				<value>//TkNewType/*[count(descendant::*) &lt; 3 and name(descendant::*) != 'class' and
 					name(descendant::*) != 'record' and name(descendant::*) != 'array' and name(descendant::*) !=
-					'set' and name(descendant::*) != 'dash_pointer']
+					'set' and name(descendant::*) != 'dash_pointer' and name(descendant::*) != 'TkClassOfType' and
+					name(descendant::*) != 'interface' and name() != 'TkCustomAttribute']
 				</value>
 			</property>
 		</properties>

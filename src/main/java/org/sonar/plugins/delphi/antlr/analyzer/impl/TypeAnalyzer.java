@@ -46,7 +46,7 @@ public class TypeAnalyzer extends CodeAnalyzer {
     }
 
     int type = getGrandChild(currentNode).getType();
-    return type == DelphiLexer.CLASS || type == DelphiLexer.RECORD || type == DelphiLexer.INTERFACE;
+    return type == DelphiLexer.TkClass || type == DelphiLexer.RECORD || type == DelphiLexer.INTERFACE;
   }
 
   @Override

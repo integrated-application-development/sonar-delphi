@@ -61,4 +61,9 @@ public class GrammarTest {
     parseFile("MultipleAttributes.pas");
   }
 
+  @Test
+  public void parseNewGrammar() throws Exception {
+    parseFile("GrammarTestNew.pas");
+  }
+
 }

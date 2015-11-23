@@ -24,58 +24,61 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.sonar.plugins.delphi.IssueMatchers.*;
 
-public class TypeAliasRuleTest extends BasePmdRuleTest {
+public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void setsArentTypeAlias() {
+  public void testValidRule() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-
-    builder.appendDecl("type");
-    builder.appendDecl("  TMySetOfChar = set of Char;");
-
-    analyse(builder);
-
-    assertThat(issues, is(empty()));
-  }
-
-  @Test
-  public void typeAliasShouldAddViolation() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyChar = Char;");
-
-    analyse(builder);
-
-    assertThat(toString(issues), issues, hasSize(1));
-    assertThat(toString(issues), issues, hasItem(allOf(hasRuleKey("TypeAliasRule"), hasRuleLine(builder.getOffsetDecl() + 2))));
-  }
-
-  @Test
-  public void typeAliasNewTypeShouldAddViolation() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyChar = type Char;");
-
-    analyse(builder);
-
-    assertThat(toString(issues), issues, hasSize(1));
-    assertThat(toString(issues), issues, hasItem(allOf(hasRuleKey("TypeAliasRule"), hasRuleLine(builder.getOffsetDecl() + 2))));
-  }
-
-  @Test
-  public void falsePositiveMetaClassIsNotTypeAlias() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
     builder.appendDecl("  end;");
-    builder.appendDecl("  TMetaClass = class of TMyClass;");
 
     analyse(builder);
 
     assertThat(issues, is(empty()));
+  }
+
+  @Test
+  public void moreThanOneClassShouldAddIssue() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendDecl("type");
+    builder.appendDecl("  TMyClass = class");
+    builder.appendDecl("  end;");
+    builder.appendDecl("  TMyClass2 = class");
+    builder.appendDecl("  end;");
+
+    analyse(builder);
+
+    assertThat(issues, hasSize(1));
+    assertThat(issues, hasItem(hasRuleKey("OneClassPerFileRule")));
+    assertThat(issues, hasItem(hasRuleLine(builder.getOffsetDecl() + 4)));
+  }
+
+  @Test
+  public void falsePositiveMetaClass() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendDecl("type");
+    builder.appendDecl("  TMyClass = class");
+    builder.appendDecl("  end;");
+    builder.appendDecl("  TMetaClassClass = class of TMyClass;");
+
+    analyse(builder);
+
+    assertThat(toString(issues), issues, is(empty()));
+  }
+
+  @Test
+  public void falsePositiveClassMethods() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendDecl("type");
+    builder.appendDecl("  TMyClass = class");
+    builder.appendDecl("    class procedure TestProcedure;");
+    builder.appendDecl("    class function TestFuncion: Boolean;");
+    builder.appendDecl("  end;");
+
+    analyse(builder);
+
+    assertThat(toString(issues), issues, is(empty()));
   }
 
 }

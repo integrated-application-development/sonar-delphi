@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import org.sonar.plugins.delphi.antlr.DelphiLexer;
+
 /**
  * It counts how many classes there are in one file.
  * 
@@ -33,7 +35,7 @@ public class ClassPerFileRule extends CountRule {
   @Override
   protected void init() {
     super.init();
-    setStringToSearch("class");
+    setTypeToSearch(DelphiLexer.TkClass);
   }
 
 }

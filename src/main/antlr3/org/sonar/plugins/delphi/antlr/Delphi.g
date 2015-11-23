@@ -269,8 +269,8 @@ genericPostfix               : '<' typeDecl (',' typeDecl)* '>'
 //section class
 //****************************
 classDecl                    : classTypeTypeDecl
-                             | classTypeDecl
-                             | classHelperDecl
+                             | classTypeDecl -> ^(TkClass classTypeDecl)
+                             | classHelperDecl -> ^(TkClass classHelperDecl)
                              | interfaceTypeDecl
                              | objectDecl
                              | recordDecl
@@ -288,7 +288,6 @@ classParent                  : '(' genericTypeIdent (',' genericTypeIdent)* ')' 
 							 ;
 classItem                    : visibility
                              | classMethod
-                             | classMethodResolution
                              | classField
                              | classProperty
                              | constSection
@@ -351,13 +350,13 @@ recordHelperDecl             : 'record' 'helper' 'for' typeId (recordHelperItem)
 recordHelperItem             : classMethod
                              | classProperty
                              ;
-classMethod                  : methodKey ident (genericDefinition)? (formalParameterSection)? ';' (methodDirective)* 
-			     			 ->  ^(methodKey ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) (methodDirective)*)
-                             | ('class')? 'function' ident (genericDefinition)? (formalParameterSection)? ':' (customAttribute)? typeDecl ';' (methodDirective)*
-                             -> ^('function' ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) (customAttribute)? ^(TkFunctionReturn typeDecl) (methodDirective)*)
-                             ;
-classMethodResolution        : ('class')? procKey typeId '.' ident '=' ident ';'
-                             ;
+classMethod                  : (customAttribute)? ('class')? methodKey ident (genericDefinition)? (formalParameterSection)? ';' (methodDirective)* 
+			     			 ->  (customAttribute)? ('class')? ^(methodKey ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) (methodDirective)*)
+                             | (customAttribute)? ('class')? 'function' ident (genericDefinition)? (formalParameterSection)? ':' (customAttribute)? typeDecl ';' (methodDirective)*
+                             -> (customAttribute)? ('class')? ^('function' ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) (customAttribute)? ^(TkFunctionReturn typeDecl) (methodDirective)*)
+                             | (customAttribute)? ('class')? 'operator' ident (genericDefinition)? (formalParameterSection)? ':' (customAttribute)? typeDecl ';'
+                             -> (customAttribute)? ('class')? 'operator' ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) ':' (customAttribute)? typeDecl ';'
+                             ;                             
 classField                   : (customAttribute)? identList ':' typeDecl ';' (hintingDirective)* 
 							 -> (customAttribute)? ^(TkClassField ^(TkVariableIdents identList) ^(TkVariableType typeDecl))
                              ;
@@ -388,10 +387,6 @@ classPropertyReadWrite       : 'read' qualifiedIdent ('[' expression ']')?  // W
 							 -> ^('read' qualifiedIdent)
                              | 'write' qualifiedIdent ('[' expression ']')?	//ADDED []
 							 -> ^('write' qualifiedIdent)
-                             | 'add' qualifiedIdent    	 		// .NET multicast event
-                             -> ^('add' qualifiedIdent)
-                             | 'remove' qualifiedIdent    		// .NET multicast event
-                             -> ^('remove' qualifiedIdent)
                              ;
 classPropertyDispInterface   : 'readonly' ';'
                              | 'writeonly' ';'
@@ -411,26 +406,25 @@ exportedProcHeading          : 'procedure' ident (formalParameterSection)? ':' (
                              ;
 methodDecl                   : methodDeclHeading ';' (methodDirective)* (methodBody)? -> methodDeclHeading (methodBody)?
                              ;
-methodDeclHeading            : (customAttribute)? methodKey qualifiedIdent (genericDefinition ('.' ident)? )? (formalParameterSection)?
-							 -> (customAttribute)? ^(methodKey ^(TkFunctionName qualifiedIdent (genericDefinition ('.' ident)? )?) ^(TkFunctionArgs (formalParameterSection)?) )
-                             | (customAttribute)? ('class')? 'function' qualifiedIdent (genericDefinition ('.' ident)? )? (formalParameterSection)? (':' (customAttribute)? typeDecl)?
-                             -> (customAttribute)? ^('function' ^(TkFunctionName qualifiedIdent (genericDefinition ('.' ident)? )? )  ^(TkFunctionArgs (formalParameterSection)? (customAttribute)?) ^(TkFunctionReturn typeDecl?))
-                             ;
-                                                                                                          
-methodKey                    : ('class')? 'procedure' -> 'procedure'
+methodDeclHeading            : (customAttribute)? ('class')?  methodKey methodName (formalParameterSection)?
+				            -> (customAttribute)? ('class')?  ^(methodKey ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) )
+                             | (customAttribute)? ('class')? 'function' methodName (formalParameterSection)? (':' (customAttribute)? typeDecl)?
+                            -> (customAttribute)? ('class')? ^('function' ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn (customAttribute)? typeDecl?) )
+                             | (customAttribute)? 'class' 'operator' methodName (formalParameterSection)? (':' (customAttribute)? typeDecl)?
+                            -> (customAttribute)? 'class' 'operator' ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn (customAttribute)? typeDecl?)
+                             ;							
+methodKey                    : 'procedure'
                              | 'constructor'
                              | 'destructor'
-                             | 'class' 'operator'
                              ;
+methodName                   : ident (genericDefinition)? ('.' ident (genericDefinition)?)? '.' ident (genericDefinition)?
+                             ;                             
 procDecl                     : procDeclHeading ';' (functionDirective)* (procBody)? -> procDeclHeading (procBody)?		//CHANGED
                              ;
 procDeclHeading              : (customAttribute)? 'procedure' ident (formalParameterSection)?							//CHANGED
 							 -> ^('procedure' ^(TkFunctionName ident) ^(TkFunctionArgs (formalParameterSection)?) )
                              | (customAttribute)? 'function' ident (formalParameterSection)? ':' typeDecl
                              -> ^('function' ^(TkFunctionName ident) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn typeDecl) )
-                             ;
-procKey                      : 'function'
-                             | 'procedure'
                              ;
 formalParameterSection       : '(' (formalParameterList)? ')' -> (formalParameterList)?
                              ;
@@ -462,15 +456,13 @@ customAttributeDecl          : '[' namespacedQualifiedIdent ('(' expressionList 
 //****************************
 //section expression
 //****************************
-expression                   : simpleExpression (relOp simpleExpression)? ('=' expression)? 	//CHANGED, added expression for: "if( functionCall(x, 7+66) = true ) then" syntax
-                             | closureExpression
+expression                   : closureExpression
+                             | simpleExpression (relOp simpleExpression)? ('=' expression)? 	//CHANGED, added expression for: "if( functionCall(x, 7+66) = true ) then" syntax
                              ;                           
 closureExpression            : 'procedure' (formalParameterSection)? block
                              | 'function' (formalParameterSection)? ':' typeDecl block
                              ;
-simpleExpression             : term (addOp term)*
-                             ;
-term                         : factor (mulOp factor)*
+simpleExpression             : factor (operator factor)*
                              ;
 factor                       : '@' factor
                              | '@@' factor       // used to get address of proc var
@@ -509,12 +501,11 @@ expressionList               : expression (',' expression)*
 colonConstruct               : ':' expression (':' expression)?
                              ;
 // Alleen voor Write/WriteLn.
-addOp                        : '+'
+operator                     : '+'
                              | '-'
                              | 'or'
                              | 'xor'
-                             ;
-mulOp                        : '*'
+                             | '*'
                              | '/'
                              | 'div'
                              | 'mod'
@@ -578,7 +569,6 @@ statementList                : (statement)? (';' (statement)?)*
                              ;
 simpleStatement              : designator ':=' expression			//CHANGED the order of the rules, gotoStatement was first but produced 'continue' errors
                              | designator // call
-                             | designator ':=' newStatement // .NET only
                              | gotoStatement
                              ;
 gotoStatement                : 'goto' label
@@ -638,7 +628,7 @@ functionDirective            : overloadDirective          // 1
                              | callConvention             // 1
                              | oldCallConventionDirective // 1
                              | hintingDirective ';'      // 1
-                             | externalDirective          // 1
+                             | (callConventionNoSemi)? externalDirective          // 1
                              | 'unsafe' ';'              // 1 .net?
                              ;
 reintroduceDirective         : 'reintroduce' ';'
@@ -927,6 +917,8 @@ TkCustomAttributeArgs		 : 'CUSTOM_ATTRIBUTE_ARGS'
 							 ;
 TkNewType				 	 : 'NEW_TYPE'
 						 	 ;
+TkClass     				 : 'CLASS'
+							 ;
 TkClassOfType				 : 'CLASS_OF_TYPE'
 							 ;
 TkVariableType				 : 'VARIABLE_TYPE'

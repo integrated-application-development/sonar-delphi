@@ -31,6 +31,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 public class CountRule extends DelphiRule {
 
   private String stringToSearch;
+  private int typeToSearch;
   protected int limit;
   protected int count;
   /**
@@ -51,6 +52,10 @@ public class CountRule extends DelphiRule {
     this.stringToSearch = stringToSearch;
   }
 
+  public void setTypeToSearch(int typeToSearch) {
+    this.typeToSearch = typeToSearch;
+  }
+
   @Override
   public Object visit(DelphiPMDNode node, Object data) {
     dataRef = data;
@@ -68,7 +73,8 @@ public class CountRule extends DelphiRule {
   }
 
   protected boolean shouldCount(DelphiPMDNode node) {
-    return node.getText().equals(stringToSearch);
+    return node.getText().equals(stringToSearch) ||
+      node.getType() == typeToSearch;
   }
 
   protected void increaseCounter(int howMuch) {
