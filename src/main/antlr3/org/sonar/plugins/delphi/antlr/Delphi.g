@@ -450,7 +450,7 @@ customAttribute              : customAttributeList
                              ;
 customAttributeList          : (customAttributeDecl)*
                              ;
-customAttributeDecl          : '[' namespacedQualifiedIdent ('(' expressionList ')')? ']'  -> ^(TkCustomAttribute '[' namespacedQualifiedIdent ('(' expressionList ')')? ']')
+customAttributeDecl          : '[' namespacedQualifiedIdent ('(' (expressionList)? ')')? ']'  -> ^(TkCustomAttribute '[' namespacedQualifiedIdent ('(' (expressionList)? ')')? ']')
                              ;                             
                 
 //****************************

@@ -40,6 +40,7 @@ Type
   end;
 
   [Annotation]
+  [Annotation()]
   TStaticClass = class
   private
     [Annotation] FValue: Integer;
