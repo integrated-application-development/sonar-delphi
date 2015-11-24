@@ -63,6 +63,27 @@ public class DelphiUnitBuilderTest {
   }
 
   public File buildFile(File baseDir) {
+    StringBuilder source = getSourceCode();
+
+    try {
+      File file = File.createTempFile("unit", ".pas", baseDir);
+      file.deleteOnExit();
+
+      FileWriter fileWriter = new FileWriter(file);
+      try {
+        fileWriter.write(source.toString());
+        fileWriter.flush();
+      } finally {
+        fileWriter.close();
+      }
+      return file;
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+
+  }
+
+  public StringBuilder getSourceCode() {
     // fixed lines
     offsetDecl = 4;
     offset = offset + 6;
@@ -87,22 +108,7 @@ public class DelphiUnitBuilderTest {
 
     printSourceCode(source);
 
-    try {
-      File file = File.createTempFile("unit", ".pas", baseDir);
-      file.deleteOnExit();
-
-      FileWriter fileWriter = new FileWriter(file);
-      try {
-        fileWriter.write(source.toString());
-        fileWriter.flush();
-      } finally {
-        fileWriter.close();
-      }
-      return file;
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-
+    return source;
   }
 
   @SneakyThrows

@@ -8,6 +8,10 @@ Type
   TMyChar = Char;
   TMySetOfChar = set of Char;
 
+//  TMyDynamicArray = array[Low(Word+1)-1..(high(Word+1)+1)-1] of Byte;
+//  TMyDynamicArray2 = array[0..(high(Integer))-1] of Byte;
+//  TMyDynamicArray3 = array[0..(high(Integer) div sizeof(Integer))-1] of Integer;
+
   TClassA = class;
   IInterfaceA = interface;
 
@@ -385,8 +389,10 @@ end;
 { TSortOrder<T>.TRecordItem }
 
 class operator TSortOrder<T>.TRecordItem.LogicalAnd(const left, right: TRecordItem): TRecordItem;
+var
+  vImmutable: Integer;
 begin
-
+  vImmutable := (high(Integer))-1;
 end;
 
 initialization

@@ -104,19 +104,19 @@ public class DefineResolver extends SourceResolver {
         defines.remove(directive.getItem());
       } else if (type == CompilerDirectiveType.IF) {
         // mark places to cut off
-        toDelete.add(getMatchingEndIfCutRange(directives, i, excluded, true));
+        toDelete.addAll(getMatchingEndIfCutRange(directives, i, excluded, true));
       } else if (type == CompilerDirectiveType.IFDEF) {
         boolean isDefined = defines.contains(directive.getItem());
         boolean isPositive = ((IfDefDirective) directive).isPositive();
-        boolean shouldCut = (isDefined == isPositive);
-        toDelete.add(getMatchingEndIfCutRange(directives, i, excluded, shouldCut));
+        boolean shouldCut = (isDefined != isPositive);
+        toDelete.addAll(getMatchingEndIfCutRange(directives, i, excluded, shouldCut));
       }
     }
 
     return toDelete;
   }
 
-  private SubRange getMatchingEndIfCutRange(List<CompilerDirective> directives, int startDirectiveIndex,
+  private SubRange[] getMatchingEndIfCutRange(List<CompilerDirective> directives, int startDirectiveIndex,
     SubRangeAggregator excluded,
     boolean shouldCut) throws DefineResolverException {
     CompilerDirective firstDirective = directives.get(startDirectiveIndex);
@@ -131,8 +131,7 @@ public class DefineResolver extends SourceResolver {
     while (branchCount > 0) {
 
       if (++index >= directives.size()) {
-        throw new DefineResolverException("No matching {$ifdef}...{$endif} pair found for {" + firstDirective
-          + "}");
+        throw new DefineResolverException("No matching {$ifdef}...{$endif} pair found for {" + firstDirective + "}");
       }
 
       lastDirective = directives.get(index);
@@ -144,7 +143,11 @@ public class DefineResolver extends SourceResolver {
       CompilerDirectiveType type = lastDirective.getType();
       if (type == CompilerDirectiveType.IFDEF) {
         ++branchCount;
+      } else if (type == CompilerDirectiveType.IF) {
+        ++branchCount;
       } else if (type == CompilerDirectiveType.ENDIF) {
+        --branchCount;
+      } else if (type == CompilerDirectiveType.IFEND) {
         --branchCount;
       } else if (type == CompilerDirectiveType.ELSE && branchCount == 1) {
         elseDirective = lastDirective;
@@ -154,35 +157,42 @@ public class DefineResolver extends SourceResolver {
     return calculateCutSubRange(firstDirective, lastDirective, elseDirective, shouldCut);
   }
 
-  private SubRange calculateCutSubRange(CompilerDirective firstDirective, CompilerDirective lastDirective,
+  private SubRange[] calculateCutSubRange(CompilerDirective firstDirective, CompilerDirective lastDirective,
     CompilerDirective elseDirective,
     boolean shouldCut) {
     // starting position to cut
     int cutStart = firstDirective.getFirstCharPosition();
     // end position to cut
     int cutEnd = -1;
+
+    SubRange subRange2 = null;
+
     // statement not defined, cut not matching code
-    if (shouldCut)
-    {
+    if (shouldCut) {
       if (elseDirective == null) {
         // cut to $endif
         cutEnd = lastDirective.getLastCharPosition() + 1;
       } else {
         // cut to $else
         cutEnd = elseDirective.getLastCharPosition() + 1;
+        subRange2 = new IntegerSubRange(lastDirective.getFirstCharPosition(), lastDirective.getLastCharPosition() + 1);
       }
     } else {
       // statement defined, but need to cut else if present
       if (elseDirective != null) {
         // start with $else
         cutStart = elseDirective.getFirstCharPosition();
+        subRange2 = new IntegerSubRange(firstDirective.getFirstCharPosition(), firstDirective.getLastCharPosition() + 1);
       }
       // cut to $endif
       cutEnd = lastDirective.getLastCharPosition() + 1;
     }
 
     if (cutEnd != -1 && cutStart != -1) {
-      return new IntegerSubRange(cutStart, cutEnd);
+      if (subRange2 != null) {
+        return new SubRange[] {new IntegerSubRange(cutStart, cutEnd), subRange2};
+      }
+      return new SubRange[] {new IntegerSubRange(cutStart, cutEnd)};
     }
 
     return null;

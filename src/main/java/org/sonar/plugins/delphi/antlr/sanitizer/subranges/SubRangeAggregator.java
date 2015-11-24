@@ -81,6 +81,18 @@ public class SubRangeAggregator {
   }
 
   /**
+   * adds all elements from another aggregator, check for duplications and
+   * merges them
+   * 
+   * @param subRangeAggregator another aggregator
+   */
+  public void addAll(SubRange... subRange) {
+    for (SubRange newRange : subRange) {
+      add(newRange);
+    }
+  }
+
+  /**
    * sort aggregated sub ranges with providen comparator
    * 
    * @param comparator Sub range comparator

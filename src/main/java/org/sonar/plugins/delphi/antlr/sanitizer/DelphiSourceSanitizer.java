@@ -29,7 +29,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.antlr.runtime.ANTLRFileStream;
-import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.DefineResolver;
 import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.ExcludeResolver;
 import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.IncludeResolver;
@@ -99,18 +98,9 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
 
   @Override
   public int LA(int i) {
-    int offset = i;
-    if (offset == 0) {
-      return 0;
-    }
-    if (offset < 0) {
-      // e.g., translate LA(-1) to use offset 0
-      offset++;
-    }
-    if ((p + offset - 1) >= n) {
-      return DelphiLexer.EOF;
-    }
-    return Character.toLowerCase(data[p + offset - 1]);
+    int la = super.LA(i);
+
+    return Character.toLowerCase(la);
   }
 
   /**
@@ -140,6 +130,7 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
 
     resolver.resolve(resolverResult);
     data = resolverResult.getFileData().toString().toCharArray();
+
     super.n = data.length;
   }
 

@@ -22,40 +22,199 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
 
-import java.io.IOException;
 import java.util.HashSet;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.sonar.plugins.delphi.debug.FileTestsCommon;
+import org.sonar.plugins.delphi.pmd.DelphiUnitBuilderTest;
 
-public class DefineResolverTest extends FileTestsCommon {
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
-  private static final String FILE_NAME = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
+public class DefineResolverTest {
+
   private DefineResolver resolver;
   private SourceResolverResults results;
-
-  @BeforeClass
-  public static void init() throws IOException {
-    loadFile(FILE_NAME);
-  }
 
   @Before
   public void setup() {
     resolver = new DefineResolver(new HashSet<String>());
-    results = new SourceResolverResults(testFile.getAbsolutePath(), testFileString);
-
-    ExcludeResolver excludeResolver = new ExcludeResolver();
-    excludeResolver.resolve(results);
   }
 
   @Test
   public void test() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendDecl("{$if defined(FPC) or (CompilerVersion >= 17)} //Delphi 2005 up");
+    builder.appendDecl("  {$DEFINE HAVE_INLINE}");
+    builder.appendDecl("{$ifend}");
+    builder.appendDecl("{$IFDEF FPC}");
+    builder.appendDecl("  {$MODE OBJFPC}{$H+}");
+    builder.appendDecl("{$ENDIF}");
+    builder.appendDecl("");
+    builder.appendDecl("{$DEFINE SUPER_METHOD}");
+    builder.appendDecl("{$DEFINE WINDOWSNT_COMPATIBILITY}");
+    builder.appendDecl("{.$DEFINE DEBUG} // track memory leack");
+    builder.appendDecl("");
+    builder.appendDecl("");
+    builder.appendDecl("{$if CompilerVersion >= 21} //DELPHI 2010 UP");
+    builder.appendDecl("  {$define HAVE_RTTI}");
+    builder.appendDecl("{$ifend}");
+    builder.appendDecl("");
+    builder.appendDecl("{$if CompilerVersion >= 22} //Delphi XE Up");
+    builder.appendDecl("  {$define NEED_FORMATSETTINGS}");
+    builder.appendDecl("{$ifend}");
+    builder.appendDecl("");
+    builder.appendDecl("{$if defined(FPC) and defined(VER2_6)}");
+    builder.appendDecl("  {$define NEED_FORMATSETTINGS}");
+    builder.appendDecl("{$ifend}");
+    builder.appendDecl("");
+    builder.appendDecl("{$OVERFLOWCHECKS OFF}");
+    builder.appendDecl("{$RANGECHECKS OFF}");
+    builder.appendDecl("");
+    builder.appendDecl("unit superobject;");
+    builder.appendDecl("");
+    builder.appendDecl("interface");
+    builder.appendDecl("uses");
+    builder.appendDecl("  Classes, SuperObjectUtils");
+    builder.appendDecl("{$IFDEF HAVE_RTTI}");
+    builder.appendDecl("  , Generics.Collections, RTTI, TypInfo");
+    builder.appendDecl("{$ENDIF}");
+    builder.appendDecl("  ;");
+    builder.appendDecl("");
+    builder.appendDecl("type");
+    builder.appendDecl("{$IFNDEF FPC}");
+    builder.appendDecl("{$IFDEF CPUX64}");
+    builder.appendDecl("  PtrInt = Int64;");
+    builder.appendDecl("  PtrUInt = UInt64;");
+    builder.appendDecl("{$ELSE}");
+    builder.appendDecl("  PtrInt = longint;");
+    builder.appendDecl("  PtrUInt = Longword;");
+    builder.appendDecl("{$ENDIF}");
+    builder.appendDecl("{$ENDIF}");
+    builder.appendDecl("  SuperInt = Int64;");
+    builder.appendDecl("");
+    builder.appendDecl("{$if (sizeof(Char) = 1)}");
+    builder.appendDecl("  SOChar = WideChar;");
+    builder.appendDecl("  SOIChar = Word;");
+    builder.appendDecl("  PSOChar = PWideChar;");
+    builder.appendDecl("{$IFDEF FPC}");
+    builder.appendDecl("  SOString = UnicodeString;");
+    builder.appendDecl("{$ELSE}");
+    builder.appendDecl("  SOString = WideString;");
+    builder.appendDecl("{$ENDIF}");
+    builder.appendDecl("{$else}");
+    builder.appendDecl("  SOChar = Char;");
+    builder.appendDecl("  SOIChar = Word;");
+    builder.appendDecl("  PSOChar = PChar;");
+    builder.appendDecl("  SOString = string;");
+    builder.appendDecl("{$ifend}");
+
+    results = new SourceResolverResults("", builder.getSourceCode());
 
     resolver.resolve(results);
-    results.getFileExcludes();
 
-    // TODO
+    String resultSourceCode = results.getFileData().toString();
+    System.out.println(resultSourceCode);
+
+    assertThat(resultSourceCode, not(containsString("IFDEF")));
+    assertThat(resultSourceCode, not(containsString("ENDIF")));
+    assertThat(resultSourceCode, not(containsString("if")));
+    assertThat(resultSourceCode, not(containsString("ifend")));
+    assertThat(resultSourceCode, not(containsString("undef")));
   }
 
+  @Test
+  public void ifUndefinedWithElse() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendDecl("unit superobject;");
+    builder.appendDecl("");
+    builder.appendDecl("interface");
+    builder.appendDecl("uses");
+    builder.appendDecl("  Classes, SuperObjectUtils;");
+    builder.appendDecl("");
+    builder.appendDecl("type");
+    builder.appendDecl("  SuperInt = Int64;");
+    builder.appendDecl("");
+    builder.appendDecl("{$if (sizeof(Char) = 1)}");
+    builder.appendDecl("  SOChar = WideChar;");
+    builder.appendDecl("  SOIChar = Word;");
+    builder.appendDecl("  PSOChar = PWideChar;");
+    builder.appendDecl("{$else}");
+    builder.appendDecl("  SOChar = Char;");
+    builder.appendDecl("  SOIChar = Word;");
+    builder.appendDecl("  PSOChar = PChar;");
+    builder.appendDecl("  SOString = string;");
+    builder.appendDecl("{$ifend}");
+
+    results = new SourceResolverResults("", builder.getSourceCode());
+
+    resolver.resolve(results);
+
+    String resultSourceCode = results.getFileData().toString();
+    System.out.println(resultSourceCode);
+    assertThat(resultSourceCode, not(containsString("$if")));
+    assertThat(resultSourceCode, not(containsString("$else")));
+    assertThat(resultSourceCode, not(containsString("$ifend")));
+    assertThat(resultSourceCode, containsString("SOChar = Char;"));
+  }
+
+  @Test
+  public void ifdefUndefinedWithElse() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendDecl("unit superobject;");
+    builder.appendDecl("");
+    builder.appendDecl("interface");
+    builder.appendDecl("uses");
+    builder.appendDecl("  Classes, SuperObjectUtils;");
+    builder.appendDecl("");
+    builder.appendDecl("type");
+    builder.appendDecl("  SuperInt = Int64;");
+    builder.appendDecl("");
+    builder.appendDecl("{$IFDEF FPC}");
+    builder.appendDecl("  SOString = UnicodeString;");
+    builder.appendDecl("{$ELSE}");
+    builder.appendDecl("  SOString = WideString;");
+    builder.appendDecl("{$ENDIF}");
+
+    results = new SourceResolverResults("", builder.getSourceCode());
+
+    resolver.resolve(results);
+
+    String resultSourceCode = results.getFileData().toString();
+    System.out.println(resultSourceCode);
+    assertThat(resultSourceCode, not(containsString("$IFDEF")));
+    assertThat(resultSourceCode, not(containsString("$ELSE")));
+    assertThat(resultSourceCode, not(containsString("$ENDIF")));
+    assertThat(resultSourceCode, containsString("SOString = WideString;"));
+  }
+
+  @Test
+  public void ifdefDefinedWithElse() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendDecl("unit superobject;");
+    builder.appendDecl("");
+    builder.appendDecl("interface");
+    builder.appendDecl("uses");
+    builder.appendDecl("  Classes, SuperObjectUtils;");
+    builder.appendDecl("");
+    builder.appendDecl("type");
+    builder.appendDecl("  SuperInt = Int64;");
+    builder.appendDecl("");
+    builder.appendDecl("{$DEFINE FPC}");
+    builder.appendDecl("{$IFDEF FPC}");
+    builder.appendDecl("  SOString = UnicodeString;");
+    builder.appendDecl("{$ELSE}");
+    builder.appendDecl("  SOString = WideString;");
+    builder.appendDecl("{$ENDIF}");
+
+    results = new SourceResolverResults("", builder.getSourceCode());
+
+    resolver.resolve(results);
+
+    String resultSourceCode = results.getFileData().toString();
+    System.out.println(resultSourceCode);
+    assertThat(resultSourceCode, not(containsString("$IFDEF")));
+    assertThat(resultSourceCode, not(containsString("$ELSE")));
+    assertThat(resultSourceCode, not(containsString("$ENDIF")));
+    assertThat(resultSourceCode, containsString("SOString = UnicodeString;"));
+  }
 }
