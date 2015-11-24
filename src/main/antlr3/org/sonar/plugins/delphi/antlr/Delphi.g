@@ -527,10 +527,7 @@ relOp                        : '<'
 //section statement
 //****************************
 
-statement                    :  statementPart
-			     			 |	label ':' 					//CHANGED
-                             ;
-statementPart                : ifStatement
+statement                    : ifStatement
                              | caseStatement
                              | repeatStatement
                              | whileStatement
@@ -540,6 +537,7 @@ statementPart                : ifStatement
                              | raiseStatement
                              | assemblerStatement
                              | compoundStatement
+			     			 | label ':' statement
                              | simpleStatement
                              ;
 ifStatement                  : 'if' expression 'then' statement ('else' statement)? 

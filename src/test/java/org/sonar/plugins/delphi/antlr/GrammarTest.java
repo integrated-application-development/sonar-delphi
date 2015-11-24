@@ -76,5 +76,9 @@ public class GrammarTest {
     parseFile("RecordInitialization.pas");
   }
 
+  @Test
+  public void parseLabel() throws Exception {
+    parseFile("LabelUsage.pas");
+  }
 
 }
