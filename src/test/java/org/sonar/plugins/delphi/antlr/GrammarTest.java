@@ -66,4 +66,15 @@ public class GrammarTest {
     parseFile("GrammarTestNew.pas");
   }
 
+  @Test
+  public void parseComplexArray() throws Exception {
+    parseFile("ComplexArray.pas");
+  }
+
+  @Test
+  public void parseRecordInitialization() throws Exception {
+    parseFile("RecordInitialization.pas");
+  }
+
+
 }

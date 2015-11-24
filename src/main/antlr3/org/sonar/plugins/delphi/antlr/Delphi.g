@@ -200,7 +200,7 @@ arrayType                    :  'array' ('[' (arrayIndex)? (',' (arrayIndex)?)* 
 
 // empty Array index for .NET only
 arrayIndex                   : typeId
-                             | constExpression '..' constExpression
+                             | expression '..' expression
                              ;
 
 arraySubType                 : 'const'
