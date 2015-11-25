@@ -7,10 +7,11 @@ uses Types, SysUtils, System.Classes, System.Generics.Collections , System.Rtti;
 Type
   TMyChar = Char;
   TMySetOfChar = set of Char;
-
-//  TMyDynamicArray = array[Low(Word+1)-1..(high(Word+1)+1)-1] of Byte;
-//  TMyDynamicArray2 = array[0..(high(Integer))-1] of Byte;
-//  TMyDynamicArray3 = array[0..(high(Integer) div sizeof(Integer))-1] of Integer;
+  
+  TPageControl = class(ComCtrls.TPageControl)
+  private
+    procedure TCMAdjustRect(var Msg: TMessage); message TCM_ADJUSTRECT;
+  end;  
 
   TClassA = class;
   IInterfaceA = interface;

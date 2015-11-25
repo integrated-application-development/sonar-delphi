@@ -246,7 +246,7 @@ typeId                       : namespacedQualifiedIdent
 //****************************
 //section generics
 //****************************
-genericTypeIdent             : ident (genericDefinition)? -> ident		//CHANGED we don't need <Type> data, it produced empty nodes
+genericTypeIdent             : qualifiedIdent (genericDefinition)? -> qualifiedIdent		//CHANGED we don't need <Type> data, it produced empty nodes
                              ;
 genericDefinition            : simpleGenericDefinition
                              | constrainedGenericDefinition
