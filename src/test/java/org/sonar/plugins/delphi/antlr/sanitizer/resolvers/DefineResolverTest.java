@@ -115,11 +115,10 @@ public class DefineResolverTest {
     String resultSourceCode = results.getFileData().toString();
     System.out.println(resultSourceCode);
 
-    assertThat(resultSourceCode, not(containsString("IFDEF")));
-    assertThat(resultSourceCode, not(containsString("ENDIF")));
-    assertThat(resultSourceCode, not(containsString("if")));
-    assertThat(resultSourceCode, not(containsString("ifend")));
-    assertThat(resultSourceCode, not(containsString("undef")));
+    assertThat(resultSourceCode, containsString("(*{$IFDEF"));
+    assertThat(resultSourceCode, containsString("$ENDIF}*)"));
+    assertThat(resultSourceCode, containsString("(*{$if"));
+    assertThat(resultSourceCode, containsString("(*{$ifend}*)"));
   }
 
   @Test
@@ -151,10 +150,9 @@ public class DefineResolverTest {
 
     String resultSourceCode = results.getFileData().toString();
     System.out.println(resultSourceCode);
-    assertThat(resultSourceCode, not(containsString("$if")));
-    assertThat(resultSourceCode, not(containsString("$else")));
-    assertThat(resultSourceCode, not(containsString("$ifend")));
-    assertThat(resultSourceCode, containsString("SOChar = Char;"));
+    assertThat(resultSourceCode, containsString("(*{$if"));
+    assertThat(resultSourceCode, containsString("$else}*)"));
+    assertThat(resultSourceCode, containsString("(*{$ifend}*)"));
   }
 
   @Test
@@ -181,10 +179,9 @@ public class DefineResolverTest {
 
     String resultSourceCode = results.getFileData().toString();
     System.out.println(resultSourceCode);
-    assertThat(resultSourceCode, not(containsString("$IFDEF")));
-    assertThat(resultSourceCode, not(containsString("$ELSE")));
-    assertThat(resultSourceCode, not(containsString("$ENDIF")));
-    assertThat(resultSourceCode, containsString("SOString = WideString;"));
+    assertThat(resultSourceCode, containsString("(*{$IFDEF"));
+    assertThat(resultSourceCode, containsString("$ELSE}*)"));
+    assertThat(resultSourceCode, containsString("(*{$ENDIF}*)"));
   }
 
   @Test
@@ -212,9 +209,43 @@ public class DefineResolverTest {
 
     String resultSourceCode = results.getFileData().toString();
     System.out.println(resultSourceCode);
-    assertThat(resultSourceCode, not(containsString("$IFDEF")));
-    assertThat(resultSourceCode, not(containsString("$ELSE")));
-    assertThat(resultSourceCode, not(containsString("$ENDIF")));
+    assertThat(resultSourceCode, containsString("(*{$IFDEF FPC}"));
+    assertThat(resultSourceCode, containsString("(*{$ELSE"));
+    assertThat(resultSourceCode, containsString("$ENDIF}*)"));
     assertThat(resultSourceCode, containsString("SOString = UnicodeString;"));
   }
+
+  @Test
+  public void skipAlreadyCommentBlock() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendDecl("unit superobject;");
+    builder.appendDecl("");
+    builder.appendDecl("interface");
+    builder.appendDecl("uses");
+    builder.appendDecl("  Classes, SuperObjectUtils;");
+    builder.appendDecl("");
+    builder.appendDecl("type");
+    builder.appendDecl("  SuperInt = Int64;");
+    builder.appendDecl("");
+    builder.appendDecl("{$IFDEF FPC}");
+    builder.appendDecl("  SOString = UnicodeString; (* unicode *) ");
+    builder.appendDecl("{$ENDIF}");
+    builder.appendDecl("{$if TEST}");
+    builder.appendDecl("  (* comment *)");
+    builder.appendDecl("{$ifend}");
+
+    results = new SourceResolverResults("", builder.getSourceCode());
+
+    resolver.resolve(results);
+
+    String resultSourceCode = results.getFileData().toString();
+    System.out.println(resultSourceCode);
+    assertThat(resultSourceCode, containsString("(*{$IFDEF FPC}"));
+    assertThat(resultSourceCode, containsString("$ENDIF}*)"));
+    assertThat(resultSourceCode, containsString("(* unicode  )"));
+    assertThat(resultSourceCode, containsString("(*{$if TEST}"));
+    assertThat(resultSourceCode, containsString("{$ifend}*)"));
+    assertThat(resultSourceCode, containsString("(* comment  )"));
+  }
+
 }

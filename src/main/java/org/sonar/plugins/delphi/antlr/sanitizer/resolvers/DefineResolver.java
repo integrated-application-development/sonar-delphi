@@ -77,8 +77,8 @@ public class DefineResolver extends SourceResolver {
     try {
       CompilerDirectiveFactory factory = new CompilerDirectiveFactory();
       List<CompilerDirective> allDirectives = factory.produce(str.toString());
-      SubRangeAggregator toDelete = processCompilerDirectives(allDirectives, defines, excluded);
-      removeUnwantedDefinitions(str, toDelete);
+      SubRangeAggregator toComment = processCompilerDirectives(allDirectives, defines, excluded);
+      commentUnwantedDefinitions(str, toComment);
     } catch (CompilerDirectiveFactorySyntaxException e) {
       DelphiUtils.LOG.debug(e.getMessage());
     } catch (DefineResolverException e) {
@@ -198,12 +198,23 @@ public class DefineResolver extends SourceResolver {
     return null;
   }
 
-  private void removeUnwantedDefinitions(StringBuilder str, SubRangeAggregator toDelete) {
-    int deletedChars = 0;
-    toDelete.sort(new SubRangeFirstOccurenceComparator());
-    for (SubRange range : toDelete.getRanges()) {
-      str.delete(range.getBegin() - deletedChars, range.getEnd() - deletedChars);
-      deletedChars += range.getEnd() - range.getBegin();
+  private void commentUnwantedDefinitions(StringBuilder str, SubRangeAggregator toComment) {
+    int insertedChars = 0;
+    toComment.sort(new SubRangeFirstOccurenceComparator());
+    for (SubRange range : toComment.getRanges()) {
+
+      final String strRange = str.substring(range.getBegin() + insertedChars, range.getEnd() + insertedChars);
+
+      if (strRange.contains("*)")) {
+        String newRange = "(*".concat(strRange.replace("*)", " )")).concat("*)");
+        str.replace(range.getBegin() + insertedChars, range.getEnd() + insertedChars, newRange);
+        insertedChars += 4;
+      } else {
+        str.insert(range.getBegin() + insertedChars, "(*");
+        insertedChars += 2;
+        str.insert(range.getEnd() + insertedChars, "*)");
+        insertedChars += 2;
+      }
     }
   }
 
