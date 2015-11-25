@@ -683,7 +683,7 @@ ident                        : TkIdentifier
 							 ;                 
 usedKeywordsAsNames			 : (NAME | READONLY | ADD | AT | MESSAGE | POINTER | INDEX | DEFAULT | STRING | CONTINUE)
                              | (READ | WRITE | REGISTER | VARIANT | OPERATOR | REMOVE | LOCAL | REFERENCE | CONTAINS | FINAL)
-                             | (BREAK | EXIT | STRICT | OUT | OBJECT)
+                             | (BREAK | EXIT | STRICT | OUT | OBJECT | EXPORT)
                              ;							             
 identList                    : ident (',' ident)* -> ^(ident (ident)*)
                              ;

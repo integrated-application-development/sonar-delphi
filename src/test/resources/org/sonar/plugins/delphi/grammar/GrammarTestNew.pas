@@ -424,6 +424,16 @@ begin
     Dispose(custRecPtr);
   end;  
 end;  
+  
+procedure ExportPDF(Crystal: TCrpe; FileName: string);
+begin
+  Crystal.PrintOptions.Retrieve;
+  Crystal.Output := toExport;
+  Crystal.Export.FileType := AdobeAcrobatPDF; //Export keyword
+  Crystal.Export.FileName := FileName; 
+  Crystal.Export.PromptForOptions := False;
+  Crystal.ProgressDialog := False;
+end;  
 
 initialization
 //  GlobalContainer.RegisterType<TLoggerFactory>
