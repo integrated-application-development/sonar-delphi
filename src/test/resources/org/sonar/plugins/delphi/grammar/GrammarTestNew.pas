@@ -37,6 +37,7 @@ Type
   strict
   private
     class constructor Create;
+    procedure value(strict: integer);//Keyword strict
   end;
 
   [Annotation]
@@ -395,6 +396,33 @@ var
 begin
   vImmutable := (high(Integer))-1;
 end;
+
+type
+  TCustomer = Record
+    name : string[20];
+    age  : Byte;
+  end;
+
+var
+  custRecPtr : ^TCustomer;
+  
+procedure CustomerCreate;
+begin
+  // Create a customer record using 'New'
+  New(custRecptr);
+  try
+	  // Assign values to it
+	  custRecPtr.name := 'Her indoors';
+	  custRecPtr.age  := 55;
+	
+	  // Now display these values
+	  ShowMessageFmt('%s is %d',[custRecPtr.name, custRecPtr.age]);
+	
+	  // Now dispose of this allocated record
+  finally
+    Dispose(custRecPtr);
+  end;  
+end;  
 
 initialization
 //  GlobalContainer.RegisterType<TLoggerFactory>

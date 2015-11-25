@@ -198,7 +198,6 @@ arrayType                    :  'array' ('[' (arrayIndex)? (',' (arrayIndex)?)* 
                              -> ^(arraySubType 'array' ('[' (arrayIndex)? (',' (arrayIndex)?)* ']')? )					//CHANGED we only need type info
                              ;
 
-// empty Array index for .NET only
 arrayIndex                   : typeId
                              | expression '..' expression
                              ;
@@ -392,8 +391,8 @@ classPropertyDispInterface   : 'readonly' ';'
                              | 'writeonly' ';'
                              | dispIDDirective
                              ;
-visibility                   : ('strict')? 'protected' 
-                             | ('strict')? 'private'
+visibility                   : (STRICT)? 'protected' 
+                             | (STRICT)? 'private'
                              | 'public'
                              | 'published' 
                              | 'automated'     // win32 deprecated
@@ -574,8 +573,6 @@ gotoStatement                : 'goto' label
                              | 'break'                          
                              | 'continue'
                              ;
-newStatement                 : 'new' '(' (expression)? (',' (expression)?)* (',' constExpression)? ')'
-                             ;
 //****************************
 //section constExpression
 //****************************
@@ -601,7 +598,7 @@ handlerIdent				 : ident ':'
 handlerStatement             : statement (';')?
 							 | ';'
 							 ;
-raiseStatement               : 'raise' (designator)? ('at' designator)? // CHECKEN!
+raiseStatement               : 'raise' (designator)? (AT designator)? // CHECKEN!
                              ;			     
 //****************************
 //section AssemblerStatement
@@ -681,37 +678,13 @@ dispIDDirective              : 'dispid' expression ';'
 ////section general
 //****************************
 ident                        : TkIdentifier
-                             | '&' reservedWord
-                             | usedKeywordsAsNames 						//ASSUMPTION: fill with more keywords if needed						
-                             ;
-                             
-usedKeywordsAsNames			 : a=NAME 		-> TkIdentifier[$a]			//DISABLE WHOLE BLOCK FOR DEBUGGING, TO AVOID "CODE TO LARGE" ERROR
-							 | a=READONLY 	-> TkIdentifier[$a]
-							 | a=ADD		-> TkIdentifier[$a]
-							 | a=AT			-> TkIdentifier[$a]
-							 | a=MESSAGE 	-> TkIdentifier[$a]
-							 | a=POINTER 	-> TkIdentifier[$a]
-							 | a=INDEX 		-> TkIdentifier[$a]
-							 | a=DEFAULT 	-> TkIdentifier[$a]
-							 | a=STRING 	-> TkIdentifier[$a]
-							 | a=CONTINUE 	-> TkIdentifier[$a]
-							 | a=READ 		-> TkIdentifier[$a]
-							 | a=WRITE 		-> TkIdentifier[$a]
-							 | a=REGISTER   -> TkIdentifier[$a]
-							 | a=OBJECT     -> TkIdentifier[$a]
-							 | a=VARIANT    -> TkIdentifier[$a]
-							 | a=OPERATOR   -> TkIdentifier[$a]
-							 | a=NEW		-> TkIdentifier[$a]
-							 | a=REMOVE		-> TkIdentifier[$a]
-							 | a=LOCAL		-> TkIdentifier[$a]
-							 | a=REFERENCE  -> TkIdentifier[$a]
-							 | a=CONTAINS   -> TkIdentifier[$a]
-							 | a=FINAL  	-> TkIdentifier[$a] 
-							 | a=BREAK      -> TkIdentifier[$a]
-							 | a=EXIT		-> TkIdentifier[$a] 
-							 ;   
-reservedWord                 : TkIdentifier  // Keyword
-                             ;
+                             | '&' TkIdentifier
+							 | usedKeywordsAsNames
+							 ;                 
+usedKeywordsAsNames			 : (NAME | READONLY | ADD | AT | MESSAGE | POINTER | INDEX | DEFAULT | STRING | CONTINUE)
+                             | (READ | WRITE | REGISTER | VARIANT | OPERATOR | REMOVE | LOCAL | REFERENCE | CONTAINS | FINAL)
+                             | (BREAK | EXIT | STRICT | OUT | OBJECT)
+                             ;							             
 identList                    : ident (',' ident)* -> ^(ident (ident)*)
                              ;
 identListFlat                : ident (',' ident)* -> ident (ident)*		//ADDED used in formalParemeter
@@ -719,6 +692,7 @@ identListFlat                : ident (',' ident)* -> ident (ident)*		//ADDED use
 label                        : TkIdentifier
                              | TkIntNum
                              | TkHexNum
+                             | usedKeywordsAsNames
                              ;
 intNum                       : TkIntNum
                              | TkHexNum
@@ -799,7 +773,6 @@ MESSAGE			:	'message'	;
 MOD				:	'mod'		;
 NAME    		:	'name' 		;
 NEAR			:	'near'		;
-NEW				:	'new'		;
 NIL				:	'nil'		;
 NODEFAULT		:	'nodefault'	;
 NOT				:	'not'		;
