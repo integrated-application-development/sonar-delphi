@@ -8,6 +8,10 @@ Type
   TMyChar = Char;
   TMySetOfChar = set of Char;
   
+   AnsiStringAlias = Ansistring;
+   AnsiStringAliasNewType = type Ansistring;
+  CyrillicString = type Ansistring(1251);  
+  
   TPageControl = class(ComCtrls.TPageControl)
   private
     procedure TCMAdjustRect(var Msg: TMessage); message TCM_ADJUSTRECT;
@@ -434,6 +438,11 @@ begin
   Crystal.Export.PromptForOptions := False;
   Crystal.ProgressDialog := False;
 end;  
+
+function Test: LongInt;
+begin
+  Result := LongInt(PAnsiChar(AnsiString(Result))); //AnsiString cast
+end;
 
 initialization
 //  GlobalContainer.RegisterType<TLoggerFactory>

@@ -214,9 +214,9 @@ pointerType                  : '^' typeDecl
                              | 'pointer'
                              ;
 stringType                   : 'string' ('[' expression ']')? -> 'string'
-     //                        | typeId (codePageNumber)?
+                             | ('type')? ANSISTRING (codePageNumber)?
                              ;
-codePageNumber               : '(' constExpression ')'
+codePageNumber               : '(' intNum ')'
                              ;
 procedureType                : methodType
 							 | simpleProcedureType
@@ -683,7 +683,7 @@ ident                        : TkIdentifier
 							 ;                 
 usedKeywordsAsNames			 : (NAME | READONLY | ADD | AT | MESSAGE | POINTER | INDEX | DEFAULT | STRING | CONTINUE)
                              | (READ | WRITE | REGISTER | VARIANT | OPERATOR | REMOVE | LOCAL | REFERENCE | CONTAINS | FINAL)
-                             | (BREAK | EXIT | STRICT | OUT | OBJECT | EXPORT)
+                             | (BREAK | EXIT | STRICT | OUT | OBJECT | EXPORT | ANSISTRING)
                              ;							             
 identList                    : ident (',' ident)* -> ^(ident (ident)*)
                              ;
@@ -711,6 +711,7 @@ ABSOLUTE		:	'absolute'	;
 ABSTRACT		:	'abstract'	;
 ADD				:	'add'		;
 AND				:	'and'	;
+ANSISTRING      :   'ansistring';
 ARRAY			:	'array'	;
 AS				:	'as'	;
 ASM				:	'asm'	;

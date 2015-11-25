@@ -180,6 +180,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
         child.setAttribute("class", "");
         child.setAttribute("method", "");
         child.setAttribute("package", "");
+        child.setAttribute("type", String.valueOf(childNode.getType()));
         root.appendChild(child);
         generateDocumentChildren(child, doc, childNode);
       } catch (DOMException e) {
