@@ -35,8 +35,12 @@ public class GrammarTest {
   private static final String BASE_DIR = "/org/sonar/plugins/delphi/grammar/";
 
   private void parseFile(String fileName) throws IOException {
+    parseFile(fileName, null);
+  }
+
+  private void parseFile(String fileName, String encoding) throws IOException {
     System.out.println("Parsing file: " + BASE_DIR + fileName);
-    DelphiAST ast = new DelphiAST(DelphiUtils.getResource(BASE_DIR + fileName));
+    DelphiAST ast = new DelphiAST(DelphiUtils.getResource(BASE_DIR + fileName), encoding);
     assertEquals(false, ast.isError());
 
     String name = fileName.replace(".pas", "");
@@ -79,6 +83,11 @@ public class GrammarTest {
   @Test
   public void parseLabel() throws Exception {
     parseFile("LabelUsage.pas");
+  }
+
+  @Test
+  public void parseDUnitX() throws Exception {
+    parseFile("DUnitX.pas", "utf-8");
   }
 
 }

@@ -65,9 +65,21 @@ public class DelphiAST extends CommonTree implements ASTTree {
    * @throws RecognitionException At parsing exception
    * @throws IOException When no file found
    */
-  @SneakyThrows
   public DelphiAST(File file) {
-    fileStream = new DelphiSourceSanitizer(file.getAbsolutePath());
+    this(file, null);
+  }
+
+  /**
+   * Constructor.
+   * @param encoding  Encoding to use
+   * 
+   * @param inputStream Input from which to read data for AST tree
+   * @throws RecognitionException At parsing exception
+   * @throws IOException When no file found
+   */
+  @SneakyThrows
+  public DelphiAST(File file, String encoding) {
+    fileStream = new DelphiSourceSanitizer(file.getAbsolutePath(), encoding);
     DelphiParser parser = new DelphiParser(new TokenRewriteStream(new DelphiLexer(fileStream)));
     parser.setTreeAdaptor(new DelphiTreeAdaptor(this));
     children = ((CommonTree) parser.file().getTree()).getChildren();
@@ -171,21 +183,23 @@ public class DelphiAST extends CommonTree implements ASTTree {
 
     for (int i = 0; i < delphiNode.getChildCount(); ++i) {
       Tree childNode = delphiNode.getChild(i);
+      String processedName = processNodeName(childNode);
+      Element child = null;
       try {
-        String processedName = processNodeName(childNode);
-        Element child = doc.createElement(processedName);
-        child.setTextContent(childNode.getText());
-        child.setAttribute("line", String.valueOf(childNode.getLine()));
-        child.setAttribute("column", String.valueOf(childNode.getCharPositionInLine()));
-        child.setAttribute("class", "");
-        child.setAttribute("method", "");
-        child.setAttribute("package", "");
-        child.setAttribute("type", String.valueOf(childNode.getType()));
-        root.appendChild(child);
-        generateDocumentChildren(child, doc, childNode);
+        child = doc.createElement(processedName);
       } catch (DOMException e) {
-        continue;
+        child = doc.createElement("Wrapper");
       }
+
+      child.setTextContent(childNode.getText());
+      child.setAttribute("line", String.valueOf(childNode.getLine()));
+      child.setAttribute("column", String.valueOf(childNode.getCharPositionInLine()));
+      child.setAttribute("class", "");
+      child.setAttribute("method", "");
+      child.setAttribute("package", "");
+      child.setAttribute("type", String.valueOf(childNode.getType()));
+      root.appendChild(child);
+      generateDocumentChildren(child, doc, childNode);
     }
   }
 
@@ -201,7 +215,6 @@ public class DelphiAST extends CommonTree implements ASTTree {
       NodeName nodeName = NodeName.findByCode(code);
       return nodeName.getName();
     } catch (NodeNameForCodeDoesNotExistException e) {
-
     }
     return code;
   }

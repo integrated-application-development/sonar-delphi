@@ -1,7 +1,6 @@
 grammar Delphi;
 
 options {
-//    k = 0;
     backtrack=true;
     memoize=true;
     output=AST;
@@ -346,7 +345,8 @@ recordVariant                : constExpression (',' constExpression)* ':' '(' (r
                              ;
 recordHelperDecl             : 'record' 'helper' 'for' typeId (recordHelperItem)* 'end'
                              ;
-recordHelperItem             : classMethod
+recordHelperItem             : visibility
+                             | classMethod
                              | classProperty
                              ;
 classMethod                  : (customAttribute)? ('class')? methodKey ident (genericDefinition)? (formalParameterSection)? ';' (methodDirective)* 
@@ -374,7 +374,7 @@ classPropertySpecifier       : classPropertyReadWrite		//CHANGED removed ';'
                              | 'default' expression 
                              | 'default'              	// for array properties only (1 per class)
                              | 'nodefault' 
-                             | 'implements' typeId   	// not on .NET
+                             | IMPLEMENTS typeId
                              ;
 classPropertyEndSpecifier    : 'stored' expression ';'		//ADDED used in classProperty at end
                              | 'default' expression ';'
@@ -564,7 +564,7 @@ compoundStatement            : 'begin' (statementList)? 'end' -> ^('begin' (stat
                              ;
 statementList                : (statement)? (';' (statement)?)*
                              ;
-simpleStatement              : designator ':=' expression			//CHANGED the order of the rules, gotoStatement was first but produced 'continue' errors
+simpleStatement              : designator ':=' expression
                              | designator // call
                              | gotoStatement
                              ;
@@ -683,7 +683,7 @@ ident                        : TkIdentifier
 							 ;                 
 usedKeywordsAsNames			 : (NAME | READONLY | ADD | AT | MESSAGE | POINTER | INDEX | DEFAULT | STRING | CONTINUE)
                              | (READ | WRITE | REGISTER | VARIANT | OPERATOR | REMOVE | LOCAL | REFERENCE | CONTAINS | FINAL)
-                             | (BREAK | EXIT | STRICT | OUT | OBJECT | EXPORT | ANSISTRING)
+                             | (BREAK | EXIT | STRICT | OUT | OBJECT | EXPORT | ANSISTRING | IMPLEMENTS)
                              ;							             
 identList                    : ident (',' ident)* -> ^(ident (ident)*)
                              ;
@@ -942,14 +942,9 @@ Hexdigit                     : Digit | 'a'..'f' | 'A'..'F'
                              ;
 Hexdigitseq                  : Hexdigit (Hexdigit)*
                              ;
-COMMENT    					 :   '//' ~('\n'|'\r')* '\r'? '\n' 					{$channel=HIDDEN;}
-    						 |   '(*' ( options {greedy=false;} : . )* '*)' 	{$channel=HIDDEN;}							 
-    						 |   '{' ( options {greedy=false;} : . )* '}' 		{$channel=HIDDEN;}
+COMMENT    					 :  '//' ~('\n'|'\r')* '\r'? '\n' 					{$channel=HIDDEN;}
+    						 |  '(*' ( options {greedy=false;} : . )* '*)' 	{$channel=HIDDEN;}							 
+    						 |  '{' ( options {greedy=false;} : . )* '}' 		{$channel=HIDDEN;}
     						 ;    						 
-WS  						 :   ( ' '
-        					 | '\t'
-        					 | '\r'
-        					 | '\n'
-        					 | '\f'
-        					 )+ {$channel=HIDDEN;}
+WS  						 : (' '|'\t'|'\r'|'\n'|'\f')+ {$channel=HIDDEN;}
     						 ;

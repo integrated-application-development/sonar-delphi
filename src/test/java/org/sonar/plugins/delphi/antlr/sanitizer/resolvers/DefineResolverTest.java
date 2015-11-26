@@ -185,17 +185,50 @@ public class DefineResolverTest {
   }
 
   @Test
-  public void ifdefDefinedWithElse() {
+  public void ifdefDefined() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("unit superobject;");
     builder.appendDecl("");
     builder.appendDecl("interface");
-    builder.appendDecl("uses");
-    builder.appendDecl("  Classes, SuperObjectUtils;");
+    builder.appendDecl("{$DEFINE FPC}");
+    builder.appendDecl("{$IFDEF FPC}");
+    builder.appendDecl("  SOString = UnicodeString;");
+    builder.appendDecl("{$ENDIF}");
+
+    results = new SourceResolverResults("", builder.getSourceCode());
+
+    resolver.resolve(results);
+
+    String resultSourceCode = results.getFileData().toString();
+    System.out.println(resultSourceCode);
+    assertThat(resultSourceCode, containsString("(*{$IFDEF FPC}*)"));
+    assertThat(resultSourceCode, containsString("(*{$ENDIF}*)"));
+    assertThat(resultSourceCode, containsString("SOString = UnicodeString;"));
+  }
+
+  @Test
+  public void ifdefUndefined() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendDecl("unit superobject;");
     builder.appendDecl("");
-    builder.appendDecl("type");
-    builder.appendDecl("  SuperInt = Int64;");
-    builder.appendDecl("");
+    builder.appendDecl("interface");
+    builder.appendDecl("{$IFDEF FPC}");
+    builder.appendDecl("  SOString = UnicodeString;");
+    builder.appendDecl("{$ENDIF}");
+
+    results = new SourceResolverResults("", builder.getSourceCode());
+
+    resolver.resolve(results);
+
+    String resultSourceCode = results.getFileData().toString();
+    System.out.println(resultSourceCode);
+    assertThat(resultSourceCode, containsString("(*{$IFDEF FPC}"));
+    assertThat(resultSourceCode, containsString("{$ENDIF}*)"));
+  }
+
+  @Test
+  public void ifdefDefinedWithElse() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("{$DEFINE FPC}");
     builder.appendDecl("{$IFDEF FPC}");
     builder.appendDecl("  SOString = UnicodeString;");
@@ -248,4 +281,26 @@ public class DefineResolverTest {
     assertThat(resultSourceCode, containsString("(* comment  )"));
   }
 
+  @Test
+  public void ifndefUndefined() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendImpl("{$IFDEF FPC}");
+    builder.appendImpl("{$ELSE}");
+    builder.appendImpl("  try");
+    builder.appendImpl("{$ENDIF} ");
+    builder.appendImpl("{$IFNDEF FPC}");
+    builder.appendImpl("  finally");
+    builder.appendImpl("  end;");
+    builder.appendImpl("{$ENDIF}");
+
+    results = new SourceResolverResults("", builder.getSourceCode());
+
+    resolver.resolve(results);
+
+    String resultSourceCode = results.getFileData().toString();
+    System.out.println(resultSourceCode);
+    assertThat(resultSourceCode, containsString("(*{$IFDEF FPC}"));
+    assertThat(resultSourceCode, containsString("{$ELSE}*)"));
+    assertThat(resultSourceCode, containsString("(*{$IFNDEF FPC}*)"));
+  }
 }

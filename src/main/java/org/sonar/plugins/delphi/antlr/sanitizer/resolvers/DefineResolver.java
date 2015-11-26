@@ -182,10 +182,12 @@ public class DefineResolver extends SourceResolver {
       if (elseDirective != null) {
         // start with $else
         cutStart = elseDirective.getFirstCharPosition();
+        cutEnd = lastDirective.getLastCharPosition() + 1;
         subRange2 = new IntegerSubRange(firstDirective.getFirstCharPosition(), firstDirective.getLastCharPosition() + 1);
+      } else {
+        cutEnd = firstDirective.getLastCharPosition() + 1;
+        subRange2 = new IntegerSubRange(lastDirective.getFirstCharPosition(), lastDirective.getLastCharPosition() + 1);
       }
-      // cut to $endif
-      cutEnd = lastDirective.getLastCharPosition() + 1;
     }
 
     if (cutEnd != -1 && cutStart != -1) {
