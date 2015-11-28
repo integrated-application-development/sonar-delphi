@@ -3,6 +3,8 @@ SonarQube Delphi
 
 [![Build Status](https://travis-ci.org/fabriciocolombo/sonar-delphi.svg?branch=master)](https://travis-ci.org/fabriciocolombo/sonar-delphi)
 
+[![PayPal donate button](http://img.shields.io/paypal/donate.png?color=yellowgreen)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=M34MZEVLTQNUQ)
+
 This is the SonarQube Delphi Plugin.
 
 This plugin was originally a [Sabre Airline Solutions](http://www.sabreairlinesolutions.com/home/) donation.
