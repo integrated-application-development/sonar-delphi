@@ -29,7 +29,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.antlr.runtime.ANTLRFileStream;
-import org.apache.commons.io.FileUtils;
 import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.DefineResolver;
 import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.ExcludeResolver;
 import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.IncludeResolver;
@@ -131,9 +130,6 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
 
     resolver.resolve(resolverResult);
     data = resolverResult.getFileData().toString().toCharArray();
-
-    String newFileName = fileName.replace(".pas", "_new.pas");
-    FileUtils.write(new File(newFileName), resolverResult.getFileData().toString(), encoding);
 
     super.n = data.length;
   }

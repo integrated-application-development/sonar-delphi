@@ -48,8 +48,7 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 /**
  * Class that helps get the maven/ant configuration from .xml file
  */
-// TODO Replace inheritance by composition
-public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtension {
+public class DelphiProjectHelper implements BatchExtension {
 
   public static final String DEFAULT_PACKAGE_NAME = "[default]";
 
@@ -65,7 +64,6 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
    * @param ruleFinder
    */
   public DelphiProjectHelper(Settings settings, RuleFinder ruleFinder, FileSystem fs) {
-    super(settings, fs);
     this.settings = settings;
     this.ruleFinder = ruleFinder;
     this.fs = fs;
@@ -312,4 +310,66 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
   public String encoding() {
     return fs != null ? fs.encoding().name() : Charset.defaultCharset().name();
   }
+
+  /**
+   * Is file in excluded list?
+   * 
+   * @param delphiFile File to check
+   * @param excludedSources Excluded paths
+   * @return True if file is excluded, false otherwise
+   */
+  public boolean isExcluded(String fileName, List<File> excludedSources) {
+    if (excludedSources == null) {
+      return false;
+    }
+    for (File excludedDir : excludedSources) {
+      String normalizedFileName = DelphiUtils.normalizeFileName(fileName.toLowerCase());
+      String excludedDirNormalizedPath = DelphiUtils.normalizeFileName(excludedDir.getAbsolutePath()
+        .toLowerCase());
+      if (normalizedFileName.startsWith(excludedDirNormalizedPath)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Is file excluded?
+   * 
+   * @param delphiFile File to check
+   * @param excludedSources List of excluded sources
+   * @return True if file is excluded, false otherwise
+   */
+  public boolean isExcluded(File delphiFile, List<File> excludedSources) {
+    return isExcluded(delphiFile.getAbsolutePath(), excludedSources);
+  }
+
+  /**
+   * Gets code coverage excluded directories
+   * 
+   * @return List of excluded directories, empty list if none
+   */
+  public List<File> getCodeCoverageExcludedDirectories(Project project) {
+    List<File> list = new ArrayList<File>();
+
+    String[] sources = settings.getStringArray(DelphiPlugin.CC_EXCLUDED_KEY);
+    if (sources == null || sources.length == 0) {
+      return list;
+    }
+    for (String path : sources) {
+      if (StringUtils.isEmpty(path)) {
+        continue;
+      }
+      File excluded = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
+      if (!excluded.exists()) {
+        DelphiUtils.LOG.warn("Excluded code coverage path does not exist: " + excluded.getAbsolutePath());
+      } else if (!excluded.isDirectory()) {
+        DelphiUtils.LOG.warn("Excluded code coverage path is not a directory: " + excluded.getAbsolutePath());
+      } else {
+        list.add(excluded);
+      }
+    }
+    return list;
+  }
+
 }
