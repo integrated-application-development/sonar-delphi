@@ -24,12 +24,11 @@ package org.sonar.plugins.delphi.utils;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -268,26 +267,8 @@ public final class DelphiUtils {
     if (f == null || !f.exists()) {
       throw new IOException();
     }
-    String fileString = null;
-    int size = (int) f.length();
 
-    InputStreamReader isr;
-    FileInputStream fis = new FileInputStream(f);
-    if (encoding != null) {
-      isr = new InputStreamReader(fis, encoding);
-    } else {
-      isr = new InputStreamReader(fis);
-    }
-
-    try {
-      char fileData[] = new char[size];
-      isr.read(fileData);
-      fileString = new String(fileData);
-    } finally {
-      isr.close();
-    }
-
-    return fileString;
+    return FileUtils.readFileToString(f, encoding).replace("\uFEFF", "");
   }
 
   public static String getRelativePath(File file, List<File> dirs) {

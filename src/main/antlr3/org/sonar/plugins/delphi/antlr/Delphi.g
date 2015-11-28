@@ -922,6 +922,7 @@ QuotedString                 : '\'' ('\'\'' | ~('\''))* '\''   //taken from PASC
                              ;
 ControlString                : Controlchar (Controlchar)*
                              ;
+                             
 fragment
 Controlchar                  : '#' Digitseq
                              | '#' '$' Hexdigitseq
@@ -929,7 +930,7 @@ Controlchar                  : '#' Digitseq
 fragment
 Alpha                        : 'a'..'z'
                              | 'A'..'Z'
-                             | '\u0080'..'\uFFFE' 			//ADDED unicode support
+                             | '\u0080'..'\uFFFE' ~('\uFEFF') //ADDED unicode support
                              ;
 fragment
 Digit                        : '0'..'9'
@@ -948,3 +949,6 @@ COMMENT    					 :  '//' ~('\n'|'\r')* '\r'? '\n' 					{$channel=HIDDEN;}
     						 ;    						 
 WS  						 : (' '|'\t'|'\r'|'\n'|'\f')+ {$channel=HIDDEN;}
     						 ;
+UnicodeBOM    				 : '\uFEFF' {$channel=HIDDEN;} 
+                             ;                             
+    						 

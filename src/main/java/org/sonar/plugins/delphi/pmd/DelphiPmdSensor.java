@@ -110,7 +110,7 @@ public class DelphiPmdSensor implements Sensor {
           }
 
           try {
-            pmd.processFile(pmdFile, ruleSets, ruleContext);
+            pmd.processFile(pmdFile, ruleSets, ruleContext, delphiProjectHelper.encoding());
           } catch (ParseException e) {
             String errorMsg = "PMD error while parsing " + pmdFile.getAbsolutePath() + ": "
               + e.getMessage();

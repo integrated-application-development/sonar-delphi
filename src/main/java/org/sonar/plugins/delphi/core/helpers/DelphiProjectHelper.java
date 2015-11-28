@@ -26,6 +26,7 @@ import com.google.common.collect.Lists;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
@@ -308,4 +309,7 @@ public class DelphiProjectHelper extends DelphiFileHelper implements BatchExtens
     return fs.workDir();
   }
 
+  public String encoding() {
+    return fs != null ? fs.encoding().name() : Charset.defaultCharset().name();
+  }
 }

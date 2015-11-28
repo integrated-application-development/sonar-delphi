@@ -90,4 +90,9 @@ public class GrammarTest {
     parseFile("DUnitX.pas", "utf-8");
   }
 
+  @Test
+  public void parseUTF8FileWithBOM() throws Exception {
+    parseFile("UTF8WithBOM.pas", "utf-8");
+  }
+
 }

@@ -262,7 +262,7 @@ public class DelphiSensor implements Sensor {
   private ASTTree analyseSourceFile(File sourceFile, ASTAnalyzer analyser) {
     DelphiAST ast = null;
     try {
-      ast = new DelphiAST(sourceFile);
+      ast = new DelphiAST(sourceFile, delphiProjectHelper.encoding());
       analyser.analyze(ast);
       ++scannedFiles;
     } catch (Exception e) {

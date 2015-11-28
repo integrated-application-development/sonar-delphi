@@ -51,10 +51,11 @@ public class DelphiPMD {
    * @param ruleSets set of rules to process against the file
    * @param ctx context in which PMD is operating. This contains the Renderer
    *            and whatnot
+   * @param encoding Encoding to use
    * @param sourceType the SourceType of the source
    * @throws ParseException if the input could not be parsed or processed
    */
-  public void processFile(File pmdFile, RuleSets ruleSets, RuleContext ctx) {
+  public void processFile(File pmdFile, RuleSets ruleSets, RuleContext ctx, String encoding) {
     ctx.setSourceCodeFile(pmdFile);
     ctx.setReport(report);
 
@@ -62,7 +63,7 @@ public class DelphiPMD {
       Language language = Language.JAVA;
       ctx.setSourceType(SourceType.JAVA_16);
 
-      DelphiAST ast = new DelphiAST(pmdFile);
+      DelphiAST ast = new DelphiAST(pmdFile, encoding);
       if (ast.isError()) {
         throw new ParseException("grammar error");
       }

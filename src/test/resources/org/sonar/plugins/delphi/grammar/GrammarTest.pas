@@ -180,6 +180,8 @@ begin
 
 	result  := not comparemem(@old, @new, sizeof(new));					//new keyword
 
+	unicodeString := 'âûÿâ³¢ ñïðîáó âûêë³êàöü â³ðòóàëüíû ìåòàä âûçâàëåíàãà àá''åêòà. Çàðàç áóäçå âûêë³êàíà ïàðóøýííå äîñòóïó äëÿ ïåðàïûíåííÿ áÿãó÷àé àïåðàöû³.';
+	
 	func.remove(me);													//remove keyword
 
 	with databaserecord as tflightlockoutrecord do						//as caused problems
