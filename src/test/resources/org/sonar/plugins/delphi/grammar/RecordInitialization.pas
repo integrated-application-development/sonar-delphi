@@ -1,4 +1,4 @@
-unit ComplexArray;
+unit RecordInitialization;
 
 interface
 

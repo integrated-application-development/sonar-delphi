@@ -95,4 +95,9 @@ public class GrammarTest {
     parseFile("UTF8WithBOM.pas", "utf-8");
   }
 
+  @Test
+  public void parseAnonymousMethods() throws Exception {
+    parseFile("AnonymousMethods.pas");
+  }
+
 }
