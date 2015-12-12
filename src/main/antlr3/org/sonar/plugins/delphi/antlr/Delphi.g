@@ -143,11 +143,11 @@ interfaceDecl                : constSection
                              | exportedProcHeading
                              | exportsSection
                              | procDecl
-   			     			 | methodDecl
+                             | methodDecl
                              ;
 labelDeclSection             : 'label' label (',' label)* ';'
                              ;
-constSection                 : constKey (constDeclaration)* -> ^(constKey (constDeclaration)*)	//CHANGED, erased one constDeclaration, for: "const {$include versioninfo.inc }"
+constSection                 : constKey (constDeclaration)* -> ^(constKey (constDeclaration)*)  //CHANGED, erased one constDeclaration, for: "const {$include versioninfo.inc }"
                              ;
 constKey                     : 'const'
                              | 'resourcestring'
@@ -194,7 +194,7 @@ strucTypePart                : arrayType
                              ;
 
 arrayType                    :  'array' ('[' (arrayIndex)? (',' (arrayIndex)?)* ']')? 'of' arraySubType 
-                             -> ^(arraySubType 'array' ('[' (arrayIndex)? (',' (arrayIndex)?)* ']')? )					//CHANGED we only need type info
+                             -> ^(arraySubType 'array' ('[' (arrayIndex)? (',' (arrayIndex)?)* ']')? )          //CHANGED we only need type info
                              ;
 
 arrayIndex                   : typeId
@@ -204,7 +204,7 @@ arrayIndex                   : typeId
 arraySubType                 : 'const'
                              | typeDecl
                              ;
-setType                      : 'set' 'of' typeDecl -> 'set' typeDecl					//CHANGED we only need type info
+setType                      : 'set' 'of' typeDecl -> 'set' typeDecl          //CHANGED we only need type info
                              ;
 // set type alleen ordinal of subrange type
 fileType                     : 'file' ('of' typeDecl)?
@@ -218,11 +218,11 @@ stringType                   : 'string' ('[' expression ']')? -> 'string'
 codePageNumber               : '(' intNum ')'
                              ;
 procedureType                : methodType
-							 | simpleProcedureType
+                             | simpleProcedureType
                              | procedureReference
                              ;
-methodType					 : procedureTypeHeading 'of' 'object'
-							 ;
+methodType                   : procedureTypeHeading 'of' 'object'
+                             ;
 simpleProcedureType          : procedureTypeHeading ( (';')? callConventionNoSemi)?
                              ;
 procedureReference           : 'reference' 'to' procedureTypeHeading
@@ -245,7 +245,7 @@ typeId                       : namespacedQualifiedIdent
 //****************************
 //section generics
 //****************************
-genericTypeIdent             : qualifiedIdent (genericDefinition)? -> qualifiedIdent		//CHANGED we don't need <Type> data, it produced empty nodes
+genericTypeIdent             : qualifiedIdent (genericDefinition)? -> qualifiedIdent    //CHANGED we don't need <Type> data, it produced empty nodes
                              ;
 genericDefinition            : simpleGenericDefinition
                              | constrainedGenericDefinition
@@ -282,8 +282,8 @@ classTypeDecl                : 'class' (classState)? (classParent)? (classItem)*
 classState                   : 'sealed'
                              | 'abstract'
                              ;
-classParent                  : '(' genericTypeIdent (',' genericTypeIdent)* ')' -> genericTypeIdent (genericTypeIdent)*		//CHANGEd from typeId to classParentId
-							 ;
+classParent                  : '(' genericTypeIdent (',' genericTypeIdent)* ')' -> genericTypeIdent (genericTypeIdent)*   //CHANGEd from typeId to classParentId
+                             ;
 classItem                    : visibility
                              | classMethod
                              | classField
@@ -292,7 +292,7 @@ classItem                    : visibility
                              | typeSection
                              | ('class')? varSection
                              ;
-classHelperDecl              : 'class' 'helper' (classParent)? 'for' typeId (classHelperItem)* 'end' -> ^('class' typeId ) (classHelperItem)*	//CHANGED, we only need "for" class name
+classHelperDecl              : 'class' 'helper' (classParent)? 'for' typeId (classHelperItem)* 'end' -> ^('class' typeId ) (classHelperItem)* //CHANGED, we only need "for" class name
                              ;
 classHelperItem              : visibility
                              | classMethod
@@ -300,9 +300,9 @@ classHelperItem              : visibility
                              | ('class')? varSection
                              ;
 interfaceTypeDecl            : interfaceKey (classParent)? (interfaceGuid)? (interfaceItem)* 'end' 
-							 -> interfaceKey ^(TkClassParents (classParent)? ) ^(TkGuid (interfaceGuid)?) (interfaceItem)* 'end'
+                              -> interfaceKey ^(TkClassParents (classParent)? ) ^(TkGuid (interfaceGuid)?) (interfaceItem)* 'end'
                              | interfaceKey (classParent)? 
-                             -> interfaceKey ^(TkClassParents (classParent)?)
+                              -> interfaceKey ^(TkClassParents (classParent)?)
                              ;
 interfaceKey                 : 'interface'
                              | 'dispinterface'
@@ -325,23 +325,23 @@ simpleRecord                 : 'record' (recordField)* (recordItem)* 'end'
                              ;
 variantRecord                : 'record' (recordField)* recordVariantSection 'end'
                              ;
-recordItem                   : visibility			//ADDED
-							 | classMethod
+recordItem                   : visibility     //ADDED
+                             | classMethod
                              | classProperty
                              | constSection
                              | typeSection
                              | recordField
                              | ('class')? varSection
                              ;
-recordField                  : identList ':' typeDecl (hintingDirective)* (';')?	//CHANGED not needed ; at the end
-							 -> identList ^(TkVariableType typeDecl)					
+recordField                  : identList ':' typeDecl (hintingDirective)* (';')?  //CHANGED not needed ; at the end
+                             -> identList ^(TkVariableType typeDecl)          
                              ;
 recordVariantField           : identList ':' typeDecl (hintingDirective)* (';') ?
-							 -> identList ^(TkVariableType typeDecl)					
+                             -> identList ^(TkVariableType typeDecl)          
                              ;
 recordVariantSection         : 'case' (ident ':')? typeDecl 'of' (recordVariant | ';') (recordVariant | ';')*
                              ;
-recordVariant                : constExpression (',' constExpression)* ':' '(' (recordVariantField)* ')'		//CHANGED to recordVariantField from recordField
+recordVariant                : constExpression (',' constExpression)* ':' '(' (recordVariantField)* ')'   //CHANGED to recordVariantField from recordField
                              ;
 recordHelperDecl             : 'record' 'helper' 'for' typeId (recordHelperItem)* 'end'
                              ;
@@ -350,42 +350,42 @@ recordHelperItem             : visibility
                              | classProperty
                              ;
 classMethod                  : (customAttribute)? ('class')? methodKey ident (genericDefinition)? (formalParameterSection)? ';' (methodDirective)* 
-			     			 ->  (customAttribute)? ('class')? ^(methodKey ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) (methodDirective)*)
+                             ->  (customAttribute)? ('class')? ^(methodKey ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) (methodDirective)*)
                              | (customAttribute)? ('class')? 'function' ident (genericDefinition)? (formalParameterSection)? ':' (customAttribute)? typeDecl ';' (methodDirective)*
                              -> (customAttribute)? ('class')? ^('function' ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) (customAttribute)? ^(TkFunctionReturn typeDecl) (methodDirective)*)
                              | (customAttribute)? ('class')? 'operator' ident (genericDefinition)? (formalParameterSection)? ':' (customAttribute)? typeDecl ';'
                              -> (customAttribute)? ('class')? 'operator' ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) ':' (customAttribute)? typeDecl ';'
                              ;                             
 classField                   : (customAttribute)? identList ':' typeDecl ';' (hintingDirective)* 
-							 -> (customAttribute)? ^(TkClassField ^(TkVariableIdents identList) ^(TkVariableType typeDecl))
+                             -> (customAttribute)? ^(TkClassField ^(TkVariableIdents identList) ^(TkVariableType typeDecl))
                              ;
 classProperty                : (customAttribute)? ('class')? 'property' ident (classPropertyArray)? (':' genericTypeIdent)? (classPropertyIndex)? (classPropertySpecifier)* ';' (classPropertyEndSpecifier)*
-							 -> ^('property' ^(TkVariableIdents ident) ^(TkVariableType genericTypeIdent?) (classPropertySpecifier)* )
-							 // CHANGED added (classPropertySpecifier)* at end for "default;"
-							 // CHANGEDD to genericTypeIdent for "property QueryBuilder : IQueryBuilder<GenericRecord>"
+                              -> ^('property' ^(TkVariableIdents ident) ^(TkVariableType genericTypeIdent?) (classPropertySpecifier)* )
+                              // CHANGED added (classPropertySpecifier)* at end for "default;"
+                              // CHANGEDD to genericTypeIdent for "property QueryBuilder : IQueryBuilder<GenericRecord>"
                              ;
 classPropertyArray           : '[' formalParameterList ']'
                              ;
-classPropertyIndex           : 'index' expression (';')?	//CHANGED to (';')?
+classPropertyIndex           : 'index' expression (';')?  //CHANGED to (';')?
                              ;
-classPropertySpecifier       : classPropertyReadWrite		//CHANGED removed ';'
+classPropertySpecifier       : classPropertyReadWrite   //CHANGED removed ';'
                              | classPropertyDispInterface
                              | 'stored' expression 
                              | 'default' expression 
-                             | 'default'              	// for array properties only (1 per class)
+                             | 'default'                // for array properties only (1 per class)
                              | 'nodefault' 
                              | IMPLEMENTS typeId
                              ;
-classPropertyEndSpecifier    : 'stored' expression ';'		//ADDED used in classProperty at end
+classPropertyEndSpecifier    : 'stored' expression ';'    //ADDED used in classProperty at end
                              | 'default' expression ';'
                              | 'default' ';'             
                              | 'nodefault' ';'
-							 ;
+                             ;
 
-classPropertyReadWrite       : 'read' qualifiedIdent ('[' expression ']')?  // Waarom qualified ident???	//ADDED []
-							 -> ^('read' qualifiedIdent)
-                             | 'write' qualifiedIdent ('[' expression ']')?	//ADDED []
-							 -> ^('write' qualifiedIdent)
+classPropertyReadWrite       : 'read' qualifiedIdent ('[' expression ']')?  // Waarom qualified ident???  //ADDED []
+                             -> ^('read' qualifiedIdent)
+                             | 'write' qualifiedIdent ('[' expression ']')? //ADDED []
+                             -> ^('write' qualifiedIdent)
                              ;
 classPropertyDispInterface   : 'readonly' ';'
                              | 'writeonly' ';'
@@ -406,22 +406,22 @@ exportedProcHeading          : 'procedure' ident (formalParameterSection)? ':' (
 methodDecl                   : methodDeclHeading ';' (methodDirective)* (methodBody)? -> methodDeclHeading (methodBody)?
                              ;
 methodDeclHeading            : (customAttribute)? ('class')?  methodKey methodName (formalParameterSection)?
-				            -> (customAttribute)? ('class')?  ^(methodKey ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) )
+                             -> (customAttribute)? ('class')?  ^(methodKey ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) )
                              | (customAttribute)? ('class')? 'function' methodName (formalParameterSection)? (':' (customAttribute)? typeDecl)?
-                            -> (customAttribute)? ('class')? ^('function' ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn (customAttribute)? typeDecl?) )
+                             -> (customAttribute)? ('class')? ^('function' ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn (customAttribute)? typeDecl?) )
                              | (customAttribute)? 'class' 'operator' methodName (formalParameterSection)? (':' (customAttribute)? typeDecl)?
-                            -> (customAttribute)? 'class' 'operator' ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn (customAttribute)? typeDecl?)
-                             ;							
+                             -> (customAttribute)? 'class' 'operator' ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn (customAttribute)? typeDecl?)
+                             ;              
 methodKey                    : 'procedure'
                              | 'constructor'
                              | 'destructor'
                              ;
 methodName                   : ident (genericDefinition)? ('.' ident (genericDefinition)?)? '.' ident (genericDefinition)?
                              ;                             
-procDecl                     : procDeclHeading ';' (functionDirective)* (procBody)? -> procDeclHeading (procBody)?		//CHANGED
+procDecl                     : procDeclHeading ';' (functionDirective)* (procBody)? -> procDeclHeading (procBody)?    //CHANGED
                              ;
-procDeclHeading              : (customAttribute)? 'procedure' ident (formalParameterSection)?							//CHANGED
-							 -> ^('procedure' ^(TkFunctionName ident) ^(TkFunctionArgs (formalParameterSection)?) )
+procDeclHeading              : (customAttribute)? 'procedure' ident (formalParameterSection)?             //CHANGED
+                             -> ^('procedure' ^(TkFunctionName ident) ^(TkFunctionArgs (formalParameterSection)?) )
                              | (customAttribute)? 'function' ident (formalParameterSection)? ':' typeDecl
                              -> ^('function' ^(TkFunctionName ident) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn typeDecl) )
                              ;
@@ -430,7 +430,7 @@ formalParameterSection       : '(' (formalParameterList)? ')' -> (formalParamete
 formalParameterList          : formalParameter (';' formalParameter)* -> formalParameter (formalParameter)*
                              ;
 formalParameter              : (customAttribute)? (parmType)? identListFlat (':' typeDecl)? ('=' expression)? -> (customAttribute)? ^(TkVariableIdents identListFlat) ^(TkVariableType typeDecl?) ^(TkVariableParam parmType)?
-							 //expressions was cut out, beacause we dont have to know default variable values; they were causing troubles with DelphiCodeAnalyser
+               //expressions was cut out, beacause we dont have to know default variable values; they were causing troubles with DelphiCodeAnalyser
                              ;
 parmType                     : 'const'
                              | 'var'
@@ -451,12 +451,12 @@ customAttributeList          : (customAttributeDecl)*
                              ;
 customAttributeDecl          : '[' namespacedQualifiedIdent ('(' (expressionList)? ')')? ']'  -> ^(TkCustomAttribute '[' namespacedQualifiedIdent ('(' (expressionList)? ')')? ']')
                              ;                             
-                
+
 //****************************
 //section expression
 //****************************
 expression                   : closureExpression
-                             | simpleExpression (relOp simpleExpression)? ('=' expression)? 	//CHANGED, added expression for: "if( functionCall(x, 7+66) = true ) then" syntax
+                             | simpleExpression (relOp simpleExpression)? ('=' expression)?   //CHANGED, added expression for: "if( functionCall(x, 7+66) = true ) then" syntax
                              ;                           
 closureExpression            : 'procedure' (formalParameterSection)? block
                              | 'function' (formalParameterSection)? ':' typeDecl block
@@ -475,7 +475,7 @@ factor                       : '@' factor
                              | 'true'
                              | 'false'
                              | 'nil'
-                             | '(' expression ')' ('^')? ('.' expression)?				//CHANGED, added  ('^')? ('.' qualifiedIdent)?
+                             | '(' expression ')' ('^')? ('.' expression)?        //CHANGED, added  ('^')? ('.' qualifiedIdent)?
                              | stringFactor
                              | setSection
                              | designator
@@ -490,8 +490,8 @@ setSection                   : '[' (expression ((',' | '..') expression)*)? ']'
 designator                   : ('inherited')? ( (namespacedQualifiedIdent | typeId) )? (designatorItem)*
                              ;
 designatorItem               : '^'
-                             | ('.' | '@') ident 							//CHANGED added '@'
-                             | ('<' ident (',' ident)* '>')				//ADDED for proc<sth, sth>.foo;
+                             | ('.' | '@') ident              //CHANGED added '@'
+                             | ('<' ident (',' ident)* '>')       //ADDED for proc<sth, sth>.foo;
                              | '[' expressionList ']'
                              | '(' (expression (colonConstruct)? (',' expression (colonConstruct)?)*)? ')' -> '(' (expression (colonConstruct)? (expression (colonConstruct)?)*)? ')'
                              ;
@@ -536,7 +536,7 @@ statement                    : ifStatement
                              | raiseStatement
                              | assemblerStatement
                              | compoundStatement
-			     			 | label ':' statement
+                             | label ':' statement
                              | simpleStatement
                              ;
 ifStatement                  : 'if' expression 'then' statement ('else' statement)? 
@@ -545,7 +545,7 @@ caseStatement                : 'case' expression 'of' (caseItem)* ('else' statem
                              ;
 caseItem                     : caseLabel (',' caseLabel)* ':' statement (';')? // checken of ; sep of scheider is
                              ;
-caseLabel   				 : expression ('..' expression)?
+caseLabel                    : expression ('..' expression)?
                              ;
 repeatStatement              : 'repeat' (statementList)? 'until' expression
                              ;
@@ -557,9 +557,9 @@ forStatement                 : 'for' designator ':=' expression 'to' expression 
                              ;
 withStatement                : 'with' withItem 'do' statement
                              ;
-withItem					 : designator 'as' designator 			//ADDED
-							 | designator (',' designator)*
-							 ;
+withItem                     : designator 'as' designator       //ADDED
+                             | designator (',' designator)*
+                             ;
 compoundStatement            : 'begin' (statementList)? 'end' -> ^('begin' (statementList)? 'end')
                              ;
 statementList                : (statement)? (';' (statement)?)*
@@ -569,14 +569,14 @@ simpleStatement              : designator ':=' expression
                              | gotoStatement
                              ;
 gotoStatement                : 'goto' label
-                             | 'exit' ('(' expression ')')?  	
+                             | 'exit' ('(' expression ')')?   
                              | 'break'                          
                              | 'continue'
                              ;
 //****************************
 //section constExpression
 //****************************
-constExpression              : '(' recordConstExpression (';' recordConstExpression)* ')'	//CHANGED reversed order
+constExpression              : '(' recordConstExpression (';' recordConstExpression)* ')' //CHANGED reversed order
                              | '(' constExpression (',' constExpression)* ')'
                              | expression
                              ;
@@ -591,31 +591,31 @@ tryStatement                 : 'try' (statementList)? 'except' handlerList 'end'
 handlerList                  : (handler)* ('else' statementList)?
                              | statementList
                              ;
-handler                      : 'on' (handlerIdent)? typeId 'do' handlerStatement 	//CHANGED - ; is not required ; handlerIdent not required, example:  "on einvalidoperation do;"
+handler                      : 'on' (handlerIdent)? typeId 'do' handlerStatement  //CHANGED - ; is not required ; handlerIdent not required, example:  "on einvalidoperation do;"
                              ;
-handlerIdent				 : ident ':'
-							 ;
+handlerIdent                 : ident ':'
+                             ;
 handlerStatement             : statement (';')?
-							 | ';'
-							 ;
+                             | ';'
+                             ;
 raiseStatement               : 'raise' (designator)? (AT designator)? // CHECKEN!
-                             ;			     
+                             ;           
 //****************************
 //section AssemblerStatement
 //****************************
-assemblerStatement           : 'asm' ~('end')* 'end'		//ADDED we don't realy care about assembler statements, since they don't contribute to
-							 ;								//any measure, just skip, allow all
+assemblerStatement           : 'asm' ~('end')* 'end'    //ADDED we don't realy care about assembler statements, since they don't contribute to
+                             ;                //any measure, just skip, allow all
 //****************************
 //section directive
 //****************************
-methodDirective              : reintroduceDirective       	// 1
-                             | overloadDirective          	// 2
-                             | bindingDirective           	// 3
-                             | abstractDirective          	// 3 virtual;
-                             | inlineDirective            	// 4 niet virtual or dynamic
-                             | callConvention             	// 4
-                             | hintingDirective ';'      	// 4 (niet abstract)
-                             | oldCallConventionDirective 	// 1
+methodDirective              : reintroduceDirective         // 1
+                             | overloadDirective            // 2
+                             | bindingDirective             // 3
+                             | abstractDirective            // 3 virtual;
+                             | inlineDirective              // 4 niet virtual or dynamic
+                             | callConvention               // 4
+                             | hintingDirective ';'       // 4 (niet abstract)
+                             | oldCallConventionDirective   // 1
                              | dispIDDirective
                              ;
 functionDirective            : overloadDirective          // 1
@@ -628,7 +628,7 @@ functionDirective            : overloadDirective          // 1
                              ;
 reintroduceDirective         : 'reintroduce' ';'
                              ;
-overloadDirective            : 'overload' (';')?		//CHANGE ; not needed
+overloadDirective            : 'overload' (';')?    //CHANGE ; not needed
                              ;
 bindingDirective             : 'message' expression ';'
                              | 'static' ';'
@@ -649,7 +649,7 @@ callConvention               : 'cdecl' ';'    //
                              | 'stdcall' ';'  //
                              | 'export' ';'   // deprecated
                              ;
-callConventionNoSemi		 : 'cdecl'    //		//ADDED for procedureType error fixing, without ';' at the end
+callConventionNoSemi         : 'cdecl'    //    //ADDED for procedureType error fixing, without ';' at the end
                              | 'pascal'   //
                              | 'register' //
                              | 'safecall' //
@@ -679,15 +679,15 @@ dispIDDirective              : 'dispid' expression ';'
 //****************************
 ident                        : TkIdentifier
                              | '&' TkIdentifier
-							 | usedKeywordsAsNames
-							 ;                 
-usedKeywordsAsNames			 : (NAME | READONLY | ADD | AT | MESSAGE | POINTER | INDEX | DEFAULT | STRING | CONTINUE)
+                             | usedKeywordsAsNames
+                             ;                 
+usedKeywordsAsNames          : (NAME | READONLY | ADD | AT | MESSAGE | POINTER | INDEX | DEFAULT | STRING | CONTINUE)
                              | (READ | WRITE | REGISTER | VARIANT | OPERATOR | REMOVE | LOCAL | REFERENCE | CONTAINS | FINAL)
                              | (BREAK | EXIT | STRICT | OUT | OBJECT | EXPORT | ANSISTRING | IMPLEMENTS)
-                             ;							             
+                             ;                           
 identList                    : ident (',' ident)* -> ^(ident (ident)*)
                              ;
-identListFlat                : ident (',' ident)* -> ident (ident)*		//ADDED used in formalParemeter
+identListFlat                : ident (',' ident)* -> ident (ident)*   //ADDED used in formalParemeter
                              ;                                                          
 label                        : TkIdentifier
                              | TkIntNum
@@ -703,252 +703,251 @@ namespacedQualifiedIdent     : (namespaceName '.')? qualifiedIdent
                              ;
 namespaceName                : ident ('.' ident)*
                              ;
-qualifiedIdent               :  (ident '.')*  ident 	//must stay the way it is, with '.' for proper class method identyfication
-          		     		 ;
+qualifiedIdent               :  (ident '.')*  ident   //must stay the way it is, with '.' for proper class method identyfication
+                             ;
                                    
 // KEYWORDS
-ABSOLUTE		:	'absolute'	;
-ABSTRACT		:	'abstract'	;
-ADD				:	'add'		;
-AND				:	'and'	;
-ANSISTRING      :   'ansistring';
-ARRAY			:	'array'	;
-AS				:	'as'	;
-ASM				:	'asm'	;
-ASSEMBLER		:	'assembler'	;
-ASSEMBLY		:	'assembly'	;
-AT				:	'at'	;
-AUTOMATED		:	'automated'	;
-BEGIN			:	'begin'	;
-BREAK			:	'break'	;
-CASE			:	'case'	;
-CDECL			:	'cdecl'	;
-CLASS			:	'class'	;
-CONST			:	'const'	;
-CONSTRUCTOR		:	'constructor'	;
-CONTAINS		:	'contains'	;
-CONTINUE		:	'continue'		;
-DEFAULT			:	'default'	;
-DEPRECATED		:	'deprecated'	;
-DESTRUCTOR		:	'destructor'	;
-DISPID			:	'dispid'	;
-DISPINTERFACE	:	'dispinterface'	;
-DIV				:	'div'	;
-DO				:	'do'	;
-DOWNTO			:	'downto'	;
-DQ				:	'dq'	;
-DW				:	'dw'	;
-DYNAMIC			:	'dynamic'	;
-ELSE			:	'else'	;
-END				:	'end'	;
-EXCEPT			:	'except'	;
-EXIT			:	'exit'	;
-EXPERIMENTAL	:	'experimental'	;
-EXPORT			:	'export'	;
-EXPORTS			:	'exports'	;
-EXTERNAL		:	'external'	;
-FAR				:	'far'		;
-FILE			:	'file'		;
-FINAL			:	'final'		;
-FINALIZATION	:	'finalization'	;
-FINALLY			:	'finally'	;
-FOR				:	'for'		;
-FORWARD			:	'forward'	;
-FUNCTION		:	'function'	;
-GOTO			:	'goto'		;
-HELPER			:	'helper'	;
-IF				:	'if'		;
-IMPLEMENTATION	:	'implementation'	;
-IMPLEMENTS		:	'implements'		;
-IN				:	'in'		;	
-INDEX			:	'index'		;
-INHERITED		:	'inherited'	;
-INITIALIZATION	:	'initialization'	;
-INLINE			:	'inline'	;
-INTERFACE		:	'interface'	;
-IS				:	'is'		;
-LABEL			:	'label'		;
-LIBRARY			:	'library'	;
-LOCAL			:	'local'		;
-MESSAGE			:	'message'	;
-MOD				:	'mod'		;
-NAME    		:	'name' 		;
-NEAR			:	'near'		;
-NIL				:	'nil'		;
-NODEFAULT		:	'nodefault'	;
-NOT				:	'not'		;
-OBJECT			:	'object'	;
-OF				:	'of'		;
-ON				:	'on'		;
-OPERATOR		:	'operator'	;
-OR				:	'or'		;
-OUT				:	'out'		;
-OVERLOAD		:	'overload'	;
-OVERRIDE		:	'override'	;
-PACKAGE			:	'package'	;
-PACKED			:	'packed'	;
-PASCAL			:	'pascal'	;
-PLATFORM		:	'platform'	;
-POINTER			:	'pointer'	;
-PRIVATE			:	'private'	;
-PROCEDURE		:	'procedure'	;
-PROGRAM         : 	'program'   ;
-PROPERTY		:	'property'	;
-PROTECTED		:	'protected'	;
-PUBLIC			:	'public'	;
-PUBLISHED		:	'published'	;
-RAISE			:	'raise'		;
-READ			:	'read'			;
-READONLY		:	'readonly'		;
-RECORD			:	'record'		;
-REFERENCE		:	'reference'		;
-REGISTER		:	'register'		;
-REINTRODUCE		:	'reintroduce'	;
-REMOVE			:	'remove'		;
-REPEAT			:	'repeat'		;
-REQUIRES		:	'requires'		;
-RESIDENT		:	'resident'		;
-RESOURCESTRING	:	'resourcestring'	;
-SAFECALL		:	'safecall'		;
-SEALED			:	'sealed'		;
-SET				:	'set'			;
-SHL				:	'shl'			;
-SHR				:	'shr'			;
-STATIC			:	'static'		;
-STDCALL			:	'stdcall'		;
-STORED			:	'stored'		;
-STRICT			:	'strict'		;
-STRING			:	'string'		;
-THEN			:	'then'			;
-THREADVAR		:	'threadvar'		;
-TO				:	'to'			;
-TRY				:	'try'			;
-TYPE			:	'type'			;
-UNIT			:	'unit'			;
-UNSAFE			:	'unsafe'		;
-UNTIL			:	'until'			;
-USES			:	'uses'			;
-VAR				:	'var'			;
-VARARGS			:	'varargs'		;
-VARIANT			:   'variant'		;
-VIRTUAL			:	'virtual'		;
-WHILE			:	'while'			;
-WITH			:	'with'			;
-WRITE			:	'write'			;
-WRITEONLY		:	'writeonly'		;
-XOR				:	'xor'			;
-FALSE			:	'false'			;
-TRUE			:	'true'			;
+ABSOLUTE          : 'absolute'       ;
+ABSTRACT          : 'abstract'       ;
+ADD               : 'add'            ;
+AND               : 'and'            ;
+ANSISTRING        : 'ansistring'     ;
+ARRAY             : 'array'          ;
+AS                : 'as'             ;
+ASM               : 'asm'            ;
+ASSEMBLER         : 'assembler'      ;
+ASSEMBLY          : 'assembly'       ;
+AT                : 'at'             ;
+AUTOMATED         : 'automated'      ;
+BEGIN             : 'begin'          ;
+BREAK             : 'break'          ;
+CASE              : 'case'           ;
+CDECL             : 'cdecl'          ;
+CLASS             : 'class'          ;
+CONST             : 'const'          ;
+CONSTRUCTOR       : 'constructor'    ;
+CONTAINS          : 'contains'       ;
+CONTINUE          : 'continue'       ;
+DEFAULT           : 'default'        ;
+DEPRECATED        : 'deprecated'     ;
+DESTRUCTOR        : 'destructor'     ;
+DISPID            : 'dispid'         ;
+DISPINTERFACE     : 'dispinterface'  ;
+DIV               : 'div'            ;
+DO                : 'do'             ;
+DOWNTO            : 'downto'         ;
+DQ                : 'dq'             ;
+DW                : 'dw'             ;
+DYNAMIC           : 'dynamic'        ;
+ELSE              : 'else'           ;
+END               : 'end'            ;
+EXCEPT            : 'except'         ;
+EXIT              : 'exit'           ;
+EXPERIMENTAL      : 'experimental'   ;
+EXPORT            : 'export'         ;
+EXPORTS           : 'exports'        ;
+EXTERNAL          : 'external'       ;
+FAR               : 'far'            ;
+FILE              : 'file'           ;
+FINAL             : 'final'          ;
+FINALIZATION      : 'finalization'   ;
+FINALLY           : 'finally'        ;
+FOR               : 'for'            ;
+FORWARD           : 'forward'        ;
+FUNCTION          : 'function'       ;
+GOTO              : 'goto'           ;
+HELPER            : 'helper'         ;
+IF                : 'if'             ;
+IMPLEMENTATION    : 'implementation' ;
+IMPLEMENTS        : 'implements'     ;
+IN                : 'in'             ;
+INDEX             : 'index'          ;
+INHERITED         : 'inherited'      ;
+INITIALIZATION    : 'initialization' ;
+INLINE            : 'inline'         ;
+INTERFACE         : 'interface'      ;
+IS                : 'is'             ;
+LABEL             : 'label'          ;
+LIBRARY           : 'library'        ;
+LOCAL             : 'local'          ;
+MESSAGE           : 'message'        ;
+MOD               : 'mod'            ;
+NAME              : 'name'           ;
+NEAR              : 'near'           ;
+NIL               : 'nil'            ;
+NODEFAULT         : 'nodefault'      ;
+NOT               : 'not'            ;
+OBJECT            : 'object'         ;
+OF                : 'of'             ;
+ON                : 'on'             ;
+OPERATOR          : 'operator'       ;
+OR                : 'or'             ;
+OUT               : 'out'            ;
+OVERLOAD          : 'overload'       ;
+OVERRIDE          : 'override'       ;
+PACKAGE           : 'package'        ;
+PACKED            : 'packed'         ;
+PASCAL            : 'pascal'         ;
+PLATFORM          : 'platform'       ;
+POINTER           : 'pointer'        ;
+PRIVATE           : 'private'        ;
+PROCEDURE         : 'procedure'      ;
+PROGRAM           : 'program'        ;
+PROPERTY          : 'property'       ;
+PROTECTED         : 'protected'      ;
+PUBLIC            : 'public'         ;
+PUBLISHED         : 'published'      ;
+RAISE             : 'raise'          ;
+READ              : 'read'           ;
+READONLY          : 'readonly'       ;
+RECORD            : 'record'         ;
+REFERENCE         : 'reference'      ;
+REGISTER          : 'register'       ;
+REINTRODUCE       : 'reintroduce'    ;
+REMOVE            : 'remove'         ;
+REPEAT            : 'repeat'         ;
+REQUIRES          : 'requires'       ;
+RESIDENT          : 'resident'       ;
+RESOURCESTRING    : 'resourcestring' ;
+SAFECALL          : 'safecall'       ;
+SEALED            : 'sealed'         ;
+SET               : 'set'            ;
+SHL               : 'shl'            ;
+SHR               : 'shr'            ;
+STATIC            : 'static'         ;
+STDCALL           : 'stdcall'        ;
+STORED            : 'stored'         ;
+STRICT            : 'strict'         ;
+STRING            : 'string'         ;
+THEN              : 'then'           ;
+THREADVAR         : 'threadvar'      ;
+TO                : 'to'             ;
+TRY               : 'try'            ;
+TYPE              : 'type'           ;
+UNIT              : 'unit'           ;
+UNSAFE            : 'unsafe'         ;
+UNTIL             : 'until'          ;
+USES              : 'uses'           ;
+VAR               : 'var'            ;
+VARARGS           : 'varargs'        ;
+VARIANT           : 'variant'        ;
+VIRTUAL           : 'virtual'        ;
+WHILE             : 'while'          ;
+WITH              : 'with'           ;
+WRITE             : 'write'          ;
+WRITEONLY         : 'writeonly'      ;
+XOR               : 'xor'            ;
+FALSE             : 'false'          ;
+TRUE              : 'true'           ;
 
 //----------------------------------------------------------------------------
 // OPERATORS
 //----------------------------------------------------------------------------
-PLUS            : '+'   ;
-MINUS           : '-'   ;
-STAR            : '*'   ;
-SLASH           : '/'   ;
-ASSIGN          : ':='  ;
-COMMA           : ','   ;
-SEMI            : ';'   ;
-COLON           : ':'   ;
-EQUAL           : '='   ;
-NOT_EQUAL       : '<>'  ;
-LT              : '<'   ;
-LE              : '<='  ;
-GE              : '>='  ;
-GT              : '>'   ;
-LPAREN          : '('   ;
-RPAREN          : ')'   ;
-LBRACK          : '['   ; // line_tab[line]
-LBRACK2         : '(.'  ; // line_tab(.line.)
-RBRACK          : ']'   ;
-RBRACK2         : '.)'  ;
-POINTER2        : '^'   ;
-AT2             : '@'   ;
-DOT             : '.'   ;// ('.' {$setType(DOTDOT);})?  ;
-DOTDOT          : '..'  ;
-LCURLY          : '{'   ;
-RCURLY          : '}'   ;     
+PLUS              : '+'   ;
+MINUS             : '-'   ;
+STAR              : '*'   ;
+SLASH             : '/'   ;
+ASSIGN            : ':='  ;
+COMMA             : ','   ;
+SEMI              : ';'   ;
+COLON             : ':'   ;
+EQUAL             : '='   ;
+NOT_EQUAL         : '<>'  ;
+LT                : '<'   ;
+LE                : '<='  ;
+GE                : '>='  ;
+GT                : '>'   ;
+LPAREN            : '('   ;
+RPAREN            : ')'   ;
+LBRACK            : '['   ; // line_tab[line]
+LBRACK2           : '(.'  ; // line_tab(.line.)
+RBRACK            : ']'   ;
+RBRACK2           : '.)'  ;
+POINTER2          : '^'   ;
+AT2               : '@'   ;
+DOT               : '.'   ;// ('.' {$setType(DOTDOT);})?  ;
+DOTDOT            : '..'  ;
+LCURLY            : '{'   ;
+RCURLY            : '}'   ;     
 
 //****************************
 //section token
 //****************************
-TkGlobalFunction	     	 : 'FUNCTION_GLOBAL'
-			     		 	 ;
-TkFunctionName		     	 : 'FUNCTION_NAME'
-			     		 	 ;
-TkFunctionArgs		     	 : 'FUNCTION_ARGS'
-			     		 	 ;
-TkFunctionBody		     	 : 'FUNCTION_BODY'
-			     		 	 ;
-TkFunctionReturn			 : 'FUNCTION_RETURN'
-							 ;
-TkCustomAttribute			 : 'CUSTOM_ATTRIBUTE'
-							 ;
-TkCustomAttributeArgs		 : 'CUSTOM_ATTRIBUTE_ARGS'
-							 ;
-TkNewType				 	 : 'NEW_TYPE'
-						 	 ;
-TkClass     				 : 'CLASS'
-							 ;
-TkClassOfType				 : 'CLASS_OF_TYPE'
-							 ;
-TkVariableType				 : 'VARIABLE_TYPE'
-							 ;
-TkVariableIdents			 : 'VARIABLE_IDENTS'
-							 ;
-TkVariableParam				 : 'VARIABLE_PARAM'
-							 ;
-TkGuid						 : 'INTERFACE_GUID'
-							 ;
-TkClassParents				 : 'CLASS_PARENTS'
-							 ;
-TkClassField				 : 'CLASS_FIELD'
-							 ;
-TkIdentifier                 : (Alpha | '_') (Alpha | Digit | '_')*
-                             ;  
-TkIntNum                     : Digitseq
-                             ;
-//TkRealNum                    : Digitseq ('.' (Digitseq)?)? (('e'|'E') ('+'|'-')? Digitseq)?
-TkRealNum                    : Digitseq ('.' Digitseq)? (('e'|'E') ('+'|'-')? Digitseq)?	//CHANGED
-                             ;
-TkHexNum                     : '$' Hexdigitseq
-                             ;
-TkAsmHexNum                  : Hexdigitseq ('h'|'H')
-                             ;
-TkAsmHexLabel                : Hexdigitseq ':'
-                             ;
-QuotedString                 : '\'' ('\'\'' | ~('\''))* '\''   //taken from PASCAL grammar
-                             ;
-ControlString                : Controlchar (Controlchar)*
-                             ;
-                             
-fragment
-Controlchar                  : '#' Digitseq
-                             | '#' '$' Hexdigitseq
-                             ;
-fragment
-Alpha                        : 'a'..'z'
-                             | 'A'..'Z'
-                             | '\u0080'..'\uFFFE' ~('\uFEFF') //ADDED unicode support
-                             ;
-fragment
-Digit                        : '0'..'9'
-                             ;
-fragment
-Digitseq                     : Digit (Digit)*
-                             ;
-fragment
-Hexdigit                     : Digit | 'a'..'f' | 'A'..'F'
-                             ;
-Hexdigitseq                  : Hexdigit (Hexdigit)*
-                             ;
-COMMENT    					 :  '//' ~('\n'|'\r')* '\r'? '\n' 					{$channel=HIDDEN;}
-    						 |  '(*' ( options {greedy=false;} : . )* '*)' 	{$channel=HIDDEN;}							 
-    						 |  '{' ( options {greedy=false;} : . )* '}' 		{$channel=HIDDEN;}
-    						 ;    						 
-WS  						 : (' '|'\t'|'\r'|'\n'|'\f')+ {$channel=HIDDEN;}
-    						 ;
-UnicodeBOM    				 : '\uFEFF' {$channel=HIDDEN;} 
-                             ;                             
-    						 
+TkGlobalFunction        : 'FUNCTION_GLOBAL'
+                        ;
+TkFunctionName          : 'FUNCTION_NAME'
+                        ;
+TkFunctionArgs          : 'FUNCTION_ARGS'
+                        ;
+TkFunctionBody          : 'FUNCTION_BODY'
+                        ;
+TkFunctionReturn        : 'FUNCTION_RETURN'
+                        ;
+TkCustomAttribute       : 'CUSTOM_ATTRIBUTE'
+                        ;
+TkCustomAttributeArgs   : 'CUSTOM_ATTRIBUTE_ARGS'
+                        ;
+TkNewType               : 'NEW_TYPE'
+                        ;
+TkClass                 : 'CLASS'
+                        ;
+TkClassOfType           : 'CLASS_OF_TYPE'
+                        ;
+TkVariableType          : 'VARIABLE_TYPE'
+                        ;
+TkVariableIdents        : 'VARIABLE_IDENTS'
+                        ;
+TkVariableParam         : 'VARIABLE_PARAM'
+                        ;
+TkGuid                  : 'INTERFACE_GUID'
+                        ;
+TkClassParents          : 'CLASS_PARENTS'
+                        ;
+TkClassField            : 'CLASS_FIELD'
+                        ;
+TkIdentifier            : (Alpha | '_') (Alpha | Digit | '_')*
+                        ;  
+TkIntNum                : Digitseq
+                        ;
+TkRealNum               : Digitseq ('.' Digitseq)? (('e'|'E') ('+'|'-')? Digitseq)?  //CHANGED
+                        ;
+TkHexNum                : '$' Hexdigitseq
+                        ;
+TkAsmHexNum             : Hexdigitseq ('h'|'H')
+                        ;
+TkAsmHexLabel           : Hexdigitseq ':'
+                        ;
+QuotedString            : '\'' ('\'\'' | ~('\''))* '\''   //taken from PASCAL grammar
+                        ;
+ControlString           : Controlchar (Controlchar)*
+                        ;
+                        
+fragment                
+Controlchar             : '#' Digitseq
+                        | '#' '$' Hexdigitseq
+                        ;
+fragment                
+Alpha                   : 'a'..'z'
+                        | 'A'..'Z'
+                        | '\u0080'..'\uFFFE' ~('\uFEFF') //ADDED unicode support
+                        ;
+fragment                
+Digit                   : '0'..'9'
+                        ;
+fragment                
+Digitseq                : Digit (Digit)*
+                        ;
+fragment                
+Hexdigit                : Digit | 'a'..'f' | 'A'..'F'
+                        ;
+Hexdigitseq             : Hexdigit (Hexdigit)*
+                        ;
+COMMENT                 :  '//' ~('\n'|'\r')* '\r'? '\n'           {$channel=HIDDEN;}
+                        |  '(*' ( options {greedy=false;} : . )* '*)'  {$channel=HIDDEN;}               
+                        |  '{' ( options {greedy=false;} : . )* '}'    {$channel=HIDDEN;}
+                        ;                 
+WS                      : (' '|'\t'|'\r'|'\n'|'\f')+ {$channel=HIDDEN;}
+                        ;
+UnicodeBOM              : '\uFEFF' {$channel=HIDDEN;} 
+                        ;                             
+                 
