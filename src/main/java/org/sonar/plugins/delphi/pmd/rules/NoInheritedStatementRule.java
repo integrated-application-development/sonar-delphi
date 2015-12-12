@@ -34,10 +34,14 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 public class NoInheritedStatementRule extends DelphiRule {
 
   private static final int MAX_LOOK_AHEAD = 3;
+  private String lookFor = "";
+
+  public void setLookFor(String lookFor) {
+    this.lookFor = lookFor;
+  }
 
   @Override
   public Object visit(DelphiPMDNode node, Object data) {
-    String lookFor = getStringProperty(LOOK_FOR);
     if (StringUtils.isEmpty(lookFor)) {
       return data;
     }

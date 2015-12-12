@@ -406,24 +406,14 @@ x.Free;			//GOOD, sufficent enough
 		</description>
 	</rule>
 
-	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.NoInheritedStatementRule" message="Constructor without 'inherited' statement."
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ConstructorWithoutInheritedStatementRule" message="Constructor without 'inherited' statement."
 		name="ConstructorWithoutInheritedStatementRule">
 		<description>Constructor without 'inherited' statement.</description>
-		<properties>
-			<property name="lookFor">
-				<value>constructor</value>
-			</property>
-		</properties>
 	</rule>
 
-	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.NoInheritedStatementRule" message="Destructor without 'inherited' statement."
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.DestructorWithoutInheritedStatementRule" message="Destructor without 'inherited' statement."
 		name="DestructorWithoutInheritedStatementRule">
 		<description>Destructor without 'inherited' statement.</description>
-		<properties>
-			<property name="lookFor">
-				<value>destructor</value>
-			</property>
-		</properties>
 	</rule>
 
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.NoBeginAfterDoRule" message="No 'begin' after 'do' statement"
