@@ -234,12 +234,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.16.4</version>
-			<scope>provided</scope>
-		</dependency>
 		<!-- HSQL FOR AQTIME TESTING -->
 		<dependency>
 			<groupId>hsqldb</groupId>

@@ -34,7 +34,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import lombok.SneakyThrows;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenRewriteStream;
 import org.antlr.runtime.tree.CommonTree;
@@ -75,14 +74,20 @@ public class DelphiAST extends CommonTree implements ASTTree {
    * 
    * @param inputStream Input from which to read data for AST tree
    * @throws RecognitionException At parsing exception
-   * @throws IOException When no file found
    */
-  @SneakyThrows
   public DelphiAST(File file, String encoding) {
-    fileStream = new DelphiSourceSanitizer(file.getAbsolutePath(), encoding);
+    try {
+      fileStream = new DelphiSourceSanitizer(file.getAbsolutePath(), encoding);
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to read file " + file.getAbsolutePath(), e);
+    }
     DelphiParser parser = new DelphiParser(new TokenRewriteStream(new DelphiLexer(fileStream)));
     parser.setTreeAdaptor(new DelphiTreeAdaptor(this));
-    children = ((CommonTree) parser.file().getTree()).getChildren();
+    try {
+      children = ((CommonTree) parser.file().getTree()).getChildren();
+    } catch (RecognitionException e) {
+      throw new RuntimeException("Failed to parse the file " + file.getAbsolutePath(), e);
+    }
     fileName = file.getAbsolutePath();
     isError = parser.getNumberOfSyntaxErrors() != 0;
     codeLines = fileStream.toString().split("\n");

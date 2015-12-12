@@ -27,7 +27,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
-import lombok.SneakyThrows;
 
 public class DelphiUnitBuilderTest {
 
@@ -111,14 +110,17 @@ public class DelphiUnitBuilderTest {
     return source;
   }
 
-  @SneakyThrows
   private void printSourceCode(StringBuilder source) {
     Readable reader = new StringReader(source.toString());
     LineReader lineReader = new LineReader(reader);
     String line = null;
     int lineNumber = 0;
-    while ((line = lineReader.readLine()) != null) {
-      System.out.println(String.format("%03d %s", ++lineNumber, line));
+    try {
+      while ((line = lineReader.readLine()) != null) {
+        System.out.println(String.format("%03d %s", ++lineNumber, line));
+      }
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to print source code.", e);
     }
   }
 

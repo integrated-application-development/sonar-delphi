@@ -24,9 +24,7 @@
 package org.sonar.plugins.delphi.pmd;
 
 import java.util.Comparator;
-import lombok.ToString;
 
-@ToString
 class RuleData {
 
   private String name;
@@ -43,6 +41,11 @@ class RuleData {
 
   public int getLine() {
     return line;
+  }
+
+  @Override
+  public String toString() {
+    return "RuleData [name=" + name + ", line=" + line + "]";
   }
 
   public static Comparator<RuleData> getComparator() {
