@@ -99,35 +99,31 @@ public class DelphiRule extends AbstractJavaRule {
   /**
    * Adds violation, get violation data from node
    * 
-   * @param data Data
+   * @param ctx RuleContext
    * @param node Node
    */
-  protected void addViolation(Object data, DelphiPMDNode node) {
-    RuleContext ctx = (RuleContext) data;
+  protected void addViolation(RuleContext ctx, DelphiPMDNode node) {
     ctx.getReport().addRuleViolation(new DelphiRuleViolation(this, ctx, node));
   }
 
   /**
    * Adds violation, get violation data from node
    * 
-   * @param data Data
+   * @param ctx RuleContext
    * @param node Node
    * @param msg Violation message
    */
-  protected void addViolation(Object data, DelphiPMDNode node, String msg) {
-
-    RuleContext ctx = (RuleContext) data;
+  protected void addViolation(RuleContext ctx, DelphiPMDNode node, String msg) {
     ctx.getReport().addRuleViolation(new DelphiRuleViolation(this, ctx, node, msg));
   }
 
   /**
    * Adds violation, used in XPathRule
    * 
-   * @param data Data
+   * @param ctx RuleContext
    * @param violation Violation
    */
-  protected void addViolation(Object data, DelphiRuleViolation violation) {
-    RuleContext ctx = (RuleContext) data;
+  protected void addViolation(RuleContext ctx, DelphiRuleViolation violation) {
     ctx.getReport().addRuleViolation(violation);
   }
 

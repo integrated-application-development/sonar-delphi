@@ -116,11 +116,11 @@ public class UppercaseReservedWordsRule extends DelphiRule {
     }
   }
 
-  protected void checkKeyword(String keyword, String[] keywords, DelphiPMDNode node, Object data) {
+  protected void checkKeyword(String keyword, String[] keywords, DelphiPMDNode node, RuleContext ctx) {
     for (String key : keywords) {
       if (keyword.equals(key)) {
         String msg = "Avoid using uppercase keywords: " + keyword;
-        addViolation(data, node, msg);
+        addViolation(ctx, node, msg);
       }
     }
   }

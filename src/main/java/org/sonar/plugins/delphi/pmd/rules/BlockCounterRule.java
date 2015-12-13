@@ -24,6 +24,8 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
+import net.sourceforge.pmd.RuleContext;
+
 /**
  * Rule that count's the number of lines between to statement pairs. Produces a
  * violation if the number of lines exceeds limit.
@@ -85,8 +87,8 @@ public class BlockCounterRule extends CountRule {
    */
 
   @Override
-  protected void addViolation(Object data, DelphiPMDNode node) {
-    super.addViolation(data, firstNode);
+  protected void addViolation(RuleContext ctx, DelphiPMDNode node) {
+    super.addViolation(ctx, firstNode);
   }
 
   /**

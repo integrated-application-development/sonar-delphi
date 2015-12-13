@@ -97,10 +97,10 @@ public class UnusedArgumentsRule extends DelphiRule {
    * @param node
    * @param data
    */
-  private void checkForUnusedArguments(Map<String, Integer> args, Object data, DelphiPMDNode node) {
+  private void checkForUnusedArguments(Map<String, Integer> args, RuleContext ctx, DelphiPMDNode node) {
     for (Map.Entry<String, Integer> entry : args.entrySet()) {
       if (entry.getValue() == 0 && !ignoredArg(entry.getKey())) {
-        addViolation(data, node, "Unused argument: '" + entry.getKey() + "' at " + methodName);
+        addViolation(ctx, node, "Unused argument: '" + entry.getKey() + "' at " + methodName);
       }
     }
   }
