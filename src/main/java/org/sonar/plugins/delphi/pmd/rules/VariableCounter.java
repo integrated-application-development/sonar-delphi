@@ -26,6 +26,8 @@ import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
+import net.sourceforge.pmd.RuleContext;
+
 /**
  * Rule that is checking how many arguments a function has - if too many, it
  * triggers a violation
@@ -33,7 +35,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 public class VariableCounter extends DelphiRule {
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
     // if function arguments node
     if (node.getText().equals(getStringProperty(START))) {
       int count = 0;
@@ -50,10 +52,9 @@ public class VariableCounter extends DelphiRule {
       if (count > limit) {
         String msg = "Too many " + getStringProperty(LOOK_FOR) + ": " + count + " (max "
           + limit + ")";
-        addViolation(data, node, msg);
+        addViolation(ctx, node, msg);
       }
     }
-    return data;
   }
 
 }

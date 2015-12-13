@@ -22,10 +22,12 @@ import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
+import net.sourceforge.pmd.RuleContext;
+
 public class InterfaceNameRule extends DelphiRule {
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
 
     if (node.getType() == DelphiLexer.TkNewType) {
       Tree candidateNode = node.getChild(0).getChild(0);
@@ -36,11 +38,9 @@ public class InterfaceNameRule extends DelphiRule {
         char firstCharAfterPrefix = name.charAt(1);
 
         if (!name.startsWith("I") || firstCharAfterPrefix != Character.toUpperCase(firstCharAfterPrefix)) {
-          addViolation(data, (DelphiPMDNode) candidateNode);
+          addViolation(ctx, (DelphiPMDNode) candidateNode);
         }
       }
     }
-
-    return data;
   }
 }

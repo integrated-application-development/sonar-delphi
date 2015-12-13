@@ -56,8 +56,8 @@ public class DelphiRule extends AbstractJavaRule {
   /**
    * overload this method in derived class
    */
-  public Object visit(DelphiPMDNode node, Object data) {
-    return data;
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
+    // do nothing
   }
 
   /**

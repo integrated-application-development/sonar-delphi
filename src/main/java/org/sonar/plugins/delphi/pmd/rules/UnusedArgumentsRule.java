@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import net.sourceforge.pmd.PropertyDescriptor;
+import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.StringProperty;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
@@ -47,7 +48,7 @@ public class UnusedArgumentsRule extends DelphiRule {
   private final List<String> excludedArgs = new ArrayList<String>();
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
     if (node.getType() == DelphiLexer.PROCEDURE || node.getType() == DelphiLexer.FUNCTION) {
       Tree nameNode = node.getFirstChildWithType(DelphiLexer.TkFunctionName);
       if (nameNode != null) {
@@ -59,7 +60,7 @@ public class UnusedArgumentsRule extends DelphiRule {
 
       Tree argsNode = node.getFirstChildWithType(DelphiLexer.TkFunctionArgs);
       if (argsNode == null) {
-        return data;
+        return;
       }
 
       int lookIndex = 0;
@@ -74,21 +75,19 @@ public class UnusedArgumentsRule extends DelphiRule {
 
       if (beginNode == null || beginNode.getType() != DelphiLexer.BEGIN) {
         // no begin..end for function
-        return data;
+        return;
       }
 
       Map<String, Integer> args = processFunctionArgs(argsNode);
       if (args.isEmpty()) {
         // no arguments
-        return data;
+        return;
       }
 
       processFunctionBegin(beginNode, args);
-      checkForUnusedArguments(args, data, node);
+      checkForUnusedArguments(args, ctx, node);
 
     }
-
-    return data;
   }
 
   /**

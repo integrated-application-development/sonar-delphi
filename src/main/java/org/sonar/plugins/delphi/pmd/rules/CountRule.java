@@ -24,6 +24,8 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
+import net.sourceforge.pmd.RuleContext;
+
 /**
  * Rule that counts the number of specified nodes, and if the count exceeds the
  * specified limit, rule will produce a violation
@@ -57,19 +59,18 @@ public class CountRule extends DelphiRule {
   }
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
-    dataRef = data;
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
+    dataRef = ctx;
     if (shouldCount(node)) {
       increaseCounter(strength);
     }
 
     if (exceedsLimit()) {
-      addViolation(data, node);
+      addViolation(ctx, node);
       if (reset) {
         count = 0;
       }
     }
-    return data;
   }
 
   protected boolean shouldCount(DelphiPMDNode node) {

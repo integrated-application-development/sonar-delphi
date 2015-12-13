@@ -26,23 +26,23 @@ import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
+import net.sourceforge.pmd.RuleContext;
+
 /**
  * Checks, if we put 'begin' after 'do' statement
  */
 public class NoBeginAfterDoRule extends DelphiRule {
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
     if (shouldCheck(node)) {
       Tree nextNode = node.getParent().getChild(node.getChildIndex() + 1);
 
       if (isWrongNode(nextNode)) {
-        addViolation(data, node);
+        addViolation(ctx, node);
       }
 
     }
-
-    return data;
   }
 
   protected boolean isWrongNode(Tree node) {

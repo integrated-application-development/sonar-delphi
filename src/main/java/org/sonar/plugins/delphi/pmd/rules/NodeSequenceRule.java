@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.StringProperty;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
@@ -39,22 +40,20 @@ public class NodeSequenceRule extends DelphiRule {
   private DelphiPMDNode firstMatchNode;
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
 
     if (node.getText().equalsIgnoreCase(sequence[count])) {
       if (++count == 1) {
         // save first match node
         firstMatchNode = node;
       } else if (count >= sequence.length) {
-        addViolation(data, firstMatchNode);
+        addViolation(ctx, firstMatchNode);
         count = 0;
       }
     } else {
       // reset if we bumped out of the sequence
       count = 0;
     }
-
-    return data;
   }
 
   @Override

@@ -27,6 +27,8 @@ import org.apache.commons.lang.StringUtils;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
+import net.sourceforge.pmd.RuleContext;
+
 /**
  * Class that checks if 'inherited' statement is in some function or procedure.
  * If no, it triggers a violation.
@@ -41,9 +43,9 @@ public class NoInheritedStatementRule extends DelphiRule {
   }
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
     if (StringUtils.isEmpty(lookFor)) {
-      return data;
+      return;
     }
 
     if (node.getText().equalsIgnoreCase(lookFor)) {
@@ -65,12 +67,10 @@ public class NoInheritedStatementRule extends DelphiRule {
         }
 
         if (!wasInherited) {
-          addViolation(data, node);
+          addViolation(ctx, node);
         }
       }
     }
-
-    return data;
   }
 
 }

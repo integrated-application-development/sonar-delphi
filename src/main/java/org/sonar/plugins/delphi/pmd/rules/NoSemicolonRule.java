@@ -27,6 +27,8 @@ import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
+import net.sourceforge.pmd.RuleContext;
+
 /**
  * Checks if semicolons are properly placed
  */
@@ -40,10 +42,10 @@ public class NoSemicolonRule extends DelphiRule {
   }
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
     if (!inImplementation) {
       inImplementation = node.getType() == LexerMetrics.IMPLEMENTATION.toMetrics();
-      return data;
+      return;
     }
 
     if (node.getType() == LexerMetrics.END.toMetrics()) {
@@ -51,15 +53,14 @@ public class NoSemicolonRule extends DelphiRule {
       if (isValidNode(previousNode)) {
         if (isBlockNode(previousNode)) {
           if (isMissingSemicolonInBlock(previousNode)) {
-            addViolation(data, node);
+            addViolation(ctx, node);
           }
         } else if (!isSemicolonNode(previousNode)) {
-          addViolation(data, (DelphiPMDNode) previousNode);
+          addViolation(ctx, (DelphiPMDNode) previousNode);
         }
       }
 
     }
-    return data;
   }
 
   private boolean isValidNode(Tree node) {

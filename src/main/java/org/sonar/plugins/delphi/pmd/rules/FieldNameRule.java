@@ -22,6 +22,8 @@ import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
+import net.sourceforge.pmd.RuleContext;
+
 public class FieldNameRule extends DelphiRule {
 
   @Override
@@ -30,7 +32,7 @@ public class FieldNameRule extends DelphiRule {
   }
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
     if (node.getType() == DelphiLexer.TkClassField) {
 
       if (!isPublished()) {
@@ -40,16 +42,14 @@ public class FieldNameRule extends DelphiRule {
 	        char firstCharAfterPrefix = name.charAt(1);
 
 	        if (!name.startsWith("F") || firstCharAfterPrefix != Character.toUpperCase(firstCharAfterPrefix)) {
-	          addViolation(data, node);
+	          addViolation(ctx, node);
 	        }
         } else {
         	// a single letter name has no prefix 
-        	addViolation(data, node);
+          addViolation(ctx, node);
         }
       }
     }
-
-    return data;
   }
 
 }

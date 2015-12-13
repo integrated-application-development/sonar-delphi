@@ -22,10 +22,12 @@ import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
+import net.sourceforge.pmd.RuleContext;
+
 public class UnitNameRule extends DelphiRule {
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
 
     if (node.getType() == DelphiLexer.UNIT) {
       for (int i = 0; i < node.getChildCount(); i++) {
@@ -37,12 +39,10 @@ public class UnitNameRule extends DelphiRule {
 
         char firstChar = child.getText().charAt(0);
         if (firstChar != Character.toUpperCase(firstChar)) {
-          addViolation(data, node);
+          addViolation(ctx, node);
           break;
         }
       }
     }
-
-    return data;
   }
 }

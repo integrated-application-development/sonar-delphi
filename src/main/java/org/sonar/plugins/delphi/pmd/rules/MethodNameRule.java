@@ -23,10 +23,12 @@ import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
+import net.sourceforge.pmd.RuleContext;
+
 public class MethodNameRule extends DelphiRule {
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
 
     if (node.getType() == DelphiLexer.TkNewType) {
       if (isInterface(node) || !isPublished()) {
@@ -37,13 +39,11 @@ public class MethodNameRule extends DelphiRule {
           char firstChar = name.charAt(0);
 
           if (firstChar != Character.toUpperCase(firstChar)) {
-            addViolation(data, (DelphiPMDNode) method);
+            addViolation(ctx, (DelphiPMDNode) method);
           }
         }
       }
     }
-
-    return data;
   }
 
 }

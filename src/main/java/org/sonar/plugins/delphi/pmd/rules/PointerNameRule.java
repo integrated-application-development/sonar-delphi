@@ -21,6 +21,8 @@ package org.sonar.plugins.delphi.pmd.rules;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
+import net.sourceforge.pmd.RuleContext;
+
 public class PointerNameRule extends DelphiRule {
 
   private boolean isImplementationSection;
@@ -32,13 +34,13 @@ public class PointerNameRule extends DelphiRule {
   }
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
     if (!isImplementationSection) {
       isImplementationSection = node.getType() == DelphiLexer.IMPLEMENTATION;
     }
 
     if (isImplementationSection) {
-      return data;
+      return;
     }
 
     if (node.getType() == DelphiLexer.POINTER2) {
@@ -47,10 +49,8 @@ public class PointerNameRule extends DelphiRule {
       char firstCharAfterPrefix = name.charAt(1);
 
       if (!name.startsWith("P") || firstCharAfterPrefix != Character.toUpperCase(firstCharAfterPrefix)) {
-        addViolation(data, node);
+        addViolation(ctx, node);
       }
     }
-
-    return data;
   }
 }

@@ -61,10 +61,10 @@ public class XPathRule extends DelphiRule {
    */
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
     String xPathString = getStringProperty(XPATH);
     if (StringUtils.isEmpty(xPathString)) {
-      return data;
+      return;
     }
     Document doc = getCachedDocument(node.getASTTree());
     try {
@@ -87,17 +87,15 @@ public class XPathRule extends DelphiRule {
 
         int column = Integer.valueOf(resultNode.getAttributes().getNamedItem("column").getTextContent());
         String msg = this.getMessage().replaceAll("\\{\\}", resultNode.getTextContent());
-        DelphiRuleViolation violation = new DelphiRuleViolation(this, (RuleContext) data, className,
+        DelphiRuleViolation violation = new DelphiRuleViolation(this, (RuleContext) ctx, className,
           methodName, packageName, line, column,
           msg);
-        addViolation(data, violation);
+        addViolation(ctx, violation);
       }
     } catch (Exception e) {
       DelphiUtils.LOG.debug("XPath error: '" + e.getMessage() + "' at rule " + getName());
       e.printStackTrace();
     }
-
-    return data;
   }
 
   /**

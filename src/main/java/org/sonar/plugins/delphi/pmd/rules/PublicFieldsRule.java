@@ -26,13 +26,15 @@ import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
+import net.sourceforge.pmd.RuleContext;
+
 /**
  * Class for checking if class fields are private or protected, not public
  */
 public class PublicFieldsRule extends DelphiRule {
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
     if (node.getType() == DelphiLexer.TkNewType) {
       // encountering new type, checking for its fields
       Tree parent = node.getChild(0);
@@ -44,12 +46,10 @@ public class PublicFieldsRule extends DelphiRule {
         } else if (isNotPublic(child.getType())) {
           isPublic = false;
         } else if (child.getType() == DelphiLexer.TkClassField && isPublic) {
-          addViolation(data, (DelphiPMDNode) child);
+          addViolation(ctx, (DelphiPMDNode) child);
         }
       }
     }
-
-    return data;
   }
 
   private boolean isNotPublic(int type) {

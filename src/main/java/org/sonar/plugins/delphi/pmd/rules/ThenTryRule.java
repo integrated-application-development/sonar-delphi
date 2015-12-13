@@ -26,6 +26,8 @@ import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
+import net.sourceforge.pmd.RuleContext;
+
 /**
  * "Try" should always be preceeded with "Begin" after "Then"
  * 
@@ -33,9 +35,9 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 public class ThenTryRule extends DelphiRule {
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
     if (node.getType() != DelphiLexer.THEN) {
-      return data;
+      return;
     }
 
     DelphiNode parent = (DelphiNode) node.getParent();
@@ -44,8 +46,7 @@ public class ThenTryRule extends DelphiRule {
     int nextNode = parent.getChildType(node.getChildIndex() + 1);
 
     if (nextNode == DelphiLexer.TRY) {
-      addViolation(data, node);
+      addViolation(ctx, node);
     }
-    return data;
   }
 }

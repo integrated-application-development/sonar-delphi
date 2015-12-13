@@ -29,6 +29,8 @@ import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
+import net.sourceforge.pmd.RuleContext;
+
 /**
  * Rule that checks if you are using function/variables names correctly, that is
  * you don't mispell them, example: <code>var
@@ -56,7 +58,7 @@ public class MixedNamesRule extends DelphiRule {
   }
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
     int type = node.getType();
     switch (type) {
       case DelphiLexer.IMPLEMENTATION:
@@ -70,7 +72,7 @@ public class MixedNamesRule extends DelphiRule {
         if (onInterface) {
           functionNames.addAll(buildNames(node, false));
         } else {
-          checkFunctionNames(node, data);
+          checkFunctionNames(node, ctx);
         }
         break;
       case DelphiLexer.VAR:
@@ -80,11 +82,10 @@ public class MixedNamesRule extends DelphiRule {
         break;
       case DelphiLexer.BEGIN:
         if (!onInterface) {
-          checkVariableNames(node, data, true);
+          checkVariableNames(node, ctx, true);
         }
         break;
     }
-    return data;
   }
 
   /**

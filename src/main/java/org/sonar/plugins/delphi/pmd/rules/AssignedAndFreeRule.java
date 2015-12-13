@@ -24,9 +24,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+
+import net.sourceforge.pmd.RuleContext;
 
 /**
  * Class for checking if we are using .Free with checking if variable is
@@ -39,7 +42,7 @@ public class AssignedAndFreeRule extends DelphiRule {
   protected Set<String> variables;
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
     if (node.getType() == DelphiLexer.IF) {
       started = true;
       variables.clear();
@@ -63,11 +66,9 @@ public class AssignedAndFreeRule extends DelphiRule {
       }
 
       else if ("free".equalsIgnoreCase(node.getText()) && freeVariable(node)) {
-        addViolation(data, node);
+        addViolation(ctx, node);
       }
     }
-
-    return data;
   }
 
   private boolean freeVariable(DelphiPMDNode node) {

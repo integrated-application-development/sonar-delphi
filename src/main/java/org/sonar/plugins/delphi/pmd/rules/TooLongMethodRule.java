@@ -26,13 +26,15 @@ import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
+import net.sourceforge.pmd.RuleContext;
+
 /**
  * Class for counting method lines. If too long, creates a violation.
  */
 public class TooLongMethodRule extends DelphiRule {
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
     if (node.getType() == DelphiLexer.PROCEDURE || node.getType() == DelphiLexer.FUNCTION) {
       Tree beginNode = null;
       // looking for begin statement
@@ -51,7 +53,7 @@ public class TooLongMethodRule extends DelphiRule {
 
       if (beginNode == null) {
         // no begin node, return
-        return data;
+        return;
       }
 
       int firstLine = node.getLine();
@@ -72,12 +74,10 @@ public class TooLongMethodRule extends DelphiRule {
 
         String msg = methodName.toString() + " is too long (" + lines + " lines). Maximum line count is "
           + limit;
-        addViolation(data, node, msg);
+        addViolation(ctx, node, msg);
         lastLineParsed = lastLine;
       }
     }
-
-    return data;
   }
 
   protected int getLastLine(Tree node) {

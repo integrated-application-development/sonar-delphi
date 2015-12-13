@@ -21,10 +21,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
+import net.sourceforge.pmd.RuleContext;
+
 public class ClassNameRule extends DelphiRule {
 
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
 
     if (node.getType() == DelphiLexer.TkClass) {
       String name = node.getParent().getText();
@@ -32,10 +34,8 @@ public class ClassNameRule extends DelphiRule {
       char firstCharAfterPrefix = name.charAt(1);
 
       if ((!name.startsWith("T") && !name.startsWith("E")) || firstCharAfterPrefix != Character.toUpperCase(firstCharAfterPrefix)) {
-        addViolation(data, node);
+        addViolation(ctx, node);
       }
     }
-
-    return data;
   }
 }
