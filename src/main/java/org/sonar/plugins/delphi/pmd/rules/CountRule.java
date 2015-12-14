@@ -37,14 +37,13 @@ public class CountRule extends DelphiRule {
   protected int limit;
   protected int count;
   /**
-   * Number to increase the count. 
+   * Number to increase the count.
    */
   protected int strength = 1;
   /**
-   * Should we reset counter after exceeding  the limit.
+   * Should we reset the counter after exceeding the limit.
    */
   protected boolean reset = true;
-  protected Object dataRef = null;
 
   public String getStringToSearch() {
     return stringToSearch;
@@ -60,10 +59,11 @@ public class CountRule extends DelphiRule {
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    dataRef = ctx;
-    if (shouldCount(node)) {
-      increaseCounter(strength);
+    if (!shouldCount(node)) {
+      return;
     }
+
+    increaseCounter(strength);
 
     if (exceedsLimit()) {
       addViolation(ctx, node);
@@ -74,8 +74,15 @@ public class CountRule extends DelphiRule {
   }
 
   protected boolean shouldCount(DelphiPMDNode node) {
-    return node.getText().equals(stringToSearch) ||
-      node.getType() == typeToSearch;
+    return matchesText(node) || matchesType(node);
+  }
+
+  protected boolean matchesText(DelphiPMDNode node) {
+    return node.getText().equals(stringToSearch);
+  }
+
+  protected boolean matchesType(DelphiPMDNode node) {
+    return node.getType() == typeToSearch;
   }
 
   protected void increaseCounter(int howMuch) {

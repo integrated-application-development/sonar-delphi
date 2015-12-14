@@ -55,6 +55,25 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  public void allClassesAfterFirstOneShouldAddIssue() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendDecl("type");
+    builder.appendDecl("  TMyClass = class");
+    builder.appendDecl("  end;");
+    builder.appendDecl("  TMyClass2 = class");
+    builder.appendDecl("  end;");
+    builder.appendDecl("  TMyClass3 = class");
+    builder.appendDecl("  end;");
+
+    analyse(builder);
+
+    assertThat(issues, hasSize(2));
+    assertThat(issues, hasItem(hasRuleKey("OneClassPerFileRule")));
+    assertThat(issues, hasItem(hasRuleLine(builder.getOffsetDecl() + 4)));
+    assertThat(issues, hasItem(hasRuleLine(builder.getOffsetDecl() + 6)));
+  }
+
+  @Test
   public void falsePositiveMetaClass() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");

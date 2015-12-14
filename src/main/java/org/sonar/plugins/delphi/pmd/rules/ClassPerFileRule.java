@@ -35,6 +35,7 @@ public class ClassPerFileRule extends CountRule {
   @Override
   protected void init() {
     super.init();
+    reset = false;
     setTypeToSearch(DelphiLexer.TkClass);
   }
 
