@@ -137,18 +137,18 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
     return jjtAccept((DelphiParserVisitor) visitor, data);
   }
 
-  public List<Tree> findAllChilds(int type) {
-    return internalfindAllChilds(this, type);
+  public List<Tree> findAllChildren(int type) {
+    return internalfindAllChildren(this, type);
   }
 
-  public List<Tree> internalfindAllChilds(Tree node, int type) {
+  public List<Tree> internalfindAllChildren(Tree node, int type) {
     List<Tree> result = new ArrayList<Tree>();
     for (int i = 0; i < node.getChildCount(); i++) {
       Tree child = node.getChild(i);
-      if (child.getType() == DelphiLexer.TkFunctionName) {
+      if (child.getType() == type) {
         result.add(child);
       } else {
-        result.addAll(internalfindAllChilds(child, type));
+        result.addAll(internalfindAllChildren(child, type));
       }
     }
     return result;

@@ -32,7 +32,7 @@ public class MethodNameRule extends DelphiRule {
 
     if (node.getType() == DelphiLexer.TkNewType) {
       if (isInterface(node) || !isPublished()) {
-        List<Tree> methodNodes = node.findAllChilds(DelphiLexer.TkFunctionName);
+        List<Tree> methodNodes = node.findAllChildren(DelphiLexer.TkFunctionName);
 
         for (Tree method : methodNodes) {
           String name = method.getChild(0).getText();
