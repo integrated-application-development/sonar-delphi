@@ -263,8 +263,6 @@ genericConstraint            : ident
                              ;
 genericPostfix               : '<' typeDecl (',' typeDecl)* '>'
                              ;
-genericTypeExpr              : '<' ident (genericTypeExpr)* '>'
-                             ;
 //****************************
 //section class
 //****************************
@@ -493,8 +491,7 @@ designator                   : ('inherited')? ( (namespacedQualifiedIdent | type
                              ;
 designatorItem               : '^'
                              | ('.' | '@') ident              //CHANGED added '@'
-                             | ('<' ident (',' ident)* '>')       //ADDED for proc<sth, sth>.foo;
-                             | genericTypeExpr
+                             | ('<' genericTypeIdent (',' genericTypeIdent)* '>')       //ADDED for proc<sth, sth>.foo;
                              | '[' expressionList ']'
                              | '(' (expression (colonConstruct)? (',' expression (colonConstruct)?)*)? ')' -> '(' (expression (colonConstruct)? (expression (colonConstruct)?)*)? ')'
                              ;
