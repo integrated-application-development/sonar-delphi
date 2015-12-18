@@ -100,4 +100,9 @@ public class GrammarTest {
     parseFile("AnonymousMethods.pas");
   }
 
+  @Test
+  public void parseGenerics() throws Exception {
+    parseFile("Generics.pas");
+  }
+
 }
