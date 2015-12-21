@@ -81,6 +81,11 @@ public class GrammarTest {
   }
 
   @Test
+  public void parseRecordConstructor() throws Exception {
+    parseFile("RecordConstructor.pas");
+  }
+
+  @Test
   public void parseLabel() throws Exception {
     parseFile("LabelUsage.pas");
   }

@@ -127,4 +127,61 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
     assertThat(issues, empty());
   }
 
+  @Test
+  public void shouldSkipRecordDeclarationOnImplementationSection() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendImpl("type");
+    builder.appendImpl("  TDummyRec = record");
+    builder.appendImpl("    FData : Integer;");
+    builder.appendImpl("    constructor Create(aData : Integer);");
+    builder.appendImpl("  end;");
+    builder.appendImpl("  ");
+    builder.appendImpl("constructor TDummyRec.Create(aData : Integer);");
+    builder.appendImpl("begin");
+    builder.appendImpl("  inherited;");
+    builder.appendImpl("  FData := aData;");
+    builder.appendImpl("end;");
+
+    analyse(builder);
+
+    assertThat(sensor.getErrors(), empty());
+    assertThat(issues, empty());
+  }
+
+  @Test
+  public void shouldSkipClassDeclarationOnImplementationSection() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendImpl("type");
+    builder.appendImpl("  TDummyClass = class");
+    builder.appendImpl("    FData : Integer;");
+    builder.appendImpl("    constructor Create(aData : Integer);");
+    builder.appendImpl("  end;");
+    builder.appendImpl("  ");
+    builder.appendImpl("constructor TDummyClass.Create(aData : Integer);");
+    builder.appendImpl("begin");
+    builder.appendImpl("  inherited;");
+    builder.appendImpl("  FData := aData;");
+    builder.appendImpl("end;");
+
+    analyse(builder);
+
+    assertThat(sensor.getErrors(), empty());
+    assertThat(issues, empty());
+  }
+
+  @Test
+  public void shouldSkipInterfaceDeclarationOnImplementationSection() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendImpl("type");
+    builder.appendImpl("  IDummyInterface = interface");
+    builder.appendImpl("  ['{FBDFC204-9986-48D5-BBBC-ED5A99834A9F}']");
+    builder.appendImpl("    procedure Dummy;");
+    builder.appendImpl("  end;");
+
+    analyse(builder);
+
+    assertThat(sensor.getErrors(), empty());
+    assertThat(issues, empty());
+  }
+
 }

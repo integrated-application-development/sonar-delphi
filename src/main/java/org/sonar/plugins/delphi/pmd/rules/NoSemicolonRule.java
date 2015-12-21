@@ -43,8 +43,7 @@ public class NoSemicolonRule extends DelphiRule {
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    if (!inImplementation) {
-      inImplementation = node.getType() == LexerMetrics.IMPLEMENTATION.toMetrics();
+    if (!isImplementationSection()) {
       return;
     }
 

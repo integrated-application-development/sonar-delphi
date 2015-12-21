@@ -25,21 +25,9 @@ import net.sourceforge.pmd.RuleContext;
 
 public class PointerNameRule extends DelphiRule {
 
-  private boolean isImplementationSection;
-
-  @Override
-  protected void init() {
-    super.init();
-    isImplementationSection = false;
-  }
-
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    if (!isImplementationSection) {
-      isImplementationSection = node.getType() == DelphiLexer.IMPLEMENTATION;
-    }
-
-    if (isImplementationSection) {
+    if (isImplementationSection()) {
       return;
     }
 

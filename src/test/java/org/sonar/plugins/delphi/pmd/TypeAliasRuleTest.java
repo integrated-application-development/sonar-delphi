@@ -78,4 +78,30 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
     assertThat(issues, is(empty()));
   }
 
+  @Test
+  public void falsePositiveEmptyRecordIsNotTypeAlias() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+
+    builder.appendDecl("type");
+    builder.appendDecl("  TMyRecord = record");
+    builder.appendDecl("  end;");
+
+    analyse(builder);
+
+    assertThat(issues, is(empty()));
+  }
+
+  @Test
+  public void falsePositiveEmptyClassIsNotTypeAlias() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+
+    builder.appendDecl("type");
+    builder.appendDecl("  TMyClass = class");
+    builder.appendDecl("  end;");
+
+    analyse(builder);
+
+    assertThat(issues, is(empty()));
+  }
+
 }

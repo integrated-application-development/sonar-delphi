@@ -18,28 +18,22 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import org.antlr.runtime.tree.Tree;
+import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
-
-import net.sourceforge.pmd.RuleContext;
 
 public class InterfaceNameRule extends DelphiRule {
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
 
-    if (node.getType() == DelphiLexer.TkNewType) {
-      Tree candidateNode = node.getChild(0).getChild(0);
+    if (node.getType() == DelphiLexer.TkInterface) {
+      String name = node.getParent().getText();
 
-      if (candidateNode.getType() == DelphiLexer.INTERFACE) {
-        String name = candidateNode.getParent().getText();
+      char firstCharAfterPrefix = name.charAt(1);
 
-        char firstCharAfterPrefix = name.charAt(1);
-
-        if (!name.startsWith("I") || firstCharAfterPrefix != Character.toUpperCase(firstCharAfterPrefix)) {
-          addViolation(ctx, (DelphiPMDNode) candidateNode);
-        }
+      if (!name.startsWith("I") || firstCharAfterPrefix != Character.toUpperCase(firstCharAfterPrefix)) {
+        addViolation(ctx, (DelphiPMDNode) node.getChild(0));
       }
     }
   }

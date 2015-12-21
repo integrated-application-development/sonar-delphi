@@ -85,7 +85,7 @@
 		<description>You may have forgotten to fill some interface with methods.</description>
 		<properties>
 			<property name="xpath">
-				<value>//TkNewType/*/interface[count(following-sibling::*) &lt; 4]</value>
+				<value>//TkNewType/*/TkInterface/interface[count(following-sibling::*) &lt; 3]</value>
 			</property>
 		</properties>
 	</rule>
@@ -319,7 +319,7 @@
 		<description>Every interface should contain unique Guid.</description>
 		<properties>
 			<property name="xpath">
-				<value>//TkNewType/*/interface[following-sibling::*[2][count(child::*)=0]]</value>
+				<value>//TkNewType/*/TkInterface/interface[following-sibling::*[2][count(child::*)=0]]</value>
 			</property>
 		</properties>
 	</rule>
@@ -374,9 +374,9 @@ x.Free;			//GOOD, sufficent enough
 		<properties>
 			<property name="xpath">
 				<value>//TkNewType/*[count(descendant::*) &lt; 3 and name(descendant::*) != 'class' and
-					name(descendant::*) != 'record' and name(descendant::*) != 'array' and name(descendant::*) !=
+					name(descendant::*) != 'TkRecord' and name(descendant::*) != 'array' and name(descendant::*) !=
 					'set' and name(descendant::*) != 'dash_pointer' and name(descendant::*) != 'TkClassOfType' and
-					name(descendant::*) != 'interface' and name() != 'TkCustomAttribute']
+					name(descendant::*) != 'TkInterface' and name() != 'TkCustomAttribute']
 				</value>
 			</property>
 		</properties>

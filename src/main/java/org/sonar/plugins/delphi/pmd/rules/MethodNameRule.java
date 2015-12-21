@@ -46,4 +46,8 @@ public class MethodNameRule extends DelphiRule {
     }
   }
 
+  private boolean isInterface(DelphiPMDNode node) {
+    return node.getChild(0).getChild(0).getType() == DelphiLexer.TkInterface;
+  }
+
 }

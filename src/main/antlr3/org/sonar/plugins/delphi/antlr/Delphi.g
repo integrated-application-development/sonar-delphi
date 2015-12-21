@@ -269,10 +269,10 @@ genericPostfix               : '<' typeDecl (',' typeDecl)* '>'
 classDecl                    : classTypeTypeDecl
                              | classTypeDecl -> ^(TkClass classTypeDecl)
                              | classHelperDecl -> ^(TkClass classHelperDecl)
-                             | interfaceTypeDecl
-                             | objectDecl
-                             | recordDecl
-                             | recordHelperDecl
+                             | interfaceTypeDecl -> ^(TkInterface interfaceTypeDecl)
+                             | objectDecl -> ^(TkObject objectDecl)
+                             | recordDecl -> ^(TkRecord recordDecl)
+                             | recordHelperDecl -> ^(TkRecordHelper recordHelperDecl)
                              ;
 classTypeTypeDecl            : 'class' 'of' typeId -> ^(TkClassOfType typeId)
                              ;
@@ -300,7 +300,7 @@ classHelperItem              : visibility
                              | ('class')? varSection
                              ;
 interfaceTypeDecl            : interfaceKey (classParent)? (interfaceGuid)? (interfaceItem)* 'end' 
-                              -> interfaceKey ^(TkClassParents (classParent)? ) ^(TkGuid (interfaceGuid)?) (interfaceItem)* 'end'
+                              -> interfaceKey ^(TkClassParents (classParent)? ) ^(TkGuid (interfaceGuid)?) (interfaceItem)*
                              | interfaceKey (classParent)? 
                               -> interfaceKey ^(TkClassParents (classParent)?)
                              ;
@@ -312,7 +312,7 @@ interfaceGuid                : '[' QuotedString ']' -> QuotedString
 interfaceItem                : classMethod
                              | ('class')? classProperty
                              ;
-objectDecl                   : 'object' (classParent)? (objectItem)* 'end'
+objectDecl                   : 'object' (classParent)? (objectItem)* 'end' -> 'object' (classParent)? (objectItem)*
                              ;
 objectItem                   : visibility
                              | classMethod
@@ -321,9 +321,9 @@ objectItem                   : visibility
 recordDecl                   : simpleRecord
                              | variantRecord
                              ;
-simpleRecord                 : 'record' (recordField)* (recordItem)* 'end'
+simpleRecord                 : 'record' (recordField)* (recordItem)* 'end' -> 'record' (recordField)* (recordItem)*
                              ;
-variantRecord                : 'record' (recordField)* recordVariantSection 'end'
+variantRecord                : 'record' (recordField)* recordVariantSection 'end' -> 'record' (recordField)* recordVariantSection
                              ;
 recordItem                   : visibility     //ADDED
                              | classMethod
@@ -890,6 +890,14 @@ TkCustomAttributeArgs   : 'CUSTOM_ATTRIBUTE_ARGS'
 TkNewType               : 'NEW_TYPE'
                         ;
 TkClass                 : 'CLASS'
+                        ;
+TkRecord                : 'RECORD_TYPE'
+                        ;
+TkRecordHelper          : 'RECORD_HELPER'
+                        ;
+TkInterface             : 'INTERFACE_TYPE'
+                        ;
+TkObject                : 'OBJECT_TYPE'
                         ;
 TkClassOfType           : 'CLASS_OF_TYPE'
                         ;

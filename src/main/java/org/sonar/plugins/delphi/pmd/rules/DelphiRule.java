@@ -29,7 +29,6 @@ import net.sourceforge.pmd.PropertyDescriptor;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.IntegerProperty;
 import net.sourceforge.pmd.properties.StringProperty;
-import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
@@ -44,6 +43,8 @@ public class DelphiRule extends AbstractJavaRule {
   protected int lastLineParsed;
 
   private int currentVisibility;
+
+  private boolean inImplementationSection = false;
 
   public static final PropertyDescriptor LIMIT = new IntegerProperty("limit", "The max limit.", 1, 1.0f);
   public static final PropertyDescriptor START = new StringProperty("start", "The AST node to start from", "", 1.0f);
@@ -83,6 +84,9 @@ public class DelphiRule extends AbstractJavaRule {
       // optimization and //NOSONAR line skip
       if (node.getLine() >= lastLineParsed) {
         updateVisibility(node);
+        if (!inImplementationSection) {
+          inImplementationSection = node.getType() == DelphiLexer.IMPLEMENTATION;
+        }
         visit(node, ctx);
         lastLineParsed = node.getLine();
       }
@@ -153,8 +157,11 @@ public class DelphiRule extends AbstractJavaRule {
     return currentVisibility == DelphiLexer.PUBLISHED;
   }
 
-  protected boolean isInterface(Tree node) {
-    return node.getChild(0).getChild(0).getType() == DelphiLexer.INTERFACE;
+  protected boolean isInterfaceSection() {
+    return !isImplementationSection();
   }
 
+  public boolean isImplementationSection() {
+    return inImplementationSection;
+  }
 }
