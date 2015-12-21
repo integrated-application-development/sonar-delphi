@@ -22,24 +22,16 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-import net.sourceforge.pmd.RuleContext;
-
 /**
  * Checks if semicolons are properly placed
  */
 public class NoSemicolonRule extends DelphiRule {
-
-  private boolean inImplementation = false;
-
-  @Override
-  public void init() {
-    inImplementation = false;
-  }
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
