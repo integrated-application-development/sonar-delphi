@@ -34,11 +34,11 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.rule.ActiveRule;
+import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.Issue;
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RuleFinder;
 import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.StubIssueBuilder;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
@@ -72,7 +72,7 @@ public class DeadCodeMetricsTest {
   private ResourcePerspectives perspectives;
   private Issuable issuable;
   private final List<Issue> issues = new ArrayList<Issue>();
-  private RuleFinder ruleFinder;
+  private ActiveRules activeRules;
 
   @Before
   public void init() {
@@ -132,15 +132,17 @@ public class DeadCodeMetricsTest {
       }
     });
 
-    ruleFinder = mock(RuleFinder.class);
-    when(ruleFinder.find(DeadCodeMetrics.RULE_QUERY_UNUSED_UNIT)).thenReturn(
-      Rule.create(DeadCodeMetrics.RULE_QUERY_UNUSED_UNIT.getRepositoryKey(),
-        DeadCodeMetrics.RULE_QUERY_UNUSED_UNIT.getKey()));
-    when(ruleFinder.find(DeadCodeMetrics.RULE_QUERY_UNUSED_FUNCTION)).thenReturn(
-      Rule.create(DeadCodeMetrics.RULE_QUERY_UNUSED_FUNCTION.getRepositoryKey(),
-        DeadCodeMetrics.RULE_QUERY_UNUSED_FUNCTION.getKey()));
+    ActiveRule activeRuleUnusedFunction = mock(ActiveRule.class);
+    ActiveRule activeRuleUnusedUnit = mock(ActiveRule.class);
 
-    metrics = new DeadCodeMetrics(null, ruleFinder, perspectives);
+    when(activeRuleUnusedFunction.ruleKey()).thenReturn(DeadCodeMetrics.RULE_KEY_UNUSED_FUNCTION);
+    when(activeRuleUnusedUnit.ruleKey()).thenReturn(DeadCodeMetrics.RULE_KEY_UNUSED_UNIT);
+
+    activeRules = mock(ActiveRules.class);
+    when(activeRules.find(DeadCodeMetrics.RULE_KEY_UNUSED_FUNCTION)).thenReturn(activeRuleUnusedUnit);
+    when(activeRules.find(DeadCodeMetrics.RULE_KEY_UNUSED_UNIT)).thenReturn(activeRuleUnusedUnit);
+
+    metrics = new DeadCodeMetrics(null, activeRules, perspectives);
   }
 
   @Test

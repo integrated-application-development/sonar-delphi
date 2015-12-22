@@ -31,14 +31,12 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.BatchExtension;
-import org.sonar.api.CoreProperties;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Directory;
 import org.sonar.api.resources.Project;
-import org.sonar.api.rules.RuleFinder;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.project.DelphiProject;
@@ -53,7 +51,6 @@ public class DelphiProjectHelper implements BatchExtension {
   public static final String DEFAULT_PACKAGE_NAME = "[default]";
 
   private final Settings settings;
-  private final RuleFinder ruleFinder;
   private final FileSystem fs;
   private List<File> excludedSources;
 
@@ -61,21 +58,13 @@ public class DelphiProjectHelper implements BatchExtension {
    * ctor used by Sonar
    *
    * @param settings
-   * @param ruleFinder
+   * @param fs
    */
-  public DelphiProjectHelper(Settings settings, RuleFinder ruleFinder, FileSystem fs) {
+  public DelphiProjectHelper(Settings settings, FileSystem fs) {
     this.settings = settings;
-    this.ruleFinder = ruleFinder;
     this.fs = fs;
     DelphiUtils.LOG.info("Delphi Project Helper creation!!!");
     this.excludedSources = detectExcludedSources();
-  }
-
-  /**
-   * @return Rule finder
-   */
-  public RuleFinder getRuleFinder() {
-    return ruleFinder;
   }
 
   /**
@@ -175,17 +164,6 @@ public class DelphiProjectHelper implements BatchExtension {
       return null;
     }
     return settings.getString(DelphiPlugin.WORKGROUP_FILE_KEY);
-  }
-
-  /**
-   * Should we import sources or not
-   *
-   * @return True if so, false otherwise
-   */
-  public boolean getImportSources() {
-    // Always import source code, see
-    // https://jira.sonarsource.com/browse/SONAR-5735
-    return CoreProperties.CORE_IMPORT_SOURCES_DEFAULT_VALUE;
   }
 
   /**

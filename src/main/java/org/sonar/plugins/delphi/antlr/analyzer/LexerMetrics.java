@@ -77,7 +77,8 @@ public enum LexerMetrics {
   THEN(46, DelphiLexer.THEN),
   DO(47, DelphiLexer.DO),
   DOT(48, DelphiLexer.DOT),
-  AS(49, DelphiLexer.AS);
+  AS(49, DelphiLexer.AS),
+  OPERATOR(50, DelphiLexer.OPERATOR);
 
   private final int code;
   private final int metrics;

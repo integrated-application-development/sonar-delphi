@@ -30,13 +30,13 @@ import org.apache.commons.io.FilenameUtils;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
+import org.sonar.api.batch.rule.ActiveRule;
+import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.Issue;
 import org.sonar.api.resources.Project;
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RuleFinder;
-import org.sonar.api.rules.RuleQuery;
+import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
@@ -58,27 +58,23 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
   private List<String> unusedUnits;
   private Set<FunctionInterface> unusedFunctions;
   private List<UnitInterface> allUnits;
-  private Rule unitRule = null;
-  private Rule functionRule = null;
+  private final ActiveRule unitRule;
+  private final ActiveRule functionRule;
   private final ResourcePerspectives perspectives;
 
-  public static final RuleQuery RULE_QUERY_UNUSED_UNIT = RuleQuery.create()
-    .withRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY)
-    .withKey("UnusedUnitRule");
-  public static final RuleQuery RULE_QUERY_UNUSED_FUNCTION = RuleQuery.create()
-    .withRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY)
-    .withKey("UnusedFunctionRule");
+  public static final RuleKey RULE_KEY_UNUSED_UNIT = RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, "UnusedUnitRule");
+  public static final RuleKey RULE_KEY_UNUSED_FUNCTION = RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, "UnusedFunctionRule");
 
   /**
    * {@inheritDoc}
    */
-  public DeadCodeMetrics(Project delphiProject, RuleFinder ruleFinder, ResourcePerspectives perspectives) {
+  public DeadCodeMetrics(Project delphiProject, ActiveRules activeRules, ResourcePerspectives perspectives) {
     super(delphiProject);
     this.perspectives = perspectives;
     isCalculated = false;
     allUnits = new ArrayList<UnitInterface>();
-    unitRule = ruleFinder.find(RULE_QUERY_UNUSED_UNIT);
-    functionRule = ruleFinder.find(RULE_QUERY_UNUSED_FUNCTION);
+    unitRule = activeRules.find(RULE_KEY_UNUSED_UNIT);
+    functionRule = activeRules.find(RULE_KEY_UNUSED_FUNCTION);
   }
 
   /**

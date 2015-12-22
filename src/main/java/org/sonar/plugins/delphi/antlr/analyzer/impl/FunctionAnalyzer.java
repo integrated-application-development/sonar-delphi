@@ -48,7 +48,8 @@ public class FunctionAnalyzer extends CodeAnalyzer {
 
   private static final LexerMetrics FUNCTION_NODE_TYPE[] = {LexerMetrics.FUNCTION, LexerMetrics.PROCEDURE,
     LexerMetrics.DESTRUCTOR,
-    LexerMetrics.CONSTRUCTOR};
+    LexerMetrics.CONSTRUCTOR,
+    LexerMetrics.OPERATOR};
 
   private String functionName;
   private String functionRealName;

@@ -29,15 +29,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import net.sourceforge.pmd.ast.ParseException;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.resources.Directory;
 import org.sonar.api.resources.DuplicatedSourceException;
 import org.sonar.api.resources.Project;
-import org.sonar.api.rules.RuleFinder;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
 import org.sonar.plugins.delphi.antlr.analyzer.DelphiASTAnalyzer;
@@ -51,7 +52,6 @@ import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.metrics.BasicMetrics;
 import org.sonar.plugins.delphi.metrics.ComplexityMetrics;
 import org.sonar.plugins.delphi.metrics.DeadCodeMetrics;
-import org.sonar.plugins.delphi.metrics.LCOM4Metrics;
 import org.sonar.plugins.delphi.metrics.MetricsInterface;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -73,13 +73,13 @@ public class DelphiSensor implements Sensor {
   private List<UnitInterface> units = null;
 
   private final DelphiProjectHelper delphiProjectHelper;
-  private final RuleFinder ruleFinder;
+  private final ActiveRules activeRules;
   private final ResourcePerspectives perspectives;
 
-  public DelphiSensor(DelphiProjectHelper delphiProjectHelper, RuleFinder ruleFinder,
+  public DelphiSensor(DelphiProjectHelper delphiProjectHelper, ActiveRules activeRules,
     ResourcePerspectives perspectives) {
     this.delphiProjectHelper = delphiProjectHelper;
-    this.ruleFinder = ruleFinder;
+    this.activeRules = activeRules;
     this.perspectives = perspectives;
   }
 
@@ -108,9 +108,8 @@ public class DelphiSensor implements Sensor {
       parseFiles(analyzer, delphiProject, project);
       parsePackages(sensorContext);
 
-      MetricsInterface metrics[] = {new BasicMetrics(project), new ComplexityMetrics(project, ruleFinder, perspectives),
-        new LCOM4Metrics(project),
-        new DeadCodeMetrics(project, ruleFinder, perspectives)};
+      MetricsInterface metrics[] = {new BasicMetrics(project), new ComplexityMetrics(project, activeRules, perspectives),
+        new DeadCodeMetrics(project, activeRules, perspectives)};
       processFiles(metrics, sensorContext);
     }
   }
@@ -181,7 +180,6 @@ public class DelphiSensor implements Sensor {
     List<File> excludedDirs = delphiProjectHelper.getExcludedSources();
     List<File> sourceFiles = delphiProject.getSourceFiles();
     List<String> definitions = delphiProject.getDefinitions();
-    boolean importSources = delphiProjectHelper.getImportSources();
 
     DelphiSourceSanitizer.setIncludeDirectories(includedDirs);
     DelphiSourceSanitizer.setDefinitions(definitions);
@@ -196,7 +194,7 @@ public class DelphiSensor implements Sensor {
     DelphiUtils.LOG.info("Files to parse: " + sourceFiles.size());
 
     for (File delphiFile : sourceFiles) {
-      parseSourceFile(delphiFile, excludedDirs, importSources, analyser, project);
+      parseSourceFile(delphiFile, excludedDirs, analyser, project);
       progressReporter.progress();
     }
 
@@ -209,11 +207,10 @@ public class DelphiSensor implements Sensor {
    * 
    * @param sourceFile Source file to parse
    * @param excludedDirs List of excluded dirs
-   * @param importSources Should we import sources to Sonar
    * @param analyzer Source code analyser
    * @param project Project
    */
-  private void parseSourceFile(File sourceFile, List<File> excludedDirs, boolean importSources, ASTAnalyzer analyzer,
+  private void parseSourceFile(File sourceFile, List<File> excludedDirs, ASTAnalyzer analyzer,
     Project project) {
     if (delphiProjectHelper.isExcluded(sourceFile, excludedDirs)) {
       return;
@@ -239,8 +236,7 @@ public class DelphiSensor implements Sensor {
     resourceList.add(resource);
 
     ASTTree ast = analyseSourceFile(sourceFile, analyzer);
-    if (importSources && ast != null) {
-
+    if (ast != null) {
       try {
         ast.getFileSource();
       } catch (DuplicatedSourceException e) {
@@ -260,14 +256,19 @@ public class DelphiSensor implements Sensor {
    * @return AST Tree
    */
   private ASTTree analyseSourceFile(File sourceFile, ASTAnalyzer analyser) {
-    DelphiAST ast = null;
+    final DelphiAST ast = new DelphiAST(sourceFile, delphiProjectHelper.encoding());
+
+    if (ast.isError()) {
+      throw new ParseException("Error while parsing " + sourceFile.getAbsolutePath());
+    }
+
     try {
-      ast = new DelphiAST(sourceFile, delphiProjectHelper.encoding());
       analyser.analyze(ast);
       ++scannedFiles;
     } catch (Exception e) {
-      DelphiUtils.LOG.debug("Error parsing file: " + e.getMessage() + " " + sourceFile.getAbsolutePath());
+      DelphiUtils.LOG.error("Error analyzing file: " + e.getMessage() + " " + sourceFile.getAbsolutePath());
     }
+
     return ast;
   }
 

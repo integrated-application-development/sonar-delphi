@@ -51,7 +51,8 @@ public class DefaultDelphiProfile extends ProfileDefinition {
       "/org/sonar/plugins/delphi/pmd/default-delphi-profile.xml"));
     RulesProfile profile = importer.importProfile(reader, messages);
     profile.setLanguage(DelphiLanguage.KEY);
-    profile.setName("Delphi Default Profile");
+    profile.setName("Sonar way");
+    profile.setDefaultProfile(Boolean.TRUE);
     return profile;
   }
 

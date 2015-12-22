@@ -30,20 +30,21 @@ import java.util.List;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.rule.ActiveRule;
+import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RuleFinder;
+import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.debug.ProjectMetricsXMLParser;
-import org.sonar.plugins.delphi.metrics.ComplexityMetrics;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
@@ -58,7 +59,7 @@ public class DelphiSensorTest {
   private File baseDir = null;
   private Map<String, Integer> keyMetricIndex = null;
   private DelphiProjectHelper delphiProjectHelper;
-  private RuleFinder ruleFinder;
+  private ActiveRules activeRules;
   private ResourcePerspectives perspectives;
 
   private static final String ROOT_NAME = "/org/sonar/plugins/delphi/SimpleDelphiProject";
@@ -130,15 +131,12 @@ public class DelphiSensorTest {
       }
     });
 
-    ruleFinder = mock(RuleFinder.class);
+    activeRules = mock(ActiveRules.class);
+    ActiveRule activeRule = mock(ActiveRule.class);
+    when(activeRules.find(Matchers.any(RuleKey.class))).thenReturn(activeRule);
+    when(activeRule.param("Threshold")).thenReturn("3");
 
-    ruleFinder = mock(RuleFinder.class);
-    Rule rule = Rule.create(ComplexityMetrics.RULE_QUERY_METHOD_CYCLOMATIC_COMPLEXITY.getRepositoryKey(),
-      ComplexityMetrics.RULE_QUERY_METHOD_CYCLOMATIC_COMPLEXITY.getKey());
-    rule.createParameter("Threshold").setDefaultValue("3");
-    when(ruleFinder.find(ComplexityMetrics.RULE_QUERY_METHOD_CYCLOMATIC_COMPLEXITY)).thenReturn(rule);
-
-    sensor = new DelphiSensor(delphiProjectHelper, ruleFinder, perspectives);
+    sensor = new DelphiSensor(delphiProjectHelper, activeRules, perspectives);
   }
 
   @Test

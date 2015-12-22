@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Set;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.rule.ActiveRule;
+import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.Issue;
@@ -34,9 +36,7 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.measures.RangeDistributionBuilder;
 import org.sonar.api.resources.Project;
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RuleFinder;
-import org.sonar.api.rules.RuleQuery;
+import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.delphi.antlr.DelphiParser;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
@@ -52,19 +52,11 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
 
   private static final Number[] FUNCTIONS_DISTRIB_BOTTOM_LIMITS = {1, 2, 4, 6, 8, 10, 12, 20, 30};
   private static final Number[] FILES_DISTRIB_BOTTOM_LIMITS = {1, 5, 10, 20, 30, 60, 90};
-  private static final Number[] CLASS_DISTRIB_BOTTOM_LIMITS = {1, 2, 4, 6, 8, 10, 12, 15, 20, 30, 50};
-  private static final Number[] RFC_DISTRIB_BOTTOM_LIMITS = {1, 5, 10, 20, 30, 40, 50, 70, 90, 100, 150};
 
-  public static final RuleQuery RULE_QUERY_METHOD_CYCLOMATIC_COMPLEXITY = RuleQuery.create()
-    .withRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY)
-    .withKey("MethodCyclomaticComplexityRule");
+  public static final RuleKey RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY = RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, "MethodCyclomaticComplexityRule");
 
-  private Rule methodCyclomaticComplexityRule;
+  private ActiveRule methodCyclomaticComplexityRule;
 
-  // class_complexity_distribution = Number of classes for given complexities
-  private RangeDistributionBuilder classDist = new RangeDistributionBuilder(
-    CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION,
-    CLASS_DISTRIB_BOTTOM_LIMITS);
   // FUNCTION_COMPLEXITY_DISTRIBUTION = Number of methods for given
   // complexities
   private RangeDistributionBuilder functionDist = new RangeDistributionBuilder(
@@ -73,9 +65,6 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
   // FILE COMPLEXITY DISTRIBUTION = Number of files for given complexities
   private RangeDistributionBuilder fileDist = new RangeDistributionBuilder(CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION,
     FILES_DISTRIB_BOTTOM_LIMITS);
-  // RFC CLASS DISTRIBUTION
-  private RangeDistributionBuilder rfcDist = new RangeDistributionBuilder(CoreMetrics.RFC_DISTRIBUTION,
-    RFC_DISTRIB_BOTTOM_LIMITS);
 
   /**
    * The Cyclomatic Complexity Number.
@@ -109,36 +98,18 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
    * Number of public classes, public methods  (without accessors) and public properties  (without public final static ones).
    */
   private double publicApi = 0;
-  /**
-   * The depth of inheritance tree (DIT) metric  provides for each class a measure of the 
-   * inheritance levels from the  object hierarchy top.
-   */
-  private double dit = 0;
-  private double numberOfChildren = 0;
 
-  /**
-   *  The response set of a class is a set of methods that can potentially be 
-   *  executed in response to a message received by an object of that class. 
-   *  RFC is simply the number of methods in the set.
-   * 
-   * -- WARNING ACHTUNG UWAGA -- This method counts only functions, that are
-   * in some unit that is in "used" section and were parsed by
-   * AbstractAnalyser. That's why system function and procedures (such as
-   * "writeln") are not counted, unless their unit is also parsed by ANTLR
-   * analyser.
-   */
-  private double rfc = 0;
   private ResourcePerspectives perspectives;
   private Integer threshold;
 
   /**
    * {@inheritDoc}
    */
-  public ComplexityMetrics(Project delphiProject, RuleFinder ruleFinder, ResourcePerspectives perspectives) {
+  public ComplexityMetrics(Project delphiProject, ActiveRules activeRules, ResourcePerspectives perspectives) {
     super(delphiProject);
     this.perspectives = perspectives;
-    methodCyclomaticComplexityRule = ruleFinder.find(RULE_QUERY_METHOD_CYCLOMATIC_COMPLEXITY);
-    threshold = methodCyclomaticComplexityRule.getParam("Threshold").getDefaultValueAsInteger();
+    methodCyclomaticComplexityRule = activeRules.find(RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY);
+    threshold = Integer.valueOf(methodCyclomaticComplexityRule.param("Threshold"));
 
   }
 
@@ -168,19 +139,11 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
         classComplexity += cl.getComplexity();
         accessorsCount += cl.getAccessorCount();
         publicApi += cl.getPublicApiCount();
-        numberOfChildren += cl.getDescendants().length;
-        rfc += cl.getRfc();
-        int clDit = cl.getDit();
-        if (clDit > dit) {
-          dit = clDit;
-        }
 
         for (FunctionInterface func : cl.getFunctions()) {
           processFunction(resource, func);
           processedFunc.add(func.getName());
         }
-        classDist.add(Double.valueOf(cl.getComplexity()));
-        rfcDist.add(Double.valueOf(cl.getRfc()));
       }
     }
 
@@ -262,18 +225,8 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
       sensorContext.saveMeasure(resource, CoreMetrics.ACCESSORS, getMetric("ACCESSORS"));
       // Number of public classes, public methods (without accessors) and public properties (without public static final ones)
       sensorContext.saveMeasure(resource, CoreMetrics.PUBLIC_API, getMetric("PUBLIC_API"));
-      // The depth of inheritance tree (DIT) metric provides for each class a measure of the inheritance levels from the object hierarchy
-      // top.
-      sensorContext.saveMeasure(resource, CoreMetrics.DEPTH_IN_TREE, getMetric("DEPTH_IN_TREE"));
-      // A class's number of children (NOC) metric simply measures the number of direct and indirect descendants of the class.
-      sensorContext.saveMeasure(resource, CoreMetrics.NUMBER_OF_CHILDREN, getMetric("NUMBER_OF_CHILDREN"));
-      // The response set of a class is a set of methods that can potentially be executed in response to a message received by an object of
-      // that class. RFC is simply the number of methods in the set.
-      sensorContext.saveMeasure(resource, CoreMetrics.RFC, getMetric("RFC"));
       sensorContext.saveMeasure(resource, functionDist.build().setPersistenceMode(PersistenceMode.MEMORY));
-      sensorContext.saveMeasure(resource, classDist.build().setPersistenceMode(PersistenceMode.MEMORY));
       sensorContext.saveMeasure(resource, fileDist.build().setPersistenceMode(PersistenceMode.MEMORY));
-      sensorContext.saveMeasure(resource, rfcDist.build().setPersistenceMode(PersistenceMode.MEMORY));
     } catch (IllegalStateException ise) {
       DelphiUtils.LOG.error(ise.getMessage());
     }
@@ -288,9 +241,6 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
     setMetric("FUNCTIONS", methodsCount);
     setMetric("ACCESSORS", accessorsCount);
     setMetric("PUBLIC_API", publicApi);
-    setMetric("DEPTH_IN_TREE", dit);
-    setMetric("NUMBER_OF_CHILDREN", numberOfChildren);
-    setMetric("RFC", rfc);
   }
 
   private void reset() {
@@ -302,10 +252,6 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
     accessorsCount = 0;
     statementsCount = 0;
     publicApi = 0;
-    numberOfChildren = 0;
-    rfc = 0;
-    dit = 0;
-    classDist.clear();
     functionDist.clear();
     fileDist.clear();
     clearMetrics();

@@ -32,11 +32,11 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.rule.ActiveRule;
+import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.Issue;
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RuleFinder;
 import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.IssueMatchers;
 import org.sonar.plugins.delphi.StubIssueBuilder;
@@ -58,7 +58,7 @@ public class ComplexityMetricsTest {
 
   private final List<Issue> issues = new ArrayList<Issue>();
 
-  private RuleFinder ruleFinder;
+  private ActiveRules activeRules;
 
   @Before
   public void setup() {
@@ -79,11 +79,11 @@ public class ComplexityMetricsTest {
       }
     });
 
-    ruleFinder = mock(RuleFinder.class);
-    Rule rule = Rule.create(ComplexityMetrics.RULE_QUERY_METHOD_CYCLOMATIC_COMPLEXITY.getRepositoryKey(),
-      ComplexityMetrics.RULE_QUERY_METHOD_CYCLOMATIC_COMPLEXITY.getKey());
-    rule.createParameter("Threshold").setDefaultValue("3");
-    when(ruleFinder.find(ComplexityMetrics.RULE_QUERY_METHOD_CYCLOMATIC_COMPLEXITY)).thenReturn(rule);
+    activeRules = mock(ActiveRules.class);
+    ActiveRule activeRule = mock(ActiveRule.class);
+    when(activeRules.find(ComplexityMetrics.RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY)).thenReturn(activeRule);
+    when(activeRule.param("Threshold")).thenReturn("3");
+    when(activeRule.ruleKey()).thenReturn(ComplexityMetrics.RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY);
   }
 
   @Test
@@ -95,12 +95,12 @@ public class ComplexityMetricsTest {
     analyzer.analyze(new DelphiAST(testFile));
 
     // processing
-    ComplexityMetrics metrics = new ComplexityMetrics(null, ruleFinder, perspectives);
+    ComplexityMetrics metrics = new ComplexityMetrics(null, activeRules, perspectives);
     metrics.analyse(new DefaultInputFile("test"), null, analyzer.getResults().getClasses(), analyzer.getResults().getFunctions(), null);
     String[] keys = {"ACCESSORS", "CLASS_COMPLEXITY", "CLASSES", "COMPLEXITY", "FUNCTIONS", "FUNCTION_COMPLEXITY",
       "PUBLIC_API",
-      "STATEMENTS", "DEPTH_IN_TREE", "NUMBER_OF_CHILDREN", "RFC"};
-    double[] values = {2.0, 3.5, 2.0, 10.0, 4.0, 2.5, 5.0, 20.0, 2.0, 1.0, 3.0};
+      "STATEMENTS"};
+    double[] values = {2.0, 3.5, 2.0, 10.0, 4.0, 2.5, 5.0, 20.0};
 
     for (int i = 0; i < keys.length; ++i) {
       assertEquals(keys[i] + " failure ->", values[i], metrics.getMetric(keys[i]), 0.0);
