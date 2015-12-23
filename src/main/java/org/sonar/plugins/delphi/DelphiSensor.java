@@ -259,7 +259,8 @@ public class DelphiSensor implements Sensor {
     final DelphiAST ast = new DelphiAST(sourceFile, delphiProjectHelper.encoding());
 
     if (ast.isError()) {
-      throw new ParseException("Error while parsing " + sourceFile.getAbsolutePath());
+      DelphiUtils.LOG.error("Error while parsing " + sourceFile.getAbsolutePath());
+      return null;
     }
 
     try {
