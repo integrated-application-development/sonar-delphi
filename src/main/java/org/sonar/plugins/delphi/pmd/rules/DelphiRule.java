@@ -69,6 +69,7 @@ public class DelphiRule extends AbstractJavaRule {
   protected void visitAll(@SuppressWarnings("rawtypes") List acus, RuleContext ctx) {
     lastLineParsed = -1;
     currentVisibility = DelphiLexer.PUBLISHED;
+    inImplementationSection = false;
     init();
     for (Iterator<?> i = acus.iterator(); i.hasNext();) {
       DelphiPMDNode node = (DelphiPMDNode) i.next();
