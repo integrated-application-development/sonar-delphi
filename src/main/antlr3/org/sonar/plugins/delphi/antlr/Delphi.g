@@ -370,13 +370,13 @@ classPropertyIndex           : 'index' expression (';')?  //CHANGED to (';')?
                              ;
 classPropertySpecifier       : classPropertyReadWrite   //CHANGED removed ';'
                              | classPropertyDispInterface
-                             | 'stored' expression 
-                             | 'default' expression 
+                             | STORED expression
+                             | 'default' expression
                              | 'default'                // for array properties only (1 per class)
-                             | 'nodefault' 
+                             | 'nodefault'
                              | IMPLEMENTS typeId
                              ;
-classPropertyEndSpecifier    : 'stored' expression ';'    //ADDED used in classProperty at end
+classPropertyEndSpecifier    : STORED expression ';'    //ADDED used in classProperty at end
                              | 'default' expression ';'
                              | 'default' ';'             
                              | 'nodefault' ';'
@@ -683,7 +683,7 @@ ident                        : TkIdentifier
                              ;                 
 usedKeywordsAsNames          : (NAME | READONLY | ADD | AT | MESSAGE | POINTER | INDEX | DEFAULT | STRING | CONTINUE)
                              | (READ | WRITE | REGISTER | VARIANT | OPERATOR | REMOVE | LOCAL | REFERENCE | CONTAINS | FINAL)
-                             | (BREAK | EXIT | STRICT | OUT | OBJECT | EXPORT | ANSISTRING | IMPLEMENTS)
+                             | (BREAK | EXIT | STRICT | OUT | OBJECT | EXPORT | ANSISTRING | IMPLEMENTS | STORED)
                              ;                           
 identList                    : ident (',' ident)* -> ^(ident (ident)*)
                              ;

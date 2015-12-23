@@ -110,4 +110,9 @@ public class GrammarTest {
     parseFile("Generics.pas");
   }
 
+  @Test
+  public void parseKeyWordsAsIdentifier() throws Exception {
+    parseFile("KeyWordsAsIdentifier.pas");
+  }
+
 }
