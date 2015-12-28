@@ -52,6 +52,8 @@ import static org.mockito.Mockito.*;
 public class FunctionBodyAnalyzerTest extends FileTestsCommon {
 
   private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
+  private static final String FILE_NAME_OPERATOR_TEST = "/org/sonar/plugins/delphi/metrics/FunctionOperatorTest.pas";
+  private static final String FILE_NAME_LIST_UTILS = "/org/sonar/plugins/delphi/metrics/ListUtils.pas";
 
   private static final Tree EMPTY_NODE = new CommonTree(new CommonToken(0, "nil"));
   private static final Tree BEGIN_NODE = new CommonTree(new CommonToken(LexerMetrics.BEGIN.toMetrics(), "begin"));
@@ -115,26 +117,66 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
   }
 
   private FunctionInterface findFunction(String functionName) {
-    DelphiFunction activeFunction = new DelphiFunction("getFunction");
+    DelphiFunction activeFunction = new DelphiFunction(functionName);
+    final AdvanceToNodeOperation advanceToImplementationSection = new AdvanceToNodeOperation(Arrays.asList(LexerMetrics.IMPLEMENTATION));
     final AdvanceToNodeOperation advanceToFunctionName = new AdvanceToNodeOperation(Arrays.asList(LexerMetrics.FUNCTION_NAME));
     final AdvanceToNodeOperation advanceToFunctionBody = new AdvanceToNodeOperation(Arrays.asList(LexerMetrics.FUNCTION_BODY));
 
-    CodeNode<Tree> currentNode = codeTree.getCurrentCodeNode();
-    while (currentNode != null) {
-      try {
-        CodeNode<Tree> functionNode = advanceToFunctionName.execute(codeTree.getCurrentCodeNode().getNode());
-        codeTree.setCurrentNode(functionNode);
-        if (functionNode.getNode().getChild(0).getText().equalsIgnoreCase(functionName)) {
-          results.setActiveFunction(activeFunction);
-          codeTree.setCurrentNode(advanceToFunctionBody.execute(codeTree.getCurrentCodeNode().getNode()));
-          analyzer.analyze(codeTree, results);
-          return activeFunction;
+    CodeNode<Tree> initialNode = codeTree.getCurrentCodeNode();
+    try {
+      codeTree.setCurrentNode(advanceToImplementationSection.execute(codeTree.getCurrentCodeNode().getNode()));
+
+      CodeNode<Tree> currentNode = codeTree.getCurrentCodeNode();
+      while (currentNode != null) {
+        try {
+          CodeNode<Tree> functionNode = advanceToFunctionName.execute(codeTree.getCurrentCodeNode().getNode());
+          codeTree.setCurrentNode(functionNode);
+          final String currentFunctionName = functionNode.getNode().getChild(functionNode.getNode().getChildCount() - 1).getText();
+          if (currentFunctionName.equalsIgnoreCase(functionName)) {
+            results.setActiveFunction(activeFunction);
+            codeTree.setCurrentNode(advanceToFunctionBody.execute(codeTree.getCurrentCodeNode().getNode()));
+            analyzer.analyze(codeTree, results);
+            return activeFunction;
+          }
+        } catch (IllegalStateException e) {
+          currentNode = null;
         }
-      } catch (IllegalStateException e) {
-        currentNode = null;
       }
+    } finally {
+      codeTree.setCurrentNode(initialNode);
     }
     return null;
+  }
+
+  @Test
+  public void captureFunctionBodyLineRecordOperator() throws IOException, RecognitionException {
+    setupFile(FILE_NAME_OPERATOR_TEST);
+
+    results.setActiveClass(new DelphiClass("GenericA"));
+
+    FunctionInterface function = findFunction("Implicit");
+    assertThat(function, notNullValue());
+    assertThat(function.hasBody(), is(true));
+    assertThat(function.getBodyLine(), is(18));
+  }
+
+  @Test
+  public void listUtils() throws IOException, RecognitionException {
+    setupFile(FILE_NAME_LIST_UTILS);
+
+    results.setActiveClass(new DelphiClass("TListUtils"));
+
+    FunctionInterface functionSingleStatement = findFunction("SingleStatement");
+    assertThat(functionSingleStatement, notNullValue());
+    assertThat(functionSingleStatement.hasBody(), is(true));
+    assertThat(functionSingleStatement.getBodyLine(), is(67));
+    assertThat(functionSingleStatement.getStatements(), hasSize(0));
+
+    FunctionInterface function = findFunction("AddAll1");
+    assertThat(function, notNullValue());
+    assertThat(function.hasBody(), is(true));
+    assertThat(function.getBodyLine(), is(28));
+    assertThat(function.getStatements(), hasSize(1));
   }
 
 }

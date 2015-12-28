@@ -354,7 +354,7 @@ classMethod                  : (customAttribute)? ('class')? methodKey ident (ge
                              | (customAttribute)? ('class')? 'function' ident (genericDefinition)? (formalParameterSection)? ':' (customAttribute)? typeDecl ';' (methodDirective)*
                              -> (customAttribute)? ('class')? ^('function' ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) (customAttribute)? ^(TkFunctionReturn typeDecl) (methodDirective)*)
                              | (customAttribute)? ('class')? 'operator' ident (genericDefinition)? (formalParameterSection)? ':' (customAttribute)? typeDecl ';'
-                             -> (customAttribute)? ('class')? 'operator' ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) ':' (customAttribute)? typeDecl ';'
+                             -> (customAttribute)? ('class')? ^('operator' ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) (customAttribute)? typeDecl )
                              ;                             
 classField                   : (customAttribute)? identList ':' typeDecl ';' (hintingDirective)* 
                              -> (customAttribute)? ^(TkClassField ^(TkVariableIdents identList) ^(TkVariableType typeDecl))
@@ -410,7 +410,7 @@ methodDeclHeading            : (customAttribute)? ('class')?  methodKey methodNa
                              | (customAttribute)? ('class')? 'function' methodName (formalParameterSection)? (':' (customAttribute)? typeDecl)?
                              -> (customAttribute)? ('class')? ^('function' ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn (customAttribute)? typeDecl?) )
                              | (customAttribute)? 'class' 'operator' methodName (formalParameterSection)? (':' (customAttribute)? typeDecl)?
-                             -> (customAttribute)? 'class' 'operator' ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn (customAttribute)? typeDecl?)
+                             -> (customAttribute)? 'class' ^('operator' ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn (customAttribute)? typeDecl?) )
                              ;              
 methodKey                    : 'procedure'
                              | 'constructor'
@@ -455,10 +455,10 @@ customAttributeDecl          : '[' namespacedQualifiedIdent ('(' (expressionList
 //****************************
 //section expression
 //****************************
-expression                   : closureExpression
+expression                   : anonymousExpression -> ^(TkAnonymousExpression anonymousExpression)
                              | simpleExpression (relOp simpleExpression)? ('=' expression)?   //CHANGED, added expression for: "if( functionCall(x, 7+66) = true ) then" syntax
                              ;                           
-closureExpression            : 'procedure' (formalParameterSection)? block
+anonymousExpression          : 'procedure' (formalParameterSection)? block
                              | 'function' (formalParameterSection)? ':' typeDecl block
                              ;
 simpleExpression             : factor (operator factor)*
@@ -912,6 +912,8 @@ TkGuid                  : 'INTERFACE_GUID'
 TkClassParents          : 'CLASS_PARENTS'
                         ;
 TkClassField            : 'CLASS_FIELD'
+                        ;
+TkAnonymousExpression   : 'ANONYMOUS_EXPRESSION'
                         ;
 TkIdentifier            : (Alpha | '_') (Alpha | Digit | '_')*
                         ;  

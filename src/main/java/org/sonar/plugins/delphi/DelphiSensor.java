@@ -29,7 +29,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import net.sourceforge.pmd.ast.ParseException;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
@@ -268,6 +267,7 @@ public class DelphiSensor implements Sensor {
       ++scannedFiles;
     } catch (Exception e) {
       DelphiUtils.LOG.error("Error analyzing file: " + e.getMessage() + " " + sourceFile.getAbsolutePath());
+      DelphiUtils.LOG.debug("Error analyzing file: " + e.getMessage() + " " + sourceFile.getAbsolutePath(), e);
     }
 
     return ast;

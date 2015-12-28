@@ -42,6 +42,10 @@ public class FunctionParametersAnalyzer extends CodeAnalyzer {
 
   @Override
   protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
+    if (results.getActiveFunction() == null) {
+      throw new IllegalArgumentException("FunctionParametersAnalyzer activeFunction cannot be null.");
+    }
+
     StringBuilder argumentTypes = new StringBuilder("(");
 
     FunctionInterface activeFunction = results.getActiveFunction();

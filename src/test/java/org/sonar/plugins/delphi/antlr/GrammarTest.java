@@ -115,4 +115,8 @@ public class GrammarTest {
     parseFile("KeyWordsAsIdentifier.pas");
   }
 
+  @Test
+  public void parseListUtils() throws Exception {
+    parseFile("ListUtils.pas");
+  }
 }

@@ -29,7 +29,9 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
@@ -44,6 +46,7 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiArgument;
 import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 public class FunctionParametersAnalyzerTest {
@@ -51,16 +54,19 @@ public class FunctionParametersAnalyzerTest {
   private static final Tree EMPTY_NODE = new CommonTree(new CommonToken(0));
   private static final Tree PARAMETERS_NODE = new CommonTree(new CommonToken(LexerMetrics.FUNCTION_ARGS.toMetrics()));
   private static final String TEST_FILE = "/org/sonar/plugins/delphi/syntax/FunctionParametersAnalyzerTest.pas";
+  private static final String FILE_NAME_OPERATOR_TEST = "/org/sonar/plugins/delphi/metrics/FunctionOperatorTest.pas";
 
   private CodeTree code;
   private CodeAnalysisResults results;
   private FunctionParametersAnalyzer analyzer;
 
+  @Rule
+  public ExpectedException expectedException = ExpectedException.none();
+
   @Before
   public void setup() {
     analyzer = new FunctionParametersAnalyzer();
     results = new CodeAnalysisResults();
-    results.setActiveFunction(new DelphiFunction("myProcedure"));
   }
 
   @Test
@@ -75,6 +81,8 @@ public class FunctionParametersAnalyzerTest {
 
   @Test
   public void doAnalyzeTest() throws IOException, RecognitionException {
+    results.setActiveFunction(new DelphiFunction("myProcedure"));
+
     File testFile = DelphiUtils.getResource(TEST_FILE);
     ASTTree ast = new DelphiAST(testFile);
     code = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
@@ -99,6 +107,26 @@ public class FunctionParametersAnalyzerTest {
     for (int i = 0; i < expectedArgs.length; ++i) {
       assertEquals(expectedArgs[i], arguments[i]);
     }
+  }
 
+  @Test
+  public void throwExceptionWhenActiveFunctionIsNull() throws IOException, RecognitionException {
+    expectedException.equals(IllegalArgumentException.class);
+    expectedException.expectMessage(containsString("activeFunction cannot be null"));
+
+    results.setActiveFunction(null);
+
+    File testFile = DelphiUtils.getResource(TEST_FILE);
+    ASTTree ast = new DelphiAST(testFile);
+    code = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
+
+    NodeOperation operation = new AdvanceToNodeOperation(LexerMetrics.FUNCTION_ARGS);
+    CodeNode<Tree> startNode = operation.execute(ast.getChild(0));
+    code.setCurrentNode(startNode);
+
+    assertEquals(true, startNode.isValid());
+    assertEquals(LexerMetrics.FUNCTION_ARGS.toMetrics(), startNode.getNode().getType());
+
+    analyzer.analyze(code, results);
   }
 }

@@ -53,6 +53,7 @@ import static org.mockito.Mockito.*;
 public class ComplexityMetricsTest {
 
   private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/ComplexityMetricsTest.pas";
+  private static final String FILE_NAME_LIST_UTILS = "/org/sonar/plugins/delphi/metrics/ListUtils.pas";
 
   private ResourcePerspectives perspectives;
 
@@ -108,6 +109,19 @@ public class ComplexityMetricsTest {
 
     assertThat(issues, hasSize(1));
     assertThat(issues, hasItem(IssueMatchers.hasRuleKeyAtLine("MethodCyclomaticComplexityRule", 48)));
+  }
+
+  @Test
+  public void analyseListUtils() throws Exception {
+    // init
+    File testFile = DelphiUtils.getResource(FILE_NAME_LIST_UTILS);
+    CodeAnalysisCacheResults.resetCache();
+    ASTAnalyzer analyzer = new DelphiASTAnalyzer(DelphiTestUtils.mockProjectHelper());
+    analyzer.analyze(new DelphiAST(testFile));
+
+    // processing
+    ComplexityMetrics metrics = new ComplexityMetrics(null, activeRules, perspectives);
+    metrics.analyse(new DefaultInputFile("test"), null, analyzer.getResults().getClasses(), analyzer.getResults().getFunctions(), null);
   }
 
 }

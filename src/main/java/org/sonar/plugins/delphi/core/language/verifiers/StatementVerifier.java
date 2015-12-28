@@ -61,9 +61,9 @@ public class StatementVerifier {
   public boolean verify(Tree node) {
     isComplex = false;
     checkedNode = node;
-    boolean isSimple = isSimpleStatementNode(node);
+    final boolean isSimple = isSimpleStatementNode(node);
     if (!isSimple) {
-      isComplex = isComplexStatementNode(node);
+      this.isComplex = isComplexStatementNode(node);
     }
     return isSimple || isComplex;
   }
@@ -127,6 +127,9 @@ public class StatementVerifier {
     StringBuilder wholeLine = new StringBuilder(node.getText());
     CommonTree parent = (CommonTree) node.getParent();
     CommonTree assign = (CommonTree) parent.getChild(childIndex + 1);
+    if (assign == null) {
+      return false;
+    }
     if (assign.getType() != LexerMetrics.ASSIGN.toMetrics()) {
       return false;
     }
@@ -144,7 +147,10 @@ public class StatementVerifier {
       wholeLine.append(actualNode.getText());
     }
 
-    List<Token> tokens = new DelphiCpdTokenizer(delphiProjectHelper).tokenize(new String[] {wholeLine.toString()});
+    // replace '..' with ' .. '
+    String fixedSourceCode = wholeLine.toString().replaceAll("\\.\\.", " .. ");
+
+    List<Token> tokens = new DelphiCpdTokenizer(delphiProjectHelper).tokenize(new String[] {fixedSourceCode});
     if (tokens.size() < MIN_TOKENS_FOR_COMPLEX_STMT) {
       // at least 4 tokens: id, :=, id, ;
       return false;

@@ -46,7 +46,8 @@ public class FunctionAnalyzer extends CodeAnalyzer {
   private static final String PROP_MESSAGE = "message";
   private static final String PROP_VIRTUAL = "virtual";
 
-  private static final LexerMetrics FUNCTION_NODE_TYPE[] = {LexerMetrics.FUNCTION, LexerMetrics.PROCEDURE,
+  private static final LexerMetrics FUNCTION_NODE_TYPE[] = {LexerMetrics.FUNCTION,
+    LexerMetrics.PROCEDURE,
     LexerMetrics.DESTRUCTOR,
     LexerMetrics.CONSTRUCTOR,
     LexerMetrics.OPERATOR};

@@ -63,9 +63,17 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
   }
 
   @Override
+  public boolean canAnalyze(CodeTree codeTree) {
+    boolean hasActiveFunction = results.getActiveFunction() != null;
+    boolean isFunctionBodyNode = isBodyNode(codeTree.getCurrentCodeNode().getNode().getType());
+    return hasActiveFunction && isFunctionBodyNode;
+  }
+
+  @Override
   protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
     FunctionInterface activeFunction = results.getActiveFunction();
     FunctionInterface functionHolder = activeFunction;
+
     Tree beginNode = codeTree.getCurrentCodeNode().getNode();
 
     // increases function overload, so the starting overload should be -1
@@ -99,18 +107,12 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
       if (child.getType() == DelphiLexer.FUNCTION
         || child.getType() == DelphiLexer.PROCEDURE
         || child.getType() == DelphiLexer.CONSTRUCTOR
-        || child.getType() == DelphiLexer.DESTRUCTOR) {
+        || child.getType() == DelphiLexer.DESTRUCTOR
+        || child.getType() == DelphiLexer.OPERATOR) {
         return child.getLine();
       }
     }
     return -1;
-  }
-
-  @Override
-  public boolean canAnalyze(CodeTree codeTree) {
-    boolean hasActiveFunction = results.getActiveFunction() != null;
-    boolean isFunctionBodyNode = isBodyNode(codeTree.getCurrentCodeNode().getNode().getType());
-    return hasActiveFunction && isFunctionBodyNode;
   }
 
   /**

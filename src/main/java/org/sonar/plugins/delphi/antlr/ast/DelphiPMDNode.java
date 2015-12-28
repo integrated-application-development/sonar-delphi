@@ -31,7 +31,6 @@ import net.sourceforge.pmd.ast.Node;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.pmd.DelphiParserVisitor;
 
 /**

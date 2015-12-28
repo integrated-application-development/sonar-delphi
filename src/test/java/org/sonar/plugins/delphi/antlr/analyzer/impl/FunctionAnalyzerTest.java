@@ -47,6 +47,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
   private static final String FILE_NAME_MESSAGE_TEST = "/org/sonar/plugins/delphi/metrics/FunctionMessageTest.pas";
   private static final String FILE_NAME_VIRTUAL_TEST = "/org/sonar/plugins/delphi/metrics/FunctionVirtualTest.pas";
+  private static final String FILE_NAME_OPERATOR_TEST = "/org/sonar/plugins/delphi/metrics/FunctionOperatorTest.pas";
 
   private final FunctionAnalyzer analyzer = new FunctionAnalyzer();
 
@@ -64,7 +65,8 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
     code = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
     advanceToFunction = new AdvanceToNodeOperation(Arrays.asList(LexerMetrics.FUNCTION, LexerMetrics.PROCEDURE,
       LexerMetrics.CONSTRUCTOR,
-      LexerMetrics.DESTRUCTOR));
+      LexerMetrics.DESTRUCTOR,
+      LexerMetrics.OPERATOR));
 
     CodeAnalysisCacheResults.resetCache();
   }
@@ -78,7 +80,22 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
     while (currentNode != null) {
       try {
         code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
-        ;
+        assertEquals(true, analyzer.canAnalyze(code));
+      } catch (IllegalStateException e) {
+        currentNode = null;
+      }
+    }
+  }
+
+  @Test
+  public void canAnalyzeRecordOperatorTest() throws IOException, RecognitionException {
+    setupFile(FILE_NAME_OPERATOR_TEST);
+    assertEquals(false, analyzer.canAnalyze(code));
+
+    CodeNode<Tree> currentNode = code.getCurrentCodeNode();
+    while (currentNode != null) {
+      try {
+        code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
         assertEquals(true, analyzer.canAnalyze(code));
       } catch (IllegalStateException e) {
         currentNode = null;
@@ -155,4 +172,27 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
       }
     }
   }
+
+  @Test
+  public void analyseRecordOperatorTest() throws IOException, RecognitionException {
+    setupFile(FILE_NAME_OPERATOR_TEST);
+
+    results.setActiveClass(new DelphiClass("GenericA"));
+
+    CodeNode<Tree> currentNode = code.getCurrentCodeNode();
+    int count = 0;
+    while (currentNode != null) {
+      try {
+        code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
+        analyzer.analyze(code, results);
+        count++;
+      } catch (IllegalStateException e) {
+        currentNode = null;
+      }
+    }
+
+    assertThat("activeFunction", results.getActiveFunction(), notNullValue());
+    assertThat("function real name", results.getActiveFunction().getRealName(), containsString("Implicit"));
+  }
+
 }
