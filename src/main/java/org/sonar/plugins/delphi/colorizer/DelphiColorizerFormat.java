@@ -38,8 +38,9 @@ import org.sonar.plugins.delphi.core.DelphiLanguage;
  */
 public class DelphiColorizerFormat extends CodeColorizerFormat {
 
-  private static final String SPAN_GREEN = "<span style='color:green; font-style: italic;'>";
-  private static final String SPAN_RED = "<span style='color:red; font-style: italic;'>";
+  private static final String SPAN_STRING = "<span class=\"s\">";
+  private static final String SPAN_COMMENT = "<span class=\"cd\">";
+  private static final String SPAN_KEYWORD = "<span class=\"k\">";
   private static final String SPAN_END = "</span>";
 
   /**
@@ -51,11 +52,11 @@ public class DelphiColorizerFormat extends CodeColorizerFormat {
 
   @Override
   public List<Tokenizer> getTokenizers() {
-    return Collections.unmodifiableList(Arrays.asList(new StringTokenizer(SPAN_RED, SPAN_END), new CDocTokenizer(
-      SPAN_GREEN, SPAN_END),
-      new CustomTokenizer("{", "}", SPAN_GREEN, SPAN_END), new CustomTokenizer2("(*", "*)", SPAN_GREEN,
+    return Collections.unmodifiableList(Arrays.asList(new StringTokenizer(SPAN_STRING, SPAN_END), new CDocTokenizer(
+      SPAN_COMMENT, SPAN_END),
+      new CustomTokenizer("{", "}", SPAN_COMMENT, SPAN_END), new CustomTokenizer2("(*", "*)", SPAN_COMMENT,
         SPAN_END), new KeywordsTokenizer(
-        "<span class=\"k\">", SPAN_END, DelphiKeywords.get())));
+        SPAN_KEYWORD, SPAN_END, DelphiKeywords.get())));
   }
 }
 
