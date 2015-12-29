@@ -124,7 +124,6 @@ public class DelphiASTAnalyzerTest {
     int[] complexities = {1, 2, 0, 0};
     int[] fieldsCount = {4, 1, 0, 0};
     int[] parentsCount = {3, 0, 1, 0};
-    int[] dit = {2, 0, 1, 0};
     int[] descendants = {0, 1, 1, 2};
     int[] children = {0, 1, 1, 1};
 
@@ -141,7 +140,6 @@ public class DelphiASTAnalyzerTest {
       assertEquals(cl.getName(), declarationsCount[index], cl.getFunctions().length);
       assertEquals(cl.getName(), fieldsCount[index], cl.getFields().length);
       assertEquals(cl.getName(), parentsCount[index], cl.getParents().length);
-      assertEquals(cl.getName(), dit[index], cl.getDit());
       assertEquals(cl.getName(), descendants[index], cl.getDescendants().length);
       assertEquals(cl.getName(), children[index], cl.getChildren().length);
       for (ClassFieldInterface field : cl.getFields()) { // checking class

@@ -127,41 +127,6 @@ public class DelphiClassTest {
   }
 
   @Test
-  public void getDitTest() {
-    assertEquals(0, ancestor.getDit());
-    assertEquals(1, parent.getDit());
-    assertEquals(2, child.getDit());
-
-    child.addParent(child);
-    assertEquals(2, child.getDit());
-  }
-
-  @Test
-  public void getRfcTest() {
-    DelphiFunction func1 = new DelphiFunction("f1");
-    DelphiFunction func2 = new DelphiFunction("f2");
-    DelphiFunction func3 = new DelphiFunction("f3");
-    DelphiFunction func4 = new DelphiFunction("f4");
-    DelphiFunction func5 = new DelphiFunction("f5");
-    DelphiFunction func6 = new DelphiFunction("ancestor.setFunc");
-
-    func1.addCalledFunction(func2);
-    func1.addCalledFunction(func3);
-    func2.addCalledFunction(func4);
-    func3.addCalledFunction(func4);
-    func5.addCalledFunction(func6);
-
-    ancestor.addFunction(func1);
-    ancestor.addFunction(func5);
-    assertEquals(5, ancestor.getRfc());
-
-    DelphiFunction func7 = new DelphiFunction("f7");
-    func7.addCalledFunction(func7);
-    parent.addFunction(func7);
-    assertEquals(1, parent.getRfc());
-  }
-
-  @Test
   public void getChildrenTest() {
     assertEquals(1, ancestor.getChildren().length);
     assertEquals(1, parent.getChildren().length);

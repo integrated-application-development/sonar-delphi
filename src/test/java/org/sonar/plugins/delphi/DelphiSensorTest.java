@@ -213,8 +213,6 @@ public class DelphiSensorTest {
     keyMetricIndex.put("class_complexity", 13);
     keyMetricIndex.put("noc", 14);
     keyMetricIndex.put("statements", 15);
-    keyMetricIndex.put("rfc", 16);
-    keyMetricIndex.put("dit", 17);
     keyMetricIndex.put("public_api", 18);
     keyMetricIndex.put("comment_blank_lines", 19);
   }

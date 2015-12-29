@@ -169,20 +169,6 @@ public interface ClassInterface extends HasNameInterface {
   ClassInterface[] getDescendants();
 
   /**
-   * Gets the Depth of Inheritance (DIT) number
-   * 
-   * @return Depth of Inheritance
-   */
-  int getDit();
-
-  /**
-   * Gets Response for Class (RFC) numer
-   * 
-   * @return class RFC
-   */
-  int getRfc();
-
-  /**
    * Do class contains a function (or function declaration)?
    * 
    * @param func Function to check

@@ -139,32 +139,6 @@ public class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-  private int calculateDepth(ClassInterface cl) {
-    int depth = 0;
-
-    for (int i = 0; i < cl.getParents().length; ++i) {
-      ClassInterface parent = cl.getParents()[i];
-      int pd = calculateDepth(parent) + 1;
-      if (pd > depth) {
-        depth = pd;
-      }
-    }
-
-    return depth;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  @Override
-  public int getDit() {
-    return calculateDepth(this);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
 
   @Override
   public void setVisibility(int value) {
@@ -328,43 +302,6 @@ public class DelphiClass implements ClassInterface {
     for (ClassInterface child : parent.children) {
       processChild((DelphiClass) child, list);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public int getRfc() {
-    int rfc = 0;
-    Set<FunctionInterface> visited = new HashSet<FunctionInterface>();
-    for (FunctionInterface currentFunction : functions) {
-      if (!currentFunction.isAccessor()) {
-        visited.add(currentFunction);
-        rfc += analyzeFunctionCalls(currentFunction, visited);
-      }
-    }
-    // rfc = number of local methods + number of remote methods
-    return rfc;
-  }
-
-  /**
-   * Analyses function for its function calls (how many other function call
-   * are in this function), NOT including accessors (getters/setters)
-   * 
-   * @param function Function to analyse
-   * @param visited Set of already visited functions (to not repeat visited
-   *            ones)
-   * @return Number of functions called within this function
-   */
-  private int analyzeFunctionCalls(FunctionInterface function, Set<FunctionInterface> visited) {
-    int result = 1 + function.getOverloadsCount();
-    for (FunctionInterface calledFunction : function.getCalledFunctions()) {
-      if (!calledFunction.isAccessor() && !visited.contains(calledFunction)) {
-        visited.add(calledFunction);
-        result += analyzeFunctionCalls(calledFunction, visited);
-      }
-    }
-    return result;
   }
 
   /**
