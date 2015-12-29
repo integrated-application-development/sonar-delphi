@@ -69,4 +69,24 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
       hasRuleLine(builder.getOffSet() + 1))));
   }
 
+  @Test
+  public void recordConstructorShouldNotAddIssue() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+
+    builder.appendDecl("type");
+    builder.appendDecl("  TTestRecord = record");
+    builder.appendDecl("    FData : Integer;");
+    builder.appendDecl("    constructor Create(aData : Integer);");
+    builder.appendDecl("  end;");
+
+    builder.appendImpl("constructor TTestRecord.Create(aData : Integer);");
+    builder.appendImpl("begin");
+    builder.appendImpl("  FData := aData;");
+    builder.appendImpl("end;");
+
+    analyse(builder);
+
+    assertThat(issues, is(empty()));
+  }
+
 }

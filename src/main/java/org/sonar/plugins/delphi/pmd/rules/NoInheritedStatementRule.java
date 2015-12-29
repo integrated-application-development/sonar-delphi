@@ -22,12 +22,11 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
-
-import net.sourceforge.pmd.RuleContext;
 
 /**
  * Class that checks if 'inherited' statement is in some function or procedure.
@@ -66,11 +65,15 @@ public class NoInheritedStatementRule extends DelphiRule {
           }
         }
 
-        if (!wasInherited) {
+        if (!wasInherited && shouldAddRule(node)) {
           addViolation(ctx, node);
         }
       }
     }
+  }
+
+  protected boolean shouldAddRule(DelphiPMDNode node) {
+    return true;
   }
 
 }

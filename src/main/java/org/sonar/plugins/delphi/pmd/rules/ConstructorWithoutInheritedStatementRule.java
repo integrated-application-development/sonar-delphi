@@ -18,7 +18,15 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import java.util.ArrayList;
+import java.util.List;
+import net.sourceforge.pmd.RuleContext;
+import org.sonar.plugins.delphi.antlr.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+
 public class ConstructorWithoutInheritedStatementRule extends NoInheritedStatementRule {
+
+  private List<String> knewRecords = new ArrayList<>();
 
   @Override
   protected void init() {
@@ -26,4 +34,20 @@ public class ConstructorWithoutInheritedStatementRule extends NoInheritedStateme
     setLookFor("constructor");
   }
 
+  @Override
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
+    if (node.getType() == DelphiLexer.TkRecord) {
+      knewRecords.add(node.getParent().getText());
+    }
+    super.visit(node, ctx);
+  }
+
+  @Override
+  protected boolean shouldAddRule(DelphiPMDNode node) {
+    if (node.getChild(0).getType() == DelphiLexer.TkFunctionName) {
+      String typeName = node.getChild(0).getChild(0).getText();
+      return !knewRecords.contains(typeName);
+    }
+    return super.shouldAddRule(node);
+  }
 }
