@@ -31,6 +31,7 @@ public class ConstructorWithoutInheritedStatementRule extends NoInheritedStateme
   @Override
   protected void init() {
     super.init();
+    knewRecords.clear();
     setLookFor("constructor");
   }
 
