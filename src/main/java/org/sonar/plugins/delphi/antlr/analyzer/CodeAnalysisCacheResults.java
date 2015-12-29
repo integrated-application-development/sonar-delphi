@@ -22,12 +22,14 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.apache.commons.lang.StringUtils;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
@@ -38,14 +40,10 @@ import org.sonar.plugins.delphi.core.language.impl.UnresolvedFunctionCall;
  */
 public class CodeAnalysisCacheResults {
 
-  private static final int INITIAL_CAPACITY = 100;
-  protected static final Set<UnitInterface> allUnits = new HashSet<UnitInterface>(INITIAL_CAPACITY);
-  protected static final Map<String, ClassInterface> allClasses = new HashMap<String, ClassInterface>(
-    INITIAL_CAPACITY);
-  protected static final Map<String, FunctionInterface> allFunctions = new HashMap<String, FunctionInterface>(
-    INITIAL_CAPACITY);
-  protected static final Map<String, UnresolvedFunctionCall> unresolvedCalls = new HashMap<String, UnresolvedFunctionCall>(
-    INITIAL_CAPACITY);
+  protected static final Set<UnitInterface> allUnits = new HashSet<>();
+  protected static final Map<String, Map<String, ClassInterface>> allClasses = new HashMap<>();
+  protected static final Map<String, FunctionInterface> allFunctions = new HashMap<>();
+  protected static final Map<String, UnresolvedFunctionCall> unresolvedCalls = new HashMap<>();
 
   /**
    * resets results chache
@@ -75,11 +73,35 @@ public class CodeAnalysisCacheResults {
   }
 
   /**
-   * @param className class name
+   * @param classInterface class for search by exampe
    * @return cached class if found, null otherwise
    */
-  public ClassInterface getCachedClass(String className) {
-    return allClasses.get(className);
+  public ClassInterface getCachedClass(ClassInterface classInterface) {
+    Map<String, ClassInterface> unitClasses = allClasses.get(classInterface.getFileName());
+    if (unitClasses != null) {
+      return unitClasses.get(classInterface.getName());
+    }
+    return null;
+  }
+
+  /**
+   * @param unitName unit where the class is declared
+   * @param classInterface class for search by exampe
+   * @return cached class if found, null otherwise
+   */
+  public ClassInterface getCachedClass(String unitName, ClassInterface classInterface) {
+    final String fileToSearch = File.pathSeparator + unitName + ".pas";
+    Map<String, ClassInterface> unitClasses = null;
+    for (String fileName : allClasses.keySet()) {
+      if (StringUtils.containsIgnoreCase(fileName, fileToSearch)) {
+        unitClasses = allClasses.get(fileName);
+        break;
+      }
+    }
+    if (unitClasses != null) {
+      return unitClasses.get(classInterface.getName());
+    }
+    return null;
   }
 
   /**
@@ -126,11 +148,15 @@ public class CodeAnalysisCacheResults {
   /**
    * add new class to cache
    * 
-   * @param className class name
    * @param clazz class
    */
-  public void cacheClass(String className, ClassInterface clazz) {
-    allClasses.put(className, clazz);
+  public void cacheClass(ClassInterface clazz) {
+    Map<String, ClassInterface> unitClasses = allClasses.get(clazz.getFileName());
+    if (unitClasses == null) {
+      unitClasses = new HashMap<>();
+      allClasses.put(clazz.getFileName(), unitClasses);
+    }
+    unitClasses.put(clazz.getName(), clazz);
   }
 
   /**

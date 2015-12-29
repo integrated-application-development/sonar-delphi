@@ -41,6 +41,8 @@ public class DelphiClass implements ClassInterface {
 
   private static final String UNKNOWN_CLASS_NAME = "UnknownClass";
 
+  public static final String UNKNOWN_FILE_NAME = "UnknownUnit";
+
   private String name = null;
   private String fileName = null;
   private int visibility = DelphiParser.PRIVATE;
@@ -64,6 +66,7 @@ public class DelphiClass implements ClassInterface {
       name = newName;
       realName = newName;
     }
+    fileName = UNKNOWN_FILE_NAME;
   }
 
   /**

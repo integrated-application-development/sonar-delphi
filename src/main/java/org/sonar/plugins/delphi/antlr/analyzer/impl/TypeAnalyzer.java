@@ -60,14 +60,18 @@ public class TypeAnalyzer extends CodeAnalyzer {
       throw new IllegalStateException("AbstractAnalyser::parseClass() - Cannot get class name.");
     }
 
-    ClassInterface active = results.getCachedClass(nameNode.getText().toLowerCase());
+    final String fileName = codeTree.getRootCodeNode().getNode().getFileName().toLowerCase();
+
+    ClassInterface searchClass = new DelphiClass(nameNode.getText().toLowerCase());
+    searchClass.setFileName(fileName);
+
+    ClassInterface active = results.getCachedClass(searchClass);
     if (active == null) {
       active = new DelphiClass(nameNode.getText().toLowerCase());
-      results.cacheClass(active.toString(), active);
+      active.setFileName(fileName);
+      results.cacheClass(active);
       results.getActiveUnit().addClass(active);
     }
-
-    active.setFileName(codeTree.getRootCodeNode().getNode().getFileName().toLowerCase());
 
     if (results.getParseStatus() == LexerMetrics.IMPLEMENTATION) {
       active.setVisibility(LexerMetrics.PRIVATE.toMetrics());

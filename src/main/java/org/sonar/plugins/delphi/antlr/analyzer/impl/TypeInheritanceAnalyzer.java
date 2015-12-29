@@ -51,12 +51,25 @@ public class TypeInheritanceAnalyzer extends CodeAnalyzer {
         parentClass = checkParentInUnits(parentName, results);
       }
 
+      ClassInterface searchClass = new DelphiClass(parentName);
+      for (String uses : results.getActiveUnit().getIncludes()) {
+        searchClass.setFileName(uses);
+        parentClass = results.getCachedClass(searchClass);
+        if (parentClass != null) {
+          break;
+        }
+      }
+
       if (parentClass == null) {
         parentClass = new DelphiClass(parentName);
+
+        // Unit not found on uses. Assuming it's the same file.
+        parentClass.setFileName(results.getActiveClass().getFileName());
+
+        results.cacheClass(parentClass);
       }
 
       results.getActiveClass().addParent(parentClass);
-      results.cacheClass(parentClass.toString(), parentClass);
     }
   }
 

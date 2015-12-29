@@ -40,6 +40,7 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiClass;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 public class TypeInheritanceAnalyzerTest {
@@ -73,23 +74,10 @@ public class TypeInheritanceAnalyzerTest {
     analyzer.analyze(code, results);
 
     ClassInterface parents[] = clazz.getParents();
-    assertEquals(3, parents.length);
-
-    String parentNames[] = {"TMyAncestor", "TMyClass", "TMyElder"};
-    for (ClassInterface parent : parents) { // we got no constant ordering
-                                            // of parents array,
-                                            // so we have to check every
-                                            // parent against every name
-      boolean isParentNameOk = false;
-      for (String parentName : parentNames) {
-        if (parent.getName().equalsIgnoreCase(parentName)) {
-          isParentNameOk = true;
-          break;
-        }
-      }
-      assertTrue("Parent name not recognized: " + parent.getName(), isParentNameOk);
-    }
-
+    assertThat(parents, arrayWithSize(3));
+    assertThat(parents, hasItemInArray(hasProperty("name", equalToIgnoringCase("TMyAncestor"))));
+    assertThat(parents, hasItemInArray(hasProperty("name", equalToIgnoringCase("TMyClass"))));
+    assertThat(parents, hasItemInArray(hasProperty("name", equalToIgnoringCase("TMyElder"))));
   }
 
   @Test
