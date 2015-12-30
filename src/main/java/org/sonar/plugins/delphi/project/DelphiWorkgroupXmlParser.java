@@ -44,7 +44,7 @@ public class DelphiWorkgroupXmlParser extends DefaultHandler {
    * C-tor
    * 
    * @param xmlFile .groupproj XML file
-   * @param _workGroup Workgroup to modify
+   * @param delphiWorkGroup Workgroup to modify
    */
   public DelphiWorkgroupXmlParser(File xmlFile, DelphiWorkgroup delphiWorkGroup) {
     xml = xmlFile;

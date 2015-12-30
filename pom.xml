@@ -312,10 +312,6 @@
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<quiet>true</quiet>
-					<failOnError>false</failOnError>
-				</configuration>
 			</plugin>
 
 		</plugins>

@@ -60,9 +60,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
   /**
    * Constructor.
    * 
-   * @param inputStream Input from which to read data for AST tree
-   * @throws RecognitionException At parsing exception
-   * @throws IOException When no file found
+   * @param file Input file from which to read data for AST tree
    */
   public DelphiAST(File file) {
     this(file, null);
@@ -70,10 +68,9 @@ public class DelphiAST extends CommonTree implements ASTTree {
 
   /**
    * Constructor.
-   * @param encoding  Encoding to use
    * 
-   * @param inputStream Input from which to read data for AST tree
-   * @throws RecognitionException At parsing exception
+   * @param file Input file from which to read data for AST tree
+   * @param encoding  Encoding to use
    */
   public DelphiAST(File file, String encoding) {
     try {
@@ -118,9 +115,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
   }
 
   /**
-   * Generates and saves AST tree to XML file
-   * 
-   * @return XML file
+   *  {@inheritDoc}
    */
 
   @Override

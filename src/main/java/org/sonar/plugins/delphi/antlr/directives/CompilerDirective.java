@@ -28,14 +28,14 @@ package org.sonar.plugins.delphi.antlr.directives;
 public interface CompilerDirective {
 
   /**
-   * example: '#include <iostream>' will return "include"
+   * example: <code>#include &lt;iostream&gt;</code> will return "include"
    * 
    * @return definition name
    */
   String getName();
 
   /**
-   * example: '#include <iostream>' will return "iostream"
+   * example: <code>#include &lt;iostream&gt;</code> will return "iostream"
    * 
    * @return definition item
    */

@@ -24,12 +24,11 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
-
-import net.sourceforge.pmd.RuleContext;
 
 /**
  * Rule that checks if you are using function/variables names correctly, that is
@@ -91,7 +90,7 @@ public class MixedNamesRule extends DelphiRule {
   /**
    * Check variable names between begin...end statements
    */
-  protected void checkVariableNames(DelphiPMDNode node, RuleContext ctx, boolean clear) {
+  private void checkVariableNames(DelphiPMDNode node, RuleContext ctx, boolean clear) {
     for (int i = 0; i < node.getChildCount(); ++i) {
 
       // Cast exception was thrown, so we use c-tor instead of casting to DelphiPMDNode
@@ -120,7 +119,7 @@ public class MixedNamesRule extends DelphiRule {
   /**
    * Check function names
    */
-  protected void checkFunctionNames(DelphiPMDNode node, RuleContext ctx) {
+  private void checkFunctionNames(DelphiPMDNode node, RuleContext ctx) {
     List<String> currentNames = buildNames(node, false);
     for (String name : currentNames) {
       for (String globalName : functionNames) {
@@ -139,7 +138,7 @@ public class MixedNamesRule extends DelphiRule {
    * @param multiply If true, each node child will be treated as a new name
    * @return List of names
    */
-  protected List<String> buildNames(Tree node, boolean multiply) {
+  private List<String> buildNames(Tree node, boolean multiply) {
     List<String> result = new ArrayList<String>();
 
     if (node == null) {

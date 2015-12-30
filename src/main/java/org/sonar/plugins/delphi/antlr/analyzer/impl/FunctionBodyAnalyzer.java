@@ -48,12 +48,6 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
     LexerMetrics.CASE,
     LexerMetrics.REPEAT, LexerMetrics.AND, LexerMetrics.OR};
 
-  /**
-   * ctor
-   * 
-   * @param results
-   * @param delphiProjectHelper
-   */
   public FunctionBodyAnalyzer(CodeAnalysisResults results, DelphiProjectHelper delphiProjectHelper) {
     if (results == null) {
       throw new IllegalArgumentException("FunctionBodyAnalyzer ctor 'results' parameter cannot be null.");

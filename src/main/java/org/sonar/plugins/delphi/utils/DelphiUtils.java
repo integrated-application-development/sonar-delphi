@@ -97,7 +97,6 @@ public final class DelphiUtils {
   /**
    * Gets the resource from project workspace
    * 
-   * @param cl Class
    * @param fileName Resource file name
    * @return Resource file
    */
@@ -257,18 +256,18 @@ public final class DelphiUtils {
   /**
    * Reads file contents to string, transform it to lowercase
    * 
-   * @param fileName File name
-   * @param encoding File encoding
+   * @param file File to be read
+   * @param encoding File content encoding
    * @return File content readed to a string
    * @throws IOException When file not found
    */
-  public static String readFileContent(File f, String encoding)
+  public static String readFileContent(File file, String encoding)
     throws IOException {
-    if (f == null || !f.exists()) {
+    if (file == null || !file.exists()) {
       throw new IOException();
     }
 
-    return FileUtils.readFileToString(f, encoding).replace("\uFEFF", "");
+    return FileUtils.readFileToString(file, encoding).replace("\uFEFF", "");
   }
 
   public static String getRelativePath(File file, List<File> dirs) {

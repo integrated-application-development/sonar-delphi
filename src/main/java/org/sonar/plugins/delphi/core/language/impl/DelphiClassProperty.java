@@ -43,6 +43,11 @@ public class DelphiClassProperty extends DelphiClassField implements ClassProper
 
   /**
    * Ctor
+   * @param name property name
+   * @param type property type
+   * @param visibility property visibility
+   * @param read property getter
+   * @param write property setter
    */
   public DelphiClassProperty(String name, String type, int visibility, FunctionInterface read, FunctionInterface write) {
     super(name, type, visibility);

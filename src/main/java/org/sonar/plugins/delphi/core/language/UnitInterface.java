@@ -121,8 +121,7 @@ public interface UnitInterface {
   /**
    * Tries to find specified function in this unit
    * 
-   * @param functionName Function name (WITH class name prefix, WITHOUT
-   *            argument list)
+   * @param functionShortName Function name (WITH class name prefix, WITHOUT argument list)
    * @return Function reference if found, null otherwise
    */
   FunctionInterface findFunction(String functionShortName);

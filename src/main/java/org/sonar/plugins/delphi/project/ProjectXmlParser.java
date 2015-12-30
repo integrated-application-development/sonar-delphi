@@ -57,16 +57,12 @@ public class ProjectXmlParser extends DefaultHandler {
 
   /**
    * Parses the document
-   * 
-   * @throws IOException
-   * @throws SAXException
-   * @throws ParserConfigurationException
    */
-  public void parse() throws SAXException, IOException {
+  public void parse() {
     try {
       SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
       parser.parse(fileName, this);
-    } catch (ParserConfigurationException e) {
+    } catch (ParserConfigurationException | SAXException | IOException e) {
       DelphiUtils.LOG.error(e.getMessage());
     }
   }

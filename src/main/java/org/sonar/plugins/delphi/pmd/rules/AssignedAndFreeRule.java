@@ -24,16 +24,14 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import java.util.HashSet;
 import java.util.Set;
-
+import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-import net.sourceforge.pmd.RuleContext;
-
 /**
  * Class for checking if we are using .Free with checking if variable is
- * assigned (redundant): if assigned(x) then x.free; if x <> nil then x.free;
+ * assigned (redundant): if assigned(x) then x.free; if x &lt;&gt; nil then x.free;
  */
 public class AssignedAndFreeRule extends DelphiRule {
 

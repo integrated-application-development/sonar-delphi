@@ -81,10 +81,9 @@ public class SubRangeAggregator {
   }
 
   /**
-   * adds all elements from another aggregator, check for duplications and
-   * merges them
+   * adds all elements.
    * 
-   * @param subRangeAggregator another aggregator
+   * @param subRange List of SubRange
    */
   public void addAll(SubRange... subRange) {
     for (SubRange newRange : subRange) {

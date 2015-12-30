@@ -35,7 +35,6 @@ import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.Issue;
-import org.sonar.api.resources.Project;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
@@ -68,8 +67,8 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
   /**
    * {@inheritDoc}
    */
-  public DeadCodeMetrics(Project delphiProject, ActiveRules activeRules, ResourcePerspectives perspectives) {
-    super(delphiProject);
+  public DeadCodeMetrics(ActiveRules activeRules, ResourcePerspectives perspectives) {
+    super();
     this.perspectives = perspectives;
     isCalculated = false;
     allUnits = new ArrayList<UnitInterface>();
@@ -221,6 +220,8 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
 
   /**
    * Find unused units
+   * @param units Units in project
+   * @return a list of unused units
    */
   protected List<String> findUnusedUnits(List<UnitInterface> units) {
     Set<String> usedUnits = new HashSet<String>();

@@ -35,7 +35,6 @@ import org.sonar.api.issue.Issue;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.measures.RangeDistributionBuilder;
-import org.sonar.api.resources.Project;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.delphi.antlr.DelphiParser;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
@@ -105,8 +104,8 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
   /**
    * {@inheritDoc}
    */
-  public ComplexityMetrics(Project delphiProject, ActiveRules activeRules, ResourcePerspectives perspectives) {
-    super(delphiProject);
+  public ComplexityMetrics(ActiveRules activeRules, ResourcePerspectives perspectives) {
+    super();
     this.perspectives = perspectives;
     methodCyclomaticComplexityRule = activeRules.find(RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY);
     threshold = Integer.valueOf(methodCyclomaticComplexityRule.param("Threshold"));

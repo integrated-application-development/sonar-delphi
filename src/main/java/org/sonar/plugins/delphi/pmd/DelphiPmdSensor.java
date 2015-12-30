@@ -68,6 +68,11 @@ public class DelphiPmdSensor implements Sensor {
 
   /**
    * C-tor
+   * @param delphiProjectHelper delphiProjectHelper
+   * @param perspectives resourcePerspectives used by DelphiPmdXmlReportParser
+   * @param rulesProfile rulesProfile used to export active rules
+   * @param profileExporter used to export active rules
+   * 
    */
   public DelphiPmdSensor(DelphiProjectHelper delphiProjectHelper, ResourcePerspectives perspectives, RulesProfile rulesProfile, DelphiPmdProfileExporter profileExporter) {
     this.delphiProjectHelper = delphiProjectHelper;

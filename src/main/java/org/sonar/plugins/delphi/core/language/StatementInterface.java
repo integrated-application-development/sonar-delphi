@@ -45,7 +45,7 @@ public interface StatementInterface {
   /**
    * Get statement text, example: "if", "else", "x := 5;"
    * 
-   * @return
+   * @return The statement text
    */
   String getText();
 

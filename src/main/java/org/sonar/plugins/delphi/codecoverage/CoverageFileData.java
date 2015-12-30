@@ -41,7 +41,7 @@ public class CoverageFileData {
   /**
    * ctor
    * 
-   * @param resource2 Delphi file
+   * @param resource Delphi file
    */
   public CoverageFileData(InputFile resource) {
     this.resource = resource;

@@ -46,9 +46,8 @@ public class ProgressReporter
    * Ctor
    * 
    * @param targetProgress Target progress we want to achieve
-   * @param parts How many parts of progress we should report, ex. 4 will
-   *            report every 25%
-   * @param printStream report will be written to this print stream
+   * @param parts How many parts of progress we should report, ex. 4 will report every 25%
+   * @param logger report will be written to this logger
    */
   public ProgressReporter(int targetProgress, int parts, ProgressReporterLogger logger) {
     this.targetProgress = targetProgress;

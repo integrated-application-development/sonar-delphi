@@ -41,6 +41,7 @@ public interface MetricsInterface {
    * @param sensorContext Given by Sonar
    * @param classes Classes in source file
    * @param functions Functions in source file
+   * @param units Units in project
    */
   void analyse(InputFile resource, SensorContext sensorContext, List<ClassInterface> classes,
     List<FunctionInterface> functions,

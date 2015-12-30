@@ -51,6 +51,7 @@ public class DelphiStatement implements StatementInterface {
    * @param text Statement text
    * @param lineNumber Statement line number
    * @param columnNumber Statement column number
+   * @param delphiProjectHelper delphiProjectHelper
    */
   public DelphiStatement(String text, int lineNumber, int columnNumber, DelphiProjectHelper delphiProjectHelper) {
     this.delphiProjectHelper = delphiProjectHelper;

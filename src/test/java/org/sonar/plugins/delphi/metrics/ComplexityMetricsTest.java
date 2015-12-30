@@ -96,7 +96,7 @@ public class ComplexityMetricsTest {
     analyzer.analyze(new DelphiAST(testFile));
 
     // processing
-    ComplexityMetrics metrics = new ComplexityMetrics(null, activeRules, perspectives);
+    ComplexityMetrics metrics = new ComplexityMetrics(activeRules, perspectives);
     metrics.analyse(new DefaultInputFile("test"), null, analyzer.getResults().getClasses(), analyzer.getResults().getFunctions(), null);
     String[] keys = {"ACCESSORS", "CLASS_COMPLEXITY", "CLASSES", "COMPLEXITY", "FUNCTIONS", "FUNCTION_COMPLEXITY",
       "PUBLIC_API",
@@ -120,7 +120,7 @@ public class ComplexityMetricsTest {
     analyzer.analyze(new DelphiAST(testFile));
 
     // processing
-    ComplexityMetrics metrics = new ComplexityMetrics(null, activeRules, perspectives);
+    ComplexityMetrics metrics = new ComplexityMetrics(activeRules, perspectives);
     metrics.analyse(new DefaultInputFile("test"), null, analyzer.getResults().getClasses(), analyzer.getResults().getFunctions(), null);
   }
 

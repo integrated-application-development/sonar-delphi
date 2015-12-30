@@ -47,13 +47,10 @@ public class DelphiPMD {
   /**
    * Processes the file read by the reader against the rule set.
    * 
-   * @param reader input stream reader
+   * @param pmdFile input source file
    * @param ruleSets set of rules to process against the file
-   * @param ctx context in which PMD is operating. This contains the Renderer
-   *            and whatnot
+   * @param ctx context in which PMD is operating. This contains the Renderer and whatnot
    * @param encoding Encoding to use
-   * @param sourceType the SourceType of the source
-   * @throws ParseException if the input could not be parsed or processed
    */
   public void processFile(File pmdFile, RuleSets ruleSets, RuleContext ctx, String encoding) {
     ctx.setSourceCodeFile(pmdFile);

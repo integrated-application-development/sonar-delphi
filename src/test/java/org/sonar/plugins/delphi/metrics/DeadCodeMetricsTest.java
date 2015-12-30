@@ -142,7 +142,7 @@ public class DeadCodeMetricsTest {
     when(activeRules.find(DeadCodeMetrics.RULE_KEY_UNUSED_FUNCTION)).thenReturn(activeRuleUnusedUnit);
     when(activeRules.find(DeadCodeMetrics.RULE_KEY_UNUSED_UNIT)).thenReturn(activeRuleUnusedUnit);
 
-    metrics = new DeadCodeMetrics(null, activeRules, perspectives);
+    metrics = new DeadCodeMetrics(activeRules, perspectives);
   }
 
   @Test

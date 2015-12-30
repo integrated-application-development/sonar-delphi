@@ -31,7 +31,7 @@ public interface SubRange {
    * Checks if value is in range
    * 
    * @param value Value to check
-   * @return True if value >= begin && value <= end, false otherwise
+   * @return True if value &gt;= begin &nbsp;&nbsp; value &lt;= end, false otherwise
    */
   boolean inRange(int value);
 

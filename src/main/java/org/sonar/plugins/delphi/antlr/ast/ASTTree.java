@@ -56,19 +56,21 @@ public interface ASTTree extends Tree {
   /**
    * Generates and saves AST tree to XML file
    * 
-   * @return XML file
+   * @param fileName The target file to generate the XML
+   * @return Generated XML file
    */
   File generateXML(String fileName);
 
   /**
-   * Gets the file source
+   * @return Gets the file source
    */
   String getFileSource();
 
   /**
-   * Gets the source file line
+   * Gets the source file at line
    * 
    * @param lineNr Line number, starting from 1
+   * @return Gets the source file at line
    */
   String getFileSourceLine(int lineNr);
 

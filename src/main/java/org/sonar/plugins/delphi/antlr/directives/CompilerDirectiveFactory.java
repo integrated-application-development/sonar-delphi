@@ -77,9 +77,8 @@ public class CompilerDirectiveFactory {
    * @param startPosition Start position to look for a directive
    * @param endPosition End position of a directive
    * @return concrete compiler directive class
-   * @throws CompilerDirectiveFactorySyntaxException when no compiler
-   *             directive could be created
-   * @throws CompilerDirectiveFactoryUnsupportedDirectiveException
+   * @throws CompilerDirectiveFactoryUnsupportedDirectiveException when not recognize the directive name
+   * @throws CompilerDirectiveFactorySyntaxException when no compiler directive could be created
    */
   public CompilerDirective create(String data, int startPosition, int endPosition)
     throws CompilerDirectiveFactoryUnsupportedDirectiveException, CompilerDirectiveFactorySyntaxException {

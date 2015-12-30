@@ -57,6 +57,7 @@ public class StatementVerifier {
    * Checks for statements
    * 
    * @param node Node to check
+   * @return Returns true if node is a statement
    */
   public boolean verify(Tree node) {
     isComplex = false;
@@ -70,7 +71,6 @@ public class StatementVerifier {
 
   /**
    * @return a Delphi statement
-   * @throws StatementVerifierException we canCreateStatement returns false
    */
   public StatementInterface createStatement() {
     StatementInterface statement = new DelphiStatement(lastStatementText, checkedNode.getLine(),

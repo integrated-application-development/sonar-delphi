@@ -46,6 +46,7 @@ public class SurefireSensor implements Sensor {
    * Ctor
    * 
    * @param settings Settings provided by Sonar
+   * @param delphiProjectHelper The DelphiProjectHelper
    */
   public SurefireSensor(Settings settings, DelphiProjectHelper delphiProjectHelper) {
     this.settings = settings;

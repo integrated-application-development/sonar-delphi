@@ -57,7 +57,6 @@ public class DelphiProject {
    * C-tor, initializes project with data loaded from xml file
    * 
    * @param xml XML file to parse
-   * @throws IOException
    */
   public DelphiProject(File xml) {
     try {

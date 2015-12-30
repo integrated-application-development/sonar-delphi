@@ -25,7 +25,7 @@ package org.sonar.plugins.delphi.antlr.sanitizer;
 import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.SourceResolverResults;
 
 /**
- * Abstract class for source resolvers, applyies chain-of-command design pattern
+ * Abstract class for source resolvers, applies chain-of-command design pattern
  */
 public abstract class SourceResolver {
 
@@ -45,7 +45,7 @@ public abstract class SourceResolver {
   /**
    * resolves
    * 
-   * @param results
+   * @param results Class to holding results for resolvers
    */
   public void resolve(SourceResolverResults results) {
     doResolve(results);

@@ -40,9 +40,9 @@ public class CommonCompilerDirective implements CompilerDirective {
    * 
    * @param name directive name
    * @param item directive item
-   * @param firstCharPos directive first character occurence
-   * @throws IllegalArgumentException if name was null, or firstCharPos < 0,
-   *             or firstCharPos < lastCharPos
+   * @param firstCharPos directive first character occurrence
+   * @param lastCharPos directive last character occurrence
+   * @throws IllegalArgumentException if name was null, or firstCharPos &lt; 0, or firstCharPos &lt; lastCharPos
    */
   public CommonCompilerDirective(String name, String item, int firstCharPos, int lastCharPos) {
     assertValues(name, firstCharPos, lastCharPos);

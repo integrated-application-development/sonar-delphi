@@ -83,8 +83,6 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
    * Sets the preprocessor definitions, method is static, so we could cache
    * the definitions and not remake them each time a new file is parsed
    * 
-   * @param list List of preprocessor definitions
-   * 
    * @param newDefinitions List of definitions
    */
   public static void setDefinitions(List<String> newDefinitions) {
@@ -95,7 +93,6 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
   /**
    * Overrides AntlrStringStream LookAhead for case insensitivity.
    */
-
   @Override
   public int LA(int i) {
     int la = super.LA(i);
@@ -137,7 +134,7 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
   /**
    * Gets the set of files, that already have been included in other files
    * 
-   * @return
+   * @return The set of files, that already have been included in other files
    */
   public static Set<String> getIncludedFiles() {
     return includedFiles;

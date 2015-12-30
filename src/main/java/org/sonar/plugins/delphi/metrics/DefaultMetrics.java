@@ -24,7 +24,6 @@ package org.sonar.plugins.delphi.metrics;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.sonar.api.resources.Project;
 
 /**
  * Metric class providing default behavior
@@ -32,16 +31,6 @@ import org.sonar.api.resources.Project;
 public abstract class DefaultMetrics implements MetricsInterface {
 
   protected Map<String, Double> metrics = new HashMap<String, Double>();
-  protected Project project = null;
-
-  /**
-   * Default ctor
-   * 
-   * @param project Sonar project
-   */
-  public DefaultMetrics(Project delphiProject) {
-    project = delphiProject;
-  }
 
   /**
    * {@inheritDoc}

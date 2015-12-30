@@ -37,7 +37,8 @@ public class SourceResolverResults {
   /**
    * ctor
    * 
-   * @param data file data
+   * @param fileName The source code file name
+   * @param data The source code file content
    */
   public SourceResolverResults(String fileName, StringBuilder data) {
     this.data = data;

@@ -48,7 +48,7 @@ public class CodeNode<T> {
   /**
    * is node valid
    * 
-   * @return
+   * @return Returns true if the CodeNode has a node.
    */
   public boolean isValid() {
     return node != null;

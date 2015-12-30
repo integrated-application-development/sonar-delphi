@@ -53,13 +53,6 @@ public class XPathRule extends DelphiRule {
    */
   private static String cachedFile = "";
 
-  /**
-   * Process the whole file with an XPath expression
-   * 
-   * @param node Any node in an AST tree
-   * @param data Data
-   */
-
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
     String xPathString = getStringProperty(XPATH);

@@ -131,7 +131,11 @@ public final class DelphiRulesUtils {
   }
 
   /**
-   * Imports configuratino
+   * Imports configuration. Transform a list of Rule in ActiveRule.
+   * 
+   * @param configuration rules configuration content
+   * @param rulesRepository list os Rules
+   * @return a list of ActiveRules
    */
   public static List<ActiveRule> importConfiguration(String configuration, List<Rule> rulesRepository) {
     Ruleset ruleset = DelphiRulesUtils.buildRuleSetFromXml(configuration);
@@ -147,6 +151,8 @@ public final class DelphiRulesUtils {
 
   /**
    * Exports configuration
+   * @param activeProfile The currrent active quality profile
+   * @return The active rules as XML String 
    */
   public static String exportConfiguration(RulesProfile activeProfile) {
     Ruleset tree = buildRulesetFromActiveProfile(activeProfile

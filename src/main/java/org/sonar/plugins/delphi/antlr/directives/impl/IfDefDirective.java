@@ -34,6 +34,7 @@ public class IfDefDirective extends CommonCompilerDirective {
   /**
    * ctor
    * 
+   * @param name directive name
    * @param item directive item
    * @param firstCharPos first character position
    * @param lastCharPos last character position
@@ -44,9 +45,10 @@ public class IfDefDirective extends CommonCompilerDirective {
   }
 
   /**
-   * Is compiler directive looking for positive checks?<br/>
-   * example: <code>{$ifdef XXX}</code> will return <b>true</b><br/>
-   * <code>{$ifNdef YYY}</code> will return <b>false</b><br/>
+   * Is compiler directive looking for positive checks?
+   * <p>
+   * example: <code>{$ifdef XXX}</code> will return <b>true</b>
+   *          <code>{$ifNdef YYY}</code> will return <b>false</b>
    * 
    * @return true if so, false otherwise
    */

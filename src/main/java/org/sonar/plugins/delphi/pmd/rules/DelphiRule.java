@@ -56,6 +56,9 @@ public class DelphiRule extends AbstractJavaRule {
 
   /**
    * overload this method in derived class
+   * @param node the current node
+   * @param ctx the ruleContext to store the violations
+   * 
    */
   public void visit(DelphiPMDNode node, RuleContext ctx) {
     // do nothing
@@ -165,4 +168,5 @@ public class DelphiRule extends AbstractJavaRule {
   public boolean isImplementationSection() {
     return inImplementationSection;
   }
+
 }

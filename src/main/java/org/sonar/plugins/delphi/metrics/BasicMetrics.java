@@ -31,7 +31,6 @@ import org.apache.commons.io.IOUtils;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.DelphiRecognizer;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
@@ -46,13 +45,6 @@ import org.sonar.squid.text.delphi.DelphiSource;
  * documentation.
  */
 public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
-
-  /**
-   * {@inheritDoc}
-   */
-  public BasicMetrics(Project delphiProject) {
-    super(delphiProject);
-  }
 
   @Override
   public void analyse(InputFile resource, SensorContext sensorContext, List<ClassInterface> classes,

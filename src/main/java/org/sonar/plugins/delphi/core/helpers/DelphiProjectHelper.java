@@ -57,8 +57,8 @@ public class DelphiProjectHelper implements BatchExtension {
   /**
    * ctor used by Sonar
    *
-   * @param settings
-   * @param fs
+   * @param settings Project settings 
+   * @param fs Sonar FileSystem
    */
   public DelphiProjectHelper(Settings settings, FileSystem fs) {
     this.settings = settings;
@@ -81,7 +81,6 @@ public class DelphiProjectHelper implements BatchExtension {
    * Gets the include directories (directories that are looked for include
    * files)
    *
-   * @param fileSystem Project file system
    * @return List of include directories
    */
   public List<File> getIncludeDirectories() {
@@ -292,7 +291,7 @@ public class DelphiProjectHelper implements BatchExtension {
   /**
    * Is file in excluded list?
    * 
-   * @param delphiFile File to check
+   * @param fileName File to check
    * @param excludedSources Excluded paths
    * @return True if file is excluded, false otherwise
    */
@@ -327,7 +326,7 @@ public class DelphiProjectHelper implements BatchExtension {
    * 
    * @return List of excluded directories, empty list if none
    */
-  public List<File> getCodeCoverageExcludedDirectories(Project project) {
+  public List<File> getCodeCoverageExcludedDirectories() {
     List<File> list = new ArrayList<File>();
 
     String[] sources = settings.getStringArray(DelphiPlugin.CC_EXCLUDED_KEY);

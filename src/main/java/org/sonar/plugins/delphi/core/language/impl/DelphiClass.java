@@ -35,7 +35,7 @@ import org.sonar.plugins.delphi.core.language.FunctionInterface;
 /**
  * DelphiLanguage language class.
  * 
- * @see ClassInterface.
+ * @see ClassInterface
  */
 public class DelphiClass implements ClassInterface {
 

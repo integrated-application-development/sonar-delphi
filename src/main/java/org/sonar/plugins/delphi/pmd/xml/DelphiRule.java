@@ -157,6 +157,7 @@ public class DelphiRule implements Comparable<String> {
 
   /**
    * adds property
+   * @param property Property to add
    */
   public void addProperty(Property property) {
     if (properties == null) {

@@ -44,7 +44,7 @@ public class CalledFunctionVerifier {
   /**
    * ctor
    * 
-   * @param results
+   * @param results to hold results of source code parsing
    */
   public CalledFunctionVerifier(CodeAnalysisResults results) {
     if (results == null) {
