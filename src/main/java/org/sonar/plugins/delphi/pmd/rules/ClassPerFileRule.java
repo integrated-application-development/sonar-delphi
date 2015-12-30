@@ -39,4 +39,8 @@ public class ClassPerFileRule extends CountRule {
     setTypeToSearch(DelphiLexer.TkClass);
   }
 
+  @Override
+  public String getMessage() {
+    return String.format("File has too many classes, maximum number of classes is %d.", limit);
+  }
 }

@@ -66,7 +66,7 @@ public class CountRule extends DelphiRule {
     increaseCounter(strength);
 
     if (exceedsLimit()) {
-      addViolation(ctx, node);
+      addViolation(ctx, node, getMessage());
       if (reset) {
         count = 0;
       }
@@ -99,4 +99,5 @@ public class CountRule extends DelphiRule {
     strength = 1;
     limit = getIntProperty(LIMIT);
   }
+
 }

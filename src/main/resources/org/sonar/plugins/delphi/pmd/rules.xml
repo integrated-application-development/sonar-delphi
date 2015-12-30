@@ -37,7 +37,8 @@
 	</rule>
 
 	<!-- YOU CAN COPY THIS RULE, JUST CHANGE THE PARAMETERS YOU WISH TO SEARCH FOR -->
-	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ClassPerFileRule" message="Only one class in a file"
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ClassPerFileRule" 
+	    message="File has too many classes."
 		name="OneClassPerFileRule">
 		<description>On class should be included in one file, for clarity reasons.</description>
 		<properties>

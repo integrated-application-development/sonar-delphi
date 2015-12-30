@@ -18,26 +18,36 @@
  */
 package org.sonar.plugins.delphi;
 
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
+import org.hamcrest.TypeSafeMatcher;
 import org.sonar.api.issue.Issue;
 
-public class IssueMatchers {
+public class HasRuleMessage<T extends Issue> extends TypeSafeMatcher<T> {
 
-  public static <T extends Issue> Matcher<T> hasRuleKey(String key) {
-    return HasRuleKey.hasRuleKey(key);
+  private final String message;
+
+  public HasRuleMessage(String message) {
+    this.message = message;
+  }
+
+  @Override
+  protected boolean matchesSafely(T item) {
+    return message.equals(item.message());
+  }
+
+  @Override
+  public void describeTo(Description description) {
+    description.appendText("message ").appendValue(message);
+  }
+
+  @Override
+  protected void describeMismatchSafely(T item, Description mismatchDescription) {
+    mismatchDescription.appendText("was ").appendValue(item.message());
   }
 
   public static <T extends Issue> Matcher<T> hasRuleMessage(String message) {
-    return HasRuleMessage.hasRuleMessage(message);
-  }
-
-  public static <T extends Issue> Matcher<T> hasRuleLine(int line) {
-    return HasRuleLineNumber.hasRuleLine(line);
-  }
-
-  public static <T extends Issue> Matcher<T> hasRuleKeyAtLine(String key, int line) {
-    return Matchers.allOf(HasRuleKey.hasRuleKey(key), hasRuleLine(line));
+    return new HasRuleMessage<T>(message);
   }
 
 }
