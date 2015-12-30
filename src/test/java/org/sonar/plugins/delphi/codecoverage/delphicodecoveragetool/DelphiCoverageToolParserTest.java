@@ -67,16 +67,10 @@ public class DelphiCoverageToolParserTest
     InputFile inputFile = new DefaultInputFile(ROOT_NAME).setFile(reportFile);
     when(delphiProjectHelper.findFileInDirectories(REPORT_FILE)).thenReturn(inputFile);
 
-    // MainWindow.pas
-
     when(delphiProjectHelper.findFileInDirectories(anyString())).thenAnswer(new Answer<InputFile>() {
       @Override
       public InputFile answer(InvocationOnMock invocation) throws Throwable {
         InputFile inputFile = new DefaultInputFile("").setAbsolutePath((String) invocation.getArguments()[0]);
-
-        // when(perspectives.as(Issuable.class, inputFile)).thenReturn(issuable);
-        //
-        // when(issuable.newIssueBuilder()).thenReturn(new StubIssueBuilder());
 
         return inputFile;
       }
@@ -84,7 +78,6 @@ public class DelphiCoverageToolParserTest
   }
 
   @Test
-  // @Ignore("Remove static method dependency. Use Dependency Injection")
   public void parseTest() {
     DelphiCodeCoverageToolParser parser = new DelphiCodeCoverageToolParser(reportFile, delphiProjectHelper);
     parser.parse(context);
