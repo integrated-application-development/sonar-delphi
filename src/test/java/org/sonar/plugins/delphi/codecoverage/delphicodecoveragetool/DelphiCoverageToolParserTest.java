@@ -23,16 +23,22 @@
 package org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 public class DelphiCoverageToolParserTest
@@ -44,24 +50,42 @@ public class DelphiCoverageToolParserTest
   private static final String ROOT_NAME = "/org/sonar/plugins/delphi/SimpleDelphiProject";
   private static final String REPORT_FILE = "/org/sonar/plugins/delphi/SimpleDelphiProject/reports/Coverage.xml";
 
+  private final File reportFile = DelphiUtils.getResource(REPORT_FILE);
+
   @Before
-  public void init() {
+  public void init() throws FileNotFoundException {
 
     context = new DebugSensorContext();
-
-    DelphiProjectHelper delphiProjectHelper = mock(DelphiProjectHelper.class);
 
     baseDir = DelphiUtils.getResource(ROOT_NAME);
 
     List<File> sourceDirs = new ArrayList<File>();
 
     sourceDirs.add(baseDir); // include baseDir
+
+    delphiProjectHelper = DelphiTestUtils.mockProjectHelper();
+    InputFile inputFile = new DefaultInputFile(ROOT_NAME).setFile(reportFile);
+    when(delphiProjectHelper.findFileInDirectories(REPORT_FILE)).thenReturn(inputFile);
+
+    // MainWindow.pas
+
+    when(delphiProjectHelper.findFileInDirectories(anyString())).thenAnswer(new Answer<InputFile>() {
+      @Override
+      public InputFile answer(InvocationOnMock invocation) throws Throwable {
+        InputFile inputFile = new DefaultInputFile("").setAbsolutePath((String) invocation.getArguments()[0]);
+
+        // when(perspectives.as(Issuable.class, inputFile)).thenReturn(issuable);
+        //
+        // when(issuable.newIssueBuilder()).thenReturn(new StubIssueBuilder());
+
+        return inputFile;
+      }
+    });
   }
 
   @Test
-  @Ignore("Remove static method dependency. Use Dependency Injection")
+  // @Ignore("Remove static method dependency. Use Dependency Injection")
   public void parseTest() {
-    File reportFile = DelphiUtils.getResource(REPORT_FILE);
     DelphiCodeCoverageToolParser parser = new DelphiCodeCoverageToolParser(reportFile, delphiProjectHelper);
     parser.parse(context);
 
