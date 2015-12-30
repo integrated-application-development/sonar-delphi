@@ -50,6 +50,7 @@ public class DelphiPmdRuleDefinition implements RulesDefinition {
       NewRule newRule = repository.createRule(rule.getKey())
         .setName(rule.getName())
         .setHtmlDescription(rule.getDescription())
+        .setInternalKey(rule.getConfigKey())
         .setSeverity(rule.getSeverity().name());
       for (RuleParam param : rule.getParams()) {
         newRule.createParam(param.getKey())

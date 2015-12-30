@@ -23,9 +23,11 @@
 package org.sonar.plugins.delphi.pmd;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -36,11 +38,13 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.Issue;
+import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.StubIssueBuilder;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
+import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileExporter;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
@@ -60,6 +64,8 @@ public class DelphiPmdSensorTest {
   private DelphiProjectHelper delphiProjectHelper;
   private Issuable issuable;
   private List<Issue> issues = new LinkedList<Issue>();
+  private DelphiPmdProfileExporter profileExporter;
+  private RulesProfile rulesProfile;
 
   @Before
   public void init() {
@@ -104,7 +110,21 @@ public class DelphiPmdSensorTest {
       }
     });
 
-    sensor = new DelphiPmdSensor(delphiProjectHelper, perspectives);
+    rulesProfile = mock(RulesProfile.class);
+    profileExporter = mock(DelphiPmdProfileExporter.class);
+
+    String fileName = getClass().getResource("/org/sonar/plugins/delphi/pmd/rules.xml").getPath();
+    File rulesFile = new File(fileName);
+    String rulesXmlContent;
+    try {
+      rulesXmlContent = FileUtils.readFileToString(rulesFile);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+
+    when(profileExporter.exportProfileToString(rulesProfile)).thenReturn(rulesXmlContent);
+
+    sensor = new DelphiPmdSensor(delphiProjectHelper, perspectives, rulesProfile, profileExporter);
   }
 
   @Test

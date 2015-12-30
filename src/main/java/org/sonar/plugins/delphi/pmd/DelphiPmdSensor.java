@@ -22,7 +22,11 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -30,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.sourceforge.pmd.Report;
 import net.sourceforge.pmd.RuleContext;
+import net.sourceforge.pmd.RuleSet;
 import net.sourceforge.pmd.RuleSetFactory;
 import net.sourceforge.pmd.RuleSets;
 import net.sourceforge.pmd.ast.ParseException;
@@ -39,8 +44,10 @@ import org.apache.commons.io.FileUtils;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.component.ResourcePerspectives;
+import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
+import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileExporter;
 import org.sonar.plugins.delphi.pmd.profile.DelphiRuleSets;
 import org.sonar.plugins.delphi.pmd.xml.DelphiPmdXmlReportParser;
 import org.sonar.plugins.delphi.project.DelphiProject;
@@ -56,13 +63,17 @@ public class DelphiPmdSensor implements Sensor {
   private final ResourcePerspectives perspectives;
   private final DelphiProjectHelper delphiProjectHelper;
   private final List<String> errors = new ArrayList<String>();
+  private final DelphiPmdProfileExporter profileExporter;
+  private final RulesProfile rulesProfile;
 
   /**
    * C-tor
    */
-  public DelphiPmdSensor(DelphiProjectHelper delphiProjectHelper, ResourcePerspectives perspectives) {
+  public DelphiPmdSensor(DelphiProjectHelper delphiProjectHelper, ResourcePerspectives perspectives, RulesProfile rulesProfile, DelphiPmdProfileExporter profileExporter) {
     this.delphiProjectHelper = delphiProjectHelper;
     this.perspectives = perspectives;
+    this.rulesProfile = rulesProfile;
+    this.profileExporter = profileExporter;
   }
 
   /**
@@ -71,21 +82,48 @@ public class DelphiPmdSensor implements Sensor {
 
   @Override
   public void analyse(Project project, SensorContext context) {
+    File reportFile;
     // creating report
-    File reportFile = createPmdReport(project);
+    ClassLoader initialClassLoader = Thread.currentThread().getContextClassLoader();
+    try {
+      Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
+      reportFile = createPmdReport(project);
+    } finally {
+      Thread.currentThread().setContextClassLoader(initialClassLoader);
+    }
 
     // analysing report
     DelphiPmdXmlReportParser parser = new DelphiPmdXmlReportParser(delphiProjectHelper, perspectives);
+
     parser.parse(reportFile);
   }
 
   private RuleSets createRuleSets() {
     RuleSets rulesets = new DelphiRuleSets();
+    String rulesXml = profileExporter.exportProfileToString(rulesProfile);
+    File ruleSetFile = dumpXmlRuleSet(DelphiPmdConstants.REPOSITORY_KEY, rulesXml);
     RuleSetFactory ruleSetFactory = new RuleSetFactory();
-    rulesets.addRuleSet(ruleSetFactory
-      .createRuleSet(getClass().getResourceAsStream(
-        "/org/sonar/plugins/delphi/pmd/rules.xml")));
-    return rulesets;
+    try {
+      RuleSet ruleSet = ruleSetFactory.createRuleSet(new FileInputStream(ruleSetFile));
+
+      rulesets.addRuleSet(ruleSet);
+      return rulesets;
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException(e);
+    }
+  }
+
+  private File dumpXmlRuleSet(String repositoryKey, String rulesXml) {
+    try {
+      File configurationFile = new File(delphiProjectHelper.workDir(), repositoryKey + ".xml");
+      Files.write(rulesXml, configurationFile, Charsets.UTF_8);
+
+      DelphiUtils.LOG.info("PMD configuration: " + configurationFile.getAbsolutePath());
+
+      return configurationFile;
+    } catch (IOException e) {
+      throw new IllegalStateException("Fail to save the PMD configuration", e);
+    }
   }
 
   private File createPmdReport(Project project) {

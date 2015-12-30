@@ -73,6 +73,8 @@
 		<sonar.exclusions>org.sonar.plugins.delphi.antlr.DelphiParser,org.sonar.plugins.delphi.antlr.DelphiLexer</sonar.exclusions>
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
 		<slf4j.version>1.7.5</slf4j.version>
+		<pmd.version>4.2.5</pmd.version>
+		<pmd.plugin.version>2.0</pmd.plugin.version>
 	</properties>
 
 	<dependencies>
@@ -113,7 +115,7 @@
 			<groupId>org.codehaus.sonar-plugins.java</groupId>
 			<artifactId>sonar-pmd-plugin</artifactId>
 			<type>sonar-plugin</type>
-			<version>2.0</version>
+			<version>${pmd.plugin.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -137,7 +139,7 @@
 		<dependency>
 			<groupId>pmd</groupId>
 			<artifactId>pmd</artifactId>
-			<version>4.2.5</version>
+			<version>${pmd.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>jaxen</groupId>
