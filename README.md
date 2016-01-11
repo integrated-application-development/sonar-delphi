@@ -31,10 +31,11 @@ Supported Runners
 ----------------------------
  To run an analysis of your Java project, you can use the following Runners:
 
-* [SonarQube Runner](http://docs.sonarqube.org/display/SONAR/Installing+and+Configuring+SonarQube+Runner): recommended for all non-Maven projects
-* [Maven](http://docs.sonarqube.org/display/SONAR/Installing+and+Configuring+Maven): recommended for all projects built with Maven
-* [SonarQube Ant Task](http://docs.sonarqube.org/display/SONAR/Installing+and+Configuring+Ant+SonarQube+Task): to integrate with projects built with Ant
-* [Gradle](http://docs.sonarqube.org/display/SONAR/Analyzing+with+Gradle): to integrate with projects built with Gradle
+* [SonarQube Runner](http://docs.sonarqube.org/display/SONAR/Installing+and+Configuring+SonarQube+Scanner): recommended for all non-Maven projects
+* [Maven](http://docs.sonarqube.org/display/SONAR/Installing+and+Configuring+SonarQube+Scanner+for+Maven): recommended for all projects built with Maven
+* [SonarQube Ant Task](http://docs.sonarqube.org/display/SONAR/Installing+and+Configuring+SonarQube+Scanner+for+Ant): to integrate with projects built with Ant
+* [Gradle](http://docs.sonarqube.org/display/SONAR/Installing+and+Configuring+SonarQube+Scanner+for+Gradle): to integrate with projects built with Gradle
+* Other options can be found [here](http://docs.sonarqube.org/display/SONAR/Installing+a+Scanner).
 
 
 Reporting Issues
