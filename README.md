@@ -37,6 +37,18 @@ Supported Runners
 * [Gradle](http://docs.sonarqube.org/display/SONAR/Analyzing+with+Gradle): to integrate with projects built with Gradle
 
 
+Reporting Issues
+----------------------------
+SonarQube Delphi Plugin uses GitHub's integrated issue tracking system to record bugs and feature
+requests. If you want to raise an issue, please follow the recommendations below:
+
+* Before you log a bug, please [search the issue tracker](https://github.com/fabriciocolombo/sonar-delphi/search?type=Issues)
+  to see if someone has already reported the problem.
+* If the issue doesn't already exist, [create a new issue](https://github.com/fabriciocolombo/sonar-delphi/issues/new).
+* Please provide as much information as possible with the issue report, we like to know
+  the version of SonarQube Delphi Plugin that you are using, as well as the SonarQube version.
+* If possible try to create a test-case or project that replicates the issue. 
+
 Implemented Features
 ------------------------------------------
 
