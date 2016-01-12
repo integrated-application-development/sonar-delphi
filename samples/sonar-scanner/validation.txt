@@ -1,0 +1,11 @@
+start server
+  with plugin delphi 0.1
+sonar-runner
+verify org.codehaus.sonar:delphi-sonar-runner
+  measure lines is 349
+  measure ncloc is 248
+  measure files is 8
+  measure classes is 7
+verify org.codehaus.sonar:delphi-sonar-runner:[default].MainWindow
+  measure lines is 52
+  measure ncloc is 38
