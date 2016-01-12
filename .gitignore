@@ -5,3 +5,4 @@ target
 /.README.md.html
 /.TODO.md.html
 /hot-deploy.bat
+.sonar

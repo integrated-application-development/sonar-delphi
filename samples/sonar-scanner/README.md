@@ -2,9 +2,9 @@ This example demonstrates how to analyze a Delphi project with the SonarQube Run
 
 Prerequisites
 =============
-* [SonarQube](http://www.sonarsource.org/downloads/) 3.0 or higher
-* [SonarQube Runner](http://docs.codehaus.org/x/N4KxDQ) 2.0 or higher
-* [SonarQube Delphi Plugin](http://docs.codehaus.org/display/SONAR/Delphi+Plugin) 0.1 or higher
+* [SonarQube Server](http://www.sonarsource.org/downloads/) Check the [supported versions](https://github.com/fabriciocolombo/sonar-delphi/releases/latest).
+* [SonarQube Runner](http://docs.sonarqube.org/display/SONAR/Installing+and+Configuring+SonarQube+Scanner)
+* [SonarQube Delphi Plugin](https://github.com/fabriciocolombo/sonar-delphi/releases/latest)
 
 Usage
 =====
