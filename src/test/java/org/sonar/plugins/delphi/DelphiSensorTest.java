@@ -31,8 +31,6 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.rule.ActiveRule;
@@ -63,6 +61,7 @@ public class DelphiSensorTest {
   private ResourcePerspectives perspectives;
 
   private static final String ROOT_NAME = "/org/sonar/plugins/delphi/SimpleDelphiProject";
+  private final DelphiProject delphiProject = new DelphiProject("Default Project");
 
   @Before
   public void init() {
@@ -103,33 +102,13 @@ public class DelphiSensorTest {
 
     perspectives = mock(ResourcePerspectives.class);
 
-    delphiProjectHelper = mock(DelphiProjectHelper.class);
-    when(delphiProjectHelper.shouldExecuteOnProject()).thenReturn(Boolean.TRUE);
+    delphiProjectHelper = DelphiTestUtils.mockProjectHelper();
+    DelphiTestUtils.mockGetFileFromString(delphiProjectHelper);
 
-    DelphiProject delphiProject = new DelphiProject("Default Project");
     delphiProject.setSourceFiles(sourceFiles);
 
     when(delphiProjectHelper.getWorkgroupProjects()).thenReturn(Arrays.asList(delphiProject));
     when(delphiProjectHelper.getDirectory(any(File.class), any(Project.class))).thenCallRealMethod();
-    when(delphiProjectHelper.getFile(any(File.class))).thenAnswer(new Answer<InputFile>() {
-
-      @Override
-      public InputFile answer(InvocationOnMock invocation) throws Throwable {
-        InputFile inputFile = new DefaultInputFile(ROOT_NAME).setFile((File) invocation.getArguments()[0]);
-
-        return inputFile;
-      }
-    });
-    when(delphiProjectHelper.getFile(any(String.class))).thenAnswer(new Answer<InputFile>() {
-
-      @Override
-      public InputFile answer(InvocationOnMock invocation) throws Throwable {
-        InputFile inputFile = new DefaultInputFile(ROOT_NAME).setFile(new File((String) invocation
-          .getArguments()[0]));
-
-        return inputFile;
-      }
-    });
 
     activeRules = mock(ActiveRules.class);
     ActiveRule activeRule = mock(ActiveRule.class);
@@ -148,46 +127,38 @@ public class DelphiSensorTest {
   public void analyseTest() {
     createKeyMetricIndexMap();
 
-    ProjectMetricsXMLParser xmlParser = new ProjectMetricsXMLParser(new File(baseDir.getAbsolutePath()
-      + File.separator + "values.xml")); // xml file for
-    // expected
-    // metrics for
-    // files
-    DebugSensorContext context = new DebugSensorContext(); // new debug
-                                                           // context for
-                                                           // debug
-                                                           // information
+    // xml file for expected metrics for files
+    ProjectMetricsXMLParser xmlParser = new ProjectMetricsXMLParser(new File(baseDir.getAbsolutePath() + File.separator + "values.xml"));
+
+    DebugSensorContext context = new DebugSensorContext();
     sensor.analyse(project, context); // analysing project
 
-    Map<String, Double[]> expectedValues = new HashMap<String, Double[]>(); // create
-                                                                            // a
-                                                                            // map
-                                                                            // of
-                                                                            // expected
-                                                                            // values
-                                                                            // for
-                                                                            // each
-                                                                            // file
+    // create a map of expected values for each file
+    Map<String, Double[]> expectedValues = new HashMap<String, Double[]>();
     for (String fileName : xmlParser.getFileNames()) {
-      expectedValues.put(fileName, xmlParser.getFileValues(fileName));
+      expectedValues.put(fileName.toLowerCase(), xmlParser.getFileValues(fileName));
     }
 
-    for (String key : context.getMeasuresKeys()) { // check each measure if
-                                                   // it is correct
-      String fileKey = key.substring(0, key.lastIndexOf(':')); // get file
-                                                               // name
-      String metricKey = key.substring(key.lastIndexOf(':') + 1, key.length()); // get
-                                                                                // metric
-                                                                                // key
+    for (String key : context.getMeasuresKeys()) {
+      Measure<?> measure = context.getMeasure(key);
 
-      if (!expectedValues.containsKey(fileKey)) {
-        continue; // skip [default] package
+      // get file name
+      String fileKey = key.substring(0, key.lastIndexOf(':')).toLowerCase();
+
+      // get metric key
+      String metricKey = key.substring(key.lastIndexOf(':') + 1, key.length());
+
+      if (!expectedValues.containsKey(fileKey) && DelphiUtils.acceptFile(fileKey)) {
+        fail("Measure key: " + key + " Unexpected file: " + fileKey);
+      } else {
+        // Skip directories
+        continue;
       }
+
       if (keyMetricIndex.get(metricKey) == null) {
         continue;
       }
 
-      Measure<?> measure = context.getMeasure(key);
       double currentValue = measure.getValue();
       double expectedValue = expectedValues.get(fileKey)[keyMetricIndex.get(metricKey)];
 
@@ -268,4 +239,18 @@ public class DelphiSensorTest {
     }
   }
 
+  @Test
+  public void analyseWithEmptySourceFiles() {
+    delphiProject.getSourceFiles().clear();
+    DebugSensorContext context = new DebugSensorContext();
+    sensor.analyse(project, context);
+  }
+
+  @Test
+  public void analyseWithInvalidNoResources() {
+    delphiProject.getSourceFiles().clear();
+    delphiProject.getSourceFiles().add(new File(baseDir + "/values.xml"));
+    DebugSensorContext context = new DebugSensorContext();
+    sensor.analyse(project, context);
+  }
 }

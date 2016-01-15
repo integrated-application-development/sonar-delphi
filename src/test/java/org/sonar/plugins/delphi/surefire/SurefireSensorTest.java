@@ -46,8 +46,8 @@ import static org.mockito.Mockito.*;
 
 public class SurefireSensorTest {
 
-  private static final String PROJECT_DIR = "/org/sonar/plugins/delphi/SimpleDelphiProject";
-  private static final String PROJECT_TEST_DIR = "/org/sonar/plugins/delphi/SimpleDelphiProject/tests";
+  private static final String PROJECT_DIR = "/org/sonar/plugins/delphi/UnitTest";
+  private static final String PROJECT_TEST_DIR = "/org/sonar/plugins/delphi/UnitTest/tests";
   private static final String SUREFIRE_REPORT_DIR = "./reports";
 
   private Project project;
@@ -88,10 +88,6 @@ public class SurefireSensorTest {
     SurefireSensor sensor = new SurefireSensor(settings, delphiProjectHelper);
     sensor.analyse(project, context);
 
-    for (String key : context.getMeasuresKeys()) {
-      System.out.println(key + ":" + context.getMeasure(key));
-    }
-
     assertEquals(18, context.getMeasuresKeys().size());
   }
 
@@ -100,10 +96,6 @@ public class SurefireSensorTest {
     DebugSensorContext context = new DebugSensorContext();
     SurefireSensor sensor = new SurefireSensor(settings, delphiProjectHelper);
     sensor.analyse(project, context);
-
-    for (String key : context.getMeasuresKeys()) {
-      System.out.println(key + ":" + context.getMeasure(key));
-    }
 
     assertEquals(24, context.getMeasuresKeys().size());
   }

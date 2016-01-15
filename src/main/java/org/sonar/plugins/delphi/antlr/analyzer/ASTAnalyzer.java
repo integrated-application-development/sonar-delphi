@@ -46,4 +46,9 @@ public interface ASTAnalyzer {
    */
   CodeTree getCode();
 
+  /**
+   * @return Returns true if CodeAnalysisResults is present.
+   */
+  boolean hasResults();
+
 }

@@ -63,4 +63,9 @@ public abstract class DefaultMetrics implements MetricsInterface {
   protected void clearMetrics() {
     metrics.clear();
   }
+
+  @Override
+  public boolean hasMetric(String metric) {
+    return metrics.containsKey(metric);
+  }
 }

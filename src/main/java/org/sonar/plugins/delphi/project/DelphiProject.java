@@ -29,7 +29,6 @@ import java.util.List;
 import javax.xml.stream.XMLStreamException;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.xml.sax.SAXException;
 
@@ -84,19 +83,9 @@ public class DelphiProject {
       throw new IOException("Could not add file to project: " + newFile.getAbsolutePath());
     }
 
-    String fileExtension = StringUtils.substringAfterLast(newFile.getName(), ".");
-    if (isFileExtensionValid(fileExtension)) {
+    if (DelphiUtils.acceptFile(newFile.getAbsolutePath())) {
       files.add(newFile);
     }
-  }
-
-  public boolean isFileExtensionValid(String fileExtension) {
-    for (String suffix : DelphiLanguage.instance.getFileSuffixes()) {
-      if (suffix.equalsIgnoreCase(fileExtension)) {
-        return true;
-      }
-    }
-    return false;
   }
 
   /**

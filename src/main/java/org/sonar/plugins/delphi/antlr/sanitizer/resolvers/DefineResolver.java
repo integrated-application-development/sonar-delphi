@@ -80,7 +80,7 @@ public class DefineResolver extends SourceResolver {
       SubRangeAggregator toComment = processCompilerDirectives(allDirectives, defines, excluded);
       commentUnwantedDefinitions(str, toComment);
     } catch (CompilerDirectiveFactorySyntaxException e) {
-      DelphiUtils.LOG.debug(e.getMessage());
+      DelphiUtils.LOG.trace(e.getMessage());
     } catch (DefineResolverException e) {
       DelphiUtils.LOG.debug(e.getMessage());
     }

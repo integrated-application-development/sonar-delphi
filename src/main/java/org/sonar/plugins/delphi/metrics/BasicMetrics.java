@@ -31,7 +31,6 @@ import org.apache.commons.io.IOUtils;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.DelphiRecognizer;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
@@ -94,12 +93,7 @@ public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
 
   @Override
   public boolean executeOnResource(InputFile resource) {
-    String[] endings = DelphiLanguage.instance.getFileSuffixes();
-    for (String ending : endings) {
-      if (resource.absolutePath().endsWith("." + ending)) {
-        return true;
-      }
-    }
-    return false;
+    return DelphiUtils.acceptFile(resource.absolutePath());
   }
+
 }

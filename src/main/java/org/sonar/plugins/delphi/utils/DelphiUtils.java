@@ -166,15 +166,26 @@ public final class DelphiUtils {
         if (!pathname.isFile()) {
           return false;
         }
-        String[] endings = DelphiLanguage.instance.getFileSuffixes();
-        for (String ending : endings) {
-          if (pathname.getAbsolutePath().endsWith("." + ending)) {
-            return true;
-          }
-        }
-        return false;
+        return acceptFile(pathname.getAbsolutePath());
       }
+
     };
+  }
+
+  /**
+   * Accept file based on file extension.
+   * 
+   * @param fileName The file name
+   * @return True if the file has a valid extension
+   */
+  public static boolean acceptFile(String fileName) {
+    String[] endings = DelphiLanguage.instance.getFileSuffixes();
+    for (String ending : endings) {
+      if (fileName.toLowerCase().endsWith("." + ending)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**

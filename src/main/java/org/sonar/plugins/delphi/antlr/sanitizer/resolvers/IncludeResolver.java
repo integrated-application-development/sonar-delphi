@@ -130,7 +130,7 @@ public class IncludeResolver extends SourceResolver {
 
       }
     } catch (CompilerDirectiveFactorySyntaxException e) {
-      DelphiUtils.LOG.debug(e.getMessage());
+      DelphiUtils.LOG.trace(e.getMessage());
     }
 
     return introduceIncludedData(newData, dataToInclude);

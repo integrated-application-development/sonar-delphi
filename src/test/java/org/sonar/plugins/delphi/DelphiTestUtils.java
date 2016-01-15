@@ -22,8 +22,14 @@
  */
 package org.sonar.plugins.delphi;
 
+import java.io.File;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 public class DelphiTestUtils {
@@ -31,7 +37,33 @@ public class DelphiTestUtils {
   public static DelphiProjectHelper mockProjectHelper() {
     DelphiProjectHelper mock = mock(DelphiProjectHelper.class);
     when(mock.shouldExecuteOnProject()).thenReturn(true);
+
+    when(mock.getFile(any(File.class))).thenAnswer(new Answer<InputFile>() {
+
+      @Override
+      public InputFile answer(InvocationOnMock invocation) throws Throwable {
+        File file = (File) invocation.getArguments()[0];
+        InputFile inputFile = new DefaultInputFile(file.getAbsolutePath()).setFile(file);
+
+        return inputFile;
+      }
+    });
+
     return mock;
+  }
+
+  public static void mockGetFileFromString(DelphiProjectHelper mock) {
+    when(mock.getFile(any(String.class))).thenAnswer(new Answer<InputFile>() {
+      @Override
+      public InputFile answer(InvocationOnMock invocation) throws Throwable {
+        String fileName = (String) invocation.getArguments()[0];
+
+        File file = new File(fileName);
+        InputFile inputFile = new DefaultInputFile(file.getAbsolutePath()).setFile(file);
+
+        return inputFile;
+      }
+    });
   }
 
 }

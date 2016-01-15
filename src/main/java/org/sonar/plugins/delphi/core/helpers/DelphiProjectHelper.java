@@ -241,7 +241,7 @@ public class DelphiProjectHelper implements BatchExtension {
   public Directory getDirectory(java.io.File dir, Project module) {
     Directory directory = Directory.fromIOFile(dir, module);
 
-    if (directory.getKey() == null) {
+    if (directory == null || directory.getKey() == null) {
       return Directory.create(DEFAULT_PACKAGE_NAME);
     }
 

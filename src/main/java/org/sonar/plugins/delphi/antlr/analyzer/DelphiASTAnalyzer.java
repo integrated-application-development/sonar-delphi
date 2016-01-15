@@ -82,4 +82,9 @@ public class DelphiASTAnalyzer implements ASTAnalyzer {
     return code;
   }
 
+  @Override
+  public boolean hasResults() {
+    return result != null;
+  }
+
 }

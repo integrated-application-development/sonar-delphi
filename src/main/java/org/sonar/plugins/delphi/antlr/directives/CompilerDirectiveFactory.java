@@ -62,7 +62,7 @@ public class CompilerDirectiveFactory {
         CompilerDirective directive = create(data, directivePos, closingBracket);
         result.add(directive);
       } catch (CompilerDirectiveFactoryUnsupportedDirectiveException e) {
-        DelphiUtils.LOG.debug(e.getMessage());
+        DelphiUtils.LOG.trace(e.getMessage());
       }
 
       directivePos = getDirectiveFirstChar(data, directivePos + 1);

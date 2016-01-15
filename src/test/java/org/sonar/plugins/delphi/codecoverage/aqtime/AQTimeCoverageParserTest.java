@@ -123,22 +123,19 @@ public class AQTimeCoverageParserTest extends DBTestCase {
     DebugSensorContext context = new DebugSensorContext();
     parser.parse(context);
 
-    Measure<Double> globalMeasureCoverage = context.getMeasure(inputFileGlobals.absolutePath() + ":" + "coverage");
+    Measure<Double> globalMeasureCoverage = context.getMeasure("Globals.pas:coverage");
     assertThat(globalMeasureCoverage, notNullValue());
     assertThat(globalMeasureCoverage.getValue(), is(100.00));
 
-    Measure<String> globalMeasureLineHits = context.getMeasure(inputFileGlobals.absolutePath() + ":"
-      + "coverage_line_hits_data");
+    Measure<String> globalMeasureLineHits = context.getMeasure("Globals.pas:coverage_line_hits_data");
     assertThat(globalMeasureLineHits, notNullValue());
     assertThat(globalMeasureLineHits.getData(), is("32=1;33=1"));
 
-    Measure<Double> mainWindowMeasureCoverage = context.getMeasure(inputFileMainWindow.absolutePath() + ":"
-      + "coverage");
+    Measure<Double> mainWindowMeasureCoverage = context.getMeasure("MainWindow.pas:coverage");
     assertThat(mainWindowMeasureCoverage, notNullValue());
     assertThat(mainWindowMeasureCoverage.getValue(), is(50.00));
 
-    Measure<String> mainWindowMeasureLineHits = context.getMeasure(inputFileMainWindow.absolutePath() + ":"
-      + "coverage_line_hits_data");
+    Measure<String> mainWindowMeasureLineHits = context.getMeasure("MainWindow.pas:coverage_line_hits_data");
     assertThat(mainWindowMeasureLineHits, notNullValue());
     assertThat(mainWindowMeasureLineHits.getData(), is("13=1;14=0"));
   }

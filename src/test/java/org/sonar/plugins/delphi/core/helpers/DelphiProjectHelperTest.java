@@ -22,7 +22,63 @@
  */
 package org.sonar.plugins.delphi.core.helpers;
 
+import java.io.File;
+import org.junit.Before;
+import org.junit.Test;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.config.Settings;
+import org.sonar.api.resources.Directory;
+import org.sonar.api.resources.Project;
+import org.sonar.api.resources.ProjectFileSystem;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class DelphiProjectHelperTest {
 
+  private DelphiProjectHelper delphiProjectHelper;
+  private Project project;
+  private ProjectFileSystem pfs;
+  private File currentDir;
+  private File baseDir;
+
+  @Before
+  public void setup() {
+    currentDir = new File(getClass().getResource("/").getPath());
+    baseDir = currentDir.getParentFile();
+
+    FileSystem fs = mock(FileSystem.class);
+    Settings settings = mock(Settings.class);
+    project = mock(Project.class);
+    pfs = mock(ProjectFileSystem.class);
+
+    when(pfs.getBasedir()).thenReturn(baseDir);
+
+    when(project.getFileSystem()).thenReturn(pfs);
+
+    delphiProjectHelper = new DelphiProjectHelper(settings, fs);
+  }
+
+  @Test
+  public void getDirectory() {
+    Directory directory = delphiProjectHelper.getDirectory(currentDir, project);
+    assertThat(directory, notNullValue());
+    assertThat(directory.getKey(), is("test-classes"));
+  }
+
+  @Test
+  public void getDirectoryEqualsToBaseDir() {
+    Directory directory = delphiProjectHelper.getDirectory(baseDir, project);
+    assertThat(directory, notNullValue());
+    assertThat(directory.getKey(), is("/"));
+  }
+
+  @Test
+  public void getInvalidRelativeDirectoryReturnsDefaultPackageName() {
+    File rootDirectory = new File("/");
+    Directory directory = delphiProjectHelper.getDirectory(rootDirectory, project);
+    assertThat(directory, notNullValue());
+    assertThat(directory.getKey(), is(DelphiProjectHelper.DEFAULT_PACKAGE_NAME));
+  }
 }

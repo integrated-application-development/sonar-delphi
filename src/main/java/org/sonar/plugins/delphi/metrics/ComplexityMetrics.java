@@ -37,7 +37,6 @@ import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.measures.RangeDistributionBuilder;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.delphi.antlr.DelphiParser;
-import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
@@ -262,13 +261,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
 
   @Override
   public boolean executeOnResource(InputFile resource) {
-    String[] endings = DelphiLanguage.instance.getFileSuffixes();
-    for (String ending : endings) {
-      if (resource.absolutePath().endsWith("." + ending)) {
-        return true;
-      }
-    }
-    return false;
+    return DelphiUtils.acceptFile(resource.absolutePath());
   }
 
   private void addIssue(InputFile resource, FunctionInterface func) {

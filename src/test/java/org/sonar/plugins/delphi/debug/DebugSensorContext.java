@@ -121,7 +121,7 @@ public class DebugSensorContext implements SensorContext {
 
   @Override
   public Measure<?> saveMeasure(Resource resource, Metric metric, Double value) {
-    data.put(resource.getName() + ".pas:" + metric.getKey(), value);
+    data.put(resource.getName() + ":" + metric.getKey(), value);
     return null;
   }
 
@@ -361,7 +361,7 @@ public class DebugSensorContext implements SensorContext {
 
   @Override
   public Measure saveMeasure(InputFile inputFile, Metric metric, Double value) {
-    data.put(inputFile.absolutePath() + ":" + metric.getKey(), value);
+    data.put(inputFile.file().getName() + ":" + metric.getKey(), value);
     return null;
   }
 
@@ -371,9 +371,9 @@ public class DebugSensorContext implements SensorContext {
       return null;
     }
     if (measure.getValue() != null) {
-      data.put(inputFile.absolutePath() + ":" + measure.getMetric().getKey(), measure.getValue());
+      data.put(inputFile.file().getName() + ":" + measure.getMetric().getKey(), measure.getValue());
     } else {
-      sdata.put(inputFile.absolutePath() + ":" + measure.getMetric().getKey(), measure.getData());
+      sdata.put(inputFile.file().getName() + ":" + measure.getMetric().getKey(), measure.getData());
     }
     return null;
   }

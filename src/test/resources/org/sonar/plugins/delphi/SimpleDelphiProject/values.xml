@@ -1,32 +1,32 @@
 <?xml version="1.0"?>
 <files>
-	<!-- metrics should be provided in following sequence, dont't reorder them  -->
+	<!-- metrics should be provided in following sequence, dont't reorder them -->
+	
+	<file>
+		<name>TestLib.dpk</name>
+		<metric name="lcom4">0.0</metric>
+		<metric name="complexity">0.0</metric>
+		<metric name="functions">0.0</metric>
+		<metric name="function_complexity">0.0</metric>
+		<metric name="classes">0.0</metric>
+		<metric name="lines">41.0</metric>
+		<metric name="comment_lines">26.0</metric>
+		<metric name="accessors">0.0</metric>
+		<metric name="public_undocumented_api">0.0</metric>
+		<metric name="ncloc">11.0</metric>
+		<metric name="files">1.0</metric>
+		<metric name="package.files">1.0</metric>
+		<metric name="package.packages">1.0</metric>
+		<metric name="class_complexity">0.0</metric>
+		<metric name="noc">0.0</metric>
+		<metric name="statements">0.0</metric>
+		<metric name="rfc">0.0</metric>
+		<metric name="dit">0.0</metric>
+		<metric name="public_api">0.0</metric>
+		<metric name="comment_blank_lines">0.0</metric>
+	</file>
 
-  <file> 
-    <name>TestLib.dpk</name>
-    <metric name="lcom4">4.0</metric>
-    <metric name="complexity">5.0</metric>
-    <metric name="functions">5.0</metric>
-    <metric name="function_complexity">1.0</metric>
-    <metric name="classes">1.0</metric>
-    <metric name="lines">50.0</metric>
-    <metric name="comment_lines">1.0</metric>
-    <metric name="accessors">0.0</metric>
-    <metric name="public_undocumented_api">6.0</metric>
-    <metric name="ncloc">38.0</metric>
-    <metric name="files">1.0</metric>
-    <metric name="package.files">1.0</metric>
-    <metric name="package.packages">1.0</metric>
-    <metric name="class_complexity">5.0</metric>
-    <metric name="noc">0.0</metric>
-    <metric name="statements">5.0</metric>
-    <metric name="rfc">5.0</metric>
-    <metric name="dit">0.0</metric>
-    <metric name="public_api">6.0</metric>
-    <metric name="comment_blank_lines">0.0</metric>
-  </file>
-
-	<file> 
+	<file>
 		<name>OverloadTest.pas</name>
 		<metric name="lcom4">4.0</metric>
 		<metric name="complexity">5.0</metric>
@@ -50,9 +50,9 @@
 		<metric name="comment_blank_lines">0.0</metric>
 	</file>
 
-	<file> 
+	<file>
 		<name>FunctionTest.pas</name>
-		<metric name="lcom4">2.0</metric>		
+		<metric name="lcom4">2.0</metric>
 		<metric name="complexity">2.0</metric>
 		<metric name="functions">2.0</metric>
 		<metric name="function_complexity">1.0</metric>
@@ -74,9 +74,9 @@
 		<metric name="comment_blank_lines">0.0</metric>
 	</file>
 
-	<file> 
-		<name>aGlobalsTest.pas</name>
-		<metric name="lcom4">1.0</metric>		
+	<file>
+		<name>GlobalsTest.pas</name>
+		<metric name="lcom4">1.0</metric>
 		<metric name="complexity">1.0</metric>
 		<metric name="functions">1.0</metric>
 		<metric name="function_complexity">1.0</metric>
@@ -98,10 +98,9 @@
 		<metric name="comment_blank_lines">0.0</metric>
 	</file>
 
-
-	<file> 
+	<file>
 		<name>Globals.pas</name>
-		<metric name="lcom4">0.0</metric>		
+		<metric name="lcom4">0.0</metric>
 		<metric name="complexity">2.0</metric>
 		<metric name="functions">2.0</metric>
 		<metric name="function_complexity">1.0</metric>
@@ -123,9 +122,9 @@
 		<metric name="comment_blank_lines">0.0</metric>
 	</file>
 
-	<file> 
+	<file>
 		<name>StatementTest.pas</name>
-		<metric name="lcom4">2.0</metric>		
+		<metric name="lcom4">2.0</metric>
 		<metric name="complexity">4.0</metric>
 		<metric name="functions">2.0</metric>
 		<metric name="function_complexity">2.0</metric>
@@ -147,9 +146,9 @@
 		<metric name="comment_blank_lines">0.0</metric>
 	</file>
 
-	<file> 
+	<file>
 		<name>AccessorsTest.pas</name>
-		<metric name="lcom4">1.0</metric>		
+		<metric name="lcom4">1.0</metric>
 		<metric name="complexity">1.0</metric>
 		<metric name="functions">1.0</metric>
 		<metric name="function_complexity">1.0</metric>
@@ -171,9 +170,9 @@
 		<metric name="comment_blank_lines">0.0</metric>
 	</file>
 
- 	<file> 
+	<file>
 		<name>CommentsTest.pas</name>
-		<metric name="lcom4">2.0</metric>		
+		<metric name="lcom4">2.0</metric>
 		<metric name="complexity">0.0</metric>
 		<metric name="functions">2.0</metric>
 		<metric name="function_complexity">0.0</metric>
@@ -194,10 +193,10 @@
 		<metric name="public_api">3.0</metric>
 		<metric name="comment_blank_lines">3.0</metric>
 	</file>
-		
-	<file> 
+
+	<file>
 		<name>MainWindow.pas</name>
-		<metric name="lcom4">1.0</metric>		
+		<metric name="lcom4">1.0</metric>
 		<metric name="complexity">2.0</metric>
 		<metric name="functions">2.0</metric>
 		<metric name="function_complexity">1.0</metric>

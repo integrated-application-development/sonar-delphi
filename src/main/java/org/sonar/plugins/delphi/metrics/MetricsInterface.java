@@ -79,4 +79,12 @@ public interface MetricsInterface {
    * @return True if metric should execute, false otherwise
    */
   boolean executeOnResource(InputFile resource);
+
+  /**
+   * Verify if a metric exists
+   * 
+   * @param metric Metric name
+   * @return true if the metric exists
+   */
+  public boolean hasMetric(String metric);
 }
