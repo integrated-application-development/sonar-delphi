@@ -168,24 +168,23 @@ public class DelphiSensorTest {
 
   private void createKeyMetricIndexMap() {
     keyMetricIndex = new HashMap<String, Integer>();
-    keyMetricIndex.put("lcom4", 0);
-    keyMetricIndex.put("complexity", 1);
-    keyMetricIndex.put("functions", 2);
-    keyMetricIndex.put("function_complexity", 3);
-    keyMetricIndex.put("classes", 4);
-    keyMetricIndex.put("lines", 5);
-    keyMetricIndex.put("comment_lines", 6);
-    keyMetricIndex.put("accessors", 7);
-    keyMetricIndex.put("public_undocumented_api", 8);
-    keyMetricIndex.put("ncloc", 9);
-    keyMetricIndex.put("files", 10);
-    keyMetricIndex.put("package.files", 11);
-    keyMetricIndex.put("package.packages", 12);
-    keyMetricIndex.put("class_complexity", 13);
-    keyMetricIndex.put("noc", 14);
-    keyMetricIndex.put("statements", 15);
-    keyMetricIndex.put("public_api", 18);
-    keyMetricIndex.put("comment_blank_lines", 19);
+    keyMetricIndex.put("complexity", 0);
+    keyMetricIndex.put("functions", 1);
+    keyMetricIndex.put("function_complexity", 2);
+    keyMetricIndex.put("classes", 3);
+    keyMetricIndex.put("lines", 4);
+    keyMetricIndex.put("comment_lines", 5);
+    keyMetricIndex.put("accessors", 6);
+    keyMetricIndex.put("public_undocumented_api", 7);
+    keyMetricIndex.put("ncloc", 8);
+    keyMetricIndex.put("files", 9);
+    keyMetricIndex.put("package.files", 10);
+    keyMetricIndex.put("package.packages", 11);
+    keyMetricIndex.put("class_complexity", 12);
+    keyMetricIndex.put("noc", 13);
+    keyMetricIndex.put("statements", 14);
+    keyMetricIndex.put("public_api", 15);
+    keyMetricIndex.put("comment_blank_lines", 16);
   }
 
   @Test

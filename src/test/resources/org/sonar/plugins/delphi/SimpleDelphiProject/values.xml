@@ -4,7 +4,6 @@
 	
 	<file>
 		<name>TestLib.dpk</name>
-		<metric name="lcom4">0.0</metric>
 		<metric name="complexity">0.0</metric>
 		<metric name="functions">0.0</metric>
 		<metric name="function_complexity">0.0</metric>
@@ -20,15 +19,12 @@
 		<metric name="class_complexity">0.0</metric>
 		<metric name="noc">0.0</metric>
 		<metric name="statements">0.0</metric>
-		<metric name="rfc">0.0</metric>
-		<metric name="dit">0.0</metric>
 		<metric name="public_api">0.0</metric>
 		<metric name="comment_blank_lines">0.0</metric>
 	</file>
 
 	<file>
 		<name>OverloadTest.pas</name>
-		<metric name="lcom4">4.0</metric>
 		<metric name="complexity">5.0</metric>
 		<metric name="functions">5.0</metric>
 		<metric name="function_complexity">1.0</metric>
@@ -44,15 +40,12 @@
 		<metric name="class_complexity">5.0</metric>
 		<metric name="noc">0.0</metric>
 		<metric name="statements">5.0</metric>
-		<metric name="rfc">5.0</metric>
-		<metric name="dit">0.0</metric>
 		<metric name="public_api">6.0</metric>
 		<metric name="comment_blank_lines">0.0</metric>
 	</file>
 
 	<file>
 		<name>FunctionTest.pas</name>
-		<metric name="lcom4">2.0</metric>
 		<metric name="complexity">2.0</metric>
 		<metric name="functions">2.0</metric>
 		<metric name="function_complexity">1.0</metric>
@@ -68,15 +61,12 @@
 		<metric name="class_complexity">2.0</metric>
 		<metric name="noc">0.0</metric>
 		<metric name="statements">10.0</metric>
-		<metric name="rfc">2.0</metric>
-		<metric name="dit">2.0</metric>
 		<metric name="public_api">2.0</metric>
 		<metric name="comment_blank_lines">0.0</metric>
 	</file>
 
 	<file>
 		<name>GlobalsTest.pas</name>
-		<metric name="lcom4">1.0</metric>
 		<metric name="complexity">1.0</metric>
 		<metric name="functions">1.0</metric>
 		<metric name="function_complexity">1.0</metric>
@@ -92,15 +82,12 @@
 		<metric name="class_complexity">1.0</metric>
 		<metric name="noc">0.0</metric>
 		<metric name="statements">0.0</metric>
-		<metric name="rfc">4.0</metric>
-		<metric name="dit">0.0</metric>
 		<metric name="public_api">2.0</metric>
 		<metric name="comment_blank_lines">0.0</metric>
 	</file>
 
 	<file>
 		<name>Globals.pas</name>
-		<metric name="lcom4">0.0</metric>
 		<metric name="complexity">2.0</metric>
 		<metric name="functions">2.0</metric>
 		<metric name="function_complexity">1.0</metric>
@@ -116,15 +103,12 @@
 		<metric name="class_complexity">0.0</metric>
 		<metric name="noc">0.0</metric>
 		<metric name="statements">2.0</metric>
-		<metric name="rfc">0.0</metric>
-		<metric name="dit">0.0</metric>
 		<metric name="public_api">2.0</metric>
 		<metric name="comment_blank_lines">0.0</metric>
 	</file>
 
 	<file>
 		<name>StatementTest.pas</name>
-		<metric name="lcom4">2.0</metric>
 		<metric name="complexity">4.0</metric>
 		<metric name="functions">2.0</metric>
 		<metric name="function_complexity">2.0</metric>
@@ -140,15 +124,12 @@
 		<metric name="class_complexity">4.0</metric>
 		<metric name="noc">1.0</metric>
 		<metric name="statements">7.0</metric>
-		<metric name="rfc">2.0</metric>
-		<metric name="dit">1.0</metric>
 		<metric name="public_api">2.0</metric>
 		<metric name="comment_blank_lines">0.0</metric>
 	</file>
 
 	<file>
 		<name>AccessorsTest.pas</name>
-		<metric name="lcom4">1.0</metric>
 		<metric name="complexity">1.0</metric>
 		<metric name="functions">1.0</metric>
 		<metric name="function_complexity">1.0</metric>
@@ -164,15 +145,12 @@
 		<metric name="class_complexity">1.0</metric>
 		<metric name="noc">0.0</metric>
 		<metric name="statements">1.0</metric>
-		<metric name="rfc">1.0</metric>
-		<metric name="dit">1.0</metric>
 		<metric name="public_api">1.0</metric>
 		<metric name="comment_blank_lines">0.0</metric>
 	</file>
 
 	<file>
 		<name>CommentsTest.pas</name>
-		<metric name="lcom4">2.0</metric>
 		<metric name="complexity">0.0</metric>
 		<metric name="functions">2.0</metric>
 		<metric name="function_complexity">0.0</metric>
@@ -188,15 +166,12 @@
 		<metric name="class_complexity">0.0</metric>
 		<metric name="noc">0.0</metric>
 		<metric name="statements">0.0</metric>
-		<metric name="rfc">2.0</metric>
-		<metric name="dit">1.0</metric>
 		<metric name="public_api">3.0</metric>
 		<metric name="comment_blank_lines">3.0</metric>
 	</file>
 
 	<file>
 		<name>MainWindow.pas</name>
-		<metric name="lcom4">1.0</metric>
 		<metric name="complexity">2.0</metric>
 		<metric name="functions">2.0</metric>
 		<metric name="function_complexity">1.0</metric>
@@ -212,8 +187,6 @@
 		<metric name="class_complexity">2.0</metric>
 		<metric name="noc">0.0</metric>
 		<metric name="statements">1.0</metric>
-		<metric name="rfc">14.0</metric>
-		<metric name="dit">1.0</metric>
 		<metric name="public_api">3.0</metric>
 		<metric name="comment_blank_lines">0.0</metric>
 	</file>
