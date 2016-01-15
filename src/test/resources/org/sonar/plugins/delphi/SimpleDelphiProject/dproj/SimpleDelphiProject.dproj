@@ -67,7 +67,7 @@
 			<DCCReference Include="..\branch\OverloadTest.pas"/>
 			<DCCReference Include="..\branch\StatementTest.pas"/>			
 			<DCCReference Include="..\tools\CommentsTest.pas"/>			
-			<DCCReference Include="..\tools\AccessorsTest.pas"/>			
+			<DCCReference Include="..\tools\AccessorsTest.Pas"/>			
 			<DCCReference Include="..\tools\FunctionTest.pas"/>						
 			<DCCReference Include="..\tools\GlobalsTest.pas"/>
 			<BuildConfiguration Include="Base">
