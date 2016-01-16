@@ -24,6 +24,7 @@ package org.sonar.plugins.delphi.antlr;
 
 import java.io.File;
 import java.io.IOException;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -119,4 +120,17 @@ public class GrammarTest {
   public void parseListUtils() throws Exception {
     parseFile("ListUtils.pas");
   }
+
+  @Test
+  @Ignore("https://github.com/fabriciocolombo/sonar-delphi/issues/38")
+  public void parsePackageAsIdentifier() throws Exception {
+    parseFile("PackageAsIdentifier.pas");
+  }
+
+  @Test
+  @Ignore("https://github.com/fabriciocolombo/sonar-delphi/issues/39")
+  public void parseInterfaceMethodResolutionClause() throws Exception {
+    parseFile("InterfaceMethodResolutionClause.pas");
+  }
+
 }
