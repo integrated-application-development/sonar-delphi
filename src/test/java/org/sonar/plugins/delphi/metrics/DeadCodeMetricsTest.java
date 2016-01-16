@@ -24,7 +24,9 @@ package org.sonar.plugins.delphi.metrics;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -42,6 +44,7 @@ import org.sonar.api.issue.Issue;
 import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.StubIssueBuilder;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
+import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.DelphiASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
@@ -66,7 +69,7 @@ public class DeadCodeMetricsTest {
   private static final String DEAD_FILE = "/org/sonar/plugins/delphi/metrics/DeadCodeUnit.pas";
 
   private DeadCodeMetrics metrics;
-  private List<UnitInterface> units;
+  private Set<UnitInterface> units;
   private List<ClassInterface> classes;
   private List<FunctionInterface> functions;
   private ResourcePerspectives perspectives;
@@ -76,9 +79,9 @@ public class DeadCodeMetricsTest {
 
   @Before
   public void init() {
-    functions = new ArrayList<FunctionInterface>();
-    classes = new ArrayList<ClassInterface>();
-    units = new ArrayList<UnitInterface>();
+    functions = new ArrayList<>();
+    classes = new ArrayList<>();
+    units = new HashSet<>();
 
     FunctionInterface f1 = new DelphiFunction("function1");
     FunctionInterface f2 = new DelphiFunction("function2");
@@ -170,10 +173,8 @@ public class DeadCodeMetricsTest {
     DelphiAST ast = new DelphiAST(DelphiUtils.getResource(TEST_FILE));
     ASTAnalyzer analyser = new DelphiASTAnalyzer(DelphiTestUtils.mockProjectHelper());
     assertFalse("Grammar error", ast.isError());
-    analyser.analyze(ast);
-    metrics.analyse(null, context, analyser.getResults().getClasses(), analyser.getResults().getFunctions(),
-      analyser.getResults()
-        .getCachedUnitsAsList());
+    CodeAnalysisResults results = analyser.analyze(ast);
+    metrics.analyse(null, context, results.getClasses(), results.getFunctions(), results.getCachedUnitsAsList());
 
     metrics.save(new DefaultInputFile("DeadCodeUnit").setAbsolutePath(DEAD_FILE), context);
 

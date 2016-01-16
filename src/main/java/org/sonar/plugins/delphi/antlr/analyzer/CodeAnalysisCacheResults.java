@@ -23,10 +23,8 @@
 package org.sonar.plugins.delphi.antlr.analyzer;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang.StringUtils;
@@ -130,8 +128,8 @@ public class CodeAnalysisCacheResults {
   /**
    * @return list of cached units
    */
-  public List<UnitInterface> getCachedUnitsAsList() {
-    List<UnitInterface> result = new ArrayList<UnitInterface>();
+  public Set<UnitInterface> getCachedUnitsAsList() {
+    Set<UnitInterface> result = new HashSet<>();
     result.addAll(allUnits);
     return result;
   }

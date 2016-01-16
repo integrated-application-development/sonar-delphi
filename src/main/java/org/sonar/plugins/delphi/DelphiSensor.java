@@ -36,12 +36,11 @@ import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.resources.Directory;
-import org.sonar.api.resources.DuplicatedSourceException;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
+import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.DelphiASTAnalyzer;
-import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.sanitizer.DelphiSourceSanitizer;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
@@ -69,7 +68,7 @@ public class DelphiSensor implements Sensor {
   private List<InputFile> resourceList = new ArrayList<InputFile>();
   private Map<InputFile, List<ClassInterface>> fileClasses = new HashMap<InputFile, List<ClassInterface>>();
   private Map<InputFile, List<FunctionInterface>> fileFunctions = new HashMap<InputFile, List<FunctionInterface>>();
-  private List<UnitInterface> units = null;
+  private Set<UnitInterface> units = new HashSet<>();
 
   private final DelphiProjectHelper delphiProjectHelper;
   private final BasicMetrics basicMetrics;
@@ -102,12 +101,11 @@ public class DelphiSensor implements Sensor {
 
   @Override
   public void analyse(Project project, SensorContext sensorContext) {
-    ASTAnalyzer analyzer = new DelphiASTAnalyzer(delphiProjectHelper);
     List<DelphiProject> projects = delphiProjectHelper.getWorkgroupProjects();
     for (DelphiProject delphiProject : projects)
     {
       CodeAnalysisCacheResults.resetCache();
-      parseFiles(analyzer, delphiProject, project);
+      parseFiles(delphiProject, project);
       parsePackages(sensorContext);
 
       processFiles(sensorContext);
@@ -176,11 +174,10 @@ public class DelphiSensor implements Sensor {
   /**
    * Parse files with ANTLR
    * 
-   * @param analyser Analyser to use
    * @param delphiProject DelphiLanguage project to parse
    * @param project Project
    */
-  protected void parseFiles(ASTAnalyzer analyser, DelphiProject delphiProject, Project project) {
+  protected void parseFiles(DelphiProject delphiProject, Project project) {
     List<File> includedDirs = delphiProject.getIncludeDirectories();
     List<File> excludedDirs = delphiProjectHelper.getExcludedSources();
     List<File> sourceFiles = delphiProject.getSourceFiles();
@@ -198,29 +195,22 @@ public class DelphiSensor implements Sensor {
       DelphiUtils.LOG));
     DelphiUtils.LOG.info("Files to parse: " + sourceFiles.size());
 
+    ASTAnalyzer analyser = new DelphiASTAnalyzer(delphiProjectHelper);
     for (File delphiFile : sourceFiles) {
-      parseSourceFile(delphiFile, excludedDirs, analyser, project);
+      final CodeAnalysisResults results = parseSourceFile(delphiFile, excludedDirs, analyser, project);
+      if (results != null) {
+        units.addAll(results.getCachedUnitsAsList());
+      }
       progressReporter.progress();
     }
 
-    if (analyser.hasResults()) {
-      units = analyser.getResults().getCachedUnitsAsList();
-    }
     DelphiUtils.LOG.info("Done");
   }
 
-  /**
-   * Parses a source file
-   * 
-   * @param sourceFile Source file to parse
-   * @param excludedDirs List of excluded dirs
-   * @param analyzer Source code analyser
-   * @param project Project
-   */
-  private void parseSourceFile(File sourceFile, List<File> excludedDirs, ASTAnalyzer analyzer,
+  private CodeAnalysisResults parseSourceFile(File sourceFile, List<File> excludedDirs, ASTAnalyzer analyzer,
     Project project) {
     if (delphiProjectHelper.isExcluded(sourceFile, excludedDirs)) {
-      return;
+      return null;
     }
 
     DelphiUtils.LOG.debug(">> PARSING " + sourceFile.getAbsolutePath());
@@ -242,19 +232,19 @@ public class DelphiSensor implements Sensor {
     }
     resourceList.add(resource);
 
-    ASTTree ast = analyseSourceFile(sourceFile, analyzer);
-    if (ast != null) {
-      try {
-        ast.getFileSource();
-      } catch (DuplicatedSourceException e) {
-        DelphiUtils.LOG.debug("Source already saved, skipping...");
-      }
+    final CodeAnalysisResults results = analyseSourceFile(sourceFile, analyzer);
+
+    if (results == null) {
+      return null;
     }
 
-    if (analyzer.hasResults()) {
-      fileClasses.put(resource, analyzer.getResults().getClasses());
-      fileFunctions.put(resource, analyzer.getResults().getFunctions());
+    if (results.getActiveUnit() != null) {
+      fileClasses.put(resource, results.getClasses());
+      fileFunctions.put(resource, results.getFunctions());
     }
+
+    return results;
+
   }
 
   /**
@@ -264,7 +254,7 @@ public class DelphiSensor implements Sensor {
    * @param analyser Source code analyser
    * @return AST Tree
    */
-  private ASTTree analyseSourceFile(File sourceFile, ASTAnalyzer analyser) {
+  private CodeAnalysisResults analyseSourceFile(File sourceFile, ASTAnalyzer analyser) {
     final DelphiAST ast = new DelphiAST(sourceFile, delphiProjectHelper.encoding());
 
     if (ast.isError()) {
@@ -273,14 +263,18 @@ public class DelphiSensor implements Sensor {
     }
 
     try {
-      analyser.analyze(ast);
+      final CodeAnalysisResults results = analyser.analyze(ast);
       ++scannedFiles;
+      return results;
     } catch (Exception e) {
-      DelphiUtils.LOG.error("Error analyzing file: " + e.getMessage() + " " + sourceFile.getAbsolutePath());
-      DelphiUtils.LOG.debug("Error analyzing file: " + e.getMessage() + " " + sourceFile.getAbsolutePath(), e);
+      if (DelphiUtils.LOG.isDebugEnabled()) {
+        DelphiUtils.LOG.debug("Error analyzing file: " + e.getMessage() + " " + sourceFile.getAbsolutePath(), e);
+      } else {
+        DelphiUtils.LOG.error("Error analyzing file: " + e.getMessage() + " " + sourceFile.getAbsolutePath());
+      }
     }
 
-    return ast;
+    return null;
   }
 
   /**
@@ -297,4 +291,15 @@ public class DelphiSensor implements Sensor {
     return getClass().getSimpleName();
   }
 
+  Set<UnitInterface> getUnits() {
+    return units;
+  }
+
+  Map<InputFile, List<ClassInterface>> getFileClasses() {
+    return fileClasses;
+  }
+
+  Map<InputFile, List<FunctionInterface>> getFileFunctions() {
+    return fileFunctions;
+  }
 }

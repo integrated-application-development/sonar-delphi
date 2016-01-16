@@ -33,22 +33,8 @@ public interface ASTAnalyzer {
    * Analyse an AST tree
    * 
    * @param ast AST Tree
+   * @return Result the result of analysis.
    */
-  void analyze(ASTTree ast);
-
-  /**
-   * @return Results of code analysis
-   */
-  CodeAnalysisResults getResults();
-
-  /**
-   * @return code being analyzed
-   */
-  CodeTree getCode();
-
-  /**
-   * @return Returns true if CodeAnalysisResults is present.
-   */
-  boolean hasResults();
+  CodeAnalysisResults analyze(ASTTree ast);
 
 }

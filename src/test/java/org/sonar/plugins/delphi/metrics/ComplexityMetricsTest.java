@@ -42,6 +42,7 @@ import org.sonar.plugins.delphi.IssueMatchers;
 import org.sonar.plugins.delphi.StubIssueBuilder;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
+import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.DelphiASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -93,11 +94,11 @@ public class ComplexityMetricsTest {
     File testFile = DelphiUtils.getResource(FILE_NAME);
     CodeAnalysisCacheResults.resetCache();
     ASTAnalyzer analyzer = new DelphiASTAnalyzer(DelphiTestUtils.mockProjectHelper());
-    analyzer.analyze(new DelphiAST(testFile));
+    final CodeAnalysisResults results = analyzer.analyze(new DelphiAST(testFile));
 
     // processing
     ComplexityMetrics metrics = new ComplexityMetrics(activeRules, perspectives);
-    metrics.analyse(new DefaultInputFile("test"), null, analyzer.getResults().getClasses(), analyzer.getResults().getFunctions(), null);
+    metrics.analyse(new DefaultInputFile("test"), null, results.getClasses(), results.getFunctions(), null);
     String[] keys = {"ACCESSORS", "CLASS_COMPLEXITY", "CLASSES", "COMPLEXITY", "FUNCTIONS", "FUNCTION_COMPLEXITY",
       "PUBLIC_API",
       "STATEMENTS"};
@@ -117,11 +118,11 @@ public class ComplexityMetricsTest {
     File testFile = DelphiUtils.getResource(FILE_NAME_LIST_UTILS);
     CodeAnalysisCacheResults.resetCache();
     ASTAnalyzer analyzer = new DelphiASTAnalyzer(DelphiTestUtils.mockProjectHelper());
-    analyzer.analyze(new DelphiAST(testFile));
+    CodeAnalysisResults results = analyzer.analyze(new DelphiAST(testFile));
 
     // processing
     ComplexityMetrics metrics = new ComplexityMetrics(activeRules, perspectives);
-    metrics.analyse(new DefaultInputFile("test"), null, analyzer.getResults().getClasses(), analyzer.getResults().getFunctions(), null);
+    metrics.analyse(new DefaultInputFile("test"), null, results.getClasses(), results.getFunctions(), null);
   }
 
 }

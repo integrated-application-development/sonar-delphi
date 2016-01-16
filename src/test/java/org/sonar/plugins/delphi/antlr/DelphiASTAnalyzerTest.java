@@ -31,6 +31,7 @@ import org.junit.Test;
 import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
+import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.DelphiASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.core.language.ClassFieldInterface;
@@ -57,13 +58,13 @@ public class DelphiASTAnalyzerTest {
   public void analyseTest() throws IOException, RecognitionException {
     File file = DelphiUtils.getResource(FILE_NAME);
     DelphiAST ast = new DelphiAST(file);
-    analyser.analyze(ast);
-    testFunctions();
-    testClasses();
+    CodeAnalysisResults results = analyser.analyze(ast);
+    testFunctions(results);
+    testClasses(results);
     testFile();
   }
 
-  public void testFunctions() {
+  public void testFunctions(CodeAnalysisResults results) {
     String[] names = {"tdemo.bshowtrackerclick", "tdemo.getfunction", "tmyclass.myprocedure",
       "tmyclass.setsomething",
       "standaloneprocedure", "standalonefunction"};
@@ -72,7 +73,7 @@ public class DelphiASTAnalyzerTest {
     int[] calledFunc = {0, 0, 1, 0, 0, 1};
     int[] numArgs = {0, 0, 0, 0, 4, 1};
     boolean[] global = {false, false, false, false, true, true};
-    List<FunctionInterface> functions = analyser.getResults().getFunctions();
+    List<FunctionInterface> functions = results.getFunctions();
     assertEquals(6, functions.size()); // checking total function number
 
     int declarations = 0;
@@ -113,7 +114,7 @@ public class DelphiASTAnalyzerTest {
     assertEquals("ACCESSORS COUNT", 2, accessors); // how many accessors
   }
 
-  public void testClasses() {
+  public void testClasses(CodeAnalysisResults results) {
     String names[] = {"tdemo", "tmyclass", "tmyancestor", "tmyelder"};
     String fnames[] = {"bshowtracker", "field1", "field2", "bshowtracker", "protectedfield"};
     String ftypes[] = {"tbutton", "integer", "integer", "tbutton", "real"};
@@ -127,7 +128,7 @@ public class DelphiASTAnalyzerTest {
     int[] descendants = {0, 1, 1, 2};
     int[] children = {0, 1, 1, 1};
 
-    List<ClassInterface> classes = analyser.getResults().getClasses();
+    List<ClassInterface> classes = results.getClasses();
     assertEquals(4, classes.size());
 
     int index = 0, findex = 0;

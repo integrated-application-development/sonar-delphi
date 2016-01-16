@@ -23,6 +23,7 @@
 package org.sonar.plugins.delphi.metrics;
 
 import java.util.List;
+import java.util.Set;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
@@ -45,7 +46,7 @@ public interface MetricsInterface {
    */
   void analyse(InputFile resource, SensorContext sensorContext, List<ClassInterface> classes,
     List<FunctionInterface> functions,
-    List<UnitInterface> units);
+    Set<UnitInterface> units);
 
   /**
    * Saves analysis result from sensorContext and associates it with resource

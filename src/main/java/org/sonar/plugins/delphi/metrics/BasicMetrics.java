@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.List;
+import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.sonar.api.batch.SensorContext;
@@ -48,7 +49,7 @@ public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
   @Override
   public void analyse(InputFile resource, SensorContext sensorContext, List<ClassInterface> classes,
     List<FunctionInterface> functions,
-    List<UnitInterface> units) {
+    Set<UnitInterface> units) {
     clearMetrics();
     Reader reader = null;
     try {

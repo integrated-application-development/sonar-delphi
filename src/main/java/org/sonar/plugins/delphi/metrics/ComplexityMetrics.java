@@ -123,7 +123,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
   @Override
   public void analyse(InputFile resource, SensorContext sensorContext, List<ClassInterface> classes,
     List<FunctionInterface> functions,
-    List<UnitInterface> units) {
+    Set<UnitInterface> units) {
     reset();
     Set<String> processedFunc = new HashSet<String>();
     if (classes != null) {

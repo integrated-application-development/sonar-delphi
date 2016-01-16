@@ -82,7 +82,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
   @Override
   public void analyse(InputFile resource, SensorContext sensorContext, List<ClassInterface> classes,
     List<FunctionInterface> functions,
-    List<UnitInterface> units) {
+    Set<UnitInterface> units) {
     if (!isCalculated) {
       if (units == null || units.isEmpty()) {
         return;
@@ -200,7 +200,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
    * @param units Unit array
    * @return List of unused functions
    */
-  protected Set<FunctionInterface> findUnusedFunctions(List<UnitInterface> units) {
+  protected Set<FunctionInterface> findUnusedFunctions(Set<UnitInterface> units) {
     Set<FunctionInterface> allFunctions = new HashSet<FunctionInterface>();
     Set<FunctionInterface> usedFunctions = new HashSet<FunctionInterface>();
     for (UnitInterface unit : units) {
@@ -222,7 +222,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
    * @param units Units in project
    * @return a list of unused units
    */
-  protected List<String> findUnusedUnits(List<UnitInterface> units) {
+  protected List<String> findUnusedUnits(Set<UnitInterface> units) {
     Set<String> usedUnits = new HashSet<String>();
     List<String> result = new ArrayList<String>();
     for (UnitInterface unit : units) {

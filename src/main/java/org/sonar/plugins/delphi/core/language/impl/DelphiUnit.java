@@ -227,7 +227,7 @@ public class DelphiUnit implements UnitInterface {
 
   @Override
   public int hashCode() {
-    return getPath().hashCode();
+    return toString().hashCode();
   }
 
   /**

@@ -43,8 +43,6 @@ import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
  */
 public class DelphiASTAnalyzer implements ASTAnalyzer {
 
-  private CodeAnalysisResults result;
-  private CodeTree code;
   private DelphiProjectHelper delphiProjectHelper;
 
   public DelphiASTAnalyzer(DelphiProjectHelper delphiProjectHelper) {
@@ -52,9 +50,9 @@ public class DelphiASTAnalyzer implements ASTAnalyzer {
   }
 
   @Override
-  public void analyze(ASTTree tree) {
-    result = new CodeAnalysisResults();
-    code = new CodeTree(new CodeNode<ASTTree>(tree), new CodeNode<Tree>(tree.getChild(0)));
+  public CodeAnalysisResults analyze(ASTTree tree) {
+    final CodeAnalysisResults result = new CodeAnalysisResults();
+    final CodeTree code = new CodeTree(new CodeNode<ASTTree>(tree), new CodeNode<Tree>(tree.getChild(0)));
 
     CodeAnalyzer analyzer = new UnitAnalyzer();
     analyzer.chain(new IncludeAnalyzer()).chain(new InterfaceAnalyzer()).chain(new VisibilityAnalyzer())
@@ -70,21 +68,8 @@ public class DelphiASTAnalyzer implements ASTAnalyzer {
       codeNode = advance.execute(codeNode.getNode());
       code.setCurrentNode(codeNode);
     }
-  }
 
-  @Override
-  public CodeAnalysisResults getResults() {
     return result;
-  }
-
-  @Override
-  public CodeTree getCode() {
-    return code;
-  }
-
-  @Override
-  public boolean hasResults() {
-    return result != null;
   }
 
 }

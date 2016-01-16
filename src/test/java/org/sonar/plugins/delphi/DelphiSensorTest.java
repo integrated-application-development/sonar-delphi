@@ -46,8 +46,8 @@ import org.sonar.plugins.delphi.debug.ProjectMetricsXMLParser;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 public class DelphiSensorTest {
@@ -108,7 +108,7 @@ public class DelphiSensorTest {
     delphiProject.setSourceFiles(sourceFiles);
 
     when(delphiProjectHelper.getWorkgroupProjects()).thenReturn(Arrays.asList(delphiProject));
-    when(delphiProjectHelper.getDirectory(any(File.class), any(Project.class))).thenCallRealMethod();
+    when(delphiProjectHelper.getDirectory(Matchers.any(File.class), Matchers.any(Project.class))).thenCallRealMethod();
 
     activeRules = mock(ActiveRules.class);
     ActiveRule activeRule = mock(ActiveRule.class);
@@ -246,10 +246,17 @@ public class DelphiSensorTest {
   }
 
   @Test
-  public void analyseWithInvalidNoResources() {
+  public void analyseWithBadSourceFileSintax() {
     delphiProject.getSourceFiles().clear();
-    delphiProject.getSourceFiles().add(new File(baseDir + "/values.xml"));
+    delphiProject.getSourceFiles().add(new File(baseDir + "/Globals.pas"));
+    delphiProject.getSourceFiles().add(new File(baseDir + "/../BadSyntax.pas"));
     DebugSensorContext context = new DebugSensorContext();
     sensor.analyse(project, context);
+
+    assertThat("processed files", sensor.getProcessedFilesCount(), is(1));
+    assertThat("units", sensor.getUnits(), hasSize(1));
+    assertThat("file classes", sensor.getFileClasses().size(), is(1));
+    assertThat("file functions", sensor.getFileFunctions().size(), is(1));
   }
+
 }
