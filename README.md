@@ -1,4 +1,4 @@
-
+https://travis-ci.org/SandroLuck/SonarDelphi.svg?branch=master
 
 SonarQube Delphi
 ================
