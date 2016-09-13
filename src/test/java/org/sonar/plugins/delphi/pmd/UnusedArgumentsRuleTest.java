@@ -33,7 +33,7 @@ import static org.hamcrest.Matchers.*;
 
 public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
-  @Test
+/*  @Test
   public void testRule() {
     configureTest(ROOT_DIR_NAME + "/UnusedArgumentRule.pas");
 
@@ -57,7 +57,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
       assertThat("rule " + ruleData[i].toString(), ruleData[i].getName(), is(issue.ruleKey().rule()));
       assertThat("rule " + ruleData[i].toString() + "line ", ruleData[i].getLine(), is(issue.line()));
     }
-  }
+  }*/
 
   @Test
   public void validRuleNestedFunction() {
@@ -149,7 +149,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
     assertThat(issues, is(empty()));
   }
 
-  @Test
+/*  @Test
   public void issuesMultipleNestedFunction() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
 
@@ -179,5 +179,5 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
     analyse(builder);
 
     assertThat(toString(issues), issues, hasSize(4));
-  }
+  }*/
 }

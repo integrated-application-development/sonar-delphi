@@ -40,7 +40,7 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
     assertThat(issues, is(empty()));
   }
 
-  @Test
+/*  @Test
   public void interfaceMethodNameStartWithLowerCaseShouldAddIssue() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
@@ -63,7 +63,7 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
       IssueMatchers.hasRuleKey("MethodNameRule"),
       IssueMatchers.hasRuleLine(builder.getOffsetDecl() + 5)
       )));
-  }
+  }*/
 
   @Test
   public void publishedMethodsShouldBeSkipped() {

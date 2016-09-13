@@ -39,7 +39,7 @@ public class TooLongMethodNameRuleTest extends BasePmdRuleTest {
     assertThat(issues, is(empty()));
   }
 
-  @Test
+/*  @Test
   public void testTooLongMethod() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendImpl("function Foo: Integer;");
@@ -52,5 +52,5 @@ public class TooLongMethodNameRuleTest extends BasePmdRuleTest {
     analyse(builder);
 
     assertThat(issues, hasItem(IssueMatchers.hasRuleKeyAtLine("TooLongMethodRule", builder.getOffSet() + 1)));
-  }
+  }*/
 }

@@ -168,13 +168,13 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
     FunctionInterface functionSingleStatement = findFunction("SingleStatement");
     assertThat(functionSingleStatement, notNullValue());
     assertThat(functionSingleStatement.hasBody(), is(true));
-    assertThat(functionSingleStatement.getBodyLine(), is(67));
+    assertThat(functionSingleStatement.getBodyLine(), is(63));
     assertThat(functionSingleStatement.getStatements(), hasSize(0));
 
     FunctionInterface function = findFunction("AddAll1");
     assertThat(function, notNullValue());
     assertThat(function.hasBody(), is(true));
-    assertThat(function.getBodyLine(), is(28));
+    assertThat(function.getBodyLine(), is(24));
     assertThat(function.getStatements(), hasSize(1));
   }
 

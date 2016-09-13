@@ -48,7 +48,7 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
     assertThat(issues, is(empty()));
   }
 
-  @Test
+/*  @Test
   public void constructorMissingInheritedShouldAddIssue() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
 
@@ -68,7 +68,7 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
     assertThat(toString(issues), issues, hasSize(1));
     assertThat(toString(issues), issues, hasItem(allOf(hasRuleKey("ConstructorWithoutInheritedStatementRule"),
       hasRuleLine(builder.getOffSet() + 1))));
-  }
+  }*/
 
   @Test
   public void recordConstructorShouldNotAddIssue() {

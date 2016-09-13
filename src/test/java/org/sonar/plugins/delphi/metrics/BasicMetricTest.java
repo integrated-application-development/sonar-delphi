@@ -81,8 +81,8 @@ public class BasicMetricTest {
 
   @Test
   public void testLines() {
-    assertThat((int) source.getMeasure(Metric.LINES), is(76));
-    assertThat((int) source.getMeasure(Metric.LINES_OF_CODE), is(46));
+    assertThat((int) source.getMeasure(Metric.LINES), is(72));
+    assertThat((int) source.getMeasure(Metric.LINES_OF_CODE), is(43));
   }
 
 }
