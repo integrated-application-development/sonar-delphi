@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 
@@ -13,6 +14,14 @@
 	<url>http://docs.sonarqube.org/display/SONARQUBE45/Delphi+Plugin</url>
 
 	<developers>
+		<developer>
+			<id>sandroluck</id>
+			<email>sandro.luck@gmx.ch</email>
+			<name>Sandro Luck</name>
+			<roles>
+				<role>developer</role>
+			</roles>
+		</developer>
 		<developer>
 			<id>fabriciocolombo</id>
 			<email>fabricio.colombo.mva@gmail.com</email>
@@ -68,7 +77,6 @@
 		<pmd.version>4.2.5</pmd.version>
 		<pmd.plugin.version>2.0</pmd.plugin.version>
 		<xalan.version>2.7.1</xalan.version>
-		<jtds.version>1.2.4</jtds.version>
 		<hamcrest-all.version>1.3</hamcrest-all.version>
 		<junit.version>4.12</junit.version>
 		<org.mockit.version>1.10.19</org.mockit.version>
@@ -77,12 +85,11 @@
 		<hsqldb.version>1.8.0.10</hsqldb.version>
 		<logback-classic.version>1.1.2</logback-classic.version>
 		<antlr3-maven-plugin.version>3.3.9</antlr3-maven-plugin.version>
-		<dbunit.version>2.5.0</dbunit.version>
-
 		<!--Version Fields end here-->
 		<sonar.pluginName>Delphi</sonar.pluginName>
 		<sonar.pluginClass>org.sonar.plugins.delphi.DelphiPlugin</sonar.pluginClass>
-		<sonar.exclusions>org.sonar.plugins.delphi.antlr.DelphiParser,org.sonar.plugins.delphi.antlr.DelphiLexer</sonar.exclusions>
+		<sonar.exclusions>org.sonar.plugins.delphi.antlr.DelphiParser,org.sonar.plugins.delphi.antlr.DelphiLexer
+		</sonar.exclusions>
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
 
 	</properties>
@@ -99,16 +106,12 @@
 			<version>${sonar.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.sonarsource.java</groupId>
-			<artifactId>sonar-java-plugin</artifactId>
-			<version>4.0</version>
-		</dependency>
+		<!-- Plugin's specific deps -->
 		<!-- Plugin's specific deps -->
 		<dependency>
 			<groupId>org.antlr</groupId>
-			<artifactId>antlr4</artifactId>
-			<version>4.5.3</version>
+			<artifactId>antlr-runtime</artifactId>
+			<version>3.3</version>
 		</dependency>
 		<dependency>
 			<groupId>pmd</groupId>
@@ -134,19 +137,7 @@
 			<artifactId>xalan</artifactId>
 			<version>${xalan.version}</version>
 		</dependency>
-		<!-- JDBC for AQTIME -->
-		<dependency>
-			<groupId>net.sourceforge.jtds</groupId>
-			<artifactId>jtds</artifactId>
-			<version>${jtds.version}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.sonarsource.java/java-squid -->
-		<dependency>
-			<groupId>org.sonarsource.java</groupId>
-			<artifactId>java-squid</artifactId>
-			<version>3.11</version>
-		</dependency>
-		<!-- unit tests -->
+
 		<dependency>
 			<groupId>org.sonarsource.sonarqube</groupId>
 			<artifactId>sonar-testing-harness</artifactId>
@@ -180,12 +171,6 @@
 			<artifactId>mockito-core</artifactId>
 			<version>${org.mockit.version}</version>
 			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>hamcrest-core</artifactId>
-					<groupId>org.hamcrest</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>commons-httpclient</groupId>
@@ -203,16 +188,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
-
-
-		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.4</version>
-		</dependency>
-
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-project</artifactId>
@@ -233,15 +208,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!--DBUNIT for test -->
-		<dependency>
-			<groupId>org.dbunit</groupId>
-			<artifactId>dbunit</artifactId>
-			<version>${dbunit.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
@@ -252,16 +218,6 @@
 			<groupId>org.sonarsource.java</groupId>
 			<artifactId>java-surefire</artifactId>
 			<version>4.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.plexus</groupId>
-			<artifactId>plexus-utils</artifactId>
-			<version>3.0.24</version>
-		</dependency>
-		<dependency>
-			<groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
-			<artifactId>sonar-packaging-maven-plugin</artifactId>
-			<version>1.16</version>
 		</dependency>
 		<dependency>
 			<groupId>org.sonarsource.sslr-squid-bridge</groupId>
@@ -283,11 +239,11 @@
 			<artifactId>xstream</artifactId>
 			<version>1.3.1</version>
 		</dependency>
-		    <dependency>
-		      <groupId>com.google.guava</groupId>
-		      <artifactId>guava</artifactId>
-		      <version>17.0</version>
-		    </dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>17.0</version>
+		</dependency>
 	</dependencies>
 
 
@@ -298,11 +254,6 @@
 				<artifactId>sonar-packaging-maven-plugin</artifactId>
 				<version>1.16</version>
 				<extensions>true</extensions>
-			</plugin>
-			<plugin>
-				<groupId>org.antlr</groupId>
-				<artifactId>antlr4-maven-plugin</artifactId>
-				<version>4.5.3</version>
 			</plugin>
 			<plugin>
 				<groupId>com.mycila.maven-license-plugin</groupId>
@@ -317,6 +268,11 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.antlr</groupId>
+				<artifactId>antlr3-maven-plugin</artifactId>
+				<version>3.5.2</version>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.10.4</version>
@@ -328,6 +284,9 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<source>1.8</source>
+				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-dependency-plugin</artifactId>
