@@ -1,4 +1,4 @@
-https://travis-ci.org/SandroLuck/SonarDelphi.svg?branch=master
+[![Build Status](https://travis-ci.org/fabriciocolombo/sonar-delphi.svg?branch=master)](https://travis-ci.org/SandroLuck/SonarDelphi.svg?branch=master)
 
 SonarQube Delphi
 ================
