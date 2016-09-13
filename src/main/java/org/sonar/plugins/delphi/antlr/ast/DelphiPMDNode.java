@@ -22,8 +22,6 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
-import java.util.ArrayList;
-import java.util.List;
 import net.sourceforge.pmd.ast.CompilationUnit;
 import net.sourceforge.pmd.ast.JavaNode;
 import net.sourceforge.pmd.ast.JavaParserVisitor;
@@ -32,6 +30,9 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.pmd.DelphiParserVisitor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * AST node extended with PMD interfaces for analysys PMD analysys
@@ -55,7 +56,7 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
    */
   public DelphiPMDNode(CommonTree node) {
     super(node.getToken());
-    this.children = node.getChildren();
+    this.children =(java.util.List) node.getChildren();
     this.parent = (CommonTree) node.getParent();
     this.childIndex = node.getChildIndex();
   }

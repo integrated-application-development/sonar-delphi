@@ -2,9 +2,6 @@ unit OverloadTest;
 
 interface
 
-uses
-  Windows;
-
 type
   TOverloadTest = class
 	public

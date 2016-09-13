@@ -2,9 +2,6 @@ unit Globals;
 
 interface
 
-uses
-  Windows;
-
 procedure globalProcedure();
 function globalFunction(): integer;
 

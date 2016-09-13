@@ -22,16 +22,13 @@
  */
 package org.sonar.plugins.delphi.colorizer;
 
+import org.sonar.api.web.CodeColorizerFormat;
+import org.sonar.colorizer.*;
+import org.sonar.plugins.delphi.core.DelphiLanguage;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.sonar.api.web.CodeColorizerFormat;
-import org.sonar.colorizer.CDocTokenizer;
-import org.sonar.colorizer.KeywordsTokenizer;
-import org.sonar.colorizer.MultilinesDocTokenizer;
-import org.sonar.colorizer.StringTokenizer;
-import org.sonar.colorizer.Tokenizer;
-import org.sonar.plugins.delphi.core.DelphiLanguage;
 
 /**
  * Class used to colorize DelphiLanguage source code in Sonar window.

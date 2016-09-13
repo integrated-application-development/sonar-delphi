@@ -22,8 +22,6 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
 
-import java.util.List;
-import java.util.Set;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveFactory;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
@@ -37,6 +35,9 @@ import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRangeFirstOccurence
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRangeMergingAggregator;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl.IntegerSubRange;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * Resolves defines in a given file, cuts out the unwanted definitions

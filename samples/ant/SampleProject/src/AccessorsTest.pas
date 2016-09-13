@@ -2,9 +2,6 @@ unit AccessorsTest;
 
 interface
 
-uses
-  Windows;
-
 type
   TAccessorsTest = class(TForm)
   public

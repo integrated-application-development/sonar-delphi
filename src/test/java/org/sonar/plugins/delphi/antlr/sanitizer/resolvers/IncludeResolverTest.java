@@ -22,15 +22,16 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
-import static org.junit.Assert.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
 
 public class IncludeResolverTest extends FileTestsCommon {
 

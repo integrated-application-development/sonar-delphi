@@ -22,7 +22,8 @@
  */
 package org.sonar.plugins.delphi.core;
 
-import org.sonar.squid.recognizer.CodeRecognizer;
+import org.sonar.squidbridge.recognizer.CodeRecognizer;
+
 
 /**
  * Delphi source code recognizer

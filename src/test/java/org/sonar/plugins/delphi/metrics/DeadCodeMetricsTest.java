@@ -22,11 +22,6 @@
  */
 package org.sonar.plugins.delphi.metrics;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -42,7 +37,6 @@ import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.Issue;
 import org.sonar.plugins.delphi.DelphiTestUtils;
-import org.sonar.plugins.delphi.StubIssueBuilder;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.DelphiASTAnalyzer;
@@ -56,11 +50,19 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiClassProperty;
 import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
+import org.sonar.plugins.delphi.pmd.StubIssueBuilder;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-import static org.hamcrest.Matchers.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @Ignore("Unused functions it's not working. There are many false positives.")
 public class DeadCodeMetricsTest {
@@ -152,8 +154,8 @@ public class DeadCodeMetricsTest {
   public void analyseTest() {
     DebugSensorContext context = new DebugSensorContext();
     metrics.analyse(null, context, classes, functions, units);
-    metrics.save(new DefaultInputFile("unit3").setAbsolutePath(pathTo("unit3.pas")), context);
-    metrics.save(new DefaultInputFile("unit2").setAbsolutePath(pathTo("unit2.pas")), context);
+    metrics.save(new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",pathTo("unit3")), context);
+    metrics.save(new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",pathTo("unit2")), context);
 
     assertThat(issues, hasSize(2));
     int lines[] = {123, 321};
@@ -176,7 +178,7 @@ public class DeadCodeMetricsTest {
     CodeAnalysisResults results = analyser.analyze(ast);
     metrics.analyse(null, context, results.getClasses(), results.getFunctions(), results.getCachedUnitsAsList());
 
-    metrics.save(new DefaultInputFile("DeadCodeUnit").setAbsolutePath(DEAD_FILE), context);
+    metrics.save(new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",DEAD_FILE), context);
 
     for (Issue issue : issues) {
       System.out.println("issue: " + issue.key() + " line: " + issue.line() + " message: " + issue.message());

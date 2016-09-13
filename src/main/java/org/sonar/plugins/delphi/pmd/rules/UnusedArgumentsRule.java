@@ -22,17 +22,14 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
 import net.sourceforge.pmd.PropertyDescriptor;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.StringProperty;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+
+import java.util.*;
 
 /**
  * Rule violation for unused function/procedure/method arguments
@@ -44,13 +41,13 @@ public class UnusedArgumentsRule extends DelphiRule {
   private static final PropertyDescriptor EXCLUDED_ARGS = new StringProperty("excluded_args",
     "The argument names to ignore", new String[] {}, 1.0f, ',');
 
-  private final List<String> excludedArgs = new ArrayList<>();
+  private final List<String> excludedArgs = new ArrayList<String>();
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
     if (isMethodNode(node)) {
-      final Stack<Tree> functionNodes = new Stack<>();
-      final Stack<Tree> beginNodes = new Stack<>();
+      final Stack<Tree> functionNodes = new Stack<Tree>();
+      final Stack<Tree> beginNodes = new Stack<Tree>();
 
       Tree argsNode = node.getFirstChildWithType(DelphiLexer.TkFunctionArgs);
       if (argsNode == null) {
@@ -123,8 +120,7 @@ public class UnusedArgumentsRule extends DelphiRule {
    * 
    * @param args Argument map
    * @param node
-   * @param methodName 
-   * @param data
+   * @param methodName
    */
   private void checkForUnusedArguments(Map<String, Integer> args, RuleContext ctx, DelphiPMDNode node, String methodName) {
     for (Map.Entry<String, Integer> entry : args.entrySet()) {

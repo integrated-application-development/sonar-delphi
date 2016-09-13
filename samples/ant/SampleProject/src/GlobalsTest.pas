@@ -2,9 +2,6 @@ unit GlobalsTest;
 
 interface
 
-uses
-  Windows;
-
 type
   TGlobalsTest = class
 	public

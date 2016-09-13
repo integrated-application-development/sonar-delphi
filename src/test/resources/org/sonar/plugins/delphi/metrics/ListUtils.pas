@@ -7,7 +7,6 @@ interface
 {$IFDEF Delphi7}
 uses Classes;
 {$ELSE}
-uses Classes, System.Generics.Collections, System.Rtti, SysUtils;
 {$ENDIF}
 type
   TListUtils = class
@@ -19,9 +18,6 @@ type
   end;
 
 implementation
-
-uses
-  TypInfo;
 
 { TListUtils }
 

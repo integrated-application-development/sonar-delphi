@@ -22,13 +22,14 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.Test;
 import org.sonar.api.issue.Issue;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class NoSemicolonRuleTest extends BasePmdRuleTest {
 

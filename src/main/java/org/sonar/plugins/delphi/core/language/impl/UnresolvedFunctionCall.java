@@ -22,9 +22,10 @@
  */
 package org.sonar.plugins.delphi.core.language.impl;
 
-import java.util.Set;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
+
+import java.util.Set;
 
 /**
  * Class used by AbstractAnalyser for unresolved function calls from function

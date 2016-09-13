@@ -2,8 +2,6 @@ unit UnusedARgumentRule;
 
 interface
 
-uses Classes;
-
 type
   TCustomComponent = class(TComponent)
   protected

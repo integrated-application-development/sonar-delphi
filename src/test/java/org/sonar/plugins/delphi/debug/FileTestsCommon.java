@@ -22,12 +22,9 @@
  */
 package org.sonar.plugins.delphi.debug;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+
+import java.io.*;
 
 public class FileTestsCommon {
 

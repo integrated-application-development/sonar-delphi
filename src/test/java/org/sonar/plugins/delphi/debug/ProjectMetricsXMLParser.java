@@ -22,15 +22,12 @@
  */
 package org.sonar.plugins.delphi.debug;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import java.io.File;
+import java.util.*;
 
 /**
  * Class for parsing value.xml file, used for DelphiSensorTest

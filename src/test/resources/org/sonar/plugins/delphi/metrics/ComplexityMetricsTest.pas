@@ -2,10 +2,6 @@ unit DemoForm;
 
 interface
 
-uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, FastMMUsageTracker;
-
 type
   TDemo = class(myClass, TMultiCheckbox, TMyAncestor, TAbstractSomething)    
   private

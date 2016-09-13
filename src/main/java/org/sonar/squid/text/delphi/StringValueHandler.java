@@ -22,7 +22,7 @@
  */
 package org.sonar.squid.text.delphi;
 
-import org.sonar.squid.measures.Metric;
+import org.sonar.squidbridge.measures.Metric;
 
 public class StringValueHandler extends LineContextHandler {
 

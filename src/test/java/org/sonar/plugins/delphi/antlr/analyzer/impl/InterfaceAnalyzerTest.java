@@ -22,7 +22,6 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
-import java.io.IOException;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
@@ -37,6 +36,8 @@ import org.sonar.plugins.delphi.antlr.analyzer.impl.operations.AdvanceNodeOperat
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
+
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 

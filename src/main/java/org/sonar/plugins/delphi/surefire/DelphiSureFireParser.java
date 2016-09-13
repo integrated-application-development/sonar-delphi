@@ -22,11 +22,6 @@
  */
 package org.sonar.plugins.delphi.surefire;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
-import java.util.Map;
-import javax.xml.stream.XMLStreamException;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +37,12 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.surefire.data.SurefireStaxHandler;
 import org.sonar.plugins.surefire.data.UnitTestClassReport;
 import org.sonar.plugins.surefire.data.UnitTestIndex;
+
+import javax.xml.stream.XMLStreamException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
+import java.util.Map;
 
 /**
  * Parses unit test reports from XML file.
@@ -121,7 +122,7 @@ public class DelphiSureFireParser {
 
   private void parseFiles(File[] reports, UnitTestIndex index) {
     SurefireStaxHandler staxParser = new SurefireStaxHandler(index);
-    StaxParser parser = new StaxParser(staxParser, false);
+    StaxParser parser = new StaxParser((StaxParser.XmlStreamHandler) staxParser, false);
     for (File report : reports) {
       try {
         parser.parse(report);

@@ -22,12 +22,14 @@
  */
 package org.sonar.plugins.delphi.utils;
 
-import java.io.File;
-import java.io.IOException;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import java.io.File;
+import java.io.IOException;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 
 public class DelphiUtilsTest {
 

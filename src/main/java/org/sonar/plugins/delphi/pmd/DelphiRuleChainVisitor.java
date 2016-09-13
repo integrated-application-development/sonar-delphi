@@ -22,13 +22,14 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import java.util.List;
 import net.sourceforge.pmd.AbstractRuleChainVisitor;
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.ast.CompilationUnit;
 import net.sourceforge.pmd.ast.JavaNode;
 import net.sourceforge.pmd.ast.SimpleNode;
+
+import java.util.List;
 
 /**
  * Delphi pmd rule chain visitor

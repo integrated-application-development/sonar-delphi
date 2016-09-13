@@ -23,12 +23,6 @@
 package org.sonar.plugins.delphi.core.helpers;
 
 import com.google.common.collect.Lists;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.batch.fs.FilePredicates;
@@ -42,6 +36,13 @@ import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.project.DelphiWorkgroup;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class that helps get the maven/ant configuration from .xml file
@@ -239,7 +240,11 @@ public class DelphiProjectHelper implements BatchExtension {
   }
 
   public Directory getDirectory(java.io.File dir, Project module) {
-    Directory directory = Directory.fromIOFile(dir, module);
+    System.out.println(("THIS IS DIR:" + dir.getPath()));
+    System.out.println(("THIS IS MODULE:" + module.toString()));
+    //findFileInDirectories("");
+
+    Directory directory = new Directory(dir.getPath());//Directory.fromIOFile(dir, module);
 
     if (directory == null || directory.getKey() == null) {
       return Directory.create(DEFAULT_PACKAGE_NAME);

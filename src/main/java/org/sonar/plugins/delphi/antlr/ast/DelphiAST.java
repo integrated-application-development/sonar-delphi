@@ -22,18 +22,6 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
-import java.io.File;
-import java.io.IOException;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenRewriteStream;
 import org.antlr.runtime.tree.CommonTree;
@@ -46,6 +34,15 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * DelphiLanguage AST tree.
@@ -81,7 +78,8 @@ public class DelphiAST extends CommonTree implements ASTTree {
     DelphiParser parser = new DelphiParser(new TokenRewriteStream(new DelphiLexer(fileStream)));
     parser.setTreeAdaptor(new DelphiTreeAdaptor(this));
     try {
-      children = ((CommonTree) parser.file().getTree()).getChildren();
+      children = (java.util.List)((CommonTree) parser.file().getTree()).getChildren();
+
     } catch (RecognitionException e) {
       throw new RuntimeException("Failed to parse the file " + file.getAbsolutePath(), e);
     }

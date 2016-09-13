@@ -49,10 +49,7 @@ public class LiteralValueHandler extends LineContextHandler {
 
   @Override
   boolean matchToBegin(Line line, StringBuilder pendingLine) {
-    if (matchEndOfString(pendingLine, delimiter)) {
-      return true;
-    }
-    return false;
+      return matchEndOfString(pendingLine, delimiter);
   }
 
   @Override

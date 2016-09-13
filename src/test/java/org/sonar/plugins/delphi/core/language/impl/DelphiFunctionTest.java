@@ -24,7 +24,7 @@ package org.sonar.plugins.delphi.core.language.impl;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class DelphiFunctionTest {
 

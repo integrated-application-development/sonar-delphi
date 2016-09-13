@@ -22,13 +22,9 @@
  */
 package org.sonar.plugins.delphi;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.sonar.api.Extension;
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
 import org.sonar.api.SonarPlugin;
-import org.sonar.plugins.delphi.codecoverage.CodeCoverageSensor;
 import org.sonar.plugins.delphi.colorizer.DelphiColorizerFormat;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
@@ -39,6 +35,9 @@ import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileExporter;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileImporter;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleDefinition;
 import org.sonar.plugins.delphi.surefire.SurefireSensor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Main Sonar DelphiLanguage plugin class
@@ -69,16 +68,7 @@ import org.sonar.plugins.delphi.surefire.SurefireSensor;
     description = "Used code coverage tool (AQTime or Delphi Code Coverage)", global = false, project = true),
   @Property(key = DelphiPlugin.CODECOVERAGE_REPORT_KEY, defaultValue = "delphi code coverage report", name = "Code coverage report file",
     description = "Code coverage report to be parsed by Delphi Code Coverage", global = false, project = true),
-  @Property(key = DelphiPlugin.JDBC_DRIVER_KEY, defaultValue = "net.sourceforge.jtds.jdbc.Driver", name = "JDBC Driver",
-    description = "Class name for JDBC driver.", global = true, project = true),
-  @Property(key = DelphiPlugin.JDBC_URL_KEY, defaultValue = "", name = "Connection host url", description = "Database host url",
-    global = true, project = true),
-  @Property(key = DelphiPlugin.JDBC_USER_KEY, defaultValue = "", name = "User name", description = "Database user name", global = true,
-    project = true),
-  @Property(key = DelphiPlugin.JDBC_PASSWORD_KEY, defaultValue = "", name = "User password", description = "Database user password",
-    global = true, project = true),
-  @Property(key = DelphiPlugin.JDBC_DB_TABLE_PREFIX_KEY, defaultValue = "", name = "AQTime database table prefix",
-    description = "AQTime database table prefix", global = true, project = true)})
+})
 public class DelphiPlugin extends SonarPlugin {
 
   public static final String EXCLUDED_DIRECTORIES_KEY = "sonar.delphi.sources.excluded";
@@ -89,19 +79,14 @@ public class DelphiPlugin extends SonarPlugin {
   public static final String WORKGROUP_FILE_KEY = "sonar.delphi.sources.workgroup";
   public static final String CODECOVERAGE_TOOL_KEY = "sonar.delphi.codecoverage.tool";
   public static final String CODECOVERAGE_REPORT_KEY = "sonar.delphi.codecoverage.report";
-  public static final String JDBC_DRIVER_KEY = "sonar.delphi.codecoverage.aqtime.jdbc.driver";
-  public static final String JDBC_URL_KEY = "sonar.delphi.codecoverage.aqtime.jdbc.url";
-  public static final String JDBC_USER_KEY = "sonar.delphi.codecoverage.aqtime.jdbc.user";
-  public static final String JDBC_PASSWORD_KEY = "sonar.delphi.codecoverage.aqtime.jdbc.password";
-  public static final String JDBC_DB_TABLE_PREFIX_KEY = "sonar.delphi.codecoverage.aqtime.jdbc.prefix";
 
   /**
    * {@inheritDoc}
    */
 
   @Override
-  public List<Class<? extends Extension>> getExtensions() {
-    List<Class<? extends Extension>> list = new ArrayList<Class<? extends Extension>>();
+  public List<Class> getExtensions() {
+    List<Class> list = new ArrayList<Class>();
 
     // Sensors
     list.add(DelphiSensor.class);
@@ -112,8 +97,6 @@ public class DelphiPlugin extends SonarPlugin {
     list.add(DelphiProjectHelper.class);
     // Colorizer
     list.add(DelphiColorizerFormat.class);
-    // Code Coverage Sensor
-    list.add(CodeCoverageSensor.class);
     // Surefire
     list.add(SurefireSensor.class);
     // Pmd

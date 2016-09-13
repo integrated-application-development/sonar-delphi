@@ -2,8 +2,6 @@ unit FunctionMessageTest;
 
 interface
 
-uses Windows, Messages;
-
 type
   TWithMessageFunction = class
     procedure CNCommand(var AMessage: TWMMouse); message WM_MOUSEWHEEL;

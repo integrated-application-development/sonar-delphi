@@ -22,20 +22,17 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import net.sourceforge.pmd.Language;
-import net.sourceforge.pmd.Report;
-import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.RuleSets;
-import net.sourceforge.pmd.SourceType;
+import net.sourceforge.pmd.*;
 import net.sourceforge.pmd.ast.CompilationUnit;
 import net.sourceforge.pmd.ast.ParseException;
 import org.antlr.runtime.tree.CommonTree;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Preforms PMD check for Delphi source files
@@ -58,7 +55,7 @@ public class DelphiPMD {
 
     if (ruleSets.applies(ctx.getSourceCodeFile())) {
       Language language = Language.JAVA;
-      ctx.setSourceType(SourceType.JAVA_16);
+      ctx.setSourceType(SourceType.JAVA_17);
 
       DelphiAST ast = new DelphiAST(pmdFile, encoding);
       if (ast.isError()) {

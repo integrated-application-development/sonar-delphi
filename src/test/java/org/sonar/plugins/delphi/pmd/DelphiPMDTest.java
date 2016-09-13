@@ -22,16 +22,17 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 import net.sourceforge.pmd.ast.CompilationUnit;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-import static org.junit.Assert.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class DelphiPMDTest {
 

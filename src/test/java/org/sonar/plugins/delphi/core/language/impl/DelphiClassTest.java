@@ -28,7 +28,7 @@ import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.core.language.ClassFieldInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class DelphiClassTest {
 

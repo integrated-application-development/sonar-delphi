@@ -22,11 +22,10 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
-
-import net.sourceforge.pmd.RuleContext;
 
 /**
  * Rule that is checking how many arguments a function has - if too many, it

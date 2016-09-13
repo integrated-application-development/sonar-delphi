@@ -22,11 +22,10 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
-
-import net.sourceforge.pmd.RuleContext;
 
 /**
  * Cast And Free rule - don't cast, just to free something, example:

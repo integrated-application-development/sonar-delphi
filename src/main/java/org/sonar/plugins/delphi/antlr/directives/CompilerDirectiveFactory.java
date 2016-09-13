@@ -22,20 +22,13 @@
  */
 package org.sonar.plugins.delphi.antlr.directives;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveFactorySyntaxException;
 import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveFactoryUnsupportedDirectiveException;
-import org.sonar.plugins.delphi.antlr.directives.impl.DefineDirective;
-import org.sonar.plugins.delphi.antlr.directives.impl.ElseDirective;
-import org.sonar.plugins.delphi.antlr.directives.impl.EndIfDirective;
-import org.sonar.plugins.delphi.antlr.directives.impl.IfDefDirective;
-import org.sonar.plugins.delphi.antlr.directives.impl.IfDirective;
-import org.sonar.plugins.delphi.antlr.directives.impl.IfEndDirective;
-import org.sonar.plugins.delphi.antlr.directives.impl.IncludeDirective;
-import org.sonar.plugins.delphi.antlr.directives.impl.UndefineDirective;
-import org.sonar.plugins.delphi.antlr.directives.impl.UnusedDirective;
+import org.sonar.plugins.delphi.antlr.directives.impl.*;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Creates concrete compiler directives based on a given string. Example:

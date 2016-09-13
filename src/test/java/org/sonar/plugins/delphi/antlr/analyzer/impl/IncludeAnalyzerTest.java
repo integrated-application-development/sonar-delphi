@@ -22,9 +22,6 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
@@ -39,6 +36,10 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 

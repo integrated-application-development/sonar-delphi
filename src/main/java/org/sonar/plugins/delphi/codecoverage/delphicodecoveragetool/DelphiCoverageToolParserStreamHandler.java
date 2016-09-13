@@ -22,7 +22,6 @@
  */
 package org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool;
 
-import javax.xml.stream.XMLStreamException;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
 import org.codehaus.staxmate.in.SMInputCursor;
 import org.sonar.api.batch.SensorContext;
@@ -34,6 +33,8 @@ import org.sonar.api.utils.StaxParser.XmlStreamHandler;
 import org.sonar.plugins.delphi.codecoverage.CoverageFileData;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+
+import javax.xml.stream.XMLStreamException;
 
 public class DelphiCoverageToolParserStreamHandler implements XmlStreamHandler
 {

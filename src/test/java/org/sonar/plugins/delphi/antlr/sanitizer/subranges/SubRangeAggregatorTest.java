@@ -22,12 +22,13 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.subranges;
 
-import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl.IntegerSubRange;
 
-import static org.junit.Assert.*;
+import java.util.Arrays;
+
+import static org.junit.Assert.assertEquals;
 
 public class SubRangeAggregatorTest {
 

@@ -22,14 +22,15 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
 
-import java.util.HashSet;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.plugins.delphi.pmd.DelphiUnitBuilderTest;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import java.util.HashSet;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 
 public class DefineResolverTest {
 

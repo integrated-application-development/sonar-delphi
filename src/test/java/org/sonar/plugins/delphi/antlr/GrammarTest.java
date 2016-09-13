@@ -22,14 +22,15 @@
  */
 package org.sonar.plugins.delphi.antlr;
 
-import java.io.File;
-import java.io.IOException;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-import static org.junit.Assert.*;
+import java.io.File;
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
 
 public class GrammarTest {
 

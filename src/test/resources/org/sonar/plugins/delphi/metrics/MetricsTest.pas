@@ -5,10 +5,6 @@ interface
 //comment line 1
 //comment line 2
 
-uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, FastMMUsageTracker;
-
 type
   TfDemo = class(TForm, TMultiCheckbox)
     bShowTracker: TButton;

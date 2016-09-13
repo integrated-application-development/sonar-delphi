@@ -2,9 +2,6 @@ unit GlobalsTest;
 
 interface
 
-uses
-  Windows, Globals;
-
 type
   TGlobalsTest = class
 	public
@@ -13,6 +10,9 @@ type
   end;
 
 implementation
+
+uses
+    Globals;
 
 {$R *.dfm}
 

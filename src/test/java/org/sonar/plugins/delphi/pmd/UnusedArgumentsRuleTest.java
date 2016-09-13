@@ -22,13 +22,14 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import java.util.Arrays;
 import org.junit.Test;
 import org.sonar.api.issue.Issue;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
 
+import java.util.Arrays;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
 
 public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 

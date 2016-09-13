@@ -22,9 +22,10 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
-import java.io.File;
 import org.antlr.runtime.tree.Tree;
 import org.w3c.dom.Document;
+
+import java.io.File;
 
 /**
  * AST Tree interface, used by AbstractAnalyser.

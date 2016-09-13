@@ -22,8 +22,6 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.apache.commons.lang.StringUtils;
@@ -37,6 +35,9 @@ import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.core.language.impl.UnresolvedFunctionCall;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class used for function analysis

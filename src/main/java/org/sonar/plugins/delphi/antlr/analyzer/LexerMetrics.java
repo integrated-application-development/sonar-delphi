@@ -83,7 +83,7 @@ public enum LexerMetrics {
   private final int code;
   private final int metrics;
 
-  private LexerMetrics(int code, int metrics) {
+  LexerMetrics(int code, int metrics) {
     this.code = code;
     this.metrics = metrics;
   }

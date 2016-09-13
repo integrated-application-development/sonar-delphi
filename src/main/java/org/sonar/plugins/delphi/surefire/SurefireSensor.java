@@ -22,7 +22,6 @@
  */
 package org.sonar.plugins.delphi.surefire;
 
-import java.io.File;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.config.Settings;
@@ -30,6 +29,8 @@ import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.surefire.api.SurefireUtils;
+
+import java.io.File;
 
 /**
  * Surefire sensor used to parse _TRANSFORMED_ DUnit report. You take a DUnit

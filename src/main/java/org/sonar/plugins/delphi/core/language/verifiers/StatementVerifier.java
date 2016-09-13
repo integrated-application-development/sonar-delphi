@@ -22,8 +22,6 @@
  */
 package org.sonar.plugins.delphi.core.language.verifiers;
 
-import java.util.List;
-import java.util.Stack;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -32,6 +30,9 @@ import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.core.language.StatementInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiStatement;
 import org.sonar.plugins.delphi.cpd.DelphiCpdTokenizer;
+
+import java.util.List;
+import java.util.Stack;
 
 /**
  * Checks if a node can be transformed into a simple or complex statement

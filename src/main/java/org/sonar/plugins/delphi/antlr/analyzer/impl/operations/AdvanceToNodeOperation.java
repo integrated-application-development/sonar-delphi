@@ -22,11 +22,12 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl.operations;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Used to advance to specific AST tree node

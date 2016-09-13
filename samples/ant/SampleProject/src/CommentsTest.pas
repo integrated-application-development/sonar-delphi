@@ -2,9 +2,6 @@ unit CommentsTest;
 
 interface
 
-uses
-  Windows;
-
 {** documented class **}
 type
   TCommentsTest = class(TForm)

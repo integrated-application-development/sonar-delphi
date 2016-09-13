@@ -22,20 +22,20 @@
  */
 package org.sonar.plugins.delphi.pmd.xml;
 
-import java.io.File;
-import javax.xml.stream.XMLStreamException;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
 import org.codehaus.staxmate.in.SMInputCursor;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
-import org.sonar.api.issue.Issue;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.StaxParser;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+
+import javax.xml.stream.XMLStreamException;
+import java.io.File;
 
 /**
  * Parses PMD xml report
@@ -69,9 +69,10 @@ public class DelphiPmdXmlReportParser {
           SMInputCursor violationCursor = fileCursor.descendantElementCursor("violation");
           while (violationCursor.getNext() != null) {
             String beginLine = violationCursor.getAttrValue("beginline");
+            //String endLine = violationCursor.getAttrValue("beginline");
             String ruleKey = violationCursor.getAttrValue("rule");
             String message = StringUtils.trim(violationCursor.collectDescendantText());
-
+            System.out.println("HIER parse1:"+ruleKey+message+beginLine);
             addIssue(ruleKey, fileName, Integer.parseInt(beginLine), message);
           }
         }
@@ -85,20 +86,22 @@ public class DelphiPmdXmlReportParser {
     }
   }
 
-  private void addIssue(String ruleKey, String fileName, Integer line, String message) {
+  private void addIssue(String ruleKey, String fileName, Integer beginLine, String message) {
 
     DelphiUtils.LOG.debug("PMD Violation - rule: " + ruleKey + " file: " + fileName + " message: " + message);
 
     InputFile inputFile = delphiProjectHelper.getFile(fileName);
-
     Issuable issuable = perspectives.as(Issuable.class, inputFile);
     if (issuable != null) {
-      Issue issue = issuable.newIssueBuilder()
-        .ruleKey(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, ruleKey))
-        .line(line)
-        .message(message)
-        .build();
-      issuable.addIssue(issue);
+                //note this has been added to get compatibility with sonar 5.2
+        issuable.addIssue(
+                issuable.newIssueBuilder()
+                        .ruleKey(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, ruleKey))
+                        .effortToFix(0.0)
+                        .message(message)
+                        .build()
+        );
+        //System.out.println("ISSUE TOSTRING: "+issue.toString());
     }
 
   }

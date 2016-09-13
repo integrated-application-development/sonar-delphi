@@ -22,11 +22,6 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveFactory;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
@@ -38,6 +33,12 @@ import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRangeAggregator;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRangeFirstOccurenceComparator;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl.ReplacementSubRange;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * add include files to a given file

@@ -45,4 +45,4 @@ public class AdvanceNodeOperation implements NodeOperation {
       return new CodeNode<Tree>(node.getChild(0));
     }
   }
-};
+}

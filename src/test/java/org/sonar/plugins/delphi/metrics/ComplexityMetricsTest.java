@@ -22,9 +22,6 @@
  */
 package org.sonar.plugins.delphi.metrics;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -39,17 +36,24 @@ import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.Issue;
 import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.IssueMatchers;
-import org.sonar.plugins.delphi.StubIssueBuilder;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.DelphiASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
+import org.sonar.plugins.delphi.pmd.StubIssueBuilder;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ComplexityMetricsTest {
 
@@ -98,7 +102,7 @@ public class ComplexityMetricsTest {
 
     // processing
     ComplexityMetrics metrics = new ComplexityMetrics(activeRules, perspectives);
-    metrics.analyse(new DefaultInputFile("test"), null, results.getClasses(), results.getFunctions(), null);
+    metrics.analyse(new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5","test"), null, results.getClasses(), results.getFunctions(), null);
     String[] keys = {"ACCESSORS", "CLASS_COMPLEXITY", "CLASSES", "COMPLEXITY", "FUNCTIONS", "FUNCTION_COMPLEXITY",
       "PUBLIC_API",
       "STATEMENTS"};
@@ -122,7 +126,7 @@ public class ComplexityMetricsTest {
 
     // processing
     ComplexityMetrics metrics = new ComplexityMetrics(activeRules, perspectives);
-    metrics.analyse(new DefaultInputFile("test"), null, results.getClasses(), results.getFunctions(), null);
+    metrics.analyse(new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5","test"), null, results.getClasses(), results.getFunctions(), null);
   }
 
 }

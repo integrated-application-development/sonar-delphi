@@ -23,17 +23,7 @@
 package org.sonar.plugins.delphi.antlr.analyzer;
 
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.analyzer.impl.FunctionAnalyzer;
-import org.sonar.plugins.delphi.antlr.analyzer.impl.FunctionBodyAnalyzer;
-import org.sonar.plugins.delphi.antlr.analyzer.impl.FunctionParametersAnalyzer;
-import org.sonar.plugins.delphi.antlr.analyzer.impl.IncludeAnalyzer;
-import org.sonar.plugins.delphi.antlr.analyzer.impl.InterfaceAnalyzer;
-import org.sonar.plugins.delphi.antlr.analyzer.impl.TypeAnalyzer;
-import org.sonar.plugins.delphi.antlr.analyzer.impl.TypeFieldsAnalyzer;
-import org.sonar.plugins.delphi.antlr.analyzer.impl.TypeInheritanceAnalyzer;
-import org.sonar.plugins.delphi.antlr.analyzer.impl.TypePropertyAnalyzer;
-import org.sonar.plugins.delphi.antlr.analyzer.impl.UnitAnalyzer;
-import org.sonar.plugins.delphi.antlr.analyzer.impl.VisibilityAnalyzer;
+import org.sonar.plugins.delphi.antlr.analyzer.impl.*;
 import org.sonar.plugins.delphi.antlr.analyzer.impl.operations.AdvanceNodeOperation;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;

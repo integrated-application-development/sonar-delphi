@@ -22,14 +22,15 @@
  */
 package org.sonar.plugins.delphi.core.language.impl;
 
+import org.sonar.plugins.delphi.core.language.ClassInterface;
+import org.sonar.plugins.delphi.core.language.FunctionInterface;
+import org.sonar.plugins.delphi.core.language.UnitInterface;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.sonar.plugins.delphi.core.language.ClassInterface;
-import org.sonar.plugins.delphi.core.language.FunctionInterface;
-import org.sonar.plugins.delphi.core.language.UnitInterface;
 
 /**
  * Class for unit (usually one delphi source file), containing list of classes

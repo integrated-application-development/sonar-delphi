@@ -22,10 +22,6 @@
  */
 package org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
@@ -37,9 +33,15 @@ import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
 
 public class DelphiCoverageToolParserTest
 {
@@ -64,13 +66,13 @@ public class DelphiCoverageToolParserTest
     sourceDirs.add(baseDir); // include baseDir
 
     delphiProjectHelper = DelphiTestUtils.mockProjectHelper();
-    InputFile inputFile = new DefaultInputFile(ROOT_NAME).setFile(reportFile);
+    InputFile inputFile = new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",reportFile.getPath()).setModuleBaseDir(Paths.get(ROOT_NAME));
     when(delphiProjectHelper.findFileInDirectories(REPORT_FILE)).thenReturn(inputFile);
 
     when(delphiProjectHelper.findFileInDirectories(anyString())).thenAnswer(new Answer<InputFile>() {
       @Override
       public InputFile answer(InvocationOnMock invocation) throws Throwable {
-        InputFile inputFile = new DefaultInputFile("").setAbsolutePath((String) invocation.getArguments()[0]);
+        InputFile inputFile = new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",((String) invocation.getArguments()[0])).setModuleBaseDir(Paths.get(ROOT_NAME));
 
         return inputFile;
       }

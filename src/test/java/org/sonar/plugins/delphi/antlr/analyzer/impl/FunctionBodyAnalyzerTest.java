@@ -22,8 +22,6 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
-import java.io.IOException;
-import java.util.Arrays;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
@@ -31,11 +29,7 @@ import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.DelphiTestUtils;
-import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
-import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
-import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
-import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
-import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
+import org.sonar.plugins.delphi.antlr.analyzer.*;
 import org.sonar.plugins.delphi.antlr.analyzer.impl.operations.AdvanceToNodeOperation;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
@@ -45,9 +39,14 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
+import java.io.IOException;
+import java.util.Arrays;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
 
 public class FunctionBodyAnalyzerTest extends FileTestsCommon {
 

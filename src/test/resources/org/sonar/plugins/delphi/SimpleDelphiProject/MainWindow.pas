@@ -2,9 +2,6 @@ unit MainWindow;
 
 interface
 
-uses
-  Windows, GlobalsTest, Globals, FunctionTest, CommentsTest, AccessorsTest, StatementTest, OverloadTest;
-
 {** documented class **}
 type
   TMainWindow = class(TForm)
@@ -23,6 +20,9 @@ var
   window: TMainWindow;
 
 implementation
+
+uses
+    OverloadTest, FunctionTest;
 
 {$R *.dfm}
 

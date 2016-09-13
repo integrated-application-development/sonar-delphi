@@ -10,9 +10,6 @@ type
 
 implementation
 
-uses
-	System.Sysutils, System.Generics.COllections;
-
 var
 	generic1: TList<Integer>;
 	generic2: TList<TList<Integer>>;

@@ -26,5 +26,5 @@ public enum CodeCoverageTool
 {
   None,
   DelphiCodeCoverage,
-  AQTime;
+  AQTime
 }

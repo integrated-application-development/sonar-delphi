@@ -22,12 +22,13 @@
  */
 package org.sonar.squid.text.delphi;
 
+import org.sonar.squidbridge.api.AnalysisException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-import org.sonar.squid.api.AnalysisException;
 
 /**
  * Class for parsing source code lines and calculating statistic for each line.

@@ -22,11 +22,6 @@
  */
 package org.sonar.plugins.delphi.metrics;
 
-import java.io.File;
-import java.io.Reader;
-import java.io.StringReader;
-import java.util.List;
-import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.sonar.api.batch.SensorContext;
@@ -37,8 +32,14 @@ import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-import org.sonar.squid.measures.Metric;
+import org.sonar.squidbridge.measures.Metric;
 import org.sonar.squid.text.delphi.DelphiSource;
+
+import java.io.File;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Class calculating basic file metrics: lines of code and comments,

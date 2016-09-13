@@ -18,11 +18,12 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.ArrayList;
-import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConstructorWithoutInheritedStatementRule extends NoInheritedStatementRule {
 

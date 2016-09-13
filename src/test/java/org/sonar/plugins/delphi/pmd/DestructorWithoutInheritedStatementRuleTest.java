@@ -21,8 +21,9 @@ package org.sonar.plugins.delphi.pmd;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import static org.sonar.plugins.delphi.IssueMatchers.*;
+import static org.junit.Assert.assertThat;
+import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKey;
+import static org.sonar.plugins.delphi.IssueMatchers.hasRuleLine;
 
 public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest {
 

@@ -2,8 +2,6 @@ unit GrammarTestNew;
 
 interface
 
-uses Types, SysUtils, System.Classes, System.Generics.Collections , System.Rtti;
-
 Type
   TMyChar = Char;
   TMySetOfChar = set of Char;

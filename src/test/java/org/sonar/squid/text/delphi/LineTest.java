@@ -24,10 +24,11 @@ package org.sonar.squid.text.delphi;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.squid.measures.Metric;
+import org.sonar.squidbridge.measures.Metric;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class LineTest {
 
@@ -101,6 +102,8 @@ public class LineTest {
     assertThat(line8.isThereComment(), is(true));
     assertThat(line8.getInt(Metric.PUBLIC_DOC_API), is(1));
   }
+
+
 
   @Test
   public void testSingleLineCommentHandler() {

@@ -84,7 +84,7 @@ public enum CompilerDirectiveType {
     return mappedValues.get(directiveName);
   }
 
-  private CompilerDirectiveType(int number, String name) {
+  CompilerDirectiveType(int number, String name) {
     this.number = number;
     this.name = name;
   }

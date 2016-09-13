@@ -22,12 +22,13 @@
  */
 package org.sonar.plugins.delphi.utils;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 import org.hsqldb.Server;
 import org.hsqldb.ServerConfiguration;
 import org.hsqldb.persist.HsqlProperties;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Utility to start the HSQL server.

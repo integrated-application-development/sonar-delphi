@@ -22,19 +22,16 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer;
 
+import org.antlr.runtime.ANTLRFileStream;
+import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.*;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.antlr.runtime.ANTLRFileStream;
-import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.DefineResolver;
-import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.ExcludeResolver;
-import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.IncludeResolver;
-import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.SourceFixerResolver;
-import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.SourceResolverResults;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 /**
  * Antlr Class that handles some common grammar problems, see ReadMe.docx for

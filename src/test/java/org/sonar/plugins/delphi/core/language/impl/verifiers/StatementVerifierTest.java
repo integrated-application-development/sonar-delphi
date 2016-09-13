@@ -22,8 +22,6 @@
  */
 package org.sonar.plugins.delphi.core.language.impl.verifiers;
 
-import java.io.File;
-import java.io.IOException;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
@@ -40,7 +38,10 @@ import org.sonar.plugins.delphi.core.language.verifiers.StatementVerifier;
 import org.sonar.plugins.delphi.core.language.verifiers.StatementVerifierException;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-import static org.junit.Assert.*;
+import java.io.File;
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
 
 public class StatementVerifierTest {
 

@@ -22,15 +22,16 @@
  */
 package org.sonar.plugins.delphi.cpd;
 
-import java.io.File;
-import java.lang.annotation.Inherited;
-import java.util.List;
 import net.sourceforge.pmd.cpd.Tokenizer;
 import org.sonar.api.batch.CpdMapping;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Resource;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
+
+import java.io.File;
+import java.lang.annotation.Inherited;
+import java.util.List;
 
 /**
  * Mapping for DelphiLanguage language tokens used in CPD analysis

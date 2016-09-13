@@ -22,14 +22,17 @@
  */
 package org.sonar.plugins.delphi.pmd.xml;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyArray;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 
 public class DelphiRuleTest {
 

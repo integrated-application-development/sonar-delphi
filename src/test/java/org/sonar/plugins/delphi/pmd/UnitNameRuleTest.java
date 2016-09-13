@@ -21,8 +21,8 @@ package org.sonar.plugins.delphi.pmd;
 import org.junit.Test;
 import org.sonar.api.issue.Issue;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
 
 public class UnitNameRuleTest extends BasePmdRuleTest {
 

@@ -22,13 +22,6 @@
  */
 package org.sonar.plugins.delphi;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
@@ -55,6 +48,9 @@ import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.ProgressReporter;
 import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
+
+import java.io.File;
+import java.util.*;
 
 /**
  * Main DelphiLanguage sensor class, it executes on DelphiLanguage project and
@@ -114,8 +110,7 @@ public class DelphiSensor implements Sensor {
 
   /**
    * Calculate metrics for project files
-   * 
-   * @param metrics Metrics to calculate
+   *
    * @param sensorContext Sensor context (provided by Sonar)
    */
   private void processFiles(SensorContext sensorContext) {

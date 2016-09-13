@@ -22,8 +22,6 @@
  */
 package org.sonar.plugins.delphi.core.language.verifiers;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
@@ -31,6 +29,9 @@ import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Veryfies if we are calling a function, from given as tree node

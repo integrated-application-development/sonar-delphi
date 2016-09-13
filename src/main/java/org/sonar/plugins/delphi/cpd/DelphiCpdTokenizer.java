@@ -22,22 +22,24 @@
  */
 package org.sonar.plugins.delphi.cpd;
 
+import net.sourceforge.pmd.cpd.SourceCode;
+import net.sourceforge.pmd.cpd.TokenEntry;
+import net.sourceforge.pmd.cpd.Tokenizer;
+import net.sourceforge.pmd.cpd.Tokens;
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.CommonToken;
+import org.antlr.runtime.Token;
+import org.sonar.plugins.delphi.antlr.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.sanitizer.DelphiSourceSanitizer;
+import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import net.sourceforge.pmd.cpd.SourceCode;
-import net.sourceforge.pmd.cpd.TokenEntry;
-import net.sourceforge.pmd.cpd.Tokenizer;
-import net.sourceforge.pmd.cpd.Tokens;
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.Token;
-import org.sonar.plugins.delphi.antlr.DelphiLexer;
-import org.sonar.plugins.delphi.antlr.sanitizer.DelphiSourceSanitizer;
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 /**
  * DelphiLanguage tokenizer class. It creates tokens based on antlr Lexer class.
@@ -89,10 +91,7 @@ public class DelphiCpdTokenizer implements Tokenizer {
     if (includedFiles.contains(fileName)) {
       return false;
     }
-    if (delphiProjectHelper.isExcluded(fileName, excluded)) {
-      return false;
-    }
-    return true;
+      return !delphiProjectHelper.isExcluded(fileName, excluded);
   }
 
   /**
@@ -113,7 +112,8 @@ public class DelphiCpdTokenizer implements Tokenizer {
         token = lexer.nextToken();
       }
     }
-    tokens.add(Token.EOF_TOKEN);
+    //has been changed to add compatibility for sonarqube 5.2
+    tokens.add(new CommonToken((-1)));
     return tokens;
   }
 

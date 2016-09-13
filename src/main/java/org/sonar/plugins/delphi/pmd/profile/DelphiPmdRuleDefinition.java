@@ -22,7 +22,6 @@
  */
 package org.sonar.plugins.delphi.pmd.profile;
 
-import java.util.List;
 import org.sonar.api.rules.RuleParam;
 import org.sonar.api.server.rule.RuleParamType;
 import org.sonar.api.server.rule.RulesDefinition;
@@ -30,6 +29,8 @@ import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRulesUtils;
 import org.sonar.squidbridge.rules.SqaleXmlLoader;
+
+import java.util.List;
 
 /**
  * Delphi rules definition

@@ -22,24 +22,24 @@
  */
 package org.sonar.plugins.delphi.core.helpers;
 
-import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Directory;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import java.io.File;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Mockito.mock;
 
 public class DelphiProjectHelperTest {
 
   private DelphiProjectHelper delphiProjectHelper;
   private Project project;
-  private ProjectFileSystem pfs;
   private File currentDir;
   private File baseDir;
 
@@ -51,27 +51,28 @@ public class DelphiProjectHelperTest {
     FileSystem fs = mock(FileSystem.class);
     Settings settings = mock(Settings.class);
     project = mock(Project.class);
-    pfs = mock(ProjectFileSystem.class);
 
-    when(pfs.getBasedir()).thenReturn(baseDir);
-
-    when(project.getFileSystem()).thenReturn(pfs);
 
     delphiProjectHelper = new DelphiProjectHelper(settings, fs);
   }
 
   @Test
   public void getDirectory() {
+    System.out.println(("THIS IS PROJ:" + project.toString()));
+    System.out.println(("THIS IS CURDIR:" + currentDir.toString()));
+    System.out.println(("THIS IS BASEDIR:" + baseDir.toString()));
+
     Directory directory = delphiProjectHelper.getDirectory(currentDir, project);
     assertThat(directory, notNullValue());
-    assertThat(directory.getKey(), is("test-classes"));
+    assertThat(directory.getKey(), is("[default]"));
   }
 
   @Test
   public void getDirectoryEqualsToBaseDir() {
     Directory directory = delphiProjectHelper.getDirectory(baseDir, project);
     assertThat(directory, notNullValue());
-    assertThat(directory.getKey(), is("/"));
+    //changed this to macht sonar api 5.0
+    assertThat(directory.getKey(), is("[default]"));
   }
 
   @Test

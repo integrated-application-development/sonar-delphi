@@ -3,7 +3,7 @@ unit FunctionTest;
 interface
 
 uses
-  Windows, StatementTest;
+  StatementTest;
 
 type
   TFunctionTest = class(TStatementTest, TForm)

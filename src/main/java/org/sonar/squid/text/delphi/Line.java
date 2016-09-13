@@ -23,8 +23,9 @@
 package org.sonar.squid.text.delphi;
 
 import org.apache.commons.lang.StringUtils;
-import org.sonar.squid.measures.Measurable;
-import org.sonar.squid.measures.Metric;
+import org.sonar.squidbridge.measures.Measurable;
+import org.sonar.squidbridge.measures.Metric;
+
 
 /**
  * Class representing line of code. Holds data required to source code statistic
@@ -90,6 +91,7 @@ class Line implements Measurable<Metric> {
     return getInt(metric);
   }
 
+
   /**
    * {@inheritDoc}
    */
@@ -114,7 +116,7 @@ class Line implements Measurable<Metric> {
       case PUBLIC_DOC_API:
         return documentation;
       default:
-        throw new IllegalStateException("Metric " + metric.name() + " is not available on Line object.");
+        throw new IllegalStateException("MetricDef " + metric.getName() + " is not available on Line object.");
     }
   }
 
@@ -131,7 +133,6 @@ class Line implements Measurable<Metric> {
    * {@inheritDoc}
    */
 
-  @Override
   public void setMeasure(Metric metric, int measure) {
     switch (metric) {
       case BLANK_LINES:
@@ -157,9 +158,9 @@ class Line implements Measurable<Metric> {
         break;
       case LINES:
         throw new IllegalStateException(
-          "Metric LINES always equals 1 on a Line and you are not permitted to change this value.");
+          "MetricDef LINES always equals 1 on a Line and you are not permitted to change this value.");
       default:
-        throw new IllegalStateException("Metric " + metric.name() + " is not suitable for Line object.");
+        throw new IllegalStateException("MetricDef " + metric.getName() + " is not suitable for Line object.");
     }
   }
 
@@ -193,10 +194,7 @@ class Line implements Measurable<Metric> {
     if (!isBlank() && !isThereComment()) {
       return true;
     }
-    if (isThereComment() && isThereCodeBeforeOrAfterComment()) {
-      return true;
-    }
-    return false;
+      return isThereComment() && isThereCodeBeforeOrAfterComment();
   }
 
   private boolean isThereCodeBeforeOrAfterComment() {

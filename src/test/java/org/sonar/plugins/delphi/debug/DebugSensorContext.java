@@ -22,25 +22,32 @@
  */
 package org.sonar.plugins.delphi.debug;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.sonar.api.batch.Event;
+import org.sonar.api.batch.AnalysisMode;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.InputModule;
 import org.sonar.api.batch.fs.InputPath;
+import org.sonar.api.batch.rule.ActiveRules;
+import org.sonar.api.batch.sensor.coverage.NewCoverage;
+import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
+import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
+import org.sonar.api.batch.sensor.issue.NewIssue;
+import org.sonar.api.batch.sensor.measure.NewMeasure;
+import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
+import org.sonar.api.config.Settings;
 import org.sonar.api.design.Dependency;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.MeasuresFilter;
 import org.sonar.api.measures.Metric;
-import org.sonar.api.resources.ProjectLink;
 import org.sonar.api.resources.Resource;
-import org.sonar.api.rules.Violation;
+import org.sonar.api.utils.Version;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Debug class used in DelphiSensorTest. It proviedes some overriden functions,
@@ -52,34 +59,17 @@ public class DebugSensorContext implements SensorContext {
 
   private Map<String, Double> data = new HashMap<String, Double>();
   private Map<String, String> sdata = new HashMap<String, String>();
-  private List<Violation> violations = new ArrayList<Violation>();
-
-  /**
-   * {@inheritDoc}
-   */
-
-  @Override
-  public void saveViolation(Violation violation) {
-    violations.add(violation);
-  }
-
   /**
    * Gets the violation by its index
    * 
    * @return violation
    */
-  public Violation getViolation(int index) {
-    return violations.get(index);
-  }
 
   /**
    * Gets violation count
    * 
    * @return Violation count
    */
-  public int getViolationsCount() {
-    return violations.size();
-  }
 
   @Override
   public <G extends Serializable> Measure<G> getMeasure(Metric<G> metric) {
@@ -189,42 +179,7 @@ public class DebugSensorContext implements SensorContext {
    */
 
   @Override
-  public void saveViolations(Collection<Violation> violations) {
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
   public Dependency saveDependency(Dependency dependency) {
-    return null;
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public Set<Dependency> getDependencies() {
-    return null;
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public Collection<Dependency> getIncomingDependencies(Resource to) {
-    return null;
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public Collection<Dependency> getOutgoingDependencies(Resource from) {
     return null;
   }
 
@@ -235,48 +190,6 @@ public class DebugSensorContext implements SensorContext {
   @Override
   public void saveSource(Resource resource, String source) {
 
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public void saveLink(ProjectLink link) {
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public void deleteLink(String key) {
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public List<Event> getEvents(Resource resource) {
-    return null;
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public Event createEvent(Resource resource, String name, String description, String category, Date date) {
-    return null;
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public void deleteEvent(Event event) {
   }
 
   /**
@@ -350,15 +263,6 @@ public class DebugSensorContext implements SensorContext {
     return null;
   }
 
-  /**
-   * Save forced violation
-   */
-
-  @Override
-  public void saveViolation(Violation violation, boolean force) {
-    saveViolation(violation);
-  }
-
   @Override
   public Measure saveMeasure(InputFile inputFile, Metric metric, Double value) {
     data.put(inputFile.file().getName() + ":" + metric.getKey(), value);
@@ -375,6 +279,92 @@ public class DebugSensorContext implements SensorContext {
     } else {
       sdata.put(inputFile.file().getName() + ":" + measure.getMetric().getKey(), measure.getData());
     }
+    return null;
+  }
+
+  @Override
+  public Settings settings() {
+    return null;
+  }
+
+  @Override
+  public FileSystem fileSystem() {
+    return null;
+  }
+
+  @Override
+  public ActiveRules activeRules() {
+    return null;
+  }
+
+  /**
+   * @since 5.5
+   */
+  @Override
+  public InputModule module() {
+    return null;
+  }
+
+  /**
+   * @since 5.5
+   */
+  @Override
+  public Version getSonarQubeVersion() {
+    return null;
+  }
+
+  /**
+   * Get analysis mode.
+   */
+
+  public AnalysisMode analysisMode() {
+    return null;
+  }
+
+
+
+  @Override
+  public <G extends Serializable> NewMeasure<G> newMeasure() {
+    return null;
+  }
+
+  @Override
+  public NewIssue newIssue() {
+    return null;
+  }
+
+  @Override
+  public NewHighlighting newHighlighting() {
+    return null;
+  }
+
+  /**
+   * Builder to define symbol table of a file. Don't forget to call {@link NewSymbolTable#save()} once all symbols are provided.
+   *
+   * @since 5.6
+   */
+  @Override
+  public NewSymbolTable newSymbolTable() {
+    return null;
+  }
+
+
+
+
+
+  @Override
+  public NewCoverage newCoverage() {
+    return null;
+  }
+
+  /**
+   * Builder to define CPD tokens in a file.
+   * Don't forget to call {@link NewCpdTokens#save()}.
+   *
+   * @since 5.5
+   */
+  @Override
+  public NewCpdTokens newCpdTokens() {
     return null;
   }
 

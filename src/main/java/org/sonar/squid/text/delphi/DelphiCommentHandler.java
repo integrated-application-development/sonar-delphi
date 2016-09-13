@@ -22,7 +22,7 @@
  */
 package org.sonar.squid.text.delphi;
 
-import org.sonar.squid.measures.Metric;
+import org.sonar.squidbridge.measures.Metric;
 
 /**
  * Class for handling custom block comments. Can also count documentation
@@ -83,12 +83,9 @@ public class DelphiCommentHandler extends LineContextHandler {
   }
 
   private boolean isDocumentation(StringBuilder pendingLine) {
-    if (isDoc && start != -1 && pendingLine.length() >= start + MIN_CHARS_LEFT
-      && pendingLine.charAt(start + 1) == '*'
-      && pendingLine.charAt(start + 2) == '*') {
-      return true;
-    }
-    return false;
+      return isDoc && start != -1 && pendingLine.length() >= start + MIN_CHARS_LEFT
+              && pendingLine.charAt(start + 1) == '*'
+              && pendingLine.charAt(start + 2) == '*';
   }
 
   @Override

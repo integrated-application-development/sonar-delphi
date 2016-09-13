@@ -22,7 +22,6 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.StringProperty;
 import org.apache.commons.lang.StringUtils;
@@ -36,6 +35,8 @@ import org.sonar.plugins.delphi.pmd.DelphiRuleViolation;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+
+import java.util.List;
 
 /**
  * DelphiLanguage rule for XPath, use it to parse XPath rules
@@ -80,7 +81,7 @@ public class XPathRule extends DelphiRule {
 
         int column = Integer.valueOf(resultNode.getAttributes().getNamedItem("column").getTextContent());
         String msg = this.getMessage().replaceAll("\\{\\}", resultNode.getTextContent());
-        DelphiRuleViolation violation = new DelphiRuleViolation(this, (RuleContext) ctx, className,
+        DelphiRuleViolation violation = new DelphiRuleViolation(this, ctx, className,
           methodName, packageName, line, column,
           msg);
         addViolation(ctx, violation);

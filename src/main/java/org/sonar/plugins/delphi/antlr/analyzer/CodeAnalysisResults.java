@@ -22,10 +22,11 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class holding results of source code parsing

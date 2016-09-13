@@ -21,8 +21,8 @@ package org.sonar.plugins.delphi.pmd;
 import org.junit.Test;
 import org.sonar.api.issue.Issue;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
 
 public class ClassNameRuleTest extends BasePmdRuleTest {
 
@@ -64,6 +64,9 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
+    System.out.println("HERE10:  RULEKEY:"+issues.get(0).ruleKey().rule());
+    System.out.println("HERE10:  LINE:"+issues.get(0).line());
+    System.out.println("HERE10:  CLASS:"+issues.get(0).getClass());
     assertThat(issue.ruleKey().rule(), equalTo("ClassNameRule"));
     assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
   }

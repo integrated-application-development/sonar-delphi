@@ -22,13 +22,14 @@
  */
 package org.sonar.plugins.delphi.metrics;
 
-import java.util.List;
-import java.util.Set;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for metrics
@@ -87,5 +88,5 @@ public interface MetricsInterface {
    * @param metric Metric name
    * @return true if the metric exists
    */
-  public boolean hasMetric(String metric);
+  boolean hasMetric(String metric);
 }

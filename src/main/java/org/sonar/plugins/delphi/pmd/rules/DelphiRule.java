@@ -22,8 +22,6 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.Iterator;
-import java.util.List;
 import net.sourceforge.pmd.AbstractJavaRule;
 import net.sourceforge.pmd.PropertyDescriptor;
 import net.sourceforge.pmd.RuleContext;
@@ -33,6 +31,9 @@ import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 import org.sonar.plugins.delphi.pmd.DelphiRuleViolation;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Basic rule class, extend this class to make your own rules. Do NOT extend

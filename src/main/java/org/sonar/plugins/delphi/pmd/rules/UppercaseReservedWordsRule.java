@@ -22,10 +22,9 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import net.sourceforge.pmd.RuleContext;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
-
-import net.sourceforge.pmd.RuleContext;
 
 /**
  * Rule checking if we are using some keyword with all uppercase characters.

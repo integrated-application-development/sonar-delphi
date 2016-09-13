@@ -22,8 +22,6 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
 
-import java.io.IOException;
-import java.util.List;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,7 +29,10 @@ import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRange;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl.IntegerSubRange;
 import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
-import static org.junit.Assert.*;
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class ExcludeResolverTest extends FileTestsCommon {
 

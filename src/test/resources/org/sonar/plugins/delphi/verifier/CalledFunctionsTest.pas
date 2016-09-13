@@ -2,9 +2,6 @@ unit TestUnit;
 
 interface
 
-uses 
-	UnitA, UnitB;
-
 procedure myProcedure;
 procedure mySecondProcedure;
 

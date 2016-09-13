@@ -22,8 +22,6 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.directives;
 
-import java.io.IOException;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
@@ -33,7 +31,10 @@ import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveFac
 import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveFactoryUnsupportedDirectiveException;
 import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
-import static org.junit.Assert.*;
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class CompilerDirectiveFactoryTest extends FileTestsCommon {
 

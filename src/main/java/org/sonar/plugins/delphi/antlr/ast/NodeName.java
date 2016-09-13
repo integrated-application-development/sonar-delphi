@@ -36,7 +36,7 @@ public enum NodeName {
   private String name;
   private String codeRegExpression;
 
-  private NodeName(String name, String regex) {
+  NodeName(String name, String regex) {
     this.name = name;
     this.codeRegExpression = regex;
   }

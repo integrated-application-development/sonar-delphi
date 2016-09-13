@@ -22,12 +22,13 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.HashSet;
-import java.util.Set;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Class for checking if we are using .Free with checking if variable is

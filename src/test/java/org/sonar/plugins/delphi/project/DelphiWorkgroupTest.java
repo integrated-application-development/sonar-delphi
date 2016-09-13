@@ -22,12 +22,13 @@
  */
 package org.sonar.plugins.delphi.project;
 
-import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-import static org.junit.Assert.*;
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
 
 public class DelphiWorkgroupTest {
 

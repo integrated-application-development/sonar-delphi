@@ -22,20 +22,17 @@
  */
 package org.sonar.plugins.delphi.pmd.xml;
 
+
 import com.thoughtworks.xstream.XStream;
-import java.io.IOException;
+import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.rules.*;
+import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
+
 import java.io.InputStream;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.math.NumberUtils;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.rules.ActiveRule;
-import org.sonar.api.rules.ActiveRuleParam;
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RuleParam;
-import org.sonar.api.rules.RulePriority;
-import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
+import java.util.Scanner;
 
 /**
  * Utilities for Delphi xml rules
@@ -50,7 +47,7 @@ public final class DelphiRulesUtils {
 
   /**
    * Builds rule sets from xml file
-   * 
+   *
    * @param configuration Xml file configuration
    * @return Rule set
    */
@@ -67,7 +64,7 @@ public final class DelphiRulesUtils {
 
   /**
    * Builds rule sets from ruleset tree
-   * 
+   *
    * @param tree Rule set tree
    * @return Rule sets
    */
@@ -87,21 +84,22 @@ public final class DelphiRulesUtils {
 
   /**
    * Gets a configuration from file
-   * 
+   *
    * @param path File path
    * @return COnfiguration string
    */
   public static String getConfigurationFromFile(String path) {
-    InputStream inputStream = Ruleset.class.getResourceAsStream(path);
     String configuration = null;
     try {
-      configuration = IOUtils.toString(inputStream, "UTF-8");
-    } catch (IOException e) {
+      InputStream inputStream = Ruleset.class.getResourceAsStream(path);
+      Scanner s = new Scanner(inputStream).useDelimiter("\\A");
+      configuration = s.hasNext() ? s.next() : "";
+    } catch (Exception e) {
       throw new IllegalArgumentException("Unable to read configuration file for the profile : " + path, e);
-    } finally {
-      IOUtils.closeQuietly(inputStream);
     }
     return configuration;
+
+
   }
 
   private static final String RESOURCE_PATH = "/org/sonar/plugins/delphi/pmd/";
@@ -117,7 +115,7 @@ public final class DelphiRulesUtils {
 
   /**
    * Parses rules xml file
-   * 
+   *
    * @param path Xml file path
    * @return List of rules
    */
@@ -132,7 +130,7 @@ public final class DelphiRulesUtils {
 
   /**
    * Imports configuration. Transform a list of Rule in ActiveRule.
-   * 
+   *
    * @param configuration rules configuration content
    * @param rulesRepository list os Rules
    * @return a list of ActiveRules
@@ -152,7 +150,7 @@ public final class DelphiRulesUtils {
   /**
    * Exports configuration
    * @param activeProfile The currrent active quality profile
-   * @return The active rules as XML String 
+   * @return The active rules as XML String
    */
   public static String exportConfiguration(RulesProfile activeProfile) {
     Ruleset tree = buildRulesetFromActiveProfile(activeProfile
@@ -177,7 +175,7 @@ public final class DelphiRulesUtils {
           .setDescription(property.getName())
           .setType("s");
 
-        if (NumberUtils.isNumber(property.getValue())) {
+        if (isStringNumeric(property.getValue())) {
           param.setType("i");
         }
 
@@ -279,6 +277,31 @@ public final class DelphiRulesUtils {
       return "5";
     }
     throw new IllegalArgumentException("Level not supported: " + priority);
+  }
+
+  public static boolean isStringNumeric( String str )
+  {
+    DecimalFormatSymbols currentLocaleSymbols = DecimalFormatSymbols.getInstance();
+    char localeMinusSign = currentLocaleSymbols.getMinusSign();
+
+    if ( !Character.isDigit( str.charAt( 0 ) ) && str.charAt( 0 ) != localeMinusSign ) return false;
+
+    boolean isDecimalSeparatorFound = false;
+    char localeDecimalSeparator = currentLocaleSymbols.getDecimalSeparator();
+
+    for ( char c : str.substring( 1 ).toCharArray() )
+    {
+      if ( !Character.isDigit( c ) )
+      {
+        if ( c == localeDecimalSeparator && !isDecimalSeparatorFound )
+        {
+          isDecimalSeparatorFound = true;
+          continue;
+        }
+        return false;
+      }
+    }
+    return true;
   }
 
 }

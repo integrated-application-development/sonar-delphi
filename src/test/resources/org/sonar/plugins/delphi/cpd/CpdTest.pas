@@ -6,10 +6,6 @@ interface
 { test }
 (* test *)
 
-uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, FastMMUsageTracker;
-
 type
   TfDemo = class(TForm)
     bShowTracker: TButton;

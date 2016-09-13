@@ -22,14 +22,14 @@
  */
 package org.sonar.squid.text.delphi;
 
+import org.sonar.squidbridge.measures.Metric;
+import org.sonar.squidbridge.recognizer.CodeRecognizer;
+
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.sonar.squid.measures.Metric;
-import org.sonar.squid.recognizer.CodeRecognizer;
-import org.sonar.squid.text.StringArrayReader;
 
 /**
  * Class representing Delphi source code. It holds statistics for code lines.
