@@ -80,9 +80,9 @@ Code Assumptions
 * Preprocessor definitions between {$if xxx} and {$ifend} are removed (DefineResolver class).
 * Sources imported to SonarQube are parsed through IncludeResolver class. It means, that the source will be lowercased and unknown preprocessor definitions will be cut out.
 
-CodeCoverage using AQtime
+CodeCoverage
 -------------------------------
-Will be uploaded in a few days...
+I am very sorry but I can't release the CodeCoverage solution I used so if you want CodeCoverage please refer to [latest release](https://github.com/fabriciocolombo/sonar-delphi/releases/latest)
 
 Importing into Eclipse
 -------------------------------
