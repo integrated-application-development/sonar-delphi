@@ -180,7 +180,7 @@ exportItem                   : ('(' (formalParameterList)? ')')? (INDEX expressi
 typeDecl                     : strucType
                              | pointerType
                              | stringType
-                             | procedureType 
+                             | procedureType
                              | variantType
                              | ('type')? typeId (genericPostfix)?
                              | simpleType
@@ -193,7 +193,7 @@ strucTypePart                : arrayType
                              | classDecl
                              ;
 
-arrayType                    :  'array' ('[' (arrayIndex)? (',' (arrayIndex)?)* ']')? 'of' arraySubType 
+arrayType                    :  'array' ('[' (arrayIndex)? (',' (arrayIndex)?)* ']')? 'of' arraySubType
                              -> ^(arraySubType 'array' ('[' (arrayIndex)? (',' (arrayIndex)?)* ']')? )          //CHANGED we only need type info
                              ;
 
@@ -248,9 +248,12 @@ typeId                       : namespacedQualifiedIdent
 genericTypeIdent             : qualifiedIdent (genericDefinition)? -> qualifiedIdent    //CHANGED we don't need <Type> data, it produced empty nodes
                              ;
 genericDefinition            : simpleGenericDefinition
+                             | complexGenericDefinition
                              | constrainedGenericDefinition
                              ;
 simpleGenericDefinition      : '<' ident (',' ident)* '>'
+                             ;
+complexGenericDefinition     : '<' qualifiedIdent (simpleGenericDefinition)? (',' qualifiedIdent (simpleGenericDefinition)?)* '>'
                              ;
 constrainedGenericDefinition : '<' constrainedGeneric (';' constrainedGeneric)* '>'
                              ;
@@ -299,9 +302,9 @@ classHelperItem              : visibility
                              | classProperty
                              | ('class')? varSection
                              ;
-interfaceTypeDecl            : interfaceKey (classParent)? (interfaceGuid)? (interfaceItem)* 'end' 
+interfaceTypeDecl            : interfaceKey (classParent)? (interfaceGuid)? (interfaceItem)* 'end'
                               -> interfaceKey ^(TkClassParents (classParent)? ) ^(TkGuid (interfaceGuid)?) (interfaceItem)*
-                             | interfaceKey (classParent)? 
+                             | interfaceKey (classParent)?
                               -> interfaceKey ^(TkClassParents (classParent)?)
                              ;
 interfaceKey                 : 'interface'
@@ -334,10 +337,10 @@ recordItem                   : visibility     //ADDED
                              | ('class')? varSection
                              ;
 recordField                  : identList ':' typeDecl (hintingDirective)* (';')?  //CHANGED not needed ; at the end
-                             -> identList ^(TkVariableType typeDecl)          
+                             -> identList ^(TkVariableType typeDecl)
                              ;
 recordVariantField           : identList ':' typeDecl (hintingDirective)* (';') ?
-                             -> identList ^(TkVariableType typeDecl)          
+                             -> identList ^(TkVariableType typeDecl)
                              ;
 recordVariantSection         : 'case' (ident ':')? typeDecl 'of' (recordVariant | ';') (recordVariant | ';')*
                              ;
@@ -355,8 +358,8 @@ classMethod                  : (customAttribute)? ('class')? methodKey ident (ge
                              -> (customAttribute)? ('class')? ^('function' ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) (customAttribute)? ^(TkFunctionReturn typeDecl) (methodDirective)*)
                              | (customAttribute)? ('class')? 'operator' ident (genericDefinition)? (formalParameterSection)? ':' (customAttribute)? typeDecl ';'
                              -> (customAttribute)? ('class')? ^('operator' ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) (customAttribute)? typeDecl )
-                             ;                             
-classField                   : (customAttribute)? identList ':' typeDecl ';' (hintingDirective)* 
+                             ;
+classField                   : (customAttribute)? identList ':' typeDecl ';' (hintingDirective)*
                              -> (customAttribute)? ^(TkClassField ^(TkVariableIdents identList) ^(TkVariableType typeDecl))
                              ;
 classProperty                : (customAttribute)? ('class')? 'property' ident (classPropertyArray)? (':' genericTypeIdent)? (classPropertyIndex)? (classPropertySpecifier)* ';' (classPropertyEndSpecifier)*
@@ -378,7 +381,7 @@ classPropertySpecifier       : classPropertyReadWrite   //CHANGED removed ';'
                              ;
 classPropertyEndSpecifier    : STORED expression ';'    //ADDED used in classProperty at end
                              | 'default' expression ';'
-                             | 'default' ';'             
+                             | 'default' ';'
                              | 'nodefault' ';'
                              ;
 
@@ -391,10 +394,10 @@ classPropertyDispInterface   : 'readonly' ';'
                              | 'writeonly' ';'
                              | dispIDDirective
                              ;
-visibility                   : (STRICT)? 'protected' 
+visibility                   : (STRICT)? 'protected'
                              | (STRICT)? 'private'
                              | 'public'
-                             | 'published' 
+                             | 'published'
                              | 'automated'     // win32 deprecated
                              ;
 //****************************
@@ -411,13 +414,13 @@ methodDeclHeading            : (customAttribute)? ('class')?  methodKey methodNa
                              -> (customAttribute)? ('class')? ^('function' ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn (customAttribute)? typeDecl?) )
                              | (customAttribute)? 'class' 'operator' methodName (formalParameterSection)? (':' (customAttribute)? typeDecl)?
                              -> (customAttribute)? 'class' ^('operator' ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn (customAttribute)? typeDecl?) )
-                             ;              
+                             ;
 methodKey                    : 'procedure'
                              | 'constructor'
                              | 'destructor'
                              ;
 methodName                   : ident (genericDefinition)? ('.' ident (genericDefinition)?)? '.' ident (genericDefinition)?
-                             ;                             
+                             ;
 procDecl                     : procDeclHeading ';' (functionDirective)* (procBody)? -> procDeclHeading (procBody)?    //CHANGED
                              ;
 procDeclHeading              : (customAttribute)? 'procedure' ident (formalParameterSection)?             //CHANGED
@@ -450,14 +453,14 @@ customAttribute              : customAttributeList
 customAttributeList          : (customAttributeDecl)*
                              ;
 customAttributeDecl          : '[' namespacedQualifiedIdent ('(' (expressionList)? ')')? ']'  -> ^(TkCustomAttribute '[' namespacedQualifiedIdent ('(' (expressionList)? ')')? ']')
-                             ;                             
+                             ;
 
 //****************************
 //section expression
 //****************************
 expression                   : anonymousExpression -> ^(TkAnonymousExpression anonymousExpression)
                              | simpleExpression (relOp simpleExpression)? ('=' expression)?   //CHANGED, added expression for: "if( functionCall(x, 7+66) = true ) then" syntax
-                             ;                           
+                             ;
 anonymousExpression          : 'procedure' (formalParameterSection)? block
                              | 'function' (formalParameterSection)? ':' typeDecl block
                              ;
@@ -539,7 +542,7 @@ statement                    : ifStatement
                              | label ':' statement
                              | simpleStatement
                              ;
-ifStatement                  : 'if' expression 'then' statement ('else' statement)? 
+ifStatement                  : 'if' expression 'then' statement ('else' statement)?
                              ;
 caseStatement                : 'case' expression 'of' (caseItem)* ('else' statementList (';')?)? 'end'
                              ;
@@ -569,8 +572,8 @@ simpleStatement              : designator ':=' expression
                              | gotoStatement
                              ;
 gotoStatement                : 'goto' label
-                             | 'exit' ('(' expression ')')?   
-                             | 'break'                          
+                             | 'exit' ('(' expression ')')?
+                             | 'break'
                              | 'continue'
                              ;
 //****************************
@@ -585,7 +588,7 @@ recordConstExpression        : ident ':' constExpression
 //****************************
 //section exceptionStatement
 //****************************
-tryStatement                 : 'try' (statementList)? 'except' handlerList 'end'  
+tryStatement                 : 'try' (statementList)? 'except' handlerList 'end'
                              | 'try' (statementList)? 'finally' (statementList)? 'end'
                              ;
 handlerList                  : (handler)* ('else' statementList)?
@@ -599,7 +602,7 @@ handlerStatement             : statement (';')?
                              | ';'
                              ;
 raiseStatement               : 'raise' (designator)? (AT designator)? // CHECKEN!
-                             ;           
+                             ;
 //****************************
 //section AssemblerStatement
 //****************************
@@ -614,7 +617,7 @@ methodDirective              : reintroduceDirective         // 1
                              | abstractDirective            // 3 virtual;
                              | inlineDirective              // 4 niet virtual or dynamic
                              | callConvention               // 4
-                             | hintingDirective ';'       // 4 (niet abstract)
+                             | hintingDirective ';'         // 4 (niet abstract)
                              | oldCallConventionDirective   // 1
                              | dispIDDirective
                              ;
@@ -622,9 +625,9 @@ functionDirective            : overloadDirective          // 1
                              | inlineDirective            // 1
                              | callConvention             // 1
                              | oldCallConventionDirective // 1
-                             | hintingDirective ';'      // 1
+                             | hintingDirective ';'       // 1
                              | (callConventionNoSemi)? externalDirective          // 1
-                             | 'unsafe' ';'              // 1 .net?
+                             | 'unsafe' ';'               // 1 .net?
                              ;
 reintroduceDirective         : 'reintroduce' ';'
                              ;
@@ -680,15 +683,15 @@ dispIDDirective              : 'dispid' expression ';'
 ident                        : TkIdentifier
                              | '&' TkIdentifier
                              | usedKeywordsAsNames
-                             ;                 
+                             ;
 usedKeywordsAsNames          : (NAME | READONLY | ADD | AT | MESSAGE | POINTER | INDEX | DEFAULT | STRING | CONTINUE)
                              | (READ | WRITE | REGISTER | VARIANT | OPERATOR | REMOVE | LOCAL | REFERENCE | CONTAINS | FINAL)
                              | (BREAK | EXIT | STRICT | OUT | OBJECT | EXPORT | ANSISTRING | IMPLEMENTS | STORED)
-                             ;                           
+                             ;
 identList                    : ident (',' ident)* -> ^(ident (ident)*)
                              ;
 identListFlat                : ident (',' ident)* -> ident (ident)*   //ADDED used in formalParemeter
-                             ;                                                          
+                             ;
 label                        : TkIdentifier
                              | TkIntNum
                              | TkHexNum
@@ -696,16 +699,16 @@ label                        : TkIdentifier
                              ;
 intNum                       : TkIntNum
                              | TkHexNum
-                             ;                             
+                             ;
 realNum                      : TkRealNum
-                             ;                             
+                             ;
 namespacedQualifiedIdent     : (namespaceName '.')? qualifiedIdent
                              ;
 namespaceName                : ident ('.' ident)*
                              ;
 qualifiedIdent               :  (ident '.')*  ident   //must stay the way it is, with '.' for proper class method identyfication
                              ;
-                                   
+
 // KEYWORDS
 ABSOLUTE          : 'absolute'       ;
 ABSTRACT          : 'abstract'       ;
@@ -868,7 +871,7 @@ AT2               : '@'   ;
 DOT               : '.'   ;// ('.' {$setType(DOTDOT);})?  ;
 DOTDOT            : '..'  ;
 LCURLY            : '{'   ;
-RCURLY            : '}'   ;     
+RCURLY            : '}'   ;
 
 //****************************
 //section token
@@ -916,7 +919,7 @@ TkClassField            : 'CLASS_FIELD'
 TkAnonymousExpression   : 'ANONYMOUS_EXPRESSION'
                         ;
 TkIdentifier            : (Alpha | '_') (Alpha | Digit | '_')*
-                        ;  
+                        ;
 TkIntNum                : Digitseq
                         ;
 TkRealNum               : Digitseq ('.' Digitseq)? (('e'|'E') ('+'|'-')? Digitseq)?  //CHANGED
@@ -931,33 +934,33 @@ QuotedString            : '\'' ('\'\'' | ~('\''))* '\''   //taken from PASCAL gr
                         ;
 ControlString           : Controlchar (Controlchar)*
                         ;
-                        
-fragment                
+
+fragment
 Controlchar             : '#' Digitseq
                         | '#' '$' Hexdigitseq
                         ;
-fragment                
+fragment
 Alpha                   : 'a'..'z'
                         | 'A'..'Z'
                         | '\u0080'..'\uFFFE' ~('\uFEFF') //ADDED unicode support
                         ;
-fragment                
+fragment
 Digit                   : '0'..'9'
                         ;
-fragment                
+fragment
 Digitseq                : Digit (Digit)*
                         ;
-fragment                
+fragment
 Hexdigit                : Digit | 'a'..'f' | 'A'..'F'
                         ;
 Hexdigitseq             : Hexdigit (Hexdigit)*
                         ;
 COMMENT                 :  '//' ~('\n'|'\r')* '\r'? '\n'           {$channel=HIDDEN;}
-                        |  '(*' ( options {greedy=false;} : . )* '*)'  {$channel=HIDDEN;}               
+                        |  '(*' ( options {greedy=false;} : . )* '*)'  {$channel=HIDDEN;}
                         |  '{' ( options {greedy=false;} : . )* '}'    {$channel=HIDDEN;}
-                        ;                 
+                        ;
 WS                      : (' '|'\t'|'\r'|'\n'|'\f')+ {$channel=HIDDEN;}
                         ;
-UnicodeBOM              : '\uFEFF' {$channel=HIDDEN;} 
-                        ;                             
-                 
+UnicodeBOM              : '\uFEFF' {$channel=HIDDEN;}
+                        ;
+
