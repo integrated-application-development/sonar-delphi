@@ -23,14 +23,12 @@
 package org.sonar.plugins.delphi.metrics;
 
 import org.apache.commons.io.FilenameUtils;
-import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.rule.ActiveRule;
 import org.sonar.api.batch.rule.ActiveRules;
-import org.sonar.api.component.ResourcePerspectives;
-import org.sonar.api.issue.Issuable;
-import org.sonar.api.issue.Issue;
+import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
@@ -59,7 +57,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
   private List<UnitInterface> allUnits;
   private final ActiveRule unitRule;
   private final ActiveRule functionRule;
-  private final ResourcePerspectives perspectives;
+  private final SensorContext context;
 
   public static final RuleKey RULE_KEY_UNUSED_UNIT = RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, "UnusedUnitRule");
   public static final RuleKey RULE_KEY_UNUSED_FUNCTION = RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, "UnusedFunctionRule");
@@ -67,11 +65,11 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
   /**
    * {@inheritDoc}
    */
-  public DeadCodeMetrics(ActiveRules activeRules, ResourcePerspectives perspectives) {
+  public DeadCodeMetrics(ActiveRules activeRules, SensorContext sensorContext) {
     super();
-    this.perspectives = perspectives;
+    context = sensorContext;
     isCalculated = false;
-    allUnits = new ArrayList<UnitInterface>();
+    allUnits = new ArrayList<>();
     unitRule = activeRules.find(RULE_KEY_UNUSED_UNIT);
     functionRule = activeRules.find(RULE_KEY_UNUSED_FUNCTION);
   }
@@ -81,7 +79,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
    */
 
   @Override
-  public void analyse(InputFile resource, SensorContext sensorContext, List<ClassInterface> classes,
+  public void analyse(InputFile resource, List<ClassInterface> classes,
     List<FunctionInterface> functions,
     Set<UnitInterface> units) {
     if (!isCalculated) {
@@ -102,28 +100,28 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
    */
 
   @Override
-  public void save(InputFile resource, SensorContext sensorContext) {
-    if (resource.type() == Type.TEST) {
+  public void save(InputFile inputFile) {
+    if (inputFile.type() == Type.TEST) {
       return;
     }
 
-    String fileName = FilenameUtils.removeExtension(resource.file().getName());
+    String fileName = FilenameUtils.removeExtension(inputFile.file().getName());
     UnitInterface unit = findUnit(fileName);
     if (unit == null) {
-      DelphiUtils.LOG.debug("No unit for " + fileName + "(" + resource.absolutePath() + ")");
+      DelphiUtils.LOG.debug("No unit for " + fileName + "(" + inputFile.absolutePath() + ")");
       return;
     }
 
     if (unusedUnits.contains(fileName.toLowerCase())) {
-      Issuable issuable = perspectives.as(Issuable.class, resource);
-      if (issuable != null) {
-        Issue issue = issuable.newIssueBuilder()
-          .ruleKey(unitRule.ruleKey())
-          .line(unit.getLine())
-          .message(unit.getName() + DEAD_UNIT_VIOLATION_MESSAGE)
-          .build();
-        issuable.addIssue(issue);
-      }
+      NewIssue newIssue = context.newIssue();
+      newIssue
+              .forRule(unitRule.ruleKey())
+              .at(newIssue.newLocation()
+                      .on(inputFile)
+                      .at(inputFile.newRange(unit.getLine(), 1,
+                              unit.getLine(), 1))
+                      .message(unit.getName() + DEAD_UNIT_VIOLATION_MESSAGE));
+      newIssue.save();
     }
 
     for (FunctionInterface function : getUnitFunctions(unit)) {
@@ -160,17 +158,22 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
       }
 
       if (unusedFunctions.contains(function)) {
-        Issuable issuable = perspectives.as(Issuable.class, resource);
-        if (issuable != null) {
-          Issue issue = issuable.newIssueBuilder()
-            .ruleKey(functionRule.ruleKey())
-            .line(function.getLine())
-            .message(function.getRealName() + DEAD_FUNCTION_VIOLATION_MESSAGE)
-            .build();
 
-          // TODO Unused functions it's not working. There are many
-          // false positives.
-          // issuable.addIssue(issue);
+        RuleKey rule = functionRule.ruleKey();
+        if (rule != null) {
+          int line = function.getLine();
+          int column = function.getColumn();
+
+
+          NewIssue newIssue = context.newIssue();
+          newIssue
+              .forRule(rule)
+              .at(newIssue.newLocation()
+                  .on(inputFile)
+                  .at(inputFile.newRange(line, column,
+                      line, column))
+                  .message(function.getRealName() + DEAD_FUNCTION_VIOLATION_MESSAGE));
+          newIssue.save();
         }
       }
     }

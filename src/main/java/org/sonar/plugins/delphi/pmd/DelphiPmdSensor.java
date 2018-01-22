@@ -29,19 +29,29 @@ import net.sourceforge.pmd.ast.ParseException;
 import net.sourceforge.pmd.renderers.Renderer;
 import net.sourceforge.pmd.renderers.XMLRenderer;
 import org.apache.commons.io.FileUtils;
-import org.sonar.api.batch.Sensor;
-import org.sonar.api.batch.SensorContext;
-import org.sonar.api.component.ResourcePerspectives;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.InputModule;
+import org.sonar.api.batch.sensor.Sensor;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.resources.Project;
+import org.sonar.api.rule.RuleKey;
+import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileExporter;
 import org.sonar.plugins.delphi.pmd.profile.DelphiRuleSets;
-import org.sonar.plugins.delphi.pmd.xml.DelphiPmdXmlReportParser;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.ProgressReporter;
 import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import org.w3c.dom.Document;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -52,7 +62,7 @@ import java.util.List;
  */
 public class DelphiPmdSensor implements Sensor {
 
-  private final ResourcePerspectives perspectives;
+  private final SensorContext context;
   private final DelphiProjectHelper delphiProjectHelper;
   private final List<String> errors = new ArrayList<String>();
   private final DelphiPmdProfileExporter profileExporter;
@@ -60,39 +70,105 @@ public class DelphiPmdSensor implements Sensor {
 
   /**
    * C-tor
+   *
    * @param delphiProjectHelper delphiProjectHelper
-   * @param perspectives resourcePerspectives used by DelphiPmdXmlReportParser
-   * @param rulesProfile rulesProfile used to export active rules
-   * @param profileExporter used to export active rules
-   * 
+   * @param context             SensorContext
+   * @param rulesProfile        rulesProfile used to export active rules
+   * @param profileExporter     used to export active rules
    */
-  public DelphiPmdSensor(DelphiProjectHelper delphiProjectHelper, ResourcePerspectives perspectives, RulesProfile rulesProfile, DelphiPmdProfileExporter profileExporter) {
+  public DelphiPmdSensor(DelphiProjectHelper delphiProjectHelper, SensorContext context, RulesProfile rulesProfile, DelphiPmdProfileExporter profileExporter) {
     this.delphiProjectHelper = delphiProjectHelper;
-    this.perspectives = perspectives;
+    this.context = context;
     this.rulesProfile = rulesProfile;
     this.profileExporter = profileExporter;
   }
 
   /**
-   * Analyses a project
+   * Populate {@link SensorDescriptor} of this sensor.
    */
-
   @Override
-  public void analyse(Project project, SensorContext context) {
+  public void describe(SensorDescriptor descriptor) {
+    DelphiUtils.LOG.info("PMD sensor.describe");
+    descriptor.name("PMD sensor").onlyOnLanguage(DelphiLanguage.KEY);
+  }
+
+  private void addIssue(String ruleKey, String fileName, Integer beginLine, String message, Integer priority) {
+
+    DelphiUtils.LOG.debug("PMD Violation - rule: " + ruleKey + " file: " + fileName + " message: " + message);
+
+    InputFile inputFile = delphiProjectHelper.getFile(fileName);
+
+    NewIssue newIssue = context.newIssue();
+    newIssue
+            .forRule(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, ruleKey))
+            .at(newIssue.newLocation()
+                    .on(inputFile)
+                    .at(inputFile.newRange(beginLine, 1,
+                            beginLine, 1))
+                    .message(message))
+            .gap(0.0);
+    newIssue.save();
+  }
+
+  void parsePMDreport(File reportFile)
+  {
+    DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+    try {
+       DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+       Document doc = docBuilder.parse(reportFile);
+
+       // normalize text representation
+       doc.getDocumentElement().normalize();
+
+       NodeList files = doc.getElementsByTagName("file");
+
+       for (int f = 0; f < files.getLength(); f++) {
+         Element file = (Element)files.item(f);
+         String fileName = file.getAttributes().getNamedItem("name").getTextContent();
+         NodeList violations = file.getElementsByTagName("violation");
+         for (int n = 0; n < violations.getLength(); n++)
+         {
+           Node violation = violations.item(n);
+           String beginLine = violation.getAttributes().getNamedItem("beginline").getTextContent();
+//           String endLine = violation.getAttributes().getNamedItem("endline").getTextContent();
+//           String beginColumn = violation.getAttributes().getNamedItem("begincolumn").getTextContent();
+//           String endColumn = violation.getAttributes().getNamedItem("endcolumn").getTextContent();
+           String rule = violation.getAttributes().getNamedItem("rule").getTextContent();
+           String priority = violation.getAttributes().getNamedItem("priority").getTextContent();
+           String message = violation.getTextContent();
+           addIssue(rule, fileName, Integer.parseInt(beginLine), message, Integer.parseInt(priority));
+         }
+       }
+    } catch (SAXParseException err) {
+      DelphiUtils.LOG.info("SAXParseException");
+    } catch (SAXException e) {
+      DelphiUtils.LOG.info("SAXException");
+       Exception x = e.getException ();
+       ((x == null) ? e : x).printStackTrace ();
+    } catch (Throwable t) {
+      DelphiUtils.LOG.info("Throwable");
+       t.printStackTrace ();
+    }
+  }
+
+  /**
+   * The actual sensor code.
+   */
+  @Override
+  public void execute(SensorContext context)
+  {
+    DelphiUtils.LOG.info("PMD sensor.execute");
     File reportFile;
     // creating report
     ClassLoader initialClassLoader = Thread.currentThread().getContextClassLoader();
     try {
       Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
-      reportFile = createPmdReport(project);
+      reportFile = createPmdReport(context.module());
     } finally {
       Thread.currentThread().setContextClassLoader(initialClassLoader);
     }
 
-    // analysing report
-    DelphiPmdXmlReportParser parser = new DelphiPmdXmlReportParser(delphiProjectHelper, perspectives);
-
-    parser.parse(reportFile);
+    parsePMDreport(reportFile);
   }
 
   private RuleSets createRuleSets() {
@@ -123,7 +199,7 @@ public class DelphiPmdSensor implements Sensor {
     }
   }
 
-  private File createPmdReport(Project project) {
+  private File createPmdReport(InputModule module) {
     try {
       DelphiPMD pmd = new DelphiPMD();
       RuleContext ruleContext = new RuleContext();
@@ -155,7 +231,7 @@ public class DelphiPmdSensor implements Sensor {
         }
       }
 
-      return writeXmlReport(project, pmd.getReport());
+      return writeXmlReport(pmd.getReport());
     } catch (IOException e) {
       DelphiUtils.LOG.error("Could not generate PMD report file.");
       return null;
@@ -165,16 +241,15 @@ public class DelphiPmdSensor implements Sensor {
   /**
    * Generates an XML file from report
    * 
-   * @param project Project
    * @param report Report
    * @return XML based on report
    * @throws IOException When report could not be generated
    */
-  private File writeXmlReport(Project project, Report report)
+  private File writeXmlReport(Report report)
     throws IOException {
     Renderer xmlRenderer = new XMLRenderer();
-    Writer stringwriter = new StringWriter();
-    xmlRenderer.setWriter(stringwriter);
+    Writer stringWriter = new StringWriter();
+    xmlRenderer.setWriter(stringWriter);
     xmlRenderer.start();
     xmlRenderer.renderFileReport(report);
     xmlRenderer.end();
@@ -182,17 +257,8 @@ public class DelphiPmdSensor implements Sensor {
     File xmlReport = new File(delphiProjectHelper.workDir().getAbsolutePath(), "pmd-report.xml");
     DelphiUtils.LOG.info("PMD output report: "
       + xmlReport.getAbsolutePath());
-    FileUtils.writeStringToFile(xmlReport, stringwriter.toString());
+    FileUtils.writeStringToFile(xmlReport, stringWriter.toString());
     return xmlReport;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  @Override
-  public boolean shouldExecuteOnProject(Project project) {
-    return delphiProjectHelper.shouldExecuteOnProject();
   }
 
   @Override
@@ -203,5 +269,4 @@ public class DelphiPmdSensor implements Sensor {
   public List<String> getErrors() {
     return errors;
   }
-
 }

@@ -33,7 +33,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
     builder.appendDecl("  TMyClass = class");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(issues, is(empty()));
   }
@@ -82,7 +82,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
     builder.appendDecl("  end;");
     builder.appendDecl("  TMetaClassClass = class of TMyClass;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(toString(issues), issues, is(empty()));
   }
@@ -96,7 +96,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
     builder.appendDecl("    class function TestFuncion: Boolean;");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(toString(issues), issues, is(empty()));
   }

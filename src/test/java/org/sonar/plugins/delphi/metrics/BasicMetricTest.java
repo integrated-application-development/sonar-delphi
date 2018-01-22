@@ -66,10 +66,10 @@ public class BasicMetricTest {
     when(cppResource.absolutePath()).thenReturn("source.cpp");
     when(dpkResource.absolutePath()).thenReturn("source.dpk");
 
-    assertTrue(new BasicMetrics().executeOnResource(pasResource));
-    assertTrue(new BasicMetrics().executeOnResource(dprResource));
-    assertTrue(new BasicMetrics().executeOnResource(dpkResource));
-    assertFalse(new BasicMetrics().executeOnResource(cppResource));
+    assertTrue(new BasicMetrics(null).executeOnResource(pasResource));
+    assertTrue(new BasicMetrics(null).executeOnResource(dprResource));
+    assertTrue(new BasicMetrics(null).executeOnResource(dpkResource));
+    assertFalse(new BasicMetrics(null).executeOnResource(cppResource));
   }
 
   @Test

@@ -32,7 +32,7 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("type");
     builder.appendDecl("  PMyPointer = ^Integer;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(issues, is(empty()));
   }
@@ -77,7 +77,7 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
     builder.appendImpl("  MyInteger := PInteger(1)^;");
     builder.appendImpl("end;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(issues, is(empty()));
   }

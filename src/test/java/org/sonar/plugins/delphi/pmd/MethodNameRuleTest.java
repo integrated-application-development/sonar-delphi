@@ -35,7 +35,7 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("    procedure Foo;");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(issues, is(empty()));
   }
@@ -73,7 +73,7 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("    procedure buttonOnClick(Sender: TNotifyEvent);");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(issues, is(empty()));
   }

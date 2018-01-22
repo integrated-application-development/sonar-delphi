@@ -135,6 +135,24 @@ public final class DelphiUtils {
   }
 
   /**
+   * Checking value range
+   *
+   * @param value Value to check
+   * @param min Minimum range
+   * @param max Maximum range
+   * @return Trims value to range, then returns it
+   */
+  public static int checkIntRange(int value, int min, int max) {
+    int newValue = value;
+    if (value < min) {
+      newValue = min;
+    } else if (value > max) {
+      newValue = max;
+    }
+    return newValue;
+  }
+
+  /**
    * Gets custom file filter, the file must ends with provided suffix
    * 
    * @param suffix File suffix

@@ -22,15 +22,19 @@
  */
 package org.sonar.plugins.delphi.surefire;
 
-import org.sonar.api.batch.Sensor;
-import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.sensor.Sensor;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.config.Settings;
-import org.sonar.api.resources.Project;
+import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
+import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
+import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.surefire.api.SurefireUtils;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Surefire sensor used to parse _TRANSFORMED_ DUnit report. You take a DUnit
@@ -54,20 +58,24 @@ public class SurefireSensor implements Sensor {
     this.delphiProjectHelper = delphiProjectHelper;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
-  public boolean shouldExecuteOnProject(Project project) {
-    return delphiProjectHelper.shouldExecuteOnProject();
+  public void describe(SensorDescriptor descriptor)
+  {
+    DelphiUtils.LOG.info("SurefireSensor sensor describe...");
+    descriptor.name("Delphi SurefireSensor");
+    descriptor.onlyOnLanguage(DelphiLanguage.KEY);
   }
 
   /**
    * {@inheritDoc}
    */
-
   @Override
-  public void analyse(Project project, SensorContext context) {
+  /**
+   * The actual sensor code.
+   */
+  public void execute(SensorContext context)
+  {
+    DelphiUtils.LOG.info("Delphi sensor execute...");
     String[] paths = settings.getStringArray(SurefireUtils.SUREFIRE_REPORTS_PATH_PROPERTY);
 
     if (paths == null || paths.length == 0) {
@@ -83,14 +91,14 @@ public class SurefireSensor implements Sensor {
         continue;
       }
 
-      collect(project, context, reportDirectory);
+      collect(context, reportDirectory);
     }
   }
 
-  protected void collect(Project project, SensorContext context, File reportsDir) {
+  protected void collect(SensorContext context, File reportsDir) {
     DelphiUtils.LOG.info("parsing {}", reportsDir);
     DelphiSureFireParser parser = new DelphiSureFireParser(delphiProjectHelper);
-    parser.collect(project, context, reportsDir);
+    parser.collect(context, reportsDir);
   }
 
   @Override

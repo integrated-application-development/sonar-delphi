@@ -122,7 +122,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
     builder.appendImpl("  end;");
     builder.appendImpl("end;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(sensor.getErrors(), empty());
     assertThat(issues, empty());
@@ -164,7 +164,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
     builder.appendImpl("  FData := aData;");
     builder.appendImpl("end;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(sensor.getErrors(), empty());
     assertThat(issues, empty());
@@ -179,7 +179,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
     builder.appendImpl("    procedure Dummy;");
     builder.appendImpl("  end;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(sensor.getErrors(), empty());
     assertThat(issues, empty());

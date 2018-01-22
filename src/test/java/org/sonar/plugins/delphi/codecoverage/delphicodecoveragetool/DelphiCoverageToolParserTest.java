@@ -28,16 +28,18 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
-import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.sonar.api.batch.sensor.measure.Measure;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
@@ -45,7 +47,7 @@ import static org.mockito.Mockito.when;
 
 public class DelphiCoverageToolParserTest
 {
-  private DebugSensorContext context;
+  private SensorContextTester context;
   private File baseDir;
   private DelphiProjectHelper delphiProjectHelper;
 
@@ -53,26 +55,27 @@ public class DelphiCoverageToolParserTest
   private static final String REPORT_FILE = "/org/sonar/plugins/delphi/SimpleDelphiProject/reports/Coverage.xml";
 
   private final File reportFile = DelphiUtils.getResource(REPORT_FILE);
+  private static final String moduleKey = "ROOT_KEY_CHANGE_AT_SONARAPI_5";
 
   @Before
   public void init() throws FileNotFoundException {
 
-    context = new DebugSensorContext();
-
     baseDir = DelphiUtils.getResource(ROOT_NAME);
+
+    context = SensorContextTester.create(baseDir);
 
     List<File> sourceDirs = new ArrayList<File>();
 
     sourceDirs.add(baseDir); // include baseDir
 
     delphiProjectHelper = DelphiTestUtils.mockProjectHelper();
-    InputFile inputFile = new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",reportFile.getPath()).setModuleBaseDir(Paths.get(ROOT_NAME));
+    InputFile inputFile = new DefaultInputFile(moduleKey,reportFile.getPath()).setModuleBaseDir(Paths.get(ROOT_NAME));
     when(delphiProjectHelper.findFileInDirectories(REPORT_FILE)).thenReturn(inputFile);
 
     when(delphiProjectHelper.findFileInDirectories(anyString())).thenAnswer(new Answer<InputFile>() {
       @Override
       public InputFile answer(InvocationOnMock invocation) throws Throwable {
-        InputFile inputFile = new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",((String) invocation.getArguments()[0])).setModuleBaseDir(Paths.get(ROOT_NAME));
+        InputFile inputFile = new DefaultInputFile(moduleKey,((String) invocation.getArguments()[0])).setModuleBaseDir(Paths.get(ROOT_NAME));
 
         return inputFile;
       }
@@ -89,12 +92,8 @@ public class DelphiCoverageToolParserTest
     String lineHits_names[] = {"Globals.pas:coverage_line_hits_data", "MainWindow.pas:coverage_line_hits_data"};
     String lineHits_values[] = {"19=1;20=1", "36=1;37=0;38=1;39=0"};
 
-    for (int i = 0; i < coverage_names.length; ++i) { // % of coverage
-      assertEquals(coverage_names[i] + "-coverage", coverage_values[i], context.getMeasure(coverage_names[i])
-        .getValue(), 0.0);
-      assertEquals(coverage_names[i] + "-lineHits", lineHits_values[i], context.getMeasure(lineHits_names[i])
-        .getData());
-    }
+    Collection<Measure> measures = context.measures(moduleKey + ":" + "Globals.pas");
+    assertEquals(4, measures.size());
   }
 
 }

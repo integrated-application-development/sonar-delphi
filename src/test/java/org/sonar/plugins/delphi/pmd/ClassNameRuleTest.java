@@ -33,7 +33,7 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("  TMyClass = class");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(issues, is(empty()));
   }
@@ -99,7 +99,7 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("      end;");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(toString(issues), issues, empty());
   }
@@ -111,7 +111,7 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("  EMyCustomException = class(Exception)");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(issues, is(empty()));
   }

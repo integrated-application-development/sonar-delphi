@@ -33,8 +33,8 @@ public class CoverageFileData {
 
   private static final double ONE_HUNDRED = 100.00;
 
-  private double totalLines = 0.0;
-  private double uncoveredLines = 0.0;
+  private int totalLines = 0;
+  private int uncoveredLines = 0;
   private InputFile resource;
   private PropertiesBuilder<String, Integer> lineHitsBuilder;
 
@@ -58,14 +58,14 @@ public class CoverageFileData {
   /**
    * @return the totalLines
    */
-  public double getTotalLines() {
+  public int getTotalLines() {
     return totalLines;
   }
 
   /**
    * @return the uncoveredLines
    */
-  public double getUncoveredLines() {
+  public int getUncoveredLines() {
     return uncoveredLines;
   }
 
@@ -86,14 +86,14 @@ public class CoverageFileData {
   /**
    * @param totalLines the totalLines to set
    */
-  public void setTotalLines(double totalLines) {
+  public void setTotalLines(int totalLines) {
     this.totalLines = totalLines;
   }
 
   /**
    * @param uncoveredLines the uncoveredLines to set
    */
-  public void setUncoveredLines(double uncoveredLines) {
+  public void setUncoveredLines(int uncoveredLines) {
     this.uncoveredLines = uncoveredLines;
   }
 }

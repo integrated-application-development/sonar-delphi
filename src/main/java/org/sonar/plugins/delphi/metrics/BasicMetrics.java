@@ -24,7 +24,7 @@ package org.sonar.plugins.delphi.metrics;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.plugins.delphi.core.DelphiRecognizer;
@@ -47,8 +47,15 @@ import java.util.Set;
  */
 public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
 
+  private final SensorContext context;
+
+  public BasicMetrics(SensorContext sensorContext) {
+    super();
+    context = sensorContext;
+  }
+
   @Override
-  public void analyse(InputFile resource, SensorContext sensorContext, List<ClassInterface> classes,
+  public void analyse(InputFile resource, List<ClassInterface> classes,
     List<FunctionInterface> functions,
     Set<UnitInterface> units) {
     clearMetrics();
@@ -56,12 +63,12 @@ public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
     try {
       reader = new StringReader(FileUtils.readFileToString(new File(resource.absolutePath())));
       DelphiSource source = new DelphiSource(reader, new DelphiRecognizer());
-      setMetric("LINES", source.getMeasure(Metric.LINES));
-      setMetric("NCLOC", source.getMeasure(Metric.LINES_OF_CODE));
-      setMetric("COMMENT_LINES", source.getMeasure(Metric.COMMENT_LINES));
-      setMetric("COMMENT_BLANK_LINES", source.getMeasure(Metric.COMMENT_BLANK_LINES));
-      setMetric("PUBLIC_DOC_API", source.getMeasure(Metric.PUBLIC_DOC_API));
-      setMetric("FILES", 1.0);
+      setIntMetric("LINES", source.getMeasure(Metric.LINES));
+      setIntMetric("NCLOC", source.getMeasure(Metric.LINES_OF_CODE));
+      setIntMetric("COMMENT_LINES", source.getMeasure(Metric.COMMENT_LINES));
+      setIntMetric("COMMENT_BLANK_LINES", source.getMeasure(Metric.COMMENT_BLANK_LINES));
+      setIntMetric("PUBLIC_DOC_API", source.getMeasure(Metric.PUBLIC_DOC_API));
+      setIntMetric("FILES", 1);
     } catch (Exception e) {
       DelphiUtils.LOG.error("BasicMetrics::analyse() -- Can not analyse the file " + resource.absolutePath(), e);
     } finally {
@@ -74,19 +81,19 @@ public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
    */
 
   @Override
-  public void save(InputFile resource, SensorContext sensorContext) {
-    sensorContext.saveMeasure(resource, CoreMetrics.LINES, getMetric("LINES"));
+  public void save(InputFile resource) {
+    context.<Integer>newMeasure().forMetric(CoreMetrics.LINES).on(resource).withValue(getIntMetric("LINES")).save();
     // Number of physical lines of code -
     // number of blank lines -
     // number of comment lines -
     // number of header file comments -
     // commented-out lines of code
-    sensorContext.saveMeasure(resource, CoreMetrics.NCLOC, getMetric("NCLOC"));
+    context.<Integer>newMeasure().forMetric(CoreMetrics.NCLOC).on(resource).withValue(getIntMetric("NCLOC")).save();
     // Number of javadoc, multi-comment and single-comment lines.
     // Empty comment lines like, header file comments (mainly used to define the license)
     // and commented-out lines of code are not included.
-    sensorContext.saveMeasure(resource, CoreMetrics.COMMENT_LINES, getMetric("COMMENT_LINES"));
-    sensorContext.saveMeasure(resource, CoreMetrics.FILES, getMetric("FILES"));
+    context.<Integer>newMeasure().forMetric(CoreMetrics.COMMENT_LINES).on(resource).withValue(getIntMetric("COMMENT_LINES")).save();
+    context.<Integer>newMeasure().forMetric(CoreMetrics.FILES).on(resource).withValue(getIntMetric("FILES")).save();
   }
 
   /**

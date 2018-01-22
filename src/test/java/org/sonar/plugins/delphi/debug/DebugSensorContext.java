@@ -22,12 +22,9 @@
  */
 package org.sonar.plugins.delphi.debug;
 
-import org.sonar.api.batch.AnalysisMode;
-import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputModule;
-import org.sonar.api.batch.fs.InputPath;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
 import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
@@ -36,12 +33,8 @@ import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.measure.NewMeasure;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 import org.sonar.api.config.Settings;
-import org.sonar.api.design.Dependency;
-import org.sonar.api.measures.Measure;
-import org.sonar.api.measures.MeasuresFilter;
-import org.sonar.api.measures.Metric;
-import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.Version;
+import org.sonar.api.batch.sensor.measure.NewMeasure;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -50,56 +43,32 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Debug class used in DelphiSensorTest. It proviedes some overriden functions,
+ * Debug class used in DelphiSensorTest. It provides some overridden functions,
  * in order to get additional information from sensor, not provided by
  * DelphiSensor.
  */
 @SuppressWarnings("rawtypes")
 public class DebugSensorContext implements SensorContext {
 
-  private Map<String, Double> data = new HashMap<String, Double>();
-  private Map<String, String> sdata = new HashMap<String, String>();
-  /**
-   * Gets the violation by its index
-   * 
-   * @return violation
-   */
+  private Map<String, Double> data = new HashMap();
+  private Map<String, String> sdata = new HashMap();
 
-  /**
-   * Gets violation count
-   * 
-   * @return Violation count
-   */
-
-  @Override
-  public <G extends Serializable> Measure<G> getMeasure(Metric<G> metric) {
-    return null;
-  }
-
-  public <G extends Serializable> Measure<G> getMeasure(String key) {
+  public <G extends Serializable> NewMeasure<G> getMeasure(String key) {
+    /*
     if (!data.containsKey(key)) {
       if (!sdata.containsKey(key)) {
         throw new IllegalStateException("No key (" + key + ") for sensor context.");
       }
-      Measure<G> m = new Measure<G>();
+      NewMeasure<G> m = new NewMeasure<G>();
       m.setData(sdata.get(key));
       return m;
     }
-    Measure<G> m = new Measure<G>();
+    NewMeasure<G> m = new NewMeasure<G>();
     m.setValue(data.get(key));
     m.setData(key);
-    return m;
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public <M> M getMeasures(MeasuresFilter<M> filter) {
+    return m;*/
     return null;
   }
-
   /**
    * Get measure keys
    * 
@@ -108,17 +77,17 @@ public class DebugSensorContext implements SensorContext {
   public Set<String> getMeasuresKeys() {
     return data.keySet();
   }
-
+/*
   @Override
   public Measure<?> saveMeasure(Resource resource, Metric metric, Double value) {
     data.put(resource.getName() + ":" + metric.getKey(), value);
     return null;
   }
-
+*/
   /**
    * {@inheritDoc}
    */
-
+/*
   @Override
   public Measure saveMeasure(Resource resource, Measure measure) {
     if (resource == null || measure == null) {
@@ -131,138 +100,8 @@ public class DebugSensorContext implements SensorContext {
     }
     return null;
   }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public Measure saveMeasure(Measure measure) {
-    return null;
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public Measure saveMeasure(Metric metric, Double value) {
-    return null;
-  }
-
-  @Override
-  public <G extends Serializable> Measure<G> getMeasure(Resource resource, Metric<G> metric) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public String saveResource(Resource resource) {
-    return null;
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public <M> M getMeasures(Resource resource, MeasuresFilter<M> filter) {
-    return null;
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public Dependency saveDependency(Dependency dependency) {
-    return null;
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public void saveSource(Resource resource, String source) {
-
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public boolean index(Resource resource) {
-    return false;
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public boolean index(Resource resource, Resource parentReference) {
-    return false;
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public boolean isExcluded(Resource reference) {
-    return false;
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public boolean isIndexed(Resource reference, boolean acceptExcluded) {
-    return false;
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public <R extends Resource> R getResource(R reference) {
-    return null;
-  }
-
-  /**
-   * Unused, not implemented
-   */
-  @Override
-  public Resource getResource(InputPath inputPath) {
-    return null;
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public Resource getParent(Resource reference) {
-    return null;
-  }
-
-  /**
-   * Unused, not implemented
-   */
-
-  @Override
-  public Collection<Resource> getChildren(Resource reference) {
-    return null;
-  }
-
+*/
+/*
   @Override
   public Measure saveMeasure(InputFile inputFile, Metric metric, Double value) {
     data.put(inputFile.file().getName() + ":" + metric.getKey(), value);
@@ -281,7 +120,7 @@ public class DebugSensorContext implements SensorContext {
     }
     return null;
   }
-
+*/
   @Override
   public Settings settings() {
     return null;
@@ -313,16 +152,6 @@ public class DebugSensorContext implements SensorContext {
     return null;
   }
 
-  /**
-   * Get analysis mode.
-   */
-
-  public AnalysisMode analysisMode() {
-    return null;
-  }
-
-
-
   @Override
   public <G extends Serializable> NewMeasure<G> newMeasure() {
     return null;
@@ -347,10 +176,6 @@ public class DebugSensorContext implements SensorContext {
   public NewSymbolTable newSymbolTable() {
     return null;
   }
-
-
-
-
 
   @Override
   public NewCoverage newCoverage() {

@@ -24,13 +24,13 @@ package org.sonar.plugins.delphi.core.helpers;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
-import org.sonar.api.BatchExtension;
+import org.sonar.api.batch.BatchSide;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.InputDir;
 import org.sonar.api.config.Settings;
-import org.sonar.api.resources.Directory;
-import org.sonar.api.resources.Project;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.project.DelphiProject;
@@ -47,7 +47,8 @@ import java.util.List;
 /**
  * Class that helps get the maven/ant configuration from .xml file
  */
-public class DelphiProjectHelper implements BatchExtension {
+@BatchSide
+public class DelphiProjectHelper  {
 
   public static final String DEFAULT_PACKAGE_NAME = "[default]";
 
@@ -239,15 +240,13 @@ public class DelphiProjectHelper implements BatchExtension {
     return fs.inputFile(fs.predicates().is(file));
   }
 
-  public Directory getDirectory(java.io.File dir, Project module) {
+  public InputDir getDirectory(java.io.File dir, SensorContext sensorContext) {
     System.out.println(("THIS IS DIR:" + dir.getPath()));
-    System.out.println(("THIS IS MODULE:" + module.toString()));
-    //findFileInDirectories("");
 
-    Directory directory = new Directory(dir.getPath());//Directory.fromIOFile(dir, module);
+    InputDir directory = sensorContext.fileSystem().inputDir(dir);
 
-    if (directory == null || directory.getKey() == null) {
-      return Directory.create(DEFAULT_PACKAGE_NAME);
+    if (directory == null) {
+      directory = sensorContext.fileSystem().inputDir(new File(""));
     }
 
     return directory;

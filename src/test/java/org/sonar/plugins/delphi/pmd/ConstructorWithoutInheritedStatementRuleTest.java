@@ -43,7 +43,7 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
     builder.appendImpl("  Writeln('do something');");
     builder.appendImpl("end;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(issues, is(empty()));
   }
@@ -85,7 +85,7 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
     builder.appendImpl("  FData := aData;");
     builder.appendImpl("end;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(issues, is(empty()));
   }

@@ -30,8 +30,8 @@ import java.util.Map;
  */
 public abstract class DefaultMetrics implements MetricsInterface {
 
-  protected Map<String, Double> metrics = new HashMap<String, Double>();
-
+  protected Map<String, Double> metrics = new HashMap<>();
+  protected Map<String, Integer> intMetrics = new HashMap<>();
   /**
    * {@inheritDoc}
    */
@@ -39,6 +39,18 @@ public abstract class DefaultMetrics implements MetricsInterface {
   @Override
   public String[] getMetricKeys() {
     return metrics.keySet().toArray(new String[metrics.keySet().size()]);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+
+  @Override
+  public Integer getIntMetric(String metric) {
+    if (!intMetrics.containsKey(metric)) {
+      throw new IllegalStateException("No metric (" + metric + ") for " + this);
+    }
+    return intMetrics.get(metric);
   }
 
   /**
@@ -60,8 +72,13 @@ public abstract class DefaultMetrics implements MetricsInterface {
     metrics.put(metric, value);
   }
 
+  public void setIntMetric(String metric, int value) {
+    intMetrics.put(metric, value);
+  }
+
   protected void clearMetrics() {
     metrics.clear();
+    intMetrics.clear();
   }
 
   @Override

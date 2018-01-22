@@ -25,32 +25,29 @@ package org.sonar.plugins.delphi.pmd;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.component.ResourcePerspectives;
-import org.sonar.api.issue.Issuable;
-import org.sonar.api.issue.Issue;
+import org.sonar.api.batch.fs.internal.FileMetadata;
+import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.DelphiTestUtils;
+import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
-import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileExporter;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -60,19 +57,25 @@ public class DelphiPmdSensorTest {
   private static final String ROOT_NAME = "/org/sonar/plugins/delphi/PMDTest";
   private static final String TEST_FILE = "/org/sonar/plugins/delphi/PMDTest/pmd.pas";
 
-  private Project project;
   private DelphiPmdSensor sensor;
-  private ResourcePerspectives perspectives;
+  private SensorContextTester sensorContext;
   private DelphiProjectHelper delphiProjectHelper;
-  private Issuable issuable;
-  private List<Issue> issues = new LinkedList<Issue>();
   private DelphiPmdProfileExporter profileExporter;
   private RulesProfile rulesProfile;
+  private File baseDir;
+  private InputFile inputFile;
+
+  private String getRelativePath(File prefix, String fullPath)
+  {
+    String result = fullPath.substring(prefix.getAbsolutePath().length() + 1);
+    return result;
+  }
 
   @Before
   public void init() {
-    project = mock(Project.class);
-    perspectives = mock(ResourcePerspectives.class);
+    baseDir = DelphiUtils.getResource(ROOT_NAME);
+    sensorContext = SensorContextTester.create(baseDir);
+
     delphiProjectHelper = DelphiTestUtils.mockProjectHelper();
 
     // Don't pollute current working directory
@@ -80,34 +83,21 @@ public class DelphiPmdSensorTest {
 
     File srcFile = DelphiUtils.getResource(TEST_FILE);
 
-    InputFile inputFile = new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",srcFile.getPath());
+    inputFile = new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",getRelativePath(baseDir,srcFile.getPath()))
+        .setModuleBaseDir(baseDir.toPath())
+        .setLanguage(DelphiLanguage.KEY)
+        .setType(InputFile.Type.MAIN)
+        .initMetadata(new FileMetadata().readMetadata(srcFile, Charset.defaultCharset()));
 
     DelphiProject delphiProject = new DelphiProject("Default Project");
-    //delphiProject.setSourceFiles(Arrays.asList(inputFile));
-
-    issuable = mock(Issuable.class);
+    delphiProject.setSourceFiles(Arrays.asList(inputFile));
 
     when(delphiProjectHelper.getWorkgroupProjects()).thenReturn(Arrays.asList(delphiProject));
+
     when(delphiProjectHelper.getFile(anyString())).thenAnswer(new Answer<InputFile>() {
       @Override
       public InputFile answer(InvocationOnMock invocation) throws Throwable {
-        InputFile inputFile = new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",(new File((String) invocation
-                .getArguments()[0])).getPath());
-
-        when(perspectives.as(Issuable.class, inputFile)).thenReturn(issuable);
-
-        when(issuable.newIssueBuilder()).thenReturn(new StubIssueBuilder());
-
         return inputFile;
-      }
-    });
-
-    when(issuable.addIssue(Matchers.any(Issue.class))).then(new Answer<Boolean>() {
-      @Override
-      public Boolean answer(InvocationOnMock invocation) throws Throwable {
-        Issue issue = (Issue) invocation.getArguments()[0];
-        issues.add(issue);
-        return Boolean.TRUE;
       }
     });
 
@@ -125,20 +115,13 @@ public class DelphiPmdSensorTest {
 
     when(profileExporter.exportProfileToString(rulesProfile)).thenReturn(rulesXmlContent);
 
-    sensor = new DelphiPmdSensor(delphiProjectHelper, perspectives, rulesProfile, profileExporter);
-  }
-
-  @Test
-  public void shouldExecuteOnProjectTest() {
-    assertTrue(sensor.shouldExecuteOnProject(project));
+    sensor = new DelphiPmdSensor(delphiProjectHelper, sensorContext, rulesProfile, profileExporter);
   }
 
   @Test
   public void analyseTest() {
     // TODO Create one test per violation
-
-    DebugSensorContext debugContext = new DebugSensorContext();
-    sensor.analyse(project, debugContext);
+    sensor.execute(sensorContext);
 
     RuleData ruleData[] = // all expected rule violations and their lines
     {new RuleData("ClassNameRule", 7),
@@ -188,15 +171,16 @@ public class DelphiPmdSensorTest {
     // violations order
     Arrays.sort(ruleData, RuleData.getComparator());
 
-    //assertThat("number of issues", issues, hasSize(ruleData.length));
+    org.sonar.api.batch.sensor.issue.Issue[] issues = sensorContext.allIssues().toArray(new org.sonar.api.batch.sensor.issue.Issue[0]);
+    assertEquals("number of issues", ruleData.length, issues.length);
 
-    for (int i = 0; i < issues.size(); ++i) {
-      Issue issue = issues.get(i);
+    for (int i = 0; i < issues.length; ++i) {
+      Issue issue = issues[i];
 
-      // System.out.println(issue.ruleKey().rule() + ":" + issue.line());
+      System.out.println(issue.ruleKey().rule() + ":" + issue.primaryLocation().textRange().start().line());
 
       assertThat(ruleData[i].toString(), issue.ruleKey().rule(), is(ruleData[i].getName()));
-      assertThat(ruleData[i].toString(), issue.line(), is(ruleData[i].getLine()));
+      assertThat(ruleData[i].toString(), issue.primaryLocation().textRange().start().line(), is(ruleData[i].getLine()));
     }
   }
 }

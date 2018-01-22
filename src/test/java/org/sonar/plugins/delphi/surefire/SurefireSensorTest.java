@@ -29,7 +29,6 @@ import org.mockito.stubbing.Answer;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.config.Settings;
-import org.sonar.api.resources.Project;
 import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
@@ -52,7 +51,6 @@ public class SurefireSensorTest {
   private static final String PROJECT_TEST_DIR = "/org/sonar/plugins/delphi/UnitTest/tests";
   private static final String SUREFIRE_REPORT_DIR = "./reports";
 
-  private Project project;
   private Settings settings;
   private DelphiProjectHelper delphiProjectHelper;
 
@@ -62,7 +60,6 @@ public class SurefireSensorTest {
     List<File> testDirs = new ArrayList<File>();
     testDirs.add(DelphiUtils.getResource(PROJECT_TEST_DIR));
 
-    project = mock(Project.class);
     delphiProjectHelper = DelphiTestUtils.mockProjectHelper();
 
     when(delphiProjectHelper.baseDir()).thenReturn(new File(getClass().getResource(PROJECT_DIR).getFile()));
@@ -78,26 +75,20 @@ public class SurefireSensorTest {
   }
 
   @Test
-  public void shouldExecuteOnProjectTest() {
-    assertTrue(new SurefireSensor(settings, delphiProjectHelper)
-      .shouldExecuteOnProject(project));
-  }
-
-  @Test
-  public void analyzeTest() {
+  public void executeTest() {
     settings.setProperty(SurefireUtils.SUREFIRE_REPORTS_PATH_PROPERTY, SUREFIRE_REPORT_DIR);
     DebugSensorContext context = new DebugSensorContext();
     SurefireSensor sensor = new SurefireSensor(settings, delphiProjectHelper);
-    //sensor.analyse(project, context);
+    sensor.execute(context);
 
     //assertEquals(18, context.getMeasuresKeys().size());
   }
 
   @Test
-  public void analyzeTestUsingDefaultSurefireReportsPath() {
+  public void executeTestUsingDefaultSurefireReportsPath() {
     DebugSensorContext context = new DebugSensorContext();
     SurefireSensor sensor = new SurefireSensor(settings, delphiProjectHelper);
-    //sensor.analyse(project, context);
+    sensor.execute(context);
 
     //assertEquals(24, context.getMeasuresKeys().size());
   }

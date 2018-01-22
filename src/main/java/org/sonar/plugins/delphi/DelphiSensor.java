@@ -22,20 +22,20 @@
  */
 package org.sonar.plugins.delphi;
 
-import org.sonar.api.batch.Sensor;
-import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.sensor.Sensor;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.ActiveRules;
-import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.resources.Directory;
-import org.sonar.api.resources.Project;
+import org.sonar.api.batch.fs.InputDir;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.DelphiASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.sanitizer.DelphiSourceSanitizer;
+import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
@@ -59,8 +59,8 @@ import java.util.*;
 public class DelphiSensor implements Sensor {
 
   private int scannedFiles = 0;
-  private Set<Directory> packageList = new HashSet<>();
-  private Map<Directory, Integer> filesCount = new HashMap<>();
+  private Set<InputDir> packageList = new HashSet<>();
+  private Map<InputDir, Integer> filesCount = new HashMap<>();
   private List<InputFile> resourceList = new ArrayList<InputFile>();
   private Map<InputFile, List<ClassInterface>> fileClasses = new HashMap<InputFile, List<ClassInterface>>();
   private Map<InputFile, List<FunctionInterface>> fileFunctions = new HashMap<InputFile, List<FunctionInterface>>();
@@ -71,40 +71,41 @@ public class DelphiSensor implements Sensor {
   private final ComplexityMetrics complexityMetrics;
   private final DeadCodeMetrics deadCodeMetrics;
 
-  public DelphiSensor(DelphiProjectHelper delphiProjectHelper, ActiveRules activeRules,
-    ResourcePerspectives perspectives) {
+  public DelphiSensor(DelphiProjectHelper delphiProjectHelper, ActiveRules activeRules, SensorContext sensorContext) {
+    DelphiUtils.LOG.info("Delphi sensor DelphiSensor...");
     this.delphiProjectHelper = delphiProjectHelper;
 
-    basicMetrics = new BasicMetrics();
-    complexityMetrics = new ComplexityMetrics(activeRules, perspectives);
-    deadCodeMetrics = new DeadCodeMetrics(activeRules, perspectives);
+    basicMetrics = new BasicMetrics(sensorContext);
+    complexityMetrics = new ComplexityMetrics(activeRules, sensorContext);
+    deadCodeMetrics = new DeadCodeMetrics(activeRules, sensorContext);
   }
 
   /**
-   * Determines if sensor should execute on project
-   * 
-   * @return true if we are analysing DelphiLanguage project, false otherwise
+   * Populate {@link SensorDescriptor} of this sensor.
    */
-
   @Override
-  public boolean shouldExecuteOnProject(Project project) {
-    return delphiProjectHelper.shouldExecuteOnProject();
+  public void describe(SensorDescriptor descriptor)
+  {
+    DelphiUtils.LOG.info("Delphi sensor describe...");
+    descriptor.name("Combined LCOV and LOC sensor");
+    descriptor.onlyOnLanguage(DelphiLanguage.KEY);
   }
 
-  /**
-   * Analyses whole project with all metrics
-   */
-
   @Override
-  public void analyse(Project project, SensorContext sensorContext) {
+  /**
+   * The actual sensor code.
+   */
+  public void execute(SensorContext context)
+  {
+    DelphiUtils.LOG.info("Delphi sensor execute...");
     List<DelphiProject> projects = delphiProjectHelper.getWorkgroupProjects();
     for (DelphiProject delphiProject : projects)
     {
       CodeAnalysisCacheResults.resetCache();
-      parseFiles(delphiProject, project);
-      parsePackages(sensorContext);
+      parseFiles(delphiProject, context);
+      parsePackages(context);
 
-      processFiles(sensorContext);
+      processFiles(context);
     }
   }
 
@@ -121,15 +122,15 @@ public class DelphiSensor implements Sensor {
     for (InputFile resource : resourceList) {
       DelphiUtils.LOG.debug(">> PROCESSING " + resource.file().getPath());
 
-      processMetric(basicMetrics, sensorContext, resource);
-      processMetric(complexityMetrics, sensorContext, resource);
-      processMetric(deadCodeMetrics, sensorContext, resource);
+      processMetric(basicMetrics, resource);
+      processMetric(complexityMetrics, resource);
+      processMetric(deadCodeMetrics, resource);
 
       if (basicMetrics.hasMetric("PUBLIC_DOC_API") && complexityMetrics.hasMetric("PUBLIC_API")) {
-        double undocumentedApi = DelphiUtils.checkRange(complexityMetrics.getMetric("PUBLIC_API") - basicMetrics.getMetric("PUBLIC_DOC_API"), 0.0, Double.MAX_VALUE);
+        int undocumentedApi = DelphiUtils.checkIntRange(complexityMetrics.getIntMetric("PUBLIC_API") - basicMetrics.getIntMetric("PUBLIC_DOC_API"), 0, Integer.MAX_VALUE);
 
         // Number of public API without a documentation block
-        sensorContext.saveMeasure(resource, CoreMetrics.PUBLIC_UNDOCUMENTED_API, undocumentedApi);
+        sensorContext.<Integer>newMeasure().forMetric(CoreMetrics.PUBLIC_UNDOCUMENTED_API).on(resource).withValue(undocumentedApi).save();
       }
 
       progressReporter.progress();
@@ -138,12 +139,12 @@ public class DelphiSensor implements Sensor {
     DelphiUtils.LOG.info("Done");
   }
 
-  public void processMetric(MetricsInterface metric, SensorContext sensorContext, InputFile resource) {
+  public void processMetric(MetricsInterface metric, InputFile resource) {
     if (metric.executeOnResource(resource)) {
-      metric.analyse(resource, sensorContext, fileClasses.get(resource), fileFunctions.get(resource),
+      metric.analyse(resource, fileClasses.get(resource), fileFunctions.get(resource),
         units);
       InputFile inputFile = delphiProjectHelper.getFile(resource.file().getAbsolutePath());
-      metric.save(inputFile, sensorContext);
+      metric.save(inputFile);
     }
   }
 
@@ -153,9 +154,9 @@ public class DelphiSensor implements Sensor {
    * @param sensorContext Sensor context (provided by Sonar)
    */
   private void parsePackages(SensorContext sensorContext) {
-    for (Directory directory : packageList) {
-      sensorContext.saveMeasure(directory, CoreMetrics.DIRECTORIES, 1.0);
-      sensorContext.saveMeasure(directory, CoreMetrics.FILES, (double) filesCount.get(directory));
+    for (InputDir directory : packageList) {
+      sensorContext.<Integer>newMeasure().forMetric(CoreMetrics.DIRECTORIES).on(directory).withValue(1).save();
+      sensorContext.<Integer>newMeasure().forMetric(CoreMetrics.FILES).on(directory).withValue(filesCount.get(directory)).save();
     }
   }
 
@@ -170,9 +171,9 @@ public class DelphiSensor implements Sensor {
    * Parse files with ANTLR
    * 
    * @param delphiProject DelphiLanguage project to parse
-   * @param project Project
+   * @param sensorContext Sensor context
    */
-  protected void parseFiles(DelphiProject delphiProject, Project project) {
+  protected void parseFiles(DelphiProject delphiProject, SensorContext sensorContext) {
     List<File> includedDirs = delphiProject.getIncludeDirectories();
     List<File> excludedDirs = delphiProjectHelper.getExcludedSources();
     List<File> sourceFiles = delphiProject.getSourceFiles();
@@ -192,7 +193,7 @@ public class DelphiSensor implements Sensor {
 
     ASTAnalyzer analyser = new DelphiASTAnalyzer(delphiProjectHelper);
     for (File delphiFile : sourceFiles) {
-      final CodeAnalysisResults results = parseSourceFile(delphiFile, excludedDirs, analyser, project);
+      final CodeAnalysisResults results = parseSourceFile(delphiFile, excludedDirs, analyser, sensorContext);
       if (results != null) {
         units.addAll(results.getCachedUnitsAsList());
       }
@@ -203,7 +204,7 @@ public class DelphiSensor implements Sensor {
   }
 
   private CodeAnalysisResults parseSourceFile(File sourceFile, List<File> excludedDirs, ASTAnalyzer analyzer,
-    Project project) {
+    SensorContext sensorContext) {
     if (delphiProjectHelper.isExcluded(sourceFile, excludedDirs)) {
       return null;
     }
@@ -212,7 +213,7 @@ public class DelphiSensor implements Sensor {
 
     InputFile resource = delphiProjectHelper.getFile(sourceFile);
 
-    Directory directory = delphiProjectHelper.getDirectory(sourceFile.getParentFile(), project);
+    InputDir directory = delphiProjectHelper.getDirectory(sourceFile.getParentFile(), sensorContext);
 
     if (directory == null) {
       throw new IllegalArgumentException("Directory: " + sourceFile.getParentFile() + " not found.");
@@ -239,7 +240,6 @@ public class DelphiSensor implements Sensor {
     }
 
     return results;
-
   }
 
   /**

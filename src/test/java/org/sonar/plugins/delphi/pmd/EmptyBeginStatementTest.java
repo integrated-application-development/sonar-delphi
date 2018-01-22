@@ -60,7 +60,7 @@ public class EmptyBeginStatementTest extends BasePmdRuleTest {
     builder.appendImpl("  Writeln('OK');");
     builder.appendImpl("end;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(issues, is(empty()));
   }

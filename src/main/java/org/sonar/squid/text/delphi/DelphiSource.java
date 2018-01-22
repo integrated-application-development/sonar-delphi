@@ -69,7 +69,7 @@ public class DelphiSource {
    * @param metric Metric to get
    * @return Sum of specified metric on all lines in file
    */
-  public double getMeasure(Metric metric) {
+  public int getMeasure(Metric metric) {
     return getMeasure(metric, 1, lines.size());
   }
 

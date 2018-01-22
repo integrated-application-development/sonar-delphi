@@ -24,9 +24,12 @@ package org.sonar.plugins.delphi;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.Plugin;
+import org.sonar.api.utils.Version;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.is;
 
 /**
  * @author Evgeny Mandrikov
@@ -42,7 +45,9 @@ public class DelphiPluginTest {
 
   @Test
   public void testExtensions() {
-    assertThat(plugin.getExtensions().size(), greaterThan(0));
+    Plugin.Context context = new Plugin.Context(Version.create(1, 0));
+    plugin.define(context);
+    assertThat(context.getExtensions().size(), is(11));
   }
 
 }

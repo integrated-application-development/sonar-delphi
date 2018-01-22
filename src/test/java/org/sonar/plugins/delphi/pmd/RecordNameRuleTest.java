@@ -33,7 +33,7 @@ public class RecordNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("  TMyRecord = record");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(issues, is(empty()));
   }

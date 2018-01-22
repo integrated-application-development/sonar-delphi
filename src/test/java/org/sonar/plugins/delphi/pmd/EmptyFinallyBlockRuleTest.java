@@ -39,7 +39,7 @@ public class EmptyFinallyBlockRuleTest extends BasePmdRuleTest {
     builder.appendImpl("  end;");
     builder.appendImpl("end;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(issues, is(empty()));
   }

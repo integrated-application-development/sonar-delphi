@@ -25,10 +25,9 @@ package org.sonar.plugins.delphi.core.helpers;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputDir;
 import org.sonar.api.config.Settings;
-import org.sonar.api.resources.Directory;
-import org.sonar.api.resources.Project;
-
+import org.sonar.api.batch.sensor.SensorContext;
 import java.io.File;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -39,7 +38,7 @@ import static org.mockito.Mockito.mock;
 public class DelphiProjectHelperTest {
 
   private DelphiProjectHelper delphiProjectHelper;
-  private Project project;
+  private SensorContext sensorContext;
   private File currentDir;
   private File baseDir;
 
@@ -50,36 +49,35 @@ public class DelphiProjectHelperTest {
 
     FileSystem fs = mock(FileSystem.class);
     Settings settings = mock(Settings.class);
-    project = mock(Project.class);
-
+    sensorContext = mock(SensorContext.class);
 
     delphiProjectHelper = new DelphiProjectHelper(settings, fs);
   }
 
   @Test
   public void getDirectory() {
-    System.out.println(("THIS IS PROJ:" + project.toString()));
+//    System.out.println(("THIS IS PROJ:" + project.toString()));
     System.out.println(("THIS IS CURDIR:" + currentDir.toString()));
     System.out.println(("THIS IS BASEDIR:" + baseDir.toString()));
 
-    Directory directory = delphiProjectHelper.getDirectory(currentDir, project);
+    InputDir directory = delphiProjectHelper.getDirectory(currentDir, sensorContext);
     assertThat(directory, notNullValue());
-    assertThat(directory.getKey(), is("[default]"));
+    assertThat(directory.key(), is("[default]"));
   }
 
   @Test
   public void getDirectoryEqualsToBaseDir() {
-    Directory directory = delphiProjectHelper.getDirectory(baseDir, project);
+    InputDir directory = delphiProjectHelper.getDirectory(baseDir, sensorContext);
     assertThat(directory, notNullValue());
     //changed this to macht sonar api 5.0
-    assertThat(directory.getKey(), is("[default]"));
+    assertThat(directory.key(), is("[default]"));
   }
 
   @Test
   public void getInvalidRelativeDirectoryReturnsDefaultPackageName() {
     File rootDirectory = new File("/");
-    Directory directory = delphiProjectHelper.getDirectory(rootDirectory, project);
+    InputDir directory = delphiProjectHelper.getDirectory(rootDirectory, sensorContext);
     assertThat(directory, notNullValue());
-    assertThat(directory.getKey(), is(DelphiProjectHelper.DEFAULT_PACKAGE_NAME));
+    assertThat(directory.key(), is(DelphiProjectHelper.DEFAULT_PACKAGE_NAME));
   }
 }

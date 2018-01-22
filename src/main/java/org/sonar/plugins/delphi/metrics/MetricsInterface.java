@@ -22,7 +22,6 @@
  */
 package org.sonar.plugins.delphi.metrics;
 
-import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
@@ -40,12 +39,11 @@ public interface MetricsInterface {
    * Analyse given DelphiLanguage source file
    * 
    * @param resource DelphiLanguage source file
-   * @param sensorContext Given by Sonar
    * @param classes Classes in source file
    * @param functions Functions in source file
    * @param units Units in project
    */
-  void analyse(InputFile resource, SensorContext sensorContext, List<ClassInterface> classes,
+  void analyse(InputFile resource, List<ClassInterface> classes,
     List<FunctionInterface> functions,
     Set<UnitInterface> units);
 
@@ -53,13 +51,22 @@ public interface MetricsInterface {
    * Saves analysis result from sensorContext and associates it with resource
    * 
    * @param inputFile Resource to associate analysis results with
-   * @param sensorContext Sensor context
    */
-  void save(InputFile inputFile, SensorContext sensorContext);
+  void save(InputFile inputFile);
 
   /**
    * Gets custom metric
    * 
+   * @param metric Metric name
+   * @throws IllegalStateException if the metric was not set before while
+   *             analysing
+   * @return Integer Metric value
+   */
+  Integer getIntMetric(String metric);
+
+  /**
+   * Gets custom metric
+   *
    * @param metric Metric name
    * @throws IllegalStateException if the metric was not set before while
    *             analysing
@@ -68,7 +75,7 @@ public interface MetricsInterface {
   double getMetric(String metric);
 
   /**
-   * Gets the metric keys, for you to know what metrics are avaible
+   * Gets the metric keys, for you to know what metrics are available
    * 
    * @return Metrics keys
    */

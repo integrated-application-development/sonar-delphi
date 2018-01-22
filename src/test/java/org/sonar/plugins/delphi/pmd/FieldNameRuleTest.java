@@ -37,7 +37,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("   FBar: String;");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(issues, is(empty()));
   }

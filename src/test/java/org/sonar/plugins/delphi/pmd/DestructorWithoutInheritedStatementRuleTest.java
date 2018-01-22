@@ -43,7 +43,7 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
     builder.appendImpl("  Writeln('do something');");
     builder.appendImpl("end;");
 
-    analyse(builder);
+    execute(builder);
 
     assertThat(issues, is(empty()));
   }
