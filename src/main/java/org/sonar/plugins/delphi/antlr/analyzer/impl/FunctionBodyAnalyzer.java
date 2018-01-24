@@ -53,7 +53,7 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
       throw new IllegalArgumentException("FunctionBodyAnalyzer ctor 'results' parameter cannot be null.");
     }
     this.results = results;
-    this.statementverifier = new StatementVerifier(delphiProjectHelper);
+    this.statementverifier = new StatementVerifier();
   }
 
   @Override

@@ -28,7 +28,6 @@ import org.sonar.api.Property;
 import org.sonar.plugins.delphi.colorizer.DelphiColorizerFormat;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
-import org.sonar.plugins.delphi.cpd.DelphiCpdMapping;
 import org.sonar.plugins.delphi.pmd.DelphiPmdSensor;
 import org.sonar.plugins.delphi.pmd.profile.DefaultDelphiProfile;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileExporter;
@@ -104,7 +103,6 @@ public class DelphiPlugin implements Plugin {
     list.add(DelphiSensor.class);
     // Core
     list.add(DelphiLanguage.class);
-    list.add(DelphiCpdMapping.class);
     // Core helpers
     list.add(DelphiProjectHelper.class);
     // Colorizer

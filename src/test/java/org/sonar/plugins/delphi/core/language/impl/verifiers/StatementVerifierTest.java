@@ -58,8 +58,8 @@ public class StatementVerifierTest {
   public void setup() throws IOException, RecognitionException {
     File astFile = DelphiUtils.getResource(FILE_NAME);
     ast = new DelphiAST(astFile);
-    codeTree = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
-    verifier = new StatementVerifier(DelphiTestUtils.mockProjectHelper());
+    codeTree = new CodeTree(new CodeNode(ast), new CodeNode<Tree>(ast.getChild(0)));
+    verifier = new StatementVerifier();
   }
 
   @Test

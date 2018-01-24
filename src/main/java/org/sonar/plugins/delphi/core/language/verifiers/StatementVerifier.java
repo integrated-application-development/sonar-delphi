@@ -22,15 +22,17 @@
  */
 package org.sonar.plugins.delphi.core.language.verifiers;
 
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.core.language.StatementInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiStatement;
-import org.sonar.plugins.delphi.cpd.DelphiCpdTokenizer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -48,11 +50,8 @@ public class StatementVerifier {
   private boolean isComplex = false;
   private String lastStatementText = null;
   private Stack<Integer> statementIndex = new Stack<Integer>();
-  private final DelphiProjectHelper delphiProjectHelper;
 
-  public StatementVerifier(DelphiProjectHelper delphiProjectHelper) {
-    this.delphiProjectHelper = delphiProjectHelper;
-  }
+  public StatementVerifier() { }
 
   /**
    * Checks for statements
@@ -75,7 +74,7 @@ public class StatementVerifier {
    */
   public StatementInterface createStatement() {
     StatementInterface statement = new DelphiStatement(lastStatementText, checkedNode.getLine(),
-      checkedNode.getCharPositionInLine(), delphiProjectHelper);
+      checkedNode.getCharPositionInLine());
     statement.setComplexity(isComplex);
     return statement;
   }
@@ -108,6 +107,28 @@ public class StatementVerifier {
       }
     }
     return false;
+  }
+
+  /**
+   * Create tokens from text.
+   *
+   * @param source The source code to parse for tokens
+   * @return List of found tokens
+   */
+  public final List<Token> tokenize(String[] source) {
+    List<Token> tokens = new ArrayList();
+
+    for (String string : source) {
+      DelphiLexer lexer = new DelphiLexer(new ANTLRStringStream(string));
+      Token token = lexer.nextToken();
+      token.setText(token.getText().toLowerCase());
+      while (token.getType() != Token.EOF) {
+        tokens.add(token);
+        token = lexer.nextToken();
+      }
+    }
+    tokens.add(new CommonToken(Token.EOF_TOKEN));
+    return tokens;
   }
 
   private boolean isComplexStatementNode(Tree node) {
@@ -151,7 +172,7 @@ public class StatementVerifier {
     // replace '..' with ' .. '
     String fixedSourceCode = wholeLine.toString().replaceAll("\\.\\.", " .. ");
 
-    List<Token> tokens = new DelphiCpdTokenizer(delphiProjectHelper).tokenize(new String[] {fixedSourceCode});
+    List<Token> tokens = tokenize(new String[] {fixedSourceCode});
     if (tokens.size() < MIN_TOKENS_FOR_COMPLEX_STMT) {
       // at least 4 tokens: id, :=, id, ;
       return false;

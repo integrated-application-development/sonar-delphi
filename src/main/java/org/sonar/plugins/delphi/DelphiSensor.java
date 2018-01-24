@@ -22,13 +22,18 @@
  */
 package org.sonar.plugins.delphi;
 
+import org.antlr.runtime.Token;
+import org.antlr.runtime.CommonToken;
+import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.ActiveRules;
+import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.batch.fs.InputDir;
+import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
@@ -49,7 +54,10 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.ProgressReporter;
 import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
 
+import javax.xml.soap.Text;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -65,6 +73,7 @@ public class DelphiSensor implements Sensor {
   private Map<InputFile, List<ClassInterface>> fileClasses = new HashMap<InputFile, List<ClassInterface>>();
   private Map<InputFile, List<FunctionInterface>> fileFunctions = new HashMap<InputFile, List<FunctionInterface>>();
   private Set<UnitInterface> units = new HashSet<>();
+  private final List<File> excluded;
 
   private final DelphiProjectHelper delphiProjectHelper;
   private final BasicMetrics basicMetrics;
@@ -78,6 +87,7 @@ public class DelphiSensor implements Sensor {
     basicMetrics = new BasicMetrics(sensorContext);
     complexityMetrics = new ComplexityMetrics(activeRules, sensorContext);
     deadCodeMetrics = new DeadCodeMetrics(activeRules, sensorContext);
+    this.excluded = delphiProjectHelper.getExcludedSources();
   }
 
   /**
@@ -109,6 +119,41 @@ public class DelphiSensor implements Sensor {
     }
   }
 
+  private boolean canTokenize(String fileName) {
+    Set<String> includedFiles = DelphiSourceSanitizer.getIncludedFiles();
+    if (includedFiles.contains(fileName)) {
+      return false;
+    }
+    return !delphiProjectHelper.isExcluded(fileName, excluded);
+  }
+
+  private void doTokenize(SensorContext context, InputFile inputFile) {
+    try {
+      String fileName = inputFile.absolutePath();
+      DelphiLexer lexer = new DelphiLexer(new DelphiSourceSanitizer(fileName));
+      Token prevToken = null;
+      Token token = lexer.nextToken();
+      NewCpdTokens cpdTokens = context.newCpdTokens().onFile(inputFile);
+      while (token.getType() != Token.EOF) {
+        if (prevToken != null) {
+          TextRange endLineRange = inputFile.selectLine(token.getLine());
+          int endPosition = Math.min(endLineRange.end().lineOffset(), token.getCharPositionInLine());
+          TextRange startLineRange = inputFile.selectLine(prevToken.getLine());
+          int startPosition = Math.min(startLineRange.end().lineOffset(), prevToken.getCharPositionInLine());
+          cpdTokens.addToken(prevToken.getLine(), startPosition, token.getLine(), endPosition,
+              prevToken.getText());
+        }
+        prevToken = token;
+        token = lexer.nextToken();
+      }
+      cpdTokens.save();
+    } catch (FileNotFoundException ex) {
+      DelphiUtils.LOG.error("Cpd could not find : " + inputFile.absolutePath(), ex);
+    } catch (IOException ex) {
+      DelphiUtils.LOG.error("Cpd IO Exception on " + inputFile.absolutePath(), ex);
+    }
+  }
+
   /**
    * Calculate metrics for project files
    *
@@ -133,6 +178,10 @@ public class DelphiSensor implements Sensor {
         sensorContext.<Integer>newMeasure().forMetric(CoreMetrics.PUBLIC_UNDOCUMENTED_API).on(resource).withValue(undocumentedApi).save();
       }
 
+      String fileName = resource.file().getName();
+      if (canTokenize(fileName)) {
+        doTokenize(sensorContext, resource);
+      }
       progressReporter.progress();
     }
 

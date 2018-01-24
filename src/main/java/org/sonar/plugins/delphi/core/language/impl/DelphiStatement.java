@@ -24,11 +24,11 @@ package org.sonar.plugins.delphi.core.language.impl;
 
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.core.language.ClassFieldInterface;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.StatementInterface;
-import org.sonar.plugins.delphi.cpd.DelphiCpdTokenizer;
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.CommonToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,6 @@ public class DelphiStatement implements StatementInterface {
   private int column = -1;
   private String text = null;
   private boolean complex = false;
-  private DelphiProjectHelper delphiProjectHelper;
 
   /**
    * Ctor
@@ -52,10 +51,8 @@ public class DelphiStatement implements StatementInterface {
    * @param text Statement text
    * @param lineNumber Statement line number
    * @param columnNumber Statement column number
-   * @param delphiProjectHelper delphiProjectHelper
    */
-  public DelphiStatement(String text, int lineNumber, int columnNumber, DelphiProjectHelper delphiProjectHelper) {
-    this.delphiProjectHelper = delphiProjectHelper;
+  public DelphiStatement(String text, int lineNumber, int columnNumber) {
     line = lineNumber;
     column = columnNumber;
     setText(text);
@@ -119,6 +116,28 @@ public class DelphiStatement implements StatementInterface {
    * {@inheritDoc}
    */
 
+  /**
+   * Create tokens from text.
+   *
+   * @param source The source code to parse for tokens
+   * @return List of found tokens
+   */
+  public final List<Token> tokenize(String[] source) {
+    List<Token> tokens = new ArrayList();
+
+    for (String string : source) {
+      DelphiLexer lexer = new DelphiLexer(new ANTLRStringStream(string));
+      Token token = lexer.nextToken();
+      token.setText(token.getText().toLowerCase());
+      while (token.getType() != Token.EOF) {
+        tokens.add(token);
+        token = lexer.nextToken();
+      }
+    }
+    //has been changed to add compatibility for sonarqube 5.2
+    tokens.add(new CommonToken(Token.EOF_TOKEN));
+    return tokens;
+  }
   @Override
   public ClassFieldInterface[] getFields(ClassInterface fromClass) {
     if (fromClass == null) {
@@ -127,7 +146,7 @@ public class DelphiStatement implements StatementInterface {
     ClassFieldInterface[] fields = fromClass.getFields();
     List<ClassFieldInterface> result = new ArrayList<ClassFieldInterface>();
 
-    List<Token> tokens = new DelphiCpdTokenizer(delphiProjectHelper).tokenize(new String[] {text});
+    List<Token> tokens = tokenize(new String[] {text});
 
     for (Token token : tokens) {
       if (token.getType() == DelphiLexer.TkIdentifier) {
