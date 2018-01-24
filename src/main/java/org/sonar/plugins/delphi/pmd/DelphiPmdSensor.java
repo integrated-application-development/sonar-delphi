@@ -48,7 +48,6 @@ import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
-import org.w3c.dom.Document;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -64,7 +63,7 @@ public class DelphiPmdSensor implements Sensor {
 
   private final SensorContext context;
   private final DelphiProjectHelper delphiProjectHelper;
-  private final List<String> errors = new ArrayList<String>();
+  private final List<String> errors = new ArrayList<>();
   private final DelphiPmdProfileExporter profileExporter;
   private final RulesProfile rulesProfile;
 

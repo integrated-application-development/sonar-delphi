@@ -34,7 +34,7 @@ import java.util.List;
  */
 public class AdvanceToNodeOperation implements NodeOperation {
 
-  private List<LexerMetrics> to = new ArrayList<LexerMetrics>();
+  private List<LexerMetrics> to = new ArrayList<>();
 
   /**
    * ctor
@@ -56,7 +56,7 @@ public class AdvanceToNodeOperation implements NodeOperation {
 
   @Override
   public CodeNode<Tree> execute(Tree node) {
-    CodeNode<Tree> atNode = new CodeNode<Tree>(node);
+    CodeNode<Tree> atNode = new CodeNode<>(node);
     do {
       atNode = new AdvanceNodeOperation().execute(atNode.getNode());
       if (atNode == null || !atNode.isValid()) {
@@ -70,7 +70,7 @@ public class AdvanceToNodeOperation implements NodeOperation {
   private String createErrorMsg() {
     StringBuilder str = new StringBuilder();
     for (LexerMetrics metric : to) {
-      str.append(metric.toMetrics() + " ");
+      str.append(metric.toMetrics()).append(" ");
     }
     return str.toString();
   }

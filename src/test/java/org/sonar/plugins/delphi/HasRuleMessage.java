@@ -47,7 +47,7 @@ public class HasRuleMessage<T extends Issue> extends TypeSafeMatcher<T> {
   }
 
   public static <T extends Issue> Matcher<T> hasRuleMessage(String message) {
-    return new HasRuleMessage<T>(message);
+    return new HasRuleMessage<>(message);
   }
 
 }

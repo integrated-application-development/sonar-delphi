@@ -24,15 +24,12 @@ package org.sonar.plugins.delphi;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputDir;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.rule.ActiveRule;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.measure.Measure;
-import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.debug.ProjectMetricsXMLParser;
@@ -51,8 +48,6 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class DelphiSensorTest {
 
@@ -81,8 +76,8 @@ public class DelphiSensorTest {
     // get all directories
     File[] dirs = baseDir.listFiles(DelphiUtils.getDirectoryFilter());
 
-    List<File> sourceDirs = new ArrayList<File>(dirs.length);
-    List<InputFile> sourceFiles = new ArrayList<InputFile>();
+    List<File> sourceDirs = new ArrayList<>(dirs.length);
+    List<InputFile> sourceFiles = new ArrayList<>();
 
     context = SensorContextTester.create(baseDir);
 
@@ -151,7 +146,7 @@ public class DelphiSensorTest {
     assertThat(context.allIssues()).hasSize(0);
 
     // create a map of expected values for each file
-    Map<String, Map<String,Double>> expectedValues = new HashMap();
+    Map<String, Map<String,Double>> expectedValues = new HashMap<>();
 
     // xml file for expected metrics for files
     ProjectMetricsXMLParser xmlParser = new ProjectMetricsXMLParser(

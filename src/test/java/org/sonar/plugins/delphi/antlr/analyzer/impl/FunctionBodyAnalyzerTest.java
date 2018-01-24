@@ -41,6 +41,7 @@ import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -69,7 +70,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
 
     results = new CodeAnalysisResults();
     analyzer = new FunctionBodyAnalyzer(results, DelphiTestUtils.mockProjectHelper());
-    codeTree = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(EMPTY_NODE));
+    codeTree = new CodeTree(new CodeNode<>(ast), new CodeNode<>(EMPTY_NODE));
   }
 
   public void setupFile(String fileName) throws IOException, RecognitionException {
@@ -77,7 +78,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
 
     results.setActiveUnit(new DelphiUnit("test"));
     ast = new DelphiAST(testFile);
-    codeTree = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
+    codeTree = new CodeTree(new CodeNode<>(ast), new CodeNode<>(ast.getChild(0)));
 
     CodeAnalysisCacheResults.resetCache();
   }
@@ -99,7 +100,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
     results.setActiveFunction(new DelphiFunction("testFunction"));
     assertEquals(false, analyzer.canAnalyze(codeTree));
 
-    codeTree.setCurrentNode(new CodeNode<Tree>(BEGIN_NODE));
+    codeTree.setCurrentNode(new CodeNode<>(BEGIN_NODE));
     assertEquals(true, analyzer.canAnalyze(codeTree));
   }
 
@@ -117,9 +118,9 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
 
   private FunctionInterface findFunction(String functionName) {
     DelphiFunction activeFunction = new DelphiFunction(functionName);
-    final AdvanceToNodeOperation advanceToImplementationSection = new AdvanceToNodeOperation(Arrays.asList(LexerMetrics.IMPLEMENTATION));
-    final AdvanceToNodeOperation advanceToFunctionName = new AdvanceToNodeOperation(Arrays.asList(LexerMetrics.FUNCTION_NAME));
-    final AdvanceToNodeOperation advanceToFunctionBody = new AdvanceToNodeOperation(Arrays.asList(LexerMetrics.FUNCTION_BODY));
+    final AdvanceToNodeOperation advanceToImplementationSection = new AdvanceToNodeOperation(Collections.singletonList(LexerMetrics.IMPLEMENTATION));
+    final AdvanceToNodeOperation advanceToFunctionName = new AdvanceToNodeOperation(Collections.singletonList(LexerMetrics.FUNCTION_NAME));
+    final AdvanceToNodeOperation advanceToFunctionBody = new AdvanceToNodeOperation(Collections.singletonList(LexerMetrics.FUNCTION_BODY));
 
     CodeNode<Tree> initialNode = codeTree.getCurrentCodeNode();
     try {

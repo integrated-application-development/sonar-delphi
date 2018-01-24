@@ -57,7 +57,7 @@ public class AdvanceNodeOperationTest extends OperationsTestsCommon {
     int parsedCount = 0;
     int types[] = {256, 1, 100, 2, 101, 3, 102};
 
-    CodeNode<Tree> codeNode = new CodeNode<Tree>(parent);
+    CodeNode<Tree> codeNode = new CodeNode<>(parent);
     do {
       assertEquals(types[parsedCount++], codeNode.getNode().getType());
       codeNode = operation.execute(codeNode.getNode());
@@ -70,7 +70,7 @@ public class AdvanceNodeOperationTest extends OperationsTestsCommon {
   public void executeOnFileTest() throws IOException, RecognitionException {
     File astFile = DelphiUtils.getResource(FILE_NAME);
     ASTTree ast = new DelphiAST(astFile);
-    CodeTree codeTree = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
+    CodeTree codeTree = new CodeTree(new CodeNode<>(ast), new CodeNode<>(ast.getChild(0)));
 
     int lastLine = -1;
     CodeNode<Tree> codeNode = codeTree.getCurrentCodeNode();

@@ -34,17 +34,17 @@ public class TraceBackNodeOperation implements NodeOperation {
   @Override
   public CodeNode<Tree> execute(Tree node) {
     if (node == null) {
-      return new CodeNode<Tree>(null);
+      return new CodeNode<>(null);
     }
 
     Tree parent = node.getParent();
     if (parent == null) {
-      return new CodeNode<Tree>(null);
+      return new CodeNode<>(null);
     }
 
     Tree nextNode = parent.getChild(node.getChildIndex() + 1);
     if (nextNode != null) {
-      return new CodeNode<Tree>(nextNode);
+      return new CodeNode<>(nextNode);
     }
 
     // No child found, trace back again

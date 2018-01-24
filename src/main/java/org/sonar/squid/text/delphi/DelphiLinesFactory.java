@@ -35,7 +35,7 @@ import java.util.List;
  */
 public class DelphiLinesFactory {
 
-  private final List<Line> lines = new ArrayList<Line>();
+  private final List<Line> lines = new ArrayList<>();
   private char lastReadCharacter;
   private StringBuilder currentStringBuilder = new StringBuilder();
   private Line currentLine;
@@ -51,7 +51,7 @@ public class DelphiLinesFactory {
    * @param reader File to read
    */
   DelphiLinesFactory(Reader reader) {
-    List<LineContextHandler> tmpHandlers = new ArrayList<LineContextHandler>();
+    List<LineContextHandler> tmpHandlers = new ArrayList<>();
 
     // //comment
     tmpHandlers.add(new SingleLineCommentHandler("//", "*//"));

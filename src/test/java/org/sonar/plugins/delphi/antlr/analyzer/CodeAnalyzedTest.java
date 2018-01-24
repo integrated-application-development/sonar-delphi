@@ -58,7 +58,7 @@ public class CodeAnalyzedTest {
     nodes[4].addChild(nodes[6]); // ab2 -> ab2c2
     nodes[4].addChild(nodes[7]); // ab2 -> ab2c3
 
-    code = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<Tree>(ast.getChild(0)));
+    code = new CodeTree(new CodeNode<>(ast), new CodeNode<>(ast.getChild(0)));
   }
 
   /*

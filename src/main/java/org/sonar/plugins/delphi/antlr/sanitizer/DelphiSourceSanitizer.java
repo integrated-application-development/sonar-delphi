@@ -39,9 +39,9 @@ import java.util.Set;
  */
 public class DelphiSourceSanitizer extends ANTLRFileStream {
 
-  private static List<File> includeDirectories = new ArrayList<File>();
-  private static Set<String> includedFiles = new HashSet<String>();
-  private static Set<String> definitions = new HashSet<String>();
+  private static List<File> includeDirectories = new ArrayList<>();
+  private static Set<String> includedFiles = new HashSet<>();
+  private static Set<String> definitions = new HashSet<>();
 
   /**
    * Ctor with file name
@@ -108,7 +108,7 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
       return;
     }
 
-    Set<String> defs = new HashSet<String>(definitions);
+    Set<String> defs = new HashSet<>(definitions);
 
     // TODO delphiProjectHelper.shouldExtendIncludes();
     boolean extendIncludes = true;

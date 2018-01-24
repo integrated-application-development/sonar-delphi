@@ -42,7 +42,7 @@ public class DelphiASTAnalyzer implements ASTAnalyzer {
   @Override
   public CodeAnalysisResults analyze(ASTTree tree) {
     final CodeAnalysisResults result = new CodeAnalysisResults();
-    final CodeTree code = new CodeTree(new CodeNode<ASTTree>(tree), new CodeNode<Tree>(tree.getChild(0)));
+    final CodeTree code = new CodeTree(new CodeNode<>(tree), new CodeNode<>(tree.getChild(0)));
 
     CodeAnalyzer analyzer = new UnitAnalyzer();
     analyzer.chain(new IncludeAnalyzer()).chain(new InterfaceAnalyzer()).chain(new VisibilityAnalyzer())

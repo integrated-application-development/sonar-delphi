@@ -46,10 +46,7 @@ public abstract class LineContextHandler {
   }
 
   static boolean matchEndOfString(StringBuilder pendingLine, char endChar) {
-    if (pendingLine.length() < 1) {
-      return false;
-    }
-    return pendingLine.charAt(pendingLine.length() - 1) == endChar;
+      return pendingLine.length() >= 1 && pendingLine.charAt(pendingLine.length() - 1) == endChar;
   }
 
   static char getLastCharacter(StringBuilder pendingLine) {

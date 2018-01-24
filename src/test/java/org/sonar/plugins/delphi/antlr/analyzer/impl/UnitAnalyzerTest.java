@@ -56,7 +56,7 @@ public class UnitAnalyzerTest {
     analyzer = new UnitAnalyzer();
     results = new CodeAnalysisResults();
     astNode = new CodeNode<ASTTree>(new DelphiAST(DelphiUtils.getResource(FILE_NAME)));
-    code = new CodeTree(astNode, new CodeNode<Tree>(astNode.getNode().getChild(0)));
+    code = new CodeTree(astNode, new CodeNode<>(astNode.getNode().getChild(0)));
   }
 
   @Test

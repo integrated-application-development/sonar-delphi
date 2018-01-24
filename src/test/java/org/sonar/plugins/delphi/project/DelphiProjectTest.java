@@ -68,7 +68,7 @@ public class DelphiProjectTest {
 
   @Test
   public void setDefinitionsTest() {
-    List<String> defs = new ArrayList<String>();
+    List<String> defs = new ArrayList<>();
     project.setDefinitions(defs);
     assertEquals(defs, project.getDefinitions());
   }

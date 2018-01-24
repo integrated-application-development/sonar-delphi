@@ -121,7 +121,7 @@ public class AssignedAndFreeRule extends DelphiRule {
   @Override
   protected void init() {
     started = false;
-    variables = new HashSet<String>();
+    variables = new HashSet<>();
   }
 
 }

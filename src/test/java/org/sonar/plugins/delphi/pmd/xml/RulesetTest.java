@@ -56,7 +56,7 @@ public class RulesetTest {
   public void rulesTest() {
     assertEquals(0, ruleset.getRules().size());
 
-    List<DelphiRule> rules = new ArrayList<DelphiRule>();
+    List<DelphiRule> rules = new ArrayList<>();
     rules.add(new DelphiRule("testRule"));
     ruleset.setRules(rules);
 

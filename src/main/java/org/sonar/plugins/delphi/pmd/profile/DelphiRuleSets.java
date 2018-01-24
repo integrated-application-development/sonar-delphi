@@ -40,7 +40,7 @@ import java.util.List;
 public class DelphiRuleSets extends RuleSets {
 
   private DelphiRuleChain delphiRuleChain = new DelphiRuleChain();
-  private Collection<RuleSet> ruleSets = new ArrayList<RuleSet>();
+  private Collection<RuleSet> ruleSets = new ArrayList<>();
 
   @Override
   public void apply(List<CompilationUnit> acuList, RuleContext ctx, Language language) {

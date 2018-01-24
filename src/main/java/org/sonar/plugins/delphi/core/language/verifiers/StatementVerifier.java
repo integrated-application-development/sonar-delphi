@@ -49,7 +49,7 @@ public class StatementVerifier {
   private Tree checkedNode = null;
   private boolean isComplex = false;
   private String lastStatementText = null;
-  private Stack<Integer> statementIndex = new Stack<Integer>();
+  private Stack<Integer> statementIndex = new Stack<>();
 
   public StatementVerifier() { }
 
@@ -115,8 +115,8 @@ public class StatementVerifier {
    * @param source The source code to parse for tokens
    * @return List of found tokens
    */
-  public final List<Token> tokenize(String[] source) {
-    List<Token> tokens = new ArrayList();
+  private List<Token> tokenize(String[] source) {
+    List<Token> tokens = new ArrayList<>();
 
     for (String string : source) {
       DelphiLexer lexer = new DelphiLexer(new ANTLRStringStream(string));

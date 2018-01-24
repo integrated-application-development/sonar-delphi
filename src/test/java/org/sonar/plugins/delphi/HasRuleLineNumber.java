@@ -47,7 +47,7 @@ public class HasRuleLineNumber<T extends Issue> extends TypeSafeMatcher<T> {
   }
 
   public static <T extends Issue> Matcher<T> hasRuleLine(int line) {
-    return new HasRuleLineNumber<T>(line);
+    return new HasRuleLineNumber<>(line);
   }
 
 }

@@ -108,8 +108,7 @@ public enum LexerMetrics {
    */
   public static LexerMetrics getLexerMetricsForType(int code) {
     LexerMetrics[] values = LexerMetrics.values();
-    for (int i = 0; i < values.length; i++) {
-      LexerMetrics value = values[i];
+    for (LexerMetrics value : values) {
       if (value.metrics == code) {
         return value;
       }

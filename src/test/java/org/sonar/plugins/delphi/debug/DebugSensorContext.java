@@ -50,8 +50,8 @@ import java.util.Set;
 @SuppressWarnings("rawtypes")
 public class DebugSensorContext implements SensorContext {
 
-  private Map<String, Double> data = new HashMap();
-  private Map<String, String> sdata = new HashMap();
+  private Map<String, Double> data = new HashMap<>();
+  private Map<String, String> sdata = new HashMap<>();
 
   public <G extends Serializable> NewMeasure<G> getMeasure(String key) {
     /*

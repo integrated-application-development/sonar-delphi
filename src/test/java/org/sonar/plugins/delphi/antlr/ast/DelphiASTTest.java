@@ -56,9 +56,7 @@ public class DelphiASTTest {
     try {
       DocumentBuilder parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
       parser.parse(xml);
-    } catch (ParserConfigurationException e) {
-      fail("Could not parse generated XML document");
-    } catch (SAXException e) {
+    } catch (ParserConfigurationException | SAXException e) {
       fail("Could not parse generated XML document");
     }
 

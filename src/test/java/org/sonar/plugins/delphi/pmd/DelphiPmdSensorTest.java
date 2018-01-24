@@ -44,6 +44,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
@@ -90,9 +91,9 @@ public class DelphiPmdSensorTest {
         .initMetadata(new FileMetadata().readMetadata(srcFile, Charset.defaultCharset()));
 
     DelphiProject delphiProject = new DelphiProject("Default Project");
-    delphiProject.setSourceFiles(Arrays.asList(inputFile));
+    delphiProject.setSourceFiles(Collections.singletonList(inputFile));
 
-    when(delphiProjectHelper.getWorkgroupProjects()).thenReturn(Arrays.asList(delphiProject));
+    when(delphiProjectHelper.getWorkgroupProjects()).thenReturn(Collections.singletonList(delphiProject));
 
     when(delphiProjectHelper.getFile(anyString())).thenAnswer(new Answer<InputFile>() {
       @Override

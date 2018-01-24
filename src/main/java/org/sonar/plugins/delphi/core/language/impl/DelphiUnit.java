@@ -27,10 +27,7 @@ import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Class for unit (usually one delphi source file), containing list of classes
@@ -43,9 +40,9 @@ public class DelphiUnit implements UnitInterface {
   private File file = null;
   private String name = "UNKNOWN_UNIT";
   private String realName = "UNKNOWN_UNIT";
-  private Set<String> includes = new HashSet<String>();
-  private List<ClassInterface> classes = new ArrayList<ClassInterface>();
-  private List<FunctionInterface> functions = new ArrayList<FunctionInterface>();
+  private Set<String> includes = new HashSet<>();
+  private List<ClassInterface> classes = new ArrayList<>();
+  private List<FunctionInterface> functions = new ArrayList<>();
   private int line = 1;
 
   /**
@@ -220,10 +217,7 @@ public class DelphiUnit implements UnitInterface {
 
   @Override
   public boolean equals(Object o) {
-    if (o == null) {
-      return false;
-    }
-    return toString().equals(o.toString());
+    return o != null && toString().equals(o.toString());
   }
 
   @Override
@@ -270,15 +264,11 @@ public class DelphiUnit implements UnitInterface {
 
   @Override
   public FunctionInterface[] getAllFunctions() {
-    Set<FunctionInterface> result = new HashSet<FunctionInterface>();
-    for (FunctionInterface globalFunction : functions) {
-      result.add(globalFunction);
-    }
+    Set<FunctionInterface> result = new HashSet<>();
+    result.addAll(functions);
 
     for (ClassInterface clazz : classes) {
-      for (FunctionInterface function : clazz.getFunctions()) {
-        result.add(function);
-      }
+      Collections.addAll(result, clazz.getFunctions());
     }
 
     return result.toArray(new FunctionInterface[result.size()]);
@@ -290,7 +280,7 @@ public class DelphiUnit implements UnitInterface {
 
   @Override
   public Set<UnitInterface> getIncludedUnits(Set<UnitInterface> allUnits) {
-    Set<UnitInterface> result = new HashSet<UnitInterface>();
+    Set<UnitInterface> result = new HashSet<>();
     if (allUnits == null) {
       return result;
     }

@@ -78,7 +78,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
     DelphiParser parser = new DelphiParser(new TokenRewriteStream(new DelphiLexer(fileStream)));
     parser.setTreeAdaptor(new DelphiTreeAdaptor(this));
     try {
-      children = (java.util.List)((CommonTree) parser.file().getTree()).getChildren();
+      children = ((CommonTree) parser.file().getTree()).getChildren();
 
     } catch (RecognitionException e) {
       throw new RuntimeException("Failed to parse the file " + file.getAbsolutePath(), e);
@@ -174,7 +174,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
    * @param doc Document
    * @param delphiNode DelphiNode
    */
-  protected void generateDocumentChildren(Element root, Document doc, Tree delphiNode) {
+  private void generateDocumentChildren(Element root, Document doc, Tree delphiNode) {
     if (root == null || doc == null) {
       return;
     }
@@ -182,7 +182,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
     for (int i = 0; i < delphiNode.getChildCount(); ++i) {
       Tree childNode = delphiNode.getChild(i);
       String processedName = processNodeName(childNode);
-      Element child = null;
+      Element child;
       try {
         child = doc.createElement(processedName);
       } catch (DOMException e) {
@@ -201,12 +201,6 @@ public class DelphiAST extends CommonTree implements ASTTree {
     }
   }
 
-  /**
-   * Some characters are forbidden as XML node, so process them
-   * 
-   * @param str String to process
-   * @return Fixed string
-   */
   private String processNodeName(Tree node) {
     String code = node.getText();
     try {

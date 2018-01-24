@@ -119,7 +119,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
     List<FunctionInterface> functions,
     Set<UnitInterface> units) {
     reset();
-    Set<String> processedFunc = new HashSet<String>();
+    Set<String> processedFunc = new HashSet<>();
     if (classes != null) {
       for (ClassInterface cl : classes) {
         if (cl == null) {
@@ -151,7 +151,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
         fileComplexity += func.getComplexity();
         functionComplexity += func.getComplexity();
         statementsCount += func.getStatements().size();
-        functionDist.add(Double.valueOf(func.getComplexity()));
+        functionDist.add((double) func.getComplexity());
         if (func.getVisibility() == DelphiParser.PUBLIC) {
           ++publicApi;
         }
@@ -177,7 +177,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
     if (!func.isAccessor()) {
       methodsCount++;
       functionComplexity += func.getComplexity();
-      functionDist.add(Double.valueOf(func.getComplexity()));
+      functionDist.add((double) func.getComplexity());
 
       addIssue(resource, func);
 
@@ -252,7 +252,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
   }
 
   private void addIssue(InputFile inputFile, FunctionInterface func) {
-    if (func.getComplexity() > threshold.intValue()) {
+    if (func.getComplexity() > threshold) {
       NewIssue newIssue = context.newIssue();
       newIssue
               .forRule(methodCyclomaticComplexityRule.ruleKey())

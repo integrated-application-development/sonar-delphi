@@ -75,7 +75,7 @@ public class DeadCodeMetricsTest {
   private List<FunctionInterface> functions;
   private SensorContextTester sensorContext;
   private Issuable issuable;
-  private final List<Issue> issues = new ArrayList<Issue>();
+  private final List<Issue> issues = new ArrayList<>();
   private ActiveRules activeRules;
   private File baseDir;
 

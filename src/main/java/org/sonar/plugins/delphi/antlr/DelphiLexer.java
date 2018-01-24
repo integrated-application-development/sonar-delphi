@@ -28,9 +28,6 @@ package org.sonar.plugins.delphi.antlr;
 
 
 import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
 
 @SuppressWarnings("all")
 public class DelphiLexer extends Lexer {

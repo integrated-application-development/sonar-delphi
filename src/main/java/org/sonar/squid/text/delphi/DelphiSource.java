@@ -36,9 +36,9 @@ import java.util.Set;
  */
 public class DelphiSource {
 
-  private List<Line> lines = new ArrayList<Line>();
+  private List<Line> lines = new ArrayList<>();
   private CodeRecognizer codeRecognizer;
-  private Set<Integer> noSonarTagLines = new HashSet<Integer>();
+  private Set<Integer> noSonarTagLines = new HashSet<>();
 
   /**
    * Constructor. Does the line processing.

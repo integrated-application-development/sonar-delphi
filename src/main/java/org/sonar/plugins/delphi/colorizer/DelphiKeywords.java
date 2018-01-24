@@ -31,7 +31,7 @@ import java.util.Set;
  */
 public final class DelphiKeywords {
 
-  private static final Set<String> DELPHI_KEYWORDS = new HashSet<String>();
+  private static final Set<String> DELPHI_KEYWORDS = new HashSet<>();
   static {
     Collections.addAll(DELPHI_KEYWORDS, "private", "public", "protected", "and", "array", "as", "begin", "case",
       "class", "const",

@@ -38,10 +38,7 @@ import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Metric used to search for "dead code" (unused units, unused methods).
@@ -184,18 +181,14 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
    * @return List of all unit functions (global and class functions)
    */
   private List<FunctionInterface> getUnitFunctions(UnitInterface unit) {
-    Set<FunctionInterface> result = new HashSet<FunctionInterface>();
-    for (FunctionInterface globalFunction : unit.getFunctions()) {
-      result.add(globalFunction);
-    }
+    Set<FunctionInterface> result = new HashSet<>();
+    Collections.addAll(result, unit.getFunctions());
 
     for (ClassInterface clazz : unit.getClasses()) {
-      for (FunctionInterface function : clazz.getFunctions()) {
-        result.add(function);
-      }
+      Collections.addAll(result, clazz.getFunctions());
     }
 
-    return new ArrayList<FunctionInterface>(result);
+    return new ArrayList<>(result);
   }
 
   /**
@@ -205,15 +198,13 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
    * @return List of unused functions
    */
   protected Set<FunctionInterface> findUnusedFunctions(Set<UnitInterface> units) {
-    Set<FunctionInterface> allFunctions = new HashSet<FunctionInterface>();
-    Set<FunctionInterface> usedFunctions = new HashSet<FunctionInterface>();
+    Set<FunctionInterface> allFunctions = new HashSet<>();
+    Set<FunctionInterface> usedFunctions = new HashSet<>();
     for (UnitInterface unit : units) {
       List<FunctionInterface> unitFunctions = getUnitFunctions(unit);
       allFunctions.addAll(unitFunctions);
       for (FunctionInterface unitFunction : unitFunctions) {
-        for (FunctionInterface usedFunction : unitFunction.getCalledFunctions()) {
-          usedFunctions.add(usedFunction);
-        }
+        Collections.addAll(usedFunctions, unitFunction.getCalledFunctions());
       }
 
     }
@@ -227,8 +218,8 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
    * @return a list of unused units
    */
   protected List<String> findUnusedUnits(Set<UnitInterface> units) {
-    Set<String> usedUnits = new HashSet<String>();
-    List<String> result = new ArrayList<String>();
+    Set<String> usedUnits = new HashSet<>();
+    List<String> result = new ArrayList<>();
     for (UnitInterface unit : units) {
       if (unit.getFileName().toLowerCase().endsWith(".pas")) {
         result.add(unit.getName().toLowerCase());

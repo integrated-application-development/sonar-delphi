@@ -32,7 +32,7 @@ import java.util.Set;
  * DelphiLanguage Language Footprint, used to recognize language
  * 
  */
-public class DelphiFootPrint implements LanguageFootprint {
+class DelphiFootPrint implements LanguageFootprint {
 
   @Override
   public Set<Detector> getDetectors() {

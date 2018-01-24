@@ -85,8 +85,8 @@ public class DelphiProjectHelper  {
    *
    * @return List of include directories
    */
-  public List<File> getIncludeDirectories() {
-    List<File> result = new ArrayList<File>();
+  private List<File> getIncludeDirectories() {
+    List<File> result = new ArrayList<>();
     if (settings == null) {
       return result;
     }
@@ -121,7 +121,7 @@ public class DelphiProjectHelper  {
   }
 
   private List<File> detectExcludedSources() {
-    List<File> result = new ArrayList<File>();
+    List<File> result = new ArrayList<>();
     if (settings == null) {
       return result;
     }
@@ -148,7 +148,7 @@ public class DelphiProjectHelper  {
    *
    * @return Path to project file
    */
-  public String getProjectFile() {
+  private String getProjectFile() {
     if (settings == null) {
       return null;
     }
@@ -160,7 +160,7 @@ public class DelphiProjectHelper  {
    *
    * @return Path to workgroup file
    */
-  public String getWorkgroupFile() {
+  private String getWorkgroupFile() {
     if (settings == null) {
       return null;
     }
@@ -173,7 +173,7 @@ public class DelphiProjectHelper  {
    * @return List of DelphiLanguage projects
    */
   public List<DelphiProject> getWorkgroupProjects() {
-    List<DelphiProject> list = new ArrayList<DelphiProject>();
+    List<DelphiProject> list = new ArrayList<>();
 
     String dprojPath = getProjectFile();
     String gprojPath = getWorkgroupFile();
@@ -183,9 +183,7 @@ public class DelphiProjectHelper  {
       try {
         DelphiUtils.LOG.debug(".groupproj file found: " + gprojPath);
         DelphiWorkgroup workGroup = new DelphiWorkgroup(new File(gprojPath));
-        for (DelphiProject newProject : workGroup.getProjects()) {
-          list.add(newProject);
-        }
+        list.addAll(workGroup.getProjects());
       } catch (IOException e) {
         DelphiUtils.LOG.error(e.getMessage());
         DelphiUtils.LOG.error("Skipping .groupproj reading, default configuration assumed.");
@@ -214,14 +212,14 @@ public class DelphiProjectHelper  {
     return list;
   }
 
-  public List<InputFile> mainFiles() {
+  private List<InputFile> mainFiles() {
     FilePredicates p = fs.predicates();
     Iterable<InputFile> inputFiles = fs.inputFiles(p.and(p.hasLanguage(DelphiLanguage.KEY),
       p.hasType(InputFile.Type.MAIN)));
     return Lists.newArrayList(inputFiles);
   }
 
-  public List<InputFile> testFiles() {
+  private List<InputFile> testFiles() {
     FilePredicates p = fs.predicates();
     Iterable<InputFile> inputFiles = fs.inputFiles(p.and(p.hasLanguage(DelphiLanguage.KEY),
       p.hasType(InputFile.Type.TEST)));
@@ -331,7 +329,7 @@ public class DelphiProjectHelper  {
    * @return List of excluded directories, empty list if none
    */
   public List<File> getCodeCoverageExcludedDirectories() {
-    List<File> list = new ArrayList<File>();
+    List<File> list = new ArrayList<>();
 
     String[] sources = settings.getStringArray(DelphiPlugin.CC_EXCLUDED_KEY);
     if (sources == null || sources.length == 0) {

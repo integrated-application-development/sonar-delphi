@@ -39,13 +39,13 @@ public class DelphiUnitBuilderTest {
   private String unitName = "Unit1";
 
   public DelphiUnitBuilderTest appendDecl(String value) {
-    declaration.append(value + "\n");
+    declaration.append(value).append("\n");
     offset++;
     return this;
   }
 
   public DelphiUnitBuilderTest appendImpl(String value) {
-    implementation.append(value + "\n");
+    implementation.append(value).append("\n");
     return this;
   }
 
@@ -69,12 +69,9 @@ public class DelphiUnitBuilderTest {
       File file = File.createTempFile("unit", ".pas", baseDir);
       file.deleteOnExit();
 
-      FileWriter fileWriter = new FileWriter(file);
-      try {
+      try (FileWriter fileWriter = new FileWriter(file)) {
         fileWriter.write(source.toString());
         fileWriter.flush();
-      } finally {
-        fileWriter.close();
       }
       return file;
     } catch (IOException e) {
@@ -95,14 +92,14 @@ public class DelphiUnitBuilderTest {
     source.append("\n");
 
     if (this.declaration.length() > 0) {
-      source.append(this.declaration() + "\n");
+      source.append(this.declaration()).append("\n");
       offset++;
     }
     source.append("implementation\n");
     source.append("\n");
 
     if (this.implementation.length() > 0) {
-      source.append(this.implementation() + "\n");
+      source.append(this.implementation()).append("\n");
     }
     source.append("end.\n");
 

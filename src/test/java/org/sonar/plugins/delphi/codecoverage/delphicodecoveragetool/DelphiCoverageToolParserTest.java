@@ -64,7 +64,7 @@ public class DelphiCoverageToolParserTest
 
     context = SensorContextTester.create(baseDir);
 
-    List<File> sourceDirs = new ArrayList<File>();
+    List<File> sourceDirs = new ArrayList<>();
 
     sourceDirs.add(baseDir); // include baseDir
 

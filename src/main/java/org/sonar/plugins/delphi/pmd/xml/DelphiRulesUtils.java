@@ -121,7 +121,7 @@ public final class DelphiRulesUtils {
    */
   public static List<Rule> parseReferential(String path) {
     Ruleset ruleset = DelphiRulesUtils.buildRuleSetFromXml(DelphiRulesUtils.getConfigurationFromFile(path));
-    List<Rule> rulesRepository = new ArrayList<Rule>();
+    List<Rule> rulesRepository = new ArrayList<>();
     for (DelphiRule fRule : ruleset.getRules()) {
       rulesRepository.add(createRepositoryRule(fRule));
     }
@@ -137,7 +137,7 @@ public final class DelphiRulesUtils {
    */
   public static List<ActiveRule> importConfiguration(String configuration, List<Rule> rulesRepository) {
     Ruleset ruleset = DelphiRulesUtils.buildRuleSetFromXml(configuration);
-    List<ActiveRule> activeRules = new ArrayList<ActiveRule>();
+    List<ActiveRule> activeRules = new ArrayList<>();
     for (DelphiRule fRule : ruleset.getRules()) {
       ActiveRule activeRule = createActiveRule(fRule, rulesRepository);
       if (activeRule != null) {
@@ -167,7 +167,7 @@ public final class DelphiRulesUtils {
     rule.setDescription(fRule.getDescription());
     rule.setTags(fRule.getTags());
     rule.setConfigKey(fRule.getClazz());
-    List<RuleParam> ruleParams = new ArrayList<RuleParam>();
+    List<RuleParam> ruleParams = new ArrayList<>();
     if (fRule.getProperties() != null) {
       for (Property property : fRule.getProperties()) {
         RuleParam param = rule.createParameter()
@@ -205,7 +205,7 @@ public final class DelphiRulesUtils {
 
   static List<ActiveRuleParam>
     buildActiveRuleParams(DelphiRule delphiRule, Rule repositoryRule, ActiveRule activeRule) {
-    List<ActiveRuleParam> activeRuleParams = new ArrayList<ActiveRuleParam>();
+    List<ActiveRuleParam> activeRuleParams = new ArrayList<>();
     if (delphiRule.getProperties() != null) {
       for (Property property : delphiRule.getProperties()) {
         if (repositoryRule.getParams() != null) {
@@ -226,7 +226,7 @@ public final class DelphiRulesUtils {
       if (activeRule.getRule().getRepositoryKey().equals(DelphiPmdConstants.REPOSITORY_KEY)) {
         String key = activeRule.getRule().getKey();
         String priority = severityToLevel(activeRule.getPriority());
-        List<Property> properties = new ArrayList<Property>();
+        List<Property> properties = new ArrayList<>();
 
         DelphiRule delphiRule = new DelphiRule(activeRule.getConfigKey(), priority);
         delphiRule.setName(key);

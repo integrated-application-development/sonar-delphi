@@ -62,7 +62,7 @@ public class CalledFunctionVerifier {
       && nextNode != null
       && (nextNode.getType() == LexerMetrics.LPAREN.toMetrics() || nextNode.getType() == LexerMetrics.SEMI.toMetrics())) {
       String functionName = node.getText().toLowerCase();
-      List<UnitInterface> unitsToLook = new ArrayList<UnitInterface>();
+      List<UnitInterface> unitsToLook = new ArrayList<>();
       // first we look in current unit for function reference
       unitsToLook.add(results.getActiveUnit());
       unitsToLook.addAll(results.getActiveUnit().getIncludedUnits(results.getCachedUnits()));

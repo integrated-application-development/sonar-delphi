@@ -33,8 +33,8 @@ public class DelphiLanguage extends AbstractLanguage {
   public static DelphiLanguage instance = new DelphiLanguage();
 
   public static final String FILE_SOURCE_CODE_SUFFIX = "pas";
-  public static final String FILE_PROJECT_SUFFIX = "dpr";
-  public static final String FILE_PACKAGE_SUFFIX = "dpk";
+  private static final String FILE_PROJECT_SUFFIX = "dpr";
+  private static final String FILE_PACKAGE_SUFFIX = "dpk";
 
   private static final String LANGUAGE_NAME = "Delphi";
 

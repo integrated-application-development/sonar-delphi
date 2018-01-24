@@ -73,7 +73,7 @@ public class DelphiPMD {
    * @return AST tree nodes ready for parsing by PMD
    */
   public List<CompilationUnit> getNodesFromAST(ASTTree ast) {
-    List<CompilationUnit> nodes = new ArrayList<CompilationUnit>();
+    List<CompilationUnit> nodes = new ArrayList<>();
 
     for (int i = 0; i < ast.getChildCount(); ++i) {
       indexNode((CommonTree) ast.getChild(i), nodes);

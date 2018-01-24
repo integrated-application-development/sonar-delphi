@@ -96,7 +96,7 @@ public class FunctionAnalyzer extends CodeAnalyzer {
   }
 
   private List<String> getFunctionProperties(Tree node) {
-    List<String> props = new ArrayList<String>();
+    List<String> props = new ArrayList<>();
     for (int i = 0; i < node.getChildCount(); ++i) {
       Tree child = node.getChild(i);
       if ("override".equalsIgnoreCase(child.getText())) {

@@ -122,8 +122,8 @@ public class DelphiStatement implements StatementInterface {
    * @param source The source code to parse for tokens
    * @return List of found tokens
    */
-  public final List<Token> tokenize(String[] source) {
-    List<Token> tokens = new ArrayList();
+  private List<Token> tokenize(String[] source) {
+    List<Token> tokens = new ArrayList<>();
 
     for (String string : source) {
       DelphiLexer lexer = new DelphiLexer(new ANTLRStringStream(string));
@@ -144,7 +144,7 @@ public class DelphiStatement implements StatementInterface {
       return null;
     }
     ClassFieldInterface[] fields = fromClass.getFields();
-    List<ClassFieldInterface> result = new ArrayList<ClassFieldInterface>();
+    List<ClassFieldInterface> result = new ArrayList<>();
 
     List<Token> tokens = tokenize(new String[] {text});
 

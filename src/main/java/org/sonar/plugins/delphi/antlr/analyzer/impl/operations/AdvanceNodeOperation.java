@@ -34,7 +34,7 @@ public class AdvanceNodeOperation implements NodeOperation {
   @Override
   public CodeNode<Tree> execute(Tree node) {
     if (node == null) {
-      return new CodeNode<Tree>(null);
+      return new CodeNode<>(null);
     }
 
     if (node.getChildCount() == 0) {
@@ -42,7 +42,7 @@ public class AdvanceNodeOperation implements NodeOperation {
       return (new TraceBackNodeOperation().execute(node));
     } else {
       // get first child
-      return new CodeNode<Tree>(node.getChild(0));
+      return new CodeNode<>(node.getChild(0));
     }
   }
 }

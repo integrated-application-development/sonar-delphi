@@ -30,14 +30,14 @@ import org.antlr.runtime.tree.CommonTree;
  */
 public class DelphiNode extends CommonTree {
 
-  protected ASTTree mainTree = null;
+  private ASTTree mainTree = null;
 
   /**
    * Default C-tor as in CommonTree
    * 
    * @param payload Provided token
    */
-  public DelphiNode(Token payload) {
+  DelphiNode(Token payload) {
     super(payload);
   }
 
@@ -47,7 +47,7 @@ public class DelphiNode extends CommonTree {
    * @param payload Provided token
    * @param tree AST Tree
    */
-  public DelphiNode(Token payload, ASTTree tree) {
+  DelphiNode(Token payload, ASTTree tree) {
     super(payload);
     mainTree = tree;
   }

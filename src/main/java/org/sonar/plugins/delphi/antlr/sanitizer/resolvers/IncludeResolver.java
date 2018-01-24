@@ -48,7 +48,7 @@ public class IncludeResolver extends SourceResolver {
   private static final int REPLACEMENT_OFFSET = 2;
   private boolean extendIncludes = true;
   private List<File> includes = null;
-  private List<String> includedFiles = new ArrayList<String>();
+  private List<String> includedFiles = new ArrayList<>();
 
   /**
    * ctor
@@ -91,7 +91,7 @@ public class IncludeResolver extends SourceResolver {
     baseFileName = DelphiUtils.normalizeFileName(baseFileName);
 
     StringBuilder newData = new StringBuilder(baseFileData);
-    List<ReplacementSubRange> dataToInclude = new ArrayList<ReplacementSubRange>();
+    List<ReplacementSubRange> dataToInclude = new ArrayList<>();
 
     try {
       CompilerDirectiveFactory factory = new CompilerDirectiveFactory();
@@ -121,12 +121,8 @@ public class IncludeResolver extends SourceResolver {
             .getFirstCharPosition()
             + directive.getLength() + REPLACEMENT_OFFSET, copyData));
 
-        } catch (IncludeResolverException e) {
+        } catch (IncludeResolverException | IOException e) {
           DelphiUtils.LOG.warn(e.getMessage());
-          continue;
-        } catch (IOException e) {
-          DelphiUtils.LOG.warn(e.getMessage());
-          continue;
         }
 
       }

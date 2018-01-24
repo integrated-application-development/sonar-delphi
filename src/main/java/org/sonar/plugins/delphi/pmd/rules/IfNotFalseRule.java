@@ -29,7 +29,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class IfNotFalseRule extends IfTrueRule {
 
-  protected boolean wasNot;
+  private boolean wasNot;
 
   @Override
   protected void init() {

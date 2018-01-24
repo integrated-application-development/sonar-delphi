@@ -33,8 +33,8 @@ import java.util.List;
  */
 public class CodeAnalysisResults extends CodeAnalysisState {
 
-  protected List<FunctionInterface> functions = new ArrayList<FunctionInterface>();
-  protected List<ClassInterface> classes = new ArrayList<ClassInterface>();
+  private List<FunctionInterface> functions = new ArrayList<>();
+  private List<ClassInterface> classes = new ArrayList<>();
 
   /**
    * @return class list in current file

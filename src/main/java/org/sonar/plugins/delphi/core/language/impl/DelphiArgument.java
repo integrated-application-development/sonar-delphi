@@ -29,13 +29,13 @@ import org.sonar.plugins.delphi.core.language.ArgumentInterface;
  */
 public class DelphiArgument implements ArgumentInterface {
 
-  protected String name;
-  protected String type;
+  String name;
+  private String type;
 
   /**
    * Default ctor, creates argument with default name and type
    */
-  public DelphiArgument() {
+  DelphiArgument() {
     name = "UNKNOWN_ARGUMENT";
     type = "UNKNOWN_TYPE";
   }
@@ -78,10 +78,7 @@ public class DelphiArgument implements ArgumentInterface {
 
   @Override
   public boolean equals(Object o) {
-    if (o == null) {
-      return false;
-    }
-    return toString().equals(o.toString());
+    return o != null && toString().equals(o.toString());
   }
 
   @Override

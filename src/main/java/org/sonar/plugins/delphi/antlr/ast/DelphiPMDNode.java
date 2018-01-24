@@ -56,7 +56,7 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
    */
   public DelphiPMDNode(CommonTree node) {
     super(node.getToken());
-    this.children =(java.util.List) node.getChildren();
+    this.children = node.getChildren();
     this.parent = (CommonTree) node.getParent();
     this.childIndex = node.getChildIndex();
   }
@@ -124,7 +124,7 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
   /**
    * {@inheritDoc}
    */
-  public Object jjtAccept(DelphiParserVisitor visitor, Object data) {
+  private Object jjtAccept(DelphiParserVisitor visitor, Object data) {
     return visitor.visit(this, data);
   }
 
@@ -141,8 +141,8 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
     return internalfindAllChildren(this, type);
   }
 
-  public List<Tree> internalfindAllChildren(Tree node, int type) {
-    List<Tree> result = new ArrayList<Tree>();
+  private List<Tree> internalfindAllChildren(Tree node, int type) {
+    List<Tree> result = new ArrayList<>();
     for (int i = 0; i < node.getChildCount(); i++) {
       Tree child = node.getChild(i);
       if (child.getType() == type) {

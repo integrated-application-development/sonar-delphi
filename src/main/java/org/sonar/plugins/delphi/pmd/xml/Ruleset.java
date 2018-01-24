@@ -38,7 +38,7 @@ public class Ruleset {
   private String description;
 
   @XStreamImplicit
-  private List<DelphiRule> delphiRules = new ArrayList<DelphiRule>();
+  private List<DelphiRule> delphiRules = new ArrayList<>();
 
   @XStreamOmitField
   @XStreamAlias(value = "exclude-pattern")

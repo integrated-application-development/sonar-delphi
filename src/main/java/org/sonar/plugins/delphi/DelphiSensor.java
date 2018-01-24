@@ -23,7 +23,6 @@
 package org.sonar.plugins.delphi;
 
 import org.antlr.runtime.Token;
-import org.antlr.runtime.CommonToken;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -54,7 +53,6 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.ProgressReporter;
 import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
 
-import javax.xml.soap.Text;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -69,9 +67,9 @@ public class DelphiSensor implements Sensor {
   private int scannedFiles = 0;
   private Set<InputDir> packageList = new HashSet<>();
   private Map<InputDir, Integer> filesCount = new HashMap<>();
-  private List<InputFile> resourceList = new ArrayList<InputFile>();
-  private Map<InputFile, List<ClassInterface>> fileClasses = new HashMap<InputFile, List<ClassInterface>>();
-  private Map<InputFile, List<FunctionInterface>> fileFunctions = new HashMap<InputFile, List<FunctionInterface>>();
+  private List<InputFile> resourceList = new ArrayList<>();
+  private Map<InputFile, List<ClassInterface>> fileClasses = new HashMap<>();
+  private Map<InputFile, List<FunctionInterface>> fileFunctions = new HashMap<>();
   private Set<UnitInterface> units = new HashSet<>();
   private final List<File> excluded;
 
@@ -121,10 +119,7 @@ public class DelphiSensor implements Sensor {
 
   private boolean canTokenize(String fileName) {
     Set<String> includedFiles = DelphiSourceSanitizer.getIncludedFiles();
-    if (includedFiles.contains(fileName)) {
-      return false;
-    }
-    return !delphiProjectHelper.isExcluded(fileName, excluded);
+    return !includedFiles.contains(fileName) && !delphiProjectHelper.isExcluded(fileName, excluded);
   }
 
   private void doTokenize(SensorContext context, InputFile inputFile) {
@@ -273,7 +268,7 @@ public class DelphiSensor implements Sensor {
     if (filesCount.containsKey(directory)) {
       filesCount.put(directory, filesCount.get(directory) + 1);
     } else {
-      filesCount.put(directory, Integer.valueOf(1));
+      filesCount.put(directory, 1);
     }
     resourceList.add(resource);
 

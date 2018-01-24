@@ -50,10 +50,10 @@ public class DelphiFunction implements FunctionInterface {
   private boolean isAccessor = false;
   private boolean isDeclaration = false;
   private ClassInterface parentClass = null;
-  private List<StatementInterface> statements = new ArrayList<StatementInterface>();
-  private Set<FunctionInterface> called = new HashSet<FunctionInterface>();
-  private List<ArgumentInterface> args = new ArrayList<ArgumentInterface>();
-  private List<FunctionInterface> overFunc = new ArrayList<FunctionInterface>();
+  private List<StatementInterface> statements = new ArrayList<>();
+  private Set<FunctionInterface> called = new HashSet<>();
+  private List<ArgumentInterface> args = new ArrayList<>();
+  private List<FunctionInterface> overFunc = new ArrayList<>();
   private UnitInterface parentUnit = null;
   private boolean message = false;
 
@@ -287,10 +287,7 @@ public class DelphiFunction implements FunctionInterface {
 
   @Override
   public boolean equals(Object o) {
-    if (o == null) {
-      return false;
-    }
-    return toString().equalsIgnoreCase(o.toString());
+    return o != null && toString().equalsIgnoreCase(o.toString());
   }
 
   /**

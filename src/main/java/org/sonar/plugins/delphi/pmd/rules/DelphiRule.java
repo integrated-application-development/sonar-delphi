@@ -75,8 +75,8 @@ public class DelphiRule extends AbstractJavaRule {
     currentVisibility = DelphiLexer.PUBLISHED;
     inImplementationSection = false;
     init();
-    for (Iterator<?> i = acus.iterator(); i.hasNext();) {
-      DelphiPMDNode node = (DelphiPMDNode) i.next();
+    for (Object acu : acus) {
+      DelphiPMDNode node = (DelphiPMDNode) acu;
       ASTTree ast = node.getASTTree();
       if (ast != null) {
         String codeLine = node.getASTTree().getFileSourceLine(node.getLine());
