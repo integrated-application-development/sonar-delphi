@@ -91,7 +91,8 @@ public class DelphiPmdSensor implements Sensor {
     descriptor.name("PMD sensor").onlyOnLanguage(DelphiLanguage.KEY);
   }
 
-  private void addIssue(String ruleKey, String fileName, Integer beginLine, String message, Integer priority) {
+  private void addIssue(String ruleKey, String fileName, Integer beginLine, Integer startColumn, Integer endLine,
+                        String message, Integer priority) {
 
     DelphiUtils.LOG.debug("PMD Violation - rule: " + ruleKey + " file: " + fileName + " message: " + message);
 
@@ -102,8 +103,7 @@ public class DelphiPmdSensor implements Sensor {
             .forRule(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, ruleKey))
             .at(newIssue.newLocation()
                     .on(inputFile)
-                    .at(inputFile.newRange(beginLine, 1,
-                            beginLine, 1))
+                    .at(inputFile.newRange(beginLine, startColumn, endLine, startColumn +1))
                     .message(message))
             .gap(0.0);
     newIssue.save();
@@ -129,13 +129,14 @@ public class DelphiPmdSensor implements Sensor {
          {
            Node violation = violations.item(n);
            String beginLine = violation.getAttributes().getNamedItem("beginline").getTextContent();
-//           String endLine = violation.getAttributes().getNamedItem("endline").getTextContent();
-//           String beginColumn = violation.getAttributes().getNamedItem("begincolumn").getTextContent();
-//           String endColumn = violation.getAttributes().getNamedItem("endcolumn").getTextContent();
+           String endLine = violation.getAttributes().getNamedItem("endline").getTextContent();
+           String beginColumn = violation.getAttributes().getNamedItem("begincolumn").getTextContent();
+           String endColumn = violation.getAttributes().getNamedItem("endcolumn").getTextContent();
            String rule = violation.getAttributes().getNamedItem("rule").getTextContent();
            String priority = violation.getAttributes().getNamedItem("priority").getTextContent();
            String message = violation.getTextContent();
-           addIssue(rule, fileName, Integer.parseInt(beginLine), message, Integer.parseInt(priority));
+           addIssue(rule, fileName, Integer.parseInt(beginLine), Integer.parseInt(beginColumn),
+             Integer.parseInt(endLine), message, Integer.parseInt(priority));
          }
        }
     } catch (SAXParseException err) {

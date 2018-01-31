@@ -51,7 +51,7 @@ public final class DelphiRulesUtils {
    * @param configuration Xml file configuration
    * @return Rule set
    */
-  public static Ruleset buildRuleSetFromXml(String configuration) {
+  private static Ruleset buildRuleSetFromXml(String configuration) {
     XStream xstream = new XStream();
     xstream.setClassLoader(DelphiRulesUtils.class.getClassLoader());
     xstream.processAnnotations(Ruleset.class);
@@ -63,12 +63,12 @@ public final class DelphiRulesUtils {
   }
 
   /**
-   * Builds rule sets from ruleset tree
+   * Builds rule sets from Ruleset tree
    *
    * @param tree Rule set tree
    * @return Rule sets
    */
-  public static String buildXmlFromRuleset(Ruleset tree) {
+  private static String buildXmlFromRuleset(Ruleset tree) {
     XStream xstream = new XStream();
     xstream.setClassLoader(DelphiRulesUtils.class.getClassLoader());
     xstream.processAnnotations(Ruleset.class);
@@ -86,10 +86,10 @@ public final class DelphiRulesUtils {
    * Gets a configuration from file
    *
    * @param path File path
-   * @return COnfiguration string
+   * @return Configuration string
    */
-  public static String getConfigurationFromFile(String path) {
-    String configuration = null;
+  private static String getConfigurationFromFile(String path) {
+    String configuration;
     try {
       InputStream inputStream = Ruleset.class.getResourceAsStream(path);
       Scanner s = new Scanner(inputStream).useDelimiter("\\A");
@@ -104,7 +104,7 @@ public final class DelphiRulesUtils {
 
   private static final String RESOURCE_PATH = "/org/sonar/plugins/delphi/pmd/";
 
-  public static final String RULES_PATH = RESOURCE_PATH + "rules.xml";
+  private static final String RULES_PATH = RESOURCE_PATH + "rules.xml";
 
   /**
    * @return rules xml file
@@ -119,7 +119,7 @@ public final class DelphiRulesUtils {
    * @param path Xml file path
    * @return List of rules
    */
-  public static List<Rule> parseReferential(String path) {
+  private static List<Rule> parseReferential(String path) {
     Ruleset ruleset = DelphiRulesUtils.buildRuleSetFromXml(DelphiRulesUtils.getConfigurationFromFile(path));
     List<Rule> rulesRepository = new ArrayList<>();
     for (DelphiRule fRule : ruleset.getRules()) {
@@ -133,36 +133,30 @@ public final class DelphiRulesUtils {
    *
    * @param configuration rules configuration content
    * @param rulesRepository list os Rules
-   * @return a list of ActiveRules
+   * @param profile rules profile
    */
-  public static List<ActiveRule> importConfiguration(String configuration, List<Rule> rulesRepository) {
+  public static void importConfiguration(String configuration, List<Rule> rulesRepository, RulesProfile profile)
+  {
     Ruleset ruleset = DelphiRulesUtils.buildRuleSetFromXml(configuration);
-    List<ActiveRule> activeRules = new ArrayList<>();
     for (DelphiRule fRule : ruleset.getRules()) {
-      ActiveRule activeRule = createActiveRule(fRule, rulesRepository);
-      if (activeRule != null) {
-        activeRules.add(activeRule);
-      }
+      createActiveRule(fRule, rulesRepository, profile);
     }
-    return activeRules;
   }
 
   /**
    * Exports configuration
-   * @param activeProfile The currrent active quality profile
+   * @param activeProfile The current active quality profile
    * @return The active rules as XML String
    */
   public static String exportConfiguration(RulesProfile activeProfile) {
     Ruleset tree = buildRulesetFromActiveProfile(activeProfile
       .getActiveRulesByRepository(DelphiPmdConstants.REPOSITORY_KEY));
-    return DelphiRulesUtils.buildXmlFromRuleset(tree);
+    return buildXmlFromRuleset(tree);
   }
 
   private static Rule createRepositoryRule(DelphiRule fRule) {
-    RulePriority priority = severityFromLevel(fRule.getPriority());
-
     Rule rule = Rule.create(DelphiPmdConstants.REPOSITORY_KEY, fRule.getName(), fRule.getMessage()).setSeverity(
-      priority);
+        severityFromLevel(fRule.getPriority()));
 
     rule.setDescription(fRule.getDescription());
     rule.setTags(fRule.getTags());
@@ -188,44 +182,39 @@ public final class DelphiRulesUtils {
     return rule;
   }
 
-  private static ActiveRule createActiveRule(DelphiRule fRule, List<Rule> rulesRepository) {
+  private static void createActiveRule(DelphiRule fRule, List<Rule> rulesRepository, RulesProfile profile) {
     String name = fRule.getName();
     RulePriority fRulePriority = severityFromLevel(fRule.getPriority());
 
     for (Rule rule : rulesRepository) {
       if (rule.getKey().equals(name)) {
         RulePriority priority = fRulePriority != null ? fRulePriority : rule.getSeverity();
-        ActiveRule activeRule = new ActiveRule(null, rule, priority);
-        activeRule.setActiveRuleParams(buildActiveRuleParams(fRule, rule, activeRule));
-        return activeRule;
+        ActiveRule activeRule = profile.activateRule(rule, priority);
+        buildActiveRuleParams(fRule, rule, activeRule);
       }
     }
-    return null;
   }
 
-  static List<ActiveRuleParam>
-    buildActiveRuleParams(DelphiRule delphiRule, Rule repositoryRule, ActiveRule activeRule) {
-    List<ActiveRuleParam> activeRuleParams = new ArrayList<>();
+  private static void buildActiveRuleParams(DelphiRule delphiRule, Rule repositoryRule, ActiveRule activeRule) {
     if (delphiRule.getProperties() != null) {
       for (Property property : delphiRule.getProperties()) {
         if (repositoryRule.getParams() != null) {
           for (RuleParam ruleParam : repositoryRule.getParams()) {
             if (ruleParam.getKey().equals(property.getName())) {
-              activeRuleParams.add(new ActiveRuleParam(activeRule, ruleParam, property.getValue()));
+              activeRule.setParameter(ruleParam.getKey(), property.getValue());
             }
           }
         }
       }
     }
-    return activeRuleParams;
   }
 
-  static Ruleset buildRulesetFromActiveProfile(List<ActiveRule> activeRules) {
+  private static Ruleset buildRulesetFromActiveProfile(List<ActiveRule> activeRules) {
     Ruleset ruleset = new Ruleset();
     for (ActiveRule activeRule : activeRules) {
       if (activeRule.getRule().getRepositoryKey().equals(DelphiPmdConstants.REPOSITORY_KEY)) {
         String key = activeRule.getRule().getKey();
-        String priority = severityToLevel(activeRule.getPriority());
+        String priority = severityToLevel(activeRule.getSeverity());
         List<Property> properties = new ArrayList<>();
 
         DelphiRule delphiRule = new DelphiRule(activeRule.getConfigKey(), priority);
@@ -242,44 +231,19 @@ public final class DelphiRulesUtils {
   }
 
   private static RulePriority severityFromLevel(String level) {
-    if ("1".equals(level)) {
-      return RulePriority.BLOCKER;
+    try {
+      int intLevel = 5 - Integer.valueOf(level);
+      return RulePriority.valueOfInt(intLevel);
+    } catch (Exception e) {
+      return null;
     }
-    if ("2".equals(level)) {
-      return RulePriority.CRITICAL;
-    }
-    if ("3".equals(level)) {
-      return RulePriority.MAJOR;
-    }
-    if ("4".equals(level)) {
-      return RulePriority.MINOR;
-    }
-    if ("5".equals(level)) {
-      return RulePriority.INFO;
-    }
-    return null;
   }
 
   private static String severityToLevel(RulePriority priority) {
-    if (priority.equals(RulePriority.BLOCKER)) {
-      return "1";
-    }
-    if (priority.equals(RulePriority.CRITICAL)) {
-      return "2";
-    }
-    if (priority.equals(RulePriority.MAJOR)) {
-      return "3";
-    }
-    if (priority.equals(RulePriority.MINOR)) {
-      return "4";
-    }
-    if (priority.equals(RulePriority.INFO)) {
-      return "5";
-    }
-    throw new IllegalArgumentException("Level not supported: " + priority);
+    return ((Integer)(5 - priority.ordinal())).toString();
   }
 
-  public static boolean isStringNumeric( String str )
+  private static boolean isStringNumeric(String str)
   {
     DecimalFormatSymbols currentLocaleSymbols = DecimalFormatSymbols.getInstance();
     char localeMinusSign = currentLocaleSymbols.getMinusSign();

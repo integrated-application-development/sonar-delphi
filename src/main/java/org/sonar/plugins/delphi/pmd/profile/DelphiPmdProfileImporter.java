@@ -52,9 +52,7 @@ public class DelphiPmdProfileImporter extends ProfileImporter {
   public RulesProfile importProfile(Reader reader, ValidationMessages messages) {
     RulesProfile profile = RulesProfile.create();
     try {
-      List<ActiveRule> activeRules = DelphiRulesUtils.importConfiguration(IOUtils.toString(reader),
-        DelphiRulesUtils.getInitialReferential());
-      profile.setActiveRules(activeRules);
+      DelphiRulesUtils.importConfiguration(IOUtils.toString(reader), DelphiRulesUtils.getInitialReferential(), profile);
     } catch (IOException e) {
       messages.addErrorText(e.getMessage());
     }

@@ -168,7 +168,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
               .at(newIssue.newLocation()
                   .on(inputFile)
                   .at(inputFile.newRange(line, column,
-                      line, column))
+                      line, column + function.getShortName().length()))
                   .message(function.getRealName() + DEAD_FUNCTION_VIOLATION_MESSAGE));
           newIssue.save();
         }

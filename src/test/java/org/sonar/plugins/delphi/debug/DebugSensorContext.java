@@ -22,12 +22,14 @@
  */
 package org.sonar.plugins.delphi.debug;
 
+import org.sonar.api.SonarRuntime;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputModule;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
 import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
+import org.sonar.api.batch.sensor.error.NewAnalysisError;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.measure.NewMeasure;
@@ -193,4 +195,28 @@ public class DebugSensorContext implements SensorContext {
     return null;
   }
 
+  /**
+   * @since 6.0
+   */
+  @Override
+  public NewAnalysisError newAnalysisError() { return null; }
+
+  @Override
+  public boolean isCancelled() { return false; }
+
+  public SonarRuntime runtime() { return null; }
+
+  /**
+   * Add a property to the scanner context. This context is available
+   * in Compute Engine when processing the report.
+   * <br/>
+   * The properties starting with {@code "sonar.analysis."} are included to the
+   * payload of webhooks.
+   *
+   * @throws IllegalArgumentException if key or value parameter is null
+   * @see org.sonar.api.ce.posttask.PostProjectAnalysisTask.ProjectAnalysis#getScannerContext()
+   * @since 6.1
+   */
+  @Override
+  public void addContextProperty(String key, String value) {};
 }

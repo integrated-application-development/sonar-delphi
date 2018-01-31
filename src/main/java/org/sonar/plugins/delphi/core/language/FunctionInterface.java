@@ -25,7 +25,7 @@ package org.sonar.plugins.delphi.core.language;
 import java.util.List;
 
 /**
- * Interface used to create custom, language-dependend functions. Used by
+ * Interface used to create custom, language-dependent functions. Used by
  * AbstractAnalyser.
  */
 public interface FunctionInterface extends HasNameInterface {

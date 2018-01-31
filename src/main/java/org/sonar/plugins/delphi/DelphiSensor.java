@@ -135,8 +135,12 @@ public class DelphiSensor implements Sensor {
           int endPosition = Math.min(endLineRange.end().lineOffset(), token.getCharPositionInLine());
           TextRange startLineRange = inputFile.selectLine(prevToken.getLine());
           int startPosition = Math.min(startLineRange.end().lineOffset(), prevToken.getCharPositionInLine());
-          cpdTokens.addToken(prevToken.getLine(), startPosition, token.getLine(), endPosition,
-              prevToken.getText());
+          int startLine = prevToken.getLine();
+          int endLine = token.getLine();
+          if (endLine <= startLine && startPosition < endPosition) {
+            cpdTokens.addToken(startLine, startPosition, endLine, endPosition,
+                prevToken.getText());
+          }
         }
         prevToken = token;
         token = lexer.nextToken();

@@ -68,17 +68,17 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
    */
   private int fileComplexity = 0;
   /**
-   * Average cyclomatic complexity number by method.
+   * cyclomatic complexity number by method.
    */
-  private double functionComplexity = 0;
+  private int functionComplexity = 0;
   /**
    * Number of classes including nested classes, interfaces, enums and annotations.
    */
   private int classCount = 0;
   /**
-   * Average complexity by class.
+   * complexity by class.
    */
-  private double classComplexity = 0;
+  private int classComplexity = 0;
   /**
    * Number of Methods without including  accessors. A constructor is considered  to be a method.
    */
@@ -103,7 +103,6 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
     context = sensorContext;
     methodCyclomaticComplexityRule = activeRules.find(RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY);
     threshold = Integer.valueOf(methodCyclomaticComplexityRule.param("Threshold"));
-
   }
 
   /**
@@ -163,13 +162,6 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
 
     fileDist.add(fileComplexity);
 
-    if (methodsCount != 0.0) {
-      functionComplexity /= methodsCount;
-    }
-    if (classCount != 0.0) {
-      classComplexity /= classCount;
-    }
-
     saveAllMetrics();
   }
 
@@ -200,13 +192,13 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
     try {
       // Number of statements as defined in the DelphiLanguage Language Specification but without block definitions.
       context.<Integer>newMeasure().forMetric(CoreMetrics.STATEMENTS).on(resource).withValue(getIntMetric("STATEMENTS")).save();
+
       // The Cyclomatic Complexity Number
       context.<Integer>newMeasure().forMetric(CoreMetrics.COMPLEXITY).on(resource).withValue(getIntMetric("COMPLEXITY")).save();
       // Average complexity by class
-      context.<Double>newMeasure().forMetric(CoreMetrics.CLASS_COMPLEXITY).on(resource).withValue(getMetric("CLASS_COMPLEXITY")).save();
-
+      //context.<Double>newMeasure().forMetric(CoreMetrics.CLASS_COMPLEXITY).on(resource).withValue(getMetric("CLASS_COMPLEXITY")).save();
       // Average cyclomatic complexity number by method
-      context.<Double>newMeasure().forMetric(CoreMetrics.FUNCTION_COMPLEXITY).on(resource).withValue(getMetric("FUNCTION_COMPLEXITY")).save();
+      //context.<Double>newMeasure().forMetric(CoreMetrics.FUNCTION_COMPLEXITY).on(resource).withValue(getMetric("FUNCTION_COMPLEXITY")).save();
 
       // Number of classes including nested classes, interfaces, enums and annotations
       context.<Integer>newMeasure().forMetric(CoreMetrics.CLASSES).on(resource).withValue(getIntMetric("CLASSES")).save();
@@ -222,8 +214,8 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
   private void saveAllMetrics() {
     setIntMetric("STATEMENTS", statementsCount);
     setIntMetric("COMPLEXITY", fileComplexity);
-    setMetric("CLASS_COMPLEXITY", classComplexity);
-    setMetric("FUNCTION_COMPLEXITY", functionComplexity);
+    //setMetric("CLASS_COMPLEXITY", classComplexity);
+    //setMetric("FUNCTION_COMPLEXITY", functionComplexity);
     setIntMetric("CLASSES", classCount);
     setIntMetric("FUNCTIONS", methodsCount);
     setIntMetric("PUBLIC_API", publicApi);

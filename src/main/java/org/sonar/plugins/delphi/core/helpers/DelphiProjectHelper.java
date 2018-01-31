@@ -24,7 +24,7 @@ package org.sonar.plugins.delphi.core.helpers;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
-import org.sonar.api.batch.BatchSide;
+import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -47,7 +47,7 @@ import java.util.List;
 /**
  * Class that helps get the maven/ant configuration from .xml file
  */
-@BatchSide
+@ScannerSide
 public class DelphiProjectHelper  {
 
   public static final String DEFAULT_PACKAGE_NAME = "[default]";

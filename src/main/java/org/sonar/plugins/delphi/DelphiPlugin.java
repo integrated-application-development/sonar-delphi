@@ -25,7 +25,6 @@ package org.sonar.plugins.delphi;
 import org.sonar.api.Plugin;
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
-import org.sonar.plugins.delphi.colorizer.DelphiColorizerFormat;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.pmd.DelphiPmdSensor;
@@ -106,7 +105,7 @@ public class DelphiPlugin implements Plugin {
     // Core helpers
     list.add(DelphiProjectHelper.class);
     // Colorizer
-    list.add(DelphiColorizerFormat.class);
+//    list.add(DelphiColorizerFormat.class);
     // Surefire
     list.add(SurefireSensor.class);
     // Pmd

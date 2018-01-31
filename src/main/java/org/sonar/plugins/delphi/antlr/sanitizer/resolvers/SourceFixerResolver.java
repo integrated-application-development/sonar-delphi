@@ -25,7 +25,7 @@ package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
 import org.sonar.plugins.delphi.antlr.sanitizer.SourceResolver;
 
 /**
- * Fixex source file: appends '\n' to the end, adds whitespaces when needed. All
+ * Fixes source file: appends '\n' to the end, adds whitespaces when needed. All
  * that in order to ANTLR parser could work correctly.
  */
 public class SourceFixerResolver extends SourceResolver {
@@ -44,9 +44,9 @@ public class SourceFixerResolver extends SourceResolver {
   private StringBuilder fixSource(StringBuilder fileData) {
     String fixed = fileData.toString();
     // replace ':' with ' :'
-    fixed = fixed.replaceAll(":", " :");
+    //fixed = fixed.replaceAll(":", " :");
     // replace '..' with ' .. '
-    fixed = fixed.replaceAll("\\.\\.", " .. ");
+    //fixed = fixed.replaceAll("\\.\\.", " .. ");
     // adds '\n' before EOF
     fixed = fixed.concat("\n");
     return new StringBuilder(fixed);

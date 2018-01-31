@@ -45,7 +45,7 @@ public class CoverageFileData {
    */
   public CoverageFileData(InputFile resource) {
     this.resource = resource;
-    lineHitsBuilder = new PropertiesBuilder<String, Integer>(CoreMetrics.COVERAGE_LINE_HITS_DATA);
+    lineHitsBuilder = new PropertiesBuilder<>(CoreMetrics.COVERAGE_LINE_HITS_DATA);
   }
 
   /**

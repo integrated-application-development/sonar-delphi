@@ -34,6 +34,7 @@ import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.surefire.api.SurefireUtils;
+import org.sonar.api.config.MapSettings;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -65,13 +66,13 @@ public class SurefireSensorTest {
     when(delphiProjectHelper.baseDir()).thenReturn(new File(getClass().getResource(PROJECT_DIR).getFile()));
     when(delphiProjectHelper.findTestFileInDirectories(anyString())).thenAnswer(new Answer<InputFile>() {
       @Override
-      public InputFile answer(InvocationOnMock invocation) throws Throwable {
+      public InputFile answer(InvocationOnMock invocation) {
         String file = (String) invocation.getArguments()[0];
         return new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",(new File(file)).getPath());
       }
     });
 
-    settings = new Settings();
+    settings = new MapSettings();
   }
 
   @Test

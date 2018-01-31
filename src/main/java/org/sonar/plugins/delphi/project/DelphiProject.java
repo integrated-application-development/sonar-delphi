@@ -65,8 +65,6 @@ public class DelphiProject {
       DelphiUtils.LOG.error("Could not find .dproj file: " + xml.getAbsolutePath());
     } catch (IllegalArgumentException e) {
       DelphiUtils.LOG.error("No .dproj file to parse. (null)");
-    } catch (XMLStreamException | SAXException e) {
-      DelphiUtils.LOG.error(".dproj xml error: " + e.getMessage());
     }
   }
 
@@ -124,7 +122,7 @@ public class DelphiProject {
    * @throws SAXException when parsing error occurs
    * @throws IllegalArgumentException If file == null
    */
-  private void parseFile(File xml) throws IOException, XMLStreamException, SAXException {
+  private void parseFile(File xml) throws IOException {
     if (xml == null) {
       throw new IllegalArgumentException("No xml file passed");
     } else if (!xml.exists()) {
