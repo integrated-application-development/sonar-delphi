@@ -104,8 +104,6 @@ public class DelphiPlugin implements Plugin {
     list.add(DelphiLanguage.class);
     // Core helpers
     list.add(DelphiProjectHelper.class);
-    // Colorizer
-//    list.add(DelphiColorizerFormat.class);
     // Surefire
     list.add(SurefireSensor.class);
     // Pmd
