@@ -53,15 +53,10 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
 
   private ActiveRule methodCyclomaticComplexityRule;
 
-  // FUNCTION_COMPLEXITY_DISTRIBUTION = Number of methods for given
-  // complexities
-  private RangeDistributionBuilder functionDist = new RangeDistributionBuilder(
-//    CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION,
-    FUNCTIONS_DISTRIB_BOTTOM_LIMITS);
+  // FUNCTION_COMPLEXITY_DISTRIBUTION = Number of methods for given complexities
+  private RangeDistributionBuilder functionDist;
   // FILE COMPLEXITY DISTRIBUTION = Number of files for given complexities
-  private RangeDistributionBuilder fileDist = new RangeDistributionBuilder(
-          //CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION,
-    FILES_DISTRIB_BOTTOM_LIMITS);
+  private RangeDistributionBuilder fileDist;
 
   /**
    * The Cyclomatic Complexity Number.
@@ -117,6 +112,8 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
   public void analyse(InputFile resource, List<ClassInterface> classes,
     List<FunctionInterface> functions,
     Set<UnitInterface> units) {
+    functionDist = new RangeDistributionBuilder(FUNCTIONS_DISTRIB_BOTTOM_LIMITS);
+    fileDist =  new RangeDistributionBuilder(FILES_DISTRIB_BOTTOM_LIMITS);
     reset();
     Set<String> processedFunc = new HashSet<>();
     if (classes != null) {
@@ -196,9 +193,9 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
       // The Cyclomatic Complexity Number
       context.<Integer>newMeasure().forMetric(CoreMetrics.COMPLEXITY).on(resource).withValue(getIntMetric("COMPLEXITY")).save();
       // Average complexity by class
-      //context.<Double>newMeasure().forMetric(CoreMetrics.CLASS_COMPLEXITY).on(resource).withValue(getMetric("CLASS_COMPLEXITY")).save();
+      context.<Integer>newMeasure().forMetric(CoreMetrics.COMPLEXITY_IN_CLASSES).on(resource).withValue(getIntMetric("CLASS_COMPLEXITY")).save();
       // Average cyclomatic complexity number by method
-      //context.<Double>newMeasure().forMetric(CoreMetrics.FUNCTION_COMPLEXITY).on(resource).withValue(getMetric("FUNCTION_COMPLEXITY")).save();
+      context.<Integer>newMeasure().forMetric(CoreMetrics.COMPLEXITY_IN_FUNCTIONS).on(resource).withValue(getIntMetric("FUNCTION_COMPLEXITY")).save();
 
       // Number of classes including nested classes, interfaces, enums and annotations
       context.<Integer>newMeasure().forMetric(CoreMetrics.CLASSES).on(resource).withValue(getIntMetric("CLASSES")).save();
@@ -206,6 +203,9 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
       context.<Integer>newMeasure().forMetric(CoreMetrics.FUNCTIONS).on(resource).withValue(getIntMetric("FUNCTIONS")).save();
       // Number of public classes, public methods (without accessors) and public properties (without public static final ones)
       context.<Integer>newMeasure().forMetric(CoreMetrics.PUBLIC_API).on(resource).withValue(getIntMetric("PUBLIC_API")).save();
+
+      context.<String>newMeasure().forMetric(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION).on(resource).withValue(functionDist.build()).save();
+      context.<String>newMeasure().forMetric(CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION).on(resource).withValue(fileDist.build()).save();
     } catch (IllegalStateException ise) {
       DelphiUtils.LOG.error(ise.getMessage());
     }
@@ -214,8 +214,8 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
   private void saveAllMetrics() {
     setIntMetric("STATEMENTS", statementsCount);
     setIntMetric("COMPLEXITY", fileComplexity);
-    //setMetric("CLASS_COMPLEXITY", classComplexity);
-    //setMetric("FUNCTION_COMPLEXITY", functionComplexity);
+    setIntMetric("CLASS_COMPLEXITY", classComplexity);
+    setIntMetric("FUNCTION_COMPLEXITY", functionComplexity);
     setIntMetric("CLASSES", classCount);
     setIntMetric("FUNCTIONS", methodsCount);
     setIntMetric("PUBLIC_API", publicApi);
@@ -229,8 +229,6 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
     methodsCount = 0;
     statementsCount = 0;
     publicApi = 0;
-//    functionDist.clear();
-//    fileDist.clear();
     clearMetrics();
   }
 
@@ -251,7 +249,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
               .at(newIssue.newLocation()
                       .on(inputFile)
                       .at(inputFile.newRange(func.getBodyLine(), 1,
-                              func.getBodyLine(), 1))
+                              func.getBodyLine(), 2))
                       .message(String.format("The Cyclomatic Complexity of this method \"%s\" is %d which is greater than %d authorized.",
                               func.getRealName(), func.getComplexity(), threshold)));
       newIssue.save();
