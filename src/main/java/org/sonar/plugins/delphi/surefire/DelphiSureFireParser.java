@@ -135,7 +135,7 @@ public class DelphiSureFireParser {
     }
   }
 
-  private static UnitTestResult parseTestResult(NamedNodeMap testCase) throws XMLStreamException {
+  private static UnitTestResult parseTestResult(NamedNodeMap testCase) {
     UnitTestResult detail = new UnitTestResult();
     String name = testCase.getNamedItem("name").getTextContent();
     String classname = testCase.getNamedItem("classname").getTextContent();

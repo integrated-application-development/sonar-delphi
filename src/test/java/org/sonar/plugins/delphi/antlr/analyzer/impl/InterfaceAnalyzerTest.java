@@ -50,7 +50,7 @@ public class InterfaceAnalyzerTest {
   private AdvanceNodeOperation advanceOp;
 
   @Before
-  public void init() throws IOException, RecognitionException {
+  public void init() {
     analyzer = new InterfaceAnalyzer();
     results = new CodeAnalysisResults();
     results.setActiveUnit(new DelphiUnit("test"));

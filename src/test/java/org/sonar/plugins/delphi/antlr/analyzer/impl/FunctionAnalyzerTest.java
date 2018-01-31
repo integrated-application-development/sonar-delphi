@@ -56,7 +56,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   private CodeTree code;
   private AdvanceToNodeOperation advanceToFunction;
 
-  public void setupFile(String fileName) throws IOException, RecognitionException {
+  public void setupFile(String fileName) throws IOException {
     loadFile(fileName);
     results = new CodeAnalysisResults();
     results.setActiveUnit(new DelphiUnit("test"));

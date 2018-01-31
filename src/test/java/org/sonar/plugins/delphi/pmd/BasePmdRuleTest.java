@@ -100,7 +100,7 @@ public abstract class BasePmdRuleTest {
     when(delphiProjectHelper.getWorkgroupProjects()).thenReturn(Collections.singletonList(delphiProject));
     when(delphiProjectHelper.getFile(anyString())).thenAnswer(new Answer<InputFile>() {
       @Override
-      public InputFile answer(InvocationOnMock invocation) throws Throwable {
+      public InputFile answer(InvocationOnMock invocation) {
         InputFile inputFile = new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",(new File((String) invocation
                 .getArguments()[0])).getPath()).setModuleBaseDir(Paths.get(ROOT_DIR_NAME));
 

@@ -74,7 +74,7 @@ public class DelphiCoverageToolParserTest
 
     when(delphiProjectHelper.findFileInDirectories(anyString())).thenAnswer(new Answer<InputFile>() {
       @Override
-      public InputFile answer(InvocationOnMock invocation) throws Throwable {
+      public InputFile answer(InvocationOnMock invocation) {
         InputFile inputFile = new DefaultInputFile(moduleKey,((String) invocation.getArguments()[0])).setModuleBaseDir(Paths.get(ROOT_NAME));
 
         return inputFile;

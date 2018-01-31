@@ -42,7 +42,7 @@ public class DelphiASTTest {
   private ASTTree ast;
 
   @Before
-  public void setup() throws IOException, RecognitionException {
+  public void setup() {
     ast = new DelphiAST(DelphiUtils.getResource(TEST_FILE));
   }
 

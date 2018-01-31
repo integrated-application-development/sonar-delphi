@@ -55,7 +55,7 @@ public class StatementVerifierTest {
   private CodeTree codeTree;
 
   @Before
-  public void setup() throws IOException, RecognitionException {
+  public void setup() {
     File astFile = DelphiUtils.getResource(FILE_NAME);
     ast = new DelphiAST(astFile);
     codeTree = new CodeTree(new CodeNode<>(ast), new CodeNode<>(ast.getChild(0)));
@@ -63,7 +63,7 @@ public class StatementVerifierTest {
   }
 
   @Test
-  public void createStatementTest() throws StatementVerifierException {
+  public void createStatementTest() {
     int statementCount = 0;
     int complexStatementsCount = 0;
 

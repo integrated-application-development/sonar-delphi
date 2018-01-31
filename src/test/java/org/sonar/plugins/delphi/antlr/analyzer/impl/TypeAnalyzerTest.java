@@ -53,7 +53,7 @@ public class TypeAnalyzerTest {
   private AdvanceToNodeOperation advanceToOp;
 
   @Before
-  public void init() throws IOException, RecognitionException {
+  public void init() {
     analyzer = new TypeAnalyzer();
     results = new CodeAnalysisResults();
     results.setActiveUnit(new DelphiUnit("test"));

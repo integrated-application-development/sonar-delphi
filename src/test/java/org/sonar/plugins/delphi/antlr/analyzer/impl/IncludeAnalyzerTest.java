@@ -55,7 +55,7 @@ public class IncludeAnalyzerTest {
   private AdvanceToNodeOperation advanceToImpl;
 
   @Before
-  public void init() throws IOException, RecognitionException {
+  public void init() {
     analyzer = new IncludeAnalyzer();
     results = new CodeAnalysisResults();
     results.setActiveUnit(new DelphiUnit("test"));

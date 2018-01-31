@@ -81,7 +81,7 @@ public class DelphiProjectTest {
   }
 
   @Test
-  public void parseFileTest() throws IllegalArgumentException, IOException {
+  public void parseFileTest() throws IllegalArgumentException {
     project = new DelphiProject(DelphiUtils.getResource(XML_FILE));
 
     assertEquals("Simple Delphi Product", project.getName());

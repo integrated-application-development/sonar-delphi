@@ -39,7 +39,7 @@ public class DelphiPMDTest {
   private static final String TEST_FILE = "/org/sonar/plugins/delphi/PMDTest/smallpmd.pas";
 
   @Test
-  public void getNodesFromASTTest() throws IOException, RecognitionException {
+  public void getNodesFromASTTest() {
     File testFile = DelphiUtils.getResource(TEST_FILE);
     DelphiPMD pmd = new DelphiPMD();
     DelphiAST ast = new DelphiAST(testFile);

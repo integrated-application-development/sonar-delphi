@@ -67,7 +67,7 @@ public class AdvanceNodeOperationTest extends OperationsTestsCommon {
   }
 
   @Test
-  public void executeOnFileTest() throws IOException, RecognitionException {
+  public void executeOnFileTest() {
     File astFile = DelphiUtils.getResource(FILE_NAME);
     ASTTree ast = new DelphiAST(astFile);
     CodeTree codeTree = new CodeTree(new CodeNode<>(ast), new CodeNode<>(ast.getChild(0)));

@@ -54,7 +54,7 @@ public class TypePropertyAnalyzerTest {
   private AdvanceToNodeOperation advanceToOp;
 
   @Before
-  public void init() throws IOException, RecognitionException {
+  public void init() {
     analyzer = new TypePropertyAnalyzer();
     results = new CodeAnalysisResults();
     results.setActiveUnit(new DelphiUnit("test"));

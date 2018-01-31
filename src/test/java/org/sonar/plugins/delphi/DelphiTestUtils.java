@@ -43,7 +43,7 @@ public class DelphiTestUtils {
     when(mock.getFile(any(File.class))).thenAnswer(new Answer<InputFile>() {
 
       @Override
-      public InputFile answer(InvocationOnMock invocation) throws Throwable {
+      public InputFile answer(InvocationOnMock invocation) {
         File file = (File) invocation.getArguments()[0];
         InputFile inputFile = new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",file.getAbsolutePath());
 
@@ -57,7 +57,7 @@ public class DelphiTestUtils {
   public static void mockGetFileFromString(DelphiProjectHelper mock) {
     when(mock.getFile(any(String.class))).thenAnswer(new Answer<InputFile>() {
       @Override
-      public InputFile answer(InvocationOnMock invocation) throws Throwable {
+      public InputFile answer(InvocationOnMock invocation) {
         String fileName = (String) invocation.getArguments()[0];
 
         File file = new File(fileName);

@@ -81,7 +81,7 @@ public class FunctionParametersAnalyzerTest {
   }
 
   @Test
-  public void doAnalyzeTest() throws IOException, RecognitionException {
+  public void doAnalyzeTest() {
     results.setActiveFunction(new DelphiFunction("myProcedure"));
 
     File testFile = DelphiUtils.getResource(TEST_FILE);
@@ -111,7 +111,7 @@ public class FunctionParametersAnalyzerTest {
   }
 
   @Test
-  public void throwExceptionWhenActiveFunctionIsNull() throws IOException, RecognitionException {
+  public void throwExceptionWhenActiveFunctionIsNull() {
     expectedException.equals(IllegalArgumentException.class);
     expectedException.expectMessage(containsString("activeFunction cannot be null"));
 

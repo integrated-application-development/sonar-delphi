@@ -97,7 +97,7 @@ public class DelphiPmdSensorTest {
 
     when(delphiProjectHelper.getFile(anyString())).thenAnswer(new Answer<InputFile>() {
       @Override
-      public InputFile answer(InvocationOnMock invocation) throws Throwable {
+      public InputFile answer(InvocationOnMock invocation) {
         return inputFile;
       }
     });

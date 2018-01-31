@@ -173,7 +173,7 @@ public class DeadCodeMetricsTest {
   }
 
   @Test
-  public void analyseFileTest() throws IllegalStateException, IOException, RecognitionException {
+  public void analyseFileTest() throws IllegalStateException {
     DelphiAST ast = new DelphiAST(DelphiUtils.getResource(TEST_FILE));
     ASTAnalyzer analyser = new DelphiASTAnalyzer(DelphiTestUtils.mockProjectHelper());
     assertFalse("Grammar error", ast.isError());

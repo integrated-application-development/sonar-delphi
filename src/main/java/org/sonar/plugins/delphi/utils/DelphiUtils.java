@@ -285,7 +285,7 @@ public final class DelphiUtils {
    * 
    * @param file File to be read
    * @param encoding File content encoding
-   * @return File content readed to a string
+   * @return File content read to a string
    * @throws IOException When file not found
    */
   public static String readFileContent(File file, String encoding)

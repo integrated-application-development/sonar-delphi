@@ -133,7 +133,7 @@ public class IncludeResolver extends SourceResolver {
     return introduceIncludedData(newData, dataToInclude);
   }
 
-  private String readFileIncludeData(File includeFile) throws IncludeResolverException, IOException {
+  private String readFileIncludeData(File includeFile) throws IOException {
     StringBuilder includeData = new StringBuilder(DelphiUtils.readFileContent(includeFile, null));
     SourceResolverResults includedResults = new SourceResolverResults(includeFile.getAbsolutePath(), includeData);
 

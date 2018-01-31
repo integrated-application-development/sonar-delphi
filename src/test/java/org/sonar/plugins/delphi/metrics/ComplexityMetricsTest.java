@@ -108,7 +108,7 @@ public class ComplexityMetricsTest {
   }
 
   @Test
-  public void analyseListUtils() throws Exception {
+  public void analyseListUtils() {
     // init
     File testFile = DelphiUtils.getResource(FILE_NAME_LIST_UTILS);
     CodeAnalysisCacheResults.resetCache();

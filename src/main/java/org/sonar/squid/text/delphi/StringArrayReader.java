@@ -68,7 +68,7 @@ public class StringArrayReader extends Reader {
   }
 
   @Override
-  public void close() throws IOException {
+  public void close() {
     stringReader.close();
   }
 

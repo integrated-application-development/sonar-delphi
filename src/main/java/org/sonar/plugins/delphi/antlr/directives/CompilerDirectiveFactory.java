@@ -106,7 +106,7 @@ public class CompilerDirectiveFactory {
     }
   }
 
-  private int getDirectiveFirstChar(String data, int startPosition) throws CompilerDirectiveFactorySyntaxException {
+  private int getDirectiveFirstChar(String data, int startPosition) {
     return data.indexOf("{$", startPosition);
   }
 

@@ -55,7 +55,7 @@ public class TypeInheritanceAnalyzerTest {
   private AdvanceToNodeOperation advanceToOp;
 
   @Before
-  public void init() throws IOException, RecognitionException {
+  public void init() {
     analyzer = new TypeInheritanceAnalyzer();
     results = new CodeAnalysisResults();
     results.setActiveUnit(new DelphiUnit("test"));

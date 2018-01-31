@@ -52,7 +52,7 @@ public class UnitAnalyzerTest {
   private CodeNode<ASTTree> astNode;
 
   @Before
-  public void init() throws IllegalStateException, IOException, RecognitionException {
+  public void init() throws IllegalStateException {
     analyzer = new UnitAnalyzer();
     results = new CodeAnalysisResults();
     astNode = new CodeNode<ASTTree>(new DelphiAST(DelphiUtils.getResource(FILE_NAME)));

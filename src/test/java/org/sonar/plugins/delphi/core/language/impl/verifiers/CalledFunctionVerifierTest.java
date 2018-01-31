@@ -56,7 +56,7 @@ public class CalledFunctionVerifierTest {
   CodeTree code;
 
   @Before
-  public void setup() throws IOException, RecognitionException {
+  public void setup() {
     results = new CodeAnalysisResults();
     verifier = new CalledFunctionVerifier(results);
 
