@@ -39,6 +39,8 @@ import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.DelphiASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.sanitizer.DelphiSourceSanitizer;
+import org.sonar.plugins.delphi.codecoverage.DelphiCodeCoverageParser;
+import org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
@@ -109,12 +111,23 @@ public class DelphiSensor implements Sensor {
     List<DelphiProject> projects = delphiProjectHelper.getWorkgroupProjects();
     for (DelphiProject delphiProject : projects)
     {
+      addCoverage(context);
       CodeAnalysisCacheResults.resetCache();
       parseFiles(delphiProject, context);
       parsePackages(context);
 
       processFiles(context);
     }
+  }
+
+  private void addCoverage(SensorContext context)
+  {
+    String coverageReport = context.settings().getString(DelphiPlugin.CODECOVERAGE_REPORT_KEY);
+
+    DelphiCodeCoverageParser coverageParser = new DelphiCodeCoverageToolParser(
+        new File(coverageReport),
+        delphiProjectHelper);
+    coverageParser.parse(context);
   }
 
   private boolean canTokenize(String fileName) {
@@ -138,8 +151,7 @@ public class DelphiSensor implements Sensor {
           int startLine = prevToken.getLine();
           int endLine = token.getLine();
           if (endLine <= startLine && startPosition < endPosition) {
-            cpdTokens.addToken(startLine, startPosition, endLine, endPosition,
-                prevToken.getText());
+            cpdTokens.addToken(startLine, startPosition, endLine, endPosition, prevToken.getText());
           }
         }
         prevToken = token;
