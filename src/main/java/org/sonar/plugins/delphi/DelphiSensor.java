@@ -122,12 +122,15 @@ public class DelphiSensor implements Sensor {
 
   private void addCoverage(SensorContext context)
   {
-    String coverageReport = context.settings().getString(DelphiPlugin.CODECOVERAGE_REPORT_KEY);
+    String coverageTool = context.settings().getString(DelphiPlugin.CODECOVERAGE_TOOL_KEY);
+    if (coverageTool.equals("dcc")) {
+      String coverageReport = context.settings().getString(DelphiPlugin.CODECOVERAGE_REPORT_KEY);
 
-    DelphiCodeCoverageParser coverageParser = new DelphiCodeCoverageToolParser(
-        new File(coverageReport),
-        delphiProjectHelper);
-    coverageParser.parse(context);
+      DelphiCodeCoverageParser coverageParser = new DelphiCodeCoverageToolParser(
+          new File(coverageReport),
+          delphiProjectHelper);
+      coverageParser.parse(context);
+    }
   }
 
   private boolean canTokenize(String fileName) {
