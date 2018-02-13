@@ -34,7 +34,6 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.surefire.data.UnitTestClassReport;
 import org.sonar.plugins.surefire.data.UnitTestIndex;
 
-import javax.xml.stream.XMLStreamException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
@@ -145,7 +144,7 @@ public class DelphiSureFireParser {
     String time = testCase.getNamedItem("time").getTextContent();
     Long duration = null;
     String success = testCase.getNamedItem("success").getTextContent();
-    if (success != "True") {
+    if (!success.equals("True")) {
       duration = 0L;
       status = "failure";
     }
@@ -177,10 +176,12 @@ public class DelphiSureFireParser {
         for (int n = 0; n < testCases.getLength(); n++)
         {
           Node testCase = testCases.item(n);
-          String testClassName = testCase.getAttributes().getNamedItem("classname").getTextContent();
-//          String testClassName = getClassname(testCase, testSuiteClassName);
-          UnitTestClassReport classReport = index.index(testClassName);
-          classReport.add(parseTestResult(testCase.getAttributes()));
+          Node className = testCase.getAttributes().getNamedItem("classname");
+          if (className != null) {
+            String testClassName = className.getTextContent();
+            UnitTestClassReport classReport = index.index(testClassName);
+            classReport.add(parseTestResult(testCase.getAttributes()));
+          }
         }
       }
     } catch (SAXParseException err) {

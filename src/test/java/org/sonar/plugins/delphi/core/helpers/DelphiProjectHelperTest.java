@@ -26,7 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputDir;
-import org.sonar.api.config.Settings;
+import org.sonar.api.config.Configuration;
 import org.sonar.api.batch.sensor.SensorContext;
 import java.io.File;
 
@@ -48,7 +48,7 @@ public class DelphiProjectHelperTest {
     baseDir = currentDir.getParentFile();
 
     FileSystem fs = mock(FileSystem.class);
-    Settings settings = mock(Settings.class);
+    Configuration settings = mock(Configuration.class);
     sensorContext = mock(SensorContext.class);
 
     delphiProjectHelper = new DelphiProjectHelper(settings, fs);

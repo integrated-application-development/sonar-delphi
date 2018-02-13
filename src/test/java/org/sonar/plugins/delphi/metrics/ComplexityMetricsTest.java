@@ -25,9 +25,8 @@ package org.sonar.plugins.delphi.metrics;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.FileMetadata;
+import org.sonar.api.batch.fs.internal.*;
 import org.sonar.api.batch.rule.ActiveRules;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.delphi.DelphiTestUtils;
@@ -39,9 +38,14 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
+import org.sonar.api.batch.fs.internal.DefaultIndexedFile;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
@@ -75,7 +79,7 @@ public class ComplexityMetricsTest {
   }
 
   @Test
-  public void analyzeTest() {
+  public void analyzeTest() throws FileNotFoundException {
     // init
     File testFile = DelphiUtils.getResource(FILE_NAME);
     CodeAnalysisCacheResults.resetCache();
@@ -84,11 +88,15 @@ public class ComplexityMetricsTest {
 
     // processing
     ComplexityMetrics metrics = new ComplexityMetrics(activeRules, sensorContext);
-    DefaultInputFile inputFile = new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",getRelativePath(baseDir,testFile.getPath()))
-      .setModuleBaseDir(Paths.get(ROOT_NAME))
-      .setLanguage(DelphiLanguage.KEY)
-      .setType(InputFile.Type.MAIN)
-      .initMetadata(new FileMetadata().readMetadata(testFile, Charset.defaultCharset()));
+
+    InputStream fileStream = new FileInputStream(testFile);
+    Metadata metadata = new FileMetadata().readMetadata(fileStream, StandardCharsets.UTF_8, testFile.getPath());
+    DefaultInputFile inputFile = TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, testFile)
+        .setModuleBaseDir(baseDir.toPath())
+        .setLanguage(DelphiLanguage.KEY)
+        .setType(InputFile.Type.MAIN)
+        .setMetadata(metadata)
+        .build();
 
     metrics.analyse(inputFile, results.getClasses(), results.getFunctions(), null);
 
@@ -117,8 +125,8 @@ public class ComplexityMetricsTest {
 
     // processing
     ComplexityMetrics metrics = new ComplexityMetrics(activeRules, sensorContext);
-    metrics.analyse(new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5","test"),
-        results.getClasses(), results.getFunctions(), null);
+//    metrics.analyse(new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5","test"),
+//        results.getClasses(), results.getFunctions(), null);
   }
 
 }

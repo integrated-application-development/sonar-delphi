@@ -25,7 +25,7 @@ package org.sonar.plugins.delphi.surefire;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
-import org.sonar.api.config.Settings;
+import org.sonar.api.config.Configuration;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -41,7 +41,7 @@ public class SurefireSensor implements Sensor {
 
   private static final String DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY = "target/surefire-reports";
 
-  private final Settings settings;
+  private final Configuration configuration;
   private final DelphiProjectHelper delphiProjectHelper;
 
   /**
@@ -50,8 +50,8 @@ public class SurefireSensor implements Sensor {
    * @param settings Settings provided by Sonar
    * @param delphiProjectHelper The DelphiProjectHelper
    */
-  public SurefireSensor(Settings settings, DelphiProjectHelper delphiProjectHelper) {
-    this.settings = settings;
+  public SurefireSensor(Configuration settings, DelphiProjectHelper delphiProjectHelper) {
+    this.configuration = settings;
     this.delphiProjectHelper = delphiProjectHelper;
   }
 
@@ -73,14 +73,14 @@ public class SurefireSensor implements Sensor {
   public void execute(SensorContext context)
   {
     DelphiUtils.LOG.info("Delphi sensor execute...");
-    String[] paths = settings.getStringArray(SurefireUtils.SUREFIRE_REPORTS_PATH_PROPERTY);
+    String[] paths = configuration.getStringArray(SurefireUtils.SUREFIRE_REPORTS_PATH_PROPERTY);
 
     if (paths == null || paths.length == 0) {
       DelphiUtils.LOG.warn("No Surefire reports directory found! Using default directory: " + DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY);
       paths = new String[] {DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY};
     }
 
-    String mainPath = delphiProjectHelper.baseDir().getAbsolutePath();
+    String mainPath = context.fileSystem().baseDir().getAbsolutePath();
     for (String path : paths) {
       File reportDirectory = DelphiUtils.resolveAbsolutePath(mainPath, path);
       if (!reportDirectory.exists()) {

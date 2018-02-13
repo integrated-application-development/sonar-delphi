@@ -30,6 +30,8 @@ import org.mockito.stubbing.Answer;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.FileMetadata;
+import org.sonar.api.batch.fs.internal.Metadata;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.plugins.delphi.DelphiTestUtils;
@@ -40,9 +42,9 @@ import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -64,16 +66,9 @@ public class DelphiPmdSensorTest {
   private DelphiPmdProfileExporter profileExporter;
   private RulesProfile rulesProfile;
   private File baseDir;
-  private InputFile inputFile;
-
-  private String getRelativePath(File prefix, String fullPath)
-  {
-    String result = fullPath.substring(prefix.getAbsolutePath().length() + 1);
-    return result;
-  }
 
   @Before
-  public void init() {
+  public void init() throws FileNotFoundException{
     baseDir = DelphiUtils.getResource(ROOT_NAME);
     sensorContext = SensorContextTester.create(baseDir);
 
@@ -84,11 +79,14 @@ public class DelphiPmdSensorTest {
 
     File srcFile = DelphiUtils.getResource(TEST_FILE);
 
-    inputFile = new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",getRelativePath(baseDir,srcFile.getPath()))
+    InputStream fileStream = new FileInputStream(srcFile);
+    Metadata metadata = new FileMetadata().readMetadata(fileStream, StandardCharsets.UTF_8, srcFile.getPath());
+    final InputFile inputFile = TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, srcFile)
         .setModuleBaseDir(baseDir.toPath())
         .setLanguage(DelphiLanguage.KEY)
         .setType(InputFile.Type.MAIN)
-        .initMetadata(new FileMetadata().readMetadata(srcFile, Charset.defaultCharset()));
+        .setMetadata(metadata)
+        .build();
 
     DelphiProject delphiProject = new DelphiProject("Default Project");
     delphiProject.setSourceFiles(Collections.singletonList(inputFile));

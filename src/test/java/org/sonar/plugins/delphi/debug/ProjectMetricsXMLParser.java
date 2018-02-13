@@ -73,18 +73,18 @@ public class ProjectMetricsXMLParser extends SimpleXMLParser {
    * @return Expected values, array of doubles
    */
 
-  public Map<String, Double> getFileValues(String filename) {
+  public Map<String, String> getFileValues(String filename) {
 
     if (!fileMap.containsKey(filename)) {
       return null;
     }
-    Map<String, Double> result = new HashMap<>();
+    Map<String, String> result = new HashMap<>();
     NodeList att = getValueNodes(fileMap.get(filename), "metric");
 
     for (int i = 0; i < att.getLength(); ++i) {
       Node metric = att.item(i);
       String name = metric.getAttributes().getNamedItem("name").getNodeValue();
-      result.put(name,Double.valueOf(getNodeValueText(metric)));
+      result.put(name,getNodeValueText(metric));
     }
 
     return result;

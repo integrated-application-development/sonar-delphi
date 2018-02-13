@@ -24,27 +24,19 @@ package org.sonar.plugins.delphi.surefire;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.config.Settings;
-import org.sonar.plugins.delphi.DelphiTestUtils;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
-import org.sonar.plugins.delphi.debug.DebugSensorContext;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.surefire.api.SurefireUtils;
-import org.sonar.api.config.MapSettings;
+import org.sonar.api.config.internal.MapSettings;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.FilenameFilter;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertEquals;
 
 public class SurefireSensorTest {
 
@@ -52,25 +44,34 @@ public class SurefireSensorTest {
   private static final String PROJECT_TEST_DIR = "/org/sonar/plugins/delphi/UnitTest/tests";
   private static final String SUREFIRE_REPORT_DIR = "./reports";
 
-  private Settings settings;
+  private MapSettings settings;
   private DelphiProjectHelper delphiProjectHelper;
+  private SensorContextTester sensorContext;
 
   @Before
-  public void setup() throws FileNotFoundException
+  public void setup()
   {
-    List<File> testDirs = new ArrayList<>();
-    testDirs.add(DelphiUtils.getResource(PROJECT_TEST_DIR));
+    File baseDir = DelphiUtils.getResource(PROJECT_TEST_DIR);
 
-    delphiProjectHelper = DelphiTestUtils.mockProjectHelper();
+    sensorContext = SensorContextTester.create(DelphiUtils.getResource(PROJECT_DIR));
 
-    when(delphiProjectHelper.baseDir()).thenReturn(new File(getClass().getResource(PROJECT_DIR).getFile()));
-    when(delphiProjectHelper.findTestFileInDirectories(anyString())).thenAnswer(new Answer<InputFile>() {
-      @Override
-      public InputFile answer(InvocationOnMock invocation) {
-        String file = (String) invocation.getArguments()[0];
-        return new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",(new File(file)).getPath());
-      }
+    delphiProjectHelper = new DelphiProjectHelper(sensorContext.config(), sensorContext.fileSystem());
+
+    File[] unitTestFiles =  baseDir.listFiles(new FilenameFilter() {
+    @Override
+    public boolean accept(File dir, String name) {
+      return name.endsWith(".pas");
+    }
     });
+
+    for (File unitTestFile : unitTestFiles) {
+      InputFile inputFile = TestInputFileBuilder.create("",
+          baseDir, unitTestFile)
+          .setLanguage(DelphiLanguage.KEY)
+          .setType(InputFile.Type.TEST)
+          .build();
+      sensorContext.fileSystem().add(inputFile);
+    }
 
     settings = new MapSettings();
   }
@@ -78,20 +79,19 @@ public class SurefireSensorTest {
   @Test
   public void executeTest() {
     settings.setProperty(SurefireUtils.SUREFIRE_REPORTS_PATH_PROPERTY, SUREFIRE_REPORT_DIR);
-    DebugSensorContext context = new DebugSensorContext();
-    SurefireSensor sensor = new SurefireSensor(settings, delphiProjectHelper);
-    sensor.execute(context);
+    SurefireSensor sensor = new SurefireSensor(settings.asConfig(), delphiProjectHelper);
+    sensor.execute(sensorContext);
 
-    //assertEquals(18, context.getMeasuresKeys().size());
+    assertEquals(6, sensorContext.measures(":MyTest1.pas").size());
+    assertEquals(6, sensorContext.measures(":MyTest2.pas").size());
   }
 
   @Test
   public void executeTestUsingDefaultSurefireReportsPath() {
-    DebugSensorContext context = new DebugSensorContext();
-    SurefireSensor sensor = new SurefireSensor(settings, delphiProjectHelper);
-    sensor.execute(context);
+    SurefireSensor sensor = new SurefireSensor(settings.asConfig(), delphiProjectHelper);
+    sensor.execute(sensorContext);
 
-    //assertEquals(24, context.getMeasuresKeys().size());
+    assertEquals(0, sensorContext.measures(":MyTest1.pas").size());
+    assertEquals(0, sensorContext.measures(":MyTest2.pas").size());
   }
-
 }

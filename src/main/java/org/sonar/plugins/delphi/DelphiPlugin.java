@@ -43,13 +43,14 @@ import java.util.List;
 
 @Properties({
   @Property(key = DelphiPlugin.EXCLUDED_DIRECTORIES_KEY, defaultValue = "", name = "Excluded sources",
-    description = "List of excluded directories or files, that will not be parsed.", global = true, project = true),
+    description = "List of excluded directories or files, that will not be parsed.", global = true, project = true,
+     multiValues = true),
   @Property(key = DelphiPlugin.CC_EXCLUDED_KEY, defaultValue = "", name = "Code coverage excluded directories",
     description = "Code coverage excluded directories list. Files in those directories will not be checked for code coverage.",
     global = true, project = true),
   @Property(key = DelphiPlugin.INCLUDED_DIRECTORIES_KEY, defaultValue = "", name = "Include directories",
     description = "Include directories that will be looked for include files for preprocessor directive {$include}", global = true,
-    project = true),
+    project = true, multiValues = true),
   @Property(key = DelphiPlugin.INCLUDE_EXTEND_KEY, defaultValue = "true", name = "Include extend option",
     description = "Include extend options, can be: 'true' (include files will be processed) or 'false' (turn the feature off)",
     global = true, project = true),

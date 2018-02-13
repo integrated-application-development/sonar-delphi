@@ -63,5 +63,9 @@
         </srcfile>
       </package>
     </all>
+    <linehits>
+      <file name="Globals.pas">16=1;17=1;23=0</file>
+      <file name="MainWindow.pas">31=1;36=1;37=1;38=1;39=1;40=1</file>
+    </linehits>
   </data>
 </report>

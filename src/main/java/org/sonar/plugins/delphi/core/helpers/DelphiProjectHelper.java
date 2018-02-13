@@ -29,7 +29,7 @@ import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputDir;
-import org.sonar.api.config.Settings;
+import org.sonar.api.config.Configuration;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
@@ -52,7 +52,7 @@ public class DelphiProjectHelper  {
 
   public static final String DEFAULT_PACKAGE_NAME = "[default]";
 
-  private final Settings settings;
+  private final Configuration settings;
   private final FileSystem fs;
   private List<File> excludedSources;
 
@@ -62,7 +62,7 @@ public class DelphiProjectHelper  {
    * @param settings Project settings 
    * @param fs Sonar FileSystem
    */
-  public DelphiProjectHelper(Settings settings, FileSystem fs) {
+  public DelphiProjectHelper(Configuration settings, FileSystem fs) {
     this.settings = settings;
     this.fs = fs;
     DelphiUtils.LOG.info("Delphi Project Helper creation!!!");
@@ -75,7 +75,7 @@ public class DelphiProjectHelper  {
    * @return True if so, false otherwise
    */
   public boolean shouldExtendIncludes() {
-    String str = settings.getString(DelphiPlugin.INCLUDE_EXTEND_KEY);
+    String str = settings.get(DelphiPlugin.INCLUDE_EXTEND_KEY).get();
     return "true".equals(str);
   }
 
@@ -144,30 +144,6 @@ public class DelphiProjectHelper  {
   }
 
   /**
-   * Gets the project file (.dproj)
-   *
-   * @return Path to project file
-   */
-  private String getProjectFile() {
-    if (settings == null) {
-      return null;
-    }
-    return settings.getString(DelphiPlugin.PROJECT_FILE_KEY);
-  }
-
-  /**
-   * Gets the workgroup (.groupproj) file
-   *
-   * @return Path to workgroup file
-   */
-  private String getWorkgroupFile() {
-    if (settings == null) {
-      return null;
-    }
-    return settings.getString(DelphiPlugin.WORKGROUP_FILE_KEY);
-  }
-
-  /**
    * Create list of DelphiLanguage projects in a current workspace
    *
    * @return List of DelphiLanguage projects
@@ -175,12 +151,10 @@ public class DelphiProjectHelper  {
   public List<DelphiProject> getWorkgroupProjects() {
     List<DelphiProject> list = new ArrayList<>();
 
-    String dprojPath = getProjectFile();
-    String gprojPath = getWorkgroupFile();
-
     // Single workgroup file, containing list of .dproj files
-    if (!StringUtils.isEmpty(gprojPath)) {
+    if (settings.hasKey(DelphiPlugin.WORKGROUP_FILE_KEY)) {
       try {
+        String gprojPath = settings.get(DelphiPlugin.WORKGROUP_FILE_KEY).get();
         DelphiUtils.LOG.debug(".groupproj file found: " + gprojPath);
         DelphiWorkgroup workGroup = new DelphiWorkgroup(new File(gprojPath));
         list.addAll(workGroup.getProjects());
@@ -195,9 +169,10 @@ public class DelphiProjectHelper  {
       }
     }
     // Single .dproj file
-    else if (!StringUtils.isEmpty(dprojPath)) {
+    else if (settings.hasKey(DelphiPlugin.PROJECT_FILE_KEY)) {
+      String dprojPath = settings.get(DelphiPlugin.PROJECT_FILE_KEY).get();
       File dprojFile = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), dprojPath);
-      DelphiUtils.LOG.info(".dproj file found: " + gprojPath);
+      DelphiUtils.LOG.info(".dproj file found: " + dprojPath);
       DelphiProject newProject = new DelphiProject(dprojFile);
       list.add(newProject);
     }

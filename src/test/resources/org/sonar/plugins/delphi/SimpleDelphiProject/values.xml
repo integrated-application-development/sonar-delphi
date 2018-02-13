@@ -4,191 +4,227 @@
 	
 	<file>
 		<name>TestLib.dpk</name>
-		<metric name="complexity">0.0</metric>
-		<metric name="functions">0.0</metric>
-		<metric name="function_complexity">0.0</metric>
-		<metric name="classes">0.0</metric>
-		<metric name="lines">41.0</metric>
-		<metric name="comment_lines">26.0</metric>
-		<metric name="accessors">0.0</metric>
-		<metric name="public_undocumented_api">0.0</metric>
-		<metric name="ncloc">11.0</metric>
-		<metric name="files">1.0</metric>
-		<metric name="package.files">1.0</metric>
-		<metric name="package.packages">1.0</metric>
-		<metric name="class_complexity">0.0</metric>
-		<metric name="noc">0.0</metric>
-		<metric name="statements">0.0</metric>
-		<metric name="public_api">0.0</metric>
-		<metric name="comment_blank_lines">0.0</metric>
+		<metric name="complexity">0</metric>
+		<metric name="function_complexity_distribution">1=0;2=0;4=0;6=0;8=0;10=0;12=0;20=0;30=0</metric>
+		<metric name="file_complexity_distribution">1=0;5=0;10=0;20=0;30=0;60=0;90=0</metric>
+		<metric name="complexity_in_functions">0</metric>
+		<metric name="complexity_in_classes">0</metric>
+		<metric name="functions">0</metric>
+		<metric name="function_complexity">0</metric>
+		<metric name="classes">0</metric>
+		<metric name="lines">41</metric>
+		<metric name="comment_lines">26</metric>
+		<metric name="accessors">0</metric>
+		<metric name="public_undocumented_api">0</metric>
+		<metric name="ncloc">11</metric>
+		<metric name="files">1</metric>
+		<metric name="package.files">1</metric>
+		<metric name="package.packages">1</metric>
+		<metric name="class_complexity">0</metric>
+		<metric name="noc">0</metric>
+		<metric name="statements">0</metric>
+		<metric name="public_api">0</metric>
+		<metric name="comment_blank_lines">0</metric>
 	</file>
 
 	<file>
 		<name>OverloadTest.pas</name>
-		<metric name="complexity">5.0</metric>
-		<metric name="functions">5.0</metric>
-		<metric name="function_complexity">1.0</metric>
-		<metric name="classes">1.0</metric>
-		<metric name="lines">50.0</metric>
-		<metric name="comment_lines">1.0</metric>
-		<metric name="accessors">0.0</metric>
-		<metric name="public_undocumented_api">6.0</metric>
-		<metric name="ncloc">38.0</metric>
-		<metric name="files">1.0</metric>
-		<metric name="package.files">1.0</metric>
-		<metric name="package.packages">1.0</metric>
-		<metric name="class_complexity">5.0</metric>
-		<metric name="noc">0.0</metric>
-		<metric name="statements">5.0</metric>
-		<metric name="public_api">6.0</metric>
-		<metric name="comment_blank_lines">0.0</metric>
+		<metric name="complexity">5</metric>
+		<metric name="function_complexity_distribution">1=5;2=0;4=0;6=0;8=0;10=0;12=0;20=0;30=0</metric>
+		<metric name="file_complexity_distribution">1=0;5=1;10=0;20=0;30=0;60=0;90=0</metric>
+		<metric name="complexity_in_functions">5</metric>
+		<metric name="complexity_in_classes">5</metric>
+		<metric name="functions">5</metric>
+		<metric name="function_complexity">1</metric>
+		<metric name="classes">1</metric>
+		<metric name="lines">47</metric>
+		<metric name="comment_lines">1</metric>
+		<metric name="accessors">0</metric>
+		<metric name="public_undocumented_api">6</metric>
+		<metric name="ncloc">36</metric>
+		<metric name="files">1</metric>
+		<metric name="package.files">1</metric>
+		<metric name="package.packages">1</metric>
+		<metric name="class_complexity">5</metric>
+		<metric name="noc">0</metric>
+		<metric name="statements">5</metric>
+		<metric name="public_api">6</metric>
+		<metric name="comment_blank_lines">0</metric>
 	</file>
 
 	<file>
 		<name>FunctionTest.pas</name>
-		<metric name="complexity">2.0</metric>
-		<metric name="functions">2.0</metric>
-		<metric name="function_complexity">1.0</metric>
-		<metric name="classes">1.0</metric>
-		<metric name="lines">60.0</metric>
-		<metric name="comment_lines">0.0</metric>
-		<metric name="accessors">2.0</metric>
-		<metric name="public_undocumented_api">2.0</metric>
-		<metric name="ncloc">50.0</metric>
-		<metric name="files">1.0</metric>
-		<metric name="package.files">1.0</metric>
-		<metric name="package.packages">1.0</metric>
-		<metric name="class_complexity">2.0</metric>
-		<metric name="noc">0.0</metric>
-		<metric name="statements">10.0</metric>
-		<metric name="public_api">2.0</metric>
-		<metric name="comment_blank_lines">0.0</metric>
+		<metric name="complexity">2</metric>
+		<metric name="function_complexity_distribution">1=2;2=0;4=0;6=0;8=0;10=0;12=0;20=0;30=0</metric>
+		<metric name="file_complexity_distribution">1=1;5=0;10=0;20=0;30=0;60=0;90=0</metric>
+		<metric name="complexity_in_functions">2</metric>
+		<metric name="complexity_in_classes">2</metric>
+		<metric name="functions">2</metric>
+		<metric name="function_complexity">1</metric>
+		<metric name="classes">1</metric>
+		<metric name="lines">60</metric>
+		<metric name="comment_lines">0</metric>
+		<metric name="accessors">2</metric>
+		<metric name="public_undocumented_api">2</metric>
+		<metric name="ncloc">50</metric>
+		<metric name="files">1</metric>
+		<metric name="package.files">1</metric>
+		<metric name="package.packages">1</metric>
+		<metric name="class_complexity">2</metric>
+		<metric name="noc">0</metric>
+		<metric name="statements">10</metric>
+		<metric name="public_api">2</metric>
+		<metric name="comment_blank_lines">0</metric>
 	</file>
 
 	<file>
 		<name>GlobalsTest.pas</name>
-		<metric name="complexity">1.0</metric>
-		<metric name="functions">1.0</metric>
-		<metric name="function_complexity">1.0</metric>
-		<metric name="classes">1.0</metric>
-		<metric name="lines">27.0</metric>
-		<metric name="comment_lines">2.0</metric>
-		<metric name="accessors">0.0</metric>
-		<metric name="public_undocumented_api">2.0</metric>
-		<metric name="ncloc">18.0</metric>
-		<metric name="files">1.0</metric>
-		<metric name="package.files">1.0</metric>
-		<metric name="package.packages">1.0</metric>
-		<metric name="class_complexity">1.0</metric>
-		<metric name="noc">0.0</metric>
-		<metric name="statements">0.0</metric>
-		<metric name="public_api">2.0</metric>
-		<metric name="comment_blank_lines">0.0</metric>
+		<metric name="complexity">1</metric>
+		<metric name="function_complexity_distribution">1=1;2=0;4=0;6=0;8=0;10=0;12=0;20=0;30=0</metric>
+		<metric name="file_complexity_distribution">1=1;5=0;10=0;20=0;30=0;60=0;90=0</metric>
+		<metric name="complexity_in_functions">1</metric>
+		<metric name="complexity_in_classes">1</metric>
+		<metric name="functions">1</metric>
+		<metric name="function_complexity">1</metric>
+		<metric name="classes">1</metric>
+		<metric name="lines">27</metric>
+		<metric name="comment_lines">2</metric>
+		<metric name="accessors">0</metric>
+		<metric name="public_undocumented_api">2</metric>
+		<metric name="ncloc">18</metric>
+		<metric name="files">1</metric>
+		<metric name="package.files">1</metric>
+		<metric name="package.packages">1</metric>
+		<metric name="class_complexity">1</metric>
+		<metric name="noc">0</metric>
+		<metric name="statements">0</metric>
+		<metric name="public_api">2</metric>
+		<metric name="comment_blank_lines">0</metric>
 	</file>
 
 	<file>
 		<name>Globals.pas</name>
-		<metric name="complexity">2.0</metric>
-		<metric name="functions">2.0</metric>
-		<metric name="function_complexity">1.0</metric>
-		<metric name="classes">0.0</metric>
-		<metric name="lines">29.0</metric>
-		<metric name="comment_lines">1.0</metric>
-		<metric name="accessors">0.0</metric>
-		<metric name="public_undocumented_api">1.0</metric>
-		<metric name="ncloc">20.0</metric>
-		<metric name="files">1.0</metric>
-		<metric name="package.files">1.0</metric>
-		<metric name="package.packages">1.0</metric>
-		<metric name="class_complexity">0.0</metric>
-		<metric name="noc">0.0</metric>
-		<metric name="statements">2.0</metric>
-		<metric name="public_api">2.0</metric>
-		<metric name="comment_blank_lines">0.0</metric>
+		<metric name="complexity">2</metric>
+		<metric name="function_complexity_distribution">1=2;2=0;4=0;6=0;8=0;10=0;12=0;20=0;30=0</metric>
+		<metric name="file_complexity_distribution">1=1;5=0;10=0;20=0;30=0;60=0;90=0</metric>
+		<metric name="complexity_in_functions">2</metric>
+		<metric name="complexity_in_classes">0</metric>
+		<metric name="functions">2</metric>
+		<metric name="function_complexity">1</metric>
+		<metric name="classes">0</metric>
+		<metric name="lines">26</metric>
+		<metric name="comment_lines">1</metric>
+		<metric name="accessors">0</metric>
+		<metric name="public_undocumented_api">1</metric>
+		<metric name="ncloc">18</metric>
+		<metric name="files">1</metric>
+		<metric name="package.files">1</metric>
+		<metric name="package.packages">1</metric>
+		<metric name="class_complexity">0</metric>
+		<metric name="noc">0</metric>
+		<metric name="statements">2</metric>
+		<metric name="public_api">2</metric>
+		<metric name="comment_blank_lines">0</metric>
 	</file>
 
 	<file>
 		<name>StatementTest.pas</name>
-		<metric name="complexity">4.0</metric>
-		<metric name="functions">2.0</metric>
-		<metric name="function_complexity">2.0</metric>
-		<metric name="classes">1.0</metric>
-		<metric name="lines">46.0</metric>
-		<metric name="comment_lines">0.0</metric>
-		<metric name="accessors">0.0</metric>
-		<metric name="public_undocumented_api">2.0</metric>
-		<metric name="ncloc">37.0</metric>
-		<metric name="files">1.0</metric>
-		<metric name="package.files">1.0</metric>
-		<metric name="package.packages">1.0</metric>
-		<metric name="class_complexity">4.0</metric>
-		<metric name="noc">1.0</metric>
-		<metric name="statements">7.0</metric>
-		<metric name="public_api">2.0</metric>
-		<metric name="comment_blank_lines">0.0</metric>
+		<metric name="complexity">4</metric>
+		<metric name="function_complexity_distribution">1=1;2=1;4=0;6=0;8=0;10=0;12=0;20=0;30=0</metric>
+		<metric name="file_complexity_distribution">1=1;5=0;10=0;20=0;30=0;60=0;90=0</metric>
+		<metric name="complexity_in_functions">4</metric>
+		<metric name="complexity_in_classes">4</metric>
+		<metric name="functions">2</metric>
+		<metric name="function_complexity">2</metric>
+		<metric name="classes">1</metric>
+		<metric name="lines">43</metric>
+		<metric name="comment_lines">0</metric>
+		<metric name="accessors">0</metric>
+		<metric name="public_undocumented_api">2</metric>
+		<metric name="ncloc">35</metric>
+		<metric name="files">1</metric>
+		<metric name="package.files">1</metric>
+		<metric name="package.packages">1</metric>
+		<metric name="class_complexity">4</metric>
+		<metric name="noc">1</metric>
+		<metric name="statements">7</metric>
+		<metric name="public_api">2</metric>
+		<metric name="comment_blank_lines">0</metric>
 	</file>
 
 	<file>
 		<name>AccessorsTest.pas</name>
-		<metric name="complexity">1.0</metric>
-		<metric name="functions">1.0</metric>
-		<metric name="function_complexity">1.0</metric>
-		<metric name="classes">1.0</metric>
-		<metric name="lines">40.0</metric>
-		<metric name="comment_lines">0.0</metric>
-		<metric name="accessors">3.0</metric>
-		<metric name="public_undocumented_api">1.0</metric>
-		<metric name="ncloc">30.0</metric>
-		<metric name="files">1.0</metric>
-		<metric name="package.files">1.0</metric>
-		<metric name="package.packages">1.0</metric>
-		<metric name="class_complexity">1.0</metric>
-		<metric name="noc">0.0</metric>
-		<metric name="statements">1.0</metric>
-		<metric name="public_api">1.0</metric>
-		<metric name="comment_blank_lines">0.0</metric>
+		<metric name="complexity">1</metric>
+		<metric name="function_complexity_distribution">1=1;2=0;4=0;6=0;8=0;10=0;12=0;20=0;30=0</metric>
+		<metric name="file_complexity_distribution">1=1;5=0;10=0;20=0;30=0;60=0;90=0</metric>
+		<metric name="complexity_in_functions">1</metric>
+		<metric name="complexity_in_classes">1</metric>
+		<metric name="functions">1</metric>
+		<metric name="function_complexity">1</metric>
+		<metric name="classes">1</metric>
+		<metric name="lines">37</metric>
+		<metric name="comment_lines">0</metric>
+		<metric name="accessors">3</metric>
+		<metric name="public_undocumented_api">1</metric>
+		<metric name="ncloc">28</metric>
+		<metric name="files">1</metric>
+		<metric name="package.files">1</metric>
+		<metric name="package.packages">1</metric>
+		<metric name="class_complexity">1</metric>
+		<metric name="noc">0</metric>
+		<metric name="statements">1</metric>
+		<metric name="public_api">1</metric>
+		<metric name="comment_blank_lines">0</metric>
 	</file>
 
 	<file>
 		<name>CommentsTest.pas</name>
-		<metric name="complexity">0.0</metric>
-		<metric name="functions">2.0</metric>
-		<metric name="function_complexity">0.0</metric>
-		<metric name="classes">1.0</metric>
-		<metric name="lines">45.0</metric>
-		<metric name="comment_lines">14.0</metric>
-		<metric name="accessors">0.0</metric>
-		<metric name="public_undocumented_api">1.0</metric>
-		<metric name="ncloc">17.0</metric>
-		<metric name="files">1.0</metric>
-		<metric name="package.files">1.0</metric>
-		<metric name="package.packages">1.0</metric>
-		<metric name="class_complexity">0.0</metric>
-		<metric name="noc">0.0</metric>
-		<metric name="statements">0.0</metric>
-		<metric name="public_api">3.0</metric>
-		<metric name="comment_blank_lines">3.0</metric>
+		<metric name="complexity">0</metric>
+		<metric name="function_complexity_distribution">1=0;2=0;4=0;6=0;8=0;10=0;12=0;20=0;30=0</metric>
+		<metric name="file_complexity_distribution">1=0;5=0;10=0;20=0;30=0;60=0;90=0</metric>
+		<metric name="complexity_in_functions">0</metric>
+		<metric name="complexity_in_classes">0</metric>
+		<metric name="functions">2</metric>
+		<metric name="function_complexity">0</metric>
+		<metric name="classes">1</metric>
+		<metric name="lines">42</metric>
+		<metric name="comment_lines">14</metric>
+		<metric name="accessors">0</metric>
+		<metric name="public_undocumented_api">1</metric>
+		<metric name="ncloc">15</metric>
+		<metric name="files">1</metric>
+		<metric name="package.files">1</metric>
+		<metric name="package.packages">1</metric>
+		<metric name="class_complexity">0</metric>
+		<metric name="noc">0</metric>
+		<metric name="statements">0</metric>
+		<metric name="public_api">3</metric>
+		<metric name="comment_blank_lines">3</metric>
 	</file>
 
 	<file>
 		<name>MainWindow.pas</name>
-		<metric name="complexity">2.0</metric>
-		<metric name="functions">2.0</metric>
-		<metric name="function_complexity">1.0</metric>
-		<metric name="classes">1.0</metric>
-		<metric name="lines">52.0</metric>
-		<metric name="comment_lines">5.0</metric>
-		<metric name="accessors">0.0</metric>
-		<metric name="public_undocumented_api">2.0</metric>
-		<metric name="ncloc">38.0</metric>
-		<metric name="files">1.0</metric>
-		<metric name="package.files">1.0</metric>
-		<metric name="package.packages">1.0</metric>
-		<metric name="class_complexity">2.0</metric>
-		<metric name="noc">0.0</metric>
-		<metric name="statements">1.0</metric>
-		<metric name="public_api">3.0</metric>
-		<metric name="comment_blank_lines">0.0</metric>
+		<metric name="complexity">2</metric>
+		<metric name="function_complexity_distribution">1=2;2=0;4=0;6=0;8=0;10=0;12=0;20=0;30=0</metric>
+		<metric name="file_complexity_distribution">1=1;5=0;10=0;20=0;30=0;60=0;90=0</metric>
+		<metric name="complexity_in_functions">2</metric>
+		<metric name="complexity_in_classes">2</metric>
+		<metric name="functions">2</metric>
+		<metric name="function_complexity">1</metric>
+		<metric name="classes">1</metric>
+		<metric name="lines">52</metric>
+		<metric name="comment_lines">5</metric>
+		<metric name="accessors">0</metric>
+		<metric name="public_undocumented_api">2</metric>
+		<metric name="ncloc">38</metric>
+		<metric name="files">1</metric>
+		<metric name="package.files">1</metric>
+		<metric name="package.packages">1</metric>
+		<metric name="class_complexity">2</metric>
+		<metric name="noc">0</metric>
+		<metric name="statements">1</metric>
+		<metric name="public_api">3</metric>
+		<metric name="comment_blank_lines">0</metric>
 	</file>
 
 </files>

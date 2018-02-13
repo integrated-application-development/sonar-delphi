@@ -27,11 +27,13 @@ import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputDir;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.measure.Measure;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
+import org.sonar.plugins.delphi.metrics.DeadCodeMetrics;
 import org.sonar.plugins.delphi.debug.ProjectMetricsXMLParser;
 import org.sonar.plugins.delphi.metrics.ComplexityMetrics;
 import org.sonar.plugins.delphi.project.DelphiProject;
@@ -40,13 +42,17 @@ import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.fs.internal.FileMetadata;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
+import org.sonar.api.batch.fs.internal.Metadata;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.*;
+import java.nio.charset.StandardCharsets;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 public class DelphiSensorTest {
@@ -68,7 +74,7 @@ public class DelphiSensorTest {
   }
 
   @Before
-  public void init() {
+  public void init() throws FileNotFoundException {
 
     baseDir = DelphiUtils.getResource(ROOT_NAME);
     File reportDir = new File(baseDir.getAbsolutePath() + "/reports");
@@ -84,14 +90,16 @@ public class DelphiSensorTest {
     sourceDirs.add(baseDir); // include baseDir
     DefaultInputDir inputBaseDir = new DefaultInputDir(moduleKey, "");
     context.fileSystem().add(inputBaseDir);
-
     for (File source : baseDir.listFiles(DelphiUtils.getFileFilter())) {
-      DefaultInputFile baseInputFile = new DefaultInputFile(moduleKey,
-          getRelativePath(baseDir,source.getPath()))
-          .setModuleBaseDir(Paths.get(ROOT_NAME))
+      InputStream fileStream = new FileInputStream(source);
+      Metadata metadata = new FileMetadata().readMetadata(fileStream, StandardCharsets.UTF_8, source.getPath());
+
+      InputFile baseInputFile = TestInputFileBuilder.create(moduleKey, baseDir, source)
+          .setModuleBaseDir(baseDir.toPath())
           .setLanguage(DelphiLanguage.KEY)
           .setType(InputFile.Type.MAIN)
-          .initMetadata(new FileMetadata().readMetadata(source, Charset.defaultCharset()));
+          .setMetadata(metadata)
+          .build();
 
       sourceFiles.add(baseInputFile);
       context.fileSystem().add(baseInputFile);
@@ -103,12 +111,14 @@ public class DelphiSensorTest {
       File[] files = directory.listFiles(DelphiUtils.getFileFilter());
       for (File sourceFile : files) {
 
-        DefaultInputFile inputFile = new DefaultInputFile(moduleKey,
-            getRelativePath(baseDir,sourceFile.getPath()))
-            .setModuleBaseDir(Paths.get(ROOT_NAME))
+        InputStream fileStream = new FileInputStream(sourceFile);
+        Metadata metadata = new FileMetadata().readMetadata(fileStream, StandardCharsets.UTF_8, sourceFile.getPath());
+        DefaultInputFile inputFile = TestInputFileBuilder.create(moduleKey, baseDir, sourceFile)
+            .setModuleBaseDir(baseDir.toPath())
             .setLanguage(DelphiLanguage.KEY)
             .setType(InputFile.Type.MAIN)
-            .initMetadata(new FileMetadata().readMetadata(sourceFile, Charset.defaultCharset()));
+            .setMetadata(metadata)
+            .build();
 
         context.fileSystem().add(inputFile);
         sourceFiles.add(inputFile);
@@ -119,13 +129,14 @@ public class DelphiSensorTest {
       sourceDirs.add(directory);
     }
 
-    delphiProjectHelper = new DelphiProjectHelper(context.settings(), context.fileSystem());
+    delphiProjectHelper = new DelphiProjectHelper(context.config(), context.fileSystem());
 
     delphiProject.setSourceFiles(sourceFiles);
 
     ActiveRulesBuilder rulesBuilder = new ActiveRulesBuilder();
     NewActiveRule rule = rulesBuilder.create(ComplexityMetrics.RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY);
     rule.setParam("Threshold", "3").setLanguage(DelphiLanguage.KEY).activate();
+    rulesBuilder.create(DeadCodeMetrics.RULE_KEY_UNUSED_FUNCTION).setLanguage(DelphiLanguage.KEY).activate();
     activeRules = rulesBuilder.build();
 
     sensor = new DelphiSensor(delphiProjectHelper, activeRules, context);
@@ -135,18 +146,19 @@ public class DelphiSensorTest {
   public void describeTest() {
     DefaultSensorDescriptor sensorDescriptor = new DefaultSensorDescriptor();
     sensor.describe(sensorDescriptor);
-    assertThat(sensorDescriptor.name()).isEqualTo("Combined LCOV and LOC sensor");
-    assertThat(sensorDescriptor.languages()).containsOnly("delph");
+    assertEquals("Combined LCOV and LOC sensor", sensorDescriptor.name());
+    String [] expected = {"delph"};
+    assertArrayEquals(expected, sensorDescriptor.languages().toArray());
   }
 
   @Test
   public void executeTest() {
     sensor.execute(context);
 
-    assertThat(context.allIssues()).hasSize(0);
+    assertEquals(12, context.allIssues().size());
 
     // create a map of expected values for each file
-    Map<String, Map<String,Double>> expectedValues = new HashMap<>();
+    Map<String, Map<String,String>> expectedValues = new HashMap<>();
 
     // xml file for expected metrics for files
     ProjectMetricsXMLParser xmlParser = new ProjectMetricsXMLParser(
@@ -159,13 +171,13 @@ public class DelphiSensorTest {
       String relativePath = file.relativePath();
       String fileName = Paths.get(relativePath).getFileName().toString().toLowerCase();
       if (expectedValues.containsKey(fileName) && DelphiUtils.acceptFile(fileName)) {
-        Map<String, Double> fileExpectedValues = expectedValues.get(fileName);
+        Map<String, String> fileExpectedValues = expectedValues.get(fileName);
         Collection<Measure> measures = context.measures(moduleKey + ":" + relativePath);
         for (Measure measure : measures) {
           String metricName = measure.metric().key();
-          Double expectedValue = fileExpectedValues.get(metricName);
-          Double currentValue = Double.valueOf(measure.value().toString());
-          assertEquals(fileName + "@" + metricName, expectedValue, currentValue, 0.0);
+          String expectedValue = fileExpectedValues.get(metricName);
+          String currentValue = measure.value().toString();
+          assertEquals(fileName + "@" + metricName, expectedValue, currentValue);
         }
       }
     }
