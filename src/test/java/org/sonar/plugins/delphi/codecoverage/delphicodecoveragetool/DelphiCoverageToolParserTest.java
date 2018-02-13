@@ -90,14 +90,14 @@ public class DelphiCoverageToolParserTest
 
     assertEquals((Integer)1, context.lineHits(":Globals.pas", 16));
     assertEquals((Integer)1, context.lineHits(":Globals.pas", 17));
-//    assertEquals((Integer)0, context.lineHits(":Globals.pas", 23));
+    assertEquals((Integer)0, context.lineHits(":Globals.pas", 23));
 
     assertEquals((Integer)1, context.lineHits(":MainWindow.pas", 31));
     assertEquals((Integer)1, context.lineHits(":MainWindow.pas", 36));
     assertEquals((Integer)1, context.lineHits(":MainWindow.pas", 37));
     assertEquals((Integer)1, context.lineHits(":MainWindow.pas", 38));
     assertEquals((Integer)1, context.lineHits(":MainWindow.pas", 39));
-//    assertEquals((Integer)1, context.lineHits(":MainWindow.pas", 40));
+    assertEquals((Integer)1, context.lineHits(":MainWindow.pas", 40));
   }
 
 }

@@ -50,18 +50,26 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser
     this.delphiProjectHelper = delphiProjectHelper;
   }
 
+  private void parseLineHit(String lineCoverage, int startPos, int endPos, NewCoverage newCoverage)
+  {
+    String lineHit = lineCoverage.substring(startPos, endPos);
+    int eq = lineHit.indexOf('=');
+    if (eq > 0) {
+      int lineNumber = Integer.parseInt(lineHit.substring(0, eq));
+      int lineHits = Integer.parseInt(lineHit.substring(eq + 1));
+      newCoverage.lineHits(lineNumber, lineHits);
+    }
+  }
+
   private void parseValue(String lineCoverage, NewCoverage newCoverage)
   {
     int pos = 0, end;
     while ((end = lineCoverage.indexOf(';', pos)) >= 0) {
-      String lineHit = lineCoverage.substring(pos, end);
-      int eq = lineHit.indexOf('=');
-      if (eq > 0) {
-        int lineNumber = Integer.parseInt(lineHit.substring(0, eq));
-        int lineHits = Integer.parseInt(lineHit.substring(eq + 1));
-        newCoverage.lineHits(lineNumber, lineHits);
-      }
+      parseLineHit(lineCoverage, pos, end, newCoverage);
       pos = end + 1;
+    }
+    if (lineCoverage.length() - 1 > pos) {
+      parseLineHit(lineCoverage, pos, lineCoverage.length(), newCoverage);
     }
   }
 
