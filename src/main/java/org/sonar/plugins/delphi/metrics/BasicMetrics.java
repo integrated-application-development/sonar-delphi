@@ -61,16 +61,14 @@ public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
     clearMetrics();
     Reader reader = null;
     try {
-      reader = new StringReader(FileUtils.readFileToString(new File(resource.absolutePath())));
+      reader = new StringReader(resource.contents());
       DelphiSource source = new DelphiSource(reader, new DelphiRecognizer());
-      setIntMetric("LINES", source.getMeasure(Metric.LINES));
       setIntMetric("NCLOC", source.getMeasure(Metric.LINES_OF_CODE));
       setIntMetric("COMMENT_LINES", source.getMeasure(Metric.COMMENT_LINES));
       setIntMetric("COMMENT_BLANK_LINES", source.getMeasure(Metric.COMMENT_BLANK_LINES));
       setIntMetric("PUBLIC_DOC_API", source.getMeasure(Metric.PUBLIC_DOC_API));
-      setIntMetric("FILES", 1);
     } catch (Exception e) {
-      DelphiUtils.LOG.error("BasicMetrics::analyse() -- Can not analyse the file " + resource.absolutePath(), e);
+      DelphiUtils.LOG.error("BasicMetrics::analyse() -- Can not analyse the file " + resource.toString(), e);
     } finally {
       IOUtils.closeQuietly(reader);
     }
@@ -82,18 +80,8 @@ public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
 
   @Override
   public void save(InputFile resource) {
-    context.<Integer>newMeasure().forMetric(CoreMetrics.LINES).on(resource).withValue(getIntMetric("LINES")).save();
-    // Number of physical lines of code -
-    // number of blank lines -
-    // number of comment lines -
-    // number of header file comments -
-    // commented-out lines of code
     context.<Integer>newMeasure().forMetric(CoreMetrics.NCLOC).on(resource).withValue(getIntMetric("NCLOC")).save();
-    // Number of javadoc, multi-comment and single-comment lines.
-    // Empty comment lines like, header file comments (mainly used to define the license)
-    // and commented-out lines of code are not included.
     context.<Integer>newMeasure().forMetric(CoreMetrics.COMMENT_LINES).on(resource).withValue(getIntMetric("COMMENT_LINES")).save();
-    context.<Integer>newMeasure().forMetric(CoreMetrics.FILES).on(resource).withValue(getIntMetric("FILES")).save();
   }
 
   /**
@@ -102,7 +90,7 @@ public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
 
   @Override
   public boolean executeOnResource(InputFile resource) {
-    return DelphiUtils.acceptFile(resource.absolutePath());
+    return DelphiUtils.acceptFile(resource.filename());
   }
 
 }

@@ -31,7 +31,7 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.batch.fs.InputDir;
+
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
@@ -67,8 +67,6 @@ import java.util.*;
 public class DelphiSensor implements Sensor {
 
   private int scannedFiles = 0;
-  private Set<InputDir> packageList = new HashSet<>();
-  private Map<InputDir, Integer> filesCount = new HashMap<>();
   private List<InputFile> resourceList = new ArrayList<>();
   private Map<InputFile, List<ClassInterface>> fileClasses = new HashMap<>();
   private Map<InputFile, List<FunctionInterface>> fileFunctions = new HashMap<>();
@@ -113,8 +111,7 @@ public class DelphiSensor implements Sensor {
     {
       addCoverage(context);
       CodeAnalysisCacheResults.resetCache();
-      parseFiles(delphiProject, context);
-      parsePackages(context);
+      parseFiles(delphiProject);
 
       processFiles(context);
     }
@@ -140,7 +137,7 @@ public class DelphiSensor implements Sensor {
 
   private void doTokenize(SensorContext context, InputFile inputFile) {
     try {
-      String fileName = inputFile.absolutePath();
+      String fileName = delphiProjectHelper.uriToAbsolutePath(inputFile.uri());
       DelphiLexer lexer = new DelphiLexer(new DelphiSourceSanitizer(fileName));
       Token prevToken = null;
       Token token = lexer.nextToken();
@@ -162,9 +159,9 @@ public class DelphiSensor implements Sensor {
       }
       cpdTokens.save();
     } catch (FileNotFoundException ex) {
-      DelphiUtils.LOG.error("Cpd could not find : " + inputFile.absolutePath(), ex);
+      DelphiUtils.LOG.error("Cpd could not find : " + inputFile.toString(), ex);
     } catch (IOException ex) {
-      DelphiUtils.LOG.error("Cpd IO Exception on " + inputFile.absolutePath(), ex);
+      DelphiUtils.LOG.error("Cpd IO Exception on " + inputFile.toString(), ex);
     }
   }
 
@@ -179,7 +176,7 @@ public class DelphiSensor implements Sensor {
       DelphiUtils.LOG));
 
     for (InputFile resource : resourceList) {
-      DelphiUtils.LOG.debug(">> PROCESSING " + resource.file().getPath());
+      DelphiUtils.LOG.debug(">> PROCESSING " + resource.toString());
 
       processMetric(basicMetrics, resource);
       processMetric(complexityMetrics, resource);
@@ -192,7 +189,7 @@ public class DelphiSensor implements Sensor {
         sensorContext.<Integer>newMeasure().forMetric(CoreMetrics.PUBLIC_UNDOCUMENTED_API).on(resource).withValue(undocumentedApi).save();
       }
 
-      String fileName = resource.file().getName();
+      String fileName = resource.filename();
       if (canTokenize(fileName)) {
         doTokenize(sensorContext, resource);
       }
@@ -204,22 +201,8 @@ public class DelphiSensor implements Sensor {
 
   public void processMetric(MetricsInterface metric, InputFile resource) {
     if (metric.executeOnResource(resource)) {
-      metric.analyse(resource, fileClasses.get(resource), fileFunctions.get(resource),
-        units);
-      InputFile inputFile = delphiProjectHelper.getFile(resource.file().getAbsolutePath());
-      metric.save(inputFile);
-    }
-  }
-
-  /**
-   * Count the metrics for packages
-   * 
-   * @param sensorContext Sensor context (provided by Sonar)
-   */
-  private void parsePackages(SensorContext sensorContext) {
-    for (InputDir directory : packageList) {
-      sensorContext.<Integer>newMeasure().forMetric(CoreMetrics.DIRECTORIES).on(directory).withValue(1).save();
-      sensorContext.<Integer>newMeasure().forMetric(CoreMetrics.FILES).on(directory).withValue(filesCount.get(directory)).save();
+      metric.analyse(resource, fileClasses.get(resource), fileFunctions.get(resource), units);
+      metric.save(resource);
     }
   }
 
@@ -234,9 +217,8 @@ public class DelphiSensor implements Sensor {
    * Parse files with ANTLR
    * 
    * @param delphiProject DelphiLanguage project to parse
-   * @param sensorContext Sensor context
    */
-  protected void parseFiles(DelphiProject delphiProject, SensorContext sensorContext) {
+  protected void parseFiles(DelphiProject delphiProject) {
     List<File> includedDirs = delphiProject.getIncludeDirectories();
     List<File> excludedDirs = delphiProjectHelper.getExcludedSources();
     List<File> sourceFiles = delphiProject.getSourceFiles();
@@ -251,12 +233,12 @@ public class DelphiSensor implements Sensor {
     DelphiUtils.LOG.info("Parsing project " + delphiProject.getName());
 
     ProgressReporter progressReporter = new ProgressReporter(sourceFiles.size(), 10, new ProgressReporterLogger(
-      DelphiUtils.LOG));
+        DelphiUtils.LOG));
     DelphiUtils.LOG.info("Files to parse: " + sourceFiles.size());
 
     ASTAnalyzer analyser = new DelphiASTAnalyzer(delphiProjectHelper);
     for (File delphiFile : sourceFiles) {
-      final CodeAnalysisResults results = parseSourceFile(delphiFile, excludedDirs, analyser, sensorContext);
+      final CodeAnalysisResults results = parseSourceFile(delphiFile, excludedDirs, analyser);
       if (results != null) {
         units.addAll(results.getCachedUnitsAsList());
       }
@@ -266,8 +248,7 @@ public class DelphiSensor implements Sensor {
     DelphiUtils.LOG.info("Done");
   }
 
-  private CodeAnalysisResults parseSourceFile(File sourceFile, List<File> excludedDirs, ASTAnalyzer analyzer,
-    SensorContext sensorContext) {
+  private CodeAnalysisResults parseSourceFile(File sourceFile, List<File> excludedDirs, ASTAnalyzer analyzer) {
     if (delphiProjectHelper.isExcluded(sourceFile, excludedDirs)) {
       return null;
     }
@@ -276,19 +257,6 @@ public class DelphiSensor implements Sensor {
 
     InputFile resource = delphiProjectHelper.getFile(sourceFile);
 
-    InputDir directory = delphiProjectHelper.getDirectory(sourceFile.getParentFile(), sensorContext);
-
-    if (directory == null) {
-      throw new IllegalArgumentException("Directory: " + sourceFile.getParentFile() + " not found.");
-    }
-
-    packageList.add(directory);
-
-    if (filesCount.containsKey(directory)) {
-      filesCount.put(directory, filesCount.get(directory) + 1);
-    } else {
-      filesCount.put(directory, 1);
-    }
     resourceList.add(resource);
 
     final CodeAnalysisResults results = analyseSourceFile(sourceFile, analyzer);

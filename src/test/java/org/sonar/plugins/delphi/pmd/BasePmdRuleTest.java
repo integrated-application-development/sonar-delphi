@@ -65,8 +65,6 @@ public abstract class BasePmdRuleTest {
   public void execute(DelphiUnitBuilderTest builder) {
     configureTest(builder);
 
-    baseDir = DelphiUtils.getResource(ROOT_DIR_NAME);
-
     SensorContextTester sensorContext = SensorContextTester.create(baseDir);
     sensor.execute(sensorContext);
     //todo: REACTIVATE THIS TEST, ATM PROBLEMS WITH TREE TESTLOGIC
@@ -90,13 +88,17 @@ public abstract class BasePmdRuleTest {
 
     File srcFile = DelphiUtils.getResource(testFileName);
 
+    baseDir = DelphiUtils.getResource(ROOT_DIR_NAME);
+
     InputFile inputFile = TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, srcFile)
         .setModuleBaseDir(baseDir.toPath())
         .setContents(builder.getSourceCode().toString())
         .build();
 
+    sensorContext.fileSystem().add(inputFile);
+
     DelphiProject delphiProject = new DelphiProject("Default Project");
-    delphiProject.setSourceFiles(Collections.singletonList(inputFile));
+    delphiProject.setSourceFiles(Collections.singletonList(srcFile));
 
     when(delphiProjectHelper.getWorkgroupProjects()).thenReturn(Collections.singletonList(delphiProject));
     when(delphiProjectHelper.getFile(anyString())).thenAnswer(new Answer<InputFile>() {

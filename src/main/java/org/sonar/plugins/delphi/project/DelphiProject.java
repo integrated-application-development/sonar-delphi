@@ -27,7 +27,6 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.xml.sax.SAXException;
 
-import javax.xml.stream.XMLStreamException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,7 +69,7 @@ public class DelphiProject {
 
   /**
    * Adds a source file to project
-   * 
+   *
    * @param path File path
    * @throws IOException If file not found
    */
@@ -170,12 +169,8 @@ public class DelphiProject {
     this.file = file;
   }
 
-  public void setSourceFiles(List<InputFile> list) {
-    List<File> files = new ArrayList<>();
-    for (InputFile inputFile : list) {
-      files.add(inputFile.file());
-    }
-    this.files = files;
+  public void setSourceFiles(List<File> list) {
+    this.files = list;
   }
 
 }

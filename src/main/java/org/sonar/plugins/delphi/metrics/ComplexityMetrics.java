@@ -238,7 +238,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
 
   @Override
   public boolean executeOnResource(InputFile resource) {
-    return DelphiUtils.acceptFile(resource.absolutePath());
+    return DelphiUtils.acceptFile(resource.filename());
   }
 
   private void addIssue(InputFile inputFile, FunctionInterface func) {

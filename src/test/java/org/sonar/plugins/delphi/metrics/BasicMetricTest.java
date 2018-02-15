@@ -61,10 +61,10 @@ public class BasicMetricTest {
     InputFile dprResource = mock(InputFile.class);
     InputFile dpkResource = mock(InputFile.class);
     InputFile cppResource = mock(InputFile.class);
-    when(pasResource.absolutePath()).thenReturn("source.pas");
-    when(dprResource.absolutePath()).thenReturn("source.dpr");
-    when(cppResource.absolutePath()).thenReturn("source.cpp");
-    when(dpkResource.absolutePath()).thenReturn("source.dpk");
+    when(pasResource.filename()).thenReturn("source.pas");
+    when(dprResource.filename()).thenReturn("source.dpr");
+    when(cppResource.filename()).thenReturn("source.cpp");
+    when(dpkResource.filename()).thenReturn("source.dpk");
 
     assertTrue(new BasicMetrics(null).executeOnResource(pasResource));
     assertTrue(new BasicMetrics(null).executeOnResource(dprResource));

@@ -28,9 +28,7 @@ import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.InputDir;
 import org.sonar.api.config.Configuration;
-import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.project.DelphiProject;
@@ -40,6 +38,7 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,6 +142,17 @@ public class DelphiProjectHelper  {
     return result;
   }
 
+  List<File> inputFilesToFiles(List<InputFile> inputFiles)
+  {
+    List<File> result = new ArrayList<>();
+    for (InputFile inputFile : inputFiles)
+    {
+      String absolutePath = uriToAbsolutePath(inputFile.uri());
+      result.add(new File(absolutePath));
+    }
+    return result;
+  }
+
   /**
    * Create list of DelphiLanguage projects in a current workspace
    *
@@ -163,7 +173,7 @@ public class DelphiProjectHelper  {
         DelphiUtils.LOG.error("Skipping .groupproj reading, default configuration assumed.");
         DelphiProject newProject = new DelphiProject("Default Project");
         newProject.setIncludeDirectories(getIncludeDirectories());
-        newProject.setSourceFiles(mainFiles());
+        newProject.setSourceFiles(inputFilesToFiles(mainFiles()));
         list.clear();
         list.add(newProject);
       }
@@ -180,7 +190,7 @@ public class DelphiProjectHelper  {
       // No .dproj files, create default project
       DelphiProject newProject = new DelphiProject("Default Project");
       newProject.setIncludeDirectories(getIncludeDirectories());
-      newProject.setSourceFiles(mainFiles());
+      newProject.setSourceFiles(inputFilesToFiles(mainFiles()));
       list.add(newProject);
     }
 
@@ -213,21 +223,9 @@ public class DelphiProjectHelper  {
     return fs.inputFile(fs.predicates().is(file));
   }
 
-  public InputDir getDirectory(java.io.File dir, SensorContext sensorContext) {
-    System.out.println(("THIS IS DIR:" + dir.getPath()));
-
-    InputDir directory = sensorContext.fileSystem().inputDir(dir);
-
-    if (directory == null) {
-      directory = sensorContext.fileSystem().inputDir(new File(""));
-    }
-
-    return directory;
-  }
-
   public InputFile findFileInDirectories(String fileName) throws FileNotFoundException {
     for (InputFile inputFile : mainFiles()) {
-      if (inputFile.file().getName().equalsIgnoreCase(fileName)) {
+      if (inputFile.filename().equalsIgnoreCase(fileName)) {
         return inputFile;
       }
     }
@@ -238,7 +236,7 @@ public class DelphiProjectHelper  {
   public InputFile findTestFileInDirectories(String fileName) throws FileNotFoundException {
     String unitFileName = normalize(fileName);
     for (InputFile inputFile : testFiles()) {
-      if (inputFile.file().getName().equalsIgnoreCase(unitFileName)) {
+      if (inputFile.filename().equalsIgnoreCase(unitFileName)) {
         return inputFile;
       }
     }
@@ -251,10 +249,6 @@ public class DelphiProjectHelper  {
       return fileName + "." + DelphiLanguage.FILE_SOURCE_CODE_SUFFIX;
     }
     return fileName;
-  }
-
-  public File baseDir() {
-    return this.fs.baseDir();
   }
 
   public File workDir() {
@@ -285,6 +279,12 @@ public class DelphiProjectHelper  {
       }
     }
     return false;
+  }
+
+  public String uriToAbsolutePath(URI uri)
+  {
+    String absolutePath = uri.getPath().substring(1);
+    return absolutePath;
   }
 
   /**

@@ -44,10 +44,7 @@ import org.sonar.api.batch.fs.internal.FileMetadata;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.fs.internal.Metadata;
 
-import java.io.File;
-import java.io.InputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.*;
@@ -63,7 +60,7 @@ public class DelphiSensorTest {
   private ActiveRules activeRules;
   private SensorContextTester context;
 
-  private final String moduleKey = "ROOT_KEY_CHANGE_AT_SONARAPI_5";
+  private final String moduleKey = "";
   private static final String ROOT_NAME = "/org/sonar/plugins/delphi/SimpleDelphiProject";
   private final DelphiProject delphiProject = new DelphiProject("Default Project");
 
@@ -74,7 +71,7 @@ public class DelphiSensorTest {
   }
 
   @Before
-  public void init() throws FileNotFoundException {
+  public void init() throws IOException {
 
     baseDir = DelphiUtils.getResource(ROOT_NAME);
     File reportDir = new File(baseDir.getAbsolutePath() + "/reports");
@@ -83,25 +80,24 @@ public class DelphiSensorTest {
     File[] dirs = baseDir.listFiles(DelphiUtils.getDirectoryFilter());
 
     List<File> sourceDirs = new ArrayList<>(dirs.length);
-    List<InputFile> sourceFiles = new ArrayList<>();
+    List<File> sourceFiles = new ArrayList<>();
 
     context = SensorContextTester.create(baseDir);
+    delphiProjectHelper = new DelphiProjectHelper(context.config(), context.fileSystem());
 
     sourceDirs.add(baseDir); // include baseDir
     DefaultInputDir inputBaseDir = new DefaultInputDir(moduleKey, "");
     context.fileSystem().add(inputBaseDir);
     for (File source : baseDir.listFiles(DelphiUtils.getFileFilter())) {
-      InputStream fileStream = new FileInputStream(source);
-      Metadata metadata = new FileMetadata().readMetadata(fileStream, StandardCharsets.UTF_8, source.getPath());
 
       InputFile baseInputFile = TestInputFileBuilder.create(moduleKey, baseDir, source)
           .setModuleBaseDir(baseDir.toPath())
           .setLanguage(DelphiLanguage.KEY)
           .setType(InputFile.Type.MAIN)
-          .setMetadata(metadata)
+          .setContents(DelphiUtils.readFileContent(source, delphiProjectHelper.encoding()))
           .build();
 
-      sourceFiles.add(baseInputFile);
+      sourceFiles.add(source);
       context.fileSystem().add(baseInputFile);
     }
 
@@ -111,25 +107,21 @@ public class DelphiSensorTest {
       File[] files = directory.listFiles(DelphiUtils.getFileFilter());
       for (File sourceFile : files) {
 
-        InputStream fileStream = new FileInputStream(sourceFile);
-        Metadata metadata = new FileMetadata().readMetadata(fileStream, StandardCharsets.UTF_8, sourceFile.getPath());
         DefaultInputFile inputFile = TestInputFileBuilder.create(moduleKey, baseDir, sourceFile)
             .setModuleBaseDir(baseDir.toPath())
             .setLanguage(DelphiLanguage.KEY)
             .setType(InputFile.Type.MAIN)
-            .setMetadata(metadata)
+            .setContents(DelphiUtils.readFileContent(sourceFile, delphiProjectHelper.encoding()))
             .build();
 
         context.fileSystem().add(inputFile);
-        sourceFiles.add(inputFile);
+        sourceFiles.add(sourceFile);
       }
       DefaultInputDir inputDir = new DefaultInputDir(moduleKey, getRelativePath(baseDir,directory.getPath()));
       context.fileSystem().add(inputDir);
       // put all directories to list
       sourceDirs.add(directory);
     }
-
-    delphiProjectHelper = new DelphiProjectHelper(context.config(), context.fileSystem());
 
     delphiProject.setSourceFiles(sourceFiles);
 
@@ -168,16 +160,15 @@ public class DelphiSensorTest {
     }
 
     for (InputFile file : context.fileSystem().inputFiles()) {
-      String relativePath = file.relativePath();
-      String fileName = Paths.get(relativePath).getFileName().toString().toLowerCase();
+      String fileName = file.filename().toLowerCase();
       if (expectedValues.containsKey(fileName) && DelphiUtils.acceptFile(fileName)) {
         Map<String, String> fileExpectedValues = expectedValues.get(fileName);
-        Collection<Measure> measures = context.measures(moduleKey + ":" + relativePath);
+        Collection<Measure> measures = context.measures(file.key());
         for (Measure measure : measures) {
           String metricName = measure.metric().key();
           String expectedValue = fileExpectedValues.get(metricName);
           String currentValue = measure.value().toString();
-          assertEquals(fileName + "@" + metricName, expectedValue, currentValue);
+          assertEquals(file.toString() + "@" + metricName, expectedValue, currentValue);
         }
       }
     }
@@ -186,7 +177,6 @@ public class DelphiSensorTest {
   @Test
   public void analyseWithEmptySourceFiles() {
     delphiProject.getSourceFiles().clear();
-//    DebugSensorContext context = new DebugSensorContext();
 //    sensor.execute(context);
   }
 
@@ -195,7 +185,6 @@ public class DelphiSensorTest {
     delphiProject.getSourceFiles().clear();
     delphiProject.getSourceFiles().add(new File(baseDir + "/Globals.pas"));
     delphiProject.getSourceFiles().add(new File(baseDir + "/../BadSyntax.pas"));
-//    DebugSensorContext context = new DebugSensorContext();
 //    sensor.execute(context);
 
     //assertThat("processed files", sensor.getProcessedFilesCount(), is(1));

@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
@@ -33,10 +34,7 @@ import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,28 +52,22 @@ public class DelphiCoverageToolParserTest
 
   private final File reportFile = DelphiUtils.getResource(REPORT_FILE);
 
-  private void addFile(String fileName) throws FileNotFoundException
+  private void addFile(String fileName) throws IOException
   {
     File file = DelphiUtils.getResource(fileName);
-    InputStream fileStream = new FileInputStream(file);
-    Metadata metadata = new FileMetadata().readMetadata(fileStream, StandardCharsets.UTF_8, file.getPath());
     final InputFile inputFile = TestInputFileBuilder.create("", baseDir, file)
         .setLanguage(DelphiLanguage.KEY)
-        .setMetadata(metadata)
+        .setContents(DelphiUtils.readFileContent(file, delphiProjectHelper.encoding()))
         .build();
     context.fileSystem().add(inputFile);
   }
 
   @Before
-  public void init() throws FileNotFoundException {
+  public void init() throws IOException {
 
     baseDir = DelphiUtils.getResource(ROOT_NAME);
 
     context = SensorContextTester.create(baseDir);
-
-    List<File> sourceDirs = new ArrayList<>();
-
-    sourceDirs.add(baseDir); // include baseDir
 
     delphiProjectHelper = new DelphiProjectHelper(context.config(), context.fileSystem());
 

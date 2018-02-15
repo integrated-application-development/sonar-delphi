@@ -51,13 +51,6 @@ public class DelphiUtilsTest {
   }
 
   @Test
-  public void checkRangeTest() {
-    assertEquals(75.00, DelphiUtils.checkRange(75.00, 75.00, 75.00), 0.0);
-    assertEquals(100.00, DelphiUtils.checkRange(75.00, 100.00, 150.00), 0.0);
-    assertEquals(50.00, DelphiUtils.checkRange(75.00, 00.00, 50.00), 0.0);
-  }
-
-  @Test
   public void acceptFile() {
     assertThat(DelphiUtils.acceptFile("Unit.pas"), is(true));
     assertThat(DelphiUtils.acceptFile("Project.dpr"), is(true));

@@ -25,7 +25,6 @@ package org.sonar.plugins.delphi.core.helpers;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.fs.InputDir;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.batch.sensor.SensorContext;
 import java.io.File;
@@ -54,30 +53,4 @@ public class DelphiProjectHelperTest {
     delphiProjectHelper = new DelphiProjectHelper(settings, fs);
   }
 
-  @Test
-  public void getDirectory() {
-//    System.out.println(("THIS IS PROJ:" + project.toString()));
-    System.out.println(("THIS IS CURDIR:" + currentDir.toString()));
-    System.out.println(("THIS IS BASEDIR:" + baseDir.toString()));
-
-    InputDir directory = delphiProjectHelper.getDirectory(currentDir, sensorContext);
-    assertThat(directory, notNullValue());
-    assertThat(directory.key(), is("[default]"));
-  }
-
-  @Test
-  public void getDirectoryEqualsToBaseDir() {
-    InputDir directory = delphiProjectHelper.getDirectory(baseDir, sensorContext);
-    assertThat(directory, notNullValue());
-    //changed this to macht sonar api 5.0
-    assertThat(directory.key(), is("[default]"));
-  }
-
-  @Test
-  public void getInvalidRelativeDirectoryReturnsDefaultPackageName() {
-    File rootDirectory = new File("/");
-    InputDir directory = delphiProjectHelper.getDirectory(rootDirectory, sensorContext);
-    assertThat(directory, notNullValue());
-    assertThat(directory.key(), is(DelphiProjectHelper.DEFAULT_PACKAGE_NAME));
-  }
 }

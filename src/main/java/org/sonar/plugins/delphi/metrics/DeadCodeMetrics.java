@@ -102,10 +102,10 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
       return;
     }
 
-    String fileName = FilenameUtils.removeExtension(inputFile.file().getName());
+    String fileName = FilenameUtils.removeExtension(inputFile.filename());
     UnitInterface unit = findUnit(fileName);
     if (unit == null) {
-      DelphiUtils.LOG.debug("No unit for " + fileName + "(" + inputFile.absolutePath() + ")");
+      DelphiUtils.LOG.debug("No unit for " + fileName + "(" + inputFile.toString() + ")");
       return;
     }
 
@@ -241,7 +241,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
 
   @Override
   public boolean executeOnResource(InputFile resource) {
-    return DelphiUtils.acceptFile(resource.absolutePath());
+    return DelphiUtils.acceptFile(resource.filename());
   }
 
   /**

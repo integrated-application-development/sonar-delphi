@@ -118,24 +118,6 @@ public final class DelphiUtils {
 
   /**
    * Checking value range
-   * 
-   * @param value Value to check
-   * @param min Minimum range
-   * @param max Maximum range
-   * @return Trims value to range, then returns it
-   */
-  public static double checkRange(double value, double min, double max) {
-    double newValue = value;
-    if (value < min) {
-      newValue = min;
-    } else if (value > max) {
-      newValue = max;
-    }
-    return newValue;
-  }
-
-  /**
-   * Checking value range
    *
    * @param value Value to check
    * @param min Minimum range
@@ -153,27 +135,7 @@ public final class DelphiUtils {
   }
 
   /**
-   * Gets custom file filter, the file must ends with provided suffix
-   * 
-   * @param suffix File suffix
-   * @return CustomFileFilter
-   */
-  public static CustomFileFilter getCustomFileFilter(String[] suffix) {
-    return new CustomFileFilter(suffix);
-  }
-
-  /**
-   * Gets directory file filter, it filters out directories
-   * 
-   * @return DirectoryFileFilter
-   */
-  public static DirectoryFileFilter getDirectoryFileFilter() {
-    return new DirectoryFileFilter();
-  }
-
-  /**
-   * Gets FileFilter associated with DelphiLanguage source files (*.pas,
-   * *.dpr, *.dpk)
+   * Gets FileFilter associated with DelphiLanguage source files (*.pas, *.dpr, *.dpk)
    * 
    * @return FileFilter
    */

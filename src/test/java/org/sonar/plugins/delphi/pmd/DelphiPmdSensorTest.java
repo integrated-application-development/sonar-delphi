@@ -68,7 +68,7 @@ public class DelphiPmdSensorTest {
   private File baseDir;
 
   @Before
-  public void init() throws FileNotFoundException{
+  public void init() throws IOException {
     baseDir = DelphiUtils.getResource(ROOT_NAME);
     sensorContext = SensorContextTester.create(baseDir);
 
@@ -79,17 +79,15 @@ public class DelphiPmdSensorTest {
 
     File srcFile = DelphiUtils.getResource(TEST_FILE);
 
-    InputStream fileStream = new FileInputStream(srcFile);
-    Metadata metadata = new FileMetadata().readMetadata(fileStream, StandardCharsets.UTF_8, srcFile.getPath());
     final InputFile inputFile = TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, srcFile)
         .setModuleBaseDir(baseDir.toPath())
         .setLanguage(DelphiLanguage.KEY)
         .setType(InputFile.Type.MAIN)
-        .setMetadata(metadata)
+        .setContents(DelphiUtils.readFileContent(srcFile, Charset.defaultCharset().name()))
         .build();
 
     DelphiProject delphiProject = new DelphiProject("Default Project");
-    delphiProject.setSourceFiles(Collections.singletonList(inputFile));
+    delphiProject.setSourceFiles(Collections.singletonList(srcFile));
 
     when(delphiProjectHelper.getWorkgroupProjects()).thenReturn(Collections.singletonList(delphiProject));
 
