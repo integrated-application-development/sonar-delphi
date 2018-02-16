@@ -70,8 +70,8 @@
 
 	<properties>
 		<!--Version Fields-->
-                <sonarQubeMinVersion>6.6</sonarQubeMinVersion>
-                <sonar.version>6.6</sonar.version>
+                <sonarQubeMinVersion>6.7</sonarQubeMinVersion>
+                <sonar.version>6.7</sonar.version>
 		<sonarcobertura.version>1.4</sonarcobertura.version>
 		<antlr-runtime.version>3.3</antlr-runtime.version>
 		<slf4j.version>1.7.5</slf4j.version>
@@ -83,7 +83,6 @@
 		<org.mockit.version>1.10.19</org.mockit.version>
 		<commons-httpclient.version>3.1</commons-httpclient.version>
 		<maven-project.version>2.2.1</maven-project.version>
-		<hsqldb.version>1.8.0.10</hsqldb.version>
 		<logback-classic.version>1.1.2</logback-classic.version>
 		<antlr3-maven-plugin.version>3.3.9</antlr3-maven-plugin.version>
 		<!--Version Fields end here-->

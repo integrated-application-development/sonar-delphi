@@ -28,7 +28,6 @@ import org.sonar.api.batch.rule.ActiveRule;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.ce.measure.RangeDistributionBuilder;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.delphi.antlr.DelphiParser;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
@@ -46,34 +45,18 @@ import java.util.Set;
  */
 public class ComplexityMetrics extends DefaultMetrics implements MetricsInterface {
 
-  private static final Number[] FUNCTIONS_DISTRIB_BOTTOM_LIMITS = {1, 2, 4, 6, 8, 10, 12, 20, 30};
-  private static final Number[] FILES_DISTRIB_BOTTOM_LIMITS = {1, 5, 10, 20, 30, 60, 90};
-
   public static final RuleKey RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY = RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, "MethodCyclomaticComplexityRule");
 
   private ActiveRule methodCyclomaticComplexityRule;
-
-  // FUNCTION_COMPLEXITY_DISTRIBUTION = Number of methods for given complexities
-  private RangeDistributionBuilder functionDist;
-  // FILE COMPLEXITY DISTRIBUTION = Number of files for given complexities
-  private RangeDistributionBuilder fileDist;
 
   /**
    * The Cyclomatic Complexity Number.
    */
   private int fileComplexity = 0;
   /**
-   * cyclomatic complexity number by method.
-   */
-  private int functionComplexity = 0;
-  /**
    * Number of classes including nested classes, interfaces, enums and annotations.
    */
   private int classCount = 0;
-  /**
-   * complexity by class.
-   */
-  private int classComplexity = 0;
   /**
    * Number of Methods without including  accessors. A constructor is considered  to be a method.
    */
@@ -112,8 +95,6 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
   public void analyse(InputFile resource, List<ClassInterface> classes,
     List<FunctionInterface> functions,
     Set<UnitInterface> units) {
-    functionDist = new RangeDistributionBuilder(FUNCTIONS_DISTRIB_BOTTOM_LIMITS);
-    fileDist =  new RangeDistributionBuilder(FILES_DISTRIB_BOTTOM_LIMITS);
     reset();
     Set<String> processedFunc = new HashSet<>();
     if (classes != null) {
@@ -124,7 +105,6 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
 
         ++classCount;
         fileComplexity += cl.getComplexity();
-        classComplexity += cl.getComplexity();
         publicApi += cl.getPublicApiCount();
 
         for (FunctionInterface func : cl.getFunctions()) {
@@ -145,9 +125,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
         }
         methodsCount += 1 + func.getOverloadsCount();
         fileComplexity += func.getComplexity();
-        functionComplexity += func.getComplexity();
         statementsCount += func.getStatements().size();
-        functionDist.add((double) func.getComplexity());
         if (func.getVisibility() == DelphiParser.PUBLIC) {
           ++publicApi;
         }
@@ -157,16 +135,12 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
       }
     }
 
-    fileDist.add(fileComplexity);
-
     saveAllMetrics();
   }
 
   private void processFunction(InputFile resource, FunctionInterface func) {
     if (!func.isAccessor()) {
       methodsCount++;
-      functionComplexity += func.getComplexity();
-      functionDist.add((double) func.getComplexity());
 
       addIssue(resource, func);
 
@@ -189,14 +163,8 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
     try {
       // Number of statements as defined in the DelphiLanguage Language Specification but without block definitions.
       context.<Integer>newMeasure().forMetric(CoreMetrics.STATEMENTS).on(resource).withValue(getIntMetric("STATEMENTS")).save();
-
       // The Cyclomatic Complexity Number
       context.<Integer>newMeasure().forMetric(CoreMetrics.COMPLEXITY).on(resource).withValue(getIntMetric("COMPLEXITY")).save();
-      // Average complexity by class
-      context.<Integer>newMeasure().forMetric(CoreMetrics.COMPLEXITY_IN_CLASSES).on(resource).withValue(getIntMetric("CLASS_COMPLEXITY")).save();
-      // Average cyclomatic complexity number by method
-      context.<Integer>newMeasure().forMetric(CoreMetrics.COMPLEXITY_IN_FUNCTIONS).on(resource).withValue(getIntMetric("FUNCTION_COMPLEXITY")).save();
-
       // Number of classes including nested classes, interfaces, enums and annotations
       context.<Integer>newMeasure().forMetric(CoreMetrics.CLASSES).on(resource).withValue(getIntMetric("CLASSES")).save();
       // Number of Methods without including accessors. A constructor is considered to be a method.
@@ -204,8 +172,6 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
       // Number of public classes, public methods (without accessors) and public properties (without public static final ones)
       context.<Integer>newMeasure().forMetric(CoreMetrics.PUBLIC_API).on(resource).withValue(getIntMetric("PUBLIC_API")).save();
 
-      context.<String>newMeasure().forMetric(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION).on(resource).withValue(functionDist.build()).save();
-      context.<String>newMeasure().forMetric(CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION).on(resource).withValue(fileDist.build()).save();
     } catch (IllegalStateException ise) {
       DelphiUtils.LOG.error(ise.getMessage());
     }
@@ -214,8 +180,6 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
   private void saveAllMetrics() {
     setIntMetric("STATEMENTS", statementsCount);
     setIntMetric("COMPLEXITY", fileComplexity);
-    setIntMetric("CLASS_COMPLEXITY", classComplexity);
-    setIntMetric("FUNCTION_COMPLEXITY", functionComplexity);
     setIntMetric("CLASSES", classCount);
     setIntMetric("FUNCTIONS", methodsCount);
     setIntMetric("PUBLIC_API", publicApi);
@@ -223,9 +187,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
 
   private void reset() {
     fileComplexity = 0;
-    functionComplexity = 0;
     classCount = 0;
-    classComplexity = 0;
     methodsCount = 0;
     statementsCount = 0;
     publicApi = 0;

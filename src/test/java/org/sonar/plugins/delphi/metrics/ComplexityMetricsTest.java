@@ -96,11 +96,9 @@ public class ComplexityMetricsTest {
 
     metrics.analyse(inputFile, results.getClasses(), results.getFunctions(), null);
 
-    assertEquals("CLASS_COMPLEXITY", (Integer)7, metrics.getIntMetric("CLASS_COMPLEXITY"));
     assertEquals("CLASSES", (Integer)2, metrics.getIntMetric("CLASSES"));
     assertEquals("COMPLEXITY", (Integer)10, metrics.getIntMetric("COMPLEXITY"));
     assertEquals("FUNCTIONS", (Integer)4, metrics.getIntMetric("FUNCTIONS"));
-    assertEquals("FUNCTION_COMPLEXITY", (Integer)10, metrics.getIntMetric("FUNCTION_COMPLEXITY"));
     assertEquals("PUBLIC_API", (Integer)5, metrics.getIntMetric("PUBLIC_API"));
     assertEquals("STATEMENTS", (Integer)20, metrics.getIntMetric("STATEMENTS"));
 
