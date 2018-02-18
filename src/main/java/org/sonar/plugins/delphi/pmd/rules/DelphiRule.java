@@ -22,11 +22,12 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import net.sourceforge.pmd.AbstractJavaRule;
+import net.sourceforge.pmd.lang.rule.AbstractRule;
+import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
 import net.sourceforge.pmd.PropertyDescriptor;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.properties.IntegerProperty;
-import net.sourceforge.pmd.properties.StringProperty;
+import net.sourceforge.pmd.lang.rule.properties.IntegerProperty;
+import net.sourceforge.pmd.lang.rule.properties.StringProperty;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
@@ -47,12 +48,18 @@ public class DelphiRule extends AbstractJavaRule {
 
   private boolean inImplementationSection = false;
 
-  public static final PropertyDescriptor LIMIT = new IntegerProperty("limit", "The max limit.", 1, 1.0f);
-  public static final PropertyDescriptor START = new StringProperty("start", "The AST node to start from", "", 1.0f);
-  public static final PropertyDescriptor END = new StringProperty("end", "The AST node to stop the search", "", 1.0f);
-  public static final PropertyDescriptor LOOK_FOR = new StringProperty("lookFor", "What nodes look for", "", 1.0f);
+  public static final IntegerProperty LIMIT = new IntegerProperty("limit", "The max limit.", 1, 100, 1, 1.0f);
+  public static final IntegerProperty THRESHOLD = new IntegerProperty("Threshold", "Threshold", 1, 100, 10, 1.0f);
+  public static final StringProperty START = new StringProperty("start", "The AST node to start from", "", 1.0f);
+  public static final StringProperty END = new StringProperty("end", "The AST node to stop the search", "", 1.0f);
+  public static final StringProperty LOOK_FOR = new StringProperty("lookFor", "What nodes look for", "", 1.0f);
 
   public DelphiRule() {
+    definePropertyDescriptor(LIMIT);
+    definePropertyDescriptor(THRESHOLD);
+    definePropertyDescriptor(START);
+    definePropertyDescriptor(END);
+    definePropertyDescriptor(LOOK_FOR);
   }
 
   /**

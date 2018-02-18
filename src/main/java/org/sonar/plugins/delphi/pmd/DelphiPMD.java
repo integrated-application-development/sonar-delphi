@@ -23,8 +23,10 @@
 package org.sonar.plugins.delphi.pmd;
 
 import net.sourceforge.pmd.*;
-import net.sourceforge.pmd.ast.CompilationUnit;
-import net.sourceforge.pmd.ast.ParseException;
+import net.sourceforge.pmd.lang.LanguageVersion;
+import net.sourceforge.pmd.lang.ast.ParseException;
+import net.sourceforge.pmd.lang.Language;
+import net.sourceforge.pmd.lang.ast.Node;
 import org.antlr.runtime.tree.CommonTree;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
@@ -55,14 +57,14 @@ public class DelphiPMD {
 
     if (ruleSets.applies(ctx.getSourceCodeFile())) {
       Language language = Language.JAVA;
-      ctx.setSourceType(SourceType.JAVA_17);
+      ctx.setLanguageVersion(LanguageVersion.JAVA_17);
 
       DelphiAST ast = new DelphiAST(pmdFile, encoding);
       if (ast.isError()) {
         throw new ParseException("grammar error");
       }
 
-      List<CompilationUnit> nodes = getNodesFromAST(ast);
+      List<Node> nodes = getNodesFromAST(ast);
       ruleSets.apply(nodes, ctx, language);
     }
 
@@ -72,8 +74,8 @@ public class DelphiPMD {
    * @param ast AST tree
    * @return AST tree nodes ready for parsing by PMD
    */
-  public List<CompilationUnit> getNodesFromAST(ASTTree ast) {
-    List<CompilationUnit> nodes = new ArrayList<>();
+  public List<Node> getNodesFromAST(ASTTree ast) {
+    List<Node> nodes = new ArrayList<>();
 
     for (int i = 0; i < ast.getChildCount(); ++i) {
       indexNode((CommonTree) ast.getChild(i), nodes);
@@ -88,7 +90,7 @@ public class DelphiPMD {
    * @param node Parent node
    * @param list List
    */
-  public void indexNode(CommonTree node, List<CompilationUnit> list) {
+  public void indexNode(CommonTree node, List<Node> list) {
     if (node == null) {
       return;
     }

@@ -36,7 +36,7 @@ public class VariableCounter extends DelphiRule {
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
     // if function arguments node
-    if (node.getText().equals(getStringProperty(START))) {
+    if (node.getText().equals(getProperty(START))) {
       int count = 0;
 
       // count num of arguments
@@ -47,9 +47,9 @@ public class VariableCounter extends DelphiRule {
         }
       }
 
-      int limit = getIntProperty(LIMIT);
+      Integer limit = getProperty(LIMIT);
       if (count > limit) {
-        String msg = "Too many " + getStringProperty(LOOK_FOR) + ": " + count + " (max "
+        String msg = "Too many " + getProperty(LOOK_FOR) + ": " + count + " (max "
           + limit + ")";
         addViolation(ctx, node, msg);
       }

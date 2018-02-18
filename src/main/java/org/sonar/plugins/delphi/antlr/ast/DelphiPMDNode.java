@@ -22,22 +22,25 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
-import net.sourceforge.pmd.ast.CompilationUnit;
-import net.sourceforge.pmd.ast.JavaNode;
-import net.sourceforge.pmd.ast.JavaParserVisitor;
-import net.sourceforge.pmd.ast.Node;
+import net.sourceforge.pmd.lang.dfa.DataFlowNode;
+import net.sourceforge.pmd.lang.java.ast.JavaNode;
+import net.sourceforge.pmd.lang.java.ast.JavaParserVisitor;
+import net.sourceforge.pmd.lang.ast.Node;
+import net.sourceforge.pmd.lang.java.symboltable.Scope;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.jaxen.JaxenException;
 import org.sonar.plugins.delphi.pmd.DelphiParserVisitor;
+import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * AST node extended with PMD interfaces for analysys PMD analysys
+ * AST node extended with PMD interfaces for analysis PMD analysis
  */
-public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUnit {
+public class DelphiPMDNode extends DelphiNode implements JavaNode {
 
   /**
    * C-tor
@@ -131,7 +134,6 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
   /**
    * {@inheritDoc}
    */
-
   @Override
   public Object jjtAccept(JavaParserVisitor visitor, Object data) {
     return jjtAccept((DelphiParserVisitor) visitor, data);
@@ -153,5 +155,164 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode, CompilationUn
     }
     return result;
   }
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public int jjtGetId() { return 0; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public Document getAsDocument() { return null; };
+
+  /**
+   {@inheritDoc}
+  */
+  @Override
+  public Object getUserData() { return null; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public String getImage() { return ""; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public void setImage(String image) {};
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public boolean hasImageEqualTo(String image) { return false; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public int getBeginLine() { return 0; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public int getBeginColumn() { return 0; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public int getEndLine() { return 0; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public int getEndColumn() { return 0; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public DataFlowNode getDataFlowNode() { return null; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public void setDataFlowNode(DataFlowNode dataFlowNode) {};
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public boolean isFindBoundary() { return false; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public Node getNthParent(int n) { return null; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public <T> T getFirstParentOfType(Class<T> parentType) { return null; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public<T> List<T> getParentsOfType(Class<T> parentType) { return null; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public <T> List<T> findChildrenOfType(Class<T> childType) { return null; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public <T> List<T> findDescendantsOfType(Class<T> targetType) { return null; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public <T> void findDescendantsOfType(Class<T> targetType, List<T> results, boolean crossFindBoundaries) { }
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public <T> T getFirstChildOfType(Class<T> childType) { return null; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public <T> T getFirstDescendantOfType(Class<T> descendantType) { return null; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public <T> boolean hasDescendantOfType(Class<T> type) { return false; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public List<? extends Node> findChildNodesWithXPath(String xpathString) throws JaxenException { return null; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public boolean hasDescendantMatchingXPath(String xpathString) { return false; };
+
+  /**
+   {@inheritDoc}
+   */
+  @Override
+  public void setUserData(Object userData) {};
+
+  @Override
+  public Object childrenAccept(JavaParserVisitor visitor, Object data) { return null; };
+
+  @Override
+  public Scope getScope() { return null; };
+
+  @Override
+  public void setScope(Scope scope) {};
 
 }

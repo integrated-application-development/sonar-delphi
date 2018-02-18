@@ -23,7 +23,7 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.properties.StringProperty;
+import net.sourceforge.pmd.lang.rule.properties.StringProperty;
 import org.apache.commons.lang.StringUtils;
 import org.apache.xml.dtm.DTM;
 import org.apache.xml.dtm.DTMIterator;
@@ -54,9 +54,14 @@ public class XPathRule extends DelphiRule {
    */
   private static String cachedFile = "";
 
+  public XPathRule()
+  {
+    definePropertyDescriptor(XPATH);
+  }
+
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    String xPathString = getStringProperty(XPATH);
+    String xPathString = getProperty(XPATH);
     if (StringUtils.isEmpty(xPathString)) {
       return;
     }

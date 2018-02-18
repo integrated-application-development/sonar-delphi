@@ -22,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import net.sourceforge.pmd.ast.JavaParserVisitor;
+import net.sourceforge.pmd.lang.java.ast.JavaParserVisitor;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**

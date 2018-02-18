@@ -23,7 +23,7 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.properties.StringProperty;
+import net.sourceforge.pmd.lang.rule.properties.StringProperty;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
@@ -39,6 +39,10 @@ public class NodeSequenceRule extends DelphiRule {
   private int count;
   private DelphiPMDNode firstMatchNode;
 
+  public NodeSequenceRule()
+  {
+    definePropertyDescriptor(SEQUENCE);
+  }
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
 
@@ -60,7 +64,7 @@ public class NodeSequenceRule extends DelphiRule {
   protected void init() {
     count = 0;
     firstMatchNode = null;
-    sequence = getStringProperty(SEQUENCE).split(",");
+    sequence = getProperty(SEQUENCE).split(",");
   }
 
   public void setSequence(String[] sequence) {

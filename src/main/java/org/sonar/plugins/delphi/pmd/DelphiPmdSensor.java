@@ -25,7 +25,7 @@ package org.sonar.plugins.delphi.pmd;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import net.sourceforge.pmd.*;
-import net.sourceforge.pmd.ast.ParseException;
+import net.sourceforge.pmd.lang.ast.ParseException;
 import net.sourceforge.pmd.renderers.Renderer;
 import net.sourceforge.pmd.renderers.XMLRenderer;
 import org.apache.commons.io.FileUtils;
@@ -177,11 +177,11 @@ public class DelphiPmdSensor implements Sensor {
     File ruleSetFile = dumpXmlRuleSet(DelphiPmdConstants.REPOSITORY_KEY, rulesXml);
     RuleSetFactory ruleSetFactory = new RuleSetFactory();
     try {
-      RuleSet ruleSet = ruleSetFactory.createRuleSet(new FileInputStream(ruleSetFile));
+      RuleSet ruleSet = ruleSetFactory.createRuleSet(ruleSetFile.getAbsolutePath());
 
       rulesets.addRuleSet(ruleSet);
       return rulesets;
-    } catch (FileNotFoundException e) {
+    } catch (RuleSetNotFoundException e) {
       throw new IllegalStateException(e);
     }
   }

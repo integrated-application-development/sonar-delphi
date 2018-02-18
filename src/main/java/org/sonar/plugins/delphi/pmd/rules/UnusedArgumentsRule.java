@@ -22,9 +22,8 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import net.sourceforge.pmd.PropertyDescriptor;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.properties.StringProperty;
+import net.sourceforge.pmd.lang.rule.properties.StringMultiProperty;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
@@ -38,11 +37,15 @@ public class UnusedArgumentsRule extends DelphiRule {
 
   private static final int MAX_LOOK_AHEAD = 3;
 
-  private static final PropertyDescriptor EXCLUDED_ARGS = new StringProperty("excluded_args",
+  private static final StringMultiProperty EXCLUDED_ARGS = new StringMultiProperty("excluded_args",
     "The argument names to ignore", new String[] {}, 1.0f, ',');
 
   private final List<String> excludedArgs = new ArrayList<>();
 
+  public UnusedArgumentsRule()
+  {
+    definePropertyDescriptor(EXCLUDED_ARGS);
+  }
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
     if (isMethodNode(node)) {
@@ -184,7 +187,7 @@ public class UnusedArgumentsRule extends DelphiRule {
   @Override
   protected void init() {
     super.init();
-    String[] stringProperties = getStringProperties(EXCLUDED_ARGS);
+    String[] stringProperties = getProperty(EXCLUDED_ARGS);
     for (String prop : stringProperties) {
       excludedArgs.add(prop.toLowerCase());
     }

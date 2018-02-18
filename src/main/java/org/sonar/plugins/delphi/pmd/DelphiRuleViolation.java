@@ -22,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import net.sourceforge.pmd.IRuleViolation;
+import net.sourceforge.pmd.RuleViolation;
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.CommonTree;
@@ -34,7 +34,7 @@ import org.sonar.plugins.delphi.pmd.rules.DelphiRule;
 /**
  * Delphi pmd rule violation
  */
-public class DelphiRuleViolation implements IRuleViolation {
+public class DelphiRuleViolation implements RuleViolation {
 
   private Rule rule;
   private String description;

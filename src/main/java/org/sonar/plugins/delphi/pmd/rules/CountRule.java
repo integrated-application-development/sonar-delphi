@@ -96,7 +96,7 @@ public class CountRule extends DelphiRule {
   protected void init() {
     count = 0;
     strength = 1;
-    limit = getIntProperty(LIMIT);
+    limit = getProperty(LIMIT);
   }
 
 }

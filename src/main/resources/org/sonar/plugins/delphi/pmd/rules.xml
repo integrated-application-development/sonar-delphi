@@ -104,7 +104,6 @@
 			understand, but also probably easier to
 			test.
 		</description>
-		<tags>brain-overload</tags>
 		<properties>
 			<property name="limit">
 				<value>100</value>

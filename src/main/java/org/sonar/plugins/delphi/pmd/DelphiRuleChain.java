@@ -22,10 +22,10 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import net.sourceforge.pmd.Language;
+import net.sourceforge.pmd.lang.Language;
+import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.RuleChain;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.ast.CompilationUnit;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class DelphiRuleChain extends RuleChain {
   private DelphiRuleChainVisitor visitor = new DelphiRuleChainVisitor();
 
   @Override
-  public void apply(List<CompilationUnit> astCompilationUnits, RuleContext ctx, Language language) {
+  public void apply(List<Node> astCompilationUnits, RuleContext ctx, Language language) {
     visitor.visitAll(astCompilationUnits, ctx);
   }
 
