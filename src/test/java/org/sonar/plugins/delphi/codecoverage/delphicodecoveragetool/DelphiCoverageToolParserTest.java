@@ -22,22 +22,17 @@
  */
 package org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.FileMetadata;
-import org.sonar.api.batch.fs.internal.Metadata;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
