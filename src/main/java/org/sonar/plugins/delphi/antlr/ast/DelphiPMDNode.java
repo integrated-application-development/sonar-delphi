@@ -118,6 +118,18 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode {
   /**
    * {@inheritDoc}
    */
+  @Override
+  public void jjtSetChildIndex(int var1) {};
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int jjtGetChildIndex() { return 0; };
+
+  /**
+   * {@inheritDoc}
+   */
 
   @Override
   public int jjtGetNumChildren() {
