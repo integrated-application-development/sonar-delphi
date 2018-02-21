@@ -327,4 +327,10 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode {
   @Override
   public void setScope(Scope scope) {};
 
+  // since 6.0.0
+  @Override
+  public void remove() {};
+
+  @Override
+  public void removeChildAtIndex(int var1) {};
 }

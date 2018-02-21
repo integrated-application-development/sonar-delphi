@@ -23,7 +23,7 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.rule.properties.StringMultiProperty;
+import net.sourceforge.pmd.properties.StringMultiProperty;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
@@ -187,7 +187,7 @@ public class UnusedArgumentsRule extends DelphiRule {
   @Override
   protected void init() {
     super.init();
-    String[] stringProperties = getProperty(EXCLUDED_ARGS);
+    List<String> stringProperties = getProperty(EXCLUDED_ARGS);
     for (String prop : stringProperties) {
       excludedArgs.add(prop.toLowerCase());
     }
