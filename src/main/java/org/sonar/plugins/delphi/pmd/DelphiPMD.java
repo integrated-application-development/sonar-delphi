@@ -27,6 +27,7 @@ import net.sourceforge.pmd.lang.LanguageVersion;
 import net.sourceforge.pmd.lang.ast.ParseException;
 import net.sourceforge.pmd.lang.Language;
 import net.sourceforge.pmd.lang.ast.Node;
+import net.sourceforge.pmd.lang.LanguageRegistry;
 import org.antlr.runtime.tree.CommonTree;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
@@ -56,8 +57,9 @@ public class DelphiPMD {
     ctx.setReport(report);
 
     if (ruleSets.applies(ctx.getSourceCodeFile())) {
-      Language language = Language.JAVA;
-      ctx.setLanguageVersion(LanguageVersion.JAVA_17);
+
+      Language language = LanguageRegistry.getDefaultLanguage();
+      ctx.setLanguageVersion(language.getDefaultVersion());
 
       DelphiAST ast = new DelphiAST(pmdFile, encoding);
       if (ast.isError()) {
