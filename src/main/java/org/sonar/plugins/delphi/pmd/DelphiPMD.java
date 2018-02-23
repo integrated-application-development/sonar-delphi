@@ -23,7 +23,6 @@
 package org.sonar.plugins.delphi.pmd;
 
 import net.sourceforge.pmd.*;
-import net.sourceforge.pmd.lang.LanguageVersion;
 import net.sourceforge.pmd.lang.ast.ParseException;
 import net.sourceforge.pmd.lang.Language;
 import net.sourceforge.pmd.lang.ast.Node;
@@ -58,7 +57,7 @@ public class DelphiPMD {
 
     if (ruleSets.applies(ctx.getSourceCodeFile())) {
 
-      Language language = LanguageRegistry.getDefaultLanguage();
+      Language language = LanguageRegistry.getLanguage(DelphiLanguageModule.NAME);
       ctx.setLanguageVersion(language.getDefaultVersion());
 
       DelphiAST ast = new DelphiAST(pmdFile, encoding);

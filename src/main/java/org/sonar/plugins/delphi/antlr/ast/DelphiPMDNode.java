@@ -23,10 +23,9 @@
 package org.sonar.plugins.delphi.antlr.ast;
 
 import net.sourceforge.pmd.lang.dfa.DataFlowNode;
-import net.sourceforge.pmd.lang.java.ast.JavaNode;
-import net.sourceforge.pmd.lang.java.ast.JavaParserVisitor;
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.symboltable.Scope;
+import net.sourceforge.pmd.lang.symboltable.ScopedNode;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -40,7 +39,7 @@ import java.util.List;
 /**
  * AST node extended with PMD interfaces for analysis PMD analysis
  */
-public class DelphiPMDNode extends DelphiNode implements JavaNode {
+public class DelphiPMDNode extends DelphiNode implements ScopedNode {
 
   /**
    * C-tor
@@ -136,19 +135,8 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode {
     return 0;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  private Object jjtAccept(DelphiParserVisitor visitor, Object data) {
+  public Object jjtAccept(DelphiParserVisitor visitor, Object data) {
     return visitor.visit(this, data);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Object jjtAccept(JavaParserVisitor visitor, Object data) {
-    return jjtAccept((DelphiParserVisitor) visitor, data);
   }
 
   public List<Tree> findAllChildren(int type) {
@@ -319,13 +307,7 @@ public class DelphiPMDNode extends DelphiNode implements JavaNode {
   public void setUserData(Object userData) {};
 
   @Override
-  public Object childrenAccept(JavaParserVisitor visitor, Object data) { return null; };
-
-  @Override
   public Scope getScope() { return null; };
-
-  @Override
-  public void setScope(Scope scope) {};
 
   // since 6.0.0
   @Override

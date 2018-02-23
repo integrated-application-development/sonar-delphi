@@ -1,4 +1,5 @@
-<ruleset>
+<ruleset name="Delphi Default">
+    <description>All default rules</description>
 
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ThenTryRule" message="No 'begin' before 'try' at 'if' statement"
 		name="ThenTryRule">

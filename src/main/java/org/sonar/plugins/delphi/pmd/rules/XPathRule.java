@@ -103,7 +103,7 @@ public class XPathRule extends DelphiRule {
    */
 
   @Override
-  protected void visitAll(@SuppressWarnings("rawtypes") List acus, RuleContext ctx) {
+  protected void visitAll(List<? extends net.sourceforge.pmd.lang.ast.Node> acus, RuleContext ctx) {
     init();
     if (acus.iterator().hasNext()) {
       visit((DelphiPMDNode) acus.iterator().next(), ctx);

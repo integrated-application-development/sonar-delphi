@@ -26,7 +26,7 @@ import net.sourceforge.pmd.lang.rule.AbstractRuleChainVisitor;
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.java.ast.JavaNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class DelphiRuleChainVisitor extends AbstractRuleChainVisitor {
 
   @Override
   protected void visit(Rule rule, Node node, RuleContext ctx) {
-    ((JavaNode)node).jjtAccept((DelphiParserVisitor) rule, ctx);
+    ((DelphiPMDNode)node).jjtAccept((DelphiParserVisitor) rule, ctx);
   }
 
   @Override

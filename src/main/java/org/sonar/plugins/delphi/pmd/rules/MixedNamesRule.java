@@ -33,7 +33,7 @@ import java.util.List;
 
 /**
  * Rule that checks if you are using function/variables names correctly, that is
- * you don't mispell them, example: <code>var
+ * you don't misspell them, example: <code>var
  * xyz: integer;
  * begin
  * xyz := 1;	//OK
