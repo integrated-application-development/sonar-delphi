@@ -73,7 +73,7 @@
                 <sonarQubeMinVersion>6.7</sonarQubeMinVersion>
                 <sonar.version>6.7</sonar.version>
 		<sonarcobertura.version>1.4</sonarcobertura.version>
-		<antlr-runtime.version>3.3</antlr-runtime.version>
+		<antlr-runtime.version>3.4</antlr-runtime.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<pmd.version>6.0.1</pmd.version>
 		<xalan.version>2.7.1</xalan.version>
@@ -87,8 +87,7 @@
 		<!--Version Fields end here-->
 		<sonar.pluginName>Delphi</sonar.pluginName>
 		<sonar.pluginClass>org.sonar.plugins.delphi.DelphiPlugin</sonar.pluginClass>
-		<sonar.exclusions>org.sonar.plugins.delphi.antlr.DelphiParser,org.sonar.plugins.delphi.antlr.DelphiLexer
-		</sonar.exclusions>
+		<sonar.exclusions>src/main/java/org/sonar/plugins/delphi/antlr/DelphiParser.java,src/main/java/org/sonar/plugins/delphi/antlr/DelphiLexer.java</sonar.exclusions>
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
 
 	</properties>
@@ -109,7 +108,7 @@
 		<dependency>
 			<groupId>org.antlr</groupId>
 			<artifactId>antlr-runtime</artifactId>
-			<version>3.3</version>
+			<version>${antlr-runtime.version}</version>
 		</dependency>
                 <dependency>
                     <groupId>net.sourceforge.pmd</groupId>
@@ -154,22 +153,6 @@
 			<artifactId>mockito-core</artifactId>
 			<version>${org.mockit.version}</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>commons-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
-			<version>${commons-httpclient.version}</version>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-				<exclusion>
-					<artifactId>commons-codec</artifactId>
-					<groupId>commons-codec</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
