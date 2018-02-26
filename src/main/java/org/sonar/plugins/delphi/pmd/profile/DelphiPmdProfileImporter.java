@@ -25,15 +25,14 @@ package org.sonar.plugins.delphi.pmd.profile;
 import org.apache.commons.io.IOUtils;
 import org.sonar.api.profiles.ProfileImporter;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.utils.ValidationMessages;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRulesUtils;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.List;
 
 /**
  * imports Delphi rules profile from Sonar
@@ -54,7 +53,10 @@ public class DelphiPmdProfileImporter extends ProfileImporter {
     try {
       DelphiRulesUtils.importConfiguration(IOUtils.toString(reader), DelphiRulesUtils.getInitialReferential(), profile);
     } catch (IOException e) {
-      messages.addErrorText(e.getMessage());
+      if (messages != null) {
+        messages.addErrorText(e.getMessage());
+      }
+      Loggers.get(getClass()).error("Error loading from rules file " + e.getMessage());
     }
     return profile;
   }
