@@ -63,7 +63,8 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser
 
   private void parseValue(String lineCoverage, NewCoverage newCoverage)
   {
-    int pos = 0, end;
+    int pos = 0;
+    int end;
     while ((end = lineCoverage.indexOf(';', pos)) >= 0) {
       parseLineHit(lineCoverage, pos, end, newCoverage);
       pos = end + 1;
@@ -73,6 +74,21 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser
     }
   }
 
+  private void parseFileNode (SensorContext sensorContext, Node srcFile){
+    String fileName = srcFile.getAttributes().getNamedItem("name").getTextContent();
+    try {
+      InputFile sourceFile = delphiProjectHelper.findFileInDirectories(fileName);
+      NewCoverage newCoverage = sensorContext.newCoverage();
+      newCoverage.onFile(sourceFile);
+
+      parseValue(srcFile.getTextContent(), newCoverage);
+      newCoverage.save();
+    }
+    catch (FileNotFoundException e) {
+      DelphiUtils.LOG.info("File not found in project %s",fileName);
+    }
+
+ }
   private void parseReportFile(SensorContext sensorContext)
   {
     DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -89,30 +105,15 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser
 
       for (int f = 0; f < files.getLength(); f++) {
         Node srcFile = files.item(f);
-        String fileName = srcFile.getAttributes().getNamedItem("name").getTextContent();
-
-        try {
-          InputFile sourceFile = delphiProjectHelper.findFileInDirectories(fileName);
-          NewCoverage newCoverage = sensorContext.newCoverage();
-          newCoverage.onFile(sourceFile);
-
-          parseValue(srcFile.getTextContent(), newCoverage);
-          newCoverage.save();
-        }
-        catch (FileNotFoundException e) {
-          DelphiUtils.LOG.info("File not found in project" + fileName);
-        }
+        parseFileNode(sensorContext, srcFile);
       }
 
     } catch (SAXParseException err) {
       DelphiUtils.LOG.info("SAXParseException");
     } catch (SAXException e) {
-      DelphiUtils.LOG.info("SAXException");
-      Exception x = e.getException ();
-      ((x == null) ? e : x).printStackTrace ();
-    } catch (Throwable t) {
-      DelphiUtils.LOG.info("Throwable");
-      t.printStackTrace ();
+      DelphiUtils.LOG.info("SAXException %s", e.getMessage());
+    } catch (Exception e) {
+      DelphiUtils.LOG.info("Exception %s", e.getMessage());
     }
   }
 

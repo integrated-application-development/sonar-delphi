@@ -26,7 +26,7 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 
 /**
- * Delphi Node used by ANTLR generated praser
+ * Delphi Node used by ANTLR generated parser
  */
 public class DelphiNode extends CommonTree {
 

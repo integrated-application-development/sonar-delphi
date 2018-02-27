@@ -127,7 +127,7 @@ public class StatementVerifier {
         token = lexer.nextToken();
       }
     }
-    tokens.add(new CommonToken(Token.EOF_TOKEN));
+    tokens.add(new CommonToken(Token.EOF));
     return tokens;
   }
 

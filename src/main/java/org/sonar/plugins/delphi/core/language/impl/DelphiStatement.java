@@ -134,8 +134,8 @@ public class DelphiStatement implements StatementInterface {
         token = lexer.nextToken();
       }
     }
-    //has been changed to add compatibility for sonarqube 5.2
-    tokens.add(new CommonToken(Token.EOF_TOKEN));
+    //has been changed to add compatibility for SonarQube 5.2
+    tokens.add(new CommonToken(Token.EOF));
     return tokens;
   }
   @Override
