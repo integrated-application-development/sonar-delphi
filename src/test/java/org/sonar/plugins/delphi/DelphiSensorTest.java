@@ -40,15 +40,10 @@ import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.batch.fs.internal.FileMetadata;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
-import org.sonar.api.batch.fs.internal.Metadata;
 
 import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.Paths;
 import java.util.*;
-import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.*;
 
@@ -74,7 +69,7 @@ public class DelphiSensorTest {
   public void init() throws IOException {
 
     baseDir = DelphiUtils.getResource(ROOT_NAME);
-    File reportDir = new File(baseDir.getAbsolutePath() + "/reports");
+    DelphiUtils.LOG.info("baseDir:" + baseDir.getAbsolutePath());
 
     // get all directories
     File[] dirs = baseDir.listFiles(DelphiUtils.getDirectoryFilter());
@@ -87,11 +82,12 @@ public class DelphiSensorTest {
 
     sourceDirs.add(baseDir); // include baseDir
     DefaultInputDir inputBaseDir = new DefaultInputDir(moduleKey, "");
+    inputBaseDir.setModuleBaseDir(baseDir.toPath());
+
     context.fileSystem().add(inputBaseDir);
     for (File source : baseDir.listFiles(DelphiUtils.getFileFilter())) {
 
       InputFile baseInputFile = TestInputFileBuilder.create(moduleKey, baseDir, source)
-          .setModuleBaseDir(baseDir.toPath())
           .setLanguage(DelphiLanguage.KEY)
           .setType(InputFile.Type.MAIN)
           .setContents(DelphiUtils.readFileContent(source, delphiProjectHelper.encoding()))
@@ -107,8 +103,9 @@ public class DelphiSensorTest {
       File[] files = directory.listFiles(DelphiUtils.getFileFilter());
       for (File sourceFile : files) {
 
+        DelphiUtils.LOG.info("sourceFile:" + sourceFile.getAbsolutePath());
+
         DefaultInputFile inputFile = TestInputFileBuilder.create(moduleKey, baseDir, sourceFile)
-            .setModuleBaseDir(baseDir.toPath())
             .setLanguage(DelphiLanguage.KEY)
             .setType(InputFile.Type.MAIN)
             .setContents(DelphiUtils.readFileContent(sourceFile, delphiProjectHelper.encoding()))
@@ -118,7 +115,9 @@ public class DelphiSensorTest {
         sourceFiles.add(sourceFile);
       }
       DefaultInputDir inputDir = new DefaultInputDir(moduleKey, getRelativePath(baseDir,directory.getPath()));
+      inputDir.setModuleBaseDir(baseDir.toPath());
       context.fileSystem().add(inputDir);
+      DelphiUtils.LOG.info("inputDir:" + inputDir.absolutePath());
       // put all directories to list
       sourceDirs.add(directory);
     }

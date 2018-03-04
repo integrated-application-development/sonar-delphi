@@ -120,13 +120,15 @@ public class DelphiSensor implements Sensor {
   private void addCoverage(SensorContext context)
   {
     Optional<String> coverageTool = context.config().get(DelphiPlugin.CODECOVERAGE_TOOL_KEY);
-    if (coverageTool.isPresent() &&  coverageTool.get().equals("dcc")) {
+    if (coverageTool.isPresent() && coverageTool.get().equals("dcc")) {
       Optional<String> coverageReport = context.config().get(DelphiPlugin.CODECOVERAGE_REPORT_KEY);
 
-      DelphiCodeCoverageParser coverageParser = new DelphiCodeCoverageToolParser(
-          new File(coverageReport.get()),
-          delphiProjectHelper);
-      coverageParser.parse(context);
+      if (coverageReport.isPresent()) {
+        DelphiCodeCoverageParser coverageParser = new DelphiCodeCoverageToolParser(
+            new File(coverageReport.get()),
+            delphiProjectHelper);
+        coverageParser.parse(context);
+      }
     }
   }
 
