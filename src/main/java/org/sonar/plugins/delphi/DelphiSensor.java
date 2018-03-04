@@ -58,6 +58,9 @@ import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -124,10 +127,21 @@ public class DelphiSensor implements Sensor {
       Optional<String> coverageReport = context.config().get(DelphiPlugin.CODECOVERAGE_REPORT_KEY);
 
       if (coverageReport.isPresent()) {
-        DelphiCodeCoverageParser coverageParser = new DelphiCodeCoverageToolParser(
-            new File(coverageReport.get()),
-            delphiProjectHelper);
-        coverageParser.parse(context);
+        Path coverageReportDir = Paths.get(coverageReport.get());
+        try {
+          Files.walk(coverageReportDir)
+              .filter(Files::isRegularFile)
+              .filter(DelphiCodeCoverageToolParser::isCodeCoverageReport)
+              .forEach(path -> {
+                DelphiCodeCoverageParser coverageParser = new DelphiCodeCoverageToolParser(path.toFile(),
+                    delphiProjectHelper);
+                coverageParser.parse(context);
+              });
+        }
+        catch (IOException e)
+        {
+          DelphiUtils.LOG.error(e.getMessage());
+        }
       }
     }
   }

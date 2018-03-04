@@ -34,6 +34,7 @@ import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Document;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
 
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
@@ -48,6 +49,11 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser
   public DelphiCodeCoverageToolParser(File reportFile, DelphiProjectHelper delphiProjectHelper) {
     this.reportFile = reportFile;
     this.delphiProjectHelper = delphiProjectHelper;
+  }
+
+  public static boolean isCodeCoverageReport(Path path)
+  {
+    return "CodeCoverage_Summary.xml".equalsIgnoreCase(path.getFileName().toString());
   }
 
   private void parseLineHit(String lineCoverage, int startPos, int endPos, NewCoverage newCoverage)
