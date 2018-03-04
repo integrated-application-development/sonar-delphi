@@ -111,6 +111,8 @@ public class DelphiSensorTest {
             .setContents(DelphiUtils.readFileContent(sourceFile, delphiProjectHelper.encoding()))
             .build();
 
+        DelphiUtils.LOG.info("uri:" + inputFile.uri());
+
         context.fileSystem().add(inputFile);
         sourceFiles.add(sourceFile);
       }
