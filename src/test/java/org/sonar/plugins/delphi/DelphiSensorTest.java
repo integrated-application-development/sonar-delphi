@@ -69,7 +69,6 @@ public class DelphiSensorTest {
   public void init() throws IOException {
 
     baseDir = DelphiUtils.getResource(ROOT_NAME);
-    DelphiUtils.LOG.info("baseDir:" + baseDir.getAbsolutePath());
 
     // get all directories
     File[] dirs = baseDir.listFiles(DelphiUtils.getDirectoryFilter());
@@ -102,16 +101,11 @@ public class DelphiSensorTest {
 
       File[] files = directory.listFiles(DelphiUtils.getFileFilter());
       for (File sourceFile : files) {
-
-        DelphiUtils.LOG.info("sourceFile:" + sourceFile.getAbsolutePath());
-
         DefaultInputFile inputFile = TestInputFileBuilder.create(moduleKey, baseDir, sourceFile)
             .setLanguage(DelphiLanguage.KEY)
             .setType(InputFile.Type.MAIN)
             .setContents(DelphiUtils.readFileContent(sourceFile, delphiProjectHelper.encoding()))
             .build();
-
-        DelphiUtils.LOG.info("uri:" + inputFile.uri());
 
         context.fileSystem().add(inputFile);
         sourceFiles.add(sourceFile);
@@ -119,7 +113,6 @@ public class DelphiSensorTest {
       DefaultInputDir inputDir = new DefaultInputDir(moduleKey, getRelativePath(baseDir,directory.getPath()));
       inputDir.setModuleBaseDir(baseDir.toPath());
       context.fileSystem().add(inputDir);
-      DelphiUtils.LOG.info("inputDir:" + inputDir.absolutePath());
       // put all directories to list
       sourceDirs.add(directory);
     }

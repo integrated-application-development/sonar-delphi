@@ -283,8 +283,12 @@ public class DelphiProjectHelper  {
 
   public String uriToAbsolutePath(URI uri)
   {
-    String absolutePath = uri.getPath().substring(1);
-    return absolutePath;
+    String path = uri.getPath();
+    if (":".equals(path.substring(2, 3))) {
+      return path.substring(1);
+    } else {
+      return path;
+    }
   }
 
   /**
