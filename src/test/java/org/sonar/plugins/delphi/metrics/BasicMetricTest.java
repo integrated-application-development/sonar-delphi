@@ -26,9 +26,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-import org.sonar.squid.text.delphi.Metric;
-
-import org.sonar.squid.text.delphi.DelphiSource;
+import org.sonar.plugins.delphi.metrics.basicmetrics.Metric;
+import org.sonar.plugins.delphi.metrics.basicmetrics.DelphiSource;
 
 import java.io.BufferedReader;
 import java.io.File;
