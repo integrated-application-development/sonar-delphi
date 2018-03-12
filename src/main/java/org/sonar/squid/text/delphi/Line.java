@@ -28,7 +28,7 @@ import org.apache.commons.lang.StringUtils;
  * Class representing line of code. Holds data required to source code statistic
  * generation.
  */
-class Line implements Measurable<Metric> {
+class Line {
 
   private final int lineIndex;
   private int blankLine = 0;
@@ -79,11 +79,6 @@ class Line implements Measurable<Metric> {
     return true;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
-  @Override
   public int getInt(Metric metric) {
     switch (metric) {
       case BLANK_LINES:
@@ -103,13 +98,9 @@ class Line implements Measurable<Metric> {
       case PUBLIC_DOC_API:
         return documentation;
       default:
-        throw new IllegalStateException("MetricDef " + metric.getName() + " is not available on Line object.");
+        throw new IllegalStateException("MetricDef " + metric.name() + " is not available on Line object.");
     }
   }
-
-  /**
-   * {@inheritDoc}
-   */
 
   public void setMeasure(Metric metric, int measure) {
     switch (metric) {
@@ -138,7 +129,7 @@ class Line implements Measurable<Metric> {
         throw new IllegalStateException(
           "MetricDef LINES always equals 1 on a Line and you are not permitted to change this value.");
       default:
-        throw new IllegalStateException("MetricDef " + metric.getName() + " is not suitable for Line object.");
+        throw new IllegalStateException("MetricDef " + metric.name() + " is not suitable for Line object.");
     }
   }
 

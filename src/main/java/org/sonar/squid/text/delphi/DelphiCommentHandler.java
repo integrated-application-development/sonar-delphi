@@ -27,7 +27,6 @@ package org.sonar.squid.text.delphi;
  * comments.
  * 
  */
-// TODO Rename to MultiLinesCommentHandler
 public class DelphiCommentHandler extends LineContextHandler {
 
   private static final int MIN_CHARS_LEFT = 3;

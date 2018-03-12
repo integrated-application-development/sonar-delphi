@@ -19,14 +19,10 @@
  */
 package org.sonar.squid.text.delphi;
 
+public enum Metric {
 
-public enum Metric implements MetricDef {
-
-  PACKAGES, CLASSES, ANONYMOUS_INNER_CLASSES, FILES, METHODS, CONSTRUCTORS, STATEMENTS, LINES(false), BLANK_LINES(false),
-  COMMENT_LINES(false), HEADER_COMMENT_LINES(false), COMMENTED_OUT_CODE_LINES(false), BRANCHES,
-  PUBLIC_API, PUBLIC_DOC_API, ACCESSORS,
-  COMMENT_BLANK_LINES(false), LINES_OF_CODE(false),
-  COMPLEXITY, INTERFACES, ABSTRACT_CLASSES,
+  LINES(false), BLANK_LINES(false), COMMENT_LINES(false), HEADER_COMMENT_LINES(false), COMMENTED_OUT_CODE_LINES(false),
+  PUBLIC_API, PUBLIC_DOC_API, COMMENT_BLANK_LINES(false), LINES_OF_CODE(false)
   ;
 
   private boolean aggregateIfThereIsAlreadyAValue = true;
@@ -36,16 +32,6 @@ public enum Metric implements MetricDef {
 
   Metric(boolean aggregateIfThereIsAlreadyAValue) {
     this.aggregateIfThereIsAlreadyAValue = aggregateIfThereIsAlreadyAValue;
-  }
-
-  @Override
-  public String getName() {
-    return name();
-  }
-
-  @Override
-  public boolean aggregateIfThereIsAlreadyAValue() {
-    return aggregateIfThereIsAlreadyAValue;
   }
 
 }
