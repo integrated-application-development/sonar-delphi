@@ -22,8 +22,6 @@
  */
 package org.sonar.squid.text.delphi;
 
-import org.sonar.squidbridge.measures.Metric;
-
 /**
  * Class for handling custom block comments. Can also count documentation
  * comments.

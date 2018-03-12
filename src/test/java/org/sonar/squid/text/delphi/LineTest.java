@@ -24,7 +24,6 @@ package org.sonar.squid.text.delphi;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.squidbridge.measures.Metric;
 
 
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -45,12 +45,12 @@ public class DelphiRule implements Comparable<String> {
   @XStreamAsAttribute
   private String name;
 
+  @XStreamAlias("description")
+  private String description;
+
   private String priority;
 
   private List<Property> properties;
-
-  @XStreamOmitField
-  private String description;
 
   @XStreamOmitField
   private String tags;
@@ -61,15 +61,10 @@ public class DelphiRule implements Comparable<String> {
   @XStreamOmitField
   private String example;
 
-  /**
-   * Default ctor
-   */
   public DelphiRule() {
   }
 
   /**
-   * Ctor
-   * 
    * @param clazz Rule class
    */
   public DelphiRule(String clazz) {
@@ -77,8 +72,6 @@ public class DelphiRule implements Comparable<String> {
   }
 
   /**
-   * Ctor
-   * 
    * @param clazz Rule class
    * @param priority Rule priority
    */
@@ -109,6 +102,8 @@ public class DelphiRule implements Comparable<String> {
   public String getClazz() {
     return clazz;
   }
+
+  public void setDescription(String description) { this.description = description; }
 
   /**
    * Sets properties

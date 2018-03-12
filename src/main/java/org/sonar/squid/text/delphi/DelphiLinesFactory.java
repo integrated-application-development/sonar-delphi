@@ -22,8 +22,6 @@
  */
 package org.sonar.squid.text.delphi;
 
-import org.sonar.squidbridge.api.AnalysisException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -85,10 +83,10 @@ public class DelphiLinesFactory {
         notifyHandlersAboutNewChar();
       } while (true);
     } catch (IOException e) {
-      throw new AnalysisException("Unable to read the source code.", e);
+//      throw new AnalysisException("Unable to read the source code.", e);
     } catch (Exception e) {
-      throw new AnalysisException("A problem was encountered when analyzing line " + lines.size() + " : '"
-        + currentStringBuilder.toString() + "'", e);
+//      throw new AnalysisException("A problem was encountered when analyzing line " + lines.size() + " : '"
+//        + currentStringBuilder.toString() + "'", e);
     }
   }
 

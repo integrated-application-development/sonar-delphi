@@ -28,7 +28,6 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRulesUtils;
-import org.sonar.squidbridge.rules.SqaleXmlLoader;
 
 import java.util.List;
 
@@ -60,8 +59,6 @@ public class DelphiPmdRuleDefinition implements RulesDefinition {
           .setDescription(param.getDescription());
       }
     }
-
-    SqaleXmlLoader.load(repository, "/org/sonar/plugins/delphi/sqale/delphi-model.xml");
 
     repository.done();
 

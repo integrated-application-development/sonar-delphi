@@ -73,7 +73,7 @@ public class SurefireSensor implements Sensor {
   public void execute(SensorContext context)
   {
     DelphiUtils.LOG.info("Delphi sensor execute...");
-    String[] paths = configuration.getStringArray(SurefireUtils.SUREFIRE_REPORTS_PATH_PROPERTY);
+    String[] paths = configuration.getStringArray(SurefireUtils.SUREFIRE_REPORT_PATHS_PROPERTY);
 
     if (paths == null || paths.length == 0) {
       DelphiUtils.LOG.warn("No Surefire reports directory found! Using default directory: " + DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY);

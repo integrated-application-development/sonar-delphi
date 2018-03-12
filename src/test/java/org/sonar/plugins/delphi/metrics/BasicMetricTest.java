@@ -25,9 +25,8 @@ package org.sonar.plugins.delphi.metrics;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.plugins.delphi.core.DelphiRecognizer;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-import org.sonar.squidbridge.measures.Metric;
+import org.sonar.squid.text.delphi.Metric;
 
 import org.sonar.squid.text.delphi.DelphiSource;
 
@@ -52,7 +51,7 @@ public class BasicMetricTest {
   public void setUp() throws Exception {
     File testFile = DelphiUtils.getResource(FILE_NAME);
     Reader reader = new BufferedReader(new FileReader(testFile));
-    source = new DelphiSource(reader, new DelphiRecognizer());
+    source = new DelphiSource(reader);
   }
 
   @Test

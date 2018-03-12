@@ -189,7 +189,7 @@ public class DelphiPmdSensor implements Sensor {
   private File dumpXmlRuleSet(String repositoryKey, String rulesXml) {
     try {
       File configurationFile = new File(delphiProjectHelper.workDir(), repositoryKey + ".xml");
-      Files.write(rulesXml, configurationFile, Charsets.UTF_8);
+      Files.asCharSink(configurationFile, Charsets.UTF_8).write(rulesXml);
 
       DelphiUtils.LOG.info("PMD configuration: " + configurationFile.getAbsolutePath());
 

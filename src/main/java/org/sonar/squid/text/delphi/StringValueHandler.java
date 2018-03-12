@@ -22,8 +22,6 @@
  */
 package org.sonar.squid.text.delphi;
 
-import org.sonar.squidbridge.measures.Metric;
-
 public class StringValueHandler extends LineContextHandler {
 
   private static final int ALNUM_BEGIN_INDEX = 48;

@@ -22,9 +22,6 @@
  */
 package org.sonar.squid.text.delphi;
 
-import org.sonar.squidbridge.measures.Metric;
-import org.sonar.squidbridge.recognizer.CodeRecognizer;
-
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -37,30 +34,17 @@ import java.util.Set;
 public class DelphiSource {
 
   private List<Line> lines = new ArrayList<>();
-  private CodeRecognizer codeRecognizer;
   private Set<Integer> noSonarTagLines = new HashSet<>();
 
   /**
    * Constructor. Does the line processing.
    * 
    * @param reader File to read
-   * @param codeRecognizer Code recognizer class to recognize Delphi code
    */
-  public DelphiSource(Reader reader, CodeRecognizer codeRecognizer) {
-    this.codeRecognizer = codeRecognizer;
+  public DelphiSource(Reader reader) {
     DelphiLinesFactory linesFactory = new DelphiLinesFactory(reader);
     lines = linesFactory.getLines();
     processLines();
-  }
-
-  /**
-   * Constructor. Does the line processing.
-   * 
-   * @param stringLines Code lines
-   * @param codeRecognizer Code recognizer class to recognize Delphi code
-   */
-  public DelphiSource(String[] stringLines, CodeRecognizer codeRecognizer) {
-    this(new StringArrayReader(stringLines), codeRecognizer);
   }
 
   /**
@@ -138,12 +122,7 @@ public class DelphiSource {
         return;
       }
 
-      boolean isCommentedOutCode = codeRecognizer.isLineOfCode(line.getComment());
-      if (!isCommentedOutCode) {
-        line.setMeasure(Metric.COMMENT_LINES, 1);
-      } else {
-        line.setMeasure(Metric.COMMENTED_OUT_CODE_LINES, 1);
-      }
+      line.setMeasure(Metric.COMMENT_LINES, 1);
     }
   }
 

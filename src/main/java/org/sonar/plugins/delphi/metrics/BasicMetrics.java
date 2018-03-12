@@ -27,15 +27,13 @@ import org.apache.commons.io.IOUtils;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.plugins.delphi.core.DelphiRecognizer;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-import org.sonar.squidbridge.measures.Metric;
+import org.sonar.squid.text.delphi.Metric;
 import org.sonar.squid.text.delphi.DelphiSource;
 
-import java.io.File;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.List;
@@ -62,7 +60,7 @@ public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
     Reader reader = null;
     try {
       reader = new StringReader(resource.contents());
-      DelphiSource source = new DelphiSource(reader, new DelphiRecognizer());
+      DelphiSource source = new DelphiSource(reader);
       setIntMetric("NCLOC", source.getMeasure(Metric.LINES_OF_CODE));
       setIntMetric("COMMENT_LINES", source.getMeasure(Metric.COMMENT_LINES));
       setIntMetric("COMMENT_BLANK_LINES", source.getMeasure(Metric.COMMENT_BLANK_LINES));

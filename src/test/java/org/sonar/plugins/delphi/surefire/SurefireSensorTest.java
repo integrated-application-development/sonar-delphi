@@ -78,7 +78,7 @@ public class SurefireSensorTest {
 
   @Test
   public void executeTest() {
-    settings.setProperty(SurefireUtils.SUREFIRE_REPORTS_PATH_PROPERTY, SUREFIRE_REPORT_DIR);
+    settings.setProperty(SurefireUtils.SUREFIRE_REPORT_PATHS_PROPERTY, SUREFIRE_REPORT_DIR);
     SurefireSensor sensor = new SurefireSensor(settings.asConfig(), delphiProjectHelper);
     sensor.execute(sensorContext);
 
