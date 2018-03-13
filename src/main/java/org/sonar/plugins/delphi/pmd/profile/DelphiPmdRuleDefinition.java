@@ -23,6 +23,7 @@
 package org.sonar.plugins.delphi.pmd.profile;
 
 import org.sonar.api.rules.RuleParam;
+import org.sonar.api.server.debt.DebtRemediationFunction;
 import org.sonar.api.server.rule.RuleParamType;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
@@ -52,6 +53,9 @@ public class DelphiPmdRuleDefinition implements RulesDefinition {
         .setHtmlDescription(rule.getDescription())
         .setInternalKey(rule.getConfigKey())
         .setSeverity(rule.getSeverity().name());
+
+      newRule.setDebtRemediationFunction(newRule.debtRemediationFunctions().constantPerIssue(rule.getParam("baseEffort").getDefaultValue()));
+
       for (RuleParam param : rule.getParams()) {
         newRule.createParam(param.getKey())
           .setDefaultValue(param.getDefaultValue())
