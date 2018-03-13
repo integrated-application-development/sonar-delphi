@@ -38,40 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class for directory filtering with File::listFiles()
- * 
- */
-class DirectoryFileFilter implements FileFilter {
-
-  @Override
-  public boolean accept(File pathname) {
-    return pathname.isDirectory() && !".svn".equals(pathname.getName());
-  }
-}
-
-/**
- * Class for file filtering with File::listFiles(), filters by file suffix
- */
-class CustomFileFilter implements FileFilter {
-
-  private String[] suffix;
-
-  CustomFileFilter(String[] filterSuffix) {
-    suffix = filterSuffix.clone();
-  }
-
-  @Override
-  public boolean accept(File pathname) {
-    for (String ending : suffix) {
-      if (pathname.getAbsolutePath().endsWith(ending)) {
-        return true;
-      }
-    }
-    return false;
-  }
-}
-
-/**
  * Some utilities
  */
 public final class DelphiUtils {
