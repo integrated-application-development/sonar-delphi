@@ -22,7 +22,6 @@
  */
 package org.sonar.plugins.delphi.core.helpers;
 
-import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.FilePredicates;
@@ -201,14 +200,18 @@ public class DelphiProjectHelper  {
     FilePredicates p = fs.predicates();
     Iterable<InputFile> inputFiles = fs.inputFiles(p.and(p.hasLanguage(DelphiLanguage.KEY),
       p.hasType(InputFile.Type.MAIN)));
-    return Lists.newArrayList(inputFiles);
+    List<InputFile> list = new ArrayList<>();
+    inputFiles.forEach(list::add);
+    return list;
   }
 
   private List<InputFile> testFiles() {
     FilePredicates p = fs.predicates();
     Iterable<InputFile> inputFiles = fs.inputFiles(p.and(p.hasLanguage(DelphiLanguage.KEY),
       p.hasType(InputFile.Type.TEST)));
-    return Lists.newArrayList(inputFiles);
+    List<InputFile> list = new ArrayList<>();
+    inputFiles.forEach(list::add);
+    return list;
   }
 
   public boolean shouldExecuteOnProject() {

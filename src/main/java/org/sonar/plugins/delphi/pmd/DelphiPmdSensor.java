@@ -22,13 +22,14 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
+import java.nio.charset.Charset;
+import org.apache.commons.io.FileUtils;
 import net.sourceforge.pmd.*;
+import net.sourceforge.pmd.RuleSets;
+import net.sourceforge.pmd.RuleSetFactory;
 import net.sourceforge.pmd.lang.ast.ParseException;
 import net.sourceforge.pmd.renderers.Renderer;
 import net.sourceforge.pmd.renderers.XMLRenderer;
-import org.apache.commons.io.FileUtils;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputModule;
 import org.sonar.api.batch.sensor.Sensor;
@@ -189,7 +190,7 @@ public class DelphiPmdSensor implements Sensor {
   private File dumpXmlRuleSet(String repositoryKey, String rulesXml) {
     try {
       File configurationFile = new File(delphiProjectHelper.workDir(), repositoryKey + ".xml");
-      Files.asCharSink(configurationFile, Charsets.UTF_8).write(rulesXml);
+      FileUtils.writeStringToFile(configurationFile, rulesXml, Charset.forName("UTF-8"));
 
       DelphiUtils.LOG.info("PMD configuration: " + configurationFile.getAbsolutePath());
 
