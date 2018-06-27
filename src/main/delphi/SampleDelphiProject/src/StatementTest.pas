@@ -2,6 +2,9 @@ unit StatementTest;
 
 interface
 
+uses
+  Windows;
+
 type
   TStatementTest = class(TForm)
   public

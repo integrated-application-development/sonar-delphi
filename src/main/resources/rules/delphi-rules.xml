@@ -1,0 +1,16 @@
+<delphi-rules>
+    <rule>
+        <key>TestRule</key>
+        <name>Test Rule</name>
+        <internalKey>TestRule</internalKey>
+        <description>A Test rule for Delphi
+        </description>
+        <severity>MAJOR</severity>
+        <cardinality>SINGLE</cardinality>
+        <status>READY</status>
+        <type>BUG</type>
+        <tag>test</tag>
+        <remediationFunction>CONSTANT_ISSUE</remediationFunction>
+        <remediationFunctionBaseEffort>2min</remediationFunctionBaseEffort>
+    </rule>
+</delphi-rules>
