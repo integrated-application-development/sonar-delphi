@@ -1,4 +1,15 @@
-[![Build Status](https://travis-ci.org/SandroLuck/SonarDelphi.svg?branch=master)](https://travis-ci.org/SandroLuck/SonarDelphi)
+FIT4002 IntegraDev SonarQube Delphi Project
+================
+This project is intended to develop a plugin for analysis of Delphi code in the SonarQube static code analysis program, using the latest 7.2 version of SonarQube.
+
+The current codebase was originally forked from the following repository: https://github.com/ekot1/SonarDelphi and updated to work with SonarQube 7.2, and was moved into this repository at the request of the customer. 
+
+The original work on the plugin that was done before forking the existing project can be found in prototype branch.
+
+Forked code is released under GPL.
+
+Original Readme:
+==================
 
 SonarQube Delphi
 ================
