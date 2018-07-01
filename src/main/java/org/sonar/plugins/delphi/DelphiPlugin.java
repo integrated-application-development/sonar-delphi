@@ -93,28 +93,24 @@ public class DelphiPlugin implements Plugin {
    */
   @Override
   public void define(Context context) {
-    context.addExtensions(getExtensions());
-  }
+    context.addExtensions(
 
-  private List<Class> getExtensions() {
-    List<Class> list = new ArrayList<>();
+            // Sensors
+            DelphiSensor.class,
+            // Core
+            DelphiLanguage.class,
+            // Core helpers
+            DelphiProjectHelper.class,
+            // Surefire
+            SurefireSensor.class,
+            // PMD
+            DelphiPmdSensor.class,
+            DelphiPmdRuleDefinition.class,
+            DefaultDelphiProfile.class,
+            DelphiPmdProfileExporter.class,
+            DelphiPmdProfileImporter.class
 
-    // Sensors
-    list.add(DelphiSensor.class);
-    // Core
-    list.add(DelphiLanguage.class);
-    // Core helpers
-    list.add(DelphiProjectHelper.class);
-    // Surefire
-    list.add(SurefireSensor.class);
-    // Pmd
-    list.add(DelphiPmdSensor.class);
-    list.add(DelphiPmdRuleDefinition.class);
-    list.add(DefaultDelphiProfile.class);
-    list.add(DelphiPmdProfileExporter.class);
-    list.add(DelphiPmdProfileImporter.class);
-
-    return list;
+    );
   }
 
 }
