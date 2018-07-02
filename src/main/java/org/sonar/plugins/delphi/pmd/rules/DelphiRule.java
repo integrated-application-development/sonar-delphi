@@ -55,7 +55,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
   public static final StringProperty START = new StringProperty("start", "The AST node to start from", "", 1.0f);
   public static final StringProperty END = new StringProperty("end", "The AST node to stop the search", "", 1.0f);
   public static final StringProperty LOOK_FOR = new StringProperty("lookFor", "What nodes look for", "", 1.0f);
-  public static final StringProperty BASEEFFORT = new StringProperty("baseEffort", "What nodes look for", "", 1.0f);
+  public static final StringProperty BASEEFFORT = new StringProperty("baseEffort", "The base effort to correct", "", 1.0f);
 
   public DelphiRule() {
     super.setLanguage(LanguageRegistry.getLanguage(DelphiLanguageModule.NAME));
