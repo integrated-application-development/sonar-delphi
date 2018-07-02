@@ -628,4 +628,14 @@ x.Free;			//GOOD, sufficent enough
 		</properties>
 	</rule>
 
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ConstantNotationRule" message="Constants should begin with C_."
+		  name="ConstantNotationRule">
+		  <description>Constants should begin with C_</description>
+		<properties>
+			<property name="baseEffort">
+				<value>1min</value>
+			</property>
+		</properties>
+	</rule>
+
 </ruleset>

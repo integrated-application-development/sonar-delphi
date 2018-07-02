@@ -178,4 +178,8 @@
 		<priority>2</priority>
 	</rule>
 
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ConstantNotationRule" name="ConstantNotationRule">
+		<priority>4</priority>
+	</rule>
+
 </ruleset>
