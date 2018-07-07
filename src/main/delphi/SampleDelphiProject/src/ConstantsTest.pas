@@ -11,6 +11,8 @@ const
   HELLO = 'Hello World';
   LETTERS = ['A'..'Z', 'a'..'z'];
   DECISION = True;
+  C_ACCEPTABLENAME = False;
+  CUNACCEPTABLE = True;
 
 var
   i : Integer;
