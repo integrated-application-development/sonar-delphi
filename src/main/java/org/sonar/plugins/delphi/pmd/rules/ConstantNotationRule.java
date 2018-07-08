@@ -28,7 +28,7 @@ public class ConstantNotationRule extends DelphiRule {
 
         if(node.getType() == DelphiLexer.CONST){
 
-            // For every child in a const block, check if any are equals nodes (type 50)
+            // For every child in a const block (except the last), check if any are equals nodes (type 50)
             for(int i = 0; i < node.getChildCount() - 1; i++){
 
                 Tree childNode = node.getChild(i);
@@ -67,7 +67,7 @@ public class ConstantNotationRule extends DelphiRule {
         String EXPECTED_CONST_PREFIX = "C_";
 
         // Get the substring of the first two characters and check if the value start with the correct characters
-        String constPrefix = constName.substring(0, 2); // TODO should this be one?
+        String constPrefix = constName.substring(0, 2);
 
         return constPrefix.equals(EXPECTED_CONST_PREFIX);
     }

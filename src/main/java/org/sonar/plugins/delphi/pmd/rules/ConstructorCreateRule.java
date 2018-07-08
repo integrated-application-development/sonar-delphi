@@ -21,24 +21,30 @@ public class ConstructorCreateRule extends DelphiRule{
 
         if(node.getType() == DelphiLexer.CONSTRUCTOR){
 
+            System.out.print("WHOLE TREE\n");
+            for(int i = 0; i < node.getChildCount(); i++){
+                System.out.print(node.getChild(i) + "\n");
+            }
+
+
 
 
             System.out.print("DEBUG*************\n");
 
-            Tree constructorName = node.getChild(CONSTRUCTOR_NAME_POS);
-            System.out.print(constructorName + "\n");
-            System.out.print(constructorName.getType() + "\n");
+            Tree constructorNameNode = node.getChild(CONSTRUCTOR_NAME_POS);
+            System.out.print(constructorNameNode + "\n");
+            System.out.print(constructorNameNode.getType() + "\n");
 
-            String constructName = constructorName.getText();
+            String constructName = constructorNameNode.getText();
             System.out.print(constructName + "\n");
-            if (constructorName.getType() == DelphiLexer.TkFunctionArgs && constructorName != null){
-                System.out.print(constructorName + "\n");
-                System.out.print(constructorName.getType() + "\n");
-                System.out.print(constructorName.getText() + "\n");
+            if (constructorNameNode.getType() == DelphiLexer.TkFunctionArgs && constructorNameNode != null){
+                System.out.print(constructorNameNode + "\n");
+                System.out.print(constructorNameNode.getType() + "\n");
+                System.out.print(constructorNameNode.getText() + "\n");
 
                 if(!nameEndsWithCreate(constructName)) {
                     System.out.print("VIOLATION\n");
-                    addViolation(ctx, node);
+                    addViolation(ctx, (DelphiPMDNode) constructorNameNode);
                 }
             }
 
