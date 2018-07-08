@@ -67,7 +67,7 @@ public class ConstantNotationRule extends DelphiRule {
         String EXPECTED_CONST_PREFIX = "C_";
 
         // Get the substring of the first two characters and check if the value start with the correct characters
-        String constPrefix = constName.substring(0, 2);
+        String constPrefix = constName.substring(0, 2); // TODO should this be one?
 
         return constPrefix.equals(EXPECTED_CONST_PREFIX);
     }
