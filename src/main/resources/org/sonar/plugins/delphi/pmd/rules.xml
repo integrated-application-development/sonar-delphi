@@ -638,4 +638,14 @@ x.Free;			//GOOD, sufficent enough
 		</properties>
 	</rule>
 
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ConstructorCreateRule" message="Constructors should begin with Create"
+		  name="ConstructorCreateRule">
+		<description>Constructors should begin with Create</description>
+		<properties>
+			<property name="baseEffort">
+				<value>1min</value>
+			</property>
+		</properties>
+	</rule>
+
 </ruleset>
