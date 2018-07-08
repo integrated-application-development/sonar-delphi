@@ -30,7 +30,13 @@ public class ClassNameRule extends DelphiRule {
     if (node.getType() == DelphiLexer.TkClass) {
       String name = node.getParent().getText();
 
-      char firstCharAfterPrefix = name.charAt(1);
+      char firstCharAfterPrefix;
+      try { // If a class name is only one character, there will be an out of bounds exception
+        // TODO could raise a violation here as well if this is undesirable
+        firstCharAfterPrefix = name.charAt(1);
+      }catch (IndexOutOfBoundsException e){
+        return;
+      }
 
       if ((!name.startsWith("T") && !name.startsWith("E")) || firstCharAfterPrefix != Character.toUpperCase(firstCharAfterPrefix)) {
         addViolation(ctx, node);
