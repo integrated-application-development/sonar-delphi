@@ -2,15 +2,24 @@ unit CyclomaticComplexityTest;
 
 interface
 
-implementation
+uses
+  Windows;
 
+type
+  TCyclomaticComplexityTest = class(TForm)
+  public
+  procedure fooZZ;
+  end;
 var
   i : Integer;
 
-// Cyclomatic Complexit endy = E - N + 2*P,  where
-// E = number of edges
-// N = number of nodes
-// P = nodes that have exit end points
+implementation
+  // Cyclomatic Complexity = E - N + 2*P,  where
+  // E = number of edges
+  // N = number of nodes
+  // P = nodes that have exit end points
+  // This procedure below has a cyclomatic complexity of 31
+procedure  TCyclomaticComplexityTest.fooZZ;
 begin
   i := 30;
   if i=1 then ShowMessage('its 1') else exit;
@@ -43,4 +52,6 @@ begin
   if i=28 then ShowMessage('its 28') else exit;
   if i=29 then ShowMessage('its 29') else exit;
   if i=30 then ShowMessage('its 30') else exit;
+end;
+
 end.
