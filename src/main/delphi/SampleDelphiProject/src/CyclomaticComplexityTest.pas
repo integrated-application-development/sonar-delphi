@@ -1,4 +1,4 @@
-unit CyclomaticComplexit endyTest;
+unit CyclomaticComplexityTest;
 
 interface
 
