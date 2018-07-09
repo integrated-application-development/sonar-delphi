@@ -623,7 +623,7 @@ x.Free;			//GOOD, sufficent enough
 				<value>10min</value>
 			</property>
 			<property name="Threshold">
-				<value>10</value>
+				<value>20</value>
 			</property>
 		</properties>
 	</rule>
