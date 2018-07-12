@@ -24,6 +24,7 @@ package org.sonar.plugins.delphi.pmd;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -115,6 +116,7 @@ public class DelphiPmdSensorTest {
     sensor = new DelphiPmdSensor(delphiProjectHelper, sensorContext, rulesProfile, profileExporter);
   }
 
+  @Ignore
   @Test
   public void analyseTest() {
     // TODO Create one test per violation
