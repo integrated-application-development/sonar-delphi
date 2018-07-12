@@ -9,10 +9,6 @@ public class EnumNamePrefixRule extends DelphiRule {
     @Override
     public  void visit(DelphiPMDNode node, RuleContext ctx){
 
-        if (){
-
-            }
-        }
 
     }
 }
