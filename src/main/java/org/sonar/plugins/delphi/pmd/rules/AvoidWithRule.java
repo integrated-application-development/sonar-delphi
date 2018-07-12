@@ -5,12 +5,12 @@ import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 import org.sonar.plugins.delphi.pmd.DelphiPMD;
 
-public class NoWithKeywordRule extends DelphiRule {
+public class AvoidWithRule extends DelphiRule {
     private String sonarMessage;
 
     protected void init(){
         super.init();
-        sonarMessage = "Delphi code must not contain 'with' keyword.";
+        sonarMessage = "Use of 'with' should be avoided";
     }
 
     public void visit(DelphiPMDNode node, RuleContext ctx){
