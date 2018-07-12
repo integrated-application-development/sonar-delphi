@@ -1,4 +1,4 @@
-unit ClassEnumPrefixTest;
+unit ClassPrefixTest;
 
 interface
 

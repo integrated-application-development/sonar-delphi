@@ -9,10 +9,16 @@ public class ClassNamePrefixRule extends DelphiRule {
     @Override
     public  void visit(DelphiPMDNode node, RuleContext ctx){
 
-        if (node.getType() == DelphiLexer.TkClass){
+        if (node.getType() == DelphiLexer.TkClass ){
             String className = node.getParent().getText();
 
             if(!className.startsWith("T")){
+                addViolation(ctx, node);
+            }
+        } else if(node.getType() == DelphiLexer.TkNewType){
+            String enumName = node.getText();
+
+            if (!enumName.startsWith("T")){
                 addViolation(ctx, node);
             }
         }
