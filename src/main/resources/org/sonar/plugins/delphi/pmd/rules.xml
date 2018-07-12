@@ -636,14 +636,4 @@ x.Free;			//GOOD, sufficent enough
 		</properties>
 	</rule>
 
-	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.EnumNamePrefixRule" message="Enumerations should begin with T"
-		  name="EnumNamePrefixRule">
-		  <description>Class names should begin with T</description>
-		<properties>
-			<property name="baseEffort">
-				<value>1min</value>
-			</property>
-		</properties>
-	</rule>
-
 </ruleset>

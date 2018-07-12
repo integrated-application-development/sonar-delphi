@@ -16,7 +16,9 @@ public class ClassNamePrefixRule extends DelphiRule {
                 addViolation(ctx, node);
             }
         } else if(node.getType() == DelphiLexer.TkNewType){
-            String enumName = node.getText();
+            String enumName = node.getChild(0).getText();
+
+            System.out.print("NAME: " + enumName + "\n");
 
             if (!enumName.startsWith("T")){
                 addViolation(ctx, node);
