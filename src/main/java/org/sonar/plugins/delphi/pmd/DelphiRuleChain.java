@@ -22,10 +22,10 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import net.sourceforge.pmd.lang.Language;
-import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.RuleChain;
 import net.sourceforge.pmd.RuleContext;
+import net.sourceforge.pmd.lang.Language;
+import net.sourceforge.pmd.lang.ast.Node;
 
 import java.util.List;
 

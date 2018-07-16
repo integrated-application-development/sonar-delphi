@@ -22,13 +22,13 @@
  */
 package org.sonar.plugins.delphi.core.language.impl;
 
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.core.language.ClassFieldInterface;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.StatementInterface;
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonToken;
 
 import java.util.ArrayList;
 import java.util.List;

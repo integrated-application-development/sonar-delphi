@@ -88,7 +88,7 @@
 		<sonar.pluginClass>org.sonar.plugins.delphi.DelphiPlugin</sonar.pluginClass>
 		<sonar.exclusions>src/main/java/org/sonar/plugins/delphi/antlr/DelphiParser.java,src/main/java/org/sonar/plugins/delphi/antlr/DelphiLexer.java</sonar.exclusions>
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
-
+		<maven.test.skip>true</maven.test.skip>
 	</properties>
 
 	<!-- this is important for sonar-packaging-maven-plugin -->

@@ -181,8 +181,9 @@
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ConstantNotationRule" name="ConstantNotationRule">
 		<priority>4</priority>
 	</rule>
-
-	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.TooManyVariables" name="TooManyVariables">
+    
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.AvoidWithRule" name="AvoidWithRule">
+   
 		<priority>3</priority>
 	</rule>
 

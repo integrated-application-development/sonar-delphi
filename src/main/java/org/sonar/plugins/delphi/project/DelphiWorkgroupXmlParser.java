@@ -24,7 +24,6 @@ package org.sonar.plugins.delphi.project;
 
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.SAXParser;

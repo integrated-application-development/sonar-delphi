@@ -1,3 +1,4 @@
+
 unit DestructorTest;
 
 interface
@@ -15,3 +16,4 @@ begin
   FreeMyStuff;
   inherited;
 end;
+end.
