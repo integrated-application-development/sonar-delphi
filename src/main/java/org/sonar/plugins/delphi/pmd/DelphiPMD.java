@@ -22,11 +22,13 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import net.sourceforge.pmd.*;
-import net.sourceforge.pmd.lang.ast.ParseException;
+import net.sourceforge.pmd.Report;
+import net.sourceforge.pmd.RuleContext;
+import net.sourceforge.pmd.RuleSets;
 import net.sourceforge.pmd.lang.Language;
-import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.LanguageRegistry;
+import net.sourceforge.pmd.lang.ast.Node;
+import net.sourceforge.pmd.lang.ast.ParseException;
 import org.antlr.runtime.tree.CommonTree;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;

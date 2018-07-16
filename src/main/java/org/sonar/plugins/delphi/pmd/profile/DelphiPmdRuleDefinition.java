@@ -23,7 +23,6 @@
 package org.sonar.plugins.delphi.pmd.profile;
 
 import org.sonar.api.rules.RuleParam;
-import org.sonar.api.server.debt.DebtRemediationFunction;
 import org.sonar.api.server.rule.RuleParamType;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.plugins.delphi.core.DelphiLanguage;

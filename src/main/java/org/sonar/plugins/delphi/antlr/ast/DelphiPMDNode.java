@@ -22,8 +22,8 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
-import net.sourceforge.pmd.lang.dfa.DataFlowNode;
 import net.sourceforge.pmd.lang.ast.Node;
+import net.sourceforge.pmd.lang.dfa.DataFlowNode;
 import net.sourceforge.pmd.lang.symboltable.Scope;
 import net.sourceforge.pmd.lang.symboltable.ScopedNode;
 import org.antlr.runtime.Token;

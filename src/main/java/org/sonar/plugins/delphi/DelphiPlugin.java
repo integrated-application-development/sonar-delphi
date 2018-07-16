@@ -34,9 +34,6 @@ import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileImporter;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleDefinition;
 import org.sonar.plugins.delphi.surefire.SurefireSensor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Main Sonar DelphiLanguage plugin class
  */
