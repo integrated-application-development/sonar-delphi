@@ -22,12 +22,12 @@
  */
 package org.sonar.plugins.delphi.pmd.profile;
 
-import net.sourceforge.pmd.lang.Language;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.RuleSet;
 import net.sourceforge.pmd.RuleSets;
-import org.sonar.plugins.delphi.pmd.DelphiRuleChain;
+import net.sourceforge.pmd.lang.Language;
 import net.sourceforge.pmd.lang.ast.Node;
+import org.sonar.plugins.delphi.pmd.DelphiRuleChain;
 
 import java.io.File;
 import java.util.ArrayList;

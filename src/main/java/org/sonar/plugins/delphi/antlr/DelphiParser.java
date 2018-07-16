@@ -28,9 +28,12 @@ package org.sonar.plugins.delphi.antlr;
 
 
 import org.antlr.runtime.*;
-import java.util.HashMap;
+import org.antlr.runtime.tree.CommonTreeAdaptor;
+import org.antlr.runtime.tree.RewriteRuleSubtreeStream;
+import org.antlr.runtime.tree.RewriteRuleTokenStream;
+import org.antlr.runtime.tree.TreeAdaptor;
 
-import org.antlr.runtime.tree.*;
+import java.util.HashMap;
 
 
 @SuppressWarnings("all")

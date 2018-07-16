@@ -25,29 +25,27 @@ package org.sonar.plugins.delphi.surefire;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.utils.ParsingUtils;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.surefire.data.UnitTestClassReport;
 import org.sonar.plugins.surefire.data.UnitTestIndex;
+import org.sonar.plugins.surefire.data.UnitTestResult;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.text.ParseException;
 import java.util.Locale;
 import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-
-import org.sonar.plugins.surefire.data.UnitTestResult;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 /**
  * Parses unit test reports from XML file.

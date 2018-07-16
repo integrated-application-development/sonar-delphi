@@ -28,17 +28,18 @@ import org.sonar.api.batch.sensor.coverage.NewCoverage;
 import org.sonar.plugins.delphi.codecoverage.DelphiCodeCoverageParser;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
-
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 
 public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser

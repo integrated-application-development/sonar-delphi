@@ -23,15 +23,15 @@
 package org.sonar.plugins.delphi.metrics;
 
 import org.apache.commons.io.IOUtils;
-import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
-import org.sonar.plugins.delphi.metrics.basicmetrics.Metric;
 import org.sonar.plugins.delphi.metrics.basicmetrics.DelphiSource;
+import org.sonar.plugins.delphi.metrics.basicmetrics.Metric;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 import java.io.Reader;
 import java.io.StringReader;
