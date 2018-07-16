@@ -22,19 +22,19 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import net.sourceforge.pmd.RuleContext;
+import net.sourceforge.pmd.lang.LanguageRegistry;
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.rule.AbstractRule;
-import net.sourceforge.pmd.lang.LanguageRegistry;
-import net.sourceforge.pmd.RuleContext;
+import net.sourceforge.pmd.lang.rule.ImmutableLanguage;
 import net.sourceforge.pmd.properties.IntegerProperty;
 import net.sourceforge.pmd.properties.StringProperty;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.pmd.DelphiLanguageModule;
 import org.sonar.plugins.delphi.pmd.DelphiParserVisitor;
 import org.sonar.plugins.delphi.pmd.DelphiRuleViolation;
-import net.sourceforge.pmd.lang.rule.ImmutableLanguage;
-import org.sonar.plugins.delphi.pmd.DelphiLanguageModule;
 
 import java.util.List;
 

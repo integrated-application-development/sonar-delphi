@@ -22,11 +22,11 @@
  */
 package org.sonar.plugins.delphi.pmd.profile;
 
+import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.ActiveRuleParam;
-import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
-import org.sonar.api.profiles.RulesProfile;
+import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 
 import java.io.InputStreamReader;
