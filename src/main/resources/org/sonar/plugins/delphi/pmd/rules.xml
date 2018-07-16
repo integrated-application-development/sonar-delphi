@@ -638,4 +638,14 @@ x.Free;			//GOOD, sufficent enough
 		</properties>
 	</rule>
 
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.TooManyVariables" message="Variable declaration should not exceed 10" name = "TooManyVariables">
+		<description>Variable declaration should not exceed 10</description>
+		<properties>
+			<property name="baseEffort">
+				<value>1min</value>
+			</property>
+		</properties>
+
+	</rule>
+
 </ruleset>
