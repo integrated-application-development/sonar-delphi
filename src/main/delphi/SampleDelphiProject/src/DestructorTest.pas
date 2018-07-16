@@ -15,3 +15,4 @@ begin
   FreeMyStuff;
   inherited;
 end;
+end.
