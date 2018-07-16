@@ -19,10 +19,7 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-
-import net.sourceforge.pmd.lang.ast.Node;
 import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
@@ -45,9 +42,9 @@ public class InterfaceNameRule extends DelphiRule {
 
         String name = interfaceNameNode.getText();
 
-      if (!name.startsWith("I")) {
-        addViolation(ctx, violationNode);
-      }
+        if (!name.startsWith("I")) {
+            addViolation(ctx, violationNode);
+        }
     }
   }
 }
