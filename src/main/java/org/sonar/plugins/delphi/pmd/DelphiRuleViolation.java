@@ -22,9 +22,9 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import net.sourceforge.pmd.RuleViolation;
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleContext;
+import net.sourceforge.pmd.RuleViolation;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;

@@ -20,7 +20,6 @@
 package org.sonar.plugins.delphi.pmd;
 
 import net.sourceforge.pmd.lang.BaseLanguageModule;
-import org.sonar.plugins.delphi.pmd.DelphiRuleChainVisitor;
 
 public class DelphiLanguageModule extends BaseLanguageModule {
 
