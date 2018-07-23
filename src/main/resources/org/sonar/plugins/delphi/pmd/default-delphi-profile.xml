@@ -182,7 +182,7 @@
 		<priority>4</priority>
 	</rule>
 
-    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.TooManySubproceduresRule" name="TooManySubproceduresRule">
+    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.TooManySubProceduresRule" name="TooManySubProceduresRule">
         <priority>3</priority>
     </rule>
 

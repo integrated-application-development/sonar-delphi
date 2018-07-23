@@ -638,14 +638,14 @@ x.Free;			//GOOD, sufficent enough
 		</properties>
 	</rule>
 
-    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.TooManySubproceduresRule" message="Too many sub procedures"
-          name="TooManySubproceduresRule">
+    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.TooManySubProceduresRule" message="Code should not contain too many sub procedures or functions"
+          name="TooManySubProceduresRule">
         <description>Methods must not have too many sub procedures</description>
         <properties>
             <property name="baseEffort">
                 <value>30min</value>
             </property>
-            <property name="Threshold">
+            <property name="limit">
                 <value>3</value>
             </property>
         </properties>

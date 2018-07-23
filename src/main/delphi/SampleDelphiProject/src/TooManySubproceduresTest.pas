@@ -1,4 +1,4 @@
-unit TooManySubproceduresTest;
+unit TooManySubProceduresTest;
 
 interface
 
@@ -28,9 +28,11 @@ procedure TOuterProcedure.outer;
     ShowMessage('sub procedure 2');
   end;
 
-  procedure SubProcedureThree;
+  function SubFunctionThree : integer;
+  var
+    j : integer;
   begin
-    ShowMessage('sub procedure 3');
+    ShowMessage('sub function 3');
   end;
 
   procedure SubProcedureFour;
@@ -41,7 +43,7 @@ procedure TOuterProcedure.outer;
 begin
   SubProcedureOne;
   SubProcedureTwo;
-  SubProcedureThree;
+  SubFunctionThree;
   SubProcedureFour;
 end;
 
