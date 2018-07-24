@@ -23,7 +23,6 @@
 package org.sonar.plugins.delphi.project;
 
 import org.apache.commons.lang.StringUtils;
-import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.xml.sax.SAXException;
 
