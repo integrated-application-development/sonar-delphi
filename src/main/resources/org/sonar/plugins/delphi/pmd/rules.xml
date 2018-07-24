@@ -626,7 +626,7 @@ x.Free;			//GOOD, sufficent enough
 		</properties>
 	</rule>
 
-	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ClassNamePrefixRule" message="Class names should begin with T"
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ClassNamePrefixRule" message="Class and enumeration name declarations should begin with T"
 		  name="ClassNamePrefixRule">
 		<description>Class names should begin with T</description>
 		<properties>
