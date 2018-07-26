@@ -8,58 +8,43 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 public class ConstructorCreateRule extends DelphiRule{
 
+    private int CONSTRUCTOR_NODE_TYPE_POS;
     private int CONSTRUCTOR_NAME_POS;
 
     @Override
     protected void init(){
         super.init();
-        CONSTRUCTOR_NAME_POS = 1; // The first child position is the name of the constructor
+        CONSTRUCTOR_NODE_TYPE_POS = 0; // The first child node in constructor nodes is the TkFunctionName node
+        CONSTRUCTOR_NAME_POS = 0; // The first child position is the name of the constructor in TkFunctionName
     }
 
+    /**
+     * This rule will find any instances of a constructor which are not declared with 'Create' at the beginning.
+     *
+     * To find this, at each 'constructor' declaration, there will next be a 'TkFunctionArgs' node, followed by a
+     * node containing the name of the declared constructor, this is the node to check for the correct naming convention
+     * @param node the current node
+     * @param ctx the ruleContext to store the violations
+     */
     @Override
     public void visit(DelphiPMDNode node, RuleContext ctx){
 
         if(node.getType() == DelphiLexer.CONSTRUCTOR){
 
-            System.out.print("WHOLE TREE\n");
-            for(int i = 0; i < node.getChildCount(); i++){
-                System.out.print(node.getChild(i) + "\n");
-            }
+            Tree constructorTypeNode = node.getChild(CONSTRUCTOR_NODE_TYPE_POS);
 
+            if(constructorTypeNode.getType() == DelphiLexer.TkFunctionName){
 
+                Tree constructorNameNode = constructorTypeNode.getChild(CONSTRUCTOR_NAME_POS);
+                String constructorName = constructorNameNode.getText();
 
-
-            System.out.print("DEBUG*************\n");
-
-            Tree constructorNameNode = node.getChild(CONSTRUCTOR_NAME_POS);
-            System.out.print(constructorNameNode + "\n");
-            System.out.print(constructorNameNode.getType() + "\n");
-
-            String constructName = constructorNameNode.getText();
-            System.out.print(constructName + "\n");
-            if (constructorNameNode.getType() == DelphiLexer.TkFunctionArgs && constructorNameNode != null){
-                System.out.print(constructorNameNode + "\n");
-                System.out.print(constructorNameNode.getType() + "\n");
-                System.out.print(constructorNameNode.getText() + "\n");
-
-                if(!nameEndsWithCreate(constructName)) {
-                    System.out.print("VIOLATION\n");
-                    addViolation(ctx, (DelphiPMDNode) constructorNameNode);
+                if(!constructorName.startsWith("Create")){
+                    addViolation(ctx, node);
                 }
+
             }
 
-            System.out.print("END DEBUG************\n");
         }
-
-    }
-
-    private boolean nameEndsWithCreate(String constructName){
-        String EXPECTED_CREATE_PREFIX = "Create";
-
-        // Check the first 6 characters of the string for 'Create'
-        String constructPrefex = constructName.substring(0, 5);
-
-        return constructPrefex.equals(EXPECTED_CREATE_PREFIX);
 
     }
 }
