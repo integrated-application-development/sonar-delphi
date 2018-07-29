@@ -2,7 +2,7 @@ unit ConstantsTest;
 
 interface
 
-implementation
+implementation        //This is a comment This is a comment This is a comment This is a comment This is a comment This is a comment This is a comment
 
 
 const
