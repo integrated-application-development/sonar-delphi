@@ -648,12 +648,15 @@ x.Free;			//GOOD, sufficent enough
         </properties>
     </rule>
 
-	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.TooLongLineRule" message="Line too long."
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.TooLongLineRule" message="Too Long Line."
 		  name="TooLongLineRule">
 		<description>Line should not be too long.</description>
 		<properties>
 			<property name="baseEffort">
 				<value>2min</value>
+			</property>
+			<property name="limit">
+				<value>100</value>
 			</property>
 		</properties>
 	</rule>

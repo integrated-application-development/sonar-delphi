@@ -8,62 +8,52 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Class for counting line characters. If too long, creates a violation.
  */
 public class TooLongLineRule extends DelphiRule{
-    private int lineNumber;
-    private int lineLength;
     private int limit;
     private ArrayList checkedLines = new ArrayList<Integer>();
+    Tree astTree;
+    boolean firstNode ;
 
     @Override
     protected void init(){
         super.init();
-        lineNumber = 0;
-        lineLength = 0;
-        limit = 100;
+        limit = getProperty(LIMIT);
+        astTree = null;
+        firstNode = true;
+
     }
 
     @Override
     public void visit(DelphiPMDNode node, RuleContext ctx) {
+        //Retrieve and store the astTree from the first node
+        if(firstNode){
+             astTree = node.getASTTree();
+             firstNode = false;
+         }
 
-        int nodeTextLength = node.getText().length();
-        int nodeLineNumber = node.getLine();
-        Tree astTree = node.getASTTree();
-        String line = ((ASTTree) astTree).getFileSourceLine(node.getLine());
+        int lineNumber = node.getLine();
+        if(!checkedLines.contains(lineNumber)){                             //Only check a line that has not been checked before
+            checkedLines.add(lineNumber);
+            String line = ((ASTTree) astTree).getFileSourceLine(lineNumber);
+            line = removeComment(line);                                         //Remove comment
 
-
-        if(line.length() > limit && !checkedLines.contains(nodeLineNumber)){
-            checkedLines.add(nodeLineNumber);
-            addViolation(ctx, node);
-        }
-
-
-
-        if(nodeLineNumber != lineNumber){
-            lineLength = 0;
-            lineNumber = nodeLineNumber;
-            lineLength -= 1;
-        }
-
-        lineLength += nodeTextLength + 1;
-
-        if(lineLength > limit){
-            String sonarMessage = "Line too long (" + lineLength + " characters). Maximum character count should be "
+            if(line.length() > limit){
+                String sonarMessage = "Line too long (" + line.length() + " characters). Maximum character count should be "
                     + limit + ".";
-            addViolation(ctx, node, sonarMessage);
-        }
+                addViolation(ctx, node, sonarMessage);
+            }
 
-        System.out.print("***********\n");
-        System.out.print("Node: " + node.getText() + "\n");
-        System.out.print("Node line number " + nodeLineNumber + "\n");
-//        System.out.print("NodeLength: " + nodeTextLength + "\n");
-//        System.out.print("LineLength: " + lineLength);
-        System.out.print(line);
-        System.out.print("\n***********\n");
-        System.out.print("");
+        }
+    }
+
+    private String removeComment(String line){
+        return line.replaceAll("(\\s+)?(\\/\\/)(.+)", "");
     }
 
 }
