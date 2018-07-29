@@ -3,7 +3,11 @@ package org.sonar.plugins.delphi.pmd.rules;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for counting line characters. If too long, creates a violation.
@@ -12,6 +16,7 @@ public class TooLongLineRule extends DelphiRule{
     private int lineNumber;
     private int lineLength;
     private int limit;
+    private ArrayList checkedLines = new ArrayList<Integer>();
 
     @Override
     protected void init(){
@@ -26,6 +31,16 @@ public class TooLongLineRule extends DelphiRule{
 
         int nodeTextLength = node.getText().length();
         int nodeLineNumber = node.getLine();
+        Tree astTree = node.getASTTree();
+        String line = ((ASTTree) astTree).getFileSourceLine(node.getLine());
+
+
+        if(line.length() > limit && !checkedLines.contains(nodeLineNumber)){
+            checkedLines.add(nodeLineNumber);
+            addViolation(ctx, node);
+        }
+
+
 
         if(nodeLineNumber != lineNumber){
             lineLength = 0;
@@ -43,10 +58,12 @@ public class TooLongLineRule extends DelphiRule{
 
         System.out.print("***********\n");
         System.out.print("Node: " + node.getText() + "\n");
-        System.out.print("NodeLength: " + nodeTextLength + "\n");
-        System.out.print("LineLength: " + lineLength);
+        System.out.print("Node line number " + nodeLineNumber + "\n");
+//        System.out.print("NodeLength: " + nodeTextLength + "\n");
+//        System.out.print("LineLength: " + lineLength);
+        System.out.print(line);
         System.out.print("\n***********\n");
-        System.out.print(node.getAsDocument());
+        System.out.print("");
     }
 
 }
