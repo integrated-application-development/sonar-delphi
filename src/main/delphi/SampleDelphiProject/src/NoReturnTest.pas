@@ -5,20 +5,20 @@ interface
 type
 
   // Noncompliant
-  TBadTest = class(TObject);
-  //public
+  TBadTest = class(TObject)
+  public
   function TestBadFunction: String;
   end;
 
 // Compliant
-  TTest = class(TObject);
-//  public
+  TTest = class(TObject)
+  public
   function TestFunction: String;
   end;
 
 implementation
 
-function TBadTest.TestFunction;
+function TBadTest.TestBadFunction;
 //begin
   // ...
 //end;
