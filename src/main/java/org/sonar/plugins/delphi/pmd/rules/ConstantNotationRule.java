@@ -8,12 +8,10 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 public class ConstantNotationRule extends DelphiRule {
 
     private String sonarMessage;
-    private int EQUALS_NODE_TYPE;
 
     @Override
     protected void init(){
         super.init();
-        EQUALS_NODE_TYPE = 50; // In the Delphi AST, type 50 identifies an equals '=' node
         sonarMessage = "Constant values should be prepended with C_";
 
     }
@@ -30,7 +28,7 @@ public class ConstantNotationRule extends DelphiRule {
 
         if(node.getType() == DelphiLexer.CONST){
 
-            // For every child in a const block, check if any are equals nodes (type 50)
+            // For every child in a const block (except the last), check if any are equals nodes (type 50)
             for(int i = 0; i < node.getChildCount() - 1; i++){
 
                 Tree childNode = node.getChild(i);
@@ -38,7 +36,7 @@ public class ConstantNotationRule extends DelphiRule {
 
                     int childType = childNode.getType();
 
-                    if(childType == EQUALS_NODE_TYPE){
+                    if(childType == DelphiLexer.EQUAL){
                         // Get the node before the equals node, as that will be the name used to define it
                         Tree assignmentNode = node.getChild(i - 1);
 

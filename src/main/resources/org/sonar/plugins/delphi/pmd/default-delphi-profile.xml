@@ -191,4 +191,9 @@
 		<priority>3</priority>
 	</rule>
 
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ClassNamePrefixRule" name="ClassNamePrefixRule">
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ConstructorCreateRule" name="ConstructorCreateRule">
+		<priority>4</priority>
+	</rule>
+
 </ruleset>
