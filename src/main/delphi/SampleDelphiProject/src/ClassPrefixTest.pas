@@ -18,7 +18,7 @@ type
     // Externally accessible fields and methods
   public
     // 2 constructors - one for round fruit, the other long fruit
-    constructor Create(diameter : single);               overload;
+    constructor Create(diameter : single);           overload;
     constructor Create(length : single; width : single); overload;
     // Externally accessible and inspectable fields and methods
   published
