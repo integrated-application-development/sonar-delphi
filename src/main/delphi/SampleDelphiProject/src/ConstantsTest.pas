@@ -2,13 +2,13 @@ unit ConstantsTest;
 
 interface
 
-implementation
+implementation        //This is a comment This is a comment This is a comment This is a comment This is a comment This is a comment This is a comment
 
 
 const
   MAX_LINES = 3;
   CRUDE_PI = 22 / 7;
-  HELLO = 'Hello World';
+  HELLO = 'Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World';
   LETTERS = ['A'..'Z', 'a'..'z'];
   DECISION = True;
   C_ACCEPTABLENAME = False;

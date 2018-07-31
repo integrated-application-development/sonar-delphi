@@ -190,6 +190,10 @@
 		<priority>3</priority>
 	</rule>
 
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.TooLongLineRule" name="TooLongLineRule">
+		<priority>4</priority>
+	</rule>
+
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ClassNamePrefixRule" name="ClassNamePrefixRule">
 		<priority>4</priority>
 	</rule>
