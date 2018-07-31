@@ -117,7 +117,7 @@
 		</properties>
 	</rule>
 
-	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.TooLongMethodRule" message="Too long method"
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.TooLongMethodRule" message="Method too long"
 		name="TooLongMethodRule">
 		<description>A method that grows too large tends to aggregate too many
 			responsibilities. Such
