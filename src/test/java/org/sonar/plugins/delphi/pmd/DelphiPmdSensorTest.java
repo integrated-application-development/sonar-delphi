@@ -116,6 +116,7 @@ public class DelphiPmdSensorTest {
     sensor = new DelphiPmdSensor(delphiProjectHelper, sensorContext, rulesProfile, profileExporter);
   }
 
+  // FIXME this test doesn't work with the addition of new rules. Needs to be modified to include ours. Temporarily Ignored.
   @Ignore
   @Test
   public void analyseTest() {

@@ -212,18 +212,6 @@
 		</properties>
 	</rule>
 
-	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ClassNameRule" message="Class Name should comply with a naming "
-		name="ClassNameRule">
-		<description>According to Object Pascal Style Guide class name should begin with capital 'T'
-			letter, less Exception classes, which starts with 'E'.
-		</description>
-		<properties>
-			<property name="baseEffort">
-				<value>15min</value>
-			</property>
-		</properties>
-	</rule>
-
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.RecordNameRule" message="Record Name should comply with a naming convention"
 		name="RecordNameRule">
 		<description>According to Object Pascal Style Guide record name should begin with capital 'T'
@@ -638,6 +626,39 @@ x.Free;			//GOOD, sufficent enough
 		</properties>
 	</rule>
 
+    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.TooManySubProceduresRule" message="Code should not contain too many sub procedures or functions"
+          name="TooManySubProceduresRule">
+        <description>Methods must not have too many sub procedures</description>
+        <properties>
+            <property name="baseEffort">
+                <value>30min</value>
+            </property>
+            <property name="limit">
+                <value>3</value>
+            </property>
+        </properties>
+    </rule>
+  
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ClassNamePrefixRule" message="Class and enumeration name declarations should begin with T"
+		  name="ClassNamePrefixRule">
+		<description>Class names should begin with T</description>
+		<properties>
+			<property name="baseEffort">
+				<value>1min</value>
+			</property>
+		</properties>
+	</rule>
+
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ConstructorCreateRule" message="Constructor name declarations should begin with Create"
+		  name="ConstructorCreateRule">
+		<description>Constructors should begin with Create</description>
+		<properties>
+			<property name="baseEffort">
+				<value>1min</value>
+			</property>
+		</properties>
+	</rule>
+
     <rule since="" class="org.sonar.plugins.delphi.pmd.rules.AvoidWithRule" message="Use of 'with' should be avoided"
           name="AvoidWithRule">
           <description>Use of 'with' should be avoided</description>
@@ -647,7 +668,7 @@ x.Free;			//GOOD, sufficent enough
             </property>
         </properties>
     </rule>
-
+  
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.TooLongLineRule" message="Line too long"
 		  name="TooLongLineRule">
 		<description>Code lines should not be too long.</description>
@@ -660,5 +681,6 @@ x.Free;			//GOOD, sufficent enough
 			</property>
 		</properties>
 	</rule>
+
 
 </ruleset>

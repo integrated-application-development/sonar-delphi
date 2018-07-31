@@ -7,17 +7,6 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 public class ConstantNotationRule extends DelphiRule {
 
-    private String sonarMessage;
-    private int EQUALS_NODE_TYPE;
-
-    @Override
-    protected void init(){
-        super.init();
-        EQUALS_NODE_TYPE = 50; // In the Delphi AST, type 50 identifies an equals '=' node
-        sonarMessage = "Constant values should be prepended with C_";
-
-    }
-
     /**
      * This rule will find a 'const' block, and search through it's child nodes for assignments made to constant values.
      * When one is found, the node before it is considered the name of the declaraed constant. This is then checked for
@@ -30,7 +19,7 @@ public class ConstantNotationRule extends DelphiRule {
 
         if(node.getType() == DelphiLexer.CONST){
 
-            // For every child in a const block, check if any are equals nodes (type 50)
+            // For every child in a const block (except the last), check if any are equals nodes (type 50)
             for(int i = 0; i < node.getChildCount() - 1; i++){
 
                 Tree childNode = node.getChild(i);
@@ -38,13 +27,13 @@ public class ConstantNotationRule extends DelphiRule {
 
                     int childType = childNode.getType();
 
-                    if(childType == EQUALS_NODE_TYPE){
+                    if(childType == DelphiLexer.EQUAL){
                         // Get the node before the equals node, as that will be the name used to define it
                         Tree assignmentNode = node.getChild(i - 1);
 
                         String constName = assignmentNode.getText();
 
-                        if (!nameStartsWithC_(constName)){
+                        if (!constName.startsWith("C_")){
 
                             addViolation(ctx, (DelphiPMDNode) assignmentNode);
 
@@ -55,23 +44,6 @@ public class ConstantNotationRule extends DelphiRule {
             }
 
         }
-    }
-
-
-    /**
-     * Check the first two characters of the string used to define the constant, return false if it does not begin
-     * with C_
-     * @param constName The name of the constant value assigned
-     * @return True if starts with C_, false if not
-     */
-    private boolean nameStartsWithC_(String constName){
-
-        String EXPECTED_CONST_PREFIX = "C_";
-
-        // Get the substring of the first two characters and check if the value start with the correct characters
-        String constPrefix = constName.substring(0, 2);
-
-        return constPrefix.equals(EXPECTED_CONST_PREFIX);
     }
 
 
