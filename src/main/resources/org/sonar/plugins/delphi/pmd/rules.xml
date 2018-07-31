@@ -626,6 +626,19 @@ x.Free;			//GOOD, sufficent enough
 		</properties>
 	</rule>
 
+    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.TooManySubProceduresRule" message="Code should not contain too many sub procedures or functions"
+          name="TooManySubProceduresRule">
+        <description>Methods must not have too many sub procedures</description>
+        <properties>
+            <property name="baseEffort">
+                <value>30min</value>
+            </property>
+            <property name="limit">
+                <value>3</value>
+            </property>
+        </properties>
+    </rule>
+  
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ClassNamePrefixRule" message="Class and enumeration name declarations should begin with T"
 		  name="ClassNamePrefixRule">
 		<description>Class names should begin with T</description>
