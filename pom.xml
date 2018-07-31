@@ -5,9 +5,9 @@
 
 
 	<artifactId>sonar-delphi-plugin</artifactId>
-	<version>0.3.4</version>
+	<version>0.1</version>
 	<groupId>org.delphi.plugin</groupId>
-	<name>Sonar Delphi Plugin</name>
+	<name>SonarDelphi Plugin</name>
 	<description>Enables analysis of Delphi projects.</description>
 
 	<inceptionYear>2011</inceptionYear>
@@ -49,6 +49,13 @@
 				<role>developer</role>
 			</roles>
 			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>agt</id>
+			<name>The Agile Excuse Team - Monash University</name>
+			<roles>
+				<role>developer</role>
+			</roles>
 		</developer>
 	</developers>
 
