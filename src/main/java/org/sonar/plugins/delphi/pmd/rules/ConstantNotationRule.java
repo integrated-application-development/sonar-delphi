@@ -7,15 +7,6 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 public class ConstantNotationRule extends DelphiRule {
 
-    private String sonarMessage;
-
-    @Override
-    protected void init(){
-        super.init();
-        sonarMessage = "Constant values should be prepended with C_";
-
-    }
-
     /**
      * This rule will find a 'const' block, and search through it's child nodes for assignments made to constant values.
      * When one is found, the node before it is considered the name of the declaraed constant. This is then checked for
@@ -42,7 +33,7 @@ public class ConstantNotationRule extends DelphiRule {
 
                         String constName = assignmentNode.getText();
 
-                        if (!nameStartsWithC_(constName)){
+                        if (!constName.startsWith("C_")){
 
                             addViolation(ctx, (DelphiPMDNode) assignmentNode);
 
@@ -53,23 +44,6 @@ public class ConstantNotationRule extends DelphiRule {
             }
 
         }
-    }
-
-
-    /**
-     * Check the first two characters of the string used to define the constant, return false if it does not begin
-     * with C_
-     * @param constName The name of the constant value assigned
-     * @return True if starts with C_, false if not
-     */
-    private boolean nameStartsWithC_(String constName){
-
-        String EXPECTED_CONST_PREFIX = "C_";
-
-        // Get the substring of the first two characters and check if the value start with the correct characters
-        String constPrefix = constName.substring(0, 2);
-
-        return constPrefix.equals(EXPECTED_CONST_PREFIX);
     }
 
 
