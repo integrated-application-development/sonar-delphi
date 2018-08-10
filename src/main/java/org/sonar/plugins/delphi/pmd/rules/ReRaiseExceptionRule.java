@@ -9,7 +9,10 @@ public class ReRaiseExceptionRule extends DelphiRule {
     @Override
     public void visit(DelphiPMDNode node, RuleContext ctx){
 
-        if(node.getType() == DelphiLexer.EXCEPT){
+        if(node.getType() == DelphiLexer.RAISE){
+            // The next node after a raise statement should either be a semicolon (compliant) or raising the exception
+
+            DelphiPMDNode nextNode
 
         }
 
