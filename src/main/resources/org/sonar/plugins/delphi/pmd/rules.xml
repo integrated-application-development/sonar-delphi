@@ -135,7 +135,7 @@
 				<value>30min</value>
 			</property>
 			<property name="limit">
-				<value>100</value>
+				<value>150</value>
 			</property>
 		</properties>
 	</rule>

@@ -50,7 +50,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
 
   private boolean inImplementationSection = false;
 
-  public static final IntegerProperty LIMIT = new IntegerProperty("limit", "The max limit.", 1, 100, 1, 1.0f);
+  public static final IntegerProperty LIMIT = new IntegerProperty("limit", "The max limit.", 1, 150, 1, 1.0f);
   public static final IntegerProperty THRESHOLD = new IntegerProperty("Threshold", "Threshold", 1, 100, 10, 1.0f);
   public static final StringProperty START = new StringProperty("start", "The AST node to start from", "", 1.0f);
   public static final StringProperty END = new StringProperty("end", "The AST node to stop the search", "", 1.0f);
