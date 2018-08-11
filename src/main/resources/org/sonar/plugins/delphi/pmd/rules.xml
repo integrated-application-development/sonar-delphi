@@ -682,5 +682,15 @@ x.Free;			//GOOD, sufficent enough
 		</properties>
 	</rule>
 
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.EmptyBracketsRule" message="Call to method with no parameters"
+		  name="EmptyBracketsRule">
+		  <description>When calling a method, there is no need to use brackets if there are no parameters.</description>
+		<properties>
+			<property name="baseEffort">
+				<value>1min</value>
+			</property>
+		</properties>
+	</rule>
+
 
 </ruleset>

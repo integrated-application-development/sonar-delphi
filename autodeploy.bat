@@ -6,7 +6,7 @@ cmd /c "mvn clean install"
 
 echo Copying compiled plugin to Sonar server install...
 
-copy /b/v/y C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\target\sonar-delphi-plugin-0.3.4.jar C:\sonarqube-7.2.1\extensions\plugins\sonar-delphi-plugin-0.3.4.jar /Y
+copy /b/v/y C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\target\sonar-delphi-plugin-0.1.jar C:\sonarqube-7.2.1\extensions\plugins\sonar-delphi-plugin-0.1.jar /Y
 
 echo Restarting server...
 
