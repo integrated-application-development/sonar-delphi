@@ -684,7 +684,8 @@ x.Free;			//GOOD, sufficent enough
 
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ReRaiseExceptionRule" message="Raising an exception here
 		actually raises two exceptions. You do not need to re raise the exception." name="ReRaiseExceptionRule">
-		<description>Raising an exception at the end of an except block raises two exceptions.</description>
+		<description>Raising an exception at the end of an except block raises two exceptions. You should just
+		use 'raise;' instead of 'raise (exception);'.</description>
 		<properties>
 			<property name="baseEffort">
 				<value>5min</value>
