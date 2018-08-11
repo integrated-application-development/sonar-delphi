@@ -375,12 +375,12 @@
 
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.PublicFieldsRule" message="Avoid using public fields"
 		name="PublicFieldsRule">
-		<description>You shouldn't make public fields. Make them private/protected and add a getter/setter
-			methods.
+		<description>You shouldn't make public fields. Instead make fields private/protected and define a public property to access
+			them instead.
 		</description>
 		<properties>
 			<property name="baseEffort">
-				<value>10min</value>
+				<value>3min</value>
 			</property>
 		</properties>
 	</rule>
