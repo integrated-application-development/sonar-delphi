@@ -11,7 +11,7 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class ConstructorCreateTest {
 
-    private static final String TEST_FILE = "/org/sonar/plugins/delphi/PMDTest/ConstructorTest.pas";
+    private static final String TEST_FILE = "/org/sonar/plugins/delphi/PMDTest/EmptyBracketsTest.pas";
 
     // TODO make this test actually test, was just being used for debugging
     @Ignore
