@@ -20,16 +20,14 @@ public class DuplicatesRule extends DelphiRule {
     public void visit(DelphiPMDNode node, RuleContext ctx) {
         List children = node.getChildren();
         if (children != null){
-            int i;
-            for(i=0; i<children.size()-4; i++){
+
+            for(int i = 0; i < children.size() - 4; i++){
                 if(children.get(i).toString().equals(".")&&
-                        children.get(i+1).toString().equals("Duplicates")&&
-                        children.get(i+2).toString().equals(":=")&&
-                        children.get(i+3).toString().equals("dupError")){
-                    // found a check for duplicates
+                        children.get(i+1).toString().equals("Duplicates")){
+                    // Found a call to duplicates function
                     try {
                         if ((!children.get(i - 1).toString().equals(children.get(i - 7).toString())) // ensure same list
-                                // ensure list is being sorted
+                                // Ensure list is being sorted
                                 || (!children.get(i - 6).toString().equals("."))
                                 || (!children.get(i - 5).toString().equals("Sorted"))
                                 || (!children.get(i - 4).toString().equals(":="))
@@ -38,8 +36,8 @@ public class DuplicatesRule extends DelphiRule {
                         }
                     }
                     catch(IndexOutOfBoundsException e){
-                        // if an index was raised, then there could not have been a sort performed on the previous line,
-                        // so raise a violation
+                        // If an index was raised, then there could not have been a sort performed on the previous line,
+                        // So raise a violation
                         addViolation(ctx, (DelphiPMDNode) children.get(i - 1));
                     }
                 }

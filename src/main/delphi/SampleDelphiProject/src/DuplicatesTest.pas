@@ -38,6 +38,9 @@ begin
   TestList.Sorted := True;
   TestList.Duplicates := dupError;
 
+  TestList := TStringList.Create;
+  TestList.Duplicates := potato;
+
 end;
 
 end.
