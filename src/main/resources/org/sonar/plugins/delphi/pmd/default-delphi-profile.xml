@@ -182,9 +182,9 @@
 		<priority>4</priority>
 	</rule>
 
-    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.TooManySubProceduresRule" name="TooManySubProceduresRule">
-        <priority>3</priority>
-    </rule>
+  <rule since="" class="org.sonar.plugins.delphi.pmd.rules.TooManySubProceduresRule" name="TooManySubProceduresRule">
+      <priority>3</priority>
+  </rule>
 
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.AvoidWithRule" name="AvoidWithRule">
 		<priority>3</priority>
@@ -202,9 +202,13 @@
 		<priority>4</priority>
 	</rule>
 
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.ReRaiseExceptionRule" name="ReRaiseExceptionRule">
+		<priority>3</priority>
+  </rule>
 
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.EmptyBracketsRule" name="EmptyBracketsRule">
 		<priority>5</priority>
+   </rule>
 
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.DuplicatesRule" name="DuplicatesRule">
 		<priority>4</priority>
