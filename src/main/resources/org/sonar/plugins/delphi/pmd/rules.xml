@@ -375,12 +375,12 @@
 
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.PublicFieldsRule" message="Avoid using public fields"
 		name="PublicFieldsRule">
-		<description>You shouldn't make public fields. Make them private/protected and add a getter/setter
-			methods.
+		<description>You shouldn't make public fields. Instead make fields private/protected and define a public property to access
+			them instead.
 		</description>
 		<properties>
 			<property name="baseEffort">
-				<value>10min</value>
+				<value>3min</value>
 			</property>
 		</properties>
 	</rule>
@@ -706,6 +706,29 @@ x.Free;			//GOOD, sufficent enough
 
  		]]></example>
 	</rule>
+
+
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.EmptyBracketsRule" message="Empty brackets for method without parameters"
+		  name="EmptyBracketsRule">
+		  <description>
+			  When calling a method, there is no need to use brackets if there are no parameters to be passed.
+		  </description>
+		<properties>
+			<property name="baseEffort">
+				<value>1min</value>
+			</property>
+		</properties>
+	</rule>
+
+    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.DuplicatesRule" message="List must be sorted before checking for duplicates"
+          name="DuplicatesRule">
+        <description>List must be sorted immediately before checking for duplicates</description>
+        <properties>
+            <property name="baseEffort">
+                <value>2min</value>
+            </property>
+        </properties>
+    </rule>
 
 
 </ruleset>
