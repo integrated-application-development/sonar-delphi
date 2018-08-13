@@ -328,7 +328,7 @@
 		</description>
 		<properties>
 			<property name="baseEffort">
-				<value>10min</value>
+				<value>1min</value>
 			</property>
 			<property name="limit">
 				<value>0</value>
@@ -354,7 +354,7 @@
 		</description>
 		<properties>
 			<property name="baseEffort">
-				<value>10min</value>
+				<value>1min</value>
 			</property>
 			<property name="limit">
 				<value>0</value>
