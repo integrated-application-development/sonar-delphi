@@ -3,13 +3,10 @@ package pmdRules;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.w3c.dom.*;
-import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -18,6 +15,7 @@ import java.util.HashMap;
  */
 public class PMDReportXMLParser {
 
+    // Note that these paths are relative
     private static String TEST_PROJECT_DIR = "src/test/resources/pmdRuleTestFiles/delphi-test-project/";
     private static String PMD_REPORT_FILE = ".scannerwork/pmd-report.xml";
 
