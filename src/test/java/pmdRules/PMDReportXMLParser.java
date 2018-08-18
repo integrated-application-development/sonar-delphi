@@ -1,6 +1,7 @@
 package pmdRules;
 
 import org.apache.commons.lang.StringUtils;
+import org.junit.Test;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -20,10 +21,11 @@ public class PMDReportXMLParser {
     private static String TEST_PROJECT_DIR = "src/test/resources/pmdRuleTestFiles/delphi-test-project/";
     private static String PMD_REPORT_FILE = ".scannerwork/pmd-report.xml";
 
-    public HashMap<String, HashMap<String, ArrayList<String>>> violations = new HashMap<>();
+    HashMap<String, HashMap<String, ArrayList<Integer>>> violationsMap = new HashMap<>();
     //private static NamedNodeMap fileNodeList;
 
-    private static void parsePmdReportXML() throws ParserConfigurationException, IOException, SAXException {
+    @Test
+    public void parsePmdReportXML(){
 
         try {
             File pmdReport = new File(TEST_PROJECT_DIR + PMD_REPORT_FILE);
@@ -32,46 +34,59 @@ public class PMDReportXMLParser {
             Document pmdReportDoc = docBuilder.parse(pmdReport);
             pmdReportDoc.getDocumentElement().normalize();
 
-            NodeList violationNodes = pmdReportDoc.getElementsByTagName("violation");
+            NodeList fileNodes = pmdReportDoc.getElementsByTagName("file");
 
-            // tODO move to other function
-            for(int i = 0; i < violationNodes.getLength(); i++){
+            buildXMLHashmap(fileNodes);
 
-                Node violationNode = violationNodes.item(i);
-                Node fileNode = violationNode.getParentNode();
-
-                Element violationElement = (Element) violationNode;
-                Element fileElement = (Element) fileNode;
-
-                String pathName = fileElement.getAttribute("name");
-                // Strip the full path from the file, just want the name
-                String fileName = StringUtils.substringAfterLast(pathName, "\\");
-
-                NamedNodeMap violationList = violationElement.getAttributes();
-
-
-
-                System.out.println("");
-            }
 
         } catch (Exception e){
             System.out.print("Error parsing PMD report.\n");
             e.printStackTrace();
         }
 
-
     }
 
     private void buildXMLHashmap(NodeList fileNodes){
 
+        for(int i = 0; i < fileNodes.getLength(); i++){
+
+            ArrayList<Integer> lineNums = new ArrayList<>();
+            HashMap<String, ArrayList<Integer>> ruleViolations = new HashMap<>();
+            String ruleType = null;
+
+            Node fileNode = fileNodes.item(i);
+            Element fileElement = (Element) fileNode;
+            String pathName = fileElement.getAttribute("name");
+            // Strip the full path from the file, just want the name
+            String fileName = StringUtils.substringAfterLast(pathName, "\\");
+
+            NodeList violationNodes = fileElement.getElementsByTagName("violation");
+
+            for(int j = 0; j < violationNodes.getLength(); j++){
+                Node violationNode = violationNodes.item(j);
+                Element violationElement = (Element) violationNode;
+
+                NamedNodeMap violationAttributes = violationElement.getAttributes();
+
+                // Get the violation type and the line the violation was on, could get more attributes here if useful
+                ruleType = violationAttributes.getNamedItem("rule").getNodeValue();
+
+
+                Integer violationLine = Integer.valueOf(violationAttributes.getNamedItem("beginline").getNodeValue());
+                lineNums.add(violationLine);
+
+                // Add to data structure for tests to use
+
+
+            }
+
+            ruleViolations.put(ruleType, lineNums);
+            violationsMap.put(fileName, ruleViolations);
+            lineNums.clear();
+
+        }
 
 
     }
-
-    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
-        // TODO remove this, just testing
-        parsePmdReportXML();
-    }
-
 
 }
