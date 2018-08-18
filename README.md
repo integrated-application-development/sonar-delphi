@@ -8,6 +8,17 @@ The original work on the plugin that was done before forking the existing projec
 
 Forked code is released under GPL.
 
+Testing Framework
+==================
+JUnit testsing (WIP):
+
+ * The latest plugin is compiled.
+ * The compiled JAR is copied to a local installation of SonarQube. (Could also be remote)
+ * The Server is restarted with the new plugin.
+ * A scan is run to create results in pmd-report.xml
+ * Tests are then run again, parsing in results from pmd-report.xml
+  * JUnit tests are run on these results. This tests actual output from the plugin on real pascal files.
+
 Original Readme:
 ==================
 
