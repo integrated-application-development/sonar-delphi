@@ -54,7 +54,7 @@ public class CodeAnalysisState extends CodeAnalysisCacheResults {
 
   /**
    * set unit being processed
-   * 
+   *
    * @param activeUnit unit
    */
   public void setActiveUnit(UnitInterface activeUnit) {
@@ -63,7 +63,7 @@ public class CodeAnalysisState extends CodeAnalysisCacheResults {
 
   /**
    * sets function being currently processed
-   * 
+   *
    * @param function function to set
    */
   public void setActiveFunction(FunctionInterface function) {
@@ -72,7 +72,7 @@ public class CodeAnalysisState extends CodeAnalysisCacheResults {
 
   /**
    * get function being currently processed
-   * 
+   *
    * @return function currently processed
    */
   public FunctionInterface getActiveFunction() {
@@ -81,7 +81,7 @@ public class CodeAnalysisState extends CodeAnalysisCacheResults {
 
   /**
    * sets current visibility scope
-   * 
+   *
    * @param parseVisibility visibility scope
    */
   public void setParseVisibility(LexerMetrics parseVisibility) {
@@ -97,7 +97,7 @@ public class CodeAnalysisState extends CodeAnalysisCacheResults {
 
   /**
    * sets active class begin processed
-   * 
+   *
    * @param activeClass class
    */
   public void setActiveClass(ClassInterface activeClass) {
@@ -120,7 +120,7 @@ public class CodeAnalysisState extends CodeAnalysisCacheResults {
 
   /**
    * sets parse status
-   * 
+   *
    * @param status parse status
    */
   public void setParseStatus(LexerMetrics status) {

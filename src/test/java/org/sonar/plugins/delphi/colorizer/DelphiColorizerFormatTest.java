@@ -24,8 +24,6 @@ package org.sonar.plugins.delphi.colorizer;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
-
 public class DelphiColorizerFormatTest {
 
   @Test

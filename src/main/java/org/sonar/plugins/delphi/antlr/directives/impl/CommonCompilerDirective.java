@@ -37,12 +37,13 @@ public class CommonCompilerDirective implements CompilerDirective {
 
   /**
    * ctor
-   * 
+   *
    * @param name directive name
    * @param item directive item
    * @param firstCharPos directive first character occurrence
    * @param lastCharPos directive last character occurrence
-   * @throws IllegalArgumentException if name was null, or firstCharPos &lt; 0, or firstCharPos &lt; lastCharPos
+   * @throws IllegalArgumentException if name was null, or firstCharPos &lt; 0, or firstCharPos &lt;
+   * lastCharPos
    */
   public CommonCompilerDirective(String name, String item, int firstCharPos, int lastCharPos) {
     assertValues(name, firstCharPos, lastCharPos);
@@ -82,10 +83,12 @@ public class CommonCompilerDirective implements CompilerDirective {
       throw new IllegalArgumentException("Compiler directive name cannot be null!");
     }
     if (beginPos < 0 || endPos < 0) {
-      throw new IllegalArgumentException("Compiler directive first/last character occurence must be >= 0");
+      throw new IllegalArgumentException(
+          "Compiler directive first/last character occurence must be >= 0");
     }
     if (beginPos > endPos) {
-      throw new IllegalArgumentException("Compiler directive first character must be <= last character");
+      throw new IllegalArgumentException(
+          "Compiler directive first character must be <= last character");
     }
 
   }

@@ -25,26 +25,27 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 public class InterfaceNameRule extends DelphiRule {
 
-    /**
-     * This rule looks for the interface name and if it doesn't start with "I" it raises a violation.
-     *
-     * @param node the current node
-     * @param ctx the ruleContext to store the violations
-     */
+  /**
+   * This rule looks for the interface name and if it doesn't start with "I" it raises a
+   * violation.
+   *
+   * @param node the current node
+   * @param ctx the ruleContext to store the violations
+   */
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
 
     if (node.getType() == DelphiLexer.TkInterface) {
-        CommonTree interfaceNameNode = (CommonTree) node.getParent();
+      CommonTree interfaceNameNode = (CommonTree) node.getParent();
         /* This safely casts interfaceNameNode from CommonTree to DelphiPMDNode type.
         Since (DelphiPMDNode) <CommonTree object> casting will not work. */
-        DelphiPMDNode violationNode = new DelphiPMDNode(interfaceNameNode);
+      DelphiPMDNode violationNode = new DelphiPMDNode(interfaceNameNode);
 
-        String name = interfaceNameNode.getText();
+      String name = interfaceNameNode.getText();
 
-        if (!name.startsWith("I")) {
-            addViolation(ctx, violationNode);
-        }
+      if (!name.startsWith("I")) {
+        addViolation(ctx, violationNode);
+      }
     }
   }
 }

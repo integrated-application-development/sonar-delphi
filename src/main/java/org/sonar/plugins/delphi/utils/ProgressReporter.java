@@ -25,8 +25,8 @@ package org.sonar.plugins.delphi.utils;
 /**
  * Class used to report some progress
  */
-public class ProgressReporter
-{
+public class ProgressReporter {
+
   private double currentProgress = 0;
   private int currentPercent = 0;
   private double reportProgress = 25;
@@ -44,7 +44,7 @@ public class ProgressReporter
 
   /**
    * Ctor
-   * 
+   *
    * @param targetProgress Target progress we want to achieve
    * @param parts How many parts of progress we should report, ex. 4 will report every 25%
    * @param logger report will be written to this logger
@@ -58,7 +58,7 @@ public class ProgressReporter
 
   /**
    * Progress by one
-   * 
+   *
    * @return number of reports printed
    */
   public int progress() {
@@ -67,12 +67,11 @@ public class ProgressReporter
 
   /**
    * Progress by amount
-   * 
+   *
    * @param amount amount we want to progress
    * @return number of reports printed
    */
-  public int progress(int amount)
-  {
+  public int progress(int amount) {
     int reportCount = reportZeroPercent();
     currentProgress += amount;
     while (currentProgress >= reportProgress) {

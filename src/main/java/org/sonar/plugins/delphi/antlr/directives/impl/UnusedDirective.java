@@ -25,16 +25,15 @@ package org.sonar.plugins.delphi.antlr.directives.impl;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
 
 /**
- * Class for unused compiler directives, such as: {$I+-} {$WARN} and so on. They
- * do not affect parsing and processing a certain file. This class will prevent
- * from writing CompilerDirectiveFactoryUnsupportedDirectiveException to log
- * file.
+ * Class for unused compiler directives, such as: {$I+-} {$WARN} and so on. They do not affect
+ * parsing and processing a certain file. This class will prevent from writing
+ * CompilerDirectiveFactoryUnsupportedDirectiveException to log file.
  */
 public class UnusedDirective extends CommonCompilerDirective {
 
   /**
    * ctor
-   * 
+   *
    * @param firstCharPos first character position
    * @param lastCharPos last character position
    */

@@ -29,7 +29,6 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  * Delphi pmd property class
  *
  * @author SG0214809
- *
  */
 @XStreamAlias("property")
 public class Property {

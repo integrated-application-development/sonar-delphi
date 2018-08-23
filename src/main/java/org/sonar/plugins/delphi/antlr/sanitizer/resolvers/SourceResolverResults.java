@@ -36,7 +36,7 @@ public class SourceResolverResults {
 
   /**
    * ctor
-   * 
+   *
    * @param fileName The source code file name
    * @param data The source code file content
    */
@@ -54,7 +54,7 @@ public class SourceResolverResults {
 
   /**
    * sets new file data
-   * 
+   *
    * @param newData new data to set
    */
   public void setFileData(StringBuilder newData) {
@@ -70,7 +70,7 @@ public class SourceResolverResults {
 
   /**
    * set the excludes
-   * 
+   *
    * @param newExcludes excludes to set
    */
   public void setFileExcludes(SubRangeAggregator newExcludes) {

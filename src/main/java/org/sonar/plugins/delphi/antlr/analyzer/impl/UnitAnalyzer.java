@@ -37,8 +37,9 @@ public class UnitAnalyzer extends CodeAnalyzer {
 
   @Override
   public void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
-    results.setActiveUnit(createUnit(codeTree.getCurrentCodeNode().getNode(), codeTree.getRootCodeNode().getNode()
-      .getFileName()));
+    results.setActiveUnit(
+        createUnit(codeTree.getCurrentCodeNode().getNode(), codeTree.getRootCodeNode().getNode()
+            .getFileName()));
     results.cacheUnit(results.getActiveUnit());
   }
 

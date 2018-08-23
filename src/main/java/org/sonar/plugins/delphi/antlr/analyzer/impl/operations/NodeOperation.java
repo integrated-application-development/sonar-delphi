@@ -32,7 +32,7 @@ public interface NodeOperation {
 
   /**
    * Executes operation
-   * 
+   *
    * @param node Node to operate on
    * @return resulting code node
    */

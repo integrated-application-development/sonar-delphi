@@ -41,7 +41,8 @@ public class SingleLineCommentHandler extends LineContextHandler {
   @Override
   boolean matchToEnd(Line line, StringBuilder pendingLine) {
     if (comment == null) {
-      throw new IllegalStateException("Method doContextBegin(StringBuilder pendingLine) has not been called.");
+      throw new IllegalStateException(
+          "Method doContextBegin(StringBuilder pendingLine) has not been called.");
     }
     comment.append(getLastCharacter(pendingLine));
     line.isThereCode();
@@ -52,7 +53,7 @@ public class SingleLineCommentHandler extends LineContextHandler {
   @Override
   boolean matchToBegin(Line line, StringBuilder pendingLine) {
     boolean doContextBegin = matchEndOfString(pendingLine, commentStartTag)
-      && (commentNotStartTag == null || !matchEndOfString(pendingLine, commentNotStartTag));
+        && (commentNotStartTag == null || !matchEndOfString(pendingLine, commentNotStartTag));
     if (doContextBegin) {
       comment = new StringBuilder(commentStartTag);
     }

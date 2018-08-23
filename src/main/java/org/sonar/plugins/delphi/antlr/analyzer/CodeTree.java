@@ -26,8 +26,7 @@ import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 
 /**
- * Code analyzed class provides us with information about code being currently
- * analysed.
+ * Code analyzed class provides us with information about code being currently analysed.
  */
 public class CodeTree {
 
@@ -36,7 +35,7 @@ public class CodeTree {
 
   /**
    * ctor
-   * 
+   *
    * @param root root element
    * @param current first element we will parse
    */
@@ -61,7 +60,7 @@ public class CodeTree {
 
   /**
    * sets the current node
-   * 
+   *
    * @param n node
    */
   public void setCurrentNode(CodeNode<Tree> n) {

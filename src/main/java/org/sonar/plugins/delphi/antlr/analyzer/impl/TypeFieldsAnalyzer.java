@@ -46,8 +46,9 @@ public class TypeFieldsAnalyzer extends CodeAnalyzer {
     String varNames = getClassVarName((CommonTree) codeTree.getCurrentCodeNode().getNode());
     String[] names = varNames.split(",");
     for (String name : names) {
-      ClassFieldInterface field = new DelphiClassField(name, varTypeName, results.getParseVisibility()
-        .toMetrics());
+      ClassFieldInterface field = new DelphiClassField(name, varTypeName,
+          results.getParseVisibility()
+              .toMetrics());
       field.setParent(results.getActiveClass());
       results.getActiveClass().addField(field);
     }
@@ -55,12 +56,14 @@ public class TypeFieldsAnalyzer extends CodeAnalyzer {
 
   @Override
   public boolean canAnalyze(CodeTree codeTree) {
-    return codeTree.getCurrentCodeNode().getNode().getType() == LexerMetrics.CLASS_FIELD.toMetrics();
+    return codeTree.getCurrentCodeNode().getNode().getType() == LexerMetrics.CLASS_FIELD
+        .toMetrics();
   }
 
   private String getClassVarName(CommonTree variableNode) {
     StringBuilder name = new StringBuilder();
-    CommonTree nameNode = (CommonTree) variableNode.getFirstChildWithType(LexerMetrics.VARIABLE_IDENTS.toMetrics());
+    CommonTree nameNode = (CommonTree) variableNode
+        .getFirstChildWithType(LexerMetrics.VARIABLE_IDENTS.toMetrics());
     if (nameNode != null) {
       Tree node = nameNode;
       while ((node = node.getChild(0)) != null) {

@@ -23,8 +23,7 @@
 package org.sonar.plugins.delphi.core.language.verifiers;
 
 /**
- * Exception for Statementverifier, triggered when we cannot create a statement
- * from provided node.
+ * Exception for Statementverifier, triggered when we cannot create a statement from provided node.
  */
 public class StatementVerifierException extends Exception {
 
@@ -32,7 +31,7 @@ public class StatementVerifierException extends Exception {
 
   /**
    * ctor
-   * 
+   *
    * @param msg error message
    */
   public StatementVerifierException(String msg) {

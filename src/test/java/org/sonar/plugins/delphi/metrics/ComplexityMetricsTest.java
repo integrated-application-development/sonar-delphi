@@ -22,12 +22,20 @@
  */
 package org.sonar.plugins.delphi.metrics;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.*;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.ActiveRules;
+import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.rule.internal.NewActiveRule;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
@@ -37,16 +45,6 @@ import org.sonar.plugins.delphi.antlr.analyzer.DelphiASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
-import org.sonar.api.batch.fs.internal.DefaultIndexedFile;
-import org.sonar.api.batch.sensor.internal.SensorContextTester;
-
-import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
-
-import static org.junit.Assert.assertEquals;
 
 public class ComplexityMetricsTest {
 
@@ -65,13 +63,13 @@ public class ComplexityMetricsTest {
     sensorContext = SensorContextTester.create(baseDir);
 
     ActiveRulesBuilder rulesBuilder = new ActiveRulesBuilder();
-    NewActiveRule rule = rulesBuilder.create(ComplexityMetrics.RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY);
+    NewActiveRule rule = rulesBuilder
+        .create(ComplexityMetrics.RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY);
     rule.setParam("Threshold", "3").setLanguage(DelphiLanguage.KEY).activate();
     activeRules = rulesBuilder.build();
   }
 
-  private String getRelativePath(File prefix, String fullPath)
-  {
+  private String getRelativePath(File prefix, String fullPath) {
     String result = fullPath.substring(prefix.getAbsolutePath().length() + 1);
     return result;
   }
@@ -87,7 +85,8 @@ public class ComplexityMetricsTest {
     // processing
     ComplexityMetrics metrics = new ComplexityMetrics(activeRules, sensorContext);
 
-    DefaultInputFile inputFile = TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, testFile)
+    DefaultInputFile inputFile = TestInputFileBuilder
+        .create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, testFile)
         .setModuleBaseDir(baseDir.toPath())
         .setLanguage(DelphiLanguage.KEY)
         .setType(InputFile.Type.MAIN)
@@ -96,11 +95,11 @@ public class ComplexityMetricsTest {
 
     metrics.analyse(inputFile, results.getClasses(), results.getFunctions(), null);
 
-    assertEquals("CLASSES", (Integer)2, metrics.getIntMetric("CLASSES"));
-    assertEquals("COMPLEXITY", (Integer)10, metrics.getIntMetric("COMPLEXITY"));
-    assertEquals("FUNCTIONS", (Integer)4, metrics.getIntMetric("FUNCTIONS"));
-    assertEquals("PUBLIC_API", (Integer)5, metrics.getIntMetric("PUBLIC_API"));
-    assertEquals("STATEMENTS", (Integer)20, metrics.getIntMetric("STATEMENTS"));
+    assertEquals("CLASSES", (Integer) 2, metrics.getIntMetric("CLASSES"));
+    assertEquals("COMPLEXITY", (Integer) 10, metrics.getIntMetric("COMPLEXITY"));
+    assertEquals("FUNCTIONS", (Integer) 4, metrics.getIntMetric("FUNCTIONS"));
+    assertEquals("PUBLIC_API", (Integer) 5, metrics.getIntMetric("PUBLIC_API"));
+    assertEquals("STATEMENTS", (Integer) 20, metrics.getIntMetric("STATEMENTS"));
 
     Issue[] issues = sensorContext.allIssues().toArray(new Issue[0]);
     assertEquals(1, issues.length);

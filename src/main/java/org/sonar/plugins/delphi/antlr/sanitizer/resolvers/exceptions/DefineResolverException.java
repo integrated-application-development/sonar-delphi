@@ -31,7 +31,7 @@ public class DefineResolverException extends Exception {
 
   /**
    * ctor
-   * 
+   *
    * @param msg Error message
    */
   public DefineResolverException(String msg) {

@@ -36,7 +36,7 @@ public class SubRangeAggregator {
 
   /**
    * add a new sub range
-   * 
+   *
    * @param newRange new sub range
    */
   public void add(SubRange newRange) {
@@ -55,7 +55,7 @@ public class SubRangeAggregator {
 
   /**
    * check if providen value is in range of all agregated ranges
-   * 
+   *
    * @param value value to check
    * @return true if so, false otherwise
    */
@@ -69,9 +69,8 @@ public class SubRangeAggregator {
   }
 
   /**
-   * adds all elements from another aggregator, check for duplications and
-   * merges them
-   * 
+   * adds all elements from another aggregator, check for duplications and merges them
+   *
    * @param subRangeAggregator another aggregator
    */
   public void addAll(SubRangeAggregator subRangeAggregator) {
@@ -82,7 +81,7 @@ public class SubRangeAggregator {
 
   /**
    * adds all elements.
-   * 
+   *
    * @param subRange List of SubRange
    */
   public void addAll(SubRange... subRange) {
@@ -93,7 +92,7 @@ public class SubRangeAggregator {
 
   /**
    * sort aggregated sub ranges with providen comparator
-   * 
+   *
    * @param comparator Sub range comparator
    */
   public void sort(Comparator<? super SubRange> comparator) {

@@ -22,6 +22,11 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveFactory;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
@@ -33,12 +38,6 @@ import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRangeAggregator;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRangeFirstOccurenceComparator;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl.ReplacementSubRange;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * add include files to a given file
@@ -52,9 +51,8 @@ public class IncludeResolver extends SourceResolver {
 
   /**
    * ctor
-   * 
-   * @param shouldExtend should we add includes, or just cut their
-   *            deffinitions out?
+   *
+   * @param shouldExtend should we add includes, or just cut their deffinitions out?
    * @param includesList list of included dirs
    */
   public IncludeResolver(boolean shouldExtend, List<File> includesList) {
@@ -76,14 +74,14 @@ public class IncludeResolver extends SourceResolver {
 
   /**
    * Resolve includes
-   * 
+   *
    * @param baseFileName base file name
    * @param baseFileData base file character data
-   * @param excludes list of excluded areas (won't be parsed: strings,
-   *            comments etc.)
+   * @param excludes list of excluded areas (won't be parsed: strings, comments etc.)
    * @return new file character data
    */
-  private StringBuilder resolveIncludes(String baseFileName, StringBuilder baseFileData, SubRangeAggregator excludes) {
+  private StringBuilder resolveIncludes(String baseFileName, StringBuilder baseFileData,
+      SubRangeAggregator excludes) {
     if (baseFileName == null || baseFileData == null) {
       return baseFileData;
     }
@@ -99,17 +97,17 @@ public class IncludeResolver extends SourceResolver {
 
       for (CompilerDirective directive : allDirectives) {
         if (excludes.inRange(directive.getFirstCharPosition())
-          || directive.getType() != CompilerDirectiveType.INCLUDE) {
+            || directive.getType() != CompilerDirectiveType.INCLUDE) {
           continue;
         }
 
         String includeFileName = directive.getItem();
 
         String currentDir = baseFileName.substring(0, baseFileName.lastIndexOf('/'));
-        currentDir = backtrackDirectory(currentDir, DelphiUtils.countSubstrings(includeFileName, ".."));
+        currentDir = backtrackDirectory(currentDir,
+            DelphiUtils.countSubstrings(includeFileName, ".."));
 
-        try
-        {
+        try {
           // string, that will be inserted in replacement of include statement
           String copyData = "";
           if (extendIncludes) {
@@ -118,8 +116,8 @@ public class IncludeResolver extends SourceResolver {
             copyData = readFileIncludeData(includeFile);
           }
           dataToInclude.add(new ReplacementSubRange(directive.getFirstCharPosition(), directive
-            .getFirstCharPosition()
-            + directive.getLength() + REPLACEMENT_OFFSET, copyData));
+              .getFirstCharPosition()
+              + directive.getLength() + REPLACEMENT_OFFSET, copyData));
 
         } catch (IncludeResolverException | IOException e) {
           DelphiUtils.LOG.warn(e.getMessage());
@@ -135,7 +133,8 @@ public class IncludeResolver extends SourceResolver {
 
   private String readFileIncludeData(File includeFile) throws IOException {
     StringBuilder includeData = new StringBuilder(DelphiUtils.readFileContent(includeFile, null));
-    SourceResolverResults includedResults = new SourceResolverResults(includeFile.getAbsolutePath(), includeData);
+    SourceResolverResults includedResults = new SourceResolverResults(includeFile.getAbsolutePath(),
+        includeData);
 
     ExcludeResolver excludeResolver = new ExcludeResolver();
     excludeResolver.resolve(includedResults);
@@ -153,19 +152,20 @@ public class IncludeResolver extends SourceResolver {
     return currentDir;
   }
 
-  private StringBuilder introduceIncludedData(StringBuilder newData, List<ReplacementSubRange> dataToInclude) {
+  private StringBuilder introduceIncludedData(StringBuilder newData,
+      List<ReplacementSubRange> dataToInclude) {
     int replacedCharsShift = 0;
     Collections.sort(dataToInclude, new SubRangeFirstOccurenceComparator());
     for (SubRange range : dataToInclude) {
       newData.replace(range.getBegin() + replacedCharsShift, range.getEnd() + replacedCharsShift,
-        range.toString());
+          range.toString());
       replacedCharsShift += range.toString().length() - (range.getEnd() - range.getBegin());
     }
     return newData;
   }
 
   private File resolveIncludeFile(String fileName, String directory, List<File> includes)
-    throws IncludeResolverException {
+      throws IncludeResolverException {
     File resolved = getExistingFile(directory, fileName);
     if (resolved != null) {
       return resolved;
@@ -173,9 +173,11 @@ public class IncludeResolver extends SourceResolver {
     return resolveIncludeFile(fileName, includes);
   }
 
-  private File resolveIncludeFile(String fileName, List<File> directories) throws IncludeResolverException {
+  private File resolveIncludeFile(String fileName, List<File> directories)
+      throws IncludeResolverException {
     for (File dir : directories) {
-      DelphiUtils.LOG.debug("Trying to include " + dir.getAbsolutePath() + File.separator + fileName);
+      DelphiUtils.LOG
+          .debug("Trying to include " + dir.getAbsolutePath() + File.separator + fileName);
       File file = getExistingFile(dir.getAbsolutePath(), fileName);
       if (file != null) {
         return file;

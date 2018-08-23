@@ -22,17 +22,15 @@
  */
 package org.sonar.plugins.delphi.project;
 
+import java.io.File;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import java.io.File;
-
 /**
  * Parser for Delphi *.groupproj XML file
- * 
  */
 public class DelphiWorkgroupXmlParser extends DefaultHandler {
 
@@ -42,7 +40,7 @@ public class DelphiWorkgroupXmlParser extends DefaultHandler {
 
   /**
    * C-tor
-   * 
+   *
    * @param xmlFile .groupproj XML file
    * @param delphiWorkGroup Workgroup to modify
    */
@@ -69,7 +67,8 @@ public class DelphiWorkgroupXmlParser extends DefaultHandler {
   public void startElement(String uri, String localName, String rawName, Attributes attributes) {
     if ("Projects".equals(rawName)) {
       // new .dproj file
-      String projectPath = DelphiUtils.resolveBacktracePath(currentDir, attributes.getValue("Include"));
+      String projectPath = DelphiUtils
+          .resolveBacktracePath(currentDir, attributes.getValue("Include"));
       workGroup.addProject(new DelphiProject(new File(projectPath)));
     }
   }

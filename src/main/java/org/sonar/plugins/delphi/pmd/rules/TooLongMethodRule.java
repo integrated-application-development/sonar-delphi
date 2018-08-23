@@ -71,8 +71,9 @@ public class TooLongMethodRule extends DelphiRule {
           throw new IllegalStateException("No method name found for TooLongMethodRule.");
         }
 
-        String msg = methodName.toString() + " is too long (" + lines + " lines). Maximum line count is "
-          + limit;
+        String msg =
+            methodName.toString() + " is too long (" + lines + " lines). Maximum line count is "
+                + limit;
         addViolation(ctx, node, msg);
         lastLineParsed = lastLine;
       }

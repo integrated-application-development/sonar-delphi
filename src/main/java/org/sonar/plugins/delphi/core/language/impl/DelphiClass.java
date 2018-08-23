@@ -22,20 +22,19 @@
  */
 package org.sonar.plugins.delphi.core.language.impl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.sonar.plugins.delphi.antlr.DelphiParser;
 import org.sonar.plugins.delphi.core.language.ClassFieldInterface;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.ClassPropertyInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 /**
  * DelphiLanguage language class.
- * 
+ *
  * @see ClassInterface
  */
 public class DelphiClass implements ClassInterface {
@@ -160,17 +159,20 @@ public class DelphiClass implements ClassInterface {
     }
     for (FunctionInterface func : functions) {
       if (!func.isAccessor()
-        && (func.getVisibility() == DelphiParser.PUBLIC || func.getVisibility() == DelphiParser.PUBLISHED)) {
+          && (func.getVisibility() == DelphiParser.PUBLIC
+          || func.getVisibility() == DelphiParser.PUBLISHED)) {
         publicApiCount += 1 + func.getOverloadsCount();
       }
     }
     for (ClassFieldInterface field : fields) {
-      if (field.getVisibility() == DelphiParser.PUBLIC || field.getVisibility() == DelphiParser.PUBLISHED) {
+      if (field.getVisibility() == DelphiParser.PUBLIC
+          || field.getVisibility() == DelphiParser.PUBLISHED) {
         ++publicApiCount;
       }
     }
     for (ClassPropertyInterface property : properties) {
-      if (property.getVisibility() == DelphiParser.PUBLIC || property.getVisibility() == DelphiParser.PUBLISHED) {
+      if (property.getVisibility() == DelphiParser.PUBLIC
+          || property.getVisibility() == DelphiParser.PUBLISHED) {
         ++publicApiCount;
       }
     }
@@ -207,6 +209,7 @@ public class DelphiClass implements ClassInterface {
 
   /**
    * Calculating function Cyclomatic Complexity with its overloaded functions.
+   *
    * @param func The function
    * @return Cyclomatic Complexity
    */

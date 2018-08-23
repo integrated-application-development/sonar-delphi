@@ -22,24 +22,30 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+import java.util.Arrays;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Test;
-import org.sonar.plugins.delphi.antlr.analyzer.*;
+import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
+import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
+import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
+import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
+import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.antlr.analyzer.impl.operations.AdvanceToNodeOperation;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.core.language.impl.DelphiClass;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.debug.FileTestsCommon;
-
-import java.io.IOException;
-import java.util.Arrays;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class FunctionAnalyzerTest extends FileTestsCommon {
 
@@ -62,10 +68,11 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
     results.setActiveUnit(new DelphiUnit("test"));
     ast = new DelphiAST(testFile);
     code = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<>(ast.getChild(0)));
-    advanceToFunction = new AdvanceToNodeOperation(Arrays.asList(LexerMetrics.FUNCTION, LexerMetrics.PROCEDURE,
-      LexerMetrics.CONSTRUCTOR,
-      LexerMetrics.DESTRUCTOR,
-      LexerMetrics.OPERATOR));
+    advanceToFunction = new AdvanceToNodeOperation(
+        Arrays.asList(LexerMetrics.FUNCTION, LexerMetrics.PROCEDURE,
+            LexerMetrics.CONSTRUCTOR,
+            LexerMetrics.DESTRUCTOR,
+            LexerMetrics.OPERATOR));
 
     CodeAnalysisCacheResults.resetCache();
   }
@@ -108,9 +115,11 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
 
     int index = 0;
     int lines[] = {10, 11, 19, 20, 42, 48, 58, 69, 75, 89};
-    String names[] = {"bShowTrackerClick", "getFunction", "myProcedure", "setSomething", "TDemo.getFunction",
-      "TDemo.bShowTrackerClick",
-      "TMyClass.myProcedure", "TMyClass.setSomething", "StandAloneProcedure", "StandAloneFunction"};
+    String names[] = {"bShowTrackerClick", "getFunction", "myProcedure", "setSomething",
+        "TDemo.getFunction",
+        "TDemo.bShowTrackerClick",
+        "TMyClass.myProcedure", "TMyClass.setSomething", "StandAloneProcedure",
+        "StandAloneFunction"};
 
     CodeNode<Tree> currentNode = code.getCurrentCodeNode();
     while (currentNode != null) {
@@ -191,7 +200,8 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
     }
 
     assertThat("activeFunction", results.getActiveFunction(), notNullValue());
-    assertThat("function real name", results.getActiveFunction().getRealName(), containsString("Implicit"));
+    assertThat("function real name", results.getActiveFunction().getRealName(),
+        containsString("Implicit"));
   }
 
 }

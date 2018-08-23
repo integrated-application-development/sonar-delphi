@@ -22,12 +22,11 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl.operations;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Used to advance to specific AST tree node
@@ -38,7 +37,7 @@ public class AdvanceToNodeOperation implements NodeOperation {
 
   /**
    * ctor
-   * 
+   *
    * @param to Node type we want advance to
    */
   public AdvanceToNodeOperation(LexerMetrics to) {
@@ -47,7 +46,7 @@ public class AdvanceToNodeOperation implements NodeOperation {
 
   /**
    * ctor
-   * 
+   *
    * @param metricsList List of nodes we want to advance to
    */
   public AdvanceToNodeOperation(List<LexerMetrics> metricsList) {

@@ -31,7 +31,7 @@ public abstract class CodeAnalyzer {
 
   /**
    * add new CodeAnalyzer to chain
-   * 
+   *
    * @param successor code analyzer we put into chain
    * @return successor
    */
@@ -42,7 +42,7 @@ public abstract class CodeAnalyzer {
 
   /**
    * analyes code tree with a set of chaied analyzers
-   * 
+   *
    * @param codeTree code tree to analyze
    * @param results code analysis results holder
    */
@@ -67,7 +67,7 @@ public abstract class CodeAnalyzer {
 
   /**
    * can a current code analyzer analyze this code tree?
-   * 
+   *
    * @param codeTree code tree to check
    * @return true if can analyze, false otherwise
    */

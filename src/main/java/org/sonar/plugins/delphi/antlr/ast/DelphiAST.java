@@ -22,6 +22,18 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
+import java.io.File;
+import java.io.IOException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenRewriteStream;
 import org.antlr.runtime.tree.CommonTree;
@@ -35,15 +47,6 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import java.io.File;
-import java.io.IOException;
-
 /**
  * DelphiLanguage AST tree.
  */
@@ -56,7 +59,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
 
   /**
    * Constructor.
-   * 
+   *
    * @param file Input file from which to read data for AST tree
    */
   public DelphiAST(File file) {
@@ -65,9 +68,9 @@ public class DelphiAST extends CommonTree implements ASTTree {
 
   /**
    * Constructor.
-   * 
+   *
    * @param file Input file from which to read data for AST tree
-   * @param encoding  Encoding to use
+   * @param encoding Encoding to use
    */
   public DelphiAST(File file, String encoding) {
     try {
@@ -113,7 +116,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
   }
 
   /**
-   *  {@inheritDoc}
+   * {@inheritDoc}
    */
 
   @Override
@@ -123,8 +126,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
     File file = new File(fileName);
     Result result = new StreamResult(file);
 
-    try
-    {
+    try {
       // Write the DOM document to the file
       Transformer xformer = TransformerFactory.newInstance().newTransformer();
       xformer.transform(source, result);
@@ -137,7 +139,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
 
   /**
    * Generates an XML document from current node
-   * 
+   *
    * @return XML document
    */
 
@@ -169,7 +171,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
 
   /**
    * Generate children for specified root element from delphi node
-   * 
+   *
    * @param root Element
    * @param doc Document
    * @param delphiNode DelphiNode
@@ -226,8 +228,9 @@ public class DelphiAST extends CommonTree implements ASTTree {
       throw new IllegalArgumentException(toString() + " Source code line cannot be less than 1");
     }
     if (lineNr > codeLines.length) {
-      throw new IllegalArgumentException(toString() + "Source code line number to high: " + lineNr + " of max "
-        + codeLines.length);
+      throw new IllegalArgumentException(
+          toString() + "Source code line number to high: " + lineNr + " of max "
+              + codeLines.length);
     }
     return codeLines[lineNr - 1];
   }

@@ -22,11 +22,11 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
-
-import static org.junit.Assert.assertEquals;
 
 public class CodeAnalisysResultsTest {
 

@@ -22,13 +22,14 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.subranges;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl.IntegerSubRange;
-
-import java.util.Arrays;
-
-import static org.junit.Assert.*;
 
 public class SubRangeMergingAggregatorTest {
 
@@ -85,15 +86,16 @@ public class SubRangeMergingAggregatorTest {
     assertEquals(3, aggregator2.getRanges().size());
 
     aggregator.addAll(aggregator2); // should not add repeating ranges and
-                                    // merge other
+    // merge other
     assertEquals(1, aggregator.getRanges().size());
   }
 
   @Test
   public void sortTest() {
-    SubRange data[] = {new IntegerSubRange(0, 10), new IntegerSubRange(-5, -1), new IntegerSubRange(12, 12),
-      new IntegerSubRange(15, 19),
-      new IntegerSubRange(-10, -6)};
+    SubRange data[] = {new IntegerSubRange(0, 10), new IntegerSubRange(-5, -1),
+        new IntegerSubRange(12, 12),
+        new IntegerSubRange(15, 19),
+        new IntegerSubRange(-10, -6)};
 
     for (SubRange range : data) {
       aggregator.add(range);

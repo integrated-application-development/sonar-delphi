@@ -31,15 +31,15 @@ import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 
 /**
- * Set the section of file currently being parsed (interface / implementation
- * sections)
+ * Set the section of file currently being parsed (interface / implementation sections)
  */
 public class InterfaceAnalyzer extends CodeAnalyzer {
 
   @Override
   public void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
-    LexerMetrics lexerMetrics = LexerMetrics.getLexerMetricsForType(codeTree.getCurrentCodeNode().getNode()
-      .getType());
+    LexerMetrics lexerMetrics = LexerMetrics
+        .getLexerMetricsForType(codeTree.getCurrentCodeNode().getNode()
+            .getType());
     if (lexerMetrics == LexerMetrics.IMPLEMENTATION) {
       results.setActiveClass(null);
       results.setParseVisibility(LexerMetrics.PRIVATE);

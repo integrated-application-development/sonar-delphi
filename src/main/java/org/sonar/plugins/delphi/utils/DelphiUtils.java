@@ -22,6 +22,12 @@
  */
 package org.sonar.plugins.delphi.utils;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
@@ -29,13 +35,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
-
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Some utilities
@@ -49,11 +48,11 @@ public final class DelphiUtils {
    * Logger class, use it for logging/debugging at Sonar window
    */
   public static final Logger LOG = LoggerFactory.getLogger(DelphiPlugin.class
-    .getName());
+      .getName());
 
   /**
    * Normalizes file name, changes all '\' into '/'
-   * 
+   *
    * @param fileName file name to normalize
    * @return normalized file name
    */
@@ -63,7 +62,7 @@ public final class DelphiUtils {
 
   /**
    * Gets the resource from project workspace
-   * 
+   *
    * @param fileName Resource file name
    * @return Resource file
    */
@@ -71,7 +70,7 @@ public final class DelphiUtils {
     URL url = DelphiUtils.class.getResource(fileName);
     if (url == null) {
       throw new IllegalStateException("Resource file not found: "
-        + fileName);
+          + fileName);
     }
     String fName = url.getPath();
     File file = new File(fName);
@@ -102,7 +101,7 @@ public final class DelphiUtils {
 
   /**
    * Gets FileFilter associated with DelphiLanguage source files (*.pas, *.dpr, *.dpk)
-   * 
+   *
    * @return FileFilter
    */
   public static FileFilter getFileFilter() {
@@ -118,7 +117,7 @@ public final class DelphiUtils {
 
   /**
    * Accept file based on file extension.
-   * 
+   *
    * @param fileName The file name
    * @return True if the file has a valid extension
    */
@@ -134,7 +133,7 @@ public final class DelphiUtils {
 
   /**
    * Gets FileFilter associated with directories
-   * 
+   *
    * @return FileFilter
    */
   public static FileFilter getDirectoryFilter() {
@@ -149,7 +148,7 @@ public final class DelphiUtils {
 
   /**
    * Counts the number of substring in a string
-   * 
+   *
    * @param string String in which to look for substrings
    * @param sub Substring to look for in a string
    * @return The count of substrings in a string
@@ -164,9 +163,8 @@ public final class DelphiUtils {
   }
 
   /**
-   * Adds root directory to path if path is relative, or returns path if
-   * absolute
-   * 
+   * Adds root directory to path if path is relative, or returns path if absolute
+   *
    * @param root Root directory
    * @param path Pathname to resolve
    * @return Resolved file
@@ -186,10 +184,9 @@ public final class DelphiUtils {
   }
 
   /**
-   * Resolves ..\ in a path to a file, backtraces the currentDir the number of
-   * '..' in a path. Example: currentDir = 'C:\my\dir' fileName =
-   * '..\file.txt'; return = 'C:/my/file.txt'
-   * 
+   * Resolves ..\ in a path to a file, backtraces the currentDir the number of '..' in a path.
+   * Example: currentDir = 'C:\my\dir' fileName = '..\file.txt'; return = 'C:/my/file.txt'
+   *
    * @param currentDir Current directory of a file
    * @param fileName File name
    * @return Resolved file name
@@ -210,14 +207,14 @@ public final class DelphiUtils {
 
   /**
    * Reads file contents to string, transform it to lowercase
-   * 
+   *
    * @param file File to be read
    * @param encoding File content encoding
    * @return File content read to a string
    * @throws IOException When file not found
    */
   public static String readFileContent(File file, String encoding)
-    throws IOException {
+      throws IOException {
     if (file == null || !file.exists()) {
       throw new IOException();
     }
@@ -242,7 +239,7 @@ public final class DelphiUtils {
   private static boolean containsFile(List<File> dirs, File cursor) {
     for (File dir : dirs) {
       if (FilenameUtils.equalsNormalizedOnSystem(dir.getAbsolutePath(),
-        cursor.getAbsolutePath())) {
+          cursor.getAbsolutePath())) {
         return true;
       }
     }

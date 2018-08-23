@@ -22,8 +22,11 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
 import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
@@ -44,16 +47,11 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiArgument;
 import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-import java.io.File;
-import java.io.IOException;
-
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertEquals;
-
 public class FunctionParametersAnalyzerTest {
 
   private static final Tree EMPTY_NODE = new CommonTree(new CommonToken(0));
-  private static final Tree PARAMETERS_NODE = new CommonTree(new CommonToken(LexerMetrics.FUNCTION_ARGS.toMetrics()));
+  private static final Tree PARAMETERS_NODE = new CommonTree(
+      new CommonToken(LexerMetrics.FUNCTION_ARGS.toMetrics()));
   private static final String TEST_FILE = "/org/sonar/plugins/delphi/syntax/FunctionParametersAnalyzerTest.pas";
   private static final String FILE_NAME_OPERATOR_TEST = "/org/sonar/plugins/delphi/metrics/FunctionOperatorTest.pas";
 
@@ -97,9 +95,10 @@ public class FunctionParametersAnalyzerTest {
 
     analyzer.analyze(code, results);
 
-    ArgumentInterface expectedArgs[] = {new DelphiArgument("x", "real"), new DelphiArgument("y", "integer"),
-      new DelphiArgument("z", "integer"),
-      new DelphiArgument("q", FunctionParametersAnalyzer.UNTYPED_PARAMETER_NAME)};
+    ArgumentInterface expectedArgs[] = {new DelphiArgument("x", "real"),
+        new DelphiArgument("y", "integer"),
+        new DelphiArgument("z", "integer"),
+        new DelphiArgument("q", FunctionParametersAnalyzer.UNTYPED_PARAMETER_NAME)};
 
     FunctionInterface function = results.getActiveFunction();
     ArgumentInterface arguments[] = function.getArguments();

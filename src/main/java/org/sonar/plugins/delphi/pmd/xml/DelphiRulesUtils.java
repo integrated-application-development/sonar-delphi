@@ -24,15 +24,18 @@ package org.sonar.plugins.delphi.pmd.xml;
 
 
 import com.thoughtworks.xstream.XStream;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.rules.*;
-import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
-
 import java.io.InputStream;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.rules.ActiveRule;
+import org.sonar.api.rules.ActiveRuleParam;
+import org.sonar.api.rules.Rule;
+import org.sonar.api.rules.RuleParam;
+import org.sonar.api.rules.RulePriority;
+import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 
 /**
  * Utilities for Delphi xml rules
@@ -95,7 +98,8 @@ public final class DelphiRulesUtils {
       Scanner s = new Scanner(inputStream).useDelimiter("\\A");
       configuration = s.hasNext() ? s.next() : "";
     } catch (Exception e) {
-      throw new IllegalArgumentException("Unable to read configuration file for the profile : " + path, e);
+      throw new IllegalArgumentException(
+          "Unable to read configuration file for the profile : " + path, e);
     }
     return configuration;
 
@@ -120,7 +124,8 @@ public final class DelphiRulesUtils {
    * @return List of rules
    */
   private static List<Rule> parseReferential(String path) {
-    Ruleset ruleset = DelphiRulesUtils.buildRuleSetFromXml(DelphiRulesUtils.getConfigurationFromFile(path));
+    Ruleset ruleset = DelphiRulesUtils
+        .buildRuleSetFromXml(DelphiRulesUtils.getConfigurationFromFile(path));
     List<Rule> rulesRepository = new ArrayList<>();
     for (DelphiRule fRule : ruleset.getRules()) {
       rulesRepository.add(createRepositoryRule(fRule));
@@ -135,8 +140,8 @@ public final class DelphiRulesUtils {
    * @param rulesRepository list os Rules
    * @param profile rules profile
    */
-  public static void importConfiguration(String configuration, List<Rule> rulesRepository, RulesProfile profile)
-  {
+  public static void importConfiguration(String configuration, List<Rule> rulesRepository,
+      RulesProfile profile) {
     Ruleset ruleset = DelphiRulesUtils.buildRuleSetFromXml(configuration);
     for (DelphiRule fRule : ruleset.getRules()) {
       createActiveRule(fRule, rulesRepository, profile);
@@ -145,18 +150,20 @@ public final class DelphiRulesUtils {
 
   /**
    * Exports configuration
+   *
    * @param activeProfile The current active quality profile
    * @return The active rules as XML String
    */
   public static String exportConfiguration(RulesProfile activeProfile) {
     Ruleset tree = buildRulesetFromActiveProfile(activeProfile
-      .getActiveRulesByRepository(DelphiPmdConstants.REPOSITORY_KEY));
+        .getActiveRulesByRepository(DelphiPmdConstants.REPOSITORY_KEY));
     return buildXmlFromRuleset(tree);
   }
 
   private static Rule createRepositoryRule(DelphiRule fRule) {
-    Rule rule = Rule.create(DelphiPmdConstants.REPOSITORY_KEY, fRule.getName(), fRule.getMessage()).setSeverity(
-        severityFromLevel(fRule.getPriority()));
+    Rule rule = Rule.create(DelphiPmdConstants.REPOSITORY_KEY, fRule.getName(), fRule.getMessage())
+        .setSeverity(
+            severityFromLevel(fRule.getPriority()));
 
     rule.setDescription(fRule.getDescription());
     rule.setTags(fRule.getTags());
@@ -165,9 +172,9 @@ public final class DelphiRulesUtils {
     if (fRule.getProperties() != null) {
       for (Property property : fRule.getProperties()) {
         RuleParam param = rule.createParameter()
-          .setKey(property.getName())
-          .setDescription(property.getName())
-          .setType("s");
+            .setKey(property.getName())
+            .setDescription(property.getName())
+            .setType("s");
 
         if (isStringNumeric(property.getValue())) {
           param.setType("i");
@@ -182,7 +189,8 @@ public final class DelphiRulesUtils {
     return rule;
   }
 
-  private static void createActiveRule(DelphiRule fRule, List<Rule> rulesRepository, RulesProfile profile) {
+  private static void createActiveRule(DelphiRule fRule, List<Rule> rulesRepository,
+      RulesProfile profile) {
     String name = fRule.getName();
     RulePriority fRulePriority = severityFromLevel(fRule.getPriority());
 
@@ -195,7 +203,8 @@ public final class DelphiRulesUtils {
     }
   }
 
-  private static void buildActiveRuleParams(DelphiRule delphiRule, Rule repositoryRule, ActiveRule activeRule) {
+  private static void buildActiveRuleParams(DelphiRule delphiRule, Rule repositoryRule,
+      ActiveRule activeRule) {
     if (delphiRule.getProperties() != null) {
       for (Property property : delphiRule.getProperties()) {
         if (repositoryRule.getParams() != null) {
@@ -220,7 +229,8 @@ public final class DelphiRulesUtils {
         DelphiRule delphiRule = new DelphiRule(activeRule.getConfigKey(), priority);
         delphiRule.setName(key);
         for (ActiveRuleParam activeRuleParam : activeRule.getActiveRuleParams()) {
-          properties.add(new Property(activeRuleParam.getRuleParam().getKey(), activeRuleParam.getValue()));
+          properties.add(
+              new Property(activeRuleParam.getRuleParam().getKey(), activeRuleParam.getValue()));
         }
         delphiRule.setProperties(properties);
         delphiRule.setMessage(activeRule.getRule().getName());
@@ -240,25 +250,23 @@ public final class DelphiRulesUtils {
   }
 
   private static String severityToLevel(RulePriority priority) {
-    return ((Integer)(5 - priority.ordinal())).toString();
+    return ((Integer) (5 - priority.ordinal())).toString();
   }
 
-  private static boolean isStringNumeric(String str)
-  {
+  private static boolean isStringNumeric(String str) {
     DecimalFormatSymbols currentLocaleSymbols = DecimalFormatSymbols.getInstance();
     char localeMinusSign = currentLocaleSymbols.getMinusSign();
 
-    if ( !Character.isDigit( str.charAt( 0 ) ) && str.charAt( 0 ) != localeMinusSign ) return false;
+    if (!Character.isDigit(str.charAt(0)) && str.charAt(0) != localeMinusSign) {
+      return false;
+    }
 
     boolean isDecimalSeparatorFound = false;
     char localeDecimalSeparator = currentLocaleSymbols.getDecimalSeparator();
 
-    for ( char c : str.substring( 1 ).toCharArray() )
-    {
-      if ( !Character.isDigit( c ) )
-      {
-        if ( c == localeDecimalSeparator && !isDecimalSeparatorFound )
-        {
+    for (char c : str.substring(1).toCharArray()) {
+      if (!Character.isDigit(c)) {
+        if (c == localeDecimalSeparator && !isDecimalSeparatorFound) {
           isDecimalSeparatorFound = true;
           continue;
         }

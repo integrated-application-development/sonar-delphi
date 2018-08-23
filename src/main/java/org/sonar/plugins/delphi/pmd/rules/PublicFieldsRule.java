@@ -32,41 +32,43 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class PublicFieldsRule extends DelphiRule {
 
-    /**
-     * This rule searches for any fields declared under a 'public' block which are also fields. These should be
-     * avoided, so a violation will be raised if any of these types are declared under a 'public' block.
-     *
-     * @param node the current node
-     * @param ctx  the ruleContext to store the violations
-     */
-    @Override
-    public void visit(DelphiPMDNode node, RuleContext ctx) {
+  /**
+   * This rule searches for any fields declared under a 'public' block which are also fields. These
+   * should be avoided, so a violation will be raised if any of these types are declared under a
+   * 'public' block.
+   *
+   * @param node the current node
+   * @param ctx the ruleContext to store the violations
+   */
+  @Override
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
 
-        if (node.getType() == DelphiLexer.TkClass) { // Wherever there is a class definition
-            Tree classNode = node;
-            boolean inPublic = false;
-            for (int i = 0; i < classNode.getChildCount(); i++) { // visits all its children
-                Tree child = classNode.getChild(i);
-                // Do nothing until the public section.
-                if (inPublic) {
-                    // Check if still in public before continuing
-                    if (child.getType() != DelphiLexer.TkClassField && child.getType() != DelphiLexer.PROPERTY
-                            && child.getType() != DelphiLexer.PROCEDURE && child.getType() != DelphiLexer.CONSTRUCTOR) {
-                        inPublic = false;
-                        break;
+    if (node.getType() == DelphiLexer.TkClass) { // Wherever there is a class definition
+      Tree classNode = node;
+      boolean inPublic = false;
+      for (int i = 0; i < classNode.getChildCount(); i++) { // visits all its children
+        Tree child = classNode.getChild(i);
+        // Do nothing until the public section.
+        if (inPublic) {
+          // Check if still in public before continuing
+          if (child.getType() != DelphiLexer.TkClassField && child.getType() != DelphiLexer.PROPERTY
+              && child.getType() != DelphiLexer.PROCEDURE
+              && child.getType() != DelphiLexer.CONSTRUCTOR) {
+            inPublic = false;
+            break;
 
-                    }
-                    if (child.getType() == DelphiLexer.TkClassField) { // raise violations on any fields
-                        addViolation(ctx, (DelphiPMDNode) child);
-                    }
-                } else {
-                    if (child.getType() == DelphiLexer.PUBLIC) { // Are we there yet?
-                        inPublic = true;
-                    }
-                }
-            }
-
+          }
+          if (child.getType() == DelphiLexer.TkClassField) { // raise violations on any fields
+            addViolation(ctx, (DelphiPMDNode) child);
+          }
+        } else {
+          if (child.getType() == DelphiLexer.PUBLIC) { // Are we there yet?
+            inPublic = true;
+          }
         }
+      }
 
     }
+
+  }
 }

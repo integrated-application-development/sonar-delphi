@@ -31,7 +31,7 @@ public class ReplacementSubRange extends IntegerSubRange {
 
   /**
    * ctor
-   * 
+   *
    * @param rangeStart start index
    * @param rangeEnd end index
    * @param str string, which we will replace with

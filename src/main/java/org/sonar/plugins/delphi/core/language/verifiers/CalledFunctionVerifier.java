@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.delphi.core.language.verifiers;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
@@ -29,9 +31,6 @@ import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Veryfies if we are calling a function, from given as tree node
@@ -44,12 +43,13 @@ public class CalledFunctionVerifier {
 
   /**
    * ctor
-   * 
+   *
    * @param results to hold results of source code parsing
    */
   public CalledFunctionVerifier(CodeAnalysisResults results) {
     if (results == null) {
-      throw new IllegalArgumentException("CalledFunctionVeifyer ctor param 'results' cannot be null.");
+      throw new IllegalArgumentException(
+          "CalledFunctionVeifyer ctor param 'results' cannot be null.");
     }
     this.results = results;
   }
@@ -59,8 +59,9 @@ public class CalledFunctionVerifier {
 
     // if we are on a ident token and it is not last
     if (node.getType() == LexerMetrics.IDENT.toMetrics()
-      && nextNode != null
-      && (nextNode.getType() == LexerMetrics.LPAREN.toMetrics() || nextNode.getType() == LexerMetrics.SEMI.toMetrics())) {
+        && nextNode != null
+        && (nextNode.getType() == LexerMetrics.LPAREN.toMetrics()
+        || nextNode.getType() == LexerMetrics.SEMI.toMetrics())) {
       String functionName = node.getText().toLowerCase();
       List<UnitInterface> unitsToLook = new ArrayList<>();
       // first we look in current unit for function reference

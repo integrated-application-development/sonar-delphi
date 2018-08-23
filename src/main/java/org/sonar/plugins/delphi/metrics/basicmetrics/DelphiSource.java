@@ -38,7 +38,7 @@ public class DelphiSource {
 
   /**
    * Constructor. Does the line processing.
-   * 
+   *
    * @param reader File to read
    */
   public DelphiSource(Reader reader) {
@@ -49,7 +49,7 @@ public class DelphiSource {
 
   /**
    * Gets the source code measure on whole file
-   * 
+   *
    * @param metric Metric to get
    * @return Sum of specified metric on all lines in file
    */
@@ -59,7 +59,7 @@ public class DelphiSource {
 
   /**
    * Gets the source code measure on whole file
-   * 
+   *
    * @param metric Metric to get
    * @param fromLine First line of calculations
    * @param toLine Last line of calculations
@@ -68,7 +68,7 @@ public class DelphiSource {
   public int getMeasure(Metric metric, int fromLine, int toLine) {
     if (toLine > lines.size()) {
       throw new IllegalStateException("There are only " + lines.size()
-        + " lines in the file and you're trying to reach line " + toLine);
+          + " lines in the file and you're trying to reach line " + toLine);
     }
     if (fromLine < 1) {
       throw new IllegalStateException("Line index starts from 1 and not from " + fromLine);
@@ -110,7 +110,8 @@ public class DelphiSource {
   }
 
   private void computeHeaderCommentLine(Line line) {
-    if (line.isThereComment() && !line.isThereBlankComment() && line.isThereLicenseHeaderComment()) {
+    if (line.isThereComment() && !line.isThereBlankComment() && line
+        .isThereLicenseHeaderComment()) {
       line.setMeasure(Metric.HEADER_COMMENT_LINES, 1);
     }
   }

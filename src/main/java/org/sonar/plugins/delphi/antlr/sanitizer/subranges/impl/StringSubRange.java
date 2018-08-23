@@ -35,7 +35,7 @@ public class StringSubRange extends IntegerSubRange implements SubRange {
 
   /**
    * Ctor.
-   * 
+   *
    * @param rangeStart Start of substring
    * @param rangeEnd End of substring
    * @param str The string

@@ -22,10 +22,10 @@
  */
 package org.sonar.plugins.delphi.utils;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl.StringSubRange;
-
-import static org.junit.Assert.assertEquals;
 
 public class StringSubRangeTest {
 

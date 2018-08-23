@@ -22,6 +22,16 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+
+import java.io.IOException;
+import java.util.Collections;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
@@ -29,7 +39,11 @@ import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.DelphiTestUtils;
-import org.sonar.plugins.delphi.antlr.analyzer.*;
+import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
+import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
+import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
+import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
+import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.antlr.analyzer.impl.operations.AdvanceToNodeOperation;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
@@ -39,16 +53,6 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-
 public class FunctionBodyAnalyzerTest extends FileTestsCommon {
 
   private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
@@ -56,7 +60,8 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
   private static final String FILE_NAME_LIST_UTILS = "/org/sonar/plugins/delphi/metrics/ListUtils.pas";
 
   private static final Tree EMPTY_NODE = new CommonTree(new CommonToken(0, "nil"));
-  private static final Tree BEGIN_NODE = new CommonTree(new CommonToken(LexerMetrics.BEGIN.toMetrics(), "begin"));
+  private static final Tree BEGIN_NODE = new CommonTree(
+      new CommonToken(LexerMetrics.BEGIN.toMetrics(), "begin"));
 
   private FunctionBodyAnalyzer analyzer;
   private CodeAnalysisResults results;
@@ -118,23 +123,30 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
 
   private FunctionInterface findFunction(String functionName) {
     DelphiFunction activeFunction = new DelphiFunction(functionName);
-    final AdvanceToNodeOperation advanceToImplementationSection = new AdvanceToNodeOperation(Collections.singletonList(LexerMetrics.IMPLEMENTATION));
-    final AdvanceToNodeOperation advanceToFunctionName = new AdvanceToNodeOperation(Collections.singletonList(LexerMetrics.FUNCTION_NAME));
-    final AdvanceToNodeOperation advanceToFunctionBody = new AdvanceToNodeOperation(Collections.singletonList(LexerMetrics.FUNCTION_BODY));
+    final AdvanceToNodeOperation advanceToImplementationSection = new AdvanceToNodeOperation(
+        Collections.singletonList(LexerMetrics.IMPLEMENTATION));
+    final AdvanceToNodeOperation advanceToFunctionName = new AdvanceToNodeOperation(
+        Collections.singletonList(LexerMetrics.FUNCTION_NAME));
+    final AdvanceToNodeOperation advanceToFunctionBody = new AdvanceToNodeOperation(
+        Collections.singletonList(LexerMetrics.FUNCTION_BODY));
 
     CodeNode<Tree> initialNode = codeTree.getCurrentCodeNode();
     try {
-      codeTree.setCurrentNode(advanceToImplementationSection.execute(codeTree.getCurrentCodeNode().getNode()));
+      codeTree.setCurrentNode(
+          advanceToImplementationSection.execute(codeTree.getCurrentCodeNode().getNode()));
 
       CodeNode<Tree> currentNode = codeTree.getCurrentCodeNode();
       while (currentNode != null) {
         try {
-          CodeNode<Tree> functionNode = advanceToFunctionName.execute(codeTree.getCurrentCodeNode().getNode());
+          CodeNode<Tree> functionNode = advanceToFunctionName
+              .execute(codeTree.getCurrentCodeNode().getNode());
           codeTree.setCurrentNode(functionNode);
-          final String currentFunctionName = functionNode.getNode().getChild(functionNode.getNode().getChildCount() - 1).getText();
+          final String currentFunctionName = functionNode.getNode()
+              .getChild(functionNode.getNode().getChildCount() - 1).getText();
           if (currentFunctionName.equalsIgnoreCase(functionName)) {
             results.setActiveFunction(activeFunction);
-            codeTree.setCurrentNode(advanceToFunctionBody.execute(codeTree.getCurrentCodeNode().getNode()));
+            codeTree.setCurrentNode(
+                advanceToFunctionBody.execute(codeTree.getCurrentCodeNode().getNode()));
             analyzer.analyze(codeTree, results);
             return activeFunction;
           }

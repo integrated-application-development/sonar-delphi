@@ -22,6 +22,14 @@
  */
 package org.sonar.plugins.delphi.surefire;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
+import java.text.ParseException;
+import java.util.Locale;
+import java.util.Map;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,18 +42,13 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.surefire.data.UnitTestClassReport;
 import org.sonar.plugins.surefire.data.UnitTestIndex;
 import org.sonar.plugins.surefire.data.UnitTestResult;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
-import java.text.ParseException;
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * Parses unit test reports from XML file.
@@ -53,7 +56,7 @@ import java.util.Map;
 public class DelphiSureFireParser {
 
   private static final Logger LOGGER = LoggerFactory
-    .getLogger(DelphiSureFireParser.class);
+      .getLogger(DelphiSureFireParser.class);
 
   private static final String FILE_EXT = ".pas";
   private static final String ERROR_MSG = "Unit test file not found: ";
@@ -61,7 +64,7 @@ public class DelphiSureFireParser {
 
   /**
    * ctor
-   * 
+   *
    * @param delphiProjectHelper DelphiProjectHelper
    */
   public DelphiSureFireParser(DelphiProjectHelper delphiProjectHelper) {
@@ -136,7 +139,9 @@ public class DelphiSureFireParser {
     UnitTestResult detail = new UnitTestResult();
     String name = testCase.getNamedItem("name").getTextContent();
     String classname = testCase.getNamedItem("classname").getTextContent();
-    String testCaseName =  StringUtils.contains(classname, "$") ? StringUtils.substringAfter(classname, "$") + "/" + name : name;
+    String testCaseName =
+        StringUtils.contains(classname, "$") ? StringUtils.substringAfter(classname, "$") + "/"
+            + name : name;
     detail.setName(testCaseName);
     String status = "ok";
     String time = testCase.getNamedItem("time").getTextContent();
@@ -155,8 +160,7 @@ public class DelphiSureFireParser {
     return detail;
   }
 
-  void parse(File reportFile, UnitTestIndex index)
-  {
+  void parse(File reportFile, UnitTestIndex index) {
     DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
     try {
       DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
@@ -168,11 +172,10 @@ public class DelphiSureFireParser {
       NodeList testsuites = doc.getElementsByTagName("testsuite");
 
       for (int f = 0; f < testsuites.getLength(); f++) {
-        Element testSuite = (Element)testsuites.item(f);
+        Element testSuite = (Element) testsuites.item(f);
         String testSuiteName = testSuite.getAttributes().getNamedItem("name").getTextContent();
         NodeList testCases = testSuite.getElementsByTagName("testcase");
-        for (int n = 0; n < testCases.getLength(); n++)
-        {
+        for (int n = 0; n < testCases.getLength(); n++) {
           Node testCase = testCases.item(n);
           Node className = testCase.getAttributes().getNamedItem("classname");
           if (className != null) {
@@ -186,17 +189,17 @@ public class DelphiSureFireParser {
       DelphiUtils.LOG.info("SAXParseException");
     } catch (SAXException e) {
       DelphiUtils.LOG.info("SAXException");
-      Exception x = e.getException ();
-      ((x == null) ? e : x).printStackTrace ();
+      Exception x = e.getException();
+      ((x == null) ? e : x).printStackTrace();
     } catch (Throwable t) {
       DelphiUtils.LOG.info("Throwable");
-      t.printStackTrace ();
+      t.printStackTrace();
     }
   }
 
   private void parseFiles(File[] reports, UnitTestIndex index) {
     for (File report : reports) {
-        parse(report, index);
+      parse(report, index);
     }
   }
 
@@ -225,18 +228,24 @@ public class DelphiSureFireParser {
   }
 
   private void save(UnitTestClassReport report, InputFile resource,
-    SensorContext context) {
+      SensorContext context) {
     int testsCount = report.getTests() - report.getSkipped();
-    context.<Integer>newMeasure().forMetric(CoreMetrics.SKIPPED_TESTS).on(resource).withValue(report.getSkipped()).save();
-    context.<Integer>newMeasure().forMetric(CoreMetrics.TESTS).on(resource).withValue(testsCount).save();
-    context.<Integer>newMeasure().forMetric(CoreMetrics.TEST_ERRORS).on(resource).withValue(report.getErrors()).save();
-    context.<Integer>newMeasure().forMetric(CoreMetrics.TEST_FAILURES).on(resource).withValue(report.getFailures()).save();
-    context.<Long>newMeasure().forMetric(CoreMetrics.TEST_EXECUTION_TIME).on(resource).withValue(report.getDurationMilliseconds()).save();
+    context.<Integer>newMeasure().forMetric(CoreMetrics.SKIPPED_TESTS).on(resource)
+        .withValue(report.getSkipped()).save();
+    context.<Integer>newMeasure().forMetric(CoreMetrics.TESTS).on(resource).withValue(testsCount)
+        .save();
+    context.<Integer>newMeasure().forMetric(CoreMetrics.TEST_ERRORS).on(resource)
+        .withValue(report.getErrors()).save();
+    context.<Integer>newMeasure().forMetric(CoreMetrics.TEST_FAILURES).on(resource)
+        .withValue(report.getFailures()).save();
+    context.<Long>newMeasure().forMetric(CoreMetrics.TEST_EXECUTION_TIME).on(resource)
+        .withValue(report.getDurationMilliseconds()).save();
 
     int passedTests = testsCount - report.getErrors() - report.getFailures();
     if (testsCount > 0) {
       double percentage = passedTests * 100d / testsCount;
-      context.<Double>newMeasure().forMetric(CoreMetrics.TEST_SUCCESS_DENSITY).on(resource).withValue(ParsingUtils.scaleValue(percentage)).save();
+      context.<Double>newMeasure().forMetric(CoreMetrics.TEST_SUCCESS_DENSITY).on(resource)
+          .withValue(ParsingUtils.scaleValue(percentage)).save();
     }
   }
 

@@ -28,8 +28,7 @@ import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
- * Rule that is checking how many arguments a function has - if too many, it
- * triggers a violation
+ * Rule that is checking how many arguments a function has - if too many, it triggers a violation
  */
 public class VariableCounter extends DelphiRule {
 
@@ -50,7 +49,7 @@ public class VariableCounter extends DelphiRule {
       Integer limit = getProperty(LIMIT);
       if (count > limit) {
         String msg = "Too many " + getProperty(LOOK_FOR) + ": " + count + " (max "
-          + limit + ")";
+            + limit + ")";
         addViolation(ctx, node, msg);
       }
     }

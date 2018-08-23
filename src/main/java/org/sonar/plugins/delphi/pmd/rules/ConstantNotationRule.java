@@ -7,44 +7,46 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 public class ConstantNotationRule extends DelphiRule {
 
-    /**
-     * This rule will find a 'const' block, and search through it's child nodes for assignments made to constant values.
-     * When one is found, the node before it is considered the name of the declaraed constant. This is then checked for
-     * correct notation and if not beginning with C_, a violation is raised in SonarQube.
-     * @param node the current node
-     * @param ctx the ruleContext to store the violations
-     */
-    @Override
-    public void visit(DelphiPMDNode node, RuleContext ctx){
+  /**
+   * This rule will find a 'const' block, and search through it's child nodes for assignments made
+   * to constant values. When one is found, the node before it is considered the name of the
+   * declaraed constant. This is then checked for correct notation and if not beginning with C_, a
+   * violation is raised in SonarQube.
+   *
+   * @param node the current node
+   * @param ctx the ruleContext to store the violations
+   */
+  @Override
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
 
-        if(node.getType() == DelphiLexer.CONST){
+    if (node.getType() == DelphiLexer.CONST) {
 
-            // For every child in a const block (except the last), check if any are equals nodes (type 50)
-            for(int i = 0; i < node.getChildCount() - 1; i++){
+      // For every child in a const block (except the last), check if any are equals nodes (type 50)
+      for (int i = 0; i < node.getChildCount() - 1; i++) {
 
-                Tree childNode = node.getChild(i);
-                if (childNode != null) {
+        Tree childNode = node.getChild(i);
+        if (childNode != null) {
 
-                    int childType = childNode.getType();
+          int childType = childNode.getType();
 
-                    if(childType == DelphiLexer.EQUAL){
-                        // Get the node before the equals node, as that will be the name used to define it
-                        Tree assignmentNode = node.getChild(i - 1);
+          if (childType == DelphiLexer.EQUAL) {
+            // Get the node before the equals node, as that will be the name used to define it
+            Tree assignmentNode = node.getChild(i - 1);
 
-                        String constName = assignmentNode.getText();
+            String constName = assignmentNode.getText();
 
-                        if (!constName.startsWith("C_")){
+            if (!constName.startsWith("C_")) {
 
-                            addViolation(ctx, (DelphiPMDNode) assignmentNode);
+              addViolation(ctx, (DelphiPMDNode) assignmentNode);
 
-                        }
-                    }
-
-                }
             }
+          }
 
         }
+      }
+
     }
+  }
 
 
 }

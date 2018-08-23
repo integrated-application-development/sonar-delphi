@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalyzer;
@@ -30,9 +32,6 @@ import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.core.language.ArgumentInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiArgument;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Analyzes function parameters (arguments)
@@ -44,7 +43,8 @@ public class FunctionParametersAnalyzer extends CodeAnalyzer {
   @Override
   protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
     if (results.getActiveFunction() == null) {
-      throw new IllegalArgumentException("FunctionParametersAnalyzer activeFunction cannot be null.");
+      throw new IllegalArgumentException(
+          "FunctionParametersAnalyzer activeFunction cannot be null.");
     }
 
     StringBuilder argumentTypes = new StringBuilder("(");
@@ -99,7 +99,8 @@ public class FunctionParametersAnalyzer extends CodeAnalyzer {
 
   @Override
   public boolean canAnalyze(CodeTree codeTree) {
-    return codeTree.getCurrentCodeNode().getNode().getType() == LexerMetrics.FUNCTION_ARGS.toMetrics();
+    return codeTree.getCurrentCodeNode().getNode().getType() == LexerMetrics.FUNCTION_ARGS
+        .toMetrics();
   }
 
 }

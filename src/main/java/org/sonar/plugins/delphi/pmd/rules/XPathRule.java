@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.StringProperty;
 import org.apache.commons.lang.StringUtils;
@@ -36,14 +37,13 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import java.util.List;
-
 /**
  * DelphiLanguage rule for XPath, use it to parse XPath rules
  */
 public class XPathRule extends DelphiRule {
 
-  private static final StringProperty XPATH = new StringProperty("xpath", "The xpath expression", "", 1.0f);
+  private static final StringProperty XPATH = new StringProperty("xpath", "The xpath expression",
+      "", 1.0f);
 
   /**
    * Last cached document.
@@ -54,8 +54,7 @@ public class XPathRule extends DelphiRule {
    */
   private static String cachedFile = "";
 
-  public XPathRule()
-  {
+  public XPathRule() {
     definePropertyDescriptor(XPATH);
   }
 
@@ -77,18 +76,20 @@ public class XPathRule extends DelphiRule {
         String className = resultNode.getAttributes().getNamedItem("class").getTextContent();
         String methodName = resultNode.getAttributes().getNamedItem("method").getTextContent();
         String packageName = resultNode.getAttributes().getNamedItem("package").getTextContent();
-        int line = Integer.parseInt(resultNode.getAttributes().getNamedItem("line").getTextContent());
+        int line = Integer
+            .parseInt(resultNode.getAttributes().getNamedItem("line").getTextContent());
         String codeLine = node.getASTTree().getFileSourceLine(line);
 
         if (codeLine.trim().endsWith("//NOSONAR")) {
           continue;
         }
 
-        int column = Integer.parseInt(resultNode.getAttributes().getNamedItem("column").getTextContent());
+        int column = Integer
+            .parseInt(resultNode.getAttributes().getNamedItem("column").getTextContent());
         String msg = this.getMessage().replaceAll("\\{\\}", resultNode.getTextContent());
         DelphiRuleViolation violation = new DelphiRuleViolation(this, ctx, className,
-          methodName, packageName, line, column,
-          msg);
+            methodName, packageName, line, column,
+            msg);
         addViolation(ctx, violation);
       }
     } catch (Exception e) {
@@ -97,8 +98,7 @@ public class XPathRule extends DelphiRule {
   }
 
   /**
-   * Preform only one visit per file, not per node cause we parse the whole
-   * file nodes at a time
+   * Preform only one visit per file, not per node cause we parse the whole file nodes at a time
    */
 
   @Override
@@ -111,7 +111,7 @@ public class XPathRule extends DelphiRule {
 
   /**
    * Gets the cached AST document, create new if not found in cache
-   * 
+   *
    * @param astTree AST tree
    * @return AST tree document
    */

@@ -22,8 +22,11 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
@@ -37,10 +40,6 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-
-import java.io.IOException;
-
-import static org.junit.Assert.*;
 
 public class UnitAnalyzerTest {
 
@@ -72,13 +71,15 @@ public class UnitAnalyzerTest {
 
   @Test
   public void canAnalyzeTest() {
-    code.setCurrentNode(new CodeNode<Tree>(new CommonTree(new CommonToken(LexerMetrics.UNIT.toMetrics(), "token"))));
+    code.setCurrentNode(new CodeNode<Tree>(
+        new CommonTree(new CommonToken(LexerMetrics.UNIT.toMetrics(), "token"))));
     assertTrue(analyzer.canAnalyze(code));
     code.setCurrentNode(new CodeNode<Tree>(new CommonTree(
-      new CommonToken(LexerMetrics.LIBRARY.toMetrics(), "token"))));
+        new CommonToken(LexerMetrics.LIBRARY.toMetrics(), "token"))));
     assertTrue(analyzer.canAnalyze(code));
-    code.setCurrentNode(new CodeNode<Tree>(new CommonTree(new CommonToken(LexerMetrics.IMPLEMENTATION.toMetrics(),
-      "token"))));
+    code.setCurrentNode(
+        new CodeNode<Tree>(new CommonTree(new CommonToken(LexerMetrics.IMPLEMENTATION.toMetrics(),
+            "token"))));
     assertFalse(analyzer.canAnalyze(code));
   }
 

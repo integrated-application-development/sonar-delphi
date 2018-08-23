@@ -22,17 +22,20 @@
  */
 package org.sonar.plugins.delphi.core.language.impl;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
 
-import java.io.File;
-import java.util.*;
-
 /**
- * Class for unit (usually one delphi source file), containing list of classes
- * and functions in that particular unit.
- * 
+ * Class for unit (usually one delphi source file), containing list of classes and functions in that
+ * particular unit.
+ *
  * @see UnitInterface
  */
 public class DelphiUnit implements UnitInterface {
@@ -53,7 +56,7 @@ public class DelphiUnit implements UnitInterface {
 
   /**
    * Name ctor
-   * 
+   *
    * @param unitName Unit name
    */
   public DelphiUnit(String unitName) {
@@ -79,7 +82,7 @@ public class DelphiUnit implements UnitInterface {
 
   /**
    * sets the real name of a unit
-   * 
+   *
    * @param name real name, not converted to lowercase
    */
   public void setRealName(String name) {

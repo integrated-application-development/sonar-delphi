@@ -46,7 +46,8 @@ public class NoBeginAfterDoRule extends DelphiRule {
 
   protected boolean isWrongNode(Tree node) {
     return node == null
-      || (node.getType() != LexerMetrics.BEGIN.toMetrics() && node.getType() != LexerMetrics.WITH.toMetrics());
+        || (node.getType() != LexerMetrics.BEGIN.toMetrics() && node.getType() != LexerMetrics.WITH
+        .toMetrics());
   }
 
   protected boolean shouldCheck(Tree node) {

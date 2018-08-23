@@ -26,8 +26,8 @@ import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
 
 /**
- * Created by IntelliJ IDEA. User: sg0501095 Date: 11/30/11 Time: 10:31 AM To
- * change this template use File | Settings | File Templates.
+ * Created by IntelliJ IDEA. User: sg0501095 Date: 11/30/11 Time: 10:31 AM To change this template
+ * use File | Settings | File Templates.
  */
 public class TraceBackNodeOperation implements NodeOperation {
 

@@ -25,8 +25,7 @@ package org.sonar.plugins.delphi.metrics.basicmetrics;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Class representing line of code. Holds data required to source code statistic
- * generation.
+ * Class representing line of code. Holds data required to source code statistic generation.
  */
 class Line {
 
@@ -98,7 +97,8 @@ class Line {
       case PUBLIC_DOC_API:
         return documentation;
       default:
-        throw new IllegalStateException("MetricDef " + metric.name() + " is not available on Line object.");
+        throw new IllegalStateException(
+            "MetricDef " + metric.name() + " is not available on Line object.");
     }
   }
 
@@ -127,9 +127,10 @@ class Line {
         break;
       case LINES:
         throw new IllegalStateException(
-          "MetricDef LINES always equals 1 on a Line and you are not permitted to change this value.");
+            "MetricDef LINES always equals 1 on a Line and you are not permitted to change this value.");
       default:
-        throw new IllegalStateException("MetricDef " + metric.name() + " is not suitable for Line object.");
+        throw new IllegalStateException(
+            "MetricDef " + metric.name() + " is not suitable for Line object.");
     }
   }
 
@@ -163,7 +164,7 @@ class Line {
     if (!isBlank() && !isThereComment()) {
       return true;
     }
-      return isThereComment() && isThereCodeBeforeOrAfterComment();
+    return isThereComment() && isThereCodeBeforeOrAfterComment();
   }
 
   private boolean isThereCodeBeforeOrAfterComment() {
@@ -181,7 +182,8 @@ class Line {
     int commentStartIndex = stringLine.indexOf(comment);
     int commentEndIndex = commentStartIndex + comment.length() - 1;
     if (commentStartIndex > 0) {
-      isThereCodeBeforeComment = !StringUtils.isBlank(stringLine.substring(0, commentStartIndex - 1));
+      isThereCodeBeforeComment = !StringUtils
+          .isBlank(stringLine.substring(0, commentStartIndex - 1));
     }
     if (commentEndIndex > 0 && commentEndIndex != stringLine.length() - 1) {
       isThereCodeAfterComment = !StringUtils.isBlank(stringLine.substring(commentEndIndex + 1));

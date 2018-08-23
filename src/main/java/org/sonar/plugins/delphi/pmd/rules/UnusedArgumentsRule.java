@@ -22,13 +22,16 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.StringMultiProperty;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
-
-import java.util.*;
 
 /**
  * Rule violation for unused function/procedure/method arguments
@@ -38,14 +41,14 @@ public class UnusedArgumentsRule extends DelphiRule {
   private static final int MAX_LOOK_AHEAD = 3;
 
   private static final StringMultiProperty EXCLUDED_ARGS = new StringMultiProperty("excluded_args",
-    "The argument names to ignore", new String[] {}, 1.0f, ',');
+      "The argument names to ignore", new String[]{}, 1.0f, ',');
 
   private final List<String> excludedArgs = new ArrayList<>();
 
-  public UnusedArgumentsRule()
-  {
+  public UnusedArgumentsRule() {
     definePropertyDescriptor(EXCLUDED_ARGS);
   }
+
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
     if (isMethodNode(node)) {
@@ -100,7 +103,8 @@ public class UnusedArgumentsRule extends DelphiRule {
   }
 
   public boolean isMethodNode(Tree candidateNode) {
-    return candidateNode.getType() == DelphiLexer.PROCEDURE || candidateNode.getType() == DelphiLexer.FUNCTION;
+    return candidateNode.getType() == DelphiLexer.PROCEDURE
+        || candidateNode.getType() == DelphiLexer.FUNCTION;
   }
 
   public Tree findBeginNode(DelphiPMDNode node) {
@@ -120,12 +124,13 @@ public class UnusedArgumentsRule extends DelphiRule {
 
   /**
    * Checks if some argument is unused, if so makes a violation
-   * 
+   *
    * @param args Argument map
    * @param node PMDNode
    * @param methodName Method name
    */
-  private void checkForUnusedArguments(Map<String, Integer> args, RuleContext ctx, DelphiPMDNode node, String methodName) {
+  private void checkForUnusedArguments(Map<String, Integer> args, RuleContext ctx,
+      DelphiPMDNode node, String methodName) {
     for (Map.Entry<String, Integer> entry : args.entrySet()) {
       if (entry.getValue() == 0 && !ignoredArg(entry.getKey())) {
         addViolation(ctx, node, "Unused argument: '" + entry.getKey() + "' at " + methodName);
@@ -139,7 +144,7 @@ public class UnusedArgumentsRule extends DelphiRule {
 
   /**
    * Process begin node, to look for used arguments
-   * 
+   *
    * @param beginNode Begin node
    * @param args Argument map
    */
@@ -161,7 +166,7 @@ public class UnusedArgumentsRule extends DelphiRule {
 
   /**
    * Create argument map, and set their used count to 0
-   * 
+   *
    * @param argsNode Function argument node
    * @return Argument map
    */

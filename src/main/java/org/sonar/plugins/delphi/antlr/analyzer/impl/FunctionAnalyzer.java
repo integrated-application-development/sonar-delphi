@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.apache.commons.lang.StringUtils;
@@ -36,9 +38,6 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.core.language.impl.UnresolvedFunctionCall;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Class used for function analysis
  */
@@ -48,10 +47,10 @@ public class FunctionAnalyzer extends CodeAnalyzer {
   private static final String PROP_VIRTUAL = "virtual";
 
   private static final LexerMetrics FUNCTION_NODE_TYPE[] = {LexerMetrics.FUNCTION,
-    LexerMetrics.PROCEDURE,
-    LexerMetrics.DESTRUCTOR,
-    LexerMetrics.CONSTRUCTOR,
-    LexerMetrics.OPERATOR};
+      LexerMetrics.PROCEDURE,
+      LexerMetrics.DESTRUCTOR,
+      LexerMetrics.CONSTRUCTOR,
+      LexerMetrics.OPERATOR};
 
   private String functionName;
   private String functionRealName;
@@ -87,7 +86,8 @@ public class FunctionAnalyzer extends CodeAnalyzer {
       return;
     }
 
-    functionName = checkFunctionName(functionRealName.toLowerCase(), currentClass, results).toLowerCase();
+    functionName = checkFunctionName(functionRealName.toLowerCase(), currentClass, results)
+        .toLowerCase();
 
     functionProperties = getFunctionProperties(codeTree.getCurrentCodeNode().getNode());
     FunctionInterface activeFunction = createFunction(results, currentClass);
@@ -110,7 +110,8 @@ public class FunctionAnalyzer extends CodeAnalyzer {
     return props;
   }
 
-  private String checkFunctionName(String functionName, ClassInterface currentClass, CodeAnalysisResults results) {
+  private String checkFunctionName(String functionName, ClassInterface currentClass,
+      CodeAnalysisResults results) {
     if (currentClass != null) {
       if (functionName.startsWith(currentClass.getName().toLowerCase())) {
         return functionName;
@@ -123,8 +124,7 @@ public class FunctionAnalyzer extends CodeAnalyzer {
       }
 
       // check all classes
-      for (ClassInterface c : results.getClasses())
-      {
+      for (ClassInterface c : results.getClasses()) {
         if (functionName.startsWith(c.getName() + ".")) {
           // new name with class prefix
           return c.getName() + '.' + functionName;
@@ -152,10 +152,10 @@ public class FunctionAnalyzer extends CodeAnalyzer {
     return str.toString();
   }
 
-  private FunctionInterface createFunction(CodeAnalysisResults results, ClassInterface currentClass) {
+  private FunctionInterface createFunction(CodeAnalysisResults results,
+      ClassInterface currentClass) {
     FunctionInterface activeFunction = results.getCachedFunction(functionName);
-    if (activeFunction == null)
-    {
+    if (activeFunction == null) {
       activeFunction = new DelphiFunction();
       activeFunction.setName(functionName.toLowerCase());
       activeFunction.setRealName(functionRealName);
@@ -178,7 +178,8 @@ public class FunctionAnalyzer extends CodeAnalyzer {
       results.cacheFunction(functionName, activeFunction);
 
       // check for unresolved function calls
-      UnresolvedFunctionCall unresolved = results.getUnresolvedCalls().get(activeFunction.getShortName());
+      UnresolvedFunctionCall unresolved = results.getUnresolvedCalls()
+          .get(activeFunction.getShortName());
       if (unresolved != null && unresolved.resolve(activeFunction, results.getCachedUnits())) {
         results.getUnresolvedCalls().remove(activeFunction.getShortName());
       }
@@ -187,7 +188,7 @@ public class FunctionAnalyzer extends CodeAnalyzer {
   }
 
   private void processFunction(FunctionInterface activeFunction, CodeAnalysisResults results,
-    ClassInterface currentClass) {
+      ClassInterface currentClass) {
     // if we found a global function before, add it to this file
     if (activeFunction.isGlobal() && !results.hasFunction(activeFunction)) {
       results.addFunction(activeFunction);

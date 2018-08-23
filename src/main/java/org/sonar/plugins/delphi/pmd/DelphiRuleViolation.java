@@ -55,7 +55,7 @@ public class DelphiRuleViolation implements RuleViolation {
 
   /**
    * C-tor used in XPathRule, bacause we don't have node information
-   * 
+   *
    * @param delphiRule DelphiLanguage rule
    * @param ctx Rule context
    * @param delphiClassName Class name
@@ -65,8 +65,9 @@ public class DelphiRuleViolation implements RuleViolation {
    * @param column Violation column number
    * @param msg Violation message
    */
-  public DelphiRuleViolation(DelphiRule delphiRule, RuleContext ctx, String delphiClassName, String delphiMethodName,
-    String delphiPackageName, int line, int column, String msg) {
+  public DelphiRuleViolation(DelphiRule delphiRule, RuleContext ctx, String delphiClassName,
+      String delphiMethodName,
+      String delphiPackageName, int line, int column, String msg) {
     rule = delphiRule;
     filename = ctx.getSourceCodeFile().getAbsolutePath();
     description = rule.getMessage();
@@ -82,7 +83,7 @@ public class DelphiRuleViolation implements RuleViolation {
 
   /**
    * C-tor used as in PMD library
-   * 
+   *
    * @param rule DelphiLanguage rule
    * @param ctx Rule context
    * @param node Violation node
@@ -93,7 +94,7 @@ public class DelphiRuleViolation implements RuleViolation {
 
   /**
    * C-tor used as in PMD library
-   * 
+   *
    * @param rule DelphiLanguage rule
    * @param ctx Rule context
    * @param node Violation node
@@ -127,7 +128,8 @@ public class DelphiRuleViolation implements RuleViolation {
           currentNode = parent;
           int index = beginNode.getChildIndex();
           for (int lookBack = 1; lookBack <= 2; ++lookBack) {
-            if (index - lookBack > -1 && isProcedureOrFunction(parent.getChild(index - lookBack).getType())) {
+            if (index - lookBack > -1 && isProcedureOrFunction(
+                parent.getChild(index - lookBack).getType())) {
               methodNode = parent.getChild(index - lookBack);
               break;
             }

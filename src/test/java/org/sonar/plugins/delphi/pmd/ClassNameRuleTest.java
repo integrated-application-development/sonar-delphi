@@ -18,12 +18,12 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
+
 import org.junit.Ignore;
 import org.junit.Test;
-import org.sonar.api.issue.Issue;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 
 public class ClassNameRuleTest extends BasePmdRuleTest {
 

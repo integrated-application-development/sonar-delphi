@@ -22,12 +22,11 @@
  */
 package org.sonar.plugins.delphi.metrics.basicmetrics;
 
-import org.junit.Before;
-import org.junit.Test;
-
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+
+import org.junit.Before;
+import org.junit.Test;
 
 public class LineTest {
 
@@ -101,7 +100,6 @@ public class LineTest {
     assertThat(line8.isThereComment(), is(true));
     assertThat(line8.getInt(Metric.PUBLIC_DOC_API), is(1));
   }
-
 
 
   @Test

@@ -8,13 +8,15 @@ type
   TDummyRec = record
     FData : Integer;
     constructor Create(aData : Integer);
+
   end;
-  
+
   TDummyClass = class
     FData : Integer;
     constructor Create(aData : Integer);
-  end;  
-  
+
+  end;
+
   TEmptyRec = record
   end;
 

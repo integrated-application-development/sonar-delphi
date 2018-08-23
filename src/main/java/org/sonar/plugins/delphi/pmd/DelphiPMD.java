@@ -22,6 +22,9 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import net.sourceforge.pmd.Report;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.RuleSets;
@@ -34,10 +37,6 @@ import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Preforms PMD check for Delphi source files
  */
@@ -47,7 +46,7 @@ public class DelphiPMD {
 
   /**
    * Processes the file read by the reader against the rule set.
-   * 
+   *
    * @param pmdFile input source file
    * @param ruleSets set of rules to process against the file
    * @param ctx context in which PMD is operating. This contains the Renderer and whatnot
@@ -89,7 +88,7 @@ public class DelphiPMD {
 
   /**
    * Adds children nodes to list
-   * 
+   *
    * @param node Parent node
    * @param list List
    */
@@ -111,7 +110,7 @@ public class DelphiPMD {
 
   /**
    * Gets generated report
-   * 
+   *
    * @return Report
    */
   public Report getReport() {

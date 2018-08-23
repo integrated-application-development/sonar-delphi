@@ -8,53 +8,57 @@ uses
 type
   TFunctionTest = class(TStatementTest, TForm)
   public
-	function getField: integer;
-	procedure setField(x: integer);
-	procedure foo;
+    function getField : integer;
+
+    procedure setField(x : integer);
+
+    procedure foo;
+
   private
- 	procedure bar;
- 	classField: integer;
+    procedure bar;
+
+    classField : integer;
   end;
 
 var
-  window: TFunctionTest;
+  window : TFunctionTest;
 
 implementation
 
-procedure TFunctionTest.setField(x: integer);
+procedure TFunctionTest.setField(x : integer);
 var
-placeHolder, z: real;
+  placeHolder, z : real;
 begin
-	classField := placeHolder + z + x;
-	if(x < 5) then x := 5;
-	if(x > 5) then z := 0.0;
+  classField := placeHolder + z + x;
+  if(x < 5) then x := 5;
+  if(x > 5) then z := 0.0;
 end;
 
-function TFunctionTest.getField: integer;
+function TFunctionTest.getField : integer;
 var
-placeHolder: real;
-y: integer;
+  placeHolder : real;
+  y : integer;
 begin
-	result := placeHolder + y;
-	y := 0;
-	while(true) do
-	begin
-		break;
-	end;
+  result := placeHolder + y;
+  y := 0;
+  while(true) do
+  begin
+    break;
+  end;
 end;
 
 procedure TFunctionTest.foo;
 var
-placeHolder, y: real;
+  placeHolder, y : real;
 begin
-	setField(0);
+  setField(0);
 end;
 
 procedure TFunctionTest.bar;
 var
-placeHolder, x: real;
+  placeHolder, x : real;
 begin
-	classField := 0;
+  classField := 0;
 end;
 
 end.

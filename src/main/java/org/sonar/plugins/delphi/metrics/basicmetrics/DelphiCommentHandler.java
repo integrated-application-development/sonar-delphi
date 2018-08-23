@@ -23,9 +23,7 @@
 package org.sonar.plugins.delphi.metrics.basicmetrics;
 
 /**
- * Class for handling custom block comments. Can also count documentation
- * comments.
- * 
+ * Class for handling custom block comments. Can also count documentation comments.
  */
 public class DelphiCommentHandler extends LineContextHandler {
 
@@ -42,11 +40,11 @@ public class DelphiCommentHandler extends LineContextHandler {
 
   /**
    * Constructor.
-   * 
+   *
    * @param start The start tag, like "{", "(*" etc
    * @param end The end tag, like "}", *)" etc
-   * @param isDocumentation If this param is set, the class will look for
-   *            additional start tag "**" and count comment as documentation
+   * @param isDocumentation If this param is set, the class will look for additional start tag "**"
+   * and count comment as documentation
    */
   public DelphiCommentHandler(String start, String end, boolean isDocumentation) {
     if (start == null || end == null) {
@@ -61,15 +59,15 @@ public class DelphiCommentHandler extends LineContextHandler {
   boolean matchToEnd(Line line, StringBuilder pendingLine) {
     if (!commentStarted) {
       throw new IllegalStateException(
-        "Method doContextBegin(StringBuilder pendingLine) has not been called first (line = '"
-          + pendingLine
-          + "').");
+          "Method doContextBegin(StringBuilder pendingLine) has not been called first (line = '"
+              + pendingLine
+              + "').");
     }
 
     currentLineComment.append(getLastCharacter(pendingLine));
     boolean match = matchEndOfString(pendingLine, endCommentTag);
     if (match
-      && !(isFirstLineOfComment && pendingLine.indexOf(startCommentTag) + 1 == pendingLine
+        && !(isFirstLineOfComment && pendingLine.indexOf(startCommentTag) + 1 == pendingLine
         .indexOf(endCommentTag))) {
       endOfCommentLine(line, pendingLine);
       initProperties();
@@ -80,9 +78,9 @@ public class DelphiCommentHandler extends LineContextHandler {
   }
 
   private boolean isDocumentation(StringBuilder pendingLine) {
-      return isDoc && start != -1 && pendingLine.length() >= start + MIN_CHARS_LEFT
-              && pendingLine.charAt(start + 1) == '*'
-              && pendingLine.charAt(start + 2) == '*';
+    return isDoc && start != -1 && pendingLine.length() >= start + MIN_CHARS_LEFT
+        && pendingLine.charAt(start + 1) == '*'
+        && pendingLine.charAt(start + 2) == '*';
   }
 
   @Override

@@ -33,7 +33,7 @@ public abstract class SourceResolver {
 
   /**
    * chain next resolver
-   * 
+   *
    * @param successor resolver to chain
    * @return chained resolver
    */
@@ -44,7 +44,7 @@ public abstract class SourceResolver {
 
   /**
    * resolves
-   * 
+   *
    * @param results Class to holding results for resolvers
    */
   public void resolve(SourceResolverResults results) {

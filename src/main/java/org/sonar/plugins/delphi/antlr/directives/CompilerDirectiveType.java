@@ -26,8 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Enum type for compiler directive Put every directive you don't use into
- * UNUSED name string - it will automaticaly supress warnings
+ * Enum type for compiler directive Put every directive you don't use into UNUSED name string - it
+ * will automaticaly supress warnings
  */
 public enum CompilerDirectiveType {
   UNKNOWN(0, "unknown_directive"),

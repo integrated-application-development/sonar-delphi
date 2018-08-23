@@ -32,7 +32,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 public class DprFunctionRule extends DelphiRule {
 
   /**
-   *  Check for *.dpr.
+   * Check for *.dpr.
    */
   private int check;
 
@@ -46,7 +46,8 @@ public class DprFunctionRule extends DelphiRule {
   public void visit(DelphiPMDNode node, RuleContext ctx) {
     // checking if we are on .dpr/.dpk
     if (check == -1) {
-      if (node.getASTTree().getFileName().endsWith(".dpr") || node.getASTTree().getFileName().endsWith(".dpk")) {
+      if (node.getASTTree().getFileName().endsWith(".dpr") || node.getASTTree().getFileName()
+          .endsWith(".dpk")) {
         check = 1;
       } else {
         check = 0;
@@ -64,7 +65,7 @@ public class DprFunctionRule extends DelphiRule {
 
   /**
    * Check if node is a procedure/function node, or a variable node
-   * 
+   *
    * @param node Node to check
    * @return True if so, false otherwise
    */

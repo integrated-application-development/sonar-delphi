@@ -31,7 +31,7 @@ public class CodeNode<T> {
 
   /**
    * ctor
-   * 
+   *
    * @param n node to hold
    */
   public CodeNode(T n) {
@@ -47,7 +47,7 @@ public class CodeNode<T> {
 
   /**
    * is node valid
-   * 
+   *
    * @return Returns true if the CodeNode has a node.
    */
   public boolean isValid() {

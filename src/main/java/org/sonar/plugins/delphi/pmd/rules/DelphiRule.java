@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.LanguageRegistry;
 import net.sourceforge.pmd.lang.ast.Node;
@@ -36,11 +37,8 @@ import org.sonar.plugins.delphi.pmd.DelphiLanguageModule;
 import org.sonar.plugins.delphi.pmd.DelphiParserVisitor;
 import org.sonar.plugins.delphi.pmd.DelphiRuleViolation;
 
-import java.util.List;
-
 /**
- * Basic rule class, extend this class to make your own rules. Do NOT extend
- * from AbstractRule.
+ * Basic rule class, extend this class to make your own rules. Do NOT extend from AbstractRule.
  */
 public class DelphiRule extends AbstractRule implements DelphiParserVisitor, ImmutableLanguage {
 
@@ -50,12 +48,18 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
 
   private boolean inImplementationSection = false;
 
-  public static final IntegerProperty LIMIT = new IntegerProperty("limit", "The max limit.", 1, 150, 1, 1.0f);
-  public static final IntegerProperty THRESHOLD = new IntegerProperty("Threshold", "Threshold", 1, 100, 10, 1.0f);
-  public static final StringProperty START = new StringProperty("start", "The AST node to start from", "", 1.0f);
-  public static final StringProperty END = new StringProperty("end", "The AST node to stop the search", "", 1.0f);
-  public static final StringProperty LOOK_FOR = new StringProperty("lookFor", "What nodes look for", "", 1.0f);
-  public static final StringProperty BASEEFFORT = new StringProperty("baseEffort", "The base effort to correct", "", 1.0f);
+  public static final IntegerProperty LIMIT = new IntegerProperty("limit", "The max limit.", 1, 150,
+      1, 1.0f);
+  public static final IntegerProperty THRESHOLD = new IntegerProperty("Threshold", "Threshold", 1,
+      100, 10, 1.0f);
+  public static final StringProperty START = new StringProperty("start",
+      "The AST node to start from", "", 1.0f);
+  public static final StringProperty END = new StringProperty("end",
+      "The AST node to stop the search", "", 1.0f);
+  public static final StringProperty LOOK_FOR = new StringProperty("lookFor", "What nodes look for",
+      "", 1.0f);
+  public static final StringProperty BASEEFFORT = new StringProperty("baseEffort",
+      "The base effort to correct", "", 1.0f);
 
   public DelphiRule() {
     super.setLanguage(LanguageRegistry.getLanguage(DelphiLanguageModule.NAME));
@@ -69,9 +73,9 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
 
   /**
    * overload this method in derived class
+   *
    * @param node the current node
    * @param ctx the ruleContext to store the violations
-   * 
    */
   public void visit(DelphiPMDNode node, RuleContext ctx) {
     // do nothing
@@ -80,7 +84,9 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
   @Override
   public Object visit(DelphiPMDNode node, Object data) {
     return null;
-  };
+  }
+
+  ;
 
   /**
    * Visits all nodes in a file
@@ -90,10 +96,11 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
    * {@inheritDoc}
    */
   @Override
-  public void apply(List<? extends Node> nodes, RuleContext ctx)
-  {
-      visitAll(nodes, ctx);
-  };
+  public void apply(List<? extends Node> nodes, RuleContext ctx) {
+    visitAll(nodes, ctx);
+  }
+
+  ;
 
   protected void visitAll(List<? extends Node> acus, RuleContext ctx) {
     lastLineParsed = -1;
@@ -124,15 +131,14 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
   }
 
   /**
-   * Overload this method in derived class to initialize your rule instance
-   * with default values
+   * Overload this method in derived class to initialize your rule instance with default values
    */
   protected void init() {
   }
 
   /**
    * Adds violation, get violation data from node
-   * 
+   *
    * @param ctx RuleContext
    * @param node Node
    */
@@ -142,7 +148,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
 
   /**
    * Adds violation, get violation data from node
-   * 
+   *
    * @param ctx RuleContext
    * @param node Node
    * @param msg Violation message
@@ -153,7 +159,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
 
   /**
    * Adds violation, used in XPathRule
-   * 
+   *
    * @param ctx RuleContext
    * @param violation Violation
    */

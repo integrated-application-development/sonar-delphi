@@ -36,16 +36,20 @@ public class UppercaseReservedWordsRule extends DelphiRule {
   private static final String[] KEYWORDS_C = {"CASE", "CLASS", "CONST", "CONSTRUCTOR"};
   private static final String[] KEYWORDS_D = {"DESTRUCTOR", "DISPINTERFACE", "DIV", "DO", "DOWNTO"};
   private static final String[] KEYWORDS_E = {"ELSE", "END", "EXCEPT", "EXPORTS"};
-  private static final String[] KEYWORDS_F = {"FILE", "FINAL", "FINALIZATION", "FINALLY", "FOR", "FUNCTION"};
+  private static final String[] KEYWORDS_F = {"FILE", "FINAL", "FINALIZATION", "FINALLY", "FOR",
+      "FUNCTION"};
   private static final String[] KEYWORDS_G = {"GOTO"};
-  private static final String[] KEYWORDS_I = {"IF", "IMPLEMENTATION", "IN", "INHERITED", "INITIALIZATION", "INLINE",
-    "INTERFACE", "IS"};
+  private static final String[] KEYWORDS_I = {"IF", "IMPLEMENTATION", "IN", "INHERITED",
+      "INITIALIZATION", "INLINE",
+      "INTERFACE", "IS"};
   private static final String[] KEYWORDS_L = {"LABEL", "LIBRARY"};
   private static final String[] KEYWORDS_N = {"NIL", "NOT"};
   private static final String[] KEYWORDS_O = {"OF", "OR", "OUT"};
   private static final String[] KEYWORDS_P = {"PACKED", "PROCEDURE", "PROGRAM", "PROPERTY"};
-  private static final String[] KEYWORDS_R = {"RAISE", "RECORD", "REMOVE", "REPEAT", "RESOURCESTRING"};
-  private static final String[] KEYWORDS_S = {"SEALED", "SET", "SHL", "SHR", "STATIC", "STRICT", "STRING"};
+  private static final String[] KEYWORDS_R = {"RAISE", "RECORD", "REMOVE", "REPEAT",
+      "RESOURCESTRING"};
+  private static final String[] KEYWORDS_S = {"SEALED", "SET", "SHL", "SHR", "STATIC", "STRICT",
+      "STRING"};
   private static final String[] KEYWORDS_T = {"THEN", "THREADVAR", "TO", "TRY", "TYPE"};
   private static final String[] KEYWORDS_U = {"UNIT", "UNSAFE", "UNTIL", "USES"};
   private static final String[] KEYWORDS_W = {"WHILE", "WITH"};
@@ -115,7 +119,8 @@ public class UppercaseReservedWordsRule extends DelphiRule {
     }
   }
 
-  private void checkKeyword(String keyword, String[] keywords, DelphiPMDNode node, RuleContext ctx) {
+  private void checkKeyword(String keyword, String[] keywords, DelphiPMDNode node,
+      RuleContext ctx) {
     for (String key : keywords) {
       if (keyword.equals(key)) {
         String msg = "Avoid using uppercase keywords: " + keyword;

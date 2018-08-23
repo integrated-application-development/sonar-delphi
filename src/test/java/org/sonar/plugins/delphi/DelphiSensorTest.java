@@ -22,6 +22,16 @@
  */
 package org.sonar.plugins.delphi;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
@@ -29,23 +39,18 @@ import org.sonar.api.batch.fs.internal.DefaultInputDir;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.ActiveRules;
+import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.rule.internal.NewActiveRule;
+import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.measure.Measure;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
-import org.sonar.plugins.delphi.metrics.DeadCodeMetrics;
 import org.sonar.plugins.delphi.debug.ProjectMetricsXMLParser;
 import org.sonar.plugins.delphi.metrics.ComplexityMetrics;
+import org.sonar.plugins.delphi.metrics.DeadCodeMetrics;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
-import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
-
-import java.io.*;
-import java.util.*;
-
-import static org.junit.Assert.*;
 
 public class DelphiSensorTest {
 
@@ -59,8 +64,7 @@ public class DelphiSensorTest {
   private static final String ROOT_NAME = "/org/sonar/plugins/delphi/SimpleDelphiProject";
   private final DelphiProject delphiProject = new DelphiProject("Default Project");
 
-  private String getRelativePath(File prefix, String fullPath)
-  {
+  private String getRelativePath(File prefix, String fullPath) {
     String result = fullPath.substring(prefix.getAbsolutePath().length() + 1);
     return result;
   }
@@ -110,7 +114,8 @@ public class DelphiSensorTest {
         context.fileSystem().add(inputFile);
         sourceFiles.add(sourceFile);
       }
-      DefaultInputDir inputDir = new DefaultInputDir(moduleKey, getRelativePath(baseDir,directory.getPath()));
+      DefaultInputDir inputDir = new DefaultInputDir(moduleKey,
+          getRelativePath(baseDir, directory.getPath()));
       inputDir.setModuleBaseDir(baseDir.toPath());
       context.fileSystem().add(inputDir);
       // put all directories to list
@@ -120,9 +125,11 @@ public class DelphiSensorTest {
     delphiProject.setSourceFiles(sourceFiles);
 
     ActiveRulesBuilder rulesBuilder = new ActiveRulesBuilder();
-    NewActiveRule rule = rulesBuilder.create(ComplexityMetrics.RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY);
+    NewActiveRule rule = rulesBuilder
+        .create(ComplexityMetrics.RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY);
     rule.setParam("Threshold", "3").setLanguage(DelphiLanguage.KEY).activate();
-    rulesBuilder.create(DeadCodeMetrics.RULE_KEY_UNUSED_FUNCTION).setLanguage(DelphiLanguage.KEY).activate();
+    rulesBuilder.create(DeadCodeMetrics.RULE_KEY_UNUSED_FUNCTION).setLanguage(DelphiLanguage.KEY)
+        .activate();
     activeRules = rulesBuilder.build();
 
     sensor = new DelphiSensor(delphiProjectHelper, activeRules, context);
@@ -133,7 +140,7 @@ public class DelphiSensorTest {
     DefaultSensorDescriptor sensorDescriptor = new DefaultSensorDescriptor();
     sensor.describe(sensorDescriptor);
     assertEquals("Combined LCOV and LOC sensor", sensorDescriptor.name());
-    String [] expected = {"delph"};
+    String[] expected = {"delph"};
     assertArrayEquals(expected, sensorDescriptor.languages().toArray());
   }
 
@@ -144,7 +151,7 @@ public class DelphiSensorTest {
     assertEquals(12, context.allIssues().size());
 
     // create a map of expected values for each file
-    Map<String, Map<String,String>> expectedValues = new HashMap<>();
+    Map<String, Map<String, String>> expectedValues = new HashMap<>();
 
     // xml file for expected metrics for files
     ProjectMetricsXMLParser xmlParser = new ProjectMetricsXMLParser(

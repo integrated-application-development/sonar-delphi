@@ -22,13 +22,12 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.subranges;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl.IntegerSubRange;
-
-import java.util.Arrays;
-
-import static org.junit.Assert.assertEquals;
 
 public class SubRangeAggregatorTest {
 
@@ -41,9 +40,10 @@ public class SubRangeAggregatorTest {
 
   @Test
   public void sortTest() {
-    SubRange data[] = {new IntegerSubRange(0, 10), new IntegerSubRange(-5, -1), new IntegerSubRange(12, 12),
-      new IntegerSubRange(15, 19),
-      new IntegerSubRange(-10, -6)};
+    SubRange data[] = {new IntegerSubRange(0, 10), new IntegerSubRange(-5, -1),
+        new IntegerSubRange(12, 12),
+        new IntegerSubRange(15, 19),
+        new IntegerSubRange(-10, -6)};
 
     for (SubRange range : data) {
       aggregator.add(range);

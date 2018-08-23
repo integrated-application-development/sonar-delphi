@@ -22,16 +22,15 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl.operations;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.Arrays;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
-
-import java.util.Arrays;
-
-import static org.junit.Assert.assertEquals;
 
 public class AdvanceToNodeOperationTest {
 
@@ -60,7 +59,7 @@ public class AdvanceToNodeOperationTest {
 
     int index = 0;
     int expected[] = {LexerMetrics.UNIT.toMetrics(), LexerMetrics.FUNCTION.toMetrics(),
-      LexerMetrics.FUNCTION.toMetrics()};
+        LexerMetrics.FUNCTION.toMetrics()};
 
     int executionsCount = 0;
 

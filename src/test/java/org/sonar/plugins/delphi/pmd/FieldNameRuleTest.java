@@ -18,10 +18,11 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import org.junit.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
+
+import org.junit.Test;
 
 public class FieldNameRuleTest extends BasePmdRuleTest {
 
@@ -129,5 +130,5 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     assertThat(issues, hasSize(1));
     assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4)));
   }*/
-  
+
 }

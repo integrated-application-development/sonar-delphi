@@ -22,21 +22,20 @@
  */
 package org.sonar.plugins.delphi.surefire;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.FilenameFilter;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.api.config.internal.MapSettings;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.surefire.api.SurefireUtils;
-import org.sonar.api.config.internal.MapSettings;
-
-import java.io.File;
-import java.io.FilenameFilter;
-
-import static org.junit.Assert.assertEquals;
 
 public class SurefireSensorTest {
 
@@ -49,19 +48,19 @@ public class SurefireSensorTest {
   private SensorContextTester sensorContext;
 
   @Before
-  public void setup()
-  {
+  public void setup() {
     File baseDir = DelphiUtils.getResource(PROJECT_TEST_DIR);
 
     sensorContext = SensorContextTester.create(DelphiUtils.getResource(PROJECT_DIR));
 
-    delphiProjectHelper = new DelphiProjectHelper(sensorContext.config(), sensorContext.fileSystem());
+    delphiProjectHelper = new DelphiProjectHelper(sensorContext.config(),
+        sensorContext.fileSystem());
 
-    File[] unitTestFiles =  baseDir.listFiles(new FilenameFilter() {
-    @Override
-    public boolean accept(File dir, String name) {
-      return name.endsWith(".pas");
-    }
+    File[] unitTestFiles = baseDir.listFiles(new FilenameFilter() {
+      @Override
+      public boolean accept(File dir, String name) {
+        return name.endsWith(".pas");
+      }
     });
 
     for (File unitTestFile : unitTestFiles) {

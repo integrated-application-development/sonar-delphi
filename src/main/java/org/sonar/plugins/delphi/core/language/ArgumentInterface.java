@@ -29,28 +29,28 @@ public interface ArgumentInterface {
 
   /**
    * Sets name
-   * 
+   *
    * @param newName New name
    */
   void setName(String newName);
 
   /**
    * Sets type
-   * 
+   *
    * @param newType New type
    */
   void setType(String newType);
 
   /**
    * Gets name
-   * 
+   *
    * @return Argument name
    */
   String getName();
 
   /**
    * Gets type
-   * 
+   *
    * @return Argument type
    */
   String getType();

@@ -42,7 +42,7 @@ public class DelphiArgument implements ArgumentInterface {
 
   /**
    * Creates an argument with provided name and type
-   * 
+   *
    * @param argName Argument name
    * @param argType Argument type
    */

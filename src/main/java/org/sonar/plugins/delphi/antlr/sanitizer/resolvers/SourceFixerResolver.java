@@ -25,8 +25,8 @@ package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
 import org.sonar.plugins.delphi.antlr.sanitizer.SourceResolver;
 
 /**
- * Fixes source file: appends '\n' to the end, adds whitespaces when needed. All
- * that in order to ANTLR parser could work correctly.
+ * Fixes source file: appends '\n' to the end, adds whitespaces when needed. All that in order to
+ * ANTLR parser could work correctly.
  */
 public class SourceFixerResolver extends SourceResolver {
 
@@ -37,7 +37,7 @@ public class SourceFixerResolver extends SourceResolver {
 
   /**
    * Fixes source
-   * 
+   *
    * @param fileData file character data to fix
    * @return String containing fixed source code
    */

@@ -22,14 +22,13 @@
  */
 package org.sonar.plugins.delphi.core.language.impl;
 
+import java.util.Set;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
 
-import java.util.Set;
-
 /**
- * Class used by AbstractAnalyser for unresolved function calls from function
- * body (when we call a function, but didn't read function include file yet)
+ * Class used by AbstractAnalyser for unresolved function calls from function body (when we call a
+ * function, but didn't read function include file yet)
  */
 public class UnresolvedFunctionCall {
 
@@ -39,12 +38,13 @@ public class UnresolvedFunctionCall {
 
   /**
    * Default ctor
-   * 
+   *
    * @param caller Function that has called another function
    * @param called Called function
    * @param callerUnit Caller function unit
    */
-  public UnresolvedFunctionCall(FunctionInterface caller, FunctionInterface called, UnitInterface callerUnit) {
+  public UnresolvedFunctionCall(FunctionInterface caller, FunctionInterface called,
+      UnitInterface callerUnit) {
     this.caller = caller;
     this.called = called;
     this.callerUnit = callerUnit;
@@ -52,7 +52,7 @@ public class UnresolvedFunctionCall {
 
   /**
    * Get function that calls another function (caller)
-   * 
+   *
    * @return Caller function
    */
   public FunctionInterface getCaller() {
@@ -61,7 +61,7 @@ public class UnresolvedFunctionCall {
 
   /**
    * Get called function
-   * 
+   *
    * @return Called function
    */
   public FunctionInterface getCalled() {
@@ -70,7 +70,7 @@ public class UnresolvedFunctionCall {
 
   /**
    * Get caller function unit
-   * 
+   *
    * @return Caller function unit
    */
   public UnitInterface getCallerUnit() {
@@ -78,9 +78,8 @@ public class UnresolvedFunctionCall {
   }
 
   /**
-   * Try to resolve called function call (find called function in provided
-   * units)
-   * 
+   * Try to resolve called function call (find called function in provided units)
+   *
    * @param allUnits List of all units
    * @return True if function was resolved, false otherwise
    */
@@ -99,11 +98,10 @@ public class UnresolvedFunctionCall {
   }
 
   /**
-   * Try to resolve called function call (check if provided function is not
-   * the function called from other function)
-   * 
-   * @param functionToCheck Function we will be checking if not a called
-   *            function
+   * Try to resolve called function call (check if provided function is not the function called from
+   * other function)
+   *
+   * @param functionToCheck Function we will be checking if not a called function
    * @param allUnits List of all units
    * @return True if function was resolved, false otherwise
    */

@@ -26,8 +26,8 @@ import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
- * Rule that count's the number of lines between to statement pairs. Produces a
- * violation if the number of lines exceeds limit.
+ * Rule that count's the number of lines between to statement pairs. Produces a violation if the
+ * number of lines exceeds limit.
  */
 public class BlockCounterRule extends CountRule {
 
@@ -51,7 +51,7 @@ public class BlockCounterRule extends CountRule {
 
   /**
    * Should we count the current node?
-   * 
+   *
    * @param node Node to check
    */
 
@@ -92,7 +92,7 @@ public class BlockCounterRule extends CountRule {
 
   /**
    * Is current node the start node
-   * 
+   *
    * @param node Node
    * @return True if so, false otherwise
    */
@@ -102,7 +102,7 @@ public class BlockCounterRule extends CountRule {
 
   /**
    * Is current node the end node
-   * 
+   *
    * @param node Node
    * @return True if so, false otherwise
    */
@@ -112,7 +112,7 @@ public class BlockCounterRule extends CountRule {
 
   /**
    * Should we accept the current node, and count it?
-   * 
+   *
    * @param node Node to count
    * @return True if so, false otherwise
    */

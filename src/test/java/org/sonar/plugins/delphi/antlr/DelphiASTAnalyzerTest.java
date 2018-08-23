@@ -22,7 +22,10 @@
  */
 package org.sonar.plugins.delphi.antlr;
 
-import org.antlr.runtime.RecognitionException;
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.sonar.plugins.delphi.DelphiTestUtils;
@@ -35,12 +38,6 @@ import org.sonar.plugins.delphi.core.language.ClassFieldInterface;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 
 public class DelphiASTAnalyzerTest {
 
@@ -67,8 +64,8 @@ public class DelphiASTAnalyzerTest {
 
   public void testFunctions(CodeAnalysisResults results) {
     String[] names = {"tdemo.bshowtrackerclick", "tdemo.getfunction", "tmyclass.myprocedure",
-      "tmyclass.setsomething",
-      "standaloneprocedure", "standalonefunction"};
+        "tmyclass.setsomething",
+        "standaloneprocedure", "standalonefunction"};
     int[] complexities = {1, 0, 2, 0, 3, 1};
     int[] statements = {1, 2, 2, 0, 7, 0};
     int[] calledFunc = {0, 0, 1, 0, 0, 1};
@@ -89,20 +86,21 @@ public class DelphiASTAnalyzerTest {
       }
       assertEquals(names[index], func.getName()); // checking names
       assertEquals(complexities[index], func.getComplexity()); // checking
-                                                               // complexities
+      // complexities
       assertEquals(statements[index], func.getStatements().size()); // checking
-                                                                    // statements
-      assertEquals("Called functions at " + names[index], calledFunc[index], func.getCalledFunctions().length); // chcecking
-                                                                                                                // called
-                                                                                                                // functions
+      // statements
+      assertEquals("Called functions at " + names[index], calledFunc[index],
+          func.getCalledFunctions().length); // chcecking
+      // called
+      // functions
       assertEquals(names[index], global[index], func.isGlobal()); // checking
-                                                                  // if
-                                                                  // function
-                                                                  // is
-                                                                  // global
+      // if
+      // function
+      // is
+      // global
       assertEquals(names[index], numArgs[index], func.getArguments().length); // number
-                                                                              // of
-                                                                              // arguments
+      // of
+      // arguments
 
       if (func.isGlobal()) {
         fileComplexity += func.getComplexity();
@@ -111,7 +109,7 @@ public class DelphiASTAnalyzerTest {
     }
 
     assertEquals("DECLARATIONS COUNT", 4, declarations); // how many
-                                                         // declarations
+    // declarations
     assertEquals("ACCESSORS COUNT", 2, accessors); // how many accessors
   }
 
@@ -145,7 +143,7 @@ public class DelphiASTAnalyzerTest {
       assertEquals(cl.getName(), descendants[index], cl.getDescendants().length);
       assertEquals(cl.getName(), children[index], cl.getChildren().length);
       for (ClassFieldInterface field : cl.getFields()) { // checking class
-                                                         // fields
+        // fields
         assertEquals(cl.getName(), fnames[findex], field.getName());
         assertEquals(cl.getName(), ftypes[findex], field.getType());
         assertEquals(cl.getName(), names[index], field.getParent().getName());

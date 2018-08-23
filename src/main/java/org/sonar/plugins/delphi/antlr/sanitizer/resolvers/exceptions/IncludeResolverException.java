@@ -38,7 +38,7 @@ public class IncludeResolverException extends Exception {
 
   /**
    * ctor
-   * 
+   *
    * @param msg Error message
    */
   public IncludeResolverException(String msg) {

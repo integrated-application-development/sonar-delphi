@@ -22,20 +22,22 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer;
 
-import org.antlr.runtime.ANTLRFileStream;
-import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.*;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.antlr.runtime.ANTLRFileStream;
+import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.DefineResolver;
+import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.ExcludeResolver;
+import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.IncludeResolver;
+import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.SourceFixerResolver;
+import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.SourceResolverResults;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 /**
- * Antlr Class that handles some common grammar problems, see ReadMe.docx for
- * more info.
+ * Antlr Class that handles some common grammar problems, see ReadMe.docx for more info.
  */
 public class DelphiSourceSanitizer extends ANTLRFileStream {
 
@@ -45,7 +47,7 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
 
   /**
    * Ctor with file name
-   * 
+   *
    * @param fileName File name to stream
    * @throws IOException If no file found
    */
@@ -55,20 +57,20 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
 
   /**
    * C-tor with file name and encoding
-   * 
+   *
    * @param fileName File namt to stream
    * @param encoding Encoding to use
    * @throws IOException If file not found
    */
   public DelphiSourceSanitizer(String fileName, String encoding)
-    throws IOException {
+      throws IOException {
     super(fileName, encoding);
   }
 
   /**
-   * Sets the include directories, method is static, so we could cache the
-   * directories and not calculate them each time a new file is parsed
-   * 
+   * Sets the include directories, method is static, so we could cache the directories and not
+   * calculate them each time a new file is parsed
+   *
    * @param list List of include directories
    */
   public static void setIncludeDirectories(List<File> list) {
@@ -77,9 +79,9 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
   }
 
   /**
-   * Sets the preprocessor definitions, method is static, so we could cache
-   * the definitions and not remake them each time a new file is parsed
-   * 
+   * Sets the preprocessor definitions, method is static, so we could cache the definitions and not
+   * remake them each time a new file is parsed
+   *
    * @param newDefinitions List of definitions
    */
   public static void setDefinitions(List<String> newDefinitions) {
@@ -98,8 +100,8 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
   }
 
   /**
-   * Overloading the load method from ANTRLFileStream, to add whitespace where
-   * it is required (':', '..'), and preform additional actions
+   * Overloading the load method from ANTRLFileStream, to add whitespace where it is required (':',
+   * '..'), and preform additional actions
    */
 
   @Override
@@ -113,14 +115,16 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
     // TODO delphiProjectHelper.shouldExtendIncludes();
     boolean extendIncludes = true;
 
-    StringBuilder fileData = new StringBuilder(DelphiUtils.readFileContent(new File(fileName), encoding));
+    StringBuilder fileData = new StringBuilder(
+        DelphiUtils.readFileContent(new File(fileName), encoding));
 
     SourceResolverResults resolverResult = new SourceResolverResults(fileName, fileData);
 
     SourceResolver resolver = new ExcludeResolver();
-    resolver.chain(new IncludeResolver(extendIncludes, includeDirectories)).chain(new ExcludeResolver())
-      .chain(new DefineResolver(defs))
-      .chain(new SourceFixerResolver());
+    resolver.chain(new IncludeResolver(extendIncludes, includeDirectories))
+        .chain(new ExcludeResolver())
+        .chain(new DefineResolver(defs))
+        .chain(new SourceFixerResolver());
 
     resolver.resolve(resolverResult);
     data = resolverResult.getFileData().toString().toCharArray();
@@ -130,7 +134,7 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
 
   /**
    * Gets the set of files, that already have been included in other files
-   * 
+   *
    * @return The set of files, that already have been included in other files
    */
   public static Set<String> getIncludedFiles() {

@@ -22,16 +22,15 @@
  */
 package org.sonar.plugins.delphi.project;
 
+import java.io.File;
+import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * Class for parsing .dproj xml file
@@ -46,7 +45,7 @@ public class ProjectXmlParser extends DefaultHandler {
 
   /**
    * C-tor
-   * 
+   *
    * @param xml Xml file to parse
    * @param delphiProject DelphiProject class to modify
    */
@@ -76,7 +75,8 @@ public class ProjectXmlParser extends DefaultHandler {
   }
 
   @Override
-  public void startElement(String uri, String localName, String rawName, Attributes attributes) throws SAXException {
+  public void startElement(String uri, String localName, String rawName, Attributes attributes)
+      throws SAXException {
     isReading = false;
 
     if ("DCCReference".equals(rawName)) {
@@ -111,9 +111,7 @@ public class ProjectXmlParser extends DefaultHandler {
     if ("VersionInfoKeys".equals(rawName)) {
       // add project name
       project.setName(readData);
-    }
-
-    else if ("DCC_Define".equals(rawName)) {
+    } else if ("DCC_Define".equals(rawName)) {
       // add define
       String[] defines = readData.split(";");
       for (String define : defines) {
@@ -124,9 +122,7 @@ public class ProjectXmlParser extends DefaultHandler {
         }
         project.addDefinition(define);
       }
-    }
-
-    else if ("DCC_UnitSearchPath".equals(rawName)) {
+    } else if ("DCC_UnitSearchPath".equals(rawName)) {
       // add include directories
       String[] paths = readData.split(";");
       for (String path : paths) {

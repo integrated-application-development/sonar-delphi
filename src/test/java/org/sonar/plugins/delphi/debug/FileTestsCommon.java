@@ -22,9 +22,12 @@
  */
 package org.sonar.plugins.delphi.debug;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-
-import java.io.*;
 
 public class FileTestsCommon {
 
@@ -36,7 +39,8 @@ public class FileTestsCommon {
     testFileString = new StringBuilder();
 
     String line;
-    BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(testFile), "UTF-8"));
+    BufferedReader reader = new BufferedReader(
+        new InputStreamReader(new FileInputStream(testFile), "UTF-8"));
     while ((line = reader.readLine()) != null) {
       testFileString.append(line);
       testFileString.append('\n');

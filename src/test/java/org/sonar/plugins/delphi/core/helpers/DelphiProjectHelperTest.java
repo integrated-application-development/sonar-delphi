@@ -22,17 +22,13 @@
  */
 package org.sonar.plugins.delphi.core.helpers;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.config.Configuration;
-import org.sonar.api.batch.sensor.SensorContext;
-import java.io.File;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.mock;
+
+import java.io.File;
+import org.junit.Before;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.config.Configuration;
 
 public class DelphiProjectHelperTest {
 

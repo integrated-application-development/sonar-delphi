@@ -33,7 +33,6 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiClass;
 
 /**
  * Analyzes inheritance tree for specific class
- * 
  */
 public class TypeInheritanceAnalyzer extends CodeAnalyzer {
 
@@ -75,7 +74,8 @@ public class TypeInheritanceAnalyzer extends CodeAnalyzer {
 
   @Override
   public boolean canAnalyze(CodeTree codeTree) {
-    return codeTree.getCurrentCodeNode().getNode().getType() == LexerMetrics.CLASS_PARENTS.toMetrics();
+    return codeTree.getCurrentCodeNode().getNode().getType() == LexerMetrics.CLASS_PARENTS
+        .toMetrics();
   }
 
   /**
@@ -100,7 +100,8 @@ public class TypeInheritanceAnalyzer extends CodeAnalyzer {
    */
   private ClassInterface checkParentInFile(String parentName, CodeAnalysisResults results) {
     for (ClassInterface clazz : results.getClasses()) {
-      if (!clazz.equals(results.getActiveClass()) && clazz.getShortName().equalsIgnoreCase(parentName)) {
+      if (!clazz.equals(results.getActiveClass()) && clazz.getShortName()
+          .equalsIgnoreCase(parentName)) {
         return clazz;
       }
     }

@@ -45,7 +45,7 @@ public class DelphiLinesFactory {
 
   /**
    * Constructor. Calculates line statistics
-   * 
+   *
    * @param reader File to read
    */
   DelphiLinesFactory(Reader reader) {
@@ -113,7 +113,8 @@ public class DelphiLinesFactory {
   }
 
   private void notifyHandlersAboutEndOfLine() {
-    if (currentHandler != null && currentHandler.matchWithEndOfLine(currentLine, currentStringBuilder)) {
+    if (currentHandler != null && currentHandler
+        .matchWithEndOfLine(currentLine, currentStringBuilder)) {
       currentHandler = null;
     }
   }

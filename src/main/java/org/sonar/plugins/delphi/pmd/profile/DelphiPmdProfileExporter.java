@@ -22,15 +22,14 @@
  */
 package org.sonar.plugins.delphi.pmd.profile;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import org.sonar.api.profiles.ProfileExporter;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRulesUtils;
-
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 
 /**
  * exports Delphi rules profile into Sonar
@@ -57,7 +56,7 @@ public class DelphiPmdProfileExporter extends ProfileExporter {
 
   /**
    * exports profile to string
-   * 
+   *
    * @param profile profile
    * @return exported profile
    */

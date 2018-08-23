@@ -22,17 +22,16 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import java.util.HashSet;
+import java.util.Set;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
- * Class for checking if we are using .Free with checking if variable is
- * assigned (redundant): if assigned(x) then x.free; if x &lt;&gt; nil then x.free;
+ * Class for checking if we are using .Free with checking if variable is assigned (redundant): if
+ * assigned(x) then x.free; if x &lt;&gt; nil then x.free;
  */
 public class AssignedAndFreeRule extends DelphiRule {
 
@@ -62,9 +61,7 @@ public class AssignedAndFreeRule extends DelphiRule {
         if (node.getChildCount() > MIN_CHILD_COUNT) {
           variables.clear();
         }
-      }
-
-      else if ("free".equalsIgnoreCase(node.getText()) && freeVariable(node)) {
+      } else if ("free".equalsIgnoreCase(node.getText()) && freeVariable(node)) {
         addViolation(ctx, node);
       }
     }
@@ -74,7 +71,8 @@ public class AssignedAndFreeRule extends DelphiRule {
     StringBuilder variableName = new StringBuilder();
     int index = node.getChildIndex();
     Tree backwardNode;
-    while (((--index) > -1) && (backwardNode = node.getParent().getChild(index)).getText().equals(".")) {
+    while (((--index) > -1) && (backwardNode = node.getParent().getChild(index)).getText()
+        .equals(".")) {
       variableName.insert(0, backwardNode.getText());
       variableName.insert(0, node.getParent().getChild(--index).getText());
     }

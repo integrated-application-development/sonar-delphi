@@ -33,7 +33,7 @@ public class IfDirective extends CommonCompilerDirective {
 
   /**
    * ctor
-   * 
+   *
    * @param item directive item
    * @param firstCharPos first character position
    * @param lastCharPos last character position

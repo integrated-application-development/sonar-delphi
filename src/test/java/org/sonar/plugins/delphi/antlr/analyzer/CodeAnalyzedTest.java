@@ -22,16 +22,15 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class CodeAnalyzedTest {
 
@@ -42,10 +41,11 @@ public class CodeAnalyzedTest {
   @Before
   public void init() {
     ast = new DelphiAST();
-    nodes = new CommonTree[] {new CommonTree(new CommonToken(0, "a")), new CommonTree(new CommonToken(0, "ab1")),
-      new CommonTree(new CommonToken(0, "ab1c1")), new CommonTree(new CommonToken(0, "ab1c2")),
-      new CommonTree(new CommonToken(0, "ab2")), new CommonTree(new CommonToken(0, "ab2c1")),
-      new CommonTree(new CommonToken(0, "ab2c2")), new CommonTree(new CommonToken(0, "ab2c3"))};
+    nodes = new CommonTree[]{new CommonTree(new CommonToken(0, "a")),
+        new CommonTree(new CommonToken(0, "ab1")),
+        new CommonTree(new CommonToken(0, "ab1c1")), new CommonTree(new CommonToken(0, "ab1c2")),
+        new CommonTree(new CommonToken(0, "ab2")), new CommonTree(new CommonToken(0, "ab2c1")),
+        new CommonTree(new CommonToken(0, "ab2c2")), new CommonTree(new CommonToken(0, "ab2c3"))};
 
     ast.addChild(nodes[0]);
     nodes[0].addChild(nodes[1]); // a->ab1
@@ -66,7 +66,7 @@ public class CodeAnalyzedTest {
    * code.getCurrentCodeNode().getNode(); int index = 0; do {
    * assertEquals(nodes[index++], n); code.advanceNode(); n =
    * code.getCurrentCodeNode(); } while (n != null);
-   * 
+   *
    * assertFalse(code.hasValidNode()); }
    */
 

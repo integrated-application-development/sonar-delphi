@@ -22,16 +22,15 @@
  */
 package org.sonar.plugins.delphi.project;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiProjectTest {
 
@@ -87,17 +86,17 @@ public class DelphiProjectTest {
     assertEquals("Simple Delphi Product", project.getName());
 
     assertEquals(8, project.getSourceFiles().size()); // checking source
-                                                      // files
+    // files
     String fileNames[] = {"Globals.pas", "MainWindow.pas", "OverloadTest.pas", "StatementTest.pas",
-      "CommentsTest.pas",
-      "AccessorsTest.Pas", "FunctionTest.pas", "GlobalsTest.pas"};
+        "CommentsTest.pas",
+        "AccessorsTest.Pas", "FunctionTest.pas", "GlobalsTest.pas"};
     for (int i = 0; i < fileNames.length; ++i) {
       assertEquals(fileNames[i], project.getSourceFiles().get(i).getName());
     }
 
     assertEquals(2, project.getIncludeDirectories().size()); // checking
-                                                             // include
-                                                             // directories
+    // include
+    // directories
     String includeNames[] = {"includes1", "includes2"};
     for (int i = 0; i < includeNames.length; ++i) {
       assertEquals(includeNames[i], project.getIncludeDirectories().get(i).getName());

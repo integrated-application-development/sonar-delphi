@@ -25,7 +25,6 @@ package org.sonar.plugins.delphi.pmd.xml;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +88,7 @@ public class DelphiRule implements Comparable<String> {
 
   /**
    * sets name
-   * 
+   *
    * @param name new name
    */
   public void setName(String name) {
@@ -103,11 +102,13 @@ public class DelphiRule implements Comparable<String> {
     return clazz;
   }
 
-  public void setDescription(String description) { this.description = description; }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
   /**
    * Sets properties
-   * 
+   *
    * @param properties Properties to set
    */
   public void setProperties(List<Property> properties) {
@@ -123,11 +124,10 @@ public class DelphiRule implements Comparable<String> {
 
   /**
    * Compares two class names lexicographically
-   * 
-   * @return the value 0 if the argument string is equal to this string; a
-   *         value less than 0 if this string is lexicographically less than
-   *         the string argument; and a value greater than 0 if this string is
-   *         lexicographically greater than the string argument.
+   *
+   * @return the value 0 if the argument string is equal to this string; a value less than 0 if this
+   * string is lexicographically less than the string argument; and a value greater than 0 if this
+   * string is lexicographically greater than the string argument.
    */
 
   @Override
@@ -144,7 +144,7 @@ public class DelphiRule implements Comparable<String> {
 
   /**
    * sets priority
-   * 
+   *
    * @param priority new priority
    */
   public void setPriority(String priority) {
@@ -153,6 +153,7 @@ public class DelphiRule implements Comparable<String> {
 
   /**
    * adds property
+   *
    * @param property Property to add
    */
   public void addProperty(Property property) {
@@ -171,7 +172,7 @@ public class DelphiRule implements Comparable<String> {
 
   /**
    * sets message
-   * 
+   *
    * @param message New rule message
    */
   public void setMessage(String message) {

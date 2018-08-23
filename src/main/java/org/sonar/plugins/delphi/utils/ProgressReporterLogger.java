@@ -27,8 +27,8 @@ import org.slf4j.Logger;
 /**
  * Logger used to report progress from ProgressReporter
  */
-public class ProgressReporterLogger
-{
+public class ProgressReporterLogger {
+
   private Logger log = null;
 
   /**
@@ -39,7 +39,7 @@ public class ProgressReporterLogger
 
   /**
    * Ctor, specify your own logger to write to
-   * 
+   *
    * @param log logger to write to
    */
   public ProgressReporterLogger(Logger log) {
@@ -48,7 +48,7 @@ public class ProgressReporterLogger
 
   /**
    * log a message
-   * 
+   *
    * @param msg message
    */
   public void log(String msg) {

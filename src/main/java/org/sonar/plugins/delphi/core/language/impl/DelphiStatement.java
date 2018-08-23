@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.delphi.core.language.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
@@ -30,12 +32,9 @@ import org.sonar.plugins.delphi.core.language.ClassFieldInterface;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.StatementInterface;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * DelphiLanguage class statement definition
- * 
+ *
  * @see StatementInterface
  */
 public class DelphiStatement implements StatementInterface {
@@ -47,7 +46,7 @@ public class DelphiStatement implements StatementInterface {
 
   /**
    * Ctor
-   * 
+   *
    * @param text Statement text
    * @param lineNumber Statement line number
    * @param columnNumber Statement column number
@@ -138,6 +137,7 @@ public class DelphiStatement implements StatementInterface {
     tokens.add(new CommonToken(Token.EOF));
     return tokens;
   }
+
   @Override
   public ClassFieldInterface[] getFields(ClassInterface fromClass) {
     if (fromClass == null) {
@@ -146,7 +146,7 @@ public class DelphiStatement implements StatementInterface {
     ClassFieldInterface[] fields = fromClass.getFields();
     List<ClassFieldInterface> result = new ArrayList<>();
 
-    List<Token> tokens = tokenize(new String[] {text});
+    List<Token> tokens = tokenize(new String[]{text});
 
     for (Token token : tokens) {
       if (token.getType() == DelphiLexer.TkIdentifier) {

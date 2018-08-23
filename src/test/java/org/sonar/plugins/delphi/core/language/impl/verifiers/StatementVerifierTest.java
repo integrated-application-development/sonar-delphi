@@ -22,11 +22,12 @@
  */
 package org.sonar.plugins.delphi.core.language.impl.verifiers;
 
-import org.antlr.runtime.RecognitionException;
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
@@ -35,19 +36,14 @@ import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.core.language.StatementInterface;
 import org.sonar.plugins.delphi.core.language.verifiers.StatementVerifier;
-import org.sonar.plugins.delphi.core.language.verifiers.StatementVerifierException;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-
-import java.io.File;
-import java.io.IOException;
-
-import static org.junit.Assert.assertEquals;
 
 public class StatementVerifierTest {
 
   private static final int FILE_COMPLEX_STMT_COUNT = 11;
-  private static final int FILE_STATEMENT_LINES[] = {27, 34, 41, 44, 50, 50, 51, 51, 52, 52, 59, 60, 61, 63, 63, 64,
-    64, 70, 70, 71};
+  private static final int FILE_STATEMENT_LINES[] = {27, 34, 41, 44, 50, 50, 51, 51, 52, 52, 59, 60,
+      61, 63, 63, 64,
+      64, 70, 70, 71};
   private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/ComplexityMetricsTest.pas";
 
   private StatementVerifier verifier;
@@ -73,7 +69,7 @@ public class StatementVerifierTest {
     while (currentNode.isValid()) {
 
       if (currentNode.getNode().getType() == LexerMetrics.FUNCTION_BODY.toMetrics()
-        && lastLineParsed <= currentNode.getNode().getLine()) {
+          && lastLineParsed <= currentNode.getNode().getLine()) {
         int beginCount = 1;
         CodeNode<Tree> atNode = currentNode;
         do {

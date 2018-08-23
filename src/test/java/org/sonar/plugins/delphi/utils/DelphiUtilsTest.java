@@ -22,20 +22,18 @@
  */
 package org.sonar.plugins.delphi.utils;
 
-import org.junit.Test;
-
-import java.io.File;
-import java.io.IOException;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.IOException;
+import org.junit.Test;
+
 public class DelphiUtilsTest {
 
   @Test
-  public void getAbsolutePathTest() throws IOException
-  {
+  public void getAbsolutePathTest() throws IOException {
     File tempFile = File.createTempFile("testFile", "tmp");
     tempFile.deleteOnExit();
 

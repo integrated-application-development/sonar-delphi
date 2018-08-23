@@ -34,7 +34,7 @@ public class DelphiNode extends CommonTree {
 
   /**
    * Default C-tor as in CommonTree
-   * 
+   *
    * @param payload Provided token
    */
   DelphiNode(Token payload) {
@@ -43,7 +43,7 @@ public class DelphiNode extends CommonTree {
 
   /**
    * C-tor with token and AST tree that has this node
-   * 
+   *
    * @param payload Provided token
    * @param tree AST Tree
    */
@@ -54,7 +54,7 @@ public class DelphiNode extends CommonTree {
 
   /**
    * Gets child type, or -1 if child does not exist
-   * 
+   *
    * @param index Child index
    * @return Child type, or -1 if child is non existant
    */
@@ -67,7 +67,7 @@ public class DelphiNode extends CommonTree {
 
   /**
    * Gets the AST Tree associated with this node
-   * 
+   *
    * @return AST Tree
    */
   public ASTTree getASTTree() {

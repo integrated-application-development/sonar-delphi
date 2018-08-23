@@ -22,6 +22,11 @@
  */
 package org.sonar.plugins.delphi.metrics;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.apache.commons.io.FilenameUtils;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
@@ -37,8 +42,6 @@ import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-
-import java.util.*;
 
 /**
  * Metric used to search for "dead code" (unused units, unused methods).
@@ -56,8 +59,10 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
   private final ActiveRule functionRule;
   private final SensorContext context;
 
-  public static final RuleKey RULE_KEY_UNUSED_UNIT = RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, "UnusedUnitRule");
-  public static final RuleKey RULE_KEY_UNUSED_FUNCTION = RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, "UnusedFunctionRule");
+  public static final RuleKey RULE_KEY_UNUSED_UNIT = RuleKey
+      .of(DelphiPmdConstants.REPOSITORY_KEY, "UnusedUnitRule");
+  public static final RuleKey RULE_KEY_UNUSED_FUNCTION = RuleKey
+      .of(DelphiPmdConstants.REPOSITORY_KEY, "UnusedFunctionRule");
 
   /**
    * {@inheritDoc}
@@ -77,8 +82,8 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
 
   @Override
   public void analyse(InputFile resource, List<ClassInterface> classes,
-    List<FunctionInterface> functions,
-    Set<UnitInterface> units) {
+      List<FunctionInterface> functions,
+      Set<UnitInterface> units) {
     if (!isCalculated) {
       if (units == null || units.isEmpty()) {
         return;
@@ -112,17 +117,18 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
     if (unusedUnits.contains(fileName.toLowerCase())) {
       NewIssue newIssue = context.newIssue();
       newIssue
-              .forRule(unitRule.ruleKey())
-              .at(newIssue.newLocation()
-                      .on(inputFile)
-                      .at(inputFile.newRange(unit.getLine(), 1,
-                              unit.getLine(), 1))
-                      .message(unit.getName() + DEAD_UNIT_VIOLATION_MESSAGE));
+          .forRule(unitRule.ruleKey())
+          .at(newIssue.newLocation()
+              .on(inputFile)
+              .at(inputFile.newRange(unit.getLine(), 1,
+                  unit.getLine(), 1))
+              .message(unit.getName() + DEAD_UNIT_VIOLATION_MESSAGE));
       newIssue.save();
     }
 
     for (FunctionInterface function : getUnitFunctions(unit)) {
-      if (function.isMessage() || function.isVirtual() || function.getVisibility() == DelphiLexer.PUBLISHED) {
+      if (function.isMessage() || function.isVirtual()
+          || function.getVisibility() == DelphiLexer.PUBLISHED) {
         continue;
       }
 
@@ -161,7 +167,6 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
           int line = function.getLine();
           int column = function.getColumn();
 
-
           NewIssue newIssue = context.newIssue();
           newIssue
               .forRule(rule)
@@ -193,7 +198,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
 
   /**
    * Find unused functions in a unit
-   * 
+   *
    * @param units Unit array
    * @return List of unused functions
    */
@@ -214,6 +219,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
 
   /**
    * Find unused units
+   *
    * @param units Units in project
    * @return a list of unused units
    */
@@ -246,7 +252,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
 
   /**
    * Searches for a unit by given unit name
-   * 
+   *
    * @param unitName Unit name
    * @return Unit if found, null otherwise
    */

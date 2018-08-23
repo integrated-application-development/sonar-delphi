@@ -50,8 +50,10 @@ public class TypePropertyAnalyzer extends CodeAnalyzer {
     }
 
     String varName = getPropertyName((CommonTree) codeTree.getCurrentCodeNode().getNode());
-    FunctionInterface read = getPropertyReadFunction((CommonTree) codeTree.getCurrentCodeNode().getNode());
-    FunctionInterface write = getPropertyWriteFunction((CommonTree) codeTree.getCurrentCodeNode().getNode());
+    FunctionInterface read = getPropertyReadFunction(
+        (CommonTree) codeTree.getCurrentCodeNode().getNode());
+    FunctionInterface write = getPropertyWriteFunction(
+        (CommonTree) codeTree.getCurrentCodeNode().getNode());
 
     if (read != null) {
       read.setParentClass(results.getActiveClass());
@@ -61,8 +63,9 @@ public class TypePropertyAnalyzer extends CodeAnalyzer {
       write.setParentClass(results.getActiveClass());
     }
 
-    ClassPropertyInterface property = new DelphiClassProperty(varName, varType, results.getParseVisibility()
-      .toMetrics(), read, write);
+    ClassPropertyInterface property = new DelphiClassProperty(varName, varType,
+        results.getParseVisibility()
+            .toMetrics(), read, write);
     property.setParent(results.getActiveClass());
     results.getActiveClass().addProperty(property);
   }

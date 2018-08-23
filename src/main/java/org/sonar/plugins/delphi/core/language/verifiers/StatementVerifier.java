@@ -22,6 +22,9 @@
  */
 package org.sonar.plugins.delphi.core.language.verifiers;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
@@ -32,18 +35,15 @@ import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.core.language.StatementInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiStatement;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
-
 /**
  * Checks if a node can be transformed into a simple or complex statement
  */
 public class StatementVerifier {
 
-  private static final LexerMetrics[] STATEMENT_NODES = {LexerMetrics.IF, LexerMetrics.ELSE, LexerMetrics.WHILE,
-    LexerMetrics.BREAK,
-    LexerMetrics.CONTINUE};
+  private static final LexerMetrics[] STATEMENT_NODES = {LexerMetrics.IF, LexerMetrics.ELSE,
+      LexerMetrics.WHILE,
+      LexerMetrics.BREAK,
+      LexerMetrics.CONTINUE};
   private static final int MIN_TOKENS_FOR_COMPLEX_STMT = 4;
 
   private Tree checkedNode = null;
@@ -51,11 +51,12 @@ public class StatementVerifier {
   private String lastStatementText = null;
   private Stack<Integer> statementIndex = new Stack<>();
 
-  public StatementVerifier() { }
+  public StatementVerifier() {
+  }
 
   /**
    * Checks for statements
-   * 
+   *
    * @param node Node to check
    * @return Returns true if node is a statement
    */
@@ -74,7 +75,7 @@ public class StatementVerifier {
    */
   public StatementInterface createStatement() {
     StatementInterface statement = new DelphiStatement(lastStatementText, checkedNode.getLine(),
-      checkedNode.getCharPositionInLine());
+        checkedNode.getCharPositionInLine());
     statement.setComplexity(isComplex);
     return statement;
   }
@@ -161,7 +162,7 @@ public class StatementVerifier {
       isBeginEndNode(node);
       // while ; or ELSE
       if (actualNode.getType() == LexerMetrics.SEMI.toMetrics()
-        || actualNode.getType() == LexerMetrics.ELSE.toMetrics()) {
+          || actualNode.getType() == LexerMetrics.ELSE.toMetrics()) {
         statementIndex.push(childIndex);
         break;
       }
@@ -172,7 +173,7 @@ public class StatementVerifier {
     // replace '..' with ' .. '
     String fixedSourceCode = wholeLine.toString().replaceAll("\\.\\.", " .. ");
 
-    List<Token> tokens = tokenize(new String[] {fixedSourceCode});
+    List<Token> tokens = tokenize(new String[]{fixedSourceCode});
     if (tokens.size() < MIN_TOKENS_FOR_COMPLEX_STMT) {
       // at least 4 tokens: id, :=, id, ;
       return false;
@@ -188,7 +189,7 @@ public class StatementVerifier {
 
   private boolean isBlockNode(int code) {
     return code == LexerMetrics.BEGIN.toMetrics() || code == LexerMetrics.TRY.toMetrics()
-      || code == LexerMetrics.CASE.toMetrics();
+        || code == LexerMetrics.CASE.toMetrics();
   }
 
   private boolean isBeginEndNode(Tree node) {

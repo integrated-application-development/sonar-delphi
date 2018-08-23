@@ -35,7 +35,8 @@ public class PointerNameRule extends DelphiRule {
 
       char firstCharAfterPrefix = name.charAt(1);
 
-      if (!name.startsWith("P") || firstCharAfterPrefix != Character.toUpperCase(firstCharAfterPrefix)) {
+      if (!name.startsWith("P") || firstCharAfterPrefix != Character
+          .toUpperCase(firstCharAfterPrefix)) {
         addViolation(ctx, node);
       }
     }

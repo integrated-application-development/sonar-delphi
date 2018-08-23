@@ -25,8 +25,8 @@ package org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRange;
 
 /**
- * Class used for checking, if provided value is in specified range. Used to
- * parse quotes, comments and definitions.
+ * Class used for checking, if provided value is in specified range. Used to parse quotes, comments
+ * and definitions.
  */
 public class IntegerSubRange implements SubRange {
 
@@ -35,7 +35,7 @@ public class IntegerSubRange implements SubRange {
 
   /**
    * Constructor
-   * 
+   *
    * @param rangeStart Range start
    * @param rangeEnd Range end
    */
@@ -49,7 +49,7 @@ public class IntegerSubRange implements SubRange {
 
   /**
    * Checks if value is in range
-   * 
+   *
    * @param value Value to check
    * @return True if value &gt;= begin &nbsp;&nbsp; value &lt;= end, false otherwise
    */
@@ -61,7 +61,7 @@ public class IntegerSubRange implements SubRange {
 
   /**
    * Checks if range is in scope of current range
-   * 
+   *
    * @param range Range to check
    * @return True if range includes itself in current range, false otherwise
    */
@@ -73,7 +73,7 @@ public class IntegerSubRange implements SubRange {
 
   /**
    * Get beginning of the range
-   * 
+   *
    * @return Beggining of the range
    */
 
@@ -84,7 +84,7 @@ public class IntegerSubRange implements SubRange {
 
   /**
    * Get the end of the range
-   * 
+   *
    * @return End of the range
    */
 

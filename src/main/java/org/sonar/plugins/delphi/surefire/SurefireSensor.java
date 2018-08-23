@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.surefire;
 
+import java.io.File;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
@@ -31,11 +32,9 @@ import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.surefire.api.SurefireUtils;
 
-import java.io.File;
-
 /**
- * Surefire sensor used to parse _TRANSFORMED_ DUnit report. You take a DUnit
- * report, then transform it to format that is acceptable by Surefire.
+ * Surefire sensor used to parse _TRANSFORMED_ DUnit report. You take a DUnit report, then transform
+ * it to format that is acceptable by Surefire.
  */
 public class SurefireSensor implements Sensor {
 
@@ -46,7 +45,7 @@ public class SurefireSensor implements Sensor {
 
   /**
    * Ctor
-   * 
+   *
    * @param settings Settings provided by Sonar
    * @param delphiProjectHelper The DelphiProjectHelper
    */
@@ -56,8 +55,7 @@ public class SurefireSensor implements Sensor {
   }
 
   @Override
-  public void describe(SensorDescriptor descriptor)
-  {
+  public void describe(SensorDescriptor descriptor) {
     DelphiUtils.LOG.info("SurefireSensor sensor describe...");
     descriptor.name("Delphi SurefireSensor");
     descriptor.onlyOnLanguage(DelphiLanguage.KEY);
@@ -70,21 +68,22 @@ public class SurefireSensor implements Sensor {
   /**
    * The actual sensor code.
    */
-  public void execute(SensorContext context)
-  {
+  public void execute(SensorContext context) {
     DelphiUtils.LOG.info("Delphi sensor execute...");
     String[] paths = configuration.getStringArray(SurefireUtils.SUREFIRE_REPORT_PATHS_PROPERTY);
 
     if (paths == null || paths.length == 0) {
-      DelphiUtils.LOG.warn("No Surefire reports directory found! Using default directory: " + DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY);
-      paths = new String[] {DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY};
+      DelphiUtils.LOG.warn("No Surefire reports directory found! Using default directory: "
+          + DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY);
+      paths = new String[]{DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY};
     }
 
     String mainPath = context.fileSystem().baseDir().getAbsolutePath();
     for (String path : paths) {
       File reportDirectory = DelphiUtils.resolveAbsolutePath(mainPath, path);
       if (!reportDirectory.exists()) {
-        DelphiUtils.LOG.warn("surefire report path not found {}", reportDirectory.getAbsolutePath());
+        DelphiUtils.LOG
+            .warn("surefire report path not found {}", reportDirectory.getAbsolutePath());
         continue;
       }
 

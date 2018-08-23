@@ -26,85 +26,84 @@ import java.util.Set;
 
 /**
  * Delphi Unit (unit, library keywords) interface
- * 
+ *
  * @author SG0214809
- * 
  */
 public interface UnitInterface {
 
   /**
    * Gets unit file name
-   * 
+   *
    * @return File name
    */
   String getFileName();
 
   /**
    * Sets unit absolute path to file
-   * 
+   *
    * @param path Path to file
    */
   void setPath(String path);
 
   /**
    * Gets unit absolute path
-   * 
+   *
    * @return Absolute path to file
    */
   String getPath();
 
   /**
    * Adds class to unit
-   * 
+   *
    * @param cl Added class
    */
   void addClass(ClassInterface cl);
 
   /**
    * Gets array of unit classes
-   * 
+   *
    * @return Array of ClassInterface
    */
   ClassInterface[] getClasses();
 
   /**
    * Add global function to unit
-   * 
+   *
    * @param func Global function
    */
   void addFunction(FunctionInterface func);
 
   /**
    * Get unit global functions
-   * 
+   *
    * @return Function array
    */
   FunctionInterface[] getFunctions();
 
   /**
    * Gets all functions (classes and global)
-   * 
+   *
    * @return Array of all functions in a unit
    */
   FunctionInterface[] getAllFunctions();
 
   /**
    * Adds unit include (by name)
-   * 
+   *
    * @param includeName Include name
    */
   void addIncludes(String includeName);
 
   /**
    * Get unit includes (by name)
-   * 
+   *
    * @return Array of include names
    */
   String[] getIncludes();
 
   /**
    * Get a array of units, that are included by this unit
-   * 
+   *
    * @param allUnits Set of all units
    * @return Array of included units, or empty array if none
    */
@@ -112,7 +111,7 @@ public interface UnitInterface {
 
   /**
    * Tries to find specified class in this unit
-   * 
+   *
    * @param classShortName Short name (without filename prefix) of class
    * @return Class reference if found, null otherwise
    */
@@ -120,7 +119,7 @@ public interface UnitInterface {
 
   /**
    * Tries to find specified function in this unit
-   * 
+   *
    * @param functionShortName Function name (WITH class name prefix, WITHOUT argument list)
    * @return Function reference if found, null otherwise
    */
@@ -128,7 +127,7 @@ public interface UnitInterface {
 
   /**
    * Checks if unit is including another unit
-   * 
+   *
    * @param unit Unit to check
    * @return True if unit is included, false otherwise
    */
@@ -136,7 +135,7 @@ public interface UnitInterface {
 
   /**
    * Sets unit line number
-   * 
+   *
    * @param lineNumber Line number
    */
   void setLine(int lineNumber);
@@ -148,14 +147,14 @@ public interface UnitInterface {
 
   /**
    * Gets function name (lowercase)
-   * 
+   *
    * @return Function name
    */
   String getName();
 
   /**
    * Sets function name
-   * 
+   *
    * @param name New function name
    */
   void setName(String name);

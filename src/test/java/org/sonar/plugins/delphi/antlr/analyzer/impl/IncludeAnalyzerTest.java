@@ -22,8 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.tree.Tree;
+import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
@@ -33,15 +32,8 @@ import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.antlr.analyzer.impl.operations.AdvanceToNodeOperation;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
-import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-
-import static org.junit.Assert.*;
 
 public class IncludeAnalyzerTest {
 

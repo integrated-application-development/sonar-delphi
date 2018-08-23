@@ -5,21 +5,25 @@ interface
 type
   TAccessorsTest = class(TForm)
   public
-	function getField(): integer;
-	procedure setField();
+    function getField() : integer;
+
+    procedure setField();
+
   private
-  	procedure fooXX;
-  	procedure getPrivateField();
+    procedure fooXX;
+
+    procedure getPrivateField();
+
   end;
 
 var
-  window: TMainWindow;
+  window : TMainWindow;
 
 implementation
 
-function TAccessorsTest.getField(): integer;
+function TAccessorsTest.getField() : integer;
 begin
-	result := 0;
+  result := 0;
 end;
 
 procedure TAccessorsTest.setField();

@@ -22,11 +22,10 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer;
 
-import org.sonar.plugins.delphi.core.language.ClassInterface;
-import org.sonar.plugins.delphi.core.language.FunctionInterface;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.sonar.plugins.delphi.core.language.ClassInterface;
+import org.sonar.plugins.delphi.core.language.FunctionInterface;
 
 /**
  * Class holding results of source code parsing
@@ -52,7 +51,7 @@ public class CodeAnalysisResults extends CodeAnalysisState {
 
   /**
    * add function to current file
-   * 
+   *
    * @param activeFunction function to add
    */
   public void addFunction(FunctionInterface activeFunction) {
@@ -61,7 +60,7 @@ public class CodeAnalysisResults extends CodeAnalysisState {
 
   /**
    * add class to current file
-   * 
+   *
    * @param clazz class to add
    */
   public void addClass(ClassInterface clazz) {
@@ -70,7 +69,7 @@ public class CodeAnalysisResults extends CodeAnalysisState {
 
   /**
    * check, if there is a certain function in current file
-   * 
+   *
    * @param activeFunction function to find
    * @return true if function is present, false otherwise
    */

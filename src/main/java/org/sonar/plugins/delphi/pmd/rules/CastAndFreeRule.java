@@ -28,19 +28,21 @@ import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
- * Cast And Free rule - don't cast, just to free something, example:
- * TMyObject(sth).free; (sth as TMyObject).free;
+ * Cast And Free rule - don't cast, just to free something, example: TMyObject(sth).free; (sth as
+ * TMyObject).free;
  */
 public class CastAndFreeRule extends DelphiRule {
 
   private int sequenceHardCastIndex = 0;
   private int sequenceSoftCastIndex = 0;
-  private LexerMetrics hardCastSequence[] = {LexerMetrics.IDENT, LexerMetrics.LPAREN, LexerMetrics.IDENT,
-    LexerMetrics.RPAREN,
-    LexerMetrics.DOT, LexerMetrics.IDENT};
-  private LexerMetrics softCastSequence[] = {LexerMetrics.LPAREN, LexerMetrics.IDENT, LexerMetrics.AS,
-    LexerMetrics.IDENT,
-    LexerMetrics.RPAREN, LexerMetrics.DOT, LexerMetrics.IDENT};
+  private LexerMetrics hardCastSequence[] = {LexerMetrics.IDENT, LexerMetrics.LPAREN,
+      LexerMetrics.IDENT,
+      LexerMetrics.RPAREN,
+      LexerMetrics.DOT, LexerMetrics.IDENT};
+  private LexerMetrics softCastSequence[] = {LexerMetrics.LPAREN, LexerMetrics.IDENT,
+      LexerMetrics.AS,
+      LexerMetrics.IDENT,
+      LexerMetrics.RPAREN, LexerMetrics.DOT, LexerMetrics.IDENT};
 
   @Override
   public void init() {
@@ -54,19 +56,18 @@ public class CastAndFreeRule extends DelphiRule {
     sequenceSoftCastIndex = processSequence(softCastSequence, sequenceSoftCastIndex, node, ctx);
   }
 
-  private int processSequence(LexerMetrics sequence[], int sequenceIndex, DelphiPMDNode node, RuleContext ctx) {
+  private int processSequence(LexerMetrics sequence[], int sequenceIndex, DelphiPMDNode node,
+      RuleContext ctx) {
     int resultIndex = sequenceIndex;
     if (resultIndex >= sequence.length) {
       resultIndex = 0;
-    }
-    else if (sequence[resultIndex].toMetrics() == node.getType()) {
+    } else if (sequence[resultIndex].toMetrics() == node.getType()) {
       ++resultIndex;
       if (isCorrectSequence(sequence, resultIndex, node)) {
         resultIndex = 0;
         addViolation(ctx, node);
       }
-    }
-    else {
+    } else {
       resultIndex = 0;
     }
 

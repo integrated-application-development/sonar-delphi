@@ -21,9 +21,9 @@ package org.sonar.plugins.delphi.metrics.basicmetrics;
 
 public enum Metric {
 
-  LINES(false), BLANK_LINES(false), COMMENT_LINES(false), HEADER_COMMENT_LINES(false), COMMENTED_OUT_CODE_LINES(false),
-  PUBLIC_API, PUBLIC_DOC_API, COMMENT_BLANK_LINES(false), LINES_OF_CODE(false)
-  ;
+  LINES(false), BLANK_LINES(false), COMMENT_LINES(false), HEADER_COMMENT_LINES(
+      false), COMMENTED_OUT_CODE_LINES(false),
+  PUBLIC_API, PUBLIC_DOC_API, COMMENT_BLANK_LINES(false), LINES_OF_CODE(false);
 
   private boolean aggregateIfThereIsAlreadyAValue = true;
 

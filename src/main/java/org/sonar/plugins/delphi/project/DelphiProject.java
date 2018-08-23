@@ -22,14 +22,13 @@
  */
 package org.sonar.plugins.delphi.project;
 
-import org.apache.commons.lang.StringUtils;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
-import org.xml.sax.SAXException;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.xml.sax.SAXException;
 
 /**
  * DelphiLanguage project class, it holds values parsed from *.dproj file.
@@ -44,7 +43,7 @@ public class DelphiProject {
 
   /**
    * C-tor, initializes project with name and empty files and definitions
-   * 
+   *
    * @param projName Project name
    */
   public DelphiProject(String projName) {
@@ -53,7 +52,7 @@ public class DelphiProject {
 
   /**
    * C-tor, initializes project with data loaded from xml file
-   * 
+   *
    * @param xml XML file to parse
    */
   public DelphiProject(File xml) {
@@ -85,7 +84,7 @@ public class DelphiProject {
 
   /**
    * Adds a project preprocessor definition
-   * 
+   *
    * @param definition Preprocessor definition
    */
   public void addDefinition(String definition) {
@@ -96,7 +95,7 @@ public class DelphiProject {
 
   /**
    * adds directory where to search for include files
-   * 
+   *
    * @param directory directory with includes
    * @throws IOException if directory is invalid
    */
@@ -114,7 +113,7 @@ public class DelphiProject {
 
   /**
    * Parses xml file to gather data
-   * 
+   *
    * @param xml File to parse
    * @throws IOException If file not found
    * @throws SAXException when parsing error occurs

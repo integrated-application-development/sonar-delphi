@@ -22,6 +22,10 @@
  */
 package org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
@@ -31,13 +35,8 @@ import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-import java.io.File;
-import java.io.IOException;
+public class DelphiCoverageToolParserTest {
 
-import static org.junit.Assert.assertEquals;
-
-public class DelphiCoverageToolParserTest
-{
   private SensorContextTester context;
   private File baseDir;
   private DelphiProjectHelper delphiProjectHelper;
@@ -47,8 +46,7 @@ public class DelphiCoverageToolParserTest
 
   private final File reportFile = DelphiUtils.getResource(REPORT_FILE);
 
-  private void addFile(String fileName) throws IOException
-  {
+  private void addFile(String fileName) throws IOException {
     File file = DelphiUtils.getResource(fileName);
     final InputFile inputFile = TestInputFileBuilder.create("", baseDir, file)
         .setLanguage(DelphiLanguage.KEY)
@@ -72,19 +70,20 @@ public class DelphiCoverageToolParserTest
 
   @Test
   public void parseTest() {
-    DelphiCodeCoverageToolParser parser = new DelphiCodeCoverageToolParser(reportFile, delphiProjectHelper);
+    DelphiCodeCoverageToolParser parser = new DelphiCodeCoverageToolParser(reportFile,
+        delphiProjectHelper);
     parser.parse(context);
 
-    assertEquals((Integer)1, context.lineHits(":Globals.pas", 16));
-    assertEquals((Integer)1, context.lineHits(":Globals.pas", 17));
-    assertEquals((Integer)0, context.lineHits(":Globals.pas", 23));
+    assertEquals((Integer) 1, context.lineHits(":Globals.pas", 16));
+    assertEquals((Integer) 1, context.lineHits(":Globals.pas", 17));
+    assertEquals((Integer) 0, context.lineHits(":Globals.pas", 23));
 
-    assertEquals((Integer)1, context.lineHits(":MainWindow.pas", 31));
-    assertEquals((Integer)1, context.lineHits(":MainWindow.pas", 36));
-    assertEquals((Integer)1, context.lineHits(":MainWindow.pas", 37));
-    assertEquals((Integer)1, context.lineHits(":MainWindow.pas", 38));
-    assertEquals((Integer)1, context.lineHits(":MainWindow.pas", 39));
-    assertEquals((Integer)1, context.lineHits(":MainWindow.pas", 40));
+    assertEquals((Integer) 1, context.lineHits(":MainWindow.pas", 31));
+    assertEquals((Integer) 1, context.lineHits(":MainWindow.pas", 36));
+    assertEquals((Integer) 1, context.lineHits(":MainWindow.pas", 37));
+    assertEquals((Integer) 1, context.lineHits(":MainWindow.pas", 38));
+    assertEquals((Integer) 1, context.lineHits(":MainWindow.pas", 39));
+    assertEquals((Integer) 1, context.lineHits(":MainWindow.pas", 40));
   }
 
 }

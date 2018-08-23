@@ -56,9 +56,9 @@ public class NoSemicolonRule extends DelphiRule {
 
   private boolean isValidNode(Tree node) {
     return node != null
-      && node.getType() != LexerMetrics.ELSE.toMetrics()
-      && node.getType() != DelphiLexer.FINALLY
-      && node.getType() != LexerMetrics.IMPLEMENTATION.toMetrics();
+        && node.getType() != LexerMetrics.ELSE.toMetrics()
+        && node.getType() != DelphiLexer.FINALLY
+        && node.getType() != LexerMetrics.IMPLEMENTATION.toMetrics();
   }
 
   private Tree getPreviousNode(DelphiPMDNode node) {
@@ -72,7 +72,8 @@ public class NoSemicolonRule extends DelphiRule {
 
   private boolean isBlockNode(Tree node) {
     return node != null
-      && (node.getType() == LexerMetrics.BEGIN.toMetrics() || node.getType() == LexerMetrics.EXCEPT
+        && (node.getType() == LexerMetrics.BEGIN.toMetrics()
+        || node.getType() == LexerMetrics.EXCEPT
         .toMetrics());
   }
 

@@ -27,22 +27,23 @@ import net.sourceforge.pmd.properties.StringProperty;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
- * Rule that checks, if sequence of nodes occur in file. Sequence should be
- * lowercase, since it is not case sensitive.
+ * Rule that checks, if sequence of nodes occur in file. Sequence should be lowercase, since it is
+ * not case sensitive.
  */
 public class NodeSequenceRule extends DelphiRule {
 
-  private static final StringProperty SEQUENCE = new StringProperty("sequence", "The AST sequence nodes to find", "",
-    1.0f);
+  private static final StringProperty SEQUENCE = new StringProperty("sequence",
+      "The AST sequence nodes to find", "",
+      1.0f);
 
   private String[] sequence;
   private int count;
   private DelphiPMDNode firstMatchNode;
 
-  public NodeSequenceRule()
-  {
+  public NodeSequenceRule() {
     definePropertyDescriptor(SEQUENCE);
   }
+
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
 

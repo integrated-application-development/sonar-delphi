@@ -13,28 +13,28 @@ unit TestUnit;
 *)
 
 {$if I_FEEL_HAPPY}
-	
+
 {$else}
 
 {$ifend}
 
 {$ifdef TEST}
 
-	{$ifndef UseMe}
-	  {$ifdef EnableMemoryLeakReporting}
-	
-	  {$else}
-	
-	  {$endif}
-	{$else}
-	  {$if VERSION >= 18}
-	  
-	  {$ifend}
-	  
-	  {$if RTLVersion < 18}
-	
-	  {$ifend}
-	{$endif}
+    {$ifndef UseMe}
+    {$ifdef EnableMemoryLeakReporting}
+
+    {$else}
+
+    {$endif}
+    {$else}
+    {$if VERSION >= 18}
+
+    {$ifend}
+
+    {$if RTLVersion < 18}
+
+    {$ifend}
+    {$endif}
 
 {$endif}
 

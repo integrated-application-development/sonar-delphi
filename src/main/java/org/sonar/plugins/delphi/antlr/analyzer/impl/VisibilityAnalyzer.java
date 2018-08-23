@@ -44,7 +44,8 @@ public class VisibilityAnalyzer extends CodeAnalyzer {
   public boolean canAnalyze(CodeTree codeTree) {
     Tree currentNode = codeTree.getCurrentCodeNode().getNode();
     int type = currentNode.getType();
-    return type == DelphiParser.PUBLIC || type == DelphiParser.PRIVATE || type == DelphiParser.PROTECTED
-      || type == DelphiParser.PUBLISHED;
+    return type == DelphiParser.PUBLIC || type == DelphiParser.PRIVATE
+        || type == DelphiParser.PROTECTED
+        || type == DelphiParser.PUBLISHED;
   }
 }

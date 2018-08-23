@@ -25,7 +25,6 @@ package org.sonar.plugins.delphi.pmd.xml;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +55,7 @@ public class Ruleset {
 
   /**
    * Ctor with description
-   * 
+   *
    * @param description Rule set description
    */
   public Ruleset(String description) {
@@ -72,7 +71,7 @@ public class Ruleset {
 
   /**
    * Sets list of rule
-   * 
+   *
    * @param delphiRules New rules
    */
   public void setRules(List<DelphiRule> delphiRules) {
@@ -88,7 +87,7 @@ public class Ruleset {
 
   /**
    * Sets rule set description
-   * 
+   *
    * @param description new description
    */
   public void setDescription(String description) {
@@ -97,7 +96,7 @@ public class Ruleset {
 
   /**
    * Adds rule to set
-   * 
+   *
    * @param delphiRule DelphiLanguage Rule to add
    */
   public void addRule(DelphiRule delphiRule) {

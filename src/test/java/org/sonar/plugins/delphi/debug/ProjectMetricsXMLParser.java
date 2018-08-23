@@ -22,12 +22,13 @@
  */
 package org.sonar.plugins.delphi.debug;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import java.io.File;
-import java.util.*;
 
 /**
  * Class for parsing value.xml file, used for DelphiSensorTest
@@ -59,7 +60,7 @@ public class ProjectMetricsXMLParser extends SimpleXMLParser {
 
   /**
    * Gets the name of all files to check in DelphiSensorTest class
-   * 
+   *
    * @return Set of file names (set of Strings)
    */
   public Set<String> getFileNames() {
@@ -68,7 +69,7 @@ public class ProjectMetricsXMLParser extends SimpleXMLParser {
 
   /**
    * Gets expected metric values for specified file
-   * 
+   *
    * @param filename File name
    * @return Expected values, array of doubles
    */
@@ -84,7 +85,7 @@ public class ProjectMetricsXMLParser extends SimpleXMLParser {
     for (int i = 0; i < att.getLength(); ++i) {
       Node metric = att.item(i);
       String name = metric.getAttributes().getNamedItem("name").getNodeValue();
-      result.put(name,getNodeValueText(metric));
+      result.put(name, getNodeValueText(metric));
     }
 
     return result;

@@ -18,12 +18,11 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import org.junit.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKey;
-import static org.sonar.plugins.delphi.IssueMatchers.hasRuleLine;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
+
+import org.junit.Test;
 
 public class EmptyFinallyBlockRuleTest extends BasePmdRuleTest {
 

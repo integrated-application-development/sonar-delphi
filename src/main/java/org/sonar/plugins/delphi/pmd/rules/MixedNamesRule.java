@@ -22,26 +22,19 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import java.util.ArrayList;
+import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Rule that checks if you are using function/variables names correctly, that is
- * you don't misspell them, example: <code>var
- * xyz: integer;
- * begin
- * xyz := 1;	//OK
- * xYZ := 2;	//BAD
- * end;</code>
- * 
+ * Rule that checks if you are using function/variables names correctly, that is you don't misspell
+ * them, example: <code>var xyz: integer; begin xyz := 1;	//OK xYZ := 2;	//BAD end;</code>
+ *
  * @author SG0214809
- * 
  */
 public class MixedNamesRule extends DelphiRule {
 
@@ -104,9 +97,9 @@ public class MixedNamesRule extends DelphiRule {
       } else {
         for (String globalName : variableNames) {
           if (child.getText().equalsIgnoreCase(globalName.toLowerCase())
-            && !child.getText().equals(globalName)) {
+              && !child.getText().equals(globalName)) {
             addViolation(ctx, child, "Avoid mixing variable names (found: '" + child.getText()
-              + "' expected: '" + globalName + "').");
+                + "' expected: '" + globalName + "').");
           }
         }
       }
@@ -126,7 +119,7 @@ public class MixedNamesRule extends DelphiRule {
       for (String globalName : functionNames) {
         if (name.equalsIgnoreCase(globalName.toLowerCase()) && !name.equals(globalName)) {
           addViolation(ctx, node, "Avoid mixing function names (found: '" + name + "' expected: '"
-            + globalName + "').");
+              + globalName + "').");
         }
       }
     }
@@ -134,7 +127,7 @@ public class MixedNamesRule extends DelphiRule {
 
   /**
    * Build names from current node (TkVariableIdents of TkFunctionName node)
-   * 
+   *
    * @param node Node from which to build names
    * @param multiply If true, each node child will be treated as a new name
    * @return List of names

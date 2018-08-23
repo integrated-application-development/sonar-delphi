@@ -29,8 +29,7 @@ import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRangeMergingAggrega
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl.IntegerSubRange;
 
 /**
- * Parses file to look for places to be excluded from processing, such as:
- * strings and comments.
+ * Parses file to look for places to be excluded from processing, such as: strings and comments.
  */
 public class ExcludeResolver extends SourceResolver {
 
@@ -40,8 +39,7 @@ public class ExcludeResolver extends SourceResolver {
   }
 
   /**
-   * @return sub range aggregator containing all exclude elements: comments,
-   *         strings
+   * @return sub range aggregator containing all exclude elements: comments, strings
    */
   private SubRangeAggregator getAllExcludes(StringBuilder fileData) {
     SubRangeMergingAggregator rangeAggregator = new SubRangeMergingAggregator();
@@ -97,8 +95,7 @@ public class ExcludeResolver extends SourceResolver {
     SubRangeAggregator rangeAggregator = new SubRangeMergingAggregator();
     int pos = -1;
     // parses strings
-    while ((pos = fileData.indexOf("'", pos + 1)) != -1)
-    {
+    while ((pos = fileData.indexOf("'", pos + 1)) != -1) {
       // get next ' position
       int pos2 = fileData.indexOf("'", pos + 1);
       if (pos2 == -1) {

@@ -22,13 +22,13 @@
  */
 package org.sonar.plugins.delphi.core.language.impl;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.core.language.ClassFieldInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
-
-import static org.junit.Assert.assertEquals;
 
 public class DelphiClassTest {
 

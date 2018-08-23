@@ -24,34 +24,33 @@ package org.sonar.plugins.delphi.core.language;
 
 /**
  * Statement interface used to declare language specific statements.
- * 
  */
 public interface StatementInterface {
 
   /**
    * Get statement line
-   * 
+   *
    * @return Statement line
    */
   int getLine();
 
   /**
    * Get statement column
-   * 
+   *
    * @return Statement column
    */
   int getColumn();
 
   /**
    * Get statement text, example: "if", "else", "x := 5;"
-   * 
+   *
    * @return The statement text
    */
   String getText();
 
   /**
    * Get class field associated with this statement
-   * 
+   *
    * @param fromClass Class, in which to look for fields
    * @return ClassField if statement includes variable, null otherwise
    */
@@ -59,36 +58,35 @@ public interface StatementInterface {
 
   /**
    * Sets statement text
-   * 
+   *
    * @param value Value to set
    */
   void setText(String value);
 
   /**
    * Set statement line number
-   * 
+   *
    * @param value Line number
    */
   void setLine(int value);
 
   /**
    * Set statement column number
-   * 
+   *
    * @param value Column number
    */
   void setColumn(int value);
 
   /**
-   * Sets if statement is complex statement, example: "x := x + 6;",
-   * "y := x * 2.5;" etc
-   * 
+   * Sets if statement is complex statement, example: "x := x + 6;", "y := x * 2.5;" etc
+   *
    * @param isComplex Param to set
    */
   void setComplexity(boolean isComplex);
 
   /**
    * Shows if the statement is a complex statement or not
-   * 
+   *
    * @return True if complex statement, false otherwise
    */
   boolean isComplex();

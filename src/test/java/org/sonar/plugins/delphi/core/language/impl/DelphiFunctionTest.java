@@ -22,9 +22,9 @@
  */
 package org.sonar.plugins.delphi.core.language.impl;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 public class DelphiFunctionTest {
 
@@ -81,7 +81,7 @@ public class DelphiFunctionTest {
     assertEquals(2, func1.getCalledFunctions().length);
 
     func1.addCalledFunction(func3); // once more the same func, to ensure it
-                                    // does not count
+    // does not count
     assertEquals(2, func1.getCalledFunctions().length);
   }
 }

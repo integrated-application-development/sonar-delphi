@@ -22,8 +22,11 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.tree.Tree;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
@@ -38,11 +41,6 @@ import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiClass;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-
-import java.io.File;
-import java.io.IOException;
-
-import static org.junit.Assert.*;
 
 public class TypeFieldsAnalyzerTest {
 

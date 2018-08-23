@@ -22,7 +22,10 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl.operations;
 
-import org.antlr.runtime.RecognitionException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,12 +34,6 @@ import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-
-import java.io.File;
-import java.io.IOException;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class AdvanceNodeOperationTest extends OperationsTestsCommon {
 

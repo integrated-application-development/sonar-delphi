@@ -29,14 +29,14 @@ public interface CompilerDirective {
 
   /**
    * example: <code>#include &lt;iostream&gt;</code> will return "include"
-   * 
+   *
    * @return definition name
    */
   String getName();
 
   /**
    * example: <code>#include &lt;iostream&gt;</code> will return "iostream"
-   * 
+   *
    * @return definition item
    */
   String getItem();
@@ -57,9 +57,8 @@ public interface CompilerDirective {
   CompilerDirectiveType getType();
 
   /**
-   * Get length of the directive, that is: the span from first and last char
-   * position
-   * 
+   * Get length of the directive, that is: the span from first and last char position
+   *
    * @return directive length
    */
   int getLength();

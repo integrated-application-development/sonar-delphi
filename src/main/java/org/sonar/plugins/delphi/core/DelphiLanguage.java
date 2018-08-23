@@ -38,7 +38,8 @@ public class DelphiLanguage extends AbstractLanguage {
 
   private static final String LANGUAGE_NAME = "Delphi";
 
-  private static final String[] FILE_SUFFIXES = {FILE_SOURCE_CODE_SUFFIX, FILE_PROJECT_SUFFIX, FILE_PACKAGE_SUFFIX};
+  private static final String[] FILE_SUFFIXES = {FILE_SOURCE_CODE_SUFFIX, FILE_PROJECT_SUFFIX,
+      FILE_PACKAGE_SUFFIX};
 
   /**
    * Default ctor

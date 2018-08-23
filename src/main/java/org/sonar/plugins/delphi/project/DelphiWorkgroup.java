@@ -42,7 +42,7 @@ public class DelphiWorkgroup {
 
   /**
    * C-tor, gets project list from xml file
-   * 
+   *
    * @param xmlFile .groupproj XML file
    * @throws IOException If XML file not found
    */
@@ -70,7 +70,7 @@ public class DelphiWorkgroup {
 
   /**
    * Adds a project to the workgroup project list
-   * 
+   *
    * @param newProject Project to add
    */
   public void addProject(DelphiProject newProject) {

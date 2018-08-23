@@ -33,13 +33,15 @@ public class WithAfterDoThenRule extends NoBeginAfterDoRule {
   @Override
   protected boolean isWrongNode(Tree node) {
     return node != null
-      && (node.getType() == LexerMetrics.WITH.toMetrics() || node.getType() == LexerMetrics.THEN.toMetrics());
+        && (node.getType() == LexerMetrics.WITH.toMetrics() || node.getType() == LexerMetrics.THEN
+        .toMetrics());
   }
 
   @Override
   protected boolean shouldCheck(Tree node) {
     return node != null
-      && (node.getType() == LexerMetrics.DO.toMetrics() || node.getType() == LexerMetrics.THEN.toMetrics());
+        && (node.getType() == LexerMetrics.DO.toMetrics() || node.getType() == LexerMetrics.THEN
+        .toMetrics());
   }
 
 }

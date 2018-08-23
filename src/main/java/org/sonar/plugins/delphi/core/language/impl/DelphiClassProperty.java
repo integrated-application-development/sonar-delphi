@@ -27,7 +27,7 @@ import org.sonar.plugins.delphi.core.language.FunctionInterface;
 
 /**
  * DelphiLanguage class property class
- * 
+ *
  * @see ClassPropertyInterface
  */
 public class DelphiClassProperty extends DelphiClassField implements ClassPropertyInterface {
@@ -43,13 +43,15 @@ public class DelphiClassProperty extends DelphiClassField implements ClassProper
 
   /**
    * Ctor
+   *
    * @param name property name
    * @param type property type
    * @param visibility property visibility
    * @param read property getter
    * @param write property setter
    */
-  public DelphiClassProperty(String name, String type, int visibility, FunctionInterface read, FunctionInterface write) {
+  public DelphiClassProperty(String name, String type, int visibility, FunctionInterface read,
+      FunctionInterface write) {
     super(name, type, visibility);
     readFunction = read;
     writeFunction = write;

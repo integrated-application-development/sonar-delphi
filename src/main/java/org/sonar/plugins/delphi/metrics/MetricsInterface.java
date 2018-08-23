@@ -22,13 +22,12 @@
  */
 package org.sonar.plugins.delphi.metrics;
 
+import java.util.List;
+import java.util.Set;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
-
-import java.util.List;
-import java.util.Set;
 
 /**
  * Interface for metrics
@@ -37,30 +36,29 @@ public interface MetricsInterface {
 
   /**
    * Analyse given DelphiLanguage source file
-   * 
+   *
    * @param resource DelphiLanguage source file
    * @param classes Classes in source file
    * @param functions Functions in source file
    * @param units Units in project
    */
   void analyse(InputFile resource, List<ClassInterface> classes,
-    List<FunctionInterface> functions,
-    Set<UnitInterface> units);
+      List<FunctionInterface> functions,
+      Set<UnitInterface> units);
 
   /**
    * Saves analysis result from sensorContext and associates it with resource
-   * 
+   *
    * @param inputFile Resource to associate analysis results with
    */
   void save(InputFile inputFile);
 
   /**
    * Gets custom metric
-   * 
+   *
    * @param metric Metric name
-   * @throws IllegalStateException if the metric was not set before while
-   *             analysing
    * @return Integer Metric value
+   * @throws IllegalStateException if the metric was not set before while analysing
    */
   Integer getIntMetric(String metric);
 
@@ -68,22 +66,21 @@ public interface MetricsInterface {
    * Gets custom metric
    *
    * @param metric Metric name
-   * @throws IllegalStateException if the metric was not set before while
-   *             analysing
    * @return double Metric value
+   * @throws IllegalStateException if the metric was not set before while analysing
    */
   double getMetric(String metric);
 
   /**
    * Gets the metric keys, for you to know what metrics are available
-   * 
+   *
    * @return Metrics keys
    */
   String[] getMetricKeys();
 
   /**
    * Should metric execute on provided resource?
-   * 
+   *
    * @param resource Resource to check
    * @return True if metric should execute, false otherwise
    */
@@ -91,7 +88,7 @@ public interface MetricsInterface {
 
   /**
    * Verify if a metric exists
-   * 
+   *
    * @param metric Metric name
    * @return true if the metric exists
    */

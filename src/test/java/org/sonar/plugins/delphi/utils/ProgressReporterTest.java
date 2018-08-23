@@ -22,12 +22,12 @@
  */
 package org.sonar.plugins.delphi.utils;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 
-public class ProgressReporterTest
-{
+import org.junit.Test;
+
+public class ProgressReporterTest {
+
   @Test
   public void testDefaultReporter() {
     ProgressReporter reporter = new ProgressReporter();

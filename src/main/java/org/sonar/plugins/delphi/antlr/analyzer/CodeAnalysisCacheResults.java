@@ -22,17 +22,16 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer;
 
-import org.apache.commons.lang.StringUtils;
-import org.sonar.plugins.delphi.core.language.ClassInterface;
-import org.sonar.plugins.delphi.core.language.FunctionInterface;
-import org.sonar.plugins.delphi.core.language.UnitInterface;
-import org.sonar.plugins.delphi.core.language.impl.UnresolvedFunctionCall;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import org.apache.commons.lang.StringUtils;
+import org.sonar.plugins.delphi.core.language.ClassInterface;
+import org.sonar.plugins.delphi.core.language.FunctionInterface;
+import org.sonar.plugins.delphi.core.language.UnitInterface;
+import org.sonar.plugins.delphi.core.language.impl.UnresolvedFunctionCall;
 
 /**
  * Holds cached results in static variables
@@ -63,7 +62,7 @@ public class CodeAnalysisCacheResults {
 
   /**
    * Adds a unresolved function call
-   * 
+   *
    * @param name unresolved function name
    * @param call the unresolved call
    */
@@ -135,7 +134,7 @@ public class CodeAnalysisCacheResults {
 
   /**
    * add new unit to cache
-   * 
+   *
    * @param unit unit to add
    */
   public void cacheUnit(UnitInterface unit) {
@@ -144,7 +143,7 @@ public class CodeAnalysisCacheResults {
 
   /**
    * add new class to cache
-   * 
+   *
    * @param clazz class
    */
   public void cacheClass(ClassInterface clazz) {
@@ -158,7 +157,7 @@ public class CodeAnalysisCacheResults {
 
   /**
    * add new function to cache
-   * 
+   *
    * @param funcName function name
    * @param function function
    */

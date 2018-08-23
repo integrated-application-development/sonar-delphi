@@ -31,7 +31,7 @@ public interface ASTAnalyzer {
 
   /**
    * Analyse an AST tree
-   * 
+   *
    * @param ast AST Tree
    * @return Result the result of analysis.
    */

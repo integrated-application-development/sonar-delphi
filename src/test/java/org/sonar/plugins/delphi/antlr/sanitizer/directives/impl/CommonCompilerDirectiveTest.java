@@ -22,11 +22,11 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.directives.impl;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
 import org.sonar.plugins.delphi.antlr.directives.impl.CommonCompilerDirective;
-
-import static org.junit.Assert.assertEquals;
 
 public class CommonCompilerDirectiveTest {
 

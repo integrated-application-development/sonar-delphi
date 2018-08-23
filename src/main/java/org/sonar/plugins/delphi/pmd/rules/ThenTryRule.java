@@ -31,7 +31,6 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
  * "Try" should always be preceded with "Begin" after "Then"
- * 
  */
 public class ThenTryRule extends DelphiRule {
 

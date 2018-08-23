@@ -22,30 +22,30 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
-import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileExporter;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-
-import java.io.*;
-import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public abstract class BasePmdRuleTest {
 
@@ -74,7 +74,8 @@ public abstract class BasePmdRuleTest {
   private void configureTest(DelphiUnitBuilderTest builder) {
     testFile = builder.buildFile(ROOT_DIR);
 
-    String relativePathTestFile = DelphiUtils.getRelativePath(testFile, Collections.singletonList(ROOT_DIR));
+    String relativePathTestFile = DelphiUtils
+        .getRelativePath(testFile, Collections.singletonList(ROOT_DIR));
 
     configureTest(ROOT_DIR_NAME + "/" + relativePathTestFile, builder);
   }
@@ -90,7 +91,8 @@ public abstract class BasePmdRuleTest {
 
     baseDir = DelphiUtils.getResource(ROOT_DIR_NAME);
 
-    InputFile inputFile = TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, srcFile)
+    InputFile inputFile = TestInputFileBuilder
+        .create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, srcFile)
         .setModuleBaseDir(baseDir.toPath())
         .setContents(builder.getSourceCode().toString())
         .build();
@@ -100,7 +102,8 @@ public abstract class BasePmdRuleTest {
     DelphiProject delphiProject = new DelphiProject("Default Project");
     delphiProject.setSourceFiles(Collections.singletonList(srcFile));
 
-    when(delphiProjectHelper.getWorkgroupProjects()).thenReturn(Collections.singletonList(delphiProject));
+    when(delphiProjectHelper.getWorkgroupProjects())
+        .thenReturn(Collections.singletonList(delphiProject));
     when(delphiProjectHelper.getFile(anyString())).thenAnswer(new Answer<InputFile>() {
       @Override
       public InputFile answer(InvocationOnMock invocation) {
@@ -147,7 +150,8 @@ public abstract class BasePmdRuleTest {
   }
 
   public String toString(Issue issue) {
-    return "Issue [ruleKey=" + issue.ruleKey() + ", message=" + issue.primaryLocation().message() + ", line=" + issue.primaryLocation().textRange().start().line() + "]";
+    return "Issue [ruleKey=" + issue.ruleKey() + ", message=" + issue.primaryLocation().message()
+        + ", line=" + issue.primaryLocation().textRange().start().line() + "]";
   }
 
 }

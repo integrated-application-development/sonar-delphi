@@ -44,13 +44,16 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
   private CodeAnalysisResults results = null;
   private StatementVerifier statementverifier;
 
-  private static final LexerMetrics[] BRANCHING_NODES = {LexerMetrics.IF, LexerMetrics.FOR, LexerMetrics.WHILE,
-    LexerMetrics.CASE,
-    LexerMetrics.REPEAT, LexerMetrics.AND, LexerMetrics.OR};
+  private static final LexerMetrics[] BRANCHING_NODES = {LexerMetrics.IF, LexerMetrics.FOR,
+      LexerMetrics.WHILE,
+      LexerMetrics.CASE,
+      LexerMetrics.REPEAT, LexerMetrics.AND, LexerMetrics.OR};
 
-  public FunctionBodyAnalyzer(CodeAnalysisResults results, DelphiProjectHelper delphiProjectHelper) {
+  public FunctionBodyAnalyzer(CodeAnalysisResults results,
+      DelphiProjectHelper delphiProjectHelper) {
     if (results == null) {
-      throw new IllegalArgumentException("FunctionBodyAnalyzer ctor 'results' parameter cannot be null.");
+      throw new IllegalArgumentException(
+          "FunctionBodyAnalyzer ctor 'results' parameter cannot be null.");
     }
     this.results = results;
     this.statementverifier = new StatementVerifier();
@@ -99,10 +102,10 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
     for (int i = currentCodeNode.getChildIndex() - 1; i >= 0; i--) {
       Tree child = parent.getChild(i);
       if (child.getType() == DelphiLexer.FUNCTION
-        || child.getType() == DelphiLexer.PROCEDURE
-        || child.getType() == DelphiLexer.CONSTRUCTOR
-        || child.getType() == DelphiLexer.DESTRUCTOR
-        || child.getType() == DelphiLexer.OPERATOR) {
+          || child.getType() == DelphiLexer.PROCEDURE
+          || child.getType() == DelphiLexer.CONSTRUCTOR
+          || child.getType() == DelphiLexer.DESTRUCTOR
+          || child.getType() == DelphiLexer.OPERATOR) {
         return child.getLine();
       }
     }
@@ -110,16 +113,17 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
   }
 
   /**
-   * Only functions existing in your project and in include directories are
-   * counted, so system functions like 'writeln' are NOT counted.
+   * Only functions existing in your project and in include directories are counted, so system
+   * functions like 'writeln' are NOT counted.
    */
-  private void countCalledFunctions(Tree node, FunctionInterface function, CodeAnalysisResults results) {
+  private void countCalledFunctions(Tree node, FunctionInterface function,
+      CodeAnalysisResults results) {
     CalledFunctionVerifier verifyer = new CalledFunctionVerifier(results);
     if (verifyer.verify(node)) {
       FunctionInterface calledFunction = verifyer.fetchCalledFunction();
       if (verifyer.isUnresolvedFunctionCall()) {
         UnresolvedFunctionCall unresolvedCall = new UnresolvedFunctionCall(function, calledFunction,
-          results.getActiveUnit());
+            results.getActiveUnit());
         results.addUnresolvedCall(calledFunction.getName(), unresolvedCall);
       } else {
         function.addCalledFunction(calledFunction);

@@ -23,7 +23,7 @@ public class EmptyFinallyBlockRule extends NodeSequenceRule {
   @Override
   protected void init() {
     super.init();
-    setSequence(new String[] {"finally", "end"});
+    setSequence(new String[]{"finally", "end"});
   }
 
 }

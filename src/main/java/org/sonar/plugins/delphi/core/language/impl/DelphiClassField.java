@@ -28,7 +28,7 @@ import org.sonar.plugins.delphi.core.language.ClassInterface;
 
 /**
  * DelphiLanguage language class field.
- * 
+ *
  * @see ClassFieldInterface
  */
 public class DelphiClassField extends DelphiArgument implements ClassFieldInterface {
@@ -44,7 +44,7 @@ public class DelphiClassField extends DelphiArgument implements ClassFieldInterf
 
   /**
    * ctor
-   * 
+   *
    * @param name field name
    * @param type field type
    * @param fieldVisibility field visibility

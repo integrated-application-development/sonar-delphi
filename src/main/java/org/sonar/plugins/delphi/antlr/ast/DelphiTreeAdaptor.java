@@ -36,7 +36,7 @@ class DelphiTreeAdaptor extends CommonTreeAdaptor {
 
   /**
    * Adaptor ctor
-   * 
+   *
    * @param tree Tree
    */
   public DelphiTreeAdaptor(ASTTree tree) {
@@ -52,8 +52,8 @@ class DelphiTreeAdaptor extends CommonTreeAdaptor {
   }
 
   /**
-   * When creating imaginary Tokens (such as TkReturnType etc) we need to set
-   * its parameters manually.
+   * When creating imaginary Tokens (such as TkReturnType etc) we need to set its parameters
+   * manually.
    */
 
   @Override

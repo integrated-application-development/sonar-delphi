@@ -32,6 +32,7 @@ public abstract class DefaultMetrics implements MetricsInterface {
 
   protected Map<String, Double> metrics = new HashMap<>();
   protected Map<String, Integer> intMetrics = new HashMap<>();
+
   /**
    * {@inheritDoc}
    */

@@ -46,13 +46,15 @@ public class TypeAnalyzer extends CodeAnalyzer {
     }
 
     int type = getGrandChild(currentNode).getType();
-    return type == DelphiLexer.TkClass || type == DelphiLexer.TkRecord || type == DelphiLexer.TkInterface;
+    return type == DelphiLexer.TkClass || type == DelphiLexer.TkRecord
+        || type == DelphiLexer.TkInterface;
   }
 
   @Override
   protected void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
     if (results.getActiveUnit() == null) {
-      throw new IllegalStateException("AbstractAnalyser::parseClass() - Cannot create class outside unit.");
+      throw new IllegalStateException(
+          "AbstractAnalyser::parseClass() - Cannot create class outside unit.");
     }
 
     CommonTree nameNode = getClassNameNode(codeTree.getCurrentCodeNode().getNode());

@@ -33,7 +33,7 @@ public class ElseDirective extends CommonCompilerDirective {
 
   /**
    * ctor
-   * 
+   *
    * @param item item
    * @param firstCharPos first character position
    * @param lastCharPos last character position

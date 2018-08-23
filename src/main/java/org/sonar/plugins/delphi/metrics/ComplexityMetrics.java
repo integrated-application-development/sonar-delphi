@@ -22,6 +22,9 @@
  */
 package org.sonar.plugins.delphi.metrics;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.ActiveRule;
 import org.sonar.api.batch.rule.ActiveRules;
@@ -36,16 +39,13 @@ import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 /**
  * Class counting function cyclomatic complexity.
  */
 public class ComplexityMetrics extends DefaultMetrics implements MetricsInterface {
 
-  public static final RuleKey RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY = RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, "MethodCyclomaticComplexityRule");
+  public static final RuleKey RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY = RuleKey
+      .of(DelphiPmdConstants.REPOSITORY_KEY, "MethodCyclomaticComplexityRule");
 
   private ActiveRule methodCyclomaticComplexityRule;
 
@@ -62,11 +62,13 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
    */
   private int methodsCount = 0;
   /**
-   *  Number of statements as defined in the DelphiLanguage Language Specification but without block  definitions.
+   * Number of statements as defined in the DelphiLanguage Language Specification but without block
+   * definitions.
    */
   private int statementsCount = 0;
   /**
-   * Number of public classes, public methods  (without accessors) and public properties  (without public final static ones).
+   * Number of public classes, public methods  (without accessors) and public properties  (without
+   * public final static ones).
    */
   private int publicApi = 0;
 
@@ -85,7 +87,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
 
   /**
    * Analyses DelphiLanguage source file
-   * 
+   *
    * @param resource DelphiLanguage source file (.pas) to analyse
    * @param classes Classes that were found in that file
    * @param functions Functions that were found in that file
@@ -93,8 +95,8 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
 
   @Override
   public void analyse(InputFile resource, List<ClassInterface> classes,
-    List<FunctionInterface> functions,
-    Set<UnitInterface> units) {
+      List<FunctionInterface> functions,
+      Set<UnitInterface> units) {
     reset();
     Set<String> processedFunc = new HashSet<>();
     if (classes != null) {
@@ -162,15 +164,20 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
     }
     try {
       // Number of statements as defined in the DelphiLanguage Language Specification but without block definitions.
-      context.<Integer>newMeasure().forMetric(CoreMetrics.STATEMENTS).on(resource).withValue(getIntMetric("STATEMENTS")).save();
+      context.<Integer>newMeasure().forMetric(CoreMetrics.STATEMENTS).on(resource)
+          .withValue(getIntMetric("STATEMENTS")).save();
       // The Cyclomatic Complexity Number
-      context.<Integer>newMeasure().forMetric(CoreMetrics.COMPLEXITY).on(resource).withValue(getIntMetric("COMPLEXITY")).save();
+      context.<Integer>newMeasure().forMetric(CoreMetrics.COMPLEXITY).on(resource)
+          .withValue(getIntMetric("COMPLEXITY")).save();
       // Number of classes including nested classes, interfaces, enums and annotations
-      context.<Integer>newMeasure().forMetric(CoreMetrics.CLASSES).on(resource).withValue(getIntMetric("CLASSES")).save();
+      context.<Integer>newMeasure().forMetric(CoreMetrics.CLASSES).on(resource)
+          .withValue(getIntMetric("CLASSES")).save();
       // Number of Methods without including accessors. A constructor is considered to be a method.
-      context.<Integer>newMeasure().forMetric(CoreMetrics.FUNCTIONS).on(resource).withValue(getIntMetric("FUNCTIONS")).save();
+      context.<Integer>newMeasure().forMetric(CoreMetrics.FUNCTIONS).on(resource)
+          .withValue(getIntMetric("FUNCTIONS")).save();
       // Number of public classes, public methods (without accessors) and public properties (without public static final ones)
-      context.<Integer>newMeasure().forMetric(CoreMetrics.PUBLIC_API).on(resource).withValue(getIntMetric("PUBLIC_API")).save();
+      context.<Integer>newMeasure().forMetric(CoreMetrics.PUBLIC_API).on(resource)
+          .withValue(getIntMetric("PUBLIC_API")).save();
 
     } catch (IllegalStateException ise) {
       DelphiUtils.LOG.error(ise.getMessage());
@@ -207,13 +214,14 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
     if (func.getComplexity() > threshold) {
       NewIssue newIssue = context.newIssue();
       newIssue
-              .forRule(methodCyclomaticComplexityRule.ruleKey())
-              .at(newIssue.newLocation()
-                      .on(inputFile)
-                      .at(inputFile.newRange(func.getBodyLine(), 1,
-                              func.getBodyLine(), 2))
-                      .message(String.format("The Cyclomatic Complexity of this method \"%s\" is %d which is greater than %d authorized.",
-                              func.getRealName(), func.getComplexity(), threshold)));
+          .forRule(methodCyclomaticComplexityRule.ruleKey())
+          .at(newIssue.newLocation()
+              .on(inputFile)
+              .at(inputFile.newRange(func.getBodyLine(), 1,
+                  func.getBodyLine(), 2))
+              .message(String.format(
+                  "The Cyclomatic Complexity of this method \"%s\" is %d which is greater than %d authorized.",
+                  func.getRealName(), func.getComplexity(), threshold)));
       newIssue.save();
     }
   }

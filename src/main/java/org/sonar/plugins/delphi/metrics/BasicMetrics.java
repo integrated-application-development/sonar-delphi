@@ -22,6 +22,10 @@
  */
 package org.sonar.plugins.delphi.metrics;
 
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.List;
+import java.util.Set;
 import org.apache.commons.io.IOUtils;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -33,14 +37,8 @@ import org.sonar.plugins.delphi.metrics.basicmetrics.DelphiSource;
 import org.sonar.plugins.delphi.metrics.basicmetrics.Metric;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-import java.io.Reader;
-import java.io.StringReader;
-import java.util.List;
-import java.util.Set;
-
 /**
- * Class calculating basic file metrics: lines of code and comments,
- * documentation.
+ * Class calculating basic file metrics: lines of code and comments, documentation.
  */
 public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
 
@@ -53,8 +51,8 @@ public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
 
   @Override
   public void analyse(InputFile resource, List<ClassInterface> classes,
-    List<FunctionInterface> functions,
-    Set<UnitInterface> units) {
+      List<FunctionInterface> functions,
+      Set<UnitInterface> units) {
     clearMetrics();
     Reader reader = null;
     try {
@@ -65,7 +63,8 @@ public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
       setIntMetric("COMMENT_BLANK_LINES", source.getMeasure(Metric.COMMENT_BLANK_LINES));
       setIntMetric("PUBLIC_DOC_API", source.getMeasure(Metric.PUBLIC_DOC_API));
     } catch (Exception e) {
-      DelphiUtils.LOG.error("BasicMetrics::analyse() -- Can not analyse the file " + resource.toString(), e);
+      DelphiUtils.LOG
+          .error("BasicMetrics::analyse() -- Can not analyse the file " + resource.toString(), e);
     } finally {
       IOUtils.closeQuietly(reader);
     }
@@ -77,8 +76,10 @@ public class BasicMetrics extends DefaultMetrics implements MetricsInterface {
 
   @Override
   public void save(InputFile resource) {
-    context.<Integer>newMeasure().forMetric(CoreMetrics.NCLOC).on(resource).withValue(getIntMetric("NCLOC")).save();
-    context.<Integer>newMeasure().forMetric(CoreMetrics.COMMENT_LINES).on(resource).withValue(getIntMetric("COMMENT_LINES")).save();
+    context.<Integer>newMeasure().forMetric(CoreMetrics.NCLOC).on(resource)
+        .withValue(getIntMetric("NCLOC")).save();
+    context.<Integer>newMeasure().forMetric(CoreMetrics.COMMENT_LINES).on(resource)
+        .withValue(getIntMetric("COMMENT_LINES")).save();
   }
 
   /**

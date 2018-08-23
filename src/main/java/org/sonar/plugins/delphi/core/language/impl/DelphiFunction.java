@@ -22,17 +22,20 @@
  */
 package org.sonar.plugins.delphi.core.language.impl;
 
-import org.sonar.plugins.delphi.antlr.DelphiParser;
-import org.sonar.plugins.delphi.core.language.*;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.sonar.plugins.delphi.antlr.DelphiParser;
+import org.sonar.plugins.delphi.core.language.ArgumentInterface;
+import org.sonar.plugins.delphi.core.language.ClassInterface;
+import org.sonar.plugins.delphi.core.language.FunctionInterface;
+import org.sonar.plugins.delphi.core.language.StatementInterface;
+import org.sonar.plugins.delphi.core.language.UnitInterface;
 
 /**
  * DelphiLanguage language function definition.
- * 
+ *
  * @see FunctionInterface
  */
 public class DelphiFunction implements FunctionInterface {
@@ -72,7 +75,7 @@ public class DelphiFunction implements FunctionInterface {
 
   /**
    * Ctor, creates function with name
-   * 
+   *
    * @param functionName Specified name
    */
   public DelphiFunction(String functionName) {

@@ -22,10 +22,12 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
@@ -36,10 +38,6 @@ import org.sonar.plugins.delphi.antlr.analyzer.impl.operations.AdvanceNodeOperat
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
-
-import java.io.IOException;
-
-import static org.junit.Assert.*;
 
 public class InterfaceAnalyzerTest {
 
