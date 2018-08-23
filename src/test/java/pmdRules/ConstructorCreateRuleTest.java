@@ -1,38 +1,28 @@
 package pmdRules;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.junit.Test;
-import org.sonar.plugins.delphi.pmd.BasePmdRuleTest;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import org.junit.Test;
 
 public class ConstructorCreateRuleTest extends BaseXmlPmdRuleTest {
 
-    private static String testFile = "ConstructorTest.pas";
-    private static String ruleType = "ConstructorCreateRule"; // Rule type being tested
+  private static String testFile = "ConstructorTest.pas";
+  private static String ruleType = "ConstructorCreateRule"; // Rule type being tested
 
-    @Test
-    public void testRuleViolation(){
+  @Test
+  public void testRuleViolation() {
 
-        super.analyse(); // fixme, be better if didnt have to run this every test, just once
-        ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
-        ArrayList<Integer> violationLines = new ArrayList<Integer>();
+    super.analyse(); // fixme, be better if didnt have to run this every test, just once
+    ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
-        Integer[] expectedViolationLines = {20, 21};
+    Integer[] expectedViolationLines = {20, 21};
 
-        // Collect the relevant results
-        for(ArrayList violation : fileResults){
-            if (violation.get(RULETYPE_POS).equals(ruleType)) {
-                violationLines.add((Integer) violation.get(VIOLATION_LINE_POS));
-            }
-        }
+    // Collect the relevant results
+    ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
 
-        assertEquals(violationLines, Arrays.asList(expectedViolationLines));
-    }
+    assertEquals(violationLines, Arrays.asList(expectedViolationLines));
+  }
 
 }
