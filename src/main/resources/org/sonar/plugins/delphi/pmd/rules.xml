@@ -32,7 +32,7 @@
 		<description>All functions should have return type specified.</description>
 		<properties>
 			<property name="baseEffort">
-				<value>10min</value>
+				<value>1 min</value>
 			</property>
 			<property name="xpath">
 				<value>//function/TkFunctionReturn[count(child::*)=0]</value>
@@ -729,6 +729,16 @@ x.Free;			//GOOD, sufficent enough
             </property>
         </properties>
     </rule>
+
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.IdentifierCapitalisationRule" message="Identifier's capitalisation doesn't match it's declaration"
+		  name="IdentifierCapitalisationRule">
+		<description>This identifier doesn't match the capitalisation of its declaration</description>
+		<properties>
+			<property name="baseEffort">
+				<value>2min</value>
+			</property>
+		</properties>
+	</rule>
 
 
 </ruleset>
