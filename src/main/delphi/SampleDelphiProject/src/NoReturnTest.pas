@@ -18,7 +18,7 @@ type
 
 implementation
 
-function TBadTest.TestBadFunction;
+function TBadTest.TestBadFunction; //Non-compliant
 //begin
   // ...
 //end;
