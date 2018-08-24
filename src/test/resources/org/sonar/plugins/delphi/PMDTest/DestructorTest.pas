@@ -6,7 +6,6 @@ type
   TTest = class(TObject)
   public
     destructor Destroy; override;
-
   end;
 
 implementation

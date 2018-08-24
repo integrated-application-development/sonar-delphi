@@ -2,26 +2,25 @@ unit Globals;
 
 interface
 
-  procedure globalProcedure();
-
-  function globalFunction() : integer;
+procedure globalProcedure();
+function globalFunction(): integer;
 
 var
-  globalX, globalY : Integer;
-  globalR : real;
+  globalX, globalY: Integer;
+  globalR: real;
 
 implementation
 
 procedure globalProcedure();
 begin
-  globalX := 5;
-  writeln();
+	globalX := 5;
+	writeln();
 end;
 
 {*** Documented public global function ****}
-function globalFunction() : integer;
+function globalFunction(): integer;
 begin
-  result := 7;
+	result := 7;
 end;
 
 end.

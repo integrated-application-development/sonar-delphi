@@ -5,6 +5,6 @@ interface
 implementation
 
 var
-  Package : Boolean;
+  Package: Boolean;
 
 end.

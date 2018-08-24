@@ -4,17 +4,17 @@ interface
 
 implementation
 
-function ParseBuffer : Integer;
+function ParseBuffer: Integer;
 label
-redo;
+  redo;
 begin
   repeat
-    redo : Inc(Result);
+	  redo : Inc(Result);
 
-    goto redo;
+	  goto redo;
   until true;
 
-  redo : Inc(Result);
+  redo: Inc(Result);
 end;
 
 

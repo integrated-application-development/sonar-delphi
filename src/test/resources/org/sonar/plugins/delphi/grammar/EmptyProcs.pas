@@ -6,15 +6,10 @@ type
   TEmptyProcs = class
   public
     procedure One;
-
     procedure Two;
-
     procedure Three;
-
     procedure Four;
-
     procedure Five;
-
   end;
 
 implementation

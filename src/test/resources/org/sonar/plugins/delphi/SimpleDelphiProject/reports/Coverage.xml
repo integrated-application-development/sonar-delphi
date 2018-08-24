@@ -40,7 +40,7 @@
               <line number="38" covered="True"/>
               <line number="39" covered="False"/>
             </method>
-          </class>
+          </class>         
         </srcfile>
         <srcfile name="Globals.pas">
           <coverage type="class, %" value="100%   (5/5)"/>
@@ -56,10 +56,10 @@
               <coverage type="method, %" value="100%   (2/2)"/>
               <coverage type="block, %" value="100%   (1/1)"/>
               <coverage type="line, %" value="100%   (2/2)"/>
-              <line number="19" covered="True"/>
+			  <line number="19" covered="True"/>
               <line number="20" covered="True"/>
             </method>
-          </class>
+          </class>         
         </srcfile>
       </package>
     </all>

@@ -5,6 +5,6 @@ interface
 implementation
 
 var
-  Stored : Boolean;
+  Stored: Boolean;
 
 end.

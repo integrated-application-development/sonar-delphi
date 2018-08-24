@@ -4,9 +4,9 @@ interface
 
 implementation
 
-function FunctionTest : integer;
+function FunctionTest: integer;
 begin
-  result := 0;
+	result := 0;
 end;
 
 procedure ProcedureTest;

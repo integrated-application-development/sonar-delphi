@@ -6,15 +6,14 @@ interface
 type
   TCommentsTest = class(TForm)
   public
-
+    
     {*** documented public procedure ***}
     procedure foo11;
-
+    
     //undocumented public procedure
     procedure foo22;
-
   private
-    field1 : integer;
+  	field1: integer;
   protected
     { comment line }
     //another comment
@@ -22,7 +21,7 @@ type
   end;
 
 var
-  window : TMainWindow;
+  window: TMainWindow;
 
 (** block comment, empty comment lines below (3)
 
@@ -36,11 +35,7 @@ blah blah **)
 (** { blah 
 } **)
 
-{  }
-
-implementation
-
-    {  }
+{  } implementation {  }
 
 {$R *.dfm}
 

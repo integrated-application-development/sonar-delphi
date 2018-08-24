@@ -4,7 +4,7 @@ interface
 
 implementation
 
-procedure myTestProcedure(x : real; y, z : integer; var q);
+procedure myTestProcedure(x: real; y,z: integer; var q);
 begin
 end;
 
