@@ -18,7 +18,7 @@ public class PublicFieldsRuleTest extends BaseXmlPmdRuleTest {
         super.analyse(); // fixme, be better if didnt have to run this every test, just once
         ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
-        Integer[] expectedViolationLines = {21, 40};
+        Integer[] expectedViolationLines = {39};
 
         // Collect the relevant results
         ArrayList violationLines = super.getViolationLines(fileResults, ruleType);

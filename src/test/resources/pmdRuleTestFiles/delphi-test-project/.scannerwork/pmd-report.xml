@@ -2,7 +2,7 @@
 <pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
-    version="6.0.1" timestamp="2018-08-20T11:20:48.635">
+    version="6.0.1" timestamp="2018-08-24T12:09:15.664">
 <file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\ConstantsTest.pas">
 <violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="ConstantNotationRule" ruleset="Missing RuleSet Name" priority="4">
 
@@ -37,8 +37,39 @@ Line too long (133 characters). Maximum character count should be 100.
 
 </violation>
 </file>
+<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\EmptyBracketsTest.pas">
+<violation beginline="10" endline="10" begincolumn="5" endcolumn="5" rule="EmptyBracketsRule" ruleset="Missing RuleSet Name" priority="5">
+
+</violation>
+</file>
 <file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\EnumTest.pas">
 <violation beginline="6" endline="6" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+</file>
+<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\IfNotTest.pas">
+<violation beginline="13" endline="13" begincolumn="23" endcolumn="23" rule="IfNotFalseRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+</file>
+<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\IfTrueTest.pas">
+<violation beginline="13" endline="13" begincolumn="19" endcolumn="19" rule="IfTrueRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+</file>
+<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\InterfaceNameTest.pas">
+<violation beginline="7" endline="7" begincolumn="4" endcolumn="4" rule="InterfaceNameRule" ruleset="Missing RuleSet Name" class="IRecyclable" priority="4">
+
+</violation>
+<violation beginline="11" endline="11" begincolumn="4" endcolumn="4" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+</file>
+<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\NoReturnTest.pas">
+<violation beginline="14" endline="14" begincolumn="12" endcolumn="12" rule="OneClassPerFileRule" ruleset="Missing RuleSet Name" class="TTest" priority="3">
+File has too many classes, maximum number of classes is 1.
+</violation>
+<violation beginline="21" endline="21" begincolumn="0" endcolumn="0" rule="NoFunctionReturnTypeRule" ruleset="Missing RuleSet Name" priority="3">
 
 </violation>
 </file>
@@ -76,6 +107,9 @@ File has too many classes, maximum number of classes is 1.
 </file>
 <file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\ReRaiseExceptionTest.pas">
 <violation beginline="18" endline="18" begincolumn="10" endcolumn="10" rule="CatchingGeneralExceptionRule" ruleset="Missing RuleSet Name" priority="3">
+
+</violation>
+<violation beginline="22" endline="22" begincolumn="7" endcolumn="7" rule="ReRaiseExceptionRule" ruleset="Missing RuleSet Name" priority="3">
 
 </violation>
 </file>

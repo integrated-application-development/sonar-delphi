@@ -100,7 +100,7 @@
         <value>then</value>
       </property>
       <property name="baseEffort">
-        <value>10min</value>
+        <value>1min</value>
       </property>
     </properties>
   </rule>
@@ -289,6 +289,14 @@
       </property>
     </properties>
   </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ReRaiseExceptionRule" name="ReRaiseExceptionRule">
+    <priority>3</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>5min</value>
+      </property>
+    </properties>
+  </rule>
   <rule class="org.sonar.plugins.delphi.pmd.rules.PointerNameRule" name="PointerNameRule">
     <priority>4</priority>
     <properties>
@@ -329,6 +337,14 @@
       </property>
     </properties>
   </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyBracketsRule" name="EmptyBracketsRule">
+    <priority>5</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>1min</value>
+      </property>
+    </properties>
+  </rule>
   <rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule" name="CatchingGeneralExceptionRule">
     <priority>3</priority>
     <properties>
@@ -359,14 +375,6 @@
       </property>
       <property name="baseEffort">
         <value>30min</value>
-      </property>
-    </properties>
-  </rule>
-  <rule class="org.sonar.plugins.delphi.pmd.rules.NoEndAfterBeginRule" name="NoEndAfterBeginRule">
-    <priority>4</priority>
-    <properties>
-      <property name="baseEffort">
-        <value>1min</value>
       </property>
     </properties>
   </rule>
@@ -473,7 +481,7 @@
         <value>then</value>
       </property>
       <property name="baseEffort">
-        <value>10min</value>
+        <value>1min</value>
       </property>
     </properties>
   </rule>
