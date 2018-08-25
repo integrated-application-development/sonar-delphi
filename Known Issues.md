@@ -15,6 +15,8 @@ These errors will appear in the sonar scanner output.
 *... mismatched character '.' expecting set null*
 
 ##### Fix:
+
+**Fixed in parser logic, disregard below**
 This is caused by array iterations using the [1..n] syntax. The parser expects whitespace between 
 the in the declaration as below, e.g. [1 .. n]
 
