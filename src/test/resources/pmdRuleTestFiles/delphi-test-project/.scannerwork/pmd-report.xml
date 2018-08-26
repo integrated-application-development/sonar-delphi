@@ -37,6 +37,25 @@ Line too long (133 characters). Maximum character count should be 100.
 
 </violation>
 </file>
+<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\CyclomaticComplexityTest.pas">
+<violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+</file>
+<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\DuplicatesTest.pas">
+<violation beginline="10" endline="10" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="25" endline="25" begincolumn="2" endcolumn="2" rule="DuplicatesRule" ruleset="Missing RuleSet Name" class="TBlah" method="TBlah.foo" priority="4">
+
+</violation>
+<violation beginline="29" endline="29" begincolumn="2" endcolumn="2" rule="DuplicatesRule" ruleset="Missing RuleSet Name" class="TBlah" method="TBlah.foo" priority="4">
+
+</violation>
+<violation beginline="34" endline="34" begincolumn="2" endcolumn="2" rule="DuplicatesRule" ruleset="Missing RuleSet Name" class="TBlah" method="TBlah.foo" priority="4">
+
+</violation>
+</file>
 <file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\EmptyBracketsTest.pas">
 <violation beginline="10" endline="10" begincolumn="5" endcolumn="5" rule="EmptyBracketsRule" ruleset="Missing RuleSet Name" priority="5">
 
