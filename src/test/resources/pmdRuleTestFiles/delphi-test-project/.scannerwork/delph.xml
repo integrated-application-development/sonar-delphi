@@ -385,7 +385,7 @@
         <value>//function/TkFunctionReturn[count(child::*)=0]</value>
       </property>
       <property name="baseEffort">
-        <value>10min</value>
+        <value>1 min</value>
       </property>
     </properties>
   </rule>

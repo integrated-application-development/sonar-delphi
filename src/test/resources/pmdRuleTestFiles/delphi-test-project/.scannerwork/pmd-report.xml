@@ -2,7 +2,15 @@
 <pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
-    version="6.0.1" timestamp="2018-08-24T12:09:15.664">
+    version="6.0.1" timestamp="2018-08-26T22:22:41.514">
+<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\AvoidWithTest.pas">
+<violation beginline="10" endline="10" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="25" endline="25" begincolumn="2" endcolumn="2" rule="AvoidWithRule" ruleset="Missing RuleSet Name" priority="3">
+
+</violation>
+</file>
 <file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\ConstantsTest.pas">
 <violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="ConstantNotationRule" ruleset="Missing RuleSet Name" priority="4">
 
@@ -12,9 +20,6 @@
 </violation>
 <violation beginline="11" endline="11" begincolumn="2" endcolumn="2" rule="ConstantNotationRule" ruleset="Missing RuleSet Name" priority="4">
 
-</violation>
-<violation beginline="11" endline="11" begincolumn="2" endcolumn="2" rule="TooLongLineRule" ruleset="Missing RuleSet Name" priority="4">
-Line too long (133 characters). Maximum character count should be 100.
 </violation>
 <violation beginline="12" endline="12" begincolumn="2" endcolumn="2" rule="ConstantNotationRule" ruleset="Missing RuleSet Name" priority="4">
 
@@ -113,12 +118,28 @@ File has too many classes, maximum number of classes is 1.
 
 </violation>
 </file>
+<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\TooManyArgumentsTest.pas">
+<violation beginline="7" endline="7" begincolumn="14" endcolumn="14" rule="TooManyArgumentsRule" ruleset="Missing RuleSet Name" method="Test" priority="3">
+Too many arguments: 11 (max 6)
+</violation>
+<violation beginline="8" endline="8" begincolumn="0" endcolumn="0" rule="EmptyBeginStatementRule" ruleset="Missing RuleSet Name" priority="2">
+
+</violation>
+</file>
 <file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\TooManySubProceduresTest.pas">
 <violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
 <violation beginline="19" endline="19" begincolumn="0" endcolumn="0" rule="TooManySubProceduresRule" ruleset="Missing RuleSet Name" priority="3">
 Code should not contain too many sub procedures or functions, limit of 3 exceeded.
+</violation>
+</file>
+<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\TooManyVariablesTest.pas">
+<violation beginline="6" endline="6" begincolumn="0" endcolumn="0" rule="TooManyVariablesRule" ruleset="Missing RuleSet Name" priority="3">
+Too many variables: 11 (max 10)
+</violation>
+<violation beginline="20" endline="20" begincolumn="0" endcolumn="0" rule="EmptyBeginStatementRule" ruleset="Missing RuleSet Name" priority="2">
+
 </violation>
 </file>
 <file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\UnusedArgumentRule.pas">
