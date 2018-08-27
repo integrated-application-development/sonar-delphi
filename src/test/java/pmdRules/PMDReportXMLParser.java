@@ -30,7 +30,6 @@ public class PMDReportXMLParser {
    * data structure, a hashmap (file names as keys) pointing to arraylists which store the violated
    * rule type and the line the violation was on.
    */
-  @Test // todo, remove, this isnt a test just for experimenting
   public void parsePmdReportXML() {
 
     try {
