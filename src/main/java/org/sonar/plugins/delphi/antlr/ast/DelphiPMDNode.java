@@ -68,6 +68,7 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
 
   @Override
   public void jjtOpen() {
+    // Do nothing
   }
 
   /**
@@ -76,6 +77,7 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
 
   @Override
   public void jjtClose() {
+    // Do nothing
   }
 
   /**
@@ -84,7 +86,7 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
 
   @Override
   public void jjtSetParent(Node n) {
-
+    // Do nothing
   }
 
   /**
@@ -102,6 +104,7 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
 
   @Override
   public void jjtAddChild(Node n, int i) {
+    // Do nothing
   }
 
   /**
@@ -118,9 +121,9 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
    */
   @Override
   public void jjtSetChildIndex(int var1) {
+    // Do nothing
   }
 
-  ;
 
   /**
    * {@inheritDoc}
@@ -130,7 +133,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return 0;
   }
 
-  ;
 
   /**
    * {@inheritDoc}
@@ -170,7 +172,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return 0;
   }
 
-  ;
 
   /**
    * {@inheritDoc}
@@ -180,7 +181,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return null;
   }
 
-  ;
 
   /**
    * {@inheritDoc}
@@ -190,7 +190,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return null;
   }
 
-  ;
 
   /**
    * {@inheritDoc}
@@ -200,16 +199,15 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return "";
   }
 
-  ;
 
   /**
    * {@inheritDoc}
    */
   @Override
   public void setImage(String image) {
+    // Do nothing
   }
 
-  ;
 
   /**
    * {@inheritDoc}
@@ -219,7 +217,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return false;
   }
 
-  ;
 
   /**
    * {@inheritDoc}
@@ -229,8 +226,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return 0;
   }
 
-  ;
-
   /**
    * {@inheritDoc}
    */
@@ -238,8 +233,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
   public int getBeginColumn() {
     return 0;
   }
-
-  ;
 
   /**
    * {@inheritDoc}
@@ -249,8 +242,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return 0;
   }
 
-  ;
-
   /**
    * {@inheritDoc}
    */
@@ -259,7 +250,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return 0;
   }
 
-  ;
 
   /**
    * {@inheritDoc}
@@ -269,16 +259,13 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return null;
   }
 
-  ;
-
   /**
    * {@inheritDoc}
    */
   @Override
   public void setDataFlowNode(DataFlowNode dataFlowNode) {
+    // Do nothing
   }
-
-  ;
 
   /**
    * {@inheritDoc}
@@ -288,8 +275,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return false;
   }
 
-  ;
-
   /**
    * {@inheritDoc}
    */
@@ -297,8 +282,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
   public Node getNthParent(int n) {
     return null;
   }
-
-  ;
 
   /**
    * {@inheritDoc}
@@ -308,8 +291,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return null;
   }
 
-  ;
-
   /**
    * {@inheritDoc}
    */
@@ -317,8 +298,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
   public <T> List<T> getParentsOfType(Class<T> parentType) {
     return null;
   }
-
-  ;
 
   /**
    * {@inheritDoc}
@@ -328,8 +307,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return null;
   }
 
-  ;
-
   /**
    * {@inheritDoc}
    */
@@ -338,14 +315,13 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return null;
   }
 
-  ;
-
   /**
    * {@inheritDoc}
    */
   @Override
   public <T> void findDescendantsOfType(Class<T> targetType, List<T> results,
       boolean crossFindBoundaries) {
+    // Do nothing
   }
 
   /**
@@ -356,8 +332,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return null;
   }
 
-  ;
-
   /**
    * {@inheritDoc}
    */
@@ -365,8 +339,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
   public <T> T getFirstDescendantOfType(Class<T> descendantType) {
     return null;
   }
-
-  ;
 
   /**
    * {@inheritDoc}
@@ -376,8 +348,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return false;
   }
 
-  ;
-
   /**
    * {@inheritDoc}
    */
@@ -385,8 +355,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
   public List<? extends Node> findChildNodesWithXPath(String xpathString) throws JaxenException {
     return null;
   }
-
-  ;
 
   /**
    * {@inheritDoc}
@@ -396,34 +364,29 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return false;
   }
 
-  ;
-
   /**
    * {@inheritDoc}
    */
   @Override
   public void setUserData(Object userData) {
+    // Do nothing
   }
-
-  ;
 
   @Override
   public Scope getScope() {
     return null;
   }
 
-  ;
-
   // since 6.0.0
   @Override
   public void remove() {
+    // Do nothing
   }
 
-  ;
 
   @Override
   public void removeChildAtIndex(int var1) {
+    // Do nothing
   }
 
-  ;
 }
