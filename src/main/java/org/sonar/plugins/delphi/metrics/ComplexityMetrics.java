@@ -24,6 +24,7 @@ package org.sonar.plugins.delphi.metrics;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.ActiveRule;
@@ -82,7 +83,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
     super();
     context = sensorContext;
     methodCyclomaticComplexityRule = activeRules.find(RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY);
-    threshold = Integer.valueOf(methodCyclomaticComplexityRule.param("Threshold"));
+    threshold = Integer.valueOf(Objects.requireNonNull(Objects.requireNonNull(methodCyclomaticComplexityRule).param("Threshold")));
   }
 
   /**
