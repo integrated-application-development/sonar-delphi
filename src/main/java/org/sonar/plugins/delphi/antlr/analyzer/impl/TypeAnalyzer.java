@@ -33,6 +33,8 @@ import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiClass;
 
+import java.util.Objects;
+
 /**
  * Delphi class analyzer, used to analyze types in a source file
  */
@@ -45,7 +47,7 @@ public class TypeAnalyzer extends CodeAnalyzer {
       return false;
     }
 
-    int type = getGrandChild(currentNode).getType();
+    int type = Objects.requireNonNull(getGrandChild(currentNode)).getType();
     return type == DelphiLexer.TkClass || type == DelphiLexer.TkRecord
         || type == DelphiLexer.TkInterface;
   }
