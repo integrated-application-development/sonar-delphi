@@ -190,10 +190,11 @@ public class DelphiSureFireParser {
     } catch (SAXException e) {
       DelphiUtils.LOG.info("SAXException");
       Exception x = e.getException();
-      ((x == null) ? e : x).printStackTrace();
+      //((x == null) ? e : x).printStackTrace(); // Removed - SonarQube Vulnerability
+      DelphiUtils.LOG.error("SAXException Stacktrace", x);
     } catch (Throwable t) {
       DelphiUtils.LOG.info("Throwable");
-      t.printStackTrace();
+      DelphiUtils.LOG.error("Throwable Stacktrace", t);
     }
   }
 
