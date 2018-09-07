@@ -95,7 +95,7 @@ public class DelphiLinesFactory {
     char nextChar = (char) reader.read();
     reader.reset();
     if (isTechnicalCharacter(nextChar) && lastReadCharacter != nextChar) {
-      reader.read();
+      int readResult = reader.read();
     }
   }
 
