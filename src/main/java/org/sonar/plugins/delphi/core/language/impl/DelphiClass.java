@@ -78,7 +78,7 @@ public class DelphiClass implements ClassInterface {
     if (o == null) {
       return false;
     }
-    if (o instanceof ClassInterface) {
+    if (o.getClass() == ClassInterface.class) {
       return name.equals(((ClassInterface) o).getName());
     }
     return toString().equals(o.toString());

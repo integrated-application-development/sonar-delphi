@@ -122,7 +122,7 @@ public class IntegerSubRange implements SubRange {
     if (this == obj) {
       return true;
     }
-    if (obj instanceof SubRange) {
+    if (obj.getClass() == SubRange.class) {
       SubRange range = (SubRange) obj;
       return range.getBegin() == this.begin && range.getEnd() == this.end;
     }
