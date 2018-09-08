@@ -83,7 +83,8 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
     super();
     context = sensorContext;
     methodCyclomaticComplexityRule = activeRules.find(RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY);
-    threshold = Integer.valueOf(Objects.requireNonNull(Objects.requireNonNull(methodCyclomaticComplexityRule).param("Threshold")));
+    threshold = Integer.valueOf(Objects
+        .requireNonNull(Objects.requireNonNull(methodCyclomaticComplexityRule).param("Threshold")));
   }
 
   /**

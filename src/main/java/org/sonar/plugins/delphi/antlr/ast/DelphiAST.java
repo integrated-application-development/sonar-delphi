@@ -54,10 +54,10 @@ import org.w3c.dom.Element;
  */
 public class DelphiAST extends CommonTree implements ASTTree {
 
-  private String fileName = null;
-  private boolean isError = false;
-  private DelphiSourceSanitizer fileStream = null;
-  private String[] codeLines = null;
+  private String fileName;
+  private boolean isError;
+  private DelphiSourceSanitizer fileStream;
+  private String[] codeLines;
 
   /**
    * Constructor.
@@ -137,6 +137,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
 
       transformer.transform(source, result);
     } catch (TransformerException e) {
+      DelphiUtils.LOG.error(e.getMessage());
       return null;
     }
 
