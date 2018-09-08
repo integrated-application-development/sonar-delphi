@@ -73,7 +73,10 @@ public class DelphiProjectHelper {
      * @return True if so, false otherwise
      */
     public boolean shouldExtendIncludes() {
-        String str = settings.get(DelphiPlugin.INCLUDE_EXTEND_KEY).get();
+        String str = null;
+        if (settings.get(DelphiPlugin.INCLUDE_EXTEND_KEY).isPresent()) {
+            str = settings.get(DelphiPlugin.INCLUDE_EXTEND_KEY).get();
+        }
         return "true".equals(str);
     }
 

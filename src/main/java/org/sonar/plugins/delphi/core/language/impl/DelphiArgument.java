@@ -29,7 +29,7 @@ import org.sonar.plugins.delphi.core.language.ArgumentInterface;
  */
 public class DelphiArgument implements ArgumentInterface {
 
-  String name;
+  protected String name;
   private String type;
 
   /**

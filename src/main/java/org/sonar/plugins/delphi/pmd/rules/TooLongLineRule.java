@@ -13,8 +13,8 @@ public class TooLongLineRule extends DelphiRule {
 
   private int limit;
   private ArrayList checkedLines = new ArrayList<Integer>();
-  Tree astTree;
-  boolean firstNode;
+  private Tree astTree;
+  private boolean firstNode;
 
   @Override
   protected void init() {

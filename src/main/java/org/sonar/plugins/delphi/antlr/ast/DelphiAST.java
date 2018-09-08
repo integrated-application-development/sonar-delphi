@@ -24,9 +24,11 @@ package org.sonar.plugins.delphi.antlr.ast;
 
 import java.io.File;
 import java.io.IOException;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -128,8 +130,12 @@ public class DelphiAST extends CommonTree implements ASTTree {
 
     try {
       // Write the DOM document to the file
-      Transformer xformer = TransformerFactory.newInstance().newTransformer();
-      xformer.transform(source, result);
+      TransformerFactory transformerFactory = TransformerFactory.newInstance();
+      transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+      Transformer transformer = transformerFactory.newTransformer();
+      transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+      transformer.transform(source, result);
     } catch (TransformerException e) {
       return null;
     }
