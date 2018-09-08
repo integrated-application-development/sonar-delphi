@@ -31,9 +31,9 @@ import org.sonar.plugins.delphi.core.language.UnitInterface;
  */
 public class CodeAnalysisState extends CodeAnalysisCacheResults {
 
-  protected UnitInterface activeUnit = null;
-  protected FunctionInterface activeFunction = null;
-  protected ClassInterface activeClass = null;
+  protected UnitInterface activeUnit;
+  protected FunctionInterface activeFunction ;
+  protected ClassInterface activeClass ;
 
   /**
    * File, Implementation or Interface section.
