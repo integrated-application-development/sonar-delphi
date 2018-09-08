@@ -73,7 +73,7 @@ import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
  */
 public class DelphiSensor implements Sensor {
 
-  private int scannedFiles = 0;
+  private int scannedFiles;
   private List<InputFile> resourceList = new ArrayList<>();
   private Map<InputFile, List<ClassInterface>> fileClasses = new HashMap<>();
   private Map<InputFile, List<FunctionInterface>> fileFunctions = new HashMap<>();
