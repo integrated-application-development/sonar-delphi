@@ -39,31 +39,47 @@ import org.sonar.plugins.delphi.surefire.SurefireSensor;
  */
 
 @Properties({
-    @Property(key = DelphiPlugin.EXCLUDED_DIRECTORIES_KEY, defaultValue = "", name = "Excluded sources",
-        description = "List of excluded directories or files, that will not be parsed.", global = true, project = true,
+    @Property(key = DelphiPlugin.EXCLUDED_DIRECTORIES_KEY,
+        name = "Excluded sources",
+        description = "List of excluded directories or files, that will not be parsed.",
+        global = true, project = true,
         multiValues = true),
-    @Property(key = DelphiPlugin.CC_EXCLUDED_KEY, defaultValue = "", name = "Code coverage excluded directories",
-        description = "Code coverage excluded directories list. Files in those directories will not be checked for code coverage.",
+    @Property(key = DelphiPlugin.CC_EXCLUDED_KEY,
+        name = "Code coverage excluded directories",
+        description = "Code coverage excluded directories list. Files in those "
+            + "directories will not be checked for code coverage.",
         global = true, project = true),
-    @Property(key = DelphiPlugin.INCLUDED_DIRECTORIES_KEY, defaultValue = "", name = "Include directories",
-        description = "Include directories that will be looked for include files for preprocessor directive {$include}", global = true,
+    @Property(key = DelphiPlugin.INCLUDED_DIRECTORIES_KEY,
+        name = "Include directories",
+        description = "Include directories that will be looked for include files for "
+            + "preprocessor directive {$include}",
+        global = true,
         project = true, multiValues = true),
-    @Property(key = DelphiPlugin.INCLUDE_EXTEND_KEY, defaultValue = "true", name = "Include extend option",
-        description = "Include extend options, can be: 'true' (include files will be processed) or 'false' (turn the feature off)",
+    @Property(key = DelphiPlugin.INCLUDE_EXTEND_KEY, defaultValue = "true",
+        name = "Include extend option",
+        description = "Include extend options, can be: 'true' (include files will be processed) "
+            + "or 'false' (turn the feature off)",
         global = true, project = true),
     @Property(
         key = DelphiPlugin.PROJECT_FILE_KEY,
-        defaultValue = "",
         name = "Project file",
-        description = "Project file. If provided, will be parsed for include lookup path, project source files and preprocessor definitions.",
+        description = "Project file. If provided, will be parsed for include lookup path, "
+            + "project source files and preprocessor definitions.",
         global = true, project = true),
-    @Property(key = DelphiPlugin.WORKGROUP_FILE_KEY, defaultValue = "", name = "Workgroup file",
-        description = "Workgroup file. If provided, will be parsed, then all *.dproj files found in workgroup file will be parsed.",
+    @Property(key = DelphiPlugin.WORKGROUP_FILE_KEY, name = "Workgroup file",
+        description = "Workgroup file. If provided, will be parsed, then all "
+            + "*.dproj files found in workgroup file will be parsed.",
         global = true, project = true),
-    @Property(key = DelphiPlugin.CODECOVERAGE_TOOL_KEY, defaultValue = "delphi code coverage", name = "Code coverage tool",
-        description = "Used code coverage tool (AQTime or Delphi Code Coverage)", global = false, project = true),
-    @Property(key = DelphiPlugin.CODECOVERAGE_REPORT_KEY, defaultValue = "delphi code coverage report", name = "Code coverage report file",
-        description = "Code coverage report to be parsed by Delphi Code Coverage", global = false, project = true),
+    @Property(key = DelphiPlugin.CODECOVERAGE_TOOL_KEY, defaultValue = "delphi code coverage",
+        name = "Code coverage tool",
+        description = "Used code coverage tool (AQTime or Delphi Code Coverage)",
+        global = false,
+        project = true),
+    @Property(key = DelphiPlugin.CODECOVERAGE_REPORT_KEY,
+        defaultValue = "delphi code coverage report", name = "Code coverage report file",
+        description = "Code coverage report to be parsed by Delphi Code Coverage",
+        global = false,
+        project = true),
 })
 public class DelphiPlugin implements Plugin {
 
