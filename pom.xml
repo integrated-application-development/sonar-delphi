@@ -95,7 +95,7 @@
 		<sonar.pluginClass>org.sonar.plugins.delphi.DelphiPlugin</sonar.pluginClass>
 		<sonar.exclusions>src/main/java/org/sonar/plugins/delphi/antlr/DelphiParser.java,src/main/java/org/sonar/plugins/delphi/antlr/DelphiLexer.java</sonar.exclusions>
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
-		<maven.test.skip>true</maven.test.skip>
+		<maven.test.skip>false</maven.test.skip>
 	</properties>
 
 	<!-- this is important for sonar-packaging-maven-plugin -->
@@ -195,6 +195,13 @@
 			<version>24.0-jre</version>
 			<scope>test</scope>
 		</dependency>
+    <dependency>
+      <groupId>org.jacoco</groupId>
+      <artifactId>jacoco-maven-plugin</artifactId>
+      <version>0.8.2</version>
+      <type>maven-plugin</type>
+      <scope>provided</scope>
+    </dependency>
 	</dependencies>
 
 
@@ -203,7 +210,20 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.0</version>
+        <version>2.22.0</version>
+        <executions>
+        <execution>
+          <id>default-test</id>
+          <phase>test</phase>
+          <goals>
+            <goal>test</goal>
+          </goals>
+          <configuration>
+            <argLine>-Xmx1024m -XX:MaxPermSize=256</argLine>
+          </configuration>
+        </execution>
+      </executions>
+
 			</plugin>
 
 			<plugin>
@@ -258,6 +278,36 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+      <!-- JaCoCo configuration -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.2</version>
+        <executions>
+          <!-- prepare agent for measuring integration tests -->
+          <execution>
+            <id>prepare-integration-tests</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+            <configuration>
+              <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
+            </configuration>
+          </execution>
+          <execution>
+            <id>jacoco-site</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <configuration>
+              <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
 		</plugins>
 	</build>
 
