@@ -730,15 +730,5 @@ x.Free;			//GOOD, sufficent enough
         </properties>
     </rule>
 
-	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.IdentifierCapitalisationRule" message="Identifier's capitalisation doesn't match it's declaration"
-		  name="IdentifierCapitalisationRule">
-		<description>This identifier doesn't match the capitalisation of its declaration</description>
-		<properties>
-			<property name="baseEffort">
-				<value>2min</value>
-			</property>
-		</properties>
-	</rule>
-
 
 </ruleset>
