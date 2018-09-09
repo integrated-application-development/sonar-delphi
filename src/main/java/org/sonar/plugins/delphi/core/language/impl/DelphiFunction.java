@@ -40,25 +40,25 @@ import org.sonar.plugins.delphi.core.language.UnitInterface;
  */
 public class DelphiFunction implements FunctionInterface {
 
-  private int complexity = 0;
+  private int complexity;
   private int overloads = -1;
   private int line = -1;
   private int bodyLine = -1;
   private int column = -1;
   private int visibility = DelphiParser.PRIVATE;
-  private String name = null;
-  private String realName = null;
-  private String longName = null;
-  private boolean virtual = false;
-  private boolean isAccessor = false;
-  private boolean isDeclaration = false;
-  private ClassInterface parentClass = null;
+  private String name;
+  private String realName;
+  private String longName;
+  private boolean virtual;
+  private boolean isAccessor;
+  private boolean isDeclaration;
+  private ClassInterface parentClass;
   private List<StatementInterface> statements = new ArrayList<>();
   private Set<FunctionInterface> called = new HashSet<>();
   private List<ArgumentInterface> args = new ArrayList<>();
   private List<FunctionInterface> overFunc = new ArrayList<>();
-  private UnitInterface parentUnit = null;
-  private boolean message = false;
+  private UnitInterface parentUnit;
+  private boolean message;
 
   private static final String UNKNOWN_FUNCTION_NAME = "UnknownFunction_";
 
