@@ -97,10 +97,13 @@ public class DelphiProjectHelper {
         }
         File included = DelphiUtils
             .resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
+
         if (!included.exists()) {
-          DelphiUtils.LOG.warn("Include directory does not exist: " + included.getAbsolutePath());
+          DelphiUtils.LOG.warn("{} {}", "Include directory does not exist: ",
+              included.getAbsolutePath());
         } else if (!included.isDirectory()) {
-          DelphiUtils.LOG.warn("Include path is not a directory: " + included.getAbsolutePath());
+          DelphiUtils.LOG.warn("{} {}", "Include path is not a directory: ",
+              included.getAbsolutePath());
         } else {
           result.add(included);
         }
@@ -135,7 +138,8 @@ public class DelphiProjectHelper {
             .resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
         result.add(excluded);
         if (!excluded.exists()) {
-          DelphiUtils.LOG.warn("Exclude directory does not exist: " + excluded.getAbsolutePath());
+          DelphiUtils.LOG.warn("{} {}","Exclude directory does not exist: ",
+              excluded.getAbsolutePath());
         }
       }
     } else {
@@ -165,7 +169,7 @@ public class DelphiProjectHelper {
     if (settings.hasKey(DelphiPlugin.WORKGROUP_FILE_KEY)) {
       try {
         String gprojPath = settings.get(DelphiPlugin.WORKGROUP_FILE_KEY).get();
-        DelphiUtils.LOG.debug(".groupproj file found: " + gprojPath);
+        DelphiUtils.LOG.debug("{} {}", ".groupproj file found: ", gprojPath);
         DelphiWorkgroup workGroup = new DelphiWorkgroup(new File(gprojPath));
         list.addAll(workGroup.getProjects());
       } catch (IOException e) {
@@ -181,7 +185,7 @@ public class DelphiProjectHelper {
     } else if (settings.hasKey(DelphiPlugin.PROJECT_FILE_KEY)) {
       String dprojPath = settings.get(DelphiPlugin.PROJECT_FILE_KEY).get();
       File dprojFile = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), dprojPath);
-      DelphiUtils.LOG.info(".dproj file found: " + dprojPath);
+      DelphiUtils.LOG.info("{} {}", ".dproj file found: ", dprojPath);
       DelphiProject newProject = new DelphiProject(dprojFile);
       list.add(newProject);
     } else {
@@ -231,7 +235,6 @@ public class DelphiProjectHelper {
         return inputFile;
       }
     }
-
     throw new FileNotFoundException(fileName);
   }
 
@@ -322,10 +325,12 @@ public class DelphiProjectHelper {
       File excluded = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
       if (!excluded.exists()) {
         DelphiUtils.LOG
-            .warn("Excluded code coverage path does not exist: " + excluded.getAbsolutePath());
+            .warn("{} {}", "Excluded code coverage path does not exist: ",
+                excluded.getAbsolutePath());
       } else if (!excluded.isDirectory()) {
         DelphiUtils.LOG
-            .warn("Excluded code coverage path is not a directory: " + excluded.getAbsolutePath());
+            .warn("{} {}", "Excluded code coverage path is not a directory: ",
+                excluded.getAbsolutePath());
       } else {
         list.add(excluded);
       }
