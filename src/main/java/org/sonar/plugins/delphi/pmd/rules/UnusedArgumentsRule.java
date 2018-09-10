@@ -52,8 +52,6 @@ public class UnusedArgumentsRule extends DelphiRule {
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
     if (isMethodNode(node)) {
-      final Stack<Tree> functionNodes = new Stack<>();
-      final Stack<Tree> beginNodes = new Stack<>();
 
       Tree argsNode = node.getFirstChildWithType(DelphiLexer.TkFunctionArgs);
       if (argsNode == null) {
@@ -66,7 +64,8 @@ public class UnusedArgumentsRule extends DelphiRule {
         return;
       }
 
-      final StringBuilder methodName = extractMethodName(node);
+      final Stack<Tree> functionNodes = new Stack<>();
+      final Stack<Tree> beginNodes = new Stack<>();
 
       for (int i = node.getChildIndex(); i < node.getParent().getChildCount(); i++) {
         Tree childNode = node.getParent().getChild(i);
@@ -84,7 +83,7 @@ public class UnusedArgumentsRule extends DelphiRule {
       if (functionNodes.isEmpty() || beginNodes.isEmpty()) {
         return;
       }
-
+      final StringBuilder methodName = extractMethodName(node);
       Tree beginNode = beginNodes.peek();
       processFunctionBegin(beginNode, args);
       checkForUnusedArguments(args, ctx, node, methodName.toString());
