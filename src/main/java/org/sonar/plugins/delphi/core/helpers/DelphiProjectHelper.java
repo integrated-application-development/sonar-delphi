@@ -177,9 +177,8 @@ public class DelphiProjectHelper {
         list.clear();
         list.add(newProject);
       }
-    }
-    // Single .dproj file
-    else if (settings.hasKey(DelphiPlugin.PROJECT_FILE_KEY)) {
+      // Single .dproj file
+    } else if (settings.hasKey(DelphiPlugin.PROJECT_FILE_KEY)) {
       String dprojPath = settings.get(DelphiPlugin.PROJECT_FILE_KEY).get();
       File dprojFile = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), dprojPath);
       DelphiUtils.LOG.info(".dproj file found: " + dprojPath);
