@@ -64,21 +64,12 @@ public class UnusedArgumentsRule extends DelphiRule {
         return;
       }
 
-      final Stack<Tree> functionNodes = new Stack<>();
-      final Stack<Tree> beginNodes = new Stack<>();
+      Stack<Tree> functionNodes = new Stack<>();
+      Stack<Tree> beginNodes = new Stack<>();
 
-      for (int i = node.getChildIndex(); i < node.getParent().getChildCount(); i++) {
-        Tree childNode = node.getParent().getChild(i);
-        if (isMethodNode(childNode)) {
-          functionNodes.push(childNode);
-        }
-        if (childNode.getType() == DelphiLexer.BEGIN) {
-          beginNodes.push(childNode);
-        }
-        if (functionNodes.size() == beginNodes.size()) {
-          break;
-        }
-      }
+      ArrayList<Stack<Tree>> stacks = populateStacks(node, functionNodes, beginNodes);
+      beginNodes = stacks.get(0);
+      functionNodes = stacks.get(1);
 
       if (functionNodes.isEmpty() || beginNodes.isEmpty()) {
         return;
@@ -90,7 +81,31 @@ public class UnusedArgumentsRule extends DelphiRule {
     }
   }
 
-  public StringBuilder extractMethodName(DelphiPMDNode node) {
+  private ArrayList<Stack<Tree>> populateStacks(DelphiPMDNode node, Stack<Tree> functionNodes,
+      Stack<Tree> beginNodes){
+
+    ArrayList<Stack<Tree>> stacks = new ArrayList<>();
+
+    for (int i = node.getChildIndex(); i < node.getParent().getChildCount(); i++) {
+      Tree childNode = node.getParent().getChild(i);
+      if (isMethodNode(childNode)) {
+        functionNodes.push(childNode);
+      }
+      if (childNode.getType() == DelphiLexer.BEGIN) {
+        beginNodes.push(childNode);
+      }
+      if (functionNodes.size() == beginNodes.size()) {
+        break;
+      }
+    }
+
+    stacks.add(beginNodes);
+    stacks.add(functionNodes);
+
+    return stacks;
+  }
+
+  private StringBuilder extractMethodName(DelphiPMDNode node) {
     final StringBuilder methodName = new StringBuilder();
     Tree nameNode = node.getFirstChildWithType(DelphiLexer.TkFunctionName);
     if (nameNode != null) {
@@ -101,7 +116,7 @@ public class UnusedArgumentsRule extends DelphiRule {
     return methodName;
   }
 
-  public boolean isMethodNode(Tree candidateNode) {
+  private boolean isMethodNode(Tree candidateNode) {
     return candidateNode.getType() == DelphiLexer.PROCEDURE
         || candidateNode.getType() == DelphiLexer.FUNCTION;
   }
@@ -186,6 +201,12 @@ public class UnusedArgumentsRule extends DelphiRule {
       }
     }
     return args;
+  }
+
+  @Override
+  // Code smell not to override equals in this class
+  public boolean equals(Object object){
+    return object == this;
   }
 
   @Override
