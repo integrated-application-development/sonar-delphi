@@ -30,15 +30,15 @@ import org.apache.commons.lang.StringUtils;
 class Line {
 
   private final int lineIndex;
-  private int blankLine = 0;
+  private int blankLine;
   private int lineNumber = 1;
-  private int lineOfCode = 0;
-  private int commentLine = 0;
-  private int headerCommentLine = 0;
-  private int commentBlankLine = 0;
-  private int commentedOutCodeLine = 0;
-  private int documentation = 0;
-  private String comment = null;
+  private int lineOfCode;
+  private int commentLine;
+  private int headerCommentLine;
+  private int commentBlankLine;
+  private int commentedOutCodeLine;
+  private int documentation;
+  private String comment;
   private StringBuilder stringLine;
   private boolean isBlank;
   private boolean isThereDoc;
