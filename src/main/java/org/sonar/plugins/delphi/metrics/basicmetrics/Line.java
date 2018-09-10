@@ -25,13 +25,13 @@ package org.sonar.plugins.delphi.metrics.basicmetrics;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Class representing line of code. Holds data required to source code statistic generation.
+ * Class representing lineNumber of code. Holds data required to source code statistic generation.
  */
 class Line {
 
   private final int lineIndex;
   private int blankLine = 0;
-  private int line = 1;
+  private int lineNumber = 1;
   private int lineOfCode = 0;
   private int commentLine = 0;
   private int headerCommentLine = 0;
@@ -83,7 +83,7 @@ class Line {
       case BLANK_LINES:
         return blankLine;
       case LINES:
-        return line;
+        return lineNumber;
       case LINES_OF_CODE:
         return lineOfCode;
       case COMMENT_LINES:
@@ -127,7 +127,8 @@ class Line {
         break;
       case LINES:
         throw new IllegalStateException(
-            "MetricDef LINES always equals 1 on a Line and you are not permitted to change this value.");
+            "MetricDef LINES always equals 1 on a Line and you are not "
+                + "permitted to change this value.");
       default:
         throw new IllegalStateException(
             "MetricDef " + metric.name() + " is not suitable for Line object.");
