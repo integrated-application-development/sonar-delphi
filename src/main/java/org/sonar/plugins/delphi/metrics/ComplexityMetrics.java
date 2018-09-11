@@ -43,7 +43,7 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 /**
  * Class counting function cyclomatic complexity.
  */
-public class ComplexityMetrics extends DefaultMetrics implements MetricsInterface {
+public class ComplexityMetrics extends DefaultMetrics {
 
   public static final RuleKey RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY = RuleKey
       .of(DelphiPmdConstants.REPOSITORY_KEY, "MethodCyclomaticComplexityRule");
@@ -53,25 +53,25 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
   /**
    * The Cyclomatic Complexity Number.
    */
-  private int fileComplexity = 0;
+  private int fileComplexity;
   /**
    * Number of classes including nested classes, interfaces, enums and annotations.
    */
-  private int classCount = 0;
+  private int classCount;
   /**
    * Number of Methods without including  accessors. A constructor is considered  to be a method.
    */
-  private int methodsCount = 0;
+  private int methodsCount;
   /**
    * Number of statements as defined in the DelphiLanguage Language Specification but without block
    * definitions.
    */
-  private int statementsCount = 0;
+  private int statementsCount;
   /**
    * Number of public classes, public methods  (without accessors) and public properties  (without
    * public final static ones).
    */
-  private int publicApi = 0;
+  private int publicApi;
 
   private Integer threshold;
   private final SensorContext context;
@@ -165,6 +165,7 @@ public class ComplexityMetrics extends DefaultMetrics implements MetricsInterfac
       return;
     }
     try {
+
       // Number of statements as defined in the DelphiLanguage Language Specification but without block definitions.
       context.<Integer>newMeasure().forMetric(CoreMetrics.STATEMENTS).on(resource)
           .withValue(getIntMetric("STATEMENTS")).save();
