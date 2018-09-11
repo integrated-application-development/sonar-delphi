@@ -42,7 +42,6 @@ import net.sourceforge.pmd.renderers.Renderer;
 import net.sourceforge.pmd.renderers.XMLRenderer;
 import org.apache.commons.io.FileUtils;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.InputModule;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
@@ -101,11 +100,9 @@ public class DelphiPmdSensor implements Sensor {
   }
 
   private void addIssue(String ruleKey, String fileName, Integer beginLine, Integer startColumn,
-      Integer endLine,
-      String message, Integer priority) {
+      Integer endLine, String message) {
 
-    DelphiUtils.LOG
-        .debug("PMD Violation - rule: " + ruleKey + " file: " + fileName + " message: " + message);
+    DelphiUtils.LOG.debug("PMD Violation - rule: {} file: {} message: {}", ruleKey, fileName, message);
 
     InputFile inputFile = delphiProjectHelper.getFile(fileName);
 
@@ -141,12 +138,10 @@ public class DelphiPmdSensor implements Sensor {
           String endLine = violation.getAttributes().getNamedItem("endline").getTextContent();
           String beginColumn = violation.getAttributes().getNamedItem("begincolumn")
               .getTextContent();
-          String endColumn = violation.getAttributes().getNamedItem("endcolumn").getTextContent();
           String rule = violation.getAttributes().getNamedItem("rule").getTextContent();
-          String priority = violation.getAttributes().getNamedItem("priority").getTextContent();
           String message = violation.getTextContent();
           addIssue(rule, fileName, Integer.parseInt(beginLine), Integer.parseInt(beginColumn),
-              Integer.parseInt(endLine), message, Integer.parseInt(priority));
+              Integer.parseInt(endLine), message);
         }
       }
     } catch (SAXParseException err) {
@@ -173,7 +168,7 @@ public class DelphiPmdSensor implements Sensor {
     ClassLoader initialClassLoader = Thread.currentThread().getContextClassLoader();
     try {
       Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
-      reportFile = createPmdReport(context.module());
+      reportFile = createPmdReport();
     } finally {
       Thread.currentThread().setContextClassLoader(initialClassLoader);
     }
@@ -201,7 +196,7 @@ public class DelphiPmdSensor implements Sensor {
       File configurationFile = new File(delphiProjectHelper.workDir(), repositoryKey + ".xml");
       FileUtils.writeStringToFile(configurationFile, rulesXml, Charset.forName("UTF-8"));
 
-      DelphiUtils.LOG.info("PMD configuration: " + configurationFile.getAbsolutePath());
+      DelphiUtils.LOG.info("PMD configuration: {}", configurationFile.getAbsolutePath());
 
       return configurationFile;
     } catch (IOException e) {
@@ -209,7 +204,7 @@ public class DelphiPmdSensor implements Sensor {
     }
   }
 
-  private File createPmdReport(InputModule module) {
+  private File createPmdReport() {
     try {
       DelphiPMD pmd = new DelphiPMD();
       RuleContext ruleContext = new RuleContext();
@@ -230,14 +225,7 @@ public class DelphiPmdSensor implements Sensor {
             continue;
           }
 
-          try {
-            pmd.processFile(pmdFile, ruleSets, ruleContext, delphiProjectHelper.encoding());
-          } catch (ParseException e) {
-            String errorMsg = "PMD error while parsing " + pmdFile.getAbsolutePath() + ": "
-                + e.getMessage();
-            DelphiUtils.LOG.warn(errorMsg);
-            errors.add(errorMsg);
-          }
+          processPmdParse(pmd, ruleContext, ruleSets, pmdFile);
         }
       }
 
@@ -245,6 +233,17 @@ public class DelphiPmdSensor implements Sensor {
     } catch (IOException e) {
       DelphiUtils.LOG.error("Could not generate PMD report file.");
       return null;
+    }
+  }
+
+  private void processPmdParse(DelphiPMD pmd, RuleContext ruleContext, RuleSets ruleSets, File pmdFile) {
+    try {
+      pmd.processFile(pmdFile, ruleSets, ruleContext, delphiProjectHelper.encoding());
+    } catch (ParseException e) {
+      String errorMsg = "PMD error while parsing " + pmdFile.getAbsolutePath() + ": "
+          + e.getMessage();
+      DelphiUtils.LOG.warn(errorMsg);
+      errors.add(errorMsg);
     }
   }
 
