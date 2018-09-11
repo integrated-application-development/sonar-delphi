@@ -140,8 +140,8 @@ public class DelphiSureFireParser {
     String name = testCase.getNamedItem("name").getTextContent();
     String classname = testCase.getNamedItem("classname").getTextContent();
     String testCaseName =
-        StringUtils.contains(classname, "$") ? StringUtils.substringAfter(classname, "$") + "/"
-            + name : name;
+        StringUtils.contains(classname, "$") ? (StringUtils.substringAfter(classname, "$") + "/"
+            + name) : name;
     detail.setName(testCaseName);
     String status = "ok";
     String time = testCase.getNamedItem("time").getTextContent();
@@ -173,7 +173,6 @@ public class DelphiSureFireParser {
 
       for (int f = 0; f < testsuites.getLength(); f++) {
         Element testSuite = (Element) testsuites.item(f);
-        String testSuiteName = testSuite.getAttributes().getNamedItem("name").getTextContent();
         NodeList testCases = testSuite.getElementsByTagName("testcase");
         for (int n = 0; n < testCases.getLength(); n++) {
           Node testCase = testCases.item(n);
