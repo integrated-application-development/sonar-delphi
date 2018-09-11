@@ -27,7 +27,7 @@ public class TooLongLineRule extends DelphiRule {
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    //Retrieve and store the astTree from the first node
+    // Retrieve and store the astTree from the first node
     if (firstNode) {
       astTree = node.getASTTree();
       firstNode = false;
@@ -39,7 +39,8 @@ public class TooLongLineRule extends DelphiRule {
       // Only check a line that has not been checked before
       checkedLines.add(lineNumber);
       String line = ((ASTTree) astTree).getFileSourceLine(lineNumber);
-      line = removeComment(line);                                         //Remove comment
+      // Remove comment
+      line = removeComment(line);
 
       if (line.length() > limit) {
         String sonarMessage =
