@@ -49,20 +49,20 @@ public class DelphiClassTest {
   }
 
   @Test
-  public void testGetFileNameTest() {
+  public void testGetFileName() {
     parent.setFileName("MyFile.pas");
     assertEquals("MyFile.pas", parent.getFileName());
   }
 
   @Test
-  public void testGetVisibilityTest() {
+  public void testGetVisibility() {
     assertEquals(DelphiLexer.PRIVATE, parent.getVisibility());
     parent.setVisibility(DelphiLexer.PUBLIC);
     assertEquals(DelphiLexer.PUBLIC, parent.getVisibility());
   }
 
   @Test
-  public void testGetPublicApiCountTest() {
+  public void testGetPublicApiCount() {
     FunctionInterface func = new DelphiFunction("public");
     ClassFieldInterface field = new DelphiClassField();
     field.setVisibility(DelphiLexer.PUBLIC);
@@ -77,13 +77,13 @@ public class DelphiClassTest {
   }
 
   @Test
-  public void testGetNameTest() {
+  public void testGetName() {
     assertEquals("parent", parent.getName());
     assertEquals("parent", parent.getShortName());
   }
 
   @Test
-  public void testGetComplexityTest() {
+  public void testGetComplexity() {
     FunctionInterface func = new DelphiFunction("parent.foo");
     FunctionInterface func2 = new DelphiFunction("parent.setBar");
     func.setComplexity(2);
@@ -96,7 +96,7 @@ public class DelphiClassTest {
   }
 
   @Test
-  public void testHasFunctionTest() {
+  public void testHasFunction() {
     FunctionInterface foo = new DelphiFunction("foo");
     FunctionInterface bar = new DelphiFunction("bar");
 
@@ -118,7 +118,7 @@ public class DelphiClassTest {
   }
 
   @Test
-  public void testGetAccessorsCountTest() {
+  public void testGetAccessorsCount() {
     ancestor.addFunction(new DelphiFunction("blah"));
     assertEquals(0, ancestor.getAccessorCount());
     ancestor.addFunction(new DelphiFunction("ancestor.setfield"));
@@ -130,7 +130,7 @@ public class DelphiClassTest {
   }
 
   @Test
-  public void testGetChildrenTest() {
+  public void testGetChildren() {
     assertEquals(1, ancestor.getChildren().length);
     assertEquals(1, parent.getChildren().length);
     assertEquals(0, child.getChildren().length);
@@ -141,7 +141,7 @@ public class DelphiClassTest {
   }
 
   @Test
-  public void testGetDescendantsTest() {
+  public void testGetDescendants() {
     parent.addChild(new DelphiClass(null));
     child.addParent(new DelphiClass(null));
     assertEquals(3, ancestor.getDescendants().length);
