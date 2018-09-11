@@ -29,7 +29,7 @@ import org.junit.Test;
 public class DelphiFunctionTest {
 
   @Test
-  public void equalsTest() {
+  public void testEqualsTest() {
     assertEquals(true, new DelphiFunction("test").equals(new DelphiFunction("test")));
     assertEquals(false, new DelphiFunction("test").equals(new DelphiFunction("test2")));
     assertEquals(false, new DelphiFunction("class.test").equals(new DelphiFunction("test")));
@@ -37,12 +37,12 @@ public class DelphiFunctionTest {
   }
 
   @Test
-  public void hashCodeTest() {
+  public void testHashCodeTest() {
     assertEquals(new DelphiFunction("test").hashCode(), new DelphiFunction("test").hashCode());
   }
 
   @Test
-  public void getParentClassTest() {
+  public void testGetParentClassTest() {
     DelphiFunction func1 = new DelphiFunction();
     DelphiFunction func2 = new DelphiFunction();
     DelphiFunction func3 = new DelphiFunction();
@@ -60,7 +60,7 @@ public class DelphiFunctionTest {
   }
 
   @Test
-  public void isGlobalTest() {
+  public void testIsGlobalTest() {
     DelphiFunction func1 = new DelphiFunction();
     assertEquals(true, func1.isGlobal());
 
@@ -69,7 +69,7 @@ public class DelphiFunctionTest {
   }
 
   @Test
-  public void getCalledFunctionTest() {
+  public void testGetCalledFunctionTest() {
     DelphiFunction func1 = new DelphiFunction();
     DelphiFunction func2 = new DelphiFunction();
     DelphiFunction func3 = new DelphiFunction();
