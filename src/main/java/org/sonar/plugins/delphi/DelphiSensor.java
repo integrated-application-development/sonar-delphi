@@ -177,9 +177,9 @@ public class DelphiSensor implements Sensor {
       }
       cpdTokens.save();
     } catch (FileNotFoundException ex) {
-      DelphiUtils.LOG.error("Cpd could not find : " + inputFile.toString(), ex);
+      DelphiUtils.LOG.error("{} {} {}", "Cpd could not find : ", inputFile.toString(), ex);
     } catch (IOException ex) {
-      DelphiUtils.LOG.error("Cpd IO Exception on " + inputFile.toString(), ex);
+      DelphiUtils.LOG.error("{} {} {}","Cpd IO Exception on ", inputFile.toString(), ex);
     }
   }
 
@@ -195,7 +195,7 @@ public class DelphiSensor implements Sensor {
             DelphiUtils.LOG));
 
     for (InputFile resource : resourceList) {
-      DelphiUtils.LOG.debug(">> PROCESSING " + resource.toString());
+      DelphiUtils.LOG.debug("{} {}", ">> PROCESSING ", resource.toString());
 
       processMetric(basicMetrics, resource);
       processMetric(complexityMetrics, resource);
@@ -252,12 +252,12 @@ public class DelphiSensor implements Sensor {
     printFileList("Included: ", includedDirs);
     printFileList("Excluded: ", excludedDirs);
 
-    DelphiUtils.LOG.info("Parsing project " + delphiProject.getName());
+    DelphiUtils.LOG.info("{} {}", "Parsing project ", delphiProject.getName());
 
     ProgressReporter progressReporter = new ProgressReporter(sourceFiles.size(), 10,
         new ProgressReporterLogger(
             DelphiUtils.LOG));
-    DelphiUtils.LOG.info("Files to parse: " + sourceFiles.size());
+    DelphiUtils.LOG.info("{} {}", "Files to parse: ", sourceFiles.size());
 
     ASTAnalyzer analyser = new DelphiASTAnalyzer(delphiProjectHelper);
     for (File delphiFile : sourceFiles) {
@@ -277,7 +277,7 @@ public class DelphiSensor implements Sensor {
       return null;
     }
 
-    DelphiUtils.LOG.debug(">> PARSING " + sourceFile.getAbsolutePath());
+    DelphiUtils.LOG.debug("{} {}", ">> PARSING ", sourceFile.getAbsolutePath());
 
     InputFile resource = delphiProjectHelper.getFile(sourceFile);
 
@@ -308,7 +308,7 @@ public class DelphiSensor implements Sensor {
     final DelphiAST ast = new DelphiAST(sourceFile, delphiProjectHelper.encoding());
 
     if (ast.isError()) {
-      DelphiUtils.LOG.error("Error while parsing " + sourceFile.getAbsolutePath());
+      DelphiUtils.LOG.error("{} {}", "Error while parsing ", sourceFile.getAbsolutePath());
       return null;
     }
 
@@ -319,11 +319,12 @@ public class DelphiSensor implements Sensor {
     } catch (Exception e) {
       if (DelphiUtils.LOG.isDebugEnabled()) {
         DelphiUtils.LOG
-            .debug("Error analyzing file: " + e.getMessage() + " " + sourceFile.getAbsolutePath(),
-                e);
+            .debug("{} {} {} {}", "Error analyzing file: ", e.getMessage(),
+                sourceFile.getAbsolutePath(), e);
       } else {
         DelphiUtils.LOG
-            .error("Error analyzing file: " + e.getMessage() + " " + sourceFile.getAbsolutePath());
+            .error("{} {} {}", "Error analyzing file: ", e.getMessage(),
+                sourceFile.getAbsolutePath());
       }
     }
 
