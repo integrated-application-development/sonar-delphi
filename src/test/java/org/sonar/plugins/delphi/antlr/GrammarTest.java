@@ -55,86 +55,86 @@ public class GrammarTest {
 
   @Test
   @Ignore
-  public void test() throws Exception {
+  public void testGrammar() throws Exception {
     parseFile("GrammarTest.pas");
   }
 
   @Test
-  public void emptyBeginStatement() throws Exception {
+  public void testEmptyBeginStatement() throws Exception {
     parseFile("EmptyProcs.pas");
   }
 
   @Test
-  public void parseMultipleAttributes() throws Exception {
+  public void testParseMultipleAttributes() throws Exception {
     parseFile("MultipleAttributes.pas");
   }
 
   @Test
   @Ignore
-  public void parseNewGrammar() throws Exception {
+  public void testParseNewGrammar() throws Exception {
     parseFile("GrammarTestNew.pas");
   }
 
   @Test
   @Ignore
-  public void parseComplexArray() throws Exception {
+  public void testParseComplexArray() throws Exception {
     parseFile("ComplexArray.pas");
   }
 
   @Test
-  public void parseRecordInitialization() throws Exception {
+  public void testParseRecordInitialization() throws Exception {
     parseFile("RecordInitialization.pas");
   }
 
   @Test
-  public void parseRecordConstructor() throws Exception {
+  public void testParseRecordConstructor() throws Exception {
     parseFile("RecordConstructor.pas");
   }
 
   @Test
-  public void parseLabel() throws Exception {
+  public void testParseLabel() throws Exception {
     parseFile("LabelUsage.pas");
   }
 
   @Test
-  public void parseDUnitX() throws Exception {
+  public void testParseDUnitX() throws Exception {
     parseFile("DUnitX.pas", "utf-8");
   }
 
   @Test
-  public void parseUTF8FileWithBOM() throws Exception {
+  public void testParseUTF8FileWithBOM() throws Exception {
     parseFile("UTF8WithBOM.pas", "utf-8");
   }
 
   @Test
-  public void parseAnonymousMethods() throws Exception {
+  public void testParseAnonymousMethods() throws Exception {
     parseFile("AnonymousMethods.pas");
   }
 
   @Test
-  public void parseGenerics() throws Exception {
+  public void testParseGenerics() throws Exception {
     parseFile("Generics.pas");
   }
 
   @Test
-  public void parseKeyWordsAsIdentifier() throws Exception {
+  public void testParseKeyWordsAsIdentifier() throws Exception {
     parseFile("KeyWordsAsIdentifier.pas");
   }
 
   @Test
-  public void parseListUtils() throws Exception {
+  public void testParseListUtils() throws Exception {
     parseFile("ListUtils.pas");
   }
 
   @Test
   @Ignore("https://github.com/fabriciocolombo/sonar-delphi/issues/38")
-  public void parsePackageAsIdentifier() throws Exception {
+  public void testParsePackageAsIdentifier() throws Exception {
     parseFile("PackageAsIdentifier.pas");
   }
 
   @Test
   @Ignore("https://github.com/fabriciocolombo/sonar-delphi/issues/39")
-  public void parseInterfaceMethodResolutionClause() throws Exception {
+  public void testParseInterfaceMethodResolutionClause() throws Exception {
     parseFile("InterfaceMethodResolutionClause.pas");
   }
 
