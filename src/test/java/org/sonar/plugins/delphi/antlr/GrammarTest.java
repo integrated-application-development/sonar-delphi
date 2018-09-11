@@ -22,7 +22,9 @@
  */
 package org.sonar.plugins.delphi.antlr;
 
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.Assert.assertFalse;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +44,7 @@ public class GrammarTest {
   private void parseFile(String fileName, String encoding) throws IOException {
     System.out.println("Parsing file: " + BASE_DIR + fileName);
     DelphiAST ast = new DelphiAST(DelphiUtils.getResource(BASE_DIR + fileName), encoding);
-    assertEquals(false, ast.isError());
+    assertFalse(ast.isError());
 
     String name = fileName.replace(".pas", "");
 
@@ -54,7 +56,7 @@ public class GrammarTest {
   }
 
   @Test
-  @Ignore
+  @Ignore("Ignored by authors due to bugs")
   public void testGrammar() throws Exception {
     parseFile("GrammarTest.pas");
   }
@@ -70,13 +72,13 @@ public class GrammarTest {
   }
 
   @Test
-  @Ignore
+  @Ignore("Ignored by authors due to bugs")
   public void testParseNewGrammar() throws Exception {
     parseFile("GrammarTestNew.pas");
   }
 
   @Test
-  @Ignore
+  @Ignore("Ignored by authors due to bugs")
   public void testParseComplexArray() throws Exception {
     parseFile("ComplexArray.pas");
   }
