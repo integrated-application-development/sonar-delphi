@@ -23,6 +23,8 @@
 package org.sonar.plugins.delphi.core.language.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -30,10 +32,10 @@ public class DelphiFunctionTest {
 
   @Test
   public void testEqualsTest() {
-    assertEquals(true, new DelphiFunction("test").equals(new DelphiFunction("test")));
-    assertEquals(false, new DelphiFunction("test").equals(new DelphiFunction("test2")));
-    assertEquals(false, new DelphiFunction("class.test").equals(new DelphiFunction("test")));
-    assertEquals(true, new DelphiFunction("class.test").equals(new DelphiFunction("class.test")));
+    assertTrue(new DelphiFunction("test").equals(new DelphiFunction("test")));
+    assertFalse( new DelphiFunction("test").equals(new DelphiFunction("test2")));
+    assertFalse(new DelphiFunction("class.test").equals(new DelphiFunction("test")));
+    assertTrue(new DelphiFunction("class.test").equals(new DelphiFunction("class.test")));
   }
 
   @Test
@@ -62,10 +64,10 @@ public class DelphiFunctionTest {
   @Test
   public void testIsGlobalTest() {
     DelphiFunction func1 = new DelphiFunction();
-    assertEquals(true, func1.isGlobal());
+    assertTrue(func1.isGlobal());
 
     new DelphiClass("test").addFunction(func1);
-    assertEquals(false, func1.isGlobal());
+    assertFalse(func1.isGlobal());
   }
 
   @Test
