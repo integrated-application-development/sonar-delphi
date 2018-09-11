@@ -121,10 +121,7 @@ public class ComplexityMetrics extends DefaultMetrics {
     // processing stand-alone (global) functions, not merged with any class
     if (functions != null) {
       for (FunctionInterface func : functions) {
-        if (func == null) {
-          continue;
-        }
-        if (processedFunc.contains(func.getName())) {
+        if ((func == null) || (processedFunc.contains(func.getName()))) {
           continue;
         }
         methodsCount += 1 + func.getOverloadsCount();
@@ -166,7 +163,8 @@ public class ComplexityMetrics extends DefaultMetrics {
     }
     try {
 
-      // Number of statements as defined in the DelphiLanguage Language Specification but without block definitions.
+      /* Number of statements as defined in the DelphiLanguage Language Specification
+      but without block definitions.*/
       context.<Integer>newMeasure().forMetric(CoreMetrics.STATEMENTS).on(resource)
           .withValue(getIntMetric("STATEMENTS")).save();
       // The Cyclomatic Complexity Number
@@ -178,7 +176,8 @@ public class ComplexityMetrics extends DefaultMetrics {
       // Number of Methods without including accessors. A constructor is considered to be a method.
       context.<Integer>newMeasure().forMetric(CoreMetrics.FUNCTIONS).on(resource)
           .withValue(getIntMetric("FUNCTIONS")).save();
-      // Number of public classes, public methods (without accessors) and public properties (without public static final ones)
+      /* Number of public classes, public methods (without accessors) and
+      public properties (without public static final ones)*/
       context.<Integer>newMeasure().forMetric(CoreMetrics.PUBLIC_API).on(resource)
           .withValue(getIntMetric("PUBLIC_API")).save();
 
@@ -223,7 +222,8 @@ public class ComplexityMetrics extends DefaultMetrics {
               .at(inputFile.newRange(func.getBodyLine(), 1,
                   func.getBodyLine(), 2))
               .message(String.format(
-                  "The Cyclomatic Complexity of this method \"%s\" is %d which is greater than %d authorized.",
+                  "The Cyclomatic Complexity of this method \"%s\" is %d which is " +
+                          "greater than %d authorized.",
                   func.getRealName(), func.getComplexity(), threshold)));
       newIssue.save();
     }
