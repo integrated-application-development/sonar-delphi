@@ -27,8 +27,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -80,13 +79,13 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   @Test
   public void canAnalyzeTest() throws IOException, RecognitionException {
     setupFile(FILE_NAME);
-    assertEquals(false, analyzer.canAnalyze(code));
+    assertFalse(analyzer.canAnalyze(code));
 
     CodeNode<Tree> currentNode = code.getCurrentCodeNode();
     while (currentNode != null) {
       try {
         code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
-        assertEquals(true, analyzer.canAnalyze(code));
+        assertTrue(analyzer.canAnalyze(code));
       } catch (IllegalStateException e) {
         currentNode = null;
       }
@@ -96,13 +95,13 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   @Test
   public void canAnalyzeRecordOperatorTest() throws IOException, RecognitionException {
     setupFile(FILE_NAME_OPERATOR_TEST);
-    assertEquals(false, analyzer.canAnalyze(code));
+    assertFalse(analyzer.canAnalyze(code));
 
     CodeNode<Tree> currentNode = code.getCurrentCodeNode();
     while (currentNode != null) {
       try {
         code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
-        assertEquals(true, analyzer.canAnalyze(code));
+        assertTrue(analyzer.canAnalyze(code));
       } catch (IllegalStateException e) {
         currentNode = null;
       }
@@ -126,7 +125,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
       try {
         code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
         analyzer.analyze(code, results);
-        assertTrue(results.getActiveFunction() != null);
+        assertNotNull(results.getActiveFunction());
         assertEquals(names[index], results.getActiveFunction().getRealName());
         assertEquals(lines[index], results.getActiveFunction().getLine());
         // assertEquals(body[index],
