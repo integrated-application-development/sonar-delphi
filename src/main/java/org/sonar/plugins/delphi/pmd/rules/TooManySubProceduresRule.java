@@ -26,7 +26,8 @@ public class TooManySubProceduresRule extends DelphiRule {
       List children = node.getChildren();
       int subProcedureCounter = 0;
 
-      // subProcedureDepth tracks whether we are in a procedure, sub procedure, or sub-sub procedures.
+      // subProcedureDepth tracks whether we are in a procedure, sub procedure,
+      // or sub-sub procedures.
       // -1 means not in a procedure
       // 0 means in an out procedure
       // 1 means in a sub procedure

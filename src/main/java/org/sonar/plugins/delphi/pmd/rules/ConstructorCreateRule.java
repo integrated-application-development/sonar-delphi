@@ -14,8 +14,10 @@ public class ConstructorCreateRule extends DelphiRule {
   @Override
   protected void init() {
     super.init();
-    CONSTRUCTOR_NODE_TYPE_POS = 0; // The first child node in constructor nodes is the TkFunctionName node
-    CONSTRUCTOR_NAME_POS = 0; // The first child position is the name of the constructor in TkFunctionName
+    // The first child node in constructor nodes is the TkFunctionName node
+    CONSTRUCTOR_NODE_TYPE_POS = 0;
+    // The first child position is the name of the constructor in TkFunctionName
+    CONSTRUCTOR_NAME_POS = 0;
   }
 
   /**

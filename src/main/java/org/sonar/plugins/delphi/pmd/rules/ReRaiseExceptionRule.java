@@ -23,7 +23,8 @@ public class ReRaiseExceptionRule extends DelphiRule {
 
     if (node.getType() == DelphiLexer.BEGIN) {
       // Exception blocks always contain 'begin' statements, so look at the children of begin blocks
-      // Note: Would be good to just access the next node after a 'raise' but list isn't accessible here
+      // Note: Would be good to just access the next node after a 'raise' but list isn't accessible
+      // here
 
       for (int i = 0; i < node.getChildCount() - 1; i++) {
         DelphiPMDNode childNode = (DelphiPMDNode) node.getChild(i);

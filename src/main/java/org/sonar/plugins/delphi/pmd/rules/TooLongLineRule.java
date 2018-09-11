@@ -35,7 +35,8 @@ public class TooLongLineRule extends DelphiRule {
 
     int lineNumber = node.getLine();
     if (!checkedLines.contains(
-        lineNumber)) {                             //Only check a line that has not been checked before
+        lineNumber)) {
+      // Only check a line that has not been checked before
       checkedLines.add(lineNumber);
       String line = ((ASTTree) astTree).getFileSourceLine(lineNumber);
       line = removeComment(line);                                         //Remove comment

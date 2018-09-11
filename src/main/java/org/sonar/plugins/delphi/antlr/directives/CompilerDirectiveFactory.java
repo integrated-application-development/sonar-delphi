@@ -81,7 +81,8 @@ public class CompilerDirectiveFactory {
    * @throws CompilerDirectiveFactorySyntaxException when no compiler directive could be created
    */
   public CompilerDirective create(String data, int startPosition, int endPosition)
-      throws CompilerDirectiveFactoryUnsupportedDirectiveException, CompilerDirectiveFactorySyntaxException {
+      throws CompilerDirectiveFactoryUnsupportedDirectiveException,
+          CompilerDirectiveFactorySyntaxException {
     int directiveFirstChar = getDirectiveFirstChar(data, startPosition);
     int directiveLastChar = getDirectiveLastChar(data, startPosition);
     String directiveName = getName(data, directiveFirstChar);
