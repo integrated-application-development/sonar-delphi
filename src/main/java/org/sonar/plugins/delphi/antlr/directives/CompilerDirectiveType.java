@@ -52,7 +52,7 @@ public enum CompilerDirectiveType {
     mappedValues = new HashMap<>();
     CompilerDirectiveType[] values = CompilerDirectiveType.values();
     for (CompilerDirectiveType type : values) {
-      String names[] = type.getName().split(",");
+      String[] names = type.getName().split(",");
       for (String name : names) {
         mappedValues.put(name, type);
       }

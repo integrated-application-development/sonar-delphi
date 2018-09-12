@@ -35,11 +35,11 @@ public class CastAndFreeRule extends DelphiRule {
 
   private int sequenceHardCastIndex = 0;
   private int sequenceSoftCastIndex = 0;
-  private LexerMetrics hardCastSequence[] = {LexerMetrics.IDENT, LexerMetrics.LPAREN,
+  private LexerMetrics[] hardCastSequence = {LexerMetrics.IDENT, LexerMetrics.LPAREN,
       LexerMetrics.IDENT,
       LexerMetrics.RPAREN,
       LexerMetrics.DOT, LexerMetrics.IDENT};
-  private LexerMetrics softCastSequence[] = {LexerMetrics.LPAREN, LexerMetrics.IDENT,
+  private LexerMetrics[] softCastSequence = {LexerMetrics.LPAREN, LexerMetrics.IDENT,
       LexerMetrics.AS,
       LexerMetrics.IDENT,
       LexerMetrics.RPAREN, LexerMetrics.DOT, LexerMetrics.IDENT};
@@ -56,7 +56,7 @@ public class CastAndFreeRule extends DelphiRule {
     sequenceSoftCastIndex = processSequence(softCastSequence, sequenceSoftCastIndex, node, ctx);
   }
 
-  private int processSequence(LexerMetrics sequence[], int sequenceIndex, DelphiPMDNode node,
+  private int processSequence(LexerMetrics[] sequence, int sequenceIndex, DelphiPMDNode node,
       RuleContext ctx) {
     int resultIndex = sequenceIndex;
     if (resultIndex >= sequence.length) {
@@ -74,7 +74,7 @@ public class CastAndFreeRule extends DelphiRule {
     return resultIndex;
   }
 
-  private boolean isCorrectSequence(LexerMetrics sequence[], int index, Tree lastNode) {
+  private boolean isCorrectSequence(LexerMetrics[] sequence, int index, Tree lastNode) {
     return index >= sequence.length && "free".equalsIgnoreCase(lastNode.getText());
   }
 }
