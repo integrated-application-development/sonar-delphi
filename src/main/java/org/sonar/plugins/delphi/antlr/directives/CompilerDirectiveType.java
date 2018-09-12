@@ -45,6 +45,11 @@ public enum CompilerDirectiveType {
   private String name;
   private static Map<String, CompilerDirectiveType> mappedValues = null;
 
+  CompilerDirectiveType(int number, String name) {
+     this.number = number;
+     this.name = name;
+  }
+
   /**
    * create a hash map for faster values lookup
    */
@@ -82,10 +87,5 @@ public enum CompilerDirectiveType {
       return UNKNOWN;
     }
     return mappedValues.get(directiveName);
-  }
-
-  CompilerDirectiveType(int number, String name) {
-    this.number = number;
-    this.name = name;
   }
 }

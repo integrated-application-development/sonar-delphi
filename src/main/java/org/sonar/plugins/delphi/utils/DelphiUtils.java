@@ -41,14 +41,14 @@ import org.sonar.plugins.delphi.core.DelphiLanguage;
  */
 public final class DelphiUtils {
 
-  private DelphiUtils() {
-  }
-
   /**
    * Logger class, use it for logging/debugging at Sonar window
    */
-  public static final Logger LOG = LoggerFactory.getLogger(DelphiPlugin.class
-      .getName());
+  public static final Logger LOG = LoggerFactory.getLogger(DelphiPlugin.class.getName());
+
+  private DelphiUtils() {
+  }
+
 
   /**
    * Normalizes file name, changes all '\' into '/'
