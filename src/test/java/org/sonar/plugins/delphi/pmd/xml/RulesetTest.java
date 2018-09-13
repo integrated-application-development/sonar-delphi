@@ -40,19 +40,19 @@ public class RulesetTest {
   }
 
   @Test
-  public void rulesetTest() {
+  public void testRuleset() {
     assertFalse((new Ruleset().getDescription()) == ruleset.getDescription());
   }
 
   @Test
-  public void descriptionTest() {
+  public void testDescription() {
     assertEquals("desc", ruleset.getDescription());
     ruleset.setDescription("desc2");
     assertEquals("desc2", ruleset.getDescription());
   }
 
   @Test
-  public void rulesTest() {
+  public void testRules() {
     assertEquals(0, ruleset.getRules().size());
 
     List<DelphiRule> rules = new ArrayList<>();

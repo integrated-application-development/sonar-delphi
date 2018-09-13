@@ -43,19 +43,19 @@ public class DelphiRuleTest {
   }
 
   @Test
-  public void nameTest() {
+  public void testName() {
     assertEquals(null, rule.getName());
     rule.setName("testDefinitionsIncludes");
     assertEquals("testDefinitionsIncludes", rule.getName());
   }
 
   @Test
-  public void clazzTest() {
+  public void testClazz() {
     assertEquals("class", rule.getClazz());
   }
 
   @Test
-  public void propertiesTest() {
+  public void testProperties() {
     assertEquals(null, rule.getProperties());
 
     List<Property> properties = new ArrayList<>();
@@ -71,36 +71,36 @@ public class DelphiRuleTest {
   }
 
   @Test
-  public void compareToTest() {
+  public void testCompareTo() {
     assertEquals(11, rule.compareTo("notEqual"));
     assertEquals(0, rule.compareTo("class"));
   }
 
   @Test
-  public void priorityTest() {
+  public void testPriority() {
     assertEquals("critical", rule.getPriority());
     assertEquals(null, new DelphiRule("class").getPriority());
   }
 
   @Test
-  public void messageTest() {
+  public void testMessage() {
     rule.setMessage("my message");
     assertEquals("my message", rule.getMessage());
   }
 
   @Test
-  public void descriptionTest() {
+  public void testDescription() {
     assertEquals("", rule.getDescription());
   }
 
   @Test
-  public void categoryTest() {
+  public void testCategory() {
     rule.setTag("bug,size");
     assertThat(rule.getTags(), Matchers.arrayContaining("bug", "size"));
   }
 
   @Test
-  public void emptyCategoryTest() {
+  public void testEmptyCategory() {
     assertThat(rule.getTags(), is(emptyArray()));
   }
 

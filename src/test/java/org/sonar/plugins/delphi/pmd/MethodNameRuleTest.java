@@ -27,7 +27,7 @@ import org.junit.Test;
 public class MethodNameRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void interfaceMethodValidRule() {
+  public void testInterfaceMethodValidRule() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
     builder.appendDecl("  IMyInterface = interface");

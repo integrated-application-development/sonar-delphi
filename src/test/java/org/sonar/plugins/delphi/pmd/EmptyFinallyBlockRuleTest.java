@@ -27,7 +27,7 @@ import org.junit.Test;
 public class EmptyFinallyBlockRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void validRule() {
+  public void testValidRule() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendImpl("procedure Test();");
     builder.appendImpl("begin");

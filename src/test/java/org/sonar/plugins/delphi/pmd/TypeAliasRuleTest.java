@@ -27,7 +27,7 @@ import org.junit.Test;
 public class TypeAliasRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void setsArentTypeAlias() {
+  public void testSetsArentTypeAlias() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
 
     builder.appendDecl("type");
@@ -65,7 +65,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
   }*/
 
   @Test
-  public void falsePositiveMetaClassIsNotTypeAlias() {
+  public void testFalsePositiveMetaClassIsNotTypeAlias() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
 
     builder.appendDecl("type");
@@ -79,7 +79,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void falsePositiveEmptyRecordIsNotTypeAlias() {
+  public void testFalsePositiveEmptyRecordIsNotTypeAlias() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
 
     builder.appendDecl("type");
@@ -92,7 +92,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void falsePositiveEmptyClassIsNotTypeAlias() {
+  public void testFalsePositiveEmptyClassIsNotTypeAlias() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
 
     builder.appendDecl("type");

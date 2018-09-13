@@ -27,7 +27,7 @@ import org.junit.Test;
 public class EmptyBeginStatementTest extends BasePmdRuleTest {
 
   @Test
-  public void validRule() {
+  public void testValidRule() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
 
     builder.appendDecl("type");

@@ -57,7 +57,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }*/
 
   @Test
-  public void validRuleNestedFunction() {
+  public void testValidRuleNestedFunction() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
 
     builder.appendDecl("procedure TestNestedParams(const aValue : string);");
@@ -81,7 +81,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void validRuleManyNestedFunction() {
+  public void testValidRuleManyNestedFunction() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
 
     builder.appendDecl("procedure TestNestedParams(const aValue : string);");
@@ -115,7 +115,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void validRuleMultipleNestedFunction() {
+  public void testValidRuleMultipleNestedFunction() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
 
     builder.appendDecl("procedure TestNestedParams(const aValue : string);");
