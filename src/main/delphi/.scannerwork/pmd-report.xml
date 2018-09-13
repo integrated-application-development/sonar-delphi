@@ -2,11 +2,8 @@
 <pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
-    version="6.0.1" timestamp="2018-08-23T16:38:41.522">
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\AccessorsTest.pas">
-<violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
+    version="6.0.1" timestamp="2018-09-13T21:09:52.963">
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\AccessorsTest.pas">
 <violation beginline="29" endline="29" begincolumn="0" endcolumn="0" rule="EmptyBeginStatementRule" ruleset="Missing RuleSet Name" priority="2">
 
 </violation>
@@ -17,7 +14,7 @@
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\ClassPrefixTest.pas">
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\ClassPrefixTest.pas">
 <violation beginline="9" endline="9" begincolumn="13" endcolumn="13" rule="OneClassPerFileRule" ruleset="Missing RuleSet Name" class="TFruit" priority="3">
 File has too many classes, maximum number of classes is 1.
 </violation>
@@ -34,15 +31,12 @@ File has too many classes, maximum number of classes is 1.
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\CommentsTest.pas">
-<violation beginline="10" endline="10" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\CommentsTest.pas">
 <violation beginline="19" endline="19" begincolumn="3" endcolumn="3" rule="FieldNameRule" ruleset="Missing RuleSet Name" class="TCommentsTest" priority="4">
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\ConstantsTest.pas">
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\ConstantsTest.pas">
 <violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="ConstantNotationRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
@@ -62,120 +56,37 @@ File has too many classes, maximum number of classes is 1.
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\ConstructorTest.pas">
-<violation beginline="15" endline="15" begincolumn="0" endcolumn="0" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
-<violation beginline="22" endline="22" begincolumn="4" endcolumn="4" rule="ConstructorCreateRule" ruleset="Missing RuleSet Name" class="T" priority="4">
-
-</violation>
-<violation beginline="23" endline="23" begincolumn="4" endcolumn="4" rule="ConstructorCreateRule" ruleset="Missing RuleSet Name" class="T" priority="4">
-
-</violation>
-</file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\CyclomaticComplexityTest.pas">
-<violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
-</file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\DuplicatesTest.pas">
-<violation beginline="10" endline="10" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
-<violation beginline="25" endline="25" begincolumn="2" endcolumn="2" rule="DuplicatesRule" ruleset="Missing RuleSet Name" class="TBlah" method="TBlah.foo" priority="4">
-
-</violation>
-<violation beginline="29" endline="29" begincolumn="2" endcolumn="2" rule="DuplicatesRule" ruleset="Missing RuleSet Name" class="TBlah" method="TBlah.foo" priority="4">
-
-</violation>
-<violation beginline="34" endline="34" begincolumn="2" endcolumn="2" rule="DuplicatesRule" ruleset="Missing RuleSet Name" class="TBlah" method="TBlah.foo" priority="4">
-
-</violation>
-<violation beginline="42" endline="42" begincolumn="2" endcolumn="2" rule="DuplicatesRule" ruleset="Missing RuleSet Name" class="TBlah" method="TBlah.foo" priority="4">
-
-</violation>
-</file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\EmptyBracketsTest.pas">
-<violation beginline="10" endline="10" begincolumn="5" endcolumn="5" rule="EmptyBracketsRule" ruleset="Missing RuleSet Name" priority="5">
-
-</violation>
-</file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\EnumTest.pas">
-<violation beginline="6" endline="6" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
-</file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\FunctionTest.pas">
-<violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\FunctionTest.pas">
 <violation beginline="16" endline="16" begincolumn="2" endcolumn="2" rule="FieldNameRule" ruleset="Missing RuleSet Name" class="TFunctionTest" priority="4">
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\Globals.pas">
-<violation beginline="20" endline="20" begincolumn="1" endcolumn="1" rule="EmptyBracketsRule" ruleset="Missing RuleSet Name" method="globalProcedure" priority="5">
-
-</violation>
-</file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\GlobalsTest.pas">
-<violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
-</file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\IdentifierCapitalisationTest.pas">
-<violation beginline="6" endline="6" begincolumn="4" endcolumn="4" rule="ConstantNotationRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
-<violation beginline="7" endline="7" begincolumn="4" endcolumn="4" rule="ConstantNotationRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
-<violation beginline="8" endline="8" begincolumn="4" endcolumn="4" rule="ConstantNotationRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
-<violation beginline="9" endline="9" begincolumn="4" endcolumn="4" rule="ConstantNotationRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
-<violation beginline="10" endline="10" begincolumn="4" endcolumn="4" rule="ConstantNotationRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
-</file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\IfNotTest.pas">
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\IfNotTest.pas">
 <violation beginline="13" endline="13" begincolumn="23" endcolumn="23" rule="IfNotFalseRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\IfTrueTest.pas">
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\IfTrueTest.pas">
 <violation beginline="13" endline="13" begincolumn="19" endcolumn="19" rule="IfTrueRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\InterfaceNameTest.pas">
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\InterfaceNameTest.pas">
 <violation beginline="7" endline="7" begincolumn="4" endcolumn="4" rule="InterfaceNameRule" ruleset="Missing RuleSet Name" class="IRecyclable" priority="4">
 
 </violation>
-<violation beginline="11" endline="11" begincolumn="4" endcolumn="4" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
-
+</file>
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\KeywordsConvention.pas">
+<violation beginline="34" endline="34" begincolumn="11" endcolumn="11" rule="UppercaseReservedKeywordsRule" ruleset="Missing RuleSet Name" class="TForm1" method="TForm1.FormCreate" priority="4">
+Avoid using uppercase keywords: NOT
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\MainWindow.pas">
-<violation beginline="10" endline="10" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\MainWindow.pas">
 <violation beginline="15" endline="15" begincolumn="3" endcolumn="3" rule="FieldNameRule" ruleset="Missing RuleSet Name" class="TMainWindow" priority="4">
 
 </violation>
-<violation beginline="37" endline="37" begincolumn="1" endcolumn="1" rule="EmptyBracketsRule" ruleset="Missing RuleSet Name" class="TMainWindow" method="TMainWindow.foo2" priority="5">
-
-</violation>
-<violation beginline="44" endline="44" begincolumn="1" endcolumn="1" rule="EmptyBracketsRule" ruleset="Missing RuleSet Name" class="TMainWindow" method="TMainWindow.foo2" priority="5">
-
-</violation>
-<violation beginline="48" endline="48" begincolumn="15" endcolumn="15" rule="EmptyBracketsRule" ruleset="Missing RuleSet Name" class="TMainWindow" method="TMainWindow.foo2" priority="5">
-
-</violation>
 </file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\NoReturnTest.pas">
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\NoReturnTest.pas">
 <violation beginline="14" endline="14" begincolumn="12" endcolumn="12" rule="OneClassPerFileRule" ruleset="Missing RuleSet Name" class="TTest" priority="3">
 File has too many classes, maximum number of classes is 1.
 </violation>
@@ -183,10 +94,7 @@ File has too many classes, maximum number of classes is 1.
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\OverloadTest.pas">
-<violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\OverloadTest.pas">
 <violation beginline="17" endline="17" begincolumn="2" endcolumn="2" rule="FieldNameRule" ruleset="Missing RuleSet Name" class="TOverloadTest" priority="4">
 
 </violation>
@@ -203,10 +111,7 @@ Unused argument: 'x' at TOverloadTest.over1
 Unused argument: 'x' at TOverloadTest.over1
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\PublicFieldsTest.pas">
-<violation beginline="11" endline="11" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\PublicFieldsTest.pas">
 <violation beginline="13" endline="13" begincolumn="4" endcolumn="4" rule="FieldNameRule" ruleset="Missing RuleSet Name" class="TSquare" priority="4">
 
 </violation>
@@ -219,14 +124,8 @@ Unused argument: 'x' at TOverloadTest.over1
 <violation beginline="21" endline="21" begincolumn="4" endcolumn="4" rule="PublicFieldsRule" ruleset="Missing RuleSet Name" class="TSquare" priority="4">
 
 </violation>
-<violation beginline="29" endline="29" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
 <violation beginline="29" endline="29" begincolumn="22" endcolumn="22" rule="OneClassPerFileRule" ruleset="Missing RuleSet Name" class="TChangeableSquare" priority="3">
 File has too many classes, maximum number of classes is 1.
-</violation>
-<violation beginline="35" endline="35" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
-
 </violation>
 <violation beginline="35" endline="35" begincolumn="11" endcolumn="11" rule="OneClassPerFileRule" ruleset="Missing RuleSet Name" class="TForm1" priority="3">
 File has too many classes, maximum number of classes is 1.
@@ -241,18 +140,12 @@ File has too many classes, maximum number of classes is 1.
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\ReRaiseExceptionTest.pas">
-<violation beginline="18" endline="18" begincolumn="10" endcolumn="10" rule="CatchingGeneralExceptionRule" ruleset="Missing RuleSet Name" priority="3">
-
-</violation>
-<violation beginline="22" endline="22" begincolumn="7" endcolumn="7" rule="ReRaiseExceptionRule" ruleset="Missing RuleSet Name" priority="3">
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\ReRaiseExceptionTest.pas">
+<violation beginline="18" endline="18" begincolumn="11" endcolumn="11" rule="CatchingGeneralExceptionRule" ruleset="Missing RuleSet Name" priority="3">
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\StatementTest.pas">
-<violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\StatementTest.pas">
 <violation beginline="35" endline="35" begincolumn="17" endcolumn="17" rule="NoSemicolonRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
@@ -260,7 +153,7 @@ File has too many classes, maximum number of classes is 1.
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\TooManyArgumentsTest.pas">
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\TooManyArgumentsTest.pas">
 <violation beginline="7" endline="7" begincolumn="14" endcolumn="14" rule="TooManyArgumentsRule" ruleset="Missing RuleSet Name" method="Test" priority="3">
 Too many arguments: 11 (max 6)
 </violation>
@@ -268,28 +161,17 @@ Too many arguments: 11 (max 6)
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\TooManyVariablesTest.pas">
-<violation beginline="6" endline="6" begincolumn="0" endcolumn="0" rule="TooManyVariablesRule" ruleset="Missing RuleSet Name" priority="3">
-Too many variables: 11 (max 10)
-</violation>
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\TooManyVariablesTest.pas">
 <violation beginline="20" endline="20" begincolumn="0" endcolumn="0" rule="EmptyBeginStatementRule" ruleset="Missing RuleSet Name" priority="2">
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\WithTest.pas">
-<violation beginline="10" endline="10" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
-
-</violation>
-<violation beginline="25" endline="25" begincolumn="2" endcolumn="2" rule="AvoidWithRule" ruleset="Missing RuleSet Name" priority="3">
-
-</violation>
-</file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\tests\MyTest1.pas">
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\tests\MyTest1.pas">
 <violation beginline="13" endline="13" begincolumn="0" endcolumn="0" rule="EmptyBeginStatementRule" ruleset="Missing RuleSet Name" priority="2">
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\GitHub Projects\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\tests\MyTest2.pas">
+<file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\tests\MyTest2.pas">
 <violation beginline="13" endline="13" begincolumn="0" endcolumn="0" rule="EmptyBeginStatementRule" ruleset="Missing RuleSet Name" priority="2">
 
 </violation>
