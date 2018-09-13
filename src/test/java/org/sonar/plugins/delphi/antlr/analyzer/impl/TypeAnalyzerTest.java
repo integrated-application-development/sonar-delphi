@@ -56,7 +56,7 @@ public class TypeAnalyzerTest {
   public void init() {
     analyzer = new TypeAnalyzer();
     results = new CodeAnalysisResults();
-    results.setActiveUnit(new DelphiUnit("testDefinitionsIncludes"));
+    results.setActiveUnit(new DelphiUnit("test"));
 
     File file = DelphiUtils.getResource(FILE_NAME);
     ast = new DelphiAST(file);

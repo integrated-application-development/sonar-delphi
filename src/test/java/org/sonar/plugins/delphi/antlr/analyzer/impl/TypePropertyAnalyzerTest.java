@@ -55,7 +55,7 @@ public class TypePropertyAnalyzerTest {
   public void init() {
     analyzer = new TypePropertyAnalyzer();
     results = new CodeAnalysisResults();
-    results.setActiveUnit(new DelphiUnit("testDefinitionsIncludes"));
+    results.setActiveUnit(new DelphiUnit("test"));
 
     File file = DelphiUtils.getResource(FILE_NAME);
     ast = new DelphiAST(file);
@@ -65,7 +65,7 @@ public class TypePropertyAnalyzerTest {
 
   @Test
   public void testAnalyze() {
-    ClassInterface clazz = new DelphiClass("testDefinitionsIncludes");
+    ClassInterface clazz = new DelphiClass("test");
     results.setActiveClass(clazz);
 
     code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));

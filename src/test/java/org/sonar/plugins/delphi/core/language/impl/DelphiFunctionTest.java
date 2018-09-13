@@ -32,15 +32,15 @@ public class DelphiFunctionTest {
 
   @Test
   public void testEqualsTest() {
-    assertTrue(new DelphiFunction("testDefinitionsIncludes").equals(new DelphiFunction("testDefinitionsIncludes")));
-    assertFalse( new DelphiFunction("testDefinitionsIncludes").equals(new DelphiFunction("test2")));
-    assertFalse(new DelphiFunction("class.testDefinitionsIncludes").equals(new DelphiFunction("testDefinitionsIncludes")));
-    assertTrue(new DelphiFunction("class.testDefinitionsIncludes").equals(new DelphiFunction("class.testDefinitionsIncludes")));
+    assertTrue(new DelphiFunction("test").equals(new DelphiFunction("test")));
+    assertFalse( new DelphiFunction("test").equals(new DelphiFunction("test2")));
+    assertFalse(new DelphiFunction("class.test").equals(new DelphiFunction("test")));
+    assertTrue(new DelphiFunction("class.test").equals(new DelphiFunction("class.test")));
   }
 
   @Test
   public void testHashCodeTest() {
-    assertEquals(new DelphiFunction("testDefinitionsIncludes").hashCode(), new DelphiFunction("testDefinitionsIncludes").hashCode());
+    assertEquals(new DelphiFunction("test").hashCode(), new DelphiFunction("test").hashCode());
   }
 
   @Test
@@ -66,7 +66,7 @@ public class DelphiFunctionTest {
     DelphiFunction func1 = new DelphiFunction();
     assertTrue(func1.isGlobal());
 
-    new DelphiClass("testDefinitionsIncludes").addFunction(func1);
+    new DelphiClass("test").addFunction(func1);
     assertFalse(func1.isGlobal());
   }
 

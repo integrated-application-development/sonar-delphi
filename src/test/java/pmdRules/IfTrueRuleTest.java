@@ -15,7 +15,7 @@ public class IfTrueRuleTest extends BaseXmlPmdRuleTest {
     @Test
     public void testRuleViolation(){
 
-        super.testAnalyse(); // fixme, be better if didnt have to run this every testDefinitionsIncludes, just once
+        super.testAnalyse(); // fixme, be better if didnt have to run this every test, just once
         ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
         Integer[] expectedViolationLines = {13};

@@ -50,7 +50,7 @@ public class IncludeAnalyzerTest {
   public void init() {
     analyzer = new IncludeAnalyzer();
     results = new CodeAnalysisResults();
-    results.setActiveUnit(new DelphiUnit("testDefinitionsIncludes"));
+    results.setActiveUnit(new DelphiUnit("test"));
 
     File file = DelphiUtils.getResource(FILE_NAME);
     ast = new DelphiAST(file);

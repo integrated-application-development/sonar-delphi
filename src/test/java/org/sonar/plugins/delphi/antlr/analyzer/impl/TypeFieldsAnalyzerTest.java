@@ -55,7 +55,7 @@ public class TypeFieldsAnalyzerTest {
   public void init() {
     analyzer = new TypeFieldsAnalyzer();
     results = new CodeAnalysisResults();
-    results.setActiveUnit(new DelphiUnit("testDefinitionsIncludes"));
+    results.setActiveUnit(new DelphiUnit("test"));
 
     File file = DelphiUtils.getResource(FILE_NAME);
     ast = new DelphiAST(file);
@@ -66,7 +66,7 @@ public class TypeFieldsAnalyzerTest {
   @Test
   public void testAnalyze() {
     code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));
-    ClassInterface clazz = new DelphiClass("testDefinitionsIncludes");
+    ClassInterface clazz = new DelphiClass("test");
     results.setActiveClass(clazz);
 
     analyzer.analyze(code, results);

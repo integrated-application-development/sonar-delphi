@@ -45,8 +45,8 @@ public class DelphiRuleTest {
   @Test
   public void testName() {
     assertEquals(null, rule.getName());
-    rule.setName("testDefinitionsIncludes");
-    assertEquals("testDefinitionsIncludes", rule.getName());
+    rule.setName("test");
+    assertEquals("test", rule.getName());
   }
 
   @Test

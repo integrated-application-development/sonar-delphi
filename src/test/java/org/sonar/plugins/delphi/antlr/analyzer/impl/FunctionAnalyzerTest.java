@@ -65,7 +65,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   public void setupFile(String fileName) throws IOException {
     loadFile(fileName);
     results = new CodeAnalysisResults();
-    results.setActiveUnit(new DelphiUnit("testDefinitionsIncludes"));
+    results.setActiveUnit(new DelphiUnit("test"));
     ast = new DelphiAST(testFile);
     code = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<>(ast.getChild(0)));
     advanceToFunction = new AdvanceToNodeOperation(

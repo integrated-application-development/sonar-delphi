@@ -51,7 +51,7 @@ public class InterfaceAnalyzerTest {
   public void init() {
     analyzer = new InterfaceAnalyzer();
     results = new CodeAnalysisResults();
-    results.setActiveUnit(new DelphiUnit("testDefinitionsIncludes"));
+    results.setActiveUnit(new DelphiUnit("test"));
 
     ast = new DelphiAST();
     ast.addChild(new CommonTree(new CommonToken(LexerMetrics.INTERFACE.toMetrics(), "interface")));

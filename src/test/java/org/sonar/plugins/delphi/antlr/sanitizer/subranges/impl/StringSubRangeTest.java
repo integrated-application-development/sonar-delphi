@@ -35,13 +35,13 @@ public class StringSubRangeTest {
 
   @Before
   public void setup() {
-    str = "!This is a testDefinitionsIncludes string!";
+    str = "!This is a test string!";
     range = new StringSubRange(0, str.length(), str);
   }
 
   @Test
   public void testToString() {
-    assertEquals("[0, 23] !This is a testDefinitionsIncludes string!", range.toString());
+    assertEquals("[0, 23] !This is a test string!", range.toString());
 
     range.setBegin(0);
     range.setEnd(10);
@@ -49,7 +49,7 @@ public class StringSubRangeTest {
 
     range.setEnd(15);
     range.setBegin(11);
-    assertEquals("[11, 15] testDefinitionsIncludes", range.toString());
+    assertEquals("[11, 15] test", range.toString());
   }
 
 }
