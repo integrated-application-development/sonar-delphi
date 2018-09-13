@@ -59,7 +59,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
     builder.appendImpl("begin");
     builder.appendImpl("  while x <> 0 do");
     builder.appendImpl("  begin");
-    builder.appendImpl("    writeln('test')");
+    builder.appendImpl("    writeln('testDefinitionsIncludes')");
     builder.appendImpl("  end;");
     builder.appendImpl("end;");
 
@@ -85,7 +85,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
     builder.appendImpl("begin");
     builder.appendImpl("  while x <> 0 do");
     builder.appendImpl("  begin");
-    builder.appendImpl("    writeln('test');");
+    builder.appendImpl("    writeln('testDefinitionsIncludes');");
     builder.appendImpl("  end");
     builder.appendImpl("end;");
 
@@ -110,11 +110,11 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
     builder.appendImpl("begin");
     builder.appendImpl("  if val then");
     builder.appendImpl("  begin");
-    builder.appendImpl("    writeln('test');");
+    builder.appendImpl("    writeln('testDefinitionsIncludes');");
     builder.appendImpl("  end");
     builder.appendImpl("  else");
     builder.appendImpl("  begin");
-    builder.appendImpl("    writeln('test');");
+    builder.appendImpl("    writeln('testDefinitionsIncludes');");
     builder.appendImpl("  end;");
     builder.appendImpl("end;");
 

@@ -59,7 +59,7 @@ public class TypeInheritanceAnalyzerTest {
   public void init() {
     analyzer = new TypeInheritanceAnalyzer();
     results = new CodeAnalysisResults();
-    results.setActiveUnit(new DelphiUnit("test"));
+    results.setActiveUnit(new DelphiUnit("testDefinitionsIncludes"));
 
     File file = DelphiUtils.getResource(FILE_NAME);
     ast = new DelphiAST(file);
@@ -71,7 +71,7 @@ public class TypeInheritanceAnalyzerTest {
   public void testAnalyze() {
     code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));
 
-    ClassInterface clazz = new DelphiClass("test");
+    ClassInterface clazz = new DelphiClass("testDefinitionsIncludes");
     results.setActiveClass(clazz);
     analyzer.analyze(code, results);
 

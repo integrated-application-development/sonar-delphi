@@ -19,7 +19,7 @@ import org.w3c.dom.NodeList;
 public class PMDReportXMLParser {
 
   // Note that these paths are relative
-  private static String TEST_PROJECT_DIR = "src/test/resources/pmdRuleTestFiles/delphi-test-project/";
+  private static String TEST_PROJECT_DIR = "src/testDefinitionsIncludes/resources/pmdRuleTestFiles/delphi-testDefinitionsIncludes-project/";
   private static String PMD_REPORT_FILE = ".scannerwork/pmd-report.xml";
 
   HashMap<String, ArrayList<ArrayList<Object>>> violationsMap = new HashMap<>();
