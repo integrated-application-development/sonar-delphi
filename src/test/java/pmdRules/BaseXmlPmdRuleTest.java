@@ -22,7 +22,7 @@ public class BaseXmlPmdRuleTest {
    * Creates the hashmap of violations by parsing the XML results of pmd-report.xml
    */
   @Test
-  public void analyse() {
+  public void testAnalyse() {
     pmdParser.parsePmdReportXML();
     violationsMap = pmdParser.violationsMap;
   }

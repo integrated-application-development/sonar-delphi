@@ -54,7 +54,7 @@ public class EmptyFinallyBlockRuleTest extends BasePmdRuleTest {
     builder.appendImpl("  end;");
     builder.appendImpl("end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues.toString(), issues, hasSize(1));
     assertThat(issues, hasItem(allOf(hasRuleKey("EmptyFinallyBlockRule"), hasRuleLine(builder.getOffSet() + 5))));

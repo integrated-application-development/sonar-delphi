@@ -54,7 +54,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("     Name: String;");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4)));
     assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
@@ -75,7 +75,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("     Name: String;");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, not(hasItem(hasRuleLine(builder.getOffsetDecl() + 3))));
     assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
@@ -94,7 +94,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("     Fbar: String;");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, hasSize(2));
     assertThat(issues, hasItem(allOf(hasRuleKey("FieldNameRule"), hasRuleLine(builder.getOffsetDecl() + 4))));
@@ -110,7 +110,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("     Foo: Integer;");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, hasSize(1));
     assertThat(issues, hasItem(allOf(hasRuleKey("FieldNameRule"), hasRuleLine(builder.getOffsetDecl() + 4))));
@@ -125,7 +125,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("     x: Integer;");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, hasSize(1));
     assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4)));

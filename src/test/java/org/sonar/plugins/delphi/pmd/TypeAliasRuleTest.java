@@ -45,7 +45,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
     builder.appendDecl("type");
     builder.appendDecl("  TMyChar = Char;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(toString(issues), issues, hasSize(1));
     assertThat(toString(issues), issues, hasItem(allOf(hasRuleKey("TypeAliasRule"), hasRuleLine(builder.getOffsetDecl() + 2))));
@@ -58,7 +58,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
     builder.appendDecl("type");
     builder.appendDecl("  TMyChar = type Char;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(toString(issues), issues, hasSize(1));
     assertThat(toString(issues), issues, hasItem(allOf(hasRuleKey("TypeAliasRule"), hasRuleLine(builder.getOffsetDecl() + 2))));

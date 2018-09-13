@@ -37,7 +37,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
     builder.appendImpl("  x := 5");
     builder.appendImpl("end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, not(empty()));
     List<Issue> matchIssues = new ArrayList<Issue>();
@@ -63,7 +63,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
     builder.appendImpl("  end;");
     builder.appendImpl("end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, not(empty()));
     List<Issue> matchIssues = new ArrayList<Issue>();
@@ -89,7 +89,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
     builder.appendImpl("  end");
     builder.appendImpl("end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, not(empty()));
     List<Issue> matchIssues = new ArrayList<Issue>();
@@ -104,7 +104,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
   }*/
 
   @Test
-  public void shouldSkipEndFollowedByElse() {
+  public void testShouldSkipEndFollowedByElse() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendImpl("procedure NoSemicolonsAfterLastInstruction(val: Boolean);");
     builder.appendImpl("begin");
@@ -139,14 +139,14 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
     builder.appendImpl("  FData := aData;");
     builder.appendImpl("end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(sensor.getErrors(), empty());
     assertThat(issues, empty());
   }*/
 
   @Test
-  public void shouldSkipClassDeclarationOnImplementationSection() {
+  public void testShouldSkipClassDeclarationOnImplementationSection() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendImpl("type");
     builder.appendImpl("  TDummyClass = class");
@@ -167,7 +167,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void shouldSkipInterfaceDeclarationOnImplementationSection() {
+  public void testShouldSkipInterfaceDeclarationOnImplementationSection() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendImpl("type");
     builder.appendImpl("  IDummyInterface = interface");

@@ -35,7 +35,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
     configureTest(ROOT_DIR_NAME + "/UnusedArgumentRule.pas");
 
     DebugSensorContext debugContext = new DebugSensorContext();
-    sensor.analyse(project, debugContext);
+    sensor.testAnalyse(project, debugContext);
 
     // all expected rule violations and their lines
     RuleData ruleData[] = {
@@ -173,7 +173,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
     builder.appendImpl("  lData := Update1('1');");
     builder.appendImpl("end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(toString(issues), issues, hasSize(4));
   }*/

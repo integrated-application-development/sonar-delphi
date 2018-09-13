@@ -14,7 +14,7 @@ public class EnumNameTest {
 
   // TODO make this testDefinitionsIncludes actually testDefinitionsIncludes, was just being used for debugging
   @Test
-  public void test() {
+  public void testDev() {
     File testFile = DelphiUtils.getResource(TEST_FILE);
     DelphiPMD pmd = new DelphiPMD();
     DelphiAST ast = new DelphiAST(testFile);

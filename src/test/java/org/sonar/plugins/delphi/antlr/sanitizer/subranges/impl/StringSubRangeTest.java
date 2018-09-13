@@ -40,7 +40,7 @@ public class StringSubRangeTest {
   }
 
   @Test
-  public void toStringTest() {
+  public void testToString() {
     assertEquals("[0, 23] !This is a testDefinitionsIncludes string!", range.toString());
 
     range.setBegin(0);

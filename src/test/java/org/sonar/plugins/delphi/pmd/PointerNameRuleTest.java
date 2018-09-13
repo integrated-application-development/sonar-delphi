@@ -44,7 +44,7 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("type");
     builder.appendDecl("  pMyPointer = ^Integer;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
@@ -59,7 +59,7 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("type");
     builder.appendDecl("  Pointer = ^Integer;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
@@ -68,7 +68,7 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
   }*/
 
   @Test
-  public void shouldIgnorePointerAssignment() {
+  public void testShouldIgnorePointerAssignment() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendImpl("procedure Foo;");
     builder.appendImpl("var");

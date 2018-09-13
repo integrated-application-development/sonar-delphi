@@ -118,7 +118,7 @@ public class ComplexityMetricsTest {
 
     // processing
     ComplexityMetrics metrics = new ComplexityMetrics(activeRules, sensorContext);
-//    metrics.analyse(new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5","testDefinitionsIncludes"),
+//    metrics.testAnalyse(new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5","testDefinitionsIncludes"),
 //        results.getClasses(), results.getFunctions(), null);
   }
 

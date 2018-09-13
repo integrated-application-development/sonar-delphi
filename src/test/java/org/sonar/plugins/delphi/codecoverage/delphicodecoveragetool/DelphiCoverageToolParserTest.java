@@ -69,7 +69,7 @@ public class DelphiCoverageToolParserTest {
   }
 
   @Test
-  public void parseTest() {
+  public void testParse() {
     DelphiCodeCoverageToolParser parser = new DelphiCodeCoverageToolParser(reportFile,
         delphiProjectHelper);
     parser.parse(context);
