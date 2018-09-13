@@ -38,7 +38,7 @@ public class CodeAnalisysResultsTest {
   }
 
   @Test
-  public void getActiveUnitTest() {
+  public void testGetActiveUnitTest() {
     result.setActiveUnit(new DelphiUnit("test"));
     assertEquals(new DelphiUnit("test"), result.getActiveUnit());
   }

@@ -136,7 +136,7 @@ public class DelphiSensorTest {
   }
 
   @Test
-  public void describeTest() {
+  public void testDescribeTest() {
     DefaultSensorDescriptor sensorDescriptor = new DefaultSensorDescriptor();
     sensor.describe(sensorDescriptor);
     assertEquals("Combined LCOV and LOC sensor", sensorDescriptor.name());
@@ -145,7 +145,7 @@ public class DelphiSensorTest {
   }
 
   @Test
-  public void executeTest() {
+  public void testExecuteTest() {
     sensor.execute(context);
 
     assertEquals(12, context.allIssues().size());
@@ -176,13 +176,13 @@ public class DelphiSensorTest {
   }
 
   @Test
-  public void analyseWithEmptySourceFiles() {
+  public void testAnalyseWithEmptySourceFiles() {
     delphiProject.getSourceFiles().clear();
 //    sensor.execute(context);
   }
 
   @Test
-  public void analyseWithBadSourceFileSyntax() {
+  public void testAnalyseWithBadSourceFileSyntax() {
     delphiProject.getSourceFiles().clear();
     delphiProject.getSourceFiles().add(new File(baseDir + "/Globals.pas"));
     delphiProject.getSourceFiles().add(new File(baseDir + "/../BadSyntax.pas"));

@@ -89,7 +89,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void constructorTest() {
+  public void testConstructor() {
     try {
       new FunctionBodyAnalyzer(null, DelphiTestUtils.mockProjectHelper());
       fail("No exception was caught");
@@ -99,7 +99,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void canAnalyzeTest() {
+  public void testCanAnalyze() {
     assertEquals(false, analyzer.canAnalyze(codeTree));
 
     results.setActiveFunction(new DelphiFunction("testFunction"));
@@ -110,7 +110,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void captureFunctionBodyLine() throws IOException, RecognitionException {
+  public void testCaptureFunctionBodyLine() throws IOException, RecognitionException {
     setupFile(FILE_NAME);
 
     results.setActiveClass(new DelphiClass("TDemo"));
@@ -161,7 +161,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void captureFunctionBodyLineRecordOperator() throws IOException, RecognitionException {
+  public void testCaptureFunctionBodyLineRecordOperator() throws IOException, RecognitionException {
     setupFile(FILE_NAME_OPERATOR_TEST);
 
     results.setActiveClass(new DelphiClass("GenericA"));
@@ -173,7 +173,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void listUtils() throws IOException, RecognitionException {
+  public void testListUtils() throws IOException, RecognitionException {
     setupFile(FILE_NAME_LIST_UTILS);
 
     results.setActiveClass(new DelphiClass("TListUtils"));

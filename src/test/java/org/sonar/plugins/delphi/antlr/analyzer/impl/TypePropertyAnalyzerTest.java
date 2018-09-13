@@ -64,7 +64,7 @@ public class TypePropertyAnalyzerTest {
   }
 
   @Test
-  public void analyzeTest() {
+  public void testAnalyze() {
     ClassInterface clazz = new DelphiClass("test");
     results.setActiveClass(clazz);
 
@@ -92,7 +92,7 @@ public class TypePropertyAnalyzerTest {
   }
 
   @Test
-  public void canAnalyzeTest() {
+  public void testCanAnalyze() {
     assertFalse(analyzer.canAnalyze(code));
     code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));
     assertTrue(analyzer.canAnalyze(code));
