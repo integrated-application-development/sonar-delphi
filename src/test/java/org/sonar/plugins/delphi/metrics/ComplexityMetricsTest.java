@@ -75,7 +75,7 @@ public class ComplexityMetricsTest {
   }
 
   @Test
-  public void analyzeTest() throws IOException {
+  public void testAnalyze() throws IOException {
     // init
     File testFile = DelphiUtils.getResource(FILE_NAME);
     CodeAnalysisCacheResults.resetCache();
@@ -109,7 +109,7 @@ public class ComplexityMetricsTest {
   }
 
   @Test
-  public void analyseListUtils() {
+  public void testAnalyseListUtils() {
     // init
     File testFile = DelphiUtils.getResource(FILE_NAME_LIST_UTILS);
     CodeAnalysisCacheResults.resetCache();
@@ -118,7 +118,7 @@ public class ComplexityMetricsTest {
 
     // processing
     ComplexityMetrics metrics = new ComplexityMetrics(activeRules, sensorContext);
-//    metrics.analyse(new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5","test"),
+//    metrics.analyse(new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5","testDefinitionsIncludes"),
 //        results.getClasses(), results.getFunctions(), null);
   }
 

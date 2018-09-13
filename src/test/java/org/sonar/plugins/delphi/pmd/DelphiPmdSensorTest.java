@@ -114,11 +114,11 @@ public class DelphiPmdSensorTest {
     sensor = new DelphiPmdSensor(delphiProjectHelper, sensorContext, rulesProfile, profileExporter);
   }
 
-  // FIXME this test doesn't work with the addition of new rules. Needs to be modified to include ours. Temporarily Ignored.
+  // FIXME this testDefinitionsIncludes doesn't work with the addition of new rules. Needs to be modified to include ours. Temporarily Ignored.
   @Ignore
   @Test
   public void analyseTest() {
-    // TODO Create one test per violation
+    // TODO Create one testDefinitionsIncludes per violation
     sensor.execute(sensorContext);
 
     RuleData ruleData[] = // all expected rule violations and their lines

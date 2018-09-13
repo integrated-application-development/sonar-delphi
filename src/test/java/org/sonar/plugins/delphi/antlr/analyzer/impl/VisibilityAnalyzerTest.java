@@ -50,7 +50,7 @@ public class VisibilityAnalyzerTest {
     code = mock(CodeTree.class);
     analyzer = new VisibilityAnalyzer();
     results = new CodeAnalysisResults();
-    results.setActiveUnit(new DelphiUnit("test"));
+    results.setActiveUnit(new DelphiUnit("testDefinitionsIncludes"));
   }
 
   @Test

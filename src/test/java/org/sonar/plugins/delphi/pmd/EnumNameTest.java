@@ -12,7 +12,7 @@ public class EnumNameTest {
 
   private static final String TEST_FILE = "/org/sonar/plugins/delphi/PMDTest/EnumTest.pas";
 
-  // TODO make this test actually test, was just being used for debugging
+  // TODO make this testDefinitionsIncludes actually testDefinitionsIncludes, was just being used for debugging
   @Test
   public void test() {
     File testFile = DelphiUtils.getResource(TEST_FILE);

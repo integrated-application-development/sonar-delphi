@@ -53,7 +53,7 @@ public class BasicMetricTest {
   }
 
   @Test
-  public void executeOnResource() {
+  public void testExecuteOnResource() {
     InputFile pasResource = mock(InputFile.class);
     InputFile dprResource = mock(InputFile.class);
     InputFile dpkResource = mock(InputFile.class);

@@ -72,7 +72,7 @@ public class LineTest {
 
   @Test
   public void testMultiLineCommentHandler() {
-    // test lines
+    // testDefinitionsIncludes lines
     Line line4 = new Line("(* comment *)\n\0");
     Line line5 = new Line("(* comment \n comment \n commment *)\0");
     Line line6 = new Line("/* comment */\n\0");
@@ -104,9 +104,9 @@ public class LineTest {
 
   @Test
   public void testSingleLineCommentHandler() {
-    // test lines
-    Line line1 = new Line("//test\0");
-    Line line2 = new Line("//test longer comment\0");
+    // testDefinitionsIncludes lines
+    Line line1 = new Line("//testDefinitionsIncludes\0");
+    Line line2 = new Line("//testDefinitionsIncludes longer comment\0");
     Line line3 = new Line("codeLine; //comment int i = 5;\0");
 
     // handlers
