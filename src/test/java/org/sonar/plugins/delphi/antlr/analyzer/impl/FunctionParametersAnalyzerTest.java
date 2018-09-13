@@ -69,7 +69,7 @@ public class FunctionParametersAnalyzerTest {
   }
 
   @Test
-  public void canAnalyzeTest() {
+  public void testCanAnalyze() {
     code = new CodeTree(null, null);
     code.setCurrentNode(new CodeNode<>(EMPTY_NODE));
     assertEquals(false, analyzer.canAnalyze(code));
@@ -110,7 +110,7 @@ public class FunctionParametersAnalyzerTest {
   }
 
   @Test
-  public void throwExceptionWhenActiveFunctionIsNull() {
+  public void testThrowExceptionWhenActiveFunctionIsNull() {
     expectedException.equals(IllegalArgumentException.class);
     expectedException.expectMessage(containsString("activeFunction cannot be null"));
 
