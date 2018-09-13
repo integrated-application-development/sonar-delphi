@@ -79,7 +79,7 @@ public class FunctionParametersAnalyzerTest {
   }
 
   @Test
-  public void doAnalyzeTest() {
+  public void testDoAnalyze() {
     results.setActiveFunction(new DelphiFunction("myProcedure"));
 
     File testFile = DelphiUtils.getResource(TEST_FILE);
