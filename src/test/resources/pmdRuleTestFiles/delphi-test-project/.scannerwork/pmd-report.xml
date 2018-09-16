@@ -2,12 +2,37 @@
 <pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
-    version="6.0.1" timestamp="2018-08-26T22:22:41.514">
+    version="6.0.1" timestamp="2018-09-16T23:11:03.226">
 <file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\AvoidWithTest.pas">
 <violation beginline="10" endline="10" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
 <violation beginline="25" endline="25" begincolumn="2" endcolumn="2" rule="AvoidWithRule" ruleset="Missing RuleSet Name" priority="3">
+
+</violation>
+</file>
+<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\ClassNamePrefixTest.pas">
+<violation beginline="10" endline="10" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="16" endline="16" begincolumn="22" endcolumn="22" rule="OneClassPerFileRule" ruleset="Missing RuleSet Name" class="TCompliantClass" priority="3">
+File has too many classes, maximum number of classes is 1.
+</violation>
+<violation beginline="18" endline="18" begincolumn="12" endcolumn="12" rule="MethodNameRule" ruleset="Missing RuleSet Name" class="TCompliantClass" method="someOtherProcedure" priority="4">
+
+</violation>
+</file>
+<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\ClassPerFileTest.pas">
+<violation beginline="15" endline="15" begincolumn="19" endcolumn="19" rule="OneClassPerFileRule" ruleset="Missing RuleSet Name" class="TSecondClass" priority="3">
+File has too many classes, maximum number of classes is 1.
+</violation>
+<violation beginline="17" endline="17" begincolumn="14" endcolumn="14" rule="MethodNameRule" ruleset="Missing RuleSet Name" class="TSecondClass" method="someOtherProcedure" priority="4">
+
+</violation>
+<violation beginline="21" endline="21" begincolumn="18" endcolumn="18" rule="OneClassPerFileRule" ruleset="Missing RuleSet Name" class="TThirdClass" priority="3">
+File has too many classes, maximum number of classes is 1.
+</violation>
+<violation beginline="23" endline="23" begincolumn="14" endcolumn="14" rule="MethodNameRule" ruleset="Missing RuleSet Name" class="TThirdClass" method="anotherProcedure" priority="4">
 
 </violation>
 </file>
@@ -130,7 +155,7 @@ File has too many classes, maximum number of classes is 1.
 </violation>
 </file>
 <file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\ReRaiseExceptionTest.pas">
-<violation beginline="18" endline="18" begincolumn="10" endcolumn="10" rule="CatchingGeneralExceptionRule" ruleset="Missing RuleSet Name" priority="3">
+<violation beginline="18" endline="18" begincolumn="11" endcolumn="11" rule="CatchingGeneralExceptionRule" ruleset="Missing RuleSet Name" priority="3">
 
 </violation>
 <violation beginline="22" endline="22" begincolumn="7" endcolumn="7" rule="ReRaiseExceptionRule" ruleset="Missing RuleSet Name" priority="3">
