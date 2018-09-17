@@ -87,7 +87,8 @@ public class CalledFunctionVerifier {
       return true;
     }
 
-    return false; // not a function call (not like "foo(args);" or "foo;"
+    // not a function call (not like "foo(args);" or "foo;"
+    return false;
   }
 
   public FunctionInterface fetchCalledFunction() {

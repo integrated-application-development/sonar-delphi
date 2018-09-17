@@ -23,7 +23,10 @@
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
 import static org.hamcrest.Matchers.containsString;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import org.antlr.runtime.CommonToken;
@@ -72,10 +75,10 @@ public class FunctionParametersAnalyzerTest {
   public void testCanAnalyze() {
     code = new CodeTree(null, null);
     code.setCurrentNode(new CodeNode<>(EMPTY_NODE));
-    assertEquals(false, analyzer.canAnalyze(code));
+    assertFalse(analyzer.canAnalyze(code));
 
     code.setCurrentNode(new CodeNode<>(PARAMETERS_NODE));
-    assertEquals(true, analyzer.canAnalyze(code));
+    assertTrue(analyzer.canAnalyze(code));
   }
 
   @Test
@@ -90,7 +93,7 @@ public class FunctionParametersAnalyzerTest {
     CodeNode<Tree> startNode = operation.execute(ast.getChild(0));
     code.setCurrentNode(startNode);
 
-    assertEquals(true, startNode.isValid());
+    assertTrue(startNode.isValid());
     assertEquals(LexerMetrics.FUNCTION_ARGS.toMetrics(), startNode.getNode().getType());
 
     analyzer.analyze(code, results);
@@ -124,7 +127,7 @@ public class FunctionParametersAnalyzerTest {
     CodeNode<Tree> startNode = operation.execute(ast.getChild(0));
     code.setCurrentNode(startNode);
 
-    assertEquals(true, startNode.isValid());
+    assertTrue(startNode.isValid());
     assertEquals(LexerMetrics.FUNCTION_ARGS.toMetrics(), startNode.getNode().getType());
 
     analyzer.analyze(code, results);

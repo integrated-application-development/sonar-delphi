@@ -49,10 +49,6 @@ public class DelphiRuleViolation implements RuleViolation {
   private int beginColumn;
   private int endColumn;
 
-  private boolean isProcedureOrFunction(int type) {
-    return type == DelphiLexer.PROCEDURE || type == DelphiLexer.FUNCTION;
-  }
-
   /**
    * C-tor used in XPathRule, bacause we don't have node information
    *
@@ -66,8 +62,8 @@ public class DelphiRuleViolation implements RuleViolation {
    * @param msg Violation message
    */
   public DelphiRuleViolation(DelphiRule delphiRule, RuleContext ctx, String delphiClassName,
-      String delphiMethodName,
-      String delphiPackageName, int line, int column, String msg) {
+                             String delphiMethodName,
+                             String delphiPackageName, int line, int column, String msg) {
     rule = delphiRule;
     filename = ctx.getSourceCodeFile().getAbsolutePath();
     description = rule.getMessage();
@@ -129,7 +125,7 @@ public class DelphiRuleViolation implements RuleViolation {
           int index = beginNode.getChildIndex();
           for (int lookBack = 1; lookBack <= 2; ++lookBack) {
             if (index - lookBack > -1 && isProcedureOrFunction(
-                parent.getChild(index - lookBack).getType())) {
+                    parent.getChild(index - lookBack).getType())) {
               methodNode = parent.getChild(index - lookBack);
               break;
             }
@@ -169,6 +165,10 @@ public class DelphiRuleViolation implements RuleViolation {
       packageName = "";
       filename = "";
     }
+  }
+
+  private boolean isProcedureOrFunction(int type) {
+    return type == DelphiLexer.PROCEDURE || type == DelphiLexer.FUNCTION;
   }
 
   /**

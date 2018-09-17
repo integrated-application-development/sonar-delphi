@@ -23,6 +23,8 @@
 package org.sonar.plugins.delphi.core.language.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -97,21 +99,21 @@ public class DelphiClassTest {
     FunctionInterface foo = new DelphiFunction("foo");
     FunctionInterface bar = new DelphiFunction("bar");
 
-    assertEquals(false, ancestor.hasFunction(foo));
+    assertFalse(ancestor.hasFunction(foo));
     ancestor.addFunction(foo);
-    assertEquals(true, ancestor.hasFunction(foo));
+    assertTrue(ancestor.hasFunction(foo));
 
-    assertEquals(false, ancestor.hasFunction(bar));
+    assertFalse(ancestor.hasFunction(bar));
     ancestor.addFunction(bar);
-    assertEquals(true, ancestor.hasFunction(bar));
+    assertTrue(ancestor.hasFunction(bar));
 
-    assertEquals(false, ancestor.hasFunction(new DelphiFunction("foobar")));
+    assertFalse(ancestor.hasFunction(new DelphiFunction("foobar")));
     ancestor.addFunction(new DelphiFunction("foobar"));
-    assertEquals(true, ancestor.hasFunction(new DelphiFunction("foobar")));
+    assertTrue(ancestor.hasFunction(new DelphiFunction("foobar")));
 
-    assertEquals(true, ancestor.hasFunction(new DelphiFunction("ancestor.foobar")));
-    assertEquals(true, ancestor.hasFunction(new DelphiFunction("ancestor.foo")));
-    assertEquals(true, ancestor.hasFunction(new DelphiFunction("ancestor.bar")));
+    assertTrue(ancestor.hasFunction(new DelphiFunction("ancestor.foobar")));
+    assertTrue(ancestor.hasFunction(new DelphiFunction("ancestor.foo")));
+    assertTrue(ancestor.hasFunction(new DelphiFunction("ancestor.bar")));
   }
 
   @Test
