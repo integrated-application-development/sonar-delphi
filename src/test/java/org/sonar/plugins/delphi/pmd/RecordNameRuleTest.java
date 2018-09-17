@@ -45,7 +45,7 @@ public class RecordNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("  MyRecord = record");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
@@ -60,7 +60,7 @@ public class RecordNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("  TmyRecord = record");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
@@ -75,7 +75,7 @@ public class RecordNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("  RecRecord = record");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);

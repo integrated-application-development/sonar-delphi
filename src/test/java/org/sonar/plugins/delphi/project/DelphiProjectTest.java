@@ -45,7 +45,7 @@ public class DelphiProjectTest {
   }
 
   @Test
-  public void simpleProjectTest() throws IOException {
+  public void testSimpleProject() throws IOException {
     File sourceFile = File.createTempFile("tempfile", ".pas");
     sourceFile.deleteOnExit();
 
@@ -66,21 +66,21 @@ public class DelphiProjectTest {
   }
 
   @Test
-  public void setDefinitionsTest() {
+  public void testSetDefinitions() {
     List<String> defs = new ArrayList<>();
     project.setDefinitions(defs);
     assertEquals(defs, project.getDefinitions());
   }
 
   @Test
-  public void setFileTest() {
+  public void testSetFile() {
     File file = DelphiUtils.getResource(XML_FILE);
     project.setFile(file);
     assertEquals(file, project.getXmlFile());
   }
 
   @Test
-  public void parseFileTest() throws IllegalArgumentException {
+  public void testParseFile() throws IllegalArgumentException {
     project = new DelphiProject(DelphiUtils.getResource(XML_FILE));
 
     assertEquals("Simple Delphi Product", project.getName());

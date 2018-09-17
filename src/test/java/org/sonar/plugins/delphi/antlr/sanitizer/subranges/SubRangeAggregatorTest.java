@@ -39,7 +39,7 @@ public class SubRangeAggregatorTest {
   }
 
   @Test
-  public void sortTest() {
+  public void testSort() {
     SubRange data[] = {new IntegerSubRange(0, 10), new IntegerSubRange(-5, -1),
         new IntegerSubRange(12, 12),
         new IntegerSubRange(15, 19),
@@ -60,7 +60,7 @@ public class SubRangeAggregatorTest {
   }
 
   @Test
-  public void addTest() {
+  public void testAddTest() {
     assertEquals(0, aggregator.getRanges().size());
 
     aggregator.add(new IntegerSubRange(0, 5)); // should add

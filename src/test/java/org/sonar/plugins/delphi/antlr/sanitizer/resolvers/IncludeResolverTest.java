@@ -48,7 +48,7 @@ public class IncludeResolverTest extends FileTestsCommon {
   }
 
   @Test
-  public void resolveIncludesTest() {
+  public void testResolveIncludes() {
     SourceResolverResults results = new SourceResolverResults(testFile.getAbsolutePath(),
         testFileString);
     ExcludeResolver excludeResolver = new ExcludeResolver();

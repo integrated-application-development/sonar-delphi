@@ -134,7 +134,7 @@ public class DelphiClass implements ClassInterface {
 
   @Override
   public ClassInterface[] getParents() {
-    ClassInterface p[] = new ClassInterface[parents.size()];
+    ClassInterface[] p = new ClassInterface[parents.size()];
     parents.toArray(p);
     return p;
   }

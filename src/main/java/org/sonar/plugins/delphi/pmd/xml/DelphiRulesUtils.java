@@ -42,6 +42,10 @@ import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
  */
 public final class DelphiRulesUtils {
 
+  private static final String RESOURCE_PATH = "/org/sonar/plugins/delphi/pmd/";
+
+  private static final String RULES_PATH = RESOURCE_PATH + "rules.xml";
+
   /**
    * Default c-tor
    */
@@ -105,10 +109,6 @@ public final class DelphiRulesUtils {
 
 
   }
-
-  private static final String RESOURCE_PATH = "/org/sonar/plugins/delphi/pmd/";
-
-  private static final String RULES_PATH = RESOURCE_PATH + "rules.xml";
 
   /**
    * @return rules xml file

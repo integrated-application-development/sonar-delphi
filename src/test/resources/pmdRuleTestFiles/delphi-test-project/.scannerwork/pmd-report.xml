@@ -2,8 +2,8 @@
 <pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
-    version="6.0.1" timestamp="2018-09-16T23:11:03.226">
-<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\AvoidWithTest.pas">
+    version="6.0.1" timestamp="2018-09-13T16:37:32.530">
+<file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\AvoidWithTest.pas">
 <violation beginline="10" endline="10" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
@@ -56,7 +56,7 @@ File has too many classes, maximum number of classes is 1.
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\ConstructorTest.pas">
+<file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\ConstructorTest.pas">
 <violation beginline="13" endline="13" begincolumn="0" endcolumn="0" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
@@ -67,12 +67,12 @@ File has too many classes, maximum number of classes is 1.
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\CyclomaticComplexityTest.pas">
+<file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\CyclomaticComplexityTest.pas">
 <violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\DuplicatesTest.pas">
+<file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\DuplicatesTest.pas">
 <violation beginline="10" endline="10" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
@@ -86,27 +86,27 @@ File has too many classes, maximum number of classes is 1.
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\EmptyBracketsTest.pas">
+<file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\EmptyBracketsTest.pas">
 <violation beginline="10" endline="10" begincolumn="5" endcolumn="5" rule="EmptyBracketsRule" ruleset="Missing RuleSet Name" priority="5">
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\EnumTest.pas">
+<file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\EnumTest.pas">
 <violation beginline="6" endline="6" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\IfNotTest.pas">
+<file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\IfNotTest.pas">
 <violation beginline="13" endline="13" begincolumn="23" endcolumn="23" rule="IfNotFalseRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\IfTrueTest.pas">
+<file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\IfTrueTest.pas">
 <violation beginline="13" endline="13" begincolumn="19" endcolumn="19" rule="IfTrueRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\InterfaceNameTest.pas">
+<file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\InterfaceNameTest.pas">
 <violation beginline="7" endline="7" begincolumn="4" endcolumn="4" rule="InterfaceNameRule" ruleset="Missing RuleSet Name" class="IRecyclable" priority="4">
 
 </violation>
@@ -114,7 +114,7 @@ File has too many classes, maximum number of classes is 1.
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\NoReturnTest.pas">
+<file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\NoReturnTest.pas">
 <violation beginline="14" endline="14" begincolumn="12" endcolumn="12" rule="OneClassPerFileRule" ruleset="Missing RuleSet Name" class="TTest" priority="3">
 File has too many classes, maximum number of classes is 1.
 </violation>
@@ -122,7 +122,7 @@ File has too many classes, maximum number of classes is 1.
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\PublicFieldsTest.pas">
+<file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\PublicFieldsTest.pas">
 <violation beginline="11" endline="11" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
@@ -162,7 +162,7 @@ File has too many classes, maximum number of classes is 1.
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\TooManyArgumentsTest.pas">
+<file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\TooManyArgumentsTest.pas">
 <violation beginline="7" endline="7" begincolumn="14" endcolumn="14" rule="TooManyArgumentsRule" ruleset="Missing RuleSet Name" method="Test" priority="3">
 Too many arguments: 11 (max 6)
 </violation>
@@ -170,7 +170,7 @@ Too many arguments: 11 (max 6)
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\TooManySubProceduresTest.pas">
+<file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\TooManySubProceduresTest.pas">
 <violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
@@ -178,7 +178,7 @@ Too many arguments: 11 (max 6)
 Code should not contain too many sub procedures or functions, limit of 3 exceeded.
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\TooManyVariablesTest.pas">
+<file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\TooManyVariablesTest.pas">
 <violation beginline="6" endline="6" begincolumn="0" endcolumn="0" rule="TooManyVariablesRule" ruleset="Missing RuleSet Name" priority="3">
 Too many variables: 11 (max 10)
 </violation>
@@ -186,7 +186,7 @@ Too many variables: 11 (max 10)
 
 </violation>
 </file>
-<file name="***REMOVED***\Desktop\Uni\4002Project\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\UnusedArgumentRule.pas">
+<file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\UnusedArgumentRule.pas">
 <violation beginline="6" endline="6" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>

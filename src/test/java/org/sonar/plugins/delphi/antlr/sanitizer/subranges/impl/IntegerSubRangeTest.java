@@ -42,7 +42,7 @@ public class IntegerSubRangeTest {
   }
 
   @Test
-  public void getBeginTest() {
+  public void testGetBegin() {
     assertEquals(0, range.getBegin());
     assertEquals(-1, range2.getBegin());
 
@@ -54,7 +54,7 @@ public class IntegerSubRangeTest {
   }
 
   @Test
-  public void getEndTest() {
+  public void testGetEnd() {
     assertEquals(5, range.getEnd());
     assertEquals(-1, range2.getEnd());
 
@@ -66,7 +66,7 @@ public class IntegerSubRangeTest {
   }
 
   @Test
-  public void valueInRangeTest() {
+  public void testValueInRange() {
     assertTrue(range.inRange(0));
     assertTrue(range.inRange(3));
     assertTrue(range.inRange(5));
@@ -79,7 +79,7 @@ public class IntegerSubRangeTest {
   }
 
   @Test
-  public void rangeInRangeTest() {
+  public void testRangeInRange() {
     assertTrue(range.inRange(range));
     assertTrue(range.inRange(new IntegerSubRange(2, 4)));
     assertTrue(range.inRange(new IntegerSubRange(0, 0)));

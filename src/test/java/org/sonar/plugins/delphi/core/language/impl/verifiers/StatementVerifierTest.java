@@ -59,7 +59,7 @@ public class StatementVerifierTest {
   }
 
   @Test
-  public void createStatementTest() {
+  public void testCreateStatement() {
     int statementCount = 0;
     int complexStatementsCount = 0;
 

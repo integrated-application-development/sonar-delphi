@@ -2,18 +2,18 @@ unit DemoForm;
 
 interface
 
-//test
-{ test }
-(* test *)
+//testDefinitionsIncludes
+{ testDefinitionsIncludes }
+(* testDefinitionsIncludes *)
 
 type
   TfDemo = class(TForm)
     bShowTracker: TButton;
     procedure bShowTrackerClick(Sender: TObject);
   private
-	//test
+	//testDefinitionsIncludes
   public
-	{test}
+	{testDefinitionsIncludes}
   end;
   
 type

@@ -48,7 +48,7 @@ public class CompilerDirectiveFactoryTest extends FileTestsCommon {
   }
 
   @Test
-  public void createIncludeDirectiveTest() throws CompilerDirectiveFactorySyntaxException,
+  public void testCreateIncludeDirective() throws CompilerDirectiveFactorySyntaxException,
       CompilerDirectiveFactoryUnsupportedDirectiveException {
     directive = factory.create("{$include file.inc}", 0, 19);
     assertEquals(CompilerDirectiveType.INCLUDE, directive.getType());
@@ -64,7 +64,7 @@ public class CompilerDirectiveFactoryTest extends FileTestsCommon {
   }
 
   @Test
-  public void createUnusedDirectiveTest() throws CompilerDirectiveFactorySyntaxException,
+  public void testCreateUnusedDirective() throws CompilerDirectiveFactorySyntaxException,
       CompilerDirectiveFactoryUnsupportedDirectiveException {
     directive = factory.create("{$i+}", 0, 5);
     assertEquals(CompilerDirectiveType.UNUSED, directive.getType());
@@ -86,7 +86,7 @@ public class CompilerDirectiveFactoryTest extends FileTestsCommon {
   }
 
   @Test
-  public void createIfDirectiveTest() throws CompilerDirectiveFactorySyntaxException,
+  public void testCreateIfDirective() throws CompilerDirectiveFactorySyntaxException,
       CompilerDirectiveFactoryUnsupportedDirectiveException {
     directive = factory.create("{$if file.inc}", 0, 14);
     assertEquals(CompilerDirectiveType.IF, directive.getType());
@@ -96,7 +96,7 @@ public class CompilerDirectiveFactoryTest extends FileTestsCommon {
   }
 
   @Test
-  public void createDefineDirectiveTest() throws CompilerDirectiveFactorySyntaxException,
+  public void testCreateDefineDirective() throws CompilerDirectiveFactorySyntaxException,
       CompilerDirectiveFactoryUnsupportedDirectiveException {
     directive = factory.create("{$define _DEBUG}", 0, 16);
     assertEquals(CompilerDirectiveType.DEFINE, directive.getType());
@@ -106,7 +106,7 @@ public class CompilerDirectiveFactoryTest extends FileTestsCommon {
   }
 
   @Test
-  public void createUndefineDirectiveTest() throws CompilerDirectiveFactorySyntaxException,
+  public void testCreateUndefineDirective() throws CompilerDirectiveFactorySyntaxException,
       CompilerDirectiveFactoryUnsupportedDirectiveException {
     directive = factory.create("{$undef _DEBUG}", 0, 15);
     assertEquals(CompilerDirectiveType.UNDEFINE, directive.getType());
@@ -116,7 +116,7 @@ public class CompilerDirectiveFactoryTest extends FileTestsCommon {
   }
 
   @Test
-  public void createElseDirectiveTest() throws CompilerDirectiveFactorySyntaxException,
+  public void testCreateElseDirective() throws CompilerDirectiveFactorySyntaxException,
       CompilerDirectiveFactoryUnsupportedDirectiveException {
     directive = factory.create("{$else}", 0, 6);
     assertEquals(CompilerDirectiveType.ELSE, directive.getType());
@@ -138,7 +138,7 @@ public class CompilerDirectiveFactoryTest extends FileTestsCommon {
   }
 
   @Test
-  public void createIfEndDirectiveTest() throws CompilerDirectiveFactorySyntaxException,
+  public void testCreateIfEndDirective() throws CompilerDirectiveFactorySyntaxException,
       CompilerDirectiveFactoryUnsupportedDirectiveException {
     directive = factory.create("{$ifend}", 0, 8);
     assertEquals(CompilerDirectiveType.IFEND, directive.getType());
@@ -148,7 +148,7 @@ public class CompilerDirectiveFactoryTest extends FileTestsCommon {
   }
 
   @Test
-  public void produceTest() throws IOException, CompilerDirectiveFactorySyntaxException {
+  public void testProduce() throws IOException, CompilerDirectiveFactorySyntaxException {
     loadFile(TEST_FILE);
 
     String names[] = {"include", "include", "define", "undefine", "include", "if", "else", "ifend",

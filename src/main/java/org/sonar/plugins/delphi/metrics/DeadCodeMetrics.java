@@ -48,10 +48,12 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  */
 public class DeadCodeMetrics extends DefaultMetrics {
 
-  private static final String DEAD_UNIT_VIOLATION_MESSAGE = " - unused unit. No other unit nor project has this unit " +
-          "in it's uses section. Probably you could remove this unit from project.";
-  private static final String DEAD_FUNCTION_VIOLATION_MESSAGE = " - unused function/procedure. No other function and " +
-          "procedure in a project refers to it. Probably you could remove it.";
+  private static final String DEAD_UNIT_VIOLATION_MESSAGE = " - unused unit. No other unit nor " +
+          "project has this unit in it's uses section. Probably you could remove this unit from " +
+          "project.";
+  private static final String DEAD_FUNCTION_VIOLATION_MESSAGE = " - unused function/procedure. " +
+          "No other function and procedure in a project refers to it. " +
+          "Probably you could remove it.";
 
   private boolean isCalculated;
   private List<String> unusedUnits;

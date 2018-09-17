@@ -27,7 +27,7 @@ import org.junit.Test;
 public class MethodNameRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void interfaceMethodValidRule() {
+  public void testInterfaceMethodValidRule() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
     builder.appendDecl("  IMyInterface = interface");
@@ -50,7 +50,7 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("    function bar: integer;");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues.toString(), issues, hasSize(2));
 
@@ -66,7 +66,7 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
   }*/
 
   @Test
-  public void publishedMethodsShouldBeSkipped() {
+  public void testPublishedMethodsShouldBeSkipped() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
     builder.appendDecl("  TMyForm = class(TForm)");

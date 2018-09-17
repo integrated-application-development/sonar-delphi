@@ -33,7 +33,7 @@ import org.junit.Test;
 public class DelphiUtilsTest {
 
   @Test
-  public void getAbsolutePathTest() throws IOException {
+  public void testGetAbsolutePath() throws IOException {
     File tempFile = File.createTempFile("testFile", "tmp");
     tempFile.deleteOnExit();
 
@@ -49,14 +49,14 @@ public class DelphiUtilsTest {
   }
 
   @Test
-  public void acceptFile() {
+  public void testAcceptFile() {
     assertThat(DelphiUtils.acceptFile("Unit.pas"), is(true));
     assertThat(DelphiUtils.acceptFile("Project.dpr"), is(true));
     assertThat(DelphiUtils.acceptFile("Package.dpk"), is(true));
   }
 
   @Test
-  public void acceptFileCaseInsensitive() {
+  public void testAcceptFileCaseInsensitive() {
     assertThat(DelphiUtils.acceptFile("Unit.Pas"), is(true));
     assertThat(DelphiUtils.acceptFile("Project.dPr"), is(true));
     assertThat(DelphiUtils.acceptFile("Package.DPK"), is(true));

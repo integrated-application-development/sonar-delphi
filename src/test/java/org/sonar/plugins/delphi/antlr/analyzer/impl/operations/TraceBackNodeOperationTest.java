@@ -42,7 +42,7 @@ public class TraceBackNodeOperationTest extends OperationsTestsCommon {
   }
 
   @Test
-  public void traceback() {
+  public void testTraceback() {
     assertFalse(operation.execute(parent).isValid());
     for (int i = 0; i < LAYER_NODES - 1; ++i) {
 
