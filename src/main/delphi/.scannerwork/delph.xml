@@ -100,7 +100,7 @@
         <value>then</value>
       </property>
       <property name="baseEffort">
-        <value>1min</value>
+        <value>10min</value>
       </property>
     </properties>
   </rule>
@@ -158,14 +158,6 @@
       </property>
     </properties>
   </rule>
-  <rule class="org.sonar.plugins.delphi.pmd.rules.DuplicatesRule" name="DuplicatesRule">
-    <priority>4</priority>
-    <properties>
-      <property name="baseEffort">
-        <value>2min</value>
-      </property>
-    </properties>
-  </rule>
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule" name="TypeAliasRule">
     <priority>4</priority>
     <properties>
@@ -173,8 +165,7 @@
         <value>//TkNewType/*[count(descendant::*) &lt; 3 and name(descendant::*) != &apos;class&apos; and
 					name(descendant::*) != &apos;TkRecord&apos; and name(descendant::*) != &apos;array&apos; and name(descendant::*) !=
 					&apos;set&apos; and name(descendant::*) != &apos;dash_pointer&apos; and name(descendant::*) != &apos;TkClassOfType&apos; and
-					name(descendant::*) != &apos;TkInterface&apos; and name() != &apos;TkCustomAttribute&apos;]
-				</value>
+					name(descendant::*) != &apos;TkInterface&apos; and name() != &apos;TkCustomAttribute&apos;]</value>
       </property>
       <property name="baseEffort">
         <value>10min</value>
@@ -281,17 +272,8 @@
     <properties>
       <property name="xpath">
         <value>//procedure/overload[count(following-sibling::*)=0] |
-					//function/overload[count(following-sibling::*)=0]
-				</value>
+					//function/overload[count(following-sibling::*)=0]</value>
       </property>
-      <property name="baseEffort">
-        <value>5min</value>
-      </property>
-    </properties>
-  </rule>
-  <rule class="org.sonar.plugins.delphi.pmd.rules.ReRaiseExceptionRule" name="ReRaiseExceptionRule">
-    <priority>3</priority>
-    <properties>
       <property name="baseEffort">
         <value>5min</value>
       </property>
@@ -337,14 +319,6 @@
       </property>
     </properties>
   </rule>
-  <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyBracketsRule" name="EmptyBracketsRule">
-    <priority>5</priority>
-    <properties>
-      <property name="baseEffort">
-        <value>1min</value>
-      </property>
-    </properties>
-  </rule>
   <rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule" name="CatchingGeneralExceptionRule">
     <priority>3</priority>
     <properties>
@@ -371,7 +345,7 @@
     <priority>3</priority>
     <properties>
       <property name="limit">
-        <value>150</value>
+        <value>100</value>
       </property>
       <property name="baseEffort">
         <value>30min</value>
@@ -385,7 +359,7 @@
         <value>//function/TkFunctionReturn[count(child::*)=0]</value>
       </property>
       <property name="baseEffort">
-        <value>1 min</value>
+        <value>10min</value>
       </property>
     </properties>
   </rule>
@@ -393,7 +367,7 @@
     <priority>4</priority>
     <properties>
       <property name="baseEffort">
-        <value>3min</value>
+        <value>10min</value>
       </property>
     </properties>
   </rule>
@@ -481,7 +455,7 @@
         <value>then</value>
       </property>
       <property name="baseEffort">
-        <value>1min</value>
+        <value>10min</value>
       </property>
     </properties>
   </rule>
