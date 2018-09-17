@@ -168,7 +168,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
     try {
       return generateDocument(createNewDocument(), "file");
     } catch (Exception e) {
-      DelphiUtils.LOG.error(String.format("%s %s %s", toString() , "Could not generate xml document: " , e.getMessage()));
+      DelphiUtils.LOG.error("{} {}" , "Could not generate xml document: " , e.getMessage());
       return null;
     }
   }
