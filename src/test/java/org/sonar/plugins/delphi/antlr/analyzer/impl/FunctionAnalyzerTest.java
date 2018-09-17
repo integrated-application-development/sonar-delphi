@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.endsWith;

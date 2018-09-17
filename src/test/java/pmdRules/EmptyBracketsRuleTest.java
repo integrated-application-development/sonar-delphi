@@ -15,7 +15,7 @@ public class EmptyBracketsRuleTest extends BaseXmlPmdRuleTest {
     @Test
     public void testRuleViolation(){
 
-        super.analyse();
+        super.testAnalyse();
         ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
         Integer[] expectedViolationLines = {10};
