@@ -16,7 +16,8 @@ public class EmptyBracketsRule extends DelphiRule {
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
 
-    // Look for any method call nodes under a begin block ('TkIdentifier'), check if the next two are parentheses
+    // Look for any method call nodes under a begin block ('TkIdentifier'), check if the next two
+    // are parentheses
     if (node.getType() == DelphiLexer.BEGIN) {
 
       for (int i = 0; i < node.getChildCount() - 1; i++) {
