@@ -23,6 +23,7 @@
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
 import static org.hamcrest.Matchers.containsString;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

@@ -127,7 +127,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
       try {
         code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
         analyzer.analyze(code, results);
-        assertTrue(results.getActiveFunction() != null);
+        assertNotNull(results.getActiveFunction());
         assertEquals(names[index], results.getActiveFunction().getRealName());
         assertEquals(lines[index], results.getActiveFunction().getLine());
         // assertEquals(body[index],
