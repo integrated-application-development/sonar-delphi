@@ -2,7 +2,7 @@
 <pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
-    version="6.0.1" timestamp="2018-09-18T10:47:48.620">
+    version="6.0.1" timestamp="2018-09-18T11:42:55.629">
 <file name="***REMOVED***\Desktop\SonarDelphi\FIT4002_SonarQube_Delphi\src\main\delphi\SampleDelphiProject\src\AccessorsTest.pas">
 <violation beginline="29" endline="29" begincolumn="0" endcolumn="0" rule="EmptyBeginStatementRule" ruleset="Missing RuleSet Name" priority="2">
 

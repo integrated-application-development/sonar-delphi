@@ -29,7 +29,7 @@ import org.slf4j.Logger;
  */
 public class ProgressReporterLogger {
 
-  private Logger log = null;
+  private Logger log;
 
   /**
    * Default ctor, no logging

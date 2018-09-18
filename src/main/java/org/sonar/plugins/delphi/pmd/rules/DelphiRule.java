@@ -46,7 +46,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
 
   private int currentVisibility;
 
-  private boolean inImplementationSection = false;
+  private boolean inImplementationSection;
 
   public static final IntegerProperty LIMIT = new IntegerProperty("limit", "The max limit.", 1, 150,
       1, 1.0f);

@@ -27,12 +27,12 @@ package org.sonar.plugins.delphi.utils;
  */
 public class ProgressReporter {
 
-  private double currentProgress = 0;
-  private int currentPercent = 0;
+  private double currentProgress;
+  private int currentPercent;
   private double reportProgress = 25;
   private int targetProgress = 100;
   private int percentProgress = 25;
-  private ProgressReporterLogger logger = null;
+  private ProgressReporterLogger logger;
   private boolean firstProgress = true;
 
   /**

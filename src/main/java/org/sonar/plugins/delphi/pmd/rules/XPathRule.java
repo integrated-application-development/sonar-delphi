@@ -48,7 +48,7 @@ public class XPathRule extends DelphiRule {
   /**
    * Last cached document.
    */
-  private static Document cachedData = null;
+  private static Document cachedData;
   /**
    * Last cached file name.
    */

@@ -39,7 +39,7 @@ public class DelphiProject {
   private List<String> definitions = new ArrayList<>();
   private List<File> files = new ArrayList<>();
   private List<File> includeDirectories = new ArrayList<>();
-  private File file = null;
+  private File file;
 
   /**
    * C-tor, initializes project with name and empty files and definitions
