@@ -229,7 +229,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
       NodeName nodeName = NodeName.findByCode(code);
       return nodeName.getName();
     } catch (NodeNameForCodeDoesNotExistException e) {
-      DelphiUtils.LOG.error("{} {} {}", e.toString(), "NODE name for code does not exist", e.getMessage());
+      //DelphiUtils.LOG.error("{} {} {}", e.toString(), "NODE name for code does not exist", e.getMessage());
     }
     return code;
   }
