@@ -32,8 +32,8 @@ import org.sonar.plugins.delphi.core.language.FunctionInterface;
  */
 public class DelphiClassProperty extends DelphiClassField implements ClassPropertyInterface {
 
-  private FunctionInterface readFunction = null;
-  private FunctionInterface writeFunction = null;
+  private FunctionInterface readFunction;
+  private FunctionInterface writeFunction;
 
   /**
    * Default ctor

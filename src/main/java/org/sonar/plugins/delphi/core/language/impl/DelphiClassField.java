@@ -33,7 +33,7 @@ import org.sonar.plugins.delphi.core.language.ClassInterface;
  */
 public class DelphiClassField extends DelphiArgument implements ClassFieldInterface {
 
-  private ClassInterface parent = null;
+  private ClassInterface parent;
   private int visibility = DelphiParser.PRIVATE;
 
   /**
