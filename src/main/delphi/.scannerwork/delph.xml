@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ConstantNotationRule" name="ConstantNotationRule">
+    <priority>4</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>1min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.RecordNameRule" name="RecordNameRule">
+    <priority>4</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>30min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounter" name="TooManyVariablesRule">
+    <priority>3</priority>
+    <properties>
+      <property name="limit">
+        <value>20</value>
+      </property>
+      <property name="start">
+        <value>var</value>
+      </property>
+      <property name="lookFor">
+        <value>variables</value>
+      </property>
+      <property name="baseEffort">
+        <value>30min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.DprVariableRule" name="ProjectFileNoVariablesRule">
+    <priority>3</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>15min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.UnitNameRule" name="UnitNameRule">
+    <priority>4</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>30min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule" name="InheritedMethodWithNoCodeRule">
+    <priority>2</priority>
+    <properties>
+      <property name="sequence">
+        <value>begin,inherited,;,end</value>
+      </property>
+      <property name="baseEffort">
+        <value>10min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.UppercaseReservedWordsRule" name="UppercaseReservedKeywordsRule">
+    <priority>4</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>5min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ClassPerFileRule" name="OneClassPerFileRule">
+    <priority>3</priority>
+    <properties>
+      <property name="limit">
+        <value>1</value>
+      </property>
+      <property name="baseEffort">
+        <value>1h</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.NoBeginAfterDoRule" name="NoBeginAfterDoRule">
+    <priority>4</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>10min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.IfTrueRule" name="IfTrueRule">
+    <priority>4</priority>
+    <properties>
+      <property name="limit">
+        <value>0</value>
+      </property>
+      <property name="start">
+        <value>if</value>
+      </property>
+      <property name="end">
+        <value>then</value>
+      </property>
+      <property name="baseEffort">
+        <value>10min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.InterfaceNameRule" name="InterfaceNameRule">
+    <priority>4</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>20min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.FieldNameRule" name="FieldNameRule">
+    <priority>4</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>5min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule" name="EmptyExceptBlockRule">
+    <priority>1</priority>
+    <properties>
+      <property name="sequence">
+        <value>except,end</value>
+      </property>
+      <property name="baseEffort">
+        <value>10min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.MixedNamesRule" name="MixedNamesRule">
+    <priority>4</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>5min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule" name="EmptyElseStatementRule">
+    <priority>2</priority>
+    <properties>
+      <property name="xpath">
+        <value>//else[following-sibling::*[1][name()=&apos;end&apos;]]</value>
+      </property>
+      <property name="baseEffort">
+        <value>5min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule" name="TypeAliasRule">
+    <priority>4</priority>
+    <properties>
+      <property name="xpath">
+        <value>//TkNewType/*[count(descendant::*) &lt; 3 and name(descendant::*) != &apos;class&apos; and
+					name(descendant::*) != &apos;TkRecord&apos; and name(descendant::*) != &apos;array&apos; and name(descendant::*) !=
+					&apos;set&apos; and name(descendant::*) != &apos;dash_pointer&apos; and name(descendant::*) != &apos;TkClassOfType&apos; and
+					name(descendant::*) != &apos;TkInterface&apos; and name() != &apos;TkCustomAttribute&apos;]</value>
+      </property>
+      <property name="baseEffort">
+        <value>10min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule" name="NoGuidRule">
+    <priority>4</priority>
+    <properties>
+      <property name="xpath">
+        <value>//TkNewType/*/TkInterface/interface[following-sibling::*[2][count(child::*)=0]]</value>
+      </property>
+      <property name="baseEffort">
+        <value>5min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.DelphiRule" name="UnusedFunctionRule">
+    <priority>5</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>15min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule" name="EmptyBeginStatementRule">
+    <priority>2</priority>
+    <properties>
+      <property name="xpath">
+        <value>//begin[count(child::*) &lt; 3]</value>
+      </property>
+      <property name="baseEffort">
+        <value>5min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.AssignedAndFreeRule" name="AssignedAndFreeRule">
+    <priority>4</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>5min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.NoSemicolonRule" name="NoSemicolonRule">
+    <priority>4</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>5min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedArgumentsRule" name="UnusedArgumentsRule">
+    <priority>3</priority>
+    <properties>
+      <property name="excluded_args">
+        <value>Sender,ASender,DataSet,ADataSet</value>
+      </property>
+      <property name="baseEffort">
+        <value>5min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ConstructorWithoutInheritedStatementRule" name="ConstructorWithoutInheritedStatementRule">
+    <priority>2</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>5min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.DestructorWithoutInheritedStatementRule" name="DestructorWithoutInheritedStatementRule">
+    <priority>2</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>30min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.DelphiRule" name="MethodCyclomaticComplexityRule">
+    <priority>2</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>10min</value>
+      </property>
+      <property name="Threshold">
+        <value>10</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule" name="NoSemiAfterOverloadRule">
+    <priority>4</priority>
+    <properties>
+      <property name="xpath">
+        <value>//procedure/overload[count(following-sibling::*)=0] |
+					//function/overload[count(following-sibling::*)=0]</value>
+      </property>
+      <property name="baseEffort">
+        <value>5min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.PointerNameRule" name="PointerNameRule">
+    <priority>4</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>30min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ThenTryRule" name="ThenTryRule">
+    <priority>3</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>5min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.CastAndFreeRule" name="CastAndFreeRule">
+    <priority>4</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>5min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.DprFunctionRule" name="ProjectFileNoFunctionsRule">
+    <priority>3</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>15min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule" name="CatchingGeneralExceptionRule">
+    <priority>3</priority>
+    <properties>
+      <property name="sequence">
+        <value>:,exception,do</value>
+      </property>
+      <property name="baseEffort">
+        <value>15min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.TooLongMethodRule" name="TooLongMethodRule">
+    <priority>3</priority>
+    <properties>
+      <property name="limit">
+        <value>100</value>
+      </property>
+      <property name="baseEffort">
+        <value>30min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule" name="NoFunctionReturnTypeRule">
+    <priority>3</priority>
+    <properties>
+      <property name="xpath">
+        <value>//function/TkFunctionReturn[count(child::*)=0]</value>
+      </property>
+      <property name="baseEffort">
+        <value>10min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.PublicFieldsRule" name="PublicFieldsRule">
+    <priority>4</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>10min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.MethodNameRule" name="MethodNameRule">
+    <priority>4</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>30min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule" name="RaisingGeneralExceptionRule">
+    <priority>3</priority>
+    <properties>
+      <property name="sequence">
+        <value>raise,exception,.,create</value>
+      </property>
+      <property name="baseEffort">
+        <value>15min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyFinallyBlockRule" name="EmptyFinallyBlockRule">
+    <priority>2</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>5min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounter" name="TooManyArgumentsRule">
+    <priority>3</priority>
+    <properties>
+      <property name="limit">
+        <value>6</value>
+      </property>
+      <property name="start">
+        <value>TkFunctionArgs</value>
+      </property>
+      <property name="lookFor">
+        <value>arguments</value>
+      </property>
+      <property name="baseEffort">
+        <value>1h</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.WithAfterDoThenRule" name="WithAfterDoThenRule">
+    <priority>3</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>5min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule" name="AvoidOutParameterRule">
+    <priority>4</priority>
+    <properties>
+      <property name="xpath">
+        <value>//TkVariableParam/out</value>
+      </property>
+      <property name="baseEffort">
+        <value>30min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.IfNotFalseRule" name="IfNotFalseRule">
+    <priority>4</priority>
+    <properties>
+      <property name="limit">
+        <value>0</value>
+      </property>
+      <property name="start">
+        <value>if</value>
+      </property>
+      <property name="end">
+        <value>then</value>
+      </property>
+      <property name="baseEffort">
+        <value>10min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.DelphiRule" name="UnusedUnitRule">
+    <priority>5</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>5min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule" name="EmptyInterfaceRule">
+    <priority>2</priority>
+    <properties>
+      <property name="xpath">
+        <value>//TkNewType/*/TkInterface/interface[count(following-sibling::*) &lt; 3]</value>
+      </property>
+      <property name="baseEffort">
+        <value>20min</value>
+      </property>
+    </properties>
+  </rule>
+</ruleset>

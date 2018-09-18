@@ -29,7 +29,7 @@ import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.SourceResolverResults;
  */
 public abstract class SourceResolver {
 
-  private SourceResolver next = null;
+  private SourceResolver next;
 
   /**
    * chain next resolver
