@@ -39,7 +39,7 @@ public class CalledFunctionVerifier {
 
   private boolean isUnresolved = true;
   private CodeAnalysisResults results;
-  private FunctionInterface calledFunction = null;
+  private FunctionInterface calledFunction;
 
   /**
    * ctor

@@ -46,9 +46,9 @@ public class StatementVerifier {
       LexerMetrics.CONTINUE};
   private static final int MIN_TOKENS_FOR_COMPLEX_STMT = 4;
 
-  private Tree checkedNode = null;
-  private boolean isComplex = false;
-  private String lastStatementText = null;
+  private Tree checkedNode;
+  private boolean isComplex;
+  private String lastStatementText;
   private Stack<Integer> statementIndex = new Stack<>();
 
   public StatementVerifier() {
