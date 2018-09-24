@@ -1,4 +1,4 @@
-unit UnusedARgumentRule;
+unit UnusedArgumentsTest;
 
 interface
 
@@ -26,6 +26,7 @@ begin
   Writeln('dummy');
 end;
 
+// Non-compliant: the argument x is unused
 procedure TCustomComponent.OnUnusedArg(x: Integer);
 begin
   Writeln('dummy');
