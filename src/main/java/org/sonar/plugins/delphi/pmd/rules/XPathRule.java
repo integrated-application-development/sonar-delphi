@@ -93,7 +93,7 @@ public class XPathRule extends DelphiRule {
         addViolation(ctx, violation);
       }
     } catch (Exception e) {
-      DelphiUtils.LOG.debug("XPath error: '{0}' at rule {1}", e.getMessage(), getName());
+      DelphiUtils.LOG.debug("XPath error: '{}' at rule {}", e.getMessage(), getName());
     }
   }
 

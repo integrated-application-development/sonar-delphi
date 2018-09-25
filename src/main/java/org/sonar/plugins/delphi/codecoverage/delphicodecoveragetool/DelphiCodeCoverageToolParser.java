@@ -88,7 +88,7 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser {
       parseValue(srcFile.getTextContent(), newCoverage);
       newCoverage.save();
     } catch (FileNotFoundException e) {
-      DelphiUtils.LOG.info("File not found in project %s", fileName);
+      DelphiUtils.LOG.info("File not found in project {}", fileName);
     }
 
   }
@@ -114,9 +114,9 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser {
     } catch (SAXParseException err) {
       DelphiUtils.LOG.info("SAXParseException");
     } catch (SAXException e) {
-      DelphiUtils.LOG.info("SAXException %s", e.getMessage());
+      DelphiUtils.LOG.info("SAXException {}", e.getMessage());
     } catch (Exception e) {
-      DelphiUtils.LOG.info("Exception %s", e.getMessage());
+      DelphiUtils.LOG.info("Exception {}", e.getMessage());
     }
   }
 
