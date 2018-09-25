@@ -202,8 +202,10 @@ public class DelphiSensor implements Sensor {
         processMetric(complexityMetrics, resource);
         processMetric(deadCodeMetrics, resource);
       } catch (IllegalArgumentException e){
-        DelphiUtils.LOG.error("{} produced {} , in metric analysis. Metrics may be in error.",
-            resource, e.getMessage());
+        // Some files may produce invalid pointers due to code that is valid for the compiler but
+        // not for the scanner, this will handle that so the execution does not fail
+        DelphiUtils.LOG.error("{} produced IllegalArgumentException: {}, while analysing metrics. "
+                + "Metric report for this file may be in error.", resource, e.getMessage());
         continue;
       }
 
