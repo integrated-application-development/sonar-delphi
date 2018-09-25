@@ -29,10 +29,10 @@ public class DelphiCommentHandler extends LineContextHandler {
 
   private static final int MIN_CHARS_LEFT = 3;
   private StringBuilder currentLineComment;
-  private boolean isFirstLineOfComment = false;
-  private boolean isLicenseHeader = false;
-  private boolean commentStarted = false;
-  private boolean isDoc = false;
+  private boolean isFirstLineOfComment;
+  private boolean isLicenseHeader;
+  private boolean commentStarted;
+  private boolean isDoc;
   private int start = -1;
 
   private String startCommentTag;

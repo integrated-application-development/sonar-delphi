@@ -33,8 +33,8 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class CastAndFreeRule extends DelphiRule {
 
-  private int sequenceHardCastIndex = 0;
-  private int sequenceSoftCastIndex = 0;
+  private int sequenceHardCastIndex;
+  private int sequenceSoftCastIndex;
   private LexerMetrics[] hardCastSequence = {LexerMetrics.IDENT, LexerMetrics.LPAREN,
       LexerMetrics.IDENT,
       LexerMetrics.RPAREN,

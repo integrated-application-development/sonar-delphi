@@ -46,7 +46,7 @@ public class IncludeResolver extends SourceResolver {
 
   private static final int REPLACEMENT_OFFSET = 2;
   private boolean extendIncludes = true;
-  private List<File> includes = null;
+  private List<File> includes;
   private List<String> includedFiles = new ArrayList<>();
 
   /**

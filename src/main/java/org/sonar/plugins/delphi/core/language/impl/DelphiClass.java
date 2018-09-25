@@ -43,8 +43,8 @@ public class DelphiClass implements ClassInterface {
 
   private static final String UNKNOWN_FILE_NAME = "UnknownUnit";
 
-  private String name = null;
-  private String fileName = null;
+  private String name;
+  private String fileName;
   private int visibility = DelphiParser.PRIVATE;
 
   private List<ClassFieldInterface> fields = new ArrayList<>();
@@ -53,7 +53,7 @@ public class DelphiClass implements ClassInterface {
   private Set<FunctionInterface> declarations = new HashSet<>();
   private Set<ClassInterface> parents = new HashSet<>();
   private Set<ClassInterface> children = new HashSet<>();
-  private String realName = null;
+  private String realName;
 
   /**
    * {@inheritDoc}

@@ -27,7 +27,7 @@ package org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl;
  */
 public class ReplacementSubRange extends IntegerSubRange {
 
-  private String replacementString = null;
+  private String replacementString;
 
   /**
    * ctor

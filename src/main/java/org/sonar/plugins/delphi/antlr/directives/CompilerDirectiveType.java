@@ -43,7 +43,7 @@ public enum CompilerDirectiveType {
 
   private int number;
   private String name;
-  private static Map<String, CompilerDirectiveType> mappedValues = null;
+  private static Map<String, CompilerDirectiveType> mappedValues;
 
   CompilerDirectiveType(int number, String name) {
      this.number = number;

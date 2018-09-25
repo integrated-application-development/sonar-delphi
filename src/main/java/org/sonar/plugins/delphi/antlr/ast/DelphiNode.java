@@ -30,7 +30,7 @@ import org.antlr.runtime.tree.CommonTree;
  */
 public class DelphiNode extends CommonTree {
 
-  private ASTTree mainTree = null;
+  private ASTTree mainTree;
 
   /**
    * Default C-tor as in CommonTree
