@@ -44,7 +44,8 @@ public class DelphiPmdRuleDefinition implements RulesDefinition {
     List<org.sonar.api.rules.Rule> rules = DelphiRulesUtils.getInitialReferential();
 
     // TODO Review
-    // https://github.com/SonarCommunity/sonar-pmd/blob/master/src/main/java/org/sonar/plugins/pmd/PmdRulesDefinition.java
+    // https://github.com/SonarCommunity/sonar-pmd/blob/master/src/main/java/org/sonar/plugins/
+    // pmd/PmdRulesDefinition.java
     for (org.sonar.api.rules.Rule rule : rules) {
       NewRule newRule = repository.createRule(rule.getKey())
           .setName(rule.getName())

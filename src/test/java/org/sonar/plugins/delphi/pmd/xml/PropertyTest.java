@@ -29,7 +29,7 @@ import org.junit.Test;
 public class PropertyTest {
 
   @Test
-  public void propertyTest() {
+  public void testProperty() {
     Property p = new Property("name", "value");
     assertEquals("name", p.getName());
     assertEquals("value", p.getValue());

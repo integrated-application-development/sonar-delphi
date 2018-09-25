@@ -59,7 +59,7 @@ public class UnitAnalyzerTest {
   }
 
   @Test
-  public void analyzeTest() {
+  public void testAnalyze() {
     analyzer.analyze(code, results);
 
     UnitInterface unit = new DelphiUnit("DemoForm");
@@ -70,7 +70,7 @@ public class UnitAnalyzerTest {
   }
 
   @Test
-  public void canAnalyzeTest() {
+  public void testCanAnalyze() {
     code.setCurrentNode(new CodeNode<Tree>(
         new CommonTree(new CommonToken(LexerMetrics.UNIT.toMetrics(), "token"))));
     assertTrue(analyzer.canAnalyze(code));

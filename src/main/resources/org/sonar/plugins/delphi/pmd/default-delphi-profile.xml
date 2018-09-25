@@ -213,5 +213,8 @@
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.DuplicatesRule" name="DuplicatesRule">
 		<priority>4</priority>
 	</rule>
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.LowerCaseReservedWordsRule" name ="LowerCaseReservedWordRule">
+		<priority>4</priority>
+	</rule>
 
 </ruleset>

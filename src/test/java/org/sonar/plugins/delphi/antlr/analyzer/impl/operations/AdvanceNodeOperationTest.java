@@ -50,7 +50,7 @@ public class AdvanceNodeOperationTest extends OperationsTestsCommon {
   }
 
   @Test
-  public void executeTest() {
+  public void testExecute() {
     int parsedCount = 0;
     int types[] = {256, 1, 100, 2, 101, 3, 102};
 
@@ -64,7 +64,7 @@ public class AdvanceNodeOperationTest extends OperationsTestsCommon {
   }
 
   @Test
-  public void executeOnFileTest() {
+  public void testExecuteOnFile() {
     File astFile = DelphiUtils.getResource(FILE_NAME);
     ASTTree ast = new DelphiAST(astFile);
     CodeTree codeTree = new CodeTree(new CodeNode<>(ast), new CodeNode<>(ast.getChild(0)));

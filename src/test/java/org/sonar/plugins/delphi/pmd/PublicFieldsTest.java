@@ -11,8 +11,9 @@ public class PublicFieldsTest {
 
   private static final String TEST_FILE = "/org/sonar/plugins/delphi/PMDTest/PublicFieldsTest.pas";
 
+  //FIXME
   @Test
-  public void test() {
+  public void testDev() {
     File testFile = DelphiUtils.getResource(TEST_FILE);
     DelphiPMD pmd = new DelphiPMD();
     DelphiAST ast = new DelphiAST(testFile);

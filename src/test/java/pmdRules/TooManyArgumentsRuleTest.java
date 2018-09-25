@@ -15,7 +15,7 @@ public class TooManyArgumentsRuleTest extends BaseXmlPmdRuleTest {
     @Test
     public void testRuleViolation(){
 
-        super.analyse(); // fixme, be better if didnt have to run this every test, just once
+        super.testAnalyse(); // fixme, be better if didnt have to run this every test, just once
         ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
         Integer[] expectedViolationLines = {7};

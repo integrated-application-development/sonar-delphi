@@ -53,7 +53,7 @@ public class DelphiASTAnalyzerTest {
   }
 
   @Test
-  public void analyseTest() {
+  public void testAnalyseTest() {
     File file = DelphiUtils.getResource(FILE_NAME);
     DelphiAST ast = new DelphiAST(file);
     CodeAnalysisResults results = analyser.analyze(ast);

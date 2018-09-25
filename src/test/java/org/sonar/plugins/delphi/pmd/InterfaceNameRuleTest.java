@@ -29,7 +29,7 @@ public class InterfaceNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("    procedure Foo;");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, is(empty()));
   }
@@ -43,7 +43,7 @@ public class InterfaceNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("    procedure Foo;");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
@@ -60,7 +60,7 @@ public class InterfaceNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("    procedure Foo;");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
@@ -77,7 +77,7 @@ public class InterfaceNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("    procedure Foo;");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);

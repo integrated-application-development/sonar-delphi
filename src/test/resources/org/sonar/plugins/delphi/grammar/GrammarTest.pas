@@ -6,7 +6,7 @@ interface
 
 (* nasty
 	{ comment
-		//test {$include error.inc}
+		//testDefinitionsIncludes {$include error.inc}
 	} *)
 
 type

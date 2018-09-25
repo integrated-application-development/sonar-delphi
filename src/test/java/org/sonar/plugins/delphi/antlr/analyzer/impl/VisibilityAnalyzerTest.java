@@ -54,7 +54,7 @@ public class VisibilityAnalyzerTest {
   }
 
   @Test
-  public void analyzeTest() {
+  public void testAnalyze() {
     LexerMetrics[] metrics = {LexerMetrics.PRIVATE, LexerMetrics.PUBLIC, LexerMetrics.PUBLISHED,
         LexerMetrics.PROTECTED};
     for (LexerMetrics metric : metrics) {
@@ -66,7 +66,7 @@ public class VisibilityAnalyzerTest {
   }
 
   @Test
-  public void canAnalyzeTest() {
+  public void testCanAnalyze() {
     when(code.getCurrentCodeNode()).thenReturn(
         new CodeNode<Tree>(
             new CommonTree(new CommonToken(LexerMetrics.PRIVATE.toMetrics(), "private"))));

@@ -48,7 +48,7 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("  MyClass = class");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
@@ -63,7 +63,7 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("  TmyClass = class");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
@@ -81,7 +81,7 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("  TestClass = class");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, hasSize(1));
     Issue issue = issues.get(0);
@@ -108,7 +108,7 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void acceptCapitalLetterEforExceptionClasses() {
+  public void testAcceptCapitalLetterEforExceptionClasses() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
     builder.appendDecl("  EMyCustomException = class(Exception)");

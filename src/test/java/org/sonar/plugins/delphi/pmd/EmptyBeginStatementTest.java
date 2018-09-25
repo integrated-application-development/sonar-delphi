@@ -27,7 +27,7 @@ import org.junit.Test;
 public class EmptyBeginStatementTest extends BasePmdRuleTest {
 
   @Test
-  public void validRule() {
+  public void testValidRule() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
 
     builder.appendDecl("type");
@@ -95,7 +95,7 @@ public class EmptyBeginStatementTest extends BasePmdRuleTest {
     builder.appendImpl("begin");
     builder.appendImpl("end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(toString(issues), issues, hasSize(5));
     assertThat(toString(issues), issues, hasItem(allOf(hasRuleKey("EmptyBeginStatementRule"), hasRuleLine(builder.getOffSet() + 2))));

@@ -83,7 +83,7 @@ public class CalledFunctionVerifierTest {
   }
 
   @Test
-  public void verifyTest() {
+  public void testVerify() {
     final boolean unresolved[] = {false, false, false, true};
     final String names[] = {"mySecondProcedure", "unitB_Procedure", "unitA_Procedure",
         "unitC_Procedure"};

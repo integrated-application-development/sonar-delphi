@@ -65,7 +65,7 @@ public class TypeAnalyzerTest {
   }
 
   @Test
-  public void analyzeTest() {
+  public void testAnalyze() {
     assertNull(results.getActiveClass());
     code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));
     analyzer.analyze(code, results);
@@ -77,7 +77,7 @@ public class TypeAnalyzerTest {
   }
 
   @Test
-  public void canAnalyzeTest() {
+  public void testCanAnalyze() {
     assertFalse(analyzer.canAnalyze(code));
     code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));
     assertTrue(analyzer.canAnalyze(code));

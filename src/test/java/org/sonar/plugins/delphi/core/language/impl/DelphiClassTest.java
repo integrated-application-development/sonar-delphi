@@ -35,9 +35,9 @@ import org.sonar.plugins.delphi.core.language.FunctionInterface;
 
 public class DelphiClassTest {
 
-  DelphiClass ancestor = null;
-  DelphiClass parent = null;
-  DelphiClass child = null;
+  private DelphiClass ancestor = null;
+  private DelphiClass parent = null;
+  private DelphiClass child = null;
 
   @Before
   public void init() {

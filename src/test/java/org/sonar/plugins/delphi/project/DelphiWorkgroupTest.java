@@ -40,14 +40,14 @@ public class DelphiWorkgroupTest {
   }
 
   @Test
-  public void simpleWorkgroupTest() {
+  public void testDimpleWorkgroup() {
     assertEquals(0, workGroup.getProjects().size());
     workGroup.addProject(new DelphiProject("Sample"));
     assertEquals(1, workGroup.getProjects().size());
   }
 
   @Test
-  public void xmlWorkgroupTest() throws IOException {
+  public void testXmlWorkgroup() throws IOException {
     DelphiWorkgroup workGroup = new DelphiWorkgroup(DelphiUtils.getResource(XML_FILE));
     assertEquals(1, workGroup.getProjects().size());
     assertEquals("Simple Delphi Product", workGroup.getProjects().get(0).getName());

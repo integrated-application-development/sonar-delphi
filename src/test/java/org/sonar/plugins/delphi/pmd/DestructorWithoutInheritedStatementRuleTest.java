@@ -27,7 +27,7 @@ import org.junit.Test;
 public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void validRule() {
+  public void testValidRule() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
 
     builder.appendDecl("type");
@@ -62,7 +62,7 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
     builder.appendImpl("  Writeln('do something');");
     builder.appendImpl("end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(toString(issues), issues, hasSize(1));
     assertThat(toString(issues), issues, hasItem(allOf(hasRuleKey("DestructorWithoutInheritedStatementRule"),

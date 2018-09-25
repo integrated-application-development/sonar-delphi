@@ -46,10 +46,14 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 /**
  * Metric used to search for "dead code" (unused units, unused methods).
  */
-public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface {
+public class DeadCodeMetrics extends DefaultMetrics {
 
-  private static final String DEAD_UNIT_VIOLATION_MESSAGE = " - unused unit. No other unit nor project has this unit in it's uses section. Probably you could remove this unit from project.";
-  private static final String DEAD_FUNCTION_VIOLATION_MESSAGE = " - unused function/procedure. No other function and procedure in a project refers to it. Probably you could remove it.";
+  private static final String DEAD_UNIT_VIOLATION_MESSAGE = " - unused unit. No other unit nor " +
+          "project has this unit in it's uses section. Probably you could remove this unit from " +
+          "project.";
+  private static final String DEAD_FUNCTION_VIOLATION_MESSAGE = " - unused function/procedure. " +
+          "No other function and procedure in a project refers to it. " +
+          "Probably you could remove it.";
 
   private boolean isCalculated;
   private List<String> unusedUnits;
@@ -90,7 +94,7 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
       }
       unusedUnits = findUnusedUnits(units);
 
-      // TODO findUnusedFunctions always returns an empty list
+      // findUnusedFunctions always returns an empty list
       unusedFunctions = findUnusedFunctions(units);
       isCalculated = true;
     }
@@ -110,7 +114,8 @@ public class DeadCodeMetrics extends DefaultMetrics implements MetricsInterface 
     String fileName = FilenameUtils.removeExtension(inputFile.filename());
     UnitInterface unit = findUnit(fileName);
     if (unit == null) {
-      DelphiUtils.LOG.debug("No unit for " + fileName + "(" + inputFile.toString() + ")");
+      String logDesc = String.format("No unit for %s (%s)", fileName, inputFile.toString());
+      DelphiUtils.LOG.debug(logDesc);
       return;
     }
 

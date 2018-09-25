@@ -117,7 +117,7 @@ public class DelphiPmdSensorTest {
   // FIXME this test doesn't work with the addition of new rules. Needs to be modified to include ours. Temporarily Ignored.
   @Ignore
   @Test
-  public void analyseTest() {
+  public void testAnalyse() {
     // TODO Create one test per violation
     sensor.execute(sensorContext);
 

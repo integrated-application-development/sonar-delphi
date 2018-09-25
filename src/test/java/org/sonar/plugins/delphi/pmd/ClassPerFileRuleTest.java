@@ -47,7 +47,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
     builder.appendDecl("  TMyClass2 = class");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, hasSize(1));
     assertThat(issues, hasItem(hasRuleKey("OneClassPerFileRule")));
@@ -66,7 +66,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
     builder.appendDecl("  TMyClass3 = class");
     builder.appendDecl("  end;");
 
-    analyse(builder);
+    testAnalyse(builder);
 
     assertThat(issues, hasSize(2));
     assertThat(issues, hasItem(hasRuleKey("OneClassPerFileRule")));
@@ -75,7 +75,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
   }*/
 
   @Test
-  public void falsePositiveMetaClass() {
+  public void testFalsePositiveMetaClass() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
@@ -88,7 +88,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void falsePositiveClassMethods() {
+  public void testFalsePositiveClassMethods() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");

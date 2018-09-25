@@ -128,7 +128,7 @@ public class DeadCodeMetricsTest {
   }
 
   @Test
-  public void analyseTest() {
+  public void testAnalyse() {
     metrics.analyse(null, classes, functions, units);
 //    metrics.save(new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",pathTo("unit3")));
 //    metrics.save(new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",pathTo("unit2")));
@@ -146,7 +146,7 @@ public class DeadCodeMetricsTest {
   }
 
   @Test
-  public void analyseFileTest() throws IllegalStateException {
+  public void testAnalyseFile() throws IllegalStateException {
     DelphiAST ast = new DelphiAST(DelphiUtils.getResource(TEST_FILE));
     ASTAnalyzer analyser = new DelphiASTAnalyzer(DelphiTestUtils.mockProjectHelper());
     assertFalse("Grammar error", ast.isError());

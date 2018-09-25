@@ -30,7 +30,7 @@ import org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl.StringSubRange;
 public class StringSubRangeTest {
 
   @Test
-  public void toStringTest() {
+  public void testToString() {
     StringSubRange subRange = new StringSubRange(3, 6, "my sub range");
     assertEquals("[3, 6] sub", subRange.toString());
   }

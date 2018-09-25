@@ -59,6 +59,18 @@ public class DelphiAST extends CommonTree implements ASTTree {
   private DelphiSourceSanitizer fileStream;
   private String[] codeLines;
 
+  private class FileReadFailException extends RuntimeException{
+    FileReadFailException (String s, IOException e){
+      super(s, e);
+    }
+  }
+
+  private class FileParseFailException extends RuntimeException{
+    FileParseFailException(String s, RecognitionException e){
+      super(s, e);
+    }
+  }
+
   /**
    * Constructor.
    *
@@ -78,15 +90,16 @@ public class DelphiAST extends CommonTree implements ASTTree {
     try {
       fileStream = new DelphiSourceSanitizer(file.getAbsolutePath(), encoding);
     } catch (IOException e) {
-      throw new RuntimeException("Failed to read file " + file.getAbsolutePath(), e);
+      throw new FileReadFailException("Failed to read file " + file.getAbsolutePath(), e);
     }
+
     DelphiParser parser = new DelphiParser(new TokenRewriteStream(new DelphiLexer(fileStream)));
     parser.setTreeAdaptor(new DelphiTreeAdaptor(this));
     try {
       children = ((CommonTree) parser.file().getTree()).getChildren();
 
     } catch (RecognitionException e) {
-      throw new RuntimeException("Failed to parse the file " + file.getAbsolutePath(), e);
+      throw new FileParseFailException("Failed to parse the file " + file.getAbsolutePath(), e);
     }
     fileName = file.getAbsolutePath();
     isError = parser.getNumberOfSyntaxErrors() != 0;
@@ -155,7 +168,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
     try {
       return generateDocument(createNewDocument(), "file");
     } catch (Exception e) {
-      DelphiUtils.LOG.error(toString() + "Could not generate xml document: " + e.getMessage());
+      DelphiUtils.LOG.error("{} {}" , "Could not generate xml document: " , e.getMessage());
       return null;
     }
   }
@@ -216,6 +229,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
       NodeName nodeName = NodeName.findByCode(code);
       return nodeName.getName();
     } catch (NodeNameForCodeDoesNotExistException e) {
+      DelphiUtils.LOG.error("{} {} {}", e.toString(), "NODE name for code does not exist", e.getMessage());
     }
     return code;
   }

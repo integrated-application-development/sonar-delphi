@@ -27,7 +27,7 @@ import org.junit.Test;
 public class DelphiColorizerFormatTest {
 
   @Test
-  public void getTokenizersTest() {
+  public void testGetTokenizers() {
 //    DelphiColorizerFormat format = new DelphiColorizerFormat();
 //    assertTrue(format.getTokenizers().size() >= 5);
   }

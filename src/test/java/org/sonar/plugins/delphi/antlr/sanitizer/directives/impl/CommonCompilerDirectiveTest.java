@@ -33,7 +33,7 @@ public class CommonCompilerDirectiveTest {
   private CommonCompilerDirective directive;
 
   @Test
-  public void getNameTest() {
+  public void testGetName() {
     directive = new CommonCompilerDirective("name", "item", 0, 0);
     assertEquals("name", directive.getName());
 
@@ -42,7 +42,7 @@ public class CommonCompilerDirectiveTest {
   }
 
   @Test
-  public void getItemTest() {
+  public void testGetItem() {
     directive = new CommonCompilerDirective("name", "item", 0, 0);
     assertEquals("item", directive.getItem());
 
@@ -51,7 +51,7 @@ public class CommonCompilerDirectiveTest {
   }
 
   @Test
-  public void getFirstCharPositionTest() {
+  public void testGetFirstCharPosition() {
     directive = new CommonCompilerDirective("name", "item", 0, 0);
     assertEquals(0, directive.getFirstCharPosition());
 
@@ -60,7 +60,7 @@ public class CommonCompilerDirectiveTest {
   }
 
   @Test
-  public void getTypeTest() {
+  public void testGetType() {
     directive = new CommonCompilerDirective("name", "item", 0, 0);
     assertEquals(CompilerDirectiveType.UNKNOWN, directive.getType());
   }
