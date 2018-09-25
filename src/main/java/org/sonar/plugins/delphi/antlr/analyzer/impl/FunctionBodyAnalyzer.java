@@ -41,7 +41,7 @@ import org.sonar.plugins.delphi.core.language.verifiers.StatementVerifier;
  */
 public class FunctionBodyAnalyzer extends CodeAnalyzer {
 
-  private CodeAnalysisResults results = null;
+  private CodeAnalysisResults results;
   private StatementVerifier statementverifier;
 
   private static final LexerMetrics[] BRANCHING_NODES = {LexerMetrics.IF, LexerMetrics.FOR,

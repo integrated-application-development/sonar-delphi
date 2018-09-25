@@ -25,11 +25,14 @@ package org.sonar.plugins.delphi.surefire;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Locale;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +86,9 @@ public class DelphiSureFireParser {
       }
       throw new FileNotFoundException();
     } catch (FileNotFoundException e) {
-      DelphiUtils.LOG.warn(ERROR_MSG + filename + FILE_EXT);
+      DelphiUtils.LOG.info("FileNotFoundException");
+      DelphiUtils.LOG.warn("{}{}{}", ERROR_MSG, filename, FILE_EXT);
+      DelphiUtils.LOG.error("FileNotFoundException Stacktrace", e);
     }
     return null;
   }
@@ -99,7 +104,7 @@ public class DelphiSureFireParser {
     if (dir == null) {
       return new File[0];
     } else if (!dir.isDirectory()) {
-      LOGGER.warn("Reports path not found: " + dir.getAbsolutePath());
+      LOGGER.warn("Reports path not found: {}", dir.getAbsolutePath());
       return new File[0];
     }
     File[] unitTestResultFiles = findXMLFilesStartingWith(dir, "TEST-");
@@ -140,8 +145,8 @@ public class DelphiSureFireParser {
     String name = testCase.getNamedItem("name").getTextContent();
     String classname = testCase.getNamedItem("classname").getTextContent();
     String testCaseName =
-        StringUtils.contains(classname, "$") ? StringUtils.substringAfter(classname, "$") + "/"
-            + name : name;
+        StringUtils.contains(classname, "$") ? (StringUtils.substringAfter(classname, "$") + "/"
+            + name) : name;
     detail.setName(testCaseName);
     String status = "ok";
     String time = testCase.getNamedItem("time").getTextContent();
@@ -173,7 +178,6 @@ public class DelphiSureFireParser {
 
       for (int f = 0; f < testsuites.getLength(); f++) {
         Element testSuite = (Element) testsuites.item(f);
-        String testSuiteName = testSuite.getAttributes().getNamedItem("name").getTextContent();
         NodeList testCases = testSuite.getElementsByTagName("testcase");
         for (int n = 0; n < testCases.getLength(); n++) {
           Node testCase = testCases.item(n);
@@ -187,14 +191,19 @@ public class DelphiSureFireParser {
       }
     } catch (SAXParseException err) {
       DelphiUtils.LOG.info("SAXParseException");
+      Exception x = err.getException();
+      DelphiUtils.LOG.error("SAXParseException Stacktrace", x);
     } catch (SAXException e) {
       DelphiUtils.LOG.info("SAXException");
       Exception x = e.getException();
       //((x == null) ? e : x).printStackTrace(); // Removed - SonarQube Vulnerability
       DelphiUtils.LOG.error("SAXException Stacktrace", x);
-    } catch (Throwable t) {
-      DelphiUtils.LOG.info("Throwable");
-      DelphiUtils.LOG.error("Throwable Stacktrace", t);
+    } catch (ParserConfigurationException e) {
+      DelphiUtils.LOG.info("ParserConfigurationException");
+      DelphiUtils.LOG.error("ParserConfigurationException Stacktrace", e);
+    } catch (IOException e) {
+      DelphiUtils.LOG.info("IOException");
+      DelphiUtils.LOG.error("IOException Stacktrace", e);
     }
   }
 

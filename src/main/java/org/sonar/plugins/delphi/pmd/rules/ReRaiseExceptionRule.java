@@ -6,7 +6,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 public class ReRaiseExceptionRule extends DelphiRule {
 
-  private String exceptionName = null;
+  private String exceptionName;
 
   /**
    * This rule looks for exception blocks where the exception is raised a second time at the end of

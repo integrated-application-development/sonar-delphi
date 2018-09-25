@@ -32,6 +32,7 @@ import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.core.language.ClassFieldInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 
+
 public class DelphiClassTest {
 
   private DelphiClass ancestor = null;
@@ -82,7 +83,7 @@ public class DelphiClassTest {
   }
 
   @Test
-  public void testComplexity() {
+  public void testGetComplexity() {
     FunctionInterface func = new DelphiFunction("parent.foo");
     FunctionInterface func2 = new DelphiFunction("parent.setBar");
     func.setComplexity(2);

@@ -41,8 +41,8 @@ public class DelphiStatement implements StatementInterface {
 
   private int line = -1;
   private int column = -1;
-  private String text = null;
-  private boolean complex = false;
+  private String text;
+  private boolean complex;
 
   /**
    * Ctor

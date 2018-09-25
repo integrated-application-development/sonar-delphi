@@ -195,7 +195,7 @@ public class DelphiSensor implements Sensor {
             DelphiUtils.LOG));
 
     for (InputFile resource : resourceList) {
-      DelphiUtils.LOG.debug("{} {}", ">> PROCESSING ", resource.toString());
+      DelphiUtils.LOG.debug("{} {}", ">> PROCESSING ", resource);
 
       processMetric(basicMetrics, resource);
       processMetric(complexityMetrics, resource);
@@ -231,7 +231,7 @@ public class DelphiSensor implements Sensor {
   // for debugging, prints file paths with message to debug file
   private void printFileList(String msg, List<File> list) {
     for (File f : list) {
-      DelphiUtils.LOG.info(msg + f.getAbsolutePath());
+      DelphiUtils.LOG.info("{}{}", msg, f.getAbsolutePath());
     }
   }
 
