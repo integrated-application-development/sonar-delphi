@@ -305,6 +305,14 @@
       </property>
     </properties>
   </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.LowerCaseReservedWordsRule" name="LowerCaseReservedWordRule">
+    <priority>4</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>5min</value>
+      </property>
+    </properties>
+  </rule>
   <rule class="org.sonar.plugins.delphi.pmd.rules.ThenTryRule" name="ThenTryRule">
     <priority>3</priority>
     <properties>
