@@ -197,9 +197,15 @@ public class DelphiSensor implements Sensor {
     for (InputFile resource : resourceList) {
       DelphiUtils.LOG.debug("{} {}", ">> PROCESSING ", resource);
 
-      processMetric(basicMetrics, resource);
-      processMetric(complexityMetrics, resource);
-      processMetric(deadCodeMetrics, resource);
+      try {
+        processMetric(basicMetrics, resource);
+        processMetric(complexityMetrics, resource);
+        processMetric(deadCodeMetrics, resource);
+      } catch (IllegalArgumentException e){
+        DelphiUtils.LOG.error("{} produced {} , in metric analysis. Metrics may be in error.",
+            resource, e.getMessage());
+        continue;
+      }
 
       if (basicMetrics.hasMetric("PUBLIC_DOC_API") && complexityMetrics.hasMetric("PUBLIC_API")) {
         int undocumentedApi = DelphiUtils.checkIntRange(
