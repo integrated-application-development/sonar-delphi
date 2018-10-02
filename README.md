@@ -10,7 +10,7 @@ Forked code is released under GPL.
 
 Testing Framework
 ==================
-JUnit testsing:
+JUnit testing:
 
  * The latest plugin is compiled.
  * The compiled JAR is copied to a local installation of SonarQube. 
