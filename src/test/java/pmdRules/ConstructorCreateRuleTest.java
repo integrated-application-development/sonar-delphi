@@ -8,13 +8,13 @@ import org.junit.Test;
 
 public class ConstructorCreateRuleTest extends BaseXmlPmdRuleTest {
 
-  private static String testFile = "ConstructorTest.pas";
   private static String ruleType = "ConstructorCreateRule"; // Rule type being tested
 
   @Test
   public void testRuleViolation() {
 
-    super.testAnalyse(); // fixme, be better if didnt have to run this every test, just once
+    String testFile = "ConstructorTest.pas";
+    super.testAnalyse();
     ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
     Integer[] expectedViolationLines = {20, 21};

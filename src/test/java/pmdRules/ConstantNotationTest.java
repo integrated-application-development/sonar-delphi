@@ -8,13 +8,13 @@ import org.junit.Test;
 
 public class ConstantNotationTest extends BaseXmlPmdRuleTest {
 
-  private static String testFile = "ConstantsTest.pas";
   private static String ruleType = "ConstantNotationRule"; // Rule type being tested
 
   @Test
   public void testRuleViolation() {
 
-    super.testAnalyse(); // fixme, be better if didnt have to run this every test, just once
+    String testFile = "ConstantsTest.pas";
+    super.testAnalyse();
     ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
     Integer[] expectedViolationLines = {9, 10, 11, 12, 13, 15};

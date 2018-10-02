@@ -5,8 +5,8 @@ import java.util.HashMap;
 import org.junit.Test;
 
 /**
- * Base class for a rule parsing for PMD results from the pmd-report.xml and testing results
- * in the Junit tests
+ * Base class for a rule parsing for PMD results from the pmd-report.xml and testing results in the
+ * Junit tests
  */
 
 public class BaseXmlPmdRuleTest {
@@ -38,8 +38,9 @@ public class BaseXmlPmdRuleTest {
   }
 
   /**
-   * Returns the results of only the rule that is being tested, and returns a list of the lines
-   * that violation was found on.
+   * Returns the results of only the rule that is being tested, and returns a list of the lines that
+   * violation was found on.
+   *
    * @param fileResults The list of results from parsing the XML file, but all results.
    * @param ruleType The rule that only violations of that type will be returned.
    * @return The list of line numbers where violations of the passes rule type are located.

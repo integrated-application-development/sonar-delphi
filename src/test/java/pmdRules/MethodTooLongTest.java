@@ -1,7 +1,6 @@
 package pmdRules;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,12 +8,13 @@ import org.junit.Test;
 
 public class MethodTooLongTest extends BaseXmlPmdRuleTest {
 
-  private static String testFile = "MethodTooLongTest.pas";
+
   private static String ruleType = "TooLongMethodRule"; // Rule type being tested
 
   @Test
-  public void testRuleViolation(){
+  public void testRuleViolation() {
 
+    String testFile = "MethodTooLongTest.pas";
     super.testAnalyse();
     ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
@@ -27,8 +27,8 @@ public class MethodTooLongTest extends BaseXmlPmdRuleTest {
   }
 
   @Test
-  public void testNoViolation(){
-    testFile = "IfTrueTest.pas";
+  public void testNoViolation() {
+    String testFile = "IfTrueTest.pas";
     super.testAnalyse();
     ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
