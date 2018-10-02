@@ -1,4 +1,4 @@
-unit DestructorTest;
+unit DestructorViolationTest;
 
 interface
 
@@ -12,7 +12,6 @@ implementation
 
 destructor TTest.Destroy;
 begin
-  FreeMyStuff;
-  inherited;
+  FreeMyStuff; // No Inherited statement, non-compliant
 end;
 end.

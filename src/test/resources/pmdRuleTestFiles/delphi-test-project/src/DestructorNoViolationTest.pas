@@ -13,6 +13,6 @@ implementation
 destructor TTest.Destroy;
 begin
   FreeMyStuff;
-  inherited;
+  inherited; // Compliant
 end;
 end.
