@@ -11,12 +11,12 @@ import org.junit.Test;
 
 public class BaseXmlPmdRuleTest {
 
-  private PMDReportXMLParser pmdParser = new PMDReportXMLParser();
+  private PmdReportXmlParser pmdParser = new PmdReportXmlParser();
   private HashMap<String, ArrayList<ArrayList<Object>>> violationsMap = new HashMap<>();
 
   // Positions in arraylist results to use for getting results
-  int RULETYPE_POS = 0;
-  int VIOLATION_LINE_POS = 1;
+  private int RULETYPE_POS = 0;
+  private int VIOLATION_LINE_POS = 1;
 
   /**
    * Creates the hashmap of violations by parsing the XML results of pmd-report.xml
