@@ -8,6 +8,28 @@ The original work on the plugin that was done before forking the existing projec
 
 Forked code is released under GPL.
 
+Implemented Rules
+==================
+The Following rules have been implemented by the team:
+
+  * Avoid using with
+  * Class names shoule begin with T
+  * Constants should begin with C_
+  * Constructors should call create
+  * Constructors should use inherited appropriately
+  * Destructors should use inherited appropriately
+  * If not notation
+  * Interface names
+  * Lower and upper case keywords
+  * No begin after Do
+  * No semicolon
+  * Line too long
+  * Public Fields
+  * Too Many Subprocedures
+  * Re raise exceptions
+  
+Additional rules already present in the plugin have been tested to ensure they work correctly.
+ 
 Testing Framework
 ==================
 JUnit testing:
