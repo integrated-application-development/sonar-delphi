@@ -8,12 +8,12 @@ import org.junit.Test;
 
 public class InterfaceNameRuleTest extends BaseXmlPmdRuleTest {
 
-  private static String testFile = "InterfaceNameTest.pas";
   private static String ruleType = "InterfaceNameRule"; // Rule type being tested
 
   @Test
   public void testRuleViolation() {
 
+    String testFile = "InterfaceNameTest.pas";
     super.testAnalyse();
     ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
@@ -23,6 +23,18 @@ public class InterfaceNameRuleTest extends BaseXmlPmdRuleTest {
     ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
 
     assertEquals(violationLines, Arrays.asList(expectedViolationLines));
+  }
+
+  @Test
+  public void testNoViolation(){
+
+    String testFile = "TooManyVariablesTest.pas";
+    super.testAnalyse();
+    ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
+
+    ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
+
+    assertEquals(0, violationLines.size());
   }
 
 }

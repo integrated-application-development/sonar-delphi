@@ -25,5 +25,17 @@ public class ConstantNotationTest extends BaseXmlPmdRuleTest {
     assertEquals(violationLines, Arrays.asList(expectedViolationLines));
   }
 
+  @Test
+  public void testNoViolation(){
+
+    String testFile = "EnumTest.pas";
+    super.testAnalyse();
+    ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
+
+    ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
+
+    assertEquals(0, violationLines.size());
+  }
+
 
 }

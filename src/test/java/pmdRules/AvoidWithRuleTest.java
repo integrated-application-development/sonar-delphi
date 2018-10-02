@@ -10,6 +10,7 @@ public class AvoidWithRuleTest extends BaseXmlPmdRuleTest {
 
   private static String ruleType = "AvoidWithRule"; // Rule type being tested
 
+
   @Test
   public void testRuleViolation() {
 
@@ -23,6 +24,18 @@ public class AvoidWithRuleTest extends BaseXmlPmdRuleTest {
     ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
 
     assertEquals(violationLines, Arrays.asList(expectedViolationLines));
+  }
+
+  @Test
+  public void testNoViolation(){
+
+    String testFile = "MethodNameTest.pas";
+    super.testAnalyse();
+    ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
+
+    ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
+
+    assertEquals(0, violationLines.size());
   }
 
 }
