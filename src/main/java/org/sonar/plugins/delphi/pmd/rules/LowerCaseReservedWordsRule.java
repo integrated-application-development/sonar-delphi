@@ -34,8 +34,8 @@ public class LowerCaseReservedWordsRule extends DelphiRule {
   }
 
   private boolean checkKeyword(String keywordName) {
-
-    String coventionRegex = "[a-z]+"; // Checking all characters are lowercase
+    // Checking all characters are lowercase
+    String coventionRegex = "[a-z]+";
     return keywordName.matches(coventionRegex);
   }
 }

@@ -81,16 +81,13 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
     // do nothing
   }
 
+  /**
+   * Visits all nodes in a file
+   */
   @Override
   public Object visit(DelphiPMDNode node, Object data) {
     return null;
   }
-
-  ;
-
-  /**
-   * Visits all nodes in a file
-   */
 
   /**
    * {@inheritDoc}

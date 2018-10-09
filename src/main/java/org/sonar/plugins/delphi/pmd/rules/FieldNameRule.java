@@ -26,11 +26,6 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 public class FieldNameRule extends DelphiRule {
 
   @Override
-  protected void init() {
-    super.init();
-  }
-
-  @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
     if (node.getType() == DelphiLexer.TkClassField) {
 
