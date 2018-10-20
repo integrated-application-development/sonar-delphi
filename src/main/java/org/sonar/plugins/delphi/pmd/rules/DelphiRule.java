@@ -97,8 +97,6 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
     visitAll(nodes, ctx);
   }
 
-  ;
-
   protected void visitAll(List<? extends Node> acus, RuleContext ctx) {
     lastLineParsed = -1;
     currentVisibility = DelphiLexer.PUBLISHED;

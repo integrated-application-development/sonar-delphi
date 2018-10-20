@@ -22,12 +22,10 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl;
 
-import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRange;
-
 /**
  * Sub range class that contains a string
  */
-public class StringSubRange extends IntegerSubRange implements SubRange {
+public class StringSubRange extends IntegerSubRange {
 
   private String fullString;
   private String subString;

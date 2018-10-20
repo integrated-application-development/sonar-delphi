@@ -122,7 +122,7 @@ public class CompilerDirectiveFactory {
 
   private int getDirectiveLastChar(String data, int startPosition)
       throws CompilerDirectiveFactorySyntaxException {
-    int pos = data.indexOf("}", startPosition + 1);
+    int pos = data.indexOf('}', startPosition + 1);
     if (pos == -1) {
       throw new CompilerDirectiveFactorySyntaxException(
           "No closing bracket for compiler directive from: "

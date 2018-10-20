@@ -147,7 +147,6 @@ public class StatementVerifier {
       return false;
     }
 
-    StringBuilder wholeLine = new StringBuilder(node.getText());
     CommonTree parent = (CommonTree) node.getParent();
     CommonTree assign = (CommonTree) parent.getChild(childIndex + 1);
     if (assign == null) {
@@ -157,7 +156,9 @@ public class StatementVerifier {
       return false;
     }
 
-    CommonTree actualNode = null;
+    CommonTree actualNode;
+
+    StringBuilder wholeLine = new StringBuilder(node.getText());
     while ((actualNode = (CommonTree) parent.getChild(++childIndex)) != null) {
       isBeginEndNode(node);
       // while ; or ELSE
