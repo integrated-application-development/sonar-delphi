@@ -51,23 +51,27 @@ public class ExcludeResolverTest extends FileTestsCommon {
     resolver = new ExcludeResolver();
   }
 
-  // FIXME currently broken
-//  @Test
-//  public void getAllExcludesTest() {
-//    SubRange expectedResults[] = {new IntegerSubRange(42, 60), new IntegerSubRange(62, 118),
-//        new IntegerSubRange(329, 365),
-//        new IntegerSubRange(375, 400), new IntegerSubRange(402, 411), new IntegerSubRange(420, 436),
-//        new IntegerSubRange(449, 478)};
-//
-//    SourceResolverResults result = new SourceResolverResults(testFile.getAbsolutePath(),
-//        testFileString);
-//    resolver.resolve(result);
-//
-//    List<SubRange> excludes = result.getFileExcludes().getRanges();
-//    assertEquals(SUBRANGES_COUNT, excludes.size());
-//
-//    for (int i = 0; i < expectedResults.length; ++i) {
-//      assertEquals(expectedResults[i], excludes.get(i));
-//    }
-//  }
+
+  @Test
+  public void getAllExcludesTest() {
+    SubRange expectedResults[] = {new IntegerSubRange(42, 60),
+        new IntegerSubRange(62, 137),
+        new IntegerSubRange(348, 384),
+        new IntegerSubRange(394, 419),
+        new IntegerSubRange(421, 430),
+        new IntegerSubRange(439, 455),
+        new IntegerSubRange(468, 497)};
+
+    SourceResolverResults result = new SourceResolverResults(testFile.getAbsolutePath(),
+        testFileString);
+    resolver.resolve(result);
+
+    List<SubRange> excludes = result.getFileExcludes().getRanges();
+    assertEquals(SUBRANGES_COUNT, excludes.size());
+
+    for (int i = 0; i < expectedResults.length; ++i) {
+      assertEquals(expectedResults[i].getBegin(), excludes.get(i).getBegin());
+      assertEquals(expectedResults[i].getEnd(), excludes.get(i).getEnd());
+    }
+  }
 }

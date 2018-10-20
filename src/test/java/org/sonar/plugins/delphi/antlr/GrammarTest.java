@@ -56,12 +56,6 @@ public class GrammarTest {
   }
 
   @Test
-  @Ignore("Ignored by authors due to bugs")
-  public void testGrammar() throws Exception {
-    parseFile("GrammarTest.pas");
-  }
-
-  @Test
   public void testEmptyBeginStatement() throws Exception {
     parseFile("EmptyProcs.pas");
   }
@@ -69,18 +63,6 @@ public class GrammarTest {
   @Test
   public void testParseMultipleAttributes() throws Exception {
     parseFile("MultipleAttributes.pas");
-  }
-
-  @Test
-  @Ignore("Ignored by authors due to bugs")
-  public void testParseNewGrammar() throws Exception {
-    parseFile("GrammarTestNew.pas");
-  }
-
-  @Test
-  @Ignore("Ignored by authors due to bugs")
-  public void testParseComplexArray() throws Exception {
-    parseFile("ComplexArray.pas");
   }
 
   @Test
