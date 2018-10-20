@@ -79,7 +79,7 @@ public class DelphiClassTest {
   @Test
   public void testGetName() {
     assertEquals("parent", parent.getName());
-    assertEquals("parent", parent.getShortName());
+    assertEquals("par", parent.getShortName());
   }
 
   @Test

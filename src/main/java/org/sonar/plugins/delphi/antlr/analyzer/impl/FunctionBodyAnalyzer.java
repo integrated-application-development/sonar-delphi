@@ -28,6 +28,7 @@ import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
+import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.StatementInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
@@ -48,7 +49,8 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
       LexerMetrics.CASE,
       LexerMetrics.REPEAT, LexerMetrics.AND, LexerMetrics.OR};
 
-  public FunctionBodyAnalyzer(CodeAnalysisResults results) {
+  public FunctionBodyAnalyzer(CodeAnalysisResults results,
+      DelphiProjectHelper delphiProjectHelper) {
     if (results == null) {
       throw new IllegalArgumentException(
           "FunctionBodyAnalyzer ctor 'results' parameter cannot be null.");

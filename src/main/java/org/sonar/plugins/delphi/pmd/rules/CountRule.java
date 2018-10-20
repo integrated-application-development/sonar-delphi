@@ -38,7 +38,7 @@ public class CountRule extends DelphiRule {
   /**
    * Number to increase the count.
    */
-  private int strength = 1;
+  protected int strength = 1;
   /**
    * Should we reset the counter after exceeding the limit.
    */
