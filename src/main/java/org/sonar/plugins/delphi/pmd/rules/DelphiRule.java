@@ -42,27 +42,30 @@ import org.sonar.plugins.delphi.pmd.DelphiRuleViolation;
  */
 public class DelphiRule extends AbstractRule implements DelphiParserVisitor, ImmutableLanguage {
 
-  private int lastLineParsed;
+  protected int lastLineParsed;
 
   private int currentVisibility;
 
   private boolean inImplementationSection;
 
-  static final IntegerProperty LIMIT = new IntegerProperty("limit", "The max limit.", 1, 150,
+  protected static final IntegerProperty LIMIT = new IntegerProperty("limit",
+      "The max limit.", 1, 150,
       1, 1.0f);
-  static final IntegerProperty THRESHOLD = new IntegerProperty("Threshold", "Threshold", 1,
+  protected static final IntegerProperty THRESHOLD = new IntegerProperty("Threshold",
+      "Threshold", 1,
       100, 10, 1.0f);
-  static final StringProperty START_AST = new StringProperty("start",
+  protected static final StringProperty START_AST = new StringProperty("start",
       "The AST node to start from", "", 1.0f);
-  static final StringProperty END_AST = new StringProperty("end",
+  protected static final StringProperty END_AST = new StringProperty("end",
       "The AST node to stop the search", "", 1.0f);
-  static final StringProperty LOOK_FOR = new StringProperty("lookFor", "What nodes look for",
+  protected static final StringProperty LOOK_FOR = new StringProperty("lookFor",
+      "What nodes look for",
       "", 1.0f);
-  static final StringProperty BASEEFFORT = new StringProperty("baseEffort",
+  protected static final StringProperty BASEEFFORT = new StringProperty("baseEffort",
       "The base effort to correct", "", 1.0f);
 
   public DelphiRule() {
-    super.setLanguage(LanguageRegistry.getLanguage(DelphiLanguageModule.NAME));
+    super.setLanguage(LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME));
     definePropertyDescriptor(LIMIT);
     definePropertyDescriptor(THRESHOLD);
     definePropertyDescriptor(START_AST);

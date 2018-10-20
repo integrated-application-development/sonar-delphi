@@ -31,6 +31,7 @@ import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.core.language.ClassFieldInterface;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.StatementInterface;
+import org.sonar.plugins.delphi.core.language.Tokenizer;
 
 /**
  * DelphiLanguage class statement definition
@@ -43,6 +44,7 @@ public class DelphiStatement implements StatementInterface {
   private int column = -1;
   private String text;
   private boolean complex;
+  private Tokenizer tokenizer = new Tokenizer();
 
   /**
    * Ctor
@@ -111,33 +113,6 @@ public class DelphiStatement implements StatementInterface {
     column = value;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
-  /**
-   * Create tokens from text.
-   *
-   * @param source The source code to parse for tokens
-   * @return List of found tokens
-   */
-  private List<Token> tokenize(String[] source) {
-    List<Token> tokens = new ArrayList<>();
-
-    for (String string : source) {
-      DelphiLexer lexer = new DelphiLexer(new ANTLRStringStream(string));
-      Token token = lexer.nextToken();
-      token.setText(token.getText().toLowerCase());
-      while (token.getType() != Token.EOF) {
-        tokens.add(token);
-        token = lexer.nextToken();
-      }
-    }
-    //has been changed to add compatibility for SonarQube 5.2
-    tokens.add(new CommonToken(Token.EOF));
-    return tokens;
-  }
-
   @Override
   public ClassFieldInterface[] getFields(ClassInterface fromClass) {
     if (fromClass == null) {
@@ -146,7 +121,7 @@ public class DelphiStatement implements StatementInterface {
     ClassFieldInterface[] fields = fromClass.getFields();
     List<ClassFieldInterface> result = new ArrayList<>();
 
-    List<Token> tokens = tokenize(new String[]{text});
+    List<Token> tokens = tokenizer.tokenize(new String[]{text});
 
     for (Token token : tokens) {
       if (token.getType() == DelphiLexer.TkIdentifier) {

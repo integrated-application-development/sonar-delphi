@@ -33,6 +33,7 @@ import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.core.language.StatementInterface;
+import org.sonar.plugins.delphi.core.language.Tokenizer;
 import org.sonar.plugins.delphi.core.language.impl.DelphiStatement;
 
 /**
@@ -50,9 +51,7 @@ public class StatementVerifier {
   private boolean isComplex;
   private String lastStatementText;
   private Stack<Integer> statementIndex = new Stack<>();
-
-  public StatementVerifier() {
-  }
+  private Tokenizer tokenizer = new Tokenizer();
 
   /**
    * Checks for statements
@@ -110,28 +109,6 @@ public class StatementVerifier {
     return false;
   }
 
-  /**
-   * Create tokens from text.
-   *
-   * @param source The source code to parse for tokens
-   * @return List of found tokens
-   */
-  private List<Token> tokenize(String[] source) {
-    List<Token> tokens = new ArrayList<>();
-
-    for (String string : source) {
-      DelphiLexer lexer = new DelphiLexer(new ANTLRStringStream(string));
-      Token token = lexer.nextToken();
-      token.setText(token.getText().toLowerCase());
-      while (token.getType() != Token.EOF) {
-        tokens.add(token);
-        token = lexer.nextToken();
-      }
-    }
-    tokens.add(new CommonToken(Token.EOF));
-    return tokens;
-  }
-
   private boolean isComplexStatementNode(Tree node) {
     // are we on a new block? (begin..end)
     if (isBeginEndNode(node)) {
@@ -174,9 +151,8 @@ public class StatementVerifier {
     // replace '..' with ' .. '
     String fixedSourceCode = wholeLine.toString().replaceAll("\\.\\.", " .. ");
 
-    List<Token> tokens = tokenize(new String[]{fixedSourceCode});
+    List<Token> tokens = tokenizer.tokenize(new String[]{fixedSourceCode});
     if (tokens.size() < MIN_TOKENS_FOR_COMPLEX_STMT) {
-      // at least 4 tokens: id, :=, id, ;
       return false;
     }
     Token second = tokens.get(1);

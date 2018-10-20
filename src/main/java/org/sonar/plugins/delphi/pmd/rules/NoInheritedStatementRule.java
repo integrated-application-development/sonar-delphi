@@ -65,15 +65,12 @@ public class NoInheritedStatementRule extends DelphiRule {
           }
         }
 
-        if (!wasInherited && shouldAddRule(node)) {
+        if (!wasInherited) {
           addViolation(ctx, node);
         }
       }
     }
   }
 
-  protected boolean shouldAddRule(DelphiPMDNode node) {
-    return true;
-  }
 
 }
