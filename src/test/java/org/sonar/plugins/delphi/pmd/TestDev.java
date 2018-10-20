@@ -15,7 +15,7 @@ public class TestDev {
   // NOTE THIS TEST IS ONLY FOR DEBUGGING WHEN DEVELOPING RULES, VISUAL REPRESENTATION OF AST
   @Ignore
   @Test
-  public void test() {
+  public void testAst() {
     File testFile = DelphiUtils.getResource(TEST_FILE);
     DelphiPMD pmd = new DelphiPMD();
     DelphiAST ast = new DelphiAST(testFile);

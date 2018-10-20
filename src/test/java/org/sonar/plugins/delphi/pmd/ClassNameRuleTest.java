@@ -41,54 +41,6 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
     assertThat(issues, is(empty()));
   }
 
-/*  @Test
-  public void classNameWithoutPrefixShouldAddIssue() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-    builder.appendDecl("type");
-    builder.appendDecl("  MyClass = class");
-    builder.appendDecl("  end;");
-
-    testAnalyse(builder);
-
-    assertThat(issues, hasSize(1));
-    Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("ClassNameRule"));
-    assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
-  }*/
-
-/*  @Test
-  public void classNameDoNotStartsWithCapitalLetterShouldAddIssue() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-    builder.appendDecl("type");
-    builder.appendDecl("  TmyClass = class");
-    builder.appendDecl("  end;");
-
-    testAnalyse(builder);
-
-    assertThat(issues, hasSize(1));
-    Issue issue = issues.get(0);
-    System.out.println("HERE10:  RULEKEY:"+issues.get(0).ruleKey().rule());
-    System.out.println("HERE10:  LINE:"+issues.get(0).line());
-    System.out.println("HERE10:  CLASS:"+issues.get(0).getClass());
-    assertThat(issue.ruleKey().rule(), equalTo("ClassNameRule"));
-    assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
-  }*/
-
-/*  @Test
-  public void testAvoidFalsePositive() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-    builder.appendDecl("type");
-    builder.appendDecl("  TestClass = class");
-    builder.appendDecl("  end;");
-
-    testAnalyse(builder);
-
-    assertThat(issues, hasSize(1));
-    Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("ClassNameRule"));
-    assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
-  }*/
-
   @Test
   public void testNestedType() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();

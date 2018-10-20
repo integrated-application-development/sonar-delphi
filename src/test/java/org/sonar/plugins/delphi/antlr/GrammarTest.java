@@ -110,16 +110,4 @@ public class GrammarTest {
     parseFile("ListUtils.pas");
   }
 
-  @Test
-  @Ignore("https://github.com/fabriciocolombo/sonar-delphi/issues/38")
-  public void testParsePackageAsIdentifier() throws Exception {
-    parseFile("PackageAsIdentifier.pas");
-  }
-
-  @Test
-  @Ignore("https://github.com/fabriciocolombo/sonar-delphi/issues/39")
-  public void testParseInterfaceMethodResolutionClause() throws Exception {
-    parseFile("InterfaceMethodResolutionClause.pas");
-  }
-
 }

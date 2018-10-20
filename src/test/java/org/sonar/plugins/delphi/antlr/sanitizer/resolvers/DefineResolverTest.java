@@ -305,23 +305,4 @@ public class DefineResolverTest {
     assertThat(resultSourceCode, containsString("(*{$IFNDEF FPC}*)"));
   }
 
-  @Test
-  @Ignore("Bug - Should consider comments")
-  public void testDirectivesInsideCommentdsShouldBeIgnored() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-    builder.appendDecl("///Ignore this directive {$IFDEF}");
-    builder.appendDecl("{$if TEST}");
-    builder.appendDecl("  (* comment *)");
-    builder.appendDecl("{$ifend}");
-
-    results = new SourceResolverResults("", builder.getSourceCode());
-
-    resolver.resolve(results);
-
-    String resultSourceCode = results.getFileData().toString();
-    System.out.println(resultSourceCode);
-    assertThat(resultSourceCode, containsString("(*{$if TEST}"));
-    assertThat(resultSourceCode, containsString("{$ifend}*)"));
-  }
-
 }

@@ -53,7 +53,7 @@ public class ExcludeResolverTest extends FileTestsCommon {
 
 
   @Test
-  public void getAllExcludesTest() {
+  public void testGetAllExcludes() {
     SubRange expectedResults[] = {new IntegerSubRange(42, 60),
         new IntegerSubRange(62, 137),
         new IntegerSubRange(348, 384),
