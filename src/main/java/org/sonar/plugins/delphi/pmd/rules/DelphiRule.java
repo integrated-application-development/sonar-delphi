@@ -42,31 +42,31 @@ import org.sonar.plugins.delphi.pmd.DelphiRuleViolation;
  */
 public class DelphiRule extends AbstractRule implements DelphiParserVisitor, ImmutableLanguage {
 
-  protected int lastLineParsed;
+  private int lastLineParsed;
 
   private int currentVisibility;
 
   private boolean inImplementationSection;
 
-  public static final IntegerProperty LIMIT = new IntegerProperty("limit", "The max limit.", 1, 150,
+  static final IntegerProperty LIMIT = new IntegerProperty("limit", "The max limit.", 1, 150,
       1, 1.0f);
-  public static final IntegerProperty THRESHOLD = new IntegerProperty("Threshold", "Threshold", 1,
+  static final IntegerProperty THRESHOLD = new IntegerProperty("Threshold", "Threshold", 1,
       100, 10, 1.0f);
-  public static final StringProperty START = new StringProperty("start",
+  static final StringProperty START_AST = new StringProperty("start",
       "The AST node to start from", "", 1.0f);
-  public static final StringProperty END = new StringProperty("end",
+  static final StringProperty END_AST = new StringProperty("end",
       "The AST node to stop the search", "", 1.0f);
-  public static final StringProperty LOOK_FOR = new StringProperty("lookFor", "What nodes look for",
+  static final StringProperty LOOK_FOR = new StringProperty("lookFor", "What nodes look for",
       "", 1.0f);
-  public static final StringProperty BASEEFFORT = new StringProperty("baseEffort",
+  static final StringProperty BASEEFFORT = new StringProperty("baseEffort",
       "The base effort to correct", "", 1.0f);
 
   public DelphiRule() {
     super.setLanguage(LanguageRegistry.getLanguage(DelphiLanguageModule.NAME));
     definePropertyDescriptor(LIMIT);
     definePropertyDescriptor(THRESHOLD);
-    definePropertyDescriptor(START);
-    definePropertyDescriptor(END);
+    definePropertyDescriptor(START_AST);
+    definePropertyDescriptor(END_AST);
     definePropertyDescriptor(LOOK_FOR);
     definePropertyDescriptor(BASEEFFORT);
   }
@@ -129,6 +129,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
    * Overload this method in derived class to initialize your rule instance with default values
    */
   protected void init() {
+    // Used to overload default values in a rule, does not have to be used
   }
 
   /**
@@ -169,6 +170,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
       case DelphiLexer.PUBLIC:
       case DelphiLexer.PUBLISHED:
         currentVisibility = node.getType();
+
     }
   }
 
@@ -192,7 +194,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
     return !isImplementationSection();
   }
 
-  public boolean isImplementationSection() {
+  boolean isImplementationSection() {
     return inImplementationSection;
   }
 
