@@ -22,15 +22,11 @@
  */
 package org.sonar.plugins.delphi.core.language.verifiers;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.core.language.StatementInterface;
 import org.sonar.plugins.delphi.core.language.Tokenizer;
