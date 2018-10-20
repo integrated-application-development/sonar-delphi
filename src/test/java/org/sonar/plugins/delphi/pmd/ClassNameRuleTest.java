@@ -22,24 +22,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class ClassNameRuleTest extends BasePmdRuleTest {
 
-  // FIXME for old classname rule
-  @Ignore
-  @Test
-  public void testValidRule() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertThat(issues, is(empty()));
-  }
 
   @Test
   public void testNestedType() {
