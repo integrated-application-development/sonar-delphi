@@ -29,20 +29,19 @@ public class MethodNameRule extends DelphiRule {
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
 
-    if (node.getType() == DelphiLexer.TkNewType) {
-      if (isInterface(node) || !isPublished()) {
-        List<Tree> methodNodes = node.findAllChildren(DelphiLexer.TkFunctionName);
+    if (node.getType() == DelphiLexer.TkNewType && (isInterface(node) || !isPublished())) {
+      List<Tree> methodNodes = node.findAllChildren(DelphiLexer.TkFunctionName);
 
-        for (Tree method : methodNodes) {
-          String name = method.getChild(0).getText();
-          char firstChar = name.charAt(0);
+      for (Tree method : methodNodes) {
+        String name = method.getChild(0).getText();
+        char firstChar = name.charAt(0);
 
-          if (firstChar != Character.toUpperCase(firstChar)) {
-            addViolation(ctx, (DelphiPMDNode) method);
-          }
+        if (firstChar != Character.toUpperCase(firstChar)) {
+          addViolation(ctx, (DelphiPMDNode) method);
         }
       }
     }
+
   }
 
   private boolean isInterface(DelphiPMDNode node) {

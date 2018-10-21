@@ -41,7 +41,7 @@ public class DelphiRuleChainVisitor extends AbstractRuleChainVisitor {
 
   @Override
   protected void indexNodes(List<Node> astCompilationUnits, RuleContext ctx) {
-
+    // Unused but necessary override
   }
 
 }

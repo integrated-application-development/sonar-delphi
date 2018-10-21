@@ -23,18 +23,16 @@ public class EmptyBracketsRule extends DelphiRule {
       for (int i = 0; i < node.getChildCount() - 1; i++) {
 
         DelphiPMDNode childNode = (DelphiPMDNode) node.getChild(i);
-        if (childNode.getType() == DelphiLexer.TkIdentifier) {
-          if (node.getChild(i + 1).getType() == DelphiLexer.LPAREN) {
-            if (node.getChild(i + 2).getType() == DelphiLexer.RPAREN) {
-              // The next node and the subsequent nodes were parentheses, no arguments passed
-              addViolation(ctx, childNode);
-            }
-          }
+        if (childNode.getType() == DelphiLexer.TkIdentifier &&
+            node.getChild(i + 1).getType() == DelphiLexer.LPAREN &&
+            node.getChild(i + 2).getType() == DelphiLexer.RPAREN) {
+          // The next node and the subsequent nodes were parentheses, no arguments passed
+          addViolation(ctx, childNode);
         }
-
       }
-    }
 
+    }
   }
 
 }
+

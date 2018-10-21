@@ -41,8 +41,8 @@ public class BlockCounterRule extends CountRule {
   @Override
   protected void init() {
     super.init();
-    start = getProperty(START);
-    end = getProperty(END);
+    start = getProperty(START_AST);
+    end = getProperty(END_AST);
     lastLine = 0;
     startIndex = 0;
     isCounting = false;

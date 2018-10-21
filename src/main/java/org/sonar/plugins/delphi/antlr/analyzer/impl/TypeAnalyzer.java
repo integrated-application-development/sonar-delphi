@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
+import java.util.Objects;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
@@ -32,8 +33,6 @@ import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiClass;
-
-import java.util.Objects;
 
 /**
  * Delphi class analyzer, used to analyze types in a source file

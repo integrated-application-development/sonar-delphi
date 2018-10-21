@@ -32,7 +32,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class NodeSequenceRule extends DelphiRule {
 
-  private static final StringProperty SEQUENCE = new StringProperty("sequence",
+  private static final StringProperty AST_SEQUENCE = new StringProperty("sequence",
       "The AST sequence nodes to find", "",
       1.0f);
 
@@ -41,7 +41,7 @@ public class NodeSequenceRule extends DelphiRule {
   private DelphiPMDNode firstMatchNode;
 
   public NodeSequenceRule() {
-    definePropertyDescriptor(SEQUENCE);
+    definePropertyDescriptor(AST_SEQUENCE);
   }
 
   @Override
@@ -65,7 +65,7 @@ public class NodeSequenceRule extends DelphiRule {
   protected void init() {
     count = 0;
     firstMatchNode = null;
-    sequence = getProperty(SEQUENCE).split(",");
+    sequence = getProperty(AST_SEQUENCE).split(",");
   }
 
   public void setSequence(String[] sequence) {

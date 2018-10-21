@@ -57,7 +57,6 @@ public class PublicFieldsRule extends DelphiRule {
           if (child.getType() != DelphiLexer.TkClassField && child.getType() != DelphiLexer.PROPERTY
               && child.getType() != DelphiLexer.PROCEDURE
               && child.getType() != DelphiLexer.CONSTRUCTOR) {
-            inPublic = false;
             break;
 
           }

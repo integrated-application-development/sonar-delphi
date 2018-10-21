@@ -31,6 +31,8 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class UppercaseReservedWordsRule extends DelphiRule {
 
+  // FIXME this rule needs to be redone as lowercase was
+
   private static final String[] KEYWORDS_A = {"ASM"};
   private static final String[] KEYWORDS_B = {"BEGIN"};
   private static final String[] KEYWORDS_C = {"CASE", "CLASS", "CONST", "CONSTRUCTOR"};

@@ -25,10 +25,8 @@ package org.sonar.plugins.delphi.antlr;
 
 import static org.junit.Assert.assertFalse;
 
-
 import java.io.File;
 import java.io.IOException;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -56,12 +54,6 @@ public class GrammarTest {
   }
 
   @Test
-  @Ignore("Ignored by authors due to bugs")
-  public void testGrammar() throws Exception {
-    parseFile("GrammarTest.pas");
-  }
-
-  @Test
   public void testEmptyBeginStatement() throws Exception {
     parseFile("EmptyProcs.pas");
   }
@@ -69,18 +61,6 @@ public class GrammarTest {
   @Test
   public void testParseMultipleAttributes() throws Exception {
     parseFile("MultipleAttributes.pas");
-  }
-
-  @Test
-  @Ignore("Ignored by authors due to bugs")
-  public void testParseNewGrammar() throws Exception {
-    parseFile("GrammarTestNew.pas");
-  }
-
-  @Test
-  @Ignore("Ignored by authors due to bugs")
-  public void testParseComplexArray() throws Exception {
-    parseFile("ComplexArray.pas");
   }
 
   @Test
@@ -126,18 +106,6 @@ public class GrammarTest {
   @Test
   public void testParseListUtils() throws Exception {
     parseFile("ListUtils.pas");
-  }
-
-  @Test
-  @Ignore("https://github.com/fabriciocolombo/sonar-delphi/issues/38")
-  public void testParsePackageAsIdentifier() throws Exception {
-    parseFile("PackageAsIdentifier.pas");
-  }
-
-  @Test
-  @Ignore("https://github.com/fabriciocolombo/sonar-delphi/issues/39")
-  public void testParseInterfaceMethodResolutionClause() throws Exception {
-    parseFile("InterfaceMethodResolutionClause.pas");
   }
 
 }

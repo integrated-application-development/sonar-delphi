@@ -27,22 +27,20 @@ public class FieldNameRule extends DelphiRule {
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    if (node.getType() == DelphiLexer.TkClassField) {
+    if (node.getType() == DelphiLexer.TkClassField && !isPublished()) {
 
-      if (!isPublished()) {
-        Tree variableIdentsNode = node.getChild(0);
-        String name = variableIdentsNode.getChild(0).getText();
-        if (name.length() > 1) {
-          char firstCharAfterPrefix = name.charAt(1);
+      Tree variableIdentsNode = node.getChild(0);
+      String name = variableIdentsNode.getChild(0).getText();
+      if (name.length() > 1) {
+        char firstCharAfterPrefix = name.charAt(1);
 
-          if (!name.startsWith("F") || firstCharAfterPrefix != Character
-              .toUpperCase(firstCharAfterPrefix)) {
-            addViolation(ctx, node);
-          }
-        } else {
-          // a single letter name has no prefix
+        if (!name.startsWith("F") || firstCharAfterPrefix != Character
+            .toUpperCase(firstCharAfterPrefix)) {
           addViolation(ctx, node);
         }
+      } else {
+        // a single letter name has no prefix
+        addViolation(ctx, node);
       }
     }
   }
