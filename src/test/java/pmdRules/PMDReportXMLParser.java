@@ -71,7 +71,7 @@ public class PMDReportXMLParser {
       String pathName = fileElement.getAttribute("name");
       // Strip the full path from the file, just want the name
       String fileName = StringUtils
-          .substringAfterLast(pathName, "\\"); // FIXME: just a note, does this also work on linux?
+          .substringAfterLast(pathName, "\\");
 
       NodeList violationNodes = fileElement.getElementsByTagName("violation");
 

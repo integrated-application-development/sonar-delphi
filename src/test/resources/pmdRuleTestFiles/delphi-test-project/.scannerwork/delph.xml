@@ -64,7 +64,7 @@
     <priority>4</priority>
     <properties>
       <property name="baseEffort">
-        <value>5min</value>
+        <value>1min</value>
       </property>
     </properties>
   </rule>
@@ -309,7 +309,7 @@
     <priority>4</priority>
     <properties>
       <property name="baseEffort">
-        <value>5min</value>
+        <value>1min</value>
       </property>
     </properties>
   </rule>
