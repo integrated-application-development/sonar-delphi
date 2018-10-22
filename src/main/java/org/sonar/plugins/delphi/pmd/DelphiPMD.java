@@ -58,7 +58,7 @@ public class DelphiPMD {
 
     if (ruleSets.applies(ctx.getSourceCodeFile())) {
 
-      Language language = LanguageRegistry.getLanguage(DelphiLanguageModule.NAME);
+      Language language = LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME);
       ctx.setLanguageVersion(language.getDefaultVersion());
 
       DelphiAST ast = new DelphiAST(pmdFile, encoding);

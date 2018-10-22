@@ -1,25 +1,25 @@
 package pmdRules;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.junit.Test;
 
-public class InterfaceNameRuleTest extends BaseXmlPmdRuleTest {
+public class LowerCaseKeywordsTest extends BaseXmlPmdRuleTest {
 
-  private static String ruleType = "InterfaceNameRule"; // Rule type being tested
+  private static String ruleType = "LowerCaseReservedWordRule";
 
   @Test
   public void testRuleViolation() {
 
-    String testFile = "InterfaceNameTest.pas";
+    String testFile = "KeywordsConventionTest.pas";
     super.testAnalyse();
     ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
-    Integer[] expectedViolationLines = {7};
+    Integer[] expectedViolationLines = {29, 34};
 
-    // Collect the relevant results
     ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
 
     assertEquals(violationLines, Arrays.asList(expectedViolationLines));
@@ -28,13 +28,10 @@ public class InterfaceNameRuleTest extends BaseXmlPmdRuleTest {
   @Test
   public void testNoViolation(){
 
-    String testFile = "TooManyVariablesTest.pas";
+    String testFile = "DestructorNoViolationTest.pas";
     super.testAnalyse();
     ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
-    ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
-
-    assertEquals(0, violationLines.size());
+    assertNull(fileResults); // Shouldn't be any violations in this file
   }
-
 }

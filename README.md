@@ -1,119 +1,74 @@
 FIT4002 IntegraDev SonarQube Delphi Project
 ================
-This project is intended to develop a plugin for analysis of Delphi code in the SonarQube static code analysis program, using the latest 7.2 version of SonarQube.
+This project is a SonarQube plugin for Delphi code, specifically extended and modified for use by IntegraDev. Rules have been created to address specific needs of IAD. The plugin was originally developed by Sabre Airline solutions and Fabricio Colombo. It was then extended by SandroLuck and eko1, before being forked for this project:
 
-The current codebase was originally forked from the following repository: https://github.com/ekot1/SonarDelphi and updated to work with SonarQube 7.2, and was moved into this repository at the request of the customer. 
+https://github.com/fabriciocolombo/sonar-delphi 
+https://github.com/SandroLuck/SonarDelphi
+https://github.com/ekot1/SonarDelphi
+
+The current codebase was originally forked from the following repository: https://github.com/ekot1/SonarDelphi, updated to work with SonarQube 7.2+, and was moved into this repository.
 
 The original work on the plugin that was done before forking the existing project can be found in prototype branch.
 
 Forked code is released under GPL.
 
+Getting Started 
+==================
+We highly recommend starting with the Developer Quick Start guide to get an introduction to the plugin. This readme does 
+not go into the level of detail of that document. 
+
+Implemented Rules
+==================
+The Following rules have been implemented by the team:
+
+  * Avoid using with
+  * Class names shoule begin with T
+  * Too many classes per file
+  * Method names should begin with capitals
+  * Constants should begin with C_
+  * Constructors should begin with create
+  * Constructors should use inherited appropriately
+  * Destructors should use inherited appropriately
+  * If not notation
+  * If true notation
+  * Sorted should be called before calling Duplicates
+  * Interface names should begin with I
+  * Lower and upper case keywords
+  * No semicolon
+  * Line too long
+  * Public Fields
+  * Too Many function Subprocedures
+  * Too many function arguments
+  * Too many function variables
+  * Arguments should not be unused
+  * Procedures should not have too many arguments
+  * Methods should not be too long
+  * Methods should not have empty brackets if no arguments supplied
+  * Keywords should be lowercase
+  * Keywords should not be uppercase
+  * Lines should not be too long
+  * Record names should begin with T
+  * Begin statements should follow do statements
+  * Do not re-raise exceptions
+  
+  
+Additional rules already present in the plugin have been tested to ensure they work correctly.
+ 
 Testing Framework
 ==================
-JUnit testsing (WIP):
+JUnit testing:
+
+This testing is performed on the output of each rule against test Delphi
+source files. Refer to the Quick Start guide for more details.
 
  * The latest plugin is compiled.
- * The compiled JAR is copied to a local installation of SonarQube. (Could also be remote)
+ * The compiled JAR is copied to a local installation of SonarQube. 
  * The Server is restarted with the new plugin.
  * A scan is run to create results in pmd-report.xml
  * Tests are then run again, parsing in results from pmd-report.xml
   * JUnit tests are run on these results. This tests actual output from the plugin on real pascal files.
-
-Original Readme:
-==================
-
-SonarQube Delphi
-================
-Is a SonarQube (http://www.sonarqube.org/) plugin and provides
-  * 49 Rules for Delphi
-  * TestCoverage using AQtime (license needed)
-   * Optional .html output for TestCoverage
-
-This is Plugin-Version 3.4 SonarQube 5.6.1(LTS) is needed. 
-It is is mainly an updated version of https://github.com/fabriciocolombo/sonar-delphi all credit goes to them.
-I have hosted it here since the orignal developer isn't active anymore.
-
-This plugin was originally a [Sabre Airline Solutions](http://www.sabreairlinesolutions.com/home/) donation.
-
-License
----------------------------------------------------------------------------------------
-The entire PLugin follows the GPL: https://github.com/SandroLuck/SonarDelphi/blob/master/src/LUCK_LICENSE.txt
-
-Steps to Analyze a Delphi Project
-------------------------------------------------
-
-1. Install SonarQube Server (see [Setup and Upgrade](http://docs.sonarqube.org/display/SONAR/Setup+and+Upgrade) for more details). Check supported versions of the [latest release](https://github.com/fabriciocolombo/sonar-delphi/releases/latest) of the plugin.
-2. Install one of the supported [Runners](#supported-runners) (see below) and be sure you can call it from the directory where you have your source code
-3. Install [Delphi Plugin](https://github.com/SandroLuck/SonarDelphi/releases) (see [Installing a Plugin](http://docs.sonarqube.org/display/SONAR/Installing+a+Plugin)  for more details).
- NOTE: This only applies to SonarQube 5.6.1(LTS) and heigher. For older versions see [Delphi Plugin](https://github.com/fabriciocolombo/sonar-delphi/releases)
-4. Check the sample project corresponding to your Runner to know which config file you need to create. You can find the samples in [sonar-delphi/samples](https://github.com/fabriciocolombo/sonar-delphi/tree/master/samples).
-5. Run your Analyzer command from the project root dir
-6. Follow the link provided at the end of the analysis to browse your project's quality in SonarQube UI (see: [Browsing SonarQube](http://docs.sonarqube.org/display/SONAR/Browsing+SonarQube))
-
-Supported Runners
-----------------------------
- To run an analysis of your Java project, you can use the following Runners:
-
-* [SonarQube Scanner](http://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner): recommended for all projects 
-* See https://github.com/fabriciocolombo/sonar-delphi for diffrent approacheds which have not been tested yet with 0.3.4
-
-Reporting Issues
-----------------------------
-SonarQube Delphi Plugin uses GitHub's integrated issue tracking system to record bugs and feature
-requests. If you want to raise an issue, please follow the recommendations below:
-
-* Before you log a bug, please [search the issue tracker](https://github.com/SandroLuck/SonarDelphi/issues)
-  to see if someone has already reported the problem.
-* If the issue doesn't already exist, [create a new issue](https://github.com/SandroLuck/SonarDelphi/issues/new)
-* Please provide as much information as possible with the issue report, we like to know
-  the version of SonarQube Delphi Plugin that you are using, as well as the SonarQube version.
-* If possible try to create a test-case or project that replicates the issue. 
-
-Implemented Features
-------------------------------------------
-
-* Counting lines of code, statements, number of files
-* Counting number of classes, number of packages, methods, accessors
-* Counting number of public API (methods, classes and fields)
-* Counting comments ratio, comment lines (including blank lines)
-* CPD (code duplication, how many lines, block and in how many files)
-* Code Complexity (per method, class, file; complexity distribution over methods, classes and files)
-* LCOM4 and RFC
-* Code colorization
-* Assembler syntax in grammar
-* Include statement
-* Parsing preprocessor statements
-* Rules
-* Tagable Issues
-* "Dead" code recognition
-* Unused files recognition
-* Unused functions
-* Unused procedures
-(Optional with AQtime)
-  * Coverage using AQtime
-  * Sufficient Coverage on new Code 
   
-Code Assumptions
-----------------------------------
-
-* Grammar is NOT case insensitive, but Delphi code is. Plugin deals with it by DelphiSourceSanitizer class, which feeds ANTLR parser lowercase characters (the "LA" method)
-* Number of classes includes: classes, records
-* Directory is count as a package. Number of packages equals number of directories.
-* Preprocessor definitions between {$if xxx} and {$ifend} are removed (DefineResolver class).
-* Sources imported to SonarQube are parsed through IncludeResolver class. It means, that the source will be lowercased and unknown preprocessor definitions will be cut out.
-
-CodeCoverage
--------------------------------
-I am very sorry but I can't release the CodeCoverage solution I used so if you want CodeCoverage please refer to [latest release](https://github.com/fabriciocolombo/sonar-delphi/releases/latest)
-
-Importing into Eclipse
--------------------------------
-First run the eclipse maven goal:
-
-    mvn eclipse:eclipse
-
-The project can then be imported into Eclipse using File -> Import and then selecting General -> Existing Projects into Workspace.
-
-Importing into Intellij
--------------------------------
-Simply open the pom.xml in Intellij should solve most dependecies by itself.
+Additional Documentation
+==================
+Most documentation was written on our Confluence server, this was backed up so a new instance could be created and additional PDF/Word versions if needed. This includes development documentation detailing how to better understand and further understand the plugin code.
+Known issues are listed in the Known Issues.md file.

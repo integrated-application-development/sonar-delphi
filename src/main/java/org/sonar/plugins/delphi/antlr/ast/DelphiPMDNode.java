@@ -23,6 +23,7 @@
 package org.sonar.plugins.delphi.antlr.ast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.dfa.DataFlowNode;
@@ -296,7 +297,7 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
    */
   @Override
   public <T> List<T> getParentsOfType(Class<T> parentType) {
-    return null;
+    return Collections.emptyList();
   }
 
   /**
@@ -304,7 +305,7 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
    */
   @Override
   public <T> List<T> findChildrenOfType(Class<T> childType) {
-    return null;
+    return Collections.emptyList();
   }
 
   /**
@@ -312,7 +313,7 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
    */
   @Override
   public <T> List<T> findDescendantsOfType(Class<T> targetType) {
-    return null;
+    return Collections.emptyList();
   }
 
   /**
@@ -353,7 +354,7 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
    */
   @Override
   public List<? extends Node> findChildNodesWithXPath(String xpathString) throws JaxenException {
-    return null;
+    return Collections.emptyList();
   }
 
   /**

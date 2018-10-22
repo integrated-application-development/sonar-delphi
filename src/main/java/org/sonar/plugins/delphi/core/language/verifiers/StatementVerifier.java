@@ -22,17 +22,14 @@
  */
 package org.sonar.plugins.delphi.core.language.verifiers;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.core.language.StatementInterface;
+import org.sonar.plugins.delphi.core.language.Tokenizer;
 import org.sonar.plugins.delphi.core.language.impl.DelphiStatement;
 
 /**
@@ -50,9 +47,7 @@ public class StatementVerifier {
   private boolean isComplex;
   private String lastStatementText;
   private Stack<Integer> statementIndex = new Stack<>();
-
-  public StatementVerifier() {
-  }
+  private Tokenizer tokenizer = new Tokenizer();
 
   /**
    * Checks for statements
@@ -110,28 +105,6 @@ public class StatementVerifier {
     return false;
   }
 
-  /**
-   * Create tokens from text.
-   *
-   * @param source The source code to parse for tokens
-   * @return List of found tokens
-   */
-  private List<Token> tokenize(String[] source) {
-    List<Token> tokens = new ArrayList<>();
-
-    for (String string : source) {
-      DelphiLexer lexer = new DelphiLexer(new ANTLRStringStream(string));
-      Token token = lexer.nextToken();
-      token.setText(token.getText().toLowerCase());
-      while (token.getType() != Token.EOF) {
-        tokens.add(token);
-        token = lexer.nextToken();
-      }
-    }
-    tokens.add(new CommonToken(Token.EOF));
-    return tokens;
-  }
-
   private boolean isComplexStatementNode(Tree node) {
     // are we on a new block? (begin..end)
     if (isBeginEndNode(node)) {
@@ -147,7 +120,6 @@ public class StatementVerifier {
       return false;
     }
 
-    StringBuilder wholeLine = new StringBuilder(node.getText());
     CommonTree parent = (CommonTree) node.getParent();
     CommonTree assign = (CommonTree) parent.getChild(childIndex + 1);
     if (assign == null) {
@@ -157,7 +129,9 @@ public class StatementVerifier {
       return false;
     }
 
-    CommonTree actualNode = null;
+    CommonTree actualNode;
+
+    StringBuilder wholeLine = new StringBuilder(node.getText());
     while ((actualNode = (CommonTree) parent.getChild(++childIndex)) != null) {
       isBeginEndNode(node);
       // while ; or ELSE
@@ -173,9 +147,8 @@ public class StatementVerifier {
     // replace '..' with ' .. '
     String fixedSourceCode = wholeLine.toString().replaceAll("\\.\\.", " .. ");
 
-    List<Token> tokens = tokenize(new String[]{fixedSourceCode});
+    List<Token> tokens = tokenizer.tokenize(new String[]{fixedSourceCode});
     if (tokens.size() < MIN_TOKENS_FOR_COMPLEX_STMT) {
-      // at least 4 tokens: id, :=, id, ;
       return false;
     }
     Token second = tokens.get(1);

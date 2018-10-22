@@ -6,18 +6,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import org.junit.Test;
 
-public class InterfaceNameRuleTest extends BaseXmlPmdRuleTest {
+public class MethodTooLongTest extends BaseXmlPmdRuleTest {
 
-  private static String ruleType = "InterfaceNameRule"; // Rule type being tested
+
+  private static String ruleType = "TooLongMethodRule"; // Rule type being tested
 
   @Test
   public void testRuleViolation() {
 
-    String testFile = "InterfaceNameTest.pas";
+    String testFile = "MethodTooLongTest.pas";
     super.testAnalyse();
     ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
-    Integer[] expectedViolationLines = {7};
+    Integer[] expectedViolationLines = {8};
 
     // Collect the relevant results
     ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
@@ -26,15 +27,15 @@ public class InterfaceNameRuleTest extends BaseXmlPmdRuleTest {
   }
 
   @Test
-  public void testNoViolation(){
-
-    String testFile = "TooManyVariablesTest.pas";
+  public void testNoViolation() {
+    String testFile = "IfTrueTest.pas";
     super.testAnalyse();
     ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
     ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
 
-    assertEquals(0, violationLines.size());
+    assertEquals(0, violationLines.size()); // Should be no results of MethodTooLong type
+
   }
 
 }

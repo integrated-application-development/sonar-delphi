@@ -33,7 +33,7 @@ public class CountRule extends DelphiRule {
 
   private String stringToSearch;
   private int typeToSearch;
-  protected int limit;
+  protected int definedLimit;
   protected int count;
   /**
    * Number to increase the count.
@@ -44,15 +44,15 @@ public class CountRule extends DelphiRule {
    */
   protected boolean reset = true;
 
-  public String getStringToSearch() {
+  String getStringToSearch() {
     return stringToSearch;
   }
 
-  public void setStringToSearch(String stringToSearch) {
+  void setStringToSearch(String stringToSearch) {
     this.stringToSearch = stringToSearch;
   }
 
-  public void setTypeToSearch(int typeToSearch) {
+  void setTypeToSearch(int typeToSearch) {
     this.typeToSearch = typeToSearch;
   }
 
@@ -89,14 +89,14 @@ public class CountRule extends DelphiRule {
   }
 
   protected boolean exceedsLimit() {
-    return count > limit;
+    return count > definedLimit;
   }
 
   @Override
   protected void init() {
     count = 0;
     strength = 1;
-    limit = getProperty(LIMIT);
+    definedLimit = getProperty(LIMIT);
   }
 
 }

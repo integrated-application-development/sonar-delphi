@@ -151,9 +151,9 @@ public class DelphiPmdSensor implements Sensor {
       Exception x = e.getException();
       //((x == null) ? e : x).printStackTrace(); // Removed, SonarQube vulnerability
       DelphiUtils.LOG.error("SAXException Stacktrace", x);
-    } catch (Throwable t) {
-      DelphiUtils.LOG.info("Throwable");
-      DelphiUtils.LOG.error("Throwable Stacktrace", t);
+    } catch (Exception e) {
+      DelphiUtils.LOG.info("SAX Parsing Exception");
+      DelphiUtils.LOG.error("Exception Stacktrace", e);
     }
   }
 

@@ -8,16 +8,16 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 public class ConstructorCreateRule extends DelphiRule {
 
-  private int CONSTRUCTOR_NODE_TYPE_POS;
-  private int CONSTRUCTOR_NAME_POS;
+  private int constructorNodeTypePos;
+  private int constructorNodeNamePos;
 
   @Override
   protected void init() {
     super.init();
     // The first child node in constructor nodes is the TkFunctionName node
-    CONSTRUCTOR_NODE_TYPE_POS = 0;
+    constructorNodeTypePos = 0;
     // The first child position is the name of the constructor in TkFunctionName
-    CONSTRUCTOR_NAME_POS = 0;
+    constructorNodeNamePos = 0;
   }
 
   /**
@@ -36,11 +36,11 @@ public class ConstructorCreateRule extends DelphiRule {
 
     if (node.getType() == DelphiLexer.CONSTRUCTOR) {
 
-      Tree constructorTypeNode = node.getChild(CONSTRUCTOR_NODE_TYPE_POS);
+      Tree constructorTypeNode = node.getChild(constructorNodeTypePos);
 
       if (constructorTypeNode.getType() == DelphiLexer.TkFunctionName) {
 
-        Tree constructorNameNode = constructorTypeNode.getChild(CONSTRUCTOR_NAME_POS);
+        Tree constructorNameNode = constructorTypeNode.getChild(constructorNodeNamePos);
         String constructorName = constructorNameNode.getText();
 
         if (!constructorName.startsWith("Create")) {

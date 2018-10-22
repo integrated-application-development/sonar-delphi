@@ -78,7 +78,6 @@ public class ExcludeResolver extends SourceResolver {
       }
     }
 
-    // { ... }
     pos = -1;
     while ((pos = fileData.indexOf("{", pos + 1)) != -1) {
       if (fileData.charAt(pos + 1) == '$') {

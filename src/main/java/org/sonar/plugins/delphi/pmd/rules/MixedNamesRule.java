@@ -78,6 +78,9 @@ public class MixedNamesRule extends DelphiRule {
           checkVariableNames(node, ctx, true);
         }
         break;
+      default:
+        // Not any relevant node
+        break;
     }
   }
 

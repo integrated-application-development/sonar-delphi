@@ -115,9 +115,7 @@ public class ProjectXmlParser extends DefaultHandler {
       // add define
       String[] defines = readData.split(";");
       for (String define : defines) {
-        if (define.startsWith("$")) {
-          continue;
-        } else if ("DEBUG".equals(define)) {
+        if (define.startsWith("$") || "DEBUG".equals(define)) {
           continue;
         }
         project.addDefinition(define);

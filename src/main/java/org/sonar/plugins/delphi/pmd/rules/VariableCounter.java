@@ -35,7 +35,7 @@ public class VariableCounter extends DelphiRule {
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
     // if function arguments node
-    if (node.getText().equals(getProperty(START))) {
+    if (node.getText().equals(getProperty(START_AST))) {
       int count = 0;
 
       // count num of arguments

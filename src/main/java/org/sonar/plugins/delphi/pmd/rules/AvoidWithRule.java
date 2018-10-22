@@ -7,17 +7,10 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 public class AvoidWithRule extends DelphiRule {
 
-  private String sonarMessage;
-  @Override
-  protected void init(){
-    super.init();
-    sonarMessage = "Use of 'with' should be avoided";
-  }
-
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx){
     if (node.getType() == DelphiLexer.WITH){
-      addViolation(ctx, node, sonarMessage);
+      addViolation(ctx, node);
     }
   }
 }

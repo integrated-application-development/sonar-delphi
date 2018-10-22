@@ -105,14 +105,7 @@ public final class DelphiUtils {
    * @return FileFilter
    */
   public static FileFilter getFileFilter() {
-    return new FileFilter() {
-
-      @Override
-      public boolean accept(File pathname) {
-        return pathname.isFile() && acceptFile(pathname.getAbsolutePath());
-      }
-
-    };
+    return pathname -> pathname.isFile() && acceptFile(pathname.getAbsolutePath());
   }
 
   /**
@@ -137,13 +130,7 @@ public final class DelphiUtils {
    * @return FileFilter
    */
   public static FileFilter getDirectoryFilter() {
-    return new FileFilter() {
-
-      @Override
-      public boolean accept(File pathname) {
-        return pathname.isDirectory();
-      }
-    };
+    return File::isDirectory;
   }
 
   /**

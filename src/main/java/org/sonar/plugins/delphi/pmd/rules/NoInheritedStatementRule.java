@@ -73,6 +73,7 @@ public class NoInheritedStatementRule extends DelphiRule {
   }
 
   protected boolean shouldAddRule(DelphiPMDNode node) {
+    // Do not remove, necessary in other rules
     return true;
   }
 

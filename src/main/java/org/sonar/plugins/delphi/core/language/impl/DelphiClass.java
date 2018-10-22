@@ -356,7 +356,8 @@ public class DelphiClass implements ClassInterface {
 
   @Override
   public String getShortName() {
-    return name;
+    // Get the first few characters of the class name, not very useful but necessary overload
+    return name.substring(0, 3);
   }
 
   /**

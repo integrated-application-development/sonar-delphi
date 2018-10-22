@@ -34,22 +34,19 @@ public class ReRaiseExceptionRule extends DelphiRule {
           exceptionName = node.getChild(i + 1).getText();
         }
 
-        if (childNode != null) {
-          if (childNode.getType() == DelphiLexer.RAISE) {
-            DelphiPMDNode exceptionDeclarationNode = (DelphiPMDNode) node.getChild(i + 1);
+        if (childNode.getType() == DelphiLexer.RAISE) {
+          DelphiPMDNode exceptionDeclarationNode = (DelphiPMDNode) node.getChild(i + 1);
 
-            if (exceptionDeclarationNode != null) {
-              // Only raise exception if the declared name is re raised later on
-              if (exceptionDeclarationNode.getText().equals(exceptionName)) {
-                addViolation(ctx, childNode);
-              }
-            }
+          // Only raise exception if the declared name is re raised later on
+          if (exceptionDeclarationNode != null &&
+              exceptionDeclarationNode.getText().equals(exceptionName)) {
+            addViolation(ctx, childNode);
           }
+
         }
       }
     }
-
-
   }
+
 
 }
