@@ -64,7 +64,7 @@
     <priority>4</priority>
     <properties>
       <property name="baseEffort">
-        <value>5min</value>
+        <value>1min</value>
       </property>
     </properties>
   </rule>
@@ -302,6 +302,14 @@
     <properties>
       <property name="baseEffort">
         <value>30min</value>
+      </property>
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.LowerCaseReservedWordsRule" name="LowerCaseReservedWordRule">
+    <priority>4</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>1min</value>
       </property>
     </properties>
   </rule>

@@ -52,7 +52,8 @@ public class ClassPerFileRule extends CountRule {
 
   @Override
   public String getMessage() {
-    return String.format("File has too many classes, maximum number of classes is %d.", limit);
+    return String.format("File has too many classes, maximum number of classes is %d.",
+        definedLimit);
   }
 
   @Override

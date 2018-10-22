@@ -1,30 +1,42 @@
 package pmdRules;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 public class AvoidWithRuleTest extends BaseXmlPmdRuleTest {
 
-    private static String testFile = "AvoidWithTest.pas";
-    private static String ruleType = "AvoidWithRule"; // Rule type being tested
+  private static String ruleType = "AvoidWithRule"; // Rule type being tested
 
-    @Test
-    public void testRuleViolation(){
 
-        super.analyse(); // fixme, be better if didnt have to run this every test, just once
-        ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
+  @Test
+  public void testRuleViolation() {
 
-        Integer[] expectedViolationLines = {25};
+    String testFile = "AvoidWithTest.pas";
+    super.testAnalyse();
+    ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
-        // Collect the relevant results
-        ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
+    Integer[] expectedViolationLines = {25};
 
-        assertEquals(violationLines, Arrays.asList(expectedViolationLines));
-    }
+    // Collect the relevant results
+    ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
+
+    assertEquals(violationLines, Arrays.asList(expectedViolationLines));
+  }
+
+  @Test
+  public void testNoViolation(){
+
+    String testFile = "MethodNameTest.pas";
+    super.testAnalyse();
+    ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
+
+    ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
+
+    assertEquals(0, violationLines.size());
+  }
 
 }
 

@@ -45,7 +45,7 @@ public class DelphiASTTest {
   }
 
   @Test
-  public void generateXMLTest() throws IOException {
+  public void testGenerateXML() throws IOException {
     File xml = File.createTempFile("DelphiAST", ".xml");
     xml.deleteOnExit();
 

@@ -22,12 +22,14 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -78,15 +80,15 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void canAnalyzeTest() throws IOException, RecognitionException {
+  public void testCanAnalyze() throws IOException, RecognitionException {
     setupFile(FILE_NAME);
-    assertEquals(false, analyzer.canAnalyze(code));
+    assertFalse(analyzer.canAnalyze(code));
 
     CodeNode<Tree> currentNode = code.getCurrentCodeNode();
     while (currentNode != null) {
       try {
         code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
-        assertEquals(true, analyzer.canAnalyze(code));
+        assertTrue(analyzer.canAnalyze(code));
       } catch (IllegalStateException e) {
         currentNode = null;
       }
@@ -94,15 +96,15 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void canAnalyzeRecordOperatorTest() throws IOException, RecognitionException {
+  public void testCanAnalyzeRecordOperator() throws IOException, RecognitionException {
     setupFile(FILE_NAME_OPERATOR_TEST);
-    assertEquals(false, analyzer.canAnalyze(code));
+    assertFalse(analyzer.canAnalyze(code));
 
     CodeNode<Tree> currentNode = code.getCurrentCodeNode();
     while (currentNode != null) {
       try {
         code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
-        assertEquals(true, analyzer.canAnalyze(code));
+        assertTrue(analyzer.canAnalyze(code));
       } catch (IllegalStateException e) {
         currentNode = null;
       }
@@ -110,7 +112,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void analyseTest() throws IOException, RecognitionException {
+  public void testAnalyse() throws IOException, RecognitionException {
     setupFile(FILE_NAME);
 
     int index = 0;
@@ -126,7 +128,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
       try {
         code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
         analyzer.analyze(code, results);
-        assertTrue(results.getActiveFunction() != null);
+        assertNotNull(results.getActiveFunction());
         assertEquals(names[index], results.getActiveFunction().getRealName());
         assertEquals(lines[index], results.getActiveFunction().getLine());
         // assertEquals(body[index],
@@ -139,7 +141,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void analyseMessageFuncionTest() throws IOException, RecognitionException {
+  public void testAnalyseMessageFuncion() throws IOException, RecognitionException {
     setupFile(FILE_NAME_MESSAGE_TEST);
 
     results.setActiveClass(new DelphiClass("TWithMessageFunction"));
@@ -161,7 +163,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void analyseVirtualFuncionTest() throws IOException, RecognitionException {
+  public void testAnalyseVirtualFunction() throws IOException, RecognitionException {
     setupFile(FILE_NAME_VIRTUAL_TEST);
 
     results.setActiveClass(new DelphiClass("TWithVirtualFunction"));
@@ -182,7 +184,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void analyseRecordOperatorTest() throws IOException, RecognitionException {
+  public void testAnalyseRecordOperator() throws IOException, RecognitionException {
     setupFile(FILE_NAME_OPERATOR_TEST);
 
     results.setActiveClass(new DelphiClass("GenericA"));

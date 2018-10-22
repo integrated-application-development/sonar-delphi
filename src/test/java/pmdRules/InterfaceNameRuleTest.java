@@ -1,29 +1,40 @@
 package pmdRules;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 public class InterfaceNameRuleTest extends BaseXmlPmdRuleTest {
 
-    private static String testFile = "InterfaceNameTest.pas";
-    private static String ruleType = "InterfaceNameRule"; // Rule type being tested
+  private static String ruleType = "InterfaceNameRule"; // Rule type being tested
 
-    @Test
-    public void testRuleViolation(){
+  @Test
+  public void testRuleViolation() {
 
-        super.analyse(); // fixme, be better if didnt have to run this every test, just once
-        ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
+    String testFile = "InterfaceNameTest.pas";
+    super.testAnalyse();
+    ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
-        Integer[] expectedViolationLines = {7};
+    Integer[] expectedViolationLines = {7};
 
-        // Collect the relevant results
-        ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
+    // Collect the relevant results
+    ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
 
-        assertEquals(violationLines, Arrays.asList(expectedViolationLines));
-    }
+    assertEquals(violationLines, Arrays.asList(expectedViolationLines));
+  }
+
+  @Test
+  public void testNoViolation(){
+
+    String testFile = "TooManyVariablesTest.pas";
+    super.testAnalyse();
+    ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
+
+    ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
+
+    assertEquals(0, violationLines.size());
+  }
 
 }

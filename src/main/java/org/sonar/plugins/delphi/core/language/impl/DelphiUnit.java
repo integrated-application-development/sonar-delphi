@@ -40,7 +40,7 @@ import org.sonar.plugins.delphi.core.language.UnitInterface;
  */
 public class DelphiUnit implements UnitInterface {
 
-  private File file = null;
+  private File file;
   private String name = "UNKNOWN_UNIT";
   private String realName = "UNKNOWN_UNIT";
   private Set<String> includes = new HashSet<>();

@@ -71,7 +71,7 @@ public class CodeAnalyzedTest {
    */
 
   @Test
-  public void isValidTest() {
+  public void testIsValid() {
     assertTrue(code.getCurrentCodeNode().isValid());
     assertTrue(code.getRootCodeNode().isValid());
     assertEquals(ast, code.getRootCodeNode().getNode());

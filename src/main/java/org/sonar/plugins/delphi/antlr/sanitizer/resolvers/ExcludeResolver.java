@@ -68,7 +68,8 @@ public class ExcludeResolver extends SourceResolver {
 
   private SubRangeAggregator excludeBlockComments(StringBuilder fileData) {
     SubRangeAggregator rangeAggregator = new SubRangeMergingAggregator();
-    int pos = -1; // (* ... *)
+    // (* ... *)
+    int pos = -1;
     while ((pos = fileData.indexOf("(*", pos + 1)) != -1) {
       int pos2 = fileData.indexOf("*)", pos + 1);
       if (pos2 != -1 && !rangeAggregator.inRange(pos)) {
@@ -77,7 +78,7 @@ public class ExcludeResolver extends SourceResolver {
       }
     }
 
-    pos = -1; // { ... }
+    pos = -1;
     while ((pos = fileData.indexOf("{", pos + 1)) != -1) {
       if (fileData.charAt(pos + 1) == '$') {
         continue;
@@ -99,7 +100,8 @@ public class ExcludeResolver extends SourceResolver {
       // get next ' position
       int pos2 = fileData.indexOf("'", pos + 1);
       if (pos2 == -1) {
-        break; // no pair
+        // no pair
+        break;
       }
       // get new line position
       int newLine = fileData.indexOf("\n", pos + 1);

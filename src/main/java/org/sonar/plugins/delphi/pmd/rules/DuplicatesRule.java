@@ -35,8 +35,8 @@ public class DuplicatesRule extends DelphiRule {
               addViolation(ctx, (DelphiPMDNode) children.get(i - 1));
             }
           } catch (IndexOutOfBoundsException e) {
-            // If an index was raised, then there could not have been a sort performed on the previous line,
-            // So raise a violation
+            // If an index was raised, then there could not have been a sort performed on the
+            // previous line, so raise a violation
             addViolation(ctx, (DelphiPMDNode) children.get(i - 1));
           }
         }

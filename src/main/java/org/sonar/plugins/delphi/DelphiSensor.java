@@ -195,11 +195,18 @@ public class DelphiSensor implements Sensor {
             DelphiUtils.LOG));
 
     for (InputFile resource : resourceList) {
-      DelphiUtils.LOG.debug("{} {}", ">> PROCESSING ", resource.toString());
+      DelphiUtils.LOG.debug("{} {}", ">> PROCESSING ", resource);
 
-      processMetric(basicMetrics, resource);
-      processMetric(complexityMetrics, resource);
-      processMetric(deadCodeMetrics, resource);
+      try {
+        processMetric(basicMetrics, resource);
+        processMetric(complexityMetrics, resource);
+        processMetric(deadCodeMetrics, resource);
+      } catch (IllegalArgumentException e){
+        // Some files may produce invalid pointers due to code that is valid for the compiler but
+        // not for the scanner, this will handle that so the execution does not fail
+        DelphiUtils.LOG.error("{} produced IllegalArgumentException: \"{}\""
+                + " Metric report for this file may be in error.", resource, e.getMessage());
+      }
 
       if (basicMetrics.hasMetric("PUBLIC_DOC_API") && complexityMetrics.hasMetric("PUBLIC_API")) {
         int undocumentedApi = DelphiUtils.checkIntRange(
@@ -231,7 +238,7 @@ public class DelphiSensor implements Sensor {
   // for debugging, prints file paths with message to debug file
   private void printFileList(String msg, List<File> list) {
     for (File f : list) {
-      DelphiUtils.LOG.info(msg + f.getAbsolutePath());
+      DelphiUtils.LOG.info("{}{}", msg, f.getAbsolutePath());
     }
   }
 

@@ -29,7 +29,7 @@ import org.junit.Test;
 public class DelphiKeywordsTest {
 
   @Test
-  public void delphiKeywordsTest() {
+  public void testDelphiKeywords() {
     assertEquals(183, DelphiKeywords.get().size());
   }
 

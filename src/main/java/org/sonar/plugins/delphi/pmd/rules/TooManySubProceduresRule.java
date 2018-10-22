@@ -26,7 +26,8 @@ public class TooManySubProceduresRule extends DelphiRule {
       List children = node.getChildren();
       int subProcedureCounter = 0;
 
-      // subProcedureDepth tracks whether we are in a procedure, sub procedure, or sub-sub procedures.
+      // subProcedureDepth tracks whether we are in a procedure, sub procedure,
+      // or sub-sub procedures.
       // -1 means not in a procedure
       // 0 means in an out procedure
       // 1 means in a sub procedure
@@ -34,8 +35,8 @@ public class TooManySubProceduresRule extends DelphiRule {
       // we treat any nth level sub procedure the same as any sub procedures
       int subProcedureDepth = -1;
 
-      if (children
-          != null) { // Some implementation nodes may not have any code yet, hence no children
+      // Some implementation nodes may not have any code yet, hence no children
+      if (children != null) {
         for (int i = 0; i < children.size(); i++) {
 
           if ((children.get(i).toString().equals("procedure")) || (children.get(i).toString()
@@ -48,7 +49,8 @@ public class TooManySubProceduresRule extends DelphiRule {
               addViolation(ctx, node,
                   "Code should not contain too many sub procedures or functions, " +
                       "limit of " + getProperty(LIMIT) + " exceeded.");
-              break; // Avoid adding multiple violations of same type
+              // Avoid adding multiple violations of same type
+              break;
             }
           } else if (children.get(i).toString().equals("begin")) {
             subProcedureDepth -= 1;

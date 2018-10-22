@@ -24,6 +24,8 @@ package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import org.antlr.runtime.CommonToken;
@@ -69,17 +71,17 @@ public class FunctionParametersAnalyzerTest {
   }
 
   @Test
-  public void canAnalyzeTest() {
+  public void testCanAnalyze() {
     code = new CodeTree(null, null);
     code.setCurrentNode(new CodeNode<>(EMPTY_NODE));
-    assertEquals(false, analyzer.canAnalyze(code));
+    assertFalse(analyzer.canAnalyze(code));
 
     code.setCurrentNode(new CodeNode<>(PARAMETERS_NODE));
-    assertEquals(true, analyzer.canAnalyze(code));
+    assertTrue(analyzer.canAnalyze(code));
   }
 
   @Test
-  public void doAnalyzeTest() {
+  public void testDoAnalyze() {
     results.setActiveFunction(new DelphiFunction("myProcedure"));
 
     File testFile = DelphiUtils.getResource(TEST_FILE);
@@ -90,7 +92,7 @@ public class FunctionParametersAnalyzerTest {
     CodeNode<Tree> startNode = operation.execute(ast.getChild(0));
     code.setCurrentNode(startNode);
 
-    assertEquals(true, startNode.isValid());
+    assertTrue(startNode.isValid());
     assertEquals(LexerMetrics.FUNCTION_ARGS.toMetrics(), startNode.getNode().getType());
 
     analyzer.analyze(code, results);
@@ -110,7 +112,7 @@ public class FunctionParametersAnalyzerTest {
   }
 
   @Test
-  public void throwExceptionWhenActiveFunctionIsNull() {
+  public void testThrowExceptionWhenActiveFunctionIsNull() {
     expectedException.equals(IllegalArgumentException.class);
     expectedException.expectMessage(containsString("activeFunction cannot be null"));
 
@@ -124,7 +126,7 @@ public class FunctionParametersAnalyzerTest {
     CodeNode<Tree> startNode = operation.execute(ast.getChild(0));
     code.setCurrentNode(startNode);
 
-    assertEquals(true, startNode.isValid());
+    assertTrue(startNode.isValid());
     assertEquals(LexerMetrics.FUNCTION_ARGS.toMetrics(), startNode.getNode().getType());
 
     analyzer.analyze(code, results);

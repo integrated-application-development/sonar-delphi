@@ -23,11 +23,12 @@ import net.sourceforge.pmd.lang.BaseLanguageModule;
 
 public class DelphiLanguageModule extends BaseLanguageModule {
 
-  public static final String NAME = "Delphi";
-  public static final String TERSE_NAME = "delphi";
+  public static final String LANGUAGE_NAME = "Delphi";
+  private static final String TERSE_NAME = "delphi";
 
   public DelphiLanguageModule() {
-    super(NAME, null, TERSE_NAME, DelphiRuleChainVisitor.class, "pas", "dpr", "dpk");
+    super(LANGUAGE_NAME, null, TERSE_NAME, DelphiRuleChainVisitor.class,
+        "pas", "dpr", "dpk");
     // Delphi 10.2
     addVersion("32", null, true);
   }

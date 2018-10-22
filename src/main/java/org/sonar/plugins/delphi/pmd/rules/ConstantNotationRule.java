@@ -37,7 +37,12 @@ public class ConstantNotationRule extends DelphiRule {
 
             if (!constName.startsWith("C_")) {
 
-              addViolation(ctx, (DelphiPMDNode) assignmentNode);
+              // FIXME, this sometimes fails to cast the Tree to a DelphiPMDNode, despite the same method being used in other rules
+              try {
+                addViolation(ctx, (DelphiPMDNode) assignmentNode);
+              } catch (ClassCastException e){
+                // Do nothing
+              }
 
             }
           }

@@ -27,7 +27,6 @@ import static org.hamcrest.Matchers.containsString;
 
 import java.util.HashSet;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.plugins.delphi.pmd.DelphiUnitBuilderTest;
 
@@ -42,7 +41,7 @@ public class DefineResolverTest {
   }
 
   @Test
-  public void test() {
+  public void testDefinitionsIncludes() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("{$if defined(FPC) or (CompilerVersion >= 17)} //Delphi 2005 up");
     builder.appendDecl("  {$DEFINE HAVE_INLINE}");
@@ -123,7 +122,7 @@ public class DefineResolverTest {
   }
 
   @Test
-  public void ifUndefinedWithElse() {
+  public void testIfUndefinedWithElse() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("unit superobject;");
     builder.appendDecl("");
@@ -157,7 +156,7 @@ public class DefineResolverTest {
   }
 
   @Test
-  public void ifdefUndefinedWithElse() {
+  public void testIfdefUndefinedWithElse() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("unit superobject;");
     builder.appendDecl("");
@@ -186,7 +185,7 @@ public class DefineResolverTest {
   }
 
   @Test
-  public void ifdefDefined() {
+  public void testIfdefDefined() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("unit superobject;");
     builder.appendDecl("");
@@ -208,7 +207,7 @@ public class DefineResolverTest {
   }
 
   @Test
-  public void ifdefUndefined() {
+  public void testIfdefUndefined() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("unit superobject;");
     builder.appendDecl("");
@@ -228,7 +227,7 @@ public class DefineResolverTest {
   }
 
   @Test
-  public void ifdefDefinedWithElse() {
+  public void testIfdefDefinedWithElse() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("{$DEFINE FPC}");
     builder.appendDecl("{$IFDEF FPC}");
@@ -250,7 +249,7 @@ public class DefineResolverTest {
   }
 
   @Test
-  public void skipAlreadyCommentBlock() {
+  public void testSkipAlreadyCommentBlock() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("unit superobject;");
     builder.appendDecl("");
@@ -283,7 +282,7 @@ public class DefineResolverTest {
   }
 
   @Test
-  public void ifndefUndefined() {
+  public void testIfndefUndefined() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendImpl("{$IFDEF FPC}");
     builder.appendImpl("{$ELSE}");
@@ -303,25 +302,6 @@ public class DefineResolverTest {
     assertThat(resultSourceCode, containsString("(*{$IFDEF FPC}"));
     assertThat(resultSourceCode, containsString("{$ELSE}*)"));
     assertThat(resultSourceCode, containsString("(*{$IFNDEF FPC}*)"));
-  }
-
-  @Test
-  @Ignore("Bug - Should consider comments")
-  public void directivesInsideCommentdsShouldBeIgnored() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-    builder.appendDecl("///Ignore this directive {$IFDEF}");
-    builder.appendDecl("{$if TEST}");
-    builder.appendDecl("  (* comment *)");
-    builder.appendDecl("{$ifend}");
-
-    results = new SourceResolverResults("", builder.getSourceCode());
-
-    resolver.resolve(results);
-
-    String resultSourceCode = results.getFileData().toString();
-    System.out.println(resultSourceCode);
-    assertThat(resultSourceCode, containsString("(*{$if TEST}"));
-    assertThat(resultSourceCode, containsString("{$ifend}*)"));
   }
 
 }

@@ -68,7 +68,7 @@ public class ProjectXmlParser extends DefaultHandler {
   }
 
   @Override
-  public void characters(char ch[], int start, int length) {
+  public void characters(char[] ch, int start, int length) {
     if (isReading) {
       readData = new String(ch.clone(), start, length);
     }
@@ -115,9 +115,7 @@ public class ProjectXmlParser extends DefaultHandler {
       // add define
       String[] defines = readData.split(";");
       for (String define : defines) {
-        if (define.startsWith("$")) {
-          continue;
-        } else if ("DEBUG".equals(define)) {
+        if (define.startsWith("$") || "DEBUG".equals(define)) {
           continue;
         }
         project.addDefinition(define);

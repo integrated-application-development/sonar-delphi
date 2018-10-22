@@ -27,6 +27,8 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
@@ -89,7 +91,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void constructorTest() {
+  public void testConstructor() {
     try {
       new FunctionBodyAnalyzer(null, DelphiTestUtils.mockProjectHelper());
       fail("No exception was caught");
@@ -99,18 +101,18 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void canAnalyzeTest() {
-    assertEquals(false, analyzer.canAnalyze(codeTree));
+  public void testCanAnalyze() {
+    assertFalse(analyzer.canAnalyze(codeTree));
 
     results.setActiveFunction(new DelphiFunction("testFunction"));
-    assertEquals(false, analyzer.canAnalyze(codeTree));
+    assertFalse(analyzer.canAnalyze(codeTree));
 
     codeTree.setCurrentNode(new CodeNode<>(BEGIN_NODE));
-    assertEquals(true, analyzer.canAnalyze(codeTree));
+    assertTrue(analyzer.canAnalyze(codeTree));
   }
 
   @Test
-  public void captureFunctionBodyLine() throws IOException, RecognitionException {
+  public void testCaptureFunctionBodyLine() throws IOException, RecognitionException {
     setupFile(FILE_NAME);
 
     results.setActiveClass(new DelphiClass("TDemo"));
@@ -161,7 +163,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void captureFunctionBodyLineRecordOperator() throws IOException, RecognitionException {
+  public void testCaptureFunctionBodyLineRecordOperator() throws IOException, RecognitionException {
     setupFile(FILE_NAME_OPERATOR_TEST);
 
     results.setActiveClass(new DelphiClass("GenericA"));
@@ -173,7 +175,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void listUtils() throws IOException, RecognitionException {
+  public void testListUtils() throws IOException, RecognitionException {
     setupFile(FILE_NAME_LIST_UTILS);
 
     results.setActiveClass(new DelphiClass("TListUtils"));

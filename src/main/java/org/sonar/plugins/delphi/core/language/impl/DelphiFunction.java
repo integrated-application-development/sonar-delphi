@@ -62,7 +62,7 @@ public class DelphiFunction implements FunctionInterface {
 
   private static final String UNKNOWN_FUNCTION_NAME = "UnknownFunction_";
 
-  private static int unknownFunctionCounter = 0;
+  private static int unknownFunctionCounter;
 
   /**
    * Ctor, creates function with default name

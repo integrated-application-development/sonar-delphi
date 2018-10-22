@@ -43,10 +43,13 @@ public class PublicFieldsRule extends DelphiRule {
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
 
-    if (node.getType() == DelphiLexer.TkClass) { // Wherever there is a class definition
+    // Wherever there is a class definition
+    if (node.getType() == DelphiLexer.TkClass) {
       Tree classNode = node;
       boolean inPublic = false;
-      for (int i = 0; i < classNode.getChildCount(); i++) { // visits all its children
+
+      // visits all its children
+      for (int i = 0; i < classNode.getChildCount(); i++) {
         Tree child = classNode.getChild(i);
         // Do nothing until the public section.
         if (inPublic) {
@@ -54,15 +57,17 @@ public class PublicFieldsRule extends DelphiRule {
           if (child.getType() != DelphiLexer.TkClassField && child.getType() != DelphiLexer.PROPERTY
               && child.getType() != DelphiLexer.PROCEDURE
               && child.getType() != DelphiLexer.CONSTRUCTOR) {
-            inPublic = false;
             break;
 
           }
-          if (child.getType() == DelphiLexer.TkClassField) { // raise violations on any fields
+
+          // raise violations on any fields
+          if (child.getType() == DelphiLexer.TkClassField) {
             addViolation(ctx, (DelphiPMDNode) child);
           }
         } else {
-          if (child.getType() == DelphiLexer.PUBLIC) { // Are we there yet?
+          // Are we there yet?
+          if (child.getType() == DelphiLexer.PUBLIC) {
             inPublic = true;
           }
         }

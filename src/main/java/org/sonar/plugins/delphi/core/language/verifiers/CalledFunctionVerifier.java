@@ -39,7 +39,7 @@ public class CalledFunctionVerifier {
 
   private boolean isUnresolved = true;
   private CodeAnalysisResults results;
-  private FunctionInterface calledFunction = null;
+  private FunctionInterface calledFunction;
 
   /**
    * ctor
@@ -87,7 +87,8 @@ public class CalledFunctionVerifier {
       return true;
     }
 
-    return false; // not a function call (not like "foo(args);" or "foo;"
+    // not a function call (not like "foo(args);" or "foo;"
+    return false;
   }
 
   public FunctionInterface fetchCalledFunction() {

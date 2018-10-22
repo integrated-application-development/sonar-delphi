@@ -1,4 +1,4 @@
-unit UnusedARgumentRule;
+unit UnusedArgumentsTest;
 
 interface
 

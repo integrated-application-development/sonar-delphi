@@ -11,7 +11,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class TooLongLineRule extends DelphiRule {
 
-  private int limit;
+  private int lineLimit;
   private ArrayList checkedLines = new ArrayList<Integer>();
   private Tree astTree;
   private boolean firstNode;
@@ -19,7 +19,7 @@ public class TooLongLineRule extends DelphiRule {
   @Override
   protected void init() {
     super.init();
-    limit = getProperty(LIMIT);
+    lineLimit = getProperty(LIMIT);
     astTree = null;
     firstNode = true;
 
@@ -27,7 +27,7 @@ public class TooLongLineRule extends DelphiRule {
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    //Retrieve and store the astTree from the first node
+    // Retrieve and store the astTree from the first node
     if (firstNode) {
       astTree = node.getASTTree();
       firstNode = false;
@@ -35,15 +35,17 @@ public class TooLongLineRule extends DelphiRule {
 
     int lineNumber = node.getLine();
     if (!checkedLines.contains(
-        lineNumber)) {                             //Only check a line that has not been checked before
+        lineNumber)) {
+      // Only check a line that has not been checked before
       checkedLines.add(lineNumber);
       String line = ((ASTTree) astTree).getFileSourceLine(lineNumber);
-      line = removeComment(line);                                         //Remove comment
+      // Remove comment
+      line = removeComment(line);
 
-      if (line.length() > limit) {
+      if (line.length() > lineLimit) {
         String sonarMessage =
             "Line too long (" + line.length() + " characters). Maximum character count should be "
-                + limit + ".";
+                + lineLimit + ".";
         addViolation(ctx, node, sonarMessage);
       }
 

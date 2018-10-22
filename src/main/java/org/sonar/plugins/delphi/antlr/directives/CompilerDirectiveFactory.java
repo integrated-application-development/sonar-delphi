@@ -81,7 +81,8 @@ public class CompilerDirectiveFactory {
    * @throws CompilerDirectiveFactorySyntaxException when no compiler directive could be created
    */
   public CompilerDirective create(String data, int startPosition, int endPosition)
-      throws CompilerDirectiveFactoryUnsupportedDirectiveException, CompilerDirectiveFactorySyntaxException {
+      throws CompilerDirectiveFactoryUnsupportedDirectiveException,
+          CompilerDirectiveFactorySyntaxException {
     int directiveFirstChar = getDirectiveFirstChar(data, startPosition);
     int directiveLastChar = getDirectiveLastChar(data, startPosition);
     String directiveName = getName(data, directiveFirstChar);
@@ -121,7 +122,7 @@ public class CompilerDirectiveFactory {
 
   private int getDirectiveLastChar(String data, int startPosition)
       throws CompilerDirectiveFactorySyntaxException {
-    int pos = data.indexOf("}", startPosition + 1);
+    int pos = data.indexOf('}', startPosition + 1);
     if (pos == -1) {
       throw new CompilerDirectiveFactorySyntaxException(
           "No closing bracket for compiler directive from: "
@@ -143,7 +144,9 @@ public class CompilerDirectiveFactory {
     if (startPos > -1) {
       int endPos = getDirectiveLastChar(data, startPos);
       int itemPos = data.indexOf(' ', startPos);
-      if (itemPos < endPos && itemPos > -1) { // we have an item in
+
+      // we have an item in
+      if (itemPos < endPos && itemPos > -1) {
         // directive
         return data.substring(startPos + 2, itemPos).trim();
       } else {

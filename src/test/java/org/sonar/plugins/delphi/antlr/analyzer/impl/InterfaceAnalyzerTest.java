@@ -63,7 +63,7 @@ public class InterfaceAnalyzerTest {
   }
 
   @Test
-  public void analyzeTest() {
+  public void testAnalyze() {
     LexerMetrics metrics[] = {LexerMetrics.PUBLIC, LexerMetrics.PUBLIC, LexerMetrics.PRIVATE};
     int i = 0;
     do {
@@ -75,7 +75,7 @@ public class InterfaceAnalyzerTest {
   }
 
   @Test
-  public void canAnalyzeTest() {
+  public void testCanAnalyze() {
     assertTrue(analyzer.canAnalyze(code));
     code.setCurrentNode(advanceOp.execute(code.getCurrentCodeNode().getNode()));
     assertFalse(analyzer.canAnalyze(code));

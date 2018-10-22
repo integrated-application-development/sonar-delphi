@@ -1,4 +1,4 @@
-unit DestructorTest;
+unit DestructorViolationTest;
 
 interface
 

@@ -64,7 +64,7 @@ public class TypeFieldsAnalyzerTest {
   }
 
   @Test
-  public void analyzeTest() {
+  public void testAnalyze() {
     code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));
     ClassInterface clazz = new DelphiClass("test");
     results.setActiveClass(clazz);
@@ -77,7 +77,7 @@ public class TypeFieldsAnalyzerTest {
   }
 
   @Test
-  public void canAnalyzeTest() {
+  public void testCanAnalyze() {
     assertFalse(analyzer.canAnalyze(code));
     code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));
     assertTrue(analyzer.canAnalyze(code));

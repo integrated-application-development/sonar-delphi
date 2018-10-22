@@ -60,7 +60,7 @@ public class IncludeAnalyzerTest {
   }
 
   @Test
-  public void analyzeTest() {
+  public void testAnalyze() {
 /*    code.setCurrentNode(advanceToUses.execute(code.getCurrentCodeNode().getNode()));
     analyzer.analyze(code, results);
 
@@ -79,7 +79,7 @@ public class IncludeAnalyzerTest {
   }
 
   @Test
-  public void canAnalyzeTest() {
+  public void testCanAnalyze() {
 /*
     code.setCurrentNode(advanceToUses.execute(code.getCurrentCodeNode().getNode()));
     assertTrue(analyzer.canAnalyze(code));

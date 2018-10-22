@@ -39,7 +39,7 @@ public class DelphiProject {
   private List<String> definitions = new ArrayList<>();
   private List<File> files = new ArrayList<>();
   private List<File> includeDirectories = new ArrayList<>();
-  private File file = null;
+  private File file;
 
   /**
    * C-tor, initializes project with name and empty files and definitions
@@ -59,7 +59,7 @@ public class DelphiProject {
     try {
       parseFile(xml);
     } catch (IOException e) {
-      DelphiUtils.LOG.error("Could not find .dproj file: " + xml.getAbsolutePath());
+      DelphiUtils.LOG.error("Could not find .dproj file: {}", xml.getAbsolutePath());
     } catch (IllegalArgumentException e) {
       DelphiUtils.LOG.error("No .dproj file to parse. (null)");
     }

@@ -41,7 +41,7 @@ public class SubRangeMergingAggregatorTest {
   }
 
   @Test
-  public void shouldMergeTest() {
+  public void testShouldMerge() {
     assertTrue(aggregator.shouldMerge(new IntegerSubRange(0, 5), new IntegerSubRange(5, 10)));
     assertTrue(aggregator.shouldMerge(new IntegerSubRange(5, 10), new IntegerSubRange(0, 5)));
 
@@ -56,7 +56,7 @@ public class SubRangeMergingAggregatorTest {
   }
 
   @Test
-  public void mergeTest() {
+  public void testMerge() {
     SubRange result = aggregator.mergeRanges(new IntegerSubRange(0, 5), new IntegerSubRange(5, 10));
     assertEquals(0, result.getBegin());
     assertEquals(10, result.getEnd());
@@ -75,7 +75,7 @@ public class SubRangeMergingAggregatorTest {
   }
 
   @Test
-  public void addAllTest() {
+  public void testAddAll() {
     SubRangeAggregator aggregator2 = new SubRangeMergingAggregator();
     aggregator.add(new IntegerSubRange(0, 10));
     assertEquals(1, aggregator.getRanges().size());
@@ -91,7 +91,7 @@ public class SubRangeMergingAggregatorTest {
   }
 
   @Test
-  public void sortTest() {
+  public void testSort() {
     SubRange data[] = {new IntegerSubRange(0, 10), new IntegerSubRange(-5, -1),
         new IntegerSubRange(12, 12),
         new IntegerSubRange(15, 19),
@@ -112,7 +112,7 @@ public class SubRangeMergingAggregatorTest {
   }
 
   @Test
-  public void addTest() {
+  public void testAdd() {
     assertEquals(0, aggregator.getRanges().size());
 
     aggregator.add(new IntegerSubRange(0, 5)); // should add
