@@ -95,7 +95,7 @@ In DelphiSensor.java there is the following code:
 ~~~~
 
 As can be seen, a handle for the IllegalArgumentException was added so that when the scan tries to process metrics, 
-it at least does not crash. This is a workaround rather than a fix. Some files may have correct code smells highlights
+it at least does not crash. This is a workaround rather than a fix. Some files may have incorrect code smells highlights
 in some errors if they return this error.
 
 The scan will not crash and the error is logged, but the problem is still present. 
