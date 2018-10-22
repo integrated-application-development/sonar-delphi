@@ -8,10 +8,6 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 import java.util.List;
 
 public class IdentifierConventionRule extends DelphiRule {
-    public void init()
-    {
-        super.init();
-    }
 
     @Override
     public void visit(DelphiPMDNode node , RuleContext ctx){
