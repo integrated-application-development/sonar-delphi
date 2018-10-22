@@ -9,12 +9,13 @@ import static org.junit.Assert.assertEquals;
 
 public class NoSemicolonRuleTest extends BaseXmlPmdRuleTest {
 
-    private static String testFile = "NoSemicolonTest.pas";
+
     private static String ruleType = "NoSemicolonRule"; // Rule type being tested
 
     @Test
     public void testRuleViolation(){
 
+        String testFile = "NoSemicolonTest.pas";
         super.testAnalyse();
         ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 

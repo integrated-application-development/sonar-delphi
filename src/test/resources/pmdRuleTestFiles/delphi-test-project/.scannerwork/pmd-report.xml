@@ -2,7 +2,7 @@
 <pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
-    version="6.0.1" timestamp="2018-10-23T09:44:23.101">
+    version="6.0.1" timestamp="2018-10-23T09:46:45.730">
 <file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\AvoidWithTest.pas">
 <violation beginline="10" endline="10" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
@@ -154,6 +154,11 @@ WayTooLongMethod is too long (156 lines). Maximum line count is 150
 File has too many classes, maximum number of classes is 1.
 </violation>
 <violation beginline="21" endline="21" begincolumn="0" endcolumn="0" rule="NoFunctionReturnTypeRule" ruleset="Missing RuleSet Name" priority="3">
+
+</violation>
+</file>
+<file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\NoSemicolonTest.pas">
+<violation beginline="32" endline="32" begincolumn="17" endcolumn="17" rule="NoSemicolonRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
 </file>
