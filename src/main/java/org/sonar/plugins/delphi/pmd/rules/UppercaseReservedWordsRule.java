@@ -23,7 +23,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.apache.commons.lang.StringUtils;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
@@ -36,6 +35,7 @@ import java.util.Set;
  * Raises a violation if they are uppercase
  */
 public class UppercaseReservedWordsRule extends DelphiRule {
+
 
   // The set of keywords to avoid using complete capitalisation with. Individually listed to avoid highlighting all
   private static final Set<Integer> keywords = new HashSet<>(Arrays.asList(
@@ -67,13 +67,14 @@ public class UppercaseReservedWordsRule extends DelphiRule {
           if(checkKeyword(keywordName)){
               addViolation(ctx, node);
           }
+
       }
   }
 
   private boolean checkKeyword(String keywordName){
-      // Check not all are uppercase
-      String uppercaseConventionRegex = "[A-Z]+";
-      return keywordName.matches(uppercaseConventionRegex);
+    // Check not all are uppercase
+    String uppercaseConventionRegex = "[A-Z]+";
+    return keywordName.matches(uppercaseConventionRegex);
   }
 
 }
