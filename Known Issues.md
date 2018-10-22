@@ -5,8 +5,7 @@ certain way, and failing to parse the file if the statement is not in that forma
 any parsing issues, the Pascal file wont be analysed and there wont be a report generated for that
 file. 
 
-The following is a list of these issues known and how code can be reformatted to corrected them.
-This is intended as a work-around in the hopes that the grammar parsing can be fixed.
+The following is a list of these issues known and how code can be reformatted to corrected them. Automatic sanitisation of the file stream is performed to fix files with these issues.
 
 ## Known parsing issues
 These errors will appear in the sonar scanner output.
