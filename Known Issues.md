@@ -100,3 +100,7 @@ in some errors if they return this error.
 
 The scan will not crash and the error is logged, but the problem is still present. 
 
+Some tests produce "Path Operator" errors
+=
+When running JUnit tests, some produce pathing errors (stacktraces) which appear to be related to Windows pathnames. 
+The tests themselves actually pass fine, so we think this can safetly be ignored as it is just a Windows issue.
