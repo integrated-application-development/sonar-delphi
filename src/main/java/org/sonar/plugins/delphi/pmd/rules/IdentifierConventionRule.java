@@ -9,6 +9,12 @@ import java.util.List;
 
 public class IdentifierConventionRule extends DelphiRule {
 
+    /**
+     * Confirms particular variable identifiers (TkVariableIdents) use the expected convention,
+     * the first letter should be an uppercase
+     * @param node the current node
+     * @param ctx the ruleContext to store the violations
+     */
     @Override
     public void visit(DelphiPMDNode node , RuleContext ctx){
         if(node.getType() == DelphiLexer.TkVariableIdents){
