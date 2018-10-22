@@ -1,0 +1,6 @@
+projectKey=delphi:plugin
+serverUrl=http://localhost:9000
+serverVersion=7.2.1.14109
+dashboardUrl=http://localhost:9000/dashboard?id=delphi%3Aplugin
+ceTaskId=AWad8IykltmJVUNJPUXZ
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AWad8IykltmJVUNJPUXZ
