@@ -71,3 +71,4 @@ source files. Refer to the Quick Start guide for more details.
 Additional Documentation
 ==================
 Most documentation was written on our Confluence server, this was backed up so a new instance could be created and additional PDF/Word versions if needed. This includes development documentation detailing how to better understand and further understand the plugin code.
+Known issues are listed in the Known Issues.md file.
