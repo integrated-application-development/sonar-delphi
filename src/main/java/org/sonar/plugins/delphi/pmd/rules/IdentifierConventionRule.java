@@ -25,7 +25,7 @@ public class IdentifierConventionRule extends DelphiRule {
           // Name identifier will be in the next node
           String identifier = childNode.getChild(0).getText();
           char firstChar = identifier.charAt(0);
-          if (firstChar != Character.toUpperCase(firstChar)) {
+          if (!Character.isUpperCase(firstChar)) {
             addViolation(ctx, (DelphiPMDNode) childNode);
           }
 
