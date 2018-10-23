@@ -112,6 +112,14 @@
       </property>
     </properties>
   </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.IdentifierConventionRule" name="IdentifierConventionRule">
+    <priority>4</priority>
+    <properties>
+      <property name="baseEffort">
+        <value>1min</value>
+      </property>
+    </properties>
+  </rule>
   <rule class="org.sonar.plugins.delphi.pmd.rules.ClassNamePrefixRule" name="ClassNamePrefixRule">
     <priority>4</priority>
     <properties>

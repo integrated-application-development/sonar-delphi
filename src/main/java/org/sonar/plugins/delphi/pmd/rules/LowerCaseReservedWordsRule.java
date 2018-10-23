@@ -11,7 +11,22 @@ public class LowerCaseReservedWordsRule extends DelphiRule {
 
   // The keyword integers defined in DelphiLexer to check for correct convention
   private static final Set<Integer> keywords = new HashSet<>(Arrays.asList(
-      DelphiLexer.NOT, DelphiLexer.OR, DelphiLexer.AND));
+      DelphiLexer.ASM, DelphiLexer.BEGIN, DelphiLexer.CASE,  DelphiLexer.CLASS,
+      DelphiLexer.CONST, DelphiLexer.CONSTRUCTOR, DelphiLexer.DESTRUCTOR,
+      DelphiLexer.DISPINTERFACE,  DelphiLexer.DIV, DelphiLexer.DO, DelphiLexer.DOWNTO,
+      DelphiLexer.ELSE, DelphiLexer.EXCEPT, DelphiLexer.EXPORTS, DelphiLexer.FILE,
+      DelphiLexer.FINAL, DelphiLexer.FINALIZATION, DelphiLexer.FINALLY, DelphiLexer.FOR,
+      DelphiLexer.FUNCTION, DelphiLexer.GOTO, DelphiLexer.IF, DelphiLexer.IMPLEMENTATION,
+      DelphiLexer.IN, DelphiLexer.INHERITED, DelphiLexer.INITIALIZATION, DelphiLexer.INLINE,
+      DelphiLexer.INTERFACE, DelphiLexer.IS, DelphiLexer.LABEL, DelphiLexer.LIBRARY,
+      DelphiLexer.NIL, DelphiLexer.NOT, DelphiLexer.OF, DelphiLexer.OR, DelphiLexer.OUT,
+      DelphiLexer.PACKED, DelphiLexer.PROCEDURE, DelphiLexer.PROGRAM, DelphiLexer.PROPERTY,
+      DelphiLexer.PROGRAM, DelphiLexer.PROPERTY, DelphiLexer.RAISE, DelphiLexer.RECORD,
+      DelphiLexer.REMOVE, DelphiLexer.REPEAT, DelphiLexer.RESOURCESTRING, DelphiLexer.SEALED,
+      DelphiLexer.SET, DelphiLexer.SHL, DelphiLexer.SHR, DelphiLexer.STATIC, DelphiLexer.STRICT,
+      DelphiLexer.THEN, DelphiLexer.THREADVAR, DelphiLexer.TO, DelphiLexer.TRY,
+      DelphiLexer.TYPE, DelphiLexer.UNIT, DelphiLexer.UNSAFE, DelphiLexer.UNTIL,
+      DelphiLexer.USES, DelphiLexer.WHILE, DelphiLexer.WITH, DelphiLexer.VAR));
 
   /**
    * This rule checks if the above Delphi keywords are following a convention, in this case if they
@@ -35,7 +50,7 @@ public class LowerCaseReservedWordsRule extends DelphiRule {
 
   private boolean checkKeyword(String keywordName) {
     // Checking all characters are lowercase
-    String coventionRegex = "[a-z]+";
-    return keywordName.matches(coventionRegex);
+    String conventionRegex = "[a-z]+";
+    return keywordName.matches(conventionRegex);
   }
 }

@@ -495,7 +495,7 @@ x.Free;			//GOOD, sufficent enough
 
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.UppercaseReservedWordsRule" message="Keywords should comply with a naming convention."
 		name="UppercaseReservedKeywordsRule">
-		<description>Avoid using uppercase reserverd keywords.</description>
+		<description>Avoid using uppercase reserved keywords.</description>
 		<properties>
 			<property name="baseEffort">
 				<value>5min</value>
@@ -505,7 +505,7 @@ x.Free;			//GOOD, sufficent enough
 
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.MixedNamesRule" message="Avoid using mixed names for functions / variables."
 		name="MixedNamesRule">
-		<description>Avoid using uppercase reserverd keywords.</description>
+		<description>Avoid using uppercase reserved keywords.</description>
 		<properties>
 			<property name="baseEffort">
 				<value>5min</value>

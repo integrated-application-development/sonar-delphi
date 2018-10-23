@@ -2,7 +2,7 @@
 <pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
-    version="6.0.1" timestamp="2018-10-23T11:31:00.451">
+    version="6.0.1" timestamp="2018-10-23T11:45:09.384">
 <file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\AvoidWithTest.pas">
 <violation beginline="10" endline="10" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
@@ -21,6 +21,15 @@ File has too many classes, maximum number of classes is 1.
 <violation beginline="18" endline="18" begincolumn="12" endcolumn="12" rule="MethodNameRule" ruleset="Missing RuleSet Name" class="TCompliantClass" method="someOtherProcedure" priority="4">
 
 </violation>
+<violation beginline="23" endline="23" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="29" endline="29" begincolumn="0" endcolumn="0" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="36" endline="36" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
 </file>
 <file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\ClassPerFileTest.pas">
 <violation beginline="15" endline="15" begincolumn="19" endcolumn="19" rule="OneClassPerFileRule" ruleset="Missing RuleSet Name" class="TSecondClass" priority="3">
@@ -33,6 +42,18 @@ File has too many classes, maximum number of classes is 1.
 File has too many classes, maximum number of classes is 1.
 </violation>
 <violation beginline="23" endline="23" begincolumn="14" endcolumn="14" rule="MethodNameRule" ruleset="Missing RuleSet Name" class="TThirdClass" method="anotherProcedure" priority="4">
+
+</violation>
+<violation beginline="28" endline="28" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="34" endline="34" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="41" endline="41" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="48" endline="48" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
 </file>
@@ -55,8 +76,20 @@ File has too many classes, maximum number of classes is 1.
 <violation beginline="15" endline="15" begincolumn="2" endcolumn="2" rule="ConstantNotationRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
+<violation beginline="18" endline="18" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
 </file>
 <file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\ConstructorTest.pas">
+<violation beginline="8" endline="8" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="10" endline="10" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
 <violation beginline="13" endline="13" begincolumn="0" endcolumn="0" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
@@ -71,6 +104,9 @@ File has too many classes, maximum number of classes is 1.
 <violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
+<violation beginline="14" endline="14" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
 </file>
 <file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\DestructorViolationTest.pas">
 <violation beginline="13" endline="13" begincolumn="0" endcolumn="0" rule="DestructorWithoutInheritedStatementRule" ruleset="Missing RuleSet Name" priority="2">
@@ -79,6 +115,9 @@ File has too many classes, maximum number of classes is 1.
 </file>
 <file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\DuplicatesTest.pas">
 <violation beginline="10" endline="10" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="15" endline="15" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
 <violation beginline="25" endline="25" begincolumn="2" endcolumn="2" rule="DuplicatesRule" ruleset="Missing RuleSet Name" class="TBlah" method="TBlah.foo" priority="4">
@@ -100,13 +139,33 @@ File has too many classes, maximum number of classes is 1.
 <violation beginline="6" endline="6" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
+<violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+</file>
+<file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\IdentifierConventionTest.pas">
+<violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
 </file>
 <file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\IfNotTest.pas">
+<violation beginline="6" endline="6" begincolumn="3" endcolumn="3" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="7" endline="7" begincolumn="3" endcolumn="3" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
 <violation beginline="13" endline="13" begincolumn="23" endcolumn="23" rule="IfNotFalseRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
 </file>
 <file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\IfTrueTest.pas">
+<violation beginline="6" endline="6" begincolumn="3" endcolumn="3" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="7" endline="7" begincolumn="3" endcolumn="3" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
 <violation beginline="13" endline="13" begincolumn="19" endcolumn="19" rule="IfTrueRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
@@ -121,6 +180,9 @@ File has too many classes, maximum number of classes is 1.
 </file>
 <file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\KeywordsConventionTest.pas">
 <violation beginline="10" endline="10" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="22" endline="22" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
 <violation beginline="34" endline="34" begincolumn="11" endcolumn="11" rule="UppercaseReservedKeywordsRule" ruleset="Missing RuleSet Name" class="TForm1" method="TForm1.FormCreate" priority="4">
@@ -152,12 +214,21 @@ File has too many classes, maximum number of classes is 1.
 </violation>
 </file>
 <file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\NoSemicolonTest.pas">
+<violation beginline="20" endline="20" begincolumn="1" endcolumn="1" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
 <violation beginline="32" endline="32" begincolumn="17" endcolumn="17" rule="NoSemicolonRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
 </file>
 <file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\PointerNameTest.pas">
 <violation beginline="6" endline="6" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="12" endline="12" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="13" endline="13" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
 <violation beginline="17" endline="17" begincolumn="25" endcolumn="25" rule="PointerNameRule" ruleset="Missing RuleSet Name" priority="4">
@@ -197,6 +268,9 @@ File has too many classes, maximum number of classes is 1.
 </violation>
 </file>
 <file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\ReRaiseExceptionTest.pas">
+<violation beginline="10" endline="10" begincolumn="3" endcolumn="3" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
 <violation beginline="18" endline="18" begincolumn="11" endcolumn="11" rule="CatchingGeneralExceptionRule" ruleset="Missing RuleSet Name" priority="3">
 
 </violation>
@@ -211,8 +285,17 @@ File has too many classes, maximum number of classes is 1.
 <violation beginline="14" endline="14" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
+<violation beginline="21" endline="21" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="22" endline="22" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
 </file>
 <file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\ThenTryTest.pas">
+<violation beginline="7" endline="7" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
 <violation beginline="15" endline="15" begincolumn="4" endcolumn="4" rule="ThenTryRule" ruleset="Missing RuleSet Name" priority="3">
 
 </violation>
@@ -229,13 +312,52 @@ Too many arguments: 11 (max 6)
 <violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
+<violation beginline="14" endline="14" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
 <violation beginline="19" endline="19" begincolumn="0" endcolumn="0" rule="TooManySubProceduresRule" ruleset="Missing RuleSet Name" priority="3">
 Code should not contain too many sub procedures or functions, limit of 3 exceeded.
+</violation>
+<violation beginline="35" endline="35" begincolumn="6" endcolumn="6" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
 </violation>
 </file>
 <file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\TooManyVariablesTest.pas">
 <violation beginline="6" endline="6" begincolumn="0" endcolumn="0" rule="TooManyVariablesRule" ruleset="Missing RuleSet Name" priority="3">
 Too many variables: 11 (max 10)
+</violation>
+<violation beginline="7" endline="7" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="8" endline="8" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="9" endline="9" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="10" endline="10" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="11" endline="11" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="12" endline="12" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="13" endline="13" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="14" endline="14" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="15" endline="15" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="16" endline="16" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="17" endline="17" begincolumn="2" endcolumn="2" rule="IdentifierConventionRule" ruleset="Missing RuleSet Name" priority="4">
+
 </violation>
 <violation beginline="20" endline="20" begincolumn="0" endcolumn="0" rule="EmptyBeginStatementRule" ruleset="Missing RuleSet Name" priority="2">
 

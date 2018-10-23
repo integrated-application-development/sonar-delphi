@@ -11,7 +11,6 @@ import static org.junit.Assert.assertEquals;
 public class IdentifierConventionTest extends BaseXmlPmdRuleTest {
     private static String ruleType = "IdentifierConventionRule"; // Rule type being tested
 
-    @Ignore // Currently broken
     @Test
     public void testRuleViolation() {
 
