@@ -1,3 +1,18 @@
+Rule Issues 
+=
+A couple of rules do not seem to work correctly or give false positives. They are:
+
+## Lower Case Reserved Rule
+This rule searches for any use of non lowercase 'keywords', such as not, and, or etc. As each
+keyword is defined separately to avoid highlighting everything that is lowercase. As such, a few
+instances such as 'Not' may be missed as they are not recognised by the DelphiLexer class.
+
+## Line Too Long
+Line too long should highlight when a line is over ~100 characters, but currently does not highlight
+any in SonarQube. We are unsure of the cause of this as on testing the logic does work and finds
+when lines are over 100 characters long to add violations. This might be related to something in
+the API being broken.
+
 Parsing Issues
 =
 There are some issues with the ANTLR parsing grammar assuming that Pascal code is written in a 

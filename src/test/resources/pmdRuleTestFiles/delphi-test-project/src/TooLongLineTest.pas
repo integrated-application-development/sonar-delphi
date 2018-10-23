@@ -16,7 +16,7 @@ type
 implementation
 
 const //Non-compliant: line below longer than 100 characters
-  HELLO = 'Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World';
+  HELLO = 'Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello HelloHelloHello';
 
       //Non-compliant: comment below longer than 100 characters
 //This is a comment This is a comment This is a comment This is a comment This is a comment This is a comment This is a comment

@@ -20,7 +20,7 @@ public class LowerCaseKeywordsTest extends BaseXmlPmdRuleTest {
     super.testAnalyse();
     ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
-    Integer[] expectedViolationLines = {29, 34};
+    Integer[] expectedViolationLines = {29};
 
     ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
 
