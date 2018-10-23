@@ -2,7 +2,7 @@
 <pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
-    version="6.0.1" timestamp="2018-10-23T09:46:45.730">
+    version="6.0.1" timestamp="2018-10-23T11:26:37.003">
 <file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\AvoidWithTest.pas">
 <violation beginline="10" endline="10" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
@@ -123,12 +123,6 @@ File has too many classes, maximum number of classes is 1.
 <violation beginline="10" endline="10" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
 
 </violation>
-<violation beginline="29" endline="29" begincolumn="5" endcolumn="5" rule="LowerCaseReservedWordRule" ruleset="Missing RuleSet Name" class="TForm1" method="TForm1.FormCreate" priority="4">
-
-</violation>
-<violation beginline="34" endline="34" begincolumn="11" endcolumn="11" rule="LowerCaseReservedWordRule" ruleset="Missing RuleSet Name" class="TForm1" method="TForm1.FormCreate" priority="4">
-
-</violation>
 <violation beginline="34" endline="34" begincolumn="11" endcolumn="11" rule="UppercaseReservedKeywordsRule" ruleset="Missing RuleSet Name" class="TForm1" method="TForm1.FormCreate" priority="4">
 
 </violation>
@@ -245,6 +239,14 @@ Too many variables: 11 (max 10)
 </violation>
 <violation beginline="20" endline="20" begincolumn="0" endcolumn="0" rule="EmptyBeginStatementRule" ruleset="Missing RuleSet Name" priority="2">
 
+</violation>
+</file>
+<file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\UnusedArgumentRule.pas">
+<violation beginline="6" endline="6" begincolumn="2" endcolumn="2" rule="ClassNamePrefixRule" ruleset="Missing RuleSet Name" priority="4">
+
+</violation>
+<violation beginline="29" endline="29" begincolumn="0" endcolumn="0" rule="UnusedArgumentsRule" ruleset="Missing RuleSet Name" priority="3">
+Unused argument: 'x' at TCustomComponent.OnUnusedArg
 </violation>
 </file>
 <file name="C:\Uni\StudioProject-FIT4002\FIT4002_SonarQube_Delphi\src\test\resources\pmdRuleTestFiles\delphi-test-project\src\UnusedArgumentsTest.pas">

@@ -2,5 +2,5 @@ projectKey=delphi:plugin
 serverUrl=http://localhost:9000
 serverVersion=7.2.1.14109
 dashboardUrl=http://localhost:9000/dashboard?id=delphi%3Aplugin
-ceTaskId=AWad9YrZltmJVUNJPUXb
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AWad9YrZltmJVUNJPUXb
+ceTaskId=AWaeUPfxW_ICdgYeUm1y
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AWaeUPfxW_ICdgYeUm1y
