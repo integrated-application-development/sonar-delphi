@@ -53,7 +53,8 @@ public class TooLongLineRule extends DelphiRule {
   }
 
   private String removeComment(String line) {
-    return line.replaceAll("(\\s+)?(\\/\\/)(.+)", "");
+    return line.replaceAll("(\\s+)?(\\/\\/)(.+)",
+        "");
   }
 
 }
