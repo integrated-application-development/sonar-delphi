@@ -1,33 +1,37 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
+import net.sourceforge.pmd.lang.ast.Node;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-import java.util.List;
-
 public class IdentifierConventionRule extends DelphiRule {
 
-    /**
-     * Confirms particular variable identifiers (TkVariableIdents) use the expected convention,
-     * the first letter should be an uppercase
-     * @param node the current node
-     * @param ctx the ruleContext to store the violations
-     */
-    @Override
-    public void visit(DelphiPMDNode node , RuleContext ctx){
-        if(node.getType() == DelphiLexer.TkVariableIdents){
-            List<Tree> children = node.findAllChildren(DelphiLexer.TkVariableIdents);
-            for(Tree c : children){
-                String name = c.getText();
-                char fChar = name.charAt(0);
+  /**
+   * This rule looks at all identifiers at ensures it follows the Delphi Case convention,
+   * at least the first character should be uppercase
+   *
+   * @param node the current node
+   * @param ctx the ruleContext to store the violations
+   */
+  @Override
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
+    // Within a var block, look for variable identifiers
+    if (node.getType() == DelphiLexer.VAR) {
+      for (int i = 0; i < node.getChildCount() - 1; i++) {
+        Tree childNode = node.getChild(i);
+        if (childNode.getType() == DelphiLexer.TkVariableIdents) {
+          // Name identifier will be in the next node
+          String identifier = childNode.getChild(0).getText();
+          char firstChar = identifier.charAt(0);
+          if (!Character.isUpperCase(firstChar)) {
+            addViolation(ctx, (DelphiPMDNode) childNode);
+          }
 
-                if (fChar != Character.toUpperCase(fChar)){
-                    addViolation(ctx, (DelphiPMDNode) c);
-                }
-
-            }
         }
+      }
     }
+  }
 }
+

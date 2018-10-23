@@ -720,8 +720,7 @@ x.Free;			//GOOD, sufficent enough
 		</properties>
 	</rule>
 
-    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.DuplicatesRule"
-			message="List must be sorted before checking for duplicates"
+    <rule since="" class="org.sonar.plugins.delphi.pmd.rules.DuplicatesRule" message="List must be sorted before checking for duplicates"
           name="DuplicatesRule">
         <description>List must be sorted immediately before checking for duplicates</description>
         <properties>
@@ -730,15 +729,24 @@ x.Free;			//GOOD, sufficent enough
             </property>
         </properties>
     </rule>
-	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.IdentifierConventionRule"
-		message = "Identifier name must follow Delphi Case"
-		name="DelphiCaseRule">
-		<description> Identifier name must follow Delphi case sonvention </description>
+	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.LowerCaseReservedWordsRule" message="Keywords 'not, or, and' must always be in lower case."
+		  name="LowerCaseReservedWordRule">
+		<description> Always use lower case when using keywords and , or, not etc.</description>
 		<properties>
-			<property name ="baseEffort">
-				<value>5min</value>
+			<property name="baseEffort">
+				<value>1min</value>
 			</property>
 		</properties>
 	</rule>
+
+  <rule since="" class="org.sonar.plugins.delphi.pmd.rules.IdentifierConventionRule" message="Identifiers should begin with a capital letter."
+  name="IdentifierConventionRule">
+    <description>It is good convention to start variable identifiers with capitals.</description>
+    <properties>
+      <property name="baseEffort">
+        <value>1min</value>
+      </property>
+    </properties>
+  </rule>
 
 </ruleset>
