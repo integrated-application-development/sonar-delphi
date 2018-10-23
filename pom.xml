@@ -8,10 +8,14 @@
 	<version>0.1</version>
 	<groupId>org.delphi.plugin</groupId>
 	<name>SonarDelphi Plugin</name>
-	<description>Enables analysis of Delphi projects.</description>
+	<description>Enables analysis of Delphi projects in SonarQube 6+.
+    Originally developed by Sabre Airline solutions and numerous open source developers.
+    Modified for use for IntegraDev (IAD) with custom rules and functions by
+    Monash University students.</description>
 
 	<inceptionYear>2011</inceptionYear>
 	<url>http://docs.sonarqube.org/display/SONARQUBE45/Delphi+Plugin</url>
+	<url></url>
 
 	<developers>
 		<developer>
@@ -59,20 +63,13 @@
 		</developer>
 	</developers>
 
-	<scm>
-		<connection>scm:git:git@github.com:fabriciocolombo/sonar-delphi.git</connection>
-		<developerConnection>scm:git:git@github.com:fabriciocolombo/sonar-delphi.git</developerConnection>
-		<url>https://github.com/fabriciocolombo/sonar-delphi</url>
-		<tag>HEAD</tag>
-	</scm>
-
 	<issueManagement>
-		<system>GitHub</system>
-		<url>https://github.com/fabriciocolombo/sonar-delphi/issues</url>
+		<system>JIRA</system>
+		<url>http://jira.agileexcuseteam.me</url>
 	</issueManagement>
 	<ciManagement>
-		<system>Travis</system>
-		<url>https://travis-ci.org/fabriciocolombo/sonar-delphi</url>
+		<system>Bamboo</system>
+		<url>http://bamboo.agileexcuseteam.me</url>
 	</ciManagement>
 
 	<properties>

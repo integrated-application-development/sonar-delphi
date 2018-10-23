@@ -20,7 +20,7 @@ public class TooLongLineRuleTest extends BaseXmlPmdRuleTest {
     super.testAnalyse();
     ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
-    Integer[] expectedViolationLines = {34};
+    Integer[] expectedViolationLines = {19, 22};
 
     ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
 
