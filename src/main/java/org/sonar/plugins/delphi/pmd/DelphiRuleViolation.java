@@ -62,8 +62,8 @@ public class DelphiRuleViolation implements RuleViolation {
    * @param msg Violation message
    */
   public DelphiRuleViolation(DelphiRule delphiRule, RuleContext ctx, String delphiClassName,
-                             String delphiMethodName,
-                             String delphiPackageName, int line, int column, String msg) {
+      String delphiMethodName,
+      String delphiPackageName, int line, int column, String msg) {
     rule = delphiRule;
     filename = ctx.getSourceCodeFile().getAbsolutePath();
     description = rule.getMessage();
@@ -125,7 +125,7 @@ public class DelphiRuleViolation implements RuleViolation {
           int index = beginNode.getChildIndex();
           for (int lookBack = 1; lookBack <= 2; ++lookBack) {
             if (index - lookBack > -1 && isProcedureOrFunction(
-                    parent.getChild(index - lookBack).getType())) {
+                parent.getChild(index - lookBack).getType())) {
               methodNode = parent.getChild(index - lookBack);
               break;
             }

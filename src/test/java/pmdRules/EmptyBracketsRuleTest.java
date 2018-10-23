@@ -26,7 +26,7 @@ public class EmptyBracketsRuleTest extends BaseXmlPmdRuleTest {
   }
 
   @Test
-  public void testNoViolation(){
+  public void testNoViolation() {
 
     String testFile = "ThenTryTest.pas";
     super.testAnalyse();

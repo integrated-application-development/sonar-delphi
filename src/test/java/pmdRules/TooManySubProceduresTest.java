@@ -26,7 +26,7 @@ public class TooManySubProceduresTest extends BaseXmlPmdRuleTest {
   }
 
   @Test
-  public void testNoViolation(){
+  public void testNoViolation() {
 
     String testFile = "DuplicatesTest.pas";
     super.testAnalyse();

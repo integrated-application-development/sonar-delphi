@@ -4679,9 +4679,9 @@ public class DelphiLexer extends Lexer {
             break;
 
             default:
-				if (cnt17 >= 1) {
-					break loop17;
-				}
+              if (cnt17 >= 1) {
+                break loop17;
+              }
               EarlyExitException eee = new EarlyExitException(17, input);
               throw eee;
           }
@@ -7370,28 +7370,28 @@ public class DelphiLexer extends Lexer {
         case 0:
           int LA18_52 = input.LA(1);
           s = -1;
-			if (((LA18_52 >= '\u0000' && LA18_52 <= '\uFEFE') || (LA18_52 >= '\uFF00'
-					&& LA18_52 <= '\uFFFF'))) {
-				s = 50;
-			} else {
-				s = 161;
-			}
-			if (s >= 0) {
-				return s;
-			}
+          if (((LA18_52 >= '\u0000' && LA18_52 <= '\uFEFE') || (LA18_52 >= '\uFF00'
+              && LA18_52 <= '\uFFFF'))) {
+            s = 50;
+          } else {
+            s = 161;
+          }
+          if (s >= 0) {
+            return s;
+          }
           break;
 
         case 1:
           int LA18_40 = input.LA(1);
           s = -1;
-			if (((LA18_40 >= '\u0000' && LA18_40 <= '\uFFFF'))) {
-				s = 137;
-			} else {
-				s = 151;
-			}
-			if (s >= 0) {
-				return s;
-			}
+          if (((LA18_40 >= '\u0000' && LA18_40 <= '\uFFFF'))) {
+            s = 137;
+          } else {
+            s = 151;
+          }
+          if (s >= 0) {
+            return s;
+          }
           break;
       }
       NoViableAltException nvae =

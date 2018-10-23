@@ -1,7 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
@@ -9,8 +8,8 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 public class IdentifierConventionRule extends DelphiRule {
 
   /**
-   * This rule looks at all identifiers at ensures it follows the Delphi Case convention,
-   * at least the first character should be uppercase
+   * This rule looks at all identifiers at ensures it follows the Delphi Case convention, at least
+   * the first character should be uppercase
    *
    * @param node the current node
    * @param ctx the ruleContext to store the violations

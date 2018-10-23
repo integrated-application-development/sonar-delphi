@@ -26,7 +26,7 @@ public class PublicFieldsRuleTest extends BaseXmlPmdRuleTest {
   }
 
   @Test
-  public void testNoViolation(){
+  public void testNoViolation() {
 
     String testFile = "AvoidWithTest.pas";
     super.testAnalyse();

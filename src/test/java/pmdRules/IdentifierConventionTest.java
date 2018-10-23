@@ -1,40 +1,39 @@
 package pmdRules;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 public class IdentifierConventionTest extends BaseXmlPmdRuleTest {
-    private static String ruleType = "IdentifierConventionRule"; // Rule type being tested
 
-    @Test
-    public void testRuleViolation() {
+  private static String ruleType = "IdentifierConventionRule"; // Rule type being tested
 
-        String testFile = "IdentifierConventionTest.pas";
-        super.testAnalyse();
-        ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
+  @Test
+  public void testRuleViolation() {
 
-        Integer[] expectedViolationLines = {9};
+    String testFile = "IdentifierConventionTest.pas";
+    super.testAnalyse();
+    ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
-        // Collect the relevant results
-        ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
+    Integer[] expectedViolationLines = {9};
 
-        assertEquals(violationLines, Arrays.asList(expectedViolationLines));
-    }
+    // Collect the relevant results
+    ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
 
-    @Test
-    public void testNoViolation(){
-        String testFile = "InterfaceNameTest.pas";
-        super.testAnalyse();
-        ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
+    assertEquals(violationLines, Arrays.asList(expectedViolationLines));
+  }
 
-        ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
+  @Test
+  public void testNoViolation() {
+    String testFile = "InterfaceNameTest.pas";
+    super.testAnalyse();
+    ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
 
-        assertEquals(0, violationLines.size());
-    }
+    ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
+
+    assertEquals(0, violationLines.size());
+  }
 
 }

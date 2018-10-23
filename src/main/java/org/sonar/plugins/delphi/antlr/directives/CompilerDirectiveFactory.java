@@ -82,7 +82,7 @@ public class CompilerDirectiveFactory {
    */
   public CompilerDirective create(String data, int startPosition, int endPosition)
       throws CompilerDirectiveFactoryUnsupportedDirectiveException,
-          CompilerDirectiveFactorySyntaxException {
+      CompilerDirectiveFactorySyntaxException {
     int directiveFirstChar = getDirectiveFirstChar(data, startPosition);
     int directiveLastChar = getDirectiveLastChar(data, startPosition);
     String directiveName = getName(data, directiveFirstChar);

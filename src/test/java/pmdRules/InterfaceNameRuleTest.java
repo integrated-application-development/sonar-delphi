@@ -26,7 +26,7 @@ public class InterfaceNameRuleTest extends BaseXmlPmdRuleTest {
   }
 
   @Test
-  public void testNoViolation(){
+  public void testNoViolation() {
 
     String testFile = "TooManyVariablesTest.pas";
     super.testAnalyse();

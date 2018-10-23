@@ -179,7 +179,7 @@ public class DelphiSensor implements Sensor {
     } catch (FileNotFoundException ex) {
       DelphiUtils.LOG.error("{} {} {}", "Cpd could not find : ", inputFile.toString(), ex);
     } catch (IOException ex) {
-      DelphiUtils.LOG.error("{} {} {}","Cpd IO Exception on ", inputFile.toString(), ex);
+      DelphiUtils.LOG.error("{} {} {}", "Cpd IO Exception on ", inputFile.toString(), ex);
     }
   }
 
@@ -201,11 +201,11 @@ public class DelphiSensor implements Sensor {
         processMetric(basicMetrics, resource);
         processMetric(complexityMetrics, resource);
         processMetric(deadCodeMetrics, resource);
-      } catch (IllegalArgumentException e){
+      } catch (IllegalArgumentException e) {
         // Some files may produce invalid pointers due to code that is valid for the compiler but
         // not for the scanner, this will handle that so the execution does not fail
         DelphiUtils.LOG.error("{} produced IllegalArgumentException: \"{}\""
-                + " Metric report for this file may be in error.", resource, e.getMessage());
+            + " Metric report for this file may be in error.", resource, e.getMessage());
       }
 
       if (basicMetrics.hasMetric("PUBLIC_DOC_API") && complexityMetrics.hasMetric("PUBLIC_API")) {

@@ -40,7 +40,7 @@ public class ConstantNotationRule extends DelphiRule {
               // FIXME, this sometimes fails to cast the Tree to a DelphiPMDNode, despite the same method being used in other rules
               try {
                 addViolation(ctx, (DelphiPMDNode) assignmentNode);
-              } catch (ClassCastException e){
+              } catch (ClassCastException e) {
                 // Do nothing
               }
 

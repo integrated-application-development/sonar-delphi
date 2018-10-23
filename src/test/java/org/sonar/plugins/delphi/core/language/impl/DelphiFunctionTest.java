@@ -33,7 +33,7 @@ public class DelphiFunctionTest {
   @Test
   public void testEqualsTest() {
     assertTrue(new DelphiFunction("test").equals(new DelphiFunction("test")));
-    assertFalse( new DelphiFunction("test").equals(new DelphiFunction("test2")));
+    assertFalse(new DelphiFunction("test").equals(new DelphiFunction("test2")));
     assertFalse(new DelphiFunction("class.test").equals(new DelphiFunction("test")));
     assertTrue(new DelphiFunction("class.test").equals(new DelphiFunction("class.test")));
   }

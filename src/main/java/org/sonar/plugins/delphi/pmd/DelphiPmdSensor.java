@@ -103,7 +103,7 @@ public class DelphiPmdSensor implements Sensor {
       Integer endLine, String message) {
 
     DelphiUtils.LOG.debug("PMD Violation - rule: {} file: {} message: {}", ruleKey, fileName,
-            message);
+        message);
 
     InputFile inputFile = delphiProjectHelper.getFile(fileName);
 
@@ -237,7 +237,7 @@ public class DelphiPmdSensor implements Sensor {
   }
 
   private void processPmdParse(DelphiPMD pmd, RuleContext ruleContext, RuleSets ruleSets,
-                               File pmdFile) {
+      File pmdFile) {
     try {
       pmd.processFile(pmdFile, ruleSets, ruleContext, delphiProjectHelper.encoding());
     } catch (ParseException e) {

@@ -11,9 +11,9 @@ public class LowerCaseReservedWordsRule extends DelphiRule {
 
   // The keyword integers defined in DelphiLexer to check for correct convention
   private static final Set<Integer> keywords = new HashSet<>(Arrays.asList(
-      DelphiLexer.ASM, DelphiLexer.BEGIN, DelphiLexer.CASE,  DelphiLexer.CLASS,
+      DelphiLexer.ASM, DelphiLexer.BEGIN, DelphiLexer.CASE, DelphiLexer.CLASS,
       DelphiLexer.CONST, DelphiLexer.CONSTRUCTOR, DelphiLexer.DESTRUCTOR,
-      DelphiLexer.DISPINTERFACE,  DelphiLexer.DIV, DelphiLexer.DO, DelphiLexer.DOWNTO,
+      DelphiLexer.DISPINTERFACE, DelphiLexer.DIV, DelphiLexer.DO, DelphiLexer.DOWNTO,
       DelphiLexer.ELSE, DelphiLexer.EXCEPT, DelphiLexer.EXPORTS, DelphiLexer.FILE,
       DelphiLexer.FINAL, DelphiLexer.FINALIZATION, DelphiLexer.FINALLY, DelphiLexer.FOR,
       DelphiLexer.FUNCTION, DelphiLexer.GOTO, DelphiLexer.IF, DelphiLexer.IMPLEMENTATION,

@@ -26,7 +26,7 @@ public class UpperCaseKeywordsTest extends BaseXmlPmdRuleTest {
   }
 
   @Test
-  public void testNoViolation(){
+  public void testNoViolation() {
 
     String testFile = "DestructorNoViolationTest.pas";
     super.testAnalyse();

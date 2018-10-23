@@ -223,7 +223,7 @@ public class ComplexityMetrics extends DefaultMetrics {
                   func.getBodyLine(), 2))
               .message(String.format(
                   "The Cyclomatic Complexity of this method \"%s\" is %d which is " +
-                          "greater than %d authorized.",
+                      "greater than %d authorized.",
                   func.getRealName(), func.getComplexity(), threshold)));
       newIssue.save();
     }

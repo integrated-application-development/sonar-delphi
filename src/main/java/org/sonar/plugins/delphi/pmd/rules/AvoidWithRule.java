@@ -8,8 +8,8 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 public class AvoidWithRule extends DelphiRule {
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx){
-    if (node.getType() == DelphiLexer.WITH){
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
+    if (node.getType() == DelphiLexer.WITH) {
       addViolation(ctx, node);
     }
   }

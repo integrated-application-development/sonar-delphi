@@ -26,7 +26,7 @@ public class TooManyVariablesRuleTest extends BaseXmlPmdRuleTest {
   }
 
   @Test
-  public void testNoViolation(){
+  public void testNoViolation() {
 
     String testFile = "TooManySubProceduresTest.pas";
     super.testAnalyse();

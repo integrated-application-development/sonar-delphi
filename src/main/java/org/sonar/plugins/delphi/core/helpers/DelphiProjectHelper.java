@@ -138,7 +138,7 @@ public class DelphiProjectHelper {
             .resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
         result.add(excluded);
         if (!excluded.exists()) {
-          DelphiUtils.LOG.warn("{} {}","Exclude directory does not exist: ",
+          DelphiUtils.LOG.warn("{} {}", "Exclude directory does not exist: ",
               excluded.getAbsolutePath());
         }
       }

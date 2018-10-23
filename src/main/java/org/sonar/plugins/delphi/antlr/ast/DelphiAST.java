@@ -59,14 +59,16 @@ public class DelphiAST extends CommonTree implements ASTTree {
   private DelphiSourceSanitizer fileStream;
   private String[] codeLines;
 
-  private class FileReadFailException extends RuntimeException{
-    FileReadFailException (String s, IOException e){
+  private class FileReadFailException extends RuntimeException {
+
+    FileReadFailException(String s, IOException e) {
       super(s, e);
     }
   }
 
-  private class FileParseFailException extends RuntimeException{
-    FileParseFailException(String s, RecognitionException e){
+  private class FileParseFailException extends RuntimeException {
+
+    FileParseFailException(String s, RecognitionException e) {
       super(s, e);
     }
   }
@@ -168,7 +170,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
     try {
       return generateDocument(createNewDocument(), "file");
     } catch (Exception e) {
-      DelphiUtils.LOG.error("{} {}" , "Could not generate xml document: " , e.getMessage());
+      DelphiUtils.LOG.error("{} {}", "Could not generate xml document: ", e.getMessage());
       return null;
     }
   }

@@ -29,7 +29,7 @@ public class TooLongLineRuleTest extends BaseXmlPmdRuleTest {
 
   @Ignore
   @Test
-  public void testNoViolation(){
+  public void testNoViolation() {
 
     String testFile = "NoReturnTest.pas";
     super.testAnalyse();

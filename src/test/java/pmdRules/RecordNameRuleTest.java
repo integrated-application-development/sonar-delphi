@@ -26,7 +26,7 @@ public class RecordNameRuleTest extends BaseXmlPmdRuleTest {
   }
 
   @Test
-  public void testNoViolation(){
+  public void testNoViolation() {
 
     String testFile = "CyclomaticComplexityTest.pas";
     super.testAnalyse();

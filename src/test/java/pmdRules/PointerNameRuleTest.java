@@ -26,7 +26,7 @@ public class PointerNameRuleTest extends BaseXmlPmdRuleTest {
   }
 
   @Test
-  public void testNoViolation(){
+  public void testNoViolation() {
 
     String testFile = "ClassPerFileTest.pas";
     super.testAnalyse();

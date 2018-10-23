@@ -82,7 +82,7 @@ public class UnusedArgumentsRule extends DelphiRule {
   }
 
   private ArrayList<Stack<Tree>> populateStacks(DelphiPMDNode node, Stack<Tree> functionNodes,
-      Stack<Tree> beginNodes){
+      Stack<Tree> beginNodes) {
 
     ArrayList<Stack<Tree>> stacks = new ArrayList<>();
 
@@ -205,7 +205,7 @@ public class UnusedArgumentsRule extends DelphiRule {
 
   @Override
   // Code smell not to override equals in this class
-  public boolean equals(Object object){
+  public boolean equals(Object object) {
     return object == this;
   }
 

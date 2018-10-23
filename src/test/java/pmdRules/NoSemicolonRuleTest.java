@@ -1,34 +1,33 @@
 package pmdRules;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 public class NoSemicolonRuleTest extends BaseXmlPmdRuleTest {
 
 
-    private static String ruleType = "NoSemicolonRule"; // Rule type being tested
-
-    @Test
-    public void testRuleViolation(){
-
-        String testFile = "NoSemicolonTest.pas";
-        super.testAnalyse();
-        ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
-
-        Integer[] expectedViolationLines = {32};
-
-        // Collect the relevant results
-        ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
-
-        assertEquals(violationLines, Arrays.asList(expectedViolationLines));
-    }
+  private static String ruleType = "NoSemicolonRule"; // Rule type being tested
 
   @Test
-  public void testNoViolation(){
+  public void testRuleViolation() {
+
+    String testFile = "NoSemicolonTest.pas";
+    super.testAnalyse();
+    ArrayList<ArrayList<Object>> fileResults = getFileResults(testFile);
+
+    Integer[] expectedViolationLines = {32};
+
+    // Collect the relevant results
+    ArrayList violationLines = super.getViolationLines(fileResults, ruleType);
+
+    assertEquals(violationLines, Arrays.asList(expectedViolationLines));
+  }
+
+  @Test
+  public void testNoViolation() {
 
     String testFile = "MethodNameTest.pas";
     super.testAnalyse();
