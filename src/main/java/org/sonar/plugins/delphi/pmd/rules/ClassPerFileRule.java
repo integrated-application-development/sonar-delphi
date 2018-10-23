@@ -70,7 +70,7 @@ public class ClassPerFileRule extends CountRule {
 
     increaseCounter(strength);
 
-    if (exceedsLimit()) {
+   if (exceedsLimit()) {
       addViolation(ctx, node, getMessage());
       if (reset) {
         count = 0;

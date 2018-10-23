@@ -12,25 +12,44 @@ The original work on the plugin that was done before forking the existing projec
 
 Forked code is released under GPL.
 
+Getting Started 
+==================
+We highly recommend starting with the Developer Quick Start guide to get an introduction to the plugin. This readme does 
+not go into the level of detail of that document. 
+
 Implemented Rules
 ==================
 The Following rules have been implemented by the team:
 
   * Avoid using with
   * Class names shoule begin with T
+  * Too many classes per file
+  * Method names should begin with capitals
   * Constants should begin with C_
-  * Constructors should call create
+  * Constructors should begin with create
   * Constructors should use inherited appropriately
   * Destructors should use inherited appropriately
   * If not notation
-  * Interface names
+  * If true notation
+  * Sorted should be called before calling Duplicates
+  * Interface names should begin with I
   * Lower and upper case keywords
-  * No begin after Do
   * No semicolon
   * Line too long
   * Public Fields
-  * Too Many Subprocedures
-  * Re raise exceptions
+  * Too Many function Subprocedures
+  * Too many function arguments
+  * Too many function variables
+  * Arguments should not be unused
+  * Procedures should not have too many arguments
+  * Methods should not be too long
+  * Methods should not have empty brackets if no arguments supplied
+  * Keywords should be lowercase
+  * Keywords should not be uppercase
+  * Lines should not be too long
+  * Record names should begin with T
+  * Begin statements should follow do statements
+  * Do not re-raise exceptions
   
   
 Additional rules already present in the plugin have been tested to ensure they work correctly.
@@ -38,6 +57,9 @@ Additional rules already present in the plugin have been tested to ensure they w
 Testing Framework
 ==================
 JUnit testing:
+
+This testing is performed on the output of each rule against test Delphi
+source files. Refer to the Quick Start guide for more details.
 
  * The latest plugin is compiled.
  * The compiled JAR is copied to a local installation of SonarQube. 
@@ -49,3 +71,4 @@ JUnit testing:
 Additional Documentation
 ==================
 Most documentation was written on our Confluence server, this was backed up so a new instance could be created and additional PDF/Word versions if needed. This includes development documentation detailing how to better understand and further understand the plugin code.
+Known issues are listed in the Known Issues.md file.
