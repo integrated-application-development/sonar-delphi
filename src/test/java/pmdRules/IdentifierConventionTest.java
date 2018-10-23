@@ -1,5 +1,6 @@
 package pmdRules;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import static org.junit.Assert.assertEquals;
 public class IdentifierConventionTest extends BaseXmlPmdRuleTest {
     private static String ruleType = "IdentifierConventionRule"; // Rule type being tested
 
+    @Ignore
     @Test
     public void testRuleViolation() {
 

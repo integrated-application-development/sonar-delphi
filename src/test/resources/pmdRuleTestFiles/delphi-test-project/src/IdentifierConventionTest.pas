@@ -5,7 +5,7 @@ interface
 implementation
 
 var
-    FirstName: String   //Compliant
-    lastName: String    //NON-COMPLIANT
+    FirstName: String;   //Compliant
+    lastName: String;    //NON-COMPLIANT
 
 end.

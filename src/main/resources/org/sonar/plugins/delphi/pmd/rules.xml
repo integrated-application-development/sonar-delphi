@@ -731,12 +731,22 @@ x.Free;			//GOOD, sufficent enough
     </rule>
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.LowerCaseReservedWordsRule" message="Keywords 'not, or, and' must always be in lower case."
 		  name="LowerCaseReservedWordRule">
-		<description> Always use lower case when using keywords and , or, not</description>
+		<description> Always use lower case when using keywords and , or, not etc.</description>
 		<properties>
 			<property name="baseEffort">
-				<value>5min</value>
+				<value>1min</value>
 			</property>
 		</properties>
 	</rule>
+
+  <rule since="" class="org.sonar.plugins.delphi.pmd.rules.IdentifierConventionRule" message="Identifiers should begin with a capital letter."
+  name="IdentifierConventionRule">
+    <description>It is good convention to start variable identifiers with capitals.</description>
+    <properties>
+      <property name="baseEffort">
+        <value>1min</value>
+      </property>
+    </properties>
+  </rule>
 
 </ruleset>
