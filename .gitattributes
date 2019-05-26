@@ -1,0 +1,8 @@
+* text=auto
+
+*.pas -text
+*.dpr -text
+*.dpk -text
+*.dproj -text
+*.groupproj -text
+*.optset -text
