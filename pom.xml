@@ -73,8 +73,8 @@
 
 	<properties>
 		<!--Version Fields-->
-                <sonarQubeMinVersion>7.0</sonarQubeMinVersion>
-                <sonar.version>7.2</sonar.version>
+		<sonarQubeMinVersion>7.0</sonarQubeMinVersion>
+		<sonar.version>7.7</sonar.version>
 		<sonarcobertura.version>1.4</sonarcobertura.version>
 		<antlr-runtime.version>3.4</antlr-runtime.version>
 		<slf4j.version>1.7.5</slf4j.version>

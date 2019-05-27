@@ -38,6 +38,7 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputDir;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
+import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.rule.internal.NewActiveRule;
@@ -87,7 +88,7 @@ public class DelphiSensorTest {
     DefaultInputDir inputBaseDir = new DefaultInputDir(moduleKey, "");
     inputBaseDir.setModuleBaseDir(baseDir.toPath());
 
-    context.fileSystem().add(inputBaseDir);
+    //context.fileSystem().add(inputBaseDir);
     for (File source : baseDir.listFiles(DelphiUtils.getFileFilter())) {
 
       InputFile baseInputFile = TestInputFileBuilder.create(moduleKey, baseDir, source)
@@ -102,8 +103,8 @@ public class DelphiSensorTest {
 
     // get all source files from all directories
     for (File directory : dirs) {
-
       File[] files = directory.listFiles(DelphiUtils.getFileFilter());
+
       for (File sourceFile : files) {
         DefaultInputFile inputFile = TestInputFileBuilder.create(moduleKey, baseDir, sourceFile)
             .setLanguage(DelphiLanguage.KEY)
@@ -114,23 +115,32 @@ public class DelphiSensorTest {
         context.fileSystem().add(inputFile);
         sourceFiles.add(sourceFile);
       }
+
       DefaultInputDir inputDir = new DefaultInputDir(moduleKey,
           getRelativePath(baseDir, directory.getPath()));
       inputDir.setModuleBaseDir(baseDir.toPath());
-      context.fileSystem().add(inputDir);
+      //context.fileSystem().add(inputDir);
       // put all directories to list
       sourceDirs.add(directory);
     }
 
     delphiProject.setSourceFiles(sourceFiles);
 
-    ActiveRulesBuilder rulesBuilder = new ActiveRulesBuilder();
-    NewActiveRule rule = rulesBuilder
-        .create(ComplexityMetrics.RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY);
-    rule.setParam("Threshold", "3").setLanguage(DelphiLanguage.KEY).activate();
-    rulesBuilder.create(DeadCodeMetrics.RULE_KEY_UNUSED_FUNCTION).setLanguage(DelphiLanguage.KEY)
-        .activate();
-    activeRules = rulesBuilder.build();
+    NewActiveRule complexityRule = new NewActiveRule.Builder()
+        .setRuleKey(ComplexityMetrics.RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY)
+        .setParam("Threshold", "3")
+        .setLanguage(DelphiLanguage.KEY)
+        .build();
+
+    NewActiveRule unusedFunctionRule = new NewActiveRule.Builder()
+        .setRuleKey(DeadCodeMetrics.RULE_KEY_UNUSED_FUNCTION)
+        .setLanguage(DelphiLanguage.KEY)
+        .build();
+
+    activeRules = new ActiveRulesBuilder()
+        .addRule(complexityRule)
+        .addRule(unusedFunctionRule)
+        .build();
 
     sensor = new DelphiSensor(delphiProjectHelper, activeRules, context);
   }

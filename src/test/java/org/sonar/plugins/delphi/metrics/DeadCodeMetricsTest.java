@@ -38,7 +38,7 @@ import org.junit.Test;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.issue.Issuable;
+//import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.Issue;
 import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
@@ -58,7 +58,7 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 @Ignore("Unused functions it's not working. There are many false positives.")
 public class DeadCodeMetricsTest {
-
+/*
   private static final String ROOT_NAME = "/org/sonar/plugins/delphi/metrics/";
   private static final String TEST_FILE = "/org/sonar/plugins/delphi/metrics/DeadCodeMetricsTest.pas";
   private static final String DEAD_FILE = "/org/sonar/plugins/delphi/metrics/DeadCodeUnit.pas";
@@ -163,4 +163,6 @@ public class DeadCodeMetricsTest {
 
     assertThat(issues, hasSize(2));
   }
+
+ */
 }
