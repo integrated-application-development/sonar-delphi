@@ -27,6 +27,7 @@ import java.io.Reader;
 import org.apache.commons.io.IOUtils;
 import org.sonar.api.profiles.ProfileImporter;
 import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.server.ServerSide;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
@@ -36,6 +37,7 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRulesUtils;
 /**
  * imports Delphi rules profile from Sonar
  */
+@ServerSide
 public class DelphiPmdProfileImporter extends ProfileImporter {
 
   /**
