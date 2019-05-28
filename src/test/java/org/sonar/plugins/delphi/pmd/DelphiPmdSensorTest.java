@@ -36,8 +36,8 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
+import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.profiles.RulesProfile;
 import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
@@ -54,7 +54,7 @@ public class DelphiPmdSensorTest {
   private SensorContextTester sensorContext;
   private DelphiProjectHelper delphiProjectHelper;
   private DelphiPmdProfileExporter profileExporter;
-  private RulesProfile rulesProfile;
+  private ActiveRules rulesProfile;
   private File baseDir;
 
   @Before
@@ -83,14 +83,10 @@ public class DelphiPmdSensorTest {
     when(delphiProjectHelper.getWorkgroupProjects())
         .thenReturn(Collections.singletonList(delphiProject));
 
-    when(delphiProjectHelper.getFile(anyString())).thenAnswer(new Answer<InputFile>() {
-      @Override
-      public InputFile answer(InvocationOnMock invocation) {
-        return inputFile;
-      }
-    });
+    when(delphiProjectHelper.getFile(anyString())).thenAnswer(
+        (Answer<InputFile>) invocation -> inputFile);
 
-    rulesProfile = mock(RulesProfile.class);
+    rulesProfile = mock(ActiveRules.class);
     profileExporter = mock(DelphiPmdProfileExporter.class);
 
     String fileName = getClass().getResource("/org/sonar/plugins/delphi/pmd/rules.xml").getPath();
@@ -102,9 +98,7 @@ public class DelphiPmdSensorTest {
       throw new RuntimeException(e);
     }
 
-    when(profileExporter.exportProfileToString(rulesProfile)).thenReturn(rulesXmlContent);
-
-    sensor = new DelphiPmdSensor(delphiProjectHelper, sensorContext, rulesProfile, profileExporter);
+    sensor = new DelphiPmdSensor(delphiProjectHelper, sensorContext, rulesProfile);
   }
 
 }

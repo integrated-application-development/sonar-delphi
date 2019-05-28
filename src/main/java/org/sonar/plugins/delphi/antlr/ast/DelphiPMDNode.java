@@ -24,8 +24,10 @@ package org.sonar.plugins.delphi.antlr.ast;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import net.sourceforge.pmd.lang.ast.Node;
+import net.sourceforge.pmd.lang.ast.xpath.Attribute;
 import net.sourceforge.pmd.lang.dfa.DataFlowNode;
 import net.sourceforge.pmd.lang.symboltable.Scope;
 import net.sourceforge.pmd.lang.symboltable.ScopedNode;
@@ -300,6 +302,11 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return Collections.emptyList();
   }
 
+  @Override
+  public <T> T getFirstParentOfAnyType(Class<? extends T>... classes) {
+    return null;
+  }
+
   /**
    * {@inheritDoc}
    */
@@ -353,7 +360,7 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
    * {@inheritDoc}
    */
   @Override
-  public List<? extends Node> findChildNodesWithXPath(String xpathString) throws JaxenException {
+  public List<? extends Node> findChildNodesWithXPath(String xpathString) {
     return Collections.emptyList();
   }
 
@@ -390,4 +397,13 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     // Do nothing
   }
 
+  @Override
+  public String getXPathNodeName() {
+    return null;
+  }
+
+  @Override
+  public Iterator<Attribute> getXPathAttributesIterator() {
+    return null;
+  }
 }

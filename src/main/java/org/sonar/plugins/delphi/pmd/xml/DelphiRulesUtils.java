@@ -27,8 +27,11 @@ import com.thoughtworks.xstream.XStream;
 import java.io.InputStream;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.ActiveRuleParam;
@@ -160,6 +163,17 @@ public final class DelphiRulesUtils {
     return buildXmlFromRuleset(tree);
   }
 
+  /**
+   * Exports active rules
+   *
+   * @param activeProfile The current active rules
+   * @return The active rules as XML String
+   */
+  public static String exportConfiguration(ActiveRules activeProfile) {
+    Ruleset tree = buildRulesetFromActiveRules(activeProfile);
+    return buildXmlFromRuleset(tree);
+  }
+
   private static Rule createRepositoryRule(DelphiRule fRule) {
     Rule rule = Rule.create(DelphiPmdConstants.REPOSITORY_KEY, fRule.getName(), fRule.getMessage())
         .setSeverity(
@@ -220,6 +234,7 @@ public final class DelphiRulesUtils {
 
   private static Ruleset buildRulesetFromActiveProfile(List<ActiveRule> activeRules) {
     Ruleset ruleset = new Ruleset();
+
     for (ActiveRule activeRule : activeRules) {
       if (activeRule.getRule().getRepositoryKey().equals(DelphiPmdConstants.REPOSITORY_KEY)) {
         String key = activeRule.getRule().getKey();
@@ -228,14 +243,41 @@ public final class DelphiRulesUtils {
 
         DelphiRule delphiRule = new DelphiRule(activeRule.getConfigKey(), priority);
         delphiRule.setName(key);
+
         for (ActiveRuleParam activeRuleParam : activeRule.getActiveRuleParams()) {
           properties.add(
               new Property(activeRuleParam.getRuleParam().getKey(), activeRuleParam.getValue()));
         }
+
         delphiRule.setProperties(properties);
         delphiRule.setMessage(activeRule.getRule().getName());
         ruleset.addRule(delphiRule);
       }
+    }
+    return ruleset;
+  }
+
+  private static Ruleset buildRulesetFromActiveRules(ActiveRules activeRules) {
+    Ruleset ruleset = new Ruleset();
+
+    Collection<org.sonar.api.batch.rule.ActiveRule> rules =
+        activeRules.findByRepository(DelphiPmdConstants.REPOSITORY_KEY);
+
+    for (org.sonar.api.batch.rule.ActiveRule activeRule : rules) {
+      String key = activeRule.ruleKey().rule();
+      String priority = severityToLevel(RulePriority.valueOfString(activeRule.severity()));
+      List<Property> properties = new ArrayList<>();
+
+      DelphiRule delphiRule = new DelphiRule(activeRule.internalKey(), priority);
+      delphiRule.setName(key);
+
+      for (Map.Entry<String, String> activeRuleParam : activeRule.params().entrySet()) {
+        properties.add(new Property(activeRuleParam.getKey(), activeRuleParam.getValue()));
+      }
+
+      delphiRule.setProperties(properties);
+      // delphiRule.setMessage(activeRule.getRule().getName());
+      ruleset.addRule(delphiRule);
     }
     return ruleset;
   }

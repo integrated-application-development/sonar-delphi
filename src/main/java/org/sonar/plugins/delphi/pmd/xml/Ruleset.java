@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @XStreamAlias("ruleset")
-/**
+/*
  * Class gathering a set of rules
  */
 public class Ruleset {

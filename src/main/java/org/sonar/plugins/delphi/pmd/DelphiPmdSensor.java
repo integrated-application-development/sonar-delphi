@@ -42,16 +42,17 @@ import net.sourceforge.pmd.renderers.Renderer;
 import net.sourceforge.pmd.renderers.XMLRenderer;
 import org.apache.commons.io.FileUtils;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.issue.NewIssue;
-import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileExporter;
 import org.sonar.plugins.delphi.pmd.profile.DelphiRuleSets;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRulesUtils;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.ProgressReporter;
@@ -71,23 +72,20 @@ public class DelphiPmdSensor implements Sensor {
   private final SensorContext context;
   private final DelphiProjectHelper delphiProjectHelper;
   private final List<String> errors = new ArrayList<>();
-  private final DelphiPmdProfileExporter profileExporter;
-  private final RulesProfile rulesProfile;
+  private final ActiveRules rulesProfile;
 
   /**
    * C-tor
    *
    * @param delphiProjectHelper delphiProjectHelper
    * @param context SensorContext
-   * @param rulesProfile rulesProfile used to export active rules
-   * @param profileExporter used to export active rules
+   * @param rulesProfile profile used to export active rules
    */
   public DelphiPmdSensor(DelphiProjectHelper delphiProjectHelper, SensorContext context,
-      RulesProfile rulesProfile, DelphiPmdProfileExporter profileExporter) {
+      ActiveRules rulesProfile) {
     this.delphiProjectHelper = delphiProjectHelper;
     this.context = context;
     this.rulesProfile = rulesProfile;
-    this.profileExporter = profileExporter;
   }
 
   /**
@@ -178,12 +176,12 @@ public class DelphiPmdSensor implements Sensor {
 
   private RuleSets createRuleSets() {
     RuleSets rulesets = new DelphiRuleSets();
-    String rulesXml = profileExporter.exportProfileToString(rulesProfile);
+    String rulesXml = DelphiRulesUtils.exportConfiguration(rulesProfile);
     File ruleSetFile = dumpXmlRuleSet(DelphiPmdConstants.REPOSITORY_KEY, rulesXml);
     RuleSetFactory ruleSetFactory = new RuleSetFactory();
+
     try {
       RuleSet ruleSet = ruleSetFactory.createRuleSet(ruleSetFile.getAbsolutePath());
-
       rulesets.addRuleSet(ruleSet);
       return rulesets;
     } catch (RuleSetNotFoundException e) {
