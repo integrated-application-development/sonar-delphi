@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.scanner.ScannerSide;
@@ -40,6 +41,7 @@ import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.project.DelphiWorkgroup;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Class that helps get the maven/ant configuration from .xml file
@@ -147,6 +149,15 @@ public class DelphiProjectHelper {
     }
     return result;
   }
+  /*
+   * Gets the list of conditional defines specified in settings
+   *
+   * @returns List of conditional defines
+   */
+  private List<String> getConditionalDefines() {
+    String[] conditionalDefines = settings.getStringArray(DelphiPlugin.CONDITIONAL_DEFINES_KEY);
+    return Arrays.asList(ArrayUtils.nullToEmpty(conditionalDefines));
+  }
 
   List<File> inputFilesToFiles(List<InputFile> inputFiles) {
     List<File> result = new ArrayList<>();
@@ -194,6 +205,10 @@ public class DelphiProjectHelper {
       newProject.setIncludeDirectories(getIncludeDirectories());
       newProject.setSourceFiles(inputFilesToFiles(mainFiles()));
       list.add(newProject);
+    }
+
+    for (DelphiProject delphiProject : list) {
+      delphiProject.setDefinitions(getConditionalDefines());
     }
 
     return list;

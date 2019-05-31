@@ -107,7 +107,7 @@ public class DelphiSensor implements Sensor {
   }
 
   @Override
-  /**
+  /*
    * The actual sensor code.
    */
   public void execute(SensorContext context) {
