@@ -116,7 +116,7 @@ public class DelphiPmdSensor implements Sensor {
     newIssue.save();
   }
 
-  void parsePMDreport(File reportFile) {
+  private void parsePMDreport(File reportFile) {
     DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
     try {
       DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
@@ -139,16 +139,21 @@ public class DelphiPmdSensor implements Sensor {
               .getTextContent();
           String rule = violation.getAttributes().getNamedItem("rule").getTextContent();
           String message = violation.getTextContent();
-          addIssue(rule, fileName, Integer.parseInt(beginLine), Integer.parseInt(beginColumn),
-              Integer.parseInt(endLine), message);
+
+          try {
+            addIssue(rule, fileName, Integer.parseInt(beginLine), Integer.parseInt(beginColumn),
+                Integer.parseInt(endLine), message);
+          }
+          catch (IllegalArgumentException e) {
+            DelphiUtils.LOG.info("Failed to add issue:");
+            DelphiUtils.LOG.error("Exception Stacktrace", e);
+          }
         }
       }
-    } catch (SAXParseException err) {
-      DelphiUtils.LOG.info("SAXParseException", err);
+    } catch (SAXParseException e) {
+      DelphiUtils.LOG.info("SAXParseException", e);
     } catch (SAXException e) {
-      Exception x = e.getException();
-      //((x == null) ? e : x).printStackTrace(); // Removed, SonarQube vulnerability
-      DelphiUtils.LOG.error("SAXException Stacktrace", x);
+      DelphiUtils.LOG.error("SAXException Stacktrace", e);
     } catch (Exception e) {
       DelphiUtils.LOG.info("SAX Parsing Exception");
       DelphiUtils.LOG.error("Exception Stacktrace", e);
