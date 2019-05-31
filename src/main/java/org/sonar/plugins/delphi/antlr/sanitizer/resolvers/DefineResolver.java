@@ -67,7 +67,6 @@ public class DefineResolver extends SourceResolver {
    * @param str File data
    * @param excluded Excluded areas, not to analyze
    * @return New file data with parsed preprocesor defines
-   * @throws DefineResolverException when no matching {$ifdef} .. {$endif} directives will be found
    */
   private StringBuilder resolveDefines(StringBuilder str, SubRangeAggregator excluded,
       Set<String> defines) {
