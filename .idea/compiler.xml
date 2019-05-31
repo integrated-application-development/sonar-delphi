@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <option name="DEFAULT_COMPILER" value="error-prone" />
     <annotationProcessing>
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -11,12 +10,12 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="SonarQube_Delphi" target="11" />
+      <module name="SonarQube_Delphi" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="SonarQube_Delphi" options="" />
+      <module name="SonarQube_Delphi" options="-XDcompilePolicy=simple &quot;-Xplugin:ErrorProne -XepDisableWarningsInGeneratedCode&quot;" />
     </option>
   </component>
 </project>
