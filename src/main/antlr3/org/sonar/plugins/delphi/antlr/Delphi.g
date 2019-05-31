@@ -352,7 +352,7 @@ recordHelperItem             : visibility
                              | classMethod
                              | classProperty
                              ;
-classMethod                  : (customAttribute)? ('class')? methodKey ident (genericDefinition)? (formalParameterSection)? ';' (methodDirective)* 
+classMethod                  : (customAttribute)? ('class')? methodKey ident (genericDefinition)? (formalParameterSection)? ';' (methodDirective)*
                              ->  (customAttribute)? ('class')? ^(methodKey ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) (methodDirective)*)
                              | (customAttribute)? ('class')? 'function' ident (genericDefinition)? (formalParameterSection)? ':' (customAttribute)? typeDecl ';' (methodDirective)*
                              -> (customAttribute)? ('class')? ^('function' ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) (customAttribute)? ^(TkFunctionReturn typeDecl) (methodDirective)*)
@@ -563,7 +563,7 @@ withStatement                : 'with' withItem 'do' statement
 withItem                     : designator 'as' designator       //ADDED
                              | designator (',' designator)*
                              ;
-compoundStatement            : 'begin' (statementList)? 'end' -> ^('begin' (statementList)? 'end')
+compoundStatement            : 'begin' (statementList)? 'end' -> ^('begin' (statementList)? 'end' ';')
                              ;
 statementList                : (statement)? (';' (statement)?)*
                              ;
@@ -621,13 +621,13 @@ methodDirective              : reintroduceDirective         // 1
                              | oldCallConventionDirective   // 1
                              | dispIDDirective
                              ;
-functionDirective            : overloadDirective          // 1
-                             | inlineDirective            // 1
-                             | callConvention             // 1
-                             | oldCallConventionDirective // 1
-                             | hintingDirective ';'       // 1
-                             | (callConventionNoSemi)? externalDirective          // 1
-                             | 'unsafe' ';'               // 1 .net?
+functionDirective            : overloadDirective                         // 1
+                             | inlineDirective                           // 1
+                             | callConvention                            // 1
+                             | oldCallConventionDirective                // 1
+                             | hintingDirective ';'                      // 1
+                             | (callConventionNoSemi)? externalDirective // 1
+                             | 'unsafe' ';'                              // 1 .net?
                              ;
 reintroduceDirective         : 'reintroduce' ';'
                              ;
@@ -686,7 +686,7 @@ ident                        : TkIdentifier
                              ;
 usedKeywordsAsNames          : (NAME | READONLY | ADD | AT | MESSAGE | POINTER | INDEX | DEFAULT | STRING | CONTINUE)
                              | (READ | WRITE | REGISTER | VARIANT | OPERATOR | REMOVE | LOCAL | REFERENCE | CONTAINS | FINAL)
-                             | (BREAK | EXIT | STRICT | OUT | OBJECT | EXPORT | ANSISTRING | IMPLEMENTS | STORED)
+                             | (BREAK | EXIT | STRICT | OUT | OBJECT | EXPORT | ANSISTRING | IMPLEMENTS | STORED | HELPER)
                              ;
 identList                    : ident (',' ident)* -> ^(ident (ident)*)
                              ;
