@@ -27,6 +27,7 @@ import java.io.Reader;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.ActiveRuleParam;
+import org.sonar.api.server.ServerSide;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
@@ -34,7 +35,7 @@ import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 /**
  * default Delphi rules profile
  */
-
+@ServerSide
 public class DefaultDelphiProfile implements BuiltInQualityProfilesDefinition {
 
   private DelphiPmdProfileImporter importer;
