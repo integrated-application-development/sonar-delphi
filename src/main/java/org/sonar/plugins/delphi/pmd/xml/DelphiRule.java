@@ -27,12 +27,13 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Delphi rule loaded from xml file
  */
 @XStreamAlias("rule")
-public class DelphiRule implements Comparable<String> {
+public class DelphiRule implements Comparable<DelphiRule> {
 
   @XStreamAlias("class")
   @XStreamAsAttribute
@@ -131,8 +132,8 @@ public class DelphiRule implements Comparable<String> {
    */
 
   @Override
-  public int compareTo(String o) {
-    return o.compareTo(clazz);
+  public int compareTo(DelphiRule other) {
+    return clazz.compareTo(other.clazz);
   }
 
   /**
@@ -212,5 +213,22 @@ public class DelphiRule implements Comparable<String> {
 
   public void setTag(String tag) {
     this.tags = tag;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    DelphiRule that = (DelphiRule) o;
+    return clazz.equals(that.clazz);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(clazz);
   }
 }
