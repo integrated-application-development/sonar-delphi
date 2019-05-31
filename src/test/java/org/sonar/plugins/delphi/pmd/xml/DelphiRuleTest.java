@@ -26,6 +26,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +58,7 @@ public class DelphiRuleTest {
 
   @Test
   public void testProperties() {
-    assertEquals(null, rule.getProperties());
+    assertNull(rule.getProperties());
 
     List<Property> properties = new ArrayList<>();
     properties.add(new Property("a", "b"));
@@ -72,14 +74,17 @@ public class DelphiRuleTest {
 
   @Test
   public void testCompareTo() {
-    assertEquals(11, rule.compareTo("notEqual"));
-    assertEquals(0, rule.compareTo("class"));
+    DelphiRule someOtherRule = new DelphiRule("not-class");
+    DelphiRule comparableRule = new DelphiRule("class");
+
+    assertNotEquals(0, rule.compareTo(someOtherRule));
+    assertEquals(0, rule.compareTo(comparableRule));
   }
 
   @Test
   public void testPriority() {
     assertEquals("critical", rule.getPriority());
-    assertEquals(null, new DelphiRule("class").getPriority());
+    assertNull(new DelphiRule("class").getPriority());
   }
 
   @Test
