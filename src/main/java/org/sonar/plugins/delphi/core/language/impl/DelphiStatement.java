@@ -25,7 +25,7 @@ package org.sonar.plugins.delphi.core.language.impl;
 import java.util.ArrayList;
 import java.util.List;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.delphi.antlr.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.core.language.ClassFieldInterface;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.StatementInterface;

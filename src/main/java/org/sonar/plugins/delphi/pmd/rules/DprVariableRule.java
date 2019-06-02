@@ -22,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import org.sonar.plugins.delphi.antlr.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
