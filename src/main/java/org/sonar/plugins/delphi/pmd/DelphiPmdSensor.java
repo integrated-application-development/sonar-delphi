@@ -104,16 +104,20 @@ public class DelphiPmdSensor implements Sensor {
         message);
 
     InputFile inputFile = delphiProjectHelper.getFile(fileName);
-
     NewIssue newIssue = context.newIssue();
-    newIssue
-        .forRule(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, ruleKey))
-        .at(newIssue.newLocation()
-            .on(inputFile)
-            .at(inputFile.newRange(beginLine, startColumn, endLine, startColumn + 1))
-            .message(message))
-        .gap(0.0);
-    newIssue.save();
+
+    try {
+      newIssue
+          .forRule(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, ruleKey))
+          .at(newIssue.newLocation()
+              .on(inputFile)
+              .at(inputFile.newRange(beginLine, startColumn, endLine, startColumn + 1))
+              .message(message))
+          .gap(0.0)
+          .save();
+    } catch (IllegalArgumentException e) {
+      DelphiUtils.LOG.error("Failed to add issue:", e);
+    }
   }
 
   private void parsePMDreport(File reportFile) {
@@ -140,23 +144,14 @@ public class DelphiPmdSensor implements Sensor {
           String rule = violation.getAttributes().getNamedItem("rule").getTextContent();
           String message = violation.getTextContent();
 
-          try {
-            addIssue(rule, fileName, Integer.parseInt(beginLine), Integer.parseInt(beginColumn),
-                Integer.parseInt(endLine), message);
-          }
-          catch (IllegalArgumentException e) {
-            DelphiUtils.LOG.info("Failed to add issue:");
-            DelphiUtils.LOG.error("Exception Stacktrace", e);
-          }
+          addIssue(rule, fileName, Integer.parseInt(beginLine), Integer.parseInt(beginColumn),
+              Integer.parseInt(endLine), message);
         }
       }
-    } catch (SAXParseException e) {
-      DelphiUtils.LOG.info("SAXParseException", e);
     } catch (SAXException e) {
-      DelphiUtils.LOG.error("SAXException Stacktrace", e);
+      DelphiUtils.LOG.error("Error while parsing PMD report", e);
     } catch (Exception e) {
-      DelphiUtils.LOG.info("SAX Parsing Exception");
-      DelphiUtils.LOG.error("Exception Stacktrace", e);
+      DelphiUtils.LOG.error("Unexpected error while parsing PMD report", e);
     }
   }
 

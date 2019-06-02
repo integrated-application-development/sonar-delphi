@@ -15,7 +15,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="SonarQube_Delphi" options="-XDcompilePolicy=simple &quot;-Xplugin:ErrorProne -XepDisableWarningsInGeneratedCode&quot;" />
+      <module name="SonarQube_Delphi" options="-XDcompilePolicy=simple &quot;-Xplugin:ErrorProne -XepDisableWarningsInGeneratedCode -XepExcludedPaths:.*/antlr/generated/.*&quot;" />
     </option>
   </component>
 </project>

@@ -22,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer;
 
-import org.sonar.plugins.delphi.antlr.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /**
  * Enum class holing lexer metrics used during file analysis

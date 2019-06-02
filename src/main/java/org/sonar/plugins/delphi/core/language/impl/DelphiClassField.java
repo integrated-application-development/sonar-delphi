@@ -22,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.core.language.impl;
 
-import org.sonar.plugins.delphi.antlr.DelphiParser;
+import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
 import org.sonar.plugins.delphi.core.language.ClassFieldInterface;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 
