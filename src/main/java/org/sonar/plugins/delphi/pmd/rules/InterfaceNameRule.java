@@ -39,7 +39,7 @@ public class InterfaceNameRule extends DelphiRule {
       CommonTree interfaceNameNode = (CommonTree) node.getParent();
         /* This safely casts interfaceNameNode from CommonTree to DelphiPMDNode type.
         Since (DelphiPMDNode) <CommonTree object> casting will not work. */
-      DelphiPMDNode violationNode = new DelphiPMDNode(interfaceNameNode);
+      DelphiPMDNode violationNode = new DelphiPMDNode(interfaceNameNode, node.getASTTree());
 
       String name = interfaceNameNode.getText();
 

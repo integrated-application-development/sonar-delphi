@@ -31,7 +31,7 @@ import org.antlr.runtime.tree.CommonTreeAdaptor;
  */
 class DelphiTreeAdaptor extends CommonTreeAdaptor {
 
-  private ASTTree astTree;
+  private DelphiAST astTree;
   private int lastLine;
 
   /**
@@ -39,7 +39,7 @@ class DelphiTreeAdaptor extends CommonTreeAdaptor {
    *
    * @param tree Tree
    */
-  public DelphiTreeAdaptor(ASTTree tree) {
+  public DelphiTreeAdaptor(DelphiAST tree) {
     astTree = tree;
   }
 

@@ -49,7 +49,7 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
    * @param payload Token
    * @param tree AST Tree
    */
-  public DelphiPMDNode(Token payload, ASTTree tree) {
+  public DelphiPMDNode(Token payload, DelphiAST tree) {
     super(payload, tree);
   }
 
@@ -57,9 +57,10 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
    * C-tor, used in DelphiPMD to safely cast from CommonTree to DelphiPMDNode
    *
    * @param node CommonTree node
+   * @param tree AST Tree
    */
-  public DelphiPMDNode(CommonTree node) {
-    super(node.getToken());
+  public DelphiPMDNode(CommonTree node, DelphiAST tree) {
+    super(node.getToken(), tree);
     this.children = node.getChildren();
     this.parent = (CommonTree) node.getParent();
     this.childIndex = node.getChildIndex();
@@ -226,7 +227,7 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
    */
   @Override
   public int getBeginLine() {
-    return 0;
+    return getLine();
   }
 
   /**
@@ -234,7 +235,7 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
    */
   @Override
   public int getBeginColumn() {
-    return 0;
+    return getCharPositionInLine();
   }
 
   /**
@@ -242,7 +243,14 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
    */
   @Override
   public int getEndLine() {
-    return 0;
+    if (getChildCount() > 0) {
+      DelphiPMDNode lastChild = new DelphiPMDNode((CommonTree)getChild(getChildCount() - 1),
+          getASTTree());
+
+      return lastChild.getEndLine();
+    }
+
+    return getLine();
   }
 
   /**
@@ -250,7 +258,21 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
    */
   @Override
   public int getEndColumn() {
-    return 0;
+    if (getChildCount() > 0) {
+      DelphiPMDNode lastChild = new DelphiPMDNode((CommonTree)getChild(getChildCount() - 1),
+          getASTTree());
+
+      return lastChild.getEndColumn();
+    }
+
+    int maxColumn = getASTTree().getFileSourceLine(getEndLine()).length() - 1;
+
+    if (isNil()) {
+      return maxColumn;
+    }
+
+    int calcColumn = getBeginColumn() + getToken().getText().length();
+    return Math.min(maxColumn, calcColumn);
   }
 
 
