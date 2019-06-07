@@ -1,4 +1,4 @@
-// $ANTLR 3.5.1 ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g 2019-05-31 15:20:14
+// $ANTLR 3.5.1 ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g 2019-06-03 14:42:39
 
 /*
  * Sonar Delphi Plugin
@@ -951,7 +951,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_SEMI.add(char_literal25);
 
 			// AST REWRITE
-			// elements: LIBRARY, namespaceName
+			// elements: namespaceName, LIBRARY
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -1338,7 +1338,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_SEMI.add(char_literal42);
 
 			// AST REWRITE
-			// elements: hintingDirective, namespaceName, UNIT
+			// elements: namespaceName, hintingDirective, UNIT
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -1476,7 +1476,7 @@ public class DelphiParser extends Parser {
 			}
 
 			// AST REWRITE
-			// elements: usesClause, INTERFACE, interfaceDecl
+			// elements: INTERFACE, usesClause, interfaceDecl
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -1619,7 +1619,7 @@ public class DelphiParser extends Parser {
 			}
 
 			// AST REWRITE
-			// elements: IMPLEMENTATION, usesClause, declSection
+			// elements: usesClause, IMPLEMENTATION, declSection
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -2129,7 +2129,7 @@ public class DelphiParser extends Parser {
 			if (state.failed) return retval;
 			if ( state.backtracking==0 ) stream_namespaceNameList.add(namespaceNameList63.getTree());
 			// AST REWRITE
-			// elements: namespaceNameList, USES
+			// elements: USES, namespaceNameList
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -3606,7 +3606,7 @@ public class DelphiParser extends Parser {
 			}
 
 			// AST REWRITE
-			// elements: constKey, constDeclaration
+			// elements: constDeclaration, constKey
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -3912,7 +3912,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_SEMI.add(char_literal111);
 
 			// AST REWRITE
-			// elements: constExpression, ident, typeDecl, EQUAL
+			// elements: constExpression, typeDecl, ident, EQUAL
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -4239,7 +4239,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_SEMI.add(char_literal120);
 
 			// AST REWRITE
-			// elements: genericTypeIdent, typeDecl, hintingDirective, customAttribute
+			// elements: customAttribute, typeDecl, genericTypeIdent, hintingDirective
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -4371,7 +4371,7 @@ public class DelphiParser extends Parser {
 			}
 
 			// AST REWRITE
-			// elements: varDeclaration, varDeclaration, varKey
+			// elements: varKey, varDeclaration, varDeclaration
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -5949,7 +5949,7 @@ public class DelphiParser extends Parser {
 			if (state.failed) return retval;
 			if ( state.backtracking==0 ) stream_arraySubType.add(arraySubType175.getTree());
 			// AST REWRITE
-			// elements: RBRACK, arraySubType, COMMA, arrayIndex, arrayIndex, ARRAY, LBRACK
+			// elements: RBRACK, ARRAY, LBRACK, COMMA, arraySubType, arrayIndex, arrayIndex
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -5968,7 +5968,7 @@ public class DelphiParser extends Parser {
 				root_1 = (Object)adaptor.becomeRoot(stream_arraySubType.nextNode(), root_1);
 				adaptor.addChild(root_1, stream_ARRAY.nextNode());
 				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:197:56: ( '[' ( arrayIndex )? ( ',' ( arrayIndex )? )* ']' )?
-				if ( stream_RBRACK.hasNext()||stream_COMMA.hasNext()||stream_arrayIndex.hasNext()||stream_LBRACK.hasNext() ) {
+				if ( stream_RBRACK.hasNext()||stream_LBRACK.hasNext()||stream_COMMA.hasNext()||stream_arrayIndex.hasNext() ) {
 					adaptor.addChild(root_1, stream_LBRACK.nextNode());
 					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:197:61: ( arrayIndex )?
 					if ( stream_arrayIndex.hasNext() ) {
@@ -5991,9 +5991,9 @@ public class DelphiParser extends Parser {
 					adaptor.addChild(root_1, stream_RBRACK.nextNode());
 				}
 				stream_RBRACK.reset();
+				stream_LBRACK.reset();
 				stream_COMMA.reset();
 				stream_arrayIndex.reset();
-				stream_LBRACK.reset();
 
 				adaptor.addChild(root_0, root_1);
 				}
@@ -6267,7 +6267,7 @@ public class DelphiParser extends Parser {
 			if (state.failed) return retval;
 			if ( state.backtracking==0 ) stream_typeDecl.add(typeDecl184.getTree());
 			// AST REWRITE
-			// elements: typeDecl, SET
+			// elements: SET, typeDecl
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -7342,7 +7342,7 @@ public class DelphiParser extends Parser {
 					if (state.failed) return retval;
 					if ( state.backtracking==0 ) stream_typeDecl.add(typeDecl217.getTree());
 					// AST REWRITE
-					// elements: formalParameterSection, FUNCTION, typeDecl
+					// elements: FUNCTION, typeDecl, formalParameterSection
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -9408,7 +9408,7 @@ public class DelphiParser extends Parser {
 					if ( state.backtracking==0 ) stream_END.add(string_literal287);
 
 					// AST REWRITE
-					// elements: classItem, CLASS, classParent
+					// elements: CLASS, classItem, classParent
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -10179,7 +10179,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_END.add(string_literal310);
 
 			// AST REWRITE
-			// elements: CLASS, classHelperItem, typeId
+			// elements: CLASS, typeId, classHelperItem
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -10581,7 +10581,7 @@ public class DelphiParser extends Parser {
 					if ( state.backtracking==0 ) stream_END.add(string_literal320);
 
 					// AST REWRITE
-					// elements: interfaceKey, interfaceGuid, classParent, interfaceItem
+					// elements: interfaceGuid, classParent, interfaceKey, interfaceItem
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -10661,7 +10661,7 @@ public class DelphiParser extends Parser {
 					}
 
 					// AST REWRITE
-					// elements: interfaceKey, classParent
+					// elements: classParent, interfaceKey
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -11108,7 +11108,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_END.add(string_literal333);
 
 			// AST REWRITE
-			// elements: OBJECT, classParent, objectItem
+			// elements: classParent, objectItem, OBJECT
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -11538,7 +11538,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_END.add(string_literal342);
 
 			// AST REWRITE
-			// elements: RECORD, recordField, recordItem
+			// elements: recordField, RECORD, recordItem
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -11666,7 +11666,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_END.add(string_literal346);
 
 			// AST REWRITE
-			// elements: recordField, RECORD, recordVariantSection
+			// elements: RECORD, recordVariantSection, recordField
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -12303,7 +12303,7 @@ public class DelphiParser extends Parser {
 			}
 
 			// AST REWRITE
-			// elements: identList, typeDecl
+			// elements: typeDecl, identList
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -13394,7 +13394,7 @@ public class DelphiParser extends Parser {
 					}
 
 					// AST REWRITE
-					// elements: methodKey, genericDefinition, ident, methodDirective, customAttribute, formalParameterSection, CLASS
+					// elements: formalParameterSection, ident, methodDirective, customAttribute, CLASS, genericDefinition, methodKey
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -14080,7 +14080,7 @@ public class DelphiParser extends Parser {
 					}
 
 					// AST REWRITE
-					// elements: customAttribute, genericDefinition, typeDecl, customAttribute, ident, CLASS, formalParameterSection, methodDirective, FUNCTION
+					// elements: FUNCTION, formalParameterSection, typeDecl, customAttribute, methodDirective, customAttribute, genericDefinition, CLASS, ident
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -14688,7 +14688,7 @@ public class DelphiParser extends Parser {
 					if ( state.backtracking==0 ) stream_SEMI.add(char_literal418);
 
 					// AST REWRITE
-					// elements: genericDefinition, CLASS, formalParameterSection, customAttribute, typeDecl, customAttribute, OPERATOR, ident
+					// elements: customAttribute, CLASS, genericDefinition, formalParameterSection, OPERATOR, ident, customAttribute, typeDecl
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -14943,7 +14943,7 @@ public class DelphiParser extends Parser {
 			}
 
 			// AST REWRITE
-			// elements: identList, typeDecl, customAttribute
+			// elements: identList, customAttribute, typeDecl
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -15269,7 +15269,7 @@ public class DelphiParser extends Parser {
 			}
 
 			// AST REWRITE
-			// elements: ident, PROPERTY, genericTypeIdent, classPropertySpecifier
+			// elements: ident, genericTypeIdent, PROPERTY, classPropertySpecifier
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -16072,7 +16072,7 @@ public class DelphiParser extends Parser {
 					}
 
 					// AST REWRITE
-					// elements: READ, qualifiedIdent
+					// elements: qualifiedIdent, READ
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -16139,7 +16139,7 @@ public class DelphiParser extends Parser {
 					}
 
 					// AST REWRITE
-					// elements: qualifiedIdent, WRITE
+					// elements: WRITE, qualifiedIdent
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -17633,7 +17633,7 @@ public class DelphiParser extends Parser {
 					}
 
 					// AST REWRITE
-					// elements: methodName, customAttribute, methodKey, formalParameterSection, CLASS
+					// elements: methodKey, customAttribute, formalParameterSection, methodName, CLASS
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -18207,7 +18207,7 @@ public class DelphiParser extends Parser {
 					}
 
 					// AST REWRITE
-					// elements: typeDecl, FUNCTION, methodName, customAttribute, CLASS, customAttribute, formalParameterSection
+					// elements: typeDecl, methodName, CLASS, formalParameterSection, customAttribute, customAttribute, FUNCTION
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -18772,7 +18772,7 @@ public class DelphiParser extends Parser {
 					}
 
 					// AST REWRITE
-					// elements: methodName, typeDecl, OPERATOR, formalParameterSection, customAttribute, customAttribute, CLASS
+					// elements: CLASS, customAttribute, OPERATOR, methodName, formalParameterSection, typeDecl, customAttribute
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -19304,7 +19304,7 @@ public class DelphiParser extends Parser {
 			}
 
 			// AST REWRITE
-			// elements: procBody, procDeclHeading
+			// elements: procDeclHeading, procBody
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -19485,7 +19485,7 @@ public class DelphiParser extends Parser {
 					}
 
 					// AST REWRITE
-					// elements: PROCEDURE, formalParameterSection, ident
+					// elements: formalParameterSection, PROCEDURE, ident
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -19600,7 +19600,7 @@ public class DelphiParser extends Parser {
 					if (state.failed) return retval;
 					if ( state.backtracking==0 ) stream_typeDecl.add(typeDecl544.getTree());
 					// AST REWRITE
-					// elements: ident, formalParameterSection, FUNCTION, typeDecl
+					// elements: FUNCTION, formalParameterSection, typeDecl, ident
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -20114,7 +20114,7 @@ public class DelphiParser extends Parser {
 			}
 
 			// AST REWRITE
-			// elements: customAttribute, identListFlat, typeDecl, parmType
+			// elements: typeDecl, parmType, customAttribute, identListFlat
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -21019,7 +21019,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_RBRACK.add(char_literal579);
 
 			// AST REWRITE
-			// elements: LPAREN, expressionList, namespacedQualifiedIdent, RBRACK, LBRACK, RPAREN
+			// elements: namespacedQualifiedIdent, LPAREN, expressionList, LBRACK, RBRACK, RPAREN
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -23532,7 +23532,7 @@ public class DelphiParser extends Parser {
 					if ( state.backtracking==0 ) stream_RPAREN.add(char_literal662);
 
 					// AST REWRITE
-					// elements: RPAREN, colonConstruct, expression, LPAREN, colonConstruct, expression
+					// elements: expression, colonConstruct, expression, colonConstruct, RPAREN, LPAREN
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -23547,7 +23547,7 @@ public class DelphiParser extends Parser {
 					{
 						adaptor.addChild(root_0, stream_LPAREN.nextNode());
 						// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:499:115: ( expression ( colonConstruct )? ( expression ( colonConstruct )? )* )?
-						if ( stream_expression.hasNext()||stream_colonConstruct.hasNext()||stream_expression.hasNext() ) {
+						if ( stream_expression.hasNext()||stream_expression.hasNext()||stream_colonConstruct.hasNext() ) {
 							adaptor.addChild(root_0, stream_expression.nextTree());
 							// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:499:127: ( colonConstruct )?
 							if ( stream_colonConstruct.hasNext() ) {
@@ -23569,8 +23569,8 @@ public class DelphiParser extends Parser {
 
 						}
 						stream_expression.reset();
-						stream_colonConstruct.reset();
 						stream_expression.reset();
+						stream_colonConstruct.reset();
 
 						adaptor.addChild(root_0, stream_RPAREN.nextNode());
 					}
@@ -25901,7 +25901,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_END.add(string_literal751);
 
 			// AST REWRITE
-			// elements: BEGIN, statementList, END
+			// elements: statementList, END, BEGIN
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -44011,11 +44011,11 @@ public class DelphiParser extends Parser {
 	static final String DFA88_acceptS =
 		"\2\uffff\1\2\22\uffff\1\1\u009b\uffff";
 	static final String DFA88_specialS =
-		"\11\uffff\1\0\1\uffff\1\1\12\uffff\1\2\1\3\1\uffff\1\4\10\uffff\1\14\1"+
-		"\uffff\1\17\1\10\3\uffff\1\11\17\uffff\1\13\15\uffff\1\21\1\uffff\1\22"+
-		"\6\uffff\1\5\11\uffff\1\7\6\uffff\1\24\1\25\3\uffff\1\12\40\uffff\1\6"+
-		"\3\uffff\1\27\1\23\11\uffff\1\26\6\uffff\1\15\14\uffff\1\20\3\uffff\1"+
-		"\16\2\uffff}>";
+		"\11\uffff\1\2\1\uffff\1\1\12\uffff\1\4\1\0\1\uffff\1\5\10\uffff\1\14\1"+
+		"\uffff\1\13\1\10\3\uffff\1\11\17\uffff\1\17\15\uffff\1\12\1\uffff\1\21"+
+		"\6\uffff\1\6\11\uffff\1\7\6\uffff\1\22\1\23\3\uffff\1\25\40\uffff\1\3"+
+		"\3\uffff\1\27\1\26\11\uffff\1\16\6\uffff\1\15\14\uffff\1\20\3\uffff\1"+
+		"\24\2\uffff}>";
 	static final String[] DFA88_transitionS = {
 			"\1\2\1\uffff\3\2\1\uffff\3\2\2\uffff\3\2\1\uffff\7\2\1\uffff\5\2\1\uffff"+
 			"\4\2\1\uffff\5\2\5\uffff\13\2\1\uffff\3\2\2\uffff\2\2\1\uffff\2\2\3\uffff"+
@@ -44733,15 +44733,15 @@ public class DelphiParser extends Parser {
 			int _s = s;
 			switch ( s ) {
 					case 0 : 
-						int LA88_9 = input.LA(1);
+						int LA88_23 = input.LA(1);
 						 
-						int index88_9 = input.index();
+						int index88_23 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred123_Delphi()) ) {s = 21;}
 						else if ( (true) ) {s = 2;}
 						 
-						input.seek(index88_9);
+						input.seek(index88_23);
 						if ( s>=0 ) return s;
 						break;
 
@@ -44759,6 +44759,32 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 2 : 
+						int LA88_9 = input.LA(1);
+						 
+						int index88_9 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred123_Delphi()) ) {s = 21;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index88_9);
+						if ( s>=0 ) return s;
+						break;
+
+					case 3 : 
+						int LA88_135 = input.LA(1);
+						 
+						int index88_135 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred123_Delphi()) ) {s = 21;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index88_135);
+						if ( s>=0 ) return s;
+						break;
+
+					case 4 : 
 						int LA88_22 = input.LA(1);
 						 
 						int index88_22 = input.index();
@@ -44771,20 +44797,7 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 3 : 
-						int LA88_23 = input.LA(1);
-						 
-						int index88_23 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred123_Delphi()) ) {s = 21;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index88_23);
-						if ( s>=0 ) return s;
-						break;
-
-					case 4 : 
+					case 5 : 
 						int LA88_25 = input.LA(1);
 						 
 						int index88_25 = input.index();
@@ -44797,7 +44810,7 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 5 : 
+					case 6 : 
 						int LA88_80 = input.LA(1);
 						 
 						int index88_80 = input.index();
@@ -44807,19 +44820,6 @@ public class DelphiParser extends Parser {
 						else if ( (true) ) {s = 2;}
 						 
 						input.seek(index88_80);
-						if ( s>=0 ) return s;
-						break;
-
-					case 6 : 
-						int LA88_135 = input.LA(1);
-						 
-						int index88_135 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred123_Delphi()) ) {s = 21;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index88_135);
 						if ( s>=0 ) return s;
 						break;
 
@@ -44863,28 +44863,28 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 10 : 
-						int LA88_102 = input.LA(1);
+						int LA88_71 = input.LA(1);
 						 
-						int index88_102 = input.index();
+						int index88_71 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred123_Delphi()) ) {s = 21;}
 						else if ( (true) ) {s = 2;}
 						 
-						input.seek(index88_102);
+						input.seek(index88_71);
 						if ( s>=0 ) return s;
 						break;
 
 					case 11 : 
-						int LA88_57 = input.LA(1);
+						int LA88_36 = input.LA(1);
 						 
-						int index88_57 = input.index();
+						int index88_36 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred123_Delphi()) ) {s = 21;}
 						else if ( (true) ) {s = 2;}
 						 
-						input.seek(index88_57);
+						input.seek(index88_36);
 						if ( s>=0 ) return s;
 						break;
 
@@ -44915,28 +44915,28 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 14 : 
-						int LA88_174 = input.LA(1);
+						int LA88_150 = input.LA(1);
 						 
-						int index88_174 = input.index();
+						int index88_150 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred123_Delphi()) ) {s = 21;}
 						else if ( (true) ) {s = 2;}
 						 
-						input.seek(index88_174);
+						input.seek(index88_150);
 						if ( s>=0 ) return s;
 						break;
 
 					case 15 : 
-						int LA88_36 = input.LA(1);
+						int LA88_57 = input.LA(1);
 						 
-						int index88_36 = input.index();
+						int index88_57 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred123_Delphi()) ) {s = 21;}
 						else if ( (true) ) {s = 2;}
 						 
-						input.seek(index88_36);
+						input.seek(index88_57);
 						if ( s>=0 ) return s;
 						break;
 
@@ -44954,19 +44954,6 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 17 : 
-						int LA88_71 = input.LA(1);
-						 
-						int index88_71 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred123_Delphi()) ) {s = 21;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index88_71);
-						if ( s>=0 ) return s;
-						break;
-
-					case 18 : 
 						int LA88_73 = input.LA(1);
 						 
 						int index88_73 = input.index();
@@ -44979,20 +44966,7 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 19 : 
-						int LA88_140 = input.LA(1);
-						 
-						int index88_140 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred123_Delphi()) ) {s = 21;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index88_140);
-						if ( s>=0 ) return s;
-						break;
-
-					case 20 : 
+					case 18 : 
 						int LA88_97 = input.LA(1);
 						 
 						int index88_97 = input.index();
@@ -45005,7 +44979,7 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 21 : 
+					case 19 : 
 						int LA88_98 = input.LA(1);
 						 
 						int index88_98 = input.index();
@@ -45018,16 +44992,42 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 22 : 
-						int LA88_150 = input.LA(1);
+					case 20 : 
+						int LA88_174 = input.LA(1);
 						 
-						int index88_150 = input.index();
+						int index88_174 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred123_Delphi()) ) {s = 21;}
 						else if ( (true) ) {s = 2;}
 						 
-						input.seek(index88_150);
+						input.seek(index88_174);
+						if ( s>=0 ) return s;
+						break;
+
+					case 21 : 
+						int LA88_102 = input.LA(1);
+						 
+						int index88_102 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred123_Delphi()) ) {s = 21;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index88_102);
+						if ( s>=0 ) return s;
+						break;
+
+					case 22 : 
+						int LA88_140 = input.LA(1);
+						 
+						int index88_140 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred123_Delphi()) ) {s = 21;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index88_140);
 						if ( s>=0 ) return s;
 						break;
 
@@ -45087,11 +45087,11 @@ public class DelphiParser extends Parser {
 	static final String DFA100_acceptS =
 		"\2\uffff\1\2\22\uffff\1\1\u009b\uffff";
 	static final String DFA100_specialS =
-		"\11\uffff\1\17\1\uffff\1\16\12\uffff\1\21\1\22\1\uffff\1\23\10\uffff\1"+
-		"\0\1\uffff\1\1\1\24\3\uffff\1\25\17\uffff\1\2\15\uffff\1\3\1\uffff\1\7"+
-		"\6\uffff\1\26\11\uffff\1\27\6\uffff\1\10\1\11\3\uffff\1\12\40\uffff\1"+
-		"\20\3\uffff\1\5\1\6\11\uffff\1\4\6\uffff\1\15\14\uffff\1\13\3\uffff\1"+
-		"\14\2\uffff}>";
+		"\11\uffff\1\20\1\uffff\1\17\12\uffff\1\16\1\21\1\uffff\1\23\10\uffff\1"+
+		"\1\1\uffff\1\0\1\24\3\uffff\1\25\17\uffff\1\2\15\uffff\1\4\1\uffff\1\7"+
+		"\6\uffff\1\26\11\uffff\1\27\6\uffff\1\12\1\13\3\uffff\1\15\40\uffff\1"+
+		"\22\3\uffff\1\10\1\11\11\uffff\1\6\6\uffff\1\3\14\uffff\1\14\3\uffff\1"+
+		"\5\2\uffff}>";
 	static final String[] DFA100_transitionS = {
 			"\1\2\1\uffff\3\2\1\uffff\3\2\2\uffff\3\2\1\uffff\7\2\1\uffff\5\2\1\uffff"+
 			"\4\2\1\uffff\5\2\5\uffff\13\2\1\uffff\3\2\2\uffff\2\2\1\uffff\2\2\3\uffff"+
@@ -45809,19 +45809,6 @@ public class DelphiParser extends Parser {
 			int _s = s;
 			switch ( s ) {
 					case 0 : 
-						int LA100_34 = input.LA(1);
-						 
-						int index100_34 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred143_Delphi()) ) {s = 21;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index100_34);
-						if ( s>=0 ) return s;
-						break;
-
-					case 1 : 
 						int LA100_36 = input.LA(1);
 						 
 						int index100_36 = input.index();
@@ -45831,6 +45818,19 @@ public class DelphiParser extends Parser {
 						else if ( (true) ) {s = 2;}
 						 
 						input.seek(index100_36);
+						if ( s>=0 ) return s;
+						break;
+
+					case 1 : 
+						int LA100_34 = input.LA(1);
+						 
+						int index100_34 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred143_Delphi()) ) {s = 21;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index100_34);
 						if ( s>=0 ) return s;
 						break;
 
@@ -45848,6 +45848,19 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 3 : 
+						int LA100_157 = input.LA(1);
+						 
+						int index100_157 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred143_Delphi()) ) {s = 21;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index100_157);
+						if ( s>=0 ) return s;
+						break;
+
+					case 4 : 
 						int LA100_71 = input.LA(1);
 						 
 						int index100_71 = input.index();
@@ -45860,7 +45873,20 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 4 : 
+					case 5 : 
+						int LA100_174 = input.LA(1);
+						 
+						int index100_174 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred143_Delphi()) ) {s = 21;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index100_174);
+						if ( s>=0 ) return s;
+						break;
+
+					case 6 : 
 						int LA100_150 = input.LA(1);
 						 
 						int index100_150 = input.index();
@@ -45870,32 +45896,6 @@ public class DelphiParser extends Parser {
 						else if ( (true) ) {s = 2;}
 						 
 						input.seek(index100_150);
-						if ( s>=0 ) return s;
-						break;
-
-					case 5 : 
-						int LA100_139 = input.LA(1);
-						 
-						int index100_139 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred143_Delphi()) ) {s = 21;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index100_139);
-						if ( s>=0 ) return s;
-						break;
-
-					case 6 : 
-						int LA100_140 = input.LA(1);
-						 
-						int index100_140 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred143_Delphi()) ) {s = 21;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index100_140);
 						if ( s>=0 ) return s;
 						break;
 
@@ -45913,6 +45913,32 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 8 : 
+						int LA100_139 = input.LA(1);
+						 
+						int index100_139 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred143_Delphi()) ) {s = 21;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index100_139);
+						if ( s>=0 ) return s;
+						break;
+
+					case 9 : 
+						int LA100_140 = input.LA(1);
+						 
+						int index100_140 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred143_Delphi()) ) {s = 21;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index100_140);
+						if ( s>=0 ) return s;
+						break;
+
+					case 10 : 
 						int LA100_97 = input.LA(1);
 						 
 						int index100_97 = input.index();
@@ -45925,7 +45951,7 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 9 : 
+					case 11 : 
 						int LA100_98 = input.LA(1);
 						 
 						int index100_98 = input.index();
@@ -45938,20 +45964,7 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 10 : 
-						int LA100_102 = input.LA(1);
-						 
-						int index100_102 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred143_Delphi()) ) {s = 21;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index100_102);
-						if ( s>=0 ) return s;
-						break;
-
-					case 11 : 
+					case 12 : 
 						int LA100_170 = input.LA(1);
 						 
 						int index100_170 = input.index();
@@ -45964,72 +45977,20 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 12 : 
-						int LA100_174 = input.LA(1);
-						 
-						int index100_174 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred143_Delphi()) ) {s = 21;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index100_174);
-						if ( s>=0 ) return s;
-						break;
-
 					case 13 : 
-						int LA100_157 = input.LA(1);
+						int LA100_102 = input.LA(1);
 						 
-						int index100_157 = input.index();
+						int index100_102 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred143_Delphi()) ) {s = 21;}
 						else if ( (true) ) {s = 2;}
 						 
-						input.seek(index100_157);
+						input.seek(index100_102);
 						if ( s>=0 ) return s;
 						break;
 
 					case 14 : 
-						int LA100_11 = input.LA(1);
-						 
-						int index100_11 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred143_Delphi()) ) {s = 21;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index100_11);
-						if ( s>=0 ) return s;
-						break;
-
-					case 15 : 
-						int LA100_9 = input.LA(1);
-						 
-						int index100_9 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred143_Delphi()) ) {s = 21;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index100_9);
-						if ( s>=0 ) return s;
-						break;
-
-					case 16 : 
-						int LA100_135 = input.LA(1);
-						 
-						int index100_135 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred143_Delphi()) ) {s = 21;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index100_135);
-						if ( s>=0 ) return s;
-						break;
-
-					case 17 : 
 						int LA100_22 = input.LA(1);
 						 
 						int index100_22 = input.index();
@@ -46042,7 +46003,33 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 18 : 
+					case 15 : 
+						int LA100_11 = input.LA(1);
+						 
+						int index100_11 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred143_Delphi()) ) {s = 21;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index100_11);
+						if ( s>=0 ) return s;
+						break;
+
+					case 16 : 
+						int LA100_9 = input.LA(1);
+						 
+						int index100_9 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred143_Delphi()) ) {s = 21;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index100_9);
+						if ( s>=0 ) return s;
+						break;
+
+					case 17 : 
 						int LA100_23 = input.LA(1);
 						 
 						int index100_23 = input.index();
@@ -46052,6 +46039,19 @@ public class DelphiParser extends Parser {
 						else if ( (true) ) {s = 2;}
 						 
 						input.seek(index100_23);
+						if ( s>=0 ) return s;
+						break;
+
+					case 18 : 
+						int LA100_135 = input.LA(1);
+						 
+						int index100_135 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred143_Delphi()) ) {s = 21;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index100_135);
 						if ( s>=0 ) return s;
 						break;
 
@@ -49910,13 +49910,13 @@ public class DelphiParser extends Parser {
 	static final String DFA288_acceptS =
 		"\1\uffff\1\2\12\uffff\1\1\6\uffff\1\1\61\uffff\1\1\137\uffff";
 	static final String DFA288_specialS =
-		"\6\uffff\1\43\4\uffff\1\40\5\uffff\1\44\1\41\3\uffff\1\2\4\uffff\1\3\1"+
-		"\5\1\1\16\uffff\1\45\1\42\1\uffff\1\6\1\uffff\1\7\2\uffff\1\27\1\30\1"+
-		"\31\1\32\2\uffff\1\46\1\47\1\50\1\51\1\52\1\53\1\54\1\uffff\1\55\1\uffff"+
-		"\1\0\3\uffff\1\24\1\uffff\1\11\1\uffff\1\12\1\uffff\1\33\1\uffff\1\34"+
-		"\4\uffff\1\56\14\uffff\1\4\1\10\1\uffff\1\35\1\uffff\1\26\4\uffff\1\17"+
-		"\1\uffff\1\20\1\13\1\16\1\21\1\14\1\23\1\22\2\uffff\1\36\1\37\25\uffff"+
-		"\1\15\1\25\25\uffff}>";
+		"\6\uffff\1\43\4\uffff\1\40\5\uffff\1\44\1\41\3\uffff\1\2\4\uffff\1\4\1"+
+		"\5\1\1\16\uffff\1\45\1\42\1\uffff\1\17\1\uffff\1\21\2\uffff\1\27\1\26"+
+		"\1\30\1\31\2\uffff\1\47\1\46\1\50\1\51\1\52\1\53\1\54\1\uffff\1\55\1\uffff"+
+		"\1\0\3\uffff\1\24\1\uffff\1\22\1\uffff\1\23\1\uffff\1\32\1\uffff\1\34"+
+		"\4\uffff\1\56\14\uffff\1\20\1\3\1\uffff\1\35\1\uffff\1\36\4\uffff\1\6"+
+		"\1\uffff\1\16\1\13\1\14\1\11\1\7\1\12\1\15\2\uffff\1\37\1\33\25\uffff"+
+		"\1\10\1\25\25\uffff}>";
 	static final String[] DFA288_transitionS = {
 			"\1\1\10\uffff\1\1\5\uffff\1\2\14\uffff\1\1\25\uffff\1\1\13\uffff\1\1"+
 			"\1\uffff\1\1\25\uffff\1\1\35\uffff\1\1",
@@ -50678,6 +50678,19 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 3 : 
+						int LA288_99 = input.LA(1);
+						 
+						int index288_99 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred473_Delphi()) ) {s = 69;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index288_99);
+						if ( s>=0 ) return s;
+						break;
+
+					case 4 : 
 						int LA288_27 = input.LA(1);
 						 
 						int index288_27 = input.index();
@@ -50687,19 +50700,6 @@ public class DelphiParser extends Parser {
 						else if ( (true) ) {s = 1;}
 						 
 						input.seek(index288_27);
-						if ( s>=0 ) return s;
-						break;
-
-					case 4 : 
-						int LA288_98 = input.LA(1);
-						 
-						int index288_98 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred473_Delphi()) ) {s = 69;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index288_98);
 						if ( s>=0 ) return s;
 						break;
 
@@ -50717,67 +50717,67 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 6 : 
-						int LA288_47 = input.LA(1);
+						int LA288_108 = input.LA(1);
 						 
-						int index288_47 = input.index();
+						int index288_108 = input.index();
 						input.rewind();
 						s = -1;
-						if ( (synpred473_Delphi()) ) {s = 12;}
+						if ( (synpred473_Delphi()) ) {s = 69;}
 						else if ( (true) ) {s = 1;}
 						 
-						input.seek(index288_47);
+						input.seek(index288_108);
 						if ( s>=0 ) return s;
 						break;
 
 					case 7 : 
-						int LA288_49 = input.LA(1);
+						int LA288_114 = input.LA(1);
 						 
-						int index288_49 = input.index();
+						int index288_114 = input.index();
 						input.rewind();
 						s = -1;
-						if ( (synpred473_Delphi()) ) {s = 12;}
+						if ( (synpred473_Delphi()) ) {s = 69;}
 						else if ( (true) ) {s = 1;}
 						 
-						input.seek(index288_49);
+						input.seek(index288_114);
 						if ( s>=0 ) return s;
 						break;
 
 					case 8 : 
-						int LA288_99 = input.LA(1);
+						int LA288_142 = input.LA(1);
 						 
-						int index288_99 = input.index();
+						int index288_142 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred473_Delphi()) ) {s = 69;}
 						else if ( (true) ) {s = 1;}
 						 
-						input.seek(index288_99);
+						input.seek(index288_142);
 						if ( s>=0 ) return s;
 						break;
 
 					case 9 : 
-						int LA288_74 = input.LA(1);
+						int LA288_113 = input.LA(1);
 						 
-						int index288_74 = input.index();
+						int index288_113 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred473_Delphi()) ) {s = 69;}
 						else if ( (true) ) {s = 1;}
 						 
-						input.seek(index288_74);
+						input.seek(index288_113);
 						if ( s>=0 ) return s;
 						break;
 
 					case 10 : 
-						int LA288_76 = input.LA(1);
+						int LA288_115 = input.LA(1);
 						 
-						int index288_76 = input.index();
+						int index288_115 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred473_Delphi()) ) {s = 69;}
 						else if ( (true) ) {s = 1;}
 						 
-						input.seek(index288_76);
+						input.seek(index288_115);
 						if ( s>=0 ) return s;
 						break;
 
@@ -50795,32 +50795,6 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 12 : 
-						int LA288_114 = input.LA(1);
-						 
-						int index288_114 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred473_Delphi()) ) {s = 69;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index288_114);
-						if ( s>=0 ) return s;
-						break;
-
-					case 13 : 
-						int LA288_142 = input.LA(1);
-						 
-						int index288_142 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred473_Delphi()) ) {s = 69;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index288_142);
-						if ( s>=0 ) return s;
-						break;
-
-					case 14 : 
 						int LA288_112 = input.LA(1);
 						 
 						int index288_112 = input.index();
@@ -50833,46 +50807,7 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 15 : 
-						int LA288_108 = input.LA(1);
-						 
-						int index288_108 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred473_Delphi()) ) {s = 69;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index288_108);
-						if ( s>=0 ) return s;
-						break;
-
-					case 16 : 
-						int LA288_110 = input.LA(1);
-						 
-						int index288_110 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred473_Delphi()) ) {s = 69;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index288_110);
-						if ( s>=0 ) return s;
-						break;
-
-					case 17 : 
-						int LA288_113 = input.LA(1);
-						 
-						int index288_113 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred473_Delphi()) ) {s = 69;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index288_113);
-						if ( s>=0 ) return s;
-						break;
-
-					case 18 : 
+					case 13 : 
 						int LA288_116 = input.LA(1);
 						 
 						int index288_116 = input.index();
@@ -50885,16 +50820,81 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 19 : 
-						int LA288_115 = input.LA(1);
+					case 14 : 
+						int LA288_110 = input.LA(1);
 						 
-						int index288_115 = input.index();
+						int index288_110 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred473_Delphi()) ) {s = 69;}
 						else if ( (true) ) {s = 1;}
 						 
-						input.seek(index288_115);
+						input.seek(index288_110);
+						if ( s>=0 ) return s;
+						break;
+
+					case 15 : 
+						int LA288_47 = input.LA(1);
+						 
+						int index288_47 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred473_Delphi()) ) {s = 12;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index288_47);
+						if ( s>=0 ) return s;
+						break;
+
+					case 16 : 
+						int LA288_98 = input.LA(1);
+						 
+						int index288_98 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred473_Delphi()) ) {s = 69;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index288_98);
+						if ( s>=0 ) return s;
+						break;
+
+					case 17 : 
+						int LA288_49 = input.LA(1);
+						 
+						int index288_49 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred473_Delphi()) ) {s = 12;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index288_49);
+						if ( s>=0 ) return s;
+						break;
+
+					case 18 : 
+						int LA288_74 = input.LA(1);
+						 
+						int index288_74 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred473_Delphi()) ) {s = 69;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index288_74);
+						if ( s>=0 ) return s;
+						break;
+
+					case 19 : 
+						int LA288_76 = input.LA(1);
+						 
+						int index288_76 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred473_Delphi()) ) {s = 69;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index288_76);
 						if ( s>=0 ) return s;
 						break;
 
@@ -50925,15 +50925,15 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 22 : 
-						int LA288_103 = input.LA(1);
+						int LA288_53 = input.LA(1);
 						 
-						int index288_103 = input.index();
+						int index288_53 = input.index();
 						input.rewind();
 						s = -1;
-						if ( (synpred473_Delphi()) ) {s = 69;}
+						if ( (synpred473_Delphi()) ) {s = 12;}
 						else if ( (true) ) {s = 1;}
 						 
-						input.seek(index288_103);
+						input.seek(index288_53);
 						if ( s>=0 ) return s;
 						break;
 
@@ -50951,19 +50951,6 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 24 : 
-						int LA288_53 = input.LA(1);
-						 
-						int index288_53 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred473_Delphi()) ) {s = 12;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index288_53);
-						if ( s>=0 ) return s;
-						break;
-
-					case 25 : 
 						int LA288_54 = input.LA(1);
 						 
 						int index288_54 = input.index();
@@ -50976,7 +50963,7 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 26 : 
+					case 25 : 
 						int LA288_55 = input.LA(1);
 						 
 						int index288_55 = input.index();
@@ -50989,7 +50976,7 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 27 : 
+					case 26 : 
 						int LA288_78 = input.LA(1);
 						 
 						int index288_78 = input.index();
@@ -50999,6 +50986,19 @@ public class DelphiParser extends Parser {
 						else if ( (true) ) {s = 1;}
 						 
 						input.seek(index288_78);
+						if ( s>=0 ) return s;
+						break;
+
+					case 27 : 
+						int LA288_120 = input.LA(1);
+						 
+						int index288_120 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred473_Delphi()) ) {s = 69;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index288_120);
 						if ( s>=0 ) return s;
 						break;
 
@@ -51029,6 +51029,19 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 30 : 
+						int LA288_103 = input.LA(1);
+						 
+						int index288_103 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred473_Delphi()) ) {s = 69;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index288_103);
+						if ( s>=0 ) return s;
+						break;
+
+					case 31 : 
 						int LA288_119 = input.LA(1);
 						 
 						int index288_119 = input.index();
@@ -51038,19 +51051,6 @@ public class DelphiParser extends Parser {
 						else if ( (true) ) {s = 1;}
 						 
 						input.seek(index288_119);
-						if ( s>=0 ) return s;
-						break;
-
-					case 31 : 
-						int LA288_120 = input.LA(1);
-						 
-						int index288_120 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred473_Delphi()) ) {s = 69;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index288_120);
 						if ( s>=0 ) return s;
 						break;
 
@@ -51133,19 +51133,6 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 38 : 
-						int LA288_58 = input.LA(1);
-						 
-						int index288_58 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred473_Delphi()) ) {s = 12;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index288_58);
-						if ( s>=0 ) return s;
-						break;
-
-					case 39 : 
 						int LA288_59 = input.LA(1);
 						 
 						int index288_59 = input.index();
@@ -51155,6 +51142,19 @@ public class DelphiParser extends Parser {
 						else if ( (true) ) {s = 1;}
 						 
 						input.seek(index288_59);
+						if ( s>=0 ) return s;
+						break;
+
+					case 39 : 
+						int LA288_58 = input.LA(1);
+						 
+						int index288_58 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred473_Delphi()) ) {s = 12;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index288_58);
 						if ( s>=0 ) return s;
 						break;
 

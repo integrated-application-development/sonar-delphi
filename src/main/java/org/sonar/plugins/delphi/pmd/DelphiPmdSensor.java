@@ -42,6 +42,7 @@ import net.sourceforge.pmd.renderers.Renderer;
 import net.sourceforge.pmd.renderers.XMLRenderer;
 import org.apache.commons.io.FileUtils;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -50,7 +51,6 @@ import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
-import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileExporter;
 import org.sonar.plugins.delphi.pmd.profile.DelphiRuleSets;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRulesUtils;
 import org.sonar.plugins.delphi.project.DelphiProject;
@@ -62,7 +62,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 /**
  * PMD sensor
@@ -73,6 +72,7 @@ public class DelphiPmdSensor implements Sensor {
   private final DelphiProjectHelper delphiProjectHelper;
   private final List<String> errors = new ArrayList<>();
   private final ActiveRules rulesProfile;
+  private int issueHighlightingErrors = 0;
 
   /**
    * C-tor
@@ -97,31 +97,40 @@ public class DelphiPmdSensor implements Sensor {
     descriptor.name("PMD sensor").onlyOnLanguage(DelphiLanguage.KEY);
   }
 
-  private void addIssue(String ruleKey, String fileName, Integer beginLine, Integer startColumn,
-      Integer endLine, String message) {
-
-    DelphiUtils.LOG.debug("PMD Violation - rule: {} file: {} message: {}", ruleKey, fileName,
-        message);
-
+  private void addIssue(String ruleKey, String fileName, int beginLine, int beginColumn,
+      int endLine, int endColumn, String message) {
     InputFile inputFile = delphiProjectHelper.getFile(fileName);
     NewIssue newIssue = context.newIssue();
+    TextRange textRange;
 
+    // Parsing errors and other factors can cause token character positions to be offset
+    // This can cause TextRange creation to fail because we naively trust the tokens to provide
+    // their location and size.
+    // In the event that we get a bad file pointer, we just select the line instead.
     try {
-      newIssue
-          .forRule(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, ruleKey))
-          .at(newIssue.newLocation()
-              .on(inputFile)
-              .at(inputFile.newRange(beginLine, startColumn, endLine, startColumn + 1))
-              .message(message))
-          .gap(0.0)
-          .save();
+      textRange = inputFile.newRange(beginLine, beginColumn, endLine, endColumn);
     } catch (IllegalArgumentException e) {
-      DelphiUtils.LOG.error("Failed to add issue:", e);
+      textRange = inputFile.selectLine(beginLine);
+      String error = "Rule: {} file: {} beginLine: {} beginCol: {} endLine: {} endCol: {}";
+      DelphiUtils.LOG.debug(error, ruleKey, fileName, beginLine, beginColumn, endLine, endColumn);
+      DelphiUtils.LOG.debug("Error while creating issue highlighting text range:", e);
+      ++issueHighlightingErrors;
     }
+
+    newIssue
+        .forRule(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, ruleKey))
+        .at(newIssue.newLocation()
+            .on(inputFile)
+            .at(textRange)
+            .message(message))
+        .gap(0.0)
+        .save();
   }
 
   private void parsePMDreport(File reportFile) {
     DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+    int issues = 0;
+
     try {
       DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
       Document doc = docBuilder.parse(reportFile);
@@ -141,11 +150,13 @@ public class DelphiPmdSensor implements Sensor {
           String endLine = violation.getAttributes().getNamedItem("endline").getTextContent();
           String beginColumn = violation.getAttributes().getNamedItem("begincolumn")
               .getTextContent();
+          String endColumn = violation.getAttributes().getNamedItem("endcolumn").getTextContent();
           String rule = violation.getAttributes().getNamedItem("rule").getTextContent();
           String message = violation.getTextContent();
 
           addIssue(rule, fileName, Integer.parseInt(beginLine), Integer.parseInt(beginColumn),
-              Integer.parseInt(endLine), message);
+              Integer.parseInt(endLine), Integer.parseInt(endColumn), message);
+          ++issues;
         }
       }
     } catch (SAXException e) {
@@ -153,6 +164,9 @@ public class DelphiPmdSensor implements Sensor {
     } catch (Exception e) {
       DelphiUtils.LOG.error("Unexpected error while parsing PMD report", e);
     }
+
+    DelphiUtils.LOG.info("{} issues added", issues);
+    DelphiUtils.LOG.info("{} issue highlighting errors", issueHighlightingErrors);
   }
 
   /**

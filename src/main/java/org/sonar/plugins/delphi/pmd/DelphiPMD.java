@@ -33,6 +33,7 @@ import net.sourceforge.pmd.lang.LanguageRegistry;
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.ast.ParseException;
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
@@ -69,18 +70,17 @@ public class DelphiPMD {
       List<Node> nodes = getNodesFromAST(ast);
       ruleSets.apply(nodes, ctx, language);
     }
-
   }
 
   /**
    * @param ast AST tree
    * @return AST tree nodes ready for parsing by PMD
    */
-  public List<Node> getNodesFromAST(ASTTree ast) {
+  public List<Node> getNodesFromAST(DelphiAST ast) {
     List<Node> nodes = new ArrayList<>();
 
     for (int i = 0; i < ast.getChildCount(); ++i) {
-      indexNode((CommonTree) ast.getChild(i), nodes);
+      indexNode(ast, i, ast, nodes);
     }
 
     return nodes;
@@ -89,10 +89,14 @@ public class DelphiPMD {
   /**
    * Adds children nodes to list
    *
-   * @param node Parent node
-   * @param list List
+   * @param parent The node whose children are being indexed
+   * @param childIndex Index of the node in its parent
+   * @param ast AST tree
+   * @param list List of DelphiPMDNodes being built
    */
-  public void indexNode(CommonTree node, List<Node> list) {
+  private void indexNode(Tree parent, int childIndex, DelphiAST ast, List<Node> list) {
+    CommonTree node = (CommonTree)parent.getChild(childIndex);
+
     if (node == null) {
       return;
     }
@@ -100,11 +104,11 @@ public class DelphiPMD {
     if (node instanceof DelphiPMDNode) {
       list.add((DelphiPMDNode) node);
     } else {
-      list.add(new DelphiPMDNode(node));
+      list.add(new DelphiPMDNode(node, ast));
     }
 
     for (int i = 0; i < node.getChildCount(); ++i) {
-      indexNode((CommonTree) node.getChild(i), list);
+      indexNode(node, i, ast, list);
     }
   }
 

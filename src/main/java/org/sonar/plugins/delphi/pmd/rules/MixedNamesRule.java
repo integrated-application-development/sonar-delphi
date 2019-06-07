@@ -91,7 +91,7 @@ public class MixedNamesRule extends DelphiRule {
     for (int i = 0; i < node.getChildCount(); ++i) {
 
       // Cast exception was thrown, so we use c-tor instead of casting to DelphiPMDNode
-      DelphiPMDNode child = new DelphiPMDNode((CommonTree) node.getChild(i));
+      DelphiPMDNode child = new DelphiPMDNode((CommonTree) node.getChild(i), node.getASTTree());
       if (child.getLine() > lastLineParsed) {
         lastLineParsed = child.getLine();
       }

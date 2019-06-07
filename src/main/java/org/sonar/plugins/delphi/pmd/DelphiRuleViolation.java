@@ -62,8 +62,7 @@ public class DelphiRuleViolation implements RuleViolation {
    * @param msg Violation message
    */
   public DelphiRuleViolation(DelphiRule delphiRule, RuleContext ctx, String delphiClassName,
-      String delphiMethodName,
-      String delphiPackageName, int line, int column, String msg) {
+      String delphiMethodName, String delphiPackageName, int line, int column, String msg) {
     rule = delphiRule;
     filename = ctx.getSourceCodeFile().getAbsolutePath();
     description = rule.getMessage();
@@ -154,10 +153,10 @@ public class DelphiRuleViolation implements RuleViolation {
 
       packageName = "";
 
-      beginLine = node.getLine();
-      endLine = beginLine;
-      beginColumn = node.getCharPositionInLine();
-      endColumn = beginColumn;
+      beginLine = node.getBeginLine();
+      endLine = node.getEndLine();
+      beginColumn = node.getBeginColumn();
+      endColumn = node.getEndColumn();
 
     } else {
       className = "";
