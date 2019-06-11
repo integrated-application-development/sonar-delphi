@@ -5,6 +5,8 @@ target
 /.README.md.html
 /.TODO.md.html
 /hot-deploy.bat
+**/antlr/output/*
+**/__history/*
 
 # Created by https://www.gitignore.io/api/git
 
