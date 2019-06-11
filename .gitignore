@@ -5,8 +5,6 @@ target
 /.README.md.html
 /.TODO.md.html
 /hot-deploy.bat
-.sonar
-
 
 # Created by https://www.gitignore.io/api/git
 
@@ -72,3 +70,8 @@ fabric.properties
 # modules.xml
 # .idea/misc.xml
 # *.ipr
+
+### Sonar ###
+.sonar/
+.sonarlint/
+.scannerwork/

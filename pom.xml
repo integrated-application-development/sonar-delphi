@@ -201,16 +201,13 @@
     </dependency>
 	</dependencies>
 
-
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
         <version>2.22.0</version>
-
 			</plugin>
-
 			<plugin>
 				<groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
 				<artifactId>sonar-packaging-maven-plugin</artifactId>
@@ -274,36 +271,33 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
-      <!-- JaCoCo configuration -->
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
         <version>0.8.2</version>
         <executions>
-          <!-- prepare agent for measuring integration tests -->
           <execution>
-            <id>prepare-integration-tests</id>
-            <phase>pre-integration-test</phase>
+            <id>pre-unit-test</id>
             <goals>
               <goal>prepare-agent</goal>
             </goals>
             <configuration>
-              <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
+              <destFile>${basedir}/target/jacoco/jacoco-unit.exec</destFile>
             </configuration>
           </execution>
           <execution>
-            <id>jacoco-site</id>
-            <phase>post-integration-test</phase>
+            <id>post-unit-test</id>
+            <phase>test</phase>
             <goals>
               <goal>report</goal>
             </goals>
             <configuration>
-              <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+              <dataFile>${basedir}/target/jacoco/jacoco-unit.exec</dataFile>
+							<outputDirectory>${basedir}/target/jacoco/report/</outputDirectory>
             </configuration>
           </execution>
         </executions>
       </plugin>
-
 		</plugins>
 	</build>
 
