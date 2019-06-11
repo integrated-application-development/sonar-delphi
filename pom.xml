@@ -73,23 +73,22 @@
 
 	<properties>
 		<!--Version Fields-->
-		<sonarQubeMinVersion>7.0</sonarQubeMinVersion>
+		<sonarQubeMinVersion>7.4</sonarQubeMinVersion>
 		<sonar.version>7.7</sonar.version>
-		<sonarcobertura.version>1.4</sonarcobertura.version>
 		<antlr-runtime.version>3.4</antlr-runtime.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<pmd.version>6.15.0</pmd.version>
-		<xalan.version>2.7.1</xalan.version>
+		<xalan.version>2.7.2</xalan.version>
 		<hamcrest-all.version>1.3</hamcrest-all.version>
 		<junit.version>4.12</junit.version>
 		<org.mockit.version>1.10.19</org.mockit.version>
-		<maven-project.version>2.2.1</maven-project.version>
-		<logback-classic.version>1.1.2</logback-classic.version>
+		<maven-project.version>3.0-alpha-2</maven-project.version>
+		<logback-classic.version>1.3.0-alpha4</logback-classic.version>
+		<slf4j.version>1.8.0-beta4</slf4j.version>
 		<antlr3-maven-plugin.version>3.3.9</antlr3-maven-plugin.version>
 		<!--Version Fields end here-->
 		<sonar.pluginName>Delphi</sonar.pluginName>
 		<sonar.pluginClass>org.sonar.plugins.delphi.DelphiPlugin</sonar.pluginClass>
-		<sonar.exclusions>src/main/java/org/sonar/plugins/delphi/antlr/DelphiParser.java,src/main/java/org/sonar/plugins/delphi/antlr/DelphiLexer.java</sonar.exclusions>
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
 		<sonar.issuesReport.html.enable>true</sonar.issuesReport.html.enable>
 		<maven.test.skip>false</maven.test.skip>
@@ -171,34 +170,43 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>${logback-classic.version}</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.sonarsource.java</groupId>
 			<artifactId>java-surefire</artifactId>
-			<version>5.1.1.13214</version>
+			<version>5.13.0.18197</version>
 		</dependency>
 		<dependency>
 			<groupId>com.thoughtworks.xstream</groupId>
 			<artifactId>xstream</artifactId>
-			<version>1.4.10</version>
+			<version>1.4.11.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>24.0-jre</version>
+			<version>27.1-jre</version>
 			<scope>test</scope>
 		</dependency>
     <dependency>
       <groupId>org.jacoco</groupId>
       <artifactId>jacoco-maven-plugin</artifactId>
-      <version>0.8.2</version>
+      <version>0.8.4</version>
       <type>maven-plugin</type>
       <scope>provided</scope>
     </dependency>
+		<dependency>
+			<groupId>xml-apis</groupId>
+			<artifactId>xml-apis</artifactId>
+			<version>1.4.01</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -298,6 +306,24 @@
           </execution>
         </executions>
       </plugin>
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>5.0.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<formats>
+								<format>HTML</format>
+								<format>XML</format>
+							</formats>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
