@@ -2,7 +2,32 @@ unit RecordInitialization;
 
 interface
 
-const DATE_FORMAT: TFormatSettings = (DateSeparator: '-'; ShortDateFormat: 'YYYY-MM-DD');
+type
+  MyCoolRecord = record
+    ID: String;
+    CoolnessFactor: Integer;
+  end;
+
+const
+  C_LameRecord: MyCoolRecord = (
+    ID: '0';
+    CoolnessFactor: 0 // No trailing semicolon
+  );
+
+  C_ArrayOfCoolRecords: array[0..4] of MyCoolRecord = (
+    (
+      ID: '1';
+      CoolnessFactor: 42;
+    ),
+    (
+      ID: '2';
+      CoolnessFactor: 834;
+    ),
+    (
+      ID: '3';
+      CoolnessFactor: 1000;
+    )
+  );
 
 implementation
 

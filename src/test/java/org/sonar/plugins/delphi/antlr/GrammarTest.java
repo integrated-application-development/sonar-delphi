@@ -108,4 +108,38 @@ public class GrammarTest {
     parseFile("ListUtils.pas");
   }
 
+  @Test
+  public void testParseEmptyNestedType() throws Exception {
+    parseFile("EmptyNestedType.pas");
+  }
+
+  @Test
+  public void testParseEmptyClassDeclarations() throws Exception {
+    parseFile("EmptyClassDeclarations.pas");
+  }
+
+  @Test
+  public void testSubRangeTypes() throws Exception {
+    parseFile("SubRangeTypes.pas");
+  }
+
+  @Test
+  public void testMethodProcDirectives() throws Exception {
+    parseFile("MethodProcDirectives.pas");
+  }
+
+  @Test
+  public void testOptionalFunctionReturnType() throws Exception {
+    parseFile("OptionalFunctionReturnType.pas");
+  }
+
+  @Test
+  public void testConstExpressionAmbiguity() throws Exception {
+    parseFile("ConstExpressionAmbiguity.pas");
+  }
+
+  @Test
+  public void testVariantRecord() throws Exception {
+    parseFile("VariantRecord.pas");
+  }
 }
