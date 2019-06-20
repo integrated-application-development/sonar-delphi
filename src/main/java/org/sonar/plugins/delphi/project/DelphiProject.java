@@ -94,6 +94,15 @@ public class DelphiProject {
   }
 
   /**
+   * Adds a list of project preprocessor definitions
+   *
+   * @param definitions List of preprocessor definitions
+   */
+  public void addDefinitions(List<String> definitions) {
+    this.definitions.addAll(definitions);
+  }
+
+  /**
    * adds directory where to search for include files
    *
    * @param directory directory with includes

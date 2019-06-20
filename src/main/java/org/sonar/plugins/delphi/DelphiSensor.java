@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 import org.antlr.runtime.Token;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
@@ -112,7 +113,7 @@ public class DelphiSensor implements Sensor {
    */
   public void execute(SensorContext context) {
     DelphiUtils.LOG.info("Delphi sensor execute...");
-    List<DelphiProject> projects = delphiProjectHelper.getWorkgroupProjects();
+    List<DelphiProject> projects = delphiProjectHelper.getProjects();
     for (DelphiProject delphiProject : projects) {
       addCoverage(context);
       CodeAnalysisCacheResults.resetCache();
@@ -129,8 +130,8 @@ public class DelphiSensor implements Sensor {
 
       if (coverageReport.isPresent()) {
         Path coverageReportDir = Paths.get(coverageReport.get());
-        try {
-          Files.walk(coverageReportDir)
+        try (Stream<Path> coverageReportStream = Files.walk(coverageReportDir)) {
+          coverageReportStream
               .filter(Files::isRegularFile)
               .filter(DelphiCodeCoverageToolParser::isCodeCoverageReport)
               .forEach(path -> {
@@ -140,7 +141,7 @@ public class DelphiSensor implements Sensor {
                 coverageParser.parse(context);
               });
         } catch (IOException e) {
-          DelphiUtils.LOG.error(e.getMessage());
+          DelphiUtils.LOG.error("Error while parsing Coverage Reports:", e);
         }
       }
     }

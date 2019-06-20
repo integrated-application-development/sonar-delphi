@@ -63,7 +63,8 @@ public final class DelphiRulesUtils {
    */
   private static Ruleset buildRuleSetFromXml(String configuration) {
     XStream xstream = new XStream();
-    xstream.setClassLoader(DelphiRulesUtils.class.getClassLoader());
+    XStream.setupDefaultSecurity(xstream);
+    xstream.allowTypesByWildcard(new String[] {"org.sonar.plugins.delphi.pmd.xml.**"});
     xstream.processAnnotations(Ruleset.class);
     xstream.processAnnotations(DelphiRule.class);
     xstream.processAnnotations(Property.class);
@@ -80,7 +81,8 @@ public final class DelphiRulesUtils {
    */
   private static String buildXmlFromRuleset(Ruleset tree) {
     XStream xstream = new XStream();
-    xstream.setClassLoader(DelphiRulesUtils.class.getClassLoader());
+    XStream.setupDefaultSecurity(xstream);
+    xstream.allowTypesByWildcard(new String[] {"org.sonar.plugins.delphi.pmd.xml.**"});
     xstream.processAnnotations(Ruleset.class);
     xstream.processAnnotations(DelphiRule.class);
     xstream.processAnnotations(Property.class);
