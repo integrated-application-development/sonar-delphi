@@ -28,6 +28,7 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.core.language.StatementInterface;
 import org.sonar.plugins.delphi.core.language.Tokenizer;
 import org.sonar.plugins.delphi.core.language.impl.DelphiStatement;
@@ -105,7 +106,7 @@ public class StatementVerifier {
     return false;
   }
 
-  private boolean isComplexStatementNode(Tree node) {
+  private boolean couldBeComplexStatementNode(Tree node) {
     // are we on a new block? (begin..end)
     if (isBeginEndNode(node)) {
       return false;
@@ -122,16 +123,20 @@ public class StatementVerifier {
 
     CommonTree parent = (CommonTree) node.getParent();
     CommonTree assign = (CommonTree) parent.getChild(childIndex + 1);
-    if (assign == null) {
-      return false;
-    }
-    if (assign.getType() != LexerMetrics.ASSIGN.toMetrics()) {
+
+    return assign != null && assign.getType() == LexerMetrics.ASSIGN.toMetrics();
+  }
+
+  private boolean isComplexStatementNode(Tree node) {
+    if (!couldBeComplexStatementNode(node)) {
       return false;
     }
 
+    CommonTree parent = (CommonTree) node.getParent();
     CommonTree actualNode;
+    int childIndex = node.getChildIndex();
 
-    StringBuilder wholeLine = new StringBuilder(node.getText());
+    StringBuilder lineBuilder = new StringBuilder(node.getText());
     while ((actualNode = (CommonTree) parent.getChild(++childIndex)) != null) {
       isBeginEndNode(node);
       // while ; or ELSE
@@ -141,19 +146,19 @@ public class StatementVerifier {
         break;
       }
 
-      wholeLine.append(actualNode.getText());
+      lineBuilder.append(" ").append(actualNode.getText());
     }
 
-    // replace '..' with ' .. '
-    String fixedSourceCode = wholeLine.toString().replaceAll("\\.\\.", " .. ");
+    String[] line = new String[]{lineBuilder.toString()};
+    List<Token> tokens = tokenizer.tokenize(line);
+    tokens.removeIf(token -> (token.getType() == DelphiLexer.WS));
 
-    List<Token> tokens = tokenizer.tokenize(new String[]{fixedSourceCode});
     if (tokens.size() < MIN_TOKENS_FOR_COMPLEX_STMT) {
       return false;
     }
     Token second = tokens.get(1);
     if (second.getType() == LexerMetrics.ASSIGN.toMetrics()) {
-      lastStatementText = wholeLine.toString();
+      lastStatementText = lineBuilder.toString();
       return true;
     }
 
