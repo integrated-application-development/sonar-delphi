@@ -52,7 +52,7 @@ public class IncludeResolver extends SourceResolver {
   /**
    * ctor
    *
-   * @param shouldExtend should we add includes, or just cut their deffinitions out?
+   * @param shouldExtend should we add includes, or just cut their definitions out?
    * @param includesList list of included dirs
    */
   public IncludeResolver(boolean shouldExtend, List<File> includesList) {

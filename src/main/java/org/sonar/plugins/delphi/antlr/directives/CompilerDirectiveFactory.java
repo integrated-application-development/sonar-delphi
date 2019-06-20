@@ -37,11 +37,16 @@ import org.sonar.plugins.delphi.antlr.directives.impl.UndefineDirective;
 import org.sonar.plugins.delphi.antlr.directives.impl.UnusedDirective;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
+// TODO: Refactor this class. The logic could be simpler and easier to follow.
 /**
  * Creates concrete compiler directives based on a given string. Example: {$include unit.pas} should
- * create a IncludeDirective instance
+ * create an IncludeDirective instance
  */
 public class CompilerDirectiveFactory {
+  private boolean insideString;
+  private boolean insideComment;
+  private boolean insideCurlyComment;
+  private boolean insideParenComment;
 
   /**
    * Produce a list of compiler directives from a string
@@ -117,18 +122,97 @@ public class CompilerDirectiveFactory {
   }
 
   private int getDirectiveFirstChar(String data, int startPosition) {
-    return data.indexOf("{$", startPosition);
+    for (int i = startPosition; i < data.length(); ++i) {
+      if (notInsideCommentOrString() && data.charAt(i) == '{' && peekChar(data, i) == '$') {
+        return i;
+      }
+
+      handleCharacter(data, i);
+    }
+
+    return -1;
+  }
+
+  private void handleCharacter(String data, int position) {
+    handleComments(data, position);
+    handleString(data, position);
+  }
+
+  private void handleComments(String data, int position) {
+    if (insideString) {
+      return;
+    }
+
+    switch (data.charAt(position)) {
+      case '/':
+        if (peekChar(data, position) == '/') {
+          insideComment = true;
+        }
+        break;
+
+      case '(':
+        if (peekChar(data, position) == '*') {
+          insideParenComment = true;
+        }
+        break;
+
+      case ')':
+        if (prevChar(data, position) == '*') {
+          insideParenComment = false;
+        }
+        break;
+
+      case '}':
+        insideCurlyComment = false;
+        break;
+
+      case '\n':
+        insideComment = false;
+        break;
+
+      default:
+        // Do nothing
+    }
+  }
+
+  private void handleString(String data, int position) {
+    if (insideComment()) {
+      return;
+    }
+
+    if (data.charAt(position) == '\'') {
+      insideString = !insideString;
+    }
+  }
+
+  private char peekChar(String data, int position) {
+    return (data.length() > position + 1) ? data.charAt(position + 1) : ' ';
+  }
+
+  private char prevChar(String data, int position) {
+    return position != 0 ? data.charAt(position - 1) : ' ';
   }
 
   private int getDirectiveLastChar(String data, int startPosition)
       throws CompilerDirectiveFactorySyntaxException {
-    int pos = data.indexOf('}', startPosition + 1);
-    if (pos == -1) {
-      throw new CompilerDirectiveFactorySyntaxException(
-          "No closing bracket for compiler directive from: "
-              + startPosition + " in: " + data);
+    for (int i = startPosition; i < data.length(); ++i) {
+      if (notInsideCommentOrString() && data.charAt(i) == '}') {
+        return i;
+      }
+
+      handleCharacter(data, i);
     }
-    return pos;
+
+    throw new CompilerDirectiveFactorySyntaxException(
+        "No closing bracket for compiler directive from: " + startPosition + " in: " + data);
+  }
+
+  private boolean notInsideCommentOrString() {
+    return !insideComment() && !insideString;
+  }
+
+  private boolean insideComment() {
+    return insideComment || insideCurlyComment || insideParenComment;
   }
 
   private String getItem(String data, int startPos) throws CompilerDirectiveFactorySyntaxException {

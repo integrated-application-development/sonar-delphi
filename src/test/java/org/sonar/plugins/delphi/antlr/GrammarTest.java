@@ -179,4 +179,20 @@ public class GrammarTest {
   public void testQualifiedKeywordIdentifier() throws Exception {
     parseFile("QualifiedKeywordIdentifier.pas");
   }
+
+  /*
+   * A bizarre corner-case in which an undefined ifdef nested inside of a defined ifdef would cause parsing errors...
+   * But only if the nested ifdef was commented out or inside a string.
+   */
+  @Test
+  public void testUndefinedInaccessibleNestedIfDef() throws Exception {
+    ArrayList<String> definitions = new ArrayList<>();
+    definitions.add("Defined");
+    DelphiSourceSanitizer.setDefinitions(definitions);
+
+    parseFile("UndefinedInaccessibleNestedIfDef.pas");
+
+    definitions.clear();
+    DelphiSourceSanitizer.setDefinitions(definitions);
+  }
 }

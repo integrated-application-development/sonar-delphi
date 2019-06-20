@@ -38,9 +38,9 @@ import org.sonar.plugins.delphi.debug.FileTestsCommon;
 public class CompilerDirectiveFactoryTest extends FileTestsCommon {
 
   private static final String TEST_FILE = "/org/sonar/plugins/delphi/directives/FileWithDirectives.pas";
-  private static final int TEST_FILE_DIRECTIVES_COUNT = 20;
-  CompilerDirectiveFactory factory;
-  CompilerDirective directive;
+  private static final int TEST_FILE_DIRECTIVES_COUNT = 19;
+  private CompilerDirectiveFactory factory;
+  private CompilerDirective directive;
 
   @Before
   public void setup() {
@@ -151,25 +151,21 @@ public class CompilerDirectiveFactoryTest extends FileTestsCommon {
   public void testProduce() throws IOException, CompilerDirectiveFactorySyntaxException {
     loadFile(TEST_FILE);
 
-    String names[] = {"include", "include", "define", "undefine", "include", "if", "else", "ifend",
-        "ifdef",
-        "ifndef", "ifdef", "else",
-        "endif", "else", "if", "ifend", "if", "ifend", "endif", "endif"};
-    String items[] = {"include1.inc", "include2.inc", "TEST", "TEST", "error.inc", "I_FEEL_HAPPY",
-        "", "", "TEST",
-        "UseMe",
-        "EnableMemoryLeakReporting", "", "", "", "VERSION >= 18", "", "RTLVersion < 18", "", "",
-        ""};
-    CompilerDirectiveType types[] = {CompilerDirectiveType.INCLUDE, CompilerDirectiveType.INCLUDE,
-        CompilerDirectiveType.DEFINE,
-        CompilerDirectiveType.UNDEFINE, CompilerDirectiveType.INCLUDE, CompilerDirectiveType.IF,
-        CompilerDirectiveType.ELSE,
+    String[] names = {"include", "include", "define", "undefine", "if", "else",
+        "ifend", "ifdef", "ifndef", "ifdef", "else", "endif", "else", "if",
+        "ifend", "if", "ifend", "endif", "endif"};
+
+    String[] items = {"include1.inc", "include2.inc", "TEST", "TEST", "I_FEEL_HAPPY",
+        "", "", "TEST", "UseMe", "EnableMemoryLeakReporting", "", "", "",
+        "VERSION >= 18", "", "RTLVersion < 18", "", "", ""};
+
+    CompilerDirectiveType[] types = {
+        CompilerDirectiveType.INCLUDE, CompilerDirectiveType.INCLUDE, CompilerDirectiveType.DEFINE,
+        CompilerDirectiveType.UNDEFINE, CompilerDirectiveType.IF, CompilerDirectiveType.ELSE,
         CompilerDirectiveType.IFEND, CompilerDirectiveType.IFDEF, CompilerDirectiveType.IFDEF,
-        CompilerDirectiveType.IFDEF,
-        CompilerDirectiveType.ELSE, CompilerDirectiveType.ENDIF, CompilerDirectiveType.ELSE,
-        CompilerDirectiveType.IF,
-        CompilerDirectiveType.IFEND, CompilerDirectiveType.IF, CompilerDirectiveType.IFEND,
-        CompilerDirectiveType.ENDIF,
+        CompilerDirectiveType.IFDEF, CompilerDirectiveType.ELSE, CompilerDirectiveType.ENDIF,
+        CompilerDirectiveType.ELSE, CompilerDirectiveType.IF, CompilerDirectiveType.IFEND,
+        CompilerDirectiveType.IF, CompilerDirectiveType.IFEND, CompilerDirectiveType.ENDIF,
         CompilerDirectiveType.ENDIF};
 
     List<CompilerDirective> allDirectives = factory.produce(testFileString.toString());
