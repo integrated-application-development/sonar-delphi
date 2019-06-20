@@ -51,8 +51,6 @@ public class IncludeResolverTest extends FileTestsCommon {
   public void testResolveIncludes() {
     SourceResolverResults results = new SourceResolverResults(testFile.getAbsolutePath(),
         testFileString);
-    ExcludeResolver excludeResolver = new ExcludeResolver();
-    excludeResolver.resolve(results);
 
     resolver.resolve(results);
     assertEquals(4, resolver.getIncludedFilesPath().size());

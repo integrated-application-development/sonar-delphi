@@ -32,7 +32,6 @@ public class SourceResolverResults {
 
   private String fileName;
   private StringBuilder data;
-  private SubRangeAggregator excludes = new SubRangeMergingAggregator();
 
   /**
    * ctor
@@ -61,21 +60,6 @@ public class SourceResolverResults {
     data = newData;
   }
 
-  /**
-   * @return exludes
-   */
-  public SubRangeAggregator getFileExcludes() {
-    return excludes;
-  }
-
-  /**
-   * set the excludes
-   *
-   * @param newExcludes excludes to set
-   */
-  public void setFileExcludes(SubRangeAggregator newExcludes) {
-    excludes = newExcludes;
-  }
 
   public String getFileName() {
     return fileName;

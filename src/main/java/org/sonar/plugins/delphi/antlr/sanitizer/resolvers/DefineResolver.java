@@ -56,8 +56,7 @@ public class DefineResolver extends SourceResolver {
 
   @Override
   protected void doResolve(SourceResolverResults results) {
-    StringBuilder newData = resolveDefines(results.getFileData(), results.getFileExcludes(),
-        definitions);
+    StringBuilder newData = resolveDefines(results.getFileData(), definitions);
     results.setFileData(newData);
   }
 
@@ -65,11 +64,9 @@ public class DefineResolver extends SourceResolver {
    * Resolve defines
    *
    * @param str File data
-   * @param excluded Excluded areas, not to analyze
    * @return New file data with parsed preprocesor defines
    */
-  private StringBuilder resolveDefines(StringBuilder str, SubRangeAggregator excluded,
-      Set<String> defines) {
+  private StringBuilder resolveDefines(StringBuilder str, Set<String> defines) {
     if (str == null) {
       return null;
     }
@@ -77,7 +74,7 @@ public class DefineResolver extends SourceResolver {
     try {
       CompilerDirectiveFactory factory = new CompilerDirectiveFactory();
       List<CompilerDirective> allDirectives = factory.produce(str.toString());
-      SubRangeAggregator toComment = processCompilerDirectives(allDirectives, defines, excluded);
+      SubRangeAggregator toComment = processCompilerDirectives(allDirectives, defines);
       commentUnwantedDefinitions(str, toComment);
     } catch (CompilerDirectiveFactorySyntaxException e) {
       DelphiUtils.LOG.trace(e.getMessage());
@@ -89,8 +86,7 @@ public class DefineResolver extends SourceResolver {
   }
 
   private SubRangeAggregator processCompilerDirectives(List<CompilerDirective> directives,
-      Set<String> defines,
-      SubRangeAggregator excluded)
+      Set<String> defines)
       throws DefineResolverException {
     SubRangeMergingAggregator toDelete = new SubRangeMergingAggregator();
 
@@ -105,12 +101,12 @@ public class DefineResolver extends SourceResolver {
         defines.remove(directive.getItem());
       } else if (type == CompilerDirectiveType.IF) {
         // mark places to cut off
-        toDelete.addAll(getMatchingEndIfCutRange(directives, i, excluded, true));
+        toDelete.addAll(getMatchingEndIfCutRange(directives, i,true));
       } else if (type == CompilerDirectiveType.IFDEF) {
         boolean isDefined = defines.contains(directive.getItem());
         boolean isPositive = ((IfDefDirective) directive).isPositive();
         boolean shouldCut = (isDefined != isPositive);
-        toDelete.addAll(getMatchingEndIfCutRange(directives, i, excluded, shouldCut));
+        toDelete.addAll(getMatchingEndIfCutRange(directives, i, shouldCut));
       }
     }
 
@@ -119,7 +115,6 @@ public class DefineResolver extends SourceResolver {
 
   private SubRange[] getMatchingEndIfCutRange(List<CompilerDirective> directives,
       int startDirectiveIndex,
-      SubRangeAggregator excluded,
       boolean shouldCut) throws DefineResolverException {
     CompilerDirective firstDirective = directives.get(startDirectiveIndex);
     CompilerDirective lastDirective = null;
@@ -138,10 +133,6 @@ public class DefineResolver extends SourceResolver {
       }
 
       lastDirective = directives.get(index);
-      if (excluded.inRange(lastDirective.getFirstCharPosition())) {
-        // if in excluded range, continue
-        continue;
-      }
 
       CompilerDirectiveType type = lastDirective.getType();
       if (type == CompilerDirectiveType.IFDEF) {
