@@ -24,11 +24,14 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Stack;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.properties.StringMultiProperty;
+import net.sourceforge.pmd.properties.PropertyDescriptor;
+import net.sourceforge.pmd.properties.PropertyFactory;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
@@ -40,10 +43,12 @@ public class UnusedArgumentsRule extends DelphiRule {
 
   private static final int MAX_LOOK_AHEAD = 3;
 
-  private static final StringMultiProperty EXCLUDED_ARGS = new StringMultiProperty("excluded_args",
-      "The argument names to ignore", new String[]{}, 1.0f, ',');
+  private static final PropertyDescriptor<List<String>> EXCLUDED_ARGS =
+      PropertyFactory.stringListProperty("excluded_args")
+          .desc("The argument names to ignore")
+          .build();
 
-  private final List<String> excludedArgs = new ArrayList<>();
+  private final HashSet<String> excludedArgs = new HashSet<>();
 
   public UnusedArgumentsRule() {
     definePropertyDescriptor(EXCLUDED_ARGS);
@@ -204,17 +209,31 @@ public class UnusedArgumentsRule extends DelphiRule {
   }
 
   @Override
-  // Code smell not to override equals in this class
-  public boolean equals(Object object) {
-    return object == this;
-  }
-
-  @Override
   protected void init() {
     super.init();
     List<String> stringProperties = getProperty(EXCLUDED_ARGS);
     for (String prop : stringProperties) {
       excludedArgs.add(prop.toLowerCase());
     }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    UnusedArgumentsRule that = (UnusedArgumentsRule) o;
+    return excludedArgs.equals(that.excludedArgs);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), excludedArgs);
   }
 }

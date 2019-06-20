@@ -29,7 +29,9 @@ import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.scanner.ScannerSide;
 import org.sonar.api.batch.fs.FilePredicates;
@@ -74,11 +76,9 @@ public class DelphiProjectHelper {
    * @return True if so, false otherwise
    */
   public boolean shouldExtendIncludes() {
-    String str = null;
-    if (settings.get(DelphiPlugin.INCLUDE_EXTEND_KEY).isPresent()) {
-      str = settings.get(DelphiPlugin.INCLUDE_EXTEND_KEY).get();
-    }
-    return "true".equals(str);
+    return settings.get(DelphiPlugin.INCLUDE_EXTEND_KEY)
+                   .orElse("false")
+                   .equals("true");
   }
 
   /**
@@ -173,45 +173,77 @@ public class DelphiProjectHelper {
    *
    * @return List of DelphiLanguage projects
    */
-  public List<DelphiProject> getWorkgroupProjects() {
-    List<DelphiProject> list = new ArrayList<>();
+  public List<DelphiProject> getProjects() {
+    List<DelphiProject> projects = getProjectsFromSettings();
 
-    // Single workgroup file, containing list of .dproj files
-    if (settings.hasKey(DelphiPlugin.WORKGROUP_FILE_KEY)) {
-      try {
-        String gprojPath = settings.get(DelphiPlugin.WORKGROUP_FILE_KEY).get();
-        DelphiUtils.LOG.debug("{} {}", ".groupproj file found: ", gprojPath);
-        DelphiWorkgroup workGroup = new DelphiWorkgroup(new File(gprojPath));
-        list.addAll(workGroup.getProjects());
-      } catch (IOException e) {
-        DelphiUtils.LOG.error(e.getMessage());
-        DelphiUtils.LOG.error("Skipping .groupproj reading, default configuration assumed.");
-        DelphiProject newProject = new DelphiProject("Default Project");
-        newProject.setIncludeDirectories(getIncludeDirectories());
-        newProject.setSourceFiles(inputFilesToFiles(mainFiles()));
-        list.clear();
-        list.add(newProject);
-      }
-      // Single .dproj file
-    } else if (settings.hasKey(DelphiPlugin.PROJECT_FILE_KEY)) {
-      String dprojPath = settings.get(DelphiPlugin.PROJECT_FILE_KEY).get();
-      File dprojFile = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), dprojPath);
-      DelphiUtils.LOG.info("{} {}", ".dproj file found: ", dprojPath);
-      DelphiProject newProject = new DelphiProject(dprojFile);
-      list.add(newProject);
-    } else {
-      // No .dproj files, create default project
-      DelphiProject newProject = new DelphiProject("Default Project");
-      newProject.setIncludeDirectories(getIncludeDirectories());
-      newProject.setSourceFiles(inputFilesToFiles(mainFiles()));
-      list.add(newProject);
+    if (projects.isEmpty()) {
+      projects = getDefaultProject();
     }
 
-    for (DelphiProject delphiProject : list) {
-      delphiProject.setDefinitions(getConditionalDefines());
+    for (DelphiProject delphiProject : projects) {
+      delphiProject.addDefinitions(getConditionalDefines());
     }
 
-    return list;
+    return projects;
+  }
+
+  /**
+   * Creates a list of DelphiLanguage projects based on the settings file
+   * If the .gproj and .dproj paths are undefined, an empty list is returned
+   * @return List of DelphiProjects.
+   */
+  private List<DelphiProject> getProjectsFromSettings() {
+    Optional<String> gprojPath = settings.get(DelphiPlugin.WORKGROUP_FILE_KEY);
+    Optional<String> dprojPath = settings.get(DelphiPlugin.PROJECT_FILE_KEY);
+
+    if (gprojPath.isPresent()) {
+      return getWorkgroupProjects(gprojPath.get());
+    } else if (dprojPath.isPresent()) {
+      return getDprojProject(dprojPath.get());
+    }
+
+    return Collections.emptyList();
+  }
+
+  /**
+   * Creates a list of DelphiLanguage projects from a workgroup file
+   * @param gprojPath Path to the .gproj file
+   * @return List of DelphiProjects
+   */
+  private List<DelphiProject> getWorkgroupProjects(String gprojPath) {
+    try {
+      DelphiUtils.LOG.debug("{} {}", ".groupproj file found: ", gprojPath);
+      DelphiWorkgroup workGroup = new DelphiWorkgroup(new File(gprojPath));
+      return workGroup.getProjects();
+    } catch (IOException e) {
+      DelphiUtils.LOG.error("Failed to create Delphi Workgroup: ", e);
+      DelphiUtils.LOG.error("Skipping .groupproj reading, default configuration assumed.");
+    }
+
+    return Collections.emptyList();
+  }
+
+  /**
+   * Creates a single-element list of DelphiLanguage projects from a dproj file
+   * @param dprojPath Path to the .dproj file
+   * @return List of DelphiProjects
+   */
+  private List<DelphiProject> getDprojProject(String dprojPath) {
+    File dprojFile = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), dprojPath);
+    DelphiUtils.LOG.info("{} {}", ".dproj file found: ", dprojPath);
+    DelphiProject newProject = new DelphiProject(dprojFile);
+    return Collections.singletonList(newProject);
+  }
+
+  /**
+   * Creates a single-element list of DelphiLanguage projects, assuming a default configuration
+   * @return List of DelphiProjects
+   */
+  private List<DelphiProject> getDefaultProject() {
+    DelphiProject newProject = new DelphiProject("Default Project");
+    newProject.setIncludeDirectories(getIncludeDirectories());
+    newProject.setSourceFiles(inputFilesToFiles(mainFiles()));
+    return Collections.singletonList(newProject);
   }
 
   private List<InputFile> mainFiles() {

@@ -52,11 +52,8 @@ public class DelphiLinesFactory {
   DelphiLinesFactory(Reader reader) {
     List<LineContextHandler> tmpHandlers = new ArrayList<>();
 
-    // //comment
     tmpHandlers.add(new SingleLineCommentHandler("//", "*//"));
-    // {comment} and {** documentation **}
     tmpHandlers.add(new DelphiCommentHandler("{", "}", true));
-    // (*comment*)
     tmpHandlers.add(new DelphiCommentHandler("(*", "*)", false));
     tmpHandlers.add(new LiteralValueHandler('\''));
     tmpHandlers.add(new LiteralValueHandler('"'));
@@ -72,7 +69,7 @@ public class DelphiLinesFactory {
         nextChar = reader.read();
         if (isEndOfFile(nextChar)) {
           notifyHandlersAboutEndOfLine();
-          break;
+          return;
         }
         lastReadCharacter = (char) nextChar;
         if (isEndOfLine(nextChar)) {
@@ -84,9 +81,9 @@ public class DelphiLinesFactory {
         notifyHandlersAboutNewChar();
       } while (true);
     } catch (IOException e) {
-      DelphiUtils.LOG.error("IOException, Unable to read the source code: {}", e);
+      DelphiUtils.LOG.error("IOException, Unable to read the source code:", e);
     } catch (Exception e) {
-      DelphiUtils.LOG.error("Exception, problem analysing: {}", e);
+      DelphiUtils.LOG.error("Exception, problem analysing:", e);
     }
   }
 
@@ -95,8 +92,7 @@ public class DelphiLinesFactory {
     char nextChar = (char) reader.read();
     reader.reset();
     if (isTechnicalCharacter(nextChar) && lastReadCharacter != nextChar) {
-      reader.read();
-      // result unused - it's just a pop
+      reader.skip(1);
     }
   }
 

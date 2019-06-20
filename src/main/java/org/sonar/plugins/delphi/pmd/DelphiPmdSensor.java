@@ -175,17 +175,7 @@ public class DelphiPmdSensor implements Sensor {
   @Override
   public void execute(SensorContext context) {
     DelphiUtils.LOG.info("PMD sensor.execute");
-    File reportFile;
-    // creating report
-    ClassLoader initialClassLoader = Thread.currentThread().getContextClassLoader();
-    try {
-      Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
-      reportFile = createPmdReport();
-    } finally {
-      Thread.currentThread().setContextClassLoader(initialClassLoader);
-    }
-
-    parsePMDreport(reportFile);
+    parsePMDreport(createPmdReport());
   }
 
   private RuleSets createRuleSets() {
@@ -224,7 +214,7 @@ public class DelphiPmdSensor implements Sensor {
 
       List<File> excluded = delphiProjectHelper.getExcludedSources();
 
-      List<DelphiProject> projects = delphiProjectHelper.getWorkgroupProjects();
+      List<DelphiProject> projects = delphiProjectHelper.getProjects();
       for (DelphiProject delphiProject : projects) {
         DelphiUtils.LOG.info("PMD Parsing project "
             + delphiProject.getName());

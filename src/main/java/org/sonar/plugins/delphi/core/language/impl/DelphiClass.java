@@ -78,7 +78,7 @@ public class DelphiClass implements ClassInterface {
     if (o == null) {
       return false;
     }
-    if (o.getClass() == ClassInterface.class) {
+    if (this.getClass() == o.getClass()) {
       return name.equals(((ClassInterface) o).getName());
     }
     return toString().equals(o.toString());
@@ -153,31 +153,44 @@ public class DelphiClass implements ClassInterface {
    */
   @Override
   public int getPublicApiCount() {
-    int publicApiCount = 0;
+    int count = getPublicFunctionCount() + getPublicFieldCount() + getPublicPropertyCount();
     if (visibility == DelphiParser.PUBLIC) {
-      ++publicApiCount;
+      ++count;
     }
+    return count;
+  }
+
+  private int getPublicFunctionCount() {
+    int count = 0;
     for (FunctionInterface func : functions) {
-      if (!func.isAccessor()
-          && (func.getVisibility() == DelphiParser.PUBLIC
-          || func.getVisibility() == DelphiParser.PUBLISHED)) {
-        publicApiCount += 1 + func.getOverloadsCount();
+      if ((func.getVisibility() == DelphiParser.PUBLIC
+          || func.getVisibility() == DelphiParser.PUBLISHED) && !func.isAccessor()) {
+        count += 1 + func.getOverloadsCount();
       }
     }
+    return count;
+  }
+
+  private int getPublicFieldCount() {
+    int count = 0;
     for (ClassFieldInterface field : fields) {
       if (field.getVisibility() == DelphiParser.PUBLIC
           || field.getVisibility() == DelphiParser.PUBLISHED) {
-        ++publicApiCount;
+        ++count;
       }
     }
+    return count;
+  }
+
+  private int getPublicPropertyCount() {
+    int count = 0;
     for (ClassPropertyInterface property : properties) {
       if (property.getVisibility() == DelphiParser.PUBLIC
           || property.getVisibility() == DelphiParser.PUBLISHED) {
-        ++publicApiCount;
+        ++count;
       }
     }
-
-    return publicApiCount;
+    return count;
   }
 
   /**

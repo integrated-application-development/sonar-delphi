@@ -80,7 +80,7 @@ public class DelphiPmdSensorTest {
     DelphiProject delphiProject = new DelphiProject("Default Project");
     delphiProject.setSourceFiles(Collections.singletonList(srcFile));
 
-    when(delphiProjectHelper.getWorkgroupProjects())
+    when(delphiProjectHelper.getProjects())
         .thenReturn(Collections.singletonList(delphiProject));
 
     when(delphiProjectHelper.getFile(anyString())).thenAnswer(
