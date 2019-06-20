@@ -32,7 +32,6 @@ import org.antlr.runtime.ANTLRFileStream;
 import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.DefineResolver;
 import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.ExcludeResolver;
 import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.IncludeResolver;
-import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.SourceFixerResolver;
 import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.SourceResolverResults;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
@@ -99,11 +98,6 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
     return Character.toLowerCase(la);
   }
 
-  /**
-   * Overloading the load method from ANTRLFileStream, to add whitespace where it is required (':',
-   * '..'), and preform additional actions
-   */
-
   @Override
   public void load(String fileName, String encoding) throws IOException {
     if (fileName == null) {
@@ -123,8 +117,7 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
     SourceResolver resolver = new ExcludeResolver();
     resolver.chain(new IncludeResolver(extendIncludes, includeDirectories))
         .chain(new ExcludeResolver())
-        .chain(new DefineResolver(defs))
-        .chain(new SourceFixerResolver());
+        .chain(new DefineResolver(defs));
 
     resolver.resolve(resolverResult);
     data = resolverResult.getFileData().toString().toCharArray();
