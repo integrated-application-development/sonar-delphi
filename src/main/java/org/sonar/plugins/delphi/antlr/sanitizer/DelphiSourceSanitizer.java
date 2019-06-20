@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Set;
 import org.antlr.runtime.ANTLRFileStream;
 import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.DefineResolver;
-import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.ExcludeResolver;
 import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.IncludeResolver;
 import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.SourceResolverResults;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -114,9 +113,7 @@ public class DelphiSourceSanitizer extends ANTLRFileStream {
 
     SourceResolverResults resolverResult = new SourceResolverResults(fileName, fileData);
 
-    SourceResolver resolver = new ExcludeResolver();
-    resolver.chain(new IncludeResolver(extendIncludes, includeDirectories))
-        .chain(new ExcludeResolver())
+    SourceResolver resolver = new IncludeResolver(extendIncludes, includeDirectories)
         .chain(new DefineResolver(defs));
 
     resolver.resolve(resolverResult);

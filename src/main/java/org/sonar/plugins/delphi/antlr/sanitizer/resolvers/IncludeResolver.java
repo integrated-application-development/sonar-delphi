@@ -69,7 +69,7 @@ public class IncludeResolver extends SourceResolver {
 
   @Override
   protected void doResolve(SourceResolverResults results) {
-    resolveIncludes(results.getFileName(), results.getFileData(), results.getFileExcludes());
+    resolveIncludes(results.getFileName(), results.getFileData());
   }
 
   /**
@@ -77,11 +77,9 @@ public class IncludeResolver extends SourceResolver {
    *
    * @param baseFileName base file name
    * @param baseFileData base file character data
-   * @param excludes list of excluded areas (won't be parsed: strings, comments etc.)
    * @return new file character data
    */
-  private StringBuilder resolveIncludes(String baseFileName, StringBuilder baseFileData,
-      SubRangeAggregator excludes) {
+  private StringBuilder resolveIncludes(String baseFileName, StringBuilder baseFileData) {
     if (baseFileName == null || baseFileData == null) {
       return baseFileData;
     }
@@ -96,11 +94,6 @@ public class IncludeResolver extends SourceResolver {
       List<CompilerDirective> allDirectives = factory.produce(baseFileData.toString());
 
       for (CompilerDirective directive : allDirectives) {
-        if (excludes.inRange(directive.getFirstCharPosition())
-            || directive.getType() != CompilerDirectiveType.INCLUDE) {
-          continue;
-        }
-
         String includeFileName = directive.getItem();
 
         String currentDir = baseFileName.substring(0, baseFileName.lastIndexOf('/'));
@@ -133,15 +126,9 @@ public class IncludeResolver extends SourceResolver {
 
   private String readFileIncludeData(File includeFile) throws IOException {
     StringBuilder includeData = new StringBuilder(DelphiUtils.readFileContent(includeFile, null));
-    SourceResolverResults includedResults = new SourceResolverResults(includeFile.getAbsolutePath(),
-        includeData);
-
-    ExcludeResolver excludeResolver = new ExcludeResolver();
-    excludeResolver.resolve(includedResults);
-    SubRangeAggregator newExcluded = includedResults.getFileExcludes();
 
     // do the same for include file, it could also have includes
-    includeData = resolveIncludes(includeFile.getAbsolutePath(), includeData, newExcluded);
+    includeData = resolveIncludes(includeFile.getAbsolutePath(), includeData);
     return includeData.toString();
   }
 
@@ -155,7 +142,7 @@ public class IncludeResolver extends SourceResolver {
   private StringBuilder introduceIncludedData(StringBuilder newData,
       List<ReplacementSubRange> dataToInclude) {
     int replacedCharsShift = 0;
-    Collections.sort(dataToInclude, new SubRangeFirstOccurenceComparator());
+    dataToInclude.sort(new SubRangeFirstOccurenceComparator());
     for (SubRange range : dataToInclude) {
       newData.replace(range.getBegin() + replacedCharsShift, range.getEnd() + replacedCharsShift,
           range.toString());
