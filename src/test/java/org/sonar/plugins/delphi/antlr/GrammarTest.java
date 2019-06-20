@@ -27,8 +27,10 @@ import static org.junit.Assert.assertFalse;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
+import org.sonar.plugins.delphi.antlr.sanitizer.DelphiSourceSanitizer;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class GrammarTest {
@@ -141,5 +143,40 @@ public class GrammarTest {
   @Test
   public void testVariantRecord() throws Exception {
     parseFile("VariantRecord.pas");
+  }
+
+  @Test
+  public void testEmptyCaseItem() throws Exception {
+    parseFile("EmptyCaseItem.pas");
+  }
+
+  @Test
+  public void testRecordHelperConstants() throws Exception {
+    parseFile("RecordHelperConstants.pas");
+  }
+
+  @Test
+  public void testGenericSubTypeDecl() throws Exception {
+    parseFile("GenericSubTypeDecl.pas");
+  }
+
+  @Test
+  public void testArrayIndices() throws Exception {
+    parseFile("ArrayIndices.pas");
+  }
+
+  @Test
+  public void testNumberNotConsumedByIdentifiers() throws Exception {
+    parseFile("NumberNotConsumedByIdentifiers.pas");
+  }
+
+  @Test
+  public void testRaiseCastedException() throws Exception {
+    parseFile("RaiseCastedException.pas");
+  }
+
+  @Test
+  public void testQualifiedKeywordIdentifier() throws Exception {
+    parseFile("QualifiedKeywordIdentifier.pas");
   }
 }

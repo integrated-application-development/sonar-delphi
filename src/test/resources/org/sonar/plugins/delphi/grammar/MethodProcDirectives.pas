@@ -7,11 +7,9 @@ type
   private
     function FunctionOverload: Boolean; overload;
     procedure ProcedureOverload; overload;
+    function FunctionOverloadWithoutTrailingSemicolon: Boolean; overload
+    procedure ProcedureOverloadWithoutTrailingSemicolon; overload
     function FunctionOverloadedSTDCall: Integer; stdcall; overload;
-
-    function FunctionOverloadWithoutSemicolon: Boolean overload;
-    procedure ProcedureOverloadWithoutSemicolon overload;
-    function FunctionOverloadedSTDCallWithoutSemicolon: Integer stdcall; overload;
   end;
 
   WithoutLeadingSemicolon = class
