@@ -9,6 +9,8 @@ type
   end;
 
 const
+  C_EmptyRecord: MyCoolRecord = ();
+
   C_LameRecord: MyCoolRecord = (
     ID: '0';
     CoolnessFactor: 0 // No trailing semicolon

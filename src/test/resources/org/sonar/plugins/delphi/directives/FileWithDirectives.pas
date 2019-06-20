@@ -1,4 +1,4 @@
-unit TestUnit;
+unit FileWithDirectives;
 
 {$include 	include1.inc}
 {$i 		include2.inc}
@@ -7,10 +7,13 @@ unit TestUnit;
 {$undef TEST}
 
 (* nasty
-	{ comment 
+	{ comment
 		//testDefinitionsIncludes {$include error.inc}
 	} 
 *)
+
+// {$ifdef MyCommentDef}
+// {$endif}
 
 {$if I_FEEL_HAPPY}
 	
@@ -40,6 +43,10 @@ unit TestUnit;
 
 
 interface
+const
+  MyDirectiveConstant =
+    '{$ifdef MyStringDef}' +
+    '{$endif}';
 
 implementation
 

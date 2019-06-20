@@ -64,6 +64,10 @@ package org.sonar.plugins.delphi.antlr.generated;
 **/
 }
 
+@lexer::members {
+  boolean asmMode = false;
+}
+
 //****************************
 //section start
 //****************************
@@ -185,7 +189,7 @@ typeDecl                     : strucType
                              | procedureType
                              | variantType
                              | subRangeType
-                             | ('type')? typeId (genericPostfix)?
+                             | ('type')? typeId
                              | simpleType
                              ;
 strucType                    : ('packed')? strucTypePart -> strucTypePart
@@ -200,8 +204,8 @@ arrayType                    :  'array' ('[' (arrayIndex)? (',' (arrayIndex)?)* 
                              -> ^(arraySubType 'array' ('[' (arrayIndex)? (',' (arrayIndex)?)* ']')? )          //CHANGED we only need type info
                              ;
 
-arrayIndex                   : typeId
-                             | expression '..' expression
+arrayIndex                   : expression '..' expression
+                             | typeId
                              ;
 
 arraySubType                 : 'const'
@@ -242,7 +246,7 @@ subRangeType                 : expression '..' expression
                              ;
 enumType                     : '(' ident ('=' expression)? (',' ident ('=' expression)? )* ')'
                              ;
-typeId                       : namespacedQualifiedIdent
+typeId                       : namespacedQualifiedIdent (genericPostfix ('.' typeId)?)?
                              ;
 //****************************
 //section generics
@@ -271,9 +275,9 @@ genericPostfix               : '<' typeDecl (',' typeDecl)* '>'
 //****************************
 //section class
 //****************************
-classDecl                    : classTypeTypeDecl
+classDecl                    : classHelperDecl -> ^(TkClass classHelperDecl)
+			     | classTypeTypeDecl
                              | classTypeDecl -> ^(TkClass classTypeDecl)
-                             | classHelperDecl -> ^(TkClass classHelperDecl)
                              | interfaceTypeDecl -> ^(TkInterface interfaceTypeDecl)
                              | objectDecl -> ^(TkObject objectDecl)
                              | recordDecl -> ^(TkRecord recordDecl)
@@ -323,14 +327,10 @@ objectItem                   : visibility
                              | classMethod
                              | classField
                              ;
-recordDecl                   : simpleRecord
-                             | variantRecord
+recordDecl                   : 'record' (recordItem)* (recordVariantSection)? 'end'
+                             -> 'record' (recordItem)* (recordVariantSection)?
                              ;
-simpleRecord                 : 'record' (recordField)* (recordItem)* 'end' -> 'record' (recordField)* (recordItem)*
-                             ;
-variantRecord                : 'record' (recordField)* recordVariantSection 'end' -> 'record' (recordField)* recordVariantSection
-                             ;
-recordItem                   : visibility     //ADDED
+recordItem                   : visibility
                              | classMethod
                              | classProperty
                              | constSection
@@ -350,6 +350,7 @@ recordHelperDecl             : 'record' 'helper' 'for' typeId (recordHelperItem)
 recordHelperItem             : visibility
                              | classMethod
                              | classProperty
+                             | constSection
                              ;
 classMethod                  : (customAttribute)? ('class')? methodKey ident (genericDefinition)? (formalParameterSection)? methodDirectiveSection
                              ->  (customAttribute)? ('class')? ^(methodKey ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) methodDirectiveSection)
@@ -361,36 +362,27 @@ classMethod                  : (customAttribute)? ('class')? methodKey ident (ge
 classField                   : (customAttribute)? identList ':' typeDecl ';' (hintingDirective)*
                              -> (customAttribute)? ^(TkClassField ^(TkVariableIdents identList) ^(TkVariableType typeDecl))
                              ;
-classProperty                : (customAttribute)? ('class')? 'property' ident (classPropertyArray)? (':' genericTypeIdent)? (classPropertyIndex)? (classPropertySpecifier)* ';' (classPropertyEndSpecifier)*
-                              -> ^('property' ^(TkVariableIdents ident) ^(TkVariableType genericTypeIdent?) (classPropertySpecifier)* )
-                              // CHANGED added (classPropertySpecifier)* at end for "default;"
-                              // CHANGEDD to genericTypeIdent for "property QueryBuilder : IQueryBuilder<GenericRecord>"
+classProperty                : (customAttribute)? ('class')? 'property' ident (classPropertyArray)? (':' genericTypeIdent)? (classPropertyDirective)* ';'
+                             -> ^('property' ^(TkVariableIdents ident) ^(TkVariableType genericTypeIdent?) (classPropertyDirective)*)
                              ;
 classPropertyArray           : '[' formalParameterList ']'
                              ;
-classPropertyIndex           : 'index' expression (';')?  //CHANGED to (';')?
-                             ;
-classPropertySpecifier       : classPropertyReadWrite   //CHANGED removed ';'
-                             | classPropertyDispInterface
-                             | STORED expression
+classPropertyDirective       : ';' 'default'
                              | 'default' expression
-                             | 'default'                // for array properties only (1 per class)
-                             | 'nodefault'
+                             | classPropertyReadWrite
+                             | classPropertyDispInterface
                              | IMPLEMENTS typeId
+                             | 'index' expression
+                             | 'nodefault'
+                             | STORED expression
                              ;
-classPropertyEndSpecifier    : STORED expression ';'    //ADDED used in classProperty at end
-                             | 'default' expression ';'
-                             | 'default' ';'
-                             | 'nodefault' ';'
-                             ;
-
 classPropertyReadWrite       : 'read' qualifiedIdent ('[' expression ']')?  // Waarom qualified ident???  //ADDED []
                              -> ^('read' qualifiedIdent)
                              | 'write' qualifiedIdent ('[' expression ']')? //ADDED []
                              -> ^('write' qualifiedIdent)
                              ;
-classPropertyDispInterface   : 'readonly' ';'
-                             | 'writeonly' ';'
+classPropertyDispInterface   : 'readonly'
+                             | 'writeonly'
                              | dispIDDirective
                              ;
 visibility                   : (STRICT)? 'protected'
@@ -431,9 +423,9 @@ formalParameterSection       : '(' (formalParameterList)? ')' -> (formalParamete
                              ;
 formalParameterList          : formalParameter (';' formalParameter)* -> formalParameter (formalParameter)*
                              ;
-formalParameter              : (customAttribute)? (parmType)? identListFlat (':' typeDecl)? ('=' expression)? -> (customAttribute)? ^(TkVariableIdents identListFlat) ^(TkVariableType typeDecl?) ^(TkVariableParam parmType)?
-               //expressions was cut out, beacause we dont have to know default variable values; they were causing troubles with DelphiCodeAnalyser
-                             ;
+formalParameter              : (customAttribute)? (parmType)? identListFlat (':' typeDecl)? ('=' expression)?
+                             -> (customAttribute)? ^(TkVariableIdents identListFlat) ^(TkVariableType typeDecl?) ^(TkVariableParam parmType)?
+                             ; // Default values were cut out because they were (apparently) causing issues with DelphiCodeAnalyser
 parmType                     : 'const'
                              | 'var'
                              | 'out'
@@ -490,7 +482,8 @@ particleItem                 : ('.' | '@') extendedIdent
                              | '^'
                              | '(' (parameterExpression (',')?)* ')'
                              ;
-extendedIdent                : ident // Ideally this would also include keywords
+extendedIdent                : ident
+                             | keywords
                              ;
 expressionList               : (expression (',')?)+
                              ;
@@ -558,7 +551,7 @@ ifStatement                  : 'if' expression 'then' statement ('else' statemen
                              ;
 caseStatement                : 'case' expression 'of' (caseItem)* ('else' statementList (';')?)? 'end'
                              ;
-caseItem                     : caseLabel (',' caseLabel)* ':' statement (';')? // checken of ; sep of scheider is
+caseItem                     : caseLabel (',' caseLabel)* ':' (statement)? (';')?
                              ;
 caseLabel                    : expression ('..' expression)?
                              ;
@@ -592,10 +585,9 @@ gotoStatement                : 'goto' label
 //section constExpression
 //****************************
 constExpression              : expression
-                             | '(' recordConstExpression (recordConstExpression)* ')'
-                             | '(' constExpression (',' constExpression)* ')'
-                             ;
-recordConstExpression        : ident ':' constExpression (';')?
+                             | '(' (ident ':' constExpression (';')?)+ ')' // Record
+                             | '(' (constExpression (',')?)+ ')' // Array
+                             | '(' ')'
                              ;
 //****************************
 //section exceptionStatement
@@ -613,13 +605,13 @@ handlerIdent                 : ident ':'
 handlerStatement             : statement (';')?
                              | ';'
                              ;
-raiseStatement               : 'raise' (designator)? (AT designator)? // CHECKEN!
+raiseStatement               : 'raise' (expression)? (AT expression)?
                              ;
 //****************************
 //section AssemblerStatement
 //****************************
-assemblerStatement           : 'asm' ~('end')* 'end'    //ADDED we don't realy care about assembler statements, since they don't contribute to
-                             ;                //any measure, just skip, allow all
+assemblerStatement           : 'asm' ~('end')* 'end' // Skip asm statements
+                             ;
 //****************************
 //section directive
 //****************************
@@ -679,7 +671,7 @@ hintingDirective             : 'deprecated' (stringFactor)?
                              | 'library'
                              ;
 externalDirective            : 'varargs'   // alleen bij external cdecl
-                             | 'external' (constExpression)? (externalSpecifier)* // constExpression = dll name
+                             | 'external' (expression)? (externalSpecifier)* // expression = dll name
                              ;
 externalSpecifier            : 'name' constExpression
                              | 'index' constExpression   // specific to a platform
@@ -691,12 +683,26 @@ dispIDDirective              : 'dispid' expression
 //****************************
 ident                        : TkIdentifier
                              | '&' TkIdentifier
-                             | usedKeywordsAsNames
+                             | keywordsUsedAsNames
                              ;
-usedKeywordsAsNames          : (NAME | READONLY | ADD | AT | MESSAGE | POINTER | INDEX | DEFAULT | STRING | CONTINUE)
+keywordsUsedAsNames          : (NAME | READONLY | ADD | AT | MESSAGE | POINTER | INDEX | DEFAULT | STRING | CONTINUE)
                              | (READ | WRITE | REGISTER | VARIANT | OPERATOR | REMOVE | LOCAL | REFERENCE | CONTAINS | FINAL)
                              | (BREAK | EXIT | STRICT | OUT | OBJECT | EXPORT | ANSISTRING | IMPLEMENTS | STORED | HELPER )
                              | (PACKAGE | DEPRECATED)
+                             ;
+keywords                     : (ABSOLUTE | ABSTRACT | ADD | AND | ANSISTRING | ARRAY | AS | ASM | ASSEMBLER | ASSEMBLY)
+                             | (AT | AUTOMATED | BEGIN | BREAK | CASE | CDECL | CLASS | CONST | CONSTRUCTOR | CONTAINS)
+                             | (CONTINUE | DEFAULT | DEPRECATED | DESTRUCTOR | DISPID | DISPINTERFACE | DIV | DO | DOWNTO)
+                             | (DQ | DW | DYNAMIC | ELSE | END | EXCEPT | EXIT | EXPERIMENTAL | EXPORT | EXPORTS | EXTERNAL)
+                             | (FAR | FILE | FINAL | FINALIZATION | FINALLY | FOR | FORWARD | FUNCTION | GOTO | HELPER | IF)
+                             | (IMPLEMENTATION | IMPLEMENTS | IN | INDEX | INHERITED | INITIALIZATION | INLINE | INTERFACE)
+                             | (IS | LABEL | LIBRARY | LOCAL | MESSAGE | MOD | NAME | NEAR | NIL | NODEFAULT | NOT | OBJECT)
+                             | (OF | ON | OPERATOR | OR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PACKED | PASCAL | PLATFORM)
+                             | (POINTER | PRIVATE | PROCEDURE | PROGRAM | PROPERTY | PROTECTED | PUBLIC | PUBLISHED | RAISE)
+                             | (READ | READONLY | RECORD | REFERENCE | REGISTER | REINTRODUCE | REMOVE | REPEAT | REQUIRES)
+                             | (RESIDENT | RESOURCESTRING | SAFECALL | SEALED | SET | SHL | SHR | STATIC | STDCALL | STORED)
+                             | (STRICT | STRING | THEN | THREADVAR | TO | TRY | TYPE | UNIT | UNSAFE | UNTIL | USES | VAR)
+                             | (VARARGS | VARIANT | VIRTUAL |  WHILE | WITH | WRITE | WRITEONLY | XOR | FALSE | TRUE)
                              ;
 identList                    : ident (',' ident)* -> ^(ident (ident)*)
                              ;
@@ -705,7 +711,7 @@ identListFlat                : ident (',' ident)* -> ident (ident)*   //ADDED us
 label                        : TkIdentifier
                              | TkIntNum
                              | TkHexNum
-                             | usedKeywordsAsNames
+                             | keywordsUsedAsNames
                              ;
 intNum                       : TkIntNum
                              | TkHexNum
@@ -716,145 +722,147 @@ namespacedQualifiedIdent     : (namespaceName '.')? qualifiedIdent
                              ;
 namespaceName                : ident ('.' ident)*
                              ;
-qualifiedIdent               :  (ident '.')*  ident   //must stay the way it is, with '.' for proper class method identyfication
+qualifiedIdent               : (ident '.')*  extendedIdent
                              ;
 
-// KEYWORDS
-ABSOLUTE          : 'absolute'       ;
-ABSTRACT          : 'abstract'       ;
-ADD               : 'add'            ;
-AND               : 'and'            ;
-ANSISTRING        : 'ansistring'     ;
-ARRAY             : 'array'          ;
-AS                : 'as'             ;
-ASM               : 'asm'            ;
-ASSEMBLER         : 'assembler'      ;
-ASSEMBLY          : 'assembly'       ;
-AT                : 'at'             ;
-AUTOMATED         : 'automated'      ;
-BEGIN             : 'begin'          ;
-BREAK             : 'break'          ;
-CASE              : 'case'           ;
-CDECL             : 'cdecl'          ;
-CLASS             : 'class'          ;
-CONST             : 'const'          ;
-CONSTRUCTOR       : 'constructor'    ;
-CONTAINS          : 'contains'       ;
-CONTINUE          : 'continue'       ;
-DEFAULT           : 'default'        ;
-DEPRECATED        : 'deprecated'     ;
-DESTRUCTOR        : 'destructor'     ;
-DISPID            : 'dispid'         ;
-DISPINTERFACE     : 'dispinterface'  ;
-DIV               : 'div'            ;
-DO                : 'do'             ;
-DOWNTO            : 'downto'         ;
-DQ                : 'dq'             ;
-DW                : 'dw'             ;
-DYNAMIC           : 'dynamic'        ;
-ELSE              : 'else'           ;
-END               : 'end'            ;
-EXCEPT            : 'except'         ;
-EXIT              : 'exit'           ;
-EXPERIMENTAL      : 'experimental'   ;
-EXPORT            : 'export'         ;
-EXPORTS           : 'exports'        ;
-EXTERNAL          : 'external'       ;
-FAR               : 'far'            ;
-FILE              : 'file'           ;
-FINAL             : 'final'          ;
-FINALIZATION      : 'finalization'   ;
-FINALLY           : 'finally'        ;
-FOR               : 'for'            ;
-FORWARD           : 'forward'        ;
-FUNCTION          : 'function'       ;
-GOTO              : 'goto'           ;
-HELPER            : 'helper'         ;
-IF                : 'if'             ;
-IMPLEMENTATION    : 'implementation' ;
-IMPLEMENTS        : 'implements'     ;
-IN                : 'in'             ;
-INDEX             : 'index'          ;
-INHERITED         : 'inherited'      ;
-INITIALIZATION    : 'initialization' ;
-INLINE            : 'inline'         ;
-INTERFACE         : 'interface'      ;
-IS                : 'is'             ;
-LABEL             : 'label'          ;
-LIBRARY           : 'library'        ;
-LOCAL             : 'local'          ;
-MESSAGE           : 'message'        ;
-MOD               : 'mod'            ;
-NAME              : 'name'           ;
-NEAR              : 'near'           ;
-NIL               : 'nil'            ;
-NODEFAULT         : 'nodefault'      ;
-NOT               : 'not'            ;
-OBJECT            : 'object'         ;
-OF                : 'of'             ;
-ON                : 'on'             ;
-OPERATOR          : 'operator'       ;
-OR                : 'or'             ;
-OUT               : 'out'            ;
-OVERLOAD          : 'overload'       ;
-OVERRIDE          : 'override'       ;
-PACKAGE           : 'package'        ;
-PACKED            : 'packed'         ;
-PASCAL            : 'pascal'         ;
-PLATFORM          : 'platform'       ;
-POINTER           : 'pointer'        ;
-PRIVATE           : 'private'        ;
-PROCEDURE         : 'procedure'      ;
-PROGRAM           : 'program'        ;
-PROPERTY          : 'property'       ;
-PROTECTED         : 'protected'      ;
-PUBLIC            : 'public'         ;
-PUBLISHED         : 'published'      ;
-RAISE             : 'raise'          ;
-READ              : 'read'           ;
-READONLY          : 'readonly'       ;
-RECORD            : 'record'         ;
-REFERENCE         : 'reference'      ;
-REGISTER          : 'register'       ;
-REINTRODUCE       : 'reintroduce'    ;
-REMOVE            : 'remove'         ;
-REPEAT            : 'repeat'         ;
-REQUIRES          : 'requires'       ;
-RESIDENT          : 'resident'       ;
-RESOURCESTRING    : 'resourcestring' ;
-SAFECALL          : 'safecall'       ;
-SEALED            : 'sealed'         ;
-SET               : 'set'            ;
-SHL               : 'shl'            ;
-SHR               : 'shr'            ;
-STATIC            : 'static'         ;
-STDCALL           : 'stdcall'        ;
-STORED            : 'stored'         ;
-STRICT            : 'strict'         ;
-STRING            : 'string'         ;
-THEN              : 'then'           ;
-THREADVAR         : 'threadvar'      ;
-TO                : 'to'             ;
-TRY               : 'try'            ;
-TYPE              : 'type'           ;
-UNIT              : 'unit'           ;
-UNSAFE            : 'unsafe'         ;
-UNTIL             : 'until'          ;
-USES              : 'uses'           ;
-VAR               : 'var'            ;
-VARARGS           : 'varargs'        ;
-VARIANT           : 'variant'        ;
-VIRTUAL           : 'virtual'        ;
-WHILE             : 'while'          ;
-WITH              : 'with'           ;
-WRITE             : 'write'          ;
-WRITEONLY         : 'writeonly'      ;
-XOR               : 'xor'            ;
-FALSE             : 'false'          ;
-TRUE              : 'true'           ;
+//----------------------------------------------------------------------------
+// Keywords
+//----------------------------------------------------------------------------
+ABSOLUTE          : 'absolute'       	         ;
+ABSTRACT          : 'abstract'       	         ;
+ADD               : 'add'            	         ;
+AND               : 'and'           	         ;
+ANSISTRING        : 'ansistring'     	         ;
+ARRAY             : 'array'          	         ;
+AS                : 'as'             	         ;
+ASM               : 'asm' { asmMode = true; }  ;
+ASSEMBLER         : 'assembler'       	       ;
+ASSEMBLY          : 'assembly'       	         ;
+AT                : 'at'             	         ;
+AUTOMATED         : 'automated'      	         ;
+BEGIN             : 'begin'          	         ;
+BREAK             : 'break'          	         ;
+CASE              : 'case'           	         ;
+CDECL             : 'cdecl'          	         ;
+CLASS             : 'class'          	         ;
+CONST             : 'const'           	       ;
+CONSTRUCTOR       : 'constructor'              ;
+CONTAINS          : 'contains'                 ;
+CONTINUE          : 'continue'                 ;
+DEFAULT           : 'default'                  ;
+DEPRECATED        : 'deprecated'               ;
+DESTRUCTOR        : 'destructor'               ;
+DISPID            : 'dispid'                   ;
+DISPINTERFACE     : 'dispinterface'            ;
+DIV               : 'div'                      ;
+DO                : 'do'                       ;
+DOWNTO            : 'downto'                   ;
+DQ                : 'dq'                       ;
+DW                : 'dw'                       ;
+DYNAMIC           : 'dynamic'        	         ;
+ELSE              : 'else'           	         ;
+END               : 'end' { asmMode = false; } ;
+EXCEPT            : 'except'                   ;
+EXIT              : 'exit'                     ;
+EXPERIMENTAL      : 'experimental'             ;
+EXPORT            : 'export'                   ;
+EXPORTS           : 'exports'                  ;
+EXTERNAL          : 'external'                 ;
+FAR               : 'far'                      ;
+FILE              : 'file'                     ;
+FINAL             : 'final'                    ;
+FINALIZATION      : 'finalization'             ;
+FINALLY           : 'finally'                  ;
+FOR               : 'for'                      ;
+FORWARD           : 'forward'                  ;
+FUNCTION          : 'function'                 ;
+GOTO              : 'goto'                     ;
+HELPER            : 'helper'                   ;
+IF                : 'if'                       ;
+IMPLEMENTATION    : 'implementation'           ;
+IMPLEMENTS        : 'implements'               ;
+IN                : 'in'                       ;
+INDEX             : 'index'                    ;
+INHERITED         : 'inherited'                ;
+INITIALIZATION    : 'initialization'           ;
+INLINE            : 'inline'                   ;
+INTERFACE         : 'interface'                ;
+IS                : 'is'                       ;
+LABEL             : 'label'                    ;
+LIBRARY           : 'library'                  ;
+LOCAL             : 'local'                    ;
+MESSAGE           : 'message'                  ;
+MOD               : 'mod'                      ;
+NAME              : 'name'                     ;
+NEAR              : 'near'                     ;
+NIL               : 'nil'                      ;
+NODEFAULT         : 'nodefault'                ;
+NOT               : 'not'                      ;
+OBJECT            : 'object'                   ;
+OF                : 'of'                       ;
+ON                : 'on'                       ;
+OPERATOR          : 'operator'                 ;
+OR                : 'or'                       ;
+OUT               : 'out'                      ;
+OVERLOAD          : 'overload'                 ;
+OVERRIDE          : 'override'                 ;
+PACKAGE           : 'package'                  ;
+PACKED            : 'packed'                   ;
+PASCAL            : 'pascal'                   ;
+PLATFORM          : 'platform'                 ;
+POINTER           : 'pointer'                  ;
+PRIVATE           : 'private'                  ;
+PROCEDURE         : 'procedure'                ;
+PROGRAM           : 'program'                  ;
+PROPERTY          : 'property'                 ;
+PROTECTED         : 'protected'                ;
+PUBLIC            : 'public'                   ;
+PUBLISHED         : 'published'                ;
+RAISE             : 'raise'                    ;
+READ              : 'read'                     ;
+READONLY          : 'readonly'                 ;
+RECORD            : 'record'                   ;
+REFERENCE         : 'reference'                ;
+REGISTER          : 'register'                 ;
+REINTRODUCE       : 'reintroduce'              ;
+REMOVE            : 'remove'                   ;
+REPEAT            : 'repeat'                   ;
+REQUIRES          : 'requires'                 ;
+RESIDENT          : 'resident'                 ;
+RESOURCESTRING    : 'resourcestring'           ;
+SAFECALL          : 'safecall'                 ;
+SEALED            : 'sealed'                   ;
+SET               : 'set'                      ;
+SHL               : 'shl'                      ;
+SHR               : 'shr'                      ;
+STATIC            : 'static'                   ;
+STDCALL           : 'stdcall'                  ;
+STORED            : 'stored'                   ;
+STRICT            : 'strict'                   ;
+STRING            : 'string'                   ;
+THEN              : 'then'                     ;
+THREADVAR         : 'threadvar'                ;
+TO                : 'to'                       ;
+TRY               : 'try'                      ;
+TYPE              : 'type'                     ;
+UNIT              : 'unit'                     ;
+UNSAFE            : 'unsafe'                   ;
+UNTIL             : 'until'                    ;
+USES              : 'uses'                     ;
+VAR               : 'var'                      ;
+VARARGS           : 'varargs'                  ;
+VARIANT           : 'variant'                  ;
+VIRTUAL           : 'virtual'                  ;
+WHILE             : 'while'                    ;
+WITH              : 'with'                     ;
+WRITE             : 'write'                    ;
+WRITEONLY         : 'writeonly'                ;
+XOR               : 'xor'                      ;
+FALSE             : 'false'                    ;
+TRUE              : 'true'                     ;
 
 //----------------------------------------------------------------------------
-// OPERATORS
+// Operators
 //----------------------------------------------------------------------------
 PLUS              : '+'   ;
 MINUS             : '-'   ;
@@ -878,7 +886,7 @@ RBRACK            : ']'   ;
 RBRACK2           : '.)'  ;
 POINTER2          : '^'   ;
 AT2               : '@'   ;
-DOT               : '.'   ;// ('.' {$setType(DOTDOT);})?  ;
+DOT               : '.'   ;
 DOTDOT            : '..'  ;
 LCURLY            : '{'   ;
 RCURLY            : '}'   ;
@@ -932,17 +940,23 @@ TkIdentifier            : (Alpha | '_') (Alpha | Digit | '_')*
                         ;
 TkIntNum                : Digitseq
                         ;
-TkRealNum               : Digitseq ('.' Digitseq)? (('e'|'E') ('+'|'-')? Digitseq)?  //CHANGED
+                        // We use a lookahead here to avoid lexer failures on range operations like '1..2'
+TkRealNum               : Digitseq ({ input.LA(2) != '.' }? => '.' Digitseq)? (('e'|'E') ('+'|'-')? Digitseq)?
                         ;
 TkHexNum                : '$' Hexdigitseq
                         ;
-TkAsmHexNum             : Hexdigitseq ('h'|'H')
+TkAsmHexNum             : { asmMode }? => Hexdigitseq ('h'|'H')
                         ;
-QuotedString            : '\'' ('\'\'' | ~('\''))* '\''   //taken from PASCAL grammar
+TkAsmHexLabel           : { asmMode }? => Hexdigitseq ':'
+                        ;
+QuotedString            : '\'' ('\'\'' | ~('\''))* '\''
                         ;
 ControlString           : Controlchar (Controlchar)*
                         ;
-
+//----------------------------------------------------------------------------
+// Fragments
+//----------------------------------------------------------------------------
+                       
 fragment
 Controlchar             : '#' Digitseq
                         | '#' '$' Hexdigitseq
@@ -950,7 +964,7 @@ Controlchar             : '#' Digitseq
 fragment
 Alpha                   : 'a'..'z'
                         | 'A'..'Z'
-                        | '\u0080'..'\uFFFE' ~('\uFEFF') //ADDED unicode support
+                        | '\u0080'..'\uFFFE' ~('\uFEFF') // unicode support
                         ;
 fragment
 Digit                   : '0'..'9'
@@ -961,9 +975,13 @@ Digitseq                : Digit (Digit)*
 fragment
 Hexdigit                : Digit | 'a'..'f' | 'A'..'F'
                         ;
-Hexdigitseq             : Hexdigit (Hexdigit)*
-                        ;
-COMMENT                 :  '//' ~('\n'|'\r')* '\r'? '\n'           {$channel=HIDDEN;}
+fragment
+Hexdigitseq		          : Hexdigit (Hexdigit)*
+			                  ;
+//----------------------------------------------------------------------------
+// Hidden
+//----------------------------------------------------------------------------		
+COMMENT                 :  '//' ~('\n'|'\r')* '\r'? '\n'               {$channel=HIDDEN;}
                         |  '(*' ( options {greedy=false;} : . )* '*)'  {$channel=HIDDEN;}
                         |  '{' ( options {greedy=false;} : . )* '}'    {$channel=HIDDEN;}
                         ;
