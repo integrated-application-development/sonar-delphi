@@ -82,7 +82,6 @@
 		<hamcrest-all.version>1.3</hamcrest-all.version>
 		<junit.version>4.12</junit.version>
 		<org.mockit.version>1.10.19</org.mockit.version>
-		<maven-project.version>3.0-alpha-2</maven-project.version>
 		<logback-classic.version>1.3.0-alpha4</logback-classic.version>
 		<slf4j.version>1.8.0-beta4</slf4j.version>
 		<antlr3-maven-plugin.version>3.3.9</antlr3-maven-plugin.version>
@@ -92,6 +91,8 @@
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
 		<sonar.issuesReport.html.enable>true</sonar.issuesReport.html.enable>
 		<maven.test.skip>false</maven.test.skip>
+		<maven.showDeprecation.showWarnings>true</maven.showDeprecation.showWarnings>
+		<maven.compiler.showWarnings>true</maven.compiler.showWarnings>
 	</properties>
 
 	<!-- this is important for sonar-packaging-maven-plugin -->
@@ -156,19 +157,6 @@
 			<version>${org.mockit.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-project</artifactId>
-			<version>${maven-project.version}</version>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>junit</artifactId>
-					<groupId>junit</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -242,7 +230,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.4</version>
+				<version>3.1.0</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -252,7 +240,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<source>1.8</source>
+					<source>11</source>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -264,10 +252,11 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.5.1</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>11</source>
+					<target>11</target>
 					<compilerArgs>
 						<arg>-XDcompilePolicy=simple</arg>
+						<arg>-Xlint:all,-serial,-path,-processing,-rawtypes,-cast</arg>
 						<arg>-Xplugin:ErrorProne -XepDisableWarningsInGeneratedCode -XepExcludedPaths:.*/antlr/generated/.*</arg>
 					</compilerArgs>
 					<annotationProcessorPaths>

@@ -10,12 +10,12 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="SonarQube_Delphi" target="1.8" />
+      <module name="SonarQube_Delphi" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="SonarQube_Delphi" options="-XDcompilePolicy=simple &quot;-Xplugin:ErrorProne -XepDisableWarningsInGeneratedCode -XepExcludedPaths:.*/antlr/generated/.*&quot;" />
+      <module name="SonarQube_Delphi" options="-XDcompilePolicy=simple -Xlint:all,-serial,-path,-processing,-rawtypes,-cast &quot;-Xplugin:ErrorProne -XepDisableWarningsInGeneratedCode -XepExcludedPaths:.*/antlr/generated/.*&quot;" />
     </option>
   </component>
 </project>
