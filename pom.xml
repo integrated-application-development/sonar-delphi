@@ -86,6 +86,7 @@
 		<slf4j.version>1.8.0-beta4</slf4j.version>
 		<antlr3-maven-plugin.version>3.3.9</antlr3-maven-plugin.version>
 		<!--Version Fields end here-->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<sonar.pluginName>Delphi</sonar.pluginName>
 		<sonar.pluginClass>org.sonar.plugins.delphi.DelphiPlugin</sonar.pluginClass>
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
@@ -181,7 +182,7 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>27.1-jre</version>
-			<scope>test</scope>
+			<scope>compile</scope>
 		</dependency>
     <dependency>
       <groupId>org.jacoco</groupId>
@@ -256,7 +257,7 @@
 					<target>11</target>
 					<compilerArgs>
 						<arg>-XDcompilePolicy=simple</arg>
-						<arg>-Xlint:all,-serial,-path,-processing,-rawtypes,-cast</arg>
+						<arg>-Xlint:all,-serial,-path,-processing,-rawtypes,-cast,-classfile</arg>
 						<arg>-Xplugin:ErrorProne -XepDisableWarningsInGeneratedCode -XepExcludedPaths:.*/antlr/generated/.*</arg>
 					</compilerArgs>
 					<annotationProcessorPaths>

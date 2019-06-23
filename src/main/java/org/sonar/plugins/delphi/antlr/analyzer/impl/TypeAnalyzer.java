@@ -42,7 +42,7 @@ public class TypeAnalyzer extends CodeAnalyzer {
   @Override
   public boolean canAnalyze(CodeTree codeTree) {
     Tree currentNode = codeTree.getCurrentCodeNode().getNode();
-    if (currentNode.getType() != DelphiParser.TkNewType || (!hasGrandChild(currentNode))) {
+    if (currentNode.getType() != DelphiParser.TkNewType || !hasGrandChild(currentNode)) {
       return false;
     }
 

@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.delphi.pmd.profile;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.InputStreamReader;
 import java.io.Reader;
 import org.sonar.api.profiles.RulesProfile;
@@ -55,7 +57,7 @@ public class DefaultDelphiProfile implements BuiltInQualityProfilesDefinition {
         .createBuiltInQualityProfile("Sonar way", DelphiLanguage.KEY);
 
     Reader reader = new InputStreamReader(getClass().getResourceAsStream(
-        "/org/sonar/plugins/delphi/pmd/default-delphi-profile.xml"));
+        "/org/sonar/plugins/delphi/pmd/default-delphi-profile.xml"), UTF_8);
     RulesProfile rulesProfile = importer.importProfile(reader, null);
 
     for (ActiveRule rule : rulesProfile.getActiveRules()) {

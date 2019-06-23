@@ -22,7 +22,12 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
+import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
+import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
@@ -32,15 +37,15 @@ import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.antlr.analyzer.impl.operations.AdvanceToNodeOperation;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
+import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class IncludeAnalyzerTest {
 
-  private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/MetricsTest.pas";
+  private static final String FILE_NAME = "/org/sonar/plugins/delphi/analyzer/IncludeAnalyzer.pas";
 
   private IncludeAnalyzer analyzer;
-  private ASTTree ast;
   private CodeAnalysisResults results;
   private CodeTree code;
   private AdvanceToNodeOperation advanceToUses;
@@ -53,7 +58,7 @@ public class IncludeAnalyzerTest {
     results.setActiveUnit(new DelphiUnit("test"));
 
     File file = DelphiUtils.getResource(FILE_NAME);
-    ast = new DelphiAST(file);
+    ASTTree ast = new DelphiAST(file);
     code = new CodeTree(new CodeNode<>(ast), new CodeNode<>(ast.getChild(0)));
     advanceToUses = new AdvanceToNodeOperation(LexerMetrics.USES);
     advanceToImpl = new AdvanceToNodeOperation(LexerMetrics.PROCEDURE);
@@ -61,31 +66,28 @@ public class IncludeAnalyzerTest {
 
   @Test
   public void testAnalyze() {
-/*    code.setCurrentNode(advanceToUses.execute(code.getCurrentCodeNode().getNode()));
+    code.setCurrentNode(advanceToUses.execute(code.getCurrentCodeNode().getNode()));
     analyzer.analyze(code, results);
 
     UnitInterface unit = results.getActiveUnit();
-    String includes[] = unit.getIncludes();
-    String expected[] = {"Windows", "Messages", "SysUtils", "Variants", "Classes", "Graphics", "Controls", "Forms",
-      "Dialogs", "StdCtrls",
-      "FastMMUsageTracker"};
+    String[] includes = unit.getIncludes();
+    String[] expected = {
+        "Types", "SysUtils", "System.Classes", "System.Generics.Collections", "System.Rtti"};
+
     Arrays.sort(includes);
     Arrays.sort(expected);
-    int index = 0;
-    assertEquals(11, includes.length);
-    for (String exp : expected) {
-      assertEquals(exp, includes[index++]);
-    }*/
+    for (String s : includes) {
+      System.out.print("'" + s + "' ");
+    }
+    assertArrayEquals(expected, includes);
   }
 
   @Test
   public void testCanAnalyze() {
-/*
     code.setCurrentNode(advanceToUses.execute(code.getCurrentCodeNode().getNode()));
     assertTrue(analyzer.canAnalyze(code));
+
     code.setCurrentNode(advanceToImpl.execute(code.getCurrentCodeNode().getNode()));
     assertFalse(analyzer.canAnalyze(code));
-*/
   }
-
 }

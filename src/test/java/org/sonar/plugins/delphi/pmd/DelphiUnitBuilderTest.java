@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 
 public class DelphiUnitBuilderTest {
 
@@ -68,7 +69,7 @@ public class DelphiUnitBuilderTest {
       File file = File.createTempFile("unit", ".pas", baseDir);
       file.deleteOnExit();
 
-      try (FileWriter fileWriter = new FileWriter(file)) {
+      try (FileWriter fileWriter = new FileWriter(file, StandardCharsets.UTF_8)) {
         fileWriter.write(source.toString());
         fileWriter.flush();
       }

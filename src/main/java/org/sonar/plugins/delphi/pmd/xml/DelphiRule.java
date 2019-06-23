@@ -33,7 +33,7 @@ import java.util.Objects;
  * Delphi rule loaded from xml file
  */
 @XStreamAlias("rule")
-public class DelphiRule implements Comparable<DelphiRule> {
+public final class DelphiRule implements Comparable<DelphiRule> {
 
   @XStreamAlias("class")
   @XStreamAsAttribute

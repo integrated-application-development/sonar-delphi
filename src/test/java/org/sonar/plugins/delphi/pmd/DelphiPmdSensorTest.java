@@ -29,6 +29,7 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -93,7 +94,7 @@ public class DelphiPmdSensorTest {
     File rulesFile = new File(fileName);
     String rulesXmlContent;
     try {
-      rulesXmlContent = FileUtils.readFileToString(rulesFile);
+      rulesXmlContent = FileUtils.readFileToString(rulesFile, StandardCharsets.UTF_8);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

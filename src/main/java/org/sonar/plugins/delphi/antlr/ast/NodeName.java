@@ -33,8 +33,8 @@ public enum NodeName {
   DASH("dash", ","),
   DASH_POINTER("dash_pointer", "\\^");
 
-  private String name;
-  private String codeRegExpression;
+  private final String name;
+  private final String codeRegExpression;
 
   NodeName(String name, String regex) {
     this.name = name;

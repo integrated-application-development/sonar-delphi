@@ -121,7 +121,7 @@ public class ComplexityMetrics extends DefaultMetrics {
     // processing stand-alone (global) functions, not merged with any class
     if (functions != null) {
       for (FunctionInterface func : functions) {
-        if ((func == null) || (processedFunc.contains(func.getName()))) {
+        if (func == null || processedFunc.contains(func.getName())) {
           continue;
         }
         methodsCount += 1 + func.getOverloadsCount();

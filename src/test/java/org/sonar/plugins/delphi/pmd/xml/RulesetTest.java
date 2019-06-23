@@ -24,6 +24,7 @@ package org.sonar.plugins.delphi.pmd.xml;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class RulesetTest {
 
   @Test
   public void testRuleset() {
-    assertFalse((new Ruleset().getDescription()) == ruleset.getDescription());
+    assertNotEquals(new Ruleset().getDescription(), ruleset.getDescription());
   }
 
   @Test

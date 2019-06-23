@@ -24,7 +24,8 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.properties.StringProperty;
+import net.sourceforge.pmd.properties.PropertyDescriptor;
+import net.sourceforge.pmd.properties.PropertyFactory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.xml.dtm.DTM;
 import org.apache.xml.dtm.DTMIterator;
@@ -42,8 +43,11 @@ import org.w3c.dom.Node;
  */
 public class XPathRule extends DelphiRule {
 
-  private static final StringProperty XPATH = new StringProperty("xpath", "The xpath expression",
-      "", 1.0f);
+  private static final PropertyDescriptor<String> XPATH = PropertyFactory
+      .stringProperty("xpath")
+      .desc("The xpath expression")
+      .defaultValue("")
+      .build();
 
   /**
    * Last cached document.

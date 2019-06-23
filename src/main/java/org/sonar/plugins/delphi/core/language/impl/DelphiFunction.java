@@ -68,7 +68,7 @@ public class DelphiFunction implements FunctionInterface {
    * Ctor, creates function with default name
    */
   public DelphiFunction() {
-    name = UNKNOWN_FUNCTION_NAME + (unknownFunctionCounter++);
+    name = UNKNOWN_FUNCTION_NAME + unknownFunctionCounter++;
     longName = name + "()";
     realName = name;
   }

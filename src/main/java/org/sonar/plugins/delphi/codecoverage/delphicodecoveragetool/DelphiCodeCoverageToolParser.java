@@ -103,7 +103,7 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser {
       doc.getDocumentElement().normalize();
 
       NodeList dataNodes = doc.getElementsByTagName("linehits");
-      Element lineHits = (Element) (dataNodes.item(0));
+      Element lineHits = (Element) dataNodes.item(0);
       NodeList files = lineHits.getElementsByTagName("file");
 
       for (int f = 0; f < files.getLength(); f++) {

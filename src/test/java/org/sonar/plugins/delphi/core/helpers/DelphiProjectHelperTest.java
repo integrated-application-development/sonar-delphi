@@ -37,6 +37,7 @@ public class DelphiProjectHelperTest {
   private File currentDir;
   private File baseDir;
 
+  //TODO: Add tests
   @Before
   public void setup() {
     currentDir = new File(getClass().getResource("/").getPath());

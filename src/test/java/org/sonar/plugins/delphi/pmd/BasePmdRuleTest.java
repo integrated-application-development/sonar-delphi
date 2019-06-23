@@ -28,9 +28,10 @@ import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
@@ -43,7 +44,6 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
-import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileExporter;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
@@ -56,9 +56,8 @@ public abstract class BasePmdRuleTest {
   private DelphiProjectHelper delphiProjectHelper;
 
   protected DelphiPmdSensor sensor;
-  protected List<Issue> issues = new LinkedList<>();
+  protected List<Issue> issues = new ArrayList<>();
   private File testFile;
-  private DelphiPmdProfileExporter profileExporter;
   private ActiveRules rulesProfile;
   private File baseDir;
 
@@ -108,21 +107,20 @@ public abstract class BasePmdRuleTest {
       @Override
       public InputFile answer(InvocationOnMock invocation) {
         InputFile inputFile = TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5",
-            Paths.get(ROOT_DIR_NAME).toFile(), (new File((String) invocation
-                .getArguments()[0]))).build();
+            Paths.get(ROOT_DIR_NAME).toFile(),
+              new File((String) invocation.getArguments()[0])).build();
 
         return inputFile;
       }
     });
 
     rulesProfile = mock(ActiveRules.class);
-    profileExporter = mock(DelphiPmdProfileExporter.class);
 
     String fileName = getClass().getResource("/org/sonar/plugins/delphi/pmd/rules.xml").getPath();
     File rulesFile = new File(fileName);
     String rulesXmlContent;
     try {
-      rulesXmlContent = FileUtils.readFileToString(rulesFile);
+      rulesXmlContent = FileUtils.readFileToString(rulesFile, StandardCharsets.UTF_8);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

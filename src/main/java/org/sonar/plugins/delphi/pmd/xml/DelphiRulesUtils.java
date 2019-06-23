@@ -23,6 +23,8 @@
 package org.sonar.plugins.delphi.pmd.xml;
 
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import com.thoughtworks.xstream.XStream;
 import java.io.InputStream;
 import java.text.DecimalFormatSymbols;
@@ -104,7 +106,7 @@ public final class DelphiRulesUtils {
     String configuration;
     try {
       InputStream inputStream = Ruleset.class.getResourceAsStream(path);
-      Scanner s = new Scanner(inputStream).useDelimiter("\\A");
+      Scanner s = new Scanner(inputStream, UTF_8).useDelimiter("\\A");
       configuration = s.hasNext() ? s.next() : "";
     } catch (Exception e) {
       throw new IllegalArgumentException(

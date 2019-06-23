@@ -12,12 +12,13 @@ public class IdentifierConventionTest {
 
   private static final String TEST = "/org/sonar/plugins/delphi/PMDTest/IdentifierConvention.pas";
 
-  @Ignore // As far as I can tell, the file is ill-formed and the test doesn't even do anything...
+  // TODO: The file is ill-formed and the test doesn't even do anything...
+  @Ignore
   @Test
   public void test() {
-    File File = DelphiUtils.getResource(TEST);
+    File file = DelphiUtils.getResource(TEST);
     DelphiPMD pmd = new DelphiPMD();
-    DelphiAST ast = new DelphiAST(File);
+    DelphiAST ast = new DelphiAST(file);
     List<Node> nodes = pmd.getNodesFromAST(ast);
 
     System.out.print("");

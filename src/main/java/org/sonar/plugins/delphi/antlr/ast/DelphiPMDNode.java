@@ -34,7 +34,6 @@ import net.sourceforge.pmd.lang.symboltable.ScopedNode;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.jaxen.JaxenException;
 import org.sonar.plugins.delphi.pmd.DelphiParserVisitor;
 import org.w3c.dom.Document;
 
@@ -325,7 +324,8 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
   }
 
   @Override
-  public <T> T getFirstParentOfAnyType(Class<? extends T>... classes) {
+  @SafeVarargs
+  public final <T> T getFirstParentOfAnyType(Class<? extends T>... classes) {
     return null;
   }
 

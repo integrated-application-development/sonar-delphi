@@ -26,7 +26,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.List;
 import java.util.Set;
-import org.apache.commons.io.IOUtils;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
@@ -54,19 +53,16 @@ public class BasicMetrics extends DefaultMetrics {
       List<FunctionInterface> functions,
       Set<UnitInterface> units) {
     clearMetrics();
-    Reader reader = null;
-    try {
-      reader = new StringReader(resource.contents());
+
+    try (Reader reader = new StringReader(resource.contents())){
       DelphiSource source = new DelphiSource(reader);
       setIntMetric("NCLOC", source.getMeasure(Metric.LINES_OF_CODE));
       setIntMetric("COMMENT_LINES", source.getMeasure(Metric.COMMENT_LINES));
       setIntMetric("COMMENT_BLANK_LINES", source.getMeasure(Metric.COMMENT_BLANK_LINES));
       setIntMetric("PUBLIC_DOC_API", source.getMeasure(Metric.PUBLIC_DOC_API));
     } catch (Exception e) {
-      DelphiUtils.LOG
-          .error("BasicMetrics::analyse() -- Can not analyse the file " + resource.toString(), e);
-    } finally {
-      IOUtils.closeQuietly(reader);
+      DelphiUtils.LOG.error(
+          "BasicMetrics::analyse() -- Can not analyse the file " + resource.toString(), e);
     }
   }
 

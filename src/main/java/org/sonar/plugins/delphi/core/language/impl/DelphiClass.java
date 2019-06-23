@@ -37,7 +37,7 @@ import org.sonar.plugins.delphi.core.language.FunctionInterface;
  *
  * @see ClassInterface
  */
-public class DelphiClass implements ClassInterface {
+public final class DelphiClass implements ClassInterface {
 
   private static final String UNKNOWN_CLASS_NAME = "UnknownClass";
 

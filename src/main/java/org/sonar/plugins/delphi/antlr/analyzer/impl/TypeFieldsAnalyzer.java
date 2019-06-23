@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
+import com.google.common.base.Splitter;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
@@ -44,7 +45,7 @@ public class TypeFieldsAnalyzer extends CodeAnalyzer {
 
     String varTypeName = getClassVarTypeName((CommonTree) codeTree.getCurrentCodeNode().getNode());
     String varNames = getClassVarName((CommonTree) codeTree.getCurrentCodeNode().getNode());
-    String[] names = varNames.split(",");
+    Iterable<String> names = Splitter.on(',').split(varNames);
     for (String name : names) {
       ClassFieldInterface field = new DelphiClassField(name, varTypeName,
           results.getParseVisibility()

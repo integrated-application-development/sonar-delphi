@@ -26,7 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
@@ -180,6 +180,8 @@ public class DelphiPmdSensor implements Sensor {
 
   private RuleSets createRuleSets() {
     RuleSets rulesets = new DelphiRuleSets();
+    //TODO: Replace call to the static DelphiRulesUtils.exportConfiguration with some kind of
+    // dependency-injected utility object?
     String rulesXml = DelphiRulesUtils.exportConfiguration(rulesProfile);
     File ruleSetFile = dumpXmlRuleSet(DelphiPmdConstants.REPOSITORY_KEY, rulesXml);
     RuleSetFactory ruleSetFactory = new RuleSetFactory();
@@ -196,7 +198,7 @@ public class DelphiPmdSensor implements Sensor {
   private File dumpXmlRuleSet(String repositoryKey, String rulesXml) {
     try {
       File configurationFile = new File(delphiProjectHelper.workDir(), repositoryKey + ".xml");
-      FileUtils.writeStringToFile(configurationFile, rulesXml, Charset.forName("UTF-8"));
+      FileUtils.writeStringToFile(configurationFile, rulesXml, StandardCharsets.UTF_8);
 
       DelphiUtils.LOG.info("PMD configuration: {}", configurationFile.getAbsolutePath());
 
@@ -269,7 +271,7 @@ public class DelphiPmdSensor implements Sensor {
     File xmlReport = new File(delphiProjectHelper.workDir().getAbsolutePath(), "pmd-report.xml");
     DelphiUtils.LOG.info("PMD output report: "
         + xmlReport.getAbsolutePath());
-    FileUtils.writeStringToFile(xmlReport, stringWriter.toString());
+    FileUtils.writeStringToFile(xmlReport, stringWriter.toString(), StandardCharsets.UTF_8);
     return xmlReport;
   }
 

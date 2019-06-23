@@ -39,8 +39,8 @@ public class TooManySubProceduresRule extends DelphiRule {
       if (children != null) {
         for (int i = 0; i < children.size(); i++) {
 
-          if ((children.get(i).toString().equals("procedure")) || (children.get(i).toString()
-              .equals("function"))) {
+          if (children.get(i).toString().equals("procedure")
+              || children.get(i).toString().equals("function")) {
             subProcedureDepth += 1;
             if (subProcedureDepth > 0) {
               subProcedureCounter += 1;

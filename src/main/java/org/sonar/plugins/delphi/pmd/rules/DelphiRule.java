@@ -28,8 +28,9 @@ import net.sourceforge.pmd.lang.LanguageRegistry;
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.rule.AbstractRule;
 import net.sourceforge.pmd.lang.rule.ImmutableLanguage;
-import net.sourceforge.pmd.properties.IntegerProperty;
-import net.sourceforge.pmd.properties.StringProperty;
+import net.sourceforge.pmd.properties.PropertyDescriptor;
+import net.sourceforge.pmd.properties.PropertyFactory;
+import net.sourceforge.pmd.properties.constraints.NumericConstraints;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
@@ -48,21 +49,42 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
 
   private boolean inImplementationSection;
 
-  protected static final IntegerProperty LIMIT = new IntegerProperty("limit",
-      "The max limit.", 1, 150,
-      1, 1.0f);
-  protected static final IntegerProperty THRESHOLD = new IntegerProperty("Threshold",
-      "Threshold", 1,
-      100, 10, 1.0f);
-  protected static final StringProperty START_AST = new StringProperty("start",
-      "The AST node to start from", "", 1.0f);
-  protected static final StringProperty END_AST = new StringProperty("end",
-      "The AST node to stop the search", "", 1.0f);
-  protected static final StringProperty LOOK_FOR = new StringProperty("lookFor",
-      "What nodes look for",
-      "", 1.0f);
-  protected static final StringProperty BASEEFFORT = new StringProperty("baseEffort",
-      "The base effort to correct", "", 1.0f);
+  protected static final PropertyDescriptor<Integer> LIMIT = PropertyFactory.intProperty("limit")
+      .desc("The max limit.")
+      .require(NumericConstraints.inRange(1, 150))
+      .defaultValue(1)
+      .build();
+
+  protected static final PropertyDescriptor<Integer> THRESHOLD = PropertyFactory
+      .intProperty("Threshold")
+      .desc("Threshold.")
+      .require(NumericConstraints.inRange(1, 100))
+      .defaultValue(10)
+      .build();
+
+  protected static final PropertyDescriptor<String> START_AST = PropertyFactory
+      .stringProperty("start")
+      .desc("The AST node to start from")
+      .defaultValue("")
+      .build();
+
+  protected static final PropertyDescriptor<String> END_AST = PropertyFactory
+      .stringProperty("end")
+      .desc("The AST node to stop the search")
+      .defaultValue("")
+      .build();
+
+  protected static final PropertyDescriptor<String> LOOK_FOR = PropertyFactory
+      .stringProperty("lookFor")
+      .desc("What nodes look for")
+      .defaultValue("")
+      .build();
+
+  protected static final PropertyDescriptor<String> BASE_EFFORT = PropertyFactory
+      .stringProperty("baseEffort")
+      .desc("The base effort to correct")
+      .defaultValue("")
+      .build();
 
   public DelphiRule() {
     super.setLanguage(LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME));
@@ -71,7 +93,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
     definePropertyDescriptor(START_AST);
     definePropertyDescriptor(END_AST);
     definePropertyDescriptor(LOOK_FOR);
-    definePropertyDescriptor(BASEEFFORT);
+    definePropertyDescriptor(BASE_EFFORT);
   }
 
   /**
