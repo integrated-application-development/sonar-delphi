@@ -24,6 +24,7 @@ package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalyzer;
@@ -52,19 +53,33 @@ public class IncludeAnalyzer extends CodeAnalyzer {
     if (activeUnit == null || includeNode == null) {
       return;
     }
-    includeIndex = 0;
+
+    String nextInclude;
+    while ((nextInclude = getNextUnitInclude(includeNode)) != null) {
+      activeUnit.addIncludes(nextInclude);
+    }
+  }
+
+  private String getNextUnitInclude(Tree includeNode) {
+    StringBuilder includeBuilder = new StringBuilder();
     CommonTree node;
-    while ((node = getNextUnitIncludeNode(includeNode)) != null) {
-      activeUnit.addIncludes(node.getText());
-    }
-  }
 
-  protected CommonTree getNextUnitIncludeNode(Tree node) {
-    CommonTree result = (CommonTree) node.getChild(includeIndex++);
-    if (result == null) {
+    while ((node = (CommonTree) includeNode.getChild(includeIndex++)) != null) {
+      includeBuilder.append(node.getText());
+
+      CommonTree nextNode = (CommonTree) includeNode.getChild(includeIndex);
+      boolean nextNodeIsDot = nextNode != null && nextNode.getType() == DelphiLexer.DOT;
+
+      if (node.getType() == DelphiLexer.TkIdentifier && !nextNodeIsDot) {
+        break;
+      }
+    }
+
+    if (includeBuilder.length() == 0) {
       includeIndex = 0;
+      return null;
     }
-    return result;
-  }
 
+    return includeBuilder.toString();
+  }
 }

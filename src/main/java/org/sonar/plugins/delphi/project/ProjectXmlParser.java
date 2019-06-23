@@ -27,6 +27,7 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import org.sonar.api.internal.google.common.base.Splitter;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -113,7 +114,7 @@ public class ProjectXmlParser extends DefaultHandler {
       project.setName(readData);
     } else if ("DCC_Define".equals(rawName)) {
       // add define
-      String[] defines = readData.split(";");
+      Iterable<String> defines = Splitter.on(';').split(readData);
       for (String define : defines) {
         if (define.startsWith("$") || "DEBUG".equals(define)) {
           continue;
@@ -122,7 +123,7 @@ public class ProjectXmlParser extends DefaultHandler {
       }
     } else if ("DCC_UnitSearchPath".equals(rawName)) {
       // add include directories
-      String[] paths = readData.split(";");
+      Iterable<String> paths = Splitter.on(';').split(readData);
       for (String path : paths) {
         if (path.startsWith("$")) {
           continue;

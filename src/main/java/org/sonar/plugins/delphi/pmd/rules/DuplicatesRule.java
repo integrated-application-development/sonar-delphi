@@ -25,13 +25,13 @@ public class DuplicatesRule extends DelphiRule {
             children.get(i + 1).toString().equals("Duplicates")) {
           // Found a call to duplicates function
           try {
-            if ((!children.get(i - 1).toString().equals(children.get(i - 7).toString()))
+            if (!children.get(i - 1).toString().equals(children.get(i - 7).toString())
                 // ensure same list
                 // Ensure list is being sorted
-                || (!children.get(i - 6).toString().equals("."))
-                || (!children.get(i - 5).toString().equals("Sorted"))
-                || (!children.get(i - 4).toString().equals(":="))
-                || (!children.get(i - 3).toString().equals("True"))) {
+                || !children.get(i - 6).toString().equals(".")
+                || !children.get(i - 5).toString().equals("Sorted")
+                || !children.get(i - 4).toString().equals(":=")
+                || !children.get(i - 3).toString().equals("True")) {
               addViolation(ctx, (DelphiPMDNode) children.get(i - 1));
             }
           } catch (IndexOutOfBoundsException e) {

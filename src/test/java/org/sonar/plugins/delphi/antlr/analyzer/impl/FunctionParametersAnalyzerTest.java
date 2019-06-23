@@ -113,7 +113,7 @@ public class FunctionParametersAnalyzerTest {
 
   @Test
   public void testThrowExceptionWhenActiveFunctionIsNull() {
-    expectedException.equals(IllegalArgumentException.class);
+    expectedException.expect(IllegalArgumentException.class);
     expectedException.expectMessage(containsString("activeFunction cannot be null"));
 
     results.setActiveFunction(null);

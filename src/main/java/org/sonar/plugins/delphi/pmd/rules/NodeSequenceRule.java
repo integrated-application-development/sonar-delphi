@@ -23,7 +23,8 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.properties.StringProperty;
+import net.sourceforge.pmd.properties.PropertyDescriptor;
+import net.sourceforge.pmd.properties.PropertyFactory;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
@@ -32,9 +33,11 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class NodeSequenceRule extends DelphiRule {
 
-  private static final StringProperty AST_SEQUENCE = new StringProperty("sequence",
-      "The AST sequence nodes to find", "",
-      1.0f);
+  private static final PropertyDescriptor<String> AST_SEQUENCE = PropertyFactory
+      .stringProperty("sequence")
+      .desc("The AST sequence nodes to find")
+      .defaultValue("")
+      .build();
 
   private String[] sequence;
   private int count;

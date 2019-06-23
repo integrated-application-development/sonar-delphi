@@ -22,7 +22,9 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -69,16 +71,15 @@ public class UnusedArgumentsRule extends DelphiRule {
         return;
       }
 
-      Stack<Tree> functionNodes = new Stack<>();
-      Stack<Tree> beginNodes = new Stack<>();
+      Deque<Tree> functionNodes = new ArrayDeque<>();
+      Deque<Tree> beginNodes = new ArrayDeque<>();
 
-      ArrayList<Stack<Tree>> stacks = populateStacks(node, functionNodes, beginNodes);
-      beginNodes = stacks.get(0);
-      functionNodes = stacks.get(1);
+      findFunctionNodesAndBeginNodes(node, functionNodes, beginNodes);
 
       if (functionNodes.isEmpty() || beginNodes.isEmpty()) {
         return;
       }
+
       final StringBuilder methodName = extractMethodName(node);
       Tree beginNode = beginNodes.peek();
       processFunctionBegin(beginNode, args);
@@ -86,10 +87,8 @@ public class UnusedArgumentsRule extends DelphiRule {
     }
   }
 
-  private ArrayList<Stack<Tree>> populateStacks(DelphiPMDNode node, Stack<Tree> functionNodes,
-      Stack<Tree> beginNodes) {
-
-    ArrayList<Stack<Tree>> stacks = new ArrayList<>();
+  private void findFunctionNodesAndBeginNodes(DelphiPMDNode node, Deque<Tree> functionNodes,
+      Deque<Tree> beginNodes) {
 
     for (int i = node.getChildIndex(); i < node.getParent().getChildCount(); i++) {
       Tree childNode = node.getParent().getChild(i);
@@ -103,11 +102,6 @@ public class UnusedArgumentsRule extends DelphiRule {
         break;
       }
     }
-
-    stacks.add(beginNodes);
-    stacks.add(functionNodes);
-
-    return stacks;
   }
 
   private StringBuilder extractMethodName(DelphiPMDNode node) {
@@ -131,11 +125,12 @@ public class UnusedArgumentsRule extends DelphiRule {
     Tree candidateNode = null;
     // looking for begin statement for function
     do {
-      candidateNode = node.getParent().getChild(node.getChildIndex() + (++lookIndex));
+      ++lookIndex;
+      candidateNode = node.getParent().getChild(node.getChildIndex() + lookIndex);
+
       if (lookIndex > MAX_LOOK_AHEAD || candidateNode == null) {
         break;
       }
-
     } while (candidateNode.getType() != DelphiLexer.BEGIN);
 
     return candidateNode;
@@ -219,12 +214,6 @@ public class UnusedArgumentsRule extends DelphiRule {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
     if (!super.equals(o)) {
       return false;
     }

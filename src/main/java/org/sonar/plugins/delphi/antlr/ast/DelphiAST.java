@@ -59,14 +59,14 @@ public class DelphiAST extends CommonTree implements ASTTree {
   private DelphiSourceSanitizer fileStream;
   private String[] codeLines;
 
-  private class FileReadFailException extends RuntimeException {
+  private static class FileReadFailException extends RuntimeException {
 
     FileReadFailException(String s, IOException e) {
       super(s, e);
     }
   }
 
-  private class FileParseFailException extends RuntimeException {
+  private static class FileParseFailException extends RuntimeException {
 
     FileParseFailException(String s, RecognitionException e) {
       super(s, e);

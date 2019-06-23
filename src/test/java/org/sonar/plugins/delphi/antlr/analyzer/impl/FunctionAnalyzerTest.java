@@ -190,12 +190,10 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
     results.setActiveClass(new DelphiClass("GenericA"));
 
     CodeNode<Tree> currentNode = code.getCurrentCodeNode();
-    int count = 0;
     while (currentNode != null) {
       try {
         code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
         analyzer.analyze(code, results);
-        count++;
       } catch (IllegalStateException e) {
         currentNode = null;
       }

@@ -22,8 +22,9 @@
  */
 package org.sonar.plugins.delphi.core.language.verifiers;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
-import java.util.Stack;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -47,7 +48,7 @@ public class StatementVerifier {
   private Tree checkedNode;
   private boolean isComplex;
   private String lastStatementText;
-  private Stack<Integer> statementIndex = new Stack<>();
+  private Deque<Integer> statementIndex = new ArrayDeque<>();
   private Tokenizer tokenizer = new Tokenizer();
 
   /**

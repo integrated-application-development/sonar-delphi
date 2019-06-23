@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.metrics.basicmetrics;
 
+import java.util.EnumMap;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -30,24 +31,22 @@ import org.apache.commons.lang.StringUtils;
 class Line {
 
   private final int lineIndex;
-  private int blankLine;
-  private int lineNumber = 1;
-  private int lineOfCode;
-  private int commentLine;
-  private int headerCommentLine;
-  private int commentBlankLine;
-  private int commentedOutCodeLine;
-  private int documentation;
   private String comment;
   private StringBuilder stringLine;
   private boolean isBlank;
   private boolean isThereDoc;
   private boolean isThereLicenseHeaderComment;
-
+  private EnumMap<Metric, Integer> measures;
   private static final String NOSONAR_TAG = "NOSONAR";
 
-  Line() {
+  private Line() {
+    initMeasures();
     this.lineIndex = 0;
+  }
+
+  Line(int lineIndex) {
+    initMeasures();
+    this.lineIndex = lineIndex;
   }
 
   Line(String stringLine) {
@@ -55,13 +54,9 @@ class Line {
     setString(new StringBuilder(stringLine));
   }
 
-  Line(int lineIndex, StringBuilder stringLine) {
-    this(lineIndex);
-    setString(stringLine);
-  }
-
-  Line(int lineIndex) {
-    this.lineIndex = lineIndex;
+  private void initMeasures() {
+    measures = new EnumMap<>(Metric.class);
+    measures.put(Metric.LINES, 1);
   }
 
   final void setString(StringBuilder stringLine) {
@@ -79,67 +74,25 @@ class Line {
   }
 
   public int getInt(Metric metric) {
-    switch (metric) {
-      case BLANK_LINES:
-        return blankLine;
-      case LINES:
-        return lineNumber;
-      case LINES_OF_CODE:
-        return lineOfCode;
-      case COMMENT_LINES:
-        return commentLine;
-      case COMMENTED_OUT_CODE_LINES:
-        return commentedOutCodeLine;
-      case COMMENT_BLANK_LINES:
-        return commentBlankLine;
-      case HEADER_COMMENT_LINES:
-        return headerCommentLine;
-      case PUBLIC_DOC_API:
-        return documentation;
-      default:
-        throw new IllegalStateException(
-            "MetricDef " + metric.name() + " is not available on Line object.");
-    }
+    return measures.getOrDefault(metric, 0);
   }
 
   public void setMeasure(Metric metric, int measure) {
-    switch (metric) {
-      case BLANK_LINES:
-        blankLine = measure;
-        break;
-      case LINES_OF_CODE:
-        lineOfCode = measure;
-        break;
-      case COMMENT_LINES:
-        commentLine = measure;
-        break;
-      case COMMENTED_OUT_CODE_LINES:
-        commentedOutCodeLine = measure;
-        break;
-      case COMMENT_BLANK_LINES:
-        commentBlankLine = measure;
-        break;
-      case HEADER_COMMENT_LINES:
-        headerCommentLine = measure;
-        break;
-      case PUBLIC_DOC_API:
-        documentation = measure;
-        break;
-      case LINES:
-        throw new IllegalStateException(
-            "MetricDef LINES always equals 1 on a Line and you are not "
-                + "permitted to change this value.");
-      default:
-        throw new IllegalStateException(
-            "MetricDef " + metric.name() + " is not suitable for Line object.");
+    if (metric == Metric.LINES) {
+      throw new IllegalStateException("Metric.LINES cannot be changed.");
     }
+
+    if (metric.isAggregateIfThereIsAlreadyAValue()) {
+      measure += getInt(metric);
+    }
+    measures.put(metric, measure);
   }
 
   void setComment(String comment) {
     this.comment = comment;
   }
 
-  void setComment(String comment, boolean isJavadoc) {
+  private void setComment(String comment, boolean isJavadoc) {
     setComment(comment);
     this.isThereDoc = isJavadoc;
   }

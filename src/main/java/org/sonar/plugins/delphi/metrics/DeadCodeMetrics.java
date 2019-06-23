@@ -166,10 +166,8 @@ public class DeadCodeMetrics extends DefaultMetrics {
       }
 
       if (unusedFunctions.contains(function)) {
-        /*
         RuleKey rule = functionRule.ruleKey();
 
-        TODO: Fix and reactivate this.
         if (rule != null) {
           int line = function.getLine();
           int column = function.getColumn();
@@ -184,7 +182,6 @@ public class DeadCodeMetrics extends DefaultMetrics {
                   .message(function.getRealName() + DEAD_FUNCTION_VIOLATION_MESSAGE));
           newIssue.save();
         }
-        */
       }
     }
   }

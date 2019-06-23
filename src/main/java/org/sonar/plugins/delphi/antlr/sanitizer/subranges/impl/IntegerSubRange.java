@@ -114,6 +114,7 @@ public class IntegerSubRange implements SubRange {
     begin = value;
   }
 
+  @SuppressWarnings("EqualsGetClass")
   @Override
   public boolean equals(Object obj) {
     if (obj == null) {

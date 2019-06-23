@@ -33,6 +33,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
@@ -48,7 +49,7 @@ public class BasicMetricTest {
   @Before
   public void setUp() throws Exception {
     File testFile = DelphiUtils.getResource(FILE_NAME);
-    Reader reader = new BufferedReader(new FileReader(testFile));
+    Reader reader = new BufferedReader(new FileReader(testFile, StandardCharsets.UTF_8));
     source = new DelphiSource(reader);
   }
 

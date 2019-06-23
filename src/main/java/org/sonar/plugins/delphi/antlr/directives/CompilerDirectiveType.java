@@ -41,8 +41,8 @@ public enum CompilerDirectiveType {
   INCLUDE(8, "include,i"),
   UNUSED(100, "warn,r,h+,h-,i+,i-,m+,m-");
 
-  private int number;
-  private String name;
+  private final int number;
+  private final String name;
   private static Map<String, CompilerDirectiveType> mappedValues;
 
   CompilerDirectiveType(int number, String name) {

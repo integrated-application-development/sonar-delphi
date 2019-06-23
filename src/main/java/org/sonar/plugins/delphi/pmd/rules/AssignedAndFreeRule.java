@@ -71,8 +71,7 @@ public class AssignedAndFreeRule extends DelphiRule {
     StringBuilder variableName = new StringBuilder();
     int index = node.getChildIndex();
     Tree backwardNode;
-    while (((--index) > -1) && (backwardNode = node.getParent().getChild(index)).getText()
-        .equals(".")) {
+    while (index > 0 && (backwardNode = node.getParent().getChild(--index)).getText().equals(".")) {
       variableName.insert(0, backwardNode.getText());
       variableName.insert(0, node.getParent().getChild(--index).getText());
     }

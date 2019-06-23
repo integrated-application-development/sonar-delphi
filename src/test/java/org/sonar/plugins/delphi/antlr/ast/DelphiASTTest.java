@@ -45,19 +45,13 @@ public class DelphiASTTest {
   }
 
   @Test
-  public void testGenerateXML() throws IOException {
+  public void testGenerateXML() throws IOException, ParserConfigurationException, SAXException {
     File xml = File.createTempFile("DelphiAST", ".xml");
-    xml.deleteOnExit();
-
     ast.generateXML(xml.getAbsolutePath());
 
-    try {
-      DocumentBuilder parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-      parser.parse(xml);
-    } catch (ParserConfigurationException | SAXException e) {
-      fail("Could not parse generated XML document");
-    }
+    DocumentBuilder parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+    parser.parse(xml);
 
+    xml.deleteOnExit();
   }
-
 }
