@@ -23,6 +23,7 @@
 package org.sonar.plugins.delphi.project;
 
 import java.io.File;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -56,7 +57,9 @@ public class DelphiWorkgroupXmlParser extends DefaultHandler {
    */
   public void parse() {
     try {
-      SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+      SAXParserFactory factory = SAXParserFactory.newInstance();
+      factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+      SAXParser parser = factory.newSAXParser();
       parser.parse(xml.getAbsolutePath(), this);
     } catch (Exception ex) {
       DelphiUtils.LOG.error(ex.getMessage());

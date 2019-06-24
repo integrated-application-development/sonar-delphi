@@ -28,6 +28,7 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLInputFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -187,6 +188,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
 
   private Document createNewDocument() throws ParserConfigurationException {
     DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+    docBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
     DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
     return docBuilder.newDocument();
   }
