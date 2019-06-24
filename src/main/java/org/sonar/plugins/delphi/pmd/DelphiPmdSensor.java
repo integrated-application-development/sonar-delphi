@@ -29,6 +29,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import net.sourceforge.pmd.Report;
@@ -128,10 +129,11 @@ public class DelphiPmdSensor implements Sensor {
   }
 
   private void parsePMDreport(File reportFile) {
-    DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
     int issues = 0;
 
     try {
+      DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+      docBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
       Document doc = docBuilder.parse(reportFile);
 
@@ -165,6 +167,7 @@ public class DelphiPmdSensor implements Sensor {
       DelphiUtils.LOG.error("Unexpected error while parsing PMD report", e);
     }
 
+    //TODO: Remove these messages
     DelphiUtils.LOG.info("{} issues added", issues);
     DelphiUtils.LOG.info("{} issue highlighting errors", issueHighlightingErrors);
   }

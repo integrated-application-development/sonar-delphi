@@ -25,6 +25,7 @@ package org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.sonar.api.batch.fs.InputFile;
@@ -94,8 +95,9 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser {
   }
 
   private void parseReportFile(SensorContext sensorContext) {
-    DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
     try {
+      DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+      docBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
       Document doc = docBuilder.parse(reportFile);
 

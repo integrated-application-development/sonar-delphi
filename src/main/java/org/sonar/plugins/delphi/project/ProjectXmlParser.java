@@ -24,6 +24,7 @@ package org.sonar.plugins.delphi.project;
 
 import java.io.File;
 import java.io.IOException;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -61,7 +62,9 @@ public class ProjectXmlParser extends DefaultHandler {
    */
   public void parse() {
     try {
-      SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+      SAXParserFactory factory = SAXParserFactory.newInstance();
+      factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+      SAXParser parser = factory.newSAXParser();
       parser.parse(fileName, this);
     } catch (ParserConfigurationException | SAXException | IOException e) {
       DelphiUtils.LOG.error(e.getMessage());
