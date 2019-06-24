@@ -67,7 +67,7 @@ public class ProjectXmlParser extends DefaultHandler {
       SAXParser parser = factory.newSAXParser();
       parser.parse(fileName, this);
     } catch (ParserConfigurationException | SAXException | IOException e) {
-      DelphiUtils.LOG.error(e.getMessage());
+      DelphiUtils.LOG.error("{}: Error while parsing project file: ", fileName, e);
     }
   }
 
@@ -89,7 +89,6 @@ public class ProjectXmlParser extends DefaultHandler {
       try {
         project.addFile(path);
       } catch (IOException e) {
-        DelphiUtils.LOG.error(e.getMessage());
         throw new SAXException(e);
       }
     } else if ("VersionInfoKeys".equals(rawName)) {
@@ -135,7 +134,6 @@ public class ProjectXmlParser extends DefaultHandler {
         try {
           project.addIncludeDirectory(path);
         } catch (IOException e) {
-          DelphiUtils.LOG.error(e.getMessage());
           throw new SAXException(e);
         }
       }

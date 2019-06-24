@@ -216,30 +216,32 @@ public class DelphiPmdSensor implements Sensor {
       DelphiPMD pmd = new DelphiPMD();
       RuleContext ruleContext = new RuleContext();
       RuleSets ruleSets = createRuleSets();
-
-      List<File> excluded = delphiProjectHelper.getExcludedSources();
-
       List<DelphiProject> projects = delphiProjectHelper.getProjects();
-      for (DelphiProject delphiProject : projects) {
-        DelphiUtils.LOG.info("PMD Parsing project "
-            + delphiProject.getName());
-        ProgressReporter progressReporter = new ProgressReporter(
-            delphiProject.getSourceFiles().size(), 10,
-            new ProgressReporterLogger(DelphiUtils.LOG));
-        for (File pmdFile : delphiProject.getSourceFiles()) {
-          progressReporter.progress();
-          if (delphiProjectHelper.isExcluded(pmdFile, excluded)) {
-            continue;
-          }
 
-          processPmdParse(pmd, ruleContext, ruleSets, pmdFile);
-        }
+      for (DelphiProject delphiProject : projects) {
+        createPmdReport(delphiProject, pmd, ruleContext, ruleSets);
       }
 
       return writeXmlReport(pmd.getReport());
     } catch (IOException e) {
-      DelphiUtils.LOG.error("Could not generate PMD report file.");
+      DelphiUtils.LOG.error("Failed to generate PMD report file: ", e);
       return null;
+    }
+  }
+
+  private void createPmdReport(DelphiProject delphiProject, DelphiPMD pmd, RuleContext ruleContext,
+      RuleSets ruleSets) {
+    DelphiUtils.LOG.info("PMD Parsing project {}", delphiProject.getName());
+
+    List<File> excluded = delphiProjectHelper.getExcludedSources();
+    ProgressReporter progressReporter = new ProgressReporter(
+        delphiProject.getSourceFiles().size(), 10, new ProgressReporterLogger(DelphiUtils.LOG));
+
+    for (File pmdFile : delphiProject.getSourceFiles()) {
+      progressReporter.progress();
+      if (!delphiProjectHelper.isExcluded(pmdFile, excluded)) {
+        processPmdParse(pmd, ruleContext, ruleSets, pmdFile);
+      }
     }
   }
 

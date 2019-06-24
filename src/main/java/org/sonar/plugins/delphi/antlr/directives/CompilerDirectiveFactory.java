@@ -66,7 +66,7 @@ public class CompilerDirectiveFactory {
         CompilerDirective directive = create(data, directivePos, closingBracket);
         result.add(directive);
       } catch (CompilerDirectiveFactoryUnsupportedDirectiveException e) {
-        DelphiUtils.LOG.trace(e.getMessage());
+        DelphiUtils.LOG.trace("Failed to produce Compiler Directive: ", e);
       }
 
       directivePos = getDirectiveFirstChar(data, directivePos + 1);
@@ -116,8 +116,7 @@ public class CompilerDirectiveFactory {
         return new UnusedDirective(directiveFirstChar, directiveLastChar);
       default:
         throw new CompilerDirectiveFactoryUnsupportedDirectiveException(
-            "Not implemented directive name: "
-                + directiveName);
+            "Not implemented directive name: " + directiveName);
     }
   }
 

@@ -61,8 +61,8 @@ public class DelphiWorkgroupXmlParser extends DefaultHandler {
       factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       SAXParser parser = factory.newSAXParser();
       parser.parse(xml.getAbsolutePath(), this);
-    } catch (Exception ex) {
-      DelphiUtils.LOG.error(ex.getMessage());
+    } catch (Exception e) {
+      DelphiUtils.LOG.error("{}: Error while parsing workgroup file: ", xml.getAbsolutePath(), e);
     }
   }
 
