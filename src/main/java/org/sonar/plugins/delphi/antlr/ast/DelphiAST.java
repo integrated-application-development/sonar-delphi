@@ -153,7 +153,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
 
       transformer.transform(source, result);
     } catch (TransformerException e) {
-      DelphiUtils.LOG.error(e.getMessage());
+      DelphiUtils.LOG.error("Failed to generate Node XML", e);
       return null;
     }
 
@@ -171,7 +171,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
     try {
       return generateDocument(createNewDocument(), "file");
     } catch (Exception e) {
-      DelphiUtils.LOG.error("{} {}", "Could not generate xml document: ", e.getMessage());
+      DelphiUtils.LOG.error("{} {}", "Failed to generate Node XML: ", e);
       return null;
     }
   }
@@ -254,8 +254,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
     }
     if (lineNr > codeLines.length) {
       throw new IllegalArgumentException(
-          toString() + "Source code line number to high: " + lineNr + " of max "
-              + codeLines.length);
+          toString() + "Source code line number too high: " + lineNr + " / " + codeLines.length);
     }
     return codeLines[lineNr - 1];
   }

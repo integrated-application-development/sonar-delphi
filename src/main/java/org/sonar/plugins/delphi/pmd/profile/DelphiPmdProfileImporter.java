@@ -59,7 +59,7 @@ public class DelphiPmdProfileImporter extends ProfileImporter {
       if (messages != null) {
         messages.addErrorText(e.getMessage());
       }
-      Loggers.get(getClass()).error("Error loading from rules file " + e.getMessage());
+      Loggers.get(getClass()).error("Error loading from rules file: ", e);
     }
     return profile;
   }

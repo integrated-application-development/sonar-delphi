@@ -39,8 +39,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-
 
 public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser {
 
@@ -90,6 +88,7 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser {
       newCoverage.save();
     } catch (FileNotFoundException e) {
       DelphiUtils.LOG.info("File not found in project {}", fileName);
+      DelphiUtils.LOG.debug("Stacktrace: ", e);
     }
 
   }
@@ -113,12 +112,10 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser {
         parseFileNode(sensorContext, srcFile);
       }
 
-    } catch (SAXParseException err) {
-      DelphiUtils.LOG.info("SAXParseException");
     } catch (SAXException e) {
-      DelphiUtils.LOG.info("SAXException {}", e.getMessage());
+      DelphiUtils.LOG.error("Failed to parse coverage report: ", e);
     } catch (Exception e) {
-      DelphiUtils.LOG.info("Exception {}", e.getMessage());
+      DelphiUtils.LOG.error("Unexpected exception while parsing coverage reports: ", e);
     }
   }
 

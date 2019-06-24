@@ -64,7 +64,7 @@ public class DefineResolver extends SourceResolver {
    * Resolve defines
    *
    * @param str File data
-   * @return New file data with parsed preprocesor defines
+   * @return New file data with parsed preprocessor defines
    */
   private StringBuilder resolveDefines(StringBuilder str, Set<String> defines) {
     if (str == null) {
@@ -76,10 +76,8 @@ public class DefineResolver extends SourceResolver {
       List<CompilerDirective> allDirectives = factory.produce(str.toString());
       SubRangeAggregator toComment = processCompilerDirectives(allDirectives, defines);
       commentUnwantedDefinitions(str, toComment);
-    } catch (CompilerDirectiveFactorySyntaxException e) {
-      DelphiUtils.LOG.trace(e.getMessage());
-    } catch (DefineResolverException e) {
-      DelphiUtils.LOG.debug(e.getMessage());
+    } catch (CompilerDirectiveFactorySyntaxException | DefineResolverException e) {
+      DelphiUtils.LOG.trace("Failed to resolve define: ", e);
     }
 
     return str;

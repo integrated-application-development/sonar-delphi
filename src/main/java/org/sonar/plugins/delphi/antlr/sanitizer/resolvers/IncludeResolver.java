@@ -25,16 +25,13 @@ package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveFactory;
-import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
 import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveFactorySyntaxException;
 import org.sonar.plugins.delphi.antlr.sanitizer.SourceResolver;
 import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.exceptions.IncludeResolverException;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRange;
-import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRangeAggregator;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRangeFirstOccurenceComparator;
 import org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl.ReplacementSubRange;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -100,28 +97,33 @@ public class IncludeResolver extends SourceResolver {
         currentDir = backtrackDirectory(currentDir,
             DelphiUtils.countSubstrings(includeFileName, ".."));
 
-        try {
-          // string, that will be inserted in replacement of include statement
-          String copyData = "";
-          if (extendIncludes) {
-            File includeFile = resolveIncludeFile(includeFileName, currentDir, includes);
-            includedFiles.add(includeFile.getAbsolutePath());
-            copyData = readFileIncludeData(includeFile);
-          }
-          dataToInclude.add(new ReplacementSubRange(directive.getFirstCharPosition(), directive
-              .getFirstCharPosition()
-              + directive.getLength() + REPLACEMENT_OFFSET, copyData));
-
-        } catch (IncludeResolverException | IOException e) {
-          DelphiUtils.LOG.warn(e.getMessage());
-        }
-
+        dataToInclude.add(processIncludedFile(directive, includeFileName, currentDir));
       }
     } catch (CompilerDirectiveFactorySyntaxException e) {
-      DelphiUtils.LOG.trace(e.getMessage());
+      DelphiUtils.LOG.trace("Compiler directive syntax error: ", e);
     }
 
     return introduceIncludedData(newData, dataToInclude);
+  }
+
+  private ReplacementSubRange processIncludedFile(CompilerDirective directive,
+      String includeFileName, String currentDir) {
+    // This string will be inserted in place of the include directive
+    String copyData = "";
+
+    try {
+      if (extendIncludes) {
+        File includeFile = resolveIncludeFile(includeFileName, currentDir, includes);
+        includedFiles.add(includeFile.getAbsolutePath());
+        copyData = readFileIncludeData(includeFile);
+      }
+    } catch (IncludeResolverException | IOException e) {
+      DelphiUtils.LOG.warn("Failed to resolve include: ", e);
+    }
+
+    int rangeStart = directive.getFirstCharPosition();
+    int rangeEnd = directive.getFirstCharPosition() + directive.getLength() + REPLACEMENT_OFFSET;
+    return new ReplacementSubRange(rangeStart, rangeEnd, copyData);
   }
 
   private String readFileIncludeData(File includeFile) throws IOException {

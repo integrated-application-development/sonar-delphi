@@ -190,21 +190,8 @@ public class DelphiSureFireParser {
           }
         }
       }
-    } catch (SAXParseException err) {
-      DelphiUtils.LOG.info("SAXParseException");
-      Exception x = err.getException();
-      DelphiUtils.LOG.error("SAXParseException Stacktrace", x);
-    } catch (SAXException e) {
-      DelphiUtils.LOG.info("SAXException");
-      Exception x = e.getException();
-      //((x == null) ? e : x).printStackTrace(); // Removed - SonarQube Vulnerability
-      DelphiUtils.LOG.error("SAXException Stacktrace", x);
-    } catch (ParserConfigurationException e) {
-      DelphiUtils.LOG.info("ParserConfigurationException");
-      DelphiUtils.LOG.error("ParserConfigurationException Stacktrace", e);
-    } catch (IOException e) {
-      DelphiUtils.LOG.info("IOException");
-      DelphiUtils.LOG.error("IOException Stacktrace", e);
+    } catch (SAXException | ParserConfigurationException | IOException e) {
+      DelphiUtils.LOG.error("Error while parsing SureFire report: ", e);
     }
   }
 

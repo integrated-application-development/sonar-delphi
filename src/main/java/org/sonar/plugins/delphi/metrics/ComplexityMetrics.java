@@ -181,8 +181,8 @@ public class ComplexityMetrics extends DefaultMetrics {
       context.<Integer>newMeasure().forMetric(CoreMetrics.PUBLIC_API).on(resource)
           .withValue(getIntMetric("PUBLIC_API")).save();
 
-    } catch (IllegalStateException ise) {
-      DelphiUtils.LOG.error(ise.getMessage());
+    } catch (IllegalStateException e) {
+      DelphiUtils.LOG.error("{}: Error while saving Complexity metrics: ", resource.filename(), e);
     }
   }
 

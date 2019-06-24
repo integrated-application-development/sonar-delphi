@@ -41,6 +41,7 @@ import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleParam;
 import org.sonar.api.rules.RulePriority;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 /**
  * Utilities for Delphi xml rules
@@ -180,12 +181,11 @@ public final class DelphiRulesUtils {
 
   private static Rule createRepositoryRule(DelphiRule fRule) {
     Rule rule = Rule.create(DelphiPmdConstants.REPOSITORY_KEY, fRule.getName(), fRule.getMessage())
-        .setSeverity(
-            severityFromLevel(fRule.getPriority()));
+      .setSeverity(severityFromLevel(fRule.getPriority()))
+      .setDescription(fRule.getDescription())
+      .setTags(fRule.getTags())
+      .setConfigKey(fRule.getClazz());
 
-    rule.setDescription(fRule.getDescription());
-    rule.setTags(fRule.getTags());
-    rule.setConfigKey(fRule.getClazz());
     List<RuleParam> ruleParams = new ArrayList<>();
     if (fRule.getProperties() != null) {
       for (Property property : fRule.getProperties()) {
@@ -223,14 +223,18 @@ public final class DelphiRulesUtils {
 
   private static void buildActiveRuleParams(DelphiRule delphiRule, Rule repositoryRule,
       ActiveRule activeRule) {
-    if (delphiRule.getProperties() != null) {
-      for (Property property : delphiRule.getProperties()) {
-        if (repositoryRule.getParams() != null) {
-          for (RuleParam ruleParam : repositoryRule.getParams()) {
-            if (ruleParam.getKey().equals(property.getName())) {
-              activeRule.setParameter(ruleParam.getKey(), property.getValue());
-            }
-          }
+    if (delphiRule.getProperties() == null) {
+      return;
+    }
+
+    for (Property property : delphiRule.getProperties()) {
+      if (repositoryRule.getParams() == null) {
+        continue;
+      }
+
+      for (RuleParam ruleParam : repositoryRule.getParams()) {
+        if (ruleParam.getKey().equals(property.getName())) {
+          activeRule.setParameter(ruleParam.getKey(), property.getValue());
         }
       }
     }
@@ -291,6 +295,7 @@ public final class DelphiRulesUtils {
       int intLevel = 5 - Integer.valueOf(level);
       return RulePriority.valueOfInt(intLevel);
     } catch (Exception e) {
+      DelphiUtils.LOG.error("DelphiRulesUtils.severityFromLevel: ", e);
       return null;
     }
   }
@@ -299,6 +304,7 @@ public final class DelphiRulesUtils {
     return ((Integer) (5 - priority.ordinal())).toString();
   }
 
+  //TODO: Surely a function like this already exists in Guava or Apache commons...
   private static boolean isStringNumeric(String str) {
     DecimalFormatSymbols currentLocaleSymbols = DecimalFormatSymbols.getInstance();
     char localeMinusSign = currentLocaleSymbols.getMinusSign();

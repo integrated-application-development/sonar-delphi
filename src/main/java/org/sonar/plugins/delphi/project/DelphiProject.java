@@ -59,9 +59,9 @@ public class DelphiProject {
     try {
       parseFile(xml);
     } catch (IOException e) {
-      DelphiUtils.LOG.error("Could not find .dproj file: {}", xml.getAbsolutePath());
+      DelphiUtils.LOG.error("Could not find .dproj file: {}", xml.getAbsolutePath(), e);
     } catch (IllegalArgumentException e) {
-      DelphiUtils.LOG.error("No .dproj file to parse. (null)");
+      DelphiUtils.LOG.error("No .dproj file to parse. ({})", e.getMessage(), e);
     }
   }
 
