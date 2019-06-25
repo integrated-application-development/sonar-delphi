@@ -154,7 +154,7 @@ public class DelphiSensor implements Sensor {
 
   private void doTokenize(SensorContext context, InputFile inputFile) {
     try {
-      String fileName = delphiProjectHelper.uriToAbsolutePath(inputFile.uri());
+      String fileName = DelphiUtils.uriToAbsolutePath(inputFile.uri());
       DelphiLexer lexer = new DelphiLexer(new DelphiSourceSanitizer(fileName));
       Token prevToken = null;
       Token token = lexer.nextToken();
@@ -207,6 +207,7 @@ public class DelphiSensor implements Sensor {
         // not for the scanner, this will handle that so the execution does not fail
         DelphiUtils.LOG.error("{} produced IllegalArgumentException: \"{}\""
             + " Metric report for this file may be in error.", resource, e.getMessage());
+        DelphiUtils.LOG.debug("Stacktrace: ", e);
       }
 
       if (basicMetrics.hasMetric("PUBLIC_DOC_API") && complexityMetrics.hasMetric("PUBLIC_API")) {

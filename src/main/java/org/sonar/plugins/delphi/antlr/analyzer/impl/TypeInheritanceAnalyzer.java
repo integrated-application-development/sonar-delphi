@@ -100,7 +100,7 @@ public class TypeInheritanceAnalyzer extends CodeAnalyzer {
    */
   private ClassInterface checkParentInFile(String parentName, CodeAnalysisResults results) {
     for (ClassInterface clazz : results.getClasses()) {
-      if (!clazz.equals(results.getActiveClass()) && clazz.getShortName()
+      if (!clazz.equals(results.getActiveClass()) && clazz.getName()
           .equalsIgnoreCase(parentName)) {
         return clazz;
       }

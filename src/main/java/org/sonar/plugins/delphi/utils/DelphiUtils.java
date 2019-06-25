@@ -25,6 +25,7 @@ package org.sonar.plugins.delphi.utils;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -231,5 +232,14 @@ public final class DelphiUtils {
       }
     }
     return false;
+  }
+
+  public static String uriToAbsolutePath(URI uri) {
+    String path = uri.getPath();
+    if (":".equals(path.substring(2, 3))) {
+      return path.substring(1);
+    } else {
+      return path;
+    }
   }
 }

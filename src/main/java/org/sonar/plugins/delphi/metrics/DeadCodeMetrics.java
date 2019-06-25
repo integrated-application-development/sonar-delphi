@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.metrics;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -95,6 +96,7 @@ public class DeadCodeMetrics extends DefaultMetrics {
       unusedUnits = findUnusedUnits(units);
 
       // findUnusedFunctions always returns an empty list
+      // huh? Why?
       unusedFunctions = findUnusedFunctions(units);
       isCalculated = true;
     }
@@ -111,79 +113,83 @@ public class DeadCodeMetrics extends DefaultMetrics {
       return;
     }
 
-    String fileName = FilenameUtils.removeExtension(inputFile.filename());
-    UnitInterface unit = findUnit(fileName);
+    UnitInterface unit = findUnit(inputFile.uri());
     if (unit == null) {
-      String logDesc = String.format("No unit for %s (%s)", fileName, inputFile.toString());
+      String unitName = FilenameUtils.removeExtension(inputFile.filename());
+      String logDesc = String.format("No unit for %s (%s)", unitName, inputFile.toString());
       DelphiUtils.LOG.debug(logDesc);
       return;
     }
 
-    if (unusedUnits.contains(fileName.toLowerCase())) {
+    if (unusedUnits.contains(unit.getName().toLowerCase())) {
       NewIssue newIssue = context.newIssue();
       newIssue
           .forRule(unitRule.ruleKey())
           .at(newIssue.newLocation()
               .on(inputFile)
-              .at(inputFile.newRange(unit.getLine(), 1,
-                  unit.getLine(), 1))
-              .message(unit.getName() + DEAD_UNIT_VIOLATION_MESSAGE));
-      newIssue.save();
+              .at(inputFile.selectLine(1))
+              .message(unit.getName() + DEAD_UNIT_VIOLATION_MESSAGE))
+          .save();
     }
 
     for (FunctionInterface function : getUnitFunctions(unit)) {
-      if (function.isMessage() || function.isVirtual()
-          || function.getVisibility() == DelphiLexer.PUBLISHED) {
+      if (!isDeadFunction(function)) {
         continue;
       }
 
-      if (function.getParentClass() != null) {
-        // check if function is not a interface implementation
-        boolean isImplementation = false;
-        for (ClassInterface parent : function.getParentClass().getParents()) {
-          if (parent.hasFunction(function)) {
-            isImplementation = true;
-            break;
-          }
-        }
-        if (isImplementation) {
-          // function used as interface implementation, surely not unused function
-          continue;
-        }
+      RuleKey rule = functionRule.ruleKey();
 
-        // check if function is used in property field
-        boolean usedInProperty = false;
-        for (ClassPropertyInterface property : function.getParentClass().getProperties()) {
-          if (property.hasFunction(function)) {
-            usedInProperty = true;
-            break;
-          }
-        }
-        if (usedInProperty) {
-          // function used in property field, surely not unused function
-          continue;
-        }
+      if (rule != null) {
+        int line = function.getLine();
+        int column = function.getColumn();
+
+        NewIssue newIssue = context.newIssue();
+        newIssue
+            .forRule(rule)
+            .at(newIssue.newLocation()
+                .on(inputFile)
+                .at(inputFile.newRange(line, column,
+                    line, column + function.getName().length()))
+                .message(function.getRealName() + DEAD_FUNCTION_VIOLATION_MESSAGE))
+            .save();
       }
+    }
+  }
 
-      if (unusedFunctions.contains(function)) {
-        RuleKey rule = functionRule.ruleKey();
+  private boolean isDeadFunction(FunctionInterface function) {
+    if (function.isMessage() ||
+        function.isVirtual() ||
+        function.getVisibility() == DelphiLexer.PUBLISHED) {
+      return false;
+    }
 
-        if (rule != null) {
-          int line = function.getLine();
-          int column = function.getColumn();
+    return unusedFunctions.contains(function)
+        && !isFunctionInterfaceImplementation(function)
+        && !isFunctionPropertyReadWriteSpecifier(function);
+  }
 
-          NewIssue newIssue = context.newIssue();
-          newIssue
-              .forRule(rule)
-              .at(newIssue.newLocation()
-                  .on(inputFile)
-                  .at(inputFile.newRange(line, column,
-                      line, column + function.getShortName().length()))
-                  .message(function.getRealName() + DEAD_FUNCTION_VIOLATION_MESSAGE));
-          newIssue.save();
+  private boolean isFunctionInterfaceImplementation(FunctionInterface function) {
+    ClassInterface clazz = function.getParentClass();
+    if (clazz != null) {
+      for (ClassInterface parent : clazz.getParents()) {
+        if (parent.hasFunction(function)) {
+          return true;
         }
       }
     }
+    return false;
+  }
+
+  private boolean isFunctionPropertyReadWriteSpecifier(FunctionInterface function) {
+    ClassInterface clazz = function.getParentClass();
+    if (clazz != null) {
+      for (ClassPropertyInterface property : clazz.getProperties()) {
+        if (property.hasFunction(function)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   /**
@@ -207,7 +213,7 @@ public class DeadCodeMetrics extends DefaultMetrics {
    * @param units Unit array
    * @return List of unused functions
    */
-  protected Set<FunctionInterface> findUnusedFunctions(Set<UnitInterface> units) {
+  private Set<FunctionInterface> findUnusedFunctions(Set<UnitInterface> units) {
     Set<FunctionInterface> allFunctions = new HashSet<>();
     Set<FunctionInterface> usedFunctions = new HashSet<>();
     for (UnitInterface unit : units) {
@@ -228,7 +234,7 @@ public class DeadCodeMetrics extends DefaultMetrics {
    * @param units Units in project
    * @return a list of unused units
    */
-  protected List<String> findUnusedUnits(Set<UnitInterface> units) {
+  private List<String> findUnusedUnits(Set<UnitInterface> units) {
     Set<String> usedUnits = new HashSet<>();
     List<String> result = new ArrayList<>();
     for (UnitInterface unit : units) {
@@ -258,12 +264,12 @@ public class DeadCodeMetrics extends DefaultMetrics {
   /**
    * Searches for a unit by given unit name
    *
-   * @param unitName Unit name
+   * @param uri The unique uri from this unit's InputFile
    * @return Unit if found, null otherwise
    */
-  private UnitInterface findUnit(String unitName) {
+  private UnitInterface findUnit(URI uri) {
     for (UnitInterface unit : allUnits) {
-      if (unit.getName().equalsIgnoreCase(unitName)) {
+      if (unit.getUri().equals(uri)) {
         return unit;
       }
     }

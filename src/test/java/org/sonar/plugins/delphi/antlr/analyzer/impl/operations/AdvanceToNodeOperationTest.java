@@ -58,7 +58,7 @@ public class AdvanceToNodeOperationTest {
   public void testExecute() {
 
     int index = 0;
-    int expected[] = {LexerMetrics.UNIT.toMetrics(), LexerMetrics.FUNCTION.toMetrics(),
+    int[] expected = {LexerMetrics.UNIT.toMetrics(), LexerMetrics.FUNCTION.toMetrics(),
         LexerMetrics.FUNCTION.toMetrics()};
 
     int executionsCount = 0;

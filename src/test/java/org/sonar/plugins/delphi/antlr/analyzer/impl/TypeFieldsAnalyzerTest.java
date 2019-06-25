@@ -71,7 +71,7 @@ public class TypeFieldsAnalyzerTest {
 
     analyzer.analyze(code, results);
 
-    ClassFieldInterface fields[] = clazz.getFields();
+    ClassFieldInterface[] fields = clazz.getFields();
     assertEquals(1, fields.length);
     assertEquals("bshowtracker", fields[0].getName());
   }

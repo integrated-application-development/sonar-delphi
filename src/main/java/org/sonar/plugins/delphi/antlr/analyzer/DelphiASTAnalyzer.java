@@ -25,7 +25,6 @@ package org.sonar.plugins.delphi.antlr.analyzer;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.analyzer.impl.FunctionAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.impl.FunctionBodyAnalyzer;
-import org.sonar.plugins.delphi.antlr.analyzer.impl.FunctionParametersAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.impl.IncludeAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.impl.InterfaceAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.impl.TypeAnalyzer;
@@ -55,13 +54,15 @@ public class DelphiASTAnalyzer implements ASTAnalyzer {
     final CodeTree code = new CodeTree(new CodeNode<>(tree), new CodeNode<>(tree.getChild(0)));
 
     CodeAnalyzer analyzer = new UnitAnalyzer();
-    analyzer.chain(new IncludeAnalyzer()).chain(new InterfaceAnalyzer())
+    analyzer.chain(new IncludeAnalyzer())
+        .chain(new InterfaceAnalyzer())
         .chain(new VisibilityAnalyzer())
         .chain(new TypeAnalyzer())
-        .chain(new TypeInheritanceAnalyzer()).chain(new TypeFieldsAnalyzer())
+        .chain(new TypeInheritanceAnalyzer())
+        .chain(new TypeFieldsAnalyzer())
         .chain(new TypePropertyAnalyzer())
-        .chain(new FunctionAnalyzer()).chain(new FunctionBodyAnalyzer(result, delphiProjectHelper))
-        .chain(new FunctionParametersAnalyzer());
+        .chain(new FunctionAnalyzer())
+        .chain(new FunctionBodyAnalyzer(result, delphiProjectHelper));
 
     CodeNode<Tree> codeNode = code.getCurrentCodeNode();
     AdvanceNodeOperation advance = new AdvanceNodeOperation();

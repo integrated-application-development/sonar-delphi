@@ -37,30 +37,30 @@ public interface ClassPropertyInterface extends ClassFieldInterface {
   /**
    * Gets the read function
    *
-   * @return Read function
+   * @return Read function name
    */
-  FunctionInterface getReadFunction();
+  String getReadFunction();
 
   /**
    * Gets the write function
    *
-   * @return Write function
+   * @return Write function name
    */
-  FunctionInterface getWriteFunction();
+  String getWriteFunction();
 
   /**
    * Sets the read function
    *
    * @param newFunction new read function
    */
-  void setReadFunction(FunctionInterface newFunction);
+  void setReadFunction(String newFunction);
 
   /**
    * Sets the write function
    *
    * @param newFunction new write function
    */
-  void setWriteFunction(FunctionInterface newFunction);
+  void setWriteFunction(String newFunction);
 
   /**
    * Checks if property has specified function

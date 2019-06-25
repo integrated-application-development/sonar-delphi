@@ -162,7 +162,7 @@ public class DelphiProjectHelper {
   List<File> inputFilesToFiles(List<InputFile> inputFiles) {
     List<File> result = new ArrayList<>();
     for (InputFile inputFile : inputFiles) {
-      String absolutePath = uriToAbsolutePath(inputFile.uri());
+      String absolutePath = DelphiUtils.uriToAbsolutePath(inputFile.uri());
       result.add(new File(absolutePath));
     }
     return result;
@@ -331,15 +331,6 @@ public class DelphiProjectHelper {
       }
     }
     return false;
-  }
-
-  public String uriToAbsolutePath(URI uri) {
-    String path = uri.getPath();
-    if (":".equals(path.substring(2, 3))) {
-      return path.substring(1);
-    } else {
-      return path;
-    }
   }
 
   /**

@@ -27,10 +27,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.InputFile.Type;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
+import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiTestUtils {
 
@@ -38,15 +45,15 @@ public class DelphiTestUtils {
     DelphiProjectHelper mock = mock(DelphiProjectHelper.class);
     when(mock.shouldExecuteOnProject()).thenReturn(true);
 
-    when(mock.getFile(any(File.class))).thenAnswer(new Answer<InputFile>() {
-
-      @Override
-      public InputFile answer(InvocationOnMock invocation) {
-        File file = (File) invocation.getArguments()[0];
-//        InputFile inputFile = new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5",file.getAbsolutePath());
-        InputFile inputFile = null;
-        return inputFile;
-      }
+    when(mock.getFile(any(File.class))).thenAnswer((Answer<InputFile>) invocation -> {
+      File file = (File) invocation.getArguments()[0];
+      return TestInputFileBuilder
+          .create("ROOT_KEY_CHANGE_AT_SONARAPI_5", file.getParentFile(), file)
+          .setModuleBaseDir(file.getParentFile().toPath())
+          .setLanguage(DelphiLanguage.KEY)
+          .setType(Type.MAIN)
+          .setContents(DelphiUtils.readFileContent(file, Charset.defaultCharset().name()))
+          .build();
     });
 
     return mock;

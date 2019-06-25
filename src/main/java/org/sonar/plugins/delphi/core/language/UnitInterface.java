@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.core.language;
 
+import java.net.URI;
 import java.util.Set;
 
 /**
@@ -159,4 +160,10 @@ public interface UnitInterface {
    */
   void setName(String name);
 
+  /**
+   * Gets unique uri
+   *
+   * @return uri
+   */
+  URI getUri();
 }

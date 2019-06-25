@@ -46,7 +46,7 @@ public class IncludeAnalyzer extends CodeAnalyzer {
   @Override
   public boolean canAnalyze(CodeTree codeTree) {
     int type = codeTree.getCurrentCodeNode().getNode().getType();
-    return (type == DelphiParser.USES || type == DelphiParser.UNIT || type == DelphiParser.LIBRARY);
+    return (type == DelphiParser.USES || type == DelphiParser.LIBRARY);
   }
 
   private void analyzeIncludes(Tree includeNode, UnitInterface activeUnit) {
