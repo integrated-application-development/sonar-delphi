@@ -31,12 +31,15 @@ import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
+import org.sonar.plugins.delphi.core.language.ArgumentInterface;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
+import org.sonar.plugins.delphi.core.language.impl.DelphiArgument;
 import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.core.language.impl.UnresolvedFunctionCall;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 /**
  * Class used for function analysis
@@ -45,6 +48,7 @@ public class FunctionAnalyzer extends CodeAnalyzer {
 
   private static final String PROP_MESSAGE = "message";
   private static final String PROP_VIRTUAL = "virtual";
+  public static final String UNTYPED_PARAMETER_NAME = "UntypedParameter";
 
   private static final LexerMetrics[] FUNCTION_NODE_TYPE = {LexerMetrics.FUNCTION,
       LexerMetrics.PROCEDURE,
@@ -54,6 +58,8 @@ public class FunctionAnalyzer extends CodeAnalyzer {
 
   private String functionName;
   private String functionRealName;
+  private String functionLongName;
+  private List<ArgumentInterface> functionArguments;
   private List<String> functionProperties;
 
   private int functionLine;
@@ -81,7 +87,9 @@ public class FunctionAnalyzer extends CodeAnalyzer {
       results.setActiveUnit(defaultUnit);
     }
 
-    functionRealName = getFunctionName((CommonTree) codeTree.getCurrentCodeNode().getNode());
+    CommonTree functionNode = (CommonTree) codeTree.getCurrentCodeNode().getNode();
+
+    functionRealName = getFunctionName(functionNode);
     if (StringUtils.isEmpty(functionRealName)) {
       return;
     }
@@ -89,8 +97,10 @@ public class FunctionAnalyzer extends CodeAnalyzer {
     ClassInterface currentClass = results.getActiveClass(); // null?
     functionName = checkFunctionName(functionRealName.toLowerCase(), currentClass, results)
         .toLowerCase();
-
+    functionArguments = getFunctionArguments(functionNode);
+    functionLongName = getLongName();
     functionProperties = getFunctionProperties(codeTree.getCurrentCodeNode().getNode());
+
     FunctionInterface activeFunction = createFunction(results, currentClass);
     processFunction(activeFunction, results, currentClass);
     results.setActiveFunction(activeFunction);
@@ -138,12 +148,13 @@ public class FunctionAnalyzer extends CodeAnalyzer {
 
   private String getFunctionName(CommonTree functionNode) {
     Tree nameNode = functionNode.getFirstChildWithType(LexerMetrics.FUNCTION_NAME.toMetrics());
+
     if (nameNode == null) {
       return "";
     }
 
-    functionLine = nameNode.getLine();
-    functionCharPosition = nameNode.getCharPositionInLine();
+    functionLine = nameNode.getChild(0).getLine();
+    functionCharPosition = nameNode.getChild(0).getCharPositionInLine();
 
     StringBuilder str = new StringBuilder();
     for (int i = 0; i < nameNode.getChildCount(); ++i) {
@@ -153,18 +164,72 @@ public class FunctionAnalyzer extends CodeAnalyzer {
     return str.toString();
   }
 
+  private List<ArgumentInterface> getFunctionArguments(CommonTree functionNode) {
+    List<ArgumentInterface> result = new ArrayList<>();
+    Tree parentNode = functionNode.getFirstChildWithType(LexerMetrics.FUNCTION_ARGS.toMetrics());
+
+    if (parentNode == null) {
+      return result;
+    }
+
+    for (int i = 0; i < parentNode.getChildCount(); ++i) {
+      Tree childNode = parentNode.getChild(i);
+      int type = childNode.getType();
+      if (type != LexerMetrics.VARIABLE_IDENTS.toMetrics()) {
+        continue;
+      }
+
+      List<String> argumentNames = getArgumentNames(childNode);
+      String argumentType = getArgumentTypes(childNode);
+      for (String name : argumentNames) {
+        result.add(new DelphiArgument(name, argumentType));
+      }
+    }
+
+    return result;
+  }
+
+  private String getArgumentTypes(Tree nameNode) {
+    Tree typeNode = nameNode.getParent().getChild(nameNode.getChildIndex() + 1);
+    if (typeNode.getChildCount() > 0) {
+      return typeNode.getChild(0).getText();
+    }
+    return UNTYPED_PARAMETER_NAME;
+  }
+
+  private List<String> getArgumentNames(Tree nameNode) {
+    List<String> names = new ArrayList<>();
+    for (int i = 0; i < nameNode.getChildCount(); ++i) {
+      names.add(nameNode.getChild(i).getText());
+    }
+    return names;
+  }
+
+  private String getLongName() {
+    StringBuilder longNameBuilder = new StringBuilder(functionName);
+    longNameBuilder.append("(");
+    for (ArgumentInterface argument : functionArguments) {
+      longNameBuilder.append(argument.getType()).append("; ");
+    }
+    longNameBuilder.append(")");
+    return longNameBuilder.toString();
+  }
+
   private FunctionInterface createFunction(CodeAnalysisResults results,
       ClassInterface currentClass) {
-    FunctionInterface activeFunction = results.getCachedFunction(functionName);
+    FunctionInterface activeFunction = results.getCachedFunction(functionLongName);
     if (activeFunction == null) {
       activeFunction = new DelphiFunction();
       activeFunction.setName(functionName.toLowerCase());
       activeFunction.setRealName(functionRealName);
+      activeFunction.setLongName(functionLongName);
       activeFunction.setLine(functionLine);
       activeFunction.setVisibility(results.getParseVisibility().toMetrics());
       activeFunction.setColumn(functionCharPosition);
       activeFunction.setUnit(results.getActiveUnit());
       activeFunction.setParentClass(currentClass);
+
+      functionArguments.forEach(activeFunction::addArgument);
 
       if (functionProperties.contains(PROP_VIRTUAL)) {
         activeFunction.setVirtual(true);
@@ -176,7 +241,7 @@ public class FunctionAnalyzer extends CodeAnalyzer {
 
       results.addFunction(activeFunction);
       results.getActiveUnit().addFunction(activeFunction);
-      results.cacheFunction(functionName, activeFunction);
+      results.cacheFunction(functionLongName, activeFunction);
 
       // check for unresolved function calls
       UnresolvedFunctionCall unresolved = results.getUnresolvedCalls()

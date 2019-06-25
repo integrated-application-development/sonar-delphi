@@ -38,10 +38,10 @@ import org.sonar.plugins.delphi.core.language.impl.UnresolvedFunctionCall;
  */
 public class CodeAnalysisCacheResults {
 
-  protected static final Set<UnitInterface> allUnits = new HashSet<>();
-  protected static final Map<String, Map<String, ClassInterface>> allClasses = new HashMap<>();
-  protected static final Map<String, FunctionInterface> allFunctions = new HashMap<>();
-  protected static final Map<String, UnresolvedFunctionCall> unresolvedCalls = new HashMap<>();
+  private static final Set<UnitInterface> allUnits = new HashSet<>();
+  private static final Map<String, Map<String, ClassInterface>> allClasses = new HashMap<>();
+  private static final Map<String, FunctionInterface> allFunctions = new HashMap<>();
+  private static final Map<String, UnresolvedFunctionCall> unresolvedCalls = new HashMap<>();
 
   /**
    * resets results chache

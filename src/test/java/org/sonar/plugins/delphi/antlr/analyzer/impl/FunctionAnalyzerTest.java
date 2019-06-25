@@ -36,7 +36,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.Tree;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
@@ -45,7 +47,11 @@ import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.antlr.analyzer.impl.operations.AdvanceToNodeOperation;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
+import org.sonar.plugins.delphi.core.language.ArgumentInterface;
+import org.sonar.plugins.delphi.core.language.FunctionInterface;
+import org.sonar.plugins.delphi.core.language.impl.DelphiArgument;
 import org.sonar.plugins.delphi.core.language.impl.DelphiClass;
+import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
@@ -55,6 +61,10 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   private static final String FILE_NAME_MESSAGE_TEST = "/org/sonar/plugins/delphi/metrics/FunctionMessageTest.pas";
   private static final String FILE_NAME_VIRTUAL_TEST = "/org/sonar/plugins/delphi/metrics/FunctionVirtualTest.pas";
   private static final String FILE_NAME_OPERATOR_TEST = "/org/sonar/plugins/delphi/metrics/FunctionOperatorTest.pas";
+  private static final String FILE_NAME_PARAMETERS_TEST = "/org/sonar/plugins/delphi/syntax/FunctionParametersAnalyzerTest.pas";
+
+  @Rule
+  public ExpectedException expectedException = ExpectedException.none();
 
   private final FunctionAnalyzer analyzer = new FunctionAnalyzer();
 
@@ -64,7 +74,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   private CodeTree code;
   private AdvanceToNodeOperation advanceToFunction;
 
-  public void setupFile(String fileName) throws IOException {
+  private void setupFile(String fileName) throws IOException {
     loadFile(fileName);
     results = new CodeAnalysisResults();
     results.setActiveUnit(new DelphiUnit("test"));
@@ -112,12 +122,12 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void testAnalyse() throws IOException, RecognitionException {
+  public void testAnalyse() throws IOException {
     setupFile(FILE_NAME);
 
     int index = 0;
-    int lines[] = {10, 11, 19, 20, 42, 48, 58, 69, 75, 89};
-    String names[] = {"bShowTrackerClick", "getFunction", "myProcedure", "setSomething",
+    int[] lines = {10, 11, 19, 20, 42, 48, 58, 69, 75, 89};
+    String[] names = {"bShowTrackerClick", "getFunction", "myProcedure", "setSomething",
         "TDemo.getFunction",
         "TDemo.bShowTrackerClick",
         "TMyClass.myProcedure", "TMyClass.setSomething", "StandAloneProcedure",
@@ -141,7 +151,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void testAnalyseMessageFuncion() throws IOException, RecognitionException {
+  public void testAnalyseMessageFuncion() throws IOException {
     setupFile(FILE_NAME_MESSAGE_TEST);
 
     results.setActiveClass(new DelphiClass("TWithMessageFunction"));
@@ -151,7 +161,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
       try {
         code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
         analyzer.analyze(code, results);
-        assertTrue(results.getActiveFunction() != null);
+        assertNotNull(results.getActiveFunction());
 
         assertThat(results.getActiveFunction().getRealName(), endsWith("CNCommand"));
         assertThat(results.getActiveFunction().isMessage(), is(true));
@@ -163,7 +173,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void testAnalyseVirtualFunction() throws IOException, RecognitionException {
+  public void testAnalyseVirtualFunction() throws IOException {
     setupFile(FILE_NAME_VIRTUAL_TEST);
 
     results.setActiveClass(new DelphiClass("TWithVirtualFunction"));
@@ -174,7 +184,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
       try {
         code.setCurrentNode(advanceToFunction.execute(code.getCurrentCodeNode().getNode()));
         analyzer.analyze(code, results);
-        assertTrue(results.getActiveFunction() != null);
+        assertNotNull(results.getActiveFunction());
         count++;
         assertThat("counting " + count, results.getActiveFunction().isVirtual(), is(true));
       } catch (IllegalStateException e) {
@@ -184,7 +194,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void testAnalyseRecordOperator() throws IOException, RecognitionException {
+  public void testAnalyseRecordOperator() throws IOException {
     setupFile(FILE_NAME_OPERATOR_TEST);
 
     results.setActiveClass(new DelphiClass("GenericA"));
@@ -204,4 +214,28 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
         containsString("Implicit"));
   }
 
+  @Test
+  public void testAnalyseParameters() throws IOException {
+    setupFile(FILE_NAME_PARAMETERS_TEST);
+    results.setActiveFunction(new DelphiFunction("myProcedure"));
+
+    CodeNode<Tree> startNode = code.getCurrentCodeNode();
+    code.setCurrentNode(advanceToFunction.execute(startNode.getNode()));
+    assertTrue(startNode.isValid());
+
+    analyzer.analyze(code, results);
+
+    ArgumentInterface[] expectedArgs = {new DelphiArgument("x", "real"),
+        new DelphiArgument("y", "integer"),
+        new DelphiArgument("z", "integer"),
+        new DelphiArgument("q", FunctionAnalyzer.UNTYPED_PARAMETER_NAME)};
+
+    FunctionInterface function = results.getActiveFunction();
+    ArgumentInterface[] arguments = function.getArguments();
+
+    assertEquals(expectedArgs.length, arguments.length);
+    for (int i = 0; i < expectedArgs.length; ++i) {
+      assertEquals(expectedArgs[i], arguments[i]);
+    }
+  }
 }

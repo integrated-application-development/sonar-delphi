@@ -23,6 +23,7 @@
 package org.sonar.plugins.delphi.core.language.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -329,18 +330,15 @@ public final class DelphiClass implements ClassInterface {
    */
   @Override
   public boolean hasFunction(FunctionInterface func) {
-    boolean b1 = functions.contains(func);
-    FunctionInterface foo1 = new DelphiFunction(func.getShortName());
-    FunctionInterface foo2 = new DelphiFunction(name + "." + func.getShortName());
-    boolean b2 = functions.contains(foo1);
-    boolean b3 = functions.contains(foo2);
-    return b1 || b2 || b3;
+    return functions
+        .parallelStream()
+        .anyMatch(f -> f.getShortName().equalsIgnoreCase(func.getShortName())
+                    && Arrays.equals(f.getArguments(), func.getArguments()));
   }
 
   /**
    * {@inheritDoc}
    */
-
   @Override
   public void setFileName(String fileName) {
     this.fileName = fileName;
@@ -349,7 +347,6 @@ public final class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public String getFileName() {
     return fileName;
@@ -366,17 +363,14 @@ public final class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public String getShortName() {
-    // Get the first few characters of the class name, not very useful but necessary overload
-    return name.substring(0, 3);
+    return getName();
   }
 
   /**
    * {@inheritDoc}
    */
-
   @Override
   public void addProperty(ClassPropertyInterface property) {
     properties.add(property);
@@ -385,7 +379,6 @@ public final class DelphiClass implements ClassInterface {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public ClassPropertyInterface[] getProperties() {
     return properties.toArray(new ClassPropertyInterface[properties.size()]);

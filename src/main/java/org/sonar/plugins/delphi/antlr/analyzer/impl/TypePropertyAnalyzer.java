@@ -29,9 +29,7 @@ import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.core.language.ClassPropertyInterface;
-import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiClassProperty;
-import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
 
 /**
  * Analyzes property fields
@@ -50,22 +48,11 @@ public class TypePropertyAnalyzer extends CodeAnalyzer {
     }
 
     String varName = getPropertyName((CommonTree) codeTree.getCurrentCodeNode().getNode());
-    FunctionInterface read = getPropertyReadFunction(
-        (CommonTree) codeTree.getCurrentCodeNode().getNode());
-    FunctionInterface write = getPropertyWriteFunction(
-        (CommonTree) codeTree.getCurrentCodeNode().getNode());
-
-    if (read != null) {
-      read.setParentClass(results.getActiveClass());
-    }
-
-    if (write != null) {
-      write.setParentClass(results.getActiveClass());
-    }
+    String read = getPropertyReadFunction((CommonTree) codeTree.getCurrentCodeNode().getNode());
+    String write = getPropertyWriteFunction((CommonTree) codeTree.getCurrentCodeNode().getNode());
 
     ClassPropertyInterface property = new DelphiClassProperty(varName, varType,
-        results.getParseVisibility()
-            .toMetrics(), read, write);
+        results.getParseVisibility().toMetrics(), read, write);
     property.setParent(results.getActiveClass());
     results.getActiveClass().addProperty(property);
   }
@@ -75,24 +62,18 @@ public class TypePropertyAnalyzer extends CodeAnalyzer {
     return codeTree.getCurrentCodeNode().getNode().getType() == LexerMetrics.PROPERTY.toMetrics();
   }
 
-  private FunctionInterface getPropertyReadFunction(CommonTree node) {
+  private String getPropertyReadFunction(CommonTree node) {
     Tree functionNode = node.getFirstChildWithType(LexerMetrics.READ.toMetrics());
     if (functionNode != null) {
-      String functionName = functionNode.getChild(0).getText();
-      FunctionInterface function = new DelphiFunction();
-      function.setName(functionName);
-      return function;
+      return functionNode.getChild(0).getText();
     }
     return null;
   }
 
-  private FunctionInterface getPropertyWriteFunction(CommonTree node) {
+  private String getPropertyWriteFunction(CommonTree node) {
     Tree functionNode = node.getFirstChildWithType(LexerMetrics.WRITE.toMetrics());
     if (functionNode != null) {
-      String functionName = functionNode.getChild(0).getText();
-      FunctionInterface function = new DelphiFunction();
-      function.setName(functionName);
-      return function;
+      return functionNode.getChild(0).getText();
     }
     return null;
   }

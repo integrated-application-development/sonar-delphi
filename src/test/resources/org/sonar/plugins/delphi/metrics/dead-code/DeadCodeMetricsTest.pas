@@ -1,11 +1,11 @@
-unit DeadCodeUnit;
+unit DeadCodeMetricsTest;
 
 interface
 
 type
-	myInterface = Interface(IInterface)		
+	myInterface = Interface(IInterface)
 		procedure foo;
-		function bar: integer;			
+		function bar: integer;
 	end;
 
 	myClass = class(myInterface)

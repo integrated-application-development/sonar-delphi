@@ -23,6 +23,7 @@
 package org.sonar.plugins.delphi.core.language.impl;
 
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -96,7 +97,6 @@ public class DelphiUnit implements UnitInterface {
   @Override
   public void setPath(String path) {
     file = new File(path);
-
   }
 
   /**
@@ -106,6 +106,14 @@ public class DelphiUnit implements UnitInterface {
   @Override
   public String getPath() {
     return file.getAbsolutePath();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public URI getUri() {
+    return file.toPath().toUri();
   }
 
   /**

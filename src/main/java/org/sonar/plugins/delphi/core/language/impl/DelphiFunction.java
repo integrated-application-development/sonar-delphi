@@ -273,19 +273,19 @@ public class DelphiFunction implements FunctionInterface {
   public String getShortName() {
     int dot = name.lastIndexOf('.');
     if (dot != -1) {
-      return name.substring(dot + 1, name.length());
+      return name.substring(dot + 1);
     }
     return name;
   }
 
   @Override
   public String toString() {
-    return name;
+    return longName;
   }
 
   @Override
   public int hashCode() {
-    return name.hashCode();
+    return longName.hashCode();
   }
 
   @Override

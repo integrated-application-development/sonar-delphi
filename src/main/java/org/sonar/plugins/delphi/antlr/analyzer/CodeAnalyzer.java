@@ -23,7 +23,7 @@
 package org.sonar.plugins.delphi.antlr.analyzer;
 
 /**
- * Base class doing AST node analisys, extend it to provide custom analyzers
+ * Base class doing AST node analysis, extend it to provide custom analyzers
  */
 public abstract class CodeAnalyzer {
 
@@ -41,7 +41,7 @@ public abstract class CodeAnalyzer {
   }
 
   /**
-   * analyes code tree with a set of chaied analyzers
+   * analyze code tree with a set of chained analyzers
    *
    * @param codeTree code tree to analyze
    * @param results code analysis results holder
@@ -50,7 +50,7 @@ public abstract class CodeAnalyzer {
     if (canAnalyze(codeTree)) {
       doAnalyze(codeTree, results);
     }
-    if (successor != null) {
+    if (successor != null && codeTree != null && results != null) {
       successor.analyze(codeTree, results);
     }
   }

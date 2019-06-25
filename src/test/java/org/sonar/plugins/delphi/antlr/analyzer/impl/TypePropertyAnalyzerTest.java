@@ -71,12 +71,12 @@ public class TypePropertyAnalyzerTest {
     code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));
     analyzer.analyze(code, results);
 
-    ClassPropertyInterface properties[] = clazz.getProperties();
+    ClassPropertyInterface[] properties = clazz.getProperties();
     assertEquals(1, properties.length);
     assertEquals("isfoo", properties[0].getName());
     assertEquals(clazz, properties[0].getParent());
-    assertEquals("foo", properties[0].getReadFunction().getName());
-    assertEquals("foo", properties[0].getWriteFunction().getName());
+    assertEquals("foo", properties[0].getReadFunction());
+    assertEquals("foo", properties[0].getWriteFunction());
     assertEquals("boolean", properties[0].getType());
 
     code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));
@@ -86,8 +86,8 @@ public class TypePropertyAnalyzerTest {
     assertEquals(2, properties.length);
     assertEquals("isbar", properties[1].getName());
     assertEquals(clazz, properties[1].getParent());
-    assertEquals("bar", properties[1].getReadFunction().getName());
-    assertEquals("bar", properties[1].getWriteFunction().getName());
+    assertEquals("bar", properties[1].getReadFunction());
+    assertEquals("bar", properties[1].getWriteFunction());
     assertEquals("boolean", properties[1].getType());
   }
 

@@ -32,8 +32,8 @@ import org.sonar.plugins.delphi.core.language.FunctionInterface;
  */
 public class DelphiClassProperty extends DelphiClassField implements ClassPropertyInterface {
 
-  private FunctionInterface readFunction;
-  private FunctionInterface writeFunction;
+  private String readFunction;
+  private String writeFunction;
 
   /**
    * Default ctor
@@ -50,8 +50,8 @@ public class DelphiClassProperty extends DelphiClassField implements ClassProper
    * @param read property getter
    * @param write property setter
    */
-  public DelphiClassProperty(String name, String type, int visibility, FunctionInterface read,
-      FunctionInterface write) {
+  public DelphiClassProperty(String name, String type, int visibility, String read,
+      String write) {
     super(name, type, visibility);
     readFunction = read;
     writeFunction = write;
@@ -62,7 +62,7 @@ public class DelphiClassProperty extends DelphiClassField implements ClassProper
    */
 
   @Override
-  public FunctionInterface getReadFunction() {
+  public String getReadFunction() {
     return readFunction;
   }
 
@@ -71,7 +71,7 @@ public class DelphiClassProperty extends DelphiClassField implements ClassProper
    */
 
   @Override
-  public FunctionInterface getWriteFunction() {
+  public String getWriteFunction() {
     return writeFunction;
   }
 
@@ -81,16 +81,8 @@ public class DelphiClassProperty extends DelphiClassField implements ClassProper
 
   @Override
   public boolean hasFunction(FunctionInterface function) {
-    FunctionInterface func = new DelphiFunction(function.getShortName());
-    boolean b1 = false;
-    boolean b2 = false;
-    if (writeFunction != null) {
-      b1 = writeFunction.equals(func);
-    }
-    if (readFunction != null) {
-      b2 = readFunction.equals(func);
-    }
-    return b1 || b2;
+    String name = function.getShortName();
+    return name.equalsIgnoreCase(writeFunction) || name.equalsIgnoreCase(readFunction);
   }
 
   /**
@@ -98,7 +90,7 @@ public class DelphiClassProperty extends DelphiClassField implements ClassProper
    */
 
   @Override
-  public void setReadFunction(FunctionInterface newFunction) {
+  public void setReadFunction(String newFunction) {
     readFunction = newFunction;
   }
 
@@ -107,7 +99,7 @@ public class DelphiClassProperty extends DelphiClassField implements ClassProper
    */
 
   @Override
-  public void setWriteFunction(FunctionInterface newFunction) {
+  public void setWriteFunction(String newFunction) {
     writeFunction = newFunction;
   }
 
@@ -115,10 +107,10 @@ public class DelphiClassProperty extends DelphiClassField implements ClassProper
   public String toString() {
     StringBuilder suffix = new StringBuilder();
     if (writeFunction != null) {
-      suffix.append("@").append(writeFunction.toString());
+      suffix.append("@").append(writeFunction);
     }
     if (readFunction != null) {
-      suffix.append("@").append(readFunction.toString());
+      suffix.append("@").append(readFunction);
     }
     return super.toString() + suffix.toString();
   }

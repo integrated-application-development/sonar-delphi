@@ -64,7 +64,7 @@ public class InterfaceAnalyzerTest {
 
   @Test
   public void testAnalyze() {
-    LexerMetrics metrics[] = {LexerMetrics.PUBLIC, LexerMetrics.PUBLIC, LexerMetrics.PRIVATE};
+    LexerMetrics[] metrics = {LexerMetrics.PUBLIC, LexerMetrics.PUBLIC, LexerMetrics.PRIVATE};
     int i = 0;
     do {
       analyzer.analyze(code, results);

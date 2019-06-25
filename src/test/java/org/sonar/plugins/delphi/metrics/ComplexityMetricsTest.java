@@ -105,7 +105,7 @@ public class ComplexityMetricsTest {
     assertEquals(1, issues.length);
     Issue issue = issues[0];
     assertEquals("delph:MethodCyclomaticComplexityRule", issue.ruleKey().toString());
-    assertEquals(44, issue.primaryLocation().textRange().start().line());
+    assertEquals(15, issue.primaryLocation().textRange().start().line());
   }
 
   @Test

@@ -113,7 +113,7 @@ public class ComplexityMetrics extends DefaultMetrics {
 
         for (FunctionInterface func : cl.getFunctions()) {
           processFunction(resource, func);
-          processedFunc.add(func.getName());
+          processedFunc.add(func.getLongName());
         }
       }
     }
@@ -121,16 +121,16 @@ public class ComplexityMetrics extends DefaultMetrics {
     // processing stand-alone (global) functions, not merged with any class
     if (functions != null) {
       for (FunctionInterface func : functions) {
-        if (func == null || processedFunc.contains(func.getName())) {
+        if (func == null || processedFunc.contains(func.getLongName())) {
           continue;
         }
-        methodsCount += 1 + func.getOverloadsCount();
+        ++methodsCount;
         fileComplexity += func.getComplexity();
         statementsCount += func.getStatements().size();
         if (func.getVisibility() == DelphiParser.PUBLIC) {
           ++publicApi;
         }
-        processedFunc.add(func.getName());
+        processedFunc.add(func.getLongName());
 
         addIssue(resource, func);
       }
@@ -215,12 +215,13 @@ public class ComplexityMetrics extends DefaultMetrics {
   private void addIssue(InputFile inputFile, FunctionInterface func) {
     if (func.getComplexity() > threshold) {
       NewIssue newIssue = context.newIssue();
+      int column = func.getColumn();
+      int line = func.getLine();
       newIssue
           .forRule(methodCyclomaticComplexityRule.ruleKey())
           .at(newIssue.newLocation()
               .on(inputFile)
-              .at(inputFile.newRange(func.getBodyLine(), 1,
-                  func.getBodyLine(), 2))
+              .at(inputFile.newRange(line, column, line, column + func.getName().length()))
               .message(String.format(
                   "The Cyclomatic Complexity of this method \"%s\" is %d which is " +
                       "greater than %d authorized.",
