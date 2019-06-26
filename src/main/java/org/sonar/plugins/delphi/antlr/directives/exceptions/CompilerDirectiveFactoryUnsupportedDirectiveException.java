@@ -26,9 +26,6 @@ package org.sonar.plugins.delphi.antlr.directives.exceptions;
  * Is thrown when we could not generate compiler directive that was supported (implemented)
  */
 public class CompilerDirectiveFactoryUnsupportedDirectiveException extends Exception {
-
-  private static final long serialVersionUID = -5165381856939059460L;
-
   /**
    * ctor
    *

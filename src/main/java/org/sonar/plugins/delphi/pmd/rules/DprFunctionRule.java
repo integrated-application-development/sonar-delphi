@@ -74,4 +74,13 @@ public class DprFunctionRule extends DelphiRule {
     return type == DelphiLexer.PROCEDURE || type == DelphiLexer.FUNCTION;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
 }

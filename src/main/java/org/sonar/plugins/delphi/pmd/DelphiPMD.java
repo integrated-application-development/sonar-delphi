@@ -34,7 +34,6 @@ import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.ast.ParseException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 

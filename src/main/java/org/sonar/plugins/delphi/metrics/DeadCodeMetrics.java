@@ -31,11 +31,10 @@ import java.util.Set;
 import org.apache.commons.io.FilenameUtils;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
-import org.sonar.api.batch.rule.ActiveRule;
-import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.rule.RuleKey;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.ClassPropertyInterface;
@@ -60,8 +59,6 @@ public class DeadCodeMetrics extends DefaultMetrics {
   private List<String> unusedUnits;
   private Set<FunctionInterface> unusedFunctions;
   private List<UnitInterface> allUnits;
-  private final ActiveRule unitRule;
-  private final ActiveRule functionRule;
   private final SensorContext context;
 
   public static final RuleKey RULE_KEY_UNUSED_UNIT = RuleKey
@@ -72,13 +69,11 @@ public class DeadCodeMetrics extends DefaultMetrics {
   /**
    * {@inheritDoc}
    */
-  public DeadCodeMetrics(ActiveRules activeRules, SensorContext sensorContext) {
+  public DeadCodeMetrics(SensorContext sensorContext) {
     super();
     context = sensorContext;
     isCalculated = false;
     allUnits = new ArrayList<>();
-    unitRule = activeRules.find(RULE_KEY_UNUSED_UNIT);
-    functionRule = activeRules.find(RULE_KEY_UNUSED_FUNCTION);
   }
 
   /**
@@ -117,14 +112,14 @@ public class DeadCodeMetrics extends DefaultMetrics {
     if (unit == null) {
       String unitName = FilenameUtils.removeExtension(inputFile.filename());
       String logDesc = String.format("No unit for %s (%s)", unitName, inputFile.toString());
-      DelphiUtils.LOG.debug(logDesc);
+      DelphiPlugin.LOG.debug(logDesc);
       return;
     }
 
     if (unusedUnits.contains(unit.getName().toLowerCase())) {
       NewIssue newIssue = context.newIssue();
       newIssue
-          .forRule(unitRule.ruleKey())
+          .forRule(RULE_KEY_UNUSED_UNIT)
           .at(newIssue.newLocation()
               .on(inputFile)
               .at(inputFile.selectLine(1))
@@ -137,22 +132,18 @@ public class DeadCodeMetrics extends DefaultMetrics {
         continue;
       }
 
-      RuleKey rule = functionRule.ruleKey();
+      int line = function.getLine();
+      int beginCol = function.getBeginColumn();
+      int endCol = function.getEndColumn();
 
-      if (rule != null) {
-        int line = function.getLine();
-        int column = function.getColumn();
-
-        NewIssue newIssue = context.newIssue();
-        newIssue
-            .forRule(rule)
-            .at(newIssue.newLocation()
-                .on(inputFile)
-                .at(inputFile.newRange(line, column,
-                    line, column + function.getName().length()))
-                .message(function.getRealName() + DEAD_FUNCTION_VIOLATION_MESSAGE))
-            .save();
-      }
+      NewIssue newIssue = context.newIssue();
+      newIssue
+          .forRule(RULE_KEY_UNUSED_FUNCTION)
+          .at(newIssue.newLocation()
+              .on(inputFile)
+              .at(inputFile.newRange(line, beginCol, line, endCol))
+              .message(function.getRealName() + DEAD_FUNCTION_VIOLATION_MESSAGE))
+          .save();
     }
   }
 

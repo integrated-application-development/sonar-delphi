@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.sonar.plugins.delphi.DelphiPlugin;
 
 /**
  * Class for parsing source code lines and calculating statistic for each line.
@@ -81,9 +81,9 @@ public class DelphiLinesFactory {
         notifyHandlersAboutNewChar();
       } while (true);
     } catch (IOException e) {
-      DelphiUtils.LOG.error("IOException, Unable to read the source code:", e);
+      DelphiPlugin.LOG.error("IOException, Unable to read the source code:", e);
     } catch (Exception e) {
-      DelphiUtils.LOG.error("Exception, problem analysing:", e);
+      DelphiPlugin.LOG.error("Exception, problem analysing:", e);
     }
   }
 

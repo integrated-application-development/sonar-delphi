@@ -36,8 +36,8 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 public class AssignedAndFreeRule extends DelphiRule {
 
   private static final int MIN_CHILD_COUNT = 5;
-  protected boolean started;
-  protected Set<String> variables;
+  private boolean started;
+  private Set<String> variables;
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
@@ -121,4 +121,13 @@ public class AssignedAndFreeRule extends DelphiRule {
     variables = new HashSet<>();
   }
 
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
 }

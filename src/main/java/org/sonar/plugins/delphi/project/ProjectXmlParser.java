@@ -29,6 +29,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.sonar.api.internal.google.common.base.Splitter;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -67,7 +68,7 @@ public class ProjectXmlParser extends DefaultHandler {
       SAXParser parser = factory.newSAXParser();
       parser.parse(fileName, this);
     } catch (ParserConfigurationException | SAXException | IOException e) {
-      DelphiUtils.LOG.error("{}: Error while parsing project file: ", fileName, e);
+      DelphiPlugin.LOG.error("{}: Error while parsing project file: ", fileName, e);
     }
   }
 
@@ -88,7 +89,7 @@ public class ProjectXmlParser extends DefaultHandler {
       String path = DelphiUtils.resolveBacktracePath(currentDir, attributes.getValue("Include"));
       try {
         project.addFile(path);
-      } catch (IOException e) {
+      } catch (RuntimeException e) {
         throw new SAXException(e);
       }
     } else if ("VersionInfoKeys".equals(rawName)) {
@@ -133,7 +134,7 @@ public class ProjectXmlParser extends DefaultHandler {
         path = DelphiUtils.resolveBacktracePath(currentDir, path);
         try {
           project.addIncludeDirectory(path);
-        } catch (IOException e) {
+        } catch (RuntimeException e) {
           throw new SAXException(e);
         }
       }

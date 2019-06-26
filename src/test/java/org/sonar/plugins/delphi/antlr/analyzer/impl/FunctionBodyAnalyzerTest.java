@@ -76,7 +76,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
     ast = mock(ASTTree.class);
 
     results = new CodeAnalysisResults();
-    analyzer = new FunctionBodyAnalyzer(results, DelphiTestUtils.mockProjectHelper());
+    analyzer = new FunctionBodyAnalyzer(results);
     codeTree = new CodeTree(new CodeNode<>(ast), new CodeNode<>(EMPTY_NODE));
   }
 
@@ -93,7 +93,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
   @Test
   public void testConstructor() {
     try {
-      new FunctionBodyAnalyzer(null, DelphiTestUtils.mockProjectHelper());
+      new FunctionBodyAnalyzer(null);
       fail("No exception was caught");
     } catch (IllegalArgumentException e) {
       assertEquals(IllegalArgumentException.class, e.getClass());

@@ -35,18 +35,11 @@ import org.sonar.plugins.delphi.antlr.analyzer.impl.UnitAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.impl.VisibilityAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.impl.operations.AdvanceNodeOperation;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 
 /**
  * Class for analyzing a DelphiLanguage AST tree
  */
 public class DelphiASTAnalyzer implements ASTAnalyzer {
-
-  private DelphiProjectHelper delphiProjectHelper;
-
-  public DelphiASTAnalyzer(DelphiProjectHelper delphiProjectHelper) {
-    this.delphiProjectHelper = delphiProjectHelper;
-  }
 
   @Override
   public CodeAnalysisResults analyze(ASTTree tree) {
@@ -62,7 +55,7 @@ public class DelphiASTAnalyzer implements ASTAnalyzer {
         .chain(new TypeFieldsAnalyzer())
         .chain(new TypePropertyAnalyzer())
         .chain(new FunctionAnalyzer())
-        .chain(new FunctionBodyAnalyzer(result, delphiProjectHelper));
+        .chain(new FunctionBodyAnalyzer(result));
 
     CodeNode<Tree> codeNode = code.getCurrentCodeNode();
     AdvanceNodeOperation advance = new AdvanceNodeOperation();

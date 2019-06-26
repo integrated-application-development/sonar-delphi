@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -51,10 +52,10 @@ public class SimpleXMLParser {
       doc.getDocumentElement().normalize();
       return doc;
     } catch (IOException ioe) {
-      DelphiUtils.LOG.error("Error parsing file: " + ioe.getMessage());
+      DelphiPlugin.LOG.error("Error parsing file: " + ioe.getMessage());
       return null;
     } catch (Exception e) {
-      DelphiUtils.LOG.error("XML Error: " + e.getMessage());
+      DelphiPlugin.LOG.error("XML Error: " + e.getMessage());
       return null;
     }
   }

@@ -50,7 +50,7 @@ public class DelphiASTAnalyzerTest {
   public static void setUp() {
     fileComplexity = 0;
     CodeAnalysisCacheResults.resetCache();
-    analyser = new DelphiASTAnalyzer(DelphiTestUtils.mockProjectHelper());
+    analyser = new DelphiASTAnalyzer();
   }
 
   @Test

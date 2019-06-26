@@ -23,8 +23,6 @@
 package org.sonar.plugins.delphi.surefire;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Locale;
@@ -34,14 +32,12 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.utils.ParsingUtils;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.surefire.data.UnitTestClassReport;
 import org.sonar.plugins.surefire.data.UnitTestIndex;
 import org.sonar.plugins.surefire.data.UnitTestResult;
@@ -56,12 +52,6 @@ import org.xml.sax.SAXException;
  * Parses unit test reports from XML file.
  */
 public class DelphiSureFireParser {
-
-  private static final Logger LOGGER = LoggerFactory
-      .getLogger(DelphiSureFireParser.class);
-
-  private static final String FILE_EXT = ".pas";
-  private static final String ERROR_MSG = "Unit test file not found: ";
   private final DelphiProjectHelper delphiProjectHelper;
 
   /**
@@ -73,23 +63,13 @@ public class DelphiSureFireParser {
     this.delphiProjectHelper = delphiProjectHelper;
   }
 
-  protected InputFile getUnitTestResource(String filename) {
-    try {
-      InputFile testFile = delphiProjectHelper.findTestFileInDirectories(filename);
-      if (testFile != null) {
-        // resource source code not saved, because tests files were
-        // excluded from analysis, so read the test file and save its
-        // source code
-        // so Sonar could show it
-        return testFile;
-      }
-      throw new FileNotFoundException();
-    } catch (FileNotFoundException e) {
-      DelphiUtils.LOG.info("FileNotFoundException");
-      DelphiUtils.LOG.warn("{}{}{}", ERROR_MSG, filename, FILE_EXT);
-      DelphiUtils.LOG.error("FileNotFoundException Stacktrace", e);
+  private InputFile getUnitTestResource(String filename) {
+    InputFile testFile = delphiProjectHelper.findTestFileInDirectories(filename);
+    if (testFile != null) {
+      DelphiPlugin.LOG.trace("Unit test file not found: {}.pas", filename);
     }
-    return null;
+
+    return testFile;
   }
 
   public void collect(SensorContext context, File reportsDir) {
@@ -103,7 +83,7 @@ public class DelphiSureFireParser {
     if (dir == null) {
       return new File[0];
     } else if (!dir.isDirectory()) {
-      LOGGER.warn("Reports path not found: {}", dir.getAbsolutePath());
+      DelphiPlugin.LOG.warn("Reports path not found: {}", dir.getAbsolutePath());
       return new File[0];
     }
     File[] unitTestResultFiles = findXMLFilesStartingWith(dir, "TEST-");
@@ -115,12 +95,7 @@ public class DelphiSureFireParser {
   }
 
   private File[] findXMLFilesStartingWith(File dir, final String fileNameStart) {
-    return dir.listFiles(new FilenameFilter() {
-      @Override
-      public boolean accept(File dir, String name) {
-        return name.startsWith(fileNameStart) && name.endsWith(".xml");
-      }
-    });
+    return dir.listFiles((dir1, name) -> name.startsWith(fileNameStart) && name.endsWith(".xml"));
   }
 
   private void parseFiles(SensorContext context, File[] reports) {
@@ -132,7 +107,7 @@ public class DelphiSureFireParser {
 
   private static long getTimeAttributeInMS(String value) {
     try {
-      Double time = ParsingUtils.parseNumber(value, Locale.ENGLISH);
+      double time = ParsingUtils.parseNumber(value, Locale.ENGLISH);
       return !Double.isNaN(time) ? (long) ParsingUtils.scaleValue(time * 1000.0D, 3) : 0L;
     } catch (ParseException e) {
       return 0L;
@@ -164,7 +139,7 @@ public class DelphiSureFireParser {
     return detail;
   }
 
-  void parse(File reportFile, UnitTestIndex index) {
+  private void parse(File reportFile, UnitTestIndex index) {
     try {
       DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
       docBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
@@ -190,7 +165,7 @@ public class DelphiSureFireParser {
         }
       }
     } catch (SAXException | ParserConfigurationException | IOException e) {
-      DelphiUtils.LOG.error("Error while parsing SureFire report: ", e);
+      DelphiPlugin.LOG.error("Error while parsing SureFire report: ", e);
     }
   }
 
@@ -218,7 +193,7 @@ public class DelphiSureFireParser {
         if (resource != null) {
           save(entry.getValue(), resource, context);
         } else {
-          LOGGER.warn("Resource not found: {}", entry.getKey());
+          DelphiPlugin.LOG.warn("Resource not found: {}", entry.getKey());
         }
       }
     }

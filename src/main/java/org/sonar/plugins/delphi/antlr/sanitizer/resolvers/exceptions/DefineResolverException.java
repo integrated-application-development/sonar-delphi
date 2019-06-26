@@ -26,9 +26,6 @@ package org.sonar.plugins.delphi.antlr.sanitizer.resolvers.exceptions;
  * DefineResolver exception
  */
 public class DefineResolverException extends Exception {
-
-  private static final long serialVersionUID = 5306303004220560085L;
-
   /**
    * ctor
    *

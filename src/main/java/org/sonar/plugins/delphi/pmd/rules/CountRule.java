@@ -58,16 +58,14 @@ public class CountRule extends DelphiRule {
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    if (!shouldCount(node)) {
-      return;
-    }
+    if (shouldCount(node)) {
+      increaseCounter(strength);
 
-    increaseCounter(strength);
-
-    if (exceedsLimit()) {
-      addViolation(ctx, node, getMessage());
-      if (reset) {
-        count = 0;
+      if (exceedsLimit()) {
+        addViolation(ctx, node, getMessage());
+        if (reset) {
+          count = 0;
+        }
       }
     }
   }
@@ -76,11 +74,11 @@ public class CountRule extends DelphiRule {
     return matchesText(node) || matchesType(node);
   }
 
-  protected boolean matchesText(DelphiPMDNode node) {
+  private boolean matchesText(DelphiPMDNode node) {
     return node.getText().equals(stringToSearch);
   }
 
-  protected boolean matchesType(DelphiPMDNode node) {
+  private boolean matchesType(DelphiPMDNode node) {
     return node.getType() == typeToSearch;
   }
 
@@ -99,4 +97,13 @@ public class CountRule extends DelphiRule {
     definedLimit = getProperty(LIMIT);
   }
 
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
 }

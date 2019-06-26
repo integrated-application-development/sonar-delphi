@@ -50,12 +50,12 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.rule.RuleKey;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.pmd.profile.DelphiRuleSets;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRulesUtils;
 import org.sonar.plugins.delphi.project.DelphiProject;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.ProgressReporter;
 import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
 import org.w3c.dom.Document;
@@ -73,7 +73,7 @@ public class DelphiPmdSensor implements Sensor {
   private final DelphiProjectHelper delphiProjectHelper;
   private final List<String> errors = new ArrayList<>();
   private final ActiveRules rulesProfile;
-  private int issueHighlightingErrors = 0;
+  private int issueHighlightingErrors;
 
   /**
    * C-tor
@@ -94,7 +94,7 @@ public class DelphiPmdSensor implements Sensor {
    */
   @Override
   public void describe(SensorDescriptor descriptor) {
-    DelphiUtils.LOG.info("PMD sensor.describe");
+    DelphiPlugin.LOG.info("PMD sensor.describe");
     descriptor.name("PMD sensor").onlyOnLanguage(DelphiLanguage.KEY);
   }
 
@@ -113,8 +113,8 @@ public class DelphiPmdSensor implements Sensor {
     } catch (IllegalArgumentException e) {
       textRange = inputFile.selectLine(beginLine);
       String error = "Rule: {} file: {} beginLine: {} beginCol: {} endLine: {} endCol: {}";
-      DelphiUtils.LOG.debug(error, ruleKey, fileName, beginLine, beginColumn, endLine, endColumn);
-      DelphiUtils.LOG.debug("Error while creating issue highlighting text range:", e);
+      DelphiPlugin.LOG.debug(error, ruleKey, fileName, beginLine, beginColumn, endLine, endColumn);
+      DelphiPlugin.LOG.debug("Error while creating issue highlighting text range:", e);
       ++issueHighlightingErrors;
     }
 
@@ -162,14 +162,14 @@ public class DelphiPmdSensor implements Sensor {
         }
       }
     } catch (SAXException e) {
-      DelphiUtils.LOG.error("Error while parsing PMD report", e);
+      DelphiPlugin.LOG.error("Error while parsing PMD report", e);
     } catch (Exception e) {
-      DelphiUtils.LOG.error("Unexpected error while parsing PMD report", e);
+      DelphiPlugin.LOG.error("Unexpected error while parsing PMD report", e);
     }
 
     //TODO: Remove these messages
-    DelphiUtils.LOG.info("{} issues added", issues);
-    DelphiUtils.LOG.info("{} issue highlighting errors", issueHighlightingErrors);
+    DelphiPlugin.LOG.info("{} issues added", issues);
+    DelphiPlugin.LOG.info("{} issue highlighting errors", issueHighlightingErrors);
   }
 
   /**
@@ -177,7 +177,7 @@ public class DelphiPmdSensor implements Sensor {
    */
   @Override
   public void execute(SensorContext context) {
-    DelphiUtils.LOG.info("PMD sensor.execute");
+    DelphiPlugin.LOG.info("PMD sensor.execute");
     parsePMDreport(createPmdReport());
   }
 
@@ -203,7 +203,7 @@ public class DelphiPmdSensor implements Sensor {
       File configurationFile = new File(delphiProjectHelper.workDir(), repositoryKey + ".xml");
       FileUtils.writeStringToFile(configurationFile, rulesXml, StandardCharsets.UTF_8);
 
-      DelphiUtils.LOG.info("PMD configuration: {}", configurationFile.getAbsolutePath());
+      DelphiPlugin.LOG.info("PMD configuration: {}", configurationFile.getAbsolutePath());
 
       return configurationFile;
     } catch (IOException e) {
@@ -224,18 +224,18 @@ public class DelphiPmdSensor implements Sensor {
 
       return writeXmlReport(pmd.getReport());
     } catch (IOException e) {
-      DelphiUtils.LOG.error("Failed to generate PMD report file: ", e);
+      DelphiPlugin.LOG.error("Failed to generate PMD report file: ", e);
       return null;
     }
   }
 
   private void createPmdReport(DelphiProject delphiProject, DelphiPMD pmd, RuleContext ruleContext,
       RuleSets ruleSets) {
-    DelphiUtils.LOG.info("PMD Parsing project {}", delphiProject.getName());
+    DelphiPlugin.LOG.info("PMD Parsing project {}", delphiProject.getName());
 
     List<File> excluded = delphiProjectHelper.getExcludedSources();
     ProgressReporter progressReporter = new ProgressReporter(
-        delphiProject.getSourceFiles().size(), 10, new ProgressReporterLogger(DelphiUtils.LOG));
+        delphiProject.getSourceFiles().size(), 10, new ProgressReporterLogger(DelphiPlugin.LOG));
 
     for (File pmdFile : delphiProject.getSourceFiles()) {
       progressReporter.progress();
@@ -252,7 +252,7 @@ public class DelphiPmdSensor implements Sensor {
     } catch (ParseException e) {
       String errorMsg = "PMD error while parsing " + pmdFile.getAbsolutePath() + ": "
           + e.getMessage();
-      DelphiUtils.LOG.warn(errorMsg);
+      DelphiPlugin.LOG.warn(errorMsg);
       errors.add(errorMsg);
     }
   }
@@ -274,7 +274,7 @@ public class DelphiPmdSensor implements Sensor {
     xmlRenderer.end();
 
     File xmlReport = new File(delphiProjectHelper.workDir().getAbsolutePath(), "pmd-report.xml");
-    DelphiUtils.LOG.info("PMD output report: "
+    DelphiPlugin.LOG.info("PMD output report: "
         + xmlReport.getAbsolutePath());
     FileUtils.writeStringToFile(xmlReport, stringWriter.toString(), StandardCharsets.UTF_8);
     return xmlReport;

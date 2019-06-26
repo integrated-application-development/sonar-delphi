@@ -23,7 +23,6 @@
 package org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -31,9 +30,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.codecoverage.DelphiCodeCoverageParser;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -79,18 +78,18 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser {
 
   private void parseFileNode(SensorContext sensorContext, Node srcFile) {
     String fileName = srcFile.getAttributes().getNamedItem("name").getTextContent();
-    try {
-      InputFile sourceFile = delphiProjectHelper.findFileInDirectories(fileName);
-      NewCoverage newCoverage = sensorContext.newCoverage();
-      newCoverage.onFile(sourceFile);
+    InputFile sourceFile = delphiProjectHelper.findFileInDirectories(fileName);
 
-      parseValue(srcFile.getTextContent(), newCoverage);
-      newCoverage.save();
-    } catch (FileNotFoundException e) {
-      DelphiUtils.LOG.info("File not found in project {}", fileName);
-      DelphiUtils.LOG.debug("Stacktrace: ", e);
+    if (sourceFile == null) {
+      DelphiPlugin.LOG.trace("File not found in project: {}", fileName);
+      return;
     }
 
+    NewCoverage newCoverage = sensorContext.newCoverage();
+    newCoverage.onFile(sourceFile);
+
+    parseValue(srcFile.getTextContent(), newCoverage);
+    newCoverage.save();
   }
 
   private void parseReportFile(SensorContext sensorContext) {
@@ -113,9 +112,9 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser {
       }
 
     } catch (SAXException e) {
-      DelphiUtils.LOG.error("Failed to parse coverage report: ", e);
+      DelphiPlugin.LOG.error("Failed to parse coverage report: ", e);
     } catch (Exception e) {
-      DelphiUtils.LOG.error("Unexpected exception while parsing coverage reports: ", e);
+      DelphiPlugin.LOG.error("Unexpected exception while parsing coverage reports: ", e);
     }
   }
 

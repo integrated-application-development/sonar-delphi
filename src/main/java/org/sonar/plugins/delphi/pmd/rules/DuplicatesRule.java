@@ -38,6 +38,7 @@ public class DuplicatesRule extends DelphiRule {
             // If an index was raised, then there could not have been a sort performed on the
             // previous line, so raise a violation
             addViolation(ctx, (DelphiPMDNode) children.get(i - 1));
+            //FIXME: I'll have to clean this up.. Exceptions for flow control? Yikes.
           }
         }
       }

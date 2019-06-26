@@ -40,8 +40,8 @@ import org.sonar.api.rules.ActiveRuleParam;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleParam;
 import org.sonar.api.rules.RulePriority;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 /**
  * Utilities for Delphi xml rules
@@ -295,7 +295,7 @@ public final class DelphiRulesUtils {
       int intLevel = 5 - Integer.valueOf(level);
       return RulePriority.valueOfInt(intLevel);
     } catch (Exception e) {
-      DelphiUtils.LOG.error("DelphiRulesUtils.severityFromLevel: ", e);
+      DelphiPlugin.LOG.error("DelphiRulesUtils.severityFromLevel: ", e);
       return null;
     }
   }

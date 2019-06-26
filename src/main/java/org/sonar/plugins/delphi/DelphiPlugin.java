@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.delphi;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.Plugin;
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
@@ -90,6 +92,10 @@ import org.sonar.plugins.delphi.surefire.SurefireSensor;
         global = false),
 })
 public class DelphiPlugin implements Plugin {
+  /**
+   * Logger class, use it for logging/debugging at Sonar window
+   */
+  public static final Logger LOG = LoggerFactory.getLogger(DelphiPlugin.class.getName());
 
   public static final String EXCLUDED_DIRECTORIES_KEY = "sonar.delphi.sources.excluded";
   public static final String CC_EXCLUDED_KEY = "sonar.delphi.codecoverage.excluded";

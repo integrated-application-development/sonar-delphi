@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveFactory;
 import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveFactorySyntaxException;
@@ -100,7 +101,7 @@ public class IncludeResolver extends SourceResolver {
         dataToInclude.add(processIncludedFile(directive, includeFileName, currentDir));
       }
     } catch (CompilerDirectiveFactorySyntaxException e) {
-      DelphiUtils.LOG.trace("Compiler directive syntax error: ", e);
+      DelphiPlugin.LOG.trace("Compiler directive syntax error: ", e);
     }
 
     return introduceIncludedData(newData, dataToInclude);
@@ -118,7 +119,7 @@ public class IncludeResolver extends SourceResolver {
         copyData = readFileIncludeData(includeFile);
       }
     } catch (IncludeResolverException | IOException e) {
-      DelphiUtils.LOG.warn("Failed to resolve include: ", e);
+      DelphiPlugin.LOG.warn("Failed to resolve include: ", e);
     }
 
     int rangeStart = directive.getFirstCharPosition();
@@ -165,7 +166,7 @@ public class IncludeResolver extends SourceResolver {
   private File resolveIncludeFile(String fileName, List<File> directories)
       throws IncludeResolverException {
     for (File dir : directories) {
-      DelphiUtils.LOG
+      DelphiPlugin.LOG
           .debug("Trying to include {}{}{}", dir.getAbsolutePath(), File.separator, fileName);
       File file = getExistingFile(dir.getAbsolutePath(), fileName);
       if (file != null) {

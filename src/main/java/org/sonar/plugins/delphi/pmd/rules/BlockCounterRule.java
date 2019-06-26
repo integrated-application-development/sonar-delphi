@@ -31,12 +31,12 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class BlockCounterRule extends CountRule {
 
-  protected boolean isCounting;
-  protected int lastLine;
+  private boolean isCounting;
+  private int lastLine;
   protected String start;
   protected String end;
   protected DelphiPMDNode firstNode;
-  protected int startIndex;
+  private int startIndex;
 
   @Override
   protected void init() {
@@ -96,7 +96,7 @@ public class BlockCounterRule extends CountRule {
    * @param node Node
    * @return True if so, false otherwise
    */
-  protected boolean isStartNode(DelphiPMDNode node) {
+  private boolean isStartNode(DelphiPMDNode node) {
     return node.getText().equals(start);
   }
 
@@ -106,7 +106,7 @@ public class BlockCounterRule extends CountRule {
    * @param node Node
    * @return True if so, false otherwise
    */
-  protected boolean isEndNode(DelphiPMDNode node) {
+  private boolean isEndNode(DelphiPMDNode node) {
     return node.getText().equals(end);
   }
 
@@ -120,4 +120,13 @@ public class BlockCounterRule extends CountRule {
     return node.getLine() > lastLine;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
 }

@@ -40,12 +40,10 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenRewriteStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
-import org.sonar.plugins.delphi.antlr.ast.exceptions.NodeNameForCodeDoesNotExistException;
 import org.sonar.plugins.delphi.antlr.sanitizer.DelphiSourceSanitizer;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -152,7 +150,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
 
       transformer.transform(source, result);
     } catch (TransformerException e) {
-      DelphiUtils.LOG.error("Failed to generate Node XML", e);
+      DelphiPlugin.LOG.error("Failed to generate Node XML", e);
       return null;
     }
 
@@ -170,7 +168,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
     try {
       return generateDocument(createNewDocument(), "file");
     } catch (Exception e) {
-      DelphiUtils.LOG.error("{} {}", "Failed to generate Node XML: ", e);
+      DelphiPlugin.LOG.error("{} {}", "Failed to generate Node XML: ", e);
       return null;
     }
   }
@@ -207,13 +205,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
     for (int i = 0; i < delphiNode.getChildCount(); ++i) {
       Tree childNode = delphiNode.getChild(i);
       String processedName = processNodeName(childNode);
-      Element child;
-      try {
-        child = doc.createElement(processedName);
-      } catch (DOMException e) {
-        child = doc.createElement("Wrapper");
-      }
-
+      Element child = doc.createElement(processedName);
       child.setTextContent(childNode.getText());
       child.setAttribute("line", String.valueOf(childNode.getLine()));
       child.setAttribute("column", String.valueOf(childNode.getCharPositionInLine()));
@@ -227,14 +219,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
   }
 
   private String processNodeName(Tree node) {
-    String code = node.getText();
-    try {
-      NodeName nodeName = NodeName.findByCode(code);
-      return nodeName.getName();
-    } catch (NodeNameForCodeDoesNotExistException e) {
-      // Do nothing
-    }
-    return code;
+    return NodeName.findByCode(node.getText()).getName();
   }
 
   /**

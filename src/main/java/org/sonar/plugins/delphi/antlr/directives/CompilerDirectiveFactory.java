@@ -24,6 +24,7 @@ package org.sonar.plugins.delphi.antlr.directives;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveFactorySyntaxException;
 import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveFactoryUnsupportedDirectiveException;
 import org.sonar.plugins.delphi.antlr.directives.impl.DefineDirective;
@@ -35,7 +36,6 @@ import org.sonar.plugins.delphi.antlr.directives.impl.IfEndDirective;
 import org.sonar.plugins.delphi.antlr.directives.impl.IncludeDirective;
 import org.sonar.plugins.delphi.antlr.directives.impl.UndefineDirective;
 import org.sonar.plugins.delphi.antlr.directives.impl.UnusedDirective;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 // TODO: Refactor this class. The logic could be simpler and easier to follow.
 /**
@@ -66,7 +66,7 @@ public class CompilerDirectiveFactory {
         CompilerDirective directive = create(data, directivePos, closingBracket);
         result.add(directive);
       } catch (CompilerDirectiveFactoryUnsupportedDirectiveException e) {
-        DelphiUtils.LOG.trace("Failed to produce Compiler Directive: ", e);
+        DelphiPlugin.LOG.trace("Failed to produce Compiler Directive: ", e);
       }
 
       directivePos = getDirectiveFirstChar(data, directivePos + 1);

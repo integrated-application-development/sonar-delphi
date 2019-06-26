@@ -79,7 +79,7 @@ public class ComplexityMetricsTest {
     // init
     File testFile = DelphiUtils.getResource(FILE_NAME);
     CodeAnalysisCacheResults.resetCache();
-    ASTAnalyzer analyzer = new DelphiASTAnalyzer(DelphiTestUtils.mockProjectHelper());
+    ASTAnalyzer analyzer = new DelphiASTAnalyzer();
     final CodeAnalysisResults results = analyzer.analyze(new DelphiAST(testFile));
 
     // processing
@@ -113,7 +113,7 @@ public class ComplexityMetricsTest {
     // init
     File testFile = DelphiUtils.getResource(FILE_NAME_LIST_UTILS);
     CodeAnalysisCacheResults.resetCache();
-    ASTAnalyzer analyzer = new DelphiASTAnalyzer(DelphiTestUtils.mockProjectHelper());
+    ASTAnalyzer analyzer = new DelphiASTAnalyzer();
     CodeAnalysisResults results = analyzer.analyze(new DelphiAST(testFile));
 
     // processing

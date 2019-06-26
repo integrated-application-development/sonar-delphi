@@ -37,6 +37,8 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
     assertThat(issues, is(empty()));
   }
 
+//TODO: Fix these tests
+
 /*
   @Test
   public void testInvalidRule() {

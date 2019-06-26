@@ -33,6 +33,7 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.rule.RuleKey;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
@@ -182,7 +183,7 @@ public class ComplexityMetrics extends DefaultMetrics {
           .withValue(getIntMetric("PUBLIC_API")).save();
 
     } catch (IllegalStateException e) {
-      DelphiUtils.LOG.error("{}: Error while saving Complexity metrics: ", resource.filename(), e);
+      DelphiPlugin.LOG.error("{}: Error while saving Complexity metrics: ", resource.filename(), e);
     }
   }
 
@@ -215,13 +216,14 @@ public class ComplexityMetrics extends DefaultMetrics {
   private void addIssue(InputFile inputFile, FunctionInterface func) {
     if (func.getComplexity() > threshold) {
       NewIssue newIssue = context.newIssue();
-      int column = func.getColumn();
       int line = func.getLine();
+      int beginCol = func.getBeginColumn();
+      int endCol = func.getEndColumn();
       newIssue
           .forRule(methodCyclomaticComplexityRule.ruleKey())
           .at(newIssue.newLocation()
               .on(inputFile)
-              .at(inputFile.newRange(line, column, line, column + func.getName().length()))
+              .at(inputFile.newRange(line, beginCol, line, endCol))
               .message(String.format(
                   "The Cyclomatic Complexity of this method \"%s\" is %d which is " +
                       "greater than %d authorized.",

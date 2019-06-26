@@ -39,7 +39,6 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiArgument;
 import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.core.language.impl.UnresolvedFunctionCall;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 /**
  * Class used for function analysis
@@ -63,7 +62,8 @@ public class FunctionAnalyzer extends CodeAnalyzer {
   private List<String> functionProperties;
 
   private int functionLine;
-  private int functionCharPosition;
+  private int functionBeginColumn;
+  private int functionEndColumn;
 
   @Override
   public boolean canAnalyze(CodeTree codeTree) {
@@ -153,8 +153,10 @@ public class FunctionAnalyzer extends CodeAnalyzer {
       return "";
     }
 
-    functionLine = nameNode.getChild(0).getLine();
-    functionCharPosition = nameNode.getChild(0).getCharPositionInLine();
+    Tree lastChild = nameNode.getChild(nameNode.getChildCount() - 1);
+    functionLine = lastChild.getLine();
+    functionBeginColumn = lastChild.getCharPositionInLine();
+    functionEndColumn = functionBeginColumn + lastChild.getText().length();
 
     StringBuilder str = new StringBuilder();
     for (int i = 0; i < nameNode.getChildCount(); ++i) {
@@ -225,7 +227,8 @@ public class FunctionAnalyzer extends CodeAnalyzer {
       activeFunction.setLongName(functionLongName);
       activeFunction.setLine(functionLine);
       activeFunction.setVisibility(results.getParseVisibility().toMetrics());
-      activeFunction.setColumn(functionCharPosition);
+      activeFunction.setBeginColumn(functionBeginColumn);
+      activeFunction.setEndColumn(functionEndColumn);
       activeFunction.setUnit(results.getActiveUnit());
       activeFunction.setParentClass(currentClass);
 

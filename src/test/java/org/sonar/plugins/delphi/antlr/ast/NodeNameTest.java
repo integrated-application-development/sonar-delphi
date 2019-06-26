@@ -25,6 +25,7 @@ package org.sonar.plugins.delphi.antlr.ast;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.sonar.plugins.delphi.antlr.ast.NodeName.COLON;
 import static org.sonar.plugins.delphi.antlr.ast.NodeName.DASH;
@@ -35,7 +36,6 @@ import static org.sonar.plugins.delphi.antlr.ast.NodeName.SEMI;
 import static org.sonar.plugins.delphi.antlr.ast.NodeName.UNKNOWN;
 
 import org.junit.Test;
-import org.sonar.plugins.delphi.antlr.ast.exceptions.NodeNameForCodeDoesNotExistException;
 
 public class NodeNameTest {
 
@@ -140,9 +140,9 @@ public class NodeNameTest {
     assertEquals(GUID_IDENT, guidIdentifier);
   }
 
-  @Test(expected = NodeNameForCodeDoesNotExistException.class)
-  public void testFindNodeNameByCodeShouldThrowAnExceptionWhenNodeNameIsNotFound() {
-    NodeName.findByCode("BogusCode");
+  @Test
+  public void testFindNodeNameByCodeShouldReturnUnknown() {
+    assertEquals(UNKNOWN, NodeName.findByCode("BogusCode"));
   }
 
   @Test

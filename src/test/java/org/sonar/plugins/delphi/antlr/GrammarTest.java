@@ -27,7 +27,6 @@ import static org.junit.Assert.assertFalse;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.sanitizer.DelphiSourceSanitizer;
@@ -36,14 +35,13 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 public class GrammarTest {
 
   private static final String BASE_DIR = "/org/sonar/plugins/delphi/grammar/";
+  private final DelphiFileStreamConfig fileStreamConfig = new DelphiFileStreamConfig("UTF-8");
 
   private void parseFile(String fileName) throws IOException {
-    parseFile(fileName, null);
-  }
-
-  private void parseFile(String fileName, String encoding) throws IOException {
-    System.out.println("Parsing file: " + BASE_DIR + fileName);
-    DelphiAST ast = new DelphiAST(DelphiUtils.getResource(BASE_DIR + fileName), encoding);
+    String path = BASE_DIR + fileName;
+    DelphiPlugin.LOG.info("Parsing file: " + path);
+    File file = DelphiUtils.getResource(path);
+    DelphiAST ast = new DelphiAST(file, fileStreamConfig);
     assertFalse(ast.isError());
 
     String name = fileName.replace(".pas", "");
@@ -56,127 +54,127 @@ public class GrammarTest {
   }
 
   @Test
-  public void testEmptyBeginStatement() throws Exception {
+  public void testEmptyBeginStatement() throws IOException {
     parseFile("EmptyProcs.pas");
   }
 
   @Test
-  public void testParseMultipleAttributes() throws Exception {
+  public void testParseMultipleAttributes() throws IOException {
     parseFile("MultipleAttributes.pas");
   }
 
   @Test
-  public void testParseRecordInitialization() throws Exception {
+  public void testParseRecordInitialization() throws IOException {
     parseFile("RecordInitialization.pas");
   }
 
   @Test
-  public void testParseRecordConstructor() throws Exception {
+  public void testParseRecordConstructor() throws IOException {
     parseFile("RecordConstructor.pas");
   }
 
   @Test
-  public void testParseLabel() throws Exception {
+  public void testParseLabel() throws IOException {
     parseFile("LabelUsage.pas");
   }
 
   @Test
-  public void testParseDUnitX() throws Exception {
-    parseFile("DUnitX.pas", "utf-8");
+  public void testParseDUnitX() throws IOException {
+    parseFile("DUnitX.pas");
   }
 
   @Test
-  public void testParseUTF8FileWithBOM() throws Exception {
-    parseFile("UTF8WithBOM.pas", "utf-8");
+  public void testParseUTF8FileWithBOM() throws IOException {
+    parseFile("UTF8WithBOM.pas");
   }
 
   @Test
-  public void testParseAnonymousMethods() throws Exception {
+  public void testParseAnonymousMethods() throws IOException {
     parseFile("AnonymousMethods.pas");
   }
 
   @Test
-  public void testParseGenerics() throws Exception {
+  public void testParseGenerics() throws IOException {
     parseFile("Generics.pas");
   }
 
   @Test
-  public void testParseKeyWordsAsIdentifier() throws Exception {
+  public void testParseKeyWordsAsIdentifier() throws IOException {
     parseFile("KeyWordsAsIdentifier.pas");
   }
 
   @Test
-  public void testParseListUtils() throws Exception {
+  public void testParseListUtils() throws IOException {
     parseFile("ListUtils.pas");
   }
 
   @Test
-  public void testParseEmptyNestedType() throws Exception {
+  public void testParseEmptyNestedType() throws IOException {
     parseFile("EmptyNestedType.pas");
   }
 
   @Test
-  public void testParseEmptyClassDeclarations() throws Exception {
+  public void testParseEmptyClassDeclarations() throws IOException {
     parseFile("EmptyClassDeclarations.pas");
   }
 
   @Test
-  public void testSubRangeTypes() throws Exception {
+  public void testSubRangeTypes() throws IOException {
     parseFile("SubRangeTypes.pas");
   }
 
   @Test
-  public void testMethodProcDirectives() throws Exception {
+  public void testMethodProcDirectives() throws IOException {
     parseFile("MethodProcDirectives.pas");
   }
 
   @Test
-  public void testOptionalFunctionReturnType() throws Exception {
+  public void testOptionalFunctionReturnType() throws IOException {
     parseFile("OptionalFunctionReturnType.pas");
   }
 
   @Test
-  public void testConstExpressionAmbiguity() throws Exception {
+  public void testConstExpressionAmbiguity() throws IOException {
     parseFile("ConstExpressionAmbiguity.pas");
   }
 
   @Test
-  public void testVariantRecord() throws Exception {
+  public void testVariantRecord() throws IOException {
     parseFile("VariantRecord.pas");
   }
 
   @Test
-  public void testEmptyCaseItem() throws Exception {
+  public void testEmptyCaseItem() throws IOException {
     parseFile("EmptyCaseItem.pas");
   }
 
   @Test
-  public void testRecordHelperConstants() throws Exception {
+  public void testRecordHelperConstants() throws IOException {
     parseFile("RecordHelperConstants.pas");
   }
 
   @Test
-  public void testGenericSubTypeDecl() throws Exception {
+  public void testGenericSubTypeDecl() throws IOException {
     parseFile("GenericSubTypeDecl.pas");
   }
 
   @Test
-  public void testArrayIndices() throws Exception {
+  public void testArrayIndices() throws IOException {
     parseFile("ArrayIndices.pas");
   }
 
   @Test
-  public void testNumberNotConsumedByIdentifiers() throws Exception {
+  public void testNumberNotConsumedByIdentifiers() throws IOException {
     parseFile("NumberNotConsumedByIdentifiers.pas");
   }
 
   @Test
-  public void testRaiseCastedException() throws Exception {
+  public void testRaiseCastedException() throws IOException {
     parseFile("RaiseCastedException.pas");
   }
 
   @Test
-  public void testQualifiedKeywordIdentifier() throws Exception {
+  public void testQualifiedKeywordIdentifier() throws IOException {
     parseFile("QualifiedKeywordIdentifier.pas");
   }
 
@@ -185,11 +183,8 @@ public class GrammarTest {
    * But only if the nested ifdef was commented out or inside a string.
    */
   @Test
-  public void testUndefinedInaccessibleNestedIfDef() throws Exception {
-    ArrayList<String> definitions = new ArrayList<>();
-    definitions.add("Defined");
-    DelphiSourceSanitizer.setDefinitions(definitions);
-
+  public void testUndefinedInaccessibleNestedIfDef() throws IOException {
+    fileStreamConfig.getDefinitions().add("Defined");
     parseFile("UndefinedInaccessibleNestedIfDef.pas");
 
     definitions.clear();
