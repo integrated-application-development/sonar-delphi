@@ -22,12 +22,22 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
-import org.sonar.plugins.delphi.antlr.ast.exceptions.NodeNameForCodeDoesNotExistException;
-
 public enum NodeName {
   UNKNOWN("unknown", ""),
   SEMI("semi", ";"),
+  EQUALS("equals", ":="),
+  NOT_EQUALS("not_equals", "<>"),
+  PLUS("plus", "\\+"),
+  MINUS("minus", "-"),
+  DIVIDE("minus", "/"),
+  MULTIPLY("minus", "\\*"),
+  L_SQUARE_BRACKET("l_square_bracket", "\\["),
+  R_SQUARE_BRACKET("r_square_bracket", "\\]"),
+  STRING("string", "'.'"),
   DOT("dot", "\\."),
+  DOTDOT("dotdot", "\\.\\."),
+  INTNUM("int_num", "[0-9]+"),
+  REALNUM("real_num", "([0-9]|\\.)+"),
   COLON("colon", "[:()]"),
   GUID_IDENT("guid_ident", "^'\\{.*"),
   DASH("dash", ","),
@@ -51,7 +61,7 @@ public enum NodeName {
         return nodeName;
       }
     }
-    throw new NodeNameForCodeDoesNotExistException(code);
+    return UNKNOWN;
   }
 
   public String getName() {

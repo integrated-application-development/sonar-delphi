@@ -26,9 +26,6 @@ package org.sonar.plugins.delphi.antlr.directives.exceptions;
  * Compiler directive factory exception
  */
 public class CompilerDirectiveFactorySyntaxException extends Exception {
-
-  private static final long serialVersionUID = -1053134005528284924L;
-
   /**
    * {@inheritDoc}
    */

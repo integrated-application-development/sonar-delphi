@@ -46,10 +46,18 @@ public class ConstructorCreateRule extends DelphiRule {
         if (!constructorName.startsWith("Create")) {
           addViolation(ctx, node);
         }
-
       }
-
     }
+  }
 
+
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
   }
 }

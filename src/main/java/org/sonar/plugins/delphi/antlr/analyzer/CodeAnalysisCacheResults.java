@@ -90,15 +90,18 @@ public class CodeAnalysisCacheResults {
   public ClassInterface getCachedClass(String unitName, ClassInterface classInterface) {
     final String fileToSearch = File.pathSeparator + unitName + ".pas";
     Map<String, ClassInterface> unitClasses = null;
-    for (String fileName : allClasses.keySet()) {
-      if (StringUtils.containsIgnoreCase(fileName, fileToSearch)) {
-        unitClasses = allClasses.get(fileName);
+
+    for (var entry: allClasses.entrySet()) {
+      if (StringUtils.containsIgnoreCase(entry.getKey(), fileToSearch)) {
+        unitClasses = entry.getValue();
         break;
       }
     }
+
     if (unitClasses != null) {
       return unitClasses.get(classInterface.getName());
     }
+
     return null;
   }
 

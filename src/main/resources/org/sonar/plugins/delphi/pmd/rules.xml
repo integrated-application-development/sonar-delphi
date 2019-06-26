@@ -730,7 +730,7 @@ x.Free;			//GOOD, sufficent enough
         </properties>
     </rule>
 	<rule since="" class="org.sonar.plugins.delphi.pmd.rules.LowerCaseReservedWordsRule" message="Keywords 'not, or, and' must always be in lower case."
-		  name="LowerCaseReservedWordRule">
+		  name="LowerCaseReservedWordsRule">
 		<description> Always use lower case when using keywords and , or, not etc.</description>
 		<properties>
 			<property name="baseEffort">

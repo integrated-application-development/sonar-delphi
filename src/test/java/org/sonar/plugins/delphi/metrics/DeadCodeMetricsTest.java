@@ -36,12 +36,8 @@ import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
-import org.sonar.api.batch.rule.ActiveRules;
-import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
-import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
-import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.DelphiASTAnalyzer;
@@ -89,7 +85,8 @@ public class DeadCodeMetricsTest {
     f1.addCalledFunction(f2);
     f2.addCalledFunction(f1);
     f3.setLine(11);
-    f3.setColumn(14);
+    f3.setBeginColumn(14);
+    f3.setEndColumn(23);
 
     ClassPropertyInterface p1 = new DelphiClassProperty();
     p1.setReadFunction(f1.getShortName());
@@ -122,22 +119,7 @@ public class DeadCodeMetricsTest {
     baseDir = DelphiUtils.getResource(ROOT_NAME);
     sensorContext = SensorContextTester.create(baseDir);
 
-    NewActiveRule unusedFunctionRule = new NewActiveRule.Builder()
-        .setRuleKey(DeadCodeMetrics.RULE_KEY_UNUSED_FUNCTION)
-        .setLanguage(DelphiLanguage.KEY)
-        .build();
-
-    NewActiveRule unusedUnitRule = new NewActiveRule.Builder()
-        .setRuleKey(DeadCodeMetrics.RULE_KEY_UNUSED_UNIT)
-        .setLanguage(DelphiLanguage.KEY)
-        .build();
-
-    ActiveRules activeRules = new ActiveRulesBuilder()
-        .addRule(unusedFunctionRule)
-        .addRule(unusedUnitRule)
-        .build();
-
-    metrics = new DeadCodeMetrics(activeRules, sensorContext);
+    metrics = new DeadCodeMetrics(sensorContext);
   }
 
   @Test
@@ -182,7 +164,7 @@ public class DeadCodeMetricsTest {
   public void testAnalyseFile() throws IOException {
     File file = DelphiUtils.getResource(TEST_FILE);
     DelphiAST ast = new DelphiAST(file);
-    ASTAnalyzer analyser = new DelphiASTAnalyzer(DelphiTestUtils.mockProjectHelper());
+    ASTAnalyzer analyser = new DelphiASTAnalyzer();
     CodeAnalysisResults results = analyser.analyze(ast);
 
     DefaultInputFile testFile = TestInputFileBuilder

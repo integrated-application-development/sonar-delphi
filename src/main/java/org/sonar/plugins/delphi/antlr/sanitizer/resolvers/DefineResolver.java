@@ -24,6 +24,7 @@ package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
 
 import java.util.List;
 import java.util.Set;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveFactory;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
@@ -77,7 +78,7 @@ public class DefineResolver extends SourceResolver {
       SubRangeAggregator toComment = processCompilerDirectives(allDirectives, defines);
       commentUnwantedDefinitions(str, toComment);
     } catch (CompilerDirectiveFactorySyntaxException | DefineResolverException e) {
-      DelphiUtils.LOG.trace("Failed to resolve define: ", e);
+      DelphiPlugin.LOG.trace("Failed to resolve define: ", e);
     }
 
     return str;

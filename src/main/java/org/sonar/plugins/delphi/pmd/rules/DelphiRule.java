@@ -138,7 +138,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
         }
       }
 
-      // optimization and //NOSONAR line skip
+      /* optimization and no-sonar line skip */
       if (node.getLine() >= lastLineParsed) {
         updateVisibility(node);
         if (!inImplementationSection) {
@@ -195,7 +195,8 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
       case DelphiLexer.PUBLIC:
       case DelphiLexer.PUBLISHED:
         currentVisibility = node.getType();
-
+        break;
+      default:
     }
   }
 
@@ -223,4 +224,13 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
     return inImplementationSection;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
 }

@@ -26,6 +26,7 @@ import java.io.File;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
@@ -62,7 +63,7 @@ public class DelphiWorkgroupXmlParser extends DefaultHandler {
       SAXParser parser = factory.newSAXParser();
       parser.parse(xml.getAbsolutePath(), this);
     } catch (Exception e) {
-      DelphiUtils.LOG.error("{}: Error while parsing workgroup file: ", xml.getAbsolutePath(), e);
+      DelphiPlugin.LOG.error("{}: Error while parsing workgroup file: ", xml.getAbsolutePath(), e);
     }
   }
 

@@ -23,14 +23,12 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Stack;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
@@ -120,7 +118,7 @@ public class UnusedArgumentsRule extends DelphiRule {
         || candidateNode.getType() == DelphiLexer.FUNCTION;
   }
 
-  public Tree findBeginNode(DelphiPMDNode node) {
+  public Tree findBeginNode(Tree node) {
     int lookIndex = 0;
     Tree candidateNode = null;
     // looking for begin statement for function

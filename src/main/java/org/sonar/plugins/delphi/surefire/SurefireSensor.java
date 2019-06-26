@@ -27,6 +27,7 @@ import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.config.Configuration;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -56,7 +57,7 @@ public class SurefireSensor implements Sensor {
 
   @Override
   public void describe(SensorDescriptor descriptor) {
-    DelphiUtils.LOG.info("SurefireSensor sensor describe...");
+    DelphiPlugin.LOG.info("SurefireSensor sensor describe...");
     descriptor.name("Delphi SurefireSensor");
     descriptor.onlyOnLanguage(DelphiLanguage.KEY);
   }
@@ -69,11 +70,11 @@ public class SurefireSensor implements Sensor {
    * The actual sensor code.
    */
   public void execute(SensorContext context) {
-    DelphiUtils.LOG.info("Delphi sensor execute...");
+    DelphiPlugin.LOG.info("Delphi sensor execute...");
     String[] paths = configuration.getStringArray(SurefireUtils.SUREFIRE_REPORT_PATHS_PROPERTY);
 
     if (paths == null || paths.length == 0) {
-      DelphiUtils.LOG.warn("No Surefire reports directory found! Using default directory: "
+      DelphiPlugin.LOG.warn("No Surefire reports directory found! Using default directory: "
           + DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY);
       paths = new String[]{DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY};
     }
@@ -82,7 +83,7 @@ public class SurefireSensor implements Sensor {
     for (String path : paths) {
       File reportDirectory = DelphiUtils.resolveAbsolutePath(mainPath, path);
       if (!reportDirectory.exists()) {
-        DelphiUtils.LOG
+        DelphiPlugin.LOG
             .warn("surefire report path not found {}", reportDirectory.getAbsolutePath());
         continue;
       }
@@ -92,7 +93,7 @@ public class SurefireSensor implements Sensor {
   }
 
   protected void collect(SensorContext context, File reportsDir) {
-    DelphiUtils.LOG.info("parsing {}", reportsDir);
+    DelphiPlugin.LOG.info("parsing {}", reportsDir);
     DelphiSureFireParser parser = new DelphiSureFireParser(delphiProjectHelper);
     parser.collect(context, reportsDir);
   }

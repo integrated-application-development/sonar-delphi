@@ -44,7 +44,8 @@ public class DelphiFunction implements FunctionInterface {
   private int overloads = -1;
   private int line = -1;
   private int bodyLine = -1;
-  private int column = -1;
+  private int beginColumn = -1;
+  private int endColumn = -1;
   private int visibility = DelphiParser.PRIVATE;
   private String name;
   private String realName;
@@ -178,8 +179,8 @@ public class DelphiFunction implements FunctionInterface {
    */
 
   @Override
-  public int getColumn() {
-    return column;
+  public int getBeginColumn() {
+    return beginColumn;
   }
 
   /**
@@ -187,8 +188,26 @@ public class DelphiFunction implements FunctionInterface {
    */
 
   @Override
-  public void setColumn(int column) {
-    this.column = column;
+  public int getEndColumn() {
+    return endColumn;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+
+  @Override
+  public void setEndColumn(int column) {
+    this.endColumn = column;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+
+  @Override
+  public void setBeginColumn(int column) {
+    this.beginColumn = column;
   }
 
   /**
@@ -212,6 +231,10 @@ public class DelphiFunction implements FunctionInterface {
     }
     int dot = name.lastIndexOf('.');
     if (dot != -1) {
+      //huh? Isn't this kind of a naive check?
+      // In our codebase we have tons of functions that start with "get" that do a whole lot more
+      // than just access a field.
+      // I expect this will lead to false-negatives in DeadCodeMetrics.
       boolean b1 = name.startsWith("get", dot + 1);
       boolean b2 = name.startsWith("set", dot + 1);
       isAccessor = b1 || b2;

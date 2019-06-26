@@ -22,7 +22,8 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
@@ -40,14 +41,14 @@ public class ClassPerFileRule extends CountRule {
   /**
    * Store the visited inner classes to to ignore the count.
    */
-  private List<Tree> visitedInnerClasses;
+  private Deque<Tree> visitedInnerClasses;
 
   @Override
   protected void init() {
     super.init();
     reset = false;
     setTypeToSearch(DelphiLexer.TkClass);
-    visitedInnerClasses = new ArrayList<>();
+    visitedInnerClasses = new ArrayDeque<>();
   }
 
   @Override
@@ -80,5 +81,15 @@ public class ClassPerFileRule extends CountRule {
 
   private List<Tree> findInnerClasses(DelphiPMDNode node) {
     return node.findAllChildren(DelphiLexer.TkClass);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
   }
 }

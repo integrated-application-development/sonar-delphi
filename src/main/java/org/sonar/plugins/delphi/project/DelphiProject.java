@@ -23,12 +23,11 @@
 package org.sonar.plugins.delphi.project;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-import org.xml.sax.SAXException;
 
 /**
  * DelphiLanguage project class, it holds values parsed from *.dproj file.
@@ -58,10 +57,8 @@ public class DelphiProject {
   public DelphiProject(File xml) {
     try {
       parseFile(xml);
-    } catch (IOException e) {
-      DelphiUtils.LOG.error("Could not find .dproj file: {}", xml.getAbsolutePath(), e);
-    } catch (IllegalArgumentException e) {
-      DelphiUtils.LOG.error("No .dproj file to parse. ({})", e.getMessage(), e);
+    } catch (RuntimeException e) {
+      DelphiPlugin.LOG.error("No .dproj file to parse. ({})", e.getMessage(), e);
     }
   }
 
@@ -69,12 +66,12 @@ public class DelphiProject {
    * Adds a source file to project
    *
    * @param path File path
-   * @throws IOException If file not found
+   * @throws RuntimeException If file not found
    */
-  public void addFile(String path) throws IOException {
+  public void addFile(String path) {
     File newFile = new File(path);
     if (!newFile.exists()) {
-      throw new IOException("Could not add file to project: " + newFile.getAbsolutePath());
+      throw new RuntimeException("Could not add file to project: " + newFile.getAbsolutePath());
     }
 
     if (DelphiUtils.acceptFile(newFile.getAbsolutePath())) {
@@ -106,14 +103,14 @@ public class DelphiProject {
    * adds directory where to search for include files
    *
    * @param directory directory with includes
-   * @throws IOException if directory is invalid
+   * @throws RuntimeException if directory is invalid
    */
-  public void addIncludeDirectory(String directory) throws IOException {
+  public void addIncludeDirectory(String directory) {
     if (!StringUtils.isEmpty(directory)) {
       File dir = new File(directory);
 
       if (!dir.exists() || !dir.isDirectory()) {
-        throw new IOException("Invalid include directory: " + dir.getAbsolutePath());
+        throw new RuntimeException("Invalid include directory: " + dir.getAbsolutePath());
       }
 
       includeDirectories.add(dir);
@@ -124,15 +121,14 @@ public class DelphiProject {
    * Parses xml file to gather data
    *
    * @param xml File to parse
-   * @throws IOException If file not found
-   * @throws SAXException when parsing error occurs
+   * @throws RuntimeException If file not found
    * @throws IllegalArgumentException If file == null
    */
-  private void parseFile(File xml) throws IOException {
+  private void parseFile(File xml) {
     if (xml == null) {
       throw new IllegalArgumentException("No xml file passed");
     } else if (!xml.exists()) {
-      throw new IOException("Project file not found");
+      throw new RuntimeException("Project file not found: " + xml.getAbsolutePath());
     }
 
     file = xml;

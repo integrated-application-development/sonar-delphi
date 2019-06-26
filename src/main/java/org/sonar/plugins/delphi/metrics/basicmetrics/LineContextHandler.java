@@ -22,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.metrics.basicmetrics;
 
-public abstract class LineContextHandler {
+abstract class LineContextHandler {
 
   abstract boolean matchToEnd(Line line, StringBuilder pendingLine);
 
@@ -30,7 +30,7 @@ public abstract class LineContextHandler {
 
   abstract boolean matchToBegin(Line line, StringBuilder pendingLine);
 
-  static boolean matchEndOfString(CharSequence pendingLine, String end) {
+  protected boolean matchEndOfString(CharSequence pendingLine, String end) {
     int pendingLineIndex = pendingLine.length() - end.length();
     if (pendingLineIndex < 0) {
       return false;
@@ -45,11 +45,11 @@ public abstract class LineContextHandler {
     return true;
   }
 
-  static boolean matchEndOfString(StringBuilder pendingLine, char endChar) {
+  protected boolean matchEndOfString(StringBuilder pendingLine, char endChar) {
     return pendingLine.length() >= 1 && pendingLine.charAt(pendingLine.length() - 1) == endChar;
   }
 
-  static char getLastCharacter(StringBuilder pendingLine) {
+  protected char getLastCharacter(StringBuilder pendingLine) {
     if (pendingLine.length() < 1) {
       throw new IllegalStateException("The pending line is empty.");
     }

@@ -42,6 +42,7 @@ import org.sonar.plugins.delphi.core.language.UnitInterface;
 public class DelphiUnit implements UnitInterface {
 
   private File file;
+  private URI uri;
   private String name = "UNKNOWN_UNIT";
   private String realName = "UNKNOWN_UNIT";
   private Set<String> includes = new HashSet<>();
@@ -97,6 +98,7 @@ public class DelphiUnit implements UnitInterface {
   @Override
   public void setPath(String path) {
     file = new File(path);
+    uri = file.toPath().toUri();
   }
 
   /**
@@ -113,7 +115,7 @@ public class DelphiUnit implements UnitInterface {
    */
   @Override
   public URI getUri() {
-    return file.toPath().toUri();
+    return uri;
   }
 
   /**

@@ -32,21 +32,12 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 
 /**
  * Some utilities
  */
 public final class DelphiUtils {
-
-  /**
-   * Logger class, use it for logging/debugging at Sonar window
-   */
-  public static final Logger LOG = LoggerFactory.getLogger(DelphiPlugin.class.getName());
-
   private DelphiUtils() {
   }
 
@@ -199,12 +190,12 @@ public final class DelphiUtils {
    * @param file File to be read
    * @param encoding File content encoding
    * @return File content read to a string
-   * @throws IOException When file not found
+   * @throws IllegalArgumentException When file is null
+   * @throws IOException When file does not exist
    */
-  public static String readFileContent(File file, String encoding)
-      throws IOException {
-    if (file == null || !file.exists()) {
-      throw new IOException();
+  public static String readFileContent(File file, String encoding) throws IOException {
+    if (file == null) {
+      throw new IllegalArgumentException("Passed a null file to readFileContent");
     }
 
     return FileUtils.readFileToString(file, encoding).replace("\uFEFF", "");
