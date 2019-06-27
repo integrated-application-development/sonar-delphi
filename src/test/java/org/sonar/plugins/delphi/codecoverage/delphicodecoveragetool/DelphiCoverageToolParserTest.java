@@ -41,8 +41,8 @@ public class DelphiCoverageToolParserTest {
   private File baseDir;
   private DelphiProjectHelper delphiProjectHelper;
 
-  private static final String ROOT_NAME = "/org/sonar/plugins/delphi/SimpleDelphiProject";
-  private static final String REPORT_FILE = "/org/sonar/plugins/delphi/SimpleDelphiProject/reports/Coverage.xml";
+  private static final String ROOT_NAME = "/org/sonar/plugins/delphi/projects/SimpleProject";
+  private static final String REPORT_FILE = "/org/sonar/plugins/delphi/projects/SimpleProject/reports/Coverage.xml";
 
   private final File reportFile = DelphiUtils.getResource(REPORT_FILE);
 

@@ -58,9 +58,10 @@ public class DelphiASTAnalyzerTest {
     File file = DelphiUtils.getResource(FILE_NAME);
     DelphiAST ast = new DelphiAST(file);
     CodeAnalysisResults results = analyser.analyze(ast);
+
     testFunctions(results);
     testClasses(results);
-    testFile();
+    assertEquals(7, fileComplexity);
   }
 
   private void testFunctions(CodeAnalysisResults results) {
@@ -155,12 +156,4 @@ public class DelphiASTAnalyzerTest {
       ++index;
     }
   }
-
-  @Test
-  @Ignore
-  public void testFile() {
-    assertEquals(7, fileComplexity); // TODO: Fix this. fileComplexity is currently producing 0
-    boolean test = false;
-  }
-
 }

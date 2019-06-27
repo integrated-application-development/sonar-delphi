@@ -22,8 +22,12 @@
  */
 package org.sonar.plugins.delphi;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +37,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputDir;
@@ -42,7 +45,6 @@ import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
-import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.measure.Measure;
@@ -56,77 +58,23 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiSensorTest {
 
-  private DelphiSensor sensor = null;
-  private File baseDir = null;
-  private DelphiProjectHelper delphiProjectHelper;
-  private ActiveRules activeRules;
+  private DelphiSensor sensor;
   private SensorContextTester context;
+  private ActiveRules activeRules;
 
-  private final String moduleKey = "";
-  private static final String ROOT_NAME = "/org/sonar/plugins/delphi/SimpleDelphiProject";
+  private static final String SIMPLE_PROJECT = "/org/sonar/plugins/delphi/projects/SimpleProject";
+  private static final String SIMPLE_PROJECT_METRICS = "/org/sonar/plugins/delphi/projects/SimpleProject/metrics.xml";
+  private static final String BAD_PROJECT = "/org/sonar/plugins/delphi/projects/BadSyntaxProject";
+  private static final String EMPTY_PROJECT = "/org/sonar/plugins/delphi/projects/EmptyProject";
+  private static final String MODULE_KEY = "TEST_MODULE";
   private final DelphiProject delphiProject = new DelphiProject("Default Project");
 
   private String getRelativePath(File prefix, String fullPath) {
-    String result = fullPath.substring(prefix.getAbsolutePath().length() + 1);
-    return result;
+    return fullPath.substring(prefix.getAbsolutePath().length() + 1);
   }
 
   @Before
-  public void init() throws IOException {
-
-    baseDir = DelphiUtils.getResource(ROOT_NAME);
-
-    // get all directories
-    File[] dirs = baseDir.listFiles(DelphiUtils.getDirectoryFilter());
-
-    List<File> sourceDirs = new ArrayList<>(dirs.length);
-    List<File> sourceFiles = new ArrayList<>();
-
-    context = SensorContextTester.create(baseDir);
-    delphiProjectHelper = new DelphiProjectHelper(context.config(), context.fileSystem());
-
-    sourceDirs.add(baseDir); // include baseDir
-    DefaultInputDir inputBaseDir = new DefaultInputDir(moduleKey, "");
-    inputBaseDir.setModuleBaseDir(baseDir.toPath());
-
-    //context.fileSystem().add(inputBaseDir);
-    for (File source : baseDir.listFiles(DelphiUtils.getFileFilter())) {
-
-      InputFile baseInputFile = TestInputFileBuilder.create(moduleKey, baseDir, source)
-          .setLanguage(DelphiLanguage.KEY)
-          .setType(InputFile.Type.MAIN)
-          .setContents(DelphiUtils.readFileContent(source, delphiProjectHelper.encoding()))
-          .build();
-
-      sourceFiles.add(source);
-      context.fileSystem().add(baseInputFile);
-    }
-
-    // get all source files from all directories
-    for (File directory : dirs) {
-      File[] files = directory.listFiles(DelphiUtils.getFileFilter());
-
-      for (File sourceFile : files) {
-        DefaultInputFile inputFile = TestInputFileBuilder.create(moduleKey, baseDir, sourceFile)
-            .setLanguage(DelphiLanguage.KEY)
-            .setType(InputFile.Type.MAIN)
-            .setContents(DelphiUtils.readFileContent(sourceFile, delphiProjectHelper.encoding()))
-            .build();
-
-        context.fileSystem().add(inputFile);
-        sourceFiles.add(sourceFile);
-      }
-
-      DefaultInputDir inputDir = new DefaultInputDir(moduleKey,
-          getRelativePath(baseDir, directory.getPath()));
-      inputDir.setModuleBaseDir(baseDir.toPath());
-      //context.fileSystem().add(inputDir);
-      // put all directories to list
-      sourceDirs.add(directory);
-    }
-
-    delphiProject.setSourceFiles(sourceFiles);
-
+  public void init() {
     NewActiveRule complexityRule = new NewActiveRule.Builder()
         .setRuleKey(ComplexityMetrics.RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY)
         .setParam("Threshold", "3")
@@ -138,16 +86,21 @@ public class DelphiSensorTest {
         .setLanguage(DelphiLanguage.KEY)
         .build();
 
+    NewActiveRule unusedUnitRule = new NewActiveRule.Builder()
+        .setRuleKey(DeadCodeMetrics.RULE_KEY_UNUSED_UNIT)
+        .setLanguage(DelphiLanguage.KEY)
+        .build();
+
     activeRules = new ActiveRulesBuilder()
         .addRule(complexityRule)
         .addRule(unusedFunctionRule)
+        .addRule(unusedUnitRule)
         .build();
-
-    sensor = new DelphiSensor(delphiProjectHelper, activeRules, context);
   }
 
   @Test
-  public void testDescribeTest() {
+  public void testDescribeTest() throws IOException {
+    setupProject(EMPTY_PROJECT);
     DefaultSensorDescriptor sensorDescriptor = new DefaultSensorDescriptor();
     sensor.describe(sensorDescriptor);
     assertEquals("Combined LCOV and LOC sensor", sensorDescriptor.name());
@@ -156,18 +109,17 @@ public class DelphiSensorTest {
   }
 
   @Test
-  @Ignore // TODO: Reactive dead code metric
-  public void testExecuteTest() {
+  public void testExecuteTest() throws IOException  {
+    setupProject(SIMPLE_PROJECT);
     sensor.execute(context);
 
-    assertEquals(12, context.allIssues().size());
-
-    // create a map of expected values for each file
-    Map<String, Map<String, String>> expectedValues = new HashMap<>();
+    assertEquals(19, context.allIssues().size());
 
     // xml file for expected metrics for files
-    ProjectMetricsXMLParser xmlParser = new ProjectMetricsXMLParser(
-        new File(baseDir.getAbsolutePath() + File.separator + "values.xml"));
+    File metricsFile = DelphiUtils.getResource(SIMPLE_PROJECT_METRICS);
+    ProjectMetricsXMLParser xmlParser = new ProjectMetricsXMLParser(metricsFile);
+    Map<String, Map<String, String>> expectedValues = new HashMap<>();
+
     for (String fileName : xmlParser.getFileNames()) {
       expectedValues.put(fileName.toLowerCase(), xmlParser.getFileValues(fileName));
     }
@@ -177,6 +129,7 @@ public class DelphiSensorTest {
       if (expectedValues.containsKey(fileName) && DelphiUtils.acceptFile(fileName)) {
         Map<String, String> fileExpectedValues = expectedValues.get(fileName);
         Collection<Measure> measures = context.measures(file.key());
+
         for (Measure measure : measures) {
           String metricName = measure.metric().key();
           String expectedValue = fileExpectedValues.get(metricName);
@@ -188,24 +141,71 @@ public class DelphiSensorTest {
   }
 
   @Test
-  @Ignore
-  public void testAnalyseWithEmptySourceFiles() {
-    delphiProject.getSourceFiles().clear();
-//    sensor.execute(context);
+  public void testAnalyseWithNoSourceFiles() throws IOException {
+    setupProject(EMPTY_PROJECT);
+    sensor.execute(context);
   }
 
   @Test
-  @Ignore
-  public void testAnalyseWithBadSourceFileSyntax() {
-    delphiProject.getSourceFiles().clear();
-    delphiProject.getSourceFiles().add(new File(baseDir + "/Globals.pas"));
-    delphiProject.getSourceFiles().add(new File(baseDir + "/../BadSyntax.pas"));
-//    sensor.execute(context);
+  public void testAnalyseWithBadSourceFileSyntax() throws IOException {
+    setupProject(BAD_PROJECT);
+    sensor.execute(context);
 
-    //assertThat("processed files", sensor.getProcessedFilesCount(), is(1));
-    //assertThat("units", sensor.getUnits(), hasSize(1));
-    //assertThat("file classes", sensor.getFileClasses().size(), is(1));
-    //assertThat("file functions", sensor.getFileFunctions().size(), is(1));
+    assertThat("processed files", sensor.getProcessedFilesCount(), is(1));
+    assertThat("units", sensor.getUnits(), hasSize(1));
+    assertThat("file classes", sensor.getFileClasses().size(), is(1));
+    assertThat("file functions", sensor.getFileFunctions().size(), is(1));
   }
 
+  private void setupProject(String projectPath) throws IOException {
+    File baseDir = DelphiUtils.getResource(projectPath);
+    context = SensorContextTester.create(baseDir);
+    DelphiProjectHelper delphiProjectHelper = new DelphiProjectHelper(context.config(),
+        context.fileSystem());
+    sensor = new DelphiSensor(delphiProjectHelper, activeRules, context);
+
+    DefaultInputDir inputBaseDir = new DefaultInputDir(MODULE_KEY, "");
+    inputBaseDir.setModuleBaseDir(baseDir.toPath());
+    List<File> sourceFiles = new ArrayList<>();
+
+    File[] baseDirFiles = baseDir.listFiles(DelphiUtils.getFileFilter());
+    assertNotNull(baseDirFiles);
+
+    for (File source : baseDirFiles) {
+      InputFile baseInputFile = TestInputFileBuilder.create(MODULE_KEY, baseDir, source)
+          .setLanguage(DelphiLanguage.KEY)
+          .setType(InputFile.Type.MAIN)
+          .setContents(DelphiUtils.readFileContent(source, delphiProjectHelper.encoding()))
+          .build();
+
+      sourceFiles.add(source);
+      context.fileSystem().add(baseInputFile);
+    }
+
+    File[] dirs = baseDir.listFiles(DelphiUtils.getDirectoryFilter());
+    assertNotNull(dirs);
+
+    // get all source files from all directories
+    for (File directory : dirs) {
+      File[] dirFiles = directory.listFiles(DelphiUtils.getFileFilter());
+      assertNotNull(dirFiles);
+
+      for (File sourceFile : dirFiles) {
+        DefaultInputFile inputFile = TestInputFileBuilder.create(MODULE_KEY, baseDir, sourceFile)
+            .setLanguage(DelphiLanguage.KEY)
+            .setType(InputFile.Type.MAIN)
+            .setContents(DelphiUtils.readFileContent(sourceFile, delphiProjectHelper.encoding()))
+            .build();
+
+        context.fileSystem().add(inputFile);
+        sourceFiles.add(sourceFile);
+      }
+
+      DefaultInputDir inputDir = new DefaultInputDir(MODULE_KEY,
+          getRelativePath(baseDir, directory.getPath()));
+      inputDir.setModuleBaseDir(baseDir.toPath());
+    }
+
+    delphiProject.setSourceFiles(sourceFiles);
+  }
 }

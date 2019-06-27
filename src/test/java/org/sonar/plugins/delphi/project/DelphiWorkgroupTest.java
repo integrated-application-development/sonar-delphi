@@ -31,7 +31,7 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiWorkgroupTest {
 
-  private static String XML_FILE = "/org/sonar/plugins/delphi/SimpleDelphiProject/dproj/workgroup/All.groupproj";
+  private static final String XML_FILE = "/org/sonar/plugins/delphi/projects/SimpleProject/dproj/workgroup/All.groupproj";
   private DelphiWorkgroup workGroup;
 
   @Before
