@@ -41,19 +41,17 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 public class StatementVerifierTest {
 
   private static final int FILE_COMPLEX_STMT_COUNT = 11;
-  private static final int FILE_STATEMENT_LINES[] = {27, 34, 41, 44, 50, 50, 51, 51, 52, 52, 59, 60,
-      61, 63, 63, 64,
-      64, 70, 70, 71};
+  private static final int[] FILE_STATEMENT_LINES =
+      {23, 30, 37, 40, 46, 46, 47, 47, 48, 48, 55, 56, 57, 59, 59, 60, 60, 66, 66, 67};
   private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/ComplexityMetricsTest.pas";
 
   private StatementVerifier verifier;
-  private ASTTree ast;
   private CodeTree codeTree;
 
   @Before
   public void setup() {
     File astFile = DelphiUtils.getResource(FILE_NAME);
-    ast = new DelphiAST(astFile);
+    ASTTree ast = new DelphiAST(astFile);
     codeTree = new CodeTree(new CodeNode<>(ast), new CodeNode<>(ast.getChild(0)));
     verifier = new StatementVerifier();
   }
@@ -76,7 +74,7 @@ public class StatementVerifierTest {
           if (verifier.verify(atNode.getNode())) {
 
             StatementInterface statement = verifier.createStatement();
-            //assertEquals(FILE_STATEMENT_LINES[statementCount], statement.getLine());
+            assertEquals(FILE_STATEMENT_LINES[statementCount], statement.getLine());
             ++statementCount;
 
             if (verifier.isComplexStatement()) {

@@ -54,7 +54,6 @@ public class DelphiPmdSensorTest {
   private DelphiPmdSensor sensor;
   private SensorContextTester sensorContext;
   private DelphiProjectHelper delphiProjectHelper;
-  private DelphiPmdProfileExporter profileExporter;
   private ActiveRules rulesProfile;
   private File baseDir;
 
@@ -88,7 +87,6 @@ public class DelphiPmdSensorTest {
         (Answer<InputFile>) invocation -> inputFile);
 
     rulesProfile = mock(ActiveRules.class);
-    profileExporter = mock(DelphiPmdProfileExporter.class);
 
     String fileName = getClass().getResource("/org/sonar/plugins/delphi/pmd/rules.xml").getPath();
     File rulesFile = new File(fileName);
