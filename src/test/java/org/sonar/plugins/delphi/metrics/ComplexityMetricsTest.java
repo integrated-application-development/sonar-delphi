@@ -37,7 +37,6 @@ import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
-import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
@@ -68,10 +67,6 @@ public class ComplexityMetricsTest {
         .build();
 
     activeRules = new ActiveRulesBuilder().addRule(rule).build();
-  }
-
-  private String getRelativePath(File prefix, String fullPath) {
-    return fullPath.substring(prefix.getAbsolutePath().length() + 1);
   }
 
   @Test
@@ -109,17 +104,22 @@ public class ComplexityMetricsTest {
   }
 
   @Test
-  public void testAnalyseListUtils() {
-    // init
+  public void testAnalyseListUtils() throws IOException {
     File testFile = DelphiUtils.getResource(FILE_NAME_LIST_UTILS);
     CodeAnalysisCacheResults.resetCache();
     ASTAnalyzer analyzer = new DelphiASTAnalyzer();
     CodeAnalysisResults results = analyzer.analyze(new DelphiAST(testFile));
 
-    // processing
+    DefaultInputFile inputFile = TestInputFileBuilder
+        .create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, testFile)
+        .setModuleBaseDir(baseDir.toPath())
+        .setLanguage(DelphiLanguage.KEY)
+        .setType(InputFile.Type.MAIN)
+        .setContents(DelphiUtils.readFileContent(testFile, Charset.defaultCharset().name()))
+        .build();
+
     ComplexityMetrics metrics = new ComplexityMetrics(activeRules, sensorContext);
-//    metrics.testAnalyse(new DefaultInputFile("ROOT_KEY_CHANGE_AT_SONARAPI_5","test"),
-//        results.getClasses(), results.getFunctions(), null);
+    metrics.analyse(inputFile, results.getClasses(), results.getFunctions(), null);
   }
 
 }

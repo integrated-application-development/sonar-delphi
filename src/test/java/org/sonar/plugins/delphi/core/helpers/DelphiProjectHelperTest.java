@@ -38,6 +38,7 @@ public class DelphiProjectHelperTest {
   private File baseDir;
 
   //TODO: Add tests
+  // This used to test DelphiProjectHelper.getDirectory(), which no longer exists.
   @Before
   public void setup() {
     currentDir = new File(getClass().getResource("/").getPath());
