@@ -20,39 +20,46 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.antlr.sanitizer;
-
-import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.SourceResolverResults;
+package org.sonar.plugins.delphi.antlr.resolvers;
 
 /**
- * Abstract class for source resolvers, applies chain-of-command design pattern
+ * class holding results for resolvers
  */
-public abstract class SourceResolver {
+public class SourceResolverResults {
 
-  private SourceResolver next;
+  private String fileName;
+  private StringBuilder data;
 
   /**
-   * chain next resolver
+   * ctor
    *
-   * @param successor resolver to chain
-   * @return chained resolver
+   * @param fileName The source code file name
+   * @param data The source code file content
    */
-  public SourceResolver chain(SourceResolver successor) {
-    next = successor;
-    return next;
+  public SourceResolverResults(String fileName, StringBuilder data) {
+    this.data = data;
+    this.fileName = fileName;
   }
 
   /**
-   * resolves
-   *
-   * @param results Class to holding results for resolvers
+   * @return string data
    */
-  public void resolve(SourceResolverResults results) {
-    doResolve(results);
-    if (next != null) {
-      next.resolve(results);
-    }
+  public StringBuilder getFileData() {
+    return data;
   }
 
-  protected abstract void doResolve(SourceResolverResults results);
+  /**
+   * sets new file data
+   *
+   * @param newData new data to set
+   */
+  public void setFileData(StringBuilder newData) {
+    data = newData;
+  }
+
+
+  public String getFileName() {
+    return fileName;
+  }
+
 }

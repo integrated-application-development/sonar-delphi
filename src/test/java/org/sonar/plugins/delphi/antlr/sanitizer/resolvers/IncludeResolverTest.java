@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.sonar.plugins.delphi.antlr.resolvers.IncludeResolver;
+import org.sonar.plugins.delphi.antlr.resolvers.SourceResolverResults;
 import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
 public class IncludeResolverTest extends FileTestsCommon {

@@ -43,7 +43,8 @@ import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
-import org.sonar.plugins.delphi.antlr.sanitizer.DelphiSourceSanitizer;
+import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStream;
+import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -54,7 +55,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
 
   private String fileName;
   private boolean isError;
-  private DelphiSourceSanitizer fileStream;
+  private DelphiFileStream fileStream;
   private String[] codeLines;
 
   private static class FileReadFailException extends RuntimeException {
@@ -72,27 +73,26 @@ public class DelphiAST extends CommonTree implements ASTTree {
   }
 
   /**
-   * Constructor.
+   * Constructor with default values for fileStreamConfig. Used for tests
    *
    * @param file Input file from which to read data for AST tree
    */
   public DelphiAST(File file) {
-    this(file, null);
+    this(file, new DelphiFileStreamConfig());
   }
 
   /**
    * Constructor.
    *
    * @param file Input file from which to read data for AST tree
-   * @param encoding Encoding to use
+   * @param fileStreamConfig Configures the DelphiFileStream which is fed to the lexer
    */
-  public DelphiAST(File file, String encoding) {
+  public DelphiAST(File file, DelphiFileStreamConfig fileStreamConfig) {
     try {
-      fileStream = new DelphiSourceSanitizer(file.getAbsolutePath(), encoding);
+      fileStream = new DelphiFileStream(file.getAbsolutePath(), fileStreamConfig);
     } catch (IOException e) {
       throw new FileReadFailException("Failed to read file " + file.getAbsolutePath(), e);
     }
-
     DelphiParser parser = new DelphiParser(new TokenRewriteStream(new DelphiLexer(fileStream)));
     parser.setTreeAdaptor(new DelphiTreeAdaptor(this));
     try {

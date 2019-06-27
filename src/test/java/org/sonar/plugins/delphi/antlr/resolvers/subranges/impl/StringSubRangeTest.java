@@ -20,19 +20,36 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.antlr.sanitizer.resolvers.exceptions;
+package org.sonar.plugins.delphi.antlr.resolvers.subranges.impl;
 
-/**
- * DefineResolver exception
- */
-public class DefineResolverException extends Exception {
-  /**
-   * ctor
-   *
-   * @param msg Error message
-   */
-  public DefineResolverException(String msg) {
-    super(msg);
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRange;
+
+public class StringSubRangeTest {
+
+  private SubRange range;
+  private String str;
+
+  @Before
+  public void setup() {
+    str = "!This is a test string!";
+    range = new StringSubRange(0, str.length(), str);
+  }
+
+  @Test
+  public void testToString() {
+    assertEquals("[0, 23] !This is a test string!", range.toString());
+
+    range.setBegin(0);
+    range.setEnd(10);
+    assertEquals("[0, 10] !This is a", range.toString());
+
+    range.setEnd(15);
+    range.setBegin(11);
+    assertEquals("[11, 15] test", range.toString());
   }
 
 }

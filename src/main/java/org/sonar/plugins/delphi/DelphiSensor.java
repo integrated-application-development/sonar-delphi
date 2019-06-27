@@ -37,6 +37,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 import org.antlr.runtime.Token;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.rule.ActiveRules;
@@ -51,7 +52,8 @@ import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.DelphiASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
-import org.sonar.plugins.delphi.antlr.sanitizer.DelphiSourceSanitizer;
+import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStream;
+import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 import org.sonar.plugins.delphi.codecoverage.DelphiCodeCoverageParser;
 import org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
@@ -80,6 +82,7 @@ public class DelphiSensor implements Sensor {
   private Map<InputFile, List<FunctionInterface>> fileFunctions = new HashMap<>();
   private Set<UnitInterface> units = new HashSet<>();
   private final List<File> excluded;
+  private DelphiFileStreamConfig fileStreamConfig;
 
   private final DelphiProjectHelper delphiProjectHelper;
   private final BasicMetrics basicMetrics;
@@ -111,16 +114,26 @@ public class DelphiSensor implements Sensor {
   /*
    * The actual sensor code.
    */
-  public void execute(SensorContext context) {
+  public void execute(@NonNull SensorContext context) {
     DelphiPlugin.LOG.info("Delphi sensor execute...");
     List<DelphiProject> projects = delphiProjectHelper.getProjects();
     for (DelphiProject delphiProject : projects) {
+      setupFileStreamConfig(delphiProject);
       addCoverage(context);
       CodeAnalysisCacheResults.resetCache();
       parseFiles(delphiProject);
-
       processFiles(context);
     }
+  }
+
+  private void setupFileStreamConfig(DelphiProject delphiProject) {
+    String encoding = delphiProjectHelper.encoding();
+    List<File> includedDirs = delphiProject.getIncludeDirectories();
+    List<String> definitions = delphiProject.getDefinitions();
+    boolean extendIncludes = delphiProjectHelper.shouldExtendIncludes();
+
+    fileStreamConfig = new DelphiFileStreamConfig(
+        encoding, includedDirs, definitions, extendIncludes);
   }
 
   private void addCoverage(SensorContext context) {
@@ -148,14 +161,13 @@ public class DelphiSensor implements Sensor {
   }
 
   private boolean canTokenize(String fileName) {
-    Set<String> includedFiles = DelphiSourceSanitizer.getIncludedFiles();
-    return !includedFiles.contains(fileName) && !delphiProjectHelper.isExcluded(fileName, excluded);
+    return !delphiProjectHelper.isExcluded(fileName, excluded);
   }
 
   private void doTokenize(SensorContext context, InputFile inputFile) {
     try {
       String fileName = DelphiUtils.uriToAbsolutePath(inputFile.uri());
-      DelphiLexer lexer = new DelphiLexer(new DelphiSourceSanitizer(fileName));
+      DelphiLexer lexer = new DelphiLexer(new DelphiFileStream(fileName, fileStreamConfig));
       Token prevToken = null;
       Token token = lexer.nextToken();
       NewCpdTokens cpdTokens = context.newCpdTokens().onFile(inputFile);
@@ -230,7 +242,7 @@ public class DelphiSensor implements Sensor {
     DelphiPlugin.LOG.info("Done");
   }
 
-  public void processMetric(MetricsInterface metric, InputFile resource) {
+  private void processMetric(MetricsInterface metric, InputFile resource) {
     if (metric.executeOnResource(resource)) {
       metric.analyse(resource, fileClasses.get(resource), fileFunctions.get(resource), units);
       metric.save(resource);
@@ -253,10 +265,6 @@ public class DelphiSensor implements Sensor {
     List<File> includedDirs = delphiProject.getIncludeDirectories();
     List<File> excludedDirs = delphiProjectHelper.getExcludedSources();
     List<File> sourceFiles = delphiProject.getSourceFiles();
-    List<String> definitions = delphiProject.getDefinitions();
-
-    DelphiSourceSanitizer.setIncludeDirectories(includedDirs);
-    DelphiSourceSanitizer.setDefinitions(definitions);
 
     printFileList("Included: ", includedDirs);
     printFileList("Excluded: ", excludedDirs);
@@ -270,7 +278,7 @@ public class DelphiSensor implements Sensor {
 
     ASTAnalyzer analyser = new DelphiASTAnalyzer();
     for (File delphiFile : sourceFiles) {
-      final CodeAnalysisResults results = parseSourceFile(delphiFile, excludedDirs, analyser);
+      final CodeAnalysisResults results = parseSourceFile(delphiFile, analyser);
       if (results != null) {
         units.addAll(results.getCachedUnitsAsList());
       }
@@ -280,9 +288,8 @@ public class DelphiSensor implements Sensor {
     DelphiPlugin.LOG.info("Done");
   }
 
-  private CodeAnalysisResults parseSourceFile(File sourceFile, List<File> excludedDirs,
-      ASTAnalyzer analyzer) {
-    if (delphiProjectHelper.isExcluded(sourceFile, excludedDirs)) {
+  private CodeAnalysisResults parseSourceFile(File sourceFile, ASTAnalyzer analyzer) {
+    if (delphiProjectHelper.isExcluded(sourceFile, delphiProjectHelper.getExcludedSources())) {
       return null;
     }
 
@@ -314,7 +321,7 @@ public class DelphiSensor implements Sensor {
    * @return AST Tree
    */
   private CodeAnalysisResults analyseSourceFile(File sourceFile, ASTAnalyzer analyser) {
-    final DelphiAST ast = new DelphiAST(sourceFile, delphiProjectHelper.encoding());
+    final DelphiAST ast = new DelphiAST(sourceFile, fileStreamConfig);
 
     if (ast.isError()) {
       DelphiPlugin.LOG.error("{} {}", "Error while parsing ", sourceFile.getAbsolutePath());

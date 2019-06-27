@@ -20,15 +20,37 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.antlr.sanitizer.subranges;
+package org.sonar.plugins.delphi.antlr.resolvers;
 
 /**
- * comparator class for SubRange, returns which subrange is defined first
+ * Abstract class for source resolvers, applies chain-of-command design pattern
  */
-public class SubRangeFirstOccurenceComparator implements java.util.Comparator<SubRange> {
+public abstract class SourceResolver {
 
-  @Override
-  public int compare(SubRange o1, SubRange o2) {
-    return o1.getBegin() - o2.getBegin();
+  private SourceResolver next;
+
+  /**
+   * chain next resolver
+   *
+   * @param successor resolver to chain
+   * @return chained resolver
+   */
+  public SourceResolver chain(SourceResolver successor) {
+    next = successor;
+    return next;
   }
+
+  /**
+   * resolves
+   *
+   * @param results Class to holding results for resolvers
+   */
+  public void resolve(SourceResolverResults results) {
+    doResolve(results);
+    if (next != null) {
+      next.resolve(results);
+    }
+  }
+
+  protected abstract void doResolve(SourceResolverResults results);
 }

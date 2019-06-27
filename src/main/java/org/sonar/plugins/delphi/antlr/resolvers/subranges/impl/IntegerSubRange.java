@@ -20,9 +20,9 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl;
+package org.sonar.plugins.delphi.antlr.resolvers.subranges.impl;
 
-import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRange;
+import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRange;
 
 /**
  * Class used for checking, if provided value is in specified range. Used to parse quotes, comments

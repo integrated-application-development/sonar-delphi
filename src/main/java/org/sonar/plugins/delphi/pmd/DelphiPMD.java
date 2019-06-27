@@ -36,6 +36,7 @@ import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 
 /**
  * Preforms PMD check for Delphi source files
@@ -50,9 +51,10 @@ public class DelphiPMD {
    * @param pmdFile input source file
    * @param ruleSets set of rules to process against the file
    * @param ctx context in which PMD is operating. This contains the Renderer and whatnot
-   * @param encoding Encoding to use
+   * @param fileStreamConfig configures the filestream that creates the AST
    */
-  public void processFile(File pmdFile, RuleSets ruleSets, RuleContext ctx, String encoding) {
+  public void processFile(File pmdFile, RuleSets ruleSets, RuleContext ctx,
+      DelphiFileStreamConfig fileStreamConfig) {
     ctx.setSourceCodeFile(pmdFile);
     ctx.setReport(report);
 
@@ -61,7 +63,7 @@ public class DelphiPMD {
       Language language = LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME);
       ctx.setLanguageVersion(language.getDefaultVersion());
 
-      DelphiAST ast = new DelphiAST(pmdFile, encoding);
+      DelphiAST ast = new DelphiAST(pmdFile, fileStreamConfig);
       if (ast.isError()) {
         throw new ParseException("grammar error");
       }

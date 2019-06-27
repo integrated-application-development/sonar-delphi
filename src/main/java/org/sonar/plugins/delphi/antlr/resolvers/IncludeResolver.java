@@ -20,7 +20,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
+package org.sonar.plugins.delphi.antlr.resolvers;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,11 +30,10 @@ import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveFactory;
 import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveFactorySyntaxException;
-import org.sonar.plugins.delphi.antlr.sanitizer.SourceResolver;
-import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.exceptions.IncludeResolverException;
-import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRange;
-import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRangeFirstOccurenceComparator;
-import org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl.ReplacementSubRange;
+import org.sonar.plugins.delphi.antlr.resolvers.exceptions.IncludeResolverException;
+import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRange;
+import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRangeFirstOccurenceComparator;
+import org.sonar.plugins.delphi.antlr.resolvers.subranges.impl.ReplacementSubRange;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 /**

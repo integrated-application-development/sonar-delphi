@@ -20,7 +20,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
+package org.sonar.plugins.delphi.antlr.resolvers;
 
 import java.util.List;
 import java.util.Set;
@@ -30,14 +30,12 @@ import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveFactory;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
 import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveFactorySyntaxException;
 import org.sonar.plugins.delphi.antlr.directives.impl.IfDefDirective;
-import org.sonar.plugins.delphi.antlr.sanitizer.SourceResolver;
-import org.sonar.plugins.delphi.antlr.sanitizer.resolvers.exceptions.DefineResolverException;
-import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRange;
-import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRangeAggregator;
-import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRangeFirstOccurenceComparator;
-import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRangeMergingAggregator;
-import org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl.IntegerSubRange;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.sonar.plugins.delphi.antlr.resolvers.exceptions.DefineResolverException;
+import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRange;
+import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRangeAggregator;
+import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRangeFirstOccurenceComparator;
+import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRangeMergingAggregator;
+import org.sonar.plugins.delphi.antlr.resolvers.subranges.impl.IntegerSubRange;
 
 /**
  * Resolves defines in a given file, cuts out the unwanted definitions

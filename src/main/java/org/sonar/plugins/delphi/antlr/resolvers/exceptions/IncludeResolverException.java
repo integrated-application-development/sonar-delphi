@@ -20,55 +20,25 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.antlr.sanitizer.subranges;
+package org.sonar.plugins.delphi.antlr.resolvers.exceptions;
 
 /**
- * Sub range interface
+ * Include resolver exception
  */
-public interface SubRange {
+public class IncludeResolverException extends Exception {
+  /**
+   * default ctor with no message
+   */
+  public IncludeResolverException() {
+    super();
+  }
 
   /**
-   * Checks if value is in range
+   * ctor
    *
-   * @param value Value to check
-   * @return True if value &gt;= begin &nbsp;&nbsp; value &lt;= end, false otherwise
+   * @param msg Error message
    */
-  boolean inRange(int value);
-
-  /**
-   * Checks if range is in scope of current range
-   *
-   * @param range Range to check
-   * @return True if range includes itself in current range, false otherwise
-   */
-  boolean inRange(SubRange range);
-
-  /**
-   * Get beginning of the range
-   *
-   * @return Beggining of the range
-   */
-  int getBegin();
-
-  /**
-   * Get the end of the range
-   *
-   * @return End of the range
-   */
-  int getEnd();
-
-  /**
-   * sets end
-   *
-   * @param value new end value
-   */
-  void setEnd(int value);
-
-  /**
-   * sets begin
-   *
-   * @param value new begin value
-   */
-  void setBegin(int value);
-
+  public IncludeResolverException(String msg) {
+    super(msg);
+  }
 }
