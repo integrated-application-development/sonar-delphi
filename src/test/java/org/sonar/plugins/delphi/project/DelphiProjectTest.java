@@ -34,8 +34,8 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiProjectTest {
 
-  private static String XML_FILE = "/org/sonar/plugins/delphi/SimpleDelphiProject/dproj/SimpleDelphiProject.dproj";
-  private static String INC_DIR = "/org/sonar/plugins/delphi/SimpleDelphiProject/includes1";
+  private static final String XML_FILE = "/org/sonar/plugins/delphi/projects/SimpleProject/dproj/SimpleDelphiProject.dproj";
+  private static final String INC_DIR = "/org/sonar/plugins/delphi/projects/SimpleProject/includes1";
 
   private DelphiProject project;
 
