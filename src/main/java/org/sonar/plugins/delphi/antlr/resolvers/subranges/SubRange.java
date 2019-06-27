@@ -20,49 +20,55 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
-
-import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRangeAggregator;
-import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRangeMergingAggregator;
+package org.sonar.plugins.delphi.antlr.resolvers.subranges;
 
 /**
- * class holding results for resolvers
+ * Sub range interface
  */
-public class SourceResolverResults {
-
-  private String fileName;
-  private StringBuilder data;
+public interface SubRange {
 
   /**
-   * ctor
+   * Checks if value is in range
    *
-   * @param fileName The source code file name
-   * @param data The source code file content
+   * @param value Value to check
+   * @return True if value &gt;= begin &nbsp;&nbsp; value &lt;= end, false otherwise
    */
-  public SourceResolverResults(String fileName, StringBuilder data) {
-    this.data = data;
-    this.fileName = fileName;
-  }
+  boolean inRange(int value);
 
   /**
-   * @return string data
-   */
-  public StringBuilder getFileData() {
-    return data;
-  }
-
-  /**
-   * sets new file data
+   * Checks if range is in scope of current range
    *
-   * @param newData new data to set
+   * @param range Range to check
+   * @return True if range includes itself in current range, false otherwise
    */
-  public void setFileData(StringBuilder newData) {
-    data = newData;
-  }
+  boolean inRange(SubRange range);
 
+  /**
+   * Get beginning of the range
+   *
+   * @return Beggining of the range
+   */
+  int getBegin();
 
-  public String getFileName() {
-    return fileName;
-  }
+  /**
+   * Get the end of the range
+   *
+   * @return End of the range
+   */
+  int getEnd();
+
+  /**
+   * sets end
+   *
+   * @param value new end value
+   */
+  void setEnd(int value);
+
+  /**
+   * sets begin
+   *
+   * @param value new begin value
+   */
+  void setBegin(int value);
 
 }

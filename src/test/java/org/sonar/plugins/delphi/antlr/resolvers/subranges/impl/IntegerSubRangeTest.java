@@ -20,7 +20,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl;
+package org.sonar.plugins.delphi.antlr.resolvers.subranges.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRange;
+import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRange;
 
 public class IntegerSubRangeTest {
 

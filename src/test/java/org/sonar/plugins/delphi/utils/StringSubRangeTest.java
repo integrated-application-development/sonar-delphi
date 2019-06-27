@@ -25,7 +25,7 @@ package org.sonar.plugins.delphi.utils;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl.StringSubRange;
+import org.sonar.plugins.delphi.antlr.resolvers.subranges.impl.StringSubRange;
 
 public class StringSubRangeTest {
 

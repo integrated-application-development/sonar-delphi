@@ -42,6 +42,7 @@ import net.sourceforge.pmd.lang.ast.ParseException;
 import net.sourceforge.pmd.renderers.Renderer;
 import net.sourceforge.pmd.renderers.XMLRenderer;
 import org.apache.commons.io.FileUtils;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.rule.ActiveRules;
@@ -51,6 +52,7 @@ import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.pmd.profile.DelphiRuleSets;
@@ -74,6 +76,7 @@ public class DelphiPmdSensor implements Sensor {
   private final List<String> errors = new ArrayList<>();
   private final ActiveRules rulesProfile;
   private int issueHighlightingErrors;
+  private DelphiFileStreamConfig fileStreamConfig;
 
   /**
    * C-tor
@@ -176,7 +179,7 @@ public class DelphiPmdSensor implements Sensor {
    * The actual sensor code.
    */
   @Override
-  public void execute(SensorContext context) {
+  public void execute(@NonNull SensorContext context) {
     DelphiPlugin.LOG.info("PMD sensor.execute");
     parsePMDreport(createPmdReport());
   }
@@ -219,6 +222,7 @@ public class DelphiPmdSensor implements Sensor {
       List<DelphiProject> projects = delphiProjectHelper.getProjects();
 
       for (DelphiProject delphiProject : projects) {
+        setupFileStreamConfig(delphiProject);
         createPmdReport(delphiProject, pmd, ruleContext, ruleSets);
       }
 
@@ -227,6 +231,16 @@ public class DelphiPmdSensor implements Sensor {
       DelphiPlugin.LOG.error("Failed to generate PMD report file: ", e);
       return null;
     }
+  }
+
+  private void setupFileStreamConfig(DelphiProject delphiProject) {
+    List<File> includedDirs = delphiProject.getIncludeDirectories();
+    List<String> definitions = delphiProject.getDefinitions();
+    String encoding = delphiProjectHelper.encoding();
+    boolean extendIncludes = delphiProjectHelper.shouldExtendIncludes();
+
+    fileStreamConfig = new DelphiFileStreamConfig(
+        encoding, includedDirs, definitions, extendIncludes);
   }
 
   private void createPmdReport(DelphiProject delphiProject, DelphiPMD pmd, RuleContext ruleContext,
@@ -248,7 +262,7 @@ public class DelphiPmdSensor implements Sensor {
   private void processPmdParse(DelphiPMD pmd, RuleContext ruleContext, RuleSets ruleSets,
       File pmdFile) {
     try {
-      pmd.processFile(pmdFile, ruleSets, ruleContext, delphiProjectHelper.encoding());
+      pmd.processFile(pmdFile, ruleSets, ruleContext, fileStreamConfig);
     } catch (ParseException e) {
       String errorMsg = "PMD error while parsing " + pmdFile.getAbsolutePath() + ": "
           + e.getMessage();

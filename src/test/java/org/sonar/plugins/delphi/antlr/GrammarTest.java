@@ -28,8 +28,9 @@ import static org.junit.Assert.assertFalse;
 import java.io.File;
 import java.io.IOException;
 import org.junit.Test;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
-import org.sonar.plugins.delphi.antlr.sanitizer.DelphiSourceSanitizer;
+import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class GrammarTest {
@@ -50,7 +51,7 @@ public class GrammarTest {
         File.createTempFile(name, "").getParentFile().getAbsolutePath() + File.separatorChar
             + "AST_" + name + ".xml";
     ast.generateXML(outputFileName);
-    System.out.println("Generated AST XML file at " + outputFileName);
+    DelphiPlugin.LOG.info("Generated AST XML file at " + outputFileName);
   }
 
   @Test
@@ -186,8 +187,6 @@ public class GrammarTest {
   public void testUndefinedInaccessibleNestedIfDef() throws IOException {
     fileStreamConfig.getDefinitions().add("Defined");
     parseFile("UndefinedInaccessibleNestedIfDef.pas");
-
-    definitions.clear();
-    DelphiSourceSanitizer.setDefinitions(definitions);
+    fileStreamConfig.getDefinitions().clear();
   }
 }

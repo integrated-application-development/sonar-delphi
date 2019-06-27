@@ -20,25 +20,19 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.antlr.sanitizer.resolvers.exceptions;
+package org.sonar.plugins.delphi.antlr.resolvers.exceptions;
 
 /**
- * Include resolver exception
+ * DefineResolver exception
  */
-public class IncludeResolverException extends Exception {
-  /**
-   * default ctor with no message
-   */
-  public IncludeResolverException() {
-    super();
-  }
-
+public class DefineResolverException extends Exception {
   /**
    * ctor
    *
    * @param msg Error message
    */
-  public IncludeResolverException(String msg) {
+  public DefineResolverException(String msg) {
     super(msg);
   }
+
 }

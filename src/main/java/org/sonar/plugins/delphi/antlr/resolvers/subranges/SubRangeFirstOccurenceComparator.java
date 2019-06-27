@@ -20,36 +20,15 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.antlr.sanitizer.subranges.impl;
+package org.sonar.plugins.delphi.antlr.resolvers.subranges;
 
-import static org.junit.Assert.assertEquals;
+/**
+ * comparator class for SubRange, returns which subrange is defined first
+ */
+public class SubRangeFirstOccurenceComparator implements java.util.Comparator<SubRange> {
 
-import org.junit.Before;
-import org.junit.Test;
-import org.sonar.plugins.delphi.antlr.sanitizer.subranges.SubRange;
-
-public class StringSubRangeTest {
-
-  private SubRange range;
-  private String str;
-
-  @Before
-  public void setup() {
-    str = "!This is a test string!";
-    range = new StringSubRange(0, str.length(), str);
+  @Override
+  public int compare(SubRange o1, SubRange o2) {
+    return o1.getBegin() - o2.getBegin();
   }
-
-  @Test
-  public void testToString() {
-    assertEquals("[0, 23] !This is a test string!", range.toString());
-
-    range.setBegin(0);
-    range.setEnd(10);
-    assertEquals("[0, 10] !This is a", range.toString());
-
-    range.setEnd(15);
-    range.setBegin(11);
-    assertEquals("[11, 15] test", range.toString());
-  }
-
 }
