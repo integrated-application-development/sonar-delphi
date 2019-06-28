@@ -49,19 +49,14 @@ public class CalledFunctionVerifier {
   public CalledFunctionVerifier(CodeAnalysisResults results) {
     if (results == null) {
       throw new IllegalArgumentException(
-          "CalledFunctionVeifyer ctor param 'results' cannot be null.");
+          "CalledFunctionVerifier constructor param 'results' cannot be null.");
     }
     this.results = results;
   }
 
   public boolean verify(Tree node) {
-    CommonTree nextNode = (CommonTree) node.getParent().getChild(node.getChildIndex() + 1);
-
     // if we are on a ident token and it is not last
-    if (node.getType() == LexerMetrics.IDENT.toMetrics()
-        && nextNode != null
-        && (nextNode.getType() == LexerMetrics.LPAREN.toMetrics()
-        || nextNode.getType() == LexerMetrics.SEMI.toMetrics())) {
+    if (looksLikeFunctionCall(node)) {
       String functionName = node.getText().toLowerCase();
       List<UnitInterface> unitsToLook = new ArrayList<>();
       // first we look in current unit for function reference
@@ -69,25 +64,40 @@ public class CalledFunctionVerifier {
       unitsToLook.addAll(results.getActiveUnit().getIncludedUnits(results.getCachedUnits()));
 
       for (UnitInterface unit : unitsToLook) {
-        FunctionInterface[] functions = unit.getAllFunctions();
-        for (FunctionInterface func : functions) {
-          if (func.getShortName().equalsIgnoreCase(functionName)) {
-            calledFunction = func;
-            isUnresolved = false;
-            return true;
-          }
+        if (resolveFunction(functionName, unit)) {
+          return true;
         }
       }
 
       // create a new unresolved function
       calledFunction = new DelphiFunction(node.getText().toLowerCase());
-      // no function found, but this was a function call
       isUnresolved = true;
-      // so we return true
       return true;
     }
 
     // not a function call (not like "foo(args);" or "foo;"
+    //huh? This is not a good approach. What about "MyVar := FunctionWithoutArguments + 3;"?
+    return false;
+  }
+
+  private boolean looksLikeFunctionCall(Tree node) {
+    CommonTree nextNode = (CommonTree) node.getParent().getChild(node.getChildIndex() + 1);
+
+    return node.getType() == LexerMetrics.IDENT.toMetrics()
+        && nextNode != null
+        && (nextNode.getType() == LexerMetrics.LPAREN.toMetrics()
+        || nextNode.getType() == LexerMetrics.SEMI.toMetrics());
+  }
+
+  private boolean resolveFunction(String functionName, UnitInterface unit) {
+    FunctionInterface[] functions = unit.getAllFunctions();
+    for (FunctionInterface func : functions) {
+      if (func.getShortName().equalsIgnoreCase(functionName)) {
+        calledFunction = func;
+        isUnresolved = false;
+        return true;
+      }
+    }
     return false;
   }
 
