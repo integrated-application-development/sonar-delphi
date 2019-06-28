@@ -113,7 +113,7 @@ public class StatementVerifier {
       return false;
     }
     int childIndex = node.getChildIndex();
-    if (childIndex <= statementIndex.peek()) {
+    if (!statementIndex.isEmpty() && childIndex <= statementIndex.peek()) {
       // optimization
       return false;
     }
