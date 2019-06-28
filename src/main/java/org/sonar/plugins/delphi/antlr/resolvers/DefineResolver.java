@@ -83,8 +83,7 @@ public class DefineResolver extends SourceResolver {
   }
 
   private SubRangeAggregator processCompilerDirectives(List<CompilerDirective> directives,
-      Set<String> defines)
-      throws DefineResolverException {
+      Set<String> defines) {
     SubRangeMergingAggregator toDelete = new SubRangeMergingAggregator();
 
     for (int i = 0; i < directives.size(); ++i) {
@@ -111,8 +110,7 @@ public class DefineResolver extends SourceResolver {
   }
 
   private SubRange[] getMatchingEndIfCutRange(List<CompilerDirective> directives,
-      int startDirectiveIndex,
-      boolean shouldCut) throws DefineResolverException {
+      int startDirectiveIndex, boolean shouldCut) {
     CompilerDirective firstDirective = directives.get(startDirectiveIndex);
     CompilerDirective lastDirective = null;
     CompilerDirective elseDirective = null;
@@ -192,7 +190,7 @@ public class DefineResolver extends SourceResolver {
       return new SubRange[]{new IntegerSubRange(cutStart, cutEnd)};
     }
 
-    return null;
+    return new SubRange[0];
   }
 
   private void commentUnwantedDefinitions(StringBuilder str, SubRangeAggregator toComment) {

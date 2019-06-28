@@ -80,7 +80,7 @@ public class DelphiProjectTest {
   }
 
   @Test
-  public void testParseFile() throws IllegalArgumentException {
+  public void testParseFile() throws Exception {
     project = new DelphiProject(DelphiUtils.getResource(XML_FILE));
 
     assertEquals("Simple Delphi Product", project.getName());

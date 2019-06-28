@@ -153,8 +153,7 @@ public class IncludeResolver extends SourceResolver {
     return newData;
   }
 
-  private File resolveIncludeFile(String fileName, String directory, List<File> includes)
-      throws IncludeResolverException {
+  private File resolveIncludeFile(String fileName, String directory, List<File> includes) {
     File resolved = getExistingFile(directory, fileName);
     if (resolved != null) {
       return resolved;
@@ -162,8 +161,7 @@ public class IncludeResolver extends SourceResolver {
     return resolveIncludeFile(fileName, includes);
   }
 
-  private File resolveIncludeFile(String fileName, List<File> directories)
-      throws IncludeResolverException {
+  private File resolveIncludeFile(String fileName, List<File> directories) {
     for (File dir : directories) {
       DelphiPlugin.LOG
           .debug("Trying to include {}{}{}", dir.getAbsolutePath(), File.separator, fileName);

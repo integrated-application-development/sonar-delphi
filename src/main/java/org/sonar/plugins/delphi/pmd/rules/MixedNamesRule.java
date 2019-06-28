@@ -32,7 +32,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
  * Rule that checks if you are using function/variables names correctly, that is you don't misspell
- * them, example: <code>var xyz: integer; begin xyz := 1;	//OK xYZ := 2;	//BAD end;</code>
+ * them, example: <code>var xyz: integer; begin xyz := 1; //OK xYZ := 2; //BAD end;</code>
  *
  * @author SG0214809
  */
@@ -55,32 +55,56 @@ public class MixedNamesRule extends DelphiRule {
     int type = node.getType();
     switch (type) {
       case DelphiLexer.IMPLEMENTATION:
-        onInterface = false;
-        typeName = "";
+        handleImplementation();
         break;
+
       case DelphiLexer.TkNewType:
-        typeName = node.getChild(0).getText() + ".";
+        handleNewType(node);
         break;
+
       case DelphiLexer.TkFunctionName:
-        if (onInterface) {
-          functionNames.addAll(buildNames(node, false));
-        } else {
-          checkFunctionNames(node, ctx);
-        }
+        handleFunctionName(node, ctx);
         break;
+
       case DelphiLexer.VAR:
-        if (!onInterface) {
-          variableNames.addAll(buildNames(node.getChild(0), true));
-        }
+        handleVar(node);
         break;
+
       case DelphiLexer.BEGIN:
-        if (!onInterface) {
-          checkVariableNames(node, ctx, true);
-        }
+        handleBegin(node, ctx);
         break;
+
       default:
-        // Not any relevant node
-        break;
+        // Do nothing
+    }
+  }
+
+  private void handleImplementation() {
+    onInterface = false;
+    typeName = "";
+  }
+
+  private void handleNewType(DelphiPMDNode node) {
+    typeName = node.getChild(0).getText() + ".";
+  }
+
+  private void handleFunctionName(DelphiPMDNode node, RuleContext ctx) {
+    if (onInterface) {
+      functionNames.addAll(buildNames(node, false));
+    } else {
+      checkFunctionNames(node, ctx);
+    }
+  }
+
+  private void handleVar(DelphiPMDNode node) {
+    if (!onInterface) {
+      variableNames.addAll(buildNames(node.getChild(0), true));
+    }
+  }
+
+  private void handleBegin(DelphiPMDNode node, RuleContext ctx) {
+    if (!onInterface) {
+      checkVariableNames(node, ctx, true);
     }
   }
 

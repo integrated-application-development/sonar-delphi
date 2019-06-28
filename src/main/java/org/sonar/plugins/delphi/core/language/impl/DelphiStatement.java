@@ -114,7 +114,7 @@ public class DelphiStatement implements StatementInterface {
   @Override
   public ClassFieldInterface[] getFields(ClassInterface fromClass) {
     if (fromClass == null) {
-      return null;
+      return new ClassFieldInterface[0];
     }
     ClassFieldInterface[] fields = fromClass.getFields();
     List<ClassFieldInterface> result = new ArrayList<>();
@@ -122,15 +122,16 @@ public class DelphiStatement implements StatementInterface {
     List<Token> tokens = tokenizer.tokenize(new String[]{text});
 
     for (Token token : tokens) {
-      if (token.getType() == DelphiLexer.TkIdentifier) {
-        for (ClassFieldInterface field : fields) {
-          if (field.getName().equals(token.getText())) {
-            result.add(field);
-          }
+      if (token.getType() != DelphiLexer.TkIdentifier) {
+        continue;
+      }
+      for (ClassFieldInterface field : fields) {
+        if (field.getName().equals(token.getText())) {
+          result.add(field);
         }
       }
     }
-    return result.toArray(new ClassFieldInterface[result.size()]);
+    return result.toArray(new ClassFieldInterface[0]);
   }
 
   /**

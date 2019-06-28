@@ -25,7 +25,7 @@ package org.sonar.plugins.delphi.antlr.directives.exceptions;
 /**
  * Is thrown when we could not generate compiler directive that was supported (implemented)
  */
-public class CompilerDirectiveFactoryUnsupportedDirectiveException extends Exception {
+public class CompilerDirectiveFactoryUnsupportedDirectiveException extends RuntimeException {
   /**
    * ctor
    *

@@ -26,8 +26,6 @@ package org.sonar.plugins.delphi.metrics.basicmetrics;
  * Class for handling custom block comments. Can also count documentation comments.
  */
 public class DelphiCommentHandler extends LineContextHandler {
-
-  private static final int MIN_CHARS_LEFT = 3;
   private StringBuilder currentLineComment;
   private boolean isFirstLineOfComment;
   private boolean isLicenseHeader;
@@ -78,7 +76,9 @@ public class DelphiCommentHandler extends LineContextHandler {
   }
 
   private boolean isDocumentation(StringBuilder pendingLine) {
-    return isDoc && start != -1 && pendingLine.length() >= start + MIN_CHARS_LEFT
+    boolean hasEnoughSpace = start != -1 && pendingLine.length() >= start + 3;
+    return isDoc
+        && hasEnoughSpace
         && pendingLine.charAt(start + 1) == '*'
         && pendingLine.charAt(start + 2) == '*';
   }

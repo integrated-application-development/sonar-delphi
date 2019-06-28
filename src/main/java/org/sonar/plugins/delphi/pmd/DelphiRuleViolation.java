@@ -100,70 +100,94 @@ public class DelphiRuleViolation implements RuleViolation {
     this.filename = ctx.getSourceCodeFile().getAbsolutePath();
     this.description = message;
 
-    if (node != null) {
-      Tree classTypeNode = node.getAncestor(DelphiLexer.TkNewType);
-      if (classTypeNode != null) {
-        Tree classNameNode = classTypeNode.getChild(0);
-        className = classNameNode.getText();
-      } else {
-        className = "";
-      }
-
-      Tree methodNode = node.getAncestor(DelphiLexer.FUNCTION);
-      if (methodNode == null) {
-        methodNode = node.getAncestor(DelphiLexer.PROCEDURE);
-      }
-
-      // look for method from begin...end statements
-      if (methodNode == null) {
-        Tree currentNode = node;
-        Tree beginNode = null;
-        while ((beginNode = currentNode.getAncestor(DelphiLexer.BEGIN)) != null) {
-          Tree parent = beginNode.getParent();
-          currentNode = parent;
-          int index = beginNode.getChildIndex();
-          for (int lookBack = 1; lookBack <= 2; ++lookBack) {
-            if (index - lookBack > -1 && isProcedureOrFunction(
-                parent.getChild(index - lookBack).getType())) {
-              methodNode = parent.getChild(index - lookBack);
-              break;
-            }
-            if (methodNode != null) {
-              break;
-            }
-          }
-        }
-      }
-
-      // gets method name
-      if (methodNode != null) {
-        StringBuilder name = new StringBuilder();
-        Tree nameNode = ((CommonTree) methodNode).getFirstChildWithType(DelphiLexer.TkFunctionName);
-        for (int i = 0; i < nameNode.getChildCount(); ++i) {
-          name.append(nameNode.getChild(i).getText());
-        }
-        methodName = name.toString();
-        if (nameNode.getChildCount() > 1) {
-          // class name from function name
-          className = nameNode.getChild(0).getText();
-        }
-      } else {
-        methodName = "";
-      }
-
-      packageName = "";
-
-      beginLine = node.getBeginLine();
-      endLine = node.getEndLine();
-      beginColumn = node.getBeginColumn();
-      endColumn = node.getEndColumn();
-
-    } else {
+    if (node == null) {
       className = "";
       methodName = "";
       packageName = "";
       filename = "";
+      return;
     }
+
+    Tree classTypeNode = node.getAncestor(DelphiLexer.TkNewType);
+    if (classTypeNode != null) {
+      Tree classNameNode = classTypeNode.getChild(0);
+      className = classNameNode.getText();
+    } else {
+      className = "";
+    }
+
+    Tree methodNode = findMethodNode(node);
+    packageName = "";
+    methodName = "";
+
+    // gets method name
+    if (methodNode != null) {
+      StringBuilder name = new StringBuilder();
+      Tree nameNode = ((CommonTree) methodNode).getFirstChildWithType(DelphiLexer.TkFunctionName);
+      for (int i = 0; i < nameNode.getChildCount(); ++i) {
+        name.append(nameNode.getChild(i).getText());
+      }
+      methodName = name.toString();
+      if (nameNode.getChildCount() > 1) {
+        // class name from function name
+        className = nameNode.getChild(0).getText();
+      }
+    }
+
+    beginLine = node.getBeginLine();
+    endLine = node.getEndLine();
+    beginColumn = node.getBeginColumn();
+    endColumn = node.getEndColumn();
+  }
+
+  private Tree findMethodNode(DelphiPMDNode node) {
+    Tree methodNode = node.getAncestor(DelphiLexer.FUNCTION);
+
+    if (methodNode != null) {
+      return methodNode;
+    }
+
+    methodNode = node.getAncestor(DelphiLexer.PROCEDURE);
+
+    if (methodNode != null) {
+      return methodNode;
+    }
+
+    // look for method from begin...end statements
+    Tree currentNode = node;
+    Tree beginNode = null;
+
+    while (methodNode == null) {
+      beginNode = currentNode.getAncestor(DelphiLexer.BEGIN);
+      if (beginNode == null) {
+        break;
+      }
+
+      currentNode = beginNode.getParent();
+      methodNode = findMethodNodeFromBeginNode(beginNode);
+    }
+
+    return methodNode;
+  }
+
+  private Tree findMethodNodeFromBeginNode(Tree beginNode) {
+    int index = beginNode.getChildIndex();
+    Tree parent = beginNode.getParent();
+    Tree possibleMethodNode;
+    Tree methodNode = null;
+
+    for (int lookBack = 1; lookBack <= 2; ++lookBack) {
+      if (index - lookBack > -1) {
+        possibleMethodNode = parent.getChild(index - lookBack);
+
+        if (isProcedureOrFunction(possibleMethodNode.getType())) {
+          methodNode = possibleMethodNode;
+          break;
+        }
+      }
+    }
+
+    return methodNode;
   }
 
   private boolean isProcedureOrFunction(int type) {

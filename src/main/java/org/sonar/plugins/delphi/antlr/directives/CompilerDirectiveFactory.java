@@ -55,8 +55,7 @@ public class CompilerDirectiveFactory {
    * @return List of compiler directives
    * @throws CompilerDirectiveFactorySyntaxException when syntax exception occurs
    */
-  public List<CompilerDirective> produce(String data)
-      throws CompilerDirectiveFactorySyntaxException {
+  public List<CompilerDirective> produce(String data) {
     List<CompilerDirective> result = new ArrayList<>();
     int directivePos = getDirectiveFirstChar(data, 0);
     while (directivePos > -1) {
@@ -85,9 +84,7 @@ public class CompilerDirectiveFactory {
    * name
    * @throws CompilerDirectiveFactorySyntaxException when no compiler directive could be created
    */
-  public CompilerDirective create(String data, int startPosition, int endPosition)
-      throws CompilerDirectiveFactoryUnsupportedDirectiveException,
-      CompilerDirectiveFactorySyntaxException {
+  public CompilerDirective create(String data, int startPosition, int endPosition) {
     int directiveFirstChar = getDirectiveFirstChar(data, startPosition);
     int directiveLastChar = getDirectiveLastChar(data, startPosition);
     String directiveName = getName(data, directiveFirstChar);
@@ -192,8 +189,7 @@ public class CompilerDirectiveFactory {
     return position != 0 ? data.charAt(position - 1) : ' ';
   }
 
-  private int getDirectiveLastChar(String data, int startPosition)
-      throws CompilerDirectiveFactorySyntaxException {
+  private int getDirectiveLastChar(String data, int startPosition) {
     for (int i = startPosition; i < data.length(); ++i) {
       if (notInsideCommentOrString() && data.charAt(i) == '}') {
         return i;
@@ -214,7 +210,7 @@ public class CompilerDirectiveFactory {
     return insideComment || insideCurlyComment || insideParenComment;
   }
 
-  private String getItem(String data, int startPos) throws CompilerDirectiveFactorySyntaxException {
+  private String getItem(String data, int startPos) {
     int pos = data.indexOf(' ', startPos + 1);
     int endPos = getDirectiveLastChar(data, startPos);
     if (pos > -1 && pos < endPos) {
@@ -223,7 +219,7 @@ public class CompilerDirectiveFactory {
     return "";
   }
 
-  private String getName(String data, int startPos) throws CompilerDirectiveFactorySyntaxException {
+  private String getName(String data, int startPos) {
     if (startPos > -1) {
       int endPos = getDirectiveLastChar(data, startPos);
       int itemPos = data.indexOf(' ', startPos);
