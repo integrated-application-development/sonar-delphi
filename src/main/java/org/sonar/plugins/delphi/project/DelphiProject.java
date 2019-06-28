@@ -23,6 +23,7 @@
 package org.sonar.plugins.delphi.project;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
@@ -54,12 +55,12 @@ public class DelphiProject {
    *
    * @param xml XML file to parse
    */
-  public DelphiProject(File xml) {
-    try {
-      parseFile(xml);
-    } catch (RuntimeException e) {
-      DelphiPlugin.LOG.error("No .dproj file to parse. ({})", e.getMessage(), e);
+  public DelphiProject(File xml) throws IOException {
+    if (xml == null) {
+      throw new IllegalArgumentException("No xml file passed into DelphiProject constructor");
     }
+
+    parseFile(xml);
   }
 
   /**
@@ -121,16 +122,10 @@ public class DelphiProject {
    * Parses xml file to gather data
    *
    * @param xml File to parse
-   * @throws RuntimeException If file not found
    * @throws IllegalArgumentException If file == null
+   * @throws IOException If file is not found
    */
-  private void parseFile(File xml) {
-    if (xml == null) {
-      throw new IllegalArgumentException("No xml file passed");
-    } else if (!xml.exists()) {
-      throw new RuntimeException("Project file not found: " + xml.getAbsolutePath());
-    }
-
+  private void parseFile(File xml) throws IOException {
     file = xml;
     ProjectXmlParser parser = new ProjectXmlParser(file, this);
     parser.parse();

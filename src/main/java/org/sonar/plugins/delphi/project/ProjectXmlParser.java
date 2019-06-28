@@ -61,13 +61,13 @@ public class ProjectXmlParser extends DefaultHandler {
   /**
    * Parses the document
    */
-  public void parse() {
+  public void parse() throws IOException {
     try {
       SAXParserFactory factory = SAXParserFactory.newInstance();
       factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       SAXParser parser = factory.newSAXParser();
       parser.parse(fileName, this);
-    } catch (ParserConfigurationException | SAXException | IOException e) {
+    } catch (ParserConfigurationException | SAXException | RuntimeException e) {
       DelphiPlugin.LOG.error("{}: Error while parsing project file: ", fileName, e);
     }
   }
@@ -80,66 +80,82 @@ public class ProjectXmlParser extends DefaultHandler {
   }
 
   @Override
-  public void startElement(String uri, String localName, String rawName, Attributes attributes)
-      throws SAXException {
+  public void startElement(String uri, String localName, String rawName, Attributes attributes) {
     isReading = false;
-
-    if ("DCCReference".equals(rawName)) {
-      // new source file
-      String path = DelphiUtils.resolveBacktracePath(currentDir, attributes.getValue("Include"));
-      try {
-        project.addFile(path);
-      } catch (RuntimeException e) {
-        throw new SAXException(e);
-      }
-    } else if ("VersionInfoKeys".equals(rawName)) {
-      // project name
-      String name = attributes.getValue("Name");
-      if (name != null && "ProductName".equals(name)) {
+    switch (rawName) {
+      case "DCCReference":
+        handleDCCReferenceStart(attributes);
+        break;
+      case "VersionInfoKeys":
+        handleVersionInfoKeysStart(attributes);
+        break;
+      case "DCC_UnitSearchPath":
         isReading = true;
-      }
-    } else if ("DCC_UnitSearchPath".equals(rawName)) {
-      isReading = true;
-    } else if ("DCC_Define".equals(rawName)) {
-      isReading = true;
+        break;
+      case "DCC_Define":
+        isReading = true;
+        break;
+      default:
+        // Do nothing
     }
-
   }
 
   @Override
-  public void endElement(String uri, String localName, String rawName) throws SAXException {
+  public void endElement(String uri, String localName, String rawName) {
     if (!isReading) {
       return;
     }
 
-    if ("VersionInfoKeys".equals(rawName)) {
-      // add project name
-      project.setName(readData);
-    } else if ("DCC_Define".equals(rawName)) {
-      // add define
-      Iterable<String> defines = Splitter.on(';').split(readData);
-      for (String define : defines) {
-        if (define.startsWith("$") || "DEBUG".equals(define)) {
-          continue;
-        }
-        project.addDefinition(define);
-      }
-    } else if ("DCC_UnitSearchPath".equals(rawName)) {
-      // add include directories
-      Iterable<String> paths = Splitter.on(';').split(readData);
-      for (String path : paths) {
-        if (path.startsWith("$")) {
-          continue;
-        }
-        path = DelphiUtils.resolveBacktracePath(currentDir, path);
-        try {
-          project.addIncludeDirectory(path);
-        } catch (RuntimeException e) {
-          throw new SAXException(e);
-        }
-      }
+    switch (rawName) {
+      case "VersionInfoKeys":
+        handleVersionInfoKeysEnd();
+        break;
+      case "DCC_UnitSearchPath":
+        handleUnitSearchPathEnd();
+        break;
+      case "DCC_Define":
+        handleDefineEnd();
+        break;
+      default:
+        // Do nothing
     }
-
   }
 
+  private void handleDCCReferenceStart(Attributes attributes) {
+    String path = DelphiUtils.resolveBacktracePath(currentDir, attributes.getValue("Include"));
+    project.addFile(path);
+  }
+
+  private void handleVersionInfoKeysStart(Attributes attributes) {
+    String name = attributes.getValue("Name");
+    if ("ProductName".equals(name)) {
+      isReading = true;
+    }
+  }
+
+
+  private void handleVersionInfoKeysEnd() {
+    project.setName(readData);
+  }
+
+  private void handleDefineEnd() {
+    Iterable<String> defines = Splitter.on(';').split(readData);
+    for (String define : defines) {
+      if (define.startsWith("$") || "DEBUG".equals(define)) {
+        continue;
+      }
+      project.addDefinition(define);
+    }
+  }
+
+  private void handleUnitSearchPathEnd() {
+    Iterable<String> paths = Splitter.on(';').split(readData);
+    for (String path : paths) {
+      if (path.startsWith("$")) {
+        continue;
+      }
+      path = DelphiUtils.resolveBacktracePath(currentDir, path);
+      project.addIncludeDirectory(path);
+    }
+  }
 }

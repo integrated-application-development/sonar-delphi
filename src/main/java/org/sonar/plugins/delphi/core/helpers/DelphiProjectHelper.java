@@ -227,10 +227,17 @@ public class DelphiProjectHelper {
    * @return List of DelphiProjects
    */
   private List<DelphiProject> getDprojProject(String dprojPath) {
-    File dprojFile = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), dprojPath);
-    DelphiPlugin.LOG.info("{} {}", ".dproj file found: ", dprojPath);
-    DelphiProject newProject = new DelphiProject(dprojFile);
-    return Collections.singletonList(newProject);
+    try {
+      File dprojFile = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), dprojPath);
+      DelphiPlugin.LOG.info("{} {}", ".dproj file found: ", dprojPath);
+      DelphiProject newProject = new DelphiProject(dprojFile);
+      return Collections.singletonList(newProject);
+    } catch (IOException e) {
+      DelphiPlugin.LOG.error("Failed to create Delphi Workgroup: ", e);
+      DelphiPlugin.LOG.error("Skipping .groupproj reading, default configuration assumed.");
+    }
+
+    return Collections.emptyList();
   }
 
   /**

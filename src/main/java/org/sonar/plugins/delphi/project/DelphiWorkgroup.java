@@ -48,15 +48,13 @@ public class DelphiWorkgroup {
    */
   public DelphiWorkgroup(File xmlFile) throws IOException {
     if (xmlFile == null) {
-      throw new IllegalArgumentException("No .groupproje file provided.");
-    } else if (!xmlFile.exists()) {
-      throw new IOException(".grupproj XML not found:" + xmlFile.getAbsolutePath());
+      throw new IllegalArgumentException("No .groupproj file provided.");
     }
 
     parseFile(xmlFile);
   }
 
-  private void parseFile(File xmlFile) {
+  private void parseFile(File xmlFile) throws IOException {
     DelphiWorkgroupXmlParser parser = new DelphiWorkgroupXmlParser(xmlFile, this);
     parser.parse();
   }
