@@ -23,12 +23,16 @@
 package org.sonar.plugins.delphi.project;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import javax.xml.XMLConstants;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -56,14 +60,14 @@ public class DelphiWorkgroupXmlParser extends DefaultHandler {
   /**
    * Parse provided .groupproj XML file
    */
-  public void parse() {
+  public void parse() throws IOException {
     try {
       SAXParserFactory factory = SAXParserFactory.newInstance();
       factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       SAXParser parser = factory.newSAXParser();
       parser.parse(xml.getAbsolutePath(), this);
-    } catch (Exception e) {
-      DelphiPlugin.LOG.error("{}: Error while parsing workgroup file: ", xml.getAbsolutePath(), e);
+    } catch (ParserConfigurationException | SAXException e) {
+      DelphiPlugin.LOG.error("{}: Error parsing workgroup file: ", xml.getAbsolutePath(), e);
     }
   }
 
@@ -73,8 +77,12 @@ public class DelphiWorkgroupXmlParser extends DefaultHandler {
       // new .dproj file
       String projectPath = DelphiUtils
           .resolveBacktracePath(currentDir, attributes.getValue("Include"));
-      workGroup.addProject(new DelphiProject(new File(projectPath)));
+
+      try {
+        workGroup.addProject(new DelphiProject(new File(projectPath)));
+      } catch (IOException e) {
+        throw new UncheckedIOException(e);
+      }
     }
   }
-
 }
