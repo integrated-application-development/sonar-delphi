@@ -25,7 +25,7 @@ package org.sonar.plugins.delphi.antlr.resolvers.exceptions;
 /**
  * DefineResolver exception
  */
-public class DefineResolverException extends Exception {
+public class DefineResolverException extends RuntimeException {
   /**
    * ctor
    *

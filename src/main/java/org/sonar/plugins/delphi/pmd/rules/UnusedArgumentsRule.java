@@ -78,10 +78,10 @@ public class UnusedArgumentsRule extends DelphiRule {
         return;
       }
 
-      final StringBuilder methodName = extractMethodName(node);
       Tree beginNode = beginNodes.peek();
+
       processFunctionBegin(beginNode, args);
-      checkForUnusedArguments(args, ctx, node, methodName.toString());
+      checkForUnusedArguments(args, ctx, node, extractMethodName(node));
     }
   }
 
@@ -102,7 +102,7 @@ public class UnusedArgumentsRule extends DelphiRule {
     }
   }
 
-  private StringBuilder extractMethodName(DelphiPMDNode node) {
+  private String extractMethodName(DelphiPMDNode node) {
     final StringBuilder methodName = new StringBuilder();
     Tree nameNode = node.getFirstChildWithType(DelphiLexer.TkFunctionName);
     if (nameNode != null) {
@@ -110,7 +110,7 @@ public class UnusedArgumentsRule extends DelphiRule {
         methodName.append(nameNode.getChild(i).getText());
       }
     }
-    return methodName;
+    return methodName.toString();
   }
 
   private boolean isMethodNode(Tree candidateNode) {
@@ -188,10 +188,11 @@ public class UnusedArgumentsRule extends DelphiRule {
       Tree idents = argsNode.getChild(i);
 
       if (idents.getType() != DelphiLexer.TkVariableIdents) {
-        idents = argsNode.getChild(++i);
+        idents = argsNode.getChild(i + 1);
         if (idents == null || idents.getType() != DelphiLexer.TkVariableIdents) {
-          break;
+          return args;
         }
+        continue;
       }
 
       for (int c = 0; c < idents.getChildCount(); ++c) {

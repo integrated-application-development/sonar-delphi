@@ -25,14 +25,7 @@ package org.sonar.plugins.delphi.antlr.resolvers.exceptions;
 /**
  * Include resolver exception
  */
-public class IncludeResolverException extends Exception {
-  /**
-   * default ctor with no message
-   */
-  public IncludeResolverException() {
-    super();
-  }
-
+public class IncludeResolverException extends RuntimeException {
   /**
    * ctor
    *

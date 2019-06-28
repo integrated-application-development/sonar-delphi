@@ -25,7 +25,7 @@ package org.sonar.plugins.delphi.antlr.directives.exceptions;
 /**
  * Compiler directive factory exception
  */
-public class CompilerDirectiveFactorySyntaxException extends Exception {
+public class CompilerDirectiveFactorySyntaxException extends RuntimeException {
   /**
    * {@inheritDoc}
    */
