@@ -28,7 +28,9 @@ import static org.hamcrest.Matchers.is;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.Plugin;
+import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
+import org.sonar.api.SonarRuntime;
 import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.utils.Version;
 
@@ -46,10 +48,13 @@ public class DelphiPluginTest {
 
   @Test
   public void testExtensions() {
-    Plugin.Context context = new Plugin.Context(
-        SonarRuntimeImpl.forSonarQube(Version.create(1, 0), SonarQubeSide.SCANNER));
+    SonarRuntime runtime = SonarRuntimeImpl.forSonarQube(
+        Version.create(1, 0), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
+
+    Plugin.Context context = new Plugin.Context(runtime);
     plugin.define(context);
-    assertThat(context.getExtensions().size(), is(9));
+
+    assertThat(context.getExtensions().size(), is(12));
   }
 
 }

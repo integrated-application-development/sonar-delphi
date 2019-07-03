@@ -53,7 +53,7 @@
     <orderEntry type="library" name="Maven: org.apache.maven:maven-project:2.2.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-plugin-registry:2.2.0" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.aether:aether-util:0.9.0.M2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.sonarsource.sonarqube:sonar-plugin-api:7.7" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.sonarsource.sonarqube:sonar-plugin-api:7.9" level="project" />
     <orderEntry type="library" name="Maven: org.antlr:antlr-runtime:3.4" level="project" />
     <orderEntry type="library" name="Maven: org.antlr:stringtemplate:3.2.1" level="project" />
     <orderEntry type="library" name="Maven: antlr:antlr:2.7.7" level="project" />
@@ -69,8 +69,12 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: net.sourceforge.saxon:saxon:dom:9.1.0.8" level="project" />
     <orderEntry type="library" name="Maven: xalan:xalan:2.7.2" level="project" />
     <orderEntry type="library" name="Maven: xalan:serializer:2.7.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.sonarsource.sonarqube:sonar-testing-harness:7.7" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.sonarsource.sonarqube:sonar-testing-harness:7.9" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: com.sun.mail:javax.mail:1.5.6" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: javax.activation:activation:1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.assertj:assertj-core:3.12.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.jsoup:jsoup:1.11.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-all:1.3" level="project" />
@@ -79,8 +83,6 @@
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.8.0-beta4" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.3.0-alpha4" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.3.0-alpha4" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: com.sun.mail:javax.mail:1.6.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: javax.activation:activation:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.sonarsource.java:java-surefire:5.13.0.18197" level="project" />
     <orderEntry type="library" name="Maven: org.sonarsource.java:java-frontend:5.13.0.18197" level="project" />
     <orderEntry type="library" name="Maven: org.sonarsource.sslr:sslr-core:1.23" level="project" />
@@ -95,7 +97,6 @@
     <orderEntry type="library" name="Maven: com.fasterxml.staxmate:staxmate:2.3.1" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.woodstox:stax2-api:3.1.4" level="project" />
     <orderEntry type="library" name="Maven: org.sonarsource.analyzer-commons:sonar-xml-parsing:1.10.2.456" level="project" />
-    <orderEntry type="library" name="Maven: org.assertj:assertj-core:3.8.0" level="project" />
     <orderEntry type="library" name="Maven: org.sonarsource.analyzer-commons:sonar-analyzer-test-commons:1.10.2.456" level="project" />
     <orderEntry type="library" name="Maven: xerces:xercesImpl:2.12.0" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.woodstox:woodstox-core:5.2.0" level="project" />
@@ -165,5 +166,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jacoco:org.jacoco.core:0.8.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jacoco:org.jacoco.report:0.8.4" level="project" />
     <orderEntry type="library" name="Maven: xml-apis:xml-apis:1.4.01" level="project" />
+    <orderEntry type="library" name="Maven: jdom:jdom:1.0" level="project" />
   </component>
 </module>
