@@ -74,7 +74,7 @@
 	<properties>
 		<!--Version Fields-->
 		<sonarQubeMinVersion>7.4</sonarQubeMinVersion>
-		<sonar.version>7.7</sonar.version>
+		<sonar.version>7.8</sonar.version>
 		<antlr-runtime.version>3.4</antlr-runtime.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<pmd.version>6.15.0</pmd.version>
@@ -196,6 +196,11 @@
 			<artifactId>xml-apis</artifactId>
 			<version>1.4.01</version>
 		</dependency>
+		<dependency>
+			<groupId>jdom</groupId>
+			<artifactId>jdom</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -220,6 +225,7 @@
 						<value>/src/SABRE_AIRLINE_LICENSE.txt</value>
 						<value>/src/LUCK_LICENSE.txt</value>
 						<value>/src/COLOMBO_LICENSE.txt</value>
+						<value>/src/COLOMBO_LICENSE.txt</value>
 					</validHeaders>
 				</configuration>
 			</plugin>
@@ -242,6 +248,7 @@
 				</executions>
 				<configuration>
 					<source>11</source>
+					<javadocExecutable>${env.JAVA_HOME}/bin/javadoc.exe</javadocExecutable>
 				</configuration>
 			</plugin>
 			<plugin>

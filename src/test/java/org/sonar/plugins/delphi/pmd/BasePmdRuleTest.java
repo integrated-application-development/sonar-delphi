@@ -37,11 +37,14 @@ import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
+import org.sonar.api.config.Configuration;
 import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.project.DelphiProject;
@@ -82,6 +85,8 @@ public abstract class BasePmdRuleTest {
   protected void configureTest(String testFileName, DelphiUnitBuilderTest builder) {
     sensorContext = SensorContextTester.create(ROOT_DIR);
     delphiProjectHelper = DelphiTestUtils.mockProjectHelper();
+    DefaultFileSystem fileSystem = sensorContext.fileSystem();
+    Configuration config = sensorContext.config();
 
     // Don't pollute current working directory
     when(delphiProjectHelper.workDir()).thenReturn(new File("target"));
@@ -96,23 +101,17 @@ public abstract class BasePmdRuleTest {
         .setContents(builder.getSourceCode().toString())
         .build();
 
-    sensorContext.fileSystem().add(inputFile);
+    fileSystem.add(inputFile);
 
     DelphiProject delphiProject = new DelphiProject("Default Project");
     delphiProject.setSourceFiles(Collections.singletonList(srcFile));
 
     when(delphiProjectHelper.getProjects())
         .thenReturn(Collections.singletonList(delphiProject));
-    when(delphiProjectHelper.getFile(anyString())).thenAnswer(new Answer<InputFile>() {
-      @Override
-      public InputFile answer(InvocationOnMock invocation) {
-        InputFile inputFile = TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5",
-            Paths.get(ROOT_DIR_NAME).toFile(),
-              new File((String) invocation.getArguments()[0])).build();
-
-        return inputFile;
-      }
-    });
+    when(delphiProjectHelper.getFile(anyString())).thenAnswer((Answer<InputFile>) invocation ->
+        TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5",
+          Paths.get(ROOT_DIR_NAME).toFile(),
+          new File((String) invocation.getArguments()[0])).build());
 
     rulesProfile = mock(ActiveRules.class);
 
@@ -125,7 +124,11 @@ public abstract class BasePmdRuleTest {
       throw new RuntimeException(e);
     }
 
-    sensor = new DelphiPmdSensor(delphiProjectHelper, sensorContext, rulesProfile);
+    var pmdConfig = new DelphiPmdConfiguration(fileSystem, config);
+    var executor = new DelphiPmdExecutor(delphiProjectHelper, rulesProfile, pmdConfig);
+    var violationRecorder = new DelphiPmdViolationRecorder(delphiProjectHelper, rulesProfile);
+
+    sensor = new DelphiPmdSensor(executor, violationRecorder);
   }
 
   @After

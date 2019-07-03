@@ -22,49 +22,49 @@
  */
 package org.sonar.plugins.delphi.pmd.xml;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.Before;
 import org.junit.Test;
 
-public class RulesetTest {
+public class DelphiRuleSetTest {
 
-  private Ruleset ruleset;
+  private DelphiRuleSet ruleset;
 
   @Before
   public void init() {
-    ruleset = new Ruleset("desc");
+    ruleset = new DelphiRuleSet();
   }
 
   @Test
-  public void testRuleset() {
-    assertNotEquals(new Ruleset().getDescription(), ruleset.getDescription());
+  public void testName() {
+    assertThat(ruleset.getName(), is(nullValue()));
+    ruleset.setName("name");
+    assertThat(ruleset.getName(), is("name"));
   }
 
   @Test
   public void testDescription() {
-    assertEquals("desc", ruleset.getDescription());
-    ruleset.setDescription("desc2");
-    assertEquals("desc2", ruleset.getDescription());
+    assertThat(ruleset.getDescription(), is(nullValue()));
+    ruleset.setDescription("desc");
+    assertThat(ruleset.getDescription(), is("desc"));
   }
 
   @Test
   public void testRules() {
-    assertEquals(0, ruleset.getRules().size());
+    assertThat(ruleset.getPmdRules(), is(empty()));
+    assertThat(ruleset.getSonarRules(), is(empty()));
 
-    List<DelphiRule> rules = new ArrayList<>();
-    rules.add(new DelphiRule("testRule"));
-    ruleset.setRules(rules);
+    DelphiRule pmdRule = new DelphiRule("testRule");
+    ruleset.addRule(pmdRule);
 
-    assertEquals(rules, ruleset.getRules());
-    assertEquals(1, ruleset.getRules().size());
-
-    ruleset.addRule(new DelphiRule("testRule2"));
-    assertEquals(2, ruleset.getRules().size());
+    assertThat(ruleset.getPmdRules(), hasItems(pmdRule));
+    assertThat(ruleset.getPmdRules(), IsCollectionWithSize.hasSize(1));
+    assertThat(ruleset.getSonarRules(), IsCollectionWithSize.hasSize(1));
   }
-
 }

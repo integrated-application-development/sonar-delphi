@@ -6,6 +6,7 @@
 				name="ThenTryRule">
 		<description>You always should place 'begin' statement after 'try', this helps to prevent errors.
 		</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
 		</properties>
@@ -32,6 +33,7 @@
 				message="No function return type specified"
 				name="NoFunctionReturnTypeRule">
 		<description>All functions should have return type specified.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="1min" />
 			<property name="xpath">
@@ -56,6 +58,7 @@
 	    	message="File has too many classes."
 				name="OneClassPerFileRule">
 		<description>On class should be included in one file, for clarity reasons.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="1h" />
 			<property name="limit" value="1" />
@@ -67,6 +70,7 @@
 				message="Inherited method, with no additional code."
 				name="InheritedMethodWithNoCodeRule">
 		<description>Some methods that only inherits parent method behaviour are not needed (redundant).</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="10min" />
 			<property name="sequence" value="begin,inherited,;,end" />
@@ -77,6 +81,7 @@
 				message="Empty 'except' block"
 				name="EmptyExceptBlockRule">
 		<description>Empty 'except' block, you should catch some exceptions.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="10min" />
 			<property name="sequence" value="except,end" />
@@ -95,6 +100,7 @@
 				message="Empty 'finally' block"
 				name="EmptyFinallyBlockRule">
 		<description>Avoid empty finally blocks - these can be deleted.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
 		</properties>
@@ -104,6 +110,7 @@
 				message="Empty interface declaration"
 				name="EmptyInterfaceRule">
 		<description>You may have forgotten to fill some interface with methods.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="20min" />
 			<property name="xpath">
@@ -125,6 +132,7 @@
 			focus on well-defined tasks. 
 			Those smaller methods will not only be easier to understand, but also probably easier to test.
 		</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="30min" />
 			<property name="limit" value="150" />
@@ -135,6 +143,7 @@
 				message="Too many arguments"
 				name="TooManyArgumentsRule">
 		<description>Function may have too many arguments, maximum number of arguments is 6</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="1h" />
 			<property name="limit" value="6" />
@@ -147,6 +156,7 @@
 				message="Too many variables"
 				name="TooManyVariablesRule">
 		<description>Function may have too many variables, maximum number of variables is 10</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="30min" />
 			<property name="limit" value="10" />
@@ -161,6 +171,7 @@
 		<description>You should put semicolon ';' after 'overload' keyword, at the end of method
 			declaration.
 		</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
 			<property name="xpath">
@@ -187,6 +198,7 @@
 		<description>
 			Interface name should begin with "I"
 		</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="1min" />
 		</properties>
@@ -197,6 +209,7 @@
 				name="RecordNameRule">
 		<description>According to Object Pascal Style Guide record name should begin with capital 'T' letter.
 		</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="30min" />
 		</properties>
@@ -206,6 +219,7 @@
 				message="Pointer Name should comply with a naming convention"
 				name="PointerNameRule">
 		<description>Pointer name should begin with 'P' letter.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="30min" />
 		</properties>
@@ -216,6 +230,7 @@
 				name="MethodNameRule">
 		<description>According to Object Pascal Style Guide method name should follow Pascal Case.
 		</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="30min" />
 		</properties>
@@ -226,6 +241,7 @@
 				name="FieldNameRule">
 		<description>According to Object Pascal Style Guide field name should begin with 'F' letter..
 		</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
 		</properties>
@@ -236,6 +252,7 @@
 				name="UnitNameRule">
 		<description>According to Object Pascal Style Guide unit name should follow Pascal Case.
 		</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="30min" />
 		</properties>
@@ -246,6 +263,7 @@
 				name="CatchingGeneralExceptionRule">
 		<description>You should not catch general exceptions but descendants of Exception class.
 		</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="15min" />
 			<property name="sequence" value=":,exception,do" />
@@ -265,6 +283,7 @@
 				message="Raising general exception"
 				name="RaisingGeneralExceptionRule">
 		<description>You should not raise a general Exception class.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="15min" />
 			<property name="sequence" value="raise,exception,.,create" />
@@ -282,6 +301,7 @@
 				message="Avoid 'out' parameters, they are evil"
 				name="AvoidOutParameterRule">
 		<description>Avoid 'out' variable parameters. Nasty.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="30min" />
 			<property name="xpath" value="//TkVariableParam/out" />
@@ -297,6 +317,7 @@
 				message="Change from 'if (x=true)' to 'if x'"
 				name="IfTrueRule">
 		<description>You don't need to write 'if x = true', this is redundant. Instead write 'if x'.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="1min" />
 			<property name="limit" value="0" />
@@ -318,6 +339,7 @@
 		<description>You don't need to write 'if not (x = false)', this is redundant. Instead write 'if
 			x'.
 		</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="1min" />
 			<property name="limit" value="0" />
@@ -339,6 +361,7 @@
 		<description>You shouldn't make public fields. Instead make fields private/protected and define 
 			a public property to access them instead.
 		</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="3min" />
 		</properties>
@@ -348,6 +371,7 @@
 				message="Unused method parameters should be removed"
 				name="UnusedArgumentsRule">
 		<description>You should always use every passed function argument.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
 			<property name="excluded_args" value="Sender,ASender,DataSet,ADataSet" />
@@ -358,6 +382,7 @@
 				message="No Guid in interface declaration"
 				name="NoGuidRule">
 		<description>Every interface should contain unique Guid.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
 			<property name="xpath">
@@ -376,6 +401,7 @@
 		<description>Free() method does check if the freed variable is not nil, you don't have to do it
 			manually.
 		</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
 		</properties>
@@ -394,6 +420,7 @@
 				message="Empty 'else' statement"
 				name="EmptyElseStatementRule">
 		<description>You should not write an empty 'else' statement.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
 			<property name="xpath">
@@ -410,6 +437,7 @@
 				message="Empty 'begin' statement"
 				name="EmptyBeginStatementRule">
 		<description>You should not write an empty 'begin' statement.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
 			<property name="xpath">
@@ -426,6 +454,7 @@
 				message=".dpr/.dpk file should not have procedures/functions."
 				name="ProjectFileNoFunctionsRule">
 		<description>.dpr/.dpk files should not have procedures/functions.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="15min" />
 		</properties>
@@ -435,6 +464,7 @@
 				message=".dpr/.dpk file should not have variables."
 				name="ProjectFileNoVariablesRule">
 		<description>.dpr/.dpk files should not have variables.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="15min" />
 		</properties>
@@ -444,6 +474,7 @@
 				message="Do not use type aliases"
 				name="TypeAliasRule">
 		<description>You should not use type aliases.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="10min" />
 			<property name="xpath">
@@ -463,6 +494,7 @@
 				message="Keywords should comply with a naming convention."
 				name="UppercaseReservedKeywordsRule">
 		<description>Avoid using uppercase reserved keywords.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
 		</properties>
@@ -472,6 +504,7 @@
 				message="Avoid using mixed names for functions / variables."
 				name="MixedNamesRule">
 		<description>Avoid using uppercase reserved keywords.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
 		</properties>
@@ -483,6 +516,7 @@
 		<description>Unused unit. No other unit has this unit in it's uses section. Probably you could
 			remove this unit from project.
 		</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
 		</properties>
@@ -494,6 +528,7 @@
 		<description>Unused function/procedure. No other unit uses this function/procedure in it's uses
 			section. Probably you could remove it from project.
 		</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="15min" />
 		</properties>
@@ -503,6 +538,7 @@
 				message="Constructor without 'inherited' statement."
 				name="ConstructorWithoutInheritedStatementRule">
 		<description>Constructor without 'inherited' statement.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
 		</properties>
@@ -512,6 +548,7 @@
 				message="Destructor without 'inherited' statement."
 				name="DestructorWithoutInheritedStatementRule">
 		<description>Destructor without 'inherited' statement.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="30min" />
 		</properties>
@@ -522,6 +559,7 @@
 				name="NoBeginAfterDoRule">
 		<description>'Begin' statement should be placed after 'do' statement to prevent errors.
 		</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="10min" />
 		</properties>
@@ -533,6 +571,7 @@
 		<description>'with' statement used directly after 'do' or 'then' statements. You should place 
 			'begin' directly after 'do' or 'then' statements.
 		</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
 		</properties>
@@ -542,6 +581,7 @@
 				message="No semicolon at the end of code block."
 				name="NoSemicolonRule">
 		<description>No semicolon at the end of code block.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
 		</properties>
@@ -551,6 +591,7 @@
 				message="Don't cast then free."
 				name="CastAndFreeRule">
 		<description>You should not cast an object before freeing it.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
 		</properties>
@@ -563,6 +604,7 @@
 			code can perform poorly and will in any case be difficult to understand and therefore to
 			maintain.
 		</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="10min" />
 			<property name="Threshold" value="20" />
@@ -572,7 +614,8 @@
 	<rule class="org.sonar.plugins.delphi.pmd.rules.ConstantNotationRule"
 				message="Constants should begin with C_"
 				name="ConstantNotationRule">
-		  <description>Constants should begin with C_</description>
+		<description>Constants should begin with C_</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="1min" />
 		</properties>
@@ -581,17 +624,19 @@
     <rule class="org.sonar.plugins.delphi.pmd.rules.TooManySubProceduresRule"
 					message="Code should not contain too many sub procedures or functions"
           name="TooManySubProceduresRule">
-        <description>Methods must not have too many sub procedures</description>
-        <properties>
-            <property name="baseEffort" value="30min" />
-            <property name="limit" value="3" />
-        </properties>
+			<description>Methods must not have too many sub procedures</description>
+			<priority>5</priority>
+			<properties>
+					<property name="baseEffort" value="30min" />
+					<property name="limit" value="3" />
+			</properties>
     </rule>
   
 	<rule class="org.sonar.plugins.delphi.pmd.rules.ClassNamePrefixRule"
 				message="Class and enumeration name declarations should begin with T"
 		  	name="ClassNamePrefixRule">
 		<description>Class names should begin with T</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="1min" />
 		</properties>
@@ -601,6 +646,7 @@
 				message="Constructor name declarations should begin with Create"
 				name="ConstructorCreateRule">
 		<description>Constructors should begin with Create</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="1min" />
 		</properties>
@@ -610,6 +656,7 @@
 					message="Use of 'with' should be avoided"
           name="AvoidWithRule">
 			<description>Use of 'with' should be avoided</description>
+			<priority>5</priority>
 			<properties>
 					<property name="baseEffort" value="5min" />
 			</properties>
@@ -619,6 +666,7 @@
 				message="Line too long"
 		  	name="TooLongLineRule">
 		<description>Code lines should not be too long.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="2min" />
 			<property name="limit" value="100" />
@@ -630,6 +678,7 @@
 				name="ReRaiseExceptionRule">
 		<description>Raising a previously declarared exception at the end of an except block actually raises two exceptions.
       You should use 'raise;' instead of 'raise (exception);'.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
 		</properties>
@@ -653,9 +702,10 @@
 	<rule class="org.sonar.plugins.delphi.pmd.rules.EmptyBracketsRule"
 				message="Empty brackets for method without parameters"
 				name="EmptyBracketsRule">
-		  <description>
-			  When calling a method, there is no need to use brackets if there are no parameters to be passed.
-		  </description>
+		<description>
+			When calling a method, there is no need to use brackets if there are no parameters to be passed.
+		</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="1min" />
 		</properties>
@@ -665,6 +715,7 @@
 				message="List must be sorted before checking for duplicates"
 				name="DuplicatesRule">
 		<description>List must be sorted immediately before checking for duplicates</description>
+		<priority>5</priority>
 		<properties>
 				<property name="baseEffort" value="2min" />
 		</properties>
@@ -674,6 +725,7 @@
 				message="Keywords 'not, or, and' must always be in lower case."
 		  	name="LowerCaseReservedWordsRule">
 		<description> Always use lower case when using keywords and , or, not etc.</description>
+		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="1min" />
 		</properties>
@@ -683,6 +735,7 @@
 				message="Identifiers should begin with a capital letter."
   			name="IdentifierConventionRule">
     <description>It is good convention to start variable identifiers with capitals.</description>
+		<priority>5</priority>
     <properties>
       <property name="baseEffort" value="1min" />
     </properties>

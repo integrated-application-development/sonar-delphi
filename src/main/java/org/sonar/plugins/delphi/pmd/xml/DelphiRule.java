@@ -22,168 +22,128 @@
  */
 package org.sonar.plugins.delphi.pmd.xml;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.annotation.Nullable;
+import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 
 /**
- * Delphi rule loaded from xml file
+ * Delphi PMD rule loaded from xml file
  */
-@XStreamAlias("rule")
-public final class DelphiRule implements Comparable<DelphiRule> {
+public final class DelphiRule {
 
-  @XStreamAlias("class")
-  @XStreamAsAttribute
-  private String clazz;
-
-  @XStreamAsAttribute
-  private String message;
-
-  @XStreamAsAttribute
+  private String ref;
+  private Integer priority;
   private String name;
-
-  @XStreamAlias("description")
+  private String message;
+  private String clazz;
   private String description;
-
-  private String priority;
-
-  private List<Property> properties;
-
-  @XStreamOmitField
-  private String tags;
-
-  @XStreamOmitField
-  private String exclude;
-
-  @XStreamOmitField
   private String example;
+  private List<DelphiRuleProperty> properties;
 
   public DelphiRule() {
   }
 
   /**
-   * @param clazz Rule class
+   * @param ref Rule ref
    */
-  public DelphiRule(String clazz) {
-    this(clazz, null);
+  public DelphiRule(String ref) {
+    this(ref, null);
   }
 
   /**
-   * @param clazz Rule class
+   * @param clazz The class which implements this rule
    * @param priority Rule priority
    */
-  public DelphiRule(String clazz, String priority) {
+  public DelphiRule(String clazz, @Nullable Integer priority) {
     this.clazz = clazz;
+    this.priority = priority;
+    properties = new ArrayList<>();
+  }
+
+  public List<DelphiRuleProperty> getProperties() {
+    return properties;
+  }
+
+  public void setProperties(List<DelphiRuleProperty> properties) {
+    this.properties = properties;
+  }
+
+  public DelphiRuleProperty getProperty(String propertyName) {
+    for (DelphiRuleProperty prop : properties) {
+      if (propertyName.equals(prop.getName())) {
+        return prop;
+      }
+    }
+    return null;
+  }
+
+  @Nullable
+  public Integer getPriority() {
+    return priority;
+  }
+
+  public void setPriority(Integer priority) {
     this.priority = priority;
   }
 
-  /**
-   * @return name
-   */
+  public void addProperty(DelphiRuleProperty property) {
+    properties.add(property);
+  }
+
   public String getName() {
     return name;
   }
 
-  /**
-   * sets name
-   *
-   * @param name new name
-   */
   public void setName(String name) {
     this.name = name;
   }
 
-  /**
-   * @return rule class
-   */
-  public String getClazz() {
-    return clazz;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  /**
-   * Sets properties
-   *
-   * @param properties Properties to set
-   */
-  public void setProperties(List<Property> properties) {
-    this.properties = properties;
-  }
-
-  /**
-   * @return Properties
-   */
-  public List<Property> getProperties() {
-    return properties;
-  }
-
-  /**
-   * Compares two class names lexicographically
-   *
-   * @return the value 0 if the argument string is equal to this string; a value less than 0 if this
-   * string is lexicographically less than the string argument; and a value greater than 0 if this
-   * string is lexicographically greater than the string argument.
-   */
-
-  @Override
-  public int compareTo(DelphiRule other) {
-    return clazz.compareTo(other.clazz);
-  }
-
-  /**
-   * @return rule priority
-   */
-  public String getPriority() {
-    return priority;
-  }
-
-  /**
-   * sets priority
-   *
-   * @param priority new priority
-   */
-  public void setPriority(String priority) {
-    this.priority = priority;
-  }
-
-  /**
-   * adds property
-   *
-   * @param property Property to add
-   */
-  public void addProperty(Property property) {
-    if (properties == null) {
-      properties = new ArrayList<>();
-    }
-    properties.add(property);
-  }
-
-  /**
-   * @return rule message
-   */
   public String getMessage() {
     return message;
   }
 
-  /**
-   * sets message
-   *
-   * @param message New rule message
-   */
   public void setMessage(String message) {
     this.message = message;
   }
 
-  /**
-   * @return rule description
-   */
-  public String getDescription() {
+  public String getClazz() {
+    return clazz;
+  }
+
+  public void setClazz(String clazz) {
+    this.clazz = clazz;
+  }
+
+  public void removeProperty(String propertyName) {
+    DelphiRuleProperty prop = getProperty(propertyName);
+    properties.remove(prop);
+  }
+
+  public boolean hasProperties() {
+    return !properties.isEmpty();
+  }
+
+  public void setDescription(@Nullable String description) {
+    this.description = description;
+  }
+
+  public void setExample(@Nullable String example) {
+    this.example = example;
+  }
+
+  @Nullable
+  String getDescription() {
+    return description;
+  }
+
+  @Nullable
+  public String getExample() {
+    return example;
+  }
+
+  public String getFullDescription() {
     String desc = "";
     if (description != null) {
       desc += "<p>" + description + "</p>";
@@ -194,25 +154,28 @@ public final class DelphiRule implements Comparable<DelphiRule> {
     return desc;
   }
 
-  /**
-   * @return rule category
-   */
-  public String[] getTags() {
-    if (tags == null) {
-      return new String[0];
+  public void processXpath(String sonarRuleKey) {
+    if (DelphiPmdConstants.XPATH_CLASS.equals(ref)) {
+      ref = null;
+      DelphiRuleProperty xpathMessage = getProperty(DelphiPmdConstants.XPATH_MESSAGE_PARAM);
+      if (xpathMessage == null) {
+        throw new IllegalArgumentException("Property '" + DelphiPmdConstants.XPATH_MESSAGE_PARAM +
+            "' should be set for PMD rule " + sonarRuleKey);
+      }
+
+      message = xpathMessage.getValue();
+      removeProperty(DelphiPmdConstants.XPATH_MESSAGE_PARAM);
+      DelphiRuleProperty xpathExp = getProperty(DelphiPmdConstants.XPATH_EXPRESSION_PARAM);
+
+      if (xpathExp == null) {
+        throw new IllegalArgumentException("Property '" + DelphiPmdConstants.XPATH_EXPRESSION_PARAM
+            + "' should be set for PMD rule " + sonarRuleKey);
+      }
+
+      xpathExp.setCdataValue(xpathExp.getValue());
+      clazz = DelphiPmdConstants.XPATH_CLASS;
+      name = sonarRuleKey;
     }
-    return tags.split(",");
-  }
-
-  /**
-   * @return exclude string
-   */
-  public String getExclude() {
-    return exclude;
-  }
-
-  public void setTag(String tag) {
-    this.tags = tag;
   }
 
   @Override
