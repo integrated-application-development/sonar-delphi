@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.pmd.xml;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.emptyArray;
@@ -124,14 +125,14 @@ public class DelphiRuleTest {
     String testRulesXmlPath = "org/sonar/plugins/delphi/pmd/xml/rules.xml";
     URL url = getClass().getClassLoader().getResource(testRulesXmlPath);
     assertThat(url, is(not(nullValue())));
-    InputStreamReader stream = new InputStreamReader(new FileInputStream(url.getPath()));
+    InputStreamReader stream = new InputStreamReader(new FileInputStream(url.getPath()), UTF_8);
 
     DelphiRuleSet ruleSet = DelphiRuleSetHelper.createFrom(stream);
     ruleSet.writeTo(writer);
     String rulesXml = writer.toString();
 
     File ruleSetFile = File.createTempFile("delphiPmdRuleSet_", ".xml");
-    FileUtils.writeStringToFile(ruleSetFile, rulesXml, StandardCharsets.UTF_8);
+    FileUtils.writeStringToFile(ruleSetFile, rulesXml, UTF_8);
 
     RuleSetFactory ruleSetFactory = new RuleSetFactory();
     RuleSet parsedRuleSet = ruleSetFactory.createRuleSet(ruleSetFile.getAbsolutePath());

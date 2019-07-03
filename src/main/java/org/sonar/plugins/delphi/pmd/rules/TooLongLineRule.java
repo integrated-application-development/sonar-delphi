@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
@@ -12,7 +13,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 public class TooLongLineRule extends DelphiRule {
 
   private int lineLimit;
-  private ArrayList<Integer> checkedLines = new ArrayList<>();
+  private Set<Integer> checkedLines = new HashSet<>();
   private Tree astTree;
   private boolean firstNode;
 
@@ -22,7 +23,6 @@ public class TooLongLineRule extends DelphiRule {
     lineLimit = getProperty(LIMIT);
     astTree = null;
     firstNode = true;
-
   }
 
   @Override
@@ -39,12 +39,12 @@ public class TooLongLineRule extends DelphiRule {
       // Only check a line that has not been checked before
       checkedLines.add(lineNumber);
       String line = ((ASTTree) astTree).getFileSourceLine(lineNumber);
-      // Remove comment
-      line = removeComment(line);
 
-      if (line.length() > lineLimit) {
+      int lineLength = getLineLengthWithoutComment(line);
+
+      if (lineLength > lineLimit) {
         String sonarMessage =
-            "Line too long (" + line.length() + " characters). Maximum character count should be "
+            "Line too long (" + lineLength + " characters). Maximum character count should be "
                 + lineLimit + ".";
         addViolation(ctx, node, sonarMessage);
       }
@@ -52,9 +52,9 @@ public class TooLongLineRule extends DelphiRule {
     }
   }
 
-  private String removeComment(String line) {
-    return line.replaceAll("(\\s+)?(\\/\\/)(.+)",
-        "");
+  private int getLineLengthWithoutComment(String line) {
+    int commentIndex = line.indexOf("//");
+    return (commentIndex == -1) ? line.length() : ++commentIndex;
   }
 
   @Override

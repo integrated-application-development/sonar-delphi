@@ -99,17 +99,25 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
     Tree parent = currentCodeNode.getParent();
     for (int i = currentCodeNode.getChildIndex() - 1; i >= 0; i--) {
       Tree child = parent.getChild(i);
-      if (child.getType() == DelphiLexer.FUNCTION
-          || child.getType() == DelphiLexer.PROCEDURE
-          || child.getType() == DelphiLexer.CONSTRUCTOR
-          || child.getType() == DelphiLexer.DESTRUCTOR
-          || child.getType() == DelphiLexer.OPERATOR) {
+      if (canExtractLineFrom(child)) {
         return child.getLine();
       }
     }
     return -1;
   }
 
+  private boolean canExtractLineFrom(Tree node) {
+    switch (node.getType()) {
+      case DelphiLexer.FUNCTION:
+      case DelphiLexer.PROCEDURE:
+      case DelphiLexer.CONSTRUCTOR:
+      case DelphiLexer.DESTRUCTOR:
+      case DelphiLexer.OPERATOR:
+        return true;
+      default:
+        return false;
+    }
+  }
   /**
    * Only functions existing in your project and in include directories are counted, so system
    * functions like 'writeln' are NOT counted.

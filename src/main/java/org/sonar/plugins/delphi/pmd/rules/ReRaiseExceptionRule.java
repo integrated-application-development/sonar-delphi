@@ -5,9 +5,6 @@ import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 public class ReRaiseExceptionRule extends DelphiRule {
-
-  private String exceptionName;
-
   /**
    * This rule looks for exception blocks where the exception is raised a second time at the end of
    * the except block. This is done by searching for any begin block (except blocks always contain
@@ -20,41 +17,32 @@ public class ReRaiseExceptionRule extends DelphiRule {
    */
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-
-    if (node.getType() == DelphiLexer.BEGIN) {
+    if (node.getType() != DelphiLexer.BEGIN) {
       // Exception blocks always contain 'begin' statements, so look at the children of begin blocks
       // Note: Would be good to just access the next node after a 'raise' but list isn't accessible
       // here
+      return;
+    }
 
-      for (int i = 0; i < node.getChildCount() - 1; i++) {
-        DelphiPMDNode childNode = (DelphiPMDNode) node.getChild(i);
+    String exceptionName = null;
 
-        if (childNode.getType() == DelphiLexer.ON) {
-          // The next node after an 'on' statement will be the name of the exception
-          exceptionName = node.getChild(i + 1).getText();
-        }
+    for (int i = 0; i < node.getChildCount() - 1; i++) {
+      DelphiPMDNode childNode = (DelphiPMDNode) node.getChild(i);
 
-        if (childNode.getType() == DelphiLexer.RAISE) {
-          DelphiPMDNode exceptionDeclarationNode = (DelphiPMDNode) node.getChild(i + 1);
+      if (childNode.getType() == DelphiLexer.ON) {
+        // The next node after an 'on' statement will be the name of the exception
+        exceptionName = node.getChild(i + 1).getText();
+      }
 
-          // Only raise exception if the declared name is re raised later on
-          if (exceptionDeclarationNode != null &&
-              exceptionDeclarationNode.getText().equals(exceptionName)) {
-            addViolation(ctx, childNode);
-          }
+      if (childNode.getType() == DelphiLexer.RAISE) {
+        DelphiPMDNode exceptionDeclarationNode = (DelphiPMDNode) node.getChild(i + 1);
 
+        // Only raise exception if the declared name is re raised later on
+        if (exceptionDeclarationNode != null &&
+            exceptionDeclarationNode.getText().equals(exceptionName)) {
+          addViolation(ctx, childNode);
         }
       }
     }
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
-  }
-
-  @Override
-  public int hashCode() {
-    return super.hashCode();
   }
 }

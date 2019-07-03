@@ -19,43 +19,50 @@ public class TooManySubProceduresRule extends DelphiRule {
    */
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
+    if (node.getType() != DelphiLexer.IMPLEMENTATION) {
+      return;
+    }
 
-    Integer threshold = getProperty(LIMIT);
+    List children = node.getChildren();
+    // Some implementation nodes may not have any code yet, hence no children
+    if (children == null) {
+      return;
+    }
 
-    if (node.getType() == DelphiLexer.IMPLEMENTATION) {
-      List children = node.getChildren();
-      int subProcedureCounter = 0;
+    int subProcedureCounter = 0;
 
-      // subProcedureDepth tracks whether we are in a procedure, sub procedure,
-      // or sub-sub procedures.
-      // -1 means not in a procedure
-      // 0 means in an out procedure
-      // 1 means in a sub procedure
-      // n means in a nth level sub procedure
-      // we treat any nth level sub procedure the same as any sub procedures
-      int subProcedureDepth = -1;
+    // subProcedureDepth tracks whether we are in a procedure, sub procedure,
+    // or sub-sub procedures.
+    // -1 means not in a procedure
+    // 0 means in an out procedure
+    // 1 means in a sub procedure
+    // n means in a nth level sub procedure
+    // we treat any nth level sub procedure the same as any sub procedures
+    int subProcedureDepth = -1;
 
-      // Some implementation nodes may not have any code yet, hence no children
-      if (children != null) {
-        for (int i = 0; i < children.size(); i++) {
+    for (Object child : children) {
+      String value = child.toString();
 
-          if (children.get(i).toString().equals("procedure")
-              || children.get(i).toString().equals("function")) {
-            subProcedureDepth += 1;
-            if (subProcedureDepth > 0) {
-              subProcedureCounter += 1;
-            }
-            if (subProcedureCounter > threshold) {
-              addViolation(ctx, node,
-                  "Code should not contain too many sub procedures or functions, " +
-                      "limit of " + getProperty(LIMIT) + " exceeded.");
-              // Avoid adding multiple violations of same type
-              break;
-            }
-          } else if (children.get(i).toString().equals("begin")) {
-            subProcedureDepth -= 1;
-          }
-        }
+      if (value.equals("begin")) {
+        --subProcedureDepth;
+      }
+
+      if (!value.equals("procedure") && !value.equals("function")) {
+        continue;
+      }
+
+      ++subProcedureDepth;
+
+      if (subProcedureDepth > 0) {
+        ++subProcedureCounter;
+      }
+
+      if (subProcedureCounter > getProperty(LIMIT)) {
+        addViolation(ctx, node,
+            "Code should not contain too many sub procedures or functions, " +
+                "limit of " + getProperty(LIMIT) + " exceeded.");
+        // Avoid adding multiple violations of same type
+        return;
       }
     }
   }

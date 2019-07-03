@@ -23,12 +23,12 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
@@ -46,6 +46,7 @@ public class UnusedArgumentsRule extends DelphiRule {
   private static final PropertyDescriptor<List<String>> EXCLUDED_ARGS =
       PropertyFactory.stringListProperty("excluded_args")
           .desc("The argument names to ignore")
+          .defaultValue(new ArrayList<>())
           .build();
 
   private final HashSet<String> excludedArgs = new HashSet<>();

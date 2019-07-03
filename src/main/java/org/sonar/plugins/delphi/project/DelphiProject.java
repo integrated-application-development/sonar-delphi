@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 /**
@@ -53,6 +54,8 @@ public class DelphiProject {
    * C-tor, initializes project with data loaded from xml file
    *
    * @param xml XML file to parse
+   * @throws IllegalArgumentException If xml is null
+   * @throws IOException If file not found
    */
   public DelphiProject(File xml) throws IOException {
     if (xml == null) {
@@ -66,12 +69,11 @@ public class DelphiProject {
    * Adds a source file to project
    *
    * @param path File path
-   * @throws RuntimeException If file not found
    */
   public void addFile(String path) {
     File newFile = new File(path);
     if (!newFile.exists()) {
-      throw new RuntimeException("Could not add file to project: " + newFile.getAbsolutePath());
+      DelphiPlugin.LOG.warn("Could not add file to project: {}", newFile.getAbsolutePath());
     }
 
     if (DelphiUtils.acceptFile(newFile.getAbsolutePath())) {

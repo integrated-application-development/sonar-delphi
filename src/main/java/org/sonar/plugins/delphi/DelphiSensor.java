@@ -118,22 +118,12 @@ public class DelphiSensor implements Sensor {
     DelphiPlugin.LOG.info("Delphi sensor execute...");
     List<DelphiProject> projects = delphiProjectHelper.getProjects();
     for (DelphiProject delphiProject : projects) {
-      setupFileStreamConfig(delphiProject);
+      fileStreamConfig = DelphiFileStream.createConfig(delphiProject, delphiProjectHelper);
       addCoverage(context);
       CodeAnalysisCacheResults.resetCache();
       parseFiles(delphiProject);
       processFiles(context);
     }
-  }
-
-  private void setupFileStreamConfig(DelphiProject delphiProject) {
-    String encoding = delphiProjectHelper.encoding();
-    List<File> includedDirs = delphiProject.getIncludeDirectories();
-    List<String> definitions = delphiProject.getDefinitions();
-    boolean extendIncludes = delphiProjectHelper.shouldExtendIncludes();
-
-    fileStreamConfig = new DelphiFileStreamConfig(
-        encoding, includedDirs, definitions, extendIncludes);
   }
 
   private void addCoverage(SensorContext context) {
@@ -160,33 +150,36 @@ public class DelphiSensor implements Sensor {
     }
   }
 
-  private boolean canTokenize(String fileName) {
-    return !delphiProjectHelper.isExcluded(fileName, excluded);
-  }
+  private void processCpd(SensorContext context, InputFile inputFile) {
+    String fileName = DelphiUtils.uriToAbsolutePath(inputFile.uri());
 
-  private void doTokenize(SensorContext context, InputFile inputFile) {
+    if (!delphiProjectHelper.isExcluded(fileName, excluded)) {
+      return;
+    }
+
     try {
-      String fileName = DelphiUtils.uriToAbsolutePath(inputFile.uri());
       DelphiLexer lexer = new DelphiLexer(new DelphiFileStream(fileName, fileStreamConfig));
-      Token prevToken = null;
+      Token prevToken;
       Token token = lexer.nextToken();
       NewCpdTokens cpdTokens = context.newCpdTokens().onFile(inputFile);
-      while (token.getType() != Token.EOF) {
-        if (prevToken != null) {
-          TextRange endLineRange = inputFile.selectLine(token.getLine());
-          int endPosition = Math
-              .min(endLineRange.end().lineOffset(), token.getCharPositionInLine());
-          TextRange startLineRange = inputFile.selectLine(prevToken.getLine());
-          int startPosition = Math
-              .min(startLineRange.end().lineOffset(), prevToken.getCharPositionInLine());
-          int startLine = prevToken.getLine();
-          int endLine = token.getLine();
-          if (endLine <= startLine && startPosition < endPosition) {
-            cpdTokens.addToken(startLine, startPosition, endLine, endPosition, prevToken.getText());
-          }
-        }
+      while (true) {
         prevToken = token;
         token = lexer.nextToken();
+        if (token.getType() == Token.EOF) {
+          break;
+        }
+
+        TextRange endLineRange = inputFile.selectLine(token.getLine());
+        int endPosition = Math.min(endLineRange.end().lineOffset(), token.getCharPositionInLine());
+        TextRange startLineRange = inputFile.selectLine(prevToken.getLine());
+        int startPosition = Math.min(startLineRange.end().lineOffset(),
+            prevToken.getCharPositionInLine());
+        int startLine = prevToken.getLine();
+        int endLine = token.getLine();
+
+        if (endLine <= startLine && startPosition < endPosition) {
+          cpdTokens.addToken(startLine, startPosition, endLine, endPosition, prevToken.getText());
+        }
       }
       cpdTokens.save();
     } catch (FileNotFoundException ex) {
@@ -215,8 +208,6 @@ public class DelphiSensor implements Sensor {
         processMetric(complexityMetrics, resource);
         processMetric(deadCodeMetrics, resource);
       } catch (IllegalArgumentException e) {
-        // Some files may produce invalid pointers due to code that is valid for the compiler but
-        // not for the scanner, this will handle that so the execution does not fail
         DelphiPlugin.LOG.error("{} produced IllegalArgumentException: \"{}\""
             + " Metric report for this file may be in error.", resource, e.getMessage());
         DelphiPlugin.LOG.debug("Stacktrace: ", e);
@@ -232,10 +223,7 @@ public class DelphiSensor implements Sensor {
             .on(resource).withValue(undocumentedApi).save();
       }
 
-      String fileName = resource.filename();
-      if (canTokenize(fileName)) {
-        doTokenize(sensorContext, resource);
-      }
+      processCpd(sensorContext, resource);
       progressReporter.progress();
     }
 
@@ -261,7 +249,7 @@ public class DelphiSensor implements Sensor {
    *
    * @param delphiProject DelphiLanguage project to parse
    */
-  protected void parseFiles(DelphiProject delphiProject) {
+  private void parseFiles(DelphiProject delphiProject) {
     List<File> includedDirs = delphiProject.getIncludeDirectories();
     List<File> excludedDirs = delphiProjectHelper.getExcludedSources();
     List<File> sourceFiles = delphiProject.getSourceFiles();

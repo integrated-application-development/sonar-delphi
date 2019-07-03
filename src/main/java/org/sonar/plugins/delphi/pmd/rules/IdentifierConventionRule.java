@@ -17,18 +17,27 @@ public class IdentifierConventionRule extends DelphiRule {
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
     // Within a var block, look for variable identifiers
-    if (node.getType() == DelphiLexer.VAR) {
-      for (int i = 0; i < node.getChildCount() - 1; i++) {
-        Tree childNode = node.getChild(i);
-        if (childNode.getType() == DelphiLexer.TkVariableIdents) {
-          // Name identifier will be in the next node
-          String identifier = childNode.getChild(0).getText();
-          char firstChar = identifier.charAt(0);
-          if (!Character.isUpperCase(firstChar)) {
-            addViolation(ctx, (DelphiPMDNode) childNode);
-          }
+    if (node.getType() != DelphiLexer.VAR) {
+      return;
+    }
 
-        }
+    for (int i = 0; i < node.getChildCount() - 1; i++) {
+      Tree childNode = node.getChild(i);
+      if (childNode.getType() != DelphiLexer.TkVariableIdents) {
+        continue;
+      }
+
+      handleVariableIdentsList(childNode, ctx);
+    }
+  }
+
+  private void handleVariableIdentsList(Tree node, RuleContext ctx) {
+    // Name identifier will be in the next node
+    for (int i = 0; i < node.getChildCount(); ++i) {
+      String identifier = node.getChild(i).getText();
+      char firstChar = identifier.charAt(0);
+      if (!Character.isUpperCase(firstChar)) {
+        addViolation(ctx, (DelphiPMDNode) node);
       }
     }
   }

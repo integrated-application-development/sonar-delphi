@@ -59,6 +59,8 @@ public class DelphiWorkgroupXmlParser extends DefaultHandler {
 
   /**
    * Parse provided .groupproj XML file
+   *
+   * @throws IOException If the SAXParser indicates a problem with the character stream
    */
   public void parse() throws IOException {
     try {
