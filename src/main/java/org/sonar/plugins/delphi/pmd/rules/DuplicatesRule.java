@@ -6,6 +6,11 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 
 public class DuplicatesRule extends DelphiRule {
+  private static final String[] DUPLICATES_LINE = {".", "duplicates"};
+  private static final String[] SORTED_LINE = {".", "sorted", ":=", "true"};
+  private static final int MINIMUM_NODES = 4;
+  private static final int PREVIOUS_LINE_OFFSET = 7;
+  private static final int NEXT_LINE_OFFSET = 5;
 
   /**
    * This rule adds violations when the Duplicates method, (foo.Duplicates := dupError) is called on
@@ -14,34 +19,78 @@ public class DuplicatesRule extends DelphiRule {
    * @param node the current node
    * @param ctx the ruleContext to store the violations
    */
-
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
     List children = node.getChildren();
-    if (children != null) {
+    if (children == null) {
+      return;
+    }
 
-      for (int i = 0; i < children.size() - 4; i++) {
-        if (children.get(i).toString().equals(".") &&
-            children.get(i + 1).toString().equals("Duplicates")) {
-          // Found a call to duplicates function
-          try {
-            if (!children.get(i - 1).toString().equals(children.get(i - 7).toString())
-                // ensure same list
-                // Ensure list is being sorted
-                || !children.get(i - 6).toString().equals(".")
-                || !children.get(i - 5).toString().equals("Sorted")
-                || !children.get(i - 4).toString().equals(":=")
-                || !children.get(i - 3).toString().equals("True")) {
-              addViolation(ctx, (DelphiPMDNode) children.get(i - 1));
-            }
-          } catch (IndexOutOfBoundsException e) {
-            // If an index was raised, then there could not have been a sort performed on the
-            // previous line, so raise a violation
-            addViolation(ctx, (DelphiPMDNode) children.get(i - 1));
-            //FIXME: I'll have to clean this up.. Exceptions for flow control? Yikes.
-          }
+    for (int i = 0; i < children.size() - MINIMUM_NODES; i++) {
+      if (isDuplicatesLine(children, i)) {
+        // Found a call to duplicates function
+        if (sortedOnPreviousLine(children, i) || sortedOnNextLine(children, i)) {
+          return;
         }
+
+        addViolation(ctx, (DelphiPMDNode) children.get(i - 1));
       }
     }
   }
+
+  private boolean isDuplicatesLine(List children, int childIndex) {
+    for (int i = 0; i < DUPLICATES_LINE.length; ++i) {
+      String child = children.get(childIndex + i).toString();
+      if (!child.equalsIgnoreCase(DUPLICATES_LINE[i])) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private boolean sortedOnPreviousLine(List children, int childIndex) {
+    if (childIndex - PREVIOUS_LINE_OFFSET < 0) {
+      return false;
+    }
+
+    String currentLineIdentifier = children.get(childIndex - 1).toString();
+    String previousLineIdentifier = children.get(childIndex - PREVIOUS_LINE_OFFSET).toString();
+
+    if (!currentLineIdentifier.equalsIgnoreCase(previousLineIdentifier)) {
+      return false;
+    }
+
+    for (int i = 0; i < SORTED_LINE.length; ++i) {
+      String child = children.get(childIndex - PREVIOUS_LINE_OFFSET + i).toString();
+      if (!child.equalsIgnoreCase(SORTED_LINE[i])) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private boolean sortedOnNextLine(List children, int childIndex) {
+    if (childIndex + NEXT_LINE_OFFSET + SORTED_LINE.length >= children.size()) {
+      return false;
+    }
+
+    String currentLineIdentifier = children.get(childIndex - 1).toString();
+    String nextLineIdentifier = children.get(childIndex + NEXT_LINE_OFFSET).toString();
+
+    if (!currentLineIdentifier.equalsIgnoreCase(nextLineIdentifier)) {
+      return false;
+    }
+
+    for (int i = 0; i < SORTED_LINE.length; ++i) {
+      String child = children.get(childIndex + NEXT_LINE_OFFSET + i).toString();
+      if (!child.equalsIgnoreCase(SORTED_LINE[i])) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 }
+

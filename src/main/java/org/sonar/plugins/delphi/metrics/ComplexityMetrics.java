@@ -55,19 +55,23 @@ public class ComplexityMetrics extends DefaultMetrics {
    * The Cyclomatic Complexity Number.
    */
   private int fileComplexity;
+
   /**
    * Number of classes including nested classes, interfaces, enums and annotations.
    */
   private int classCount;
+
   /**
    * Number of Methods without including  accessors. A constructor is considered  to be a method.
    */
   private int methodsCount;
+
   /**
    * Number of statements as defined in the DelphiLanguage Language Specification but without block
    * definitions.
    */
   private int statementsCount;
+
   /**
    * Number of public classes, public methods  (without accessors) and public properties  (without
    * public final static ones).
@@ -76,6 +80,7 @@ public class ComplexityMetrics extends DefaultMetrics {
 
   private Integer threshold;
   private final SensorContext context;
+  private Set<String> processedFunctions = new HashSet<>();
 
   /**
    * {@inheritDoc}
@@ -98,10 +103,14 @@ public class ComplexityMetrics extends DefaultMetrics {
 
   @Override
   public void analyse(InputFile resource, List<ClassInterface> classes,
-      List<FunctionInterface> functions,
-      Set<UnitInterface> units) {
+      List<FunctionInterface> functions, Set<UnitInterface> units) {
     reset();
-    Set<String> processedFunc = new HashSet<>();
+    analyseClasses(resource, classes);
+    analyseFunctions(resource, functions);
+    saveAllMetrics();
+  }
+
+  private void analyseClasses(InputFile resource, List<ClassInterface> classes) {
     if (classes != null) {
       for (ClassInterface cl : classes) {
         if (cl == null) {
@@ -114,30 +123,32 @@ public class ComplexityMetrics extends DefaultMetrics {
 
         for (FunctionInterface func : cl.getFunctions()) {
           processFunction(resource, func);
-          processedFunc.add(func.getLongName());
+          processedFunctions.add(func.getLongName());
         }
       }
     }
+  }
 
-    // processing stand-alone (global) functions, not merged with any class
-    if (functions != null) {
-      for (FunctionInterface func : functions) {
-        if (func == null || processedFunc.contains(func.getLongName())) {
-          continue;
-        }
-        ++methodsCount;
-        fileComplexity += func.getComplexity();
-        statementsCount += func.getStatements().size();
-        if (func.getVisibility() == DelphiParser.PUBLIC) {
-          ++publicApi;
-        }
-        processedFunc.add(func.getLongName());
-
-        addIssue(resource, func);
-      }
+  private void analyseFunctions(InputFile resource, List<FunctionInterface> functions) {
+    if (functions == null) {
+      return;
     }
 
-    saveAllMetrics();
+    // Processing stand-alone (global) functions, not part of any class
+    for (FunctionInterface func : functions) {
+      if (func == null || processedFunctions.contains(func.getLongName())) {
+        continue;
+      }
+      ++methodsCount;
+      fileComplexity += func.getComplexity();
+      statementsCount += func.getStatements().size();
+      if (func.getVisibility() == DelphiParser.PUBLIC) {
+        ++publicApi;
+      }
+      processedFunctions.add(func.getLongName());
+
+      addIssue(resource, func);
+    }
   }
 
   private void processFunction(InputFile resource, FunctionInterface func) {

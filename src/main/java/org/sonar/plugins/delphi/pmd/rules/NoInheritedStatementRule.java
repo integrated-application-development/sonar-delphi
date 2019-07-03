@@ -32,7 +32,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  * Class that checks if 'inherited' statement is in some function or procedure. If no, it triggers a
  * violation.
  */
-public class NoInheritedStatementRule extends DelphiRule {
+public abstract class NoInheritedStatementRule extends DelphiRule {
 
   private static final int MAX_LOOK_AHEAD = 3;
   private String lookFor = "";
@@ -43,38 +43,51 @@ public class NoInheritedStatementRule extends DelphiRule {
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    if (StringUtils.isEmpty(lookFor)) {
+    if (StringUtils.isEmpty(lookFor) || !node.getText().equalsIgnoreCase(lookFor)) {
       return;
     }
 
-    if (node.getText().equalsIgnoreCase(lookFor)) {
-      Tree beginNode = null;
-      for (int i = node.getChildIndex() + 1; i < node.getChildIndex() + MAX_LOOK_AHEAD
-          && i < node.getParent().getChildCount(); ++i) {
-        if (node.getParent().getChild(i).getType() == DelphiLexer.BEGIN) {
-          beginNode = node.getParent().getChild(i);
-          break;
-        }
-      }
-      if (beginNode != null) {
-        boolean wasInherited = false;
-        for (int c = 0; c < beginNode.getChildCount(); c++) {
-          if (beginNode.getChild(c).getType() == DelphiLexer.INHERITED) {
-            wasInherited = true;
-            break;
-          }
-        }
+    Tree beginNode = findBeginNode(node);
+    if (beginNode == null) {
+      return;
+    }
 
-        if (!wasInherited && shouldAddRule(node)) {
-          addViolation(ctx, node);
-        }
+    boolean wasInherited = false;
+    for (int c = 0; c < beginNode.getChildCount(); c++) {
+      if (beginNode.getChild(c).getType() == DelphiLexer.INHERITED) {
+        wasInherited = true;
+        break;
       }
+    }
+
+    if (!wasInherited && shouldAddRule(node)) {
+      addViolation(ctx, node);
     }
   }
 
-  protected boolean shouldAddRule(DelphiPMDNode node) {
-    // Do not remove, necessary in other rules
-    return true;
+  private Tree findBeginNode(DelphiPMDNode node) {
+    Tree parent = node.getParent();
+    int childIndex = node.getChildIndex();
+    int childCount = parent.getChildCount();
+
+    for (int i = childIndex + 1; i < childIndex + MAX_LOOK_AHEAD && i < childCount; ++i) {
+      if (parent.getChild(i).getType() == DelphiLexer.BEGIN) {
+        return parent.getChild(i);
+      }
+    }
+
+    return null;
   }
 
+  protected abstract boolean shouldAddRule(DelphiPMDNode node);
+
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
 }

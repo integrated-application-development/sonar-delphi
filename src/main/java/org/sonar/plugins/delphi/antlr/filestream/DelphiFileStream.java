@@ -31,6 +31,8 @@ import org.sonar.plugins.delphi.antlr.resolvers.SourceResolver;
 import org.sonar.plugins.delphi.antlr.resolvers.DefineResolver;
 import org.sonar.plugins.delphi.antlr.resolvers.IncludeResolver;
 import org.sonar.plugins.delphi.antlr.resolvers.SourceResolverResults;
+import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
+import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiFileStream extends ANTLRStringStream {
@@ -85,5 +87,21 @@ public class DelphiFileStream extends ANTLRStringStream {
   @Override
   public String getSourceName() {
     return this.fileName;
+  }
+
+  /**
+   * Creates a DelphiFileStreamConfig for a given DelphiProject
+   * @param delphiProject a DelphiProject with its own include directories and compiler definitions
+   * @param delphiProjectHelper the delphiProjectHelper, provides user settings like encoding
+   * @return a new DelphiFileStreamConfig instance
+   */
+  public static DelphiFileStreamConfig createConfig(DelphiProject delphiProject,
+      DelphiProjectHelper delphiProjectHelper) {
+    String encoding = delphiProjectHelper.encoding();
+    List<File> includedDirs = delphiProject.getIncludeDirectories();
+    List<String> definitions = delphiProject.getDefinitions();
+    boolean extendIncludes = delphiProjectHelper.shouldExtendIncludes();
+
+    return new DelphiFileStreamConfig(encoding, includedDirs, definitions, extendIncludes);
   }
 }

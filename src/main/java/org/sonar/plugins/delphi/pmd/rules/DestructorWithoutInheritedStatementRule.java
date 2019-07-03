@@ -18,12 +18,19 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
+
 public class DestructorWithoutInheritedStatementRule extends NoInheritedStatementRule {
 
   @Override
   protected void init() {
     super.init();
-    setLookFor("destructor");
+    setLookFor(DelphiParser.tokenNames[DelphiParser.DESTRUCTOR]);
   }
 
+  @Override
+  protected boolean shouldAddRule(DelphiPMDNode node) {
+    return true;
+  }
 }

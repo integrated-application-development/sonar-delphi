@@ -28,18 +28,19 @@ public class UnitNameRule extends DelphiRule {
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
 
-    if (node.getType() == DelphiLexer.UNIT) {
-      for (int i = 0; i < node.getChildCount(); i++) {
-        Tree child = node.getChild(i);
+    if (node.getType() != DelphiLexer.UNIT) {
+      return;
+    }
 
-        if (child.getType() == DelphiLexer.DOT) {
-          continue;
-        }
+    for (int i = 0; i < node.getChildCount(); i++) {
+      Tree child = node.getChild(i);
 
+      if (child.getType() != DelphiLexer.DOT) {
         char firstChar = child.getText().charAt(0);
+
         if (firstChar != Character.toUpperCase(firstChar)) {
           addViolation(ctx, node);
-          break;
+          return;
         }
       }
     }

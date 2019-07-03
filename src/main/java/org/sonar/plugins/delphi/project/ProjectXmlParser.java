@@ -60,6 +60,7 @@ public class ProjectXmlParser extends DefaultHandler {
 
   /**
    * Parses the document
+   * @throws IOException If the SAXParser indicates a problem with the character stream
    */
   public void parse() throws IOException {
     try {

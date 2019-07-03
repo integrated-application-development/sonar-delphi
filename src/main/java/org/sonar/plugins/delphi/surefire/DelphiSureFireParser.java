@@ -149,23 +149,29 @@ public class DelphiSureFireParser {
       // normalize text representation
       doc.getDocumentElement().normalize();
 
-      NodeList testsuites = doc.getElementsByTagName("testsuite");
-
-      for (int f = 0; f < testsuites.getLength(); f++) {
-        Element testSuite = (Element) testsuites.item(f);
-        NodeList testCases = testSuite.getElementsByTagName("testcase");
-        for (int n = 0; n < testCases.getLength(); n++) {
-          Node testCase = testCases.item(n);
-          Node className = testCase.getAttributes().getNamedItem("classname");
-          if (className != null) {
-            String testClassName = className.getTextContent();
-            UnitTestClassReport classReport = index.index(testClassName);
-            classReport.add(parseTestResult(testCase.getAttributes()));
-          }
-        }
-      }
+      NodeList testSuites = doc.getElementsByTagName("testsuite");
+      parseTestSuites(index, testSuites);
     } catch (SAXException | ParserConfigurationException | IOException e) {
       DelphiPlugin.LOG.error("Error while parsing SureFire report: ", e);
+    }
+  }
+
+  private void parseTestSuites(UnitTestIndex index, NodeList testSuites) {
+    for (int f = 0; f < testSuites.getLength(); f++) {
+      Element testSuite = (Element) testSuites.item(f);
+      NodeList testCases = testSuite.getElementsByTagName("testcase");
+      for (int n = 0; n < testCases.getLength(); n++) {
+        Node testCase = testCases.item(n);
+        Node className = testCase.getAttributes().getNamedItem("classname");
+
+        if (className == null) {
+          continue;
+        }
+
+        String testClassName = className.getTextContent();
+        UnitTestClassReport classReport = index.index(testClassName);
+        classReport.add(parseTestResult(testCase.getAttributes()));
+      }
     }
   }
 

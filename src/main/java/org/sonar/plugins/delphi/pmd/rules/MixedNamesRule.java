@@ -113,21 +113,20 @@ public class MixedNamesRule extends DelphiRule {
    */
   private void checkVariableNames(DelphiPMDNode node, RuleContext ctx, boolean clear) {
     for (int i = 0; i < node.getChildCount(); ++i) {
-
-      // Cast exception was thrown, so we use c-tor instead of casting to DelphiPMDNode
       DelphiPMDNode child = new DelphiPMDNode((CommonTree) node.getChild(i), node.getASTTree());
+
       if (child.getLine() > lastLineParsed) {
         lastLineParsed = child.getLine();
       }
+
       if (child.getType() == DelphiLexer.BEGIN) {
         checkVariableNames(child, ctx, false);
       } else {
-        for (String globalName : variableNames) {
-          if (child.getText().equalsIgnoreCase(globalName.toLowerCase())
-              && !child.getText().equals(globalName)) {
-            addViolation(ctx, child, "Avoid mixing variable names (found: '" + child.getText()
-                + "' expected: '" + globalName + "').");
-          }
+        String name = child.getText();
+        String globalName = getGlobalName(name, variableNames);
+        if (!globalName.equals(name)) {
+          addViolation(ctx, child, "Avoid mixing variable names (found: '" + child.getText()
+              + "' expected: '" + globalName + "').");
         }
       }
     }
@@ -137,17 +136,25 @@ public class MixedNamesRule extends DelphiRule {
     }
   }
 
+  private String getGlobalName(String name, List<String> globalNames) {
+    for (String globalName : globalNames) {
+      if (name.equalsIgnoreCase(globalName)) {
+        return globalName;
+      }
+    }
+    return name;
+  }
+
   /**
    * Check function names
    */
   private void checkFunctionNames(DelphiPMDNode node, RuleContext ctx) {
     List<String> currentNames = buildNames(node, false);
     for (String name : currentNames) {
-      for (String globalName : functionNames) {
-        if (name.equalsIgnoreCase(globalName.toLowerCase()) && !name.equals(globalName)) {
-          addViolation(ctx, node, "Avoid mixing function names (found: '" + name + "' expected: '"
-              + globalName + "').");
-        }
+      String globalName = getGlobalName(name, functionNames);
+      if (!name.equals(globalName)) {
+        addViolation(ctx, node, "Avoid mixing function names (found: '" + name + "' expected: '"
+            + globalName + "').");
       }
     }
   }

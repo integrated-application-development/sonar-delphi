@@ -45,35 +45,30 @@ public class PublicFieldsRule extends DelphiRule {
 
     // Wherever there is a class definition
     if (node.getType() == DelphiLexer.TkClass) {
-      Tree classNode = node;
       boolean inPublic = false;
 
       // visits all its children
-      for (int i = 0; i < classNode.getChildCount(); i++) {
-        Tree child = classNode.getChild(i);
+      for (int i = 0; i < node.getChildCount(); i++) {
+        Tree child = node.getChild(i);
         // Do nothing until the public section.
-        if (inPublic) {
-          // Check if still in public before continuing
-          if (child.getType() != DelphiLexer.TkClassField && child.getType() != DelphiLexer.PROPERTY
-              && child.getType() != DelphiLexer.PROCEDURE
-              && child.getType() != DelphiLexer.CONSTRUCTOR) {
-            break;
+        if (!inPublic) {
+          inPublic = (child.getType() == DelphiLexer.PUBLIC);
+          continue;
+        }
 
-          }
+        // Check if still in public before continuing
+        if (child.getType() != DelphiLexer.TkClassField
+            && child.getType() != DelphiLexer.PROPERTY
+            && child.getType() != DelphiLexer.PROCEDURE
+            && child.getType() != DelphiLexer.CONSTRUCTOR) {
+          return;
+        }
 
-          // raise violations on any fields
-          if (child.getType() == DelphiLexer.TkClassField) {
-            addViolation(ctx, (DelphiPMDNode) child);
-          }
-        } else {
-          // Are we there yet?
-          if (child.getType() == DelphiLexer.PUBLIC) {
-            inPublic = true;
-          }
+        // raise violations on any fields
+        if (child.getType() == DelphiLexer.TkClassField) {
+          addViolation(ctx, (DelphiPMDNode) child);
         }
       }
-
     }
-
   }
 }

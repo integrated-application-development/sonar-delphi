@@ -21,6 +21,7 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.api.utils.log.Profiler;
 import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStream;
 import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.pmd.profile.DelphiRuleSets;
@@ -75,7 +76,7 @@ public class DelphiPmdExecutor {
     List<DelphiProject> projects = delphiProjectHelper.getProjects();
 
     for (DelphiProject delphiProject : projects) {
-      setupFileStreamConfig(delphiProject);
+      fileStreamConfig = DelphiFileStream.createConfig(delphiProject, delphiProjectHelper);
       addToPmdReport(delphiProject, pmd, ruleContext, ruleSets);
     }
 
@@ -135,16 +136,6 @@ public class DelphiPmdExecutor {
     } catch (IOException e) {
       throw new IllegalStateException("Fail to save the PMD configuration", e);
     }
-  }
-
-  private void setupFileStreamConfig(DelphiProject delphiProject) {
-    List<File> includedDirs = delphiProject.getIncludeDirectories();
-    List<String> definitions = delphiProject.getDefinitions();
-    String encoding = delphiProjectHelper.encoding();
-    boolean extendIncludes = delphiProjectHelper.shouldExtendIncludes();
-
-    fileStreamConfig = new DelphiFileStreamConfig(
-        encoding, includedDirs, definitions, extendIncludes);
   }
 
   private void processPmdParse(DelphiPMD pmd, RuleContext ruleContext, RuleSets ruleSets,

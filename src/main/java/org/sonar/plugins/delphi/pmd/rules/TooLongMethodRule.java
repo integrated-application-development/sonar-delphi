@@ -34,53 +34,50 @@ public class TooLongMethodRule extends DelphiRule {
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    if (node.getType() == DelphiLexer.PROCEDURE || node.getType() == DelphiLexer.FUNCTION) {
-      Tree beginNode = null;
-      // looking for begin statement
-      for (int i = node.getChildIndex() + 1; i < node.getParent().getChildCount(); ++i) {
-        Tree sibling = node.getParent().getChild(i);
-        int type = sibling.getType();
-        if (type == DelphiLexer.BEGIN) {
-          // found begin node
-          beginNode = sibling;
-          break;
-        } else if (type != DelphiLexer.VAR && type != DelphiLexer.CONST) {
-          // no begin node for this function
-          break;
-        }
-      }
+    if (notMethodNode(node)){
+      return;
+    }
 
-      if (beginNode == null) {
-        // no begin node, return
-        return;
-      }
+    Tree beginNode = findBeginNode(node);
 
+    if (beginNode != null) {
       int firstLine = node.getLine();
       int lastLine = getLastLine(beginNode);
       int lines = lastLine - firstLine;
       int limit = getProperty(LIMIT);
-      if (lines > limit) {
-        // get method name
-        StringBuilder methodName = new StringBuilder();
-        Tree nameNode = node.getFirstChildWithType(DelphiLexer.TkFunctionName);
-        if (nameNode != null) {
-          for (int c = 0; c < nameNode.getChildCount(); ++c) {
-            methodName.append(nameNode.getChild(c).getText());
-          }
-        } else {
-          throw new IllegalStateException("No method name found for TooLongMethodRule.");
-        }
 
+      if (lines > limit) {
+        String methodName = getMethodName(node);
         String msg =
-            methodName.toString() + " is too long (" + lines + " lines). Maximum line count is "
-                + limit;
+            methodName + " is too long (" + lines + " lines). Maximum line count is " + limit;
         addViolation(ctx, node, msg);
         lastLineParsed = lastLine;
       }
     }
   }
 
-  protected int getLastLine(Tree node) {
+  private boolean notMethodNode(DelphiPMDNode node) {
+    return (node.getType() != DelphiLexer.PROCEDURE && node.getType() != DelphiLexer.FUNCTION);
+  }
+
+  private Tree findBeginNode(DelphiPMDNode parent) {
+    for (int i = parent.getChildIndex() + 1; i < parent.getParent().getChildCount(); ++i) {
+      Tree sibling = parent.getParent().getChild(i);
+      int type = sibling.getType();
+
+      if (type == DelphiLexer.BEGIN) {
+        return sibling;
+      }
+
+      if (type != DelphiLexer.VAR && type != DelphiLexer.CONST) {
+        break;
+      }
+    }
+
+    return null;
+  }
+
+  private int getLastLine(Tree node) {
     int line = -1;
     for (int i = 0; i < node.getChildCount(); ++i) {
       Tree child = node.getChild(i);
@@ -95,5 +92,20 @@ public class TooLongMethodRule extends DelphiRule {
     }
 
     return line;
+  }
+
+  private String getMethodName(DelphiPMDNode node) {
+    // get method name
+    StringBuilder methodName = new StringBuilder();
+    Tree nameNode = node.getFirstChildWithType(DelphiLexer.TkFunctionName);
+    if (nameNode != null) {
+      for (int c = 0; c < nameNode.getChildCount(); ++c) {
+        methodName.append(nameNode.getChild(c).getText());
+      }
+    } else {
+      throw new IllegalStateException("No method name found for TooLongMethodRule.");
+    }
+
+    return methodName.toString();
   }
 }
