@@ -22,74 +22,31 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import net.sourceforge.pmd.Report;
-import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.RuleSet;
-import net.sourceforge.pmd.RuleSetFactory;
-import net.sourceforge.pmd.RuleSetNotFoundException;
-import net.sourceforge.pmd.RuleSets;
-import net.sourceforge.pmd.lang.ast.ParseException;
-import net.sourceforge.pmd.renderers.Renderer;
-import net.sourceforge.pmd.renderers.XMLRenderer;
-import org.apache.commons.io.FileUtils;
+import net.sourceforge.pmd.RuleViolation;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.TextRange;
-import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
-import org.sonar.api.batch.sensor.issue.NewIssue;
-import org.sonar.api.rule.RuleKey;
-import org.sonar.plugins.delphi.DelphiPlugin;
-import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
-import org.sonar.plugins.delphi.pmd.profile.DelphiRuleSets;
-import org.sonar.plugins.delphi.pmd.xml.DelphiRulesUtils;
-import org.sonar.plugins.delphi.project.DelphiProject;
-import org.sonar.plugins.delphi.utils.ProgressReporter;
-import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 /**
  * PMD sensor
  */
 public class DelphiPmdSensor implements Sensor {
 
-  private final SensorContext context;
-  private final DelphiProjectHelper delphiProjectHelper;
-  private final List<String> errors = new ArrayList<>();
-  private final ActiveRules rulesProfile;
-  private int issueHighlightingErrors;
-  private DelphiFileStreamConfig fileStreamConfig;
+  private final DelphiPmdExecutor executor;
+  private final DelphiPmdViolationRecorder violationRecorder;
 
   /**
    * C-tor
    *
-   * @param delphiProjectHelper delphiProjectHelper
-   * @param context SensorContext
-   * @param rulesProfile profile used to export active rules
+   * @param executor Does all of the work!
+   * @param violationRecorder Saves PMD violations as sonar issues
    */
-  public DelphiPmdSensor(DelphiProjectHelper delphiProjectHelper, SensorContext context,
-      ActiveRules rulesProfile) {
-    this.delphiProjectHelper = delphiProjectHelper;
-    this.context = context;
-    this.rulesProfile = rulesProfile;
+  public DelphiPmdSensor(DelphiPmdExecutor executor, DelphiPmdViolationRecorder violationRecorder) {
+    this.executor = executor;
+    this.violationRecorder = violationRecorder;
   }
 
   /**
@@ -97,82 +54,8 @@ public class DelphiPmdSensor implements Sensor {
    */
   @Override
   public void describe(SensorDescriptor descriptor) {
-    DelphiPlugin.LOG.info("PMD sensor.describe");
-    descriptor.name("PMD sensor").onlyOnLanguage(DelphiLanguage.KEY);
-  }
-
-  private void addIssue(String ruleKey, String fileName, int beginLine, int beginColumn,
-      int endLine, int endColumn, String message) {
-    InputFile inputFile = delphiProjectHelper.getFile(fileName);
-    NewIssue newIssue = context.newIssue();
-    TextRange textRange;
-
-    // Parsing errors and other factors can cause token character positions to be offset
-    // This can cause TextRange creation to fail because we naively trust the tokens to provide
-    // their location and size.
-    // In the event that we get a bad file pointer, we just select the line instead.
-    try {
-      textRange = inputFile.newRange(beginLine, beginColumn, endLine, endColumn);
-    } catch (IllegalArgumentException e) {
-      textRange = inputFile.selectLine(beginLine);
-      String error = "Rule: {} file: {} beginLine: {} beginCol: {} endLine: {} endCol: {}";
-      DelphiPlugin.LOG.debug(error, ruleKey, fileName, beginLine, beginColumn, endLine, endColumn);
-      DelphiPlugin.LOG.debug("Error while creating issue highlighting text range:", e);
-      ++issueHighlightingErrors;
-    }
-
-    newIssue
-        .forRule(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, ruleKey))
-        .at(newIssue.newLocation()
-            .on(inputFile)
-            .at(textRange)
-            .message(message))
-        .gap(0.0)
-        .save();
-  }
-
-  private void parsePMDreport(File reportFile) {
-    int issues = 0;
-
-    try {
-      DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-      docBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-      DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-      Document doc = docBuilder.parse(reportFile);
-
-      // normalize text representation
-      doc.getDocumentElement().normalize();
-
-      NodeList files = doc.getElementsByTagName("file");
-
-      for (int f = 0; f < files.getLength(); f++) {
-        Element file = (Element) files.item(f);
-        String fileName = file.getAttributes().getNamedItem("name").getTextContent();
-        NodeList violations = file.getElementsByTagName("violation");
-        for (int n = 0; n < violations.getLength(); n++) {
-          Node violation = violations.item(n);
-          String beginLine = violation.getAttributes().getNamedItem("beginline").getTextContent();
-          String endLine = violation.getAttributes().getNamedItem("endline").getTextContent();
-          String beginColumn = violation.getAttributes().getNamedItem("begincolumn")
-              .getTextContent();
-          String endColumn = violation.getAttributes().getNamedItem("endcolumn").getTextContent();
-          String rule = violation.getAttributes().getNamedItem("rule").getTextContent();
-          String message = violation.getTextContent();
-
-          addIssue(rule, fileName, Integer.parseInt(beginLine), Integer.parseInt(beginColumn),
-              Integer.parseInt(endLine), Integer.parseInt(endColumn), message);
-          ++issues;
-        }
-      }
-    } catch (SAXException e) {
-      DelphiPlugin.LOG.error("Error while parsing PMD report", e);
-    } catch (Exception e) {
-      DelphiPlugin.LOG.error("Unexpected error while parsing PMD report", e);
-    }
-
-    //TODO: Remove these messages
-    DelphiPlugin.LOG.info("{} issues added", issues);
-    DelphiPlugin.LOG.info("{} issue highlighting errors", issueHighlightingErrors);
+    descriptor.onlyOnLanguage(DelphiLanguage.KEY)
+        .name("DelphiPmdSensor");
   }
 
   /**
@@ -180,118 +63,9 @@ public class DelphiPmdSensor implements Sensor {
    */
   @Override
   public void execute(@NonNull SensorContext context) {
-    DelphiPlugin.LOG.info("PMD sensor.execute");
-    parsePMDreport(createPmdReport());
-  }
-
-  private RuleSets createRuleSets() {
-    RuleSets rulesets = new DelphiRuleSets();
-    //TODO: Replace call to the static DelphiRulesUtils.exportConfiguration with some kind of
-    // dependency-injected utility object?
-    String rulesXml = DelphiRulesUtils.exportConfiguration(rulesProfile);
-    File ruleSetFile = dumpXmlRuleSet(DelphiPmdConstants.REPOSITORY_KEY, rulesXml);
-    RuleSetFactory ruleSetFactory = new RuleSetFactory();
-
-    try {
-      RuleSet ruleSet = ruleSetFactory.createRuleSet(ruleSetFile.getAbsolutePath());
-      rulesets.addRuleSet(ruleSet);
-      return rulesets;
-    } catch (RuleSetNotFoundException e) {
-      throw new IllegalStateException(e);
+    for (RuleViolation violation : executor.execute()) {
+      violationRecorder.saveViolation(violation, context);
     }
-  }
-
-  private File dumpXmlRuleSet(String repositoryKey, String rulesXml) {
-    try {
-      File configurationFile = new File(delphiProjectHelper.workDir(), repositoryKey + ".xml");
-      FileUtils.writeStringToFile(configurationFile, rulesXml, StandardCharsets.UTF_8);
-
-      DelphiPlugin.LOG.info("PMD configuration: {}", configurationFile.getAbsolutePath());
-
-      return configurationFile;
-    } catch (IOException e) {
-      throw new IllegalStateException("Fail to save the PMD configuration", e);
-    }
-  }
-
-  private File createPmdReport() {
-    try {
-      DelphiPMD pmd = new DelphiPMD();
-      RuleContext ruleContext = new RuleContext();
-      RuleSets ruleSets = createRuleSets();
-      List<DelphiProject> projects = delphiProjectHelper.getProjects();
-
-      for (DelphiProject delphiProject : projects) {
-        setupFileStreamConfig(delphiProject);
-        createPmdReport(delphiProject, pmd, ruleContext, ruleSets);
-      }
-
-      return writeXmlReport(pmd.getReport());
-    } catch (IOException e) {
-      DelphiPlugin.LOG.error("Failed to generate PMD report file: ", e);
-      return null;
-    }
-  }
-
-  private void setupFileStreamConfig(DelphiProject delphiProject) {
-    List<File> includedDirs = delphiProject.getIncludeDirectories();
-    List<String> definitions = delphiProject.getDefinitions();
-    String encoding = delphiProjectHelper.encoding();
-    boolean extendIncludes = delphiProjectHelper.shouldExtendIncludes();
-
-    fileStreamConfig = new DelphiFileStreamConfig(
-        encoding, includedDirs, definitions, extendIncludes);
-  }
-
-  private void createPmdReport(DelphiProject delphiProject, DelphiPMD pmd, RuleContext ruleContext,
-      RuleSets ruleSets) {
-    DelphiPlugin.LOG.info("PMD Parsing project {}", delphiProject.getName());
-
-    List<File> excluded = delphiProjectHelper.getExcludedSources();
-    ProgressReporter progressReporter = new ProgressReporter(
-        delphiProject.getSourceFiles().size(), 10, new ProgressReporterLogger(DelphiPlugin.LOG));
-
-    for (File pmdFile : delphiProject.getSourceFiles()) {
-      progressReporter.progress();
-      if (!delphiProjectHelper.isExcluded(pmdFile, excluded)) {
-        processPmdParse(pmd, ruleContext, ruleSets, pmdFile);
-      }
-    }
-  }
-
-  private void processPmdParse(DelphiPMD pmd, RuleContext ruleContext, RuleSets ruleSets,
-      File pmdFile) {
-    try {
-      pmd.processFile(pmdFile, ruleSets, ruleContext, fileStreamConfig);
-    } catch (ParseException e) {
-      String errorMsg = "PMD error while parsing " + pmdFile.getAbsolutePath() + ": "
-          + e.getMessage();
-      DelphiPlugin.LOG.warn(errorMsg);
-      errors.add(errorMsg);
-    }
-  }
-
-  /**
-   * Generates an XML file from report
-   *
-   * @param report Report
-   * @return XML based on report
-   * @throws IOException When report could not be generated
-   */
-  private File writeXmlReport(Report report)
-      throws IOException {
-    Renderer xmlRenderer = new XMLRenderer();
-    Writer stringWriter = new StringWriter();
-    xmlRenderer.setWriter(stringWriter);
-    xmlRenderer.start();
-    xmlRenderer.renderFileReport(report);
-    xmlRenderer.end();
-
-    File xmlReport = new File(delphiProjectHelper.workDir().getAbsolutePath(), "pmd-report.xml");
-    DelphiPlugin.LOG.info("PMD output report: "
-        + xmlReport.getAbsolutePath());
-    FileUtils.writeStringToFile(xmlReport, stringWriter.toString(), StandardCharsets.UTF_8);
-    return xmlReport;
   }
 
   @Override
@@ -300,6 +74,6 @@ public class DelphiPmdSensor implements Sensor {
   }
 
   public List<String> getErrors() {
-    return errors;
+    return executor.getErrors();
   }
 }

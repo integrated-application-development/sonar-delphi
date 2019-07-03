@@ -29,17 +29,19 @@ import org.sonar.api.Properties;
 import org.sonar.api.Property;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
+import org.sonar.plugins.delphi.pmd.DelphiPmdConfiguration;
+import org.sonar.plugins.delphi.pmd.DelphiPmdExecutor;
 import org.sonar.plugins.delphi.pmd.DelphiPmdSensor;
+import org.sonar.plugins.delphi.pmd.DelphiPmdViolationRecorder;
 import org.sonar.plugins.delphi.pmd.profile.DefaultDelphiProfile;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileExporter;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileImporter;
-import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleDefinition;
+import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRulesDefinition;
 import org.sonar.plugins.delphi.surefire.SurefireSensor;
 
 /**
  * Main Sonar DelphiLanguage plugin class
  */
-
 @Properties({
     @Property(key = DelphiPlugin.EXCLUDED_DIRECTORIES_KEY,
         name = "Excluded sources",
@@ -72,8 +74,7 @@ import org.sonar.plugins.delphi.surefire.SurefireSensor;
         name = "Workgroup file",
         description = "Workgroup file. If provided, will be parsed, then all "
             + "*.dproj files found in workgroup file will be parsed.",
-        project = true,
-        global = true),
+        project = true),
     @Property(key = DelphiPlugin.CONDITIONAL_DEFINES_KEY,
         name = "Conditional Defines",
         description = "List of conditional defines to define while parsing the project",
@@ -88,6 +89,12 @@ import org.sonar.plugins.delphi.surefire.SurefireSensor;
         defaultValue = "delphi code coverage report",
         name = "Code coverage report file",
         description = "Code coverage report to be parsed by Delphi Code Coverage",
+        project = true,
+        global = false),
+    @Property(key = DelphiPlugin.GENERATE_PMD_REPORT_XML,
+        defaultValue = "false",
+        name = "Generate XML Report",
+        description = "Whether a PMD Report XML file should be generated",
         project = true,
         global = false),
 })
@@ -106,6 +113,7 @@ public class DelphiPlugin implements Plugin {
   public static final String CONDITIONAL_DEFINES_KEY = "sonar.delphi.conditionalDefines";
   public static final String CODECOVERAGE_TOOL_KEY = "sonar.delphi.codecoverage.tool";
   public static final String CODECOVERAGE_REPORT_KEY = "sonar.delphi.codecoverage.report";
+  public static final String GENERATE_PMD_REPORT_XML = "sonar.delphi.pmd.generateXml";
 
 
   /**
@@ -122,7 +130,6 @@ public class DelphiPlugin implements Plugin {
   @Override
   public void define(Context context) {
     context.addExtensions(
-
         // Sensors
         DelphiSensor.class,
         // Core
@@ -133,12 +140,13 @@ public class DelphiPlugin implements Plugin {
         SurefireSensor.class,
         // PMD
         DelphiPmdSensor.class,
-        DelphiPmdRuleDefinition.class,
+        DelphiPmdConfiguration.class,
+        DelphiPmdExecutor.class,
+        DelphiPmdRulesDefinition.class,
         DefaultDelphiProfile.class,
         DelphiPmdProfileExporter.class,
-        DelphiPmdProfileImporter.class
-
+        DelphiPmdProfileImporter.class,
+        DelphiPmdViolationRecorder.class
     );
   }
-
 }

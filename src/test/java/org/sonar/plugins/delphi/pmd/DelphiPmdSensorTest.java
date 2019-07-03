@@ -97,7 +97,7 @@ public class DelphiPmdSensorTest {
       throw new RuntimeException(e);
     }
 
-    sensor = new DelphiPmdSensor(delphiProjectHelper, sensorContext, rulesProfile);
+    //sensor = new DelphiPmdSensor(delphiProjectHelper, sensorContext, rulesProfile);
   }
 
 }

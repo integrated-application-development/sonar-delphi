@@ -29,8 +29,11 @@ public final class DelphiPmdConstants {
 
   public static final String REPOSITORY_KEY = "delph";
   public static final String REPOSITORY_NAME = "Delphi PMD";
+  public static final String XPATH_CLASS = "net.sourceforge.pmd.lang.rule.XPathRule";
+  public static final String XPATH_EXPRESSION_PARAM = "xpath";
+  public static final String XPATH_MESSAGE_PARAM = "message";
 
   private DelphiPmdConstants() {
-  }
 
+  }
 }

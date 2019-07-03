@@ -104,7 +104,7 @@ public class DelphiSensorTest {
     DefaultSensorDescriptor sensorDescriptor = new DefaultSensorDescriptor();
     sensor.describe(sensorDescriptor);
     assertEquals("Combined LCOV and LOC sensor", sensorDescriptor.name());
-    String[] expected = {"delph"};
+    String[] expected = {DelphiLanguage.KEY};
     assertArrayEquals(expected, sensorDescriptor.languages().toArray());
   }
 

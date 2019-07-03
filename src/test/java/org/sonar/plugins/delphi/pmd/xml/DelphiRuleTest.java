@@ -23,17 +23,38 @@
 package org.sonar.plugins.delphi.pmd.xml;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.emptyArray;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import net.sourceforge.pmd.RuleSet;
+import net.sourceforge.pmd.RuleSetFactory;
+import net.sourceforge.pmd.RuleSetNotFoundException;
+import net.sourceforge.pmd.RuleSets;
+import org.apache.commons.io.FileUtils;
 import org.hamcrest.Matchers;
+import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.plugins.delphi.pmd.profile.DelphiRuleSets;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiRuleTest {
 
@@ -41,72 +62,80 @@ public class DelphiRuleTest {
 
   @Before
   public void init() {
-    rule = new DelphiRule("class", "critical");
+    rule = new DelphiRule("class", 1);
   }
 
   @Test
   public void testName() {
-    assertEquals(null, rule.getName());
+    assertThat(rule.getName(), is(nullValue()));
     rule.setName("test");
-    assertEquals("test", rule.getName());
+    assertThat(rule.getName(), is("test"));
   }
 
   @Test
   public void testClazz() {
-    assertEquals("class", rule.getClazz());
+    assertThat(rule.getClazz(), is("class"));
   }
 
   @Test
   public void testProperties() {
-    assertNull(rule.getProperties());
-
-    List<Property> properties = new ArrayList<>();
-    properties.add(new Property("a", "b"));
+    List<DelphiRuleProperty> properties = new ArrayList<>();
+    properties.add(new DelphiRuleProperty("a", "b"));
     rule.setProperties(properties);
 
-    assertEquals(properties, rule.getProperties());
-    assertEquals(1, rule.getProperties().size());
+    assertThat(rule.getProperties(), is(properties));
+    assertThat(rule.getProperties(), IsCollectionWithSize.hasSize(1));
 
-    rule.addProperty(new Property("c", "d"));
-    assertEquals(2, rule.getProperties().size());
+    rule.addProperty(new DelphiRuleProperty("c", "d"));
+    assertThat(rule.getProperties(), IsCollectionWithSize.hasSize(2));
 
-  }
+    rule.removeProperty("c");
+    assertThat(rule.getProperties(), IsCollectionWithSize.hasSize(1));
 
-  @Test
-  public void testCompareTo() {
-    DelphiRule someOtherRule = new DelphiRule("not-class");
-    DelphiRule comparableRule = new DelphiRule("class");
-
-    assertNotEquals(0, rule.compareTo(someOtherRule));
-    assertEquals(0, rule.compareTo(comparableRule));
+    assertThat(rule.getProperties().get(0).getName(), is("a"));
   }
 
   @Test
   public void testPriority() {
-    assertEquals("critical", rule.getPriority());
-    assertNull(new DelphiRule("class").getPriority());
+    assertThat(rule.getPriority(), is(1));
+    assertThat(new DelphiRule("class").getPriority(), is(nullValue()));
   }
 
   @Test
   public void testMessage() {
     rule.setMessage("my message");
-    assertEquals("my message", rule.getMessage());
+    assertThat(rule.getMessage(), is("my message"));
   }
 
   @Test
   public void testDescription() {
-    assertEquals("", rule.getDescription());
+    assertThat(rule.getFullDescription(), isEmptyString());
+    rule.setDescription("abc");
+    assertThat(rule.getDescription(), is("abc"));
+    assertThat(rule.getFullDescription(), is("<p>abc</p>"));
+    rule.setExample("123");
+    assertThat(rule.getExample(), is("123"));
+    assertThat(rule.getFullDescription(), is("<p>abc</p><pre>123</pre>"));
   }
 
   @Test
-  public void testCategory() {
-    rule.setTag("bug,size");
-    assertThat(rule.getTags(), Matchers.arrayContaining("bug", "size"));
-  }
+  public void testWriteToIsValidPmdRuleSetSyntax() throws Exception {
+    StringWriter writer = new StringWriter();
+    String testRulesXmlPath = "org/sonar/plugins/delphi/pmd/xml/rules.xml";
+    URL url = getClass().getClassLoader().getResource(testRulesXmlPath);
+    assertThat(url, is(not(nullValue())));
+    InputStreamReader stream = new InputStreamReader(new FileInputStream(url.getPath()));
 
-  @Test
-  public void testEmptyCategory() {
-    assertThat(rule.getTags(), is(emptyArray()));
-  }
+    DelphiRuleSet ruleSet = DelphiRuleSetHelper.createFrom(stream);
+    ruleSet.writeTo(writer);
+    String rulesXml = writer.toString();
 
+    File ruleSetFile = File.createTempFile("delphiPmdRuleSet_", ".xml");
+    FileUtils.writeStringToFile(ruleSetFile, rulesXml, StandardCharsets.UTF_8);
+
+    RuleSetFactory ruleSetFactory = new RuleSetFactory();
+    RuleSet parsedRuleSet = ruleSetFactory.createRuleSet(ruleSetFile.getAbsolutePath());
+
+    assertThat(parsedRuleSet.getRules(), hasSize(ruleSet.getPmdRules().size()));
+  }
 }

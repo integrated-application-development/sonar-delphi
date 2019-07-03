@@ -20,11 +20,12 @@
 package org.sonar.plugins.delphi.pmd;
 
 import net.sourceforge.pmd.lang.BaseLanguageModule;
+import org.sonar.plugins.delphi.core.DelphiLanguage;
 
 public class DelphiLanguageModule extends BaseLanguageModule {
 
   public static final String LANGUAGE_NAME = "Delphi";
-  private static final String TERSE_NAME = "delphi";
+  private static final String TERSE_NAME = DelphiLanguage.KEY;
 
   public DelphiLanguageModule() {
     super(LANGUAGE_NAME, null, TERSE_NAME, DelphiRuleChainVisitor.class,

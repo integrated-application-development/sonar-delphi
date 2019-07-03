@@ -22,17 +22,28 @@
  */
 package org.sonar.plugins.delphi.pmd.xml;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 import org.junit.Test;
 
-public class PropertyTest {
+public class DelphiPropertyTest {
 
   @Test
   public void testProperty() {
-    Property p = new Property("name", "value");
-    assertEquals("name", p.getName());
-    assertEquals("value", p.getValue());
+    DelphiRuleProperty property = new DelphiRuleProperty("name", "value");
+
+    assertThat(property.getName(), is("name"));
+    assertThat(property.getValue(), is("value"));
+
+    assertThat(property.getCdataValue(), is(nullValue()));
+    assertThat(property.isCdataValue(), is(false));
+
+    property.setCdataValue("cdatavalue");
+
+    assertThat(property.isCdataValue(), is(true));
+    assertThat(property.getCdataValue(), is("cdatavalue"));
   }
 
 }

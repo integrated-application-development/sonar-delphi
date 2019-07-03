@@ -22,45 +22,107 @@
  */
 package org.sonar.plugins.delphi.pmd.profile;
 
-import java.io.IOException;
 import java.io.Reader;
-import org.apache.commons.io.IOUtils;
 import org.sonar.api.profiles.ProfileImporter;
 import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.rules.ActiveRule;
+import org.sonar.api.rules.Rule;
+import org.sonar.api.rules.RuleFinder;
+import org.sonar.api.rules.RuleQuery;
 import org.sonar.api.server.ServerSide;
 import org.sonar.api.utils.ValidationMessages;
-import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
-import org.sonar.plugins.delphi.pmd.xml.DelphiRulesUtils;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSetHelper;
+import org.sonar.plugins.delphi.utils.PmdLevelUtils;
 
 /**
  * imports Delphi rules profile from Sonar
  */
 @ServerSide
 public class DelphiPmdProfileImporter extends ProfileImporter {
+  private static final String AUTOMATIC_XPATH_WARNING = "PMD XPath rule '%s' can't be imported " +
+      "automatically. The rule must be created manually through the SonarQube web interface.";
 
-  /**
-   * ctor
-   */
-  public DelphiPmdProfileImporter() {
+  private static final String MISSING_CLASS_WARNING = "A PMD rule without 'class' attribute can't "
+      + "be imported. see '%s'";
+
+  private static final String UNKNOWN_PMD_RULE_WARNING = "Unable to import unknown PMD rule '%s'";
+
+  private static final String PROP_NOT_SUPPORTED_WARNING = "The property '%s' is not supported in "
+      + "the pmd rule: %s";
+
+  private final RuleFinder ruleFinder;
+  private ValidationMessages messages;
+
+  public DelphiPmdProfileImporter(RuleFinder ruleFinder) {
     super(DelphiPmdConstants.REPOSITORY_KEY, DelphiPmdConstants.REPOSITORY_NAME);
     setSupportedLanguages(DelphiLanguage.KEY);
+    this.ruleFinder = ruleFinder;
   }
 
   @Override
-  public RulesProfile importProfile(Reader reader, ValidationMessages messages) {
+  public RulesProfile importProfile(Reader pmdConfigurationFile, ValidationMessages messages) {
+    this.messages = messages;
+    DelphiRuleSet ruleSet = DelphiRuleSetHelper.createFrom(pmdConfigurationFile, messages);
     RulesProfile profile = RulesProfile.create();
-    try {
-      DelphiRulesUtils
-          .importConfiguration(IOUtils.toString(reader), DelphiRulesUtils.getInitialReferential(),
-              profile);
-    } catch (IOException e) {
-      if (messages != null) {
-        messages.addErrorText(e.getMessage());
-      }
-      Loggers.get(getClass()).error("Error loading from rules file: ", e);
+
+    for (DelphiRule delphiRule : ruleSet.getPmdRules()) {
+      createActiveRule(delphiRule, profile);
     }
     return profile;
+  }
+
+  private void createActiveRule(DelphiRule delphiRule, RulesProfile profile) {
+    String ruleClassName = delphiRule.getClazz();
+    if (DelphiPmdConstants.XPATH_CLASS.equals(ruleClassName)) {
+      addWarning(String.format(AUTOMATIC_XPATH_WARNING, delphiRule.getName()));
+      return;
+    }
+
+    String ruleName = delphiRule.getName();
+    if (ruleName == null) {
+      addWarning(String.format(MISSING_CLASS_WARNING, ruleName));
+      return;
+    }
+
+    RuleQuery query = RuleQuery.create()
+        .withRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY)
+        .withKey(ruleName);
+
+    Rule rule = ruleFinder.find(query);
+
+    if (rule == null) {
+      addWarning(String.format(UNKNOWN_PMD_RULE_WARNING, ruleName));
+      return;
+    }
+
+    Integer pmdLevel = delphiRule.getPriority();
+    ActiveRule activeRule = profile.activateRule(rule, PmdLevelUtils.fromLevel(pmdLevel));
+    setParameters(activeRule, delphiRule, rule);
+  }
+
+  private void setParameters(ActiveRule activeRule, DelphiRule delphiRule, Rule rule) {
+    for (DelphiRuleProperty prop : delphiRule.getProperties()) {
+      String paramName = prop.getName();
+      if (rule.getParam(paramName) == null) {
+        String errMsg = String.format(PROP_NOT_SUPPORTED_WARNING, paramName, delphiRule.getClazz());
+        addWarning(errMsg);
+        continue;
+      }
+
+      activeRule.setParameter(paramName, prop.getValue());
+    }
+  }
+
+  private void addWarning(String warning) {
+    if (messages != null) {
+      messages.addWarningText(warning);
+    }
+    DelphiPlugin.LOG.warn(warning);
   }
 }
