@@ -22,41 +22,44 @@
  */
 package org.sonar.plugins.delphi.antlr.sanitizer.directives;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
-import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveFactory;
+import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveParser;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
-import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveFactorySyntaxException;
-import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveFactoryUnsupportedDirectiveException;
+import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveSyntaxException;
+import org.sonar.plugins.delphi.antlr.directives.exceptions.UnsupportedCompilerDirectiveException;
 import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
-public class CompilerDirectiveFactoryTest extends FileTestsCommon {
+public class CompilerDirectiveParserTest extends FileTestsCommon {
 
   private static final String TEST_FILE = "/org/sonar/plugins/delphi/directives/FileWithDirectives.pas";
   private static final int TEST_FILE_DIRECTIVES_COUNT = 19;
-  private CompilerDirectiveFactory factory;
+  private CompilerDirectiveParser parser;
   private CompilerDirective directive;
 
   @Before
   public void setup() {
-    factory = new CompilerDirectiveFactory();
+    parser = new CompilerDirectiveParser();
   }
 
   @Test
-  public void testCreateIncludeDirective() throws CompilerDirectiveFactorySyntaxException,
-      CompilerDirectiveFactoryUnsupportedDirectiveException {
-    directive = factory.create("{$include file.inc}", 0, 19);
+  public void testCreateIncludeDirective() throws CompilerDirectiveSyntaxException,
+      UnsupportedCompilerDirectiveException {
+    directive = parseOne("{$include file.inc}");
     assertEquals(CompilerDirectiveType.INCLUDE, directive.getType());
     assertEquals("file.inc", directive.getItem());
     assertEquals(0, directive.getFirstCharPosition());
     assertEquals(18, directive.getLastCharPosition());
 
-    directive = factory.create("{$I file.inc}", 0, 13);
+    directive = parseOne("{$I file.inc}");
     assertEquals(CompilerDirectiveType.INCLUDE, directive.getType());
     assertEquals("file.inc", directive.getItem());
     assertEquals(0, directive.getFirstCharPosition());
@@ -64,21 +67,21 @@ public class CompilerDirectiveFactoryTest extends FileTestsCommon {
   }
 
   @Test
-  public void testCreateUnusedDirective() throws CompilerDirectiveFactorySyntaxException,
-      CompilerDirectiveFactoryUnsupportedDirectiveException {
-    directive = factory.create("{$i+}", 0, 5);
+  public void testCreateUnusedDirective() throws CompilerDirectiveSyntaxException,
+      UnsupportedCompilerDirectiveException {
+    directive = parseOne("{$i+}");
     assertEquals(CompilerDirectiveType.UNUSED, directive.getType());
     assertEquals("", directive.getItem());
     assertEquals(0, directive.getFirstCharPosition());
     assertEquals(4, directive.getLastCharPosition());
 
-    directive = factory.create("{$warn}", 0, 7);
+    directive = parseOne("{$warn}");
     assertEquals(CompilerDirectiveType.UNUSED, directive.getType());
     assertEquals("", directive.getItem());
     assertEquals(0, directive.getFirstCharPosition());
     assertEquals(6, directive.getLastCharPosition());
 
-    directive = factory.create("{$R}", 0, 4);
+    directive = parseOne("{$R}");
     assertEquals(CompilerDirectiveType.UNUSED, directive.getType());
     assertEquals("", directive.getItem());
     assertEquals(0, directive.getFirstCharPosition());
@@ -86,9 +89,9 @@ public class CompilerDirectiveFactoryTest extends FileTestsCommon {
   }
 
   @Test
-  public void testCreateIfDirective() throws CompilerDirectiveFactorySyntaxException,
-      CompilerDirectiveFactoryUnsupportedDirectiveException {
-    directive = factory.create("{$if file.inc}", 0, 14);
+  public void testCreateIfDirective() throws CompilerDirectiveSyntaxException,
+      UnsupportedCompilerDirectiveException {
+    directive = parseOne("{$if file.inc}");
     assertEquals(CompilerDirectiveType.IF, directive.getType());
     assertEquals("file.inc", directive.getItem());
     assertEquals(0, directive.getFirstCharPosition());
@@ -96,9 +99,9 @@ public class CompilerDirectiveFactoryTest extends FileTestsCommon {
   }
 
   @Test
-  public void testCreateDefineDirective() throws CompilerDirectiveFactorySyntaxException,
-      CompilerDirectiveFactoryUnsupportedDirectiveException {
-    directive = factory.create("{$define _DEBUG}", 0, 16);
+  public void testCreateDefineDirective() throws CompilerDirectiveSyntaxException,
+      UnsupportedCompilerDirectiveException {
+    directive = parseOne("{$define _DEBUG}");
     assertEquals(CompilerDirectiveType.DEFINE, directive.getType());
     assertEquals("_DEBUG", directive.getItem());
     assertEquals(0, directive.getFirstCharPosition());
@@ -106,9 +109,9 @@ public class CompilerDirectiveFactoryTest extends FileTestsCommon {
   }
 
   @Test
-  public void testCreateUndefineDirective() throws CompilerDirectiveFactorySyntaxException,
-      CompilerDirectiveFactoryUnsupportedDirectiveException {
-    directive = factory.create("{$undef _DEBUG}", 0, 15);
+  public void testCreateUndefineDirective() throws CompilerDirectiveSyntaxException,
+      UnsupportedCompilerDirectiveException {
+    directive = parseOne("{$undef _DEBUG}");
     assertEquals(CompilerDirectiveType.UNDEFINE, directive.getType());
     assertEquals("_DEBUG", directive.getItem());
     assertEquals(0, directive.getFirstCharPosition());
@@ -116,21 +119,21 @@ public class CompilerDirectiveFactoryTest extends FileTestsCommon {
   }
 
   @Test
-  public void testCreateElseDirective() throws CompilerDirectiveFactorySyntaxException,
-      CompilerDirectiveFactoryUnsupportedDirectiveException {
-    directive = factory.create("{$else}", 0, 6);
+  public void testCreateElseDirective() throws CompilerDirectiveSyntaxException,
+      UnsupportedCompilerDirectiveException {
+    directive = parseOne("{$else}");
     assertEquals(CompilerDirectiveType.ELSE, directive.getType());
     assertEquals("", directive.getItem());
     assertEquals(0, directive.getFirstCharPosition());
     assertEquals(6, directive.getLastCharPosition());
 
-    directive = factory.create("\t{$else}\t\n", 0, 12);
+    directive = parseOne("\t{$else}\t\n");
     assertEquals(CompilerDirectiveType.ELSE, directive.getType());
     assertEquals("", directive.getItem());
     assertEquals(1, directive.getFirstCharPosition());
     assertEquals(7, directive.getLastCharPosition());
 
-    directive = factory.create("{$elseif}", 0, 9);
+    directive = parseOne("{$elseif}");
     assertEquals(CompilerDirectiveType.ELSE, directive.getType());
     assertEquals("", directive.getItem());
     assertEquals(0, directive.getFirstCharPosition());
@@ -138,9 +141,9 @@ public class CompilerDirectiveFactoryTest extends FileTestsCommon {
   }
 
   @Test
-  public void testCreateIfEndDirective() throws CompilerDirectiveFactorySyntaxException,
-      CompilerDirectiveFactoryUnsupportedDirectiveException {
-    directive = factory.create("{$ifend}", 0, 8);
+  public void testCreateIfEndDirective() throws CompilerDirectiveSyntaxException,
+      UnsupportedCompilerDirectiveException {
+    directive = parseOne("{$ifend}");
     assertEquals(CompilerDirectiveType.IFEND, directive.getType());
     assertEquals("", directive.getItem());
     assertEquals(0, directive.getFirstCharPosition());
@@ -148,7 +151,7 @@ public class CompilerDirectiveFactoryTest extends FileTestsCommon {
   }
 
   @Test
-  public void testProduce() throws IOException, CompilerDirectiveFactorySyntaxException {
+  public void testProduce() throws IOException, CompilerDirectiveSyntaxException {
     loadFile(TEST_FILE);
 
     String[] names = {"include", "include", "define", "undefine", "if", "else",
@@ -168,12 +171,20 @@ public class CompilerDirectiveFactoryTest extends FileTestsCommon {
         CompilerDirectiveType.IF, CompilerDirectiveType.IFEND, CompilerDirectiveType.ENDIF,
         CompilerDirectiveType.ENDIF};
 
-    List<CompilerDirective> allDirectives = factory.produce(testFileString.toString());
+    List<CompilerDirective> allDirectives = parser.parse(testFileString.toString());
+    DelphiPlugin.LOG.info(allDirectives.toString());
     assertEquals(TEST_FILE_DIRECTIVES_COUNT, allDirectives.size());
     for (int i = 0; i < TEST_FILE_DIRECTIVES_COUNT; ++i) {
       assertEquals(String.valueOf(i), types[i], allDirectives.get(i).getType());
       assertEquals(names[i], allDirectives.get(i).getName());
       assertEquals(items[i], allDirectives.get(i).getItem());
     }
+  }
+
+  private CompilerDirective parseOne(String data) {
+    List<CompilerDirective> directives = parser.parse(data);
+    assertThat(directives, hasSize(1));
+
+    return directives.get(0);
   }
 }

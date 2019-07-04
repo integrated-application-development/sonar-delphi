@@ -26,9 +26,9 @@ import java.util.List;
 import java.util.Set;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
-import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveFactory;
+import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveParser;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
-import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveFactorySyntaxException;
+import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveSyntaxException;
 import org.sonar.plugins.delphi.antlr.directives.impl.IfDefDirective;
 import org.sonar.plugins.delphi.antlr.resolvers.exceptions.DefineResolverException;
 import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRange;
@@ -71,11 +71,11 @@ public class DefineResolver extends SourceResolver {
     }
 
     try {
-      CompilerDirectiveFactory factory = new CompilerDirectiveFactory();
-      List<CompilerDirective> allDirectives = factory.produce(str.toString());
+      CompilerDirectiveParser factory = new CompilerDirectiveParser();
+      List<CompilerDirective> allDirectives = factory.parse(str.toString());
       SubRangeAggregator toComment = processCompilerDirectives(allDirectives, defines);
       commentUnwantedDefinitions(str, toComment);
-    } catch (CompilerDirectiveFactorySyntaxException | DefineResolverException e) {
+    } catch (CompilerDirectiveSyntaxException | DefineResolverException e) {
       DelphiPlugin.LOG.trace("Failed to resolve define: ", e);
     }
 

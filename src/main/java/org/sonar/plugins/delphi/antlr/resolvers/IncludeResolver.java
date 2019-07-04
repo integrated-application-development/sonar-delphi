@@ -28,8 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
-import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveFactory;
-import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveFactorySyntaxException;
+import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveParser;
+import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveSyntaxException;
 import org.sonar.plugins.delphi.antlr.resolvers.exceptions.IncludeResolverException;
 import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRange;
 import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRangeFirstOccurenceComparator;
@@ -87,8 +87,8 @@ public class IncludeResolver extends SourceResolver {
     List<ReplacementSubRange> dataToInclude = new ArrayList<>();
 
     try {
-      CompilerDirectiveFactory factory = new CompilerDirectiveFactory();
-      List<CompilerDirective> allDirectives = factory.produce(baseFileData.toString());
+      CompilerDirectiveParser factory = new CompilerDirectiveParser();
+      List<CompilerDirective> allDirectives = factory.parse(baseFileData.toString());
 
       for (CompilerDirective directive : allDirectives) {
         String includeFileName = directive.getItem();
@@ -99,7 +99,7 @@ public class IncludeResolver extends SourceResolver {
 
         dataToInclude.add(processIncludedFile(directive, includeFileName, currentDir));
       }
-    } catch (CompilerDirectiveFactorySyntaxException e) {
+    } catch (CompilerDirectiveSyntaxException e) {
       DelphiPlugin.LOG.trace("Compiler directive syntax error: ", e);
     }
 
