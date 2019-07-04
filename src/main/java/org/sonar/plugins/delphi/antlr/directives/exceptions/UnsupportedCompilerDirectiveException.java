@@ -25,13 +25,13 @@ package org.sonar.plugins.delphi.antlr.directives.exceptions;
 /**
  * Is thrown when we could not generate compiler directive that was supported (implemented)
  */
-public class CompilerDirectiveFactoryUnsupportedDirectiveException extends RuntimeException {
+public class UnsupportedCompilerDirectiveException extends RuntimeException {
   /**
    * ctor
    *
    * @param msg Error message
    */
-  public CompilerDirectiveFactoryUnsupportedDirectiveException(String msg) {
+  public UnsupportedCompilerDirectiveException(String msg) {
     super(msg);
   }
 }

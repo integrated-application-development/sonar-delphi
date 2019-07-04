@@ -22,6 +22,18 @@
  */
 package org.sonar.plugins.delphi.antlr.directives;
 
+import org.sonar.plugins.delphi.antlr.directives.exceptions.UnsupportedCompilerDirectiveException;
+import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveSyntaxException;
+import org.sonar.plugins.delphi.antlr.directives.impl.DefineDirective;
+import org.sonar.plugins.delphi.antlr.directives.impl.ElseDirective;
+import org.sonar.plugins.delphi.antlr.directives.impl.EndIfDirective;
+import org.sonar.plugins.delphi.antlr.directives.impl.IfDefDirective;
+import org.sonar.plugins.delphi.antlr.directives.impl.IfDirective;
+import org.sonar.plugins.delphi.antlr.directives.impl.IfEndDirective;
+import org.sonar.plugins.delphi.antlr.directives.impl.IncludeDirective;
+import org.sonar.plugins.delphi.antlr.directives.impl.UndefineDirective;
+import org.sonar.plugins.delphi.antlr.directives.impl.UnusedDirective;
+
 /**
  * Compiler directive interface
  */
@@ -63,4 +75,43 @@ public interface CompilerDirective {
    */
   int getLength();
 
+
+  /**
+   * Creates a concrete compiler directive class base on a given string
+   *
+   * @param name Name of the directive
+   * @param item Argument(s) following the name of the directive
+   * @param startPos Start position of the compiler directive in the input string
+   * @param endPos End position of the compiler directive in the input string
+   * @return concrete compiler directive class
+   *
+   * @throws UnsupportedCompilerDirectiveException when directive name is unknown
+   * @throws CompilerDirectiveSyntaxException when no compiler directive could be created
+   */
+  static CompilerDirective create(String name, String item, int startPos, int endPos) {
+    CompilerDirectiveType type = CompilerDirectiveType.getTypeByName(name.toLowerCase());
+
+    switch (type) {
+      case DEFINE:
+        return new DefineDirective(item, startPos, endPos);
+      case UNDEFINE:
+        return new UndefineDirective(item, startPos, endPos);
+      case IF:
+        return new IfDirective(item, startPos, endPos);
+      case IFDEF:
+        return new IfDefDirective(name, item, startPos, endPos);
+      case IFEND:
+        return new IfEndDirective(item, startPos, endPos);
+      case ENDIF:
+        return new EndIfDirective(item, startPos, endPos);
+      case ELSE:
+        return new ElseDirective(item, startPos, endPos);
+      case INCLUDE:
+        return new IncludeDirective(item, startPos, endPos);
+      case UNUSED:
+        return new UnusedDirective(startPos, endPos);
+      default:
+        throw new UnsupportedCompilerDirectiveException("Not implemented directive name: " + name);
+    }
+  }
 }

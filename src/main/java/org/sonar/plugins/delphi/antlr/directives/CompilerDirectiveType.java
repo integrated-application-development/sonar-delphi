@@ -27,7 +27,7 @@ import java.util.Map;
 
 /**
  * Enum type for compiler directive Put every directive you don't use into UNUSED name string - it
- * will automaticaly supress warnings
+ * will automatically suppress warnings
  */
 public enum CompilerDirectiveType {
   UNKNOWN(0, "unknown_directive"),
@@ -50,9 +50,7 @@ public enum CompilerDirectiveType {
     this.name = name;
   }
 
-  /**
-   * create a hash map for faster values lookup
-   */
+  // create a hash map for faster values lookup
   static {
     mappedValues = new HashMap<>();
     CompilerDirectiveType[] values = CompilerDirectiveType.values();
