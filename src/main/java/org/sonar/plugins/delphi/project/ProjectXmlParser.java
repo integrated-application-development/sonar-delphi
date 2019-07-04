@@ -29,7 +29,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.sonar.api.internal.google.common.base.Splitter;
-import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -39,6 +40,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * Class for parsing .dproj xml file
  */
 public class ProjectXmlParser extends DefaultHandler {
+  private static final Logger LOG = Loggers.get(ProjectXmlParser.class);
 
   private String fileName;
   private String currentDir;
@@ -69,7 +71,7 @@ public class ProjectXmlParser extends DefaultHandler {
       SAXParser parser = factory.newSAXParser();
       parser.parse(fileName, this);
     } catch (ParserConfigurationException | SAXException | RuntimeException e) {
-      DelphiPlugin.LOG.error("{}: Error while parsing project file: ", fileName, e);
+      LOG.error("{}: Error while parsing project file: ", fileName, e);
     }
   }
 

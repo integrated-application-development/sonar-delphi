@@ -31,7 +31,8 @@ import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.RuleQuery;
 import org.sonar.api.server.ServerSide;
 import org.sonar.api.utils.ValidationMessages;
-import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
@@ -45,6 +46,8 @@ import org.sonar.plugins.delphi.utils.PmdLevelUtils;
  */
 @ServerSide
 public class DelphiPmdProfileImporter extends ProfileImporter {
+  private static final Logger LOG = Loggers.get(DelphiPmdProfileImporter.class);
+
   private static final String AUTOMATIC_XPATH_WARNING = "PMD XPath rule '%s' can't be imported " +
       "automatically. The rule must be created manually through the SonarQube web interface.";
 
@@ -123,6 +126,6 @@ public class DelphiPmdProfileImporter extends ProfileImporter {
     if (messages != null) {
       messages.addWarningText(warning);
     }
-    DelphiPlugin.LOG.warn(warning);
+    LOG.warn(warning);
   }
 }

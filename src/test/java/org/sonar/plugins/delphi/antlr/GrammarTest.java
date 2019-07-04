@@ -28,19 +28,21 @@ import static org.junit.Assert.assertFalse;
 import java.io.File;
 import java.io.IOException;
 import org.junit.Test;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class GrammarTest {
-
+  private static final Logger LOG = Loggers.get(GrammarTest.class);
   private static final String BASE_DIR = "/org/sonar/plugins/delphi/grammar/";
   private final DelphiFileStreamConfig fileStreamConfig = new DelphiFileStreamConfig("UTF-8");
 
   private void parseFile(String fileName) throws IOException {
     String path = BASE_DIR + fileName;
-    DelphiPlugin.LOG.info("Parsing file: " + path);
+    LOG.info("Parsing file: " + path);
     File file = DelphiUtils.getResource(path);
     DelphiAST ast = new DelphiAST(file, fileStreamConfig);
     assertFalse(ast.isError());
@@ -51,7 +53,7 @@ public class GrammarTest {
         File.createTempFile(name, "").getParentFile().getAbsolutePath() + File.separatorChar
             + "AST_" + name + ".xml";
     ast.generateXML(outputFileName);
-    DelphiPlugin.LOG.info("Generated AST XML file at " + outputFileName);
+    LOG.info("Generated AST XML file at " + outputFileName);
   }
 
   @Test

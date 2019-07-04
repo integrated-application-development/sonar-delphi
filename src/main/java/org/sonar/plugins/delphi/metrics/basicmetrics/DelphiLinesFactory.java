@@ -27,20 +27,22 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 
 /**
  * Class for parsing source code lines and calculating statistic for each line.
  */
 public class DelphiLinesFactory {
+  private static final Logger LOG = Loggers.get(DelphiLinesFactory.class);
+  private static final char LF = '\n';
+  private static final char CR = '\r';
+  private static final int EOF = -1;
 
   private final List<Line> lines = new ArrayList<>();
   private char lastReadCharacter;
   private StringBuilder currentStringBuilder = new StringBuilder();
   private Line currentLine;
-  private static final char LF = '\n';
-  private static final char CR = '\r';
-  private static final int EOF = -1;
   private LineContextHandler currentHandler;
   private LineContextHandler[] handlers;
 
@@ -81,9 +83,9 @@ public class DelphiLinesFactory {
         notifyHandlersAboutNewChar();
       } while (true);
     } catch (IOException e) {
-      DelphiPlugin.LOG.error("IOException, Unable to read the source code:", e);
+      LOG.error("IOException, Unable to read the source code:", e);
     } catch (Exception e) {
-      DelphiPlugin.LOG.error("Exception, problem analysing:", e);
+      LOG.error("Exception, problem analysing:", e);
     }
   }
 

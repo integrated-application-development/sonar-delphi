@@ -33,7 +33,8 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
@@ -45,7 +46,7 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  * Class counting function cyclomatic complexity.
  */
 public class ComplexityMetrics extends DefaultMetrics {
-
+  private static final Logger LOG = Loggers.get(ComplexityMetrics.class);
   public static final RuleKey RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY = RuleKey
       .of(DelphiPmdConstants.REPOSITORY_KEY, "MethodCyclomaticComplexityRule");
 
@@ -194,7 +195,7 @@ public class ComplexityMetrics extends DefaultMetrics {
           .withValue(getIntMetric("PUBLIC_API")).save();
 
     } catch (IllegalStateException e) {
-      DelphiPlugin.LOG.error("{}: Error while saving Complexity metrics: ", resource.filename(), e);
+      LOG.error("{}: Error while saving Complexity metrics: ", resource.filename(), e);
     }
   }
 

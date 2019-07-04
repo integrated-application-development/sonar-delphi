@@ -36,7 +36,8 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.utils.ParsingUtils;
-import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.surefire.data.UnitTestClassReport;
 import org.sonar.plugins.surefire.data.UnitTestIndex;
@@ -52,6 +53,7 @@ import org.xml.sax.SAXException;
  * Parses unit test reports from XML file.
  */
 public class DelphiSureFireParser {
+  private static final Logger LOG = Loggers.get(DelphiSureFireParser.class);
   private final DelphiProjectHelper delphiProjectHelper;
 
   /**
@@ -66,7 +68,7 @@ public class DelphiSureFireParser {
   private InputFile getUnitTestResource(String filename) {
     InputFile testFile = delphiProjectHelper.findTestFileInDirectories(filename);
     if (testFile != null) {
-      DelphiPlugin.LOG.trace("Unit test file not found: {}.pas", filename);
+      LOG.trace("Unit test file not found: {}.pas", filename);
     }
 
     return testFile;
@@ -83,7 +85,7 @@ public class DelphiSureFireParser {
     if (dir == null) {
       return new File[0];
     } else if (!dir.isDirectory()) {
-      DelphiPlugin.LOG.warn("Reports path not found: {}", dir.getAbsolutePath());
+      LOG.warn("Reports path not found: {}", dir.getAbsolutePath());
       return new File[0];
     }
     File[] unitTestResultFiles = findXMLFilesStartingWith(dir, "TEST-");
@@ -152,7 +154,7 @@ public class DelphiSureFireParser {
       NodeList testSuites = doc.getElementsByTagName("testsuite");
       parseTestSuites(index, testSuites);
     } catch (SAXException | ParserConfigurationException | IOException e) {
-      DelphiPlugin.LOG.error("Error while parsing SureFire report: ", e);
+      LOG.error("Error while parsing SureFire report: ", e);
     }
   }
 
@@ -199,7 +201,7 @@ public class DelphiSureFireParser {
         if (resource != null) {
           save(entry.getValue(), resource, context);
         } else {
-          DelphiPlugin.LOG.warn("Resource not found: {}", entry.getKey());
+          LOG.warn("Resource not found: {}", entry.getKey());
         }
       }
     }
