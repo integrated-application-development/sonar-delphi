@@ -27,13 +27,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
-import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 /**
  * DelphiLanguage project class, it holds values parsed from *.dproj file.
  */
 public class DelphiProject {
+  private static final Logger LOG = Loggers.get(DelphiProject.class);
 
   private String name = "";
   private List<String> definitions = new ArrayList<>();
@@ -73,7 +75,7 @@ public class DelphiProject {
   public void addFile(String path) {
     File newFile = new File(path);
     if (!newFile.exists()) {
-      DelphiPlugin.LOG.warn("Could not add file to project: {}", newFile.getAbsolutePath());
+      LOG.warn("Could not add file to project: {}", newFile.getAbsolutePath());
     }
 
     if (DelphiUtils.acceptFile(newFile.getAbsolutePath())) {

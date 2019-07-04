@@ -24,7 +24,8 @@ package org.sonar.plugins.delphi.antlr.resolvers;
 
 import java.util.List;
 import java.util.Set;
-import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveParser;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
@@ -41,6 +42,7 @@ import org.sonar.plugins.delphi.antlr.resolvers.subranges.impl.IntegerSubRange;
  * Resolves defines in a given file, cuts out the unwanted definitions
  */
 public class DefineResolver extends SourceResolver {
+  private static final Logger LOG = Loggers.get(DefineResolver.class);
 
   private Set<String> definitions;
 
@@ -76,7 +78,7 @@ public class DefineResolver extends SourceResolver {
       SubRangeAggregator toComment = processCompilerDirectives(allDirectives, defines);
       commentUnwantedDefinitions(str, toComment);
     } catch (CompilerDirectiveSyntaxException | DefineResolverException e) {
-      DelphiPlugin.LOG.trace("Failed to resolve define: ", e);
+      LOG.trace("Failed to resolve define: ", e);
     }
 
     return str;

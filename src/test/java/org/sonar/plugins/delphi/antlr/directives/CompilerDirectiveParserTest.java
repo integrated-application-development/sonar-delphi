@@ -30,7 +30,8 @@ import java.io.IOException;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveParser;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
@@ -39,7 +40,7 @@ import org.sonar.plugins.delphi.antlr.directives.exceptions.UnsupportedCompilerD
 import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
 public class CompilerDirectiveParserTest extends FileTestsCommon {
-
+  private static final Logger LOG = Loggers.get(CompilerDirectiveParser.class);
   private static final String TEST_FILE = "/org/sonar/plugins/delphi/directives/FileWithDirectives.pas";
   private static final int TEST_FILE_DIRECTIVES_COUNT = 19;
   private CompilerDirectiveParser parser;
@@ -172,7 +173,7 @@ public class CompilerDirectiveParserTest extends FileTestsCommon {
         CompilerDirectiveType.ENDIF};
 
     List<CompilerDirective> allDirectives = parser.parse(testFileString.toString());
-    DelphiPlugin.LOG.info(allDirectives.toString());
+    LOG.info(allDirectives.toString());
     assertEquals(TEST_FILE_DIRECTIVES_COUNT, allDirectives.size());
     for (int i = 0; i < TEST_FILE_DIRECTIVES_COUNT; ++i) {
       assertEquals(String.valueOf(i), types[i], allDirectives.get(i).getType());

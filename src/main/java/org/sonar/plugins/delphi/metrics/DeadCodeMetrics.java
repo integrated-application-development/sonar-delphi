@@ -34,7 +34,8 @@ import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.ClassPropertyInterface;
@@ -47,10 +48,12 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  * Metric used to search for "dead code" (unused units, unused methods).
  */
 public class DeadCodeMetrics extends DefaultMetrics {
+  private static final Logger LOG = Loggers.get(DeadCodeMetrics.class);
 
   private static final String DEAD_UNIT_VIOLATION_MESSAGE = " - unused unit. No other unit nor " +
       "project has this unit in it's uses section. Probably you could remove this unit from " +
       "project.";
+
   private static final String DEAD_FUNCTION_VIOLATION_MESSAGE = " - unused function/procedure. " +
       "No other function and procedure in a project refers to it. " +
       "Probably you could remove it.";
@@ -112,7 +115,7 @@ public class DeadCodeMetrics extends DefaultMetrics {
     if (unit == null) {
       String unitName = FilenameUtils.removeExtension(inputFile.filename());
       String logDesc = String.format("No unit for %s (%s)", unitName, inputFile.toString());
-      DelphiPlugin.LOG.debug(logDesc);
+      LOG.debug(logDesc);
       return;
     }
 

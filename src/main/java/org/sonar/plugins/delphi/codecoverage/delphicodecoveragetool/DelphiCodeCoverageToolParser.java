@@ -30,7 +30,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
-import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.codecoverage.DelphiCodeCoverageParser;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.w3c.dom.Document;
@@ -40,7 +41,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser {
-
+  private static final Logger LOG = Loggers.get(DelphiCodeCoverageToolParser.class);
   private final File reportFile;
   private final DelphiProjectHelper delphiProjectHelper;
 
@@ -81,7 +82,7 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser {
     InputFile sourceFile = delphiProjectHelper.findFileInDirectories(fileName);
 
     if (sourceFile == null) {
-      DelphiPlugin.LOG.trace("File not found in project: {}", fileName);
+      LOG.trace("File not found in project: {}", fileName);
       return;
     }
 
@@ -112,9 +113,9 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser {
       }
 
     } catch (SAXException e) {
-      DelphiPlugin.LOG.error("Failed to parse coverage report: ", e);
+      LOG.error("Failed to parse coverage report: ", e);
     } catch (Exception e) {
-      DelphiPlugin.LOG.error("Unexpected exception while parsing coverage reports: ", e);
+      LOG.error("Unexpected exception while parsing coverage reports: ", e);
     }
   }
 

@@ -36,6 +36,8 @@ import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.config.Configuration;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.project.DelphiProject;
@@ -48,8 +50,7 @@ import org.apache.commons.lang3.ArrayUtils;
  */
 @ScannerSide
 public class DelphiProjectHelper {
-
-  public static final String DEFAULT_PACKAGE_NAME = "[default]";
+  private static final Logger LOG = Loggers.get(DelphiProjectHelper.class);
 
   private final Configuration settings;
   private final FileSystem fs;
@@ -64,7 +65,7 @@ public class DelphiProjectHelper {
   public DelphiProjectHelper(Configuration settings, FileSystem fs) {
     this.settings = settings;
     this.fs = fs;
-    DelphiPlugin.LOG.info("Delphi Project Helper creation!!!");
+    LOG.info("Delphi Project Helper creation!!!");
     this.excludedSources = detectExcludedSources();
   }
 
@@ -99,17 +100,17 @@ public class DelphiProjectHelper {
             .resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
 
         if (!included.exists()) {
-          DelphiPlugin.LOG.warn("{} {}", "Include directory does not exist: ",
+          LOG.warn("{} {}", "Include directory does not exist: ",
               included.getAbsolutePath());
         } else if (!included.isDirectory()) {
-          DelphiPlugin.LOG.warn("{} {}", "Include path is not a directory: ",
+          LOG.warn("{} {}", "Include path is not a directory: ",
               included.getAbsolutePath());
         } else {
           result.add(included);
         }
       }
     } else {
-      DelphiPlugin.LOG.info("No include directories found in project configuration.");
+      LOG.info("No include directories found in project configuration.");
     }
     return result;
   }
@@ -138,12 +139,12 @@ public class DelphiProjectHelper {
             .resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
         result.add(excluded);
         if (!excluded.exists()) {
-          DelphiPlugin.LOG.warn("{} {}", "Exclude directory does not exist: ",
+          LOG.warn("{} {}", "Exclude directory does not exist: ",
               excluded.getAbsolutePath());
         }
       }
     } else {
-      DelphiPlugin.LOG.info("No exclude directories found in project configuration.");
+      LOG.info("No exclude directories found in project configuration.");
     }
     return result;
   }
@@ -210,12 +211,12 @@ public class DelphiProjectHelper {
    */
   private List<DelphiProject> getWorkgroupProjects(String gprojPath) {
     try {
-      DelphiPlugin.LOG.debug("{} {}", ".groupproj file found: ", gprojPath);
+      LOG.debug("{} {}", ".groupproj file found: ", gprojPath);
       DelphiWorkgroup workGroup = new DelphiWorkgroup(new File(gprojPath));
       return workGroup.getProjects();
     } catch (IOException e) {
-      DelphiPlugin.LOG.error("Failed to create Delphi Workgroup: ", e);
-      DelphiPlugin.LOG.error("Skipping .groupproj reading, default configuration assumed.");
+      LOG.error("Failed to create Delphi Workgroup: ", e);
+      LOG.error("Skipping .groupproj reading, default configuration assumed.");
     }
 
     return Collections.emptyList();
@@ -229,12 +230,12 @@ public class DelphiProjectHelper {
   private List<DelphiProject> getDprojProject(String dprojPath) {
     try {
       File dprojFile = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), dprojPath);
-      DelphiPlugin.LOG.info("{} {}", ".dproj file found: ", dprojPath);
+      LOG.info("{} {}", ".dproj file found: ", dprojPath);
       DelphiProject newProject = new DelphiProject(dprojFile);
       return Collections.singletonList(newProject);
     } catch (IOException e) {
-      DelphiPlugin.LOG.error("Failed to create Delphi Workgroup: ", e);
-      DelphiPlugin.LOG.error("Skipping .groupproj reading, default configuration assumed.");
+      LOG.error("Failed to create Delphi Workgroup: ", e);
+      LOG.error("Skipping .groupproj reading, default configuration assumed.");
     }
 
     return Collections.emptyList();
@@ -366,13 +367,11 @@ public class DelphiProjectHelper {
       }
       File excluded = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
       if (!excluded.exists()) {
-        DelphiPlugin.LOG
-            .warn("{} {}", "Excluded code coverage path does not exist: ",
-                excluded.getAbsolutePath());
+        LOG.warn("{} {}", "Excluded code coverage path does not exist: ",
+            excluded.getAbsolutePath());
       } else if (!excluded.isDirectory()) {
-        DelphiPlugin.LOG
-            .warn("{} {}", "Excluded code coverage path is not a directory: ",
-                excluded.getAbsolutePath());
+        LOG.warn("{} {}", "Excluded code coverage path is not a directory: ",
+            excluded.getAbsolutePath());
       } else {
         list.add(excluded);
       }

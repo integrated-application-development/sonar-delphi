@@ -82,7 +82,6 @@
 		<hamcrest-all.version>1.3</hamcrest-all.version>
 		<junit.version>4.12</junit.version>
 		<org.mockit.version>1.10.19</org.mockit.version>
-		<logback-classic.version>1.3.0-alpha4</logback-classic.version>
 		<slf4j.version>1.8.0-beta4</slf4j.version>
 		<antlr3-maven-plugin.version>3.3.9</antlr3-maven-plugin.version>
 		<!--Version Fields end here-->
@@ -157,16 +156,6 @@
 			<artifactId>mockito-core</artifactId>
 			<version>${org.mockit.version}</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>${logback-classic.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.sonarsource.java</groupId>

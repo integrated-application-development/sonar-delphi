@@ -47,6 +47,11 @@ public class DelphiPluginTest {
   }
 
   @Test
+  public void testToString() {
+    assertThat(plugin.toString(), is("DelphiPlugin"));
+  }
+
+  @Test
   public void testExtensions() {
     SonarRuntime runtime = SonarRuntimeImpl.forSonarQube(
         Version.create(1, 0), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);

@@ -214,15 +214,11 @@ public class UnusedArgumentsRule extends DelphiRule {
 
   @Override
   public boolean equals(Object o) {
-    if (!super.equals(o)) {
-      return false;
-    }
-    UnusedArgumentsRule that = (UnusedArgumentsRule) o;
-    return excludedArgs.equals(that.excludedArgs);
+    return super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), excludedArgs);
+    return super.hashCode();
   }
 }

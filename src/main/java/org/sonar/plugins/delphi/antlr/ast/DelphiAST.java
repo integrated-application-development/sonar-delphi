@@ -40,7 +40,8 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenRewriteStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
 import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStream;
@@ -52,6 +53,7 @@ import org.w3c.dom.Element;
  * DelphiLanguage AST tree.
  */
 public class DelphiAST extends CommonTree implements ASTTree {
+  private static final Logger LOG = Loggers.get(DelphiAST.class);
 
   private String fileName;
   private boolean isError;
@@ -150,7 +152,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
 
       transformer.transform(source, result);
     } catch (TransformerException e) {
-      DelphiPlugin.LOG.error("Failed to generate Node XML", e);
+      LOG.error("Failed to generate Node XML", e);
       return null;
     }
 
@@ -168,7 +170,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
     try {
       return generateDocument(createNewDocument(), "file");
     } catch (Exception e) {
-      DelphiPlugin.LOG.error("{} {}", "Failed to generate Node XML: ", e);
+      LOG.error("{} {}", "Failed to generate Node XML: ", e);
       return null;
     }
   }

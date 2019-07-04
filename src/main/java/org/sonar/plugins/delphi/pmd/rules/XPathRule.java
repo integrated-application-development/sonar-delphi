@@ -31,7 +31,8 @@ import org.apache.xml.dtm.DTM;
 import org.apache.xml.dtm.DTMIterator;
 import org.apache.xpath.XPathAPI;
 import org.apache.xpath.objects.XNodeSet;
-import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 import org.sonar.plugins.delphi.pmd.DelphiRuleViolation;
@@ -42,6 +43,7 @@ import org.w3c.dom.Node;
  * DelphiLanguage rule for XPath, use it to parse XPath rules
  */
 public class XPathRule extends DelphiRule {
+  private static final Logger LOG = Loggers.get(XPathRule.class);
 
   private static final PropertyDescriptor<String> XPATH = PropertyFactory
       .stringProperty("xpath")
@@ -97,7 +99,7 @@ public class XPathRule extends DelphiRule {
         addViolation(ctx, violation);
       }
     } catch (Exception e) {
-      DelphiPlugin.LOG.debug("XPath error: '{}' at rule {}", e.getMessage(), getName(), e);
+      LOG.debug("XPath error: '{}' at rule {}", e.getMessage(), getName(), e);
     }
   }
 

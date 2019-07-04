@@ -46,6 +46,8 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
 import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
@@ -75,6 +77,11 @@ import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
  * through metrics.
  */
 public class DelphiSensor implements Sensor {
+  private static final Logger LOG = Loggers.get(DelphiSensor.class);
+  private final DelphiProjectHelper delphiProjectHelper;
+  private final BasicMetrics basicMetrics;
+  private final ComplexityMetrics complexityMetrics;
+  private final DeadCodeMetrics deadCodeMetrics;
 
   private int scannedFiles;
   private List<InputFile> resourceList = new ArrayList<>();
@@ -84,14 +91,9 @@ public class DelphiSensor implements Sensor {
   private final List<File> excluded;
   private DelphiFileStreamConfig fileStreamConfig;
 
-  private final DelphiProjectHelper delphiProjectHelper;
-  private final BasicMetrics basicMetrics;
-  private final ComplexityMetrics complexityMetrics;
-  private final DeadCodeMetrics deadCodeMetrics;
-
   public DelphiSensor(DelphiProjectHelper delphiProjectHelper, ActiveRules activeRules,
       SensorContext sensorContext) {
-    DelphiPlugin.LOG.info("Delphi sensor DelphiSensor...");
+    LOG.info("Delphi sensor DelphiSensor...");
     this.delphiProjectHelper = delphiProjectHelper;
 
     basicMetrics = new BasicMetrics(sensorContext);
@@ -105,7 +107,7 @@ public class DelphiSensor implements Sensor {
    */
   @Override
   public void describe(SensorDescriptor descriptor) {
-    DelphiPlugin.LOG.info("Delphi sensor describe...");
+    LOG.info("Delphi sensor describe...");
     descriptor.name("Combined LCOV and LOC sensor");
     descriptor.onlyOnLanguage(DelphiLanguage.KEY);
   }
@@ -115,7 +117,7 @@ public class DelphiSensor implements Sensor {
    * The actual sensor code.
    */
   public void execute(@NonNull SensorContext context) {
-    DelphiPlugin.LOG.info("Delphi sensor execute...");
+    LOG.info("Delphi sensor execute...");
     List<DelphiProject> projects = delphiProjectHelper.getProjects();
     for (DelphiProject delphiProject : projects) {
       fileStreamConfig = DelphiFileStream.createConfig(delphiProject, delphiProjectHelper);
@@ -144,7 +146,7 @@ public class DelphiSensor implements Sensor {
                 coverageParser.parse(context);
               });
         } catch (IOException e) {
-          DelphiPlugin.LOG.error("Error while parsing Coverage Reports:", e);
+          LOG.error("Error while parsing Coverage Reports:", e);
         }
       }
     }
@@ -183,9 +185,9 @@ public class DelphiSensor implements Sensor {
       }
       cpdTokens.save();
     } catch (FileNotFoundException ex) {
-      DelphiPlugin.LOG.error("{} {} {}", "Cpd could not find : ", inputFile.toString(), ex);
+      LOG.error("{} {} {}", "Cpd could not find : ", inputFile.toString(), ex);
     } catch (IOException ex) {
-      DelphiPlugin.LOG.error("{} {} {}", "Cpd IO Exception on ", inputFile.toString(), ex);
+      LOG.error("{} {} {}", "Cpd IO Exception on ", inputFile.toString(), ex);
     }
   }
 
@@ -195,22 +197,21 @@ public class DelphiSensor implements Sensor {
    * @param sensorContext Sensor context (provided by Sonar)
    */
   private void processFiles(SensorContext sensorContext) {
-    DelphiPlugin.LOG.info("Processing metrics...");
+    LOG.info("Processing metrics...");
     ProgressReporter progressReporter = new ProgressReporter(resourceList.size(), 10,
-        new ProgressReporterLogger(
-            DelphiPlugin.LOG));
+        new ProgressReporterLogger(LOG));
 
     for (InputFile resource : resourceList) {
-      DelphiPlugin.LOG.debug("{} {}", ">> PROCESSING ", resource);
+      LOG.debug("{} {}", ">> PROCESSING ", resource);
 
       try {
         processMetric(basicMetrics, resource);
         processMetric(complexityMetrics, resource);
         processMetric(deadCodeMetrics, resource);
       } catch (IllegalArgumentException e) {
-        DelphiPlugin.LOG.error("{} produced IllegalArgumentException: \"{}\""
+        LOG.error("{} produced IllegalArgumentException: \"{}\""
             + " Metric report for this file may be in error.", resource, e.getMessage());
-        DelphiPlugin.LOG.debug("Stacktrace: ", e);
+        LOG.debug("Stacktrace: ", e);
       }
 
       if (basicMetrics.hasMetric("PUBLIC_DOC_API") && complexityMetrics.hasMetric("PUBLIC_API")) {
@@ -227,7 +228,7 @@ public class DelphiSensor implements Sensor {
       progressReporter.progress();
     }
 
-    DelphiPlugin.LOG.info("Done");
+    LOG.info("Done");
   }
 
   private void processMetric(MetricsInterface metric, InputFile resource) {
@@ -240,7 +241,7 @@ public class DelphiSensor implements Sensor {
   // for debugging, prints file paths with message to debug file
   private void printFileList(String msg, List<File> list) {
     for (File f : list) {
-      DelphiPlugin.LOG.info("{}{}", msg, f.getAbsolutePath());
+      LOG.info("{}{}", msg, f.getAbsolutePath());
     }
   }
 
@@ -257,12 +258,11 @@ public class DelphiSensor implements Sensor {
     printFileList("Included: ", includedDirs);
     printFileList("Excluded: ", excludedDirs);
 
-    DelphiPlugin.LOG.info("{} {}", "Parsing project ", delphiProject.getName());
+    LOG.info("{} {}", "Parsing project ", delphiProject.getName());
 
     ProgressReporter progressReporter = new ProgressReporter(sourceFiles.size(), 10,
-        new ProgressReporterLogger(
-            DelphiPlugin.LOG));
-    DelphiPlugin.LOG.info("{} {}", "Files to parse: ", sourceFiles.size());
+        new ProgressReporterLogger(LOG));
+    LOG.info("{} {}", "Files to parse: ", sourceFiles.size());
 
     ASTAnalyzer analyser = new DelphiASTAnalyzer();
     for (File delphiFile : sourceFiles) {
@@ -273,7 +273,7 @@ public class DelphiSensor implements Sensor {
       progressReporter.progress();
     }
 
-    DelphiPlugin.LOG.info("Done");
+    LOG.info("Done");
   }
 
   private CodeAnalysisResults parseSourceFile(File sourceFile, ASTAnalyzer analyzer) {
@@ -281,7 +281,7 @@ public class DelphiSensor implements Sensor {
       return null;
     }
 
-    DelphiPlugin.LOG.debug("{} {}", ">> PARSING ", sourceFile.getAbsolutePath());
+    LOG.debug("{} {}", ">> PARSING ", sourceFile.getAbsolutePath());
 
     InputFile resource = delphiProjectHelper.getFile(sourceFile);
 
@@ -312,7 +312,7 @@ public class DelphiSensor implements Sensor {
     final DelphiAST ast = new DelphiAST(sourceFile, fileStreamConfig);
 
     if (ast.isError()) {
-      DelphiPlugin.LOG.error("{} {}", "Error while parsing ", sourceFile.getAbsolutePath());
+      LOG.error("{} {}", "Error while parsing ", sourceFile.getAbsolutePath());
       return null;
     }
 
@@ -321,13 +321,11 @@ public class DelphiSensor implements Sensor {
       ++scannedFiles;
       return results;
     } catch (Exception e) {
-      if (DelphiPlugin.LOG.isDebugEnabled()) {
-        DelphiPlugin.LOG
-            .debug("{} {} {} {}", "Error analyzing file: ", e.getMessage(),
+      if (LOG.isDebugEnabled()) {
+        LOG.debug("{} {} {} {}", "Error analyzing file: ", e.getMessage(),
                 sourceFile.getAbsolutePath(), e);
       } else {
-        DelphiPlugin.LOG
-            .error("{} {} {}", "Error analyzing file: ", e.getMessage(),
+        LOG.error("{} {} {}", "Error analyzing file: ", e.getMessage(),
                 sourceFile.getAbsolutePath());
       }
     }

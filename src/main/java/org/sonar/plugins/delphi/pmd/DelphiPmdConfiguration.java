@@ -64,11 +64,11 @@ public class DelphiPmdConfiguration {
     try {
       File configurationFile = writeToWorkingDirectory(rulesXml, repositoryKey + ".xml").toFile();
 
-      LOG.info("PMD configuration: " + configurationFile.getAbsolutePath());
+      LOG.info("PMD configuration: {}", configurationFile.getAbsolutePath());
 
       return configurationFile;
     } catch (IOException e) {
-      throw new IllegalStateException("Fail to save the PMD configuration", e);
+      throw new IllegalStateException("Failed to save the PMD configuration", e);
     }
   }
 

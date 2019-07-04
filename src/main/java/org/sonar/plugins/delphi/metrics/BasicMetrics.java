@@ -29,7 +29,8 @@ import java.util.Set;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
@@ -41,7 +42,7 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
  * Class calculating basic file metrics: lines of code and comments, documentation.
  */
 public class BasicMetrics extends DefaultMetrics {
-
+  private static final Logger LOG = Loggers.get(BasicMetrics.class);
   private final SensorContext context;
 
   public BasicMetrics(SensorContext sensorContext) {
@@ -62,8 +63,7 @@ public class BasicMetrics extends DefaultMetrics {
       setIntMetric("COMMENT_BLANK_LINES", source.getMeasure(Metric.COMMENT_BLANK_LINES));
       setIntMetric("PUBLIC_DOC_API", source.getMeasure(Metric.PUBLIC_DOC_API));
     } catch (Exception e) {
-      DelphiPlugin.LOG.error(
-          "BasicMetrics::analyse() -- Can not analyse the file " + resource.toString(), e);
+      LOG.error("BasicMetrics::analyse() -- Can not analyse the file " + resource.toString(), e);
     }
   }
 

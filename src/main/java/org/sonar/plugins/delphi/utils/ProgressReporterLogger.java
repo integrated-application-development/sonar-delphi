@@ -22,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.utils;
 
-import org.slf4j.Logger;
+import org.sonar.api.utils.log.Logger;
 
 /**
  * Logger used to report progress from ProgressReporter

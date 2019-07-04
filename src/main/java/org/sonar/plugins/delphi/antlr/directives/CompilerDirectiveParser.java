@@ -24,7 +24,8 @@ package org.sonar.plugins.delphi.antlr.directives;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveSyntaxException;
 import org.sonar.plugins.delphi.antlr.directives.exceptions.UnsupportedCompilerDirectiveException;
 
@@ -33,6 +34,7 @@ import org.sonar.plugins.delphi.antlr.directives.exceptions.UnsupportedCompilerD
  * Example: "{$include unit.pas}" will create 1 IncludeDirective instance
  */
 public class CompilerDirectiveParser {
+  private static final Logger LOG = Loggers.get(CompilerDirectiveParser.class);
   private static final char END_OF_INPUT = '\0';
 
   private enum DirectiveBracketType {
@@ -134,7 +136,7 @@ public class CompilerDirectiveParser {
     try {
       directives.add(CompilerDirective.create(name, item, directiveStartPos, position));
     } catch (UnsupportedCompilerDirectiveException e) {
-      DelphiPlugin.LOG.trace("Failed to parse Compiler Directive: ", e);
+      LOG.trace("Failed to parse Compiler Directive: ", e);
     }
   }
 

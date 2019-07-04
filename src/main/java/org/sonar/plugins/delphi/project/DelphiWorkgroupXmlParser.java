@@ -29,7 +29,8 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -39,7 +40,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * Parser for Delphi *.groupproj XML file
  */
 public class DelphiWorkgroupXmlParser extends DefaultHandler {
-
+  private static final Logger LOG = Loggers.get(DelphiWorkgroupXmlParser.class);
   private File xml;
   private DelphiWorkgroup workGroup;
   private String currentDir;
@@ -69,7 +70,7 @@ public class DelphiWorkgroupXmlParser extends DefaultHandler {
       SAXParser parser = factory.newSAXParser();
       parser.parse(xml.getAbsolutePath(), this);
     } catch (ParserConfigurationException | SAXException e) {
-      DelphiPlugin.LOG.error("{}: Error parsing workgroup file: ", xml.getAbsolutePath(), e);
+      LOG.error("{}: Error parsing workgroup file: ", xml.getAbsolutePath(), e);
     }
   }
 
