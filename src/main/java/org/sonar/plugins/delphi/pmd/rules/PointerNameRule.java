@@ -18,27 +18,24 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import net.sourceforge.pmd.RuleContext;
+import org.antlr.runtime.tree.CommonTree;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-public class PointerNameRule extends DelphiRule {
+public class PointerNameRule extends NameConventionRule {
+  private static final String POINTER_PREFIX = "P";
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
-    if (isImplementationSection()) {
-      return;
+  public DelphiPMDNode findNameNode(DelphiPMDNode node) {
+    if (isImplementationSection() || node.getType() != DelphiLexer.POINTER2) {
+      return null;
     }
 
-    if (node.getType() == DelphiLexer.POINTER2) {
-      String name = node.getParent().getText();
+    return new DelphiPMDNode((CommonTree) node.getParent(), node.getASTTree());
+  }
 
-      char firstCharAfterPrefix = name.charAt(1);
-
-      if (!name.startsWith("P") || firstCharAfterPrefix != Character
-          .toUpperCase(firstCharAfterPrefix)) {
-        addViolation(ctx, node);
-      }
-    }
+  @Override
+  protected boolean isViolation(DelphiPMDNode nameNode) {
+    return !compliesWithPrefixNamingConvention(nameNode.getText(), POINTER_PREFIX);
   }
 }

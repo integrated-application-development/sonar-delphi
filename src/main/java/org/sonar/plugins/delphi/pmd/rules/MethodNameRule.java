@@ -18,34 +18,36 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import java.util.Collections;
 import java.util.List;
-import net.sourceforge.pmd.RuleContext;
+import java.util.stream.Collectors;
+import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-public class MethodNameRule extends DelphiRule {
+public class MethodNameRule extends NameConventionRule {
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
-
-    if (node.getType() == DelphiLexer.TkNewType && (isInterface(node) || !isPublished())) {
-      List<Tree> methodNodes = node.findAllChildren(DelphiLexer.TkFunctionName);
-
-      for (Tree method : methodNodes) {
-        String name = method.getChild(0).getText();
-        char firstChar = name.charAt(0);
-
-        if (firstChar != Character.toUpperCase(firstChar)) {
-          addViolation(ctx, (DelphiPMDNode) method);
-        }
-      }
+  public List<DelphiPMDNode> findNameNodes(DelphiPMDNode node) {
+    if (node.getType() != DelphiLexer.TkNewType || (!isInterface(node) && isPublished())) {
+      return Collections.emptyList();
     }
 
+    List<Tree> nameParentNodes = node.findAllChildren(DelphiLexer.TkFunctionName);
+
+    return nameParentNodes.stream()
+        .map(parent -> new DelphiPMDNode((CommonTree) parent.getChild(0), node.getASTTree()))
+        .collect(Collectors.toList());
   }
 
-  private boolean isInterface(DelphiPMDNode node) {
-    return node.getChild(0).getChild(0).getType() == DelphiLexer.TkInterface;
+  @Override
+  protected boolean isViolation(DelphiPMDNode method) {
+    String name = method.getText();
+    return Character.isLowerCase(name.charAt(0));
   }
 
+  private boolean isInterface(DelphiPMDNode typeNode) {
+    return typeNode.getChild(0).getChild(0).getType() == DelphiLexer.TkInterface;
+  }
 }

@@ -18,34 +18,28 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.CommonTree;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-public class InterfaceNameRule extends DelphiRule {
+/**
+ * This rule looks for the interface name and if it doesn't start with "I" it raises a
+ * violation.
+ */
+public class InterfaceNameRule extends NameConventionRule {
+  private static final String INTERFACE_PREFIX = "I";
 
-  /**
-   * This rule looks for the interface name and if it doesn't start with "I" it raises a
-   * violation.
-   *
-   * @param node the current node
-   * @param ctx the ruleContext to store the violations
-   */
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
-
-    if (node.getType() == DelphiLexer.TkInterface) {
-      CommonTree interfaceNameNode = (CommonTree) node.getParent();
-        /* This safely casts interfaceNameNode from CommonTree to DelphiPMDNode type.
-        Since (DelphiPMDNode) <CommonTree object> casting will not work. */
-      DelphiPMDNode violationNode = new DelphiPMDNode(interfaceNameNode, node.getASTTree());
-
-      String name = interfaceNameNode.getText();
-
-      if (!name.startsWith("I")) {
-        addViolation(ctx, violationNode);
-      }
+  public DelphiPMDNode findNameNode(DelphiPMDNode node) {
+    if (node.getType() != DelphiLexer.TkInterface) {
+      return null;
     }
+
+    return new DelphiPMDNode((CommonTree) node.getParent(), node.getASTTree());
+  }
+
+  @Override
+  protected boolean isViolation(DelphiPMDNode nameNode) {
+    return !compliesWithPrefixNamingConvention(nameNode.getText(), INTERFACE_PREFIX);
   }
 }

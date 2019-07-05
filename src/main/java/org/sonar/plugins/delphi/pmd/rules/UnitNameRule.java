@@ -18,31 +18,33 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import net.sourceforge.pmd.RuleContext;
-import org.antlr.runtime.tree.Tree;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.antlr.runtime.tree.CommonTree;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-public class UnitNameRule extends DelphiRule {
+public class UnitNameRule extends NameConventionRule {
+  private static final String[] PREFIXES = {"F"};
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
+  public List<DelphiPMDNode> findNameNodes(DelphiPMDNode node) {
+    if (node.getType() == DelphiLexer.UNIT) {
+      List<?> children = node.getChildren();
 
-    if (node.getType() != DelphiLexer.UNIT) {
-      return;
+      return children.stream()
+          .filter(child -> ((CommonTree) child).getType() != DelphiLexer.DOT)
+          .map(child -> new DelphiPMDNode((CommonTree) child, node.getASTTree()))
+          .collect(Collectors.toList());
     }
 
-    for (int i = 0; i < node.getChildCount(); i++) {
-      Tree child = node.getChild(i);
+    return Collections.emptyList();
+  }
 
-      if (child.getType() != DelphiLexer.DOT) {
-        char firstChar = child.getText().charAt(0);
-
-        if (firstChar != Character.toUpperCase(firstChar)) {
-          addViolation(ctx, node);
-          return;
-        }
-      }
-    }
+  @Override
+  protected boolean isViolation(DelphiPMDNode nameNode) {
+    return !compliesWithPrefixNamingConvention(nameNode.getText(), PREFIXES);
   }
 }
