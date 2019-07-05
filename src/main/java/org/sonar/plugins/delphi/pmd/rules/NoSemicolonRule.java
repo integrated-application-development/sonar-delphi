@@ -50,7 +50,7 @@ public class NoSemicolonRule extends DelphiRule {
     if (isValidNode(previousNode)) {
       if (isBlockNode(previousNode) && isMissingSemicolonInBlock(previousNode)) {
         return (DelphiPMDNode) previousNode.getChild(previousNode.getChildCount() - 1);
-      } else if (!isSemicolonNode(previousNode)) {
+      } else if (notSemicolonNode(previousNode)) {
         return (DelphiPMDNode) previousNode;
       }
     }
@@ -81,11 +81,11 @@ public class NoSemicolonRule extends DelphiRule {
 
   private boolean isMissingSemicolonInBlock(Tree beginNode) {
     Tree lastChild = beginNode.getChild(beginNode.getChildCount() - 1);
-    return lastChild != null && !isSemicolonNode(lastChild);
+    return notSemicolonNode(lastChild);
   }
 
-  private boolean isSemicolonNode(Tree node) {
-    return node != null && node.getType() == LexerMetrics.SEMI.toMetrics();
+  private boolean notSemicolonNode(Tree node) {
+    return node == null || node.getType() != LexerMetrics.SEMI.toMetrics();
   }
 
 }
