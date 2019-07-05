@@ -21,19 +21,20 @@ package org.sonar.plugins.delphi;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.sonar.api.issue.Issue;
+import org.sonar.api.batch.fs.TextRange;
+import org.sonar.api.batch.sensor.issue.Issue;
 
 public class HasRuleLineNumber<T extends Issue> extends TypeSafeMatcher<T> {
 
   private final int line;
 
-  public HasRuleLineNumber(int line) {
+  private HasRuleLineNumber(int line) {
     this.line = line;
   }
 
   @Override
   protected boolean matchesSafely(T item) {
-    return line == item.line();
+    return line == getLine(item);
   }
 
   @Override
@@ -43,11 +44,16 @@ public class HasRuleLineNumber<T extends Issue> extends TypeSafeMatcher<T> {
 
   @Override
   protected void describeMismatchSafely(T item, Description mismatchDescription) {
-    mismatchDescription.appendText("was ").appendValue(item.line());
+    mismatchDescription.appendText("was ").appendValue(getLine(item));
   }
 
   public static <T extends Issue> Matcher<T> hasRuleLine(int line) {
     return new HasRuleLineNumber<>(line);
   }
 
+  private static <T extends Issue> int getLine(T item) {
+    TextRange textRange = item.primaryLocation().textRange();
+
+    return (textRange == null) ? -1 : textRange.start().line();
+  }
 }

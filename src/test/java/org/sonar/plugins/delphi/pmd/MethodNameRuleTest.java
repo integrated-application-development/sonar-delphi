@@ -37,7 +37,7 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(issues, is(empty()));
+    assertThat(stringifyIssues(), issues, is(empty()));
   }
 
 /*  @Test

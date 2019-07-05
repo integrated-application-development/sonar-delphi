@@ -22,86 +22,70 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
+import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
 
 public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
-/*  @Test
+  @Test
   public void testRule() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendImpl("procedure NoSemicolonsAfterLastInstruction;");
     builder.appendImpl("begin");
-    builder.appendImpl("  x := 5");
+    builder.appendImpl("  SomeVar := 5");
     builder.appendImpl("end;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(issues, not(empty()));
-    List<Issue> matchIssues = new ArrayList<Issue>();
-    for (Issue issue : issues) {
-      if (issue.ruleKey().rule().equals("NoSemicolonRule")) {
-        matchIssues.add(issue);
-      }
-    }
-    assertThat(matchIssues, hasSize(1));
-    assertThat(matchIssues.get(0).line(), is(builder.getOffSet() + 3));
-  }*/
+    assertThat(stringifyIssues(), issues, hasSize(1));
+    assertThat(stringifyIssues(), issues, hasItem(
+        hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 3)));
+  }
 
- /* @Test
+  @Test
   public void testInsideWhile() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendImpl("procedure NoSemicolonsAfterLastInstruction;");
     builder.appendImpl("var");
-    builder.appendImpl("  x: integer;");
+    builder.appendImpl("  SomeNumber: Integer;");
     builder.appendImpl("begin");
     builder.appendImpl("  while x <> 0 do");
     builder.appendImpl("  begin");
-    builder.appendImpl("    writeln('test')");
+    builder.appendImpl("    WriteLn('test')");
     builder.appendImpl("  end;");
     builder.appendImpl("end;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(issues, not(empty()));
-    List<Issue> matchIssues = new ArrayList<Issue>();
-    for (Issue issue : issues) {
-      if (issue.ruleKey().rule().equals("NoSemicolonRule")) {
-        matchIssues.add(issue);
-      }
-    }
-    assertThat(matchIssues, hasSize(1));
-    assertThat(matchIssues.get(0).line(), is(builder.getOffSet() + 7));
-  }*/
+    assertThat(stringifyIssues(), issues, hasSize(1));
+    assertThat(stringifyIssues(), issues, hasItem(
+        hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 7)));
+  }
 
-/*  @Test
+  @Test
   public void testOnEndOfWhile() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendImpl("procedure NoSemicolonsAfterLastInstruction;");
     builder.appendImpl("var");
-    builder.appendImpl("  x: integer;");
+    builder.appendImpl("  SomeVar: integer;");
     builder.appendImpl("begin");
-    builder.appendImpl("  while x <> 0 do");
+    builder.appendImpl("  while SomeVar <> 0 do");
     builder.appendImpl("  begin");
-    builder.appendImpl("    writeln('test');");
+    builder.appendImpl("    WriteLn('test');");
     builder.appendImpl("  end");
     builder.appendImpl("end;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(issues, not(empty()));
-    List<Issue> matchIssues = new ArrayList<Issue>();
-    for (Issue issue : issues) {
-      if (issue.ruleKey().rule().equals("NoSemicolonRule")) {
-        matchIssues.add(issue);
-      }
-    }
-    assertThat(matchIssues, hasSize(1));
-    // TODO The correct line is 15
-    assertThat(matchIssues.get(0).line(), is(builder.getOffSet() + 9));
-  }*/
+    assertThat(stringifyIssues(), issues, hasSize(1));
+    assertThat(stringifyIssues(), issues, hasItem(
+        hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 8)));
+  }
 
   @Test
   public void testShouldSkipEndFollowedByElse() {
@@ -120,30 +104,28 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(sensor.getErrors(), empty());
     assertThat(issues, empty());
   }
 
-/*  @Test
-  public void shouldSkipRecordDeclarationOnImplementationSection() {
+  @Test
+  public void testShouldSkipRecordDeclarationOnImplementationSection() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendImpl("type");
     builder.appendImpl("  TDummyRec = record");
     builder.appendImpl("    FData : Integer;");
-    builder.appendImpl("    constructor Create(aData : Integer);");
+    builder.appendImpl("    constructor Create(Data: Integer);");
     builder.appendImpl("  end;");
     builder.appendImpl("  ");
-    builder.appendImpl("constructor TDummyRec.Create(aData : Integer);");
+    builder.appendImpl("constructor TDummyRec.Create(Data: Integer);");
     builder.appendImpl("begin");
     builder.appendImpl("  inherited;");
     builder.appendImpl("  FData := aData;");
     builder.appendImpl("end;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(sensor.getErrors(), empty());
     assertThat(issues, empty());
-  }*/
+  }
 
   @Test
   public void testShouldSkipClassDeclarationOnImplementationSection() {
@@ -162,7 +144,6 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(sensor.getErrors(), empty());
     assertThat(issues, empty());
   }
 
@@ -177,8 +158,6 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(sensor.getErrors(), empty());
     assertThat(issues, empty());
   }
-
 }

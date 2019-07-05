@@ -20,16 +20,12 @@ package org.sonar.plugins.delphi;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
-import org.sonar.api.issue.Issue;
+import org.sonar.api.batch.sensor.issue.Issue;
 
 public class IssueMatchers {
 
   public static <T extends Issue> Matcher<T> hasRuleKey(String key) {
     return HasRuleKey.hasRuleKey(key);
-  }
-
-  public static <T extends Issue> Matcher<T> hasRuleMessage(String message) {
-    return HasRuleMessage.hasRuleMessage(message);
   }
 
   public static <T extends Issue> Matcher<T> hasRuleLine(int line) {

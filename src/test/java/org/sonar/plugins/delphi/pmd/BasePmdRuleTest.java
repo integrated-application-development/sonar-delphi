@@ -22,29 +22,33 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.not;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
+import org.sonar.api.batch.rule.ActiveRule;
 import org.sonar.api.batch.rule.ActiveRules;
+import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
+import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.config.Configuration;
+import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.project.DelphiProject;
@@ -59,7 +63,7 @@ public abstract class BasePmdRuleTest {
   private DelphiProjectHelper delphiProjectHelper;
 
   protected DelphiPmdSensor sensor;
-  protected List<Issue> issues = new ArrayList<>();
+  protected Collection<Issue> issues = new ArrayList<>();
   private File testFile;
   private ActiveRules rulesProfile;
   private File baseDir;
@@ -69,12 +73,14 @@ public abstract class BasePmdRuleTest {
 
     SensorContextTester sensorContext = SensorContextTester.create(baseDir);
     sensor.execute(sensorContext);
-    //todo: REACTIVATE THIS TEST, ATM PROBLEMS WITH TREE TESTLOGIC
-    //assertThat("Errors: " + sensor.getErrors(), sensor.getErrors(), is(empty()));
+    issues = sensorContext.allIssues();
+
+    assertThat("Errors: " + sensor.getErrors(), sensor.getErrors(), is(empty()));
   }
 
-  private void configureTest(DelphiUnitBuilderTest builder) {
+  protected void configureTest(DelphiUnitBuilderTest builder) {
     testFile = builder.buildFile(ROOT_DIR);
+    testFile.deleteOnExit();
 
     String relativePathTestFile = DelphiUtils
         .getRelativePath(testFile, Collections.singletonList(ROOT_DIR));
@@ -85,6 +91,7 @@ public abstract class BasePmdRuleTest {
   protected void configureTest(String testFileName, DelphiUnitBuilderTest builder) {
     sensorContext = SensorContextTester.create(ROOT_DIR);
     delphiProjectHelper = DelphiTestUtils.mockProjectHelper();
+
     DefaultFileSystem fileSystem = sensorContext.fileSystem();
     Configuration config = sensorContext.config();
 
@@ -94,11 +101,12 @@ public abstract class BasePmdRuleTest {
     File srcFile = DelphiUtils.getResource(testFileName);
 
     baseDir = DelphiUtils.getResource(ROOT_DIR_NAME);
+    StringBuilder builderSourceCode = builder.getSourceCode(true);
 
     InputFile inputFile = TestInputFileBuilder
         .create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, srcFile)
         .setModuleBaseDir(baseDir.toPath())
-        .setContents(builder.getSourceCode().toString())
+        .setContents(builderSourceCode.toString())
         .build();
 
     fileSystem.add(inputFile);
@@ -106,51 +114,52 @@ public abstract class BasePmdRuleTest {
     DelphiProject delphiProject = new DelphiProject("Default Project");
     delphiProject.setSourceFiles(Collections.singletonList(srcFile));
 
-    when(delphiProjectHelper.getProjects())
-        .thenReturn(Collections.singletonList(delphiProject));
-    when(delphiProjectHelper.getFile(anyString())).thenAnswer((Answer<InputFile>) invocation ->
-        TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5",
-          Paths.get(ROOT_DIR_NAME).toFile(),
-          new File((String) invocation.getArguments()[0])).build());
-
-    rulesProfile = mock(ActiveRules.class);
+    when(delphiProjectHelper.getProjects()).thenReturn(Collections.singletonList(delphiProject));
+    when(delphiProjectHelper.getFile(anyString())).thenReturn(inputFile);
 
     String fileName = getClass().getResource("/org/sonar/plugins/delphi/pmd/rules.xml").getPath();
     File rulesFile = new File(fileName);
-    String rulesXmlContent;
-    try {
-      rulesXmlContent = FileUtils.readFileToString(rulesFile, StandardCharsets.UTF_8);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
 
-    var pmdConfig = new DelphiPmdConfiguration(fileSystem, config);
+    rulesProfile = mock(ActiveRules.class);
+    when(rulesProfile.find(any(RuleKey.class))).thenAnswer((Answer<ActiveRule>) invocation -> {
+      RuleKey ruleKey = (RuleKey) invocation.getArguments()[0];
+      NewActiveRule newActiveRule = new NewActiveRule.Builder()
+          .setRuleKey(ruleKey)
+          .build();
+
+      ActiveRules rules = new ActiveRulesBuilder()
+          .addRule(newActiveRule)
+          .build();
+
+      return rules.find(ruleKey);
+    });
+
+    var pmdConfig = mock(DelphiPmdConfiguration.class);
+    when(pmdConfig.dumpXmlRuleSet(any(String.class), any(String.class))).thenReturn(rulesFile);
+
     var executor = new DelphiPmdExecutor(delphiProjectHelper, rulesProfile, pmdConfig);
     var violationRecorder = new DelphiPmdViolationRecorder(delphiProjectHelper, rulesProfile);
 
     sensor = new DelphiPmdSensor(executor, violationRecorder);
   }
 
-  @After
-  public void teardown() {
-    if (testFile != null) {
-      testFile.delete();
-    }
-  }
-
-  public String toString(List<Issue> issues) {
+  public String stringifyIssues() {
     StringBuilder builder = new StringBuilder();
     builder.append("[");
     for (Issue issue : issues) {
-      builder.append(toString(issue)).append(',');
+      builder.append(stringifyIssue(issue)).append(", ");
     }
     builder.append("]");
     return builder.toString();
   }
 
-  public String toString(Issue issue) {
-    return "Issue [ruleKey=" + issue.ruleKey() + ", message=" + issue.primaryLocation().message()
-        + ", line=" + issue.primaryLocation().textRange().start().line() + "]";
-  }
+  private String stringifyIssue(Issue issue) {
+    TextRange primaryLocation = issue.primaryLocation().textRange();
+    assertThat(primaryLocation, is(not(nullValue())));
 
+    int line = primaryLocation.start().line();
+    String message = issue.primaryLocation().message();
+
+    return String.format("Issue [ruleKey=%s, message=%s, line=%s]", issue.ruleKey(), message, line);
+  }
 }
