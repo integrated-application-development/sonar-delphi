@@ -632,7 +632,7 @@
 			</properties>
     </rule>
   
-	<rule class="org.sonar.plugins.delphi.pmd.rules.ClassNamePrefixRule"
+	<rule class="org.sonar.plugins.delphi.pmd.rules.ClassNameRule"
 				message="Class and enumeration name declarations should begin with T"
 		  	name="ClassNamePrefixRule">
 		<description>Class names should begin with T</description>

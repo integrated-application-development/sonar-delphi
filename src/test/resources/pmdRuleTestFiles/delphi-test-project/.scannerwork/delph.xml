@@ -120,7 +120,7 @@
       </property>
     </properties>
   </rule>
-  <rule class="org.sonar.plugins.delphi.pmd.rules.ClassNamePrefixRule" name="ClassNamePrefixRule">
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ClassNameRule" name="ClassNameRule">
     <priority>4</priority>
     <properties>
       <property name="baseEffort">

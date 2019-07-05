@@ -588,10 +588,10 @@
         </properties>
     </rule>
   
-	<rule class="org.sonar.plugins.delphi.pmd.rules.ClassNamePrefixRule"
-				message="Class and enumeration name declarations should begin with T"
-		  	name="ClassNamePrefixRule">
-		<description>Class names should begin with T</description>
+	<rule class="org.sonar.plugins.delphi.pmd.rules.ClassNameRule"
+				message="Class and enumeration name declarations should begin with T, TForm, or E"
+		  	name="ClassNameRule">
+		<description>Class and enumeration name declarations should begin with T, TForm, or E</description>
 		<properties>
 			<property name="baseEffort" value="1min" />
 		</properties>

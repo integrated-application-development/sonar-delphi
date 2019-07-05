@@ -29,7 +29,9 @@ public class ClassNamePrefixRule extends DelphiRule {
 
       String newTypeName = newTypeNode.getText();
 
-      if (!newTypeName.startsWith("T")) {
+      if (!newTypeName.startsWith("T") &&
+          !newTypeName.startsWith("TForm") &&
+          !newTypeName.startsWith("E")) {
         addViolation(ctx, node);
       }
     }
