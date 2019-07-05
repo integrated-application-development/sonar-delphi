@@ -33,19 +33,18 @@ public class ConstructorCreateRule extends DelphiRule {
    */
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
+    if (isImplementationSection() || node.getType() != DelphiLexer.CONSTRUCTOR) {
+      return;
+    }
 
-    if (node.getType() == DelphiLexer.CONSTRUCTOR) {
+    Tree constructorTypeNode = node.getChild(constructorNodeTypePos);
 
-      Tree constructorTypeNode = node.getChild(constructorNodeTypePos);
+    if (constructorTypeNode.getType() == DelphiLexer.TkFunctionName) {
+      Tree constructorNameNode = constructorTypeNode.getChild(constructorNodeNamePos);
+      String constructorName = constructorNameNode.getText();
 
-      if (constructorTypeNode.getType() == DelphiLexer.TkFunctionName) {
-
-        Tree constructorNameNode = constructorTypeNode.getChild(constructorNodeNamePos);
-        String constructorName = constructorNameNode.getText();
-
-        if (!constructorName.startsWith("Create")) {
-          addViolation(ctx, node);
-        }
+      if (!constructorName.startsWith("Create")) {
+        addViolation(ctx, node);
       }
     }
   }
