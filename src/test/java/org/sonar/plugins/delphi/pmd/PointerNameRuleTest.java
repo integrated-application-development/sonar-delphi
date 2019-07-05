@@ -20,7 +20,10 @@ package org.sonar.plugins.delphi.pmd;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
 
@@ -34,40 +37,32 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(issues, is(empty()));
+    assertThat(stringifyIssues(), issues, is(empty()));
   }
 
-//TODO: Fix these tests
-
-/*
   @Test
   public void testInvalidRule() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
     builder.appendDecl("  pMyPointer = ^Integer;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(issues, hasSize(1));
-    Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("PointerNameRule"));
-    assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
+    assertThat(stringifyIssues(), issues, hasSize(1));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("PointerNameRule", builder.getOffsetDecl() + 2)));
   }
-*/
 
-/*  @Test
-  public void testAvoidFalsePositive() {
+  @Test
+  public void testBadPascalCase() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
     builder.appendDecl("  Pointer = ^Integer;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(issues, hasSize(1));
-    Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("PointerNameRule"));
-    assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
-  }*/
+    assertThat(stringifyIssues(), issues, hasSize(1));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("PointerNameRule", builder.getOffsetDecl() + 2)));
+  }
 
   @Test
   public void testShouldIgnorePointerAssignment() {
@@ -81,6 +76,6 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(issues, is(empty()));
+    assertThat(stringifyIssues(), issues, is(empty()));
   }
 }

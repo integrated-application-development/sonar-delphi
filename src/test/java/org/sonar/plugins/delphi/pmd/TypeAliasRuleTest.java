@@ -35,7 +35,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(issues, is(empty()));
+    assertThat(stringifyIssues(), issues, is(empty()));
   }
 
 /*  @Test
@@ -75,7 +75,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(issues, is(empty()));
+    assertThat(stringifyIssues(), issues, is(empty()));
   }
 
   @Test
@@ -88,7 +88,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(issues, is(empty()));
+    assertThat(stringifyIssues(), issues, is(empty()));
   }
 
   @Test
@@ -101,7 +101,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(issues, is(empty()));
+    assertThat(stringifyIssues(), issues, is(empty()));
   }
 
 }

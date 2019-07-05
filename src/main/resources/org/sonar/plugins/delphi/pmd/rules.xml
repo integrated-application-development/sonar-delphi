@@ -54,8 +54,8 @@
 	<!-- YOU CAN COPY THIS RULE, JUST CHANGE THE PARAMETERS YOU WISH TO SEARCH FOR -->
 	<rule class="org.sonar.plugins.delphi.pmd.rules.ClassPerFileRule" 
 	    	message="File has too many classes."
-				name="OneClassPerFileRule">
-		<description>On class should be included in one file, for clarity reasons.</description>
+				name="ClassPerFileRule">
+		<description>A file should not include too many classes, for clarity reasons.</description>
 		<properties>
 			<property name="baseEffort" value="1h" />
 			<property name="limit" value="1" />

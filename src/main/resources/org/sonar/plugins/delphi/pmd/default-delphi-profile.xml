@@ -13,7 +13,7 @@
 	</rule>
 
 	<rule class="org.sonar.plugins.delphi.pmd.rules.CountRule"
-				name="OneClassPerFileRule">
+				name="ClassPerFileRule">
 		<priority>3</priority>
 	</rule>
 

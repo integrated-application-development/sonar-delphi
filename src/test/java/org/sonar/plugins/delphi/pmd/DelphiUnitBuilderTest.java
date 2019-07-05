@@ -36,11 +36,12 @@ public class DelphiUnitBuilderTest {
 
   private int offset;
   private int offsetDecl;
-  private String unitName = "Unit1";
+  private int declCount;
+  private String unitName = "TestUnits";
 
   public DelphiUnitBuilderTest appendDecl(String value) {
     declaration.append(value).append("\n");
-    offset++;
+    declCount++;
     return this;
   }
 
@@ -81,9 +82,13 @@ public class DelphiUnitBuilderTest {
   }
 
   public StringBuilder getSourceCode() {
+    return getSourceCode(false);
+  }
+
+  public StringBuilder getSourceCode(boolean print) {
     // fixed lines
     offsetDecl = 4;
-    offset = offset + 6;
+    offset = declCount + 6;
 
     StringBuilder source = new StringBuilder();
     source.append(String.format("unit %s;\n", this.unitName));
@@ -103,7 +108,9 @@ public class DelphiUnitBuilderTest {
     }
     source.append("end.\n");
 
-    printSourceCode(source);
+    if (print) {
+      printSourceCode(source);
+    }
 
     return source;
   }

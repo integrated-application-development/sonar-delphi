@@ -21,13 +21,13 @@ package org.sonar.plugins.delphi;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.sonar.api.issue.Issue;
+import org.sonar.api.batch.sensor.issue.Issue;
 
 public class HasRuleKey<T extends Issue> extends TypeSafeMatcher<T> {
 
   private final String key;
 
-  public HasRuleKey(String key) {
+  private HasRuleKey(String key) {
     this.key = key;
   }
 

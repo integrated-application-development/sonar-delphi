@@ -9,7 +9,7 @@ import org.junit.Test;
 public class ClassNameRuleTest extends BaseXmlPmdRuleTest {
 
 
-  private static String ruleType = "ClassNameRule"; // Rule type being tested
+  private static String ruleType = "ClassNamePrefixRule"; // Rule type being tested
 
   @Test
   public void testRuleViolation() {

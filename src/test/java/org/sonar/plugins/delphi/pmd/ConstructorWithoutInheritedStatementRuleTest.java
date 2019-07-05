@@ -18,9 +18,14 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKey;
+import static org.sonar.plugins.delphi.IssueMatchers.hasRuleLine;
 
 import org.junit.Test;
 
@@ -44,11 +49,11 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
 
     execute(builder);
 
-    assertThat(issues, is(empty()));
+    assertThat(stringifyIssues(), issues, is(empty()));
   }
 
-/*  @Test
-  public void constructorMissingInheritedShouldAddIssue() {
+  @Test
+  public void testConstructorMissingInheritedShouldAddIssue() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
 
     builder.appendDecl("type");
@@ -62,12 +67,13 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
     builder.appendImpl("  Writeln('do something');");
     builder.appendImpl("end;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(toString(issues), issues, hasSize(1));
-    assertThat(toString(issues), issues, hasItem(allOf(hasRuleKey("ConstructorWithoutInheritedStatementRule"),
-      hasRuleLine(builder.getOffSet() + 1))));
-  }*/
+    assertThat(stringifyIssues(), issues, hasSize(1));
+    assertThat(stringifyIssues(), issues, hasItem(allOf(
+        hasRuleKey("ConstructorWithoutInheritedStatementRule"),
+        hasRuleLine(builder.getOffSet() + 1))));
+  }
 
   @Test
   public void testRecordConstructorShouldNotAddIssue() {
@@ -86,7 +92,7 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
 
     execute(builder);
 
-    assertThat(issues, is(empty()));
+    assertThat(stringifyIssues(), issues, is(empty()));
   }
 
 }
