@@ -18,24 +18,24 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import net.sourceforge.pmd.RuleContext;
+import org.antlr.runtime.tree.CommonTree;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-public class RecordNameRule extends DelphiRule {
+public class RecordNameRule extends NameConventionRule {
+  private static final String RECORD_PREFIX = "T";
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
-
-    if (node.getType() == DelphiLexer.TkRecord) {
-      String name = node.getParent().getText();
-
-      char firstCharAfterPrefix = name.charAt(1);
-
-      if (!name.startsWith("T") || firstCharAfterPrefix != Character
-          .toUpperCase(firstCharAfterPrefix)) {
-        addViolation(ctx, node);
-      }
+  public DelphiPMDNode findNameNode(DelphiPMDNode node) {
+    if (node.getType() != DelphiLexer.TkRecord) {
+      return null;
     }
+
+    return  new DelphiPMDNode((CommonTree) node.getParent(), node.getASTTree());
+  }
+
+  @Override
+  protected boolean isViolation(DelphiPMDNode nameNode) {
+    return !compliesWithPrefixNamingConvention(nameNode.getText(), RECORD_PREFIX);
   }
 }

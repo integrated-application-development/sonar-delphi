@@ -1,45 +1,43 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import net.sourceforge.pmd.RuleContext;
-import org.antlr.runtime.tree.Tree;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.antlr.runtime.tree.CommonTree;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-public class IdentifierConventionRule extends DelphiRule {
+/**
+ * This rule looks at all identifiers at ensures it follows the Delphi Case convention, at least
+ * the first character should be uppercase
+ */
+public class IdentifierConventionRule extends NameConventionRule {
 
-  /**
-   * This rule looks at all identifiers at ensures it follows the Delphi Case convention, at least
-   * the first character should be uppercase
-   *
-   * @param node the current node
-   * @param ctx the ruleContext to store the violations
-   */
+
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
+  public List<DelphiPMDNode> findNameNodes(DelphiPMDNode node) {
     // Within a var block, look for variable identifiers
-    if (node.getType() != DelphiLexer.VAR) {
-      return;
-    }
+    if (node.getType() == DelphiLexer.VAR) {
+      for (Object child : node.getChildren()) {
+        CommonTree childNode = (CommonTree) child;
 
-    for (int i = 0; i < node.getChildCount() - 1; i++) {
-      Tree childNode = node.getChild(i);
-      if (childNode.getType() != DelphiLexer.TkVariableIdents) {
-        continue;
+        if (childNode.getType() == DelphiLexer.TkVariableIdents) {
+          List<?> children = childNode.getChildren();
+
+          return children.stream()
+              .map(varName -> new DelphiPMDNode((CommonTree) varName, node.getASTTree()))
+              .collect(Collectors.toList());
+        }
       }
-
-      handleVariableIdentsList(childNode, ctx);
     }
+
+    return Collections.emptyList();
   }
 
-  private void handleVariableIdentsList(Tree node, RuleContext ctx) {
-    // Name identifier will be in the next node
-    for (int i = 0; i < node.getChildCount(); ++i) {
-      String identifier = node.getChild(i).getText();
-      char firstChar = identifier.charAt(0);
-      if (!Character.isUpperCase(firstChar)) {
-        addViolation(ctx, (DelphiPMDNode) node);
-      }
-    }
+  @Override
+  protected boolean isViolation(DelphiPMDNode nameNode) {
+    String name = nameNode.getText();
+    return !Character.isUpperCase(name.charAt(0));
   }
 }
 
