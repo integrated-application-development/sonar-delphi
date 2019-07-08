@@ -22,40 +22,70 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
 
 public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
-/*  @Test
-  public void testRule() {
-    configureTest(ROOT_DIR_NAME + "/UnusedArgumentRule.pas");
+  @Test
+  public void testUnusedArgumentShouldAddIssue() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
 
-    DebugSensorContext debugContext = new DebugSensorContext();
-    sensor.testAnalyse(project, debugContext);
+    builder.appendDecl("type");
+    builder.appendDecl("  TCustomComponent = class(TComponent)");
+    builder.appendDecl("  protected");
+    builder.appendDecl("    procedure OnUnusedArg(Arg: Integer);");
+    builder.appendDecl("  public");
+    builder.appendDecl("    procedure CaseInsensitive(Arg: Integer);");
+    builder.appendDecl("  end;");
 
-    // all expected rule violations and their lines
-    RuleData ruleData[] = {
-      new RuleData("UnusedArgumentsRule", 31)
-    };
+    builder.appendImpl("procedure TCustomComponent.OnUnusedArg(Arg: Integer);");
+    builder.appendImpl("begin");
+    builder.appendImpl("  WriteLn('dummy');");
+    builder.appendImpl("end;");
 
-    // Sort the violations by line number, so we don't have to add
-    // violations order
-    Arrays.sort(ruleData, RuleData.getComparator());
+    builder.appendImpl("procedure TCustomComponent.CaseInsensitive(Arg: Integer);");
+    builder.appendImpl("begin");
+    builder.appendImpl("  Arg := Arg + 1;");
+    builder.appendImpl("end;");
 
-    assertThat(toString(issues), issues, hasSize(1));
+    execute(builder);
 
-    for (int i = 0; i < issues.size(); ++i) {
-      Issue issue = issues.get(i);
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 1)));
+  }
 
-      assertThat("rule " + ruleData[i].toString(), ruleData[i].getName(), is(issue.ruleKey().rule()));
-      assertThat("rule " + ruleData[i].toString() + "line ", ruleData[i].getLine(), is(issue.line()));
-    }
-  }*/
+  @Test
+  public void testValidRuleExcludedArguments() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+
+    builder.appendDecl("type");
+    builder.appendDecl("  TCustomComponent = class(TComponent)");
+    builder.appendDecl("  protected");
+    builder.appendDecl("    procedure OnEvent(Sender: TObject);");
+    builder.appendDecl("    procedure OnEventB(ASender: TObject);");
+    builder.appendDecl("  end;");
+
+    builder.appendImpl("procedure TCustomComponent.OnEvent(Sender: TObject);");
+    builder.appendImpl("begin");
+    builder.appendImpl("  WriteLn('dummy');");
+    builder.appendImpl("end;");
+
+    builder.appendImpl("procedure TCustomComponent.OnEventB(ASender: TObject);");
+    builder.appendImpl("begin");
+    builder.appendImpl("  WriteLn('dummy');");
+    builder.appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(hasSize(2));
+    assertIssues(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 1)));
+    assertIssues(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 5)));
+  }
 
   @Test
   public void testValidRuleNestedFunction() {
@@ -78,7 +108,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, is(empty()));
+    assertIssues(empty());
   }
 
   @Test
@@ -112,7 +142,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, is(empty()));
+    assertIssues(empty());
   }
 
   @Test
@@ -144,7 +174,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, is(empty()));
+    assertIssues(empty());
   }
 
   @Test
@@ -176,6 +206,10 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, hasSize(4));
+    assertIssues(hasSize(4));
+    assertIssues(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 1)));
+    assertIssues(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 6)));
+    assertIssues(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 7)));
+    assertIssues(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 8)));
   }
 }

@@ -8,11 +8,10 @@ import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
- * This rule looks at all identifiers at ensures it follows the Delphi Case convention, at least
- * the first character should be uppercase
+ * This rule looks at all variable names to ensure they follow basic Pascal Case.
+ * At the moment it only checks if the first character is uppercase
  */
 public class IdentifierConventionRule extends NameConventionRule {
-
 
   @Override
   public List<DelphiPMDNode> findNameNodes(DelphiPMDNode node) {

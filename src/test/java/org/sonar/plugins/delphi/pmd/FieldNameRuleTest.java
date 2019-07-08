@@ -18,9 +18,11 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.not;
+import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
 
@@ -39,11 +41,11 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, is(empty()));
+    assertIssues(empty());
   }
 
-/*  @Test
-  public void fieldNameWithoutPrefixShouldAddIssue() {
+  @Test
+  public void testFieldNameWithoutPrefixShouldAddIssue() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
@@ -54,15 +56,15 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("     Name: String;");
     builder.appendDecl("  end;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4)));
-    assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
-    assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7)));
-  }*/
+    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4)));
+    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
+    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7)));
+  }
 
-/*  @Test
-  public void publishedFieldsShouldBeSkipped() {
+  @Test
+  public void testPublishedFieldsShouldBeSkipped() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
@@ -75,60 +77,48 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("     Name: String;");
     builder.appendDecl("  end;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(issues, not(hasItem(hasRuleLine(builder.getOffsetDecl() + 3))));
-    assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
-    assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7)));
-    assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 9)));
-  }*/
+    assertIssues(not(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 3))));
+    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
+    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7)));
+    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 9)));
+  }
 
-/*  @Test
-  public void fieldNameDoNotStartsWithCapitalLetterShouldAddIssue() {
+  @Test
+  public void testBadPascalCaseShouldAddIssue() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
     builder.appendDecl("    private");
     builder.appendDecl("     Ffoo: Integer;");
+    builder.appendDecl("     Foo: Integer;");
     builder.appendDecl("    protected");
     builder.appendDecl("     Fbar: String;");
     builder.appendDecl("  end;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(issues, hasSize(2));
-    assertThat(issues, hasItem(allOf(hasRuleKey("FieldNameRule"), hasRuleLine(builder.getOffsetDecl() + 4))));
-    assertThat(issues, hasItem(allOf(hasRuleKey("FieldNameRule"), hasRuleLine(builder.getOffsetDecl() + 6))));
-  }*/
-
-/*  @Test
-  public void testAvoidFalsePositive() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class");
-    builder.appendDecl("    private");
-    builder.appendDecl("     Foo: Integer;");
-    builder.appendDecl("  end;");
-
-    testAnalyse(builder);
-
-    assertThat(issues, hasSize(1));
-    assertThat(issues, hasItem(allOf(hasRuleKey("FieldNameRule"), hasRuleLine(builder.getOffsetDecl() + 4))));
+    assertIssues(hasSize(3));
+    assertIssues(hasItem(hasRuleKeyAtLine(("FieldNameRule"), builder.getOffsetDecl() + 4)));
+    assertIssues(hasItem(hasRuleKeyAtLine(("FieldNameRule"), builder.getOffsetDecl() + 5)));
+    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7)));
   }
 
   @Test
-  public void testOneLetterNameField() {
+  public void testOneLetterNameFields() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
     builder.appendDecl("    private");
     builder.appendDecl("     x: Integer;");
+    builder.appendDecl("     F: Integer;");
     builder.appendDecl("  end;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(issues, hasSize(1));
-    assertThat(issues, hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4)));
-  }*/
-
+    assertIssues(hasSize(2));
+    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4)));
+    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
+  }
 }

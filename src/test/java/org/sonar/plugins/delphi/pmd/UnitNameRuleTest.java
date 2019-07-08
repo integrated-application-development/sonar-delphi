@@ -18,12 +18,10 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
@@ -34,37 +32,37 @@ public class UnitNameRuleTest extends BasePmdRuleTest {
   public void testValidRule() {
     execute(new DelphiUnitBuilderTest().unitName("TestUnits"));
 
-    assertThat(stringifyIssues(), issues, is(empty()));
+    assertIssues(empty());
   }
 
   @Test
   public void testValidUnitUsingNameSpace() {
     execute(new DelphiUnitBuilderTest().unitName("Namespaces.TestUnits"));
 
-    assertThat(stringifyIssues(), issues, is(empty()));
+    assertIssues(empty());
   }
 
   @Test
   public void testInvalidUnit() {
     execute(new DelphiUnitBuilderTest().unitName("myUnit"));
 
-    assertThat(stringifyIssues(), issues, hasSize(1));
-    assertThat(stringifyIssues(), issues, hasItem(hasRuleKeyAtLine("UnitNameRule", 1)));
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("UnitNameRule", 1)));
   }
 
   @Test
   public void testInvalidNamespace() {
     execute(new DelphiUnitBuilderTest().unitName("bad_Namespace.omGoodUnit"));
 
-    assertThat(stringifyIssues(), issues, hasSize(1));
-    assertThat(stringifyIssues(), issues, hasItem(hasRuleKeyAtLine("UnitNameRule", 1)));
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("UnitNameRule", 1)));
   }
 
   @Test
   public void testInvalidUnitAndNameSpace() {
     execute(new DelphiUnitBuilderTest().unitName("bad_Namespace.SUPER_bad_UNIT"));
 
-    assertThat(stringifyIssues(), issues, hasSize(2));
-    assertThat(stringifyIssues(), issues, everyItem(hasRuleKeyAtLine("UnitNameRule", 1)));
+    assertIssues(hasSize(2));
+    assertIssues(everyItem(hasRuleKeyAtLine("UnitNameRule", 1)));
   }
 }

@@ -18,11 +18,9 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
@@ -37,7 +35,7 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, is(empty()));
+    assertIssues(empty());
   }
 
   @Test
@@ -48,8 +46,8 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, hasSize(1));
-    assertThat(issues, hasItem(hasRuleKeyAtLine("PointerNameRule", builder.getOffsetDecl() + 2)));
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("PointerNameRule", builder.getOffsetDecl() + 2)));
   }
 
   @Test
@@ -60,8 +58,8 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, hasSize(1));
-    assertThat(issues, hasItem(hasRuleKeyAtLine("PointerNameRule", builder.getOffsetDecl() + 2)));
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("PointerNameRule", builder.getOffsetDecl() + 2)));
   }
 
   @Test
@@ -76,6 +74,6 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, is(empty()));
+    assertIssues(empty());
   }
 }

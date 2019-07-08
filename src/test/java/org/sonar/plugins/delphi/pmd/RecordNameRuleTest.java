@@ -18,9 +18,10 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
 
@@ -35,51 +36,33 @@ public class RecordNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(issues, is(empty()));
+    assertIssues(empty());
   }
 
- /* @Test
-  public void nameWithoutPrefixShouldAddIssue() {
+  @Test
+  public void testNameWithoutPrefixShouldAddIssue() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
     builder.appendDecl("  MyRecord = record");
     builder.appendDecl("  end;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(issues, hasSize(1));
-    Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("RecordNameRule"));
-    assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
-  }*/
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("RecordNameRule", builder.getOffsetDecl() + 2)));
+  }
 
-/*  @Test
-  public void nameDoNotStartsWithCapitalLetterShouldAddIssue() {
+  @Test
+  public void testBadPascalCaseShouldAddIssue() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
     builder.appendDecl("  TmyRecord = record");
     builder.appendDecl("  end;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(issues, hasSize(1));
-    Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("RecordNameRule"));
-    assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
-  }*/
-/*
-  @Test
-  public void testAvoidFalsePositive() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-    builder.appendDecl("type");
-    builder.appendDecl("  RecRecord = record");
-    builder.appendDecl("  end;");
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("RecordNameRule", builder.getOffsetDecl() + 2)));
+  }
 
-    testAnalyse(builder);
-
-    assertThat(issues, hasSize(1));
-    Issue issue = issues.get(0);
-    assertThat(issue.ruleKey().rule(), equalTo("RecordNameRule"));
-    assertThat(issue.line(), is(builder.getOffsetDecl() + 2));
-  }*/
 }

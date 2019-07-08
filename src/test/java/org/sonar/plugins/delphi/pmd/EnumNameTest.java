@@ -1,20 +1,11 @@
 package org.sonar.plugins.delphi.pmd;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
-import java.io.File;
-import java.util.List;
-import net.sourceforge.pmd.lang.ast.Node;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.sonar.plugins.delphi.HasRuleLineNumber;
-import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class EnumNameTest extends BasePmdRuleTest {
 
@@ -26,7 +17,7 @@ public class EnumNameTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, is(empty()));
+    assertIssues(empty());
   }
 
   @Test
@@ -37,9 +28,8 @@ public class EnumNameTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, hasSize(1));
-    assertThat(stringifyIssues(), issues, hasItem(
-        hasRuleKeyAtLine("ClassNameRule", builder.getOffsetDecl() + 2)));
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("ClassNameRule", builder.getOffsetDecl() + 2)));
   }
 
   @Test
@@ -50,9 +40,19 @@ public class EnumNameTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, hasSize(1));
-    assertThat(stringifyIssues(), issues, hasItem(
-        hasRuleKeyAtLine("ClassNameRule", builder.getOffsetDecl() + 2)));
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("ClassNameRule", builder.getOffsetDecl() + 2)));
+  }
+
+  @Test
+  public void testNotAcceptPrefixAlone() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendDecl("type");
+    builder.appendDecl("  T = (someEnum, someOtherEnum, someThirdEnum);");
+
+    execute(builder);
+
+    assertIssues(hasItem(hasRuleKeyAtLine("ClassNameRule", builder.getOffsetDecl() + 2)));
   }
 
 }

@@ -18,9 +18,9 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasItem;
+import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
 
@@ -36,21 +36,21 @@ public class TooLongMethodNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(issues, is(empty()));
+    assertIssues(empty());
   }
 
-/*  @Test
+  @Test
   public void testTooLongMethod() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendImpl("function Foo: Integer;");
     builder.appendImpl("begin");
-    for (int i = 1; i <= 101; i++) {
+    for (int i = 1; i <= 150; i++) {
       builder.appendImpl(" Result := Result + 1;");
     }
     builder.appendImpl("end;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(issues, hasItem(IssueMatchers.hasRuleKeyAtLine("TooLongMethodRule", builder.getOffSet() + 1)));
-  }*/
+    assertIssues(hasItem(hasRuleKeyAtLine("TooLongMethodRule", builder.getOffSet() + 1)));
+  }
 }

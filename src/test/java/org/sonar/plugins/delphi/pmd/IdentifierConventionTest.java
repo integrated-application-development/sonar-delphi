@@ -1,26 +1,46 @@
 package org.sonar.plugins.delphi.pmd;
 
-import java.io.File;
-import java.util.List;
-import net.sourceforge.pmd.lang.ast.Node;
-import org.junit.Ignore;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
+
 import org.junit.Test;
-import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-public class IdentifierConventionTest {
+public class IdentifierConventionTest extends BasePmdRuleTest {
 
-  private static final String TEST = "/org/sonar/plugins/delphi/PMDTest/IdentifierConvention.pas";
-
-  // TODO: The file is ill-formed and the test doesn't even do anything...
-  @Ignore
   @Test
-  public void test() {
-    File file = DelphiUtils.getResource(TEST);
-    DelphiPMD pmd = new DelphiPMD();
-    DelphiAST ast = new DelphiAST(file);
-    List<Node> nodes = pmd.getNodesFromAST(ast);
+  public void testValidRule() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendImpl("procedure MyProcedure;");
+    builder.appendImpl("var");
+    builder.appendImpl("  SomeVar: Integer;");
+    builder.appendImpl("begin");
+    builder.appendImpl("  if SomeVar <> 0 then begin");
+    builder.appendImpl("    WriteLn('test');");
+    builder.appendImpl("  end;");
+    builder.appendImpl("end;");
 
-    System.out.print("");
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testBadPascalCaseShouldAddIssue() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    builder.appendImpl("procedure MyProcedure;");
+    builder.appendImpl("var");
+    builder.appendImpl("  someVar: Integer;");
+    builder.appendImpl("begin");
+    builder.appendImpl("  if someVar <> 0 then begin");
+    builder.appendImpl("    WriteLn('test');");
+    builder.appendImpl("  end;");
+    builder.appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("IdentifierConventionRule", builder.getOffSet() + 3)));
   }
 }

@@ -19,8 +19,9 @@
 package org.sonar.plugins.delphi.pmd;
 
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
 
@@ -61,9 +62,8 @@ public class EmptyBeginStatementTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(issues, is(empty()));
+    assertIssues(empty());
   }
-/*
 
   @Test
   public void testBeginEndStatement() {
@@ -95,15 +95,14 @@ public class EmptyBeginStatementTest extends BasePmdRuleTest {
     builder.appendImpl("begin");
     builder.appendImpl("end;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(toString(issues), issues, hasSize(5));
-    assertThat(toString(issues), issues, hasItem(allOf(hasRuleKey("EmptyBeginStatementRule"), hasRuleLine(builder.getOffSet() + 2))));
-    assertThat(toString(issues), issues, hasItem(allOf(hasRuleKey("EmptyBeginStatementRule"), hasRuleLine(builder.getOffSet() + 5))));
-    assertThat(toString(issues), issues, hasItem(allOf(hasRuleKey("EmptyBeginStatementRule"), hasRuleLine(builder.getOffSet() + 8))));
-    assertThat(toString(issues), issues, hasItem(allOf(hasRuleKey("EmptyBeginStatementRule"), hasRuleLine(builder.getOffSet() + 11))));
-    assertThat(toString(issues), issues, hasItem(allOf(hasRuleKey("EmptyBeginStatementRule"), hasRuleLine(builder.getOffSet() + 14))));
+    assertIssues(hasSize(5));
+    assertIssues(hasItem(hasRuleKeyAtLine("EmptyBeginStatementRule", builder.getOffSet() + 2)));
+    assertIssues(hasItem(hasRuleKeyAtLine("EmptyBeginStatementRule", builder.getOffSet() + 5)));
+    assertIssues(hasItem(hasRuleKeyAtLine("EmptyBeginStatementRule", builder.getOffSet() + 8)));
+    assertIssues(hasItem(hasRuleKeyAtLine("EmptyBeginStatementRule", builder.getOffSet() + 11)));
+    assertIssues(hasItem(hasRuleKeyAtLine("EmptyBeginStatementRule", builder.getOffSet() + 14)));
   }
-*/
 
 }

@@ -19,11 +19,9 @@
 package org.sonar.plugins.delphi.pmd;
 
 import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.sonar.plugins.delphi.HasRuleKey.hasRuleKey;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleLine;
 
@@ -40,11 +38,11 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, is(empty()));
+    assertIssues(empty());
   }
 
   @Test
-  public void moreThanOneClassShouldAddIssue() {
+  public void testMoreThanOneClassShouldAddIssue() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
@@ -54,9 +52,9 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(issues, hasSize(1));
-    assertThat(issues, hasItem(hasRuleKey("ClassPerFileRule")));
-    assertThat(issues, hasItem(hasRuleLine(builder.getOffsetDecl() + 4)));
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKey("ClassPerFileRule")));
+    assertIssues(hasItem(hasRuleLine(builder.getOffsetDecl() + 4)));
   }
 
   @Test
@@ -72,10 +70,10 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(issues, hasSize(2));
-    assertThat(issues, everyItem(hasRuleKey("ClassPerFileRule")));
-    assertThat(issues, hasItem(hasRuleLine(builder.getOffsetDecl() + 4)));
-    assertThat(issues, hasItem(hasRuleLine(builder.getOffsetDecl() + 6)));
+    assertIssues(hasSize(2));
+    assertIssues(everyItem(hasRuleKey("ClassPerFileRule")));
+    assertIssues(hasItem(hasRuleLine(builder.getOffsetDecl() + 4)));
+    assertIssues(hasItem(hasRuleLine(builder.getOffsetDecl() + 6)));
   }
 
   @Test
@@ -88,7 +86,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, is(empty()));
+    assertIssues(empty());
   }
 
   @Test
@@ -102,7 +100,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, is(empty()));
+    assertIssues(empty());
   }
 
 }

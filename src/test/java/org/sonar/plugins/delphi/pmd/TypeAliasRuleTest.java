@@ -18,51 +18,40 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
 
 public class TypeAliasRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testSetsArentTypeAlias() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-
-    builder.appendDecl("type");
-    builder.appendDecl("  TMySetOfChar = set of Char;");
-
-    execute(builder);
-
-    assertThat(stringifyIssues(), issues, is(empty()));
-  }
-
-/*  @Test
-  public void typeAliasShouldAddViolation() {
+  public void testTypeAliasShouldAddViolation() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
 
     builder.appendDecl("type");
     builder.appendDecl("  TMyChar = Char;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(toString(issues), issues, hasSize(1));
-    assertThat(toString(issues), issues, hasItem(allOf(hasRuleKey("TypeAliasRule"), hasRuleLine(builder.getOffsetDecl() + 2))));
-  }*/
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("TypeAliasRule", builder.getOffsetDecl() + 2)));
+  }
 
-/*  @Test
-  public void typeAliasNewTypeShouldAddViolation() {
+  @Test
+  public void testTypeAliasNewTypeShouldAddViolation() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
 
     builder.appendDecl("type");
     builder.appendDecl("  TMyChar = type Char;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(toString(issues), issues, hasSize(1));
-    assertThat(toString(issues), issues, hasItem(allOf(hasRuleKey("TypeAliasRule"), hasRuleLine(builder.getOffsetDecl() + 2))));
-  }*/
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("TypeAliasRule", builder.getOffsetDecl() + 2)));
+  }
 
   @Test
   public void testFalsePositiveMetaClassIsNotTypeAlias() {
@@ -75,7 +64,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, is(empty()));
+    assertIssues(empty());
   }
 
   @Test
@@ -88,7 +77,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, is(empty()));
+    assertIssues(empty());
   }
 
   @Test
@@ -101,7 +90,44 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, is(empty()));
+    assertIssues(empty());
   }
+
+  @Test
+  public void testFalsePositiveSetsAreNotTypeAlias() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+
+    builder.appendDecl("type");
+    builder.appendDecl("  TSetOfChar = set of Char;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testFalsePositiveArraysAreNotTypeAlias() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+
+    builder.appendDecl("type");
+    builder.appendDecl("  TArrayOfChar = array of Char;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testFalsePositivePointerTypesAreNotTypeAlias() {
+    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+
+    builder.appendDecl("type");
+    builder.appendDecl("  PClassPointer = ^TClass;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
 
 }
