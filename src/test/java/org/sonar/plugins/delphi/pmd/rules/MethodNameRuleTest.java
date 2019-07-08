@@ -16,7 +16,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.pmd;
+package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
@@ -24,12 +24,13 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
+import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 
 public class MethodNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testInterfaceMethodValidRule() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  IMyInterface = interface");
     builder.appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']");
@@ -43,7 +44,7 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testInterfaceMethodNameStartWithLowerCaseShouldAddIssue() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  IMyInterface = interface");
     builder.appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']");
@@ -60,7 +61,7 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testPublishedMethodsShouldBeSkipped() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyForm = class(TForm)");
     builder.appendDecl("    procedure buttonOnClick(Sender: TNotifyEvent);");

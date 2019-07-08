@@ -52,7 +52,7 @@ public class AdvanceNodeOperationTest extends OperationsTestsCommon {
   @Test
   public void testExecute() {
     int parsedCount = 0;
-    int types[] = {256, 1, 100, 2, 101, 3, 102};
+    int[] types = {256, 1, 100, 2, 101, 3, 102};
 
     CodeNode<Tree> codeNode = new CodeNode<>(parent);
     do {

@@ -16,7 +16,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.pmd;
+package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.Matchers.empty;
@@ -26,12 +26,13 @@ import static org.sonar.plugins.delphi.HasRuleKey.hasRuleKey;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleLine;
 
 import org.junit.Test;
+import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 
 public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testValidRule() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
     builder.appendDecl("  end;");
@@ -43,7 +44,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testMoreThanOneClassShouldAddIssue() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
     builder.appendDecl("  end;");
@@ -59,7 +60,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testAllClassesAfterFirstOneShouldAddIssue() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
     builder.appendDecl("  end;");
@@ -78,7 +79,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testFalsePositiveMetaClass() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
     builder.appendDecl("  end;");
@@ -91,7 +92,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testFalsePositiveClassMethods() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
     builder.appendDecl("    class procedure TestProcedure;");

@@ -16,7 +16,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.pmd;
+package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
@@ -24,14 +24,16 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
+import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 
-public class PointerNameRuleTest extends BasePmdRuleTest {
+public class RecordNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testValidRule() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
-    builder.appendDecl("  PMyPointer = ^Integer;");
+    builder.appendDecl("  TMyRecord = record");
+    builder.appendDecl("  end;");
 
     execute(builder);
 
@@ -39,41 +41,29 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInvalidRule() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+  public void testNameWithoutPrefixShouldAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
-    builder.appendDecl("  pMyPointer = ^Integer;");
+    builder.appendDecl("  MyRecord = record");
+    builder.appendDecl("  end;");
 
     execute(builder);
 
     assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("PointerNameRule", builder.getOffsetDecl() + 2)));
+    assertIssues(hasItem(hasRuleKeyAtLine("RecordNameRule", builder.getOffsetDecl() + 2)));
   }
 
   @Test
-  public void testBadPascalCase() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+  public void testBadPascalCaseShouldAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
-    builder.appendDecl("  Pointer = ^Integer;");
+    builder.appendDecl("  TmyRecord = record");
+    builder.appendDecl("  end;");
 
     execute(builder);
 
     assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("PointerNameRule", builder.getOffsetDecl() + 2)));
+    assertIssues(hasItem(hasRuleKeyAtLine("RecordNameRule", builder.getOffsetDecl() + 2)));
   }
 
-  @Test
-  public void testShouldIgnorePointerAssignment() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-    builder.appendImpl("procedure Foo;");
-    builder.appendImpl("var");
-    builder.appendImpl("  MyInteger: Integer;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  MyInteger := PInteger(1)^;");
-    builder.appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues(empty());
-  }
 }

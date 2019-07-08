@@ -34,7 +34,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.Arrays;
-import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Rule;
 import org.junit.Test;
@@ -45,7 +44,6 @@ import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.antlr.analyzer.impl.operations.AdvanceToNodeOperation;
-import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.core.language.ArgumentInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
@@ -79,7 +77,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
     results = new CodeAnalysisResults();
     results.setActiveUnit(new DelphiUnit("test"));
     ast = new DelphiAST(testFile);
-    code = new CodeTree(new CodeNode<ASTTree>(ast), new CodeNode<>(ast.getChild(0)));
+    code = new CodeTree(new CodeNode<>(ast), new CodeNode<>(ast.getChild(0)));
     advanceToFunction = new AdvanceToNodeOperation(
         Arrays.asList(LexerMetrics.FUNCTION, LexerMetrics.PROCEDURE,
             LexerMetrics.CONSTRUCTOR,
@@ -90,7 +88,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void testCanAnalyze() throws IOException, RecognitionException {
+  public void testCanAnalyze() throws IOException {
     setupFile(FILE_NAME);
     assertFalse(analyzer.canAnalyze(code));
 
@@ -106,7 +104,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void testCanAnalyzeRecordOperator() throws IOException, RecognitionException {
+  public void testCanAnalyzeRecordOperator() throws IOException {
     setupFile(FILE_NAME_OPERATOR_TEST);
     assertFalse(analyzer.canAnalyze(code));
 

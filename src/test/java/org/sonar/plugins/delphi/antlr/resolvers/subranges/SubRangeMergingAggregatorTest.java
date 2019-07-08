@@ -92,7 +92,7 @@ public class SubRangeMergingAggregatorTest {
 
   @Test
   public void testSort() {
-    SubRange data[] = {new IntegerSubRange(0, 10), new IntegerSubRange(-5, -1),
+    SubRange[] data = {new IntegerSubRange(0, 10), new IntegerSubRange(-5, -1),
         new IntegerSubRange(12, 12),
         new IntegerSubRange(15, 19),
         new IntegerSubRange(-10, -6)};

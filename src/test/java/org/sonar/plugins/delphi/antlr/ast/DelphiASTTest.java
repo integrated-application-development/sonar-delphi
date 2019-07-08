@@ -22,8 +22,6 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
-import static org.junit.Assert.fail;
-
 import java.io.File;
 import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;

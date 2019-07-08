@@ -20,7 +20,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.antlr.sanitizer.directives.impl;
+package org.sonar.plugins.delphi.antlr.directives.impl;
 
 import static org.junit.Assert.assertEquals;
 

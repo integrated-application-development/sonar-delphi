@@ -16,23 +16,24 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.pmd;
+package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
+import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 
-public class RecordNameRuleTest extends BasePmdRuleTest {
+public class TooLongMethodNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testValidRule() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyRecord = record");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+    builder.appendImpl("function Foo: Integer;");
+    builder.appendImpl("begin");
+    builder.appendImpl(" Result := 1;");
+    builder.appendImpl("end;");
 
     execute(builder);
 
@@ -40,29 +41,17 @@ public class RecordNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNameWithoutPrefixShouldAddIssue() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-    builder.appendDecl("type");
-    builder.appendDecl("  MyRecord = record");
-    builder.appendDecl("  end;");
+  public void testTooLongMethod() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+    builder.appendImpl("function Foo: Integer;");
+    builder.appendImpl("begin");
+    for (int i = 1; i <= 150; i++) {
+      builder.appendImpl(" Result := Result + 1;");
+    }
+    builder.appendImpl("end;");
 
     execute(builder);
 
-    assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("RecordNameRule", builder.getOffsetDecl() + 2)));
+    assertIssues(hasItem(hasRuleKeyAtLine("TooLongMethodRule", builder.getOffSet() + 1)));
   }
-
-  @Test
-  public void testBadPascalCaseShouldAddIssue() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
-    builder.appendDecl("type");
-    builder.appendDecl("  TmyRecord = record");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("RecordNameRule", builder.getOffsetDecl() + 2)));
-  }
-
 }

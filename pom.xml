@@ -81,7 +81,7 @@
 		<xalan.version>2.7.2</xalan.version>
 		<hamcrest-all.version>1.3</hamcrest-all.version>
 		<junit.version>4.12</junit.version>
-		<org.mockit.version>1.10.19</org.mockit.version>
+		<org.mockit.version>3.0.0</org.mockit.version>
 		<slf4j.version>1.8.0-beta4</slf4j.version>
 		<antlr3-maven-plugin.version>3.3.9</antlr3-maven-plugin.version>
 		<!--Version Fields end here-->
