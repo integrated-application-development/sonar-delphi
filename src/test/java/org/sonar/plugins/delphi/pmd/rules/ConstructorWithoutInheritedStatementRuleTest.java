@@ -16,28 +16,29 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.pmd;
+package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
+import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 
-public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest {
+public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testValidRule() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     builder.appendDecl("type");
-    builder.appendDecl("  TTestDestructor = class");
+    builder.appendDecl("  TTestConstructor = class");
     builder.appendDecl("  public");
-    builder.appendDecl("    destructor Destroy; override;");
+    builder.appendDecl("    constructor Create;");
     builder.appendDecl("  end;");
 
-    builder.appendImpl("destructor TTestConstructor.Destroy;");
+    builder.appendImpl("constructor TTestConstructor.Create;");
     builder.appendImpl("begin");
     builder.appendImpl("  inherited;");
     builder.appendImpl("  Writeln('do something');");
@@ -49,16 +50,16 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
   }
 
   @Test
-  public void testDstructorMissingInheritedShouldAddIssue() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+  public void testConstructorMissingInheritedShouldAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     builder.appendDecl("type");
-    builder.appendDecl("  TTestDestructor = class");
+    builder.appendDecl("  TTestConstructor = class");
     builder.appendDecl("  public");
-    builder.appendDecl("    destructor Destroy; override;");
+    builder.appendDecl("    constructor Create;");
     builder.appendDecl("  end;");
 
-    builder.appendImpl("destructor TTestConstructor.Destroy;");
+    builder.appendImpl("constructor TTestConstructor.Create;");
     builder.appendImpl("begin");
     builder.appendImpl("  Writeln('do something');");
     builder.appendImpl("end;");
@@ -66,7 +67,27 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
     execute(builder);
 
     assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("DestructorWithoutInheritedStatementRule", builder.getOffSet() + 1)));
+    assertIssues(hasItem(hasRuleKeyAtLine("ConstructorWithoutInheritedStatementRule", builder.getOffSet() + 1)));
+  }
+
+  @Test
+  public void testRecordConstructorShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+
+    builder.appendDecl("type");
+    builder.appendDecl("  TTestRecord = record");
+    builder.appendDecl("    FData : Integer;");
+    builder.appendDecl("    constructor Create(aData : Integer);");
+    builder.appendDecl("  end;");
+
+    builder.appendImpl("constructor TTestRecord.Create(aData : Integer);");
+    builder.appendImpl("begin");
+    builder.appendImpl("  FData := aData;");
+    builder.appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
   }
 
 }

@@ -60,7 +60,7 @@ public class DelphiPmdConfiguration {
     return output.toString();
   }
 
-  File dumpXmlRuleSet(String repositoryKey, String rulesXml) {
+  public File dumpXmlRuleSet(String repositoryKey, String rulesXml) {
     try {
       File configurationFile = writeToWorkingDirectory(rulesXml, repositoryKey + ".xml").toFile();
 

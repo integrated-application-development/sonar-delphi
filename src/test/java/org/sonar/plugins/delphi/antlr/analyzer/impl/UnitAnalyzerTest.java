@@ -28,7 +28,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
@@ -54,7 +53,7 @@ public class UnitAnalyzerTest {
   public void init() throws IllegalStateException {
     analyzer = new UnitAnalyzer();
     results = new CodeAnalysisResults();
-    astNode = new CodeNode<ASTTree>(new DelphiAST(DelphiUtils.getResource(FILE_NAME)));
+    astNode = new CodeNode<>(new DelphiAST(DelphiUtils.getResource(FILE_NAME)));
     code = new CodeTree(astNode, new CodeNode<>(astNode.getNode().getChild(0)));
   }
 
@@ -71,14 +70,14 @@ public class UnitAnalyzerTest {
 
   @Test
   public void testCanAnalyze() {
-    code.setCurrentNode(new CodeNode<Tree>(
+    code.setCurrentNode(new CodeNode<>(
         new CommonTree(new CommonToken(LexerMetrics.UNIT.toMetrics(), "token"))));
     assertTrue(analyzer.canAnalyze(code));
-    code.setCurrentNode(new CodeNode<Tree>(new CommonTree(
+    code.setCurrentNode(new CodeNode<>(new CommonTree(
         new CommonToken(LexerMetrics.LIBRARY.toMetrics(), "token"))));
     assertTrue(analyzer.canAnalyze(code));
     code.setCurrentNode(
-        new CodeNode<Tree>(new CommonTree(new CommonToken(LexerMetrics.IMPLEMENTATION.toMetrics(),
+        new CodeNode<>(new CommonTree(new CommonToken(LexerMetrics.IMPLEMENTATION.toMetrics(),
             "token"))));
     assertFalse(analyzer.canAnalyze(code));
   }

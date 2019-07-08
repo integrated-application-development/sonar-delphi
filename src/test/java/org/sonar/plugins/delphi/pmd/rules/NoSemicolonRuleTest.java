@@ -20,7 +20,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.pmd;
+package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.Matchers.empty;
@@ -28,12 +28,13 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
+import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 
 public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testRule() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("procedure NoSemicolonsAfterLastInstruction;");
     builder.appendImpl("begin");
     builder.appendImpl("  SomeVar := 5");
@@ -47,7 +48,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testInsideWhile() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("procedure NoSemicolonsAfterLastInstruction;");
     builder.appendImpl("var");
     builder.appendImpl("  SomeNumber: Integer;");
@@ -66,7 +67,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testOnEndOfWhile() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("procedure NoSemicolonsAfterLastInstruction;");
     builder.appendImpl("var");
     builder.appendImpl("  SomeVar: integer;");
@@ -85,7 +86,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testShouldSkipEndFollowedByElse() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("procedure NoSemicolonsAfterLastInstruction(val: Boolean);");
     builder.appendImpl("begin");
     builder.appendImpl("  if val then");
@@ -105,7 +106,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testShouldSkipRecordDeclarationOnImplementationSection() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("type");
     builder.appendImpl("  TDummyRec = record");
     builder.appendImpl("    FData : Integer;");
@@ -125,7 +126,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testShouldSkipClassDeclarationOnImplementationSection() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("type");
     builder.appendImpl("  TDummyClass = class");
     builder.appendImpl("    FData : Integer;");
@@ -145,7 +146,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testShouldSkipInterfaceDeclarationOnImplementationSection() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("type");
     builder.appendImpl("  IDummyInterface = interface");
     builder.appendImpl("  ['{FBDFC204-9986-48D5-BBBC-ED5A99834A9F}']");

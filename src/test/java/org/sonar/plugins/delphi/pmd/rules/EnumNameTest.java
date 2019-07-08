@@ -1,4 +1,4 @@
-package org.sonar.plugins.delphi.pmd;
+package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
@@ -6,12 +6,13 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
+import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 
 public class EnumNameTest extends BasePmdRuleTest {
 
   @Test
   public void testAcceptT() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TEnum = (someEnum, someOtherEnum, someThirdEnum);");
 
@@ -22,7 +23,7 @@ public class EnumNameTest extends BasePmdRuleTest {
 
   @Test
   public void testNotAcceptLowercaseT() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  tEnum = (someEnum, someOtherEnum, someThirdEnum);");
 
@@ -34,7 +35,7 @@ public class EnumNameTest extends BasePmdRuleTest {
 
   @Test
   public void testNotAcceptBadPascalCase() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  Tenum = (someEnum, someOtherEnum, someThirdEnum);");
 
@@ -46,7 +47,7 @@ public class EnumNameTest extends BasePmdRuleTest {
 
   @Test
   public void testNotAcceptPrefixAlone() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  T = (someEnum, someOtherEnum, someThirdEnum);");
 

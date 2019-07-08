@@ -30,7 +30,6 @@ import static org.mockito.Mockito.when;
 
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
@@ -59,7 +58,7 @@ public class VisibilityAnalyzerTest {
         LexerMetrics.PROTECTED};
     for (LexerMetrics metric : metrics) {
       when(code.getCurrentCodeNode()).thenReturn(
-          new CodeNode<Tree>(new CommonTree(new CommonToken(metric.toMetrics(), "token"))));
+          new CodeNode<>(new CommonTree(new CommonToken(metric.toMetrics(), "token"))));
       analyzer.analyze(code, results);
       assertEquals(metric, results.getParseVisibility());
     }
@@ -68,23 +67,23 @@ public class VisibilityAnalyzerTest {
   @Test
   public void testCanAnalyze() {
     when(code.getCurrentCodeNode()).thenReturn(
-        new CodeNode<Tree>(
+        new CodeNode<>(
             new CommonTree(new CommonToken(LexerMetrics.PRIVATE.toMetrics(), "private"))));
     assertTrue(analyzer.canAnalyze(code));
     when(code.getCurrentCodeNode()).thenReturn(
-        new CodeNode<Tree>(
+        new CodeNode<>(
             new CommonTree(new CommonToken(LexerMetrics.PUBLIC.toMetrics(), "public"))));
     assertTrue(analyzer.canAnalyze(code));
     when(code.getCurrentCodeNode()).thenReturn(
-        new CodeNode<Tree>(
+        new CodeNode<>(
             new CommonTree(new CommonToken(LexerMetrics.PUBLISHED.toMetrics(), "published"))));
     assertTrue(analyzer.canAnalyze(code));
     when(code.getCurrentCodeNode()).thenReturn(
-        new CodeNode<Tree>(
+        new CodeNode<>(
             new CommonTree(new CommonToken(LexerMetrics.PROTECTED.toMetrics(), "protected"))));
     assertTrue(analyzer.canAnalyze(code));
     when(code.getCurrentCodeNode()).thenReturn(
-        new CodeNode<Tree>(
+        new CodeNode<>(
             new CommonTree(new CommonToken(LexerMetrics.IMPLEMENTATION.toMetrics(), "impl"))));
     assertFalse(analyzer.canAnalyze(code));
   }

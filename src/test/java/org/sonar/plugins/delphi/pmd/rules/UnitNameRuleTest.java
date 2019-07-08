@@ -16,7 +16,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.pmd;
+package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.everyItem;
@@ -25,26 +25,27 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
+import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 
 public class UnitNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testValidRule() {
-    execute(new DelphiUnitBuilderTest().unitName("TestUnits"));
+    execute(new DelphiTestUnitBuilder().unitName("TestUnits"));
 
     assertIssues(empty());
   }
 
   @Test
   public void testValidUnitUsingNameSpace() {
-    execute(new DelphiUnitBuilderTest().unitName("Namespaces.TestUnits"));
+    execute(new DelphiTestUnitBuilder().unitName("Namespaces.TestUnits"));
 
     assertIssues(empty());
   }
 
   @Test
   public void testInvalidUnit() {
-    execute(new DelphiUnitBuilderTest().unitName("myUnit"));
+    execute(new DelphiTestUnitBuilder().unitName("myUnit"));
 
     assertIssues(hasSize(1));
     assertIssues(hasItem(hasRuleKeyAtLine("UnitNameRule", 1)));
@@ -52,7 +53,7 @@ public class UnitNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testInvalidNamespace() {
-    execute(new DelphiUnitBuilderTest().unitName("bad_Namespace.omGoodUnit"));
+    execute(new DelphiTestUnitBuilder().unitName("bad_Namespace.omGoodUnit"));
 
     assertIssues(hasSize(1));
     assertIssues(hasItem(hasRuleKeyAtLine("UnitNameRule", 1)));
@@ -60,7 +61,7 @@ public class UnitNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testInvalidUnitAndNameSpace() {
-    execute(new DelphiUnitBuilderTest().unitName("bad_Namespace.SUPER_bad_UNIT"));
+    execute(new DelphiTestUnitBuilder().unitName("bad_Namespace.SUPER_bad_UNIT"));
 
     assertIssues(hasSize(2));
     assertIssues(everyItem(hasRuleKeyAtLine("UnitNameRule", 1)));

@@ -20,18 +20,15 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
+package org.sonar.plugins.delphi.antlr.resolvers;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.sonar.plugins.delphi.antlr.resolvers.IncludeResolver;
-import org.sonar.plugins.delphi.antlr.resolvers.SourceResolverResults;
 import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
 public class IncludeResolverTest extends FileTestsCommon {
@@ -46,7 +43,7 @@ public class IncludeResolverTest extends FileTestsCommon {
 
   @Before
   public void setup() {
-    resolver = new IncludeResolver(true, new ArrayList<File>());
+    resolver = new IncludeResolver(true, new ArrayList<>());
   }
 
   @Test

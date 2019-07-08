@@ -16,7 +16,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.pmd;
+package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.Matchers.empty;
@@ -25,12 +25,13 @@ import static org.hamcrest.Matchers.not;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
+import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 
 public class FieldNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testValidRule() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
     builder.appendDecl("  private");
@@ -46,7 +47,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testFieldNameWithoutPrefixShouldAddIssue() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
     builder.appendDecl("    private");
@@ -65,7 +66,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testPublishedFieldsShouldBeSkipped() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
     builder.appendDecl("     DefaultId: Integer;");
@@ -87,7 +88,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testBadPascalCaseShouldAddIssue() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
     builder.appendDecl("    private");
@@ -100,14 +101,14 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues(hasSize(3));
-    assertIssues(hasItem(hasRuleKeyAtLine(("FieldNameRule"), builder.getOffsetDecl() + 4)));
-    assertIssues(hasItem(hasRuleKeyAtLine(("FieldNameRule"), builder.getOffsetDecl() + 5)));
+    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4)));
+    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
     assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7)));
   }
 
   @Test
   public void testOneLetterNameFields() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
     builder.appendDecl("    private");

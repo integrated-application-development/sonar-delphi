@@ -20,15 +20,15 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.pmd;
+package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.not;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -48,28 +48,28 @@ import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
-import org.sonar.api.config.Configuration;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.delphi.DelphiTestUtils;
+import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
+import org.sonar.plugins.delphi.pmd.DelphiPmdConfiguration;
+import org.sonar.plugins.delphi.pmd.DelphiPmdExecutor;
+import org.sonar.plugins.delphi.pmd.DelphiPmdSensor;
+import org.sonar.plugins.delphi.pmd.DelphiPmdViolationRecorder;
+import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public abstract class BasePmdRuleTest {
 
-  protected static final String ROOT_DIR_NAME = "/org/sonar/plugins/delphi/PMDTest";
-  protected static final File ROOT_DIR = DelphiUtils.getResource(ROOT_DIR_NAME);
-
-  private SensorContextTester sensorContext;
-  private DelphiProjectHelper delphiProjectHelper;
+  private static final String ROOT_DIR_NAME = "/org/sonar/plugins/delphi/PMDTest";
+  private static final File ROOT_DIR = DelphiUtils.getResource(ROOT_DIR_NAME);
 
   protected DelphiPmdSensor sensor;
-  protected Collection<Issue> issues = new ArrayList<>();
-  private File testFile;
-  private ActiveRules rulesProfile;
+  private Collection<Issue> issues = new ArrayList<>();
   private File baseDir;
 
-  public void execute(DelphiUnitBuilderTest builder) {
+  public void execute(DelphiTestUnitBuilder builder) {
     configureTest(builder);
 
     SensorContextTester sensorContext = SensorContextTester.create(baseDir);
@@ -79,8 +79,8 @@ public abstract class BasePmdRuleTest {
     assertThat("Errors: " + sensor.getErrors(), sensor.getErrors(), empty());
   }
 
-  protected void configureTest(DelphiUnitBuilderTest builder) {
-    testFile = builder.buildFile(ROOT_DIR);
+  private void configureTest(DelphiTestUnitBuilder builder) {
+    File testFile = builder.buildFile(ROOT_DIR);
     testFile.deleteOnExit();
 
     String relativePathTestFile = DelphiUtils
@@ -89,12 +89,11 @@ public abstract class BasePmdRuleTest {
     configureTest(ROOT_DIR_NAME + "/" + relativePathTestFile, builder);
   }
 
-  protected void configureTest(String testFileName, DelphiUnitBuilderTest builder) {
-    sensorContext = SensorContextTester.create(ROOT_DIR);
-    delphiProjectHelper = DelphiTestUtils.mockProjectHelper();
+  private void configureTest(String testFileName, DelphiTestUnitBuilder builder) {
+    SensorContextTester sensorContext = SensorContextTester.create(ROOT_DIR);
+    DelphiProjectHelper delphiProjectHelper = DelphiTestUtils.mockProjectHelper();
 
     DefaultFileSystem fileSystem = sensorContext.fileSystem();
-    Configuration config = sensorContext.config();
 
     // Don't pollute current working directory
     when(delphiProjectHelper.workDir()).thenReturn(new File("target"));
@@ -108,6 +107,7 @@ public abstract class BasePmdRuleTest {
         .create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, srcFile)
         .setModuleBaseDir(baseDir.toPath())
         .setContents(builderSourceCode.toString())
+        .setLanguage(DelphiLanguage.KEY)
         .build();
 
     fileSystem.add(inputFile);
@@ -121,7 +121,7 @@ public abstract class BasePmdRuleTest {
     String fileName = getClass().getResource("/org/sonar/plugins/delphi/pmd/rules.xml").getPath();
     File rulesFile = new File(fileName);
 
-    rulesProfile = mock(ActiveRules.class);
+    ActiveRules rulesProfile = mock(ActiveRules.class);
     when(rulesProfile.find(any(RuleKey.class))).thenAnswer((Answer<ActiveRule>) invocation -> {
       RuleKey ruleKey = (RuleKey) invocation.getArguments()[0];
       NewActiveRule newActiveRule = new NewActiveRule.Builder()
@@ -144,7 +144,7 @@ public abstract class BasePmdRuleTest {
     sensor = new DelphiPmdSensor(executor, violationRecorder);
   }
 
-  public String stringifyIssues() {
+  private String stringifyIssues() {
     StringBuilder builder = new StringBuilder();
     builder.append("[");
     for (Issue issue : issues) {

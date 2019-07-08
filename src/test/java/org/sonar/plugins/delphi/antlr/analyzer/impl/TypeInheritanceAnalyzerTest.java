@@ -75,7 +75,7 @@ public class TypeInheritanceAnalyzerTest {
     results.setActiveClass(clazz);
     analyzer.analyze(code, results);
 
-    ClassInterface parents[] = clazz.getParents();
+    ClassInterface[] parents = clazz.getParents();
     assertThat(parents, arrayWithSize(3));
     assertThat(parents, hasItemInArray(hasProperty("name", equalToIgnoringCase("TMyAncestor"))));
     assertThat(parents, hasItemInArray(hasProperty("name", equalToIgnoringCase("TMyClass"))));

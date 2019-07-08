@@ -16,7 +16,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.pmd;
+package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
@@ -24,12 +24,13 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
+import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 
 public class TypeAliasRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testTypeAliasShouldAddViolation() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     builder.appendDecl("type");
     builder.appendDecl("  TMyChar = Char;");
@@ -42,7 +43,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testTypeAliasNewTypeShouldAddViolation() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     builder.appendDecl("type");
     builder.appendDecl("  TMyChar = type Char;");
@@ -55,7 +56,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testFalsePositiveMetaClassIsNotTypeAlias() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
@@ -69,7 +70,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testFalsePositiveEmptyRecordIsNotTypeAlias() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     builder.appendDecl("type");
     builder.appendDecl("  TMyRecord = record");
@@ -82,7 +83,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testFalsePositiveEmptyClassIsNotTypeAlias() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
@@ -95,7 +96,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testFalsePositiveSetsAreNotTypeAlias() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     builder.appendDecl("type");
     builder.appendDecl("  TSetOfChar = set of Char;");
@@ -107,7 +108,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testFalsePositiveArraysAreNotTypeAlias() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     builder.appendDecl("type");
     builder.appendDecl("  TArrayOfChar = array of Char;");
@@ -119,7 +120,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testFalsePositivePointerTypesAreNotTypeAlias() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     builder.appendDecl("type");
     builder.appendDecl("  PClassPointer = ^TClass;");

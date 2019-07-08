@@ -20,7 +20,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.antlr.sanitizer.resolvers;
+package org.sonar.plugins.delphi.antlr.resolvers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -28,9 +28,7 @@ import static org.hamcrest.Matchers.containsString;
 import java.util.HashSet;
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.plugins.delphi.antlr.resolvers.DefineResolver;
-import org.sonar.plugins.delphi.antlr.resolvers.SourceResolverResults;
-import org.sonar.plugins.delphi.pmd.DelphiUnitBuilderTest;
+import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 
 public class DefineResolverTest {
 
@@ -39,12 +37,12 @@ public class DefineResolverTest {
 
   @Before
   public void setup() {
-    resolver = new DefineResolver(new HashSet<String>());
+    resolver = new DefineResolver(new HashSet<>());
   }
 
   @Test
   public void testDefinitionsIncludes() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("{$if defined(FPC) or (CompilerVersion >= 17)} //Delphi 2005 up");
     builder.appendDecl("  {$DEFINE HAVE_INLINE}");
     builder.appendDecl("{$ifend}");
@@ -125,7 +123,7 @@ public class DefineResolverTest {
 
   @Test
   public void testIfUndefinedWithElse() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("unit superobject;");
     builder.appendDecl("");
     builder.appendDecl("interface");
@@ -159,7 +157,7 @@ public class DefineResolverTest {
 
   @Test
   public void testIfdefUndefinedWithElse() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("unit superobject;");
     builder.appendDecl("");
     builder.appendDecl("interface");
@@ -188,7 +186,7 @@ public class DefineResolverTest {
 
   @Test
   public void testIfdefDefined() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("unit superobject;");
     builder.appendDecl("");
     builder.appendDecl("interface");
@@ -210,7 +208,7 @@ public class DefineResolverTest {
 
   @Test
   public void testIfdefUndefined() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("unit superobject;");
     builder.appendDecl("");
     builder.appendDecl("interface");
@@ -230,7 +228,7 @@ public class DefineResolverTest {
 
   @Test
   public void testIfdefDefinedWithElse() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("{$DEFINE FPC}");
     builder.appendDecl("{$IFDEF FPC}");
     builder.appendDecl("  SOString = UnicodeString;");
@@ -252,7 +250,7 @@ public class DefineResolverTest {
 
   @Test
   public void testSkipAlreadyCommentBlock() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("unit superobject;");
     builder.appendDecl("");
     builder.appendDecl("interface");
@@ -285,7 +283,7 @@ public class DefineResolverTest {
 
   @Test
   public void testIfndefUndefined() {
-    DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("{$IFDEF FPC}");
     builder.appendImpl("{$ELSE}");
     builder.appendImpl("  try");

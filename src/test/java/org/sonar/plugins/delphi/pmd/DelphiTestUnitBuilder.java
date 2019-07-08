@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 
-public class DelphiUnitBuilderTest {
+public class DelphiTestUnitBuilder {
 
   private StringBuilder declaration = new StringBuilder();
   private StringBuilder implementation = new StringBuilder();
@@ -39,13 +39,13 @@ public class DelphiUnitBuilderTest {
   private int declCount;
   private String unitName = "TestUnits";
 
-  public DelphiUnitBuilderTest appendDecl(String value) {
+  public DelphiTestUnitBuilder appendDecl(String value) {
     declaration.append(value).append("\n");
     declCount++;
     return this;
   }
 
-  public DelphiUnitBuilderTest appendImpl(String value) {
+  public DelphiTestUnitBuilder appendImpl(String value) {
     implementation.append(value).append("\n");
     return this;
   }
@@ -58,7 +58,7 @@ public class DelphiUnitBuilderTest {
     return implementation.toString();
   }
 
-  public DelphiUnitBuilderTest unitName(String unitName) {
+  public DelphiTestUnitBuilder unitName(String unitName) {
     this.unitName = unitName;
     return this;
   }
@@ -118,7 +118,7 @@ public class DelphiUnitBuilderTest {
   private void printSourceCode(StringBuilder source) {
     Readable reader = new StringReader(source.toString());
     LineReader lineReader = new LineReader(reader);
-    String line = null;
+    String line;
     int lineNumber = 0;
     try {
       while ((line = lineReader.readLine()) != null) {
@@ -129,7 +129,7 @@ public class DelphiUnitBuilderTest {
     }
   }
 
-  protected int getOffSet() {
+  public int getOffSet() {
     return offset;
   }
 

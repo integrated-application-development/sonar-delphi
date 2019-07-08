@@ -35,12 +35,10 @@ import static org.mockito.Mockito.mock;
 import java.io.IOException;
 import java.util.Collections;
 import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.plugins.delphi.DelphiTestUtils;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
@@ -112,7 +110,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void testCaptureFunctionBodyLine() throws IOException, RecognitionException {
+  public void testCaptureFunctionBodyLine() throws IOException {
     setupFile(FILE_NAME);
 
     results.setActiveClass(new DelphiClass("TDemo"));
@@ -163,7 +161,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void testCaptureFunctionBodyLineRecordOperator() throws IOException, RecognitionException {
+  public void testCaptureFunctionBodyLineRecordOperator() throws IOException {
     setupFile(FILE_NAME_OPERATOR_TEST);
 
     results.setActiveClass(new DelphiClass("GenericA"));
@@ -175,7 +173,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void testListUtils() throws IOException, RecognitionException {
+  public void testListUtils() throws IOException {
     setupFile(FILE_NAME_LIST_UTILS);
 
     results.setActiveClass(new DelphiClass("TListUtils"));
