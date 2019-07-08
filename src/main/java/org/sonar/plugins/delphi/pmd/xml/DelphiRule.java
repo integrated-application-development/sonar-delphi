@@ -33,7 +33,6 @@ import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
  */
 public final class DelphiRule {
 
-  private String ref;
   private Integer priority;
   private String name;
   private String message;
@@ -46,10 +45,10 @@ public final class DelphiRule {
   }
 
   /**
-   * @param ref Rule ref
+   * @param clazz The class which implements this rule
    */
-  public DelphiRule(String ref) {
-    this(ref, null);
+  public DelphiRule(String clazz) {
+    this(clazz, null);
   }
 
   /**
@@ -155,16 +154,7 @@ public final class DelphiRule {
   }
 
   public void processXpath(String sonarRuleKey) {
-    if (DelphiPmdConstants.XPATH_CLASS.equals(ref)) {
-      ref = null;
-      DelphiRuleProperty xpathMessage = getProperty(DelphiPmdConstants.XPATH_MESSAGE_PARAM);
-      if (xpathMessage == null) {
-        throw new IllegalArgumentException("Property '" + DelphiPmdConstants.XPATH_MESSAGE_PARAM +
-            "' should be set for PMD rule " + sonarRuleKey);
-      }
-
-      message = xpathMessage.getValue();
-      removeProperty(DelphiPmdConstants.XPATH_MESSAGE_PARAM);
+    if (DelphiPmdConstants.XPATH_CLASS.equals(clazz)) {
       DelphiRuleProperty xpathExp = getProperty(DelphiPmdConstants.XPATH_EXPRESSION_PARAM);
 
       if (xpathExp == null) {
@@ -173,7 +163,6 @@ public final class DelphiRule {
       }
 
       xpathExp.setCdataValue(xpathExp.getValue());
-      clazz = DelphiPmdConstants.XPATH_CLASS;
       name = sonarRuleKey;
     }
   }
