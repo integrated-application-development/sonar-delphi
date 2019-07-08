@@ -48,9 +48,6 @@ import org.sonar.plugins.delphi.utils.PmdLevelUtils;
 public class DelphiPmdProfileImporter extends ProfileImporter {
   private static final Logger LOG = Loggers.get(DelphiPmdProfileImporter.class);
 
-  private static final String AUTOMATIC_XPATH_WARNING = "PMD XPath rule '%s' can't be imported " +
-      "automatically. The rule must be created manually through the SonarQube web interface.";
-
   private static final String MISSING_CLASS_WARNING = "A PMD rule without 'class' attribute can't "
       + "be imported. see '%s'";
 
@@ -81,14 +78,9 @@ public class DelphiPmdProfileImporter extends ProfileImporter {
   }
 
   private void createActiveRule(DelphiRule delphiRule, RulesProfile profile) {
-    String ruleClassName = delphiRule.getClazz();
-    if (DelphiPmdConstants.XPATH_CLASS.equals(ruleClassName)) {
-      addWarning(String.format(AUTOMATIC_XPATH_WARNING, delphiRule.getName()));
-      return;
-    }
-
     String ruleName = delphiRule.getName();
-    if (ruleName == null) {
+
+    if (delphiRule.getClazz() == null) {
       addWarning(String.format(MISSING_CLASS_WARNING, ruleName));
       return;
     }

@@ -31,9 +31,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,13 +51,17 @@ import org.apache.commons.io.FileUtils;
 import org.hamcrest.Matchers;
 import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.sonar.plugins.delphi.pmd.profile.DelphiRuleSets;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.junit.rules.ExpectedException;
+import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 
 public class DelphiRuleTest {
 
   private DelphiRule rule;
+
+  @Rule
+  public ExpectedException exceptionCatcher = ExpectedException.none();
 
   @Before
   public void init() {
@@ -138,5 +140,29 @@ public class DelphiRuleTest {
     RuleSet parsedRuleSet = ruleSetFactory.createRuleSet(ruleSetFile.getAbsolutePath());
 
     assertThat(parsedRuleSet.getRules(), hasSize(ruleSet.getPmdRules().size()));
+  }
+
+  @Test
+  public void testProcessXpath() {
+    final DelphiRule rule = new DelphiRule(DelphiPmdConstants.XPATH_CLASS);
+    rule.setName("MyOwnRule");
+    DelphiRuleProperty xpathProperty = new DelphiRuleProperty(
+        DelphiPmdConstants.XPATH_EXPRESSION_PARAM, "myXpathExpression");
+
+    rule.addProperty(xpathProperty);
+    rule.processXpath("sonarRuleKey");
+
+    assertTrue(xpathProperty.isCdataValue());
+    assertThat(xpathProperty.getCdataValue(), is("myXpathExpression"));
+    assertThat(rule.getName(), is("sonarRuleKey"));
+  }
+
+  @Test
+  public void testProcessXpathShouldFailIfXpathNotprovided() {
+    final DelphiRule rule = new DelphiRule(DelphiPmdConstants.XPATH_CLASS);
+    rule.setName("MyOwnRule");
+    exceptionCatcher.expect(IllegalArgumentException.class);
+
+    rule.processXpath("xpathKey");
   }
 }

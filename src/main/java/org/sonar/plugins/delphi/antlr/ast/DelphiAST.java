@@ -206,8 +206,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
 
     for (int i = 0; i < delphiNode.getChildCount(); ++i) {
       Tree childNode = delphiNode.getChild(i);
-      String processedName = processNodeName(childNode);
-      Element child = doc.createElement(processedName);
+      Element child = doc.createElement(DelphiParser.tokenNames[childNode.getType()]);
       child.setTextContent(childNode.getText());
       child.setAttribute("line", String.valueOf(childNode.getLine()));
       child.setAttribute("column", String.valueOf(childNode.getCharPositionInLine()));
@@ -220,14 +219,9 @@ public class DelphiAST extends CommonTree implements ASTTree {
     }
   }
 
-  private String processNodeName(Tree node) {
-    return NodeName.findByCode(node.getText()).getName();
-  }
-
   /**
    * {@inheritDoc}
    */
-
   @Override
   public String getFileSource() {
     return fileStream.toString();
