@@ -18,9 +18,10 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
 
@@ -37,33 +38,25 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, is(empty()));
+    assertIssues(empty());
   }
 
-/*  @Test
-  public void interfaceMethodNameStartWithLowerCaseShouldAddIssue() {
+  @Test
+  public void testInterfaceMethodNameStartWithLowerCaseShouldAddIssue() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendDecl("type");
     builder.appendDecl("  IMyInterface = interface");
     builder.appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']");
     builder.appendDecl("    procedure foo;");
-    builder.appendDecl("    function bar: integer;");
+    builder.appendDecl("    function bar: Integer;");
     builder.appendDecl("  end;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(issues.toString(), issues, hasSize(2));
-
-    assertThat(issues, hasItem(allOf(
-      IssueMatchers.hasRuleKey("MethodNameRule"),
-      IssueMatchers.hasRuleLine(builder.getOffsetDecl() + 4)
-      )));
-
-    assertThat(issues, hasItem(allOf(
-      IssueMatchers.hasRuleKey("MethodNameRule"),
-      IssueMatchers.hasRuleLine(builder.getOffsetDecl() + 5)
-      )));
-  }*/
+    assertIssues(hasSize(2));
+    assertIssues(hasItem(hasRuleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 4)));
+    assertIssues(hasItem(hasRuleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 5)));
+  }
 
   @Test
   public void testPublishedMethodsShouldBeSkipped() {
@@ -75,6 +68,6 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(issues, is(empty()));
+    assertIssues(empty());
   }
 }

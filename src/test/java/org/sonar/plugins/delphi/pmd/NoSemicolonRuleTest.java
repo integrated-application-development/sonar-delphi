@@ -25,7 +25,6 @@ package org.sonar.plugins.delphi.pmd;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
@@ -42,9 +41,8 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, hasSize(1));
-    assertThat(stringifyIssues(), issues, hasItem(
-        hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 3)));
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 3)));
   }
 
   @Test
@@ -62,9 +60,8 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, hasSize(1));
-    assertThat(stringifyIssues(), issues, hasItem(
-        hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 7)));
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 7)));
   }
 
   @Test
@@ -82,9 +79,8 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(stringifyIssues(), issues, hasSize(1));
-    assertThat(stringifyIssues(), issues, hasItem(
-        hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 8)));
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 8)));
   }
 
   @Test
@@ -104,7 +100,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(issues, empty());
+    assertIssues(empty());
   }
 
   @Test
@@ -124,7 +120,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(issues, empty());
+    assertIssues(empty());
   }
 
   @Test
@@ -144,7 +140,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(issues, empty());
+    assertIssues(empty());
   }
 
   @Test
@@ -158,6 +154,6 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(issues, empty());
+    assertIssues(empty());
   }
 }

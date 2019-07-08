@@ -36,6 +36,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import org.hamcrest.Matcher;
 import org.mockito.stubbing.Answer;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
@@ -75,7 +76,7 @@ public abstract class BasePmdRuleTest {
     sensor.execute(sensorContext);
     issues = sensorContext.allIssues();
 
-    assertThat("Errors: " + sensor.getErrors(), sensor.getErrors(), is(empty()));
+    assertThat("Errors: " + sensor.getErrors(), sensor.getErrors(), empty());
   }
 
   protected void configureTest(DelphiUnitBuilderTest builder) {
@@ -161,5 +162,10 @@ public abstract class BasePmdRuleTest {
     String message = issue.primaryLocation().message();
 
     return String.format("Issue [ruleKey=%s, message=%s, line=%s]", issue.ruleKey(), message, line);
+  }
+
+  @SuppressWarnings("unchecked")
+  protected void assertIssues(Matcher matcher) {
+    assertThat(stringifyIssues(), issues, matcher);
   }
 }

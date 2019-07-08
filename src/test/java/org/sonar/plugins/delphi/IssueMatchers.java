@@ -33,7 +33,7 @@ public class IssueMatchers {
   }
 
   public static <T extends Issue> Matcher<T> hasRuleKeyAtLine(String key, int line) {
-    return Matchers.allOf(HasRuleKey.hasRuleKey(key), hasRuleLine(line));
+    return Matchers.allOf(hasRuleKey(key), hasRuleLine(line));
   }
 
 }

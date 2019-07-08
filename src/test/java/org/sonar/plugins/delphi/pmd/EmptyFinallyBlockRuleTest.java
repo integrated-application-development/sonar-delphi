@@ -18,9 +18,10 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
 
@@ -40,10 +41,10 @@ public class EmptyFinallyBlockRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertThat(issues, is(empty()));
+    assertIssues(empty());
   }
 
-/*  @Test
+  @Test
   public void testEmptyFinallyBlock() {
     DelphiUnitBuilderTest builder = new DelphiUnitBuilderTest();
     builder.appendImpl("procedure Test();");
@@ -54,10 +55,10 @@ public class EmptyFinallyBlockRuleTest extends BasePmdRuleTest {
     builder.appendImpl("  end;");
     builder.appendImpl("end;");
 
-    testAnalyse(builder);
+    execute(builder);
 
-    assertThat(issues.toString(), issues, hasSize(1));
-    assertThat(issues, hasItem(allOf(hasRuleKey("EmptyFinallyBlockRule"), hasRuleLine(builder.getOffSet() + 5))));
-  }*/
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("EmptyFinallyBlockRule", builder.getOffSet() + 5)));
+  }
 
 }
