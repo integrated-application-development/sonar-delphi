@@ -51,10 +51,11 @@ import org.apache.commons.lang3.ArrayUtils;
 @ScannerSide
 public class DelphiProjectHelper {
   private static final Logger LOG = Loggers.get(DelphiProjectHelper.class);
+  public static final String DEFAULT_PROJECT_NAME = "Default Project";
 
   private final Configuration settings;
   private final FileSystem fs;
-  private List<File> excludedSources;
+  private List<File> excludedDirectories;
 
   /**
    * ctor used by Sonar
@@ -66,7 +67,7 @@ public class DelphiProjectHelper {
     this.settings = settings;
     this.fs = fs;
     LOG.info("Delphi Project Helper creation!!!");
-    this.excludedSources = detectExcludedSources();
+    this.excludedDirectories = detectExcludedDirectories();
   }
 
   /**
@@ -116,15 +117,15 @@ public class DelphiProjectHelper {
   }
 
   /**
-   * Gets the list of excluded source files and directories
+   * Gets the list of excluded directories
    *
-   * @return List of excluded source files and directories
+   * @return List of excluded directories
    */
-  public List<File> getExcludedSources() {
-    return this.excludedSources;
+  public List<File> getExcludedDirectories() {
+    return this.excludedDirectories;
   }
 
-  private List<File> detectExcludedSources() {
+  private List<File> detectExcludedDirectories() {
     List<File> result = new ArrayList<>();
     if (settings == null) {
       return result;
@@ -211,8 +212,9 @@ public class DelphiProjectHelper {
    */
   private List<DelphiProject> getWorkgroupProjects(String gprojPath) {
     try {
+      File gprojFile = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), gprojPath);
       LOG.debug("{} {}", ".groupproj file found: ", gprojPath);
-      DelphiWorkgroup workGroup = new DelphiWorkgroup(new File(gprojPath));
+      DelphiWorkgroup workGroup = new DelphiWorkgroup(gprojFile);
       return workGroup.getProjects();
     } catch (IOException e) {
       LOG.error("Failed to create Delphi Workgroup: ", e);
@@ -246,7 +248,7 @@ public class DelphiProjectHelper {
    * @return List of DelphiProjects
    */
   private List<DelphiProject> getDefaultProject() {
-    DelphiProject newProject = new DelphiProject("Default Project");
+    DelphiProject newProject = new DelphiProject(DEFAULT_PROJECT_NAME);
     newProject.setIncludeDirectories(getIncludeDirectories());
     newProject.setSourceFiles(inputFilesToFiles(mainFiles()));
     return Collections.singletonList(newProject);
@@ -320,14 +322,13 @@ public class DelphiProjectHelper {
    * Is file in excluded list?
    *
    * @param fileName File to check
-   * @param excludedSources Excluded paths
    * @return True if file is excluded, false otherwise
    */
-  public boolean isExcluded(String fileName, List<File> excludedSources) {
-    if (excludedSources == null) {
+  public boolean isExcluded(String fileName) {
+    if (excludedDirectories == null) {
       return false;
     }
-    for (File excludedDir : excludedSources) {
+    for (File excludedDir : excludedDirectories) {
       String normalizedFileName = DelphiUtils.normalizeFileName(fileName.toLowerCase());
       String excludedDirNormalizedPath = DelphiUtils.normalizeFileName(excludedDir.getAbsolutePath()
           .toLowerCase());
@@ -342,11 +343,10 @@ public class DelphiProjectHelper {
    * Is file excluded?
    *
    * @param delphiFile File to check
-   * @param excludedSources List of excluded sources
    * @return True if file is excluded, false otherwise
    */
-  public boolean isExcluded(File delphiFile, List<File> excludedSources) {
-    return isExcluded(delphiFile.getAbsolutePath(), excludedSources);
+  public boolean isExcluded(File delphiFile) {
+    return isExcluded(delphiFile.getAbsolutePath());
   }
 
   /**

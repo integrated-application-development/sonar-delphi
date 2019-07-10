@@ -142,7 +142,7 @@ public final class DelphiRule {
     return example;
   }
 
-  public String getFullDescription() {
+  public String getHtmlDescription() {
     String desc = "";
     if (description != null) {
       desc += "<p>" + description + "</p>";

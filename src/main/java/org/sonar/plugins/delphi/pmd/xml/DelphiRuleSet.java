@@ -143,7 +143,7 @@ public class DelphiRuleSet {
         Rule.create(DelphiPmdConstants.REPOSITORY_KEY, fRule.getName(), fRule.getMessage())
             .setLanguage(DelphiLanguage.KEY)
             .setSeverity(PmdLevelUtils.fromLevel(fRule.getPriority()))
-            .setDescription(fRule.getFullDescription())
+            .setDescription(fRule.getHtmlDescription())
             .setConfigKey(fRule.getClazz());
 
     List<RuleParam> ruleParams = new ArrayList<>();

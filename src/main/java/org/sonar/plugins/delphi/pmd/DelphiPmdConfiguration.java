@@ -77,10 +77,11 @@ public class DelphiPmdConfiguration {
    * unless <code>sonar.pmd.generateXml</code> is set to false.
    *
    * @param report The report which shall be written into an XML file.
+   * @return Path to the report
    */
-  void dumpXmlReport(Report report) {
+  Path dumpXmlReport(Report report) {
     if (!settings.getBoolean(DelphiPlugin.GENERATE_PMD_REPORT_XML).orElse(false)) {
-      return;
+      return null;
     }
 
     try {
@@ -88,6 +89,8 @@ public class DelphiPmdConfiguration {
       final Path reportFile = writeToWorkingDirectory(reportAsString, PMD_RESULT_XML);
 
       LOG.info("PMD output report: " + reportFile.toString());
+
+      return reportFile;
     } catch (IOException e) {
       throw new IllegalStateException("Fail to save the PMD report", e);
     }

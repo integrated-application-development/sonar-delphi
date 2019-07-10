@@ -104,13 +104,13 @@ public class DelphiRuleTest {
 
   @Test
   public void testDescription() {
-    assertThat(rule.getFullDescription(), isEmptyString());
+    assertThat(rule.getHtmlDescription(), isEmptyString());
     rule.setDescription("abc");
     assertThat(rule.getDescription(), is("abc"));
-    assertThat(rule.getFullDescription(), is("<p>abc</p>"));
+    assertThat(rule.getHtmlDescription(), is("<p>abc</p>"));
     rule.setExample("123");
     assertThat(rule.getExample(), is("123"));
-    assertThat(rule.getFullDescription(), is("<p>abc</p><pre>123</pre>"));
+    assertThat(rule.getHtmlDescription(), is("<p>abc</p><pre>123</pre>"));
   }
 
   @Test

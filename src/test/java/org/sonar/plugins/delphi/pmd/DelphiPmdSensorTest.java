@@ -1,10 +1,7 @@
 /*
- * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
- * Author(s):
- * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
- * Michal Wojcik (michal.wojcik@sabre.com)
- * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
+ * SonarQube PMD Plugin
+ * Copyright (C) 2012-2019 SonarSource SA
+ * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,86 +13,135 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.plugins.delphi.pmd;
 
-import static org.mockito.Matchers.anyString;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.ThrowableAssert.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import com.google.common.collect.Iterators;
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import org.apache.commons.io.FileUtils;
+import java.util.Iterator;
+import net.sourceforge.pmd.Report;
+import net.sourceforge.pmd.RuleViolation;
 import org.junit.Before;
-import org.mockito.stubbing.Answer;
-import org.sonar.api.batch.fs.InputFile;
+import org.junit.Test;
+import org.sonar.api.batch.fs.InputFile.Type;
+import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
-import org.sonar.api.batch.rule.ActiveRules;
-import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.plugins.delphi.DelphiTestUtils;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
-import org.sonar.plugins.delphi.project.DelphiProject;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiPmdSensorTest {
-
-  private static final String ROOT_NAME = "/org/sonar/plugins/delphi/PMDTest";
-  private static final String TEST_FILE = "/org/sonar/plugins/delphi/PMDTest/pmd.pas";
+  private final DelphiPmdExecutor executor = mock(DelphiPmdExecutor.class);
+  private final DelphiPmdViolationRecorder violationRecorder = mock(DelphiPmdViolationRecorder.class);
+  private final SensorContext context = mock(SensorContext.class);
+  private final DefaultFileSystem fs = new DefaultFileSystem(new File("."));
 
   private DelphiPmdSensor sensor;
-  private SensorContextTester sensorContext;
-  private DelphiProjectHelper delphiProjectHelper;
-  private ActiveRules rulesProfile;
-  private File baseDir;
+
+  private static DelphiRuleViolation violation() {
+    return mock(DelphiRuleViolation.class);
+  }
+
+  private static Report report(DelphiRuleViolation... violations) {
+    Report report = mock(Report.class);
+    when(report.iterator()).thenReturn(Iterators.forArray(violations));
+    return report;
+  }
 
   @Before
-  public void init() throws IOException {
-    baseDir = DelphiUtils.getResource(ROOT_NAME);
-    sensorContext = SensorContextTester.create(baseDir);
+  public void setupSensor() {
+    sensor = new DelphiPmdSensor(executor, violationRecorder);
+    when(executor.execute()).thenReturn(mock(Report.class));
+    when(executor.shouldExecuteOnProject()).thenReturn(true);
+  }
 
-    delphiProjectHelper = DelphiTestUtils.mockProjectHelper();
+  @Test
+  public void testShouldReportViolations() {
+    addFile();
+    final DelphiRuleViolation pmdViolation = violation();
+    final Report report = report(pmdViolation);
+    when(executor.execute()).thenReturn(report);
 
-    // Don't pollute current working directory
-    when(delphiProjectHelper.workDir()).thenReturn(new File("target"));
+    sensor.execute(context);
 
-    File srcFile = DelphiUtils.getResource(TEST_FILE);
+    verify(violationRecorder).saveViolation(pmdViolation, context);
+  }
 
-    final InputFile inputFile = TestInputFileBuilder
-        .create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, srcFile)
-        .setModuleBaseDir(baseDir.toPath())
+  @Test
+  public void testShouldNotReportZeroViolations() {
+    final Report report = report();
+    when(executor.execute()).thenReturn(report);
+
+    sensor.execute(context);
+
+    verify(violationRecorder, never()).saveViolation(any(DelphiRuleViolation.class), eq(context));
+    verifyZeroInteractions(context);
+  }
+
+  @Test
+  public void testSensorShouldNotRethrowOtherExceptions() {
+    addFile();
+    final RuntimeException expectedException = new RuntimeException();
+    when(executor.execute()).thenThrow(expectedException);
+
+    final Throwable thrown = catchThrowable(() -> sensor.execute(context));
+
+    assertThat(thrown)
+        .isInstanceOf(RuntimeException.class)
+        .isEqualTo(expectedException);
+  }
+
+  @Test
+  public void testToString() {
+    final String toString = sensor.toString();
+    assertThat(toString).isEqualTo("DelphiPmdSensor");
+  }
+
+  @Test
+  public void testWhenDescribeCalledThenSensorDescriptionIsWritten() {
+    final SensorDescriptor mockDescriptor = mock(SensorDescriptor.class);
+    when(mockDescriptor.onlyOnLanguage(anyString())).thenReturn(mockDescriptor);
+
+    sensor.describe(mockDescriptor);
+
+    verify(mockDescriptor).onlyOnLanguage(DelphiLanguage.KEY);
+    verify(mockDescriptor).name("DelphiPmdSensor");
+  }
+
+  @SuppressWarnings("unchecked")
+  private void mockEmptyReport() {
+    final Report mockReport = mock(Report.class);
+    final Iterator<RuleViolation> iterator = mock(Iterator.class);
+
+    when(mockReport.iterator()).thenReturn(iterator);
+    when(iterator.hasNext()).thenReturn(false);
+
+    when(executor.execute()).thenReturn(mockReport);
+  }
+
+  private void addFile() {
+    mockEmptyReport();
+    File file = new File("x");
+    fs.add(
+      TestInputFileBuilder.create("sonar-pmd-test", file.getName())
         .setLanguage(DelphiLanguage.KEY)
-        .setType(InputFile.Type.MAIN)
-        .setContents(DelphiUtils.readFileContent(srcFile, Charset.defaultCharset().name()))
-        .build();
-
-    DelphiProject delphiProject = new DelphiProject("Default Project");
-    delphiProject.setSourceFiles(Collections.singletonList(srcFile));
-
-    when(delphiProjectHelper.getProjects())
-        .thenReturn(Collections.singletonList(delphiProject));
-
-    when(delphiProjectHelper.getFile(anyString())).thenAnswer(
-        (Answer<InputFile>) invocation -> inputFile);
-
-    rulesProfile = mock(ActiveRules.class);
-
-    String fileName = getClass().getResource("/org/sonar/plugins/delphi/pmd/rules.xml").getPath();
-    File rulesFile = new File(fileName);
-    String rulesXmlContent;
-    try {
-      rulesXmlContent = FileUtils.readFileToString(rulesFile, StandardCharsets.UTF_8);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-
-    //sensor = new DelphiPmdSensor(delphiProjectHelper, sensorContext, rulesProfile);
+        .setType(Type.MAIN)
+        .build()
+    );
   }
 
 }

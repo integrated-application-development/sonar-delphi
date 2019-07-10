@@ -21,6 +21,8 @@ package org.sonar.plugins.delphi.pmd.xml.factory;
 
 import java.util.List;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.ActiveRuleParam;
@@ -53,9 +55,17 @@ public class RulesProfileRuleSetFactory implements RuleSetFactory {
 
     for (ActiveRule activeRule : activeRules) {
       if (activeRule.getRule().getRepositoryKey().equals(repositoryKey)) {
-        String configKey = activeRule.getRule().getConfigKey();
+        String clazz = activeRule.getRule().getConfigKey();
         Integer level = PmdLevelUtils.toLevel(activeRule.getSeverity().name());
-        DelphiRule rule = new DelphiRule(configKey, level);
+        String name = activeRule.getRule().getKey();
+        String message = activeRule.getRule().getName();
+        String description = activeRule.getRule().getDescription();
+
+        DelphiRule rule = new DelphiRule(clazz, level);
+        rule.setName(name);
+        rule.setMessage(message);
+        parseDescription(rule, description);
+
         addRuleProperties(activeRule, rule);
         ruleSet.addRule(rule);
         rule.processXpath(activeRule.getRuleKey());
@@ -72,6 +82,36 @@ public class RulesProfileRuleSetFactory implements RuleSetFactory {
         String value = activeRuleParam.getValue();
         pmdRule.addProperty(new DelphiRuleProperty(key, value));
       }
+    }
+  }
+
+  /**
+   * Takes an HTML string and parses out the description and example
+   *
+   * This is needed because PMD separates the description and example into separate XML elements.
+   * Meanwhile, Sonar is given one HTML description which we created by appending the PMD
+   * description and example in {@link DelphiRule#getHtmlDescription()}
+   * As a result, we can't reverse-engineer a PMD rule from an {@link ActiveRule} without parsing
+   * that HTML.
+   *
+   * @param pmdRule The rule we are creating a description and/or example for
+   * @param htmlDescription HTML containing a description and/or example
+   */
+  private void parseDescription(DelphiRule pmdRule, String htmlDescription) {
+    if (htmlDescription == null) {
+      return;
+    }
+
+    Pattern descriptionPattern = Pattern.compile("(?<=<p>)(.*)(?=</p>)");
+    Matcher descriptionMatcher = descriptionPattern.matcher(htmlDescription);
+    if (descriptionMatcher.find()) {
+      pmdRule.setDescription(descriptionMatcher.group(1));
+    }
+
+    Pattern examplePattern = Pattern.compile("(?<=<pre>)(.*)(?=</pre>)");
+    Matcher exampleMatcher = examplePattern.matcher(htmlDescription);
+    if (exampleMatcher.find()) {
+      pmdRule.setExample(exampleMatcher.group(1));
     }
   }
 
