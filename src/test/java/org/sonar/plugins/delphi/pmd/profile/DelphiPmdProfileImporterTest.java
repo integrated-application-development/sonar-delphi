@@ -45,7 +45,6 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -83,6 +82,10 @@ public class DelphiPmdProfileImporterTest {
                     rule.createParameter("limit");
                   }
 
+                  if (rule.getKey().equals("MyXpathRule")) {
+                    rule.createParameter("xpath");
+                  }
+
                   return rule;
                 });
     return ruleFinder;
@@ -112,13 +115,13 @@ public class DelphiPmdProfileImporterTest {
   }
 
   @Test
-  public void testShouldNotImportXpathRule() {
+  public void testShouldImportXpathRule() {
     Reader reader = read("export_xpath_rules.xml");
 
     RulesProfile profile = importer.importProfile(reader, messages);
 
-    assertThat(profile.getActiveRules(), is(empty()));
-    assertTrue(messages.hasWarnings());
+    assertThat(profile.getActiveRules(), hasSize(1));
+    assertThat(getRule(profile, "MyXpathRule"), is(not(nullValue())));
   }
 
   @Test
@@ -206,5 +209,14 @@ public class DelphiPmdProfileImporterTest {
 
     assertThat(profile.getActiveRules(), is(empty()));
     assertThat(messages.getWarnings(), hasSize(1));
+  }
+
+  @Test
+  public void testMessagesCanBeNull() {
+    Reader reader = read("import_rule_with_missing_class.xml");
+
+    RulesProfile profile = importer.importProfile(reader, null);
+
+    assertThat(profile.getActiveRules(), is(empty()));
   }
 }

@@ -62,12 +62,12 @@
 		<priority>3</priority>
 	</rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+	<rule class="org.sonar.plugins.delphi.pmd.rules.InterfaceNameRule"
 				name="InterfaceNameRule">
 		<priority>4</priority>
 	</rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+	<rule class="org.sonar.plugins.delphi.pmd.rules.ClassNameRule"
 				name="ClassNameRule">
 		<priority>4</priority>
 	</rule>
@@ -239,11 +239,6 @@
 
 	<rule class="org.sonar.plugins.delphi.pmd.rules.TooLongLineRule"
 				name="TooLongLineRule">
-		<priority>4</priority>
-	</rule>
-
-	<rule class="org.sonar.plugins.delphi.pmd.rules.ClassNameRule"
-				name="ClassNameRule">
 		<priority>4</priority>
 	</rule>
 

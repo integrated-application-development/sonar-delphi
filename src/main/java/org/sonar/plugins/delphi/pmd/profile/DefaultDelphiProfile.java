@@ -39,7 +39,7 @@ import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
  */
 @ServerSide
 public class DefaultDelphiProfile implements BuiltInQualityProfilesDefinition {
-
+  public static final String DEFAULT_PROFILE_NAME = "Sonar way";
   private DelphiPmdProfileImporter importer;
 
   /**
@@ -54,7 +54,7 @@ public class DefaultDelphiProfile implements BuiltInQualityProfilesDefinition {
   @Override
   public void define(Context context) {
     NewBuiltInQualityProfile qualityProfile = context
-        .createBuiltInQualityProfile("Sonar way", DelphiLanguage.KEY);
+        .createBuiltInQualityProfile(DEFAULT_PROFILE_NAME, DelphiLanguage.KEY);
 
     Reader reader = new InputStreamReader(getClass().getResourceAsStream(
         "/org/sonar/plugins/delphi/pmd/default-delphi-profile.xml"), UTF_8);
