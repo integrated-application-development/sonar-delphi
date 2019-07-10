@@ -95,7 +95,6 @@ public class DelphiPmdProfileExporterTest {
     for (RulesDefinition.Rule rule : rules) {
       Rule newRule = Rule.create(rule.repository().key(), rule.key(), rule.name())
           .setDescription(rule.htmlDescription())
-          .setRepositoryKey(rule.repository().key())
           .setConfigKey(rule.internalKey());
 
       if (!rule.params().isEmpty()) {
