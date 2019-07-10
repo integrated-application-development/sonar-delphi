@@ -9,8 +9,7 @@ public class DuplicatesRule extends DelphiRule {
   private static final String[] DUPLICATES_LINE = {".", "duplicates"};
   private static final String[] SORTED_LINE = {".", "sorted", ":=", "true"};
   private static final int MINIMUM_NODES = 4;
-  private static final int PREVIOUS_LINE_OFFSET = 7;
-  private static final int NEXT_LINE_OFFSET = 5;
+  private static final int LINE_OFFSET = 6;
 
   /**
    * This rule adds violations when the Duplicates method, (foo.Duplicates := dupError) is called on
@@ -33,14 +32,14 @@ public class DuplicatesRule extends DelphiRule {
           return;
         }
 
-        addViolation(ctx, (DelphiPMDNode) children.get(i - 1));
+        addViolation(ctx, (DelphiPMDNode) children.get(i + 2));
       }
     }
   }
 
   private boolean isDuplicatesLine(List children, int childIndex) {
     for (int i = 0; i < DUPLICATES_LINE.length; ++i) {
-      String child = children.get(childIndex + i).toString();
+      String child = children.get(childIndex + i + 1).toString();
       if (!child.equalsIgnoreCase(DUPLICATES_LINE[i])) {
         return false;
       }
@@ -50,19 +49,19 @@ public class DuplicatesRule extends DelphiRule {
   }
 
   private boolean sortedOnPreviousLine(List children, int childIndex) {
-    if (childIndex - PREVIOUS_LINE_OFFSET < 0) {
+    if (childIndex - LINE_OFFSET < 0) {
       return false;
     }
 
-    String currentLineIdentifier = children.get(childIndex - 1).toString();
-    String previousLineIdentifier = children.get(childIndex - PREVIOUS_LINE_OFFSET).toString();
+    String currentLineIdentifier = children.get(childIndex).toString();
+    String previousLineIdentifier = children.get(childIndex - LINE_OFFSET).toString();
 
     if (!currentLineIdentifier.equalsIgnoreCase(previousLineIdentifier)) {
       return false;
     }
 
     for (int i = 0; i < SORTED_LINE.length; ++i) {
-      String child = children.get(childIndex - PREVIOUS_LINE_OFFSET + i).toString();
+      String child = children.get(childIndex - LINE_OFFSET + 1 + i).toString();
       if (!child.equalsIgnoreCase(SORTED_LINE[i])) {
         return false;
       }
@@ -72,19 +71,19 @@ public class DuplicatesRule extends DelphiRule {
   }
 
   private boolean sortedOnNextLine(List children, int childIndex) {
-    if (childIndex + NEXT_LINE_OFFSET + SORTED_LINE.length >= children.size()) {
+    if (childIndex + LINE_OFFSET + SORTED_LINE.length >= children.size()) {
       return false;
     }
 
-    String currentLineIdentifier = children.get(childIndex - 1).toString();
-    String nextLineIdentifier = children.get(childIndex + NEXT_LINE_OFFSET).toString();
+    String currentLineIdentifier = children.get(childIndex).toString();
+    String nextLineIdentifier = children.get(childIndex + LINE_OFFSET).toString();
 
     if (!currentLineIdentifier.equalsIgnoreCase(nextLineIdentifier)) {
       return false;
     }
 
     for (int i = 0; i < SORTED_LINE.length; ++i) {
-      String child = children.get(childIndex + NEXT_LINE_OFFSET + i).toString();
+      String child = children.get(childIndex + LINE_OFFSET + 1 + i).toString();
       if (!child.equalsIgnoreCase(SORTED_LINE[i])) {
         return false;
       }
