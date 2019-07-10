@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="delph">
+  <description>Sonar Profile: delph</description>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounter" message="Too many variables" name="TooManyVariablesRule" language="delph">
+    <priority>3</priority>
+    <properties>
+      <property>
+        <property name="UNKNOWN" value="blablabla" />
+      </property>
+    </properties>
+    <description>Function may have too many variables, maximum number of variables is 10</description>
+  </rule>
+</ruleset>

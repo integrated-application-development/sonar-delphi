@@ -83,7 +83,7 @@ public class DelphiProjectTest {
   public void testParseFile() throws Exception {
     project = new DelphiProject(DelphiUtils.getResource(XML_FILE));
 
-    assertEquals("Simple Delphi Product", project.getName());
+    assertEquals("Simple Delphi Project", project.getName());
 
     assertEquals(8, project.getSourceFiles().size()); // checking source
     // files

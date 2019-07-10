@@ -79,7 +79,7 @@ public class DelphiPmdProfileImporter extends ProfileImporter {
 
   private void createActiveRule(DelphiRule delphiRule, RulesProfile profile) {
     String ruleName = delphiRule.getName();
-
+    
     if (delphiRule.getClazz() == null) {
       addWarning(String.format(MISSING_CLASS_WARNING, ruleName));
       return;

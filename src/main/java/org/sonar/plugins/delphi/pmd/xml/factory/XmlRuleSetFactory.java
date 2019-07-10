@@ -85,13 +85,13 @@ public class XmlRuleSetFactory implements RuleSetFactory {
 
   private void parseDescription(Element eltRule, DelphiRule rule, @Nullable Namespace namespace) {
     for (Element eltDescription : getChildren(eltRule, "description", namespace)) {
-      rule.setDescription(eltDescription.getText());
+      rule.setDescription(eltDescription.getText().trim());
     }
   }
 
   private void parseExample(Element eltRule, DelphiRule rule, @Nullable Namespace namespace) {
     for (Element eltExample : getChildren(eltRule, "example", namespace)) {
-      rule.setDescription(eltExample.getText());
+      rule.setExample(eltExample.getText().trim());
     }
   }
 
@@ -120,7 +120,7 @@ public class XmlRuleSetFactory implements RuleSetFactory {
       if (messages != null) {
         messages.addErrorText(INVALID_INPUT + " : " + e.getMessage());
       }
-      LOG.error(INVALID_INPUT, e);
+      LOG.debug(INVALID_INPUT, e);
       return new DelphiRuleSet();
     }
 

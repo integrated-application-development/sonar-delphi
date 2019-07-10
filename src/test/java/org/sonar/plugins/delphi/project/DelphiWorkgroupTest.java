@@ -50,7 +50,7 @@ public class DelphiWorkgroupTest {
   public void testXmlWorkgroup() throws IOException {
     DelphiWorkgroup workGroup = new DelphiWorkgroup(DelphiUtils.getResource(XML_FILE));
     assertEquals(1, workGroup.getProjects().size());
-    assertEquals("Simple Delphi Product", workGroup.getProjects().get(0).getName());
+    assertEquals("Simple Delphi Project", workGroup.getProjects().get(0).getName());
   }
 
 }

@@ -123,7 +123,7 @@
 						<VersionInfoKeys Name="LegalCopyright">Copyright 2011 Company Inc.</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks"/>
 						<VersionInfoKeys Name="OriginalFilename">FILE.EXE</VersionInfoKeys>
-						<VersionInfoKeys Name="ProductName">Simple Delphi Product</VersionInfoKeys>
+						<VersionInfoKeys Name="ProductName">Simple Delphi Project</VersionInfoKeys>
 						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
 						<VersionInfoKeys Name="Comments"/>
 					</VersionInfoKeys>

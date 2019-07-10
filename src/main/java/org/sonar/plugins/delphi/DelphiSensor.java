@@ -88,7 +88,6 @@ public class DelphiSensor implements Sensor {
   private Map<InputFile, List<ClassInterface>> fileClasses = new HashMap<>();
   private Map<InputFile, List<FunctionInterface>> fileFunctions = new HashMap<>();
   private Set<UnitInterface> units = new HashSet<>();
-  private final List<File> excluded;
   private DelphiFileStreamConfig fileStreamConfig;
 
   public DelphiSensor(DelphiProjectHelper delphiProjectHelper, ActiveRules activeRules,
@@ -99,7 +98,6 @@ public class DelphiSensor implements Sensor {
     basicMetrics = new BasicMetrics(sensorContext);
     complexityMetrics = new ComplexityMetrics(activeRules, sensorContext);
     deadCodeMetrics = new DeadCodeMetrics(sensorContext);
-    this.excluded = delphiProjectHelper.getExcludedSources();
   }
 
   /**
@@ -155,7 +153,7 @@ public class DelphiSensor implements Sensor {
   private void processCpd(SensorContext context, InputFile inputFile) {
     String fileName = DelphiUtils.uriToAbsolutePath(inputFile.uri());
 
-    if (!delphiProjectHelper.isExcluded(fileName, excluded)) {
+    if (!delphiProjectHelper.isExcluded(fileName)) {
       return;
     }
 
@@ -252,7 +250,7 @@ public class DelphiSensor implements Sensor {
    */
   private void parseFiles(DelphiProject delphiProject) {
     List<File> includedDirs = delphiProject.getIncludeDirectories();
-    List<File> excludedDirs = delphiProjectHelper.getExcludedSources();
+    List<File> excludedDirs = delphiProjectHelper.getExcludedDirectories();
     List<File> sourceFiles = delphiProject.getSourceFiles();
 
     printFileList("Included: ", includedDirs);
@@ -277,7 +275,7 @@ public class DelphiSensor implements Sensor {
   }
 
   private CodeAnalysisResults parseSourceFile(File sourceFile, ASTAnalyzer analyzer) {
-    if (delphiProjectHelper.isExcluded(sourceFile, delphiProjectHelper.getExcludedSources())) {
+    if (delphiProjectHelper.isExcluded(sourceFile)) {
       return null;
     }
 

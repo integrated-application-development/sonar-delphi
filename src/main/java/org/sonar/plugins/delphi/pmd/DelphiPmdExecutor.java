@@ -64,6 +64,10 @@ public class DelphiPmdExecutor {
     return result;
   }
 
+  public boolean shouldExecuteOnProject() {
+    return delphiProjectHelper.shouldExecuteOnProject();
+  }
+
   private Report executePmd() {
     DelphiPMD pmd = new DelphiPMD();
     Report report = pmd.getReport();
@@ -85,13 +89,12 @@ public class DelphiPmdExecutor {
       RuleSets ruleSets) {
     LOG.info("PMD Parsing project {}", delphiProject.getName());
 
-    List<File> excluded = delphiProjectHelper.getExcludedSources();
     ProgressReporter progressReporter = new ProgressReporter(
         delphiProject.getSourceFiles().size(), 10, new ProgressReporterLogger(LOG));
 
     for (File pmdFile : delphiProject.getSourceFiles()) {
       progressReporter.progress();
-      if (!delphiProjectHelper.isExcluded(pmdFile, excluded)) {
+      if (!delphiProjectHelper.isExcluded(pmdFile)) {
         processPmdParse(pmd, ruleContext, ruleSets, pmdFile);
       }
     }

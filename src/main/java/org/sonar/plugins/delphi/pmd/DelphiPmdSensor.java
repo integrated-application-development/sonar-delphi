@@ -63,8 +63,10 @@ public class DelphiPmdSensor implements Sensor {
    */
   @Override
   public void execute(@NonNull SensorContext context) {
-    for (RuleViolation violation : executor.execute()) {
-      violationRecorder.saveViolation(violation, context);
+    if (executor.shouldExecuteOnProject()) {
+      for (RuleViolation violation : executor.execute()) {
+        violationRecorder.saveViolation(violation, context);
+      }
     }
   }
 
