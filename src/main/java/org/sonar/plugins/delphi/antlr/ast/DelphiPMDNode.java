@@ -428,4 +428,33 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
   public Iterator<Attribute> getXPathAttributesIterator() {
     return null;
   }
+
+  public DelphiPMDNode prevNode() {
+    if (parent == null || childIndex == 0) {
+      return null;
+    }
+
+    return (DelphiPMDNode) parent.getChild(childIndex - 1);
+  }
+
+  public DelphiPMDNode nextNode() {
+    if (parent == null || parent.getChildCount() == childIndex + 1) {
+      return null;
+    }
+
+    return (DelphiPMDNode) parent.getChild(childIndex + 1);
+  }
+
+  public DelphiPMDNode findNextSiblingOfType(int type) {
+    if (parent != null) {
+      for (int i = childIndex; i < parent.getChildCount(); ++i) {
+        Tree child = parent.getChild(i);
+
+        if (child.getType() == type) {
+          return (DelphiPMDNode) parent.getChild(i);
+        }
+      }
+    }
+    return null;
+  }
 }

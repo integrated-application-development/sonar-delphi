@@ -64,6 +64,7 @@ public class DelphiPMD {
       ctx.setLanguageVersion(language.getDefaultVersion());
 
       DelphiAST ast = new DelphiAST(pmdFile, fileStreamConfig);
+
       if (ast.isError()) {
         throw new ParseException("grammar error");
       }
