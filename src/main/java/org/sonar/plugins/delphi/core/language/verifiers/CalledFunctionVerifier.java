@@ -33,7 +33,7 @@ import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
 
 /**
- * Veryfies if we are calling a function, from given as tree node
+ * Verifies if we are calling a function, from a given tree node
  */
 public class CalledFunctionVerifier {
 

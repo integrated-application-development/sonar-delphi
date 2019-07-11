@@ -22,7 +22,6 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
-import java.io.File;
 import org.antlr.runtime.tree.Tree;
 import org.w3c.dom.Document;
 
@@ -56,9 +55,8 @@ public interface ASTTree extends Tree {
    * Generates and saves AST tree to XML file
    *
    * @param fileName The target file to generate the XML
-   * @return Generated XML file
    */
-  File generateXML(String fileName);
+  void generateXML(String fileName);
 
   /**
    * @return Gets the file source

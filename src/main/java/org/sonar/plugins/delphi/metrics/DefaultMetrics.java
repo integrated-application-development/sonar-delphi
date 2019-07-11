@@ -30,8 +30,8 @@ import java.util.Map;
  */
 public abstract class DefaultMetrics implements MetricsInterface {
 
-  protected Map<String, Double> metrics = new HashMap<>();
-  protected Map<String, Integer> intMetrics = new HashMap<>();
+  protected final Map<String, Double> metrics = new HashMap<>();
+  protected final Map<String, Integer> intMetrics = new HashMap<>();
 
   /**
    * {@inheritDoc}
@@ -39,7 +39,7 @@ public abstract class DefaultMetrics implements MetricsInterface {
 
   @Override
   public String[] getMetricKeys() {
-    return metrics.keySet().toArray(new String[metrics.keySet().size()]);
+    return metrics.keySet().toArray(new String[0]);
   }
 
   /**

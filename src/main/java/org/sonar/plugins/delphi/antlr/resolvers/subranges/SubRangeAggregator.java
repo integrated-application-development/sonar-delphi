@@ -23,7 +23,6 @@
 package org.sonar.plugins.delphi.antlr.resolvers.subranges;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -32,7 +31,7 @@ import java.util.List;
  */
 public class SubRangeAggregator {
 
-  protected ArrayList<SubRange> data = new ArrayList<>();
+  protected final ArrayList<SubRange> data = new ArrayList<>();
 
   /**
    * add a new sub range
@@ -54,7 +53,7 @@ public class SubRangeAggregator {
   }
 
   /**
-   * check if providen value is in range of all agregated ranges
+   * check if provided value is in range of all aggregated ranges
    *
    * @param value value to check
    * @return true if so, false otherwise
@@ -91,12 +90,12 @@ public class SubRangeAggregator {
   }
 
   /**
-   * sort aggregated sub ranges with providen comparator
+   * sort aggregated sub ranges with provided comparator
    *
    * @param comparator Sub range comparator
    */
   public void sort(Comparator<? super SubRange> comparator) {
-    Collections.sort(data, comparator);
+    data.sort(comparator);
   }
 
   /**

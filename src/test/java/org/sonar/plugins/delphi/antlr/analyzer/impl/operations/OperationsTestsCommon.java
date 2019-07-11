@@ -31,7 +31,7 @@ class OperationsTestsCommon // private class
 
   protected final static int LAYER_NODES = 3;
 
-  protected NodeOperation operation;
+  protected final NodeOperation operation;
   protected Tree parent;
 
   public OperationsTestsCommon(NodeOperation op) {

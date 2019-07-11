@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class FileTestsCommon {
@@ -40,7 +41,7 @@ public class FileTestsCommon {
 
     String line;
     BufferedReader reader = new BufferedReader(
-        new InputStreamReader(new FileInputStream(testFile), "UTF-8"));
+        new InputStreamReader(new FileInputStream(testFile), StandardCharsets.UTF_8));
     while ((line = reader.readLine()) != null) {
       testFileString.append(line);
       testFileString.append('\n');

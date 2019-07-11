@@ -48,8 +48,8 @@ public class StatementVerifier {
   private Tree checkedNode;
   private boolean isComplex;
   private String lastStatementText;
-  private Deque<Integer> statementIndex = new ArrayDeque<>();
-  private Tokenizer tokenizer = new Tokenizer();
+  private final Deque<Integer> statementIndex = new ArrayDeque<>();
+  private final Tokenizer tokenizer = new Tokenizer();
 
   /**
    * Checks for statements

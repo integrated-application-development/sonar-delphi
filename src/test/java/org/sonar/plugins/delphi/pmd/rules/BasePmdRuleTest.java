@@ -60,7 +60,7 @@ import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-public abstract class BasePmdRuleTest {
+abstract class BasePmdRuleTest {
 
   private static final String ROOT_DIR_NAME = "/org/sonar/plugins/delphi/PMDTest";
   private static final File ROOT_DIR = DelphiUtils.getResource(ROOT_DIR_NAME);

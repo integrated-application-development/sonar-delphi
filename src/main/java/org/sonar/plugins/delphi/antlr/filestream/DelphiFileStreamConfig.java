@@ -13,9 +13,9 @@ import java.util.Set;
  */
 public class DelphiFileStreamConfig {
   private String encoding;
-  private List<File> includedDirs;
-  private Set<String> definitions;
-  private boolean extendIncludes;
+  private final List<File> includedDirs;
+  private final Set<String> definitions;
+  private final boolean extendIncludes;
 
   /**
    * Constructor with default values

@@ -13,7 +13,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 public class TooLongLineRule extends DelphiRule {
 
   private int lineLimit;
-  private Set<Integer> checkedLines = new HashSet<>();
+  private final Set<Integer> checkedLines = new HashSet<>();
   private Tree astTree;
   private boolean firstNode;
 

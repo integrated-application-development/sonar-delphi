@@ -34,7 +34,6 @@ public interface DelphiParserVisitor {
    *
    * @param node node to visit
    * @param data data
-   * @return node data
    */
-  Object visit(DelphiPMDNode node, Object data);
+  void visit(DelphiPMDNode node, Object data);
 }

@@ -50,7 +50,7 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
   }
 
   @Test
-  public void testDstructorMissingInheritedShouldAddIssue() {
+  public void testDestructorMissingInheritedShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     builder.appendDecl("type");

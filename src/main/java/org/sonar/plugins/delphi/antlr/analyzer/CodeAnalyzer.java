@@ -55,11 +55,11 @@ public abstract class CodeAnalyzer {
     }
   }
 
-  protected CodeAnalyzer getSuccesor() {
+  protected CodeAnalyzer getSuccessor() {
     return successor;
   }
 
-  protected boolean hasSucessor() {
+  protected boolean hasSuccessor() {
     return successor != null;
   }
 
@@ -71,5 +71,5 @@ public abstract class CodeAnalyzer {
    * @param codeTree code tree to check
    * @return true if can analyze, false otherwise
    */
-  public abstract boolean canAnalyze(CodeTree codeTree);
+  protected abstract boolean canAnalyze(CodeTree codeTree);
 }

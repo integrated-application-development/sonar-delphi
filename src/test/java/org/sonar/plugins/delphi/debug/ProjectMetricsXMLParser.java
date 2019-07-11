@@ -25,6 +25,7 @@ package org.sonar.plugins.delphi.debug;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -35,7 +36,7 @@ import org.w3c.dom.NodeList;
  */
 public class ProjectMetricsXMLParser extends SimpleXMLParser {
 
-  private Map<String, Node> fileMap = null;
+  private Map<String, Node> fileMap;
 
   public ProjectMetricsXMLParser(File xmlFile) {
     if (xmlFile == null) {
@@ -43,7 +44,7 @@ public class ProjectMetricsXMLParser extends SimpleXMLParser {
     }
     fileMap = new HashMap<>();
     Document doc = parseXML(xmlFile);
-    NodeList filesNode = doc.getElementsByTagName("file");
+    NodeList filesNode = Objects.requireNonNull(doc).getElementsByTagName("file");
     parse(filesNode);
   }
 
@@ -53,7 +54,7 @@ public class ProjectMetricsXMLParser extends SimpleXMLParser {
     {
       Node file = filesNode.item(i); // get file
       // get its "name" node
-      String fileName = getNodeValueText(getValueNodes(file, "name").item(0));
+      String fileName = getNodeValueText(Objects.requireNonNull(getValueNodes(file, "name")).item(0));
       fileMap.put(fileName, file); // put to map
     }
   }
@@ -82,7 +83,7 @@ public class ProjectMetricsXMLParser extends SimpleXMLParser {
     Map<String, String> result = new HashMap<>();
     NodeList att = getValueNodes(fileMap.get(filename), "metric");
 
-    for (int i = 0; i < att.getLength(); ++i) {
+    for (int i = 0; i < Objects.requireNonNull(att).getLength(); ++i) {
       Node metric = att.item(i);
       String name = metric.getAttributes().getNamedItem("name").getNodeValue();
       result.put(name, getNodeValueText(metric));

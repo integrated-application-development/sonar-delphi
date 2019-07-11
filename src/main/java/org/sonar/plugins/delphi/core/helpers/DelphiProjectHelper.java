@@ -55,7 +55,7 @@ public class DelphiProjectHelper {
 
   private final Configuration settings;
   private final FileSystem fs;
-  private List<File> excludedDirectories;
+  private final List<File> excludedDirectories;
 
   /**
    * ctor used by Sonar

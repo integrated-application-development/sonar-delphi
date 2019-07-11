@@ -25,8 +25,8 @@ public class DelphiRuleSet {
 
   private String name;
   private String description;
-  private List<DelphiRule> pmdRules = new ArrayList<>();
-  private List<Rule> sonarRules = new ArrayList<>();
+  private final List<DelphiRule> pmdRules = new ArrayList<>();
+  private final List<Rule> sonarRules = new ArrayList<>();
 
   public List<DelphiRule> getPmdRules() {
     return pmdRules;

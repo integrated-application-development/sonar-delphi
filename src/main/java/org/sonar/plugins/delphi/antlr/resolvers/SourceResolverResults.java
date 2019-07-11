@@ -27,7 +27,7 @@ package org.sonar.plugins.delphi.antlr.resolvers;
  */
 public class SourceResolverResults {
 
-  private String fileName;
+  private final String fileName;
   private StringBuilder data;
 
   /**

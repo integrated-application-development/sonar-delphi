@@ -102,7 +102,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
    * @param node the current node
    * @param ctx the ruleContext to store the violations
    */
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
+  protected void visit(DelphiPMDNode node, RuleContext ctx) {
     // do nothing
   }
 
@@ -110,8 +110,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
    * Visits all nodes in a file
    */
   @Override
-  public Object visit(DelphiPMDNode node, Object data) {
-    return null;
+  public void visit(DelphiPMDNode node, Object data) {
   }
 
   /**

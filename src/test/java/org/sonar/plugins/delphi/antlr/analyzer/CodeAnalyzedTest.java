@@ -35,17 +35,20 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 public class CodeAnalyzedTest {
 
   private CodeTree code;
-  private CommonTree[] nodes;
   private ASTTree ast;
 
   @Before
   public void init() {
     ast = new DelphiAST();
-    nodes = new CommonTree[]{new CommonTree(new CommonToken(0, "a")),
+    CommonTree[] nodes = new CommonTree[]{
+        new CommonTree(new CommonToken(0, "a")),
         new CommonTree(new CommonToken(0, "ab1")),
-        new CommonTree(new CommonToken(0, "ab1c1")), new CommonTree(new CommonToken(0, "ab1c2")),
-        new CommonTree(new CommonToken(0, "ab2")), new CommonTree(new CommonToken(0, "ab2c1")),
-        new CommonTree(new CommonToken(0, "ab2c2")), new CommonTree(new CommonToken(0, "ab2c3"))};
+        new CommonTree(new CommonToken(0, "ab1c1")),
+        new CommonTree(new CommonToken(0, "ab1c2")),
+        new CommonTree(new CommonToken(0, "ab2")),
+        new CommonTree(new CommonToken(0, "ab2c1")),
+        new CommonTree(new CommonToken(0, "ab2c2")),
+        new CommonTree(new CommonToken(0, "ab2c3"))};
 
     ast.addChild(nodes[0]);
     nodes[0].addChild(nodes[1]); // a->ab1
@@ -60,15 +63,6 @@ public class CodeAnalyzedTest {
 
     code = new CodeTree(new CodeNode<>(ast), new CodeNode<>(ast.getChild(0)));
   }
-
-  /*
-   * @Test public void advanceNodeTest() { Tree n =
-   * code.getCurrentCodeNode().getNode(); int index = 0; do {
-   * assertEquals(nodes[index++], n); code.advanceNode(); n =
-   * code.getCurrentCodeNode(); } while (n != null);
-   *
-   * assertFalse(code.hasValidNode()); }
-   */
 
   @Test
   public void testIsValid() {

@@ -32,7 +32,7 @@ public class ProgressReporter {
   private double reportProgress = 25;
   private int targetProgress = 100;
   private int percentProgress = 25;
-  private ProgressReporterLogger logger;
+  private final ProgressReporterLogger logger;
   private boolean firstProgress = true;
 
   /**

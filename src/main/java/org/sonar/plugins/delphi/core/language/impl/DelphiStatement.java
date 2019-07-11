@@ -38,11 +38,11 @@ import org.sonar.plugins.delphi.core.language.Tokenizer;
  */
 public class DelphiStatement implements StatementInterface {
 
-  private int line = -1;
-  private int column = -1;
+  private int line;
+  private int column;
   private String text;
   private boolean complex;
-  private Tokenizer tokenizer = new Tokenizer();
+  private final Tokenizer tokenizer = new Tokenizer();
 
   /**
    * Ctor

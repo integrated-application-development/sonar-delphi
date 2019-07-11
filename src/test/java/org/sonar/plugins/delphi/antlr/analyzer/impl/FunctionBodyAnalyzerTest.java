@@ -78,7 +78,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
     codeTree = new CodeTree(new CodeNode<>(ast), new CodeNode<>(EMPTY_NODE));
   }
 
-  public void setupFile(String fileName) throws IOException {
+  private void setupFile(String fileName) throws IOException {
     loadFile(fileName);
 
     results.setActiveUnit(new DelphiUnit("test"));

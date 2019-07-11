@@ -50,7 +50,6 @@ public class TypeInheritanceAnalyzerTest {
   private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
 
   private TypeInheritanceAnalyzer analyzer;
-  private ASTTree ast;
   private CodeAnalysisResults results;
   private CodeTree code;
   private AdvanceToNodeOperation advanceToOp;
@@ -62,7 +61,7 @@ public class TypeInheritanceAnalyzerTest {
     results.setActiveUnit(new DelphiUnit("test"));
 
     File file = DelphiUtils.getResource(FILE_NAME);
-    ast = new DelphiAST(file);
+    ASTTree ast = new DelphiAST(file);
     code = new CodeTree(new CodeNode<>(ast), new CodeNode<>(ast.getChild(0)));
     advanceToOp = new AdvanceToNodeOperation(LexerMetrics.CLASS_PARENTS);
   }

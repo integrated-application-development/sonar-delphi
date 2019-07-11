@@ -137,7 +137,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
    */
 
   @Override
-  public File generateXML(String fileName) {
+  public void generateXML(String fileName) {
     Source source = new DOMSource(generateDocument());
 
     File file = new File(fileName);
@@ -153,10 +153,8 @@ public class DelphiAST extends CommonTree implements ASTTree {
       transformer.transform(source, result);
     } catch (TransformerException e) {
       LOG.error("Failed to generate Node XML", e);
-      return null;
     }
 
-    return file;
   }
 
   /**

@@ -46,7 +46,6 @@ public class TypeFieldsAnalyzerTest {
 
   private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
   private TypeFieldsAnalyzer analyzer;
-  private ASTTree ast;
   private CodeAnalysisResults results;
   private CodeTree code;
   private AdvanceToNodeOperation advanceToOp;
@@ -58,7 +57,7 @@ public class TypeFieldsAnalyzerTest {
     results.setActiveUnit(new DelphiUnit("test"));
 
     File file = DelphiUtils.getResource(FILE_NAME);
-    ast = new DelphiAST(file);
+    ASTTree ast = new DelphiAST(file);
     code = new CodeTree(new CodeNode<>(ast), new CodeNode<>(ast.getChild(0)));
     advanceToOp = new AdvanceToNodeOperation(LexerMetrics.CLASS_FIELD);
   }

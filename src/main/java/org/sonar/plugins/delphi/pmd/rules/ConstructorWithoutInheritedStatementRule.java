@@ -26,7 +26,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 public class ConstructorWithoutInheritedStatementRule extends NoInheritedStatementRule {
 
-  private Deque<String> knownRecords = new ArrayDeque<>();
+  private final Deque<String> knownRecords = new ArrayDeque<>();
 
   @Override
   protected void init() {

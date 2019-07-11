@@ -25,7 +25,7 @@ package org.sonar.plugins.delphi.surefire;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
-import java.io.FilenameFilter;
+import java.util.Objects;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
@@ -56,14 +56,9 @@ public class SurefireSensorTest {
     delphiProjectHelper = new DelphiProjectHelper(sensorContext.config(),
         sensorContext.fileSystem());
 
-    File[] unitTestFiles = baseDir.listFiles(new FilenameFilter() {
-      @Override
-      public boolean accept(File dir, String name) {
-        return name.endsWith(".pas");
-      }
-    });
+    File[] unitTestFiles = baseDir.listFiles((dir, name) -> name.endsWith(".pas"));
 
-    for (File unitTestFile : unitTestFiles) {
+    for (File unitTestFile : Objects.requireNonNull(unitTestFiles)) {
       InputFile inputFile = TestInputFileBuilder.create("",
           baseDir, unitTestFile)
           .setLanguage(DelphiLanguage.KEY)

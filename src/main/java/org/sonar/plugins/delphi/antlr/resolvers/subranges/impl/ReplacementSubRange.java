@@ -29,7 +29,7 @@ import java.util.Objects;
  */
 public class ReplacementSubRange extends IntegerSubRange {
 
-  private String replacementString;
+  private final String replacementString;
 
   /**
    * ctor

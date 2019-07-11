@@ -44,7 +44,7 @@ public class DelphiLinesFactory {
   private StringBuilder currentStringBuilder = new StringBuilder();
   private Line currentLine;
   private LineContextHandler currentHandler;
-  private LineContextHandler[] handlers;
+  private final LineContextHandler[] handlers;
 
   /**
    * Constructor. Calculates line statistics
@@ -59,7 +59,7 @@ public class DelphiLinesFactory {
     tmpHandlers.add(new DelphiCommentHandler("(*", "*)", false));
     tmpHandlers.add(new LiteralValueHandler('\''));
     tmpHandlers.add(new LiteralValueHandler('"'));
-    this.handlers = tmpHandlers.toArray(new LineContextHandler[tmpHandlers.size()]);
+    this.handlers = tmpHandlers.toArray(new LineContextHandler[0]);
     fillLines(new BufferedReader(reader));
   }
 

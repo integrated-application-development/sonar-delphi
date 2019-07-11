@@ -61,7 +61,7 @@ public class DeadCodeMetrics extends DefaultMetrics {
   private boolean isCalculated;
   private List<String> unusedUnits;
   private Set<FunctionInterface> unusedFunctions;
-  private List<UnitInterface> allUnits;
+  private final List<UnitInterface> allUnits;
   private final SensorContext context;
 
   public static final RuleKey RULE_KEY_UNUSED_UNIT = RuleKey

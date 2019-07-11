@@ -54,10 +54,10 @@ public class DelphiFunction implements FunctionInterface {
   private boolean isAccessor;
   private boolean isDeclaration;
   private ClassInterface parentClass;
-  private List<StatementInterface> statements = new ArrayList<>();
-  private Set<FunctionInterface> called = new HashSet<>();
-  private List<ArgumentInterface> args = new ArrayList<>();
-  private List<FunctionInterface> overFunc = new ArrayList<>();
+  private final List<StatementInterface> statements = new ArrayList<>();
+  private final Set<FunctionInterface> called = new HashSet<>();
+  private final List<ArgumentInterface> args = new ArrayList<>();
+  private final List<FunctionInterface> overFunc = new ArrayList<>();
   private UnitInterface parentUnit;
   private boolean message;
 
@@ -265,7 +265,7 @@ public class DelphiFunction implements FunctionInterface {
 
   @Override
   public FunctionInterface[] getCalledFunctions() {
-    return called.toArray(new FunctionInterface[called.size()]);
+    return called.toArray(new FunctionInterface[0]);
   }
 
   /**
@@ -358,7 +358,7 @@ public class DelphiFunction implements FunctionInterface {
 
   @Override
   public ArgumentInterface[] getArguments() {
-    return args.toArray(new ArgumentInterface[args.size()]);
+    return args.toArray(new ArgumentInterface[0]);
   }
 
   /**
@@ -424,7 +424,7 @@ public class DelphiFunction implements FunctionInterface {
 
   @Override
   public FunctionInterface[] getOverloadedFunctions() {
-    return overFunc.toArray(new FunctionInterface[overFunc.size()]);
+    return overFunc.toArray(new FunctionInterface[0]);
   }
 
   /**

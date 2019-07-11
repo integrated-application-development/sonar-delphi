@@ -146,8 +146,8 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     return 0;
   }
 
-  public Object jjtAccept(DelphiParserVisitor visitor, Object data) {
-    return visitor.visit(this, data);
+  public void jjtAccept(DelphiParserVisitor visitor, Object data) {
+    visitor.visit(this, data);
   }
 
   public List<Tree> findAllChildren(int type) {

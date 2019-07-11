@@ -36,13 +36,13 @@ import org.sonar.plugins.delphi.pmd.rules.DelphiRule;
  */
 public class DelphiRuleViolation implements RuleViolation {
 
-  private Rule rule;
+  private final Rule rule;
   private String description;
   private String filename;
 
   private String className;
   private String methodName;
-  private String packageName;
+  private final String packageName;
   private int beginLine;
   private int endLine;
 
@@ -50,7 +50,7 @@ public class DelphiRuleViolation implements RuleViolation {
   private int endColumn;
 
   /**
-   * C-tor used in XPathRule, bacause we don't have node information
+   * C-tor used in XPathRule, because we don't have node information
    *
    * @param delphiRule DelphiLanguage rule
    * @param ctx Rule context
@@ -155,7 +155,7 @@ public class DelphiRuleViolation implements RuleViolation {
 
     // look for method from begin...end statements
     Tree currentNode = node;
-    Tree beginNode = null;
+    Tree beginNode;
 
     while (methodNode == null) {
       beginNode = currentNode.getAncestor(DelphiLexer.BEGIN);

@@ -34,7 +34,7 @@ import org.sonar.plugins.delphi.antlr.directives.impl.IfDefDirective;
 import org.sonar.plugins.delphi.antlr.resolvers.exceptions.DefineResolverException;
 import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRange;
 import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRangeAggregator;
-import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRangeFirstOccurenceComparator;
+import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRangeFirstOccurrenceComparator;
 import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRangeMergingAggregator;
 import org.sonar.plugins.delphi.antlr.resolvers.subranges.impl.IntegerSubRange;
 
@@ -44,7 +44,7 @@ import org.sonar.plugins.delphi.antlr.resolvers.subranges.impl.IntegerSubRange;
 public class DefineResolver extends SourceResolver {
   private static final Logger LOG = Loggers.get(DefineResolver.class);
 
-  private Set<String> definitions;
+  private final Set<String> definitions;
 
   /**
    * ctor
@@ -155,7 +155,7 @@ public class DefineResolver extends SourceResolver {
     // starting position to cut
     int cutStart = firstDirective.getFirstCharPosition();
     // end position to cut
-    int cutEnd = -1;
+    int cutEnd;
 
     SubRange subRange2 = null;
 
@@ -197,7 +197,7 @@ public class DefineResolver extends SourceResolver {
 
   private void commentUnwantedDefinitions(StringBuilder str, SubRangeAggregator toComment) {
     int insertedChars = 0;
-    toComment.sort(new SubRangeFirstOccurenceComparator());
+    toComment.sort(new SubRangeFirstOccurrenceComparator());
     for (SubRange range : toComment.getRanges()) {
 
       final String strRange = str

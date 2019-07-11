@@ -27,7 +27,7 @@ package org.sonar.plugins.delphi.antlr.analyzer;
  */
 public class CodeNode<T> {
 
-  private T node;
+  private final T node;
 
   /**
    * ctor

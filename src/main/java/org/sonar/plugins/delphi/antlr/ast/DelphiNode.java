@@ -56,7 +56,7 @@ public class DelphiNode extends CommonTree {
    * Gets child type, or -1 if child does not exist
    *
    * @param index Child index
-   * @return Child type, or -1 if child is non existant
+   * @return Child type, or -1 if child is non-existent
    */
   public int getChildType(int index) {
     if (index > -1 && index < getChildCount()) {

@@ -29,10 +29,6 @@ public class SingleLineCommentHandler extends LineContextHandler {
   private final String commentStartTag;
   private final String commentNotStartTag;
 
-  public SingleLineCommentHandler(String commentStartTag) {
-    this(commentStartTag, null);
-  }
-
   public SingleLineCommentHandler(String commentStartTag, String commentNotStartTag) {
     this.commentStartTag = commentStartTag;
     this.commentNotStartTag = commentNotStartTag;
@@ -62,7 +58,7 @@ public class SingleLineCommentHandler extends LineContextHandler {
 
   @Override
   boolean matchWithEndOfLine(Line line, StringBuilder pendingLine) {
-    String newComment = "";
+    String newComment;
     String oldComment = line.getComment();
 
     if (oldComment != null) {

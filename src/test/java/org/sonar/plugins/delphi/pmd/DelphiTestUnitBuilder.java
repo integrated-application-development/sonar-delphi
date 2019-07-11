@@ -31,8 +31,8 @@ import java.nio.charset.StandardCharsets;
 
 public class DelphiTestUnitBuilder {
 
-  private StringBuilder declaration = new StringBuilder();
-  private StringBuilder implementation = new StringBuilder();
+  private final StringBuilder declaration = new StringBuilder();
+  private final StringBuilder implementation = new StringBuilder();
 
   private int offset;
   private int offsetDecl;

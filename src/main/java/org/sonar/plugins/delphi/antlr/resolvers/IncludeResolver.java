@@ -33,7 +33,7 @@ import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveParser;
 import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveSyntaxException;
 import org.sonar.plugins.delphi.antlr.resolvers.exceptions.IncludeResolverException;
 import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRange;
-import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRangeFirstOccurenceComparator;
+import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRangeFirstOccurrenceComparator;
 import org.sonar.plugins.delphi.antlr.resolvers.subranges.impl.ReplacementSubRange;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
@@ -43,9 +43,9 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 public class IncludeResolver extends SourceResolver {
   private static final Logger LOG = Loggers.get(IncludeResolver.class);
   private static final int REPLACEMENT_OFFSET = 2;
-  private boolean extendIncludes = true;
-  private List<File> includes;
-  private List<String> includedFiles = new ArrayList<>();
+  private final boolean extendIncludes;
+  private final List<File> includes;
+  private final List<String> includedFiles = new ArrayList<>();
 
   /**
    * ctor
@@ -145,7 +145,7 @@ public class IncludeResolver extends SourceResolver {
   private StringBuilder introduceIncludedData(StringBuilder newData,
       List<ReplacementSubRange> dataToInclude) {
     int replacedCharsShift = 0;
-    dataToInclude.sort(new SubRangeFirstOccurenceComparator());
+    dataToInclude.sort(new SubRangeFirstOccurrenceComparator());
     for (SubRange range : dataToInclude) {
       newData.replace(range.getBegin() + replacedCharsShift, range.getEnd() + replacedCharsShift,
           range.toString());

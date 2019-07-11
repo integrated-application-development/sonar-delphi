@@ -92,7 +92,7 @@ public class XPathRule extends DelphiRule {
 
         int column = Integer
             .parseInt(resultNode.getAttributes().getNamedItem("column").getTextContent());
-        String msg = this.getMessage().replaceAll("\\{\\}", resultNode.getTextContent());
+        String msg = this.getMessage().replaceAll("\\{}", resultNode.getTextContent());
         DelphiRuleViolation violation = new DelphiRuleViolation(this, ctx, className,
             methodName, packageName, line, column,
             msg);

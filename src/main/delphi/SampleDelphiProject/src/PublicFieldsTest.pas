@@ -11,7 +11,7 @@ type
   TSquare = class
   private           // Only known to the parent class
     squareArea : Integer;
-  protected         // Known to all classes in the hierarachy
+  protected         // Known to all classes in the hierarchy
     squareWidth, squareHeight : Integer;
     procedure setArea;
   public            // Known externally by class users

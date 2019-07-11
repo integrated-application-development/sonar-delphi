@@ -22,7 +22,10 @@
  */
 package org.sonar.plugins.delphi.metrics;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +40,6 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.DelphiASTAnalyzer;
@@ -151,13 +153,10 @@ public class DeadCodeMetricsTest {
     metrics.save(unit2);
     metrics.save(unit3);
 
-    Issue[] issues = sensorContext.allIssues().toArray(new Issue[0]);
-    assertEquals(2, issues.length);
-    int[] lines = {11, 1};
-    for (int i = 0; i < issues.length; ++i) {
-      assertEquals("Incorrect issue line", lines[i],
-          issues[i].primaryLocation().textRange().start().line());
-    }
+    var issues = sensorContext.allIssues();
+    assertThat(issues, hasSize(2));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("UnusedUnitRule", 1)));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("UnusedFunctionRule", 11)));
   }
 
   @Test
@@ -179,13 +178,10 @@ public class DeadCodeMetricsTest {
 
     metrics.save(testFile);
 
-    Issue[] issues = sensorContext.allIssues().toArray(new Issue[0]);
-    assertEquals(3, issues.length);
-
-    int[] lines = {1, 21, 14};
-    for (int i = 0; i < issues.length; ++i) {
-      assertEquals("Incorrect issue line", lines[i],
-          issues[i].primaryLocation().textRange().start().line());
-    }
+    var issues = sensorContext.allIssues();
+    assertThat(issues, hasSize(3));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("UnusedUnitRule", 1)));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("UnusedFunctionRule", 14)));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("UnusedFunctionRule", 21)));
   }
 }
