@@ -84,10 +84,10 @@ public class DelphiSensor implements Sensor {
   private final DeadCodeMetrics deadCodeMetrics;
 
   private int scannedFiles;
-  private List<InputFile> resourceList = new ArrayList<>();
-  private Map<InputFile, List<ClassInterface>> fileClasses = new HashMap<>();
-  private Map<InputFile, List<FunctionInterface>> fileFunctions = new HashMap<>();
-  private Set<UnitInterface> units = new HashSet<>();
+  private final List<InputFile> resourceList = new ArrayList<>();
+  private final Map<InputFile, List<ClassInterface>> fileClasses = new HashMap<>();
+  private final Map<InputFile, List<FunctionInterface>> fileFunctions = new HashMap<>();
+  private final Set<UnitInterface> units = new HashSet<>();
   private DelphiFileStreamConfig fileStreamConfig;
 
   public DelphiSensor(DelphiProjectHelper delphiProjectHelper, ActiveRules activeRules,

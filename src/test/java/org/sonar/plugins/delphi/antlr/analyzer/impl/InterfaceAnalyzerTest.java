@@ -41,7 +41,6 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 
 public class InterfaceAnalyzerTest {
 
-  private ASTTree ast;
   private InterfaceAnalyzer analyzer;
   private CodeAnalysisResults results;
   private CodeTree code;
@@ -53,7 +52,7 @@ public class InterfaceAnalyzerTest {
     results = new CodeAnalysisResults();
     results.setActiveUnit(new DelphiUnit("test"));
 
-    ast = new DelphiAST();
+    ASTTree ast = new DelphiAST();
     ast.addChild(new CommonTree(new CommonToken(LexerMetrics.INTERFACE.toMetrics(), "interface")));
     ast.addChild(new CommonTree(new CommonToken(LexerMetrics.IDENT.toMetrics(), "ident")));
     ast.addChild(new CommonTree(new CommonToken(LexerMetrics.IMPLEMENTATION.toMetrics(), "impl")));

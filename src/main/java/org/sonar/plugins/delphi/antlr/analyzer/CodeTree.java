@@ -30,7 +30,7 @@ import org.sonar.plugins.delphi.antlr.ast.ASTTree;
  */
 public class CodeTree {
 
-  private CodeNode<ASTTree> rootNode;
+  private final CodeNode<ASTTree> rootNode;
   private CodeNode<Tree> currentNode;
 
   /**

@@ -101,8 +101,8 @@ public class SubRangeMergingAggregatorTest {
       aggregator.add(range);
     }
 
-    Arrays.sort(data, new SubRangeFirstOccurenceComparator());
-    aggregator.sort(new SubRangeFirstOccurenceComparator());
+    Arrays.sort(data, new SubRangeFirstOccurrenceComparator());
+    aggregator.sort(new SubRangeFirstOccurrenceComparator());
 
     int index = 0;
     for (SubRange sortedRange : aggregator.getRanges()) {

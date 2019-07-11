@@ -40,7 +40,7 @@ import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 @ServerSide
 public class DefaultDelphiProfile implements BuiltInQualityProfilesDefinition {
   public static final String DEFAULT_PROFILE_NAME = "Sonar way";
-  private DelphiPmdProfileImporter importer;
+  private final DelphiPmdProfileImporter importer;
 
   /**
    * ctor

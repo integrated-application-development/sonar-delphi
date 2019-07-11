@@ -43,7 +43,7 @@ import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
  */
 public class DelphiPMD {
 
-  private Report report = new Report();
+  private final Report report = new Report();
 
   /**
    * Processes the file read by the reader against the rule set.

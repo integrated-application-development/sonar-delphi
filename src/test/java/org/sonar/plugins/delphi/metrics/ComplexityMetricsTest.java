@@ -22,7 +22,11 @@
  */
 package org.sonar.plugins.delphi.metrics;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
+import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +40,6 @@ import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisCacheResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
@@ -96,11 +99,9 @@ public class ComplexityMetricsTest {
     assertEquals("PUBLIC_API", (Integer) 5, metrics.getIntMetric("PUBLIC_API"));
     assertEquals("STATEMENTS", (Integer) 20, metrics.getIntMetric("STATEMENTS"));
 
-    Issue[] issues = sensorContext.allIssues().toArray(new Issue[0]);
-    assertEquals(1, issues.length);
-    Issue issue = issues[0];
-    assertEquals("delph:MethodCyclomaticComplexityRule", issue.ruleKey().toString());
-    assertEquals(15, issue.primaryLocation().textRange().start().line());
+    var issues = sensorContext.allIssues();
+    assertThat(issues, hasSize(1));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("MethodCyclomaticComplexityRule", 15)));
   }
 
   @Test

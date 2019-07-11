@@ -38,8 +38,8 @@ import org.sonar.plugins.delphi.pmd.DelphiRuleChain;
  */
 public class DelphiRuleSets extends RuleSets {
 
-  private DelphiRuleChain delphiRuleChain = new DelphiRuleChain();
-  private Collection<RuleSet> ruleSets = new ArrayList<>();
+  private final DelphiRuleChain delphiRuleChain = new DelphiRuleChain();
+  private final Collection<RuleSet> ruleSets = new ArrayList<>();
 
   @Override
   public void apply(List<Node> acuList, RuleContext ctx, Language language) {

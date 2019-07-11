@@ -46,7 +46,7 @@ public interface SubRange {
   /**
    * Get beginning of the range
    *
-   * @return Beggining of the range
+   * @return Beginning of the range
    */
   int getBegin();
 

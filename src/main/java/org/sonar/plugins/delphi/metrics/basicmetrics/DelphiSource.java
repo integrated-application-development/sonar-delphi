@@ -23,7 +23,6 @@
 package org.sonar.plugins.delphi.metrics.basicmetrics;
 
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,8 +32,8 @@ import java.util.Set;
  */
 public class DelphiSource {
 
-  private List<Line> lines = new ArrayList<>();
-  private Set<Integer> noSonarTagLines = new HashSet<>();
+  private final List<Line> lines;
+  private final Set<Integer> noSonarTagLines = new HashSet<>();
 
   /**
    * Constructor. Does the line processing.

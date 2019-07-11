@@ -42,9 +42,9 @@ import org.xml.sax.helpers.DefaultHandler;
 public class ProjectXmlParser extends DefaultHandler {
   private static final Logger LOG = Loggers.get(ProjectXmlParser.class);
 
-  private String fileName;
-  private String currentDir;
-  private DelphiProject project;
+  private final String fileName;
+  private final String currentDir;
+  private final DelphiProject project;
   private boolean isReading;
   private String readData;
 
@@ -93,8 +93,6 @@ public class ProjectXmlParser extends DefaultHandler {
         handleVersionInfoKeysStart(attributes);
         break;
       case "DCC_UnitSearchPath":
-        isReading = true;
-        break;
       case "DCC_Define":
         isReading = true;
         break;

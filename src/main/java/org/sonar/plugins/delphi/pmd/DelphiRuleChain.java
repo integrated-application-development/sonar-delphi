@@ -33,7 +33,7 @@ import net.sourceforge.pmd.lang.ast.Node;
  */
 public class DelphiRuleChain extends RuleChain {
 
-  private DelphiRuleChainVisitor visitor = new DelphiRuleChainVisitor();
+  private final DelphiRuleChainVisitor visitor = new DelphiRuleChainVisitor();
 
   @Override
   public void apply(List<Node> astCompilationUnits, RuleContext ctx, Language language) {

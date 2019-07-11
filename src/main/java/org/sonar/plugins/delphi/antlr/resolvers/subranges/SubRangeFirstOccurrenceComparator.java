@@ -20,27 +20,15 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.antlr.analyzer;
+package org.sonar.plugins.delphi.antlr.resolvers.subranges;
 
-import static org.junit.Assert.assertEquals;
+/**
+ * comparator class for SubRange, returns which subrange is defined first
+ */
+public class SubRangeFirstOccurrenceComparator implements java.util.Comparator<SubRange> {
 
-import org.junit.Before;
-import org.junit.Test;
-import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
-
-public class CodeAnalisysResultsTest {
-
-  private CodeAnalysisResults result;
-
-  @Before
-  public void init() {
-    result = new CodeAnalysisResults();
+  @Override
+  public int compare(SubRange o1, SubRange o2) {
+    return o1.getBegin() - o2.getBegin();
   }
-
-  @Test
-  public void testGetActiveUnitTest() {
-    result.setActiveUnit(new DelphiUnit("test"));
-    assertEquals(new DelphiUnit("test"), result.getActiveUnit());
-  }
-
 }

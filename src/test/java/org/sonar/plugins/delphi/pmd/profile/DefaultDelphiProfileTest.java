@@ -37,7 +37,7 @@ public class DefaultDelphiProfileTest {
 
   @Test
   public void testShouldCreateDefaultDelphiProfile() {
-    DelphiPmdProfileImporter importer = new DelphiPmdProfileImporter(createRuleFinder());;
+    DelphiPmdProfileImporter importer = new DelphiPmdProfileImporter(createRuleFinder());
     DefaultDelphiProfile profileDef = new DefaultDelphiProfile(importer);
 
     BuiltInQualityProfilesDefinition.Context context = new BuiltInQualityProfilesDefinition.Context();

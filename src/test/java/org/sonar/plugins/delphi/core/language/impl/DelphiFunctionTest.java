@@ -24,6 +24,7 @@ package org.sonar.plugins.delphi.core.language.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -32,10 +33,10 @@ public class DelphiFunctionTest {
 
   @Test
   public void testEqualsTest() {
-    assertTrue(new DelphiFunction("test").equals(new DelphiFunction("test")));
-    assertFalse(new DelphiFunction("test").equals(new DelphiFunction("test2")));
-    assertFalse(new DelphiFunction("class.test").equals(new DelphiFunction("test")));
-    assertTrue(new DelphiFunction("class.test").equals(new DelphiFunction("class.test")));
+    assertEquals(new DelphiFunction("test"), new DelphiFunction("test"));
+    assertNotEquals(new DelphiFunction("test"), new DelphiFunction("test2"));
+    assertNotEquals(new DelphiFunction("class.test"), new DelphiFunction("test"));
+    assertEquals(new DelphiFunction("class.test"), new DelphiFunction("class.test"));
   }
 
   @Test

@@ -21,7 +21,7 @@ package org.sonar.plugins.delphi.pmd.xml;
 
 public class DelphiRuleProperty {
 
-  private String name;
+  private final String name;
   private String value;
   private String cdataValue;
 

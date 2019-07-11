@@ -50,7 +50,7 @@ public class ComplexityMetrics extends DefaultMetrics {
   public static final RuleKey RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY = RuleKey
       .of(DelphiPmdConstants.REPOSITORY_KEY, "MethodCyclomaticComplexityRule");
 
-  private ActiveRule methodCyclomaticComplexityRule;
+  private final ActiveRule methodCyclomaticComplexityRule;
 
   /**
    * The Cyclomatic Complexity Number.
@@ -79,9 +79,9 @@ public class ComplexityMetrics extends DefaultMetrics {
    */
   private int publicApi;
 
-  private Integer threshold;
+  private final Integer threshold;
   private final SensorContext context;
-  private Set<String> processedFunctions = new HashSet<>();
+  private final Set<String> processedFunctions = new HashSet<>();
 
   /**
    * {@inheritDoc}

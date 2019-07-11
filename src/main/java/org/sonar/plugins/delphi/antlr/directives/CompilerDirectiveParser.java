@@ -53,8 +53,8 @@ public class CompilerDirectiveParser {
 
   // Current directive state
   private DirectiveBracketType directiveBracketType;
-  private StringBuilder directiveName = new StringBuilder();
-  private StringBuilder directiveItem = new StringBuilder();
+  private final StringBuilder directiveName = new StringBuilder();
+  private final StringBuilder directiveItem = new StringBuilder();
   private int directiveStartPos;
 
   /**

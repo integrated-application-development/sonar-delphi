@@ -35,7 +35,7 @@ public class LineTest {
   }
 
   private void runHandler(LineContextHandler handler, Line line) {
-    char at = ' ';
+    char at;
     int index = 0;
     StringBuilder pendingLine = new StringBuilder();
     boolean isMatch = false;

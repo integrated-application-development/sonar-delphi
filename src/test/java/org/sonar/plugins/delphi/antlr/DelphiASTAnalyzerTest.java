@@ -115,8 +115,8 @@ public class DelphiASTAnalyzerTest {
 
   private void testClasses(CodeAnalysisResults results) {
     String[] names = {"tdemo", "tmyclass", "tmyancestor", "tmyelder"};
-    String[] fnames = {"bshowtracker", "field1", "field2", "bshowtracker", "protectedfield"};
-    String[] ftypes = {"tbutton", "integer", "integer", "tbutton", "real"};
+    String[] funcNames = {"bshowtracker", "field1", "field2", "bshowtracker", "protectedfield"};
+    String[] funcTypes = {"tbutton", "integer", "integer", "tbutton", "real"};
     int[] functionsCount = {2, 2, 0, 0};
     int[] declarationsCount = {2, 2, 0, 0};
     int[] publicApiCount = {4, 2, 1, 1};
@@ -144,8 +144,8 @@ public class DelphiASTAnalyzerTest {
       assertEquals(cl.getName(), children[index], cl.getChildren().length);
       for (ClassFieldInterface field : cl.getFields()) { // checking class
         // fields
-        assertEquals(cl.getName(), fnames[findex], field.getName());
-        assertEquals(cl.getName(), ftypes[findex], field.getType());
+        assertEquals(cl.getName(), funcNames[findex], field.getName());
+        assertEquals(cl.getName(), funcTypes[findex], field.getType());
         assertEquals(cl.getName(), names[index], field.getParent().getName());
         ++findex;
       }

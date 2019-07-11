@@ -48,12 +48,12 @@ public final class DelphiClass implements ClassInterface {
   private String fileName;
   private int visibility = DelphiParser.PRIVATE;
 
-  private List<ClassFieldInterface> fields = new ArrayList<>();
-  private List<ClassPropertyInterface> properties = new ArrayList<>();
-  private Set<FunctionInterface> functions = new HashSet<>();
-  private Set<FunctionInterface> declarations = new HashSet<>();
-  private Set<ClassInterface> parents = new HashSet<>();
-  private Set<ClassInterface> children = new HashSet<>();
+  private final List<ClassFieldInterface> fields = new ArrayList<>();
+  private final List<ClassPropertyInterface> properties = new ArrayList<>();
+  private final Set<FunctionInterface> functions = new HashSet<>();
+  private final Set<FunctionInterface> declarations = new HashSet<>();
+  private final Set<ClassInterface> parents = new HashSet<>();
+  private final Set<ClassInterface> children = new HashSet<>();
   private String realName;
 
   /**
@@ -218,7 +218,7 @@ public final class DelphiClass implements ClassInterface {
 
   @Override
   public ClassFieldInterface[] getFields() {
-    return fields.toArray(new ClassFieldInterface[fields.size()]);
+    return fields.toArray(new ClassFieldInterface[0]);
   }
 
   /**
@@ -257,7 +257,7 @@ public final class DelphiClass implements ClassInterface {
 
   @Override
   public FunctionInterface[] getFunctions() {
-    return functions.toArray(new FunctionInterface[functions.size()]);
+    return functions.toArray(new FunctionInterface[0]);
   }
 
   /**
@@ -266,7 +266,7 @@ public final class DelphiClass implements ClassInterface {
 
   @Override
   public FunctionInterface[] getDeclarations() {
-    return declarations.toArray(new FunctionInterface[declarations.size()]);
+    return declarations.toArray(new FunctionInterface[0]);
   }
 
   /**
@@ -306,7 +306,7 @@ public final class DelphiClass implements ClassInterface {
     for (ClassInterface child : children) {
       processChild((DelphiClass) child, allChildren);
     }
-    return allChildren.toArray(new ClassInterface[allChildren.size()]);
+    return allChildren.toArray(new ClassInterface[0]);
   }
 
   /**
@@ -315,7 +315,7 @@ public final class DelphiClass implements ClassInterface {
 
   @Override
   public ClassInterface[] getChildren() {
-    return children.toArray(new ClassInterface[children.size()]);
+    return children.toArray(new ClassInterface[0]);
   }
 
   private void processChild(DelphiClass parent, List<ClassInterface> list) {
@@ -381,7 +381,7 @@ public final class DelphiClass implements ClassInterface {
    */
   @Override
   public ClassPropertyInterface[] getProperties() {
-    return properties.toArray(new ClassPropertyInterface[properties.size()]);
+    return properties.toArray(new ClassPropertyInterface[0]);
   }
 
   @Override

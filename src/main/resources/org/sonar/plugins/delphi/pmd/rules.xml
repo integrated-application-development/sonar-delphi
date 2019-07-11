@@ -371,7 +371,7 @@
 	</rule>
 
 	<rule class="org.sonar.plugins.delphi.pmd.rules.AssignedAndFreeRule"
-				message="You don't have to check for assignement when calling Free"
+				message="You don't have to check for assignment when calling Free"
 				name="AssignedAndFreeRule">
 		<description>Free() method does check if the freed variable is not nil, you don't have to do it
 			manually.
@@ -385,7 +385,7 @@
 
 					<b>if</b> x &lt;&gt; <b>nil</b> <b>then</b> x.Free;		//WRONG
 
-					x.Free;			//GOOD, sufficent enough
+					x.Free;			//GOOD, sufficient enough
  				]]>
 		</example>
 	</rule>
@@ -628,7 +628,7 @@
 	<rule class="org.sonar.plugins.delphi.pmd.rules.ReRaiseExceptionRule"
 				message="Previously declared exceptions should not be re-raised"
 				name="ReRaiseExceptionRule">
-		<description>Raising a previously declarared exception at the end of an except block actually raises two exceptions.
+		<description>Raising a previously declared exception at the end of an except block actually raises two exceptions.
       You should use 'raise;' instead of 'raise (exception);'.</description>
 		<properties>
 			<property name="baseEffort" value="5min" />

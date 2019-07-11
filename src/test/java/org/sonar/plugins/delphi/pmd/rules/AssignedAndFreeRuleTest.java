@@ -316,6 +316,6 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(not(hasItem((hasRuleKey("AssignedAndFreeRule")))));
+    assertIssues(not(hasItem(hasRuleKey("AssignedAndFreeRule"))));
   }
 }

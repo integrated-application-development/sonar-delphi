@@ -45,7 +45,7 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiProjectHelperTest {
   private static final String PROJECTS_PATH = "/org/sonar/plugins/delphi/projects";
-  private File baseDir = DelphiUtils.getResource(PROJECTS_PATH);
+  private final File baseDir = DelphiUtils.getResource(PROJECTS_PATH);
   private Configuration settings;
   private DefaultFileSystem fs;
 

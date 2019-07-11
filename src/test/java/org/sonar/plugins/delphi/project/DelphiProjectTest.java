@@ -23,6 +23,7 @@
 package org.sonar.plugins.delphi.project;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +54,7 @@ public class DelphiProjectTest {
     assertEquals(0, project.getDefinitions().size());
     assertEquals(0, project.getIncludeDirectories().size());
     assertEquals(0, project.getSourceFiles().size());
-    assertEquals(null, project.getXmlFile());
+    assertNull(project.getXmlFile());
 
     project.addDefinition("DEF");
     assertEquals(1, project.getDefinitions().size());
@@ -87,7 +88,7 @@ public class DelphiProjectTest {
 
     assertEquals(8, project.getSourceFiles().size()); // checking source
     // files
-    String fileNames[] = {"Globals.pas", "MainWindow.pas", "OverloadTest.pas", "StatementTest.pas",
+    String[] fileNames = {"Globals.pas", "MainWindow.pas", "OverloadTest.pas", "StatementTest.pas",
         "CommentsTest.pas",
         "AccessorsTest.Pas", "FunctionTest.pas", "GlobalsTest.pas"};
     for (int i = 0; i < fileNames.length; ++i) {
@@ -97,13 +98,13 @@ public class DelphiProjectTest {
     assertEquals(2, project.getIncludeDirectories().size()); // checking
     // include
     // directories
-    String includeNames[] = {"includes1", "includes2"};
+    String[] includeNames = {"includes1", "includes2"};
     for (int i = 0; i < includeNames.length; ++i) {
       assertEquals(includeNames[i], project.getIncludeDirectories().get(i).getName());
     }
 
     assertEquals(4, project.getDefinitions().size());
-    String definitionNames[] = {"GGMSGDEBUGx", "LOGTOFILEx", "FullDebugMode", "RELEASE"};
+    String[] definitionNames = {"GGMSGDEBUGx", "LOGTOFILEx", "FullDebugMode", "RELEASE"};
     for (int i = 0; i < definitionNames.length; ++i) {
       assertEquals(definitionNames[i], project.getDefinitions().get(i));
     }

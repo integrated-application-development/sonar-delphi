@@ -29,7 +29,7 @@ import java.util.Objects;
  */
 public class StringSubRange extends IntegerSubRange {
 
-  private String fullString;
+  private final String fullString;
   private String subString;
   private boolean dirty;
 

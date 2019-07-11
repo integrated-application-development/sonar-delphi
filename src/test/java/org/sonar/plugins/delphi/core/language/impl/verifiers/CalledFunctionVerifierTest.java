@@ -47,14 +47,13 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 public class CalledFunctionVerifierTest {
 
   private static final String TEST_FILE = "/org/sonar/plugins/delphi/verifier/CalledFunctionsTest.pas";
-  private static final int BEGIN_STMTS_IN_TEST_FILE = 2;
-  CalledFunctionVerifier verifier;
-  CodeAnalysisResults results;
-  CodeTree code;
+  private static final int BEGIN_STATEMENTS_IN_TEST_FILE = 2;
+  private CalledFunctionVerifier verifier;
+  private CodeTree code;
 
   @Before
   public void setup() {
-    results = new CodeAnalysisResults();
+    CodeAnalysisResults results = new CodeAnalysisResults();
     verifier = new CalledFunctionVerifier(results);
 
     UnitInterface testUnit = new DelphiUnit("testUnit");
@@ -84,8 +83,8 @@ public class CalledFunctionVerifierTest {
 
   @Test
   public void testVerify() {
-    final boolean unresolved[] = {false, false, false, true};
-    final String names[] = {"mySecondProcedure", "unitB_Procedure", "unitA_Procedure",
+    final boolean[] unresolved = {false, false, false, true};
+    final String[] names = {"mySecondProcedure", "unitB_Procedure", "unitA_Procedure",
         "unitC_Procedure"};
 
     NodeOperation advanceToOperation = new AdvanceToNodeOperation(LexerMetrics.FUNCTION_BODY);
@@ -93,7 +92,7 @@ public class CalledFunctionVerifierTest {
     CodeNode<Tree> currentNode = code.getCurrentCodeNode();
 
     int index = 0;
-    for (int i = 0; i < BEGIN_STMTS_IN_TEST_FILE; ++i) {
+    for (int i = 0; i < BEGIN_STATEMENTS_IN_TEST_FILE; ++i) {
       currentNode = advanceToOperation.execute(currentNode.getNode());
       code.setCurrentNode(currentNode);
 

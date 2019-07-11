@@ -45,9 +45,9 @@ public class DelphiUnit implements UnitInterface {
   private URI uri;
   private String name = "UNKNOWN_UNIT";
   private String realName = "UNKNOWN_UNIT";
-  private Set<String> includes = new HashSet<>();
-  private List<ClassInterface> classes = new ArrayList<>();
-  private List<FunctionInterface> functions = new ArrayList<>();
+  private final Set<String> includes = new HashSet<>();
+  private final List<ClassInterface> classes = new ArrayList<>();
+  private final List<FunctionInterface> functions = new ArrayList<>();
   private int line = 1;
 
   /**
@@ -151,7 +151,7 @@ public class DelphiUnit implements UnitInterface {
 
   @Override
   public ClassInterface[] getClasses() {
-    return classes.toArray(new ClassInterface[classes.size()]);
+    return classes.toArray(new ClassInterface[0]);
   }
 
   /**
@@ -169,7 +169,7 @@ public class DelphiUnit implements UnitInterface {
 
   @Override
   public FunctionInterface[] getFunctions() {
-    return functions.toArray(new FunctionInterface[functions.size()]);
+    return functions.toArray(new FunctionInterface[0]);
   }
 
   /**
@@ -187,7 +187,7 @@ public class DelphiUnit implements UnitInterface {
 
   @Override
   public String[] getIncludes() {
-    return includes.toArray(new String[includes.size()]);
+    return includes.toArray(new String[0]);
   }
 
   /**
@@ -277,14 +277,13 @@ public class DelphiUnit implements UnitInterface {
 
   @Override
   public FunctionInterface[] getAllFunctions() {
-    Set<FunctionInterface> result = new HashSet<>();
-    result.addAll(functions);
+    Set<FunctionInterface> result = new HashSet<>(functions);
 
     for (ClassInterface clazz : classes) {
       Collections.addAll(result, clazz.getFunctions());
     }
 
-    return result.toArray(new FunctionInterface[result.size()]);
+    return result.toArray(new FunctionInterface[0]);
   }
 
   /**

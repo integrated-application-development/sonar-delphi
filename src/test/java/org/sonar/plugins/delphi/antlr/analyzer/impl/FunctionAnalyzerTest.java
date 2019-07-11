@@ -68,7 +68,6 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
 
   private CodeAnalysisResults results;
 
-  private DelphiAST ast;
   private CodeTree code;
   private AdvanceToNodeOperation advanceToFunction;
 
@@ -76,7 +75,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
     loadFile(fileName);
     results = new CodeAnalysisResults();
     results.setActiveUnit(new DelphiUnit("test"));
-    ast = new DelphiAST(testFile);
+    DelphiAST ast = new DelphiAST(testFile);
     code = new CodeTree(new CodeNode<>(ast), new CodeNode<>(ast.getChild(0)));
     advanceToFunction = new AdvanceToNodeOperation(
         Arrays.asList(LexerMetrics.FUNCTION, LexerMetrics.PROCEDURE,
@@ -149,7 +148,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   }
 
   @Test
-  public void testAnalyseMessageFuncion() throws IOException {
+  public void testAnalyseMessageFunction() throws IOException {
     setupFile(FILE_NAME_MESSAGE_TEST);
 
     results.setActiveClass(new DelphiClass("TWithMessageFunction"));

@@ -29,7 +29,7 @@ import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
  */
 public class IfDefDirective extends CommonCompilerDirective {
 
-  private boolean positive;
+  private final boolean positive;
 
   /**
    * ctor

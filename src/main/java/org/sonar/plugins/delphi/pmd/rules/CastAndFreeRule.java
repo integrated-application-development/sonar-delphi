@@ -35,11 +35,11 @@ public class CastAndFreeRule extends DelphiRule {
 
   private int sequenceHardCastIndex;
   private int sequenceSoftCastIndex;
-  private LexerMetrics[] hardCastSequence = {LexerMetrics.IDENT, LexerMetrics.LPAREN,
+  private final LexerMetrics[] hardCastSequence = {LexerMetrics.IDENT, LexerMetrics.LPAREN,
       LexerMetrics.IDENT,
       LexerMetrics.RPAREN,
       LexerMetrics.DOT, LexerMetrics.IDENT};
-  private LexerMetrics[] softCastSequence = {LexerMetrics.LPAREN, LexerMetrics.IDENT,
+  private final LexerMetrics[] softCastSequence = {LexerMetrics.LPAREN, LexerMetrics.IDENT,
       LexerMetrics.AS,
       LexerMetrics.IDENT,
       LexerMetrics.RPAREN, LexerMetrics.DOT, LexerMetrics.IDENT};

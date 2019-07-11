@@ -37,8 +37,8 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiFileStream extends ANTLRStringStream {
 
-  private DelphiFileStreamConfig config;
-  private String fileName;
+  private final DelphiFileStreamConfig config;
+  private final String fileName;
 
   /**
    * Constructor

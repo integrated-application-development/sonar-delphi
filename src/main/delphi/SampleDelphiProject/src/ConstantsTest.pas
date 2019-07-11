@@ -21,7 +21,7 @@ begin
   // Display our crude value of Pi
   ShowMessage('Crude Pi = ' + FloatToStr(CRUDE_PI));
 
-  // Say hello to the WOrld
+  // Say hello to the World
   ShowMessage(HELLO);
 
   // Display MAX_LINES of data

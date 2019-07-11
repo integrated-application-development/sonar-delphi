@@ -110,10 +110,6 @@ class Line {
     return !isThereComment() && isBlank;
   }
 
-  public boolean isThereJavaDoc() {
-    return isThereDoc;
-  }
-
   boolean isThereCode() {
     if (!isBlank() && !isThereComment()) {
       return true;

@@ -38,8 +38,8 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class MixedNamesRule extends DelphiRule {
 
-  private List<String> functionNames = new ArrayList<>();
-  private List<String> variableNames = new ArrayList<>();
+  private final List<String> functionNames = new ArrayList<>();
+  private final List<String> variableNames = new ArrayList<>();
   private boolean onInterface = true;
   private String typeName = "";
 

@@ -32,9 +32,9 @@ import org.sonar.plugins.delphi.core.language.UnitInterface;
  */
 public class UnresolvedFunctionCall {
 
-  private FunctionInterface caller;
-  private FunctionInterface called;
-  private UnitInterface callerUnit;
+  private final FunctionInterface caller;
+  private final FunctionInterface called;
+  private final UnitInterface callerUnit;
 
   /**
    * Default ctor

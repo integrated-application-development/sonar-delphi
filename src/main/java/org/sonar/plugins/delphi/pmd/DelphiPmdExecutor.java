@@ -38,7 +38,7 @@ public class DelphiPmdExecutor {
   private final DelphiPmdConfiguration pmdConfiguration;
 
   private DelphiFileStreamConfig fileStreamConfig;
-  private List<String> errors = new ArrayList<>();
+  private final List<String> errors = new ArrayList<>();
 
   /**
    * Constructor

@@ -44,7 +44,7 @@ public class CodeAnalysisCacheResults {
   private static final Map<String, UnresolvedFunctionCall> unresolvedCalls = new HashMap<>();
 
   /**
-   * resets results chache
+   * resets results cache
    */
   public static void resetCache() {
     allClasses.clear();
@@ -71,7 +71,7 @@ public class CodeAnalysisCacheResults {
   }
 
   /**
-   * @param classInterface class for search by exampe
+   * @param classInterface class for search by example
    * @return cached class if found, null otherwise
    */
   public ClassInterface getCachedClass(ClassInterface classInterface) {
@@ -84,7 +84,7 @@ public class CodeAnalysisCacheResults {
 
   /**
    * @param unitName unit where the class is declared
-   * @param classInterface class for search by exampe
+   * @param classInterface class for search by example
    * @return cached class if found, null otherwise
    */
   public ClassInterface getCachedClass(String unitName, ClassInterface classInterface) {
@@ -150,11 +150,8 @@ public class CodeAnalysisCacheResults {
    * @param clazz class
    */
   public void cacheClass(ClassInterface clazz) {
-    Map<String, ClassInterface> unitClasses = allClasses.get(clazz.getFileName());
-    if (unitClasses == null) {
-      unitClasses = new HashMap<>();
-      allClasses.put(clazz.getFileName(), unitClasses);
-    }
+    Map<String, ClassInterface> unitClasses = allClasses
+        .computeIfAbsent(clazz.getFileName(), k -> new HashMap<>());
     unitClasses.put(clazz.getName(), clazz);
   }
 

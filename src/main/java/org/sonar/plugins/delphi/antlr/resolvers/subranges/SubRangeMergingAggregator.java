@@ -22,8 +22,10 @@
  */
 package org.sonar.plugins.delphi.antlr.resolvers.subranges;
 
+import java.util.Iterator;
+
 /**
- * Aggregates sub ranges, merges them if neccessary to reduce workload
+ * Aggregates sub ranges, merges them if necessary to reduce workload
  */
 public class SubRangeMergingAggregator extends SubRangeAggregator {
 
@@ -74,14 +76,16 @@ public class SubRangeMergingAggregator extends SubRangeAggregator {
     return rangeInList;
   }
 
-  protected void removeDuplications(SubRange rangeToCheck) {
-    for (int i = 0; i < data.size(); ++i) {
-      SubRange atRange = data.get(i);
+  private void removeDuplications(SubRange rangeToCheck) {
+    Iterator<SubRange> iterator = data.iterator();
+
+    while (iterator.hasNext()) {
+      SubRange atRange = iterator.next();
       if (atRange.equals(rangeToCheck)) {
         continue;
       }
       if (rangeToCheck.inRange(atRange)) {
-        data.remove(i);
+        iterator.remove();
       }
     }
   }

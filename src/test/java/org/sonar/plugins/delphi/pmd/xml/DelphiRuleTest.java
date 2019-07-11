@@ -150,7 +150,7 @@ public class DelphiRuleTest {
   }
 
   @Test
-  public void testProcessXpathShouldFailIfXpathNotprovided() {
+  public void testProcessXpathShouldFailIfXpathNotProvided() {
     final DelphiRule rule = new DelphiRule(DelphiPmdConstants.XPATH_CLASS);
     rule.setName("MyOwnRule");
     exceptionCatcher.expect(IllegalArgumentException.class);

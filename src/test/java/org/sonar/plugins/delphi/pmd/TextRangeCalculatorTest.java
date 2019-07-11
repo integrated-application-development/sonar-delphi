@@ -55,10 +55,10 @@ public class TextRangeCalculatorTest {
 
   @Test
   public void testWhenEndLineEqualsBeginLineThenRangeStartAndEndsAtSameLine() {
-    final RuleViolation violation = createRuleViolation(1, 1, 1, 2);
+    final RuleViolation violation = createRuleViolation(2, 1, 2, 2);
     final TextRange range = TextRangeCalculator.calculate(violation, testInput);
 
-    assertTextRangeLines(range, 1, 1);
+    assertTextRangeLines(range, 2, 2);
   }
 
   @Test

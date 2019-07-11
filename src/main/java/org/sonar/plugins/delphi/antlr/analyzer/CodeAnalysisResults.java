@@ -32,8 +32,8 @@ import org.sonar.plugins.delphi.core.language.FunctionInterface;
  */
 public class CodeAnalysisResults extends CodeAnalysisState {
 
-  private List<FunctionInterface> functions = new ArrayList<>();
-  private List<ClassInterface> classes = new ArrayList<>();
+  private final List<FunctionInterface> functions = new ArrayList<>();
+  private final List<ClassInterface> classes = new ArrayList<>();
 
   /**
    * @return class list in current file

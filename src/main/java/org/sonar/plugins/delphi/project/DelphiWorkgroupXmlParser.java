@@ -41,8 +41,8 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class DelphiWorkgroupXmlParser extends DefaultHandler {
   private static final Logger LOG = Loggers.get(DelphiWorkgroupXmlParser.class);
-  private File xml;
-  private DelphiWorkgroup workGroup;
+  private final File xml;
+  private final DelphiWorkgroup workGroup;
   private String currentDir;
 
   /**

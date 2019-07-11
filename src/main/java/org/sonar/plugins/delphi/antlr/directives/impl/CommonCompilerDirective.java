@@ -30,10 +30,10 @@ import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
  */
 public class CommonCompilerDirective implements CompilerDirective {
 
-  protected String name;
-  protected String item;
-  protected int firstCharPos;
-  protected int lastCharPos;
+  private final String name;
+  protected final String item;
+  private final int firstCharPos;
+  private final int lastCharPos;
 
   /**
    * ctor
@@ -84,7 +84,7 @@ public class CommonCompilerDirective implements CompilerDirective {
     }
     if (beginPos < 0 || endPos < 0) {
       throw new IllegalArgumentException(
-          "Compiler directive first/last character occurence must be >= 0");
+          "Compiler directive first/last character occurrence must be >= 0");
     }
     if (beginPos > endPos) {
       throw new IllegalArgumentException(

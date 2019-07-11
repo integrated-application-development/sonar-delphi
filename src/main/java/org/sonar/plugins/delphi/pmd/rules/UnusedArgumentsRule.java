@@ -121,7 +121,7 @@ public class UnusedArgumentsRule extends DelphiRule {
 
   public Tree findBeginNode(Tree node) {
     int lookIndex = 0;
-    Tree candidateNode = null;
+    Tree candidateNode;
     // looking for begin statement for function
     do {
       ++lookIndex;

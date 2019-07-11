@@ -31,19 +31,19 @@ import org.sonar.plugins.delphi.core.language.UnitInterface;
  */
 public class CodeAnalysisState extends CodeAnalysisCacheResults {
 
-  protected UnitInterface activeUnit;
-  protected FunctionInterface activeFunction;
-  protected ClassInterface activeClass;
+  private UnitInterface activeUnit;
+  private FunctionInterface activeFunction;
+  private ClassInterface activeClass;
 
   /**
    * File, Implementation or Interface section.
    */
-  protected LexerMetrics parseStatus = LexerMetrics.FILE;
+  private LexerMetrics parseStatus = LexerMetrics.FILE;
 
   /**
    * We start with public because whole classes in interface are public.
    */
-  protected LexerMetrics parseVisibility = LexerMetrics.PUBLIC;
+  private LexerMetrics parseVisibility = LexerMetrics.PUBLIC;
 
   /**
    * @return unit currently being processed
