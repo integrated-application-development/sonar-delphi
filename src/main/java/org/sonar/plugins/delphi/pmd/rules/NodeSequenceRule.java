@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import com.qualinsight.plugins.sonarqube.smell.api.annotation.Smell;
+import com.qualinsight.plugins.sonarqube.smell.api.model.SmellType;
 import java.util.ArrayList;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
@@ -33,6 +35,12 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  * Rule that checks, if sequence of nodes occur in file. Sequence should be lowercase, since it is
  * not case sensitive.
  */
+@Smell(
+    minutes = 30,
+    reason = "Effectively a poor man's xpath. Considering XPathRule is much more flexible, I see "
+        + "no reason to keep it.",
+    type = SmellType.ODDBALL_SOLUTION
+)
 public class NodeSequenceRule extends DelphiRule {
 
   private static final PropertyDescriptor<List<String>> AST_SEQUENCE =
@@ -52,11 +60,11 @@ public class NodeSequenceRule extends DelphiRule {
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
 
-    if (node.getText().equalsIgnoreCase(sequence[count])) {
+    if (node.getText().equalsIgnoreCase(sequence.get(count))) {
       if (++count == 1) {
         // save first match node
         firstMatchNode = node;
-      } else if (count >= sequence.length) {
+      } else if (count >= sequence.size()) {
         addViolation(ctx, firstMatchNode);
         count = 0;
       }

@@ -27,7 +27,7 @@
 		<priority>1</priority>
 	</rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.EmptyFinallyBlockRule"
+	<rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
 				name="EmptyFinallyBlockRule">
 		<priority>2</priority>
 	</rule>
