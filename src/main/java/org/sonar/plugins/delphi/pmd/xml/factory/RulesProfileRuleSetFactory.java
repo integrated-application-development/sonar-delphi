@@ -68,7 +68,7 @@ public class RulesProfileRuleSetFactory implements RuleSetFactory {
 
         addRuleProperties(activeRule, rule);
         ruleSet.addRule(rule);
-        rule.processXpath(activeRule.getRuleKey());
+        rule.processXpath(name);
       }
     }
 
