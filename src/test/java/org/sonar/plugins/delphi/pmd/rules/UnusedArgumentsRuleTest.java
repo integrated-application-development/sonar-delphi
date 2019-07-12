@@ -83,9 +83,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(2));
-    assertIssues(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 1)));
-    assertIssues(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 5)));
+    assertIssues(empty());
   }
 
   @Test
