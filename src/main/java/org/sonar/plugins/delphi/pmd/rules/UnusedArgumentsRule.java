@@ -26,7 +26,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import net.sourceforge.pmd.RuleContext;
@@ -49,7 +48,7 @@ public class UnusedArgumentsRule extends DelphiRule {
           .defaultValue(new ArrayList<>())
           .build();
 
-  private final HashSet<String> excludedArgs = new HashSet<>();
+  private List<String> excludedArgs = new ArrayList<>();
 
   public UnusedArgumentsRule() {
     definePropertyDescriptor(EXCLUDED_ARGS);
@@ -152,7 +151,7 @@ public class UnusedArgumentsRule extends DelphiRule {
   }
 
   private boolean ignoredArg(String arg) {
-    return excludedArgs.contains(arg);
+    return excludedArgs.stream().anyMatch(arg::equalsIgnoreCase);
   }
 
   /**
@@ -205,11 +204,7 @@ public class UnusedArgumentsRule extends DelphiRule {
 
   @Override
   protected void init() {
-    super.init();
-    List<String> stringProperties = getProperty(EXCLUDED_ARGS);
-    for (String prop : stringProperties) {
-      excludedArgs.add(prop.toLowerCase());
-    }
+    excludedArgs = getProperty(EXCLUDED_ARGS);
   }
 
   @Override
