@@ -69,12 +69,12 @@ public class AssignedAndFreeRule extends DelphiRule {
   private AssignCheckType findAssignCheckType(DelphiPMDNode node) {
     if (node.getType() == DelphiLexer.NIL) {
       DelphiPMDNode prevNode = node.prevNode();
-      if (prevNode.getType() == DelphiLexer.NOT_EQUAL) {
+      if (prevNode != null && prevNode.getType() == DelphiLexer.NOT_EQUAL) {
         return AssignCheckType.NIL_COMPARE;
       }
 
       DelphiPMDNode nextNode = node.nextNode();
-      if (nextNode.getType() == DelphiLexer.NOT_EQUAL) {
+      if (nextNode != null && nextNode.getType() == DelphiLexer.NOT_EQUAL) {
         return AssignCheckType.NIL_COMPARE_BACKWARDS;
       }
     }
