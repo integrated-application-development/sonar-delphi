@@ -69,7 +69,7 @@
 		<description>Some methods that only inherits parent method behaviour are not needed (redundant).</description>
 		<properties>
 			<property name="baseEffort" value="10min" />
-			<property name="sequence" value="begin,inherited,;,end" />
+			<property name="sequence" value="begin|inherited|;|end" />
 		</properties>
 	</rule>
 
@@ -79,7 +79,7 @@
 		<description>Empty 'except' block, you should catch some exceptions.</description>
 		<properties>
 			<property name="baseEffort" value="10min" />
-			<property name="sequence" value="except,end" />
+			<property name="sequence" value="except|end" />
 		</properties>
 		<example>
 			<![CDATA[
@@ -248,7 +248,7 @@
 		</description>
 		<properties>
 			<property name="baseEffort" value="15min" />
-			<property name="sequence" value=":,exception,do" />
+			<property name="sequence" value=":|exception|do" />
 		</properties>
 		<example>
 			<![CDATA[
@@ -267,7 +267,7 @@
 		<description>You should not raise a general Exception class.</description>
 		<properties>
 			<property name="baseEffort" value="15min" />
-			<property name="sequence" value="raise,exception,.,create" />
+			<property name="sequence" value="raise|exception|.|create" />
 		</properties>
 		<example>
 			<![CDATA[
@@ -350,7 +350,7 @@
 		<description>You should always use every passed function argument.</description>
 		<properties>
 			<property name="baseEffort" value="5min" />
-			<property name="excluded_args" value="Sender,ASender,DataSet,ADataSet" />
+			<property name="excluded_args" value="Sender|ASender|DataSet|ADataSet" />
 		</properties>
 	</rule>
 
@@ -363,7 +363,7 @@
 			<property name="xpath">
 				<value>
 					<![CDATA[
-						//TkNewType/*/TkInterface/interface[following-sibling::*[2][count(child::*)=0]]
+						//TkNewType/*/TkInterface/INTERFACE[following-sibling::*[2][count(child::*) = 0]]
 					]]>			
 				</value>
 			</property>
