@@ -91,12 +91,13 @@
 		</example>
 	</rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.EmptyFinallyBlockRule"
+	<rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
 				message="Empty 'finally' block"
 				name="EmptyFinallyBlockRule">
 		<description>Avoid empty finally blocks - these can be deleted.</description>
 		<properties>
 			<property name="baseEffort" value="5min" />
+			<property name="sequence" value="finally|end" />
 		</properties>
 	</rule>
 

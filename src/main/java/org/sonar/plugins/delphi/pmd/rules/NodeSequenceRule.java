@@ -22,6 +22,10 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import com.qualinsight.plugins.sonarqube.smell.api.annotation.Smell;
+import com.qualinsight.plugins.sonarqube.smell.api.model.SmellType;
+import java.util.ArrayList;
+import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
@@ -31,15 +35,21 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  * Rule that checks, if sequence of nodes occur in file. Sequence should be lowercase, since it is
  * not case sensitive.
  */
+@Smell(
+    minutes = 30,
+    reason = "Effectively a poor man's xpath. Considering XPathRule is much more flexible, I see "
+        + "no reason to keep it.",
+    type = SmellType.ODDBALL_SOLUTION
+)
 public class NodeSequenceRule extends DelphiRule {
 
-  private static final PropertyDescriptor<String> AST_SEQUENCE = PropertyFactory
-      .stringProperty("sequence")
-      .desc("The AST sequence nodes to find")
-      .defaultValue("")
-      .build();
+  private static final PropertyDescriptor<List<String>> AST_SEQUENCE =
+      PropertyFactory.stringListProperty("sequence")
+        .desc("The AST sequence nodes to find")
+        .defaultValue(new ArrayList<>())
+        .build();
 
-  private String[] sequence;
+  private List<String> sequence;
   private int count;
   private DelphiPMDNode firstMatchNode;
 
@@ -50,11 +60,11 @@ public class NodeSequenceRule extends DelphiRule {
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
 
-    if (node.getText().equalsIgnoreCase(sequence[count])) {
+    if (node.getText().equalsIgnoreCase(sequence.get(count))) {
       if (++count == 1) {
         // save first match node
         firstMatchNode = node;
-      } else if (count >= sequence.length) {
+      } else if (count >= sequence.size()) {
         addViolation(ctx, firstMatchNode);
         count = 0;
       }
@@ -68,11 +78,7 @@ public class NodeSequenceRule extends DelphiRule {
   protected void init() {
     count = 0;
     firstMatchNode = null;
-    sequence = getProperty(AST_SEQUENCE).split(",");
-  }
-
-  public void setSequence(String[] sequence) {
-    this.sequence = sequence;
+    sequence = getProperty(AST_SEQUENCE);
   }
 
   @Override
