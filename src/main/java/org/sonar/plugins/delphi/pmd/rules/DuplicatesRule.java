@@ -6,7 +6,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 
 public class DuplicatesRule extends DelphiRule {
-  private static final String[] DUPLICATES_LINE = {".", "duplicates"};
+  private static final String[] DUPLICATES_LINE = {".", "duplicates", ":="};
   private static final String[] SORTED_LINE = {".", "sorted", ":=", "true"};
   private static final int MINIMUM_NODES = 4;
   private static final int LINE_OFFSET = 6;
@@ -27,7 +27,10 @@ public class DuplicatesRule extends DelphiRule {
 
     for (int i = 0; i < children.size() - MINIMUM_NODES; i++) {
       if (isDuplicatesLine(children, i)) {
-        // Found a call to duplicates function
+        if (isDupAccept(children, i)) {
+          return;
+        }
+
         if (sortedOnPreviousLine(children, i) || sortedOnNextLine(children, i)) {
           return;
         }
@@ -46,6 +49,11 @@ public class DuplicatesRule extends DelphiRule {
     }
 
     return true;
+  }
+
+  private boolean isDupAccept(List children, int childIndex) {
+    String dupType = children.get(childIndex + 1 + DUPLICATES_LINE.length).toString();
+    return dupType.equalsIgnoreCase("dupAccept");
   }
 
   private boolean sortedOnPreviousLine(List children, int childIndex) {
