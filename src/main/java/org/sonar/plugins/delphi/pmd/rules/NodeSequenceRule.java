@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import java.util.ArrayList;
+import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
@@ -33,13 +35,13 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class NodeSequenceRule extends DelphiRule {
 
-  private static final PropertyDescriptor<String> AST_SEQUENCE = PropertyFactory
-      .stringProperty("sequence")
-      .desc("The AST sequence nodes to find")
-      .defaultValue("")
-      .build();
+  private static final PropertyDescriptor<List<String>> AST_SEQUENCE =
+      PropertyFactory.stringListProperty("sequence")
+        .desc("The AST sequence nodes to find")
+        .defaultValue(new ArrayList<>())
+        .build();
 
-  private String[] sequence;
+  private List<String> sequence;
   private int count;
   private DelphiPMDNode firstMatchNode;
 
@@ -68,11 +70,7 @@ public class NodeSequenceRule extends DelphiRule {
   protected void init() {
     count = 0;
     firstMatchNode = null;
-    sequence = getProperty(AST_SEQUENCE).split(",");
-  }
-
-  public void setSequence(String[] sequence) {
-    this.sequence = sequence;
+    sequence = getProperty(AST_SEQUENCE);
   }
 
   @Override

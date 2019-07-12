@@ -53,11 +53,10 @@
 		 </example>
 	</rule>
 
-	<!-- YOU CAN COPY THIS RULE, JUST CHANGE THE PARAMETERS YOU WISH TO SEARCH FOR -->
 	<rule class="org.sonar.plugins.delphi.pmd.rules.ClassPerFileRule" 
 	    	message="File has too many classes."
 				name="ClassPerFileRule">
-		<description>One class should be included in one file, for clarity reasons.</description>
+		<description>A file should not include too many classes, for clarity reasons.</description>
 		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="1h" />
@@ -65,7 +64,6 @@
 		</properties>
 	</rule>
 
-	<!-- YOU CAN COPY THIS RULE, JUST CHANGE THE PARAMETERS YOU WISH TO SEARCH FOR -->
 	<rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
 				message="Inherited method, with no additional code."
 				name="InheritedMethodWithNoCodeRule">
@@ -73,7 +71,7 @@
 		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="10min" />
-			<property name="sequence" value="begin,inherited,;,end" />
+			<property name="sequence" value="begin|inherited|;|end" />
 		</properties>
 	</rule>
 
@@ -84,7 +82,7 @@
 		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="10min" />
-			<property name="sequence" value="except,end" />
+			<property name="sequence" value="except|end" />
 		</properties>
 		<example>
 			<![CDATA[
@@ -96,13 +94,14 @@
 		</example>
 	</rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.EmptyFinallyBlockRule"
+	<rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
 				message="Empty 'finally' block"
 				name="EmptyFinallyBlockRule">
 		<description>Avoid empty finally blocks - these can be deleted.</description>
 		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
+			<property name="sequence" value="finally|end" />
 		</properties>
 	</rule>
 
@@ -116,7 +115,7 @@
 			<property name="xpath">
 				<value>
 					<![CDATA[
-						//TkNewType/*/TkInterface/interface[count(following-sibling::*) &lt; 3]
+							//TkNewType/*/TkInterface/interface[count(following-sibling::*) < 3]
  						]]>	
 				</value>
 			</property>
@@ -266,7 +265,7 @@
 		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="15min" />
-			<property name="sequence" value=":,exception,do" />
+			<property name="sequence" value=":|exception|do" />
 		</properties>
 		<example>
 			<![CDATA[
@@ -286,7 +285,7 @@
 		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="15min" />
-			<property name="sequence" value="raise,exception,.,create" />
+			<property name="sequence" value="raise|exception|.|create" />
 		</properties>
 		<example>
 			<![CDATA[
@@ -374,7 +373,7 @@
 		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
-			<property name="excluded_args" value="Sender,ASender,DataSet,ADataSet" />
+			<property name="excluded_args" value="Sender|ASender|DataSet|ADataSet" />
 		</properties>
 	</rule>
 
@@ -388,7 +387,7 @@
 			<property name="xpath">
 				<value>
 					<![CDATA[
-						//TkNewType/*/TkInterface/interface[following-sibling::*[2][count(child::*)=0]]
+						//TkNewType/*/TkInterface/INTERFACE[following-sibling::*[2][count(child::*)=0]]
 					]]>			
 				</value>
 			</property>
@@ -426,7 +425,7 @@
 			<property name="xpath">
 				<value>
 					<![CDATA[
-						//else[following-sibling::*[1][name()='end']]
+						//ELSE[following-sibling::*[1][name()='END']]
 					]]>	
 				</value>
 			</property>
@@ -443,7 +442,7 @@
 			<property name="xpath">
 				<value>
 					<![CDATA[
-						//begin[count(child::*) &lt; 3]
+						//BEGIN[count(child::*) = 1]
 					]]>	
 				</value>
 			</property>
@@ -480,11 +479,11 @@
 			<property name="xpath">
 				<value>
 					<![CDATA[
-						//TkNewType/*[count(descendant::*) &lt; 3 and name(descendant::*) != 'class' and
-						name(descendant::*) != 'TkRecord' and name(descendant::*) != 'array' and name(descendant::*) !=
-						'set' and name(descendant::*) != 'dash_pointer' and name(descendant::*) != 'TkClassOfType' and
+						//TkNewType/*[count(descendant::*) < 3 and name(descendant::*) != 'CLASS' and
+						name(descendant::*) != 'TkRecord' and name(descendant::*[2]) != 'ARRAY' and name(descendant::*) !=
+						'SET' and name(descendant::*) != 'POINTER2' and name(descendant::*) != 'TkClassOfType' and
 						name(descendant::*) != 'TkInterface' and name() != 'TkCustomAttribute']
-					]]>	
+					]]>
 				</value>
 			</property>
 		</properties>
@@ -634,7 +633,7 @@
   
 	<rule class="org.sonar.plugins.delphi.pmd.rules.ClassNameRule"
 				message="Class and enumeration name declarations should begin with T"
-		  	name="ClassNamePrefixRule">
+		  	name="ClassNameRule">
 		<description>Class names should begin with T</description>
 		<priority>5</priority>
 		<properties>
