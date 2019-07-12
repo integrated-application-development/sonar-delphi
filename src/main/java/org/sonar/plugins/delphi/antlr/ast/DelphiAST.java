@@ -24,6 +24,7 @@ package org.sonar.plugins.delphi.antlr.ast;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -40,6 +41,7 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenRewriteStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.apache.commons.io.FileUtils;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
@@ -58,7 +60,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
   private String fileName;
   private boolean isError;
   private DelphiFileStream fileStream;
-  private String[] codeLines;
+  private List<String> codeLines;
 
   private static class FileReadFailException extends RuntimeException {
 
@@ -92,6 +94,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
   public DelphiAST(File file, DelphiFileStreamConfig fileStreamConfig) {
     try {
       fileStream = new DelphiFileStream(file.getAbsolutePath(), fileStreamConfig);
+      codeLines = FileUtils.readLines(file, fileStreamConfig.getEncoding());
     } catch (IOException e) {
       throw new FileReadFailException("Failed to read file " + file.getAbsolutePath(), e);
     }
@@ -103,9 +106,9 @@ public class DelphiAST extends CommonTree implements ASTTree {
     } catch (RecognitionException e) {
       throw new FileParseFailException("Failed to parse the file " + file.getAbsolutePath(), e);
     }
+
     fileName = file.getAbsolutePath();
     isError = parser.getNumberOfSyntaxErrors() != 0;
-    codeLines = fileStream.toString().split("\n");
   }
 
   /**
@@ -230,15 +233,15 @@ public class DelphiAST extends CommonTree implements ASTTree {
   }
 
   @Override
-  public String getFileSourceLine(int lineNr) {
-    if (lineNr < 1) {
+  public String getFileSourceLine(int line) {
+    if (line < 1) {
       throw new IllegalArgumentException(toString() + " Source code line cannot be less than 1");
     }
-    if (lineNr > codeLines.length) {
+    if (line > codeLines.size()) {
       throw new IllegalArgumentException(
-          toString() + "Source code line number too high: " + lineNr + " / " + codeLines.length);
+          toString() + "Source code line number too high: " + line + " / " + codeLines.size());
     }
-    return codeLines[lineNr - 1];
+    return codeLines.get(line - 1);
   }
 
   @Override

@@ -24,6 +24,7 @@ public class TooLongLineRule extends DelphiRule {
     int lineNumber = node.getLine();
 
     if (lineNumber > lastLineChecked) {
+      lastLineChecked = lineNumber;
       String line = node.getASTTree().getFileSourceLine(lineNumber);
 
       int lineLength = getLineLengthWithoutComment(line);
@@ -31,7 +32,7 @@ public class TooLongLineRule extends DelphiRule {
 
       if (lineLength > lineLimit) {
         newViolation(ctx)
-            .fileLocation(node.getLine(), 0, node.getLine(), lineLength - 1)
+            .fileLocation(lineNumber, 0, lineNumber, lineLength - 1)
             .logicalLocation(node)
             .message(String.format(MESSAGE, lineLength, lineLimit))
             .save();
