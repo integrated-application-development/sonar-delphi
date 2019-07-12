@@ -35,8 +35,8 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
-import org.sonar.plugins.delphi.pmd.DelphiRuleViolation;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
@@ -79,27 +79,33 @@ public class XPathRule extends DelphiRule {
       while (iterator.nextNode() != DTM.NULL) {
         final int nodeId = iterator.getCurrentNode();
         Node resultNode = iterator.getDTM(nodeId).getNode(nodeId);
-        String className = resultNode.getAttributes().getNamedItem("class").getTextContent();
-        String methodName = resultNode.getAttributes().getNamedItem("method").getTextContent();
-        String packageName = resultNode.getAttributes().getNamedItem("package").getTextContent();
-        int line = Integer
-            .parseInt(resultNode.getAttributes().getNamedItem("line").getTextContent());
-        String codeLine = node.getASTTree().getFileSourceLine(line);
+        NamedNodeMap attributes = resultNode.getAttributes();
 
-        if (codeLine.trim().endsWith("//NOSONAR")) {
+        String className = attributes.getNamedItem("class").getTextContent();
+        String methodName = attributes.getNamedItem("method").getTextContent();
+        String packageName = attributes.getNamedItem("package").getTextContent();
+        int beginLine = Integer.parseInt(attributes.getNamedItem("beginLine").getTextContent());
+        int beginColumn = Integer.parseInt(attributes.getNamedItem("beginColumn").getTextContent());
+        int endLine = Integer.parseInt(attributes.getNamedItem("endLine").getTextContent());
+        int endColumn = Integer.parseInt(attributes.getNamedItem("endColumn").getTextContent());
+
+        String codeLine = node.getASTTree().getFileSourceLine(beginLine).trim();
+
+        if (codeLine.endsWith("//NOSONAR")) {
           continue;
         }
 
-        int column = Integer
-            .parseInt(resultNode.getAttributes().getNamedItem("column").getTextContent());
         String msg = this.getMessage().replaceAll("\\{}", resultNode.getTextContent());
-        DelphiRuleViolation violation = new DelphiRuleViolation(this, ctx, className,
-            methodName, packageName, line, column,
-            msg);
-        addViolation(ctx, violation);
+
+        newViolation(ctx)
+            .logicalLocation(packageName, className, methodName)
+            .fileLocation(beginLine, beginColumn, endLine, endColumn)
+            .message(msg)
+            .save();
       }
     } catch (Exception e) {
-      LOG.warn("XPath error: '{}' at rule {}", e.getMessage(), getName(), e);
+      LOG.warn("{}: XPath error: '{}' at rule {}",
+          node.getASTTree().getFileName(), e.getMessage(), getName(), e);
     }
   }
 

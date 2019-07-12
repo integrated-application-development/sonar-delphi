@@ -36,7 +36,7 @@ import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 import org.sonar.plugins.delphi.pmd.DelphiLanguageModule;
 import org.sonar.plugins.delphi.pmd.DelphiParserVisitor;
-import org.sonar.plugins.delphi.pmd.DelphiRuleViolation;
+import org.sonar.plugins.delphi.pmd.DelphiRuleViolationBuilder;
 
 /**
  * Basic rule class, extend this class to make your own rules. Do NOT extend from AbstractRule.
@@ -44,9 +44,7 @@ import org.sonar.plugins.delphi.pmd.DelphiRuleViolation;
 public class DelphiRule extends AbstractRule implements DelphiParserVisitor, ImmutableLanguage {
 
   protected int lastLineParsed;
-
   private int currentVisibility;
-
   private boolean inImplementationSection;
 
   protected static final PropertyDescriptor<Integer> LIMIT = PropertyFactory.intProperty("limit")
@@ -87,7 +85,8 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
       .build();
 
   public DelphiRule() {
-    super.setLanguage(LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME));
+    setLanguage(LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME));
+
     definePropertyDescriptor(LIMIT);
     definePropertyDescriptor(THRESHOLD);
     definePropertyDescriptor(START_AST);
@@ -97,6 +96,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
   }
 
   /**
+   * Visits all nodes in a file
    * overload this method in derived class
    *
    * @param node the current node
@@ -111,6 +111,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
    */
   @Override
   public void visit(DelphiPMDNode node, Object data) {
+    // do nothing
   }
 
   /**
@@ -157,34 +158,35 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
   }
 
   /**
-   * Adds violation, get violation data from node
+   * Adds violation to pmd report
    *
    * @param ctx RuleContext
    * @param node Node
    */
   protected void addViolation(RuleContext ctx, DelphiPMDNode node) {
-    ctx.getReport().addRuleViolation(new DelphiRuleViolation(this, ctx, node));
+    newViolation(ctx)
+        .fileLocation(node)
+        .logicalLocation(node)
+        .save();
   }
 
   /**
-   * Adds violation, get violation data from node
+   * Adds violation to pmd report with override message
    *
    * @param ctx RuleContext
    * @param node Node
    * @param msg Violation message
    */
   protected void addViolation(RuleContext ctx, DelphiPMDNode node, String msg) {
-    ctx.getReport().addRuleViolation(new DelphiRuleViolation(this, ctx, node, msg));
+    newViolation(ctx)
+        .fileLocation(node)
+        .logicalLocation(node)
+        .message(msg)
+        .save();
   }
 
-  /**
-   * Adds violation, used in XPathRule
-   *
-   * @param ctx RuleContext
-   * @param violation Violation
-   */
-  protected void addViolation(RuleContext ctx, DelphiRuleViolation violation) {
-    ctx.getReport().addRuleViolation(violation);
+  protected DelphiRuleViolationBuilder newViolation(RuleContext ctx) {
+    return DelphiRuleViolationBuilder.newViolation(this, ctx);
   }
 
   private void updateVisibility(DelphiPMDNode node) {
