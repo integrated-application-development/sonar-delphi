@@ -32,12 +32,11 @@ public class TooLongLineRule extends DelphiRule {
 
       if (lineLength > lineLimit) {
         newViolation(ctx)
-            .fileLocation(lineNumber, 0, lineNumber, lineLength - 1)
+            .fileLocation(lineNumber, 0, lineNumber, lineLength)
             .logicalLocation(node)
             .message(String.format(MESSAGE, lineLength, lineLimit))
             .save();
       }
-
     }
   }
 
