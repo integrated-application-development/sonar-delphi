@@ -48,7 +48,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
       .appendImpl("procedure MyProcedure;")
       .appendImpl("begin")
       .appendImpl("  List.Sorted := True;")
-      .appendImpl("  List.Duplicates := dupIgnore;")
+      .appendImpl("  List.Duplicates := dupError;")
       .appendImpl("end;");
 
     execute(builder);
@@ -76,7 +76,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
       .appendImpl("procedure MyProcedure;")
       .appendImpl("begin")
       .appendImpl("  List.Sorted := False;")
-      .appendImpl("  List.Duplicates := dupIgnore;")
+      .appendImpl("  List.Duplicates := dupError;")
       .appendImpl("end;");
 
     execute(builder);
@@ -98,6 +98,50 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
 
     assertIssues(hasSize(1));
     assertIssues(hasItem(hasRuleKeyAtLine("DuplicatesRule", builder.getOffSet() + 3)));
+  }
+
+  @Test
+  public void testSortedDifferentListOnPreviousLineShouldAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+        .appendImpl("procedure MyProcedure;")
+        .appendImpl("begin")
+        .appendImpl("  OtherList.Sorted := False;")
+        .appendImpl("  List.Duplicates := dupError;")
+        .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("DuplicatesRule", builder.getOffSet() + 4)));
+  }
+
+  @Test
+  public void testSortedDifferentListOnNextLineShouldAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+        .appendImpl("procedure MyProcedure;")
+        .appendImpl("begin")
+        .appendImpl("  OtherList.Duplicates := dupIgnore;")
+        .appendImpl("  List.Sorted := False;")
+        .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("DuplicatesRule", builder.getOffSet() + 3)));
+  }
+
+
+  @Test
+  public void testDupAcceptShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+        .appendImpl("procedure MyProcedure;")
+        .appendImpl("begin")
+        .appendImpl("  List.Duplicates := dupAccept;")
+        .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
   }
 
 }
