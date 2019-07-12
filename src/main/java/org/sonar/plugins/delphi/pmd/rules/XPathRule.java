@@ -23,14 +23,14 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import java.util.List;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
 import org.apache.commons.lang.StringUtils;
-import org.apache.xml.dtm.DTM;
-import org.apache.xml.dtm.DTMIterator;
-import org.apache.xpath.XPathAPI;
-import org.apache.xpath.objects.XNodeSet;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
@@ -38,6 +38,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * DelphiLanguage rule for XPath, use it to parse XPath rules
@@ -72,13 +73,12 @@ public class XPathRule extends DelphiRule {
     }
     Document doc = getCachedDocument(node.getASTTree());
     try {
-      XNodeSet result = (XNodeSet) XPathAPI.eval(doc, xPathString);
+      XPath xPath = XPathFactory.newInstance().newXPath();
+      XPathExpression expression = xPath.compile(xPathString);
+      NodeList nodes = (NodeList) expression.evaluate(doc, XPathConstants.NODESET);
 
-      final DTMIterator iterator = result.iter();
-
-      while (iterator.nextNode() != DTM.NULL) {
-        final int nodeId = iterator.getCurrentNode();
-        Node resultNode = iterator.getDTM(nodeId).getNode(nodeId);
+      for (int i = 0; i < nodes.getLength(); ++i) {
+        Node resultNode = nodes.item(i);
         NamedNodeMap attributes = resultNode.getAttributes();
 
         String className = attributes.getNamedItem("class").getTextContent();
@@ -112,7 +112,6 @@ public class XPathRule extends DelphiRule {
   /**
    * Preform only one visit per file, not per node cause we parse the whole file nodes at a time
    */
-
   @Override
   protected void visitAll(List<? extends net.sourceforge.pmd.lang.ast.Node> acus, RuleContext ctx) {
     init();
