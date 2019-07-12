@@ -1,10 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.HashSet;
-import java.util.Set;
 import net.sourceforge.pmd.RuleContext;
-import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
@@ -12,41 +8,33 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class TooLongLineRule extends DelphiRule {
 
-  private int lineLimit;
-  private final Set<Integer> checkedLines = new HashSet<>();
-  private Tree astTree;
-  private boolean firstNode;
+  private static final String MESSAGE = "Line too long (%s characters). Maximum character count "
+      + "should be %s.";
+
+  private int lastLineChecked;
 
   @Override
-  protected void init() {
-    super.init();
-    lineLimit = getProperty(LIMIT);
-    astTree = null;
-    firstNode = true;
+  public void init() {
+    lastLineChecked = 0;
   }
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
     // Retrieve and store the astTree from the first node
-    if (firstNode) {
-      astTree = node.getASTTree();
-      firstNode = false;
-    }
-
     int lineNumber = node.getLine();
-    if (!checkedLines.contains(
-        lineNumber)) {
-      // Only check a line that has not been checked before
-      checkedLines.add(lineNumber);
-      String line = ((ASTTree) astTree).getFileSourceLine(lineNumber);
+
+    if (lineNumber > lastLineChecked) {
+      String line = node.getASTTree().getFileSourceLine(lineNumber);
 
       int lineLength = getLineLengthWithoutComment(line);
+      int lineLimit = getProperty(LIMIT);
 
       if (lineLength > lineLimit) {
-        String sonarMessage =
-            "Line too long (" + lineLength + " characters). Maximum character count should be "
-                + lineLimit + ".";
-        addViolation(ctx, node, sonarMessage);
+        newViolation(ctx)
+            .fileLocation(node.getLine(), 0, node.getLine(), lineLength - 1)
+            .logicalLocation(node)
+            .message(String.format(MESSAGE, lineLength, lineLimit))
+            .save();
       }
 
     }

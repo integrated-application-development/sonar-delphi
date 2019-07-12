@@ -25,10 +25,6 @@ package org.sonar.plugins.delphi.pmd;
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.RuleViolation;
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 import org.sonar.plugins.delphi.pmd.rules.DelphiRule;
 
 /**
@@ -40,164 +36,30 @@ public class DelphiRuleViolation implements RuleViolation {
   private String description;
   private String filename;
 
-  private String className;
-  private String methodName;
-  private final String packageName;
+  private String className = "";
+  private String methodName = "";
+  private String packageName = "";
+
   private int beginLine;
   private int endLine;
-
   private int beginColumn;
   private int endColumn;
 
   /**
-   * C-tor used in XPathRule, because we don't have node information
-   *
-   * @param delphiRule DelphiLanguage rule
-   * @param ctx Rule context
-   * @param delphiClassName Class name
-   * @param delphiMethodName Method name
-   * @param delphiPackageName Package name
-   * @param line Violation line number
-   * @param column Violation column number
-   * @param msg Violation message
-   */
-  public DelphiRuleViolation(DelphiRule delphiRule, RuleContext ctx, String delphiClassName,
-      String delphiMethodName, String delphiPackageName, int line, int column, String msg) {
-    rule = delphiRule;
-    filename = ctx.getSourceCodeFile().getAbsolutePath();
-    description = rule.getMessage();
-    className = delphiClassName;
-    methodName = delphiMethodName;
-    packageName = delphiPackageName;
-    beginLine = line;
-    endLine = line;
-    beginColumn = column;
-    endColumn = column;
-    description = msg;
-  }
-
-  /**
-   * C-tor used as in PMD library
+   * C-tor used by DelphiRuleViolationBuilder
    *
    * @param rule DelphiLanguage rule
    * @param ctx Rule context
-   * @param node Violation node
    */
-  public DelphiRuleViolation(DelphiRule rule, RuleContext ctx, DelphiPMDNode node) {
-    this(rule, ctx, node, rule.getMessage());
-  }
-
-  /**
-   * C-tor used as in PMD library
-   *
-   * @param rule DelphiLanguage rule
-   * @param ctx Rule context
-   * @param node Violation node
-   * @param message Violation message
-   */
-  public DelphiRuleViolation(DelphiRule rule, RuleContext ctx, DelphiPMDNode node, String message) {
+  public DelphiRuleViolation(DelphiRule rule, RuleContext ctx) {
     this.rule = rule;
     this.filename = ctx.getSourceCodeFile().getAbsolutePath();
-    this.description = message;
-
-    if (node == null) {
-      className = "";
-      methodName = "";
-      packageName = "";
-      filename = "";
-      return;
-    }
-
-    Tree classTypeNode = node.getAncestor(DelphiLexer.TkNewType);
-    if (classTypeNode != null) {
-      Tree classNameNode = classTypeNode.getChild(0);
-      className = classNameNode.getText();
-    } else {
-      className = "";
-    }
-
-    Tree methodNode = findMethodNode(node);
-    packageName = "";
-    methodName = "";
-
-    // gets method name
-    if (methodNode != null) {
-      StringBuilder name = new StringBuilder();
-      Tree nameNode = ((CommonTree) methodNode).getFirstChildWithType(DelphiLexer.TkFunctionName);
-      for (int i = 0; i < nameNode.getChildCount(); ++i) {
-        name.append(nameNode.getChild(i).getText());
-      }
-      methodName = name.toString();
-      if (nameNode.getChildCount() > 1) {
-        // class name from function name
-        className = nameNode.getChild(0).getText();
-      }
-    }
-
-    beginLine = node.getBeginLine();
-    endLine = node.getEndLine();
-    beginColumn = node.getBeginColumn();
-    endColumn = node.getEndColumn();
-  }
-
-  private Tree findMethodNode(DelphiPMDNode node) {
-    Tree methodNode = node.getAncestor(DelphiLexer.FUNCTION);
-
-    if (methodNode != null) {
-      return methodNode;
-    }
-
-    methodNode = node.getAncestor(DelphiLexer.PROCEDURE);
-
-    if (methodNode != null) {
-      return methodNode;
-    }
-
-    // look for method from begin...end statements
-    Tree currentNode = node;
-    Tree beginNode;
-
-    while (methodNode == null) {
-      beginNode = currentNode.getAncestor(DelphiLexer.BEGIN);
-      if (beginNode == null) {
-        break;
-      }
-
-      currentNode = beginNode.getParent();
-      methodNode = findMethodNodeFromBeginNode(beginNode);
-    }
-
-    return methodNode;
-  }
-
-  private Tree findMethodNodeFromBeginNode(Tree beginNode) {
-    int index = beginNode.getChildIndex();
-    Tree parent = beginNode.getParent();
-    Tree possibleMethodNode;
-    Tree methodNode = null;
-
-    for (int lookBack = 1; lookBack <= 2; ++lookBack) {
-      if (index - lookBack > -1) {
-        possibleMethodNode = parent.getChild(index - lookBack);
-
-        if (isProcedureOrFunction(possibleMethodNode.getType())) {
-          methodNode = possibleMethodNode;
-          break;
-        }
-      }
-    }
-
-    return methodNode;
-  }
-
-  private boolean isProcedureOrFunction(int type) {
-    return type == DelphiLexer.PROCEDURE || type == DelphiLexer.FUNCTION;
+    this.description = rule.getMessage();
   }
 
   /**
    * {@inheritDoc}
    */
-
   @Override
   public String getFilename() {
     return filename;
@@ -206,7 +68,6 @@ public class DelphiRuleViolation implements RuleViolation {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public int getBeginLine() {
     return beginLine;
@@ -215,7 +76,6 @@ public class DelphiRuleViolation implements RuleViolation {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public int getBeginColumn() {
     return beginColumn;
@@ -224,7 +84,6 @@ public class DelphiRuleViolation implements RuleViolation {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public int getEndLine() {
     return endLine;
@@ -233,7 +92,6 @@ public class DelphiRuleViolation implements RuleViolation {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public int getEndColumn() {
     return endColumn;
@@ -242,7 +100,6 @@ public class DelphiRuleViolation implements RuleViolation {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public Rule getRule() {
     return rule;
@@ -251,7 +108,6 @@ public class DelphiRuleViolation implements RuleViolation {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public String getDescription() {
     return description;
@@ -260,7 +116,6 @@ public class DelphiRuleViolation implements RuleViolation {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public String getPackageName() {
     return packageName;
@@ -269,7 +124,6 @@ public class DelphiRuleViolation implements RuleViolation {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public String getMethodName() {
     return methodName;
@@ -278,7 +132,6 @@ public class DelphiRuleViolation implements RuleViolation {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public String getClassName() {
     return className;
@@ -287,7 +140,6 @@ public class DelphiRuleViolation implements RuleViolation {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public boolean isSuppressed() {
     return false;
@@ -296,10 +148,40 @@ public class DelphiRuleViolation implements RuleViolation {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public String getVariableName() {
     return "";
   }
 
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public void setClassName(String className) {
+    this.className = className;
+  }
+
+  public void setMethodName(String methodName) {
+    this.methodName = methodName;
+  }
+
+  public void setPackageName(String packageName) {
+    this.packageName = packageName;
+  }
+
+  public void setBeginLine(int beginLine) {
+    this.beginLine = beginLine;
+  }
+
+  public void setEndLine(int endLine) {
+    this.endLine = endLine;
+  }
+
+  public void setBeginColumn(int beginColumn) {
+    this.beginColumn = beginColumn;
+  }
+
+  public void setEndColumn(int endColumn) {
+    this.endColumn = endColumn;
+  }
 }

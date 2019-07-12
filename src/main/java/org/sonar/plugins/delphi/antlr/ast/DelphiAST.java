@@ -203,15 +203,19 @@ public class DelphiAST extends CommonTree implements ASTTree {
     }
 
     for (int i = 0; i < delphiNode.getChildCount(); ++i) {
-      Tree childNode = delphiNode.getChild(i);
+      DelphiPMDNode childNode = new DelphiPMDNode((CommonTree) delphiNode.getChild(i), this);
+
       Element child = doc.createElement(DelphiParser.tokenNames[childNode.getType()]);
       child.setTextContent(childNode.getText());
-      child.setAttribute("line", String.valueOf(childNode.getLine()));
-      child.setAttribute("column", String.valueOf(childNode.getCharPositionInLine()));
+      child.setAttribute("beginLine", String.valueOf(childNode.getBeginLine()));
+      child.setAttribute("beginColumn", String.valueOf(childNode.getBeginColumn()));
+      child.setAttribute("endLine", String.valueOf(childNode.getBeginLine()));
+      child.setAttribute("endColumn", String.valueOf(childNode.getBeginColumn()));
       child.setAttribute("class", "");
       child.setAttribute("method", "");
       child.setAttribute("package", "");
       child.setAttribute("type", String.valueOf(childNode.getType()));
+
       root.appendChild(child);
       generateDocumentChildren(child, doc, childNode);
     }
