@@ -14,7 +14,6 @@
     Monash University students.</description>
 
 	<inceptionYear>2011</inceptionYear>
-	<url>https://github.com/alecfn/FIT4002_SonarQube_Delphi</url>
 
 	<developers>
 		<developer>
@@ -62,15 +61,6 @@
 		</developer>
 	</developers>
 
-	<issueManagement>
-		<system>JIRA</system>
-		<url>http://jira.agileexcuseteam.me</url>
-	</issueManagement>
-	<ciManagement>
-		<system>Bamboo</system>
-		<url>http://bamboo.agileexcuseteam.me</url>
-	</ciManagement>
-
 	<properties>
 		<!--Version Fields-->
 		<sonarQubeMinVersion>7.9</sonarQubeMinVersion>
@@ -78,12 +68,25 @@
 		<antlr-runtime.version>3.4</antlr-runtime.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<pmd.version>6.15.0</pmd.version>
-		<xalan.version>2.7.2</xalan.version>
 		<hamcrest-all.version>1.3</hamcrest-all.version>
 		<junit.version>4.12</junit.version>
 		<org.mockit.version>3.0.0</org.mockit.version>
 		<slf4j.version>1.8.0-beta4</slf4j.version>
-		<antlr3-maven-plugin.version>3.3.9</antlr3-maven-plugin.version>
+		<java-surefire.version>5.13.0.18197</java-surefire.version>
+		<guava.version>27.1-jre</guava.version>
+		<jdom.version>1.0</jdom.version>
+		<sonarqube-smell-plugin.version>4.0.0</sonarqube-smell-plugin.version>
+		<errorprone.version>2.3.3</errorprone.version>
+		<!--Maven plugins-->
+		<antlr3-plugin.version>3.5.2</antlr3-plugin.version>
+		<jacoco-plugin.version>0.8.4</jacoco-plugin.version>
+		<surefire-plugin.version>2.22.0</surefire-plugin.version>
+		<sonar-packaging-plugin.version>1.16</sonar-packaging-plugin.version>
+		<license-plugin.version>1.9.0</license-plugin.version>
+		<javadoc-plugin>3.1.0</javadoc-plugin>
+		<dependency-plugin.version>2.10</dependency-plugin.version>
+		<dependency-check-plugin.version>5.0.0</dependency-check-plugin.version>
+		<compiler-plugin.version>3.5.1</compiler-plugin.version>
 		<!--Version Fields end here-->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<sonar.pluginName>Delphi</sonar.pluginName>
@@ -119,20 +122,11 @@
 				<version>${pmd.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>xalan</groupId>
-			<artifactId>xalan</artifactId>
-			<version>${xalan.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.sonarsource.sonarqube</groupId>
 			<artifactId>sonar-testing-harness</artifactId>
 			<version>${sonar.version}</version>
 			<scope>test</scope>
 			<exclusions>
-				<exclusion>
-					<artifactId>xalan</artifactId>
-					<groupId>xalan</groupId>
-				</exclusion>
 				<exclusion>
 					<artifactId>hamcrest-all</artifactId>
 					<groupId>org.hamcrest</groupId>
@@ -160,40 +154,30 @@
 		<dependency>
 			<groupId>org.sonarsource.java</groupId>
 			<artifactId>java-surefire</artifactId>
-			<version>5.13.0.18197</version>
-		</dependency>
-		<dependency>
-			<groupId>com.thoughtworks.xstream</groupId>
-			<artifactId>xstream</artifactId>
-			<version>1.4.11.1</version>
+			<version>${java-surefire.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>27.1-jre</version>
+			<version>${guava.version}</version>
 			<scope>compile</scope>
 		</dependency>
     <dependency>
       <groupId>org.jacoco</groupId>
       <artifactId>jacoco-maven-plugin</artifactId>
-      <version>0.8.4</version>
+      <version>${jacoco-plugin.version}</version>
       <type>maven-plugin</type>
       <scope>provided</scope>
     </dependency>
 		<dependency>
-			<groupId>xml-apis</groupId>
-			<artifactId>xml-apis</artifactId>
-			<version>1.4.01</version>
-		</dependency>
-		<dependency>
 			<groupId>jdom</groupId>
 			<artifactId>jdom</artifactId>
-			<version>1.0</version>
+			<version>${jdom.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.qualinsight.plugins.sonarqube</groupId>
 			<artifactId>qualinsight-plugins-sonarqube-smell-plugin</artifactId>
-			<version>4.0.0</version>
+			<version>${sonarqube-smell-plugin.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -202,18 +186,18 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-        <version>2.22.0</version>
+        <version>${surefire-plugin.version}</version>
 			</plugin>
 			<plugin>
 				<groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
 				<artifactId>sonar-packaging-maven-plugin</artifactId>
-				<version>1.16</version>
+				<version>${sonar-packaging-plugin.version}</version>
 				<extensions>true</extensions>
 			</plugin>
 			<plugin>
 				<groupId>com.mycila.maven-license-plugin</groupId>
 				<artifactId>maven-license-plugin</artifactId>
-				<version>1.8.0</version>
+				<version>${license-plugin.version}</version>
 				<configuration>
 					<validHeaders>
 						<value>/src/SABRE_AIRLINE_LICENSE.txt</value>
@@ -226,12 +210,12 @@
 			<plugin>
 				<groupId>org.antlr</groupId>
 				<artifactId>antlr3-maven-plugin</artifactId>
-				<version>3.5.2</version>
+				<version>${antlr3-plugin.version}</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>${javadoc-plugin}</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -246,13 +230,14 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.10</version>
+				<version>${dependency-plugin.version}</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
+				<version>${compiler-plugin.version}</version>
 				<configuration>
 					<source>11</source>
 					<target>11</target>
@@ -265,7 +250,7 @@
 						<path>
 							<groupId>com.google.errorprone</groupId>
 							<artifactId>error_prone_core</artifactId>
-							<version>2.3.3</version>
+							<version>${errorprone.version}</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
@@ -273,7 +258,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.2</version>
+        <version>${jacoco-plugin.version}</version>
         <executions>
           <execution>
             <id>pre-unit-test</id>
@@ -300,7 +285,7 @@
 			<plugin>
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
-				<version>5.0.0</version>
+				<version>${dependency-check-plugin.version}</version>
 				<executions>
 					<execution>
 						<goals>
