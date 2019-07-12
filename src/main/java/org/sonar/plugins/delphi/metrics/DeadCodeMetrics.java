@@ -91,10 +91,8 @@ public class DeadCodeMetrics extends DefaultMetrics {
       if (units == null || units.isEmpty()) {
         return;
       }
-      unusedUnits = findUnusedUnits(units);
 
-      // findUnusedFunctions always returns an empty list
-      // huh? Why?
+      unusedUnits = findUnusedUnits(units);
       unusedFunctions = findUnusedFunctions(units);
       isCalculated = true;
     }

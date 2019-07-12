@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.delphi.core.language.impl;
 
+import com.qualinsight.plugins.sonarqube.smell.api.annotation.Smell;
+import com.qualinsight.plugins.sonarqube.smell.api.model.SmellType;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -222,8 +224,15 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-
   @Override
+  @Smell(
+      minutes = 30,
+      reason =
+          "This is a naive check."
+              + "In our codebase we have tons of functions that start with 'get' that do a whole "
+              + "lot more than just access a field."
+              + "This will lead to false-negatives in dead code analysis.",
+      type = SmellType.WRONG_LOGIC)
   public final void setName(String name) {
     this.name = name;
     if (longName == null) {
@@ -231,10 +240,6 @@ public class DelphiFunction implements FunctionInterface {
     }
     int dot = name.lastIndexOf('.');
     if (dot != -1) {
-      //huh? Isn't this kind of a naive check?
-      // In our codebase we have tons of functions that start with "get" that do a whole lot more
-      // than just access a field.
-      // I expect this will lead to false-negatives in DeadCodeMetrics.
       boolean b1 = name.startsWith("get", dot + 1);
       boolean b2 = name.startsWith("set", dot + 1);
       isAccessor = b1 || b2;

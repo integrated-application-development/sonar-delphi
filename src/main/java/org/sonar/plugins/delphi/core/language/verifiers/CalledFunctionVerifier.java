@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.delphi.core.language.verifiers;
 
+import com.qualinsight.plugins.sonarqube.smell.api.annotation.Smell;
+import com.qualinsight.plugins.sonarqube.smell.api.model.SmellType;
 import java.util.ArrayList;
 import java.util.List;
 import org.antlr.runtime.tree.CommonTree;
@@ -54,6 +56,15 @@ public class CalledFunctionVerifier {
     this.results = results;
   }
 
+  @Smell(
+      minutes = 30,
+      reason =
+          "We can't assume that a function call always looks like an identifier followed by '(' " +
+           "or ';', considering empty parentheses are optional in Delphi."
+              + "Example: 'Result := FunctionWithoutArguments + 5;' will not see a function call."
+              + "It's indistinguishable from a variable until we have a symbol table."
+              + "This causes false positives in dead code analysis.",
+      type = SmellType.WRONG_LOGIC)
   public boolean verify(Tree node) {
     // if we are on a ident token and it is not last
     if (looksLikeFunctionCall(node)) {
@@ -76,7 +87,6 @@ public class CalledFunctionVerifier {
     }
 
     // not a function call (not like "foo(args);" or "foo;"
-    //huh? This is not a good approach. What about "MyVar := FunctionWithoutArguments + 3;"?
     return false;
   }
 
