@@ -264,13 +264,13 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
       return lastChild.getEndColumn();
     }
 
-    int maxColumn = getASTTree().getFileSourceLine(getEndLine()).length() - 1;
+    int maxColumn = getASTTree().getFileSourceLine(getEndLine()).length();
 
     if (isNil()) {
       return maxColumn;
     }
-
-    int calcColumn = getBeginColumn() + getToken().getText().length();
+    
+    int calcColumn = getBeginColumn() + getText().length();
     return Math.min(maxColumn, calcColumn);
   }
 
