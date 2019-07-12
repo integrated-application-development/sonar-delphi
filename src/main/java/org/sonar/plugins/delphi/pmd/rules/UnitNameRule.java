@@ -26,7 +26,7 @@ import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 public class UnitNameRule extends NameConventionRule {
-  private static final String[] PREFIXES = {"F"};
+  private static final String[] PREFIXES = {"F", "Fr", "Frame"};
 
   @Override
   public List<DelphiPMDNode> findNameNodes(DelphiPMDNode node) {
