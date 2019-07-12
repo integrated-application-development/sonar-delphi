@@ -55,7 +55,7 @@ public class ActiveRulesRuleSetFactory implements RuleSetFactory {
       addRuleProperties(rule, delphiRule);
       ruleset.addRule(delphiRule);
 
-      delphiRule.processXpath(rule.internalKey());
+      delphiRule.processXpath(rule.ruleKey().rule());
     }
     return ruleset;
   }
