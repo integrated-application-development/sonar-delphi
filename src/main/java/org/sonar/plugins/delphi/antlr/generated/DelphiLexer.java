@@ -1,4 +1,4 @@
-// $ANTLR 3.5.1 ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g 2019-06-20 11:39:13
+// $ANTLR 3.5.1 ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g 2019-07-15 14:11:14
 
 /*
  * Sonar Delphi Plugin
@@ -4133,12 +4133,12 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkRealNum;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:943:25: ( Digitseq ({...}? => '.' Digitseq )? ( ( 'e' | 'E' ) ( '+' | '-' )? Digitseq )? )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:943:27: Digitseq ({...}? => '.' Digitseq )? ( ( 'e' | 'E' ) ( '+' | '-' )? Digitseq )?
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:944:25: ( Digitseq ({...}? => '.' Digitseq )? ( ( 'e' | 'E' ) ( '+' | '-' )? Digitseq )? )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:944:27: Digitseq ({...}? => '.' Digitseq )? ( ( 'e' | 'E' ) ( '+' | '-' )? Digitseq )?
 			{
 			mDigitseq(); 
 
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:943:36: ({...}? => '.' Digitseq )?
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:944:36: ({...}? => '.' Digitseq )?
 			int alt3=2;
 			int LA3_0 = input.LA(1);
 			if ( (LA3_0=='.') && (( input.LA(2) != '.' ))) {
@@ -4146,7 +4146,7 @@ public class DelphiLexer extends Lexer {
 			}
 			switch (alt3) {
 				case 1 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:943:37: {...}? => '.' Digitseq
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:944:37: {...}? => '.' Digitseq
 					{
 					if ( !(( input.LA(2) != '.' )) ) {
 						throw new FailedPredicateException(input, "TkRealNum", " input.LA(2) != '.' ");
@@ -4159,7 +4159,7 @@ public class DelphiLexer extends Lexer {
 
 			}
 
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:943:79: ( ( 'e' | 'E' ) ( '+' | '-' )? Digitseq )?
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:944:79: ( ( 'e' | 'E' ) ( '+' | '-' )? Digitseq )?
 			int alt5=2;
 			int LA5_0 = input.LA(1);
 			if ( (LA5_0=='E'||LA5_0=='e') ) {
@@ -4167,7 +4167,7 @@ public class DelphiLexer extends Lexer {
 			}
 			switch (alt5) {
 				case 1 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:943:80: ( 'e' | 'E' ) ( '+' | '-' )? Digitseq
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:944:80: ( 'e' | 'E' ) ( '+' | '-' )? Digitseq
 					{
 					if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
 						input.consume();
@@ -4177,7 +4177,7 @@ public class DelphiLexer extends Lexer {
 						recover(mse);
 						throw mse;
 					}
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:943:90: ( '+' | '-' )?
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:944:90: ( '+' | '-' )?
 					int alt4=2;
 					int LA4_0 = input.LA(1);
 					if ( (LA4_0=='+'||LA4_0=='-') ) {
@@ -4223,8 +4223,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkHexNum;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:945:25: ( '$' Hexdigitseq )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:945:27: '$' Hexdigitseq
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:946:25: ( '$' Hexdigitseq )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:946:27: '$' Hexdigitseq
 			{
 			match('$'); 
 			mHexdigitseq(); 
@@ -4245,8 +4245,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkAsmHexNum;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:947:25: ({...}? => Hexdigitseq ( 'h' | 'H' ) )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:947:27: {...}? => Hexdigitseq ( 'h' | 'H' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:948:25: ({...}? => Hexdigitseq ( 'h' | 'H' ) )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:948:27: {...}? => Hexdigitseq ( 'h' | 'H' )
 			{
 			if ( !(( asmMode )) ) {
 				throw new FailedPredicateException(input, "TkAsmHexNum", " asmMode ");
@@ -4277,8 +4277,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkAsmHexLabel;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:949:25: ({...}? => Hexdigitseq ':' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:949:27: {...}? => Hexdigitseq ':'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:950:25: ({...}? => Hexdigitseq ':' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:950:27: {...}? => Hexdigitseq ':'
 			{
 			if ( !(( asmMode )) ) {
 				throw new FailedPredicateException(input, "TkAsmHexLabel", " asmMode ");
@@ -4302,11 +4302,11 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = QuotedString;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:951:25: ( '\\'' ( '\\'\\'' |~ ( '\\'' ) )* '\\'' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:951:27: '\\'' ( '\\'\\'' |~ ( '\\'' ) )* '\\''
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:952:25: ( '\\'' ( '\\'\\'' |~ ( '\\'' ) )* '\\'' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:952:27: '\\'' ( '\\'\\'' |~ ( '\\'' ) )* '\\''
 			{
 			match('\''); 
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:951:32: ( '\\'\\'' |~ ( '\\'' ) )*
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:952:32: ( '\\'\\'' |~ ( '\\'' ) )*
 			loop6:
 			while (true) {
 				int alt6=3;
@@ -4324,14 +4324,14 @@ public class DelphiLexer extends Lexer {
 
 				switch (alt6) {
 				case 1 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:951:33: '\\'\\''
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:952:33: '\\'\\''
 					{
 					match("''"); 
 
 					}
 					break;
 				case 2 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:951:42: ~ ( '\\'' )
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:952:42: ~ ( '\\'' )
 					{
 					if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '&')||(input.LA(1) >= '(' && input.LA(1) <= '\uFFFF') ) {
 						input.consume();
@@ -4366,12 +4366,12 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = ControlString;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:953:25: ( Controlchar ( Controlchar )* )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:953:27: Controlchar ( Controlchar )*
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:954:25: ( Controlchar ( Controlchar )* )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:954:27: Controlchar ( Controlchar )*
 			{
 			mControlchar(); 
 
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:953:39: ( Controlchar )*
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:954:39: ( Controlchar )*
 			loop7:
 			while (true) {
 				int alt7=2;
@@ -4382,7 +4382,7 @@ public class DelphiLexer extends Lexer {
 
 				switch (alt7) {
 				case 1 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:953:40: Controlchar
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:954:40: Controlchar
 					{
 					mControlchar(); 
 
@@ -4408,7 +4408,7 @@ public class DelphiLexer extends Lexer {
 	// $ANTLR start "Controlchar"
 	public final void mControlchar() throws RecognitionException {
 		try {
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:961:25: ( '#' Digitseq | '#' '$' Hexdigitseq )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:962:25: ( '#' Digitseq | '#' '$' Hexdigitseq )
 			int alt8=2;
 			int LA8_0 = input.LA(1);
 			if ( (LA8_0=='#') ) {
@@ -4442,7 +4442,7 @@ public class DelphiLexer extends Lexer {
 
 			switch (alt8) {
 				case 1 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:961:27: '#' Digitseq
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:962:27: '#' Digitseq
 					{
 					match('#'); 
 					mDigitseq(); 
@@ -4450,7 +4450,7 @@ public class DelphiLexer extends Lexer {
 					}
 					break;
 				case 2 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:962:27: '#' '$' Hexdigitseq
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:963:27: '#' '$' Hexdigitseq
 					{
 					match('#'); 
 					match('$'); 
@@ -4470,7 +4470,7 @@ public class DelphiLexer extends Lexer {
 	// $ANTLR start "Alpha"
 	public final void mAlpha() throws RecognitionException {
 		try {
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:965:25: ( 'a' .. 'z' | 'A' .. 'Z' | '\\u0080' .. '\\uFFFE' ~ ( '\\uFEFF' ) )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:966:25: ( 'a' .. 'z' | 'A' .. 'Z' | '\\u0080' .. '\\uFFFE' ~ ( '\\uFEFF' ) )
 			int alt9=3;
 			int LA9_0 = input.LA(1);
 			if ( ((LA9_0 >= 'a' && LA9_0 <= 'z')) ) {
@@ -4491,19 +4491,19 @@ public class DelphiLexer extends Lexer {
 
 			switch (alt9) {
 				case 1 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:965:27: 'a' .. 'z'
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:966:27: 'a' .. 'z'
 					{
 					matchRange('a','z'); 
 					}
 					break;
 				case 2 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:966:27: 'A' .. 'Z'
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:967:27: 'A' .. 'Z'
 					{
 					matchRange('A','Z'); 
 					}
 					break;
 				case 3 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:967:27: '\\u0080' .. '\\uFFFE' ~ ( '\\uFEFF' )
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:968:27: '\\u0080' .. '\\uFFFE' ~ ( '\\uFEFF' )
 					{
 					matchRange('\u0080','\uFFFE'); 
 					if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '\uFEFE')||(input.LA(1) >= '\uFF00' && input.LA(1) <= '\uFFFF') ) {
@@ -4528,7 +4528,7 @@ public class DelphiLexer extends Lexer {
 	// $ANTLR start "Digit"
 	public final void mDigit() throws RecognitionException {
 		try {
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:970:25: ( '0' .. '9' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:971:25: ( '0' .. '9' )
 			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:
 			{
 			if ( (input.LA(1) >= '0' && input.LA(1) <= '9') ) {
@@ -4551,12 +4551,12 @@ public class DelphiLexer extends Lexer {
 	// $ANTLR start "Digitseq"
 	public final void mDigitseq() throws RecognitionException {
 		try {
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:973:25: ( Digit ( Digit )* )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:973:27: Digit ( Digit )*
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:974:25: ( Digit ( Digit )* )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:974:27: Digit ( Digit )*
 			{
 			mDigit(); 
 
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:973:33: ( Digit )*
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:974:33: ( Digit )*
 			loop10:
 			while (true) {
 				int alt10=2;
@@ -4597,7 +4597,7 @@ public class DelphiLexer extends Lexer {
 	// $ANTLR start "Hexdigit"
 	public final void mHexdigit() throws RecognitionException {
 		try {
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:976:25: ( Digit | 'a' .. 'f' | 'A' .. 'F' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:977:25: ( Digit | 'a' .. 'f' | 'A' .. 'F' )
 			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:
 			{
 			if ( (input.LA(1) >= '0' && input.LA(1) <= '9')||(input.LA(1) >= 'A' && input.LA(1) <= 'F')||(input.LA(1) >= 'a' && input.LA(1) <= 'f') ) {
@@ -4620,12 +4620,12 @@ public class DelphiLexer extends Lexer {
 	// $ANTLR start "Hexdigitseq"
 	public final void mHexdigitseq() throws RecognitionException {
 		try {
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:979:24: ( Hexdigit ( Hexdigit )* )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:979:26: Hexdigit ( Hexdigit )*
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:980:24: ( Hexdigit ( Hexdigit )* )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:980:26: Hexdigit ( Hexdigit )*
 			{
 			mHexdigit(); 
 
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:979:35: ( Hexdigit )*
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:980:35: ( Hexdigit )*
 			loop11:
 			while (true) {
 				int alt11=2;
@@ -4668,7 +4668,7 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = COMMENT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:25: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '(*' ( options {greedy=false; } : . )* '*)' | '{' ( options {greedy=false; } : . )* '}' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:984:25: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '(*' ( options {greedy=false; } : . )* '*)' | '{' ( options {greedy=false; } : . )* '}' )
 			int alt16=3;
 			switch ( input.LA(1) ) {
 			case '/':
@@ -4693,11 +4693,11 @@ public class DelphiLexer extends Lexer {
 			}
 			switch (alt16) {
 				case 1 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:28: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:984:28: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
 					{
 					match("//"); 
 
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:33: (~ ( '\\n' | '\\r' ) )*
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:984:33: (~ ( '\\n' | '\\r' ) )*
 					loop12:
 					while (true) {
 						int alt12=2;
@@ -4726,7 +4726,7 @@ public class DelphiLexer extends Lexer {
 						}
 					}
 
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:47: ( '\\r' )?
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:984:47: ( '\\r' )?
 					int alt13=2;
 					int LA13_0 = input.LA(1);
 					if ( (LA13_0=='\r') ) {
@@ -4734,7 +4734,7 @@ public class DelphiLexer extends Lexer {
 					}
 					switch (alt13) {
 						case 1 :
-							// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:47: '\\r'
+							// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:984:47: '\\r'
 							{
 							match('\r'); 
 							}
@@ -4747,11 +4747,11 @@ public class DelphiLexer extends Lexer {
 					}
 					break;
 				case 2 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:984:28: '(*' ( options {greedy=false; } : . )* '*)'
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:985:28: '(*' ( options {greedy=false; } : . )* '*)'
 					{
 					match("(*"); 
 
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:984:33: ( options {greedy=false; } : . )*
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:985:33: ( options {greedy=false; } : . )*
 					loop14:
 					while (true) {
 						int alt14=2;
@@ -4772,7 +4772,7 @@ public class DelphiLexer extends Lexer {
 
 						switch (alt14) {
 						case 1 :
-							// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:984:61: .
+							// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:985:61: .
 							{
 							matchAny(); 
 							}
@@ -4789,10 +4789,10 @@ public class DelphiLexer extends Lexer {
 					}
 					break;
 				case 3 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:985:28: '{' ( options {greedy=false; } : . )* '}'
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:986:28: '{' ( options {greedy=false; } : . )* '}'
 					{
 					match('{'); 
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:985:32: ( options {greedy=false; } : . )*
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:986:32: ( options {greedy=false; } : . )*
 					loop15:
 					while (true) {
 						int alt15=2;
@@ -4806,7 +4806,7 @@ public class DelphiLexer extends Lexer {
 
 						switch (alt15) {
 						case 1 :
-							// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:985:60: .
+							// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:986:60: .
 							{
 							matchAny(); 
 							}
@@ -4837,10 +4837,10 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = WS;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:987:25: ( ( ' ' | '\\t' | '\\r' | '\\n' | '\\f' )+ )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:987:27: ( ' ' | '\\t' | '\\r' | '\\n' | '\\f' )+
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:988:25: ( ( ' ' | '\\t' | '\\r' | '\\n' | '\\f' )+ )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:988:27: ( ' ' | '\\t' | '\\r' | '\\n' | '\\f' )+
 			{
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:987:27: ( ' ' | '\\t' | '\\r' | '\\n' | '\\f' )+
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:988:27: ( ' ' | '\\t' | '\\r' | '\\n' | '\\f' )+
 			int cnt17=0;
 			loop17:
 			while (true) {
@@ -4890,8 +4890,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = UnicodeBOM;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:989:25: ( '\\uFEFF' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:989:27: '\\uFEFF'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:990:25: ( '\\uFEFF' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:990:27: '\\uFEFF'
 			{
 			match('\uFEFF'); 
 			_channel=HIDDEN;

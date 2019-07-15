@@ -53,7 +53,7 @@
 	</rule>
 
 	<rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
-				name="NoSemiAfterOverloadRule">
+				name="NoSemiAfterMethodDeclarationRule">
 		<priority>4</priority>
 	</rule>
 
