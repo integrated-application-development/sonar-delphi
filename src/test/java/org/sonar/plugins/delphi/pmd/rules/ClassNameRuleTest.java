@@ -18,8 +18,10 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
+import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
@@ -48,6 +50,7 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("ClassNameRule", builder.getOffsetDecl() + 2)));
   }
 
   @Test
@@ -90,6 +93,7 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("ClassNameRule", builder.getOffsetDecl() + 2)));
   }
 
   @Test
@@ -114,6 +118,7 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("ClassNameRule", builder.getOffsetDecl() + 2)));
   }
 
 }

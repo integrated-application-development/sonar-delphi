@@ -156,7 +156,7 @@ constSection                 : constKey (constDeclaration)* -> ^(constKey (const
 constKey                     : 'const'
                              | 'resourcestring'
                              ;
-constDeclaration             : (customAttribute)? ident (':' typeDecl)? '=' constExpression (hintingDirective)* ';' -> ident (typeDecl)? '=' constExpression
+constDeclaration             : (customAttribute)? ident (':' typeDecl)? '=' constExpression (hintingDirective)* ';' -> ^(TkConstantName ident) (typeDecl)? '=' constExpression
                              ;
 typeSection                  : 'type' typeDeclaration (typeDeclaration)* -> ^('type' typeDeclaration (typeDeclaration)*)
                              ;
@@ -897,6 +897,8 @@ RCURLY            : '}'   ;
 TkGlobalFunction        : 'FUNCTION_GLOBAL'
                         ;
 TkFunctionName          : 'FUNCTION_NAME'
+                        ;
+TkConstantName          : 'CONSTANT_NAME'
                         ;
 TkFunctionArgs          : 'FUNCTION_ARGS'
                         ;

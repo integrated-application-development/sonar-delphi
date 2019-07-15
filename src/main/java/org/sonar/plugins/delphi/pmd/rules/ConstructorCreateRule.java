@@ -1,62 +1,37 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import net.sourceforge.pmd.RuleContext;
+import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-
-public class ConstructorCreateRule extends DelphiRule {
-
-  private int constructorNodeTypePos;
-  private int constructorNodeNamePos;
+/**
+ * This rule will find any instances of a constructor which are not declared with 'Create' at the
+ * beginning.
+ *
+ * <p>To find this, at each 'constructor' declaration, there will next be a 'TkFunctionArgs' node,
+ * followed by a node containing the name of the declared constructor, this is the node to check
+ * for the correct naming convention</p>
+ */
+public class ConstructorCreateRule extends NameConventionRule {
+  private static final String PREFIX = "Create";
 
   @Override
-  protected void init() {
-    super.init();
-    // The first child node in constructor nodes is the TkFunctionName node
-    constructorNodeTypePos = 0;
-    // The first child position is the name of the constructor in TkFunctionName
-    constructorNodeNamePos = 0;
-  }
+  public DelphiPMDNode findNameNode(DelphiPMDNode node) {
+    if (isInterfaceSection() && node.getType() == DelphiLexer.CONSTRUCTOR) {
+      Tree functionName = node.getFirstChildWithType(DelphiLexer.TkFunctionName);
 
-  /**
-   * This rule will find any instances of a constructor which are not declared with 'Create' at the
-   * beginning.
-   *
-   * To find this, at each 'constructor' declaration, there will next be a 'TkFunctionArgs' node,
-   * followed by a node containing the name of the declared constructor, this is the node to check
-   * for the correct naming convention
-   *
-   * @param node the current node
-   * @param ctx the ruleContext to store the violations
-   */
-  @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
-    if (isImplementationSection() || node.getType() != DelphiLexer.CONSTRUCTOR) {
-      return;
-    }
-
-    Tree constructorTypeNode = node.getChild(constructorNodeTypePos);
-
-    if (constructorTypeNode.getType() == DelphiLexer.TkFunctionName) {
-      Tree constructorNameNode = constructorTypeNode.getChild(constructorNodeNamePos);
-      String constructorName = constructorNameNode.getText();
-
-      if (!constructorName.startsWith("Create")) {
-        addViolation(ctx, node);
+      if (functionName != null) {
+        return new DelphiPMDNode((CommonTree) functionName.getChild(0), node.getASTTree());
       }
     }
-  }
 
-
-  @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
+    return null;
   }
 
   @Override
-  public int hashCode() {
-    return super.hashCode();
+  protected boolean isViolation(DelphiPMDNode node) {
+    String name = node.getText();
+    return !name.equals(PREFIX) && !compliesWithPrefixNamingConvention(name, PREFIX);
   }
 }
