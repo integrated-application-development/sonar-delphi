@@ -110,7 +110,7 @@
 			<property name="xpath">
 				<value>
 					<![CDATA[
-						//TkNewType/*/TkInterface/interface[count(following-sibling::*) < 3]
+						//TkNewType/*/TkInterface/INTERFACE[count(following-sibling::*) < 3]
  						]]>	
 				</value>
 			</property>
