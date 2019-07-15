@@ -16,7 +16,7 @@ public class IdentifierConventionRule extends NameConventionRule {
   @Override
   public List<DelphiPMDNode> findNameNodes(DelphiPMDNode node) {
     // Within a var block, look for variable identifiers
-    if (node.getType() == DelphiLexer.VAR) {
+    if (node.getType() == DelphiLexer.VAR && node.getChildren() != null) {
       for (Object child : node.getChildren()) {
         CommonTree childNode = (CommonTree) child;
 
