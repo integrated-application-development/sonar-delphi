@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import com.qualinsight.plugins.sonarqube.smell.api.annotation.Smell;
+import com.qualinsight.plugins.sonarqube.smell.api.model.SmellType;
 import java.util.ArrayList;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
@@ -36,6 +38,11 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  *
  * @author SG0214809
  */
+@Smell(
+    minutes = 60,
+    reason = "Won't handle function name mixing when the type is declared in the implementation.",
+    type = SmellType.WRONG_LOGIC
+)
 public class MixedNamesRule extends DelphiRule {
 
   private final List<String> functionNames = new ArrayList<>();
@@ -172,25 +179,27 @@ public class MixedNamesRule extends DelphiRule {
     if (node == null) {
       return result;
     }
+
     // if function name from new type declared
     if (node.getChildCount() == 1 && !multiply) {
       result.add(typeName + node.getChild(0).getText());
       return result;
     }
 
-    StringBuilder name = new StringBuilder();
-    for (int i = 0; i < node.getChildCount(); ++i) {
-      if (multiply) {
-        // variable names
+    if (multiply) {
+      for (int i = 0; i < node.getChildCount(); ++i) {
         result.add(node.getChild(i).getText());
-      } else {
-        // function name from implementation section
+      }
+    } else {
+      StringBuilder name = new StringBuilder();
+
+      for (int i = 0; i < node.getChildCount(); ++i) {
         name.append(node.getChild(i).getText());
       }
-    }
-    if (!multiply) {
+
       result.add(name.toString());
     }
+
     return result;
   }
 
