@@ -890,6 +890,7 @@ DOT               : '.'   ;
 DOTDOT            : '..'  ;
 LCURLY            : '{'   ;
 RCURLY            : '}'   ;
+AMPERSAND         : '&'   ;
 
 //****************************
 //section token

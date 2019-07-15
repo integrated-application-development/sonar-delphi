@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
+import static org.apache.commons.lang.StringEscapeUtils.escapeXml;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -207,8 +209,9 @@ public class DelphiAST extends CommonTree implements ASTTree {
 
     for (int i = 0; i < delphiNode.getChildCount(); ++i) {
       DelphiPMDNode childNode = new DelphiPMDNode((CommonTree) delphiNode.getChild(i), this);
+      String tag = escapeXml(DelphiParser.tokenNames[childNode.getType()]);
 
-      Element child = doc.createElement(DelphiParser.tokenNames[childNode.getType()]);
+      Element child = doc.createElement(tag);
       child.setTextContent(childNode.getText());
       child.setAttribute("beginLine", String.valueOf(childNode.getBeginLine()));
       child.setAttribute("beginColumn", String.valueOf(childNode.getBeginColumn()));
