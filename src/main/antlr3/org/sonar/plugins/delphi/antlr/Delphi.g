@@ -397,14 +397,14 @@ visibility                   : (STRICT)? 'protected'
 exportedProcHeading          : 'procedure' ident (formalParameterSection)? ':' (customAttribute)? typeDecl functionDirectiveSection
                              | 'function' ident (formalParameterSection)? functionDirectiveSection
                              ;
-methodDecl                   : methodDeclHeading methodDirectiveSection (methodBody)? -> methodDeclHeading (methodBody)?
+methodDecl                   : methodDeclHeading (methodBody)?
                              ;
-methodDeclHeading            : (customAttribute)? ('class')?  methodKey methodName (formalParameterSection)?
-                             -> (customAttribute)? ('class')?  ^(methodKey ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) )
-                             | (customAttribute)? ('class')? 'function' methodName (formalParameterSection)? (':' (customAttribute)? typeDecl)?
-                             -> (customAttribute)? ('class')? ^('function' ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn (customAttribute)? typeDecl?) )
-                             | (customAttribute)? 'class' 'operator' methodName (formalParameterSection)? (':' (customAttribute)? typeDecl)?
-                             -> (customAttribute)? 'class' ^('operator' ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn (customAttribute)? typeDecl?) )
+methodDeclHeading            : (customAttribute)? ('class')?  methodKey methodName (formalParameterSection)? methodDirectiveSection
+                             -> (customAttribute)? ('class')?  ^(methodKey ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) methodDirectiveSection)
+                             | (customAttribute)? ('class')? 'function' methodName (formalParameterSection)? (':' (customAttribute)? typeDecl)? methodDirectiveSection
+                             -> (customAttribute)? ('class')? ^('function' ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn (customAttribute)? typeDecl?) methodDirectiveSection)
+                             | (customAttribute)? 'class' 'operator' methodName (formalParameterSection)? (':' (customAttribute)? typeDecl)? methodDirectiveSection
+                             -> (customAttribute)? 'class' ^('operator' ^(TkFunctionName methodName) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn (customAttribute)? typeDecl?) methodDirectiveSection)
                              ;
 methodKey                    : 'procedure'
                              | 'constructor'
@@ -412,12 +412,12 @@ methodKey                    : 'procedure'
                              ;
 methodName                   : ident (genericDefinition)? ('.' ident (genericDefinition)?)? '.' ident (genericDefinition)?
                              ;
-procDecl                     : procDeclHeading functionDirectiveSection (procBody)? -> procDeclHeading (procBody)?    //CHANGED
+procDecl                     : procDeclHeading (procBody)?
                              ;
-procDeclHeading              : (customAttribute)? 'procedure' ident (formalParameterSection)?             //CHANGED
-                             -> ^('procedure' ^(TkFunctionName ident) ^(TkFunctionArgs (formalParameterSection)?) )
-                             | (customAttribute)? 'function' ident (formalParameterSection)? (':' typeDecl)?
-                             -> ^('function' ^(TkFunctionName ident) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn (typeDecl)?) )
+procDeclHeading              : (customAttribute)? 'procedure' ident (formalParameterSection)? functionDirectiveSection
+                             -> ^('procedure' ^(TkFunctionName ident) ^(TkFunctionArgs (formalParameterSection)?) functionDirectiveSection )
+                             | (customAttribute)? 'function' ident (formalParameterSection)? (':' typeDecl)? functionDirectiveSection
+                             -> ^('function' ^(TkFunctionName ident) ^(TkFunctionArgs (formalParameterSection)?) ^(TkFunctionReturn (typeDecl)?) functionDirectiveSection )
                              ;
 formalParameterSection       : '(' (formalParameterList)? ')' -> (formalParameterList)?
                              ;
