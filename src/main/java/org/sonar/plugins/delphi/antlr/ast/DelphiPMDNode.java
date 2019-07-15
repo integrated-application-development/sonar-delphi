@@ -226,7 +226,14 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
    */
   @Override
   public int getBeginLine() {
-    return getLine();
+    int line = getLine();
+    if (getChildCount() > 0) {
+      DelphiPMDNode firstChild = new DelphiPMDNode((CommonTree) getChild(0), getASTTree());
+
+      line = Math.min(line, firstChild.getBeginLine());
+    }
+
+    return line;
   }
 
   /**
@@ -243,7 +250,7 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
   @Override
   public int getEndLine() {
     if (getChildCount() > 0) {
-      DelphiPMDNode lastChild = new DelphiPMDNode((CommonTree)getChild(getChildCount() - 1),
+      DelphiPMDNode lastChild = new DelphiPMDNode((CommonTree) getChild(getChildCount() - 1),
           getASTTree());
 
       return lastChild.getEndLine();
@@ -258,7 +265,7 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
   @Override
   public int getEndColumn() {
     if (getChildCount() > 0) {
-      DelphiPMDNode lastChild = new DelphiPMDNode((CommonTree)getChild(getChildCount() - 1),
+      DelphiPMDNode lastChild = new DelphiPMDNode((CommonTree) getChild(getChildCount() - 1),
           getASTTree());
 
       return lastChild.getEndColumn();
