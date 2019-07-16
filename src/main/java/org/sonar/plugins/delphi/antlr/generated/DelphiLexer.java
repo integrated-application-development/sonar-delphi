@@ -1,4 +1,4 @@
-// $ANTLR 3.5.1 ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g 2019-07-16 09:27:41
+// $ANTLR 3.5.1 ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g 2019-07-16 09:56:09
 
 /*
  * Sonar Delphi Plugin
@@ -193,46 +193,47 @@ public class DelphiLexer extends Lexer {
 	public static final int TkAnonymousExpression=159;
 	public static final int TkAsmHexLabel=160;
 	public static final int TkAsmHexNum=161;
-	public static final int TkClass=162;
-	public static final int TkClassField=163;
-	public static final int TkClassOfType=164;
-	public static final int TkClassParents=165;
-	public static final int TkConstantName=166;
-	public static final int TkCustomAttribute=167;
-	public static final int TkCustomAttributeArgs=168;
-	public static final int TkFunctionArgs=169;
-	public static final int TkFunctionBody=170;
-	public static final int TkFunctionName=171;
-	public static final int TkFunctionReturn=172;
-	public static final int TkGlobalFunction=173;
-	public static final int TkGuid=174;
-	public static final int TkHexNum=175;
-	public static final int TkIdentifier=176;
-	public static final int TkIntNum=177;
-	public static final int TkInterface=178;
-	public static final int TkNewType=179;
-	public static final int TkObject=180;
-	public static final int TkRealNum=181;
-	public static final int TkRecord=182;
-	public static final int TkRecordHelper=183;
-	public static final int TkVariableIdents=184;
-	public static final int TkVariableParam=185;
-	public static final int TkVariableType=186;
-	public static final int UNIT=187;
-	public static final int UNSAFE=188;
-	public static final int UNTIL=189;
-	public static final int USES=190;
-	public static final int UnicodeBOM=191;
-	public static final int VAR=192;
-	public static final int VARARGS=193;
-	public static final int VARIANT=194;
-	public static final int VIRTUAL=195;
-	public static final int WHILE=196;
-	public static final int WITH=197;
-	public static final int WRITE=198;
-	public static final int WRITEONLY=199;
-	public static final int WS=200;
-	public static final int XOR=201;
+	public static final int TkAssemblerInstructions=162;
+	public static final int TkClass=163;
+	public static final int TkClassField=164;
+	public static final int TkClassOfType=165;
+	public static final int TkClassParents=166;
+	public static final int TkConstantName=167;
+	public static final int TkCustomAttribute=168;
+	public static final int TkCustomAttributeArgs=169;
+	public static final int TkFunctionArgs=170;
+	public static final int TkFunctionBody=171;
+	public static final int TkFunctionName=172;
+	public static final int TkFunctionReturn=173;
+	public static final int TkGlobalFunction=174;
+	public static final int TkGuid=175;
+	public static final int TkHexNum=176;
+	public static final int TkIdentifier=177;
+	public static final int TkIntNum=178;
+	public static final int TkInterface=179;
+	public static final int TkNewType=180;
+	public static final int TkObject=181;
+	public static final int TkRealNum=182;
+	public static final int TkRecord=183;
+	public static final int TkRecordHelper=184;
+	public static final int TkVariableIdents=185;
+	public static final int TkVariableParam=186;
+	public static final int TkVariableType=187;
+	public static final int UNIT=188;
+	public static final int UNSAFE=189;
+	public static final int UNTIL=190;
+	public static final int USES=191;
+	public static final int UnicodeBOM=192;
+	public static final int VAR=193;
+	public static final int VARARGS=194;
+	public static final int VARIANT=195;
+	public static final int VIRTUAL=196;
+	public static final int WHILE=197;
+	public static final int WITH=198;
+	public static final int WRITE=199;
+	public static final int WRITEONLY=200;
+	public static final int WS=201;
+	public static final int XOR=202;
 
 	  boolean asmMode = false;
 
@@ -257,8 +258,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = ABSOLUTE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:731:19: ( 'absolute' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:731:21: 'absolute'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:733:19: ( 'absolute' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:733:21: 'absolute'
 			{
 			match("absolute"); 
 
@@ -278,8 +279,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = ABSTRACT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:732:19: ( 'abstract' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:732:21: 'abstract'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:734:19: ( 'abstract' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:734:21: 'abstract'
 			{
 			match("abstract"); 
 
@@ -299,8 +300,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = ADD;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:733:19: ( 'add' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:733:21: 'add'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:735:19: ( 'add' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:735:21: 'add'
 			{
 			match("add"); 
 
@@ -320,8 +321,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = AND;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:734:19: ( 'and' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:734:21: 'and'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:736:19: ( 'and' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:736:21: 'and'
 			{
 			match("and"); 
 
@@ -341,8 +342,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = ANSISTRING;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:735:19: ( 'ansistring' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:735:21: 'ansistring'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:737:19: ( 'ansistring' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:737:21: 'ansistring'
 			{
 			match("ansistring"); 
 
@@ -362,8 +363,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = ARRAY;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:736:19: ( 'array' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:736:21: 'array'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:738:19: ( 'array' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:738:21: 'array'
 			{
 			match("array"); 
 
@@ -383,8 +384,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = AS;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:737:19: ( 'as' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:737:21: 'as'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:739:19: ( 'as' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:739:21: 'as'
 			{
 			match("as"); 
 
@@ -404,8 +405,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = ASM;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:738:19: ( 'asm' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:738:21: 'asm'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:740:19: ( 'asm' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:740:21: 'asm'
 			{
 			match("asm"); 
 
@@ -426,8 +427,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = ASSEMBLER;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:739:19: ( 'assembler' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:739:21: 'assembler'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:741:19: ( 'assembler' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:741:21: 'assembler'
 			{
 			match("assembler"); 
 
@@ -447,8 +448,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = ASSEMBLY;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:740:19: ( 'assembly' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:740:21: 'assembly'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:742:19: ( 'assembly' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:742:21: 'assembly'
 			{
 			match("assembly"); 
 
@@ -468,8 +469,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = AT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:741:19: ( 'at' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:741:21: 'at'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:743:19: ( 'at' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:743:21: 'at'
 			{
 			match("at"); 
 
@@ -489,8 +490,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = AUTOMATED;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:742:19: ( 'automated' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:742:21: 'automated'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:744:19: ( 'automated' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:744:21: 'automated'
 			{
 			match("automated"); 
 
@@ -510,8 +511,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = BEGIN;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:743:19: ( 'begin' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:743:21: 'begin'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:745:19: ( 'begin' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:745:21: 'begin'
 			{
 			match("begin"); 
 
@@ -531,8 +532,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = BREAK;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:744:19: ( 'break' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:744:21: 'break'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:746:19: ( 'break' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:746:21: 'break'
 			{
 			match("break"); 
 
@@ -552,8 +553,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = CASE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:745:19: ( 'case' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:745:21: 'case'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:747:19: ( 'case' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:747:21: 'case'
 			{
 			match("case"); 
 
@@ -573,8 +574,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = CDECL;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:746:19: ( 'cdecl' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:746:21: 'cdecl'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:748:19: ( 'cdecl' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:748:21: 'cdecl'
 			{
 			match("cdecl"); 
 
@@ -594,8 +595,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = CLASS;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:747:19: ( 'class' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:747:21: 'class'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:749:19: ( 'class' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:749:21: 'class'
 			{
 			match("class"); 
 
@@ -615,8 +616,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = CONST;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:748:19: ( 'const' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:748:21: 'const'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:750:19: ( 'const' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:750:21: 'const'
 			{
 			match("const"); 
 
@@ -636,8 +637,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = CONSTRUCTOR;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:749:19: ( 'constructor' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:749:21: 'constructor'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:751:19: ( 'constructor' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:751:21: 'constructor'
 			{
 			match("constructor"); 
 
@@ -657,8 +658,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = CONTAINS;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:750:19: ( 'contains' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:750:21: 'contains'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:752:19: ( 'contains' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:752:21: 'contains'
 			{
 			match("contains"); 
 
@@ -678,8 +679,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = CONTINUE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:751:19: ( 'continue' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:751:21: 'continue'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:753:19: ( 'continue' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:753:21: 'continue'
 			{
 			match("continue"); 
 
@@ -699,8 +700,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = DEFAULT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:752:19: ( 'default' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:752:21: 'default'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:754:19: ( 'default' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:754:21: 'default'
 			{
 			match("default"); 
 
@@ -720,8 +721,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = DEPRECATED;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:753:19: ( 'deprecated' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:753:21: 'deprecated'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:755:19: ( 'deprecated' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:755:21: 'deprecated'
 			{
 			match("deprecated"); 
 
@@ -741,8 +742,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = DESTRUCTOR;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:754:19: ( 'destructor' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:754:21: 'destructor'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:756:19: ( 'destructor' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:756:21: 'destructor'
 			{
 			match("destructor"); 
 
@@ -762,8 +763,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = DISPID;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:755:19: ( 'dispid' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:755:21: 'dispid'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:757:19: ( 'dispid' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:757:21: 'dispid'
 			{
 			match("dispid"); 
 
@@ -783,8 +784,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = DISPINTERFACE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:756:19: ( 'dispinterface' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:756:21: 'dispinterface'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:758:19: ( 'dispinterface' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:758:21: 'dispinterface'
 			{
 			match("dispinterface"); 
 
@@ -804,8 +805,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = DIV;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:757:19: ( 'div' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:757:21: 'div'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:759:19: ( 'div' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:759:21: 'div'
 			{
 			match("div"); 
 
@@ -825,8 +826,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = DO;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:758:19: ( 'do' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:758:21: 'do'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:760:19: ( 'do' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:760:21: 'do'
 			{
 			match("do"); 
 
@@ -846,8 +847,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = DOWNTO;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:759:19: ( 'downto' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:759:21: 'downto'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:761:19: ( 'downto' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:761:21: 'downto'
 			{
 			match("downto"); 
 
@@ -867,8 +868,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = DQ;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:760:19: ( 'dq' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:760:21: 'dq'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:762:19: ( 'dq' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:762:21: 'dq'
 			{
 			match("dq"); 
 
@@ -888,8 +889,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = DW;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:761:19: ( 'dw' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:761:21: 'dw'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:763:19: ( 'dw' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:763:21: 'dw'
 			{
 			match("dw"); 
 
@@ -909,8 +910,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = DYNAMIC;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:762:19: ( 'dynamic' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:762:21: 'dynamic'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:764:19: ( 'dynamic' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:764:21: 'dynamic'
 			{
 			match("dynamic"); 
 
@@ -930,8 +931,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = ELSE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:763:19: ( 'else' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:763:21: 'else'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:765:19: ( 'else' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:765:21: 'else'
 			{
 			match("else"); 
 
@@ -951,8 +952,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = END;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:764:19: ( 'end' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:764:21: 'end'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:766:19: ( 'end' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:766:21: 'end'
 			{
 			match("end"); 
 
@@ -973,8 +974,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = EXCEPT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:765:19: ( 'except' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:765:21: 'except'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:767:19: ( 'except' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:767:21: 'except'
 			{
 			match("except"); 
 
@@ -994,8 +995,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = EXIT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:766:19: ( 'exit' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:766:21: 'exit'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:768:19: ( 'exit' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:768:21: 'exit'
 			{
 			match("exit"); 
 
@@ -1015,8 +1016,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = EXPERIMENTAL;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:767:19: ( 'experimental' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:767:21: 'experimental'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:769:19: ( 'experimental' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:769:21: 'experimental'
 			{
 			match("experimental"); 
 
@@ -1036,8 +1037,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = EXPORT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:768:19: ( 'export' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:768:21: 'export'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:770:19: ( 'export' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:770:21: 'export'
 			{
 			match("export"); 
 
@@ -1057,8 +1058,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = EXPORTS;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:769:19: ( 'exports' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:769:21: 'exports'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:771:19: ( 'exports' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:771:21: 'exports'
 			{
 			match("exports"); 
 
@@ -1078,8 +1079,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = EXTERNAL;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:770:19: ( 'external' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:770:21: 'external'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:772:19: ( 'external' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:772:21: 'external'
 			{
 			match("external"); 
 
@@ -1099,8 +1100,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = FAR;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:771:19: ( 'far' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:771:21: 'far'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:773:19: ( 'far' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:773:21: 'far'
 			{
 			match("far"); 
 
@@ -1120,8 +1121,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = FILE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:772:19: ( 'file' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:772:21: 'file'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:774:19: ( 'file' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:774:21: 'file'
 			{
 			match("file"); 
 
@@ -1141,8 +1142,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = FINAL;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:773:19: ( 'final' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:773:21: 'final'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:775:19: ( 'final' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:775:21: 'final'
 			{
 			match("final"); 
 
@@ -1162,8 +1163,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = FINALIZATION;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:774:19: ( 'finalization' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:774:21: 'finalization'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:776:19: ( 'finalization' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:776:21: 'finalization'
 			{
 			match("finalization"); 
 
@@ -1183,8 +1184,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = FINALLY;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:775:19: ( 'finally' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:775:21: 'finally'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:777:19: ( 'finally' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:777:21: 'finally'
 			{
 			match("finally"); 
 
@@ -1204,8 +1205,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = FOR;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:776:19: ( 'for' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:776:21: 'for'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:778:19: ( 'for' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:778:21: 'for'
 			{
 			match("for"); 
 
@@ -1225,8 +1226,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = FORWARD;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:777:19: ( 'forward' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:777:21: 'forward'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:779:19: ( 'forward' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:779:21: 'forward'
 			{
 			match("forward"); 
 
@@ -1246,8 +1247,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = FUNCTION;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:778:19: ( 'function' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:778:21: 'function'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:780:19: ( 'function' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:780:21: 'function'
 			{
 			match("function"); 
 
@@ -1267,8 +1268,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = GOTO;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:779:19: ( 'goto' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:779:21: 'goto'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:781:19: ( 'goto' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:781:21: 'goto'
 			{
 			match("goto"); 
 
@@ -1288,8 +1289,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = HELPER;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:780:19: ( 'helper' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:780:21: 'helper'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:782:19: ( 'helper' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:782:21: 'helper'
 			{
 			match("helper"); 
 
@@ -1309,8 +1310,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = IF;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:781:19: ( 'if' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:781:21: 'if'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:783:19: ( 'if' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:783:21: 'if'
 			{
 			match("if"); 
 
@@ -1330,8 +1331,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = IMPLEMENTATION;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:782:19: ( 'implementation' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:782:21: 'implementation'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:784:19: ( 'implementation' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:784:21: 'implementation'
 			{
 			match("implementation"); 
 
@@ -1351,8 +1352,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = IMPLEMENTS;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:783:19: ( 'implements' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:783:21: 'implements'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:785:19: ( 'implements' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:785:21: 'implements'
 			{
 			match("implements"); 
 
@@ -1372,8 +1373,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = IN;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:784:19: ( 'in' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:784:21: 'in'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:786:19: ( 'in' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:786:21: 'in'
 			{
 			match("in"); 
 
@@ -1393,8 +1394,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = INDEX;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:785:19: ( 'index' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:785:21: 'index'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:787:19: ( 'index' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:787:21: 'index'
 			{
 			match("index"); 
 
@@ -1414,8 +1415,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = INHERITED;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:786:19: ( 'inherited' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:786:21: 'inherited'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:788:19: ( 'inherited' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:788:21: 'inherited'
 			{
 			match("inherited"); 
 
@@ -1435,8 +1436,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = INITIALIZATION;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:787:19: ( 'initialization' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:787:21: 'initialization'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:789:19: ( 'initialization' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:789:21: 'initialization'
 			{
 			match("initialization"); 
 
@@ -1456,8 +1457,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = INLINE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:788:19: ( 'inline' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:788:21: 'inline'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:790:19: ( 'inline' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:790:21: 'inline'
 			{
 			match("inline"); 
 
@@ -1477,8 +1478,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = INTERFACE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:789:19: ( 'interface' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:789:21: 'interface'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:791:19: ( 'interface' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:791:21: 'interface'
 			{
 			match("interface"); 
 
@@ -1498,8 +1499,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = IS;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:790:19: ( 'is' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:790:21: 'is'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:792:19: ( 'is' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:792:21: 'is'
 			{
 			match("is"); 
 
@@ -1519,8 +1520,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = LABEL;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:791:19: ( 'label' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:791:21: 'label'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:793:19: ( 'label' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:793:21: 'label'
 			{
 			match("label"); 
 
@@ -1540,8 +1541,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = LIBRARY;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:792:19: ( 'library' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:792:21: 'library'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:794:19: ( 'library' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:794:21: 'library'
 			{
 			match("library"); 
 
@@ -1561,8 +1562,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = LOCAL;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:793:19: ( 'local' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:793:21: 'local'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:795:19: ( 'local' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:795:21: 'local'
 			{
 			match("local"); 
 
@@ -1582,8 +1583,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = MESSAGE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:794:19: ( 'message' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:794:21: 'message'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:796:19: ( 'message' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:796:21: 'message'
 			{
 			match("message"); 
 
@@ -1603,8 +1604,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = MOD;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:795:19: ( 'mod' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:795:21: 'mod'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:797:19: ( 'mod' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:797:21: 'mod'
 			{
 			match("mod"); 
 
@@ -1624,8 +1625,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = NAME;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:796:19: ( 'name' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:796:21: 'name'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:798:19: ( 'name' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:798:21: 'name'
 			{
 			match("name"); 
 
@@ -1645,8 +1646,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = NEAR;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:797:19: ( 'near' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:797:21: 'near'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:799:19: ( 'near' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:799:21: 'near'
 			{
 			match("near"); 
 
@@ -1666,8 +1667,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = NIL;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:798:19: ( 'nil' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:798:21: 'nil'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:800:19: ( 'nil' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:800:21: 'nil'
 			{
 			match("nil"); 
 
@@ -1687,8 +1688,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = NODEFAULT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:799:19: ( 'nodefault' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:799:21: 'nodefault'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:801:19: ( 'nodefault' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:801:21: 'nodefault'
 			{
 			match("nodefault"); 
 
@@ -1708,8 +1709,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = NOT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:800:19: ( 'not' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:800:21: 'not'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:802:19: ( 'not' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:802:21: 'not'
 			{
 			match("not"); 
 
@@ -1729,8 +1730,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = OBJECT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:801:19: ( 'object' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:801:21: 'object'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:803:19: ( 'object' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:803:21: 'object'
 			{
 			match("object"); 
 
@@ -1750,8 +1751,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = OF;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:802:19: ( 'of' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:802:21: 'of'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:804:19: ( 'of' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:804:21: 'of'
 			{
 			match("of"); 
 
@@ -1771,8 +1772,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = ON;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:803:19: ( 'on' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:803:21: 'on'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:805:19: ( 'on' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:805:21: 'on'
 			{
 			match("on"); 
 
@@ -1792,8 +1793,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = OPERATOR;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:804:19: ( 'operator' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:804:21: 'operator'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:806:19: ( 'operator' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:806:21: 'operator'
 			{
 			match("operator"); 
 
@@ -1813,8 +1814,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = OR;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:805:19: ( 'or' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:805:21: 'or'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:807:19: ( 'or' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:807:21: 'or'
 			{
 			match("or"); 
 
@@ -1834,8 +1835,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = OUT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:806:19: ( 'out' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:806:21: 'out'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:808:19: ( 'out' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:808:21: 'out'
 			{
 			match("out"); 
 
@@ -1855,8 +1856,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = OVERLOAD;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:807:19: ( 'overload' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:807:21: 'overload'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:809:19: ( 'overload' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:809:21: 'overload'
 			{
 			match("overload"); 
 
@@ -1876,8 +1877,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = OVERRIDE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:808:19: ( 'override' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:808:21: 'override'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:810:19: ( 'override' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:810:21: 'override'
 			{
 			match("override"); 
 
@@ -1897,8 +1898,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = PACKAGE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:809:19: ( 'package' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:809:21: 'package'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:811:19: ( 'package' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:811:21: 'package'
 			{
 			match("package"); 
 
@@ -1918,8 +1919,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = PACKED;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:810:19: ( 'packed' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:810:21: 'packed'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:812:19: ( 'packed' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:812:21: 'packed'
 			{
 			match("packed"); 
 
@@ -1939,8 +1940,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = PASCAL;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:811:19: ( 'pascal' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:811:21: 'pascal'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:813:19: ( 'pascal' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:813:21: 'pascal'
 			{
 			match("pascal"); 
 
@@ -1960,8 +1961,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = PLATFORM;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:812:19: ( 'platform' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:812:21: 'platform'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:814:19: ( 'platform' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:814:21: 'platform'
 			{
 			match("platform"); 
 
@@ -1981,8 +1982,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = POINTER;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:813:19: ( 'pointer' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:813:21: 'pointer'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:815:19: ( 'pointer' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:815:21: 'pointer'
 			{
 			match("pointer"); 
 
@@ -2002,8 +2003,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = PRIVATE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:814:19: ( 'private' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:814:21: 'private'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:816:19: ( 'private' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:816:21: 'private'
 			{
 			match("private"); 
 
@@ -2023,8 +2024,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = PROCEDURE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:815:19: ( 'procedure' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:815:21: 'procedure'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:817:19: ( 'procedure' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:817:21: 'procedure'
 			{
 			match("procedure"); 
 
@@ -2044,8 +2045,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = PROGRAM;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:816:19: ( 'program' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:816:21: 'program'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:818:19: ( 'program' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:818:21: 'program'
 			{
 			match("program"); 
 
@@ -2065,8 +2066,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = PROPERTY;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:817:19: ( 'property' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:817:21: 'property'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:819:19: ( 'property' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:819:21: 'property'
 			{
 			match("property"); 
 
@@ -2086,8 +2087,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = PROTECTED;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:818:19: ( 'protected' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:818:21: 'protected'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:820:19: ( 'protected' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:820:21: 'protected'
 			{
 			match("protected"); 
 
@@ -2107,8 +2108,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = PUBLIC;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:819:19: ( 'public' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:819:21: 'public'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:821:19: ( 'public' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:821:21: 'public'
 			{
 			match("public"); 
 
@@ -2128,8 +2129,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = PUBLISHED;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:820:19: ( 'published' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:820:21: 'published'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:822:19: ( 'published' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:822:21: 'published'
 			{
 			match("published"); 
 
@@ -2149,8 +2150,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = RAISE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:821:19: ( 'raise' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:821:21: 'raise'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:823:19: ( 'raise' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:823:21: 'raise'
 			{
 			match("raise"); 
 
@@ -2170,8 +2171,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = READ;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:822:19: ( 'read' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:822:21: 'read'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:824:19: ( 'read' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:824:21: 'read'
 			{
 			match("read"); 
 
@@ -2191,8 +2192,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = READONLY;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:823:19: ( 'readonly' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:823:21: 'readonly'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:825:19: ( 'readonly' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:825:21: 'readonly'
 			{
 			match("readonly"); 
 
@@ -2212,8 +2213,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = RECORD;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:824:19: ( 'record' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:824:21: 'record'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:826:19: ( 'record' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:826:21: 'record'
 			{
 			match("record"); 
 
@@ -2233,8 +2234,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = REFERENCE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:825:19: ( 'reference' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:825:21: 'reference'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:827:19: ( 'reference' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:827:21: 'reference'
 			{
 			match("reference"); 
 
@@ -2254,8 +2255,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = REGISTER;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:826:19: ( 'register' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:826:21: 'register'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:828:19: ( 'register' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:828:21: 'register'
 			{
 			match("register"); 
 
@@ -2275,8 +2276,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = REINTRODUCE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:827:19: ( 'reintroduce' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:827:21: 'reintroduce'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:829:19: ( 'reintroduce' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:829:21: 'reintroduce'
 			{
 			match("reintroduce"); 
 
@@ -2296,8 +2297,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = REMOVE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:828:19: ( 'remove' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:828:21: 'remove'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:830:19: ( 'remove' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:830:21: 'remove'
 			{
 			match("remove"); 
 
@@ -2317,8 +2318,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = REPEAT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:829:19: ( 'repeat' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:829:21: 'repeat'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:831:19: ( 'repeat' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:831:21: 'repeat'
 			{
 			match("repeat"); 
 
@@ -2338,8 +2339,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = REQUIRES;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:830:19: ( 'requires' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:830:21: 'requires'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:832:19: ( 'requires' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:832:21: 'requires'
 			{
 			match("requires"); 
 
@@ -2359,8 +2360,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = RESIDENT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:831:19: ( 'resident' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:831:21: 'resident'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:833:19: ( 'resident' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:833:21: 'resident'
 			{
 			match("resident"); 
 
@@ -2380,8 +2381,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = RESOURCESTRING;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:832:19: ( 'resourcestring' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:832:21: 'resourcestring'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:834:19: ( 'resourcestring' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:834:21: 'resourcestring'
 			{
 			match("resourcestring"); 
 
@@ -2401,8 +2402,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = SAFECALL;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:833:19: ( 'safecall' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:833:21: 'safecall'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:835:19: ( 'safecall' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:835:21: 'safecall'
 			{
 			match("safecall"); 
 
@@ -2422,8 +2423,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = SEALED;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:834:19: ( 'sealed' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:834:21: 'sealed'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:836:19: ( 'sealed' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:836:21: 'sealed'
 			{
 			match("sealed"); 
 
@@ -2443,8 +2444,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = SET;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:835:19: ( 'set' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:835:21: 'set'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:837:19: ( 'set' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:837:21: 'set'
 			{
 			match("set"); 
 
@@ -2464,8 +2465,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = SHL;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:836:19: ( 'shl' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:836:21: 'shl'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:838:19: ( 'shl' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:838:21: 'shl'
 			{
 			match("shl"); 
 
@@ -2485,8 +2486,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = SHR;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:837:19: ( 'shr' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:837:21: 'shr'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:839:19: ( 'shr' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:839:21: 'shr'
 			{
 			match("shr"); 
 
@@ -2506,8 +2507,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = STATIC;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:838:19: ( 'static' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:838:21: 'static'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:840:19: ( 'static' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:840:21: 'static'
 			{
 			match("static"); 
 
@@ -2527,8 +2528,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = STDCALL;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:839:19: ( 'stdcall' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:839:21: 'stdcall'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:841:19: ( 'stdcall' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:841:21: 'stdcall'
 			{
 			match("stdcall"); 
 
@@ -2548,8 +2549,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = STORED;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:840:19: ( 'stored' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:840:21: 'stored'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:842:19: ( 'stored' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:842:21: 'stored'
 			{
 			match("stored"); 
 
@@ -2569,8 +2570,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = STRICT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:841:19: ( 'strict' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:841:21: 'strict'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:843:19: ( 'strict' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:843:21: 'strict'
 			{
 			match("strict"); 
 
@@ -2590,8 +2591,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = STRING;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:842:19: ( 'string' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:842:21: 'string'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:844:19: ( 'string' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:844:21: 'string'
 			{
 			match("string"); 
 
@@ -2611,8 +2612,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = THEN;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:843:19: ( 'then' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:843:21: 'then'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:845:19: ( 'then' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:845:21: 'then'
 			{
 			match("then"); 
 
@@ -2632,8 +2633,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = THREADVAR;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:844:19: ( 'threadvar' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:844:21: 'threadvar'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:846:19: ( 'threadvar' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:846:21: 'threadvar'
 			{
 			match("threadvar"); 
 
@@ -2653,8 +2654,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TO;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:845:19: ( 'to' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:845:21: 'to'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:847:19: ( 'to' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:847:21: 'to'
 			{
 			match("to"); 
 
@@ -2674,8 +2675,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TRY;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:846:19: ( 'try' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:846:21: 'try'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:848:19: ( 'try' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:848:21: 'try'
 			{
 			match("try"); 
 
@@ -2695,8 +2696,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TYPE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:847:19: ( 'type' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:847:21: 'type'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:849:19: ( 'type' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:849:21: 'type'
 			{
 			match("type"); 
 
@@ -2716,8 +2717,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = UNIT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:848:19: ( 'unit' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:848:21: 'unit'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:850:19: ( 'unit' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:850:21: 'unit'
 			{
 			match("unit"); 
 
@@ -2737,8 +2738,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = UNSAFE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:849:19: ( 'unsafe' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:849:21: 'unsafe'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:851:19: ( 'unsafe' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:851:21: 'unsafe'
 			{
 			match("unsafe"); 
 
@@ -2758,8 +2759,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = UNTIL;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:850:19: ( 'until' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:850:21: 'until'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:852:19: ( 'until' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:852:21: 'until'
 			{
 			match("until"); 
 
@@ -2779,8 +2780,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = USES;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:851:19: ( 'uses' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:851:21: 'uses'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:853:19: ( 'uses' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:853:21: 'uses'
 			{
 			match("uses"); 
 
@@ -2800,8 +2801,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = VAR;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:852:19: ( 'var' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:852:21: 'var'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:854:19: ( 'var' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:854:21: 'var'
 			{
 			match("var"); 
 
@@ -2821,8 +2822,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = VARARGS;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:853:19: ( 'varargs' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:853:21: 'varargs'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:855:19: ( 'varargs' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:855:21: 'varargs'
 			{
 			match("varargs"); 
 
@@ -2842,8 +2843,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = VARIANT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:854:19: ( 'variant' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:854:21: 'variant'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:856:19: ( 'variant' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:856:21: 'variant'
 			{
 			match("variant"); 
 
@@ -2863,8 +2864,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = VIRTUAL;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:855:19: ( 'virtual' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:855:21: 'virtual'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:857:19: ( 'virtual' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:857:21: 'virtual'
 			{
 			match("virtual"); 
 
@@ -2884,8 +2885,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = WHILE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:856:19: ( 'while' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:856:21: 'while'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:858:19: ( 'while' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:858:21: 'while'
 			{
 			match("while"); 
 
@@ -2905,8 +2906,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = WITH;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:857:19: ( 'with' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:857:21: 'with'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:859:19: ( 'with' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:859:21: 'with'
 			{
 			match("with"); 
 
@@ -2926,8 +2927,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = WRITE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:858:19: ( 'write' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:858:21: 'write'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:860:19: ( 'write' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:860:21: 'write'
 			{
 			match("write"); 
 
@@ -2947,8 +2948,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = WRITEONLY;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:859:19: ( 'writeonly' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:859:21: 'writeonly'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:861:19: ( 'writeonly' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:861:21: 'writeonly'
 			{
 			match("writeonly"); 
 
@@ -2968,8 +2969,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = XOR;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:860:19: ( 'xor' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:860:21: 'xor'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:862:19: ( 'xor' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:862:21: 'xor'
 			{
 			match("xor"); 
 
@@ -2989,8 +2990,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = FALSE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:861:19: ( 'false' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:861:21: 'false'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:863:19: ( 'false' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:863:21: 'false'
 			{
 			match("false"); 
 
@@ -3010,8 +3011,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TRUE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:862:19: ( 'true' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:862:21: 'true'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:864:19: ( 'true' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:864:21: 'true'
 			{
 			match("true"); 
 
@@ -3031,8 +3032,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = PLUS;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:867:19: ( '+' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:867:21: '+'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:869:19: ( '+' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:869:21: '+'
 			{
 			match('+'); 
 			}
@@ -3051,8 +3052,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = MINUS;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:868:19: ( '-' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:868:21: '-'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:870:19: ( '-' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:870:21: '-'
 			{
 			match('-'); 
 			}
@@ -3071,8 +3072,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = STAR;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:869:19: ( '*' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:869:21: '*'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:871:19: ( '*' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:871:21: '*'
 			{
 			match('*'); 
 			}
@@ -3091,8 +3092,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = SLASH;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:870:19: ( '/' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:870:21: '/'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:872:19: ( '/' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:872:21: '/'
 			{
 			match('/'); 
 			}
@@ -3111,8 +3112,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = ASSIGN;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:871:19: ( ':=' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:871:21: ':='
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:873:19: ( ':=' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:873:21: ':='
 			{
 			match(":="); 
 
@@ -3132,8 +3133,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = COMMA;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:872:19: ( ',' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:872:21: ','
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:874:19: ( ',' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:874:21: ','
 			{
 			match(','); 
 			}
@@ -3152,8 +3153,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = SEMI;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:873:19: ( ';' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:873:21: ';'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:875:19: ( ';' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:875:21: ';'
 			{
 			match(';'); 
 			}
@@ -3172,8 +3173,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = COLON;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:874:19: ( ':' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:874:21: ':'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:876:19: ( ':' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:876:21: ':'
 			{
 			match(':'); 
 			}
@@ -3192,8 +3193,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = EQUAL;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:875:19: ( '=' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:875:21: '='
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:877:19: ( '=' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:877:21: '='
 			{
 			match('='); 
 			}
@@ -3212,8 +3213,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = NOT_EQUAL;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:876:19: ( '<>' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:876:21: '<>'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:878:19: ( '<>' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:878:21: '<>'
 			{
 			match("<>"); 
 
@@ -3233,8 +3234,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = LT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:877:19: ( '<' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:877:21: '<'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:879:19: ( '<' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:879:21: '<'
 			{
 			match('<'); 
 			}
@@ -3253,8 +3254,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = LE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:878:19: ( '<=' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:878:21: '<='
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:880:19: ( '<=' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:880:21: '<='
 			{
 			match("<="); 
 
@@ -3274,8 +3275,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = GE;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:879:19: ( '>=' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:879:21: '>='
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:881:19: ( '>=' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:881:21: '>='
 			{
 			match(">="); 
 
@@ -3295,8 +3296,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = GT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:880:19: ( '>' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:880:21: '>'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:882:19: ( '>' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:882:21: '>'
 			{
 			match('>'); 
 			}
@@ -3315,8 +3316,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = LPAREN;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:881:19: ( '(' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:881:21: '('
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:883:19: ( '(' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:883:21: '('
 			{
 			match('('); 
 			}
@@ -3335,8 +3336,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = RPAREN;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:882:19: ( ')' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:882:21: ')'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:884:19: ( ')' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:884:21: ')'
 			{
 			match(')'); 
 			}
@@ -3355,8 +3356,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = LBRACK;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:883:19: ( '[' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:883:21: '['
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:885:19: ( '[' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:885:21: '['
 			{
 			match('['); 
 			}
@@ -3375,8 +3376,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = LBRACK2;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:884:19: ( '(.' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:884:21: '(.'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:886:19: ( '(.' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:886:21: '(.'
 			{
 			match("(."); 
 
@@ -3396,8 +3397,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = RBRACK;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:885:19: ( ']' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:885:21: ']'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:887:19: ( ']' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:887:21: ']'
 			{
 			match(']'); 
 			}
@@ -3416,8 +3417,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = RBRACK2;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:886:19: ( '.)' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:886:21: '.)'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:888:19: ( '.)' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:888:21: '.)'
 			{
 			match(".)"); 
 
@@ -3437,8 +3438,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = POINTER2;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:887:19: ( '^' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:887:21: '^'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:889:19: ( '^' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:889:21: '^'
 			{
 			match('^'); 
 			}
@@ -3457,8 +3458,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = AT2;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:888:19: ( '@' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:888:21: '@'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:890:19: ( '@' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:890:21: '@'
 			{
 			match('@'); 
 			}
@@ -3477,8 +3478,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = DOT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:889:19: ( '.' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:889:21: '.'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:891:19: ( '.' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:891:21: '.'
 			{
 			match('.'); 
 			}
@@ -3497,8 +3498,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = DOTDOT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:890:19: ( '..' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:890:21: '..'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:892:19: ( '..' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:892:21: '..'
 			{
 			match(".."); 
 
@@ -3518,8 +3519,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = LCURLY;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:891:19: ( '{' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:891:21: '{'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:893:19: ( '{' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:893:21: '{'
 			{
 			match('{'); 
 			}
@@ -3538,8 +3539,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = RCURLY;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:892:19: ( '}' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:892:21: '}'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:894:19: ( '}' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:894:21: '}'
 			{
 			match('}'); 
 			}
@@ -3558,8 +3559,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = AMPERSAND;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:893:19: ( '&' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:893:21: '&'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:895:19: ( '&' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:895:21: '&'
 			{
 			match('&'); 
 			}
@@ -3578,8 +3579,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkGlobalFunction;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:898:25: ( 'FUNCTION_GLOBAL' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:898:27: 'FUNCTION_GLOBAL'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:900:25: ( 'FUNCTION_GLOBAL' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:900:27: 'FUNCTION_GLOBAL'
 			{
 			match("FUNCTION_GLOBAL"); 
 
@@ -3599,8 +3600,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkFunctionName;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:900:25: ( 'FUNCTION_NAME' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:900:27: 'FUNCTION_NAME'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:902:25: ( 'FUNCTION_NAME' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:902:27: 'FUNCTION_NAME'
 			{
 			match("FUNCTION_NAME"); 
 
@@ -3620,8 +3621,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkConstantName;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:902:25: ( 'CONSTANT_NAME' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:902:27: 'CONSTANT_NAME'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:904:25: ( 'CONSTANT_NAME' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:904:27: 'CONSTANT_NAME'
 			{
 			match("CONSTANT_NAME"); 
 
@@ -3641,8 +3642,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkFunctionArgs;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:904:25: ( 'FUNCTION_ARGS' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:904:27: 'FUNCTION_ARGS'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:906:25: ( 'FUNCTION_ARGS' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:906:27: 'FUNCTION_ARGS'
 			{
 			match("FUNCTION_ARGS"); 
 
@@ -3662,8 +3663,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkFunctionBody;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:906:25: ( 'FUNCTION_BODY' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:906:27: 'FUNCTION_BODY'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:908:25: ( 'FUNCTION_BODY' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:908:27: 'FUNCTION_BODY'
 			{
 			match("FUNCTION_BODY"); 
 
@@ -3683,8 +3684,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkFunctionReturn;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:908:25: ( 'FUNCTION_RETURN' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:908:27: 'FUNCTION_RETURN'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:910:25: ( 'FUNCTION_RETURN' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:910:27: 'FUNCTION_RETURN'
 			{
 			match("FUNCTION_RETURN"); 
 
@@ -3704,8 +3705,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkCustomAttribute;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:910:25: ( 'CUSTOM_ATTRIBUTE' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:910:27: 'CUSTOM_ATTRIBUTE'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:912:25: ( 'CUSTOM_ATTRIBUTE' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:912:27: 'CUSTOM_ATTRIBUTE'
 			{
 			match("CUSTOM_ATTRIBUTE"); 
 
@@ -3725,8 +3726,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkCustomAttributeArgs;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:912:25: ( 'CUSTOM_ATTRIBUTE_ARGS' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:912:27: 'CUSTOM_ATTRIBUTE_ARGS'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:914:25: ( 'CUSTOM_ATTRIBUTE_ARGS' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:914:27: 'CUSTOM_ATTRIBUTE_ARGS'
 			{
 			match("CUSTOM_ATTRIBUTE_ARGS"); 
 
@@ -3746,8 +3747,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkNewType;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:914:25: ( 'NEW_TYPE' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:914:27: 'NEW_TYPE'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:916:25: ( 'NEW_TYPE' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:916:27: 'NEW_TYPE'
 			{
 			match("NEW_TYPE"); 
 
@@ -3767,8 +3768,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkClass;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:916:25: ( 'CLASS' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:916:27: 'CLASS'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:918:25: ( 'CLASS' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:918:27: 'CLASS'
 			{
 			match("CLASS"); 
 
@@ -3788,8 +3789,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkRecord;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:918:25: ( 'RECORD_TYPE' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:918:27: 'RECORD_TYPE'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:920:25: ( 'RECORD_TYPE' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:920:27: 'RECORD_TYPE'
 			{
 			match("RECORD_TYPE"); 
 
@@ -3809,8 +3810,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkRecordHelper;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:920:25: ( 'RECORD_HELPER' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:920:27: 'RECORD_HELPER'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:922:25: ( 'RECORD_HELPER' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:922:27: 'RECORD_HELPER'
 			{
 			match("RECORD_HELPER"); 
 
@@ -3830,8 +3831,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkInterface;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:922:25: ( 'INTERFACE_TYPE' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:922:27: 'INTERFACE_TYPE'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:924:25: ( 'INTERFACE_TYPE' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:924:27: 'INTERFACE_TYPE'
 			{
 			match("INTERFACE_TYPE"); 
 
@@ -3851,8 +3852,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkObject;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:924:25: ( 'OBJECT_TYPE' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:924:27: 'OBJECT_TYPE'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:926:25: ( 'OBJECT_TYPE' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:926:27: 'OBJECT_TYPE'
 			{
 			match("OBJECT_TYPE"); 
 
@@ -3872,8 +3873,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkClassOfType;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:926:25: ( 'CLASS_OF_TYPE' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:926:27: 'CLASS_OF_TYPE'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:928:25: ( 'CLASS_OF_TYPE' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:928:27: 'CLASS_OF_TYPE'
 			{
 			match("CLASS_OF_TYPE"); 
 
@@ -3893,8 +3894,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkVariableType;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:928:25: ( 'VARIABLE_TYPE' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:928:27: 'VARIABLE_TYPE'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:930:25: ( 'VARIABLE_TYPE' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:930:27: 'VARIABLE_TYPE'
 			{
 			match("VARIABLE_TYPE"); 
 
@@ -3914,8 +3915,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkVariableIdents;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:930:25: ( 'VARIABLE_IDENTS' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:930:27: 'VARIABLE_IDENTS'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:932:25: ( 'VARIABLE_IDENTS' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:932:27: 'VARIABLE_IDENTS'
 			{
 			match("VARIABLE_IDENTS"); 
 
@@ -3935,8 +3936,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkVariableParam;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:932:25: ( 'VARIABLE_PARAM' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:932:27: 'VARIABLE_PARAM'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:934:25: ( 'VARIABLE_PARAM' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:934:27: 'VARIABLE_PARAM'
 			{
 			match("VARIABLE_PARAM"); 
 
@@ -3956,8 +3957,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkGuid;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:934:25: ( 'INTERFACE_GUID' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:934:27: 'INTERFACE_GUID'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:936:25: ( 'INTERFACE_GUID' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:936:27: 'INTERFACE_GUID'
 			{
 			match("INTERFACE_GUID"); 
 
@@ -3977,8 +3978,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkClassParents;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:936:25: ( 'CLASS_PARENTS' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:936:27: 'CLASS_PARENTS'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:938:25: ( 'CLASS_PARENTS' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:938:27: 'CLASS_PARENTS'
 			{
 			match("CLASS_PARENTS"); 
 
@@ -3998,8 +3999,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkClassField;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:938:25: ( 'CLASS_FIELD' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:938:27: 'CLASS_FIELD'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:940:25: ( 'CLASS_FIELD' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:940:27: 'CLASS_FIELD'
 			{
 			match("CLASS_FIELD"); 
 
@@ -4019,8 +4020,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkAnonymousExpression;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:940:25: ( 'ANONYMOUS_EXPRESSION' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:940:27: 'ANONYMOUS_EXPRESSION'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:942:25: ( 'ANONYMOUS_EXPRESSION' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:942:27: 'ANONYMOUS_EXPRESSION'
 			{
 			match("ANONYMOUS_EXPRESSION"); 
 
@@ -4035,15 +4036,36 @@ public class DelphiLexer extends Lexer {
 	}
 	// $ANTLR end "TkAnonymousExpression"
 
+	// $ANTLR start "TkAssemblerInstructions"
+	public final void mTkAssemblerInstructions() throws RecognitionException {
+		try {
+			int _type = TkAssemblerInstructions;
+			int _channel = DEFAULT_TOKEN_CHANNEL;
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:944:25: ( 'ASSEMBLER_INSTRUCTIONS' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:944:27: 'ASSEMBLER_INSTRUCTIONS'
+			{
+			match("ASSEMBLER_INSTRUCTIONS"); 
+
+			}
+
+			state.type = _type;
+			state.channel = _channel;
+		}
+		finally {
+			// do for sure before leaving
+		}
+	}
+	// $ANTLR end "TkAssemblerInstructions"
+
 	// $ANTLR start "TkIdentifier"
 	public final void mTkIdentifier() throws RecognitionException {
 		try {
 			int _type = TkIdentifier;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:942:25: ( ( Alpha | '_' ) ( Alpha | Digit | '_' )* )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:942:27: ( Alpha | '_' ) ( Alpha | Digit | '_' )*
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:946:25: ( ( Alpha | '_' ) ( Alpha | Digit | '_' )* )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:946:27: ( Alpha | '_' ) ( Alpha | Digit | '_' )*
 			{
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:942:27: ( Alpha | '_' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:946:27: ( Alpha | '_' )
 			int alt1=2;
 			int LA1_0 = input.LA(1);
 			if ( ((LA1_0 >= 'A' && LA1_0 <= 'Z')||(LA1_0 >= 'a' && LA1_0 <= 'z')||(LA1_0 >= '\u0080' && LA1_0 <= '\uFFFE')) ) {
@@ -4061,14 +4083,14 @@ public class DelphiLexer extends Lexer {
 
 			switch (alt1) {
 				case 1 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:942:28: Alpha
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:946:28: Alpha
 					{
 					mAlpha(); 
 
 					}
 					break;
 				case 2 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:942:36: '_'
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:946:36: '_'
 					{
 					match('_'); 
 					}
@@ -4076,7 +4098,7 @@ public class DelphiLexer extends Lexer {
 
 			}
 
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:942:41: ( Alpha | Digit | '_' )*
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:946:41: ( Alpha | Digit | '_' )*
 			loop2:
 			while (true) {
 				int alt2=4;
@@ -4093,21 +4115,21 @@ public class DelphiLexer extends Lexer {
 
 				switch (alt2) {
 				case 1 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:942:42: Alpha
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:946:42: Alpha
 					{
 					mAlpha(); 
 
 					}
 					break;
 				case 2 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:942:50: Digit
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:946:50: Digit
 					{
 					mDigit(); 
 
 					}
 					break;
 				case 3 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:942:58: '_'
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:946:58: '_'
 					{
 					match('_'); 
 					}
@@ -4134,8 +4156,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkIntNum;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:944:25: ( Digitseq )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:944:27: Digitseq
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:948:25: ( Digitseq )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:948:27: Digitseq
 			{
 			mDigitseq(); 
 
@@ -4155,12 +4177,12 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkRealNum;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:947:25: ( Digitseq ({...}? => '.' Digitseq )? ( ( 'e' | 'E' ) ( '+' | '-' )? Digitseq )? )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:947:27: Digitseq ({...}? => '.' Digitseq )? ( ( 'e' | 'E' ) ( '+' | '-' )? Digitseq )?
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:951:25: ( Digitseq ({...}? => '.' Digitseq )? ( ( 'e' | 'E' ) ( '+' | '-' )? Digitseq )? )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:951:27: Digitseq ({...}? => '.' Digitseq )? ( ( 'e' | 'E' ) ( '+' | '-' )? Digitseq )?
 			{
 			mDigitseq(); 
 
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:947:36: ({...}? => '.' Digitseq )?
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:951:36: ({...}? => '.' Digitseq )?
 			int alt3=2;
 			int LA3_0 = input.LA(1);
 			if ( (LA3_0=='.') && (( input.LA(2) != '.' ))) {
@@ -4168,7 +4190,7 @@ public class DelphiLexer extends Lexer {
 			}
 			switch (alt3) {
 				case 1 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:947:37: {...}? => '.' Digitseq
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:951:37: {...}? => '.' Digitseq
 					{
 					if ( !(( input.LA(2) != '.' )) ) {
 						throw new FailedPredicateException(input, "TkRealNum", " input.LA(2) != '.' ");
@@ -4181,7 +4203,7 @@ public class DelphiLexer extends Lexer {
 
 			}
 
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:947:79: ( ( 'e' | 'E' ) ( '+' | '-' )? Digitseq )?
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:951:79: ( ( 'e' | 'E' ) ( '+' | '-' )? Digitseq )?
 			int alt5=2;
 			int LA5_0 = input.LA(1);
 			if ( (LA5_0=='E'||LA5_0=='e') ) {
@@ -4189,7 +4211,7 @@ public class DelphiLexer extends Lexer {
 			}
 			switch (alt5) {
 				case 1 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:947:80: ( 'e' | 'E' ) ( '+' | '-' )? Digitseq
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:951:80: ( 'e' | 'E' ) ( '+' | '-' )? Digitseq
 					{
 					if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
 						input.consume();
@@ -4199,7 +4221,7 @@ public class DelphiLexer extends Lexer {
 						recover(mse);
 						throw mse;
 					}
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:947:90: ( '+' | '-' )?
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:951:90: ( '+' | '-' )?
 					int alt4=2;
 					int LA4_0 = input.LA(1);
 					if ( (LA4_0=='+'||LA4_0=='-') ) {
@@ -4245,8 +4267,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkHexNum;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:949:25: ( '$' Hexdigitseq )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:949:27: '$' Hexdigitseq
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:953:25: ( '$' Hexdigitseq )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:953:27: '$' Hexdigitseq
 			{
 			match('$'); 
 			mHexdigitseq(); 
@@ -4267,8 +4289,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkAsmHexNum;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:951:25: ({...}? => Hexdigitseq ( 'h' | 'H' ) )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:951:27: {...}? => Hexdigitseq ( 'h' | 'H' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:955:25: ({...}? => Hexdigitseq ( 'h' | 'H' ) )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:955:27: {...}? => Hexdigitseq ( 'h' | 'H' )
 			{
 			if ( !(( asmMode )) ) {
 				throw new FailedPredicateException(input, "TkAsmHexNum", " asmMode ");
@@ -4299,8 +4321,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = TkAsmHexLabel;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:953:25: ({...}? => Hexdigitseq ':' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:953:27: {...}? => Hexdigitseq ':'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:957:25: ({...}? => Hexdigitseq ':' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:957:27: {...}? => Hexdigitseq ':'
 			{
 			if ( !(( asmMode )) ) {
 				throw new FailedPredicateException(input, "TkAsmHexLabel", " asmMode ");
@@ -4324,11 +4346,11 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = QuotedString;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:955:25: ( '\\'' ( '\\'\\'' |~ ( '\\'' ) )* '\\'' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:955:27: '\\'' ( '\\'\\'' |~ ( '\\'' ) )* '\\''
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:959:25: ( '\\'' ( '\\'\\'' |~ ( '\\'' ) )* '\\'' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:959:27: '\\'' ( '\\'\\'' |~ ( '\\'' ) )* '\\''
 			{
 			match('\''); 
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:955:32: ( '\\'\\'' |~ ( '\\'' ) )*
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:959:32: ( '\\'\\'' |~ ( '\\'' ) )*
 			loop6:
 			while (true) {
 				int alt6=3;
@@ -4346,14 +4368,14 @@ public class DelphiLexer extends Lexer {
 
 				switch (alt6) {
 				case 1 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:955:33: '\\'\\''
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:959:33: '\\'\\''
 					{
 					match("''"); 
 
 					}
 					break;
 				case 2 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:955:42: ~ ( '\\'' )
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:959:42: ~ ( '\\'' )
 					{
 					if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '&')||(input.LA(1) >= '(' && input.LA(1) <= '\uFFFF') ) {
 						input.consume();
@@ -4388,12 +4410,12 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = ControlString;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:957:25: ( Controlchar ( Controlchar )* )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:957:27: Controlchar ( Controlchar )*
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:961:25: ( Controlchar ( Controlchar )* )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:961:27: Controlchar ( Controlchar )*
 			{
 			mControlchar(); 
 
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:957:39: ( Controlchar )*
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:961:39: ( Controlchar )*
 			loop7:
 			while (true) {
 				int alt7=2;
@@ -4404,7 +4426,7 @@ public class DelphiLexer extends Lexer {
 
 				switch (alt7) {
 				case 1 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:957:40: Controlchar
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:961:40: Controlchar
 					{
 					mControlchar(); 
 
@@ -4430,7 +4452,7 @@ public class DelphiLexer extends Lexer {
 	// $ANTLR start "Controlchar"
 	public final void mControlchar() throws RecognitionException {
 		try {
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:965:25: ( '#' Digitseq | '#' '$' Hexdigitseq )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:969:25: ( '#' Digitseq | '#' '$' Hexdigitseq )
 			int alt8=2;
 			int LA8_0 = input.LA(1);
 			if ( (LA8_0=='#') ) {
@@ -4464,7 +4486,7 @@ public class DelphiLexer extends Lexer {
 
 			switch (alt8) {
 				case 1 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:965:27: '#' Digitseq
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:969:27: '#' Digitseq
 					{
 					match('#'); 
 					mDigitseq(); 
@@ -4472,7 +4494,7 @@ public class DelphiLexer extends Lexer {
 					}
 					break;
 				case 2 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:966:27: '#' '$' Hexdigitseq
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:970:27: '#' '$' Hexdigitseq
 					{
 					match('#'); 
 					match('$'); 
@@ -4492,7 +4514,7 @@ public class DelphiLexer extends Lexer {
 	// $ANTLR start "Alpha"
 	public final void mAlpha() throws RecognitionException {
 		try {
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:969:25: ( 'a' .. 'z' | 'A' .. 'Z' | '\\u0080' .. '\\uFFFE' ~ ( '\\uFEFF' ) )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:973:25: ( 'a' .. 'z' | 'A' .. 'Z' | '\\u0080' .. '\\uFFFE' ~ ( '\\uFEFF' ) )
 			int alt9=3;
 			int LA9_0 = input.LA(1);
 			if ( ((LA9_0 >= 'a' && LA9_0 <= 'z')) ) {
@@ -4513,19 +4535,19 @@ public class DelphiLexer extends Lexer {
 
 			switch (alt9) {
 				case 1 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:969:27: 'a' .. 'z'
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:973:27: 'a' .. 'z'
 					{
 					matchRange('a','z'); 
 					}
 					break;
 				case 2 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:970:27: 'A' .. 'Z'
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:974:27: 'A' .. 'Z'
 					{
 					matchRange('A','Z'); 
 					}
 					break;
 				case 3 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:971:27: '\\u0080' .. '\\uFFFE' ~ ( '\\uFEFF' )
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:975:27: '\\u0080' .. '\\uFFFE' ~ ( '\\uFEFF' )
 					{
 					matchRange('\u0080','\uFFFE'); 
 					if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '\uFEFE')||(input.LA(1) >= '\uFF00' && input.LA(1) <= '\uFFFF') ) {
@@ -4550,7 +4572,7 @@ public class DelphiLexer extends Lexer {
 	// $ANTLR start "Digit"
 	public final void mDigit() throws RecognitionException {
 		try {
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:974:25: ( '0' .. '9' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:978:25: ( '0' .. '9' )
 			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:
 			{
 			if ( (input.LA(1) >= '0' && input.LA(1) <= '9') ) {
@@ -4573,12 +4595,12 @@ public class DelphiLexer extends Lexer {
 	// $ANTLR start "Digitseq"
 	public final void mDigitseq() throws RecognitionException {
 		try {
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:977:25: ( Digit ( Digit )* )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:977:27: Digit ( Digit )*
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:981:25: ( Digit ( Digit )* )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:981:27: Digit ( Digit )*
 			{
 			mDigit(); 
 
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:977:33: ( Digit )*
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:981:33: ( Digit )*
 			loop10:
 			while (true) {
 				int alt10=2;
@@ -4619,7 +4641,7 @@ public class DelphiLexer extends Lexer {
 	// $ANTLR start "Hexdigit"
 	public final void mHexdigit() throws RecognitionException {
 		try {
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:980:25: ( Digit | 'a' .. 'f' | 'A' .. 'F' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:984:25: ( Digit | 'a' .. 'f' | 'A' .. 'F' )
 			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:
 			{
 			if ( (input.LA(1) >= '0' && input.LA(1) <= '9')||(input.LA(1) >= 'A' && input.LA(1) <= 'F')||(input.LA(1) >= 'a' && input.LA(1) <= 'f') ) {
@@ -4642,12 +4664,12 @@ public class DelphiLexer extends Lexer {
 	// $ANTLR start "Hexdigitseq"
 	public final void mHexdigitseq() throws RecognitionException {
 		try {
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:24: ( Hexdigit ( Hexdigit )* )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:26: Hexdigit ( Hexdigit )*
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:987:24: ( Hexdigit ( Hexdigit )* )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:987:26: Hexdigit ( Hexdigit )*
 			{
 			mHexdigit(); 
 
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:35: ( Hexdigit )*
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:987:35: ( Hexdigit )*
 			loop11:
 			while (true) {
 				int alt11=2;
@@ -4690,7 +4712,7 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = COMMENT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:987:25: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '(*' ( options {greedy=false; } : . )* '*)' | '{' ( options {greedy=false; } : . )* '}' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:991:25: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '(*' ( options {greedy=false; } : . )* '*)' | '{' ( options {greedy=false; } : . )* '}' )
 			int alt16=3;
 			switch ( input.LA(1) ) {
 			case '/':
@@ -4715,11 +4737,11 @@ public class DelphiLexer extends Lexer {
 			}
 			switch (alt16) {
 				case 1 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:987:28: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:991:28: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
 					{
 					match("//"); 
 
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:987:33: (~ ( '\\n' | '\\r' ) )*
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:991:33: (~ ( '\\n' | '\\r' ) )*
 					loop12:
 					while (true) {
 						int alt12=2;
@@ -4748,7 +4770,7 @@ public class DelphiLexer extends Lexer {
 						}
 					}
 
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:987:47: ( '\\r' )?
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:991:47: ( '\\r' )?
 					int alt13=2;
 					int LA13_0 = input.LA(1);
 					if ( (LA13_0=='\r') ) {
@@ -4756,7 +4778,7 @@ public class DelphiLexer extends Lexer {
 					}
 					switch (alt13) {
 						case 1 :
-							// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:987:47: '\\r'
+							// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:991:47: '\\r'
 							{
 							match('\r'); 
 							}
@@ -4769,11 +4791,11 @@ public class DelphiLexer extends Lexer {
 					}
 					break;
 				case 2 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:988:28: '(*' ( options {greedy=false; } : . )* '*)'
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:992:28: '(*' ( options {greedy=false; } : . )* '*)'
 					{
 					match("(*"); 
 
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:988:33: ( options {greedy=false; } : . )*
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:992:33: ( options {greedy=false; } : . )*
 					loop14:
 					while (true) {
 						int alt14=2;
@@ -4794,7 +4816,7 @@ public class DelphiLexer extends Lexer {
 
 						switch (alt14) {
 						case 1 :
-							// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:988:61: .
+							// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:992:61: .
 							{
 							matchAny(); 
 							}
@@ -4811,10 +4833,10 @@ public class DelphiLexer extends Lexer {
 					}
 					break;
 				case 3 :
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:989:28: '{' ( options {greedy=false; } : . )* '}'
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:993:28: '{' ( options {greedy=false; } : . )* '}'
 					{
 					match('{'); 
-					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:989:32: ( options {greedy=false; } : . )*
+					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:993:32: ( options {greedy=false; } : . )*
 					loop15:
 					while (true) {
 						int alt15=2;
@@ -4828,7 +4850,7 @@ public class DelphiLexer extends Lexer {
 
 						switch (alt15) {
 						case 1 :
-							// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:989:60: .
+							// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:993:60: .
 							{
 							matchAny(); 
 							}
@@ -4859,10 +4881,10 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = WS;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:991:25: ( ( ' ' | '\\t' | '\\r' | '\\n' | '\\f' )+ )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:991:27: ( ' ' | '\\t' | '\\r' | '\\n' | '\\f' )+
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:995:25: ( ( ' ' | '\\t' | '\\r' | '\\n' | '\\f' )+ )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:995:27: ( ' ' | '\\t' | '\\r' | '\\n' | '\\f' )+
 			{
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:991:27: ( ' ' | '\\t' | '\\r' | '\\n' | '\\f' )+
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:995:27: ( ' ' | '\\t' | '\\r' | '\\n' | '\\f' )+
 			int cnt17=0;
 			loop17:
 			while (true) {
@@ -4912,8 +4934,8 @@ public class DelphiLexer extends Lexer {
 		try {
 			int _type = UnicodeBOM;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:993:25: ( '\\uFEFF' )
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:993:27: '\\uFEFF'
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:997:25: ( '\\uFEFF' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:997:27: '\\uFEFF'
 			{
 			match('\uFEFF'); 
 			_channel=HIDDEN;
@@ -4930,8 +4952,8 @@ public class DelphiLexer extends Lexer {
 
 	@Override
 	public void mTokens() throws RecognitionException {
-		// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:8: ( ABSOLUTE | ABSTRACT | ADD | AND | ANSISTRING | ARRAY | AS | ASM | ASSEMBLER | ASSEMBLY | AT | AUTOMATED | BEGIN | BREAK | CASE | CDECL | CLASS | CONST | CONSTRUCTOR | CONTAINS | CONTINUE | DEFAULT | DEPRECATED | DESTRUCTOR | DISPID | DISPINTERFACE | DIV | DO | DOWNTO | DQ | DW | DYNAMIC | ELSE | END | EXCEPT | EXIT | EXPERIMENTAL | EXPORT | EXPORTS | EXTERNAL | FAR | FILE | FINAL | FINALIZATION | FINALLY | FOR | FORWARD | FUNCTION | GOTO | HELPER | IF | IMPLEMENTATION | IMPLEMENTS | IN | INDEX | INHERITED | INITIALIZATION | INLINE | INTERFACE | IS | LABEL | LIBRARY | LOCAL | MESSAGE | MOD | NAME | NEAR | NIL | NODEFAULT | NOT | OBJECT | OF | ON | OPERATOR | OR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PACKED | PASCAL | PLATFORM | POINTER | PRIVATE | PROCEDURE | PROGRAM | PROPERTY | PROTECTED | PUBLIC | PUBLISHED | RAISE | READ | READONLY | RECORD | REFERENCE | REGISTER | REINTRODUCE | REMOVE | REPEAT | REQUIRES | RESIDENT | RESOURCESTRING | SAFECALL | SEALED | SET | SHL | SHR | STATIC | STDCALL | STORED | STRICT | STRING | THEN | THREADVAR | TO | TRY | TYPE | UNIT | UNSAFE | UNTIL | USES | VAR | VARARGS | VARIANT | VIRTUAL | WHILE | WITH | WRITE | WRITEONLY | XOR | FALSE | TRUE | PLUS | MINUS | STAR | SLASH | ASSIGN | COMMA | SEMI | COLON | EQUAL | NOT_EQUAL | LT | LE | GE | GT | LPAREN | RPAREN | LBRACK | LBRACK2 | RBRACK | RBRACK2 | POINTER2 | AT2 | DOT | DOTDOT | LCURLY | RCURLY | AMPERSAND | TkGlobalFunction | TkFunctionName | TkConstantName | TkFunctionArgs | TkFunctionBody | TkFunctionReturn | TkCustomAttribute | TkCustomAttributeArgs | TkNewType | TkClass | TkRecord | TkRecordHelper | TkInterface | TkObject | TkClassOfType | TkVariableType | TkVariableIdents | TkVariableParam | TkGuid | TkClassParents | TkClassField | TkAnonymousExpression | TkIdentifier | TkIntNum | TkRealNum | TkHexNum | TkAsmHexNum | TkAsmHexLabel | QuotedString | ControlString | COMMENT | WS | UnicodeBOM )
-		int alt18=192;
+		// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:8: ( ABSOLUTE | ABSTRACT | ADD | AND | ANSISTRING | ARRAY | AS | ASM | ASSEMBLER | ASSEMBLY | AT | AUTOMATED | BEGIN | BREAK | CASE | CDECL | CLASS | CONST | CONSTRUCTOR | CONTAINS | CONTINUE | DEFAULT | DEPRECATED | DESTRUCTOR | DISPID | DISPINTERFACE | DIV | DO | DOWNTO | DQ | DW | DYNAMIC | ELSE | END | EXCEPT | EXIT | EXPERIMENTAL | EXPORT | EXPORTS | EXTERNAL | FAR | FILE | FINAL | FINALIZATION | FINALLY | FOR | FORWARD | FUNCTION | GOTO | HELPER | IF | IMPLEMENTATION | IMPLEMENTS | IN | INDEX | INHERITED | INITIALIZATION | INLINE | INTERFACE | IS | LABEL | LIBRARY | LOCAL | MESSAGE | MOD | NAME | NEAR | NIL | NODEFAULT | NOT | OBJECT | OF | ON | OPERATOR | OR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PACKED | PASCAL | PLATFORM | POINTER | PRIVATE | PROCEDURE | PROGRAM | PROPERTY | PROTECTED | PUBLIC | PUBLISHED | RAISE | READ | READONLY | RECORD | REFERENCE | REGISTER | REINTRODUCE | REMOVE | REPEAT | REQUIRES | RESIDENT | RESOURCESTRING | SAFECALL | SEALED | SET | SHL | SHR | STATIC | STDCALL | STORED | STRICT | STRING | THEN | THREADVAR | TO | TRY | TYPE | UNIT | UNSAFE | UNTIL | USES | VAR | VARARGS | VARIANT | VIRTUAL | WHILE | WITH | WRITE | WRITEONLY | XOR | FALSE | TRUE | PLUS | MINUS | STAR | SLASH | ASSIGN | COMMA | SEMI | COLON | EQUAL | NOT_EQUAL | LT | LE | GE | GT | LPAREN | RPAREN | LBRACK | LBRACK2 | RBRACK | RBRACK2 | POINTER2 | AT2 | DOT | DOTDOT | LCURLY | RCURLY | AMPERSAND | TkGlobalFunction | TkFunctionName | TkConstantName | TkFunctionArgs | TkFunctionBody | TkFunctionReturn | TkCustomAttribute | TkCustomAttributeArgs | TkNewType | TkClass | TkRecord | TkRecordHelper | TkInterface | TkObject | TkClassOfType | TkVariableType | TkVariableIdents | TkVariableParam | TkGuid | TkClassParents | TkClassField | TkAnonymousExpression | TkAssemblerInstructions | TkIdentifier | TkIntNum | TkRealNum | TkHexNum | TkAsmHexNum | TkAsmHexLabel | QuotedString | ControlString | COMMENT | WS | UnicodeBOM )
+		int alt18=193;
 		alt18 = dfa18.predict(input);
 		switch (alt18) {
 			case 1 :
@@ -6202,77 +6224,84 @@ public class DelphiLexer extends Lexer {
 				}
 				break;
 			case 182 :
-				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1425: TkIdentifier
+				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1425: TkAssemblerInstructions
+				{
+				mTkAssemblerInstructions(); 
+
+				}
+				break;
+			case 183 :
+				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1449: TkIdentifier
 				{
 				mTkIdentifier(); 
 
 				}
 				break;
-			case 183 :
-				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1438: TkIntNum
+			case 184 :
+				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1462: TkIntNum
 				{
 				mTkIntNum(); 
 
 				}
 				break;
-			case 184 :
-				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1447: TkRealNum
+			case 185 :
+				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1471: TkRealNum
 				{
 				mTkRealNum(); 
 
 				}
 				break;
-			case 185 :
-				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1457: TkHexNum
+			case 186 :
+				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1481: TkHexNum
 				{
 				mTkHexNum(); 
 
 				}
 				break;
-			case 186 :
-				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1466: TkAsmHexNum
+			case 187 :
+				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1490: TkAsmHexNum
 				{
 				mTkAsmHexNum(); 
 
 				}
 				break;
-			case 187 :
-				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1478: TkAsmHexLabel
+			case 188 :
+				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1502: TkAsmHexLabel
 				{
 				mTkAsmHexLabel(); 
 
 				}
 				break;
-			case 188 :
-				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1492: QuotedString
+			case 189 :
+				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1516: QuotedString
 				{
 				mQuotedString(); 
 
 				}
 				break;
-			case 189 :
-				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1505: ControlString
+			case 190 :
+				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1529: ControlString
 				{
 				mControlString(); 
 
 				}
 				break;
-			case 190 :
-				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1519: COMMENT
+			case 191 :
+				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1543: COMMENT
 				{
 				mCOMMENT(); 
 
 				}
 				break;
-			case 191 :
-				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1527: WS
+			case 192 :
+				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1551: WS
 				{
 				mWS(); 
 
 				}
 				break;
-			case 192 :
-				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1530: UnicodeBOM
+			case 193 :
+				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1554: UnicodeBOM
 				{
 				mUnicodeBOM(); 
 
@@ -6286,52 +6315,53 @@ public class DelphiLexer extends Lexer {
 	protected DFA18 dfa18 = new DFA18(this);
 	static final String DFA18_eotS =
 		"\1\uffff\25\62\3\uffff\1\u0088\1\u008a\3\uffff\1\u008d\1\u008f\1\u0091"+
-		"\3\uffff\1\u0094\2\uffff\1\u0095\2\uffff\10\62\1\uffff\1\62\1\u00a0\1"+
-		"\u00a1\4\uffff\4\62\1\u00ae\1\u00af\4\62\1\u00b1\1\u00b2\1\uffff\10\62"+
-		"\1\u00bf\1\u00c0\1\u00c1\12\62\1\u00d1\1\62\1\u00d8\1\u00d9\12\62\1\u00e5"+
-		"\1\u00e6\1\62\1\u00e8\16\62\1\u0107\12\62\17\uffff\12\62\2\uffff\1\u00a1"+
-		"\4\uffff\1\62\1\u0122\1\u0123\2\62\1\u0126\1\62\2\uffff\1\62\2\uffff\12"+
-		"\62\1\u0134\1\62\3\uffff\2\62\1\u0138\4\62\1\u013e\3\62\1\u0143\3\62\1"+
-		"\uffff\6\62\2\uffff\4\62\1\u0151\2\62\1\u0154\1\62\1\u0156\1\62\2\uffff"+
-		"\1\62\1\uffff\1\u0159\24\62\1\u0172\1\u0173\1\u0174\6\62\1\uffff\1\u017b"+
-		"\6\62\1\u0184\4\62\1\u0189\12\62\1\u00a3\2\62\2\uffff\2\62\1\uffff\4\62"+
-		"\1\u019d\10\62\1\uffff\2\62\1\u01a9\1\uffff\1\62\1\u01ab\3\62\1\uffff"+
-		"\1\62\1\u01b0\2\62\1\uffff\1\62\1\u01b4\13\62\1\uffff\1\u01c0\1\u01c1"+
-		"\1\uffff\1\62\1\uffff\2\62\1\uffff\14\62\1\u01d4\13\62\3\uffff\4\62\1"+
-		"\u01e5\1\62\1\uffff\1\u01e7\1\u01e8\1\u01e9\2\62\1\u01ec\2\62\1\uffff"+
-		"\2\62\1\u01f1\1\62\1\uffff\12\62\1\u00a3\3\62\1\u0200\2\62\1\u0203\1\u0204"+
-		"\1\uffff\1\u0205\1\u0206\1\u0208\10\62\1\uffff\1\62\1\uffff\3\62\1\u0216"+
-		"\1\uffff\1\u0219\2\62\1\uffff\2\62\1\u021e\4\62\1\u0223\1\62\1\u0225\1"+
-		"\62\2\uffff\20\62\1\u0238\1\62\1\uffff\20\62\1\uffff\1\62\3\uffff\1\62"+
-		"\1\u024c\1\uffff\3\62\1\u0250\1\uffff\1\u0252\3\62\1\u0257\11\62\1\uffff"+
-		"\2\62\4\uffff\1\62\1\uffff\5\62\1\u0269\1\62\1\u026b\1\62\1\u026d\1\62"+
-		"\1\u0270\1\62\1\uffff\2\62\1\uffff\2\62\1\u0276\1\62\1\uffff\2\62\1\u027a"+
-		"\1\62\1\uffff\1\62\1\uffff\2\62\1\u027f\4\62\1\u0284\1\u0285\7\62\1\u028d"+
-		"\1\62\1\uffff\1\62\1\u0290\3\62\1\u0294\1\u0295\4\62\1\u029a\1\u029b\1"+
-		"\62\1\u029d\1\u029e\1\u029f\1\62\1\u02a1\1\uffff\3\62\1\uffff\1\62\1\uffff"+
-		"\4\62\1\uffff\16\62\1\u02bb\2\62\1\uffff\1\62\1\uffff\1\u02bf\1\uffff"+
-		"\1\62\1\u02c1\1\uffff\2\62\1\u02c4\1\u02c5\1\62\1\uffff\3\62\1\uffff\1"+
-		"\62\1\u02cb\1\u02cc\1\62\1\uffff\3\62\1\u02d1\2\uffff\1\62\1\u02d3\1\u02d4"+
-		"\1\62\1\u02d6\2\62\1\uffff\2\62\1\uffff\3\62\2\uffff\4\62\2\uffff\1\u02e2"+
-		"\3\uffff\1\62\1\uffff\1\u02e4\1\u02e5\1\u02e6\15\62\1\u02f5\1\u02f6\2"+
-		"\62\1\u02f9\2\62\1\u02fc\1\u02fd\1\uffff\3\62\1\uffff\1\62\1\uffff\1\u0302"+
-		"\1\62\2\uffff\1\u0304\4\62\2\uffff\1\62\1\u030a\1\u030b\1\u030c\1\uffff"+
-		"\1\u030d\2\uffff\1\62\1\uffff\1\u030f\2\62\1\u0312\1\62\1\u0314\1\62\1"+
-		"\u0316\1\u0317\1\62\1\u0319\1\uffff\1\62\3\uffff\7\62\1\u0322\6\62\2\uffff"+
-		"\1\62\1\u032a\1\uffff\1\u032b\1\62\2\uffff\4\62\1\uffff\1\62\1\uffff\1"+
-		"\62\1\u0334\1\62\1\u0336\1\u0337\4\uffff\1\u0338\1\uffff\1\u0339\1\u033a"+
-		"\1\uffff\1\u033b\1\uffff\1\62\2\uffff\1\62\1\uffff\1\u033e\1\u033f\6\62"+
-		"\1\uffff\6\62\1\u0352\2\uffff\1\62\1\u0354\1\u0355\4\62\1\u035a\1\uffff"+
-		"\1\62\6\uffff\2\62\2\uffff\22\62\1\uffff\1\u0371\2\uffff\4\62\1\uffff"+
-		"\1\62\1\u0377\12\62\1\u0382\1\u0383\3\62\1\u0387\4\62\1\uffff\1\62\1\u038d"+
-		"\1\u038e\2\62\1\uffff\12\62\2\uffff\3\62\1\uffff\4\62\1\u03a2\2\uffff"+
-		"\4\62\1\u03a7\1\u03a8\1\u03a9\1\62\1\u03ab\1\62\1\u03ad\1\u03ae\1\u03af"+
-		"\2\62\1\u03b2\3\62\1\uffff\1\u03b6\1\u03b7\1\u03b8\1\62\3\uffff\1\62\1"+
-		"\uffff\1\62\3\uffff\1\u03bc\1\u03bd\1\uffff\1\62\1\u03bf\1\62\3\uffff"+
-		"\1\u03c1\1\u03c2\1\62\2\uffff\1\u03c4\1\uffff\1\62\2\uffff\1\u03c7\1\uffff"+
-		"\2\62\1\uffff\6\62\1\u03d0\1\u03d1\2\uffff";
+		"\3\uffff\1\u0094\2\uffff\1\u0095\2\uffff\10\62\1\uffff\1\62\1\u00a1\1"+
+		"\u00a2\4\uffff\4\62\1\u00af\1\u00b0\4\62\1\u00b2\1\u00b3\1\uffff\10\62"+
+		"\1\u00c0\1\u00c1\1\u00c2\12\62\1\u00d2\1\62\1\u00d9\1\u00da\12\62\1\u00e6"+
+		"\1\u00e7\1\62\1\u00e9\16\62\1\u0108\12\62\17\uffff\13\62\2\uffff\1\u00a2"+
+		"\4\uffff\1\62\1\u0124\1\u0125\2\62\1\u0128\1\62\2\uffff\1\62\2\uffff\12"+
+		"\62\1\u0136\1\62\3\uffff\2\62\1\u013a\4\62\1\u0140\3\62\1\u0145\3\62\1"+
+		"\uffff\6\62\2\uffff\4\62\1\u0153\2\62\1\u0156\1\62\1\u0158\1\62\2\uffff"+
+		"\1\62\1\uffff\1\u015b\24\62\1\u0174\1\u0175\1\u0176\6\62\1\uffff\1\u017d"+
+		"\6\62\1\u0186\4\62\1\u018b\13\62\1\u00a4\2\62\2\uffff\2\62\1\uffff\4\62"+
+		"\1\u01a0\10\62\1\uffff\2\62\1\u01ac\1\uffff\1\62\1\u01ae\3\62\1\uffff"+
+		"\1\62\1\u01b3\2\62\1\uffff\1\62\1\u01b7\13\62\1\uffff\1\u01c3\1\u01c4"+
+		"\1\uffff\1\62\1\uffff\2\62\1\uffff\14\62\1\u01d7\13\62\3\uffff\4\62\1"+
+		"\u01e8\1\62\1\uffff\1\u01ea\1\u01eb\1\u01ec\2\62\1\u01ef\2\62\1\uffff"+
+		"\2\62\1\u01f4\1\62\1\uffff\13\62\1\u00a4\3\62\1\u0204\2\62\1\u0207\1\u0208"+
+		"\1\uffff\1\u0209\1\u020a\1\u020c\10\62\1\uffff\1\62\1\uffff\3\62\1\u021a"+
+		"\1\uffff\1\u021d\2\62\1\uffff\2\62\1\u0222\4\62\1\u0227\1\62\1\u0229\1"+
+		"\62\2\uffff\20\62\1\u023c\1\62\1\uffff\20\62\1\uffff\1\62\3\uffff\1\62"+
+		"\1\u0250\1\uffff\3\62\1\u0254\1\uffff\1\u0256\3\62\1\u025b\12\62\1\uffff"+
+		"\2\62\4\uffff\1\62\1\uffff\5\62\1\u026e\1\62\1\u0270\1\62\1\u0272\1\62"+
+		"\1\u0275\1\62\1\uffff\2\62\1\uffff\2\62\1\u027b\1\62\1\uffff\2\62\1\u027f"+
+		"\1\62\1\uffff\1\62\1\uffff\2\62\1\u0284\4\62\1\u0289\1\u028a\7\62\1\u0292"+
+		"\1\62\1\uffff\1\62\1\u0295\3\62\1\u0299\1\u029a\4\62\1\u029f\1\u02a0\1"+
+		"\62\1\u02a2\1\u02a3\1\u02a4\1\62\1\u02a6\1\uffff\3\62\1\uffff\1\62\1\uffff"+
+		"\4\62\1\uffff\17\62\1\u02c1\2\62\1\uffff\1\62\1\uffff\1\u02c5\1\uffff"+
+		"\1\62\1\u02c7\1\uffff\2\62\1\u02ca\1\u02cb\1\62\1\uffff\3\62\1\uffff\1"+
+		"\62\1\u02d1\1\u02d2\1\62\1\uffff\3\62\1\u02d7\2\uffff\1\62\1\u02d9\1\u02da"+
+		"\1\62\1\u02dc\2\62\1\uffff\2\62\1\uffff\3\62\2\uffff\4\62\2\uffff\1\u02e8"+
+		"\3\uffff\1\62\1\uffff\1\u02ea\1\u02eb\1\u02ec\16\62\1\u02fc\1\u02fd\2"+
+		"\62\1\u0300\2\62\1\u0303\1\u0304\1\uffff\3\62\1\uffff\1\62\1\uffff\1\u0309"+
+		"\1\62\2\uffff\1\u030b\4\62\2\uffff\1\62\1\u0311\1\u0312\1\u0313\1\uffff"+
+		"\1\u0314\2\uffff\1\62\1\uffff\1\u0316\2\62\1\u0319\1\62\1\u031b\1\62\1"+
+		"\u031d\1\u031e\1\62\1\u0320\1\uffff\1\62\3\uffff\7\62\1\u0329\7\62\2\uffff"+
+		"\1\62\1\u0332\1\uffff\1\u0333\1\62\2\uffff\4\62\1\uffff\1\62\1\uffff\1"+
+		"\62\1\u033c\1\62\1\u033e\1\u033f\4\uffff\1\u0340\1\uffff\1\u0341\1\u0342"+
+		"\1\uffff\1\u0343\1\uffff\1\62\2\uffff\1\62\1\uffff\1\u0346\1\u0347\6\62"+
+		"\1\uffff\7\62\1\u035b\2\uffff\1\62\1\u035d\1\u035e\4\62\1\u0363\1\uffff"+
+		"\1\62\6\uffff\2\62\2\uffff\23\62\1\uffff\1\u037b\2\uffff\4\62\1\uffff"+
+		"\1\62\1\u0381\12\62\1\u038c\1\u038d\3\62\1\u0391\5\62\1\uffff\1\62\1\u0398"+
+		"\1\u0399\2\62\1\uffff\12\62\2\uffff\3\62\1\uffff\5\62\1\u03ae\2\uffff"+
+		"\4\62\1\u03b3\1\u03b4\1\u03b5\1\62\1\u03b7\1\62\1\u03b9\1\u03ba\1\u03bb"+
+		"\2\62\1\u03be\4\62\1\uffff\1\u03c3\1\u03c4\1\u03c5\1\62\3\uffff\1\62\1"+
+		"\uffff\1\62\3\uffff\1\u03c9\1\u03ca\1\uffff\1\62\1\u03cc\2\62\3\uffff"+
+		"\1\u03cf\1\u03d0\1\62\2\uffff\1\u03d2\1\uffff\2\62\2\uffff\1\u03d6\1\uffff"+
+		"\3\62\1\uffff\11\62\1\u03e3\1\62\1\u03e5\1\uffff\1\62\1\uffff\1\u03e7"+
+		"\1\uffff";
 	static final String DFA18_eofS =
-		"\u03d2\uffff";
+		"\u03e8\uffff";
 	static final String DFA18_minS =
 		"\1\11\6\60\1\157\1\145\1\146\1\141\1\145\1\141\1\142\3\141\1\150\1\156"+
 		"\1\141\1\150\1\157\3\uffff\1\57\1\75\3\uffff\2\75\1\52\3\uffff\1\51\2"+
@@ -6342,68 +6372,70 @@ public class DelphiLexer extends Lexer {
 		"\1\154\1\144\1\152\2\60\1\145\1\60\1\164\1\145\1\143\1\141\2\151\1\142"+
 		"\1\151\1\141\1\146\1\141\1\154\1\141\1\145\1\60\1\165\1\160\1\151\1\145"+
 		"\2\162\1\151\1\164\1\151\1\162\17\uffff\2\116\1\123\1\101\1\127\1\103"+
-		"\1\124\1\112\1\122\1\117\2\uffff\1\56\1\uffff\1\53\1\60\1\uffff\1\157"+
-		"\2\60\1\151\1\141\1\60\1\145\2\uffff\1\157\2\0\1\151\1\141\1\145\1\60"+
-		"\2\163\1\60\1\162\1\164\1\160\1\60\1\156\3\uffff\1\141\1\145\1\60\1\145"+
-		"\1\164\2\145\1\60\1\163\1\145\1\141\1\60\1\143\1\157\1\160\1\uffff\1\154"+
-		"\2\145\1\164\1\151\1\145\2\uffff\1\145\1\162\1\141\1\163\1\60\1\145\1"+
-		"\162\1\60\1\145\1\60\1\145\2\uffff\1\162\1\uffff\1\60\1\162\1\153\1\143"+
-		"\1\164\1\156\1\166\1\143\1\154\1\163\1\144\1\157\1\145\1\151\1\156\1\157"+
-		"\1\145\1\165\1\151\1\145\1\154\3\60\1\164\1\143\1\162\1\151\1\156\1\145"+
-		"\1\uffff\1\60\2\145\1\164\1\141\1\151\1\163\1\60\1\164\1\154\1\150\1\164"+
-		"\1\60\1\103\1\123\1\124\1\123\1\137\1\117\2\105\1\111\1\116\1\60\1\154"+
-		"\1\162\2\uffff\1\163\1\171\1\uffff\2\155\1\156\1\153\2\60\1\163\1\164"+
-		"\1\141\1\60\1\145\1\162\1\151\1\uffff\1\164\1\155\1\60\1\uffff\1\160\1"+
-		"\60\3\162\1\uffff\1\145\1\60\1\154\1\141\1\uffff\1\164\1\60\2\145\1\170"+
-		"\1\162\1\151\1\156\1\162\1\154\1\141\1\154\1\141\1\uffff\2\60\1\uffff"+
-		"\1\146\1\uffff\1\143\1\141\1\uffff\1\154\2\141\1\146\1\164\1\141\1\145"+
-		"\1\162\2\145\1\151\1\145\1\60\2\162\1\163\1\164\1\166\1\141\1\151\1\144"+
-		"\1\165\1\143\1\145\3\uffff\1\151\1\141\1\145\1\143\1\60\1\141\1\uffff"+
-		"\3\60\1\146\1\154\1\60\1\162\1\141\1\uffff\1\165\1\145\1\60\1\145\1\uffff"+
-		"\2\124\1\117\1\123\1\124\2\122\1\103\1\101\1\131\1\60\1\165\1\141\1\164"+
-		"\1\60\1\142\1\141\2\60\1\uffff\3\60\1\151\1\156\1\154\1\143\1\165\1\144"+
-		"\1\157\1\151\1\uffff\1\164\1\uffff\1\151\1\164\1\156\1\60\1\uffff\1\60"+
-		"\1\162\1\151\1\uffff\1\162\1\155\1\60\1\151\1\141\1\145\1\146\1\60\1\162"+
-		"\1\60\1\147\2\uffff\1\141\2\164\1\157\1\151\1\147\1\144\1\154\1\157\1"+
-		"\145\1\164\1\144\1\141\1\162\2\143\1\60\1\156\1\uffff\1\144\1\145\1\164"+
-		"\1\162\1\145\1\164\1\162\1\145\1\162\1\141\1\144\1\143\1\154\1\144\1\164"+
-		"\1\147\1\uffff\1\144\3\uffff\1\145\1\60\1\uffff\1\147\1\156\1\141\1\60"+
-		"\1\uffff\1\60\1\111\1\101\1\115\1\60\1\131\1\104\1\106\1\124\1\102\1\115"+
-		"\1\164\1\143\1\162\1\uffff\1\154\1\164\4\uffff\1\165\1\uffff\1\156\1\165"+
-		"\1\164\1\141\1\143\1\60\1\164\1\60\1\143\1\60\1\155\1\60\1\141\1\uffff"+
-		"\1\172\1\171\1\uffff\1\144\1\157\1\60\1\145\1\uffff\1\164\1\154\1\60\1"+
-		"\141\1\uffff\1\171\1\uffff\1\145\1\165\1\60\1\157\1\141\1\144\1\145\2"+
-		"\60\2\162\1\145\1\165\1\155\2\164\1\60\1\150\1\uffff\1\154\1\60\1\156"+
-		"\1\145\1\157\2\60\1\145\1\156\1\143\1\154\2\60\1\154\3\60\1\166\1\60\1"+
-		"\uffff\1\163\1\164\1\154\1\uffff\1\156\1\uffff\1\117\1\116\1\137\1\106"+
-		"\1\uffff\1\120\1\137\1\101\1\137\1\114\1\117\1\145\1\164\1\151\2\145\1"+
-		"\143\1\163\1\145\1\60\2\164\1\uffff\1\145\1\uffff\1\60\1\uffff\1\145\1"+
-		"\60\1\uffff\1\154\1\141\2\60\1\156\1\uffff\1\156\1\145\1\151\1\uffff\1"+
-		"\143\2\60\1\154\1\uffff\1\162\1\144\1\145\1\60\2\uffff\1\155\2\60\1\162"+
-		"\1\60\1\171\1\145\1\uffff\1\145\1\171\1\uffff\1\143\1\162\1\144\2\uffff"+
-		"\1\163\1\164\1\145\1\154\2\uffff\1\60\3\uffff\1\141\1\uffff\3\60\1\154"+
-		"\1\116\1\124\1\101\1\106\1\101\1\111\1\105\1\110\1\103\1\124\1\105\1\125"+
-		"\2\60\1\156\1\162\1\60\1\144\1\164\2\60\1\uffff\1\145\1\157\1\162\1\uffff"+
-		"\1\156\1\uffff\1\60\1\164\2\uffff\1\60\1\164\1\144\1\172\1\145\2\uffff"+
-		"\1\164\3\60\1\uffff\1\60\2\uffff\1\145\1\uffff\1\60\2\144\1\60\1\145\1"+
-		"\60\1\165\2\60\1\163\1\60\1\uffff\1\162\3\uffff\1\171\2\137\1\124\1\137"+
-		"\1\122\1\105\1\60\1\131\2\105\1\131\1\137\1\123\2\uffff\1\147\1\60\1\uffff"+
-		"\1\60\1\157\2\uffff\1\144\1\162\1\146\1\164\1\uffff\1\151\1\uffff\1\141"+
-		"\1\60\1\141\2\60\4\uffff\1\60\1\uffff\2\60\1\uffff\1\60\1\uffff\1\143"+
-		"\2\uffff\1\164\1\uffff\2\60\1\101\1\116\2\124\1\105\1\114\1\uffff\1\120"+
-		"\1\114\1\137\1\120\1\111\1\137\1\60\2\uffff\1\162\2\60\2\141\1\157\1\164"+
-		"\1\60\1\uffff\1\164\6\uffff\1\145\1\162\2\uffff\1\114\1\101\1\122\1\117"+
-		"\1\105\1\101\1\122\1\131\1\116\1\104\1\105\1\120\1\107\1\105\1\131\1\104"+
-		"\1\101\1\105\1\uffff\1\60\2\uffff\1\143\1\154\1\156\1\151\1\uffff\1\151"+
-		"\1\60\1\151\1\117\1\115\1\107\1\104\1\124\1\115\1\111\1\120\1\124\2\60"+
-		"\1\105\1\131\1\125\1\60\1\120\1\105\1\122\1\130\1\uffff\1\145\2\60\2\157"+
+		"\1\124\1\112\1\122\1\117\1\123\2\uffff\1\56\1\uffff\1\53\1\60\1\uffff"+
+		"\1\157\2\60\1\151\1\141\1\60\1\145\2\uffff\1\157\2\0\1\151\1\141\1\145"+
+		"\1\60\2\163\1\60\1\162\1\164\1\160\1\60\1\156\3\uffff\1\141\1\145\1\60"+
+		"\1\145\1\164\2\145\1\60\1\163\1\145\1\141\1\60\1\143\1\157\1\160\1\uffff"+
+		"\1\154\2\145\1\164\1\151\1\145\2\uffff\1\145\1\162\1\141\1\163\1\60\1"+
+		"\145\1\162\1\60\1\145\1\60\1\145\2\uffff\1\162\1\uffff\1\60\1\162\1\153"+
+		"\1\143\1\164\1\156\1\166\1\143\1\154\1\163\1\144\1\157\1\145\1\151\1\156"+
+		"\1\157\1\145\1\165\1\151\1\145\1\154\3\60\1\164\1\143\1\162\1\151\1\156"+
+		"\1\145\1\uffff\1\60\2\145\1\164\1\141\1\151\1\163\1\60\1\164\1\154\1\150"+
+		"\1\164\1\60\1\103\1\123\1\124\1\123\1\137\1\117\2\105\1\111\1\116\1\105"+
+		"\1\60\1\154\1\162\2\uffff\1\163\1\171\1\uffff\2\155\1\156\1\153\2\60\1"+
+		"\163\1\164\1\141\1\60\1\145\1\162\1\151\1\uffff\1\164\1\155\1\60\1\uffff"+
+		"\1\160\1\60\3\162\1\uffff\1\145\1\60\1\154\1\141\1\uffff\1\164\1\60\2"+
+		"\145\1\170\1\162\1\151\1\156\1\162\1\154\1\141\1\154\1\141\1\uffff\2\60"+
+		"\1\uffff\1\146\1\uffff\1\143\1\141\1\uffff\1\154\2\141\1\146\1\164\1\141"+
+		"\1\145\1\162\2\145\1\151\1\145\1\60\2\162\1\163\1\164\1\166\1\141\1\151"+
+		"\1\144\1\165\1\143\1\145\3\uffff\1\151\1\141\1\145\1\143\1\60\1\141\1"+
+		"\uffff\3\60\1\146\1\154\1\60\1\162\1\141\1\uffff\1\165\1\145\1\60\1\145"+
+		"\1\uffff\2\124\1\117\1\123\1\124\2\122\1\103\1\101\1\131\1\115\1\60\1"+
+		"\165\1\141\1\164\1\60\1\142\1\141\2\60\1\uffff\3\60\1\151\1\156\1\154"+
+		"\1\143\1\165\1\144\1\157\1\151\1\uffff\1\164\1\uffff\1\151\1\164\1\156"+
+		"\1\60\1\uffff\1\60\1\162\1\151\1\uffff\1\162\1\155\1\60\1\151\1\141\1"+
+		"\145\1\146\1\60\1\162\1\60\1\147\2\uffff\1\141\2\164\1\157\1\151\1\147"+
+		"\1\144\1\154\1\157\1\145\1\164\1\144\1\141\1\162\2\143\1\60\1\156\1\uffff"+
+		"\1\144\1\145\1\164\1\162\1\145\1\164\1\162\1\145\1\162\1\141\1\144\1\143"+
+		"\1\154\1\144\1\164\1\147\1\uffff\1\144\3\uffff\1\145\1\60\1\uffff\1\147"+
+		"\1\156\1\141\1\60\1\uffff\1\60\1\111\1\101\1\115\1\60\1\131\1\104\1\106"+
+		"\1\124\1\102\1\115\1\102\1\164\1\143\1\162\1\uffff\1\154\1\164\4\uffff"+
+		"\1\165\1\uffff\1\156\1\165\1\164\1\141\1\143\1\60\1\164\1\60\1\143\1\60"+
+		"\1\155\1\60\1\141\1\uffff\1\172\1\171\1\uffff\1\144\1\157\1\60\1\145\1"+
+		"\uffff\1\164\1\154\1\60\1\141\1\uffff\1\171\1\uffff\1\145\1\165\1\60\1"+
+		"\157\1\141\1\144\1\145\2\60\2\162\1\145\1\165\1\155\2\164\1\60\1\150\1"+
+		"\uffff\1\154\1\60\1\156\1\145\1\157\2\60\1\145\1\156\1\143\1\154\2\60"+
+		"\1\154\3\60\1\166\1\60\1\uffff\1\163\1\164\1\154\1\uffff\1\156\1\uffff"+
+		"\1\117\1\116\1\137\1\106\1\uffff\1\120\1\137\1\101\1\137\1\114\1\117\1"+
+		"\114\1\145\1\164\1\151\2\145\1\143\1\163\1\145\1\60\2\164\1\uffff\1\145"+
+		"\1\uffff\1\60\1\uffff\1\145\1\60\1\uffff\1\154\1\141\2\60\1\156\1\uffff"+
+		"\1\156\1\145\1\151\1\uffff\1\143\2\60\1\154\1\uffff\1\162\1\144\1\145"+
+		"\1\60\2\uffff\1\155\2\60\1\162\1\60\1\171\1\145\1\uffff\1\145\1\171\1"+
+		"\uffff\1\143\1\162\1\144\2\uffff\1\163\1\164\1\145\1\154\2\uffff\1\60"+
+		"\3\uffff\1\141\1\uffff\3\60\1\154\1\116\1\124\1\101\1\106\1\101\1\111"+
+		"\1\105\1\110\1\103\1\124\1\105\1\125\1\105\2\60\1\156\1\162\1\60\1\144"+
+		"\1\164\2\60\1\uffff\1\145\1\157\1\162\1\uffff\1\156\1\uffff\1\60\1\164"+
+		"\2\uffff\1\60\1\164\1\144\1\172\1\145\2\uffff\1\164\3\60\1\uffff\1\60"+
+		"\2\uffff\1\145\1\uffff\1\60\2\144\1\60\1\145\1\60\1\165\2\60\1\163\1\60"+
+		"\1\uffff\1\162\3\uffff\1\171\2\137\1\124\1\137\1\122\1\105\1\60\1\131"+
+		"\2\105\1\131\1\137\1\123\1\122\2\uffff\1\147\1\60\1\uffff\1\60\1\157\2"+
+		"\uffff\1\144\1\162\1\146\1\164\1\uffff\1\151\1\uffff\1\141\1\60\1\141"+
+		"\2\60\4\uffff\1\60\1\uffff\2\60\1\uffff\1\60\1\uffff\1\143\2\uffff\1\164"+
+		"\1\uffff\2\60\1\101\1\116\2\124\1\105\1\114\1\uffff\1\120\1\114\1\137"+
+		"\1\120\1\111\2\137\1\60\2\uffff\1\162\2\60\2\141\1\157\1\164\1\60\1\uffff"+
+		"\1\164\6\uffff\1\145\1\162\2\uffff\1\114\1\101\1\122\1\117\1\105\1\101"+
+		"\1\122\1\131\1\116\1\104\1\105\1\120\1\107\1\105\1\131\1\104\1\101\1\105"+
+		"\1\111\1\uffff\1\60\2\uffff\1\143\1\154\1\156\1\151\1\uffff\1\151\1\60"+
+		"\1\151\1\117\1\115\1\107\1\104\1\124\1\115\1\111\1\120\1\124\2\60\1\105"+
+		"\1\131\1\125\1\60\1\120\1\105\1\122\1\130\1\116\1\uffff\1\145\2\60\2\157"+
 		"\1\uffff\1\156\1\102\1\105\1\123\1\131\1\125\1\105\1\102\1\105\1\123\2"+
-		"\uffff\1\122\1\120\1\111\1\uffff\1\105\1\116\1\101\1\120\1\60\2\uffff"+
-		"\2\156\1\147\1\101\3\60\1\122\1\60\1\125\3\60\1\105\1\104\1\60\1\124\1"+
-		"\115\1\122\1\uffff\3\60\1\114\3\uffff\1\116\1\uffff\1\124\3\uffff\2\60"+
-		"\1\uffff\1\123\1\60\1\105\3\uffff\2\60\1\105\2\uffff\1\60\1\uffff\1\123"+
-		"\2\uffff\1\60\1\uffff\1\123\1\101\1\uffff\1\111\1\122\1\117\1\107\1\116"+
-		"\1\123\2\60\2\uffff";
+		"\uffff\1\122\1\120\1\111\1\uffff\1\105\1\116\1\101\1\120\1\123\1\60\2"+
+		"\uffff\2\156\1\147\1\101\3\60\1\122\1\60\1\125\3\60\1\105\1\104\1\60\1"+
+		"\124\1\115\1\122\1\124\1\uffff\3\60\1\114\3\uffff\1\116\1\uffff\1\124"+
+		"\3\uffff\2\60\1\uffff\1\123\1\60\1\105\1\122\3\uffff\2\60\1\105\2\uffff"+
+		"\1\60\1\uffff\1\123\1\125\2\uffff\1\60\1\uffff\1\123\1\103\1\101\1\uffff"+
+		"\1\111\1\124\1\122\1\117\1\111\1\107\1\116\1\117\1\123\1\60\1\116\1\60"+
+		"\1\uffff\1\123\1\uffff\1\60\1\uffff";
 	static final String DFA18_maxS =
 		"\1\ufffe\1\165\1\162\1\157\1\171\1\170\1\165\1\157\1\145\1\163\3\157\1"+
 		"\166\1\165\1\145\1\164\1\171\1\163\1\151\1\162\1\157\3\uffff\1\57\1\75"+
@@ -6415,111 +6447,113 @@ public class DelphiLexer extends Lexer {
 		"\155\1\141\1\154\1\164\1\152\2\ufffe\1\145\1\ufffe\1\164\1\145\1\163\1"+
 		"\141\1\151\1\157\1\142\1\151\1\163\1\146\1\164\3\162\1\ufffe\1\171\1\160"+
 		"\1\164\1\145\2\162\1\151\1\164\1\151\1\162\17\uffff\2\116\1\123\1\101"+
-		"\1\127\1\103\1\124\1\112\1\122\1\117\2\uffff\1\150\1\uffff\2\150\1\uffff"+
-		"\1\164\2\ufffe\1\151\1\141\1\ufffe\1\145\2\uffff\1\157\2\0\1\151\1\141"+
-		"\1\145\1\150\1\163\1\164\1\150\1\162\1\164\1\160\1\ufffe\1\156\3\uffff"+
-		"\1\141\1\145\1\ufffe\1\145\1\164\1\157\1\145\1\ufffe\1\163\1\145\1\141"+
-		"\1\ufffe\1\143\1\157\1\160\1\uffff\1\154\2\145\1\164\1\151\1\145\2\uffff"+
-		"\1\145\1\162\1\141\1\163\1\ufffe\1\145\1\162\1\ufffe\1\145\1\ufffe\1\145"+
-		"\2\uffff\1\162\1\uffff\1\ufffe\1\162\1\153\1\143\1\164\1\156\1\166\1\164"+
-		"\1\154\1\163\1\144\1\157\1\145\1\151\1\156\1\157\1\145\1\165\1\157\1\145"+
-		"\1\154\3\ufffe\1\164\1\143\1\162\1\151\1\156\1\145\1\uffff\1\ufffe\2\145"+
-		"\1\164\1\141\1\151\1\163\1\ufffe\1\164\1\154\1\150\1\164\1\ufffe\1\103"+
-		"\1\123\1\124\1\123\1\137\1\117\2\105\1\111\1\116\1\150\1\154\1\162\2\uffff"+
-		"\1\163\1\171\1\uffff\2\155\1\156\1\153\1\ufffe\1\154\1\163\1\164\1\151"+
-		"\1\165\1\145\1\162\1\151\1\uffff\1\164\1\155\1\ufffe\1\uffff\1\160\1\ufffe"+
-		"\3\162\1\uffff\1\145\1\ufffe\1\154\1\141\1\uffff\1\164\1\ufffe\2\145\1"+
-		"\170\1\162\1\151\1\156\1\162\1\154\1\141\1\154\1\141\1\uffff\2\ufffe\1"+
-		"\uffff\1\146\1\uffff\1\143\1\141\1\uffff\1\162\1\145\1\141\1\146\1\164"+
-		"\1\141\1\145\1\162\2\145\1\151\1\145\1\ufffe\2\162\1\163\1\164\1\166\1"+
-		"\141\1\151\1\144\1\165\1\143\1\145\3\uffff\1\151\1\141\1\145\1\156\1\ufffe"+
-		"\1\141\1\uffff\3\ufffe\1\146\1\154\1\ufffe\1\162\1\141\1\uffff\1\165\1"+
-		"\145\1\ufffe\1\145\1\uffff\2\124\1\117\1\123\1\124\2\122\1\103\1\101\1"+
-		"\131\1\150\1\165\1\141\1\164\1\ufffe\1\142\1\141\2\ufffe\1\uffff\3\ufffe"+
-		"\1\151\1\156\1\154\1\143\1\165\1\156\1\157\1\151\1\uffff\1\164\1\uffff"+
-		"\1\151\1\164\1\156\1\ufffe\1\uffff\1\ufffe\1\162\1\151\1\uffff\1\162\1"+
-		"\155\1\ufffe\1\151\1\141\1\145\1\146\1\ufffe\1\162\1\ufffe\1\147\2\uffff"+
-		"\1\141\2\164\1\157\1\151\1\147\1\144\1\154\1\157\1\145\1\164\1\144\1\141"+
-		"\1\162\1\143\1\163\1\ufffe\1\156\1\uffff\1\144\1\145\1\164\1\162\1\145"+
-		"\1\164\1\162\1\145\1\162\1\141\1\144\1\143\1\154\1\144\1\164\1\147\1\uffff"+
-		"\1\144\3\uffff\1\145\1\ufffe\1\uffff\1\147\1\156\1\141\1\ufffe\1\uffff"+
-		"\1\ufffe\1\111\1\101\1\115\1\ufffe\1\131\1\104\1\106\1\124\1\102\1\115"+
-		"\1\164\1\143\1\162\1\uffff\1\154\1\164\4\uffff\1\165\1\uffff\1\156\1\165"+
-		"\1\164\1\141\1\143\1\ufffe\1\164\1\ufffe\1\143\1\ufffe\1\155\1\ufffe\1"+
-		"\141\1\uffff\1\172\1\171\1\uffff\1\144\1\157\1\ufffe\1\145\1\uffff\1\164"+
-		"\1\154\1\ufffe\1\141\1\uffff\1\171\1\uffff\1\145\1\165\1\ufffe\1\157\1"+
-		"\141\1\144\1\145\2\ufffe\2\162\1\145\1\165\1\155\2\164\1\ufffe\1\150\1"+
-		"\uffff\1\154\1\ufffe\1\156\1\145\1\157\2\ufffe\1\145\1\156\1\143\1\154"+
-		"\2\ufffe\1\154\3\ufffe\1\166\1\ufffe\1\uffff\1\163\1\164\1\154\1\uffff"+
-		"\1\156\1\uffff\1\117\1\116\1\137\1\120\1\uffff\1\120\1\137\1\101\1\137"+
-		"\1\114\1\117\1\145\1\164\1\151\1\171\1\145\1\143\1\163\1\145\1\ufffe\2"+
-		"\164\1\uffff\1\145\1\uffff\1\ufffe\1\uffff\1\145\1\ufffe\1\uffff\1\154"+
-		"\1\141\2\ufffe\1\156\1\uffff\1\156\1\145\1\151\1\uffff\1\143\2\ufffe\1"+
-		"\154\1\uffff\1\162\1\144\1\145\1\ufffe\2\uffff\1\155\2\ufffe\1\162\1\ufffe"+
-		"\1\171\1\145\1\uffff\1\145\1\171\1\uffff\1\143\1\162\1\144\2\uffff\1\163"+
-		"\1\164\1\145\1\154\2\uffff\1\ufffe\3\uffff\1\141\1\uffff\3\ufffe\1\154"+
-		"\1\116\1\124\1\101\1\106\1\101\1\111\1\105\1\124\1\103\1\124\1\105\1\125"+
-		"\2\ufffe\1\156\1\162\1\ufffe\1\144\1\164\2\ufffe\1\uffff\1\145\1\157\1"+
-		"\162\1\uffff\1\156\1\uffff\1\ufffe\1\164\2\uffff\1\ufffe\1\164\1\144\1"+
-		"\172\1\145\2\uffff\1\164\3\ufffe\1\uffff\1\ufffe\2\uffff\1\145\1\uffff"+
-		"\1\ufffe\2\144\1\ufffe\1\145\1\ufffe\1\165\2\ufffe\1\163\1\ufffe\1\uffff"+
-		"\1\162\3\uffff\1\171\2\137\1\124\1\137\1\122\1\105\1\ufffe\1\131\2\105"+
-		"\1\131\1\137\1\123\2\uffff\1\147\1\ufffe\1\uffff\1\ufffe\1\157\2\uffff"+
-		"\1\144\1\162\1\146\1\164\1\uffff\1\151\1\uffff\1\163\1\ufffe\1\141\2\ufffe"+
-		"\4\uffff\1\ufffe\1\uffff\2\ufffe\1\uffff\1\ufffe\1\uffff\1\143\2\uffff"+
-		"\1\164\1\uffff\2\ufffe\1\122\1\116\2\124\1\105\1\114\1\uffff\1\120\1\114"+
-		"\1\137\1\120\1\124\1\137\1\ufffe\2\uffff\1\162\2\ufffe\2\141\1\157\1\164"+
-		"\1\ufffe\1\uffff\1\164\6\uffff\1\145\1\162\2\uffff\1\114\1\101\1\122\1"+
-		"\117\1\105\1\101\1\122\1\131\1\116\1\104\1\105\1\120\1\124\1\105\1\131"+
-		"\1\104\1\101\1\105\1\uffff\1\ufffe\2\uffff\1\143\1\154\1\156\1\151\1\uffff"+
-		"\1\151\1\ufffe\1\151\1\117\1\115\1\107\1\104\1\124\1\115\1\111\1\120\1"+
-		"\124\2\ufffe\1\105\1\131\1\125\1\ufffe\1\120\1\105\1\122\1\130\1\uffff"+
-		"\1\145\2\ufffe\2\157\1\uffff\1\156\1\102\1\105\1\123\1\131\1\125\1\105"+
-		"\1\102\1\105\1\123\2\uffff\1\122\1\120\1\111\1\uffff\1\105\1\116\1\101"+
-		"\1\120\1\ufffe\2\uffff\2\156\1\147\1\101\3\ufffe\1\122\1\ufffe\1\125\3"+
-		"\ufffe\1\105\1\104\1\ufffe\1\124\1\115\1\122\1\uffff\3\ufffe\1\114\3\uffff"+
-		"\1\116\1\uffff\1\124\3\uffff\2\ufffe\1\uffff\1\123\1\ufffe\1\105\3\uffff"+
-		"\2\ufffe\1\105\2\uffff\1\ufffe\1\uffff\1\123\2\uffff\1\ufffe\1\uffff\1"+
-		"\123\1\101\1\uffff\1\111\1\122\1\117\1\107\1\116\1\123\2\ufffe\2\uffff";
+		"\1\127\1\103\1\124\1\112\1\122\1\117\1\123\2\uffff\1\150\1\uffff\2\150"+
+		"\1\uffff\1\164\2\ufffe\1\151\1\141\1\ufffe\1\145\2\uffff\1\157\2\0\1\151"+
+		"\1\141\1\145\1\150\1\163\1\164\1\150\1\162\1\164\1\160\1\ufffe\1\156\3"+
+		"\uffff\1\141\1\145\1\ufffe\1\145\1\164\1\157\1\145\1\ufffe\1\163\1\145"+
+		"\1\141\1\ufffe\1\143\1\157\1\160\1\uffff\1\154\2\145\1\164\1\151\1\145"+
+		"\2\uffff\1\145\1\162\1\141\1\163\1\ufffe\1\145\1\162\1\ufffe\1\145\1\ufffe"+
+		"\1\145\2\uffff\1\162\1\uffff\1\ufffe\1\162\1\153\1\143\1\164\1\156\1\166"+
+		"\1\164\1\154\1\163\1\144\1\157\1\145\1\151\1\156\1\157\1\145\1\165\1\157"+
+		"\1\145\1\154\3\ufffe\1\164\1\143\1\162\1\151\1\156\1\145\1\uffff\1\ufffe"+
+		"\2\145\1\164\1\141\1\151\1\163\1\ufffe\1\164\1\154\1\150\1\164\1\ufffe"+
+		"\1\103\1\123\1\124\1\123\1\137\1\117\2\105\1\111\1\116\1\105\1\150\1\154"+
+		"\1\162\2\uffff\1\163\1\171\1\uffff\2\155\1\156\1\153\1\ufffe\1\154\1\163"+
+		"\1\164\1\151\1\165\1\145\1\162\1\151\1\uffff\1\164\1\155\1\ufffe\1\uffff"+
+		"\1\160\1\ufffe\3\162\1\uffff\1\145\1\ufffe\1\154\1\141\1\uffff\1\164\1"+
+		"\ufffe\2\145\1\170\1\162\1\151\1\156\1\162\1\154\1\141\1\154\1\141\1\uffff"+
+		"\2\ufffe\1\uffff\1\146\1\uffff\1\143\1\141\1\uffff\1\162\1\145\1\141\1"+
+		"\146\1\164\1\141\1\145\1\162\2\145\1\151\1\145\1\ufffe\2\162\1\163\1\164"+
+		"\1\166\1\141\1\151\1\144\1\165\1\143\1\145\3\uffff\1\151\1\141\1\145\1"+
+		"\156\1\ufffe\1\141\1\uffff\3\ufffe\1\146\1\154\1\ufffe\1\162\1\141\1\uffff"+
+		"\1\165\1\145\1\ufffe\1\145\1\uffff\2\124\1\117\1\123\1\124\2\122\1\103"+
+		"\1\101\1\131\1\115\1\150\1\165\1\141\1\164\1\ufffe\1\142\1\141\2\ufffe"+
+		"\1\uffff\3\ufffe\1\151\1\156\1\154\1\143\1\165\1\156\1\157\1\151\1\uffff"+
+		"\1\164\1\uffff\1\151\1\164\1\156\1\ufffe\1\uffff\1\ufffe\1\162\1\151\1"+
+		"\uffff\1\162\1\155\1\ufffe\1\151\1\141\1\145\1\146\1\ufffe\1\162\1\ufffe"+
+		"\1\147\2\uffff\1\141\2\164\1\157\1\151\1\147\1\144\1\154\1\157\1\145\1"+
+		"\164\1\144\1\141\1\162\1\143\1\163\1\ufffe\1\156\1\uffff\1\144\1\145\1"+
+		"\164\1\162\1\145\1\164\1\162\1\145\1\162\1\141\1\144\1\143\1\154\1\144"+
+		"\1\164\1\147\1\uffff\1\144\3\uffff\1\145\1\ufffe\1\uffff\1\147\1\156\1"+
+		"\141\1\ufffe\1\uffff\1\ufffe\1\111\1\101\1\115\1\ufffe\1\131\1\104\1\106"+
+		"\1\124\1\102\1\115\1\102\1\164\1\143\1\162\1\uffff\1\154\1\164\4\uffff"+
+		"\1\165\1\uffff\1\156\1\165\1\164\1\141\1\143\1\ufffe\1\164\1\ufffe\1\143"+
+		"\1\ufffe\1\155\1\ufffe\1\141\1\uffff\1\172\1\171\1\uffff\1\144\1\157\1"+
+		"\ufffe\1\145\1\uffff\1\164\1\154\1\ufffe\1\141\1\uffff\1\171\1\uffff\1"+
+		"\145\1\165\1\ufffe\1\157\1\141\1\144\1\145\2\ufffe\2\162\1\145\1\165\1"+
+		"\155\2\164\1\ufffe\1\150\1\uffff\1\154\1\ufffe\1\156\1\145\1\157\2\ufffe"+
+		"\1\145\1\156\1\143\1\154\2\ufffe\1\154\3\ufffe\1\166\1\ufffe\1\uffff\1"+
+		"\163\1\164\1\154\1\uffff\1\156\1\uffff\1\117\1\116\1\137\1\120\1\uffff"+
+		"\1\120\1\137\1\101\1\137\1\114\1\117\1\114\1\145\1\164\1\151\1\171\1\145"+
+		"\1\143\1\163\1\145\1\ufffe\2\164\1\uffff\1\145\1\uffff\1\ufffe\1\uffff"+
+		"\1\145\1\ufffe\1\uffff\1\154\1\141\2\ufffe\1\156\1\uffff\1\156\1\145\1"+
+		"\151\1\uffff\1\143\2\ufffe\1\154\1\uffff\1\162\1\144\1\145\1\ufffe\2\uffff"+
+		"\1\155\2\ufffe\1\162\1\ufffe\1\171\1\145\1\uffff\1\145\1\171\1\uffff\1"+
+		"\143\1\162\1\144\2\uffff\1\163\1\164\1\145\1\154\2\uffff\1\ufffe\3\uffff"+
+		"\1\141\1\uffff\3\ufffe\1\154\1\116\1\124\1\101\1\106\1\101\1\111\1\105"+
+		"\1\124\1\103\1\124\1\105\1\125\1\105\2\ufffe\1\156\1\162\1\ufffe\1\144"+
+		"\1\164\2\ufffe\1\uffff\1\145\1\157\1\162\1\uffff\1\156\1\uffff\1\ufffe"+
+		"\1\164\2\uffff\1\ufffe\1\164\1\144\1\172\1\145\2\uffff\1\164\3\ufffe\1"+
+		"\uffff\1\ufffe\2\uffff\1\145\1\uffff\1\ufffe\2\144\1\ufffe\1\145\1\ufffe"+
+		"\1\165\2\ufffe\1\163\1\ufffe\1\uffff\1\162\3\uffff\1\171\2\137\1\124\1"+
+		"\137\1\122\1\105\1\ufffe\1\131\2\105\1\131\1\137\1\123\1\122\2\uffff\1"+
+		"\147\1\ufffe\1\uffff\1\ufffe\1\157\2\uffff\1\144\1\162\1\146\1\164\1\uffff"+
+		"\1\151\1\uffff\1\163\1\ufffe\1\141\2\ufffe\4\uffff\1\ufffe\1\uffff\2\ufffe"+
+		"\1\uffff\1\ufffe\1\uffff\1\143\2\uffff\1\164\1\uffff\2\ufffe\1\122\1\116"+
+		"\2\124\1\105\1\114\1\uffff\1\120\1\114\1\137\1\120\1\124\2\137\1\ufffe"+
+		"\2\uffff\1\162\2\ufffe\2\141\1\157\1\164\1\ufffe\1\uffff\1\164\6\uffff"+
+		"\1\145\1\162\2\uffff\1\114\1\101\1\122\1\117\1\105\1\101\1\122\1\131\1"+
+		"\116\1\104\1\105\1\120\1\124\1\105\1\131\1\104\1\101\1\105\1\111\1\uffff"+
+		"\1\ufffe\2\uffff\1\143\1\154\1\156\1\151\1\uffff\1\151\1\ufffe\1\151\1"+
+		"\117\1\115\1\107\1\104\1\124\1\115\1\111\1\120\1\124\2\ufffe\1\105\1\131"+
+		"\1\125\1\ufffe\1\120\1\105\1\122\1\130\1\116\1\uffff\1\145\2\ufffe\2\157"+
+		"\1\uffff\1\156\1\102\1\105\1\123\1\131\1\125\1\105\1\102\1\105\1\123\2"+
+		"\uffff\1\122\1\120\1\111\1\uffff\1\105\1\116\1\101\1\120\1\123\1\ufffe"+
+		"\2\uffff\2\156\1\147\1\101\3\ufffe\1\122\1\ufffe\1\125\3\ufffe\1\105\1"+
+		"\104\1\ufffe\1\124\1\115\1\122\1\124\1\uffff\3\ufffe\1\114\3\uffff\1\116"+
+		"\1\uffff\1\124\3\uffff\2\ufffe\1\uffff\1\123\1\ufffe\1\105\1\122\3\uffff"+
+		"\2\ufffe\1\105\2\uffff\1\ufffe\1\uffff\1\123\1\125\2\uffff\1\ufffe\1\uffff"+
+		"\1\123\1\103\1\101\1\uffff\1\111\1\124\1\122\1\117\1\111\1\107\1\116\1"+
+		"\117\1\123\1\ufffe\1\116\1\ufffe\1\uffff\1\123\1\uffff\1\ufffe\1\uffff";
 	static final String DFA18_acceptS =
 		"\26\uffff\1\u0085\1\u0086\1\u0087\2\uffff\1\u008a\1\u008b\1\u008d\3\uffff"+
 		"\1\u0094\1\u0095\1\u0097\1\uffff\1\u0099\1\u009a\1\uffff\1\u009e\1\u009f"+
-		"\10\uffff\1\u00b6\3\uffff\1\u00b9\1\u00bc\1\u00bd\1\u00bf\14\uffff\1\u00bb"+
-		"\100\uffff\1\u00be\1\u0088\1\u0089\1\u008c\1\u008e\1\u0090\1\u008f\1\u0091"+
-		"\1\u0092\1\u0096\1\u0093\1\u0098\1\u009c\1\u009b\1\u009d\12\uffff\1\u00c0"+
-		"\1\u00b7\1\uffff\1\u00b8\2\uffff\1\u00ba\7\uffff\1\7\1\13\17\uffff\1\34"+
+		"\10\uffff\1\u00b7\3\uffff\1\u00ba\1\u00bd\1\u00be\1\u00c0\14\uffff\1\u00bc"+
+		"\100\uffff\1\u00bf\1\u0088\1\u0089\1\u008c\1\u008e\1\u0090\1\u008f\1\u0091"+
+		"\1\u0092\1\u0096\1\u0093\1\u0098\1\u009c\1\u009b\1\u009d\13\uffff\1\u00c1"+
+		"\1\u00b8\1\uffff\1\u00b9\2\uffff\1\u00bb\7\uffff\1\7\1\13\17\uffff\1\34"+
 		"\1\36\1\37\17\uffff\1\63\6\uffff\1\66\1\74\13\uffff\1\110\1\111\1\uffff"+
-		"\1\113\36\uffff\1\163\32\uffff\1\3\1\4\2\uffff\1\10\15\uffff\1\33\3\uffff"+
+		"\1\113\36\uffff\1\163\33\uffff\1\3\1\4\2\uffff\1\10\15\uffff\1\33\3\uffff"+
 		"\1\42\5\uffff\1\51\4\uffff\1\56\15\uffff\1\101\2\uffff\1\104\1\uffff\1"+
 		"\106\2\uffff\1\114\30\uffff\1\151\1\152\1\153\6\uffff\1\164\10\uffff\1"+
-		"\172\4\uffff\1\u0082\23\uffff\1\17\13\uffff\1\41\1\uffff\1\44\4\uffff"+
+		"\172\4\uffff\1\u0082\24\uffff\1\17\13\uffff\1\41\1\uffff\1\44\4\uffff"+
 		"\1\52\3\uffff\1\61\13\uffff\1\102\1\103\22\uffff\1\134\20\uffff\1\161"+
-		"\1\uffff\1\u0084\1\165\1\166\2\uffff\1\171\4\uffff\1\177\16\uffff\1\6"+
+		"\1\uffff\1\u0084\1\165\1\166\2\uffff\1\171\4\uffff\1\177\17\uffff\1\6"+
 		"\2\uffff\1\15\1\16\1\20\1\21\1\uffff\1\22\15\uffff\1\u0083\2\uffff\1\53"+
 		"\4\uffff\1\67\4\uffff\1\75\1\uffff\1\77\22\uffff\1\133\23\uffff\1\170"+
-		"\3\uffff\1\176\1\uffff\1\u0080\4\uffff\1\u00a9\21\uffff\1\31\1\uffff\1"+
+		"\3\uffff\1\176\1\uffff\1\u0080\4\uffff\1\u00a9\22\uffff\1\31\1\uffff\1"+
 		"\35\1\uffff\1\43\2\uffff\1\46\5\uffff\1\62\3\uffff\1\72\4\uffff\1\107"+
 		"\4\uffff\1\120\1\121\7\uffff\1\131\2\uffff\1\136\3\uffff\1\142\1\143\4"+
-		"\uffff\1\150\1\154\1\uffff\1\156\1\157\1\160\1\uffff\1\167\31\uffff\1"+
+		"\uffff\1\150\1\154\1\uffff\1\156\1\157\1\160\1\uffff\1\167\32\uffff\1"+
 		"\26\3\uffff\1\40\1\uffff\1\47\2\uffff\1\55\1\57\5\uffff\1\76\1\100\4\uffff"+
 		"\1\117\1\uffff\1\123\1\124\1\uffff\1\126\13\uffff\1\155\1\uffff\1\173"+
-		"\1\174\1\175\16\uffff\1\1\1\2\2\uffff\1\12\2\uffff\1\24\1\25\4\uffff\1"+
+		"\1\174\1\175\17\uffff\1\1\1\2\2\uffff\1\12\2\uffff\1\24\1\25\4\uffff\1"+
 		"\50\1\uffff\1\60\5\uffff\1\112\1\115\1\116\1\122\1\uffff\1\127\2\uffff"+
 		"\1\135\1\uffff\1\140\1\uffff\1\144\1\145\1\uffff\1\147\10\uffff\1\u00a8"+
-		"\7\uffff\1\11\1\14\10\uffff\1\70\1\uffff\1\73\1\105\1\125\1\130\1\132"+
-		"\1\137\2\uffff\1\162\1\u0081\22\uffff\1\5\1\uffff\1\27\1\30\4\uffff\1"+
-		"\65\26\uffff\1\23\5\uffff\1\141\12\uffff\1\u00b4\1\u00aa\3\uffff\1\u00ad"+
-		"\5\uffff\1\45\1\54\23\uffff\1\32\4\uffff\1\u00a1\1\u00a3\1\u00a4\1\uffff"+
-		"\1\u00a2\1\uffff\1\u00ae\1\u00b3\1\u00ab\2\uffff\1\u00af\3\uffff\1\64"+
-		"\1\71\1\146\3\uffff\1\u00ac\1\u00b2\1\uffff\1\u00b1\1\uffff\1\u00a0\1"+
-		"\u00a5\1\uffff\1\u00b0\2\uffff\1\u00a6\10\uffff\1\u00b5\1\u00a7";
+		"\10\uffff\1\11\1\14\10\uffff\1\70\1\uffff\1\73\1\105\1\125\1\130\1\132"+
+		"\1\137\2\uffff\1\162\1\u0081\23\uffff\1\5\1\uffff\1\27\1\30\4\uffff\1"+
+		"\65\27\uffff\1\23\5\uffff\1\141\12\uffff\1\u00b4\1\u00aa\3\uffff\1\u00ad"+
+		"\6\uffff\1\45\1\54\24\uffff\1\32\4\uffff\1\u00a1\1\u00a3\1\u00a4\1\uffff"+
+		"\1\u00a2\1\uffff\1\u00ae\1\u00b3\1\u00ab\2\uffff\1\u00af\4\uffff\1\64"+
+		"\1\71\1\146\3\uffff\1\u00ac\1\u00b2\1\uffff\1\u00b1\2\uffff\1\u00a0\1"+
+		"\u00a5\1\uffff\1\u00b0\3\uffff\1\u00a6\14\uffff\1\u00b5\1\uffff\1\u00a7"+
+		"\1\uffff\1\u00b6";
 	static final String DFA18_specialS =
-		"\1\uffff\1\40\1\36\1\4\1\34\1\1\1\6\40\uffff\1\30\2\uffff\1\31\1\35\5"+
-		"\uffff\1\13\1\uffff\1\12\1\27\1\11\4\uffff\1\32\1\17\5\uffff\1\7\1\10"+
-		"\1\2\3\uffff\1\20\1\uffff\1\21\1\22\2\uffff\1\0\10\uffff\1\14\113\uffff"+
-		"\1\3\1\uffff\1\16\1\15\2\uffff\1\37\10\uffff\1\41\1\42\3\uffff\1\24\2"+
-		"\uffff\1\26\145\uffff\1\33\14\uffff\1\23\3\uffff\1\25\143\uffff\1\5\u023d"+
-		"\uffff}>";
+		"\1\uffff\1\10\1\6\1\23\1\3\1\21\1\24\40\uffff\1\22\2\uffff\1\2\1\5\5\uffff"+
+		"\1\30\1\uffff\1\26\1\14\1\31\4\uffff\1\42\1\27\5\uffff\1\16\1\17\1\13"+
+		"\3\uffff\1\32\1\uffff\1\33\1\34\2\uffff\1\12\10\uffff\1\25\114\uffff\1"+
+		"\15\1\uffff\1\20\1\11\2\uffff\1\4\10\uffff\1\0\1\1\3\uffff\1\36\2\uffff"+
+		"\1\40\146\uffff\1\41\14\uffff\1\35\3\uffff\1\37\144\uffff\1\7\u0250\uffff}>";
 	static final String[] DFA18_transitionS = {
 			"\2\71\1\uffff\2\71\22\uffff\1\71\2\uffff\1\70\1\66\1\uffff\1\51\1\67"+
 			"\1\40\1\41\1\30\1\26\1\33\1\27\1\44\1\31\12\65\1\32\1\34\1\36\1\35\1"+
@@ -6586,65 +6620,64 @@ public class DelphiLexer extends Lexer {
 			"\1\u009c",
 			"\1\u009d",
 			"\1\u009e",
-			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\5\uffff\1\u009f\22\uffff\6"+
-			"\101\1\uffff\1\104",
+			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\5\uffff\1\u009f\4\uffff\1"+
+			"\u00a0\15\uffff\6\101\1\uffff\1\104",
 			"",
 			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\6\101\1\uffff\1\104",
 			"\ufeff\62\1\uffff\u0100\62",
-			"\1\u00a3\1\uffff\12\u00a2\1\106\6\uffff\4\u00a5\1\u00a4\1\u00a5\1\uffff"+
-			"\1\u00a6\30\uffff\4\u00a5\1\u00a4\1\u00a5\1\uffff\1\u00a6",
+			"\1\u00a4\1\uffff\12\u00a3\1\106\6\uffff\4\u00a6\1\u00a5\1\u00a6\1\uffff"+
+			"\1\u00a7\30\uffff\4\u00a6\1\u00a5\1\u00a6\1\uffff\1\u00a7",
 			"",
 			"",
 			"",
 			"",
 			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\6\101\1\uffff\1\104"+
-			"\12\uffff\1\u00a7",
-			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\3\101\1\u00a8\2\101"+
+			"\12\uffff\1\u00a8",
+			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\3\101\1\u00a9\2\101"+
 			"\1\uffff\1\104",
-			"\1\u00a9\16\uffff\1\u00aa",
-			"\1\u00ab",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\14\62\1\u00ac\5\62\1\u00ad"+
+			"\1\u00aa\16\uffff\1\u00ab",
+			"\1\u00ac",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\14\62\1\u00ad\5\62\1\u00ae"+
 			"\7\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u00b0",
+			"\1\u00b1",
 			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\6\101\1\uffff\1\104",
 			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\6\101\1\uffff\1\104",
 			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\6\101\1\uffff\1\104",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"",
-			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\6\101\1\u00b3\1\104",
-			"\1\u00b4",
+			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\6\101\1\u00b4\1\104",
+			"\1\u00b5",
 			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\6\101\1\uffff\1\104"+
-			"\12\uffff\1\u00b5",
-			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\4\101\1\u00b6\1\101"+
+			"\12\uffff\1\u00b6",
+			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\4\101\1\u00b7\1\101"+
 			"\1\uffff\1\104",
-			"\1\u00b7",
 			"\1\u00b8",
-			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\5\101\1\u00b9\1\uffff"+
-			"\1\104\7\uffff\1\u00ba\2\uffff\1\u00bb",
-			"\1\u00bc\2\uffff\1\u00bd",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\26\62\1\u00be\3\62\5\uffff"+
+			"\1\u00b9",
+			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\5\101\1\u00ba\1\uffff"+
+			"\1\104\7\uffff\1\u00bb\2\uffff\1\u00bc",
+			"\1\u00bd\2\uffff\1\u00be",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\26\62\1\u00bf\3\62\5\uffff"+
 			"\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u00c2",
 			"\1\u00c3",
 			"\1\u00c4",
-			"\1\u00c5\5\uffff\1\u00c6\6\uffff\1\u00c7\3\uffff\1\u00c8",
+			"\1\u00c5",
+			"\1\u00c6\5\uffff\1\u00c7\6\uffff\1\u00c8\3\uffff\1\u00c9",
 			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\6\101\1\uffff\1\104"+
-			"\3\uffff\1\u00ca\5\uffff\1\u00c9",
-			"\1\u00cb\1\uffff\1\u00cc",
-			"\1\u00cd",
+			"\3\uffff\1\u00cb\5\uffff\1\u00ca",
+			"\1\u00cc\1\uffff\1\u00cd",
 			"\1\u00ce",
 			"\1\u00cf",
 			"\1\u00d0",
+			"\1\u00d1",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u00d2",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\3\62\1\u00d3\3\62\1\u00d4"+
-			"\1\u00d5\2\62\1\u00d6\7\62\1\u00d7\6\62\5\uffff\uff7f\62",
+			"\1\u00d3",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\3\62\1\u00d4\3\62\1\u00d5"+
+			"\1\u00d6\2\62\1\u00d7\7\62\1\u00d8\6\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u00da",
 			"\1\u00db",
 			"\1\u00dc",
 			"\1\u00dd",
@@ -6652,54 +6685,54 @@ public class DelphiLexer extends Lexer {
 			"\1\u00df",
 			"\1\u00e0",
 			"\1\u00e1",
-			"\1\u00e2\17\uffff\1\u00e3",
-			"\1\u00e4",
+			"\1\u00e2",
+			"\1\u00e3\17\uffff\1\u00e4",
+			"\1\u00e5",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u00e7",
+			"\1\u00e8",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u00e9",
 			"\1\u00ea",
-			"\1\u00eb\17\uffff\1\u00ec",
-			"\1\u00ed",
+			"\1\u00eb",
+			"\1\u00ec\17\uffff\1\u00ed",
 			"\1\u00ee",
-			"\1\u00ef\5\uffff\1\u00f0",
-			"\1\u00f1",
+			"\1\u00ef",
+			"\1\u00f0\5\uffff\1\u00f1",
 			"\1\u00f2",
-			"\1\u00f3\1\uffff\1\u00f4\2\uffff\1\u00f5\1\u00f6\1\uffff\1\u00f7\3\uffff"+
-			"\1\u00f8\2\uffff\1\u00f9\1\u00fa\1\uffff\1\u00fb",
-			"\1\u00fc",
-			"\1\u00fd\22\uffff\1\u00fe",
-			"\1\u00ff\5\uffff\1\u0100",
-			"\1\u0101\2\uffff\1\u0102\12\uffff\1\u0103\2\uffff\1\u0104",
-			"\1\u0105\14\uffff\1\u0106",
+			"\1\u00f3",
+			"\1\u00f4\1\uffff\1\u00f5\2\uffff\1\u00f6\1\u00f7\1\uffff\1\u00f8\3\uffff"+
+			"\1\u00f9\2\uffff\1\u00fa\1\u00fb\1\uffff\1\u00fc",
+			"\1\u00fd",
+			"\1\u00fe\22\uffff\1\u00ff",
+			"\1\u0100\5\uffff\1\u0101",
+			"\1\u0102\2\uffff\1\u0103\12\uffff\1\u0104\2\uffff\1\u0105",
+			"\1\u0106\14\uffff\1\u0107",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u0109\3\uffff\1\u0108",
-			"\1\u010a",
-			"\1\u010b\11\uffff\1\u010c\1\u010d",
-			"\1\u010e",
+			"\1\u010a\3\uffff\1\u0109",
+			"\1\u010b",
+			"\1\u010c\11\uffff\1\u010d\1\u010e",
 			"\1\u010f",
 			"\1\u0110",
 			"\1\u0111",
 			"\1\u0112",
 			"\1\u0113",
 			"\1\u0114",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
 			"\1\u0115",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
 			"\1\u0116",
 			"\1\u0117",
 			"\1\u0118",
@@ -6709,96 +6742,96 @@ public class DelphiLexer extends Lexer {
 			"\1\u011c",
 			"\1\u011d",
 			"\1\u011e",
+			"\1\u011f",
+			"\1\u0120",
 			"",
 			"",
-			"\1\u00a3\1\uffff\12\u00a2\1\106\6\uffff\4\u00a5\1\u00a4\1\u00a5\1\uffff"+
-			"\1\u00a6\30\uffff\4\u00a5\1\u00a4\1\u00a5\1\uffff\1\u00a6",
+			"\1\u00a4\1\uffff\12\u00a3\1\106\6\uffff\4\u00a6\1\u00a5\1\u00a6\1\uffff"+
+			"\1\u00a7\30\uffff\4\u00a6\1\u00a5\1\u00a6\1\uffff\1\u00a7",
 			"",
-			"\1\u00a3\1\uffff\1\u00a3\2\uffff\12\u011f\1\106\6\uffff\6\u00a5\1\uffff"+
-			"\1\u00a6\30\uffff\6\u00a5\1\uffff\1\u00a6",
-			"\12\u00a5\1\106\6\uffff\6\u00a5\1\uffff\1\u00a6\30\uffff\6\u00a5\1\uffff"+
-			"\1\u00a6",
+			"\1\u00a4\1\uffff\1\u00a4\2\uffff\12\u0121\1\106\6\uffff\6\u00a6\1\uffff"+
+			"\1\u00a7\30\uffff\6\u00a6\1\uffff\1\u00a7",
+			"\12\u00a6\1\106\6\uffff\6\u00a6\1\uffff\1\u00a7\30\uffff\6\u00a6\1\uffff"+
+			"\1\u00a7",
 			"",
-			"\1\u0120\4\uffff\1\u0121",
+			"\1\u0122\4\uffff\1\u0123",
 			"\12\103\1\106\6\uffff\6\102\1\62\1\105\22\62\4\uffff\1\62\1\uffff\6"+
 			"\101\1\62\1\104\22\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u0124",
-			"\1\u0125",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0126",
 			"\1\u0127",
-			"",
-			"",
-			"\1\u0128",
-			"\1\uffff",
-			"\1\uffff",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u0129",
+			"",
+			"",
 			"\1\u012a",
+			"\1\uffff",
+			"\1\uffff",
 			"\1\u012b",
-			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\2\101\1\u012c\3\101"+
-			"\1\uffff\1\104",
+			"\1\u012c",
 			"\1\u012d",
-			"\1\u012e\1\u012f",
-			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\1\u0130\5\101\1\uffff"+
+			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\2\101\1\u012e\3\101"+
+			"\1\uffff\1\104",
+			"\1\u012f",
+			"\1\u0130\1\u0131",
+			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\1\u0132\5\101\1\uffff"+
 			"\1\104",
-			"\1\u0131",
-			"\1\u0132",
 			"\1\u0133",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0134",
 			"\1\u0135",
-			"",
-			"",
-			"",
-			"\1\u0136",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u0137",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u0139",
-			"\1\u013a",
-			"\1\u013b\11\uffff\1\u013c",
-			"\1\u013d",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u013f",
-			"\1\u0140",
-			"\1\u0141",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\26\62\1\u0142\3\62\5\uffff"+
-			"\uff7f\62",
-			"\1\u0144",
-			"\1\u0145",
-			"\1\u0146",
 			"",
+			"",
+			"",
+			"\1\u0138",
+			"\1\u0139",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u013b",
+			"\1\u013c",
+			"\1\u013d\11\uffff\1\u013e",
+			"\1\u013f",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0141",
+			"\1\u0142",
+			"\1\u0143",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\26\62\1\u0144\3\62\5\uffff"+
+			"\uff7f\62",
+			"\1\u0146",
 			"\1\u0147",
 			"\1\u0148",
+			"",
 			"\1\u0149",
 			"\1\u014a",
 			"\1\u014b",
 			"\1\u014c",
-			"",
-			"",
 			"\1\u014d",
 			"\1\u014e",
+			"",
+			"",
 			"\1\u014f",
 			"\1\u0150",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0151",
 			"\1\u0152",
-			"\1\u0153",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0154",
 			"\1\u0155",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u0157",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0159",
 			"",
 			"",
-			"\1\u0158",
+			"\1\u015a",
 			"",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u015a",
-			"\1\u015b",
 			"\1\u015c",
 			"\1\u015d",
 			"\1\u015e",
 			"\1\u015f",
-			"\1\u0160\3\uffff\1\u0161\10\uffff\1\u0162\3\uffff\1\u0163",
-			"\1\u0164",
-			"\1\u0165",
+			"\1\u0160",
+			"\1\u0161",
+			"\1\u0162\3\uffff\1\u0163\10\uffff\1\u0164\3\uffff\1\u0165",
 			"\1\u0166",
 			"\1\u0167",
 			"\1\u0168",
@@ -6807,35 +6840,35 @@ public class DelphiLexer extends Lexer {
 			"\1\u016b",
 			"\1\u016c",
 			"\1\u016d",
-			"\1\u016e\5\uffff\1\u016f",
-			"\1\u0170",
-			"\1\u0171",
+			"\1\u016e",
+			"\1\u016f",
+			"\1\u0170\5\uffff\1\u0171",
+			"\1\u0172",
+			"\1\u0173",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u0175",
-			"\1\u0176",
 			"\1\u0177",
 			"\1\u0178",
 			"\1\u0179",
 			"\1\u017a",
+			"\1\u017b",
+			"\1\u017c",
 			"",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u017c",
-			"\1\u017d",
 			"\1\u017e",
 			"\1\u017f",
 			"\1\u0180",
 			"\1\u0181",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\1\u0182\7\62\1\u0183\21\62"+
+			"\1\u0182",
+			"\1\u0183",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\1\u0184\7\62\1\u0185\21\62"+
 			"\5\uffff\uff7f\62",
-			"\1\u0185",
-			"\1\u0186",
 			"\1\u0187",
 			"\1\u0188",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0189",
 			"\1\u018a",
-			"\1\u018b",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u018c",
 			"\1\u018d",
 			"\1\u018e",
@@ -6844,51 +6877,51 @@ public class DelphiLexer extends Lexer {
 			"\1\u0191",
 			"\1\u0192",
 			"\1\u0193",
-			"\12\u0194\1\106\6\uffff\6\u00a5\1\uffff\1\u00a6\30\uffff\6\u00a5\1\uffff"+
-			"\1\u00a6",
+			"\1\u0194",
 			"\1\u0195",
 			"\1\u0196",
-			"",
-			"",
-			"\1\u0197",
+			"\12\u0197\1\106\6\uffff\6\u00a6\1\uffff\1\u00a7\30\uffff\6\u00a6\1\uffff"+
+			"\1\u00a7",
 			"\1\u0198",
-			"",
 			"\1\u0199",
+			"",
+			"",
 			"\1\u019a",
 			"\1\u019b",
+			"",
 			"\1\u019c",
+			"\1\u019d",
+			"\1\u019e",
+			"\1\u019f",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\6\101\1\uffff\1\104"+
-			"\3\uffff\1\u019e",
-			"\1\u019f",
-			"\1\u01a0",
-			"\1\u01a1\7\uffff\1\u01a2",
+			"\3\uffff\1\u01a1",
+			"\1\u01a2",
+			"\1\u01a3",
+			"\1\u01a4\7\uffff\1\u01a5",
 			"\12\103\1\106\6\uffff\6\102\1\uffff\1\105\30\uffff\6\101\1\uffff\1\104"+
-			"\14\uffff\1\u01a3",
-			"\1\u01a4",
-			"\1\u01a5",
-			"\1\u01a6",
-			"",
+			"\14\uffff\1\u01a6",
 			"\1\u01a7",
 			"\1\u01a8",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u01a9",
 			"",
 			"\1\u01aa",
+			"\1\u01ab",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u01ac",
+			"",
 			"\1\u01ad",
-			"\1\u01ae",
-			"",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u01af",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u01b0",
 			"\1\u01b1",
-			"\1\u01b2",
 			"",
-			"\1\u01b3",
+			"\1\u01b2",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u01b4",
 			"\1\u01b5",
+			"",
 			"\1\u01b6",
-			"\1\u01b7",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u01b8",
 			"\1\u01b9",
 			"\1\u01ba",
@@ -6897,20 +6930,20 @@ public class DelphiLexer extends Lexer {
 			"\1\u01bd",
 			"\1\u01be",
 			"\1\u01bf",
-			"",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
+			"\1\u01c0",
+			"\1\u01c1",
 			"\1\u01c2",
 			"",
-			"\1\u01c3",
-			"\1\u01c4",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"",
-			"\1\u01c5\5\uffff\1\u01c6",
-			"\1\u01c7\3\uffff\1\u01c8",
-			"\1\u01c9",
-			"\1\u01ca",
-			"\1\u01cb",
+			"\1\u01c5",
+			"",
+			"\1\u01c6",
+			"\1\u01c7",
+			"",
+			"\1\u01c8\5\uffff\1\u01c9",
+			"\1\u01ca\3\uffff\1\u01cb",
 			"\1\u01cc",
 			"\1\u01cd",
 			"\1\u01ce",
@@ -6918,11 +6951,11 @@ public class DelphiLexer extends Lexer {
 			"\1\u01d0",
 			"\1\u01d1",
 			"\1\u01d2",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\16\62\1\u01d3\13\62\5\uffff"+
-			"\uff7f\62",
+			"\1\u01d3",
+			"\1\u01d4",
 			"\1\u01d5",
-			"\1\u01d6",
-			"\1\u01d7",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\16\62\1\u01d6\13\62\5\uffff"+
+			"\uff7f\62",
 			"\1\u01d8",
 			"\1\u01d9",
 			"\1\u01da",
@@ -6931,33 +6964,33 @@ public class DelphiLexer extends Lexer {
 			"\1\u01dd",
 			"\1\u01de",
 			"\1\u01df",
-			"",
-			"",
-			"",
 			"\1\u01e0",
 			"\1\u01e1",
 			"\1\u01e2",
-			"\1\u01e3\12\uffff\1\u01e4",
+			"",
+			"",
+			"",
+			"\1\u01e3",
+			"\1\u01e4",
+			"\1\u01e5",
+			"\1\u01e6\12\uffff\1\u01e7",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u01e6",
+			"\1\u01e9",
 			"",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u01ea",
-			"\1\u01eb",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u01ed",
 			"\1\u01ee",
-			"",
-			"\1\u01ef",
-			"\1\u01f0",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u01f2",
+			"\1\u01f0",
+			"\1\u01f1",
 			"",
+			"\1\u01f2",
 			"\1\u01f3",
-			"\1\u01f4",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u01f5",
+			"",
 			"\1\u01f6",
 			"\1\u01f7",
 			"\1\u01f8",
@@ -6965,59 +6998,59 @@ public class DelphiLexer extends Lexer {
 			"\1\u01fa",
 			"\1\u01fb",
 			"\1\u01fc",
-			"\12\u0194\1\106\6\uffff\6\u00a5\1\uffff\1\u00a6\30\uffff\6\u00a5\1\uffff"+
-			"\1\u00a6",
 			"\1\u01fd",
 			"\1\u01fe",
 			"\1\u01ff",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0200",
+			"\12\u0197\1\106\6\uffff\6\u00a6\1\uffff\1\u00a7\30\uffff\6\u00a6\1\uffff"+
+			"\1\u00a7",
 			"\1\u0201",
 			"\1\u0202",
+			"\1\u0203",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0205",
+			"\1\u0206",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\21\62\1\u0207\10\62\5\uffff"+
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\21\62\1\u020b\10\62\5\uffff"+
 			"\uff7f\62",
-			"\1\u0209",
-			"\1\u020a",
-			"\1\u020b",
-			"\1\u020c",
 			"\1\u020d",
-			"\1\u020e\11\uffff\1\u020f",
+			"\1\u020e",
+			"\1\u020f",
 			"\1\u0210",
 			"\1\u0211",
-			"",
-			"\1\u0212",
-			"",
-			"\1\u0213",
+			"\1\u0212\11\uffff\1\u0213",
 			"\1\u0214",
 			"\1\u0215",
+			"",
+			"\1\u0216",
+			"",
+			"\1\u0217",
+			"\1\u0218",
+			"\1\u0219",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\10\62\1\u0217\2\62\1\u0218"+
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\10\62\1\u021b\2\62\1\u021c"+
 			"\16\62\5\uffff\uff7f\62",
-			"\1\u021a",
-			"\1\u021b",
-			"",
-			"\1\u021c",
-			"\1\u021d",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u021e",
 			"\1\u021f",
+			"",
 			"\1\u0220",
 			"\1\u0221",
-			"\1\u0222",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0223",
 			"\1\u0224",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0225",
 			"\1\u0226",
-			"",
-			"",
-			"\1\u0227",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u0228",
-			"\1\u0229",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u022a",
+			"",
+			"",
 			"\1\u022b",
 			"\1\u022c",
 			"\1\u022d",
@@ -7029,14 +7062,14 @@ public class DelphiLexer extends Lexer {
 			"\1\u0233",
 			"\1\u0234",
 			"\1\u0235",
-			"\1\u0236\17\uffff\1\u0237",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0236",
+			"\1\u0237",
+			"\1\u0238",
 			"\1\u0239",
-			"",
-			"\1\u023a",
-			"\1\u023b",
-			"\1\u023c",
+			"\1\u023a\17\uffff\1\u023b",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u023d",
+			"",
 			"\1\u023e",
 			"\1\u023f",
 			"\1\u0240",
@@ -7049,500 +7082,523 @@ public class DelphiLexer extends Lexer {
 			"\1\u0247",
 			"\1\u0248",
 			"\1\u0249",
-			"",
 			"\1\u024a",
-			"",
-			"",
-			"",
 			"\1\u024b",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
+			"\1\u024c",
 			"\1\u024d",
+			"",
 			"\1\u024e",
+			"",
+			"",
+			"",
 			"\1\u024f",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\16\62\1\u0251\13\62\5\uffff"+
-			"\uff7f\62",
+			"\1\u0251",
+			"\1\u0252",
 			"\1\u0253",
-			"\1\u0254",
-			"\1\u0255",
-			"\12\62\7\uffff\32\62\4\uffff\1\u0256\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\16\62\1\u0255\13\62\5\uffff"+
+			"\uff7f\62",
+			"\1\u0257",
 			"\1\u0258",
 			"\1\u0259",
-			"\1\u025a",
-			"\1\u025b",
+			"\12\62\7\uffff\32\62\4\uffff\1\u025a\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u025c",
 			"\1\u025d",
 			"\1\u025e",
 			"\1\u025f",
 			"\1\u0260",
-			"",
 			"\1\u0261",
 			"\1\u0262",
-			"",
-			"",
-			"",
-			"",
 			"\1\u0263",
-			"",
 			"\1\u0264",
 			"\1\u0265",
+			"",
 			"\1\u0266",
 			"\1\u0267",
+			"",
+			"",
+			"",
+			"",
 			"\1\u0268",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"",
+			"\1\u0269",
 			"\1\u026a",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u026b",
 			"\1\u026c",
+			"\1\u026d",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u026e",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\22\62\1\u026f\7\62\5\uffff"+
-			"\uff7f\62",
+			"\1\u026f",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u0271",
-			"",
-			"\1\u0272",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u0273",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\22\62\1\u0274\7\62\5\uffff"+
+			"\uff7f\62",
+			"\1\u0276",
 			"",
-			"\1\u0274",
-			"\1\u0275",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u0277",
-			"",
 			"\1\u0278",
-			"\1\u0279",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u027b",
 			"",
+			"\1\u0279",
+			"\1\u027a",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u027c",
 			"",
 			"\1\u027d",
 			"\1\u027e",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u0280",
+			"",
 			"\1\u0281",
+			"",
 			"\1\u0282",
 			"\1\u0283",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0285",
 			"\1\u0286",
 			"\1\u0287",
 			"\1\u0288",
-			"\1\u0289",
-			"\1\u028a",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u028b",
 			"\1\u028c",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u028d",
 			"\1\u028e",
-			"",
 			"\1\u028f",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0290",
 			"\1\u0291",
-			"\1\u0292",
-			"\1\u0293",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0293",
+			"",
+			"\1\u0294",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u0296",
 			"\1\u0297",
 			"\1\u0298",
-			"\1\u0299",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u029b",
 			"\1\u029c",
+			"\1\u029d",
+			"\1\u029e",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u02a1",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u02a0",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
-			"\1\u02a2",
-			"\1\u02a3",
-			"\1\u02a4",
-			"",
 			"\1\u02a5",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"",
-			"\1\u02a6",
 			"\1\u02a7",
 			"\1\u02a8",
-			"\1\u02ab\10\uffff\1\u02a9\1\u02aa",
+			"\1\u02a9",
 			"",
+			"\1\u02aa",
+			"",
+			"\1\u02ab",
 			"\1\u02ac",
 			"\1\u02ad",
-			"\1\u02ae",
-			"\1\u02af",
-			"\1\u02b0",
+			"\1\u02b0\10\uffff\1\u02ae\1\u02af",
+			"",
 			"\1\u02b1",
 			"\1\u02b2",
 			"\1\u02b3",
 			"\1\u02b4",
-			"\1\u02b5\23\uffff\1\u02b6",
+			"\1\u02b5",
+			"\1\u02b6",
 			"\1\u02b7",
 			"\1\u02b8",
 			"\1\u02b9",
 			"\1\u02ba",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u02bc",
+			"\1\u02bb\23\uffff\1\u02bc",
 			"\1\u02bd",
-			"",
 			"\1\u02be",
-			"",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
+			"\1\u02bf",
 			"\1\u02c0",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
 			"\1\u02c2",
 			"\1\u02c3",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u02c6",
 			"",
-			"\1\u02c7",
+			"\1\u02c4",
+			"",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"",
+			"\1\u02c6",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"",
 			"\1\u02c8",
 			"\1\u02c9",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u02cc",
 			"",
-			"\1\u02ca",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u02cd",
-			"",
 			"\1\u02ce",
 			"\1\u02cf",
+			"",
 			"\1\u02d0",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
-			"",
-			"\1\u02d2",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u02d3",
+			"",
+			"\1\u02d4",
 			"\1\u02d5",
+			"\1\u02d6",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u02d7",
+			"",
+			"",
 			"\1\u02d8",
-			"",
-			"\1\u02d9",
-			"\1\u02da",
-			"",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u02db",
-			"\1\u02dc",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u02dd",
-			"",
-			"",
 			"\1\u02de",
+			"",
 			"\1\u02df",
 			"\1\u02e0",
+			"",
 			"\1\u02e1",
-			"",
-			"",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
-			"",
-			"",
+			"\1\u02e2",
 			"\1\u02e3",
 			"",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"",
+			"\1\u02e4",
+			"\1\u02e5",
+			"\1\u02e6",
 			"\1\u02e7",
-			"\1\u02e8",
+			"",
+			"",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"",
+			"",
+			"",
 			"\1\u02e9",
-			"\1\u02ea",
-			"\1\u02eb",
-			"\1\u02ec",
+			"",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u02ed",
 			"\1\u02ee",
-			"\1\u02f0\13\uffff\1\u02ef",
+			"\1\u02ef",
+			"\1\u02f0",
 			"\1\u02f1",
 			"\1\u02f2",
 			"\1\u02f3",
 			"\1\u02f4",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u02f6\13\uffff\1\u02f5",
 			"\1\u02f7",
 			"\1\u02f8",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u02f9",
 			"\1\u02fa",
 			"\1\u02fb",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
 			"\1\u02fe",
 			"\1\u02ff",
-			"\1\u0300",
-			"",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u0301",
-			"",
+			"\1\u0302",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u0303",
-			"",
-			"",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"",
 			"\1\u0305",
 			"\1\u0306",
 			"\1\u0307",
+			"",
 			"\1\u0308",
 			"",
-			"",
-			"\1\u0309",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u030a",
 			"",
 			"",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u030c",
+			"\1\u030d",
 			"\1\u030e",
+			"\1\u030f",
+			"",
+			"",
+			"\1\u0310",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u0310",
-			"\1\u0311",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u0313",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"",
+			"",
 			"\1\u0315",
+			"",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0317",
 			"\1\u0318",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
 			"\1\u031a",
-			"",
-			"",
-			"",
-			"\1\u031b",
-			"\1\u031c",
-			"\1\u031d",
-			"\1\u031e",
-			"\1\u031f",
-			"\1\u0320",
-			"\1\u0321",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u031c",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u031f",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"",
+			"\1\u0321",
+			"",
+			"",
+			"",
+			"\1\u0322",
 			"\1\u0323",
 			"\1\u0324",
 			"\1\u0325",
 			"\1\u0326",
 			"\1\u0327",
 			"\1\u0328",
-			"",
-			"",
-			"\1\u0329",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u032a",
+			"\1\u032b",
 			"\1\u032c",
-			"",
-			"",
 			"\1\u032d",
 			"\1\u032e",
 			"\1\u032f",
 			"\1\u0330",
 			"",
+			"",
 			"\1\u0331",
-			"",
-			"\1\u0332\21\uffff\1\u0333",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0334",
+			"",
+			"",
 			"\1\u0335",
+			"\1\u0336",
+			"\1\u0337",
+			"\1\u0338",
+			"",
+			"\1\u0339",
+			"",
+			"\1\u033a\21\uffff\1\u033b",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
-			"",
-			"",
-			"",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
-			"\1\u033c",
-			"",
-			"",
 			"\1\u033d",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"",
+			"",
+			"",
+			"",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u0342\1\u0343\4\uffff\1\u0340\6\uffff\1\u0341\3\uffff\1\u0344",
+			"",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"",
+			"\1\u0344",
+			"",
+			"",
 			"\1\u0345",
-			"\1\u0346",
-			"\1\u0347",
-			"\1\u0348",
-			"\1\u0349",
 			"",
-			"\1\u034a",
-			"\1\u034b",
-			"\1\u034c",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u034a\1\u034b\4\uffff\1\u0348\6\uffff\1\u0349\3\uffff\1\u034c",
 			"\1\u034d",
-			"\1\u034f\6\uffff\1\u0350\3\uffff\1\u034e",
+			"\1\u034e",
+			"\1\u034f",
+			"\1\u0350",
 			"\1\u0351",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"",
-			"",
+			"\1\u0352",
 			"\1\u0353",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u0356",
-			"\1\u0357",
-			"\1\u0358",
+			"\1\u0354",
+			"\1\u0355",
+			"\1\u0357\6\uffff\1\u0358\3\uffff\1\u0356",
 			"\1\u0359",
+			"\1\u035a",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
-			"\1\u035b",
-			"",
-			"",
-			"",
-			"",
 			"",
 			"",
 			"\1\u035c",
-			"\1\u035d",
-			"",
-			"",
-			"\1\u035e",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u035f",
 			"\1\u0360",
 			"\1\u0361",
 			"\1\u0362",
-			"\1\u0363",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"",
 			"\1\u0364",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
 			"\1\u0365",
 			"\1\u0366",
+			"",
+			"",
 			"\1\u0367",
 			"\1\u0368",
 			"\1\u0369",
-			"\1\u036b\14\uffff\1\u036a",
+			"\1\u036a",
+			"\1\u036b",
 			"\1\u036c",
 			"\1\u036d",
 			"\1\u036e",
 			"\1\u036f",
 			"\1\u0370",
-			"",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
-			"",
+			"\1\u0371",
 			"\1\u0372",
-			"\1\u0373",
-			"\1\u0374",
+			"\1\u0374\14\uffff\1\u0373",
 			"\1\u0375",
-			"",
 			"\1\u0376",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0377",
 			"\1\u0378",
 			"\1\u0379",
 			"\1\u037a",
-			"\1\u037b",
+			"",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"",
+			"",
 			"\1\u037c",
 			"\1\u037d",
 			"\1\u037e",
 			"\1\u037f",
+			"",
 			"\1\u0380",
-			"\1\u0381",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0382",
+			"\1\u0383",
 			"\1\u0384",
 			"\1\u0385",
 			"\1\u0386",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u0387",
 			"\1\u0388",
 			"\1\u0389",
 			"\1\u038a",
 			"\1\u038b",
-			"",
-			"\1\u038c",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u038e",
 			"\1\u038f",
 			"\1\u0390",
-			"",
-			"\1\u0391",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u0392",
 			"\1\u0393",
 			"\1\u0394",
 			"\1\u0395",
 			"\1\u0396",
+			"",
 			"\1\u0397",
-			"\1\u0398",
-			"\1\u0399",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u039a",
-			"",
-			"",
 			"\1\u039b",
+			"",
 			"\1\u039c",
 			"\1\u039d",
-			"",
 			"\1\u039e",
 			"\1\u039f",
 			"\1\u03a0",
 			"\1\u03a1",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
-			"",
+			"\1\u03a2",
 			"\1\u03a3",
 			"\1\u03a4",
 			"\1\u03a5",
+			"",
+			"",
 			"\1\u03a6",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u03a7",
+			"\1\u03a8",
+			"",
+			"\1\u03a9",
 			"\1\u03aa",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u03ab",
 			"\1\u03ac",
+			"\1\u03ad",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"",
+			"",
+			"\1\u03af",
 			"\1\u03b0",
 			"\1\u03b1",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u03b3",
-			"\1\u03b4",
-			"\1\u03b5",
-			"",
+			"\1\u03b2",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u03b9",
-			"",
-			"",
-			"",
-			"\1\u03ba",
-			"",
-			"\1\u03bb",
-			"",
-			"",
-			"",
+			"\1\u03b6",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u03b8",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"",
-			"\1\u03be",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u03bc",
+			"\1\u03bd",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u03bf",
 			"\1\u03c0",
-			"",
-			"",
-			"",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
-			"\1\u03c3",
-			"",
+			"\1\u03c1",
+			"\1\u03c2",
 			"",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u03c6",
 			"",
-			"\1\u03c5",
 			"",
 			"",
-			"\12\62\7\uffff\32\62\4\uffff\1\u03c6\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u03c7",
 			"",
 			"\1\u03c8",
-			"\1\u03c9",
 			"",
-			"\1\u03ca",
+			"",
+			"",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"",
 			"\1\u03cb",
-			"\1\u03cc",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"\1\u03cd",
 			"\1\u03ce",
-			"\1\u03cf",
+			"",
+			"",
+			"",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u03d1",
+			"",
+			"",
 			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			"",
+			"\1\u03d3",
+			"\1\u03d4",
+			"",
+			"",
+			"\12\62\7\uffff\32\62\4\uffff\1\u03d5\1\uffff\32\62\5\uffff\uff7f\62",
+			"",
+			"\1\u03d7",
+			"\1\u03d8",
+			"\1\u03d9",
+			"",
+			"\1\u03da",
+			"\1\u03db",
+			"\1\u03dc",
+			"\1\u03dd",
+			"\1\u03de",
+			"\1\u03df",
+			"\1\u03e0",
+			"\1\u03e1",
+			"\1\u03e2",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"\1\u03e4",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
+			"",
+			"\1\u03e6",
+			"",
+			"\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62\5\uffff\uff7f\62",
 			""
 	};
 
@@ -7577,7 +7633,7 @@ public class DelphiLexer extends Lexer {
 		}
 		@Override
 		public String getDescription() {
-			return "1:1: Tokens : ( ABSOLUTE | ABSTRACT | ADD | AND | ANSISTRING | ARRAY | AS | ASM | ASSEMBLER | ASSEMBLY | AT | AUTOMATED | BEGIN | BREAK | CASE | CDECL | CLASS | CONST | CONSTRUCTOR | CONTAINS | CONTINUE | DEFAULT | DEPRECATED | DESTRUCTOR | DISPID | DISPINTERFACE | DIV | DO | DOWNTO | DQ | DW | DYNAMIC | ELSE | END | EXCEPT | EXIT | EXPERIMENTAL | EXPORT | EXPORTS | EXTERNAL | FAR | FILE | FINAL | FINALIZATION | FINALLY | FOR | FORWARD | FUNCTION | GOTO | HELPER | IF | IMPLEMENTATION | IMPLEMENTS | IN | INDEX | INHERITED | INITIALIZATION | INLINE | INTERFACE | IS | LABEL | LIBRARY | LOCAL | MESSAGE | MOD | NAME | NEAR | NIL | NODEFAULT | NOT | OBJECT | OF | ON | OPERATOR | OR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PACKED | PASCAL | PLATFORM | POINTER | PRIVATE | PROCEDURE | PROGRAM | PROPERTY | PROTECTED | PUBLIC | PUBLISHED | RAISE | READ | READONLY | RECORD | REFERENCE | REGISTER | REINTRODUCE | REMOVE | REPEAT | REQUIRES | RESIDENT | RESOURCESTRING | SAFECALL | SEALED | SET | SHL | SHR | STATIC | STDCALL | STORED | STRICT | STRING | THEN | THREADVAR | TO | TRY | TYPE | UNIT | UNSAFE | UNTIL | USES | VAR | VARARGS | VARIANT | VIRTUAL | WHILE | WITH | WRITE | WRITEONLY | XOR | FALSE | TRUE | PLUS | MINUS | STAR | SLASH | ASSIGN | COMMA | SEMI | COLON | EQUAL | NOT_EQUAL | LT | LE | GE | GT | LPAREN | RPAREN | LBRACK | LBRACK2 | RBRACK | RBRACK2 | POINTER2 | AT2 | DOT | DOTDOT | LCURLY | RCURLY | AMPERSAND | TkGlobalFunction | TkFunctionName | TkConstantName | TkFunctionArgs | TkFunctionBody | TkFunctionReturn | TkCustomAttribute | TkCustomAttributeArgs | TkNewType | TkClass | TkRecord | TkRecordHelper | TkInterface | TkObject | TkClassOfType | TkVariableType | TkVariableIdents | TkVariableParam | TkGuid | TkClassParents | TkClassField | TkAnonymousExpression | TkIdentifier | TkIntNum | TkRealNum | TkHexNum | TkAsmHexNum | TkAsmHexLabel | QuotedString | ControlString | COMMENT | WS | UnicodeBOM );";
+			return "1:1: Tokens : ( ABSOLUTE | ABSTRACT | ADD | AND | ANSISTRING | ARRAY | AS | ASM | ASSEMBLER | ASSEMBLY | AT | AUTOMATED | BEGIN | BREAK | CASE | CDECL | CLASS | CONST | CONSTRUCTOR | CONTAINS | CONTINUE | DEFAULT | DEPRECATED | DESTRUCTOR | DISPID | DISPINTERFACE | DIV | DO | DOWNTO | DQ | DW | DYNAMIC | ELSE | END | EXCEPT | EXIT | EXPERIMENTAL | EXPORT | EXPORTS | EXTERNAL | FAR | FILE | FINAL | FINALIZATION | FINALLY | FOR | FORWARD | FUNCTION | GOTO | HELPER | IF | IMPLEMENTATION | IMPLEMENTS | IN | INDEX | INHERITED | INITIALIZATION | INLINE | INTERFACE | IS | LABEL | LIBRARY | LOCAL | MESSAGE | MOD | NAME | NEAR | NIL | NODEFAULT | NOT | OBJECT | OF | ON | OPERATOR | OR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PACKED | PASCAL | PLATFORM | POINTER | PRIVATE | PROCEDURE | PROGRAM | PROPERTY | PROTECTED | PUBLIC | PUBLISHED | RAISE | READ | READONLY | RECORD | REFERENCE | REGISTER | REINTRODUCE | REMOVE | REPEAT | REQUIRES | RESIDENT | RESOURCESTRING | SAFECALL | SEALED | SET | SHL | SHR | STATIC | STDCALL | STORED | STRICT | STRING | THEN | THREADVAR | TO | TRY | TYPE | UNIT | UNSAFE | UNTIL | USES | VAR | VARARGS | VARIANT | VIRTUAL | WHILE | WITH | WRITE | WRITEONLY | XOR | FALSE | TRUE | PLUS | MINUS | STAR | SLASH | ASSIGN | COMMA | SEMI | COLON | EQUAL | NOT_EQUAL | LT | LE | GE | GT | LPAREN | RPAREN | LBRACK | LBRACK2 | RBRACK | RBRACK2 | POINTER2 | AT2 | DOT | DOTDOT | LCURLY | RCURLY | AMPERSAND | TkGlobalFunction | TkFunctionName | TkConstantName | TkFunctionArgs | TkFunctionBody | TkFunctionReturn | TkCustomAttribute | TkCustomAttributeArgs | TkNewType | TkClass | TkRecord | TkRecordHelper | TkInterface | TkObject | TkClassOfType | TkVariableType | TkVariableIdents | TkVariableParam | TkGuid | TkClassParents | TkClassField | TkAnonymousExpression | TkAssemblerInstructions | TkIdentifier | TkIntNum | TkRealNum | TkHexNum | TkAsmHexNum | TkAsmHexLabel | QuotedString | ControlString | COMMENT | WS | UnicodeBOM );";
 		}
 		@Override
 		public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
@@ -7585,453 +7641,32 @@ public class DelphiLexer extends Lexer {
 			int _s = s;
 			switch ( s ) {
 					case 0 : 
-						int LA18_77 = input.LA(1);
+						int LA18_178 = input.LA(1);
 						 
-						int index18_77 = input.index();
+						int index18_178 = input.index();
 						input.rewind();
 						s = -1;
-						if ( (LA18_77=='f') ) {s = 185;}
-						else if ( (LA18_77=='p') ) {s = 186;}
-						else if ( (LA18_77=='s') ) {s = 187;}
-						else if ( (LA18_77=='h') ) {s = 68;}
-						else if ( (LA18_77=='H') ) {s = 69;}
-						else if ( ((LA18_77 >= '0' && LA18_77 <= '9')) ) {s = 67;}
-						else if ( ((LA18_77 >= 'a' && LA18_77 <= 'e')) ) {s = 65;}
-						else if ( ((LA18_77 >= 'A' && LA18_77 <= 'F')) ) {s = 66;}
-						else if ( (LA18_77==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
+						if ( (!((( asmMode )))) ) {s = 50;}
+						else if ( (( asmMode )) ) {s = 167;}
 						 
-						input.seek(index18_77);
+						input.seek(index18_178);
 						if ( s>=0 ) return s;
 						break;
 
 					case 1 : 
-						int LA18_5 = input.LA(1);
+						int LA18_179 = input.LA(1);
 						 
-						int index18_5 = input.index();
+						int index18_179 = input.index();
 						input.rewind();
 						s = -1;
-						if ( (LA18_5=='l') ) {s = 83;}
-						else if ( (LA18_5=='n') ) {s = 84;}
-						else if ( (LA18_5=='x') ) {s = 85;}
-						else if ( ((LA18_5 >= 'a' && LA18_5 <= 'f')) ) {s = 65;}
-						else if ( ((LA18_5 >= 'A' && LA18_5 <= 'F')) ) {s = 66;}
-						else if ( ((LA18_5 >= '0' && LA18_5 <= '9')) ) {s = 67;}
-						else if ( (LA18_5=='h') ) {s = 68;}
-						else if ( (LA18_5=='H') ) {s = 69;}
-						else if ( (LA18_5==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
+						if ( (!((( asmMode )))) ) {s = 50;}
+						else if ( (( asmMode )) ) {s = 167;}
 						 
-						input.seek(index18_5);
+						input.seek(index18_179);
 						if ( s>=0 ) return s;
 						break;
 
 					case 2 : 
-						int LA18_67 = input.LA(1);
-						 
-						int index18_67 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (LA18_67=='h') ) {s = 68;}
-						else if ( (LA18_67=='H') ) {s = 69;}
-						else if ( ((LA18_67 >= '0' && LA18_67 <= '9')) ) {s = 67;}
-						else if ( ((LA18_67 >= 'a' && LA18_67 <= 'f')) ) {s = 65;}
-						else if ( ((LA18_67 >= 'A' && LA18_67 <= 'F')) ) {s = 66;}
-						else if ( (LA18_67==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
-						 
-						input.seek(index18_67);
-						if ( s>=0 ) return s;
-						break;
-
-					case 3 : 
-						int LA18_162 = input.LA(1);
-						 
-						int index18_162 = input.index();
-						input.rewind();
-						s = -1;
-						if ( ((LA18_162 >= '0' && LA18_162 <= '9')) ) {s = 162;}
-						else if ( (LA18_162=='.') ) {s = 163;}
-						else if ( (LA18_162=='E'||LA18_162=='e') ) {s = 164;}
-						else if ( (LA18_162=='H'||LA18_162=='h') && (( asmMode ))) {s = 166;}
-						else if ( ((LA18_162 >= 'A' && LA18_162 <= 'D')||LA18_162=='F'||(LA18_162 >= 'a' && LA18_162 <= 'd')||LA18_162=='f') && (( asmMode ))) {s = 165;}
-						else if ( (LA18_162==':') && (( asmMode ))) {s = 70;}
-						else s = 161;
-						 
-						input.seek(index18_162);
-						if ( s>=0 ) return s;
-						break;
-
-					case 4 : 
-						int LA18_3 = input.LA(1);
-						 
-						int index18_3 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (LA18_3=='a') ) {s = 73;}
-						else if ( (LA18_3=='d') ) {s = 74;}
-						else if ( (LA18_3=='l') ) {s = 75;}
-						else if ( (LA18_3=='o') ) {s = 76;}
-						else if ( ((LA18_3 >= 'b' && LA18_3 <= 'c')||(LA18_3 >= 'e' && LA18_3 <= 'f')) ) {s = 65;}
-						else if ( ((LA18_3 >= 'A' && LA18_3 <= 'F')) ) {s = 66;}
-						else if ( ((LA18_3 >= '0' && LA18_3 <= '9')) ) {s = 67;}
-						else if ( (LA18_3=='h') ) {s = 68;}
-						else if ( (LA18_3=='H') ) {s = 69;}
-						else if ( (LA18_3==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
-						 
-						input.seek(index18_3);
-						if ( s>=0 ) return s;
-						break;
-
-					case 5 : 
-						int LA18_404 = input.LA(1);
-						 
-						int index18_404 = input.index();
-						input.rewind();
-						s = -1;
-						if ( ((LA18_404 >= '0' && LA18_404 <= '9')) ) {s = 404;}
-						else if ( (LA18_404=='H'||LA18_404=='h') && (( asmMode ))) {s = 166;}
-						else if ( ((LA18_404 >= 'A' && LA18_404 <= 'F')||(LA18_404 >= 'a' && LA18_404 <= 'f')) && (( asmMode ))) {s = 165;}
-						else if ( (LA18_404==':') && (( asmMode ))) {s = 70;}
-						else s = 163;
-						 
-						input.seek(index18_404);
-						if ( s>=0 ) return s;
-						break;
-
-					case 6 : 
-						int LA18_6 = input.LA(1);
-						 
-						int index18_6 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (LA18_6=='a') ) {s = 86;}
-						else if ( (LA18_6=='i') ) {s = 87;}
-						else if ( (LA18_6=='o') ) {s = 88;}
-						else if ( (LA18_6=='u') ) {s = 89;}
-						else if ( ((LA18_6 >= 'b' && LA18_6 <= 'f')) ) {s = 65;}
-						else if ( ((LA18_6 >= 'A' && LA18_6 <= 'F')) ) {s = 66;}
-						else if ( ((LA18_6 >= '0' && LA18_6 <= '9')) ) {s = 67;}
-						else if ( (LA18_6=='h') ) {s = 68;}
-						else if ( (LA18_6=='H') ) {s = 69;}
-						else if ( (LA18_6==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
-						 
-						input.seek(index18_6);
-						if ( s>=0 ) return s;
-						break;
-
-					case 7 : 
-						int LA18_65 = input.LA(1);
-						 
-						int index18_65 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (LA18_65=='h') ) {s = 68;}
-						else if ( (LA18_65=='H') ) {s = 69;}
-						else if ( ((LA18_65 >= '0' && LA18_65 <= '9')) ) {s = 67;}
-						else if ( ((LA18_65 >= 'a' && LA18_65 <= 'f')) ) {s = 65;}
-						else if ( ((LA18_65 >= 'A' && LA18_65 <= 'F')) ) {s = 66;}
-						else if ( (LA18_65==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
-						 
-						input.seek(index18_65);
-						if ( s>=0 ) return s;
-						break;
-
-					case 8 : 
-						int LA18_66 = input.LA(1);
-						 
-						int index18_66 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (LA18_66=='h') ) {s = 68;}
-						else if ( (LA18_66=='H') ) {s = 69;}
-						else if ( ((LA18_66 >= '0' && LA18_66 <= '9')) ) {s = 67;}
-						else if ( ((LA18_66 >= 'a' && LA18_66 <= 'f')) ) {s = 65;}
-						else if ( ((LA18_66 >= 'A' && LA18_66 <= 'F')) ) {s = 66;}
-						else if ( (LA18_66==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
-						 
-						input.seek(index18_66);
-						if ( s>=0 ) return s;
-						break;
-
-					case 9 : 
-						int LA18_53 = input.LA(1);
-						 
-						int index18_53 = input.index();
-						input.rewind();
-						s = -1;
-						if ( ((LA18_53 >= '0' && LA18_53 <= '9')) ) {s = 162;}
-						else if ( (LA18_53=='.') ) {s = 163;}
-						else if ( (LA18_53=='E'||LA18_53=='e') ) {s = 164;}
-						else if ( ((LA18_53 >= 'A' && LA18_53 <= 'D')||LA18_53=='F'||(LA18_53 >= 'a' && LA18_53 <= 'd')||LA18_53=='f') && (( asmMode ))) {s = 165;}
-						else if ( (LA18_53=='H'||LA18_53=='h') && (( asmMode ))) {s = 166;}
-						else if ( (LA18_53==':') && (( asmMode ))) {s = 70;}
-						else s = 161;
-						 
-						input.seek(index18_53);
-						if ( s>=0 ) return s;
-						break;
-
-					case 10 : 
-						int LA18_51 = input.LA(1);
-						 
-						int index18_51 = input.index();
-						input.rewind();
-						s = -1;
-						if ( ((LA18_51 >= 'a' && LA18_51 <= 'f')) ) {s = 65;}
-						else if ( ((LA18_51 >= 'A' && LA18_51 <= 'F')) ) {s = 66;}
-						else if ( ((LA18_51 >= '0' && LA18_51 <= '9')) ) {s = 67;}
-						else if ( (LA18_51=='h') ) {s = 68;}
-						else if ( (LA18_51=='H') ) {s = 69;}
-						else if ( (LA18_51==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
-						 
-						input.seek(index18_51);
-						if ( s>=0 ) return s;
-						break;
-
-					case 11 : 
-						int LA18_49 = input.LA(1);
-						 
-						int index18_49 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (LA18_49=='N') ) {s = 159;}
-						else if ( ((LA18_49 >= 'a' && LA18_49 <= 'f')) ) {s = 65;}
-						else if ( ((LA18_49 >= 'A' && LA18_49 <= 'F')) ) {s = 66;}
-						else if ( ((LA18_49 >= '0' && LA18_49 <= '9')) ) {s = 67;}
-						else if ( (LA18_49=='h') ) {s = 68;}
-						else if ( (LA18_49=='H') ) {s = 69;}
-						else if ( (LA18_49==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
-						 
-						input.seek(index18_49);
-						if ( s>=0 ) return s;
-						break;
-
-					case 12 : 
-						int LA18_86 = input.LA(1);
-						 
-						int index18_86 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (LA18_86=='r') ) {s = 201;}
-						else if ( (LA18_86=='l') ) {s = 202;}
-						else if ( (LA18_86=='h') ) {s = 68;}
-						else if ( (LA18_86=='H') ) {s = 69;}
-						else if ( ((LA18_86 >= '0' && LA18_86 <= '9')) ) {s = 67;}
-						else if ( ((LA18_86 >= 'a' && LA18_86 <= 'f')) ) {s = 65;}
-						else if ( ((LA18_86 >= 'A' && LA18_86 <= 'F')) ) {s = 66;}
-						else if ( (LA18_86==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
-						 
-						input.seek(index18_86);
-						if ( s>=0 ) return s;
-						break;
-
-					case 13 : 
-						int LA18_165 = input.LA(1);
-						 
-						int index18_165 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (LA18_165=='H'||LA18_165=='h') && (( asmMode ))) {s = 166;}
-						else if ( ((LA18_165 >= '0' && LA18_165 <= '9')||(LA18_165 >= 'A' && LA18_165 <= 'F')||(LA18_165 >= 'a' && LA18_165 <= 'f')) && (( asmMode ))) {s = 165;}
-						else if ( (LA18_165==':') && (( asmMode ))) {s = 70;}
-						 
-						input.seek(index18_165);
-						if ( s>=0 ) return s;
-						break;
-
-					case 14 : 
-						int LA18_164 = input.LA(1);
-						 
-						int index18_164 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (LA18_164=='+'||LA18_164=='-') ) {s = 163;}
-						else if ( ((LA18_164 >= '0' && LA18_164 <= '9')) ) {s = 287;}
-						else if ( (LA18_164=='H'||LA18_164=='h') && (( asmMode ))) {s = 166;}
-						else if ( ((LA18_164 >= 'A' && LA18_164 <= 'F')||(LA18_164 >= 'a' && LA18_164 <= 'f')) && (( asmMode ))) {s = 165;}
-						else if ( (LA18_164==':') && (( asmMode ))) {s = 70;}
-						 
-						input.seek(index18_164);
-						if ( s>=0 ) return s;
-						break;
-
-					case 15 : 
-						int LA18_59 = input.LA(1);
-						 
-						int index18_59 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (LA18_59=='d') ) {s = 168;}
-						else if ( (LA18_59=='h') ) {s = 68;}
-						else if ( (LA18_59=='H') ) {s = 69;}
-						else if ( ((LA18_59 >= '0' && LA18_59 <= '9')) ) {s = 67;}
-						else if ( ((LA18_59 >= 'a' && LA18_59 <= 'c')||(LA18_59 >= 'e' && LA18_59 <= 'f')) ) {s = 65;}
-						else if ( ((LA18_59 >= 'A' && LA18_59 <= 'F')) ) {s = 66;}
-						else if ( (LA18_59==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
-						 
-						input.seek(index18_59);
-						if ( s>=0 ) return s;
-						break;
-
-					case 16 : 
-						int LA18_71 = input.LA(1);
-						 
-						int index18_71 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (LA18_71=='g') ) {s = 179;}
-						else if ( (LA18_71=='h') ) {s = 68;}
-						else if ( (LA18_71=='H') ) {s = 69;}
-						else if ( ((LA18_71 >= '0' && LA18_71 <= '9')) ) {s = 67;}
-						else if ( ((LA18_71 >= 'a' && LA18_71 <= 'f')) ) {s = 65;}
-						else if ( ((LA18_71 >= 'A' && LA18_71 <= 'F')) ) {s = 66;}
-						else if ( (LA18_71==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
-						 
-						input.seek(index18_71);
-						if ( s>=0 ) return s;
-						break;
-
-					case 17 : 
-						int LA18_73 = input.LA(1);
-						 
-						int index18_73 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (LA18_73=='s') ) {s = 181;}
-						else if ( (LA18_73=='h') ) {s = 68;}
-						else if ( (LA18_73=='H') ) {s = 69;}
-						else if ( ((LA18_73 >= '0' && LA18_73 <= '9')) ) {s = 67;}
-						else if ( ((LA18_73 >= 'a' && LA18_73 <= 'f')) ) {s = 65;}
-						else if ( ((LA18_73 >= 'A' && LA18_73 <= 'F')) ) {s = 66;}
-						else if ( (LA18_73==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
-						 
-						input.seek(index18_73);
-						if ( s>=0 ) return s;
-						break;
-
-					case 18 : 
-						int LA18_74 = input.LA(1);
-						 
-						int index18_74 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (LA18_74=='e') ) {s = 182;}
-						else if ( (LA18_74=='h') ) {s = 68;}
-						else if ( (LA18_74=='H') ) {s = 69;}
-						else if ( ((LA18_74 >= '0' && LA18_74 <= '9')) ) {s = 67;}
-						else if ( ((LA18_74 >= 'a' && LA18_74 <= 'd')||LA18_74=='f') ) {s = 65;}
-						else if ( ((LA18_74 >= 'A' && LA18_74 <= 'F')) ) {s = 66;}
-						else if ( (LA18_74==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
-						 
-						input.seek(index18_74);
-						if ( s>=0 ) return s;
-						break;
-
-					case 19 : 
-						int LA18_300 = input.LA(1);
-						 
-						int index18_300 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (LA18_300=='l') ) {s = 414;}
-						else if ( (LA18_300=='h') ) {s = 68;}
-						else if ( (LA18_300=='H') ) {s = 69;}
-						else if ( ((LA18_300 >= '0' && LA18_300 <= '9')) ) {s = 67;}
-						else if ( ((LA18_300 >= 'a' && LA18_300 <= 'f')) ) {s = 65;}
-						else if ( ((LA18_300 >= 'A' && LA18_300 <= 'F')) ) {s = 66;}
-						else if ( (LA18_300==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
-						 
-						input.seek(index18_300);
-						if ( s>=0 ) return s;
-						break;
-
-					case 20 : 
-						int LA18_182 = input.LA(1);
-						 
-						int index18_182 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (LA18_182=='c') ) {s = 300;}
-						else if ( (LA18_182=='h') ) {s = 68;}
-						else if ( (LA18_182=='H') ) {s = 69;}
-						else if ( ((LA18_182 >= '0' && LA18_182 <= '9')) ) {s = 67;}
-						else if ( ((LA18_182 >= 'a' && LA18_182 <= 'b')||(LA18_182 >= 'd' && LA18_182 <= 'f')) ) {s = 65;}
-						else if ( ((LA18_182 >= 'A' && LA18_182 <= 'F')) ) {s = 66;}
-						else if ( (LA18_182==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
-						 
-						input.seek(index18_182);
-						if ( s>=0 ) return s;
-						break;
-
-					case 21 : 
-						int LA18_304 = input.LA(1);
-						 
-						int index18_304 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (LA18_304=='u') ) {s = 419;}
-						else if ( (LA18_304=='h') ) {s = 68;}
-						else if ( (LA18_304=='H') ) {s = 69;}
-						else if ( ((LA18_304 >= '0' && LA18_304 <= '9')) ) {s = 67;}
-						else if ( ((LA18_304 >= 'a' && LA18_304 <= 'f')) ) {s = 65;}
-						else if ( ((LA18_304 >= 'A' && LA18_304 <= 'F')) ) {s = 66;}
-						else if ( (LA18_304==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
-						 
-						input.seek(index18_304);
-						if ( s>=0 ) return s;
-						break;
-
-					case 22 : 
-						int LA18_185 = input.LA(1);
-						 
-						int index18_185 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (LA18_185=='a') ) {s = 304;}
-						else if ( (LA18_185=='h') ) {s = 68;}
-						else if ( (LA18_185=='H') ) {s = 69;}
-						else if ( ((LA18_185 >= '0' && LA18_185 <= '9')) ) {s = 67;}
-						else if ( ((LA18_185 >= 'b' && LA18_185 <= 'f')) ) {s = 65;}
-						else if ( ((LA18_185 >= 'A' && LA18_185 <= 'F')) ) {s = 66;}
-						else if ( (LA18_185==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
-						 
-						input.seek(index18_185);
-						if ( s>=0 ) return s;
-						break;
-
-					case 23 : 
-						int LA18_52 = input.LA(1);
-						s = -1;
-						if ( ((LA18_52 >= '\u0000' && LA18_52 <= '\uFEFE')||(LA18_52 >= '\uFF00' && LA18_52 <= '\uFFFF')) ) {s = 50;}
-						else s = 160;
-						if ( s>=0 ) return s;
-						break;
-
-					case 24 : 
-						int LA18_39 = input.LA(1);
-						s = -1;
-						if ( ((LA18_39 >= '\u0000' && LA18_39 <= '\uFFFF')) ) {s = 135;}
-						else s = 149;
-						if ( s>=0 ) return s;
-						break;
-
-					case 25 : 
 						int LA18_42 = input.LA(1);
 						 
 						int index18_42 = input.index();
@@ -8050,42 +7685,7 @@ public class DelphiLexer extends Lexer {
 						if ( s>=0 ) return s;
 						break;
 
-					case 26 : 
-						int LA18_58 = input.LA(1);
-						 
-						int index18_58 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (LA18_58=='s') ) {s = 167;}
-						else if ( (LA18_58=='h') ) {s = 68;}
-						else if ( (LA18_58=='H') ) {s = 69;}
-						else if ( ((LA18_58 >= '0' && LA18_58 <= '9')) ) {s = 67;}
-						else if ( ((LA18_58 >= 'a' && LA18_58 <= 'f')) ) {s = 65;}
-						else if ( ((LA18_58 >= 'A' && LA18_58 <= 'F')) ) {s = 66;}
-						else if ( (LA18_58==':') && (( asmMode ))) {s = 70;}
-						else s = 50;
-						 
-						input.seek(index18_58);
-						if ( s>=0 ) return s;
-						break;
-
-					case 27 : 
-						int LA18_287 = input.LA(1);
-						 
-						int index18_287 = input.index();
-						input.rewind();
-						s = -1;
-						if ( ((LA18_287 >= '0' && LA18_287 <= '9')) ) {s = 404;}
-						else if ( (LA18_287=='H'||LA18_287=='h') && (( asmMode ))) {s = 166;}
-						else if ( ((LA18_287 >= 'A' && LA18_287 <= 'F')||(LA18_287 >= 'a' && LA18_287 <= 'f')) && (( asmMode ))) {s = 165;}
-						else if ( (LA18_287==':') && (( asmMode ))) {s = 70;}
-						else s = 163;
-						 
-						input.seek(index18_287);
-						if ( s>=0 ) return s;
-						break;
-
-					case 28 : 
+					case 3 : 
 						int LA18_4 = input.LA(1);
 						 
 						int index18_4 = input.index();
@@ -8109,7 +7709,26 @@ public class DelphiLexer extends Lexer {
 						if ( s>=0 ) return s;
 						break;
 
-					case 29 : 
+					case 4 : 
+						int LA18_169 = input.LA(1);
+						 
+						int index18_169 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_169=='h') ) {s = 68;}
+						else if ( (LA18_169=='H') ) {s = 69;}
+						else if ( (LA18_169=='G'||(LA18_169 >= 'I' && LA18_169 <= 'Z')||LA18_169=='_'||LA18_169=='g'||(LA18_169 >= 'i' && LA18_169 <= 'z')||(LA18_169 >= '\u0080' && LA18_169 <= '\uFFFE')) ) {s = 50;}
+						else if ( ((LA18_169 >= '0' && LA18_169 <= '9')) ) {s = 67;}
+						else if ( ((LA18_169 >= 'a' && LA18_169 <= 'f')) ) {s = 65;}
+						else if ( ((LA18_169 >= 'A' && LA18_169 <= 'F')) ) {s = 66;}
+						else if ( (LA18_169==':') && (( asmMode ))) {s = 70;}
+						else s = 292;
+						 
+						input.seek(index18_169);
+						if ( s>=0 ) return s;
+						break;
+
+					case 5 : 
 						int LA18_43 = input.LA(1);
 						 
 						int index18_43 = input.index();
@@ -8130,7 +7749,7 @@ public class DelphiLexer extends Lexer {
 						if ( s>=0 ) return s;
 						break;
 
-					case 30 : 
+					case 6 : 
 						int LA18_2 = input.LA(1);
 						 
 						int index18_2 = input.index();
@@ -8150,26 +7769,23 @@ public class DelphiLexer extends Lexer {
 						if ( s>=0 ) return s;
 						break;
 
-					case 31 : 
-						int LA18_168 = input.LA(1);
+					case 7 : 
+						int LA18_407 = input.LA(1);
 						 
-						int index18_168 = input.index();
+						int index18_407 = input.index();
 						input.rewind();
 						s = -1;
-						if ( (LA18_168=='h') ) {s = 68;}
-						else if ( (LA18_168=='H') ) {s = 69;}
-						else if ( (LA18_168=='G'||(LA18_168 >= 'I' && LA18_168 <= 'Z')||LA18_168=='_'||LA18_168=='g'||(LA18_168 >= 'i' && LA18_168 <= 'z')||(LA18_168 >= '\u0080' && LA18_168 <= '\uFFFE')) ) {s = 50;}
-						else if ( ((LA18_168 >= '0' && LA18_168 <= '9')) ) {s = 67;}
-						else if ( ((LA18_168 >= 'a' && LA18_168 <= 'f')) ) {s = 65;}
-						else if ( ((LA18_168 >= 'A' && LA18_168 <= 'F')) ) {s = 66;}
-						else if ( (LA18_168==':') && (( asmMode ))) {s = 70;}
-						else s = 290;
+						if ( ((LA18_407 >= '0' && LA18_407 <= '9')) ) {s = 407;}
+						else if ( (LA18_407=='H'||LA18_407=='h') && (( asmMode ))) {s = 167;}
+						else if ( ((LA18_407 >= 'A' && LA18_407 <= 'F')||(LA18_407 >= 'a' && LA18_407 <= 'f')) && (( asmMode ))) {s = 166;}
+						else if ( (LA18_407==':') && (( asmMode ))) {s = 70;}
+						else s = 164;
 						 
-						input.seek(index18_168);
+						input.seek(index18_407);
 						if ( s>=0 ) return s;
 						break;
 
-					case 32 : 
+					case 8 : 
 						int LA18_1 = input.LA(1);
 						 
 						int index18_1 = input.index();
@@ -8194,29 +7810,470 @@ public class DelphiLexer extends Lexer {
 						if ( s>=0 ) return s;
 						break;
 
-					case 33 : 
-						int LA18_177 = input.LA(1);
+					case 9 : 
+						int LA18_166 = input.LA(1);
 						 
-						int index18_177 = input.index();
+						int index18_166 = input.index();
 						input.rewind();
 						s = -1;
-						if ( (!((( asmMode )))) ) {s = 50;}
-						else if ( (( asmMode )) ) {s = 166;}
+						if ( (LA18_166=='H'||LA18_166=='h') && (( asmMode ))) {s = 167;}
+						else if ( ((LA18_166 >= '0' && LA18_166 <= '9')||(LA18_166 >= 'A' && LA18_166 <= 'F')||(LA18_166 >= 'a' && LA18_166 <= 'f')) && (( asmMode ))) {s = 166;}
+						else if ( (LA18_166==':') && (( asmMode ))) {s = 70;}
 						 
-						input.seek(index18_177);
+						input.seek(index18_166);
+						if ( s>=0 ) return s;
+						break;
+
+					case 10 : 
+						int LA18_77 = input.LA(1);
+						 
+						int index18_77 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_77=='f') ) {s = 186;}
+						else if ( (LA18_77=='p') ) {s = 187;}
+						else if ( (LA18_77=='s') ) {s = 188;}
+						else if ( (LA18_77=='h') ) {s = 68;}
+						else if ( (LA18_77=='H') ) {s = 69;}
+						else if ( ((LA18_77 >= '0' && LA18_77 <= '9')) ) {s = 67;}
+						else if ( ((LA18_77 >= 'a' && LA18_77 <= 'e')) ) {s = 65;}
+						else if ( ((LA18_77 >= 'A' && LA18_77 <= 'F')) ) {s = 66;}
+						else if ( (LA18_77==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
+						 
+						input.seek(index18_77);
+						if ( s>=0 ) return s;
+						break;
+
+					case 11 : 
+						int LA18_67 = input.LA(1);
+						 
+						int index18_67 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_67=='h') ) {s = 68;}
+						else if ( (LA18_67=='H') ) {s = 69;}
+						else if ( ((LA18_67 >= '0' && LA18_67 <= '9')) ) {s = 67;}
+						else if ( ((LA18_67 >= 'a' && LA18_67 <= 'f')) ) {s = 65;}
+						else if ( ((LA18_67 >= 'A' && LA18_67 <= 'F')) ) {s = 66;}
+						else if ( (LA18_67==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
+						 
+						input.seek(index18_67);
+						if ( s>=0 ) return s;
+						break;
+
+					case 12 : 
+						int LA18_52 = input.LA(1);
+						s = -1;
+						if ( ((LA18_52 >= '\u0000' && LA18_52 <= '\uFEFE')||(LA18_52 >= '\uFF00' && LA18_52 <= '\uFFFF')) ) {s = 50;}
+						else s = 161;
+						if ( s>=0 ) return s;
+						break;
+
+					case 13 : 
+						int LA18_163 = input.LA(1);
+						 
+						int index18_163 = input.index();
+						input.rewind();
+						s = -1;
+						if ( ((LA18_163 >= '0' && LA18_163 <= '9')) ) {s = 163;}
+						else if ( (LA18_163=='.') ) {s = 164;}
+						else if ( (LA18_163=='E'||LA18_163=='e') ) {s = 165;}
+						else if ( (LA18_163=='H'||LA18_163=='h') && (( asmMode ))) {s = 167;}
+						else if ( ((LA18_163 >= 'A' && LA18_163 <= 'D')||LA18_163=='F'||(LA18_163 >= 'a' && LA18_163 <= 'd')||LA18_163=='f') && (( asmMode ))) {s = 166;}
+						else if ( (LA18_163==':') && (( asmMode ))) {s = 70;}
+						else s = 162;
+						 
+						input.seek(index18_163);
+						if ( s>=0 ) return s;
+						break;
+
+					case 14 : 
+						int LA18_65 = input.LA(1);
+						 
+						int index18_65 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_65=='h') ) {s = 68;}
+						else if ( (LA18_65=='H') ) {s = 69;}
+						else if ( ((LA18_65 >= '0' && LA18_65 <= '9')) ) {s = 67;}
+						else if ( ((LA18_65 >= 'a' && LA18_65 <= 'f')) ) {s = 65;}
+						else if ( ((LA18_65 >= 'A' && LA18_65 <= 'F')) ) {s = 66;}
+						else if ( (LA18_65==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
+						 
+						input.seek(index18_65);
+						if ( s>=0 ) return s;
+						break;
+
+					case 15 : 
+						int LA18_66 = input.LA(1);
+						 
+						int index18_66 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_66=='h') ) {s = 68;}
+						else if ( (LA18_66=='H') ) {s = 69;}
+						else if ( ((LA18_66 >= '0' && LA18_66 <= '9')) ) {s = 67;}
+						else if ( ((LA18_66 >= 'a' && LA18_66 <= 'f')) ) {s = 65;}
+						else if ( ((LA18_66 >= 'A' && LA18_66 <= 'F')) ) {s = 66;}
+						else if ( (LA18_66==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
+						 
+						input.seek(index18_66);
+						if ( s>=0 ) return s;
+						break;
+
+					case 16 : 
+						int LA18_165 = input.LA(1);
+						 
+						int index18_165 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_165=='+'||LA18_165=='-') ) {s = 164;}
+						else if ( ((LA18_165 >= '0' && LA18_165 <= '9')) ) {s = 289;}
+						else if ( (LA18_165=='H'||LA18_165=='h') && (( asmMode ))) {s = 167;}
+						else if ( ((LA18_165 >= 'A' && LA18_165 <= 'F')||(LA18_165 >= 'a' && LA18_165 <= 'f')) && (( asmMode ))) {s = 166;}
+						else if ( (LA18_165==':') && (( asmMode ))) {s = 70;}
+						 
+						input.seek(index18_165);
+						if ( s>=0 ) return s;
+						break;
+
+					case 17 : 
+						int LA18_5 = input.LA(1);
+						 
+						int index18_5 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_5=='l') ) {s = 83;}
+						else if ( (LA18_5=='n') ) {s = 84;}
+						else if ( (LA18_5=='x') ) {s = 85;}
+						else if ( ((LA18_5 >= 'a' && LA18_5 <= 'f')) ) {s = 65;}
+						else if ( ((LA18_5 >= 'A' && LA18_5 <= 'F')) ) {s = 66;}
+						else if ( ((LA18_5 >= '0' && LA18_5 <= '9')) ) {s = 67;}
+						else if ( (LA18_5=='h') ) {s = 68;}
+						else if ( (LA18_5=='H') ) {s = 69;}
+						else if ( (LA18_5==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
+						 
+						input.seek(index18_5);
+						if ( s>=0 ) return s;
+						break;
+
+					case 18 : 
+						int LA18_39 = input.LA(1);
+						s = -1;
+						if ( ((LA18_39 >= '\u0000' && LA18_39 <= '\uFFFF')) ) {s = 135;}
+						else s = 149;
+						if ( s>=0 ) return s;
+						break;
+
+					case 19 : 
+						int LA18_3 = input.LA(1);
+						 
+						int index18_3 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_3=='a') ) {s = 73;}
+						else if ( (LA18_3=='d') ) {s = 74;}
+						else if ( (LA18_3=='l') ) {s = 75;}
+						else if ( (LA18_3=='o') ) {s = 76;}
+						else if ( ((LA18_3 >= 'b' && LA18_3 <= 'c')||(LA18_3 >= 'e' && LA18_3 <= 'f')) ) {s = 65;}
+						else if ( ((LA18_3 >= 'A' && LA18_3 <= 'F')) ) {s = 66;}
+						else if ( ((LA18_3 >= '0' && LA18_3 <= '9')) ) {s = 67;}
+						else if ( (LA18_3=='h') ) {s = 68;}
+						else if ( (LA18_3=='H') ) {s = 69;}
+						else if ( (LA18_3==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
+						 
+						input.seek(index18_3);
+						if ( s>=0 ) return s;
+						break;
+
+					case 20 : 
+						int LA18_6 = input.LA(1);
+						 
+						int index18_6 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_6=='a') ) {s = 86;}
+						else if ( (LA18_6=='i') ) {s = 87;}
+						else if ( (LA18_6=='o') ) {s = 88;}
+						else if ( (LA18_6=='u') ) {s = 89;}
+						else if ( ((LA18_6 >= 'b' && LA18_6 <= 'f')) ) {s = 65;}
+						else if ( ((LA18_6 >= 'A' && LA18_6 <= 'F')) ) {s = 66;}
+						else if ( ((LA18_6 >= '0' && LA18_6 <= '9')) ) {s = 67;}
+						else if ( (LA18_6=='h') ) {s = 68;}
+						else if ( (LA18_6=='H') ) {s = 69;}
+						else if ( (LA18_6==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
+						 
+						input.seek(index18_6);
+						if ( s>=0 ) return s;
+						break;
+
+					case 21 : 
+						int LA18_86 = input.LA(1);
+						 
+						int index18_86 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_86=='r') ) {s = 202;}
+						else if ( (LA18_86=='l') ) {s = 203;}
+						else if ( (LA18_86=='h') ) {s = 68;}
+						else if ( (LA18_86=='H') ) {s = 69;}
+						else if ( ((LA18_86 >= '0' && LA18_86 <= '9')) ) {s = 67;}
+						else if ( ((LA18_86 >= 'a' && LA18_86 <= 'f')) ) {s = 65;}
+						else if ( ((LA18_86 >= 'A' && LA18_86 <= 'F')) ) {s = 66;}
+						else if ( (LA18_86==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
+						 
+						input.seek(index18_86);
+						if ( s>=0 ) return s;
+						break;
+
+					case 22 : 
+						int LA18_51 = input.LA(1);
+						 
+						int index18_51 = input.index();
+						input.rewind();
+						s = -1;
+						if ( ((LA18_51 >= 'a' && LA18_51 <= 'f')) ) {s = 65;}
+						else if ( ((LA18_51 >= 'A' && LA18_51 <= 'F')) ) {s = 66;}
+						else if ( ((LA18_51 >= '0' && LA18_51 <= '9')) ) {s = 67;}
+						else if ( (LA18_51=='h') ) {s = 68;}
+						else if ( (LA18_51=='H') ) {s = 69;}
+						else if ( (LA18_51==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
+						 
+						input.seek(index18_51);
+						if ( s>=0 ) return s;
+						break;
+
+					case 23 : 
+						int LA18_59 = input.LA(1);
+						 
+						int index18_59 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_59=='d') ) {s = 169;}
+						else if ( (LA18_59=='h') ) {s = 68;}
+						else if ( (LA18_59=='H') ) {s = 69;}
+						else if ( ((LA18_59 >= '0' && LA18_59 <= '9')) ) {s = 67;}
+						else if ( ((LA18_59 >= 'a' && LA18_59 <= 'c')||(LA18_59 >= 'e' && LA18_59 <= 'f')) ) {s = 65;}
+						else if ( ((LA18_59 >= 'A' && LA18_59 <= 'F')) ) {s = 66;}
+						else if ( (LA18_59==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
+						 
+						input.seek(index18_59);
+						if ( s>=0 ) return s;
+						break;
+
+					case 24 : 
+						int LA18_49 = input.LA(1);
+						 
+						int index18_49 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_49=='N') ) {s = 159;}
+						else if ( (LA18_49=='S') ) {s = 160;}
+						else if ( ((LA18_49 >= 'a' && LA18_49 <= 'f')) ) {s = 65;}
+						else if ( ((LA18_49 >= 'A' && LA18_49 <= 'F')) ) {s = 66;}
+						else if ( ((LA18_49 >= '0' && LA18_49 <= '9')) ) {s = 67;}
+						else if ( (LA18_49=='h') ) {s = 68;}
+						else if ( (LA18_49=='H') ) {s = 69;}
+						else if ( (LA18_49==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
+						 
+						input.seek(index18_49);
+						if ( s>=0 ) return s;
+						break;
+
+					case 25 : 
+						int LA18_53 = input.LA(1);
+						 
+						int index18_53 = input.index();
+						input.rewind();
+						s = -1;
+						if ( ((LA18_53 >= '0' && LA18_53 <= '9')) ) {s = 163;}
+						else if ( (LA18_53=='.') ) {s = 164;}
+						else if ( (LA18_53=='E'||LA18_53=='e') ) {s = 165;}
+						else if ( ((LA18_53 >= 'A' && LA18_53 <= 'D')||LA18_53=='F'||(LA18_53 >= 'a' && LA18_53 <= 'd')||LA18_53=='f') && (( asmMode ))) {s = 166;}
+						else if ( (LA18_53=='H'||LA18_53=='h') && (( asmMode ))) {s = 167;}
+						else if ( (LA18_53==':') && (( asmMode ))) {s = 70;}
+						else s = 162;
+						 
+						input.seek(index18_53);
+						if ( s>=0 ) return s;
+						break;
+
+					case 26 : 
+						int LA18_71 = input.LA(1);
+						 
+						int index18_71 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_71=='g') ) {s = 180;}
+						else if ( (LA18_71=='h') ) {s = 68;}
+						else if ( (LA18_71=='H') ) {s = 69;}
+						else if ( ((LA18_71 >= '0' && LA18_71 <= '9')) ) {s = 67;}
+						else if ( ((LA18_71 >= 'a' && LA18_71 <= 'f')) ) {s = 65;}
+						else if ( ((LA18_71 >= 'A' && LA18_71 <= 'F')) ) {s = 66;}
+						else if ( (LA18_71==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
+						 
+						input.seek(index18_71);
+						if ( s>=0 ) return s;
+						break;
+
+					case 27 : 
+						int LA18_73 = input.LA(1);
+						 
+						int index18_73 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_73=='s') ) {s = 182;}
+						else if ( (LA18_73=='h') ) {s = 68;}
+						else if ( (LA18_73=='H') ) {s = 69;}
+						else if ( ((LA18_73 >= '0' && LA18_73 <= '9')) ) {s = 67;}
+						else if ( ((LA18_73 >= 'a' && LA18_73 <= 'f')) ) {s = 65;}
+						else if ( ((LA18_73 >= 'A' && LA18_73 <= 'F')) ) {s = 66;}
+						else if ( (LA18_73==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
+						 
+						input.seek(index18_73);
+						if ( s>=0 ) return s;
+						break;
+
+					case 28 : 
+						int LA18_74 = input.LA(1);
+						 
+						int index18_74 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_74=='e') ) {s = 183;}
+						else if ( (LA18_74=='h') ) {s = 68;}
+						else if ( (LA18_74=='H') ) {s = 69;}
+						else if ( ((LA18_74 >= '0' && LA18_74 <= '9')) ) {s = 67;}
+						else if ( ((LA18_74 >= 'a' && LA18_74 <= 'd')||LA18_74=='f') ) {s = 65;}
+						else if ( ((LA18_74 >= 'A' && LA18_74 <= 'F')) ) {s = 66;}
+						else if ( (LA18_74==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
+						 
+						input.seek(index18_74);
+						if ( s>=0 ) return s;
+						break;
+
+					case 29 : 
+						int LA18_302 = input.LA(1);
+						 
+						int index18_302 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_302=='l') ) {s = 417;}
+						else if ( (LA18_302=='h') ) {s = 68;}
+						else if ( (LA18_302=='H') ) {s = 69;}
+						else if ( ((LA18_302 >= '0' && LA18_302 <= '9')) ) {s = 67;}
+						else if ( ((LA18_302 >= 'a' && LA18_302 <= 'f')) ) {s = 65;}
+						else if ( ((LA18_302 >= 'A' && LA18_302 <= 'F')) ) {s = 66;}
+						else if ( (LA18_302==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
+						 
+						input.seek(index18_302);
+						if ( s>=0 ) return s;
+						break;
+
+					case 30 : 
+						int LA18_183 = input.LA(1);
+						 
+						int index18_183 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_183=='c') ) {s = 302;}
+						else if ( (LA18_183=='h') ) {s = 68;}
+						else if ( (LA18_183=='H') ) {s = 69;}
+						else if ( ((LA18_183 >= '0' && LA18_183 <= '9')) ) {s = 67;}
+						else if ( ((LA18_183 >= 'a' && LA18_183 <= 'b')||(LA18_183 >= 'd' && LA18_183 <= 'f')) ) {s = 65;}
+						else if ( ((LA18_183 >= 'A' && LA18_183 <= 'F')) ) {s = 66;}
+						else if ( (LA18_183==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
+						 
+						input.seek(index18_183);
+						if ( s>=0 ) return s;
+						break;
+
+					case 31 : 
+						int LA18_306 = input.LA(1);
+						 
+						int index18_306 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_306=='u') ) {s = 422;}
+						else if ( (LA18_306=='h') ) {s = 68;}
+						else if ( (LA18_306=='H') ) {s = 69;}
+						else if ( ((LA18_306 >= '0' && LA18_306 <= '9')) ) {s = 67;}
+						else if ( ((LA18_306 >= 'a' && LA18_306 <= 'f')) ) {s = 65;}
+						else if ( ((LA18_306 >= 'A' && LA18_306 <= 'F')) ) {s = 66;}
+						else if ( (LA18_306==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
+						 
+						input.seek(index18_306);
+						if ( s>=0 ) return s;
+						break;
+
+					case 32 : 
+						int LA18_186 = input.LA(1);
+						 
+						int index18_186 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (LA18_186=='a') ) {s = 306;}
+						else if ( (LA18_186=='h') ) {s = 68;}
+						else if ( (LA18_186=='H') ) {s = 69;}
+						else if ( ((LA18_186 >= '0' && LA18_186 <= '9')) ) {s = 67;}
+						else if ( ((LA18_186 >= 'b' && LA18_186 <= 'f')) ) {s = 65;}
+						else if ( ((LA18_186 >= 'A' && LA18_186 <= 'F')) ) {s = 66;}
+						else if ( (LA18_186==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
+						 
+						input.seek(index18_186);
+						if ( s>=0 ) return s;
+						break;
+
+					case 33 : 
+						int LA18_289 = input.LA(1);
+						 
+						int index18_289 = input.index();
+						input.rewind();
+						s = -1;
+						if ( ((LA18_289 >= '0' && LA18_289 <= '9')) ) {s = 407;}
+						else if ( (LA18_289=='H'||LA18_289=='h') && (( asmMode ))) {s = 167;}
+						else if ( ((LA18_289 >= 'A' && LA18_289 <= 'F')||(LA18_289 >= 'a' && LA18_289 <= 'f')) && (( asmMode ))) {s = 166;}
+						else if ( (LA18_289==':') && (( asmMode ))) {s = 70;}
+						else s = 164;
+						 
+						input.seek(index18_289);
 						if ( s>=0 ) return s;
 						break;
 
 					case 34 : 
-						int LA18_178 = input.LA(1);
+						int LA18_58 = input.LA(1);
 						 
-						int index18_178 = input.index();
+						int index18_58 = input.index();
 						input.rewind();
 						s = -1;
-						if ( (!((( asmMode )))) ) {s = 50;}
-						else if ( (( asmMode )) ) {s = 166;}
+						if ( (LA18_58=='s') ) {s = 168;}
+						else if ( (LA18_58=='h') ) {s = 68;}
+						else if ( (LA18_58=='H') ) {s = 69;}
+						else if ( ((LA18_58 >= '0' && LA18_58 <= '9')) ) {s = 67;}
+						else if ( ((LA18_58 >= 'a' && LA18_58 <= 'f')) ) {s = 65;}
+						else if ( ((LA18_58 >= 'A' && LA18_58 <= 'F')) ) {s = 66;}
+						else if ( (LA18_58==':') && (( asmMode ))) {s = 70;}
+						else s = 50;
 						 
-						input.seek(index18_178);
+						input.seek(index18_58);
 						if ( s>=0 ) return s;
 						break;
 			}
