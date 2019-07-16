@@ -610,7 +610,9 @@ raiseStatement               : 'raise' (expression)? (AT expression)?
 //****************************
 //section AssemblerStatement
 //****************************
-assemblerStatement           : 'asm' ~('end')* 'end' // Skip asm statements
+assemblerStatement           : 'asm' assemblerInstructions 'end' -> 'asm' ^(TkAssemblerInstructions assemblerInstructions) 'end'
+                             ;
+assemblerInstructions        : ~('end')* // Skip asm statements
                              ;
 //****************************
 //section directive
@@ -938,6 +940,8 @@ TkClassParents          : 'CLASS_PARENTS'
 TkClassField            : 'CLASS_FIELD'
                         ;
 TkAnonymousExpression   : 'ANONYMOUS_EXPRESSION'
+                        ;
+TkAssemblerInstructions : 'ASSEMBLER_INSTRUCTIONS'
                         ;
 TkIdentifier            : (Alpha | '_') (Alpha | Digit | '_')*
                         ;

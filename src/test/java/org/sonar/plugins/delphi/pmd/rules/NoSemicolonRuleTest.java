@@ -157,4 +157,57 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     assertIssues(empty());
   }
+
+  @Test
+  public void testShouldSkipAsmProcedure() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+    builder.appendImpl("procedure Test; assembler; register;");
+    builder.appendImpl("asm");
+    builder.appendImpl("   MOV EAX, 1");
+    builder.appendImpl("   ADD EAX, 2");
+    builder.appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testShouldSkipInlineAsm() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+    builder.appendImpl("procedure Test; assembler; register;");
+    builder.appendImpl("var");
+    builder.appendImpl("  MyVar: Boolean;");
+    builder.appendImpl("begin");
+    builder.appendImpl("  MyVar := True;");
+    builder.appendImpl("  asm");
+    builder.appendImpl("    MOV EAX, 1");
+    builder.appendImpl("    ADD EAX, 2");
+    builder.appendImpl("  end;");
+    builder.appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testInlineAsmWithoutSemicolonAfterEndShouldAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+    builder.appendImpl("procedure Test; assembler; register;");
+    builder.appendImpl("var");
+    builder.appendImpl("  MyVar: Boolean;");
+    builder.appendImpl("begin");
+    builder.appendImpl("  MyVar := True;");
+    builder.appendImpl("  asm");
+    builder.appendImpl("    MOV EAX, 1");
+    builder.appendImpl("    ADD EAX, 2");
+    builder.appendImpl("  end");
+    builder.appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 9)));
+  }
 }
