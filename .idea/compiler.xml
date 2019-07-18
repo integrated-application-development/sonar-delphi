@@ -85,7 +85,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="SonarQube_Delphi" options="-XDcompilePolicy=simple -Xlint:all,-serial,-path,-processing,-rawtypes,-cast,-classfile &quot;-Xplugin:ErrorProne -XepDisableWarningsInGeneratedCode -XepExcludedPaths:.*/antlr/generated/.*&quot;" />
+      <module name="SonarQube_Delphi" options="-XDcompilePolicy=simple -Werror -Xlint:all,-serial,-path,-processing,-rawtypes,-cast,-classfile &quot;-Xplugin:ErrorProne -XepDisableWarningsInGeneratedCode -XepExcludedPaths:.*/antlr/generated/.*&quot;" />
     </option>
   </component>
 </project>
