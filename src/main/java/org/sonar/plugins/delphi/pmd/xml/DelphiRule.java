@@ -162,7 +162,10 @@ public final class DelphiRule {
             + "' should be set for PMD rule " + sonarRuleKey);
       }
 
-      xpathExp.setCdataValue(xpathExp.getValue());
+      if (!xpathExp.isCdataValue()) {
+        xpathExp.setCdataValue(xpathExp.getValue());
+      }
+
       name = sonarRuleKey;
     }
   }

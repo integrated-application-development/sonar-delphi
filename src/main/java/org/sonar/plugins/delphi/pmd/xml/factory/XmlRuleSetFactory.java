@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.delphi.pmd.xml.factory;
 
+import com.google.common.base.Splitter;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
@@ -32,6 +33,7 @@ import org.jdom.input.SAXBuilder;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
@@ -61,8 +63,8 @@ public class XmlRuleSetFactory implements RuleSetFactory {
     }
   }
 
-  private Element getChild(Element parent, @Nullable Namespace namespace) {
-    final List<Element> children = getChildren(parent, "description", namespace);
+  private Element getChild(Element parent, String child, @Nullable Namespace namespace) {
+    final List<Element> children = getChildren(parent, child, namespace);
 
     return (children != null && !children.isEmpty()) ? children.get(0) : null;
   }
@@ -71,9 +73,24 @@ public class XmlRuleSetFactory implements RuleSetFactory {
     for (Element eltProperties : getChildren(eltRule, "properties", namespace)) {
       for (Element eltProperty : getChildren(eltProperties, "property", namespace)) {
         String name = eltProperty.getAttributeValue("name");
-        String value = eltProperty.getAttributeValue("value");
-        rule.addProperty(new DelphiRuleProperty(name, value));
+
+        DelphiRuleProperty property = new DelphiRuleProperty(name);
+        parsePmdPropertyValue(eltProperty, property, namespace);
+
+        rule.addProperty(property);
       }
+    }
+  }
+
+  private void parsePmdPropertyValue(Element eltProperty, DelphiRuleProperty property,
+      @Nullable Namespace namespace) {
+    if (DelphiPmdConstants.XPATH_EXPRESSION_PARAM.equals(property.getName())) {
+      Element xpathElement = getChild(eltProperty, "value", namespace);
+      if (xpathElement != null) {
+        property.setCdataValue(xpathElement.getValue());
+      }
+    } else {
+      property.setCdataValue(eltProperty.getAttributeValue("value"));
     }
   }
 
@@ -91,7 +108,17 @@ public class XmlRuleSetFactory implements RuleSetFactory {
 
   private void parseExample(Element eltRule, DelphiRule rule, @Nullable Namespace namespace) {
     for (Element eltExample : getChildren(eltRule, "example", namespace)) {
-      rule.setExample(eltExample.getText().trim());
+      String text = eltExample.getText();
+      StringBuilder exampleBuilder = new StringBuilder();
+      Iterable<String> lines = Splitter.on('\n')
+          .trimResults()
+          .split(text);
+
+      for (String line : lines) {
+        exampleBuilder.append(line);
+      }
+
+      rule.setExample(exampleBuilder.toString());
     }
   }
 
@@ -129,7 +156,7 @@ public class XmlRuleSetFactory implements RuleSetFactory {
     final DelphiRuleSet result = new DelphiRuleSet();
 
     final String name = eltResultset.getAttributeValue("name");
-    final Element descriptionElement = getChild(eltResultset, namespace);
+    final Element descriptionElement = getChild(eltResultset, "description", namespace);
 
     result.setName(name);
 

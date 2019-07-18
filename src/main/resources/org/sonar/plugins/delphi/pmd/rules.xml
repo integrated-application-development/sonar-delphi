@@ -280,7 +280,13 @@
 		<description>Avoid 'out' variable parameters. Nasty.</description>
 		<properties>
 			<property name="baseEffort" value="30min" />
-			<property name="xpath" value="//TkVariableParam/out" />
+			<property name="xpath">
+				<value>
+					<![CDATA[
+						//TkVariableParam/OUT
+					]]>
+				</value>
+			</property>
 		</properties>
 		<example>
 			<![CDATA[

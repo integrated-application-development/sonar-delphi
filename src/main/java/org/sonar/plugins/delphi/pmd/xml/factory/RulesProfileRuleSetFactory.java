@@ -46,7 +46,6 @@ public class RulesProfileRuleSetFactory implements RuleSetFactory {
 
   @Override
   public DelphiRuleSet create() {
-
     final DelphiRuleSet ruleSet = new DelphiRuleSet();
     ruleSet.setName(repositoryKey);
     ruleSet.setDescription(String.format("Sonar Profile: %s", repositoryKey));

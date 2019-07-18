@@ -23,11 +23,16 @@ public class DelphiRuleProperty {
 
   private final String name;
   private String value;
-  private String cdataValue;
+  private boolean cdataValue;
+
+  public DelphiRuleProperty(String name) {
+    this(name, null);
+  }
 
   public DelphiRuleProperty(String name, String value) {
     this.name = name;
     this.value = value;
+    this.cdataValue = false;
   }
 
   public String getName() {
@@ -38,19 +43,17 @@ public class DelphiRuleProperty {
     return value;
   }
 
-  public void setValue(String value) {
-    this.value = value;
-  }
-
-  public String getCdataValue() {
+  public boolean isCdataValue() {
     return cdataValue;
   }
 
-  public boolean isCdataValue() {
-    return cdataValue != null;
+  public void setValue(String value) {
+    this.value = value;
+    this.cdataValue = false;
   }
 
   public void setCdataValue(String cdataValue) {
-    this.cdataValue = cdataValue;
+    this.value = cdataValue;
+    this.cdataValue = true;
   }
 }

@@ -119,9 +119,11 @@ public class DelphiPmdProfileImporterTest {
     Reader reader = read("export_xpath_rules.xml");
 
     RulesProfile profile = importer.importProfile(reader, messages);
+    ActiveRule rule = getRule(profile, "MyXpathRule");
 
     assertThat(profile.getActiveRules(), hasSize(1));
-    assertThat(getRule(profile, "MyXpathRule"), is(not(nullValue())));
+    assertThat(rule, is(not(nullValue())));
+    assertThat(rule.getParameter(DelphiPmdConstants.XPATH_EXPRESSION_PARAM), is(not(nullValue())));
   }
 
   @Test

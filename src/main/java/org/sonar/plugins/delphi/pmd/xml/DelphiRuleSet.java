@@ -1,5 +1,7 @@
 package org.sonar.plugins.delphi.pmd.xml;
 
+import static org.apache.commons.lang3.StringUtils.isNumeric;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import org.jdom.CDATA;
 import org.jdom.Content;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.Text;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.sonar.api.rules.Rule;
@@ -96,7 +99,7 @@ public class DelphiRuleSet {
 
   private void addChild(Element elt, String name, @Nullable String text) {
     if (text != null) {
-      elt.addContent(new Element(name).setText(text));
+      addChild(elt, name, new Text(text));
     }
   }
 
@@ -115,27 +118,26 @@ public class DelphiRuleSet {
   private Element processRuleProperties(DelphiRule delphiRule) {
     Element eltProperties = new Element("properties");
     for (DelphiRuleProperty prop : delphiRule.getProperties()) {
-      if (isPropertyValueNotEmpty(prop)) {
-        Element eltProperty = new Element("property");
-        eltProperty.setAttribute("name", prop.getName());
-        if (prop.isCdataValue()) {
-          Element eltValue = new Element("value");
-          eltValue.addContent(new CDATA(prop.getCdataValue()));
-          eltProperty.addContent(eltValue);
-        } else {
-          eltProperty.setAttribute("value", prop.getValue());
-        }
-        eltProperties.addContent(eltProperty);
+      if (isPropertyValueEmpty(prop)) {
+        continue;
       }
+
+      Element eltProperty = new Element("property");
+      eltProperty.setAttribute("name", prop.getName());
+      if (prop.isCdataValue()) {
+        Element eltValue = new Element("value");
+        eltValue.addContent(new CDATA(prop.getValue()));
+        eltProperty.addContent(eltValue);
+      } else {
+        eltProperty.setAttribute("value", prop.getValue());
+      }
+      eltProperties.addContent(eltProperty);
     }
     return eltProperties;
   }
 
-  private boolean isPropertyValueNotEmpty(DelphiRuleProperty prop) {
-    if (prop.isCdataValue()) {
-      return StringUtils.isNotEmpty(prop.getCdataValue());
-    }
-    return StringUtils.isNotEmpty(prop.getValue());
+  private boolean isPropertyValueEmpty(DelphiRuleProperty prop) {
+    return StringUtils.isEmpty(prop.getValue());
   }
 
   private static Rule makeSonarRule(DelphiRule fRule) {
@@ -155,7 +157,7 @@ public class DelphiRuleSet {
                 .setDescription(property.getName())
                 .setType("s");
 
-        if (org.apache.commons.lang.StringUtils.isNumeric(property.getValue())) {
+        if (isNumeric(property.getValue())) {
           param.setType("i");
         }
 

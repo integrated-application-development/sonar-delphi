@@ -145,7 +145,7 @@ public class DelphiRuleTest {
     rule.processXpath("sonarRuleKey");
 
     assertTrue(xpathProperty.isCdataValue());
-    assertThat(xpathProperty.getCdataValue(), is("myXpathExpression"));
+    assertThat(xpathProperty.getValue(), is("myXpathExpression"));
     assertThat(rule.getName(), is("sonarRuleKey"));
   }
 
