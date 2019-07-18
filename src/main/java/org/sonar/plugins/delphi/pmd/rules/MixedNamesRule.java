@@ -92,7 +92,8 @@ public class MixedNamesRule extends DelphiRule {
   }
 
   private void handleNewType(DelphiPMDNode node) {
-    typeName = node.getChild(0).getText() + ".";
+    Tree typeNameNode = node.getFirstChildWithType(DelphiLexer.TkNewTypeName).getChild(0);
+    typeName = typeNameNode.getText() + ".";
   }
 
   private void handleFunctionName(DelphiPMDNode node, RuleContext ctx) {
@@ -122,8 +123,8 @@ public class MixedNamesRule extends DelphiRule {
     for (int i = 0; i < node.getChildCount(); ++i) {
       DelphiPMDNode child = new DelphiPMDNode((CommonTree) node.getChild(i), node.getASTTree());
 
-      if (child.getLine() > lastLineParsed) {
-        lastLineParsed = child.getLine();
+      if (child.getLine() > skipToLine) {
+        skipToLine = child.getLine();
       }
 
       if (child.getType() == DelphiLexer.BEGIN) {

@@ -17,7 +17,7 @@ public class ConstructorCreateRule extends NameConventionRule {
   private static final String PREFIX = "Create";
 
   @Override
-  public DelphiPMDNode findNameNode(DelphiPMDNode node) {
+  public DelphiPMDNode findNode(DelphiPMDNode node) {
     if (isInterfaceSection() && node.getType() == DelphiLexer.CONSTRUCTOR) {
       Tree functionName = node.getFirstChildWithType(DelphiLexer.TkFunctionName);
 

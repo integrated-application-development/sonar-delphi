@@ -11,13 +11,13 @@
     <exclude name="NMTOKEN"/>
     <example>an example</example>
   </rule>
-  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounter" name="TooManyArgumentsRule">
+  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounterRule" name="TooManyArgumentsRule">
     <priority>3</priority>
     <properties>
       <property name="limit" value="20" pluginname="plugin name" description="property description"/>
     </properties>
   </rule>
-  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounter" name="TooManyVariablesRule">
+  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounterRule" name="TooManyVariablesRule">
     <priority>4</priority>
   </rule>
 </ruleset>

@@ -29,7 +29,7 @@ public class UnitNameRule extends NameConventionRule {
   private static final String[] PREFIXES = {"F", "Fr", "Frame"};
 
   @Override
-  public List<DelphiPMDNode> findNameNodes(DelphiPMDNode node) {
+  public List<DelphiPMDNode> findNodes(DelphiPMDNode node) {
     if (node.getType() == DelphiLexer.UNIT) {
       List<?> children = node.getChildren();
 

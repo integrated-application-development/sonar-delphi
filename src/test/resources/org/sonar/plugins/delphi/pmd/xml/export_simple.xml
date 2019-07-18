@@ -8,24 +8,20 @@
       <property name="baseEffort" value="1min" />
     </properties>
   </rule>
-  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounter" message="Too many arguments" name="TooManyArgumentsRule" language="delph">
+  <rule class="org.sonar.plugins.delphi.pmd.rules.TooManyArgumentsRule" message="Too many arguments" name="TooManyArgumentsRule" language="delph">
     <priority>1</priority>
     <description>Function may have too many arguments, maximum number of arguments is 6</description>
     <properties>
       <property name="baseEffort" value="1h" />
       <property name="limit" value="6" />
-      <property name="start" value="TkFunctionArgs" />
-      <property name="lookFor" value="arguments" />
     </properties>
   </rule>
-  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounter" message="Too many variables" name="TooManyVariablesRule" language="delph">
+  <rule class="org.sonar.plugins.delphi.pmd.rules.TooManyVariablesRule" message="Too many variables" name="TooManyVariablesRule" language="delph">
     <priority>3</priority>
     <description>Function may have too many variables, maximum number of variables is 10</description>
     <properties>
       <property name="baseEffort" value="30min" />
       <property name="limit" value="10" />
-      <property name="start" value="var" />
-      <property name="lookFor" value="variables" />
     </properties>
   </rule>
 </ruleset>

@@ -12,7 +12,7 @@ public class ConstantNotationRule extends NameConventionRule {
   private static final String PREFIX = "C_";
 
   @Override
-  public List<DelphiPMDNode> findNameNodes(DelphiPMDNode node) {
+  public List<DelphiPMDNode> findNodes(DelphiPMDNode node) {
     if (node.getType() != DelphiLexer.CONST) {
       return Collections.emptyList();
     }

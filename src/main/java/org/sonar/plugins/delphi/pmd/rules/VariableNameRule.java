@@ -11,10 +11,10 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  * This rule looks at all variable names to ensure they follow basic Pascal Case.
  * At the moment it only checks if the first character is uppercase
  */
-public class IdentifierConventionRule extends NameConventionRule {
+public class VariableNameRule extends NameConventionRule {
 
   @Override
-  public List<DelphiPMDNode> findNameNodes(DelphiPMDNode node) {
+  public List<DelphiPMDNode> findNodes(DelphiPMDNode node) {
     // Within a var block, look for variable identifiers
     if (node.getType() == DelphiLexer.VAR && node.getChildren() != null) {
       for (Object child : node.getChildren()) {

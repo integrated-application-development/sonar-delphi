@@ -22,7 +22,6 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
-import java.util.Objects;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
@@ -41,13 +40,15 @@ public class TypeAnalyzer extends CodeAnalyzer {
 
   @Override
   public boolean canAnalyze(CodeTree codeTree) {
-    Tree currentNode = codeTree.getCurrentCodeNode().getNode();
-    if (currentNode.getType() != DelphiParser.TkNewType || !hasGrandChild(currentNode)) {
+    CommonTree currentNode = (CommonTree) codeTree.getCurrentCodeNode().getNode();
+    if (currentNode.getType() != DelphiParser.TkNewType) {
       return false;
     }
 
-    int type = Objects.requireNonNull(getGrandChild(currentNode)).getType();
-    return type == DelphiLexer.TkClass || type == DelphiLexer.TkRecord
+    int type = getType(currentNode);
+
+    return type == DelphiLexer.TkClass
+        || type == DelphiLexer.TkRecord
         || type == DelphiLexer.TkInterface;
   }
 
@@ -58,7 +59,7 @@ public class TypeAnalyzer extends CodeAnalyzer {
           "AbstractAnalyser::parseClass() - Cannot create class outside unit.");
     }
 
-    CommonTree nameNode = getClassNameNode(codeTree.getCurrentCodeNode().getNode());
+    Tree nameNode = getClassNameNode((CommonTree) codeTree.getCurrentCodeNode().getNode());
     if (nameNode == null) {
       throw new IllegalStateException("AbstractAnalyser::parseClass() - Cannot get class name.");
     }
@@ -77,9 +78,9 @@ public class TypeAnalyzer extends CodeAnalyzer {
     }
 
     if (results.getParseStatus() == LexerMetrics.IMPLEMENTATION) {
-      active.setVisibility(LexerMetrics.PRIVATE.toMetrics());
+      active.setVisibility(DelphiLexer.PRIVATE);
     } else {
-      active.setVisibility(LexerMetrics.PUBLIC.toMetrics());
+      active.setVisibility(DelphiLexer.PUBLIC);
     }
 
     results.setParseVisibility(LexerMetrics.PUBLISHED);
@@ -87,20 +88,13 @@ public class TypeAnalyzer extends CodeAnalyzer {
     results.setActiveClass(active);
   }
 
-  private boolean hasGrandChild(Tree node) {
-    return getGrandChild(node) != null;
+  private int getType(CommonTree node) {
+    Tree typeNode = node.getFirstChildWithType(DelphiLexer.TkNewTypeDecl).getChild(0);
+    return typeNode.getType();
   }
 
-  private Tree getGrandChild(Tree node) {
-    Tree child = node.getChild(0);
-    if (child != null) {
-      return child.getChild(0);
-    }
-    return null;
-  }
-
-  private CommonTree getClassNameNode(Tree node) {
-    return (CommonTree) node.getChild(0);
+  private Tree getClassNameNode(CommonTree node) {
+    return node.getFirstChildWithType(DelphiLexer.TkNewTypeName).getChild(0);
   }
 
 }

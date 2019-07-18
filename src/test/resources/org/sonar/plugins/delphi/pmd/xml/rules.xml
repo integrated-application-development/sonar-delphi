@@ -138,7 +138,7 @@
 		</properties>
 	</rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounter"
+	<rule class="org.sonar.plugins.delphi.pmd.rules.TooManyArgumentsRule"
 				message="Too many arguments"
 				name="TooManyArgumentsRule">
 		<description>Function may have too many arguments, maximum number of arguments is 6</description>
@@ -146,12 +146,10 @@
 		<properties>
 			<property name="baseEffort" value="1h" />
 			<property name="limit" value="6" />
-			<property name="start" value="TkFunctionArgs" />
-			<property name="lookFor" value="arguments" />
 		</properties>
 	</rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounter"
+	<rule class="org.sonar.plugins.delphi.pmd.rules.TooManyVariablesRule"
 				message="Too many variables"
 				name="TooManyVariablesRule">
 		<description>Function may have too many variables, maximum number of variables is 10</description>
@@ -159,8 +157,6 @@
 		<properties>
 			<property name="baseEffort" value="30min" />
 			<property name="limit" value="10" />
-			<property name="start" value="var" />
-			<property name="lookFor" value="variables" />
 		</properties>
 	</rule>
 
@@ -477,10 +473,8 @@
 			<property name="xpath">
 				<value>
 					<![CDATA[
-						//TkNewType/*[count(descendant::*) < 3 and name(descendant::*) != 'CLASS' and
-						name(descendant::*) != 'TkRecord' and name(descendant::*[2]) != 'ARRAY' and name(descendant::*) !=
-						'SET' and name(descendant::*) != 'POINTER2' and name(descendant::*) != 'TkClassOfType' and
-						name(descendant::*) != 'TkInterface' and name() != 'TkCustomAttribute']
+						//TkNewType[TkNewTypeDecl/*[1][name() = 'TkIdentifier'][not(child::ARRAY)]] |
+						//TkNewType[TkNewTypeDecl/*[1][name() = 'TYPE'][following-sibling::TkIdentifier]]
 					]]>
 				</value>
 			</property>
@@ -604,7 +598,7 @@
 		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="10min" />
-			<property name="Threshold" value="20" />
+			<property name="limit" value="20" />
 		</properties>
 	</rule>
 
@@ -728,9 +722,9 @@
 		</properties>
 	</rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.IdentifierConventionRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableNameRule"
 				message="Identifiers should begin with a capital letter."
-  			name="IdentifierConventionRule">
+  			name="VariableNameRule">
     <description>It is good convention to start variable identifiers with capitals.</description>
 		<priority>5</priority>
     <properties>
