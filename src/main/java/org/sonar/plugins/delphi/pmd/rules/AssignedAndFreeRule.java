@@ -23,6 +23,7 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
+import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
@@ -67,7 +68,9 @@ public class AssignedAndFreeRule extends DelphiRule {
   }
 
   private AssignCheckType findAssignCheckType(DelphiPMDNode node) {
-    if (node.getType() == DelphiLexer.NIL) {
+    int type = node.getType();
+
+    if (type == DelphiLexer.NIL) {
       DelphiPMDNode prevNode = node.prevNode();
       if (prevNode != null && prevNode.getType() == DelphiLexer.NOT_EQUAL) {
         return AssignCheckType.NIL_COMPARE;
@@ -79,7 +82,7 @@ public class AssignedAndFreeRule extends DelphiRule {
       }
     }
 
-    if (node.getText().equalsIgnoreCase("assigned")) {
+    if (type == DelphiLexer.TkIdentifier && node.getText().equalsIgnoreCase("Assigned")) {
       return AssignCheckType.ASSIGNED;
     }
 
@@ -141,7 +144,14 @@ public class AssignedAndFreeRule extends DelphiRule {
   }
 
   private DelphiPMDNode findViolationNode(DelphiPMDNode node) {
+    if (hasConditionsAfterAssignCheck(node)) {
+      // This caters to cases where the assignment check is reasonably used as a short-circuit
+      // Example: "if Assigned(X) and X.ShouldBeFreed then X.Free;"
+      return null;
+    }
+
     DelphiPMDNode thenNode = node.findNextSiblingOfType(DelphiLexer.THEN);
+
     if (thenNode == null) {
       return null;
     }
@@ -153,6 +163,26 @@ public class AssignedAndFreeRule extends DelphiRule {
     }
 
     return findViolationNodeInStatement(startNode);
+  }
+
+  private boolean hasConditionsAfterAssignCheck(DelphiPMDNode node) {
+    Tree parent = node.getParent();
+
+    if (parent != null) {
+      for (int i = node.getChildIndex(); i < parent.getChildCount(); ++i) {
+        int type = parent.getChild(i).getType();
+
+        if (type == DelphiLexer.OR || type == DelphiLexer.AND) {
+          return true;
+        }
+
+        if (type == DelphiLexer.THEN) {
+          return false;
+        }
+      }
+    }
+
+    return false;
   }
 
   private DelphiPMDNode findViolationNodeInStatement(DelphiPMDNode node) {

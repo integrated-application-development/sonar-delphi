@@ -195,6 +195,11 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
       case DelphiLexer.PUBLISHED:
         currentVisibility = node.getType();
         break;
+
+      case DelphiLexer.TkNewType:
+        currentVisibility = DelphiLexer.PUBLISHED;
+        break;
+
       default:
     }
   }

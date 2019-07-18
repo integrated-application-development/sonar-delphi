@@ -451,7 +451,7 @@
 			<property name="xpath">
 				<value>
 					<![CDATA[
-						//TkNewType[TkNewTypeDecl/*[1][name() = 'TkIdentifier'][not(child::ARRAY)]] |
+						//TkNewType[TkNewTypeDecl/*[1][name() = 'TkIdentifier'][not(child::ARRAY)][not(following-sibling::DOTDOT)]] |
 						//TkNewType[TkNewTypeDecl/*[1][name() = 'TYPE'][following-sibling::TkIdentifier]]
 					]]>	
 				</value>
