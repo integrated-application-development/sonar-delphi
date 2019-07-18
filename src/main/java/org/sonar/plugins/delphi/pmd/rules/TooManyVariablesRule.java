@@ -12,14 +12,18 @@ public class TooManyVariablesRule extends VariableCounterRule {
 
   @Override
   public List<DelphiPMDNode> findNodes(DelphiPMDNode node) {
-    if (node.getType() == DelphiLexer.TkBlockDeclSection) {
-      List<?> children = node.getChildren();
+    if (node.getType() == DelphiLexer.TkFunctionName) {
+      DelphiPMDNode method = new DelphiPMDNode((CommonTree) node.getParent(), node.getASTTree());
+      DelphiPMDNode nextNode = method.nextNode();
 
-      if (children != null) {
-        return children.stream()
-            .map(child -> new DelphiPMDNode((CommonTree) child, node.getASTTree()))
-            .filter(child -> child.getType() == DelphiLexer.VAR)
-            .collect(Collectors.toList());
+      if (nextNode != null && nextNode.getType() == DelphiLexer.TkBlockDeclSection) {
+        List<?> children = nextNode.getChildren();
+        if (children != null) {
+          return children.stream()
+              .map(child -> new DelphiPMDNode((CommonTree) child, node.getASTTree()))
+              .filter(child -> child.getType() == DelphiLexer.VAR)
+              .collect(Collectors.toList());
+        }
       }
     }
 
