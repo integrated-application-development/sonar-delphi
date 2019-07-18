@@ -66,7 +66,7 @@ public class ComplexityMetricsTest {
 
     NewActiveRule rule = new NewActiveRule.Builder()
         .setRuleKey(ComplexityMetrics.RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY)
-        .setParam("Threshold", "3").setLanguage(DelphiLanguage.KEY)
+        .setParam("limit", "3").setLanguage(DelphiLanguage.KEY)
         .build();
 
     activeRules = new ActiveRulesBuilder().addRule(rule).build();

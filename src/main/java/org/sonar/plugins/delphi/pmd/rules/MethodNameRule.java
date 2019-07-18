@@ -29,7 +29,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 public class MethodNameRule extends NameConventionRule {
 
   @Override
-  public List<DelphiPMDNode> findNameNodes(DelphiPMDNode node) {
+  public List<DelphiPMDNode> findNodes(DelphiPMDNode node) {
     if (node.getType() != DelphiLexer.TkNewType || (!isInterface(node) && isPublished())) {
       return Collections.emptyList();
     }
@@ -48,6 +48,9 @@ public class MethodNameRule extends NameConventionRule {
   }
 
   private boolean isInterface(DelphiPMDNode typeNode) {
-    return typeNode.getChild(0).getChild(0).getType() == DelphiLexer.TkInterface;
+    Tree typeDeclNode = typeNode.getFirstChildWithType(DelphiLexer.TkNewTypeDecl);
+    int type = typeDeclNode.getChild(0).getType();
+
+    return type == DelphiLexer.TkInterface;
   }
 }

@@ -26,16 +26,21 @@ public class PointerNameRule extends NameConventionRule {
   private static final String POINTER_PREFIX = "P";
 
   @Override
-  public DelphiPMDNode findNameNode(DelphiPMDNode node) {
-    if (isImplementationSection() || node.getType() != DelphiLexer.POINTER2) {
+  public DelphiPMDNode findNode(DelphiPMDNode node) {
+    if (node.getType() != DelphiLexer.TkNewTypeName || !isPointerType(node.nextNode())) {
       return null;
     }
 
-    return new DelphiPMDNode((CommonTree) node.getParent(), node.getASTTree());
+    return new DelphiPMDNode((CommonTree) node.getChild(0), node.getASTTree());
   }
 
   @Override
   protected boolean isViolation(DelphiPMDNode nameNode) {
     return !compliesWithPrefixNamingConvention(nameNode.getText(), POINTER_PREFIX);
+  }
+
+  private boolean isPointerType(DelphiPMDNode typeDeclNode) {
+    int type = typeDeclNode.getChild(0).getType();
+    return type == DelphiLexer.POINTER2;
   }
 }

@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import com.qualinsight.plugins.sonarqube.smell.api.annotation.Smell;
+import com.qualinsight.plugins.sonarqube.smell.api.model.SmellType;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.LanguageRegistry;
@@ -43,21 +45,21 @@ import org.sonar.plugins.delphi.pmd.DelphiRuleViolationBuilder;
  */
 public class DelphiRule extends AbstractRule implements DelphiParserVisitor, ImmutableLanguage {
 
-  protected int lastLineParsed;
+  protected int skipToLine;
   private int currentVisibility;
   private boolean inImplementationSection;
 
-  protected static final PropertyDescriptor<Integer> LIMIT = PropertyFactory.intProperty("limit")
+  protected static final PropertyDescriptor<Integer> LIMIT = PropertyFactory
+      .intProperty("limit")
       .desc("The max limit.")
       .require(NumericConstraints.inRange(1, 150))
       .defaultValue(1)
       .build();
 
-  protected static final PropertyDescriptor<Integer> THRESHOLD = PropertyFactory
-      .intProperty("Threshold")
-      .desc("Threshold.")
-      .require(NumericConstraints.inRange(1, 100))
-      .defaultValue(10)
+  private static final PropertyDescriptor<String> BASE_EFFORT = PropertyFactory
+      .stringProperty("baseEffort")
+      .desc("The base effort to correct")
+      .defaultValue("")
       .build();
 
   protected static final PropertyDescriptor<String> START_AST = PropertyFactory
@@ -72,26 +74,12 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
       .defaultValue("")
       .build();
 
-  protected static final PropertyDescriptor<String> LOOK_FOR = PropertyFactory
-      .stringProperty("lookFor")
-      .desc("What nodes look for")
-      .defaultValue("")
-      .build();
-
-  protected static final PropertyDescriptor<String> BASE_EFFORT = PropertyFactory
-      .stringProperty("baseEffort")
-      .desc("The base effort to correct")
-      .defaultValue("")
-      .build();
-
   public DelphiRule() {
     setLanguage(LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME));
 
     definePropertyDescriptor(LIMIT);
-    definePropertyDescriptor(THRESHOLD);
     definePropertyDescriptor(START_AST);
     definePropertyDescriptor(END_AST);
-    definePropertyDescriptor(LOOK_FOR);
     definePropertyDescriptor(BASE_EFFORT);
   }
 
@@ -122,30 +110,40 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
     visitAll(nodes, ctx);
   }
 
+  @Smell(
+      minutes = 60,
+      reason =
+          "The //NOSONAR line skip is poorly implemented."
+            + "We completely skip visiting any nodes on that line, which could lead to surprising"
+            + "behavior when a rule traverses nodes on multiple lines."
+            + "We're also doing a String.endsWith check on every line in the codebase."
+            + "That probably isn't performing very well.",
+      type = SmellType.BAD_DESIGN
+  )
   protected void visitAll(List<? extends Node> acus, RuleContext ctx) {
-    lastLineParsed = -1;
+    skipToLine = -1;
     currentVisibility = DelphiLexer.PUBLISHED;
     inImplementationSection = false;
+
     init();
+
     for (Node acu : acus) {
       DelphiPMDNode node = (DelphiPMDNode) acu;
       ASTTree ast = node.getASTTree();
-      if (ast != null) {
-        String codeLine = node.getASTTree().getFileSourceLine(node.getLine());
+      int nodeLine = node.getLine();
+
+      if (ast != null && nodeLine > skipToLine) {
+        String codeLine = node.getASTTree().getFileSourceLine(nodeLine);
         // skip pmd analysis
-        if (codeLine.trim().endsWith("//NOSONAR") && node.getLine() + 1 > lastLineParsed) {
-          lastLineParsed = node.getLine() + 1;
+        if (codeLine.trim().endsWith("//NOSONAR")) {
+          skipToLine = nodeLine + 1;
         }
       }
 
-      /* optimization and no-sonar line skip */
-      if (node.getLine() >= lastLineParsed) {
+      if (nodeLine >= skipToLine) {
         updateVisibility(node);
-        if (!inImplementationSection) {
-          inImplementationSection = node.getType() == DelphiLexer.IMPLEMENTATION;
-        }
+        updateIsImplementation(node);
         visit(node, ctx);
-        lastLineParsed = node.getLine();
       }
     }
   }
@@ -201,8 +199,14 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
     }
   }
 
-  public int getLastLineParsed() {
-    return lastLineParsed;
+  private void updateIsImplementation(DelphiPMDNode node) {
+    if (!inImplementationSection) {
+      inImplementationSection = node.getType() == DelphiLexer.IMPLEMENTATION;
+    }
+  }
+
+  public int getSkipToLine() {
+    return skipToLine;
   }
 
   protected boolean isProtected() {

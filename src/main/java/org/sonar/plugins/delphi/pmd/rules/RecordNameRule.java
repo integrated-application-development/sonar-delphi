@@ -26,12 +26,16 @@ public class RecordNameRule extends NameConventionRule {
   private static final String RECORD_PREFIX = "T";
 
   @Override
-  public DelphiPMDNode findNameNode(DelphiPMDNode node) {
-    if (node.getType() != DelphiLexer.TkRecord) {
+  public DelphiPMDNode findNode(DelphiPMDNode node) {
+    if (node.getType() != DelphiLexer.TkNewTypeName || !isRecordType(node.nextNode())) {
       return null;
     }
 
-    return  new DelphiPMDNode((CommonTree) node.getParent(), node.getASTTree());
+    return new DelphiPMDNode((CommonTree) node.getChild(0), node.getASTTree());
+  }
+
+  private boolean isRecordType(DelphiPMDNode typeDeclNode) {
+    return typeDeclNode.getChild(0).getType() == DelphiLexer.TkRecord;
   }
 
   @Override

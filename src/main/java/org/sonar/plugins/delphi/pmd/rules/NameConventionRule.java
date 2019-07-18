@@ -23,7 +23,7 @@ import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-public abstract class NameConventionRule extends DelphiRule implements NameNodeFinderInterface {
+public abstract class NameConventionRule extends DelphiRule implements NodeFinderInterface {
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
@@ -35,12 +35,12 @@ public abstract class NameConventionRule extends DelphiRule implements NameNodeF
   }
 
   private List<DelphiPMDNode> getNameNodes(DelphiPMDNode node) {
-    DelphiPMDNode singleNode = findNameNode(node);
+    DelphiPMDNode singleNode = findNode(node);
     if (singleNode != null) {
       return Collections.singletonList(singleNode);
     }
 
-    return findNameNodes(node);
+    return findNodes(node);
   }
 
   protected boolean compliesWithPrefixNamingConvention(final String name, final String prefix) {

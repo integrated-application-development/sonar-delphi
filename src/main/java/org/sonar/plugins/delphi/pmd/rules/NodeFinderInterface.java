@@ -4,13 +4,13 @@ import java.util.Collections;
 import java.util.List;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-public interface NameNodeFinderInterface {
+public interface NodeFinderInterface {
 
-  default DelphiPMDNode findNameNode(DelphiPMDNode node) {
+  default DelphiPMDNode findNode(DelphiPMDNode node) {
     return null;
   }
 
-  default List<DelphiPMDNode> findNameNodes(DelphiPMDNode node) {
+  default List<DelphiPMDNode> findNodes(DelphiPMDNode node) {
     return Collections.emptyList();
   }
 }

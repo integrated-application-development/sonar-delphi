@@ -77,7 +77,7 @@ public class DelphiSensorTest {
   public void init() {
     NewActiveRule complexityRule = new NewActiveRule.Builder()
         .setRuleKey(ComplexityMetrics.RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY)
-        .setParam("Threshold", "3")
+        .setParam("limit", "3")
         .setLanguage(DelphiLanguage.KEY)
         .build();
 

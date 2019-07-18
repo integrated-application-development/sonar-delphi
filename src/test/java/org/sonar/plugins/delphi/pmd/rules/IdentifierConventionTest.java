@@ -42,6 +42,6 @@ public class IdentifierConventionTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("IdentifierConventionRule", builder.getOffSet() + 3)));
+    assertIssues(hasItem(hasRuleKeyAtLine("VariableNameRule", builder.getOffSet() + 3)));
   }
 }

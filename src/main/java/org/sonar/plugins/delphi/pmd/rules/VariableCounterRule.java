@@ -22,37 +22,57 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import java.util.Collections;
+import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-/**
- * Rule that is checking how many arguments a function has - if too many, it triggers a violation
- */
-public class VariableCounter extends DelphiRule {
+public abstract class VariableCounterRule extends DelphiRule implements NodeFinderInterface {
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    // if function arguments node
-    if (node.getText().equals(getProperty(START_AST))) {
-      int count = 0;
+    List<DelphiPMDNode> nodes = getVarParentNodes(node);
 
-      // count num of arguments
-      for (int i = 0; i < node.getChildCount(); ++i) {
-        Tree child = node.getChild(i);
-        if (child.getType() == DelphiLexer.TkVariableIdents) {
-          count += child.getChildCount();
-        }
-      }
+    if (nodes.isEmpty()) {
+      return;
+    }
 
-      Integer limit = getProperty(LIMIT);
-      if (count > limit) {
-        String msg = "Too many " + getProperty(LOOK_FOR) + ": " + count + " (max "
-            + limit + ")";
-        addViolation(ctx, node, msg);
-      }
+    int variableCount = 0;
+
+    for (DelphiPMDNode varBlockNode : nodes) {
+      variableCount += countVariables(varBlockNode);
+    }
+
+    int limit = getProperty(LIMIT);
+
+    if (variableCount > limit) {
+      addViolation(ctx, node, getViolationMessage(variableCount, limit));
     }
   }
 
+  private int countVariables(DelphiPMDNode node) {
+    int count = 0;
+
+    for (int i = 0; i < node.getChildCount(); ++i) {
+      Tree child = node.getChild(i);
+      if (child.getType() == DelphiLexer.TkVariableIdents) {
+        count += child.getChildCount();
+      }
+    }
+
+    return count;
+  }
+
+  private List<DelphiPMDNode> getVarParentNodes(DelphiPMDNode node) {
+    DelphiPMDNode singleNode = findNode(node);
+    if (singleNode != null) {
+      return Collections.singletonList(singleNode);
+    }
+
+    return findNodes(node);
+  }
+
+  protected abstract String getViolationMessage(int variableCount, int limit);
 }

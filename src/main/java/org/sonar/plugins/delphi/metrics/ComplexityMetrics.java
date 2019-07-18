@@ -79,7 +79,7 @@ public class ComplexityMetrics extends DefaultMetrics {
    */
   private int publicApi;
 
-  private final Integer threshold;
+  private int threshold;
   private final SensorContext context;
   private final Set<String> processedFunctions = new HashSet<>();
 
@@ -90,8 +90,11 @@ public class ComplexityMetrics extends DefaultMetrics {
     super();
     context = sensorContext;
     methodCyclomaticComplexityRule = activeRules.find(RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY);
-    threshold = Integer.valueOf(Objects
-        .requireNonNull(Objects.requireNonNull(methodCyclomaticComplexityRule).param("Threshold")));
+
+    if (methodCyclomaticComplexityRule != null) {
+      String limitParam = Objects.requireNonNull(methodCyclomaticComplexityRule.param("limit"));
+      threshold = Integer.parseInt(limitParam);
+    }
   }
 
   /**

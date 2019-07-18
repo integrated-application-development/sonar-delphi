@@ -30,12 +30,13 @@ public class InterfaceNameRule extends NameConventionRule {
   private static final String INTERFACE_PREFIX = "I";
 
   @Override
-  public DelphiPMDNode findNameNode(DelphiPMDNode node) {
-    if (node.getType() != DelphiLexer.TkInterface) {
+  public DelphiPMDNode findNode(DelphiPMDNode node) {
+    if (node.getType() != DelphiLexer.TkNewTypeName ||
+        node.nextNode().getType() != DelphiLexer.TkInterface) {
       return null;
     }
 
-    return new DelphiPMDNode((CommonTree) node.getParent(), node.getASTTree());
+    return new DelphiPMDNode((CommonTree) node.getChild(0), node.getASTTree());
   }
 
   @Override

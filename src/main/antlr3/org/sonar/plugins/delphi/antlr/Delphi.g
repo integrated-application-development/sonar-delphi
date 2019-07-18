@@ -68,6 +68,25 @@ package org.sonar.plugins.delphi.antlr.generated;
   boolean asmMode = false;
 }
 
+@parser::members {
+  int savedLineNumber = 0;
+
+  private void saveLineNumber() {
+    Token token = input.LT(1);
+    if (token == null) {
+      throw new IllegalStateException("Failed to save line number: Previous token is null");
+    }
+
+    this.savedLineNumber = token.getLine();
+  }
+
+  private Token token(int type) {
+    CommonToken t = new CommonToken(type, tokenNames[type]);
+    t.setLine(savedLineNumber);
+    return t;
+  }
+}
+
 //****************************
 //section start
 //****************************
@@ -127,7 +146,9 @@ namespaceNameList            : namespaceName (',' namespaceName)* ';' -> namespa
 //****************************
 //section declaration
 //****************************
-block                        : (declSection)* (blockBody)?
+block                        : blockDeclSection (blockBody)?
+                             ;
+blockDeclSection             : {saveLineNumber();} (declSection)* -> ^({token(TkBlockDeclSection)} (declSection)*)
                              ;
 blockBody                    : compoundStatement
                              | assemblerStatement
@@ -162,7 +183,7 @@ typeSection                  : 'type' typeDeclaration (typeDeclaration)* -> ^('t
                              ;
 innerTypeSection             : 'type' (typeDeclaration)* -> ^('type' (typeDeclaration)*)
                              ;
-typeDeclaration              : (customAttribute)? genericTypeIdent '=' typeDecl (hintingDirective)* ';' -> ^(TkNewType (customAttribute)? ^(genericTypeIdent typeDecl (hintingDirective)*))
+typeDeclaration              : (customAttribute)? genericTypeIdent '=' typeDecl (hintingDirective)* ';' -> ^(TkNewType (customAttribute)? ^(TkNewTypeName genericTypeIdent) ^(TkNewTypeDecl typeDecl (hintingDirective)*))
                              ;
 varSection                   : varKey varDeclaration (varDeclaration)* -> ^(varKey varDeclaration (varDeclaration)*)
                              ;
@@ -915,6 +936,10 @@ TkCustomAttributeArgs   : 'CUSTOM_ATTRIBUTE_ARGS'
                         ;
 TkNewType               : 'NEW_TYPE'
                         ;
+TkNewTypeName           : 'NEW_TYPE_NAME'
+                        ;
+TkNewTypeDecl           : 'NEW_TYPE_DECL'
+                        ;
 TkClass                 : 'CLASS'
                         ;
 TkRecord                : 'RECORD_TYPE'
@@ -942,6 +967,8 @@ TkClassField            : 'CLASS_FIELD'
 TkAnonymousExpression   : 'ANONYMOUS_EXPRESSION'
                         ;
 TkAssemblerInstructions : 'ASSEMBLER_INSTRUCTIONS'
+                        ;
+TkBlockDeclSection      : 'BLOCK_DECL_SECTION'
                         ;
 TkIdentifier            : (Alpha | '_') (Alpha | Digit | '_')*
                         ;

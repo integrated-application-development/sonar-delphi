@@ -51,7 +51,7 @@ public class TooLongMethodRule extends DelphiRule {
         String msg =
             methodName + " is too long (" + lines + " lines). Maximum line count is " + limit;
         addViolation(ctx, node, msg);
-        lastLineParsed = lastLine;
+        skipToLine = lastLine;
       }
     }
   }
@@ -69,7 +69,7 @@ public class TooLongMethodRule extends DelphiRule {
         return sibling;
       }
 
-      if (type != DelphiLexer.VAR && type != DelphiLexer.CONST) {
+      if (type != DelphiLexer.TkBlockDeclSection) {
         break;
       }
     }

@@ -18,16 +18,14 @@ public class ClassNameRule extends NameConventionRule {
   private static final String[] PREFIXES = {"T", "TForm", "E"};
 
   @Override
-  public DelphiPMDNode findNameNode(DelphiPMDNode node) {
-    if (node.getType() != DelphiLexer.TkNewType) {
+  public DelphiPMDNode findNode(DelphiPMDNode node) {
+    if (node.getType() != DelphiLexer.TkNewTypeName) {
       return null;
     }
-    // The child node will contain the name of the declared class/enumeration
-    Tree nameNode = node.getChild(0);
 
     // Other name conventions are handled in InterfaceNameRule, RecordNameRule, and PointerNameRule
-    Tree typeNode = nameNode.getChild(0);
-    int type = typeNode.getType();
+    Tree typeDeclNode = node.nextNode();
+    int type = typeDeclNode.getChild(0).getType();
 
     if (type == DelphiLexer.TkInterface
         || type == DelphiLexer.TkRecord
@@ -35,7 +33,7 @@ public class ClassNameRule extends NameConventionRule {
       return null;
     }
 
-    return new DelphiPMDNode((CommonTree) nameNode, node.getASTTree());
+    return new DelphiPMDNode((CommonTree) node.getChild(0), node.getASTTree());
   }
 
   @Override

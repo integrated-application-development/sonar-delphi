@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset name="delph">
   <description>Sonar Profile: delph</description>
-  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounter" message="Too many variables" name="TooManyVariablesRule" language="delph">
+  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounterRule" message="Too many variables" name="TooManyVariablesRule" language="delph">
     <priority>3</priority>
     <properties>
       <property>

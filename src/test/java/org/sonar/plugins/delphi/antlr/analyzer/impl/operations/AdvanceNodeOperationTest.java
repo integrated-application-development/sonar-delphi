@@ -22,8 +22,10 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl.operations;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import org.antlr.runtime.tree.Tree;
@@ -72,8 +74,9 @@ public class AdvanceNodeOperationTest extends OperationsTestsCommon {
     int lastLine = -1;
     CodeNode<Tree> codeNode = codeTree.getCurrentCodeNode();
     do {
-      assertTrue(lastLine <= codeNode.getNode().getLine());
-      lastLine = codeNode.getNode().getLine();
+      int codeNodeLine = codeNode.getNode().getLine();
+      assertThat(lastLine, is(lessThanOrEqualTo(codeNodeLine)));
+      lastLine = codeNodeLine;
       codeNode = operation.execute(codeNode.getNode());
     } while (codeNode.isValid());
 

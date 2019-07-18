@@ -42,12 +42,12 @@
 		<priority>3</priority>
 	</rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounter"
+	<rule class="org.sonar.plugins.delphi.pmd.rules.TooManyArgumentsRule"
 				name="TooManyArgumentsRule">
 		<priority>3</priority>
 	</rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounter"
+	<rule class="org.sonar.plugins.delphi.pmd.rules.TooManyVariablesRule"
 				name="TooManyVariablesRule">
 		<priority>3</priority>
 	</rule>
@@ -261,8 +261,8 @@
 				name="DuplicatesRule">
 		<priority>4</priority>
 	</rule>
-	<rule class = "org.sonar.plugins.delphi.pmd.rules.IdentifierConventionRule"
-				name="IdentifierConventionRule">
+	<rule class = "org.sonar.plugins.delphi.pmd.rules.VariableNameRule"
+				name="VariableNameRule">
 		<priority>4</priority>
 	</rule>
 

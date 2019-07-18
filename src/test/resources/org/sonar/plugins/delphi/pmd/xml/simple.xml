@@ -4,14 +4,14 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.InterfaceNameRule" message="Interface Name doesn't comply with a naming convention" name="InterfaceNameRule" language="delph">
     <description>Interface name should begin with "I"</description>
   </rule>
-  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounter" message="Too many arguments" name="TooManyArgumentsRule" language="delph">
+  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounterRule" message="Too many arguments" name="TooManyArgumentsRule" language="delph">
     <priority>2</priority>
     <description>Function may have too many arguments, maximum number of arguments is 6</description>
     <properties>
       <property name="limit" value="6" />
     </properties>
   </rule>
-  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounter" message="Too many variables" name="TooManyVariablesRule" language="delph">
+  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounterRule" message="Too many variables" name="TooManyVariablesRule" language="delph">
     <priority>3</priority>
     <description>Function may have too many variables, maximum number of variables is 10</description>
   </rule>

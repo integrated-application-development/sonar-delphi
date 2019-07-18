@@ -25,7 +25,7 @@ import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 import org.junit.Test;
 import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 
-public class TooLongMethodNameRuleTest extends BasePmdRuleTest {
+public class TooLongMethodRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testValidRule() {

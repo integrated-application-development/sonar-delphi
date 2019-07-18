@@ -21,6 +21,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import net.sourceforge.pmd.RuleContext;
+import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
@@ -37,9 +38,10 @@ public class ConstructorWithoutInheritedStatementRule extends NoInheritedStateme
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    if (node.getType() == DelphiLexer.TkRecord) {
-      knownRecords.add(node.getParent().getText());
+    if (node.getType() == DelphiLexer.TkNewType && isRecordType(node)) {
+      knownRecords.add(getTypeName(node));
     }
+
     super.visit(node, ctx);
   }
 
@@ -50,6 +52,18 @@ public class ConstructorWithoutInheritedStatementRule extends NoInheritedStateme
       return !knownRecords.contains(typeName);
     }
     return true;
+  }
+
+  private boolean isRecordType(DelphiPMDNode newTypeNode) {
+    Tree typeDeclNode = newTypeNode.getFirstChildWithType(DelphiLexer.TkNewTypeDecl);
+    int type = typeDeclNode.getChild(0).getType();
+
+    return type == DelphiLexer.TkRecord;
+  }
+
+  private String getTypeName(DelphiPMDNode newTypeNode) {
+    Tree typeNameNode = newTypeNode.getFirstChildWithType(DelphiLexer.TkNewTypeName);
+    return typeNameNode.getChild(0).getText();
   }
 
   @Override

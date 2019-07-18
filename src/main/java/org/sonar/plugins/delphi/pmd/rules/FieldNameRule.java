@@ -29,7 +29,7 @@ public class FieldNameRule extends NameConventionRule {
   private static final String FIELD_PREFIX = "F";
 
   @Override
-  public List<DelphiPMDNode> findNameNodes(DelphiPMDNode node) {
+  public List<DelphiPMDNode> findNodes(DelphiPMDNode node) {
     if (node.getType() != DelphiLexer.TkClassField || isPublished()) {
       return Collections.emptyList();
     }
