@@ -32,18 +32,17 @@ public class DelphiPropertyTest {
 
   @Test
   public void testProperty() {
-    DelphiRuleProperty property = new DelphiRuleProperty("name", "value");
-
+    DelphiRuleProperty property = new DelphiRuleProperty("name");
     assertThat(property.getName(), is("name"));
-    assertThat(property.getValue(), is("value"));
+    assertThat(property.getValue(), is(nullValue()));
 
-    assertThat(property.getCdataValue(), is(nullValue()));
+    property.setValue("value");
+    assertThat(property.getValue(), is("value"));
     assertThat(property.isCdataValue(), is(false));
 
-    property.setCdataValue("cdatavalue");
-
+    property.setCdataValue("cDataValue");
+    assertThat(property.getValue(), is("cDataValue"));
     assertThat(property.isCdataValue(), is(true));
-    assertThat(property.getCdataValue(), is("cdatavalue"));
   }
 
 }
