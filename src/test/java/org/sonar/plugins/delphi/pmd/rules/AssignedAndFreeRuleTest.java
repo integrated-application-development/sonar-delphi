@@ -293,6 +293,29 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  public void testAssignCheckFollowedByAdditionalConditionsShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+        .appendImpl("procedure AndProcedure;")
+        .appendImpl("begin")
+        .appendImpl("  if Assigned(MyVar) and MyVar.ShouldBeFreed then begin")
+        .appendImpl("    FreeAndNil(MyVar);")
+        .appendImpl("  end;")
+        .appendImpl("end;")
+
+        .appendImpl("procedure OrProcedure;")
+        .appendImpl("begin")
+        .appendImpl("  if Assigned(MyVar) or ShouldFreeSomethingElse then begin")
+        .appendImpl("    FreeAndNil(MyVar);")
+        .appendImpl("    FreeAndNil(SomethingElse);")
+        .appendImpl("  end;")
+        .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
   public void testEdgeCases() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
         .appendImpl("procedure MyProcedure;")

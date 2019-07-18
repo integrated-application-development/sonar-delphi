@@ -87,6 +87,44 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  public void testPublishedFieldsInMultipleClassesShouldBeSkipped() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+    builder.appendDecl("type");
+    builder.appendDecl("  TMyClass = class");
+    builder.appendDecl("     DefaultId: Integer;");
+    builder.appendDecl("    private");
+    builder.appendDecl("     Id: Integer;");
+    builder.appendDecl("    protected");
+    builder.appendDecl("     Name: String;");
+    builder.appendDecl("    public");
+    builder.appendDecl("     Name: String;");
+    builder.appendDecl("  end;");
+
+    builder.appendDecl("type");
+    builder.appendDecl("  TMyOtherClass = class");
+    builder.appendDecl("     DefaultId: Integer;");
+    builder.appendDecl("    private");
+    builder.appendDecl("     Id: Integer;");
+    builder.appendDecl("    protected");
+    builder.appendDecl("     Name: String;");
+    builder.appendDecl("    public");
+    builder.appendDecl("     Name: String;");
+    builder.appendDecl("  end;");
+
+    execute(builder);
+
+    assertIssues(not(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 3))));
+    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
+    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7)));
+    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 9)));
+
+    assertIssues(not(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 13))));
+    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 15)));
+    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 17)));
+    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 19)));
+  }
+
+  @Test
   public void testBadPascalCaseShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");

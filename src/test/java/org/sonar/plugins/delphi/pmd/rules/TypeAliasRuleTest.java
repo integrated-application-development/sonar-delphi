@@ -119,6 +119,18 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  public void testFalsePositiveSubRangesAreNotTypeAlias() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+
+    builder.appendDecl("type");
+    builder.appendDecl("  TSubRange = Lower..Upper;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
   public void testFalsePositivePointerTypesAreNotTypeAlias() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
