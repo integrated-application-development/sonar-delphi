@@ -59,7 +59,7 @@ public class TooManySubProceduresRule extends DelphiRule {
 
       if (subProcedureCounter > getProperty(LIMIT)) {
         addViolation(ctx, node,
-            "Code should not contain too many sub procedures or functions, " +
+            "Code should not contain too many sub-procedures, " +
                 "limit of " + getProperty(LIMIT) + " exceeded.");
         // Avoid adding multiple violations of same type
         return;
