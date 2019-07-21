@@ -8,8 +8,8 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class TooLongLineRule extends DelphiRule {
 
-  private static final String MESSAGE = "Line too long (%s characters). Maximum character count "
-      + "should be %s.";
+  private static final String MESSAGE = "Line too long (%s characters). Maximum length is %s "
+      + "characters.";
 
   private int lastLineChecked;
 

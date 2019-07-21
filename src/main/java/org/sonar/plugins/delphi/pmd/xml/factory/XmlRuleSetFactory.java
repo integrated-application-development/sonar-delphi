@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.delphi.pmd.xml.factory;
 
-import com.google.common.base.Splitter;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
@@ -108,17 +107,7 @@ public class XmlRuleSetFactory implements RuleSetFactory {
 
   private void parseExample(Element eltRule, DelphiRule rule, @Nullable Namespace namespace) {
     for (Element eltExample : getChildren(eltRule, "example", namespace)) {
-      String text = eltExample.getText();
-      StringBuilder exampleBuilder = new StringBuilder();
-      Iterable<String> lines = Splitter.on('\n')
-          .trimResults()
-          .split(text);
-
-      for (String line : lines) {
-        exampleBuilder.append(line);
-      }
-
-      rule.setExample(exampleBuilder.toString());
+      rule.setExample(eltExample.getText().trim());
     }
   }
 
