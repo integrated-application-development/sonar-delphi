@@ -152,6 +152,11 @@
 		<priority>2</priority>
 	</rule>
 
+	<rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+		name="EmptyMethodRule">
+		<priority>2</priority>
+	</rule>
+
 	<rule class="org.sonar.plugins.delphi.pmd.rules.DprFunctionRule"
 				name="ProjectFileNoFunctionsRule">
 		<priority>3</priority>

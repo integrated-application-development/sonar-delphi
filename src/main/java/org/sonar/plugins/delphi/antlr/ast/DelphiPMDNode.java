@@ -441,7 +441,7 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
       return null;
     }
 
-    return (DelphiPMDNode) parent.getChild(childIndex - 1);
+    return new DelphiPMDNode((CommonTree) parent.getChild(childIndex - 1), getASTTree());
   }
 
   public DelphiPMDNode nextNode() {
@@ -449,7 +449,7 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
       return null;
     }
 
-    return (DelphiPMDNode) parent.getChild(childIndex + 1);
+    return new DelphiPMDNode((CommonTree) parent.getChild(childIndex + 1), getASTTree());
   }
 
   public DelphiPMDNode findNextSiblingOfType(int type) {
@@ -458,7 +458,7 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
         Tree child = parent.getChild(i);
 
         if (child.getType() == type) {
-          return (DelphiPMDNode) parent.getChild(i);
+          return new DelphiPMDNode((CommonTree) parent.getChild(i), getASTTree());
         }
       }
     }
