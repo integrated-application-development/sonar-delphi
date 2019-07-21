@@ -513,8 +513,8 @@ FreeAndNil(Foo); // Compliant
 			<property name="xpath">
 				<value>
 					<![CDATA[
-						//BEGIN[count(child::*) = 1][not(parent::TkExceptionHandler)]
-					]]>	
+						//BEGIN[count(child::*) = 1][preceding-sibling::*[1][name() != 'TkBlockDeclSection']]
+					]]>
 				</value>
 			</property>
 		</properties>

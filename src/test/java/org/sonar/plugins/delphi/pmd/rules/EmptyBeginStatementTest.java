@@ -21,13 +21,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.not;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 
 public class EmptyBeginStatementTest extends BasePmdRuleTest {
-
   @Test
   public void testValidRule() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
@@ -67,7 +67,7 @@ public class EmptyBeginStatementTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBeginEndStatement() {
+  public void testEmptyBeginStatements() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     builder.appendDecl("type");
@@ -76,34 +76,57 @@ public class EmptyBeginStatementTest extends BasePmdRuleTest {
     builder.appendDecl("    procedure One;");
     builder.appendDecl("    procedure Two;");
     builder.appendDecl("    procedure Three;");
-    builder.appendDecl("    procedure Four;");
-    builder.appendDecl("    procedure Five;");
+    builder.appendDecl("  end;");
+
+    builder.appendImpl("procedure TEmptyProcs.One;");
+    builder.appendImpl("begin");
+    builder.appendImpl("  Writeln('OK');");
+    builder.appendImpl("end;");
+    builder.appendImpl("procedure TEmptyProcs.Two;");
+    builder.appendImpl("begin");
+    builder.appendImpl("  if Foo then begin");
+    builder.appendImpl("    Bar;");
+    builder.appendImpl("  end;");
+    builder.appendImpl("end;");
+    builder.appendImpl("procedure TEmptyProcs.Three;");
+    builder.appendImpl("begin");
+    builder.appendImpl("  if Foo then begin");
+    builder.appendImpl("    // Do nothing");
+    builder.appendImpl("  end;");
+    builder.appendImpl("end;");
+    builder.appendImpl("procedure GlobalProcedureFour;");
+    builder.appendImpl("begin");
+    builder.appendImpl("  Writeln('OK');");
+    builder.appendImpl("end;");
+    builder.appendImpl("procedure GlobalProcedureFive;");
+    builder.appendImpl("begin");
+    builder.appendImpl("  if Foo then begin");
+    builder.appendImpl("    // Do nothing");
+    builder.appendImpl("  end;");
+    builder.appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(hasSize(2));
+    assertIssues(hasItem(hasRuleKeyAtLine("EmptyBeginStatementRule", builder.getOffSet() + 13)));
+    assertIssues(hasItem(hasRuleKeyAtLine("EmptyBeginStatementRule", builder.getOffSet() + 23)));
+  }
+  @Test
+  public void testEmptyMethodShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+
+    builder.appendDecl("type");
+    builder.appendDecl("  TEmptyProcs = class");
+    builder.appendDecl("  public");
+    builder.appendDecl("    procedure One;");
     builder.appendDecl("  end;");
 
     builder.appendImpl("procedure TEmptyProcs.One;");
     builder.appendImpl("begin");
     builder.appendImpl("end;");
-    builder.appendImpl("procedure TEmptyProcs.Two;");
-    builder.appendImpl("begin");
-    builder.appendImpl("end;");
-    builder.appendImpl("procedure TEmptyProcs.Three;");
-    builder.appendImpl("begin");
-    builder.appendImpl("end;");
-    builder.appendImpl("procedure TEmptyProcs.Four;");
-    builder.appendImpl("begin");
-    builder.appendImpl("end;");
-    builder.appendImpl("procedure TEmptyProcs.Five;");
-    builder.appendImpl("begin");
-    builder.appendImpl("end;");
 
     execute(builder);
 
-    assertIssues(hasSize(5));
-    assertIssues(hasItem(hasRuleKeyAtLine("EmptyBeginStatementRule", builder.getOffSet() + 2)));
-    assertIssues(hasItem(hasRuleKeyAtLine("EmptyBeginStatementRule", builder.getOffSet() + 5)));
-    assertIssues(hasItem(hasRuleKeyAtLine("EmptyBeginStatementRule", builder.getOffSet() + 8)));
-    assertIssues(hasItem(hasRuleKeyAtLine("EmptyBeginStatementRule", builder.getOffSet() + 11)));
-    assertIssues(hasItem(hasRuleKeyAtLine("EmptyBeginStatementRule", builder.getOffSet() + 14)));
+    assertIssues(not(hasItem(hasRuleKeyAtLine("EmptyBeginStatementRule", builder.getOffSet() + 2))));
   }
-
 }
