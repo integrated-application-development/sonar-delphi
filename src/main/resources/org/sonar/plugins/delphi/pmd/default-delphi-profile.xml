@@ -22,8 +22,8 @@
 		<priority>2</priority>
 	</rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
-				name="EmptyExceptBlockRule">
+	<rule class="org.sonar.plugins.delphi.pmd.rules.SwallowedExceptionsRule"
+				name="SwallowedExceptionsRule">
 		<priority>1</priority>
 	</rule>
 
@@ -200,11 +200,6 @@
 	<rule class="org.sonar.plugins.delphi.pmd.rules.NoBeginAfterDoRule"
 				name="NoBeginAfterDoRule">
 		<priority>4</priority>
-	</rule>
-
-	<rule class="org.sonar.plugins.delphi.pmd.rules.WithAfterDoThenRule"
-				name="WithAfterDoThenRule">
-		<priority>3</priority>
 	</rule>
 
 	<rule class="org.sonar.plugins.delphi.pmd.rules.NoSemicolonRule"

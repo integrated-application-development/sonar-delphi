@@ -24,8 +24,8 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /**
  * Checks, if we put 'begin' after 'do' statement
@@ -34,24 +34,26 @@ public class NoBeginAfterDoRule extends DelphiRule {
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    if (shouldCheck(node)) {
-      Tree nextNode = node.getParent().getChild(node.getChildIndex() + 1);
+    if (node.getType() != DelphiLexer.DO) {
+      return;
+    }
 
-      if (isWrongNode(nextNode)) {
-        addViolation(ctx, node);
-      }
-
+    if (isViolationNode(node)) {
+      addViolation(ctx, node);
     }
   }
 
-  protected boolean isWrongNode(Tree node) {
-    return node == null
-        || (node.getType() != LexerMetrics.BEGIN.toMetrics() && node.getType() != LexerMetrics.WITH
-        .toMetrics());
-  }
+  private boolean isViolationNode(DelphiPMDNode node) {
+    Tree nextNode = node.nextNode();
 
-  protected boolean shouldCheck(Tree node) {
-    return node != null && node.getType() == LexerMetrics.DO.toMetrics();
-  }
+    if (nextNode != null) {
+      int type = nextNode.getType();
 
+      return type != DelphiLexer.BEGIN
+          && type != DelphiLexer.WITH
+          && type != DelphiLexer.TkExceptionHandler;
+    }
+
+    return true;
+  }
 }

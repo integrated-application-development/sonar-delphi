@@ -73,15 +73,14 @@
 		</properties>
 	</rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
+	<rule class="org.sonar.plugins.delphi.pmd.rules.SwallowedExceptionsRule"
 				message="Exceptions should not be swallowed"
-				name="EmptyExceptBlockRule">
+				name="SwallowedExceptionsRule">
 		<description>
 			Exceptions should not be swallowed.
 			Exception handlers should contain logic to handle the caught exception.</description>
 		<properties>
 			<property name="baseEffort" value="10min" />
-			<property name="sequence" value="except|end" />
 		</properties>
 		<example>
 			<![CDATA[
@@ -514,7 +513,7 @@ FreeAndNil(Foo); // Compliant
 			<property name="xpath">
 				<value>
 					<![CDATA[
-						//BEGIN[count(child::*) = 1]
+						//BEGIN[count(child::*) = 1][not(parent::TkExceptionHandler)]
 					]]>	
 				</value>
 			</property>
@@ -616,18 +615,6 @@ FreeAndNil(Foo); // Compliant
 		<description>'Begin' statement should be placed after 'do' statement to prevent errors.</description>
 		<properties>
 			<property name="baseEffort" value="10min" />
-		</properties>
-	</rule>
-
-	<rule class="org.sonar.plugins.delphi.pmd.rules.WithAfterDoThenRule"
-				message="'with' statements should not come directly after 'do' or 'then' statements"
-				name="WithAfterDoThenRule">
-		<description>
-			'with' statement should not come directly after 'do' or 'then' statements.
-			Instead, place 'begin' directly after 'do' or 'then' statements.
-		</description>
-		<properties>
-			<property name="baseEffort" value="5min" />
 		</properties>
 	</rule>
 
