@@ -513,8 +513,24 @@ FreeAndNil(Foo); // Compliant
 			<property name="xpath">
 				<value>
 					<![CDATA[
-						//BEGIN[count(child::*) = 1][not(parent::TkExceptionHandler)]
-					]]>	
+						//BEGIN[count(child::*) = 1][preceding-sibling::*[1][name() != 'TkBlockDeclSection']]
+					]]>
+				</value>
+			</property>
+		</properties>
+	</rule>
+
+	<rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+		message="Methods should not be empty"
+		name="EmptyMethodRule">
+		<description>Empty methods are not allowed.</description>
+		<properties>
+			<property name="baseEffort" value="5min" />
+			<property name="xpath">
+				<value>
+					<![CDATA[
+						//BEGIN[count(child::*) = 1][preceding-sibling::*[1][name() = 'TkBlockDeclSection']]
+					]]>
 				</value>
 			</property>
 		</properties>

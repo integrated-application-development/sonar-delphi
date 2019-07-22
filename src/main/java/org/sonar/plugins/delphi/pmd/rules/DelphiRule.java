@@ -210,10 +210,6 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
     }
   }
 
-  public int getSkipToLine() {
-    return skipToLine;
-  }
-
   protected boolean isProtected() {
     return currentVisibility == DelphiLexer.PROTECTED;
   }
