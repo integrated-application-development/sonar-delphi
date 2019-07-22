@@ -486,16 +486,6 @@
 		</properties>
 	</rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.UppercaseReservedWordsRule"
-				message="Keywords should comply with a naming convention."
-				name="UppercaseReservedKeywordsRule">
-		<description>Avoid using uppercase reserved keywords.</description>
-		<priority>5</priority>
-		<properties>
-			<property name="baseEffort" value="5min" />
-		</properties>
-	</rule>
-
 	<rule class="org.sonar.plugins.delphi.pmd.rules.MixedNamesRule"
 				message="Avoid using mixed names for functions / variables."
 				name="MixedNamesRule">

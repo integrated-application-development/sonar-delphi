@@ -172,11 +172,6 @@
 		<priority>4</priority>
 	</rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.UppercaseReservedWordsRule"
-				name="UppercaseReservedKeywordsRule">
-		<priority>4</priority>
-	</rule>
-
 	<rule class="org.sonar.plugins.delphi.pmd.rules.MixedNamesRule"
 				name="MixedNamesRule">
 		<priority>4</priority>
