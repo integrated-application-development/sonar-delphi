@@ -562,18 +562,6 @@
 		</properties>
 	</rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.WithAfterDoThenRule"
-				message="'with' statement after 'do', 'begin' omitted"
-				name="WithAfterDoThenRule">
-		<description>'with' statement used directly after 'do' or 'then' statements. You should place 
-			'begin' directly after 'do' or 'then' statements.
-		</description>
-		<priority>5</priority>
-		<properties>
-			<property name="baseEffort" value="5min" />
-		</properties>
-	</rule>
-
 	<rule class="org.sonar.plugins.delphi.pmd.rules.NoSemicolonRule"
 				message="No semicolon at the end of code block."
 				name="NoSemicolonRule">

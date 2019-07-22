@@ -623,8 +623,8 @@ handler                      : 'on' (handlerIdent)? typeId 'do' handlerStatement
                              ;
 handlerIdent                 : ident ':'
                              ;
-handlerStatement             : statement (';')?
-                             | ';'
+handlerStatement             : statement (';')? -> ^(TkExceptionHandler statement) (';')?
+                             | ';' -> ^(TkExceptionHandler) ';'
                              ;
 raiseStatement               : 'raise' (expression)? (AT expression)?
                              ;
@@ -969,6 +969,8 @@ TkAnonymousExpression   : 'ANONYMOUS_EXPRESSION'
 TkAssemblerInstructions : 'ASSEMBLER_INSTRUCTIONS'
                         ;
 TkBlockDeclSection      : 'BLOCK_DECL_SECTION'
+                        ;
+TkExceptionHandler      : 'EXCEPTION_HANDLER'
                         ;
 TkIdentifier            : (Alpha | '_') (Alpha | Digit | '_')*
                         ;
