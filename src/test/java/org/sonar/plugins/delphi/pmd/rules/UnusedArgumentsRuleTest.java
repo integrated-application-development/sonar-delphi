@@ -34,25 +34,24 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testUnusedArgumentShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+      .appendDecl("type")
+      .appendDecl("  TCustomComponent = class(TComponent)")
+      .appendDecl("  protected")
+      .appendDecl("    procedure OnUnusedArg(Arg: Integer);")
+      .appendDecl("  public")
+      .appendDecl("    procedure CaseInsensitive(Arg: Integer);")
+      .appendDecl("  end;")
 
-    builder.appendDecl("type");
-    builder.appendDecl("  TCustomComponent = class(TComponent)");
-    builder.appendDecl("  protected");
-    builder.appendDecl("    procedure OnUnusedArg(Arg: Integer);");
-    builder.appendDecl("  public");
-    builder.appendDecl("    procedure CaseInsensitive(Arg: Integer);");
-    builder.appendDecl("  end;");
+      .appendImpl("procedure TCustomComponent.OnUnusedArg(Arg: Integer);")
+      .appendImpl("begin")
+      .appendImpl("  WriteLn('dummy');")
+      .appendImpl("end;")
 
-    builder.appendImpl("procedure TCustomComponent.OnUnusedArg(Arg: Integer);");
-    builder.appendImpl("begin");
-    builder.appendImpl("  WriteLn('dummy');");
-    builder.appendImpl("end;");
-
-    builder.appendImpl("procedure TCustomComponent.CaseInsensitive(Arg: Integer);");
-    builder.appendImpl("begin");
-    builder.appendImpl("  Arg := Arg + 1;");
-    builder.appendImpl("end;");
+      .appendImpl("procedure TCustomComponent.CaseInsensitive(Arg: Integer);")
+      .appendImpl("begin")
+      .appendImpl("  Arg := Arg + 1;")
+      .appendImpl("end;");
 
     execute(builder);
 
@@ -61,49 +60,31 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testValidRuleExcludedArguments() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+  public void testPublishedMethodsShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+      .appendDecl("type")
+      .appendDecl("  TCustomComponent = class(TComponent)")
+      .appendDecl("    procedure OnEvent(Sender: TObject);")
+      .appendDecl("  published")
+      .appendDecl("    procedure OnEventB(ASender: TObject);")
+      .appendDecl("  private")
+      .appendDecl("    procedure OnEventC(ASender: TObject);")
+      .appendDecl("  end;")
 
-    builder.appendDecl("type");
-    builder.appendDecl("  TCustomComponent = class(TComponent)");
-    builder.appendDecl("  protected");
-    builder.appendDecl("    procedure OnEvent(Sender: TObject);");
-    builder.appendDecl("    procedure OnEventB(ASender: TObject);");
-    builder.appendDecl("  end;");
+      .appendImpl("procedure TCustomComponent.OnEvent(Sender: TObject);")
+      .appendImpl("begin")
+      .appendImpl("  WriteLn('dummy');")
+      .appendImpl("end;")
 
-    builder.appendImpl("procedure TCustomComponent.OnEvent(Sender: TObject);");
-    builder.appendImpl("begin");
-    builder.appendImpl("  WriteLn('dummy');");
-    builder.appendImpl("end;");
+      .appendImpl("procedure TCustomComponent.OnEventB(Sender: TObject);")
+      .appendImpl("begin")
+      .appendImpl("  WriteLn('dummy');")
+      .appendImpl("end;")
 
-    builder.appendImpl("procedure TCustomComponent.OnEventB(ASender: TObject);");
-    builder.appendImpl("begin");
-    builder.appendImpl("  WriteLn('dummy');");
-    builder.appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues(empty());
-  }
-
-  @Test
-  public void testValidRuleNestedFunction() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-
-    builder.appendDecl("procedure TestNestedParams(const Value : String);");
-
-    builder.appendImpl("procedure TestNestedParams(const Value : String);");
-    builder.appendImpl("const");
-    builder.appendImpl("  C_MyConstant = 'VALUE';");
-    builder.appendImpl("var");
-    builder.appendImpl("  Data : string;");
-    builder.appendImpl("  function Update(const Param : String) : String;");
-    builder.appendImpl("  begin");
-    builder.appendImpl("    Result := Param + ' dummy';");
-    builder.appendImpl("  end;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  Data := Update(Value);");
-    builder.appendImpl("end;");
+      .appendImpl("procedure TCustomComponent.OnEventC(Sender: TObject);")
+      .appendImpl("begin")
+      .appendImpl("  DoSomethingWithSender(Sender);")
+      .appendImpl("end;");
 
     execute(builder);
 
@@ -111,33 +92,22 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testValidRuleManyNestedFunction() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+  public void testOverrideMethodsShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+      .appendDecl("type")
+      .appendDecl("  TCustomComponent = class(TComponent)")
+      .appendDecl("  private")
+      .appendDecl("    procedure OnEvent(Sender: TObject); override;")
+      .appendDecl("  end;")
 
-    builder.appendDecl("procedure TestNestedParams(const Value : String);");
-
-    builder.appendImpl("procedure TestNestedParams(const Value : String);");
-    builder.appendImpl("const");
-    builder.appendImpl("  C_MyConstant = 'VALUE';");
-    builder.appendImpl("var");
-    builder.appendImpl("  Data : String;");
-    builder.appendImpl("  function Update(const Param : String) : String;");
-    builder.appendImpl("  begin");
-    builder.appendImpl("    Result := Param + ' dummy';");
-    builder.appendImpl("  end;");
-    builder.appendImpl("  function Insert(const Param : String) : String;");
-    builder.appendImpl("  begin");
-    builder.appendImpl("    Result := Param + ' dummy';");
-    builder.appendImpl("  end;");
-    builder.appendImpl("  function Retrieve(const Param : String) : String;");
-    builder.appendImpl("  begin");
-    builder.appendImpl("    Result := Param + ' dummy';");
-    builder.appendImpl("  end;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  Data := Update(Value);");
-    builder.appendImpl("  Data := Insert(Value);");
-    builder.appendImpl("  Data := Retrieve(Value);");
-    builder.appendImpl("end;");
+      .appendImpl("procedure TCustomComponent.OnEvent(Sender: TObject);")
+      .appendImpl("begin")
+      .appendImpl("  WriteLn('dummy');")
+      .appendImpl("end;")
+      .appendImpl("procedure TCustomComponent.OnEventB(Sender: TObject);")
+      .appendImpl("begin")
+      .appendImpl("  DoSomethingWithSender(Sender);")
+      .appendImpl("end;");
 
     execute(builder);
 
@@ -145,31 +115,24 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testValidRuleMultipleNestedFunction() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+  public void testVirtualMethodsShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+      .appendDecl("type")
+      .appendDecl("  TCustomComponent = class(TComponent)")
+      .appendDecl("  private")
+      .appendDecl("    procedure OnEvent(Sender: TObject); virtual;")
+      .appendDecl("    procedure OnEventB(ASender: TObject);")
+      .appendDecl("  end;")
 
-    builder.appendDecl("procedure TestNestedParams(const Value : string);");
+      .appendImpl("procedure TCustomComponent.OnEvent(Sender: TObject);")
+      .appendImpl("begin")
+      .appendImpl("  WriteLn('dummy');")
+      .appendImpl("end;")
 
-    builder.appendImpl("procedure TestNestedParams(const Value : string);");
-    builder.appendImpl("const");
-    builder.appendImpl("  C_MyConstant = 'VALUE';");
-    builder.appendImpl("var");
-    builder.appendImpl("  Data : String;");
-    builder.appendImpl("  function Update1(const Param : String) : String;");
-    builder.appendImpl("    function Update2(const Param : String) : String;");
-    builder.appendImpl("      function Update3(const Param : String) : String;");
-    builder.appendImpl("      begin");
-    builder.appendImpl("        Result := Param + ' dummy';");
-    builder.appendImpl("      end;");
-    builder.appendImpl("    begin");
-    builder.appendImpl("      Result := Update3(Param + '3');");
-    builder.appendImpl("    end;");
-    builder.appendImpl("  begin");
-    builder.appendImpl("    Result := Update2(Param + '2');");
-    builder.appendImpl("  end;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  lData := Update1(Value);");
-    builder.appendImpl("end;");
+      .appendImpl("procedure TCustomComponent.OnEventB(Sender: TObject);")
+      .appendImpl("begin")
+      .appendImpl("  DoSomethingWithSender(Sender);")
+      .appendImpl("end;");
 
     execute(builder);
 
@@ -177,31 +140,117 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testIssuesMultipleNestedFunction() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+  public void testValidSubProcedureShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+      .appendDecl("procedure TestNestedParams(const Value : String);")
 
-    builder.appendDecl("procedure TestNestedParams(const Value : String);");
+      .appendImpl("procedure TestNestedParams(const Value : String);")
+      .appendImpl("const")
+      .appendImpl("  C_MyConstant = 'VALUE';")
+      .appendImpl("var")
+      .appendImpl("  Data : string;")
+      .appendImpl("  function Update(const Param : String) : String;")
+      .appendImpl("  begin")
+      .appendImpl("    Result := Param + ' dummy';")
+      .appendImpl("  end;")
+      .appendImpl("begin")
+      .appendImpl("  Data := Update(Value);")
+      .appendImpl("end;");
 
-    builder.appendImpl("procedure TestNestedParams(const Value : String);");
-    builder.appendImpl("const");
-    builder.appendImpl("  C_MyConstant = 'VALUE';");
-    builder.appendImpl("var");
-    builder.appendImpl("  Data : string;");
-    builder.appendImpl("  function Update1(const Param : String) : String;");
-    builder.appendImpl("    function Update2(const Param : String) : String;");
-    builder.appendImpl("      function Update3(const Param : String) : String;");
-    builder.appendImpl("      begin");
-    builder.appendImpl("        Result := 'dummy';");
-    builder.appendImpl("      end;");
-    builder.appendImpl("    begin");
-    builder.appendImpl("      Result := Update3('3');");
-    builder.appendImpl("    end;");
-    builder.appendImpl("  begin");
-    builder.appendImpl("    Result := Update2('2');");
-    builder.appendImpl("  end;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  Data := Update1('1');");
-    builder.appendImpl("end;");
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testValidSubProceduresShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+      .appendDecl("procedure TestNestedParams(const Value : String);")
+
+      .appendImpl("procedure TestNestedParams(const Value : String);")
+      .appendImpl("const")
+      .appendImpl("  C_MyConstant = 'VALUE';")
+      .appendImpl("var")
+      .appendImpl("  Data : String;")
+      .appendImpl("  function Update(const Param : String) : String;")
+      .appendImpl("  begin")
+      .appendImpl("    Result := Param + ' dummy';")
+      .appendImpl("  end;")
+      .appendImpl("  function Insert(const Param : String) : String;")
+      .appendImpl("  begin")
+      .appendImpl("    Result := Param + ' dummy';")
+      .appendImpl("  end;")
+      .appendImpl("  function Retrieve(const Param : String) : String;")
+      .appendImpl("  begin")
+      .appendImpl("    Result := Param + ' dummy';")
+      .appendImpl("  end;")
+      .appendImpl("begin")
+      .appendImpl("  Data := Update(Value);")
+      .appendImpl("  Data := Insert(Value);")
+      .appendImpl("  Data := Retrieve(Value);")
+      .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testValidNestedSubProceduresShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+      .appendDecl("procedure TestNestedParams(const Value : string);")
+
+      .appendImpl("procedure TestNestedParams(const Value : string);")
+      .appendImpl("const")
+      .appendImpl("  C_MyConstant = 'VALUE';")
+      .appendImpl("var")
+      .appendImpl("  Data : String;")
+      .appendImpl("  function Update1(const Param : String) : String;")
+      .appendImpl("    function Update2(const Param : String) : String;")
+      .appendImpl("      function Update3(const Param : String) : String;")
+      .appendImpl("      begin")
+      .appendImpl("        Result := Param + ' dummy';")
+      .appendImpl("      end;")
+      .appendImpl("    begin")
+      .appendImpl("      Result := Update3(Param + '3');")
+      .appendImpl("    end;")
+      .appendImpl("  begin")
+      .appendImpl("    Result := Update2(Param + '2');")
+      .appendImpl("  end;")
+      .appendImpl("begin")
+      .appendImpl("  lData := Update1(Value);")
+      .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testInvalidNestedSubProceduresShouldAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+      .appendDecl("procedure TestNestedParams(const Value : String);")
+
+      .appendImpl("procedure TestNestedParams(const Value : String);")
+      .appendImpl("const")
+      .appendImpl("  C_MyConstant = 'VALUE';")
+      .appendImpl("var")
+      .appendImpl("  Data : string;")
+      .appendImpl("  function Update1(const Param : String) : String;")
+      .appendImpl("    function Update2(const Param : String) : String;")
+      .appendImpl("      function Update3(const Param : String) : String;")
+      .appendImpl("      begin")
+      .appendImpl("        Result := 'dummy';")
+      .appendImpl("      end;")
+      .appendImpl("    begin")
+      .appendImpl("      Result := Update3('3');")
+      .appendImpl("    end;")
+      .appendImpl("  begin")
+      .appendImpl("    Result := Update2('2');")
+      .appendImpl("  end;")
+      .appendImpl("begin")
+      .appendImpl("  Data := Update1('1');")
+      .appendImpl("end;");
 
     execute(builder);
 

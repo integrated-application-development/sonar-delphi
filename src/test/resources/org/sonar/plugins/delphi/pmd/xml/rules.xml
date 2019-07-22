@@ -373,7 +373,6 @@
 		<priority>5</priority>
 		<properties>
 			<property name="baseEffort" value="5min" />
-			<property name="excluded_args" value="Sender|ASender|DataSet|ADataSet" />
 		</properties>
 	</rule>
 
