@@ -23,14 +23,13 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.properties.PropertyDescriptor;
-import net.sourceforge.pmd.properties.PropertyFactory;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
@@ -39,50 +38,110 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  * Rule violation for unused function/procedure/method arguments
  */
 public class UnusedArgumentsRule extends DelphiRule {
-
-  private static final int MAX_LOOK_AHEAD = 3;
-
-  private static final PropertyDescriptor<List<String>> EXCLUDED_ARGS =
-      PropertyFactory.stringListProperty("excluded_args")
-          .desc("The argument names to ignore")
-          .defaultValue(new ArrayList<>())
-          .build();
-
-  private List<String> excludedArgs = new ArrayList<>();
-
-  public UnusedArgumentsRule() {
-    definePropertyDescriptor(EXCLUDED_ARGS);
-  }
+  private String currentTypeName;
+  private Set<String> excludedMethods;
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    if (isMethodNode(node)) {
+    handleTypes(node);
+    handleMethods(node, ctx);
+  }
 
-      Tree argsNode = node.getFirstChildWithType(DelphiLexer.TkFunctionArgs);
-      if (argsNode == null) {
-        return;
-      }
+  private void handleTypes(DelphiPMDNode node) {
+    if (node.getType() == DelphiLexer.TkNewType) {
+      Tree typeName = node.getFirstChildWithType(DelphiLexer.TkNewTypeName);
+      handleTypeName(typeName);
 
-      Map<String, Integer> args = processFunctionArgs(argsNode);
-      if (args.isEmpty()) {
-        // no arguments
-        return;
-      }
-
-      Deque<Tree> functionNodes = new ArrayDeque<>();
-      Deque<Tree> beginNodes = new ArrayDeque<>();
-
-      findFunctionNodesAndBeginNodes(node, functionNodes, beginNodes);
-
-      if (functionNodes.isEmpty() || beginNodes.isEmpty()) {
-        return;
-      }
-
-      Tree beginNode = beginNodes.peek();
-
-      processFunctionBegin(beginNode, args);
-      checkForUnusedArguments(args, ctx, node, extractMethodName(node));
+      Tree typeDecl = node.getFirstChildWithType(DelphiLexer.TkNewTypeDecl);
+      handleTypeDecl(typeDecl.getChild(0));
     }
+  }
+
+  private void handleTypeName(Tree typeName) {
+    currentTypeName = typeName.getChild(0).getText().toLowerCase();
+  }
+
+  private void handleTypeDecl(Tree typeDecl) {
+    if (typeDecl == null) {
+      return;
+    }
+
+    int visibility = DelphiLexer.PUBLISHED;
+    for (int i = 0; i < typeDecl.getChildCount(); ++i) {
+      Tree child = typeDecl.getChild(i);
+
+      switch (child.getType()) {
+        case DelphiLexer.PRIVATE:
+        case DelphiLexer.PROTECTED:
+        case DelphiLexer.PUBLIC:
+        case DelphiLexer.PUBLISHED:
+          visibility = child.getType();
+          break;
+
+        case DelphiLexer.FUNCTION:
+        case DelphiLexer.PROCEDURE:
+          handleMethodDeclaration(child, visibility);
+          break;
+
+        default:
+          // Do nothing
+      }
+    }
+  }
+
+  private void handleMethodDeclaration(Tree child, int visibility) {
+    if (visibility == DelphiLexer.PUBLISHED || hasExcludedDirective(child)) {
+      String methodName = child.getChild(0).getChild(0).getText().toLowerCase();
+      excludedMethods.add(currentTypeName + "." + methodName);
+    }
+  }
+
+  private boolean hasExcludedDirective(Tree methodNode) {
+    for (int i = 0; i < methodNode.getChildCount(); ++i) {
+      int type = methodNode.getChild(i).getType();
+
+      if (type == DelphiLexer.OVERRIDE || type == DelphiLexer.VIRTUAL) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private void handleMethods(DelphiPMDNode node, RuleContext ctx) {
+    if (!isMethodNode(node) || !isImplementationSection()) {
+      return;
+    }
+
+    Tree argsNode = node.getFirstChildWithType(DelphiLexer.TkFunctionArgs);
+    if (argsNode == null) {
+      return;
+    }
+
+    String methodName = extractMethodName(node);
+    if (isExcluded(methodName)) {
+      return;
+    }
+
+    Map<String, Integer> args = processFunctionArgs(argsNode);
+    if (args.isEmpty()) {
+      // no arguments
+      return;
+    }
+
+    Deque<Tree> functionNodes = new ArrayDeque<>();
+    Deque<Tree> beginNodes = new ArrayDeque<>();
+
+    findFunctionNodesAndBeginNodes(node, functionNodes, beginNodes);
+
+    if (functionNodes.isEmpty() || beginNodes.isEmpty()) {
+      return;
+    }
+
+    Tree beginNode = beginNodes.peek();
+
+    processFunctionBegin(beginNode, args);
+    checkForUnusedArguments(args, ctx, node, methodName);
   }
 
   private void findFunctionNodesAndBeginNodes(DelphiPMDNode node, Deque<Tree> functionNodes,
@@ -118,22 +177,6 @@ public class UnusedArgumentsRule extends DelphiRule {
         || candidateNode.getType() == DelphiLexer.FUNCTION;
   }
 
-  public Tree findBeginNode(Tree node) {
-    int lookIndex = 0;
-    Tree candidateNode;
-    // looking for begin statement for function
-    do {
-      ++lookIndex;
-      candidateNode = node.getParent().getChild(node.getChildIndex() + lookIndex);
-
-      if (lookIndex > MAX_LOOK_AHEAD || candidateNode == null) {
-        break;
-      }
-    } while (candidateNode.getType() != DelphiLexer.BEGIN);
-
-    return candidateNode;
-  }
-
   /**
    * Checks if some argument is unused, if so makes a violation
    *
@@ -144,14 +187,14 @@ public class UnusedArgumentsRule extends DelphiRule {
   private void checkForUnusedArguments(Map<String, Integer> args, RuleContext ctx,
       DelphiPMDNode node, String methodName) {
     for (Map.Entry<String, Integer> entry : args.entrySet()) {
-      if (entry.getValue() == 0 && !ignoredArg(entry.getKey())) {
+      if (entry.getValue() == 0) {
         addViolation(ctx, node, "Unused argument: '" + entry.getKey() + "' at " + methodName);
       }
     }
   }
 
-  private boolean ignoredArg(String arg) {
-    return excludedArgs.stream().anyMatch(arg::equalsIgnoreCase);
+  private boolean isExcluded(String methodName) {
+    return excludedMethods.contains(methodName.toLowerCase());
   }
 
   /**
@@ -163,9 +206,8 @@ public class UnusedArgumentsRule extends DelphiRule {
   private void processFunctionBegin(Tree beginNode, Map<String, Integer> args) {
     for (int i = 0; i < beginNode.getChildCount(); ++i) {
       Tree child = beginNode.getChild(i);
-      String key = child.getText().toLowerCase();
+      String key = child.getText();
       if (args.containsKey(key)) {
-        // if we are using a argument, increase the counter
         Integer newValue = args.get(key) + 1;
         args.put(key, newValue);
       }
@@ -183,7 +225,8 @@ public class UnusedArgumentsRule extends DelphiRule {
    * @return Argument map
    */
   private Map<String, Integer> processFunctionArgs(Tree argsNode) {
-    Map<String, Integer> args = new HashMap<>();
+    Map<String, Integer> args = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+
     for (int i = 0; i < argsNode.getChildCount(); i += 2) {
       Tree idents = argsNode.getChild(i);
 
@@ -196,7 +239,7 @@ public class UnusedArgumentsRule extends DelphiRule {
       }
 
       for (int c = 0; c < idents.getChildCount(); ++c) {
-        args.put(idents.getChild(c).getText().toLowerCase(), 0);
+        args.put(idents.getChild(c).getText(), 0);
       }
     }
     return args;
@@ -204,7 +247,8 @@ public class UnusedArgumentsRule extends DelphiRule {
 
   @Override
   protected void init() {
-    excludedArgs = getProperty(EXCLUDED_ARGS);
+    currentTypeName = "";
+    excludedMethods = new HashSet<>();
   }
 
   @Override
