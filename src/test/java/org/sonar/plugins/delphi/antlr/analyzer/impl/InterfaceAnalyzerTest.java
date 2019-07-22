@@ -68,7 +68,7 @@ public class InterfaceAnalyzerTest {
     do {
       analyzer.analyze(code, results);
       LexerMetrics visibility = results.getParseVisibility();
-      assertEquals(metrics[i++], visibility);
+      assertEquals(visibility, metrics[i++]);
       code.setCurrentNode(advanceOp.execute(code.getCurrentCodeNode().getNode()));
     } while (code.getCurrentCodeNode().isValid());
   }
