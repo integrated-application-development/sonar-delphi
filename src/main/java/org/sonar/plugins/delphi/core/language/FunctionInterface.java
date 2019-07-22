@@ -131,32 +131,60 @@ public interface FunctionInterface extends HasNameInterface {
   void setBodyLine(int line);
 
   /**
-   * Gets function begin-column in file
+   * Gets function begin-column in interface
    *
    * @return Function begin-column in file
    */
   int getBeginColumn();
 
   /**
-   * Gets function end-column in file
+   * Gets function end-column in interface
    *
    * @return Function end-column in file
    */
   int getEndColumn();
 
   /**
-   * Sets function begin-column in file
+   * Sets function begin-column in interface
    *
    * @param column New function begin-column
    */
   void setBeginColumn(int column);
 
   /**
-   * Sets function end-column in file
+   * Sets function end-column in interface
    *
    * @param column New function end-column
    */
   void setEndColumn(int column);
+
+  /**
+   * Gets function begin-column in implementation
+   *
+   * @return Function begin-column in file
+   */
+  int getBodyBeginColumn();
+
+  /**
+   * Gets function end-column in implementation
+   *
+   * @return Function end-column in file
+   */
+  int getBodyEndColumn();
+
+  /**
+   * Sets function begin-column in implementation
+   *
+   * @param column New function begin-column
+   */
+  void setBodyBeginColumn(int column);
+
+  /**
+   * Sets function end-column in implementation
+   *
+   * @param column New function end-column
+   */
+  void setBodyEndColumn(int column);
 
   /**
    * Gets function short name (without class name prefix)

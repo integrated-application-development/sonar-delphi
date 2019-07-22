@@ -231,9 +231,9 @@ public class ComplexityMetrics extends DefaultMetrics {
   private void addIssue(InputFile inputFile, FunctionInterface func) {
     if (func.getComplexity() > threshold) {
       NewIssue newIssue = context.newIssue();
-      int line = func.getLine();
-      int beginCol = func.getBeginColumn();
-      int endCol = func.getEndColumn();
+      int line = func.getBodyLine();
+      int beginCol = func.getBodyBeginColumn();
+      int endCol = func.getBodyEndColumn();
       newIssue
           .forRule(methodCyclomaticComplexityRule.ruleKey())
           .at(newIssue.newLocation()
