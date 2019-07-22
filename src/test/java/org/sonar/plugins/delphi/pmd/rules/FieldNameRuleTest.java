@@ -160,4 +160,19 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4)));
     assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
   }
+
+  @Test
+  public void testIdentListField() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+    builder.appendDecl("type");
+    builder.appendDecl("  TMyClass = class");
+    builder.appendDecl("    private");
+    builder.appendDecl("     x, y: Integer;");
+    builder.appendDecl("  end;");
+
+    execute(builder);
+
+    assertIssues(hasSize(2));
+    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4)));
+  }
 }
