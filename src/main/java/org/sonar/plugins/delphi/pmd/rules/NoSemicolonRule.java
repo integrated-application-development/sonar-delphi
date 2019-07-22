@@ -25,7 +25,6 @@ package org.sonar.plugins.delphi.pmd.rules;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
-import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
 /**
@@ -35,30 +34,21 @@ public class NoSemicolonRule extends DelphiRule {
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    if (!isImplementationSection() || node.getType() != DelphiLexer.END) {
-      return;
-    }
+    if (shouldVisit(node)) {
+      DelphiPMDNode violationNode = findViolationNode(node);
 
-    DelphiPMDNode violationNode = findViolationNode(node);
-    if (violationNode != null) {
-      addViolation(ctx, violationNode);
-    }
-  }
-
-  private DelphiPMDNode findViolationNode(DelphiPMDNode node) {
-    Tree previousNode = getPreviousNode(node);
-    if (isValidNode(previousNode)) {
-      if (isBlockNode(previousNode) && isMissingSemicolonInBlock(previousNode)) {
-        return (DelphiPMDNode) previousNode.getChild(previousNode.getChildCount() - 1);
-      } else if (notSemicolonNode(previousNode)) {
-        return (DelphiPMDNode) previousNode;
+      if (violationNode != null) {
+        addViolation(ctx, violationNode);
       }
     }
-
-    return null;
   }
 
-  private boolean isValidNode(Tree node) {
+  private boolean shouldVisit(DelphiPMDNode node) {
+    return isImplementationSection() && node.getType() == DelphiLexer.END
+        && previousNodeValid(node.prevNode()) && nextNodeValid(node.nextNode());
+  }
+
+  private boolean previousNodeValid(Tree node) {
     if (node == null) {
       return false;
     }
@@ -69,18 +59,36 @@ public class NoSemicolonRule extends DelphiRule {
         && node.getType() != DelphiLexer.TkAssemblerInstructions;
   }
 
-  private Tree getPreviousNode(DelphiPMDNode node) {
-    int index = node.getChildIndex() - 1;
-    if (index < 0 || node.getParent() == null) {
-      return null;
-    }
+  private boolean nextNodeValid(DelphiPMDNode node) {
+    return node == null || node.getType() != DelphiLexer.DOT;
+  }
 
-    return node.getParent().getChild(index);
+  private DelphiPMDNode findViolationNode(DelphiPMDNode node) {
+    DelphiPMDNode previousNode = node.prevNode();
+
+    if (isBlockNode(previousNode)) {
+      return findViolationNodeInBlock(previousNode);
+    } else {
+      return findViolationNodeInStatement(previousNode);
+    }
+  }
+
+  private DelphiPMDNode findViolationNodeInBlock(DelphiPMDNode node) {
+    if (isMissingSemicolonInBlock(node)) {
+      return (DelphiPMDNode) node.getChild(node.getChildCount() - 1);
+    }
+    return null;
+  }
+
+  private DelphiPMDNode findViolationNodeInStatement(DelphiPMDNode node) {
+    if (notSemicolonNode(node)) {
+      return node;
+    }
+    return null;
   }
 
   private boolean isBlockNode(Tree node) {
-    return node != null &&
-        (node.getType() == DelphiLexer.BEGIN || node.getType() == DelphiLexer.EXCEPT);
+    return node.getType() == DelphiLexer.BEGIN || node.getType() == DelphiLexer.EXCEPT;
   }
 
   private boolean isMissingSemicolonInBlock(Tree beginNode) {
@@ -89,7 +97,7 @@ public class NoSemicolonRule extends DelphiRule {
   }
 
   private boolean notSemicolonNode(Tree node) {
-    return node == null || node.getType() != LexerMetrics.SEMI.toMetrics();
+    return node != null && node.getType() != DelphiLexer.SEMI;
   }
 
 }
