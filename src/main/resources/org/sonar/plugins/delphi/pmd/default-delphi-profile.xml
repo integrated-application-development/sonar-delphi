@@ -17,7 +17,7 @@
 		<priority>3</priority>
 	</rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
+	<rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
 				name="InheritedMethodWithNoCodeRule">
 		<priority>2</priority>
 	</rule>
