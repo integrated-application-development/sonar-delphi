@@ -63,13 +63,23 @@
 		</properties>
 	</rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
+	<rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
 				message="Overriding methods should do more than simply call the same method in the super class"
 				name="InheritedMethodWithNoCodeRule">
 		<description>Overriding a method just to call the same method from the super class without performing any other actions is useless and misleading.</description>
 		<properties>
 			<property name="baseEffort" value="10min" />
-			<property name="sequence" value="begin|inherited|;|end" />
+			<property name="xpath">
+				<value>
+					<![CDATA[
+						//TkBlockDeclSection/following-sibling::BEGIN/*[1][name() = 'INHERITED']
+							[
+								following-sibling::*[1][name() = 'END']
+								or (following-sibling::*[1][name() = 'SEMI'] and following-sibling::*[2][name() = 'END'])
+							]
+ 						]]>
+				</value>
+			</property>
 		</properties>
 	</rule>
 
