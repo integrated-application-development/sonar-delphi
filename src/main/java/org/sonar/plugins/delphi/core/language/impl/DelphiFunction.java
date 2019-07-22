@@ -45,9 +45,11 @@ public class DelphiFunction implements FunctionInterface {
   private int complexity;
   private int overloads = -1;
   private int line = -1;
-  private int bodyLine = -1;
   private int beginColumn = -1;
   private int endColumn = -1;
+  private int bodyLine = -1;
+  private int bodyBeginColumn = -1;
+  private int bodyEndColumn = -1;
   private int visibility = DelphiParser.PRIVATE;
   private String name;
   private String realName;
@@ -89,7 +91,6 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public boolean isAccessor() {
     return isAccessor;
@@ -98,7 +99,6 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public void setDeclaration(boolean value) {
     isDeclaration = value;
@@ -107,7 +107,6 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public int getVisibility() {
     return visibility;
@@ -125,7 +124,6 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public boolean isDeclaration() {
     return isDeclaration;
@@ -134,7 +132,6 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public void increaseComplexity() {
     complexity++;
@@ -143,7 +140,6 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public int getComplexity() {
     return complexity;
@@ -152,7 +148,6 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public void setComplexity(int complexity) {
     this.complexity = complexity;
@@ -161,7 +156,6 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public int getLine() {
     return line;
@@ -170,7 +164,6 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public void setLine(int line) {
     this.line = line;
@@ -179,7 +172,6 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public int getBeginColumn() {
     return beginColumn;
@@ -188,7 +180,6 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public int getEndColumn() {
     return endColumn;
@@ -197,7 +188,6 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public void setEndColumn(int column) {
     this.endColumn = column;
@@ -206,7 +196,6 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public void setBeginColumn(int column) {
     this.beginColumn = column;
@@ -215,7 +204,6 @@ public class DelphiFunction implements FunctionInterface {
   /**
    * {@inheritDoc}
    */
-
   @Override
   public final String getName() {
     return name;
@@ -450,43 +438,99 @@ public class DelphiFunction implements FunctionInterface {
     parentUnit = functionUnit;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void setVirtual(boolean value) {
     virtual = value;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public boolean isVirtual() {
     return virtual;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void setMessage(boolean value) {
     message = value;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public boolean isMessage() {
     return message;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public final String getRealName() {
     return realName;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public final void setRealName(String name) {
     realName = name;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public int getBodyLine() {
     return bodyLine;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void setBodyLine(int line) {
     bodyLine = line;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int getBodyBeginColumn() {
+    return bodyBeginColumn;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int getBodyEndColumn() {
+    return bodyEndColumn;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setBodyEndColumn(int column) {
+    this.bodyEndColumn = column;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setBodyBeginColumn(int column) {
+    this.bodyBeginColumn = column;
   }
 }

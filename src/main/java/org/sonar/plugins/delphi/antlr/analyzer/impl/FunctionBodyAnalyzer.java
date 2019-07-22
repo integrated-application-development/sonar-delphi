@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
+import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
@@ -73,7 +74,7 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
 
     // increases function overload, so the starting overload should be -1
     activeFunction.increaseFunctionOverload();
-    activeFunction.setBodyLine(extractLine(codeTree.getCurrentCodeNode().getNode()));
+    processLocation(activeFunction, beginNode);
 
     if (activeFunction.getOverloadsCount() > 0) {
       functionHolder = new DelphiFunction();
@@ -95,18 +96,28 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
     results.setActiveFunction(null);
   }
 
-  private int extractLine(Tree currentCodeNode) {
-    Tree parent = currentCodeNode.getParent();
-    for (int i = currentCodeNode.getChildIndex() - 1; i >= 0; i--) {
-      Tree child = parent.getChild(i);
-      if (canExtractLineFrom(child)) {
-        return child.getLine();
-      }
+  private void processLocation(FunctionInterface function, Tree currentCodeNode) {
+    int childIndex = currentCodeNode.getChildIndex();
+
+    if (childIndex < 2) {
+      return;
     }
-    return -1;
+
+    Tree parent = currentCodeNode.getParent();
+    CommonTree funcNode = (CommonTree) parent.getChild(childIndex - 2);
+
+    if (canProcessLocation(funcNode)) {
+      Tree functionName = funcNode.getFirstChildWithType(DelphiLexer.TkFunctionName);
+      Tree nameStart = functionName.getChild(0);
+      Tree nameEnd = functionName.getChild(functionName.getChildCount() - 1);
+
+      function.setBodyLine(nameStart.getLine());
+      function.setBodyBeginColumn(nameStart.getCharPositionInLine());
+      function.setBodyEndColumn(nameEnd.getCharPositionInLine() + nameEnd.getText().length());
+    }
   }
 
-  private boolean canExtractLineFrom(Tree node) {
+  private boolean canProcessLocation(Tree node) {
     switch (node.getType()) {
       case DelphiLexer.FUNCTION:
       case DelphiLexer.PROCEDURE:
@@ -124,10 +135,10 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
    */
   private void countCalledFunctions(Tree node, FunctionInterface function,
       CodeAnalysisResults results) {
-    CalledFunctionVerifier verifyer = new CalledFunctionVerifier(results);
-    if (verifyer.verify(node)) {
-      FunctionInterface calledFunction = verifyer.fetchCalledFunction();
-      if (verifyer.isUnresolvedFunctionCall()) {
+    CalledFunctionVerifier verifier = new CalledFunctionVerifier(results);
+    if (verifier.verify(node)) {
+      FunctionInterface calledFunction = verifier.fetchCalledFunction();
+      if (verifier.isUnresolvedFunctionCall()) {
         UnresolvedFunctionCall unresolvedCall = new UnresolvedFunctionCall(function, calledFunction,
             results.getActiveUnit());
         results.addUnresolvedCall(calledFunction.getName(), unresolvedCall);
@@ -155,7 +166,7 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
   }
 
   private boolean isBodyNode(int type) {
-    return type == LexerMetrics.FUNCTION_BODY.toMetrics();
+    return type == DelphiLexer.BEGIN;
   }
 
   private void countBranches(Tree node, FunctionInterface function) {

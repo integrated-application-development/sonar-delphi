@@ -101,7 +101,7 @@ public class ComplexityMetricsTest {
 
     var issues = sensorContext.allIssues();
     assertThat(issues, hasSize(1));
-    assertThat(issues, hasItem(hasRuleKeyAtLine("MethodCyclomaticComplexityRule", 15)));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("MethodCyclomaticComplexityRule", 44)));
   }
 
   @Test
