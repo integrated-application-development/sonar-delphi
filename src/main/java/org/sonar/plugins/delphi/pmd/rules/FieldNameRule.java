@@ -18,9 +18,9 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.antlr.runtime.tree.CommonTree;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
@@ -34,12 +34,21 @@ public class FieldNameRule extends NameConventionRule {
       return Collections.emptyList();
     }
 
-    CommonTree fieldIdentList = (CommonTree) node.getChild(0);
-    List<?> children = fieldIdentList.getChildren();
+    return getFieldNames(node);
+  }
 
-    return children.stream()
-        .map(fieldName -> new DelphiPMDNode((CommonTree) fieldName, node.getASTTree()))
-        .collect(Collectors.toList());
+  private List<DelphiPMDNode> getFieldNames(DelphiPMDNode node) {
+    List<DelphiPMDNode> nodes = new ArrayList<>();
+    CommonTree nameNode = (CommonTree) node.getFirstChildWithType(DelphiLexer.TkVariableIdents);
+
+    if (nameNode != null) {
+      CommonTree currentNode = nameNode;
+      while ((currentNode = (CommonTree) currentNode.getChild(0)) != null) {
+        nodes.add(new DelphiPMDNode(currentNode, node.getASTTree()));
+      }
+    }
+
+    return nodes;
   }
 
   @Override
