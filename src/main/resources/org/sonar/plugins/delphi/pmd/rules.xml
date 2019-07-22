@@ -570,15 +570,6 @@ FreeAndNil(Foo); // Compliant
 		</properties>
 	</rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.UppercaseReservedWordsRule"
-				message="Keywords should not be uppercased"
-				name="UppercaseReservedKeywordsRule">
-		<description>Avoid using uppercase reserved keywords.</description>
-		<properties>
-			<property name="baseEffort" value="5min" />
-		</properties>
-	</rule>
-
 	<rule class="org.sonar.plugins.delphi.pmd.rules.MixedNamesRule"
 				message="Method/variable name casing should be kept consistent"
 				name="MixedNamesRule">
