@@ -77,12 +77,10 @@ public class MixedNamesRule extends DelphiRule {
         handleVar(node);
         break;
 
-      case DelphiLexer.BEGIN:
-        handleBegin(node, ctx);
-        break;
-
       default:
-        // Do nothing
+        if (isBlockNode(node)) {
+          handleBegin(node, ctx);
+        }
     }
   }
 
@@ -127,7 +125,7 @@ public class MixedNamesRule extends DelphiRule {
         skipToLine = child.getLine();
       }
 
-      if (child.getType() == DelphiLexer.BEGIN) {
+      if (isBlockNode(child)) {
         checkVariableNames(child, ctx, false);
       } else {
         String name = child.getText();
@@ -142,6 +140,11 @@ public class MixedNamesRule extends DelphiRule {
     if (clear) {
       variableNames.clear();
     }
+  }
+
+  private boolean isBlockNode(Tree node) {
+    return node.getType() == DelphiLexer.BEGIN
+        || node.getType() == DelphiLexer.TkAssemblerInstructions;
   }
 
   private String getGlobalName(String name, List<String> globalNames) {
