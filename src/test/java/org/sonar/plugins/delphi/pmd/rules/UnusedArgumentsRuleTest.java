@@ -25,6 +25,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.not;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
@@ -103,11 +104,29 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
       .appendImpl("procedure TCustomComponent.OnEvent(Sender: TObject);")
       .appendImpl("begin")
       .appendImpl("  WriteLn('dummy');")
-      .appendImpl("end;")
-      .appendImpl("procedure TCustomComponent.OnEventB(Sender: TObject);")
-      .appendImpl("begin")
-      .appendImpl("  DoSomethingWithSender(Sender);")
       .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testNestedOverrideMethodsShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+        .appendDecl("type")
+        .appendDecl("  TCustomComponent = class(TComponent)")
+        .appendDecl("  private")
+        .appendDecl("    type")
+        .appendDecl("      TNestedComponent = class(TComponent)")
+        .appendDecl("        procedure OnEvent(Sender: TObject);")
+        .appendDecl("    end;")
+        .appendDecl("  end;")
+
+        .appendImpl("procedure TCustomComponent.TNestedComponent.OnEvent(Sender: TObject);")
+        .appendImpl("begin")
+        .appendImpl("  WriteLn('dummy');")
+        .appendImpl("end;");
 
     execute(builder);
 
@@ -121,17 +140,30 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
       .appendDecl("  TCustomComponent = class(TComponent)")
       .appendDecl("  private")
       .appendDecl("    procedure OnEvent(Sender: TObject); virtual;")
-      .appendDecl("    procedure OnEventB(ASender: TObject);")
       .appendDecl("  end;")
 
       .appendImpl("procedure TCustomComponent.OnEvent(Sender: TObject);")
       .appendImpl("begin")
       .appendImpl("  WriteLn('dummy');")
-      .appendImpl("end;")
+      .appendImpl("end;");
 
-      .appendImpl("procedure TCustomComponent.OnEventB(Sender: TObject);")
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testMessageMethodsShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+      .appendDecl("type")
+      .appendDecl("  TCustomComponent = class(TComponent)")
+      .appendDecl("  private")
+      .appendDecl("    procedure OnEvent(Sender: TObject); message WM_MESSAGE;")
+      .appendDecl("  end;")
+
+      .appendImpl("procedure TCustomComponent.OnEvent(Sender: TObject);")
       .appendImpl("begin")
-      .appendImpl("  DoSomethingWithSender(Sender);")
+      .appendImpl("  WriteLn('dummy');")
       .appendImpl("end;");
 
     execute(builder);
@@ -229,20 +261,20 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   @Test
   public void testValidSubProcedureUsingOuterArgumentShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-        .appendDecl("procedure TestNestedParams(const Value: String);")
+      .appendDecl("procedure TestNestedParams(const Value: String);")
 
-        .appendImpl("procedure TestNestedParams(const Value: String);")
-        .appendImpl("const")
-        .appendImpl("  C_MyConstant = 'VALUE';")
-        .appendImpl("var")
-        .appendImpl("  Data : String;")
-        .appendImpl("  function Update: String;")
-        .appendImpl("  begin")
-        .appendImpl("    Result := Value + ' dummy';")
-        .appendImpl("  end;")
-        .appendImpl("begin")
-        .appendImpl("  Data := Update;")
-        .appendImpl("end;");
+      .appendImpl("procedure TestNestedParams(const Value: String);")
+      .appendImpl("const")
+      .appendImpl("  C_MyConstant = 'VALUE';")
+      .appendImpl("var")
+      .appendImpl("  Data : String;")
+      .appendImpl("  function Update: String;")
+      .appendImpl("  begin")
+      .appendImpl("    Result := Value + ' dummy';")
+      .appendImpl("  end;")
+      .appendImpl("begin")
+      .appendImpl("  Data := Update;")
+      .appendImpl("end;");
 
     execute(builder);
 
@@ -283,4 +315,76 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
     assertIssues(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 7)));
     assertIssues(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 8)));
   }
+
+  @Test
+  public void testForwardedMethodShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+        .appendDecl("function InsertDetour(const TargetProc, Trampoline, DetourProc: Pointer): Boolean; forward;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testHandlerMethodShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+      .appendDecl("type")
+      .appendDecl("  TCustomComponent = class(TComponent)")
+      .appendDecl("  protected")
+      .appendDecl("    procedure DummyHandler(Arg: Integer);")
+      .appendDecl("  public")
+      .appendDecl("    procedure OtherHandler(Arg: Integer);")
+      .appendDecl("  end;")
+      .appendDecl("type")
+      .appendDecl("  TOtherComponent = class(TComponent)")
+      .appendDecl("  protected")
+      .appendDecl("    procedure NotImplemented;")
+      .appendDecl("  end;")
+
+      .appendImpl("procedure TCustomComponent.SetDummyHandler;")
+      .appendImpl("  procedure NestedProcedure;")
+      .appendImpl("  begin")
+      .appendImpl("    FDummyHandler := DummyHandler;")
+      .appendImpl("  end;")
+      .appendImpl("begin")
+      .appendImpl("  NestedProcedure;")
+      .appendImpl("end;")
+
+      .appendImpl("procedure TCustomComponent.DummyHandler(Arg: Integer);")
+      .appendImpl("begin")
+      .appendImpl("  Log.Info('dummy');;")
+      .appendImpl("end;")
+
+      .appendImpl("procedure TCustomComponent.OtherHandler(Arg: Integer);")
+      .appendImpl("begin")
+      .appendImpl(" Log.Info('hello');")
+      .appendImpl("end;")
+
+      .appendImpl("procedure TCustomComponent.SetOtherHandler;")
+      .appendImpl("begin")
+      .appendImpl("  FOtherHandler := Otherhandler")
+      .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(not(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 9))));
+    assertIssues(not(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 13))));
+  }
+
+  @Test
+  public void testImplementationMethodDeclShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+      .appendImpl("procedure MyProcedure(MyArg: String); forward;")
+
+      .appendImpl("procedure AnotherProcedure(SomeArg: String); overload;")
+      .appendImpl("begin")
+      .appendImpl("  SomeArg := 'test';")
+      .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
 }
