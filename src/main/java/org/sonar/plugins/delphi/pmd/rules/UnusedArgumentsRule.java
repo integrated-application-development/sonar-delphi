@@ -23,12 +23,15 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
@@ -129,34 +132,44 @@ public class UnusedArgumentsRule extends DelphiRule {
       return;
     }
 
-    Deque<Tree> functionNodes = new ArrayDeque<>();
-    Deque<Tree> beginNodes = new ArrayDeque<>();
-
-    findFunctionNodesAndBeginNodes(node, functionNodes, beginNodes);
-
-    if (functionNodes.isEmpty() || beginNodes.isEmpty()) {
-      return;
+    for (Tree beginNode : findBeginNodes(node)) {
+      processFunctionBegin(beginNode, args);
     }
 
-    Tree beginNode = beginNodes.peek();
-
-    processFunctionBegin(beginNode, args);
-    checkForUnusedArguments(args, ctx, node, methodName);
+    addViolationsForUnusedArguments(args, ctx, node, methodName);
   }
 
-  private void findFunctionNodesAndBeginNodes(DelphiPMDNode node, Deque<Tree> functionNodes,
-      Deque<Tree> beginNodes) {
+  private List<Tree> findBeginNodes(DelphiPMDNode node) {
+    List<Tree> beginNodes = new ArrayList<>();
+    DelphiPMDNode blockDeclSection = node.nextNode();
 
-    for (int i = node.getChildIndex(); i < node.getParent().getChildCount(); i++) {
-      Tree childNode = node.getParent().getChild(i);
-      if (isMethodNode(childNode)) {
-        functionNodes.push(childNode);
-      }
-      if (childNode.getType() == DelphiLexer.BEGIN) {
-        beginNodes.push(childNode);
-      }
-      if (functionNodes.size() == beginNodes.size()) {
-        break;
+    if (blockDeclSection == null) {
+      return beginNodes;
+    }
+
+    beginNodes.add(blockDeclSection.nextNode());
+
+    findSubProcedureBeginNodes(blockDeclSection, beginNodes);
+
+    return beginNodes;
+  }
+
+  private void findSubProcedureBeginNodes(DelphiPMDNode node, List<Tree> beginNodes) {
+    final int[] types = {DelphiLexer.PROCEDURE, DelphiLexer.FUNCTION};
+
+    List<DelphiPMDNode> methodNodes = node.findAllChildren(types).stream()
+        .map(treeNode -> (DelphiPMDNode) treeNode)
+        .collect(Collectors.toList());
+
+    for (DelphiPMDNode methodNode : methodNodes) {
+      int childIndex = methodNode.getChildIndex();
+      Tree parent = methodNode.getParent();
+
+      if (childIndex < parent.getChildCount() - 2) {
+        Tree beginNode = parent.getChild(childIndex + 2);
+        if (beginNode.getType() == DelphiLexer.BEGIN) {
+          beginNodes.add(beginNode);
+        }
       }
     }
   }
@@ -178,13 +191,13 @@ public class UnusedArgumentsRule extends DelphiRule {
   }
 
   /**
-   * Checks if some argument is unused, if so makes a violation
+   * Adds violations for any arguments with 0 usages
    *
-   * @param args Argument map
+   * @param args Arguments usage map
    * @param node PMDNode
    * @param methodName Method name
    */
-  private void checkForUnusedArguments(Map<String, Integer> args, RuleContext ctx,
+  private void addViolationsForUnusedArguments(Map<String, Integer> args, RuleContext ctx,
       DelphiPMDNode node, String methodName) {
     for (Map.Entry<String, Integer> entry : args.entrySet()) {
       if (entry.getValue() == 0) {

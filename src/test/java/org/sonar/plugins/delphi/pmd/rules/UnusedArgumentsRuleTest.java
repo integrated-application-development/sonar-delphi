@@ -227,6 +227,29 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  public void testValidSubProcedureUsingOuterArgumentShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+        .appendDecl("procedure TestNestedParams(const Value: String);")
+
+        .appendImpl("procedure TestNestedParams(const Value: String);")
+        .appendImpl("const")
+        .appendImpl("  C_MyConstant = 'VALUE';")
+        .appendImpl("var")
+        .appendImpl("  Data : String;")
+        .appendImpl("  function Update: String;")
+        .appendImpl("  begin")
+        .appendImpl("    Result := Value + ' dummy';")
+        .appendImpl("  end;")
+        .appendImpl("begin")
+        .appendImpl("  Data := Update;")
+        .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
   public void testInvalidNestedSubProceduresShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
       .appendDecl("procedure TestNestedParams(const Value : String);")
