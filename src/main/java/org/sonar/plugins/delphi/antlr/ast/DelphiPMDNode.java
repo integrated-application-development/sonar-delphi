@@ -150,6 +150,14 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     visitor.visit(this, data);
   }
 
+  public List<Tree> findAllChildren(int[] types) {
+    List<Tree> children = new ArrayList<>();
+    for (int type : types) {
+      children.addAll(internalfindAllChildren(this, type));
+    }
+    return children;
+  }
+
   public List<Tree> findAllChildren(int type) {
     return internalfindAllChildren(this, type);
   }
