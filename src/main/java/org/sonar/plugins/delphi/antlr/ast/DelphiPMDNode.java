@@ -23,24 +23,16 @@
 package org.sonar.plugins.delphi.antlr.ast;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.ast.xpath.Attribute;
-import net.sourceforge.pmd.lang.dfa.DataFlowNode;
-import net.sourceforge.pmd.lang.symboltable.Scope;
-import net.sourceforge.pmd.lang.symboltable.ScopedNode;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.pmd.DelphiParserVisitor;
-import org.w3c.dom.Document;
 
 /**
  * AST node extended with PMD interfaces for analysis PMD analysis
  */
-public class DelphiPMDNode extends DelphiNode implements ScopedNode {
+public class DelphiPMDNode extends DelphiNode implements AntlrPmdNodeInterface {
 
   /**
    * C-tor
@@ -63,87 +55,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     this.children = node.getChildren();
     this.parent = (CommonTree) node.getParent();
     this.childIndex = node.getChildIndex();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  @Override
-  public void jjtOpen() {
-    // Do nothing
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  @Override
-  public void jjtClose() {
-    // Do nothing
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  @Override
-  public void jjtSetParent(Node n) {
-    // Do nothing
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  @Override
-  public Node jjtGetParent() {
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  @Override
-  public void jjtAddChild(Node n, int i) {
-    // Do nothing
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  @Override
-  public Node jjtGetChild(int i) {
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void jjtSetChildIndex(int var1) {
-    // Do nothing
-  }
-
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public int jjtGetChildIndex() {
-    return 0;
-  }
-
-
-  /**
-   * {@inheritDoc}
-   */
-
-  @Override
-  public int jjtGetNumChildren() {
-    return 0;
   }
 
   public void jjtAccept(DelphiParserVisitor visitor, Object data) {
@@ -174,60 +85,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     }
     return result;
   }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public int jjtGetId() {
-    return 0;
-  }
-
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Document getAsDocument() {
-    return null;
-  }
-
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Object getUserData() {
-    return null;
-  }
-
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getImage() {
-    return "";
-  }
-
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setImage(String image) {
-    // Do nothing
-  }
-
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean hasImageEqualTo(String image) {
-    return false;
-  }
-
 
   /**
    * {@inheritDoc}
@@ -287,161 +144,6 @@ public class DelphiPMDNode extends DelphiNode implements ScopedNode {
     
     int calcColumn = getBeginColumn() + getText().length();
     return Math.min(maxColumn, calcColumn);
-  }
-
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public DataFlowNode getDataFlowNode() {
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setDataFlowNode(DataFlowNode dataFlowNode) {
-    // Do nothing
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isFindBoundary() {
-    return false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Node getNthParent(int n) {
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public <T> T getFirstParentOfType(Class<T> parentType) {
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public <T> List<T> getParentsOfType(Class<T> parentType) {
-    return Collections.emptyList();
-  }
-
-  @Override
-  @SafeVarargs
-  public final <T> T getFirstParentOfAnyType(Class<? extends T>... classes) {
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public <T> List<T> findChildrenOfType(Class<T> childType) {
-    return Collections.emptyList();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public <T> List<T> findDescendantsOfType(Class<T> targetType) {
-    return Collections.emptyList();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public <T> void findDescendantsOfType(Class<T> targetType, List<T> results,
-      boolean crossFindBoundaries) {
-    // Do nothing
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public <T> T getFirstChildOfType(Class<T> childType) {
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public <T> T getFirstDescendantOfType(Class<T> descendantType) {
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public <T> boolean hasDescendantOfType(Class<T> type) {
-    return false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public List<? extends Node> findChildNodesWithXPath(String xpathString) {
-    return Collections.emptyList();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean hasDescendantMatchingXPath(String xpathString) {
-    return false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setUserData(Object userData) {
-    // Do nothing
-  }
-
-  @Override
-  public Scope getScope() {
-    return null;
-  }
-
-  // since 6.0.0
-  @Override
-  public void remove() {
-    // Do nothing
-  }
-
-
-  @Override
-  public void removeChildAtIndex(int var1) {
-    // Do nothing
-  }
-
-  @Override
-  public String getXPathNodeName() {
-    return null;
-  }
-
-  @Override
-  public Iterator<Attribute> getXPathAttributesIterator() {
-    return null;
   }
 
   public DelphiPMDNode prevNode() {
