@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import net.sourceforge.pmd.RuleContext;
+import org.antlr.runtime.tree.Tree;
+import org.apache.commons.lang.StringUtils;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
@@ -28,29 +30,22 @@ public class LowerCaseReservedWordsRule extends DelphiRule {
       DelphiLexer.UNSAFE, DelphiLexer.UNTIL, DelphiLexer.USES, DelphiLexer.WHILE, DelphiLexer.WITH,
       DelphiLexer.VAR));
 
-  /**
-   * This rule checks if the above Delphi keywords are following a convention, in this case if they
-   * are all lowercase. This can be changed by changing the regex in the 'checkKeyword' function
-   *
-   * @param node the current node
-   * @param ctx the ruleContext to store the violations
-   */
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-
-    int nodeType = node.getType();
-    if (keywords.contains(nodeType)) {
-      String keywordName = node.getText();
-      if (!checkKeyword(keywordName)) {
-        addViolation(ctx, node);
-      }
+    Tree parent = node.getParent();
+    if (parent.getType() == DelphiLexer.TkAssemblerInstructions) {
+      return;
     }
 
-  }
+    if (!keywords.contains(node.getType())) {
+      return;
+    }
 
-  private boolean checkKeyword(String keywordName) {
-    // Checking all characters are lowercase
-    String conventionRegex = "[a-z]+";
-    return keywordName.matches(conventionRegex);
+    String keywordName = node.getText();
+    if (StringUtils.isAllLowerCase(keywordName)) {
+      return;
+    }
+
+    addViolation(ctx, node);
   }
 }
