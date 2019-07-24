@@ -387,4 +387,37 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
     assertIssues(empty());
   }
 
+  @Test
+  public void testUsageInAsmBlockShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+        .appendImpl("procedure MyProcedure(MyArg: Integer); forward;")
+
+        .appendImpl("procedure MyProcedure(MyArg: Integer);")
+        .appendImpl("begin")
+        .appendImpl("  asm")
+        .appendImpl("    MOV EAX, MyArg")
+        .appendImpl("    ADD EAX, 2")
+        .appendImpl("  end;")
+        .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testUsageInAsmProcShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+        .appendImpl("procedure MyProcedure(MyArg: Integer); forward;")
+
+        .appendImpl("procedure MyProcedure(MyArg: Integer);")
+        .appendImpl("asm")
+        .appendImpl("  MOV EAX, MyArg")
+        .appendImpl("  ADD EAX, 2")
+        .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
 }

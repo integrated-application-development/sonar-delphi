@@ -12,13 +12,13 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testMatchingVarNamesShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure Test;");
-    builder.appendImpl("var");
-    builder.appendImpl("  MyVar: Boolean;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  MyVar := True;");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+      .appendImpl("procedure Test;")
+      .appendImpl("var")
+      .appendImpl("  MyVar: Boolean;")
+      .appendImpl("begin")
+      .appendImpl("  MyVar := True;")
+      .appendImpl("end;");
 
     execute(builder);
 
@@ -27,13 +27,13 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testMismatchedVarNamesShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure Test;");
-    builder.appendImpl("var");
-    builder.appendImpl("  MyVar: Boolean;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  myvar := True;");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+      .appendImpl("procedure Test;")
+      .appendImpl("var")
+      .appendImpl("  MyVar: Boolean;")
+      .appendImpl("begin")
+      .appendImpl("  myvar := True;")
+      .appendImpl("end;");
 
     execute(builder);
 
@@ -44,15 +44,15 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testMatchingFunctionNamesShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type TClass = class");
-    builder.appendDecl("  procedure DoThing(SomeArg: ArgType);");
-    builder.appendDecl("end;");
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+      .appendDecl("type TClass = class")
+      .appendDecl("  procedure DoThing(SomeArg: ArgType);")
+      .appendDecl("end;")
 
-    builder.appendImpl("procedure TClass.DoThing(SomeArg: ArgType);");
-    builder.appendImpl("begin");
-    builder.appendImpl("  DoAnotherThing(SomeArg);");
-    builder.appendImpl("end;");
+      .appendImpl("procedure TClass.DoThing(SomeArg: ArgType);")
+      .appendImpl("begin")
+      .appendImpl("  DoAnotherThing(SomeArg);")
+      .appendImpl("end;");
 
     execute(builder);
 
@@ -61,15 +61,15 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testMismatchedTypeNameShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type TClass = class");
-    builder.appendDecl("  procedure DoThing(SomeArg: ArgType);");
-    builder.appendDecl("end;");
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+      .appendDecl("type TClass = class")
+      .appendDecl("  procedure DoThing(SomeArg: ArgType);")
+      .appendDecl("end;")
 
-    builder.appendImpl("procedure Tclass.DoThing(SomeArg: ArgType);");
-    builder.appendImpl("begin");
-    builder.appendImpl("  DoAnotherThing(SomeArg);");
-    builder.appendImpl("end;");
+      .appendImpl("procedure Tclass.DoThing(SomeArg: ArgType);")
+      .appendImpl("begin")
+      .appendImpl("  DoAnotherThing(SomeArg);")
+      .appendImpl("end;");
 
     execute(builder);
 
@@ -79,20 +79,60 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testMismatchedFunctionNameShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type TClass = class");
-    builder.appendDecl("  procedure DoThing(SomeArg: ArgType);");
-    builder.appendDecl("end;");
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+      .appendDecl("type TClass = class")
+      .appendDecl("  procedure DoThing(SomeArg: ArgType);")
+      .appendDecl("end;")
 
-    builder.appendImpl("procedure TClass.doThing(SomeArg: ArgType);");
-    builder.appendImpl("begin");
-    builder.appendImpl("  DoAnotherThing(SomeArg);");
-    builder.appendImpl("end;");
+      .appendImpl("procedure TClass.doThing(SomeArg: ArgType);")
+      .appendImpl("begin")
+      .appendImpl("  DoAnotherThing(SomeArg);")
+      .appendImpl("end;");
 
     execute(builder);
 
     assertIssues(hasSize(1));
     assertIssues(hasItem(hasRuleKeyAtLine("MixedNamesRule", builder.getOffSet() + 1)));
+  }
+
+  @Test
+  public void testMismatchedVarNameInAsmBlockShouldAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+      .appendImpl("procedure MyProcedure; forward;")
+
+      .appendImpl("procedure MyProcedure;")
+      .appendImpl("var")
+      .appendImpl("  MyArg: Integer;")
+      .appendImpl("begin")
+      .appendImpl("  asm")
+      .appendImpl("    MOV EAX, Myarg")
+      .appendImpl("    ADD EAX, 2")
+      .appendImpl("  end;")
+      .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("MixedNamesRule", builder.getOffSet() + 7)));
+  }
+
+  @Test
+  public void testMismatchedVarNameInAsmProcShouldAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
+      .appendImpl("procedure MyProcedure(MyArg: Integer); forward;")
+
+      .appendImpl("procedure MyProcedure(MyArg: Integer);")
+      .appendImpl("var")
+      .appendImpl("  MyArg: Integer;")
+      .appendImpl("asm")
+      .appendImpl("  MOV EAX, Myarg")
+      .appendImpl("  ADD EAX, 2")
+      .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("MixedNamesRule", builder.getOffSet() + 6)));
   }
 
 }

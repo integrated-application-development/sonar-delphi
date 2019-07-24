@@ -1,4 +1,4 @@
-// $ANTLR 3.5.1 ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g 2019-07-22 11:44:01
+// $ANTLR 3.5.1 ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g 2019-07-24 15:26:33
 
 /*
  * Sonar Delphi Plugin
@@ -975,7 +975,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_SEMI.add(char_literal25);
 
 			// AST REWRITE
-			// elements: LIBRARY, namespaceName
+			// elements: namespaceName, LIBRARY
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -1362,7 +1362,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_SEMI.add(char_literal42);
 
 			// AST REWRITE
-			// elements: namespaceName, UNIT, hintingDirective
+			// elements: hintingDirective, UNIT, namespaceName
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -1500,7 +1500,7 @@ public class DelphiParser extends Parser {
 			}
 
 			// AST REWRITE
-			// elements: interfaceDecl, INTERFACE, usesClause
+			// elements: INTERFACE, interfaceDecl, usesClause
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -1643,7 +1643,7 @@ public class DelphiParser extends Parser {
 			}
 
 			// AST REWRITE
-			// elements: declSection, IMPLEMENTATION, usesClause
+			// elements: IMPLEMENTATION, usesClause, declSection
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -3719,7 +3719,7 @@ public class DelphiParser extends Parser {
 			}
 
 			// AST REWRITE
-			// elements: constDeclaration, constKey
+			// elements: constKey, constDeclaration
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -4027,7 +4027,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_SEMI.add(char_literal112);
 
 			// AST REWRITE
-			// elements: EQUAL, constExpression, typeDecl, ident
+			// elements: EQUAL, ident, typeDecl, constExpression
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -4147,7 +4147,7 @@ public class DelphiParser extends Parser {
 			}
 
 			// AST REWRITE
-			// elements: typeDeclaration, TYPE, typeDeclaration
+			// elements: typeDeclaration, typeDeclaration, TYPE
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -4881,7 +4881,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_SEMI.add(char_literal123);
 
 			// AST REWRITE
-			// elements: customAttribute, typeDecl, genericTypeIdent, hintingDirective
+			// elements: customAttribute, genericTypeIdent, hintingDirective, typeDecl
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -5021,7 +5021,7 @@ public class DelphiParser extends Parser {
 			}
 
 			// AST REWRITE
-			// elements: varDeclaration, varKey, varDeclaration
+			// elements: varDeclaration, varDeclaration, varKey
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -5324,7 +5324,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_SEMI.add(char_literal134);
 
 			// AST REWRITE
-			// elements: typeDecl, identListFlat, customAttribute
+			// elements: typeDecl, customAttribute, identListFlat
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -7284,7 +7284,7 @@ public class DelphiParser extends Parser {
 			if (state.failed) return retval;
 			if ( state.backtracking==0 ) stream_arraySubType.add(arraySubType178.getTree());
 			// AST REWRITE
-			// elements: RBRACK, arraySubType, ARRAY, COMMA, arrayIndex, arrayIndex, LBRACK
+			// elements: RBRACK, arraySubType, arrayIndex, ARRAY, COMMA, arrayIndex, LBRACK
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -7303,7 +7303,7 @@ public class DelphiParser extends Parser {
 				root_1 = (Object)adaptor.becomeRoot(stream_arraySubType.nextNode(), root_1);
 				adaptor.addChild(root_1, stream_ARRAY.nextNode());
 				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:225:56: ( '[' ( arrayIndex )? ( ',' ( arrayIndex )? )* ']' )?
-				if ( stream_RBRACK.hasNext()||stream_COMMA.hasNext()||stream_arrayIndex.hasNext()||stream_LBRACK.hasNext() ) {
+				if ( stream_RBRACK.hasNext()||stream_arrayIndex.hasNext()||stream_COMMA.hasNext()||stream_LBRACK.hasNext() ) {
 					adaptor.addChild(root_1, stream_LBRACK.nextNode());
 					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:225:61: ( arrayIndex )?
 					if ( stream_arrayIndex.hasNext() ) {
@@ -7326,8 +7326,8 @@ public class DelphiParser extends Parser {
 					adaptor.addChild(root_1, stream_RBRACK.nextNode());
 				}
 				stream_RBRACK.reset();
-				stream_COMMA.reset();
 				stream_arrayIndex.reset();
+				stream_COMMA.reset();
 				stream_LBRACK.reset();
 
 				adaptor.addChild(root_0, root_1);
@@ -9319,7 +9319,7 @@ public class DelphiParser extends Parser {
 					if (state.failed) return retval;
 					if ( state.backtracking==0 ) stream_typeDecl.add(typeDecl220.getTree());
 					// AST REWRITE
-					// elements: typeDecl, formalParameterSection, FUNCTION
+					// elements: typeDecl, FUNCTION, formalParameterSection
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -11478,7 +11478,7 @@ public class DelphiParser extends Parser {
 					if ( state.backtracking==0 ) stream_END.add(string_literal292);
 
 					// AST REWRITE
-					// elements: classItem, classParent, CLASS
+					// elements: CLASS, classItem, classParent
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -11569,7 +11569,7 @@ public class DelphiParser extends Parser {
 					}
 
 					// AST REWRITE
-					// elements: CLASS, classParent
+					// elements: classParent, CLASS
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -12277,7 +12277,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_END.add(string_literal316);
 
 			// AST REWRITE
-			// elements: typeId, classHelperItem, CLASS
+			// elements: classHelperItem, typeId, CLASS
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -12679,7 +12679,7 @@ public class DelphiParser extends Parser {
 					if ( state.backtracking==0 ) stream_END.add(string_literal326);
 
 					// AST REWRITE
-					// elements: interfaceKey, classParent, interfaceItem, interfaceGuid
+					// elements: classParent, interfaceItem, interfaceKey, interfaceGuid
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -12759,7 +12759,7 @@ public class DelphiParser extends Parser {
 					}
 
 					// AST REWRITE
-					// elements: interfaceKey, classParent
+					// elements: classParent, interfaceKey
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -13539,7 +13539,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_END.add(string_literal346);
 
 			// AST REWRITE
-			// elements: recordVariantSection, RECORD, recordItem
+			// elements: recordItem, RECORD, recordVariantSection
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -14044,7 +14044,7 @@ public class DelphiParser extends Parser {
 			}
 
 			// AST REWRITE
-			// elements: typeDecl, identList
+			// elements: identList, typeDecl
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -15000,7 +15000,7 @@ public class DelphiParser extends Parser {
 					if (state.failed) return retval;
 					if ( state.backtracking==0 ) stream_methodDirectiveSection.add(methodDirectiveSection389.getTree());
 					// AST REWRITE
-					// elements: formalParameterSection, methodDirectiveSection, methodKey, customAttribute, ident, CLASS, genericDefinition
+					// elements: customAttribute, genericDefinition, methodKey, methodDirectiveSection, ident, CLASS, formalParameterSection
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -15592,7 +15592,7 @@ public class DelphiParser extends Parser {
 					if (state.failed) return retval;
 					if ( state.backtracking==0 ) stream_methodDirectiveSection.add(methodDirectiveSection399.getTree());
 					// AST REWRITE
-					// elements: customAttribute, genericDefinition, formalParameterSection, FUNCTION, ident, typeDecl, customAttribute, CLASS, methodDirectiveSection
+					// elements: CLASS, customAttribute, FUNCTION, customAttribute, typeDecl, ident, genericDefinition, formalParameterSection, methodDirectiveSection
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -16196,7 +16196,7 @@ public class DelphiParser extends Parser {
 					if ( state.backtracking==0 ) stream_SEMI.add(char_literal409);
 
 					// AST REWRITE
-					// elements: CLASS, OPERATOR, customAttribute, typeDecl, genericDefinition, customAttribute, formalParameterSection, ident
+					// elements: ident, OPERATOR, customAttribute, CLASS, genericDefinition, customAttribute, formalParameterSection, typeDecl
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -16727,7 +16727,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_SEMI.add(char_literal424);
 
 			// AST REWRITE
-			// elements: genericTypeIdent, PROPERTY, classPropertyDirective, ident
+			// elements: PROPERTY, ident, genericTypeIdent, classPropertyDirective
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -17304,7 +17304,7 @@ public class DelphiParser extends Parser {
 					}
 
 					// AST REWRITE
-					// elements: WRITE, qualifiedIdent
+					// elements: qualifiedIdent, WRITE
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -18688,7 +18688,7 @@ public class DelphiParser extends Parser {
 					if (state.failed) return retval;
 					if ( state.backtracking==0 ) stream_methodDirectiveSection.add(methodDirectiveSection479.getTree());
 					// AST REWRITE
-					// elements: methodName, customAttribute, CLASS, methodDirectiveSection, formalParameterSection, methodKey
+					// elements: methodDirectiveSection, CLASS, methodKey, methodName, formalParameterSection, customAttribute
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -19269,7 +19269,7 @@ public class DelphiParser extends Parser {
 					if (state.failed) return retval;
 					if ( state.backtracking==0 ) stream_methodDirectiveSection.add(methodDirectiveSection488.getTree());
 					// AST REWRITE
-					// elements: FUNCTION, formalParameterSection, customAttribute, methodName, CLASS, customAttribute, typeDecl, methodDirectiveSection
+					// elements: customAttribute, CLASS, customAttribute, methodDirectiveSection, typeDecl, FUNCTION, formalParameterSection, methodName
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -19841,7 +19841,7 @@ public class DelphiParser extends Parser {
 					if (state.failed) return retval;
 					if ( state.backtracking==0 ) stream_methodDirectiveSection.add(methodDirectiveSection497.getTree());
 					// AST REWRITE
-					// elements: formalParameterSection, typeDecl, methodDirectiveSection, customAttribute, methodName, OPERATOR, customAttribute, CLASS
+					// elements: customAttribute, methodName, methodDirectiveSection, customAttribute, formalParameterSection, typeDecl, CLASS, OPERATOR
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -20496,7 +20496,7 @@ public class DelphiParser extends Parser {
 					if (state.failed) return retval;
 					if ( state.backtracking==0 ) stream_functionDirectiveSection.add(functionDirectiveSection513.getTree());
 					// AST REWRITE
-					// elements: PROCEDURE, functionDirectiveSection, ident, formalParameterSection
+					// elements: ident, formalParameterSection, PROCEDURE, functionDirectiveSection
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -20632,7 +20632,7 @@ public class DelphiParser extends Parser {
 					if (state.failed) return retval;
 					if ( state.backtracking==0 ) stream_functionDirectiveSection.add(functionDirectiveSection520.getTree());
 					// AST REWRITE
-					// elements: formalParameterSection, typeDecl, functionDirectiveSection, FUNCTION, ident
+					// elements: ident, formalParameterSection, FUNCTION, typeDecl, functionDirectiveSection
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -21154,7 +21154,7 @@ public class DelphiParser extends Parser {
 			}
 
 			// AST REWRITE
-			// elements: customAttribute, typeDecl, parmType, identListFlat
+			// elements: customAttribute, identListFlat, typeDecl, parmType
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -21684,7 +21684,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_RBRACK.add(char_literal546);
 
 			// AST REWRITE
-			// elements: LBRACK, expressionList, namespacedQualifiedIdent, RBRACK, LPAREN, RPAREN
+			// elements: namespacedQualifiedIdent, LPAREN, RBRACK, expressionList, LBRACK, RPAREN
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -21704,7 +21704,7 @@ public class DelphiParser extends Parser {
 				adaptor.addChild(root_1, stream_LBRACK.nextNode());
 				adaptor.addChild(root_1, stream_namespacedQualifiedIdent.nextTree());
 				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:465:147: ( '(' ( expressionList )? ')' )?
-				if ( stream_expressionList.hasNext()||stream_LPAREN.hasNext()||stream_RPAREN.hasNext() ) {
+				if ( stream_LPAREN.hasNext()||stream_expressionList.hasNext()||stream_RPAREN.hasNext() ) {
 					adaptor.addChild(root_1, stream_LPAREN.nextNode());
 					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:465:152: ( expressionList )?
 					if ( stream_expressionList.hasNext() ) {
@@ -21714,8 +21714,8 @@ public class DelphiParser extends Parser {
 
 					adaptor.addChild(root_1, stream_RPAREN.nextNode());
 				}
-				stream_expressionList.reset();
 				stream_LPAREN.reset();
+				stream_expressionList.reset();
 				stream_RPAREN.reset();
 
 				adaptor.addChild(root_1, stream_RBRACK.nextNode());
@@ -26815,7 +26815,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_END.add(string_literal713);
 
 			// AST REWRITE
-			// elements: BEGIN, END, statementList
+			// elements: statementList, END, BEGIN
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -28839,7 +28839,7 @@ public class DelphiParser extends Parser {
 					}
 
 					// AST REWRITE
-					// elements: statement, SEMI
+					// elements: SEMI, statement
 					// token labels: 
 					// rule labels: retval
 					// token list labels: 
@@ -29247,7 +29247,7 @@ public class DelphiParser extends Parser {
 
 
 	// $ANTLR start "assemblerStatement"
-	// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:634:1: assemblerStatement : 'asm' assemblerInstructions 'end' -> 'asm' ^( TkAssemblerInstructions assemblerInstructions ) 'end' ;
+	// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:634:1: assemblerStatement : 'asm' assemblerInstructions 'end' -> ^( 'asm' ^( TkAssemblerInstructions assemblerInstructions ) 'end' ) ;
 	public final DelphiParser.assemblerStatement_return assemblerStatement() throws RecognitionException {
 		DelphiParser.assemblerStatement_return retval = new DelphiParser.assemblerStatement_return();
 		retval.start = input.LT(1);
@@ -29268,7 +29268,7 @@ public class DelphiParser extends Parser {
 		try {
 			if ( state.backtracking>0 && alreadyParsedRule(input, 157) ) { return retval; }
 
-			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:634:30: ( 'asm' assemblerInstructions 'end' -> 'asm' ^( TkAssemblerInstructions assemblerInstructions ) 'end' )
+			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:634:30: ( 'asm' assemblerInstructions 'end' -> ^( 'asm' ^( TkAssemblerInstructions assemblerInstructions ) 'end' ) )
 			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:634:32: 'asm' assemblerInstructions 'end'
 			{
 			string_literal771=(Token)match(input,ASM,FOLLOW_ASM_in_assemblerStatement16773); if (state.failed) return retval; 
@@ -29283,7 +29283,7 @@ public class DelphiParser extends Parser {
 			if ( state.backtracking==0 ) stream_END.add(string_literal773);
 
 			// AST REWRITE
-			// elements: assemblerInstructions, END, ASM
+			// elements: END, ASM, assemblerInstructions
 			// token labels: 
 			// rule labels: retval
 			// token list labels: 
@@ -29294,18 +29294,24 @@ public class DelphiParser extends Parser {
 			RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.getTree():null);
 
 			root_0 = (Object)adaptor.nil();
-			// 634:66: -> 'asm' ^( TkAssemblerInstructions assemblerInstructions ) 'end'
+			// 634:66: -> ^( 'asm' ^( TkAssemblerInstructions assemblerInstructions ) 'end' )
 			{
-				adaptor.addChild(root_0, stream_ASM.nextNode());
-				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:634:75: ^( TkAssemblerInstructions assemblerInstructions )
+				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:634:69: ^( 'asm' ^( TkAssemblerInstructions assemblerInstructions ) 'end' )
 				{
 				Object root_1 = (Object)adaptor.nil();
-				root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(TkAssemblerInstructions, "TkAssemblerInstructions"), root_1);
-				adaptor.addChild(root_1, stream_assemblerInstructions.nextTree());
+				root_1 = (Object)adaptor.becomeRoot(stream_ASM.nextNode(), root_1);
+				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:634:77: ^( TkAssemblerInstructions assemblerInstructions )
+				{
+				Object root_2 = (Object)adaptor.nil();
+				root_2 = (Object)adaptor.becomeRoot((Object)adaptor.create(TkAssemblerInstructions, "TkAssemblerInstructions"), root_2);
+				adaptor.addChild(root_2, stream_assemblerInstructions.nextTree());
+				adaptor.addChild(root_1, root_2);
+				}
+
+				adaptor.addChild(root_1, stream_END.nextNode());
 				adaptor.addChild(root_0, root_1);
 				}
 
-				adaptor.addChild(root_0, stream_END.nextNode());
 			}
 
 
@@ -29530,7 +29536,7 @@ public class DelphiParser extends Parser {
 								case 1 :
 									// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:641:34: ';'
 									{
-									char_literal775=(Token)match(input,SEMI,FOLLOW_SEMI_in_methodDirectiveSection16886); if (state.failed) return retval;
+									char_literal775=(Token)match(input,SEMI,FOLLOW_SEMI_in_methodDirectiveSection16888); if (state.failed) return retval;
 									if ( state.backtracking==0 ) {
 									char_literal775_tree = (Object)adaptor.create(char_literal775);
 									adaptor.addChild(root_0, char_literal775_tree);
@@ -29541,7 +29547,7 @@ public class DelphiParser extends Parser {
 
 							}
 
-							pushFollow(FOLLOW_methodDirective_in_methodDirectiveSection16890);
+							pushFollow(FOLLOW_methodDirective_in_methodDirectiveSection16892);
 							methodDirective776=methodDirective();
 							state._fsp--;
 							if (state.failed) return retval;
@@ -29555,7 +29561,7 @@ public class DelphiParser extends Parser {
 						}
 					}
 
-					char_literal777=(Token)match(input,SEMI,FOLLOW_SEMI_in_methodDirectiveSection16894); if (state.failed) return retval;
+					char_literal777=(Token)match(input,SEMI,FOLLOW_SEMI_in_methodDirectiveSection16896); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					char_literal777_tree = (Object)adaptor.create(char_literal777);
 					adaptor.addChild(root_0, char_literal777_tree);
@@ -29569,7 +29575,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					pushFollow(FOLLOW_standaloneOverloadDirective_in_methodDirectiveSection16927);
+					pushFollow(FOLLOW_standaloneOverloadDirective_in_methodDirectiveSection16929);
 					standaloneOverloadDirective778=standaloneOverloadDirective();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -29709,7 +29715,7 @@ public class DelphiParser extends Parser {
 								case 1 :
 									// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:644:34: ';'
 									{
-									char_literal779=(Token)match(input,SEMI,FOLLOW_SEMI_in_functionDirectiveSection16970); if (state.failed) return retval;
+									char_literal779=(Token)match(input,SEMI,FOLLOW_SEMI_in_functionDirectiveSection16972); if (state.failed) return retval;
 									if ( state.backtracking==0 ) {
 									char_literal779_tree = (Object)adaptor.create(char_literal779);
 									adaptor.addChild(root_0, char_literal779_tree);
@@ -29720,7 +29726,7 @@ public class DelphiParser extends Parser {
 
 							}
 
-							pushFollow(FOLLOW_functionDirective_in_functionDirectiveSection16974);
+							pushFollow(FOLLOW_functionDirective_in_functionDirectiveSection16976);
 							functionDirective780=functionDirective();
 							state._fsp--;
 							if (state.failed) return retval;
@@ -29734,7 +29740,7 @@ public class DelphiParser extends Parser {
 						}
 					}
 
-					char_literal781=(Token)match(input,SEMI,FOLLOW_SEMI_in_functionDirectiveSection16978); if (state.failed) return retval;
+					char_literal781=(Token)match(input,SEMI,FOLLOW_SEMI_in_functionDirectiveSection16980); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					char_literal781_tree = (Object)adaptor.create(char_literal781);
 					adaptor.addChild(root_0, char_literal781_tree);
@@ -29748,7 +29754,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					pushFollow(FOLLOW_standaloneOverloadDirective_in_functionDirectiveSection17011);
+					pushFollow(FOLLOW_standaloneOverloadDirective_in_functionDirectiveSection17013);
 					standaloneOverloadDirective782=standaloneOverloadDirective();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -29813,13 +29819,13 @@ public class DelphiParser extends Parser {
 			root_0 = (Object)adaptor.nil();
 
 
-			char_literal783=(Token)match(input,SEMI,FOLLOW_SEMI_in_standaloneOverloadDirective17049); if (state.failed) return retval;
+			char_literal783=(Token)match(input,SEMI,FOLLOW_SEMI_in_standaloneOverloadDirective17051); if (state.failed) return retval;
 			if ( state.backtracking==0 ) {
 			char_literal783_tree = (Object)adaptor.create(char_literal783);
 			adaptor.addChild(root_0, char_literal783_tree);
 			}
 
-			string_literal784=(Token)match(input,OVERLOAD,FOLLOW_OVERLOAD_in_standaloneOverloadDirective17051); if (state.failed) return retval;
+			string_literal784=(Token)match(input,OVERLOAD,FOLLOW_OVERLOAD_in_standaloneOverloadDirective17053); if (state.failed) return retval;
 			if ( state.backtracking==0 ) {
 			string_literal784_tree = (Object)adaptor.create(string_literal784);
 			adaptor.addChild(root_0, string_literal784_tree);
@@ -29838,7 +29844,7 @@ public class DelphiParser extends Parser {
 				case 1 :
 					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:647:48: ';'
 					{
-					char_literal785=(Token)match(input,SEMI,FOLLOW_SEMI_in_standaloneOverloadDirective17054); if (state.failed) return retval;
+					char_literal785=(Token)match(input,SEMI,FOLLOW_SEMI_in_standaloneOverloadDirective17056); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					char_literal785_tree = (Object)adaptor.create(char_literal785);
 					adaptor.addChild(root_0, char_literal785_tree);
@@ -29982,7 +29988,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					string_literal786=(Token)match(input,OVERLOAD,FOLLOW_OVERLOAD_in_methodDirective17106); if (state.failed) return retval;
+					string_literal786=(Token)match(input,OVERLOAD,FOLLOW_OVERLOAD_in_methodDirective17108); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					string_literal786_tree = (Object)adaptor.create(string_literal786);
 					adaptor.addChild(root_0, string_literal786_tree);
@@ -29996,7 +30002,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					string_literal787=(Token)match(input,REINTRODUCE,FOLLOW_REINTRODUCE_in_methodDirective17139); if (state.failed) return retval;
+					string_literal787=(Token)match(input,REINTRODUCE,FOLLOW_REINTRODUCE_in_methodDirective17141); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					string_literal787_tree = (Object)adaptor.create(string_literal787);
 					adaptor.addChild(root_0, string_literal787_tree);
@@ -30010,7 +30016,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					pushFollow(FOLLOW_bindingDirective_in_methodDirective17172);
+					pushFollow(FOLLOW_bindingDirective_in_methodDirective17174);
 					bindingDirective788=bindingDirective();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -30024,7 +30030,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					pushFollow(FOLLOW_abstractDirective_in_methodDirective17205);
+					pushFollow(FOLLOW_abstractDirective_in_methodDirective17207);
 					abstractDirective789=abstractDirective();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -30038,7 +30044,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					pushFollow(FOLLOW_inlineDirective_in_methodDirective17239);
+					pushFollow(FOLLOW_inlineDirective_in_methodDirective17241);
 					inlineDirective790=inlineDirective();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -30052,7 +30058,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					pushFollow(FOLLOW_callConvention_in_methodDirective17275);
+					pushFollow(FOLLOW_callConvention_in_methodDirective17277);
 					callConvention791=callConvention();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -30066,7 +30072,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					pushFollow(FOLLOW_hintingDirective_in_methodDirective17308);
+					pushFollow(FOLLOW_hintingDirective_in_methodDirective17310);
 					hintingDirective792=hintingDirective();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -30080,7 +30086,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					pushFollow(FOLLOW_oldCallConventionDirective_in_methodDirective17343);
+					pushFollow(FOLLOW_oldCallConventionDirective_in_methodDirective17345);
 					oldCallConventionDirective793=oldCallConventionDirective();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -30094,7 +30100,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					pushFollow(FOLLOW_dispIDDirective_in_methodDirective17376);
+					pushFollow(FOLLOW_dispIDDirective_in_methodDirective17378);
 					dispIDDirective794=dispIDDirective();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -30226,7 +30232,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					string_literal795=(Token)match(input,FORWARD,FOLLOW_FORWARD_in_functionDirective17424); if (state.failed) return retval;
+					string_literal795=(Token)match(input,FORWARD,FOLLOW_FORWARD_in_functionDirective17426); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					string_literal795_tree = (Object)adaptor.create(string_literal795);
 					adaptor.addChild(root_0, string_literal795_tree);
@@ -30240,7 +30246,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					string_literal796=(Token)match(input,OVERLOAD,FOLLOW_OVERLOAD_in_functionDirective17457); if (state.failed) return retval;
+					string_literal796=(Token)match(input,OVERLOAD,FOLLOW_OVERLOAD_in_functionDirective17459); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					string_literal796_tree = (Object)adaptor.create(string_literal796);
 					adaptor.addChild(root_0, string_literal796_tree);
@@ -30254,7 +30260,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					pushFollow(FOLLOW_inlineDirective_in_functionDirective17490);
+					pushFollow(FOLLOW_inlineDirective_in_functionDirective17492);
 					inlineDirective797=inlineDirective();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -30268,7 +30274,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					pushFollow(FOLLOW_callConvention_in_functionDirective17523);
+					pushFollow(FOLLOW_callConvention_in_functionDirective17525);
 					callConvention798=callConvention();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -30282,7 +30288,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					pushFollow(FOLLOW_oldCallConventionDirective_in_functionDirective17556);
+					pushFollow(FOLLOW_oldCallConventionDirective_in_functionDirective17558);
 					oldCallConventionDirective799=oldCallConventionDirective();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -30296,7 +30302,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					pushFollow(FOLLOW_hintingDirective_in_functionDirective17589);
+					pushFollow(FOLLOW_hintingDirective_in_functionDirective17591);
 					hintingDirective800=hintingDirective();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -30310,7 +30316,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					pushFollow(FOLLOW_externalDirective_in_functionDirective17622);
+					pushFollow(FOLLOW_externalDirective_in_functionDirective17624);
 					externalDirective801=externalDirective();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -30324,7 +30330,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					string_literal802=(Token)match(input,UNSAFE,FOLLOW_UNSAFE_in_functionDirective17655); if (state.failed) return retval;
+					string_literal802=(Token)match(input,UNSAFE,FOLLOW_UNSAFE_in_functionDirective17657); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					string_literal802_tree = (Object)adaptor.create(string_literal802);
 					adaptor.addChild(root_0, string_literal802_tree);
@@ -30429,13 +30435,13 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					string_literal803=(Token)match(input,MESSAGE,FOLLOW_MESSAGE_in_bindingDirective17706); if (state.failed) return retval;
+					string_literal803=(Token)match(input,MESSAGE,FOLLOW_MESSAGE_in_bindingDirective17708); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					string_literal803_tree = (Object)adaptor.create(string_literal803);
 					adaptor.addChild(root_0, string_literal803_tree);
 					}
 
-					pushFollow(FOLLOW_expression_in_bindingDirective17708);
+					pushFollow(FOLLOW_expression_in_bindingDirective17710);
 					expression804=expression();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -30449,7 +30455,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					string_literal805=(Token)match(input,STATIC,FOLLOW_STATIC_in_bindingDirective17741); if (state.failed) return retval;
+					string_literal805=(Token)match(input,STATIC,FOLLOW_STATIC_in_bindingDirective17743); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					string_literal805_tree = (Object)adaptor.create(string_literal805);
 					adaptor.addChild(root_0, string_literal805_tree);
@@ -30463,7 +30469,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					string_literal806=(Token)match(input,DYNAMIC,FOLLOW_DYNAMIC_in_bindingDirective17774); if (state.failed) return retval;
+					string_literal806=(Token)match(input,DYNAMIC,FOLLOW_DYNAMIC_in_bindingDirective17776); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					string_literal806_tree = (Object)adaptor.create(string_literal806);
 					adaptor.addChild(root_0, string_literal806_tree);
@@ -30477,7 +30483,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					string_literal807=(Token)match(input,OVERRIDE,FOLLOW_OVERRIDE_in_bindingDirective17807); if (state.failed) return retval;
+					string_literal807=(Token)match(input,OVERRIDE,FOLLOW_OVERRIDE_in_bindingDirective17809); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					string_literal807_tree = (Object)adaptor.create(string_literal807);
 					adaptor.addChild(root_0, string_literal807_tree);
@@ -30491,7 +30497,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					string_literal808=(Token)match(input,VIRTUAL,FOLLOW_VIRTUAL_in_bindingDirective17840); if (state.failed) return retval;
+					string_literal808=(Token)match(input,VIRTUAL,FOLLOW_VIRTUAL_in_bindingDirective17842); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					string_literal808_tree = (Object)adaptor.create(string_literal808);
 					adaptor.addChild(root_0, string_literal808_tree);
@@ -30849,7 +30855,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					string_literal813=(Token)match(input,DEPRECATED,FOLLOW_DEPRECATED_in_hintingDirective18404); if (state.failed) return retval;
+					string_literal813=(Token)match(input,DEPRECATED,FOLLOW_DEPRECATED_in_hintingDirective18406); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					string_literal813_tree = (Object)adaptor.create(string_literal813);
 					adaptor.addChild(root_0, string_literal813_tree);
@@ -30865,7 +30871,7 @@ public class DelphiParser extends Parser {
 						case 1 :
 							// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:691:46: stringFactor
 							{
-							pushFollow(FOLLOW_stringFactor_in_hintingDirective18407);
+							pushFollow(FOLLOW_stringFactor_in_hintingDirective18409);
 							stringFactor814=stringFactor();
 							state._fsp--;
 							if (state.failed) return retval;
@@ -30884,7 +30890,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					string_literal815=(Token)match(input,EXPERIMENTAL,FOLLOW_EXPERIMENTAL_in_hintingDirective18442); if (state.failed) return retval;
+					string_literal815=(Token)match(input,EXPERIMENTAL,FOLLOW_EXPERIMENTAL_in_hintingDirective18444); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					string_literal815_tree = (Object)adaptor.create(string_literal815);
 					adaptor.addChild(root_0, string_literal815_tree);
@@ -30898,7 +30904,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					string_literal816=(Token)match(input,PLATFORM,FOLLOW_PLATFORM_in_hintingDirective18477); if (state.failed) return retval;
+					string_literal816=(Token)match(input,PLATFORM,FOLLOW_PLATFORM_in_hintingDirective18479); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					string_literal816_tree = (Object)adaptor.create(string_literal816);
 					adaptor.addChild(root_0, string_literal816_tree);
@@ -30912,7 +30918,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					string_literal817=(Token)match(input,LIBRARY,FOLLOW_LIBRARY_in_hintingDirective18510); if (state.failed) return retval;
+					string_literal817=(Token)match(input,LIBRARY,FOLLOW_LIBRARY_in_hintingDirective18512); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					string_literal817_tree = (Object)adaptor.create(string_literal817);
 					adaptor.addChild(root_0, string_literal817_tree);
@@ -30995,7 +31001,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					string_literal818=(Token)match(input,VARARGS,FOLLOW_VARARGS_in_externalDirective18558); if (state.failed) return retval;
+					string_literal818=(Token)match(input,VARARGS,FOLLOW_VARARGS_in_externalDirective18560); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					string_literal818_tree = (Object)adaptor.create(string_literal818);
 					adaptor.addChild(root_0, string_literal818_tree);
@@ -31009,7 +31015,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					string_literal819=(Token)match(input,EXTERNAL,FOLLOW_EXTERNAL_in_externalDirective18594); if (state.failed) return retval;
+					string_literal819=(Token)match(input,EXTERNAL,FOLLOW_EXTERNAL_in_externalDirective18596); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					string_literal819_tree = (Object)adaptor.create(string_literal819);
 					adaptor.addChild(root_0, string_literal819_tree);
@@ -31115,7 +31121,7 @@ public class DelphiParser extends Parser {
 						case 1 :
 							// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:697:44: expression
 							{
-							pushFollow(FOLLOW_expression_in_externalDirective18597);
+							pushFollow(FOLLOW_expression_in_externalDirective18599);
 							expression820=expression();
 							state._fsp--;
 							if (state.failed) return retval;
@@ -31139,7 +31145,7 @@ public class DelphiParser extends Parser {
 						case 1 :
 							// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:697:58: externalSpecifier
 							{
-							pushFollow(FOLLOW_externalSpecifier_in_externalDirective18602);
+							pushFollow(FOLLOW_externalSpecifier_in_externalDirective18604);
 							externalSpecifier821=externalSpecifier();
 							state._fsp--;
 							if (state.failed) return retval;
@@ -31230,13 +31236,13 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					string_literal822=(Token)match(input,NAME,FOLLOW_NAME_in_externalSpecifier18653); if (state.failed) return retval;
+					string_literal822=(Token)match(input,NAME,FOLLOW_NAME_in_externalSpecifier18655); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					string_literal822_tree = (Object)adaptor.create(string_literal822);
 					adaptor.addChild(root_0, string_literal822_tree);
 					}
 
-					pushFollow(FOLLOW_constExpression_in_externalSpecifier18655);
+					pushFollow(FOLLOW_constExpression_in_externalSpecifier18657);
 					constExpression823=constExpression();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -31250,13 +31256,13 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					string_literal824=(Token)match(input,INDEX,FOLLOW_INDEX_in_externalSpecifier18688); if (state.failed) return retval;
+					string_literal824=(Token)match(input,INDEX,FOLLOW_INDEX_in_externalSpecifier18690); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					string_literal824_tree = (Object)adaptor.create(string_literal824);
 					adaptor.addChild(root_0, string_literal824_tree);
 					}
 
-					pushFollow(FOLLOW_constExpression_in_externalSpecifier18690);
+					pushFollow(FOLLOW_constExpression_in_externalSpecifier18692);
 					constExpression825=constExpression();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -31318,13 +31324,13 @@ public class DelphiParser extends Parser {
 			root_0 = (Object)adaptor.nil();
 
 
-			string_literal826=(Token)match(input,DISPID,FOLLOW_DISPID_in_dispIDDirective18743); if (state.failed) return retval;
+			string_literal826=(Token)match(input,DISPID,FOLLOW_DISPID_in_dispIDDirective18745); if (state.failed) return retval;
 			if ( state.backtracking==0 ) {
 			string_literal826_tree = (Object)adaptor.create(string_literal826);
 			adaptor.addChild(root_0, string_literal826_tree);
 			}
 
-			pushFollow(FOLLOW_expression_in_dispIDDirective18745);
+			pushFollow(FOLLOW_expression_in_dispIDDirective18747);
 			expression827=expression();
 			state._fsp--;
 			if (state.failed) return retval;
@@ -31444,7 +31450,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					TkIdentifier828=(Token)match(input,TkIdentifier,FOLLOW_TkIdentifier_in_ident18808); if (state.failed) return retval;
+					TkIdentifier828=(Token)match(input,TkIdentifier,FOLLOW_TkIdentifier_in_ident18810); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					TkIdentifier828_tree = (Object)adaptor.create(TkIdentifier828);
 					adaptor.addChild(root_0, TkIdentifier828_tree);
@@ -31458,13 +31464,13 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					char_literal829=(Token)match(input,AMPERSAND,FOLLOW_AMPERSAND_in_ident18841); if (state.failed) return retval;
+					char_literal829=(Token)match(input,AMPERSAND,FOLLOW_AMPERSAND_in_ident18843); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					char_literal829_tree = (Object)adaptor.create(char_literal829);
 					adaptor.addChild(root_0, char_literal829_tree);
 					}
 
-					TkIdentifier830=(Token)match(input,TkIdentifier,FOLLOW_TkIdentifier_in_ident18843); if (state.failed) return retval;
+					TkIdentifier830=(Token)match(input,TkIdentifier,FOLLOW_TkIdentifier_in_ident18845); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					TkIdentifier830_tree = (Object)adaptor.create(TkIdentifier830);
 					adaptor.addChild(root_0, TkIdentifier830_tree);
@@ -31478,7 +31484,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					pushFollow(FOLLOW_keywordsUsedAsNames_in_ident18876);
+					pushFollow(FOLLOW_keywordsUsedAsNames_in_ident18878);
 					keywordsUsedAsNames831=keywordsUsedAsNames();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -31670,7 +31676,7 @@ public class DelphiParser extends Parser {
 			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:730:30: ( ident ( ',' ident )* -> ^( ident ( ident )* ) )
 			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:730:32: ident ( ',' ident )*
 			{
-			pushFollow(FOLLOW_ident_in_identList20154);
+			pushFollow(FOLLOW_ident_in_identList20156);
 			ident834=ident();
 			state._fsp--;
 			if (state.failed) return retval;
@@ -31688,10 +31694,10 @@ public class DelphiParser extends Parser {
 				case 1 :
 					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:730:39: ',' ident
 					{
-					char_literal835=(Token)match(input,COMMA,FOLLOW_COMMA_in_identList20157); if (state.failed) return retval; 
+					char_literal835=(Token)match(input,COMMA,FOLLOW_COMMA_in_identList20159); if (state.failed) return retval; 
 					if ( state.backtracking==0 ) stream_COMMA.add(char_literal835);
 
-					pushFollow(FOLLOW_ident_in_identList20159);
+					pushFollow(FOLLOW_ident_in_identList20161);
 					ident836=ident();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -31791,7 +31797,7 @@ public class DelphiParser extends Parser {
 			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:732:30: ( ident ( ',' ident )* -> ident ( ident )* )
 			// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:732:32: ident ( ',' ident )*
 			{
-			pushFollow(FOLLOW_ident_in_identListFlat20224);
+			pushFollow(FOLLOW_ident_in_identListFlat20226);
 			ident837=ident();
 			state._fsp--;
 			if (state.failed) return retval;
@@ -31809,10 +31815,10 @@ public class DelphiParser extends Parser {
 				case 1 :
 					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:732:39: ',' ident
 					{
-					char_literal838=(Token)match(input,COMMA,FOLLOW_COMMA_in_identListFlat20227); if (state.failed) return retval; 
+					char_literal838=(Token)match(input,COMMA,FOLLOW_COMMA_in_identListFlat20229); if (state.failed) return retval; 
 					if ( state.backtracking==0 ) stream_COMMA.add(char_literal838);
 
-					pushFollow(FOLLOW_ident_in_identListFlat20229);
+					pushFollow(FOLLOW_ident_in_identListFlat20231);
 					ident839=ident();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -31971,7 +31977,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					TkIdentifier840=(Token)match(input,TkIdentifier,FOLLOW_TkIdentifier_in_label20303); if (state.failed) return retval;
+					TkIdentifier840=(Token)match(input,TkIdentifier,FOLLOW_TkIdentifier_in_label20305); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					TkIdentifier840_tree = (Object)adaptor.create(TkIdentifier840);
 					adaptor.addChild(root_0, TkIdentifier840_tree);
@@ -31985,7 +31991,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					TkIntNum841=(Token)match(input,TkIntNum,FOLLOW_TkIntNum_in_label20336); if (state.failed) return retval;
+					TkIntNum841=(Token)match(input,TkIntNum,FOLLOW_TkIntNum_in_label20338); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					TkIntNum841_tree = (Object)adaptor.create(TkIntNum841);
 					adaptor.addChild(root_0, TkIntNum841_tree);
@@ -31999,7 +32005,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					TkHexNum842=(Token)match(input,TkHexNum,FOLLOW_TkHexNum_in_label20369); if (state.failed) return retval;
+					TkHexNum842=(Token)match(input,TkHexNum,FOLLOW_TkHexNum_in_label20371); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					TkHexNum842_tree = (Object)adaptor.create(TkHexNum842);
 					adaptor.addChild(root_0, TkHexNum842_tree);
@@ -32013,7 +32019,7 @@ public class DelphiParser extends Parser {
 					root_0 = (Object)adaptor.nil();
 
 
-					pushFollow(FOLLOW_keywordsUsedAsNames_in_label20402);
+					pushFollow(FOLLOW_keywordsUsedAsNames_in_label20404);
 					keywordsUsedAsNames843=keywordsUsedAsNames();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -32139,7 +32145,7 @@ public class DelphiParser extends Parser {
 			root_0 = (Object)adaptor.nil();
 
 
-			TkRealNum845=(Token)match(input,TkRealNum,FOLLOW_TkRealNum_in_realNum20552); if (state.failed) return retval;
+			TkRealNum845=(Token)match(input,TkRealNum,FOLLOW_TkRealNum_in_realNum20554); if (state.failed) return retval;
 			if ( state.backtracking==0 ) {
 			TkRealNum845_tree = (Object)adaptor.create(TkRealNum845);
 			adaptor.addChild(root_0, TkRealNum845_tree);
@@ -32275,13 +32281,13 @@ public class DelphiParser extends Parser {
 				case 1 :
 					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:744:33: namespaceName '.'
 					{
-					pushFollow(FOLLOW_namespaceName_in_namespacedQualifiedIdent20594);
+					pushFollow(FOLLOW_namespaceName_in_namespacedQualifiedIdent20596);
 					namespaceName846=namespaceName();
 					state._fsp--;
 					if (state.failed) return retval;
 					if ( state.backtracking==0 ) adaptor.addChild(root_0, namespaceName846.getTree());
 
-					char_literal847=(Token)match(input,DOT,FOLLOW_DOT_in_namespacedQualifiedIdent20596); if (state.failed) return retval;
+					char_literal847=(Token)match(input,DOT,FOLLOW_DOT_in_namespacedQualifiedIdent20598); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					char_literal847_tree = (Object)adaptor.create(char_literal847);
 					adaptor.addChild(root_0, char_literal847_tree);
@@ -32292,7 +32298,7 @@ public class DelphiParser extends Parser {
 
 			}
 
-			pushFollow(FOLLOW_qualifiedIdent_in_namespacedQualifiedIdent20600);
+			pushFollow(FOLLOW_qualifiedIdent_in_namespacedQualifiedIdent20602);
 			qualifiedIdent848=qualifiedIdent();
 			state._fsp--;
 			if (state.failed) return retval;
@@ -32353,7 +32359,7 @@ public class DelphiParser extends Parser {
 			root_0 = (Object)adaptor.nil();
 
 
-			pushFollow(FOLLOW_ident_in_namespaceName20652);
+			pushFollow(FOLLOW_ident_in_namespaceName20654);
 			ident849=ident();
 			state._fsp--;
 			if (state.failed) return retval;
@@ -32368,13 +32374,13 @@ public class DelphiParser extends Parser {
 				case 1 :
 					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:746:39: '.' ident
 					{
-					char_literal850=(Token)match(input,DOT,FOLLOW_DOT_in_namespaceName20655); if (state.failed) return retval;
+					char_literal850=(Token)match(input,DOT,FOLLOW_DOT_in_namespaceName20657); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					char_literal850_tree = (Object)adaptor.create(char_literal850);
 					adaptor.addChild(root_0, char_literal850_tree);
 					}
 
-					pushFollow(FOLLOW_ident_in_namespaceName20657);
+					pushFollow(FOLLOW_ident_in_namespaceName20659);
 					ident851=ident();
 					state._fsp--;
 					if (state.failed) return retval;
@@ -32515,13 +32521,13 @@ public class DelphiParser extends Parser {
 				case 1 :
 					// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:748:33: ident '.'
 					{
-					pushFollow(FOLLOW_ident_in_qualifiedIdent20711);
+					pushFollow(FOLLOW_ident_in_qualifiedIdent20713);
 					ident852=ident();
 					state._fsp--;
 					if (state.failed) return retval;
 					if ( state.backtracking==0 ) adaptor.addChild(root_0, ident852.getTree());
 
-					char_literal853=(Token)match(input,DOT,FOLLOW_DOT_in_qualifiedIdent20713); if (state.failed) return retval;
+					char_literal853=(Token)match(input,DOT,FOLLOW_DOT_in_qualifiedIdent20715); if (state.failed) return retval;
 					if ( state.backtracking==0 ) {
 					char_literal853_tree = (Object)adaptor.create(char_literal853);
 					adaptor.addChild(root_0, char_literal853_tree);
@@ -32535,7 +32541,7 @@ public class DelphiParser extends Parser {
 				}
 			}
 
-			pushFollow(FOLLOW_extendedIdent_in_qualifiedIdent20718);
+			pushFollow(FOLLOW_extendedIdent_in_qualifiedIdent20720);
 			extendedIdent854=extendedIdent();
 			state._fsp--;
 			if (state.failed) return retval;
@@ -36075,14 +36081,14 @@ public class DelphiParser extends Parser {
 			case 1 :
 				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:641:34: ';'
 				{
-				match(input,SEMI,FOLLOW_SEMI_in_synpred378_Delphi16886); if (state.failed) return;
+				match(input,SEMI,FOLLOW_SEMI_in_synpred378_Delphi16888); if (state.failed) return;
 
 				}
 				break;
 
 		}
 
-		pushFollow(FOLLOW_methodDirective_in_synpred378_Delphi16890);
+		pushFollow(FOLLOW_methodDirective_in_synpred378_Delphi16892);
 		methodDirective();
 		state._fsp--;
 		if (state.failed) return;
@@ -36127,14 +36133,14 @@ public class DelphiParser extends Parser {
 					case 1 :
 						// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:641:34: ';'
 						{
-						match(input,SEMI,FOLLOW_SEMI_in_synpred379_Delphi16886); if (state.failed) return;
+						match(input,SEMI,FOLLOW_SEMI_in_synpred379_Delphi16888); if (state.failed) return;
 
 						}
 						break;
 
 				}
 
-				pushFollow(FOLLOW_methodDirective_in_synpred379_Delphi16890);
+				pushFollow(FOLLOW_methodDirective_in_synpred379_Delphi16892);
 				methodDirective();
 				state._fsp--;
 				if (state.failed) return;
@@ -36147,7 +36153,7 @@ public class DelphiParser extends Parser {
 			}
 		}
 
-		match(input,SEMI,FOLLOW_SEMI_in_synpred379_Delphi16894); if (state.failed) return;
+		match(input,SEMI,FOLLOW_SEMI_in_synpred379_Delphi16896); if (state.failed) return;
 
 		}
 
@@ -36169,14 +36175,14 @@ public class DelphiParser extends Parser {
 			case 1 :
 				// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:644:34: ';'
 				{
-				match(input,SEMI,FOLLOW_SEMI_in_synpred381_Delphi16970); if (state.failed) return;
+				match(input,SEMI,FOLLOW_SEMI_in_synpred381_Delphi16972); if (state.failed) return;
 
 				}
 				break;
 
 		}
 
-		pushFollow(FOLLOW_functionDirective_in_synpred381_Delphi16974);
+		pushFollow(FOLLOW_functionDirective_in_synpred381_Delphi16976);
 		functionDirective();
 		state._fsp--;
 		if (state.failed) return;
@@ -36221,14 +36227,14 @@ public class DelphiParser extends Parser {
 					case 1 :
 						// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:644:34: ';'
 						{
-						match(input,SEMI,FOLLOW_SEMI_in_synpred382_Delphi16970); if (state.failed) return;
+						match(input,SEMI,FOLLOW_SEMI_in_synpred382_Delphi16972); if (state.failed) return;
 
 						}
 						break;
 
 				}
 
-				pushFollow(FOLLOW_functionDirective_in_synpred382_Delphi16974);
+				pushFollow(FOLLOW_functionDirective_in_synpred382_Delphi16976);
 				functionDirective();
 				state._fsp--;
 				if (state.failed) return;
@@ -36241,7 +36247,7 @@ public class DelphiParser extends Parser {
 			}
 		}
 
-		match(input,SEMI,FOLLOW_SEMI_in_synpred382_Delphi16978); if (state.failed) return;
+		match(input,SEMI,FOLLOW_SEMI_in_synpred382_Delphi16980); if (state.failed) return;
 
 		}
 
@@ -36253,7 +36259,7 @@ public class DelphiParser extends Parser {
 		// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:647:48: ( ';' )
 		// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:647:48: ';'
 		{
-		match(input,SEMI,FOLLOW_SEMI_in_synpred383_Delphi17054); if (state.failed) return;
+		match(input,SEMI,FOLLOW_SEMI_in_synpred383_Delphi17056); if (state.failed) return;
 
 		}
 
@@ -36265,7 +36271,7 @@ public class DelphiParser extends Parser {
 		// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:697:44: ( expression )
 		// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:697:44: expression
 		{
-		pushFollow(FOLLOW_expression_in_synpred417_Delphi18597);
+		pushFollow(FOLLOW_expression_in_synpred417_Delphi18599);
 		expression();
 		state._fsp--;
 		if (state.failed) return;
@@ -36280,12 +36286,12 @@ public class DelphiParser extends Parser {
 		// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:744:33: ( namespaceName '.' )
 		// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:744:33: namespaceName '.'
 		{
-		pushFollow(FOLLOW_namespaceName_in_synpred590_Delphi20594);
+		pushFollow(FOLLOW_namespaceName_in_synpred590_Delphi20596);
 		namespaceName();
 		state._fsp--;
 		if (state.failed) return;
 
-		match(input,DOT,FOLLOW_DOT_in_synpred590_Delphi20596); if (state.failed) return;
+		match(input,DOT,FOLLOW_DOT_in_synpred590_Delphi20598); if (state.failed) return;
 
 		}
 
@@ -36297,9 +36303,9 @@ public class DelphiParser extends Parser {
 		// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:746:39: ( '.' ident )
 		// ***REMOVED***\\Desktop\\MonashCapstone2018\\Code\\FIT4002_SonarQube_Delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:746:39: '.' ident
 		{
-		match(input,DOT,FOLLOW_DOT_in_synpred591_Delphi20655); if (state.failed) return;
+		match(input,DOT,FOLLOW_DOT_in_synpred591_Delphi20657); if (state.failed) return;
 
-		pushFollow(FOLLOW_ident_in_synpred591_Delphi20657);
+		pushFollow(FOLLOW_ident_in_synpred591_Delphi20659);
 		ident();
 		state._fsp--;
 		if (state.failed) return;
@@ -40981,12 +40987,12 @@ public class DelphiParser extends Parser {
 	static final String DFA90_acceptS =
 		"\2\uffff\1\2\14\uffff\1\1\u021a\uffff";
 	static final String DFA90_specialS =
-		"\23\uffff\1\24\1\uffff\1\26\1\31\1\32\1\36\1\40\1\42\1\33\1\uffff\1\44"+
-		"\33\uffff\1\25\12\uffff\1\27\1\uffff\1\34\1\23\15\uffff\1\0\1\uffff\1"+
-		"\1\1\2\1\3\1\7\1\13\1\14\1\16\1\uffff\1\15\10\uffff\1\35\15\uffff\1\22"+
-		"\14\uffff\1\43\6\uffff\1\30\23\uffff\1\17\72\uffff\1\21\1\uffff\1\4\1"+
-		"\10\41\uffff\1\41\13\uffff\1\37\17\uffff\1\20\15\uffff\1\5\14\uffff\1"+
-		"\12\6\uffff\1\11\172\uffff\1\6\162\uffff}>";
+		"\23\uffff\1\30\1\uffff\1\24\1\34\1\23\1\22\1\35\1\40\1\26\1\uffff\1\27"+
+		"\33\uffff\1\25\12\uffff\1\31\1\uffff\1\41\1\36\15\uffff\1\0\1\uffff\1"+
+		"\5\1\12\1\13\1\14\1\1\1\15\1\17\1\uffff\1\16\10\uffff\1\42\15\uffff\1"+
+		"\37\14\uffff\1\33\6\uffff\1\32\23\uffff\1\4\72\uffff\1\2\1\uffff\1\21"+
+		"\1\20\41\uffff\1\43\13\uffff\1\44\17\uffff\1\7\15\uffff\1\10\14\uffff"+
+		"\1\3\6\uffff\1\6\172\uffff\1\11\162\uffff}>";
 	static final String[] DFA90_transitionS = {
 			"\4\2\1\uffff\1\2\2\uffff\2\2\2\uffff\3\2\1\uffff\7\2\1\uffff\5\2\1\uffff"+
 			"\4\2\2\uffff\1\2\1\uffff\2\2\2\uffff\1\2\2\uffff\17\2\1\uffff\2\2\2\uffff"+
@@ -44490,136 +44496,6 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 1 : 
-						int LA90_87 = input.LA(1);
-						 
-						int index90_87 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_87);
-						if ( s>=0 ) return s;
-						break;
-
-					case 2 : 
-						int LA90_88 = input.LA(1);
-						 
-						int index90_88 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_88);
-						if ( s>=0 ) return s;
-						break;
-
-					case 3 : 
-						int LA90_89 = input.LA(1);
-						 
-						int index90_89 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_89);
-						if ( s>=0 ) return s;
-						break;
-
-					case 4 : 
-						int LA90_219 = input.LA(1);
-						 
-						int index90_219 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_219);
-						if ( s>=0 ) return s;
-						break;
-
-					case 5 : 
-						int LA90_296 = input.LA(1);
-						 
-						int index90_296 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_296);
-						if ( s>=0 ) return s;
-						break;
-
-					case 6 : 
-						int LA90_439 = input.LA(1);
-						 
-						int index90_439 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_439);
-						if ( s>=0 ) return s;
-						break;
-
-					case 7 : 
-						int LA90_90 = input.LA(1);
-						 
-						int index90_90 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_90);
-						if ( s>=0 ) return s;
-						break;
-
-					case 8 : 
-						int LA90_220 = input.LA(1);
-						 
-						int index90_220 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_220);
-						if ( s>=0 ) return s;
-						break;
-
-					case 9 : 
-						int LA90_316 = input.LA(1);
-						 
-						int index90_316 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_316);
-						if ( s>=0 ) return s;
-						break;
-
-					case 10 : 
-						int LA90_309 = input.LA(1);
-						 
-						int index90_309 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_309);
-						if ( s>=0 ) return s;
-						break;
-
-					case 11 : 
 						int LA90_91 = input.LA(1);
 						 
 						int index90_91 = input.index();
@@ -44632,72 +44508,7 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 12 : 
-						int LA90_92 = input.LA(1);
-						 
-						int index90_92 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_92);
-						if ( s>=0 ) return s;
-						break;
-
-					case 13 : 
-						int LA90_95 = input.LA(1);
-						 
-						int index90_95 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_95);
-						if ( s>=0 ) return s;
-						break;
-
-					case 14 : 
-						int LA90_93 = input.LA(1);
-						 
-						int index90_93 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_93);
-						if ( s>=0 ) return s;
-						break;
-
-					case 15 : 
-						int LA90_158 = input.LA(1);
-						 
-						int index90_158 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_158);
-						if ( s>=0 ) return s;
-						break;
-
-					case 16 : 
-						int LA90_282 = input.LA(1);
-						 
-						int index90_282 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_282);
-						if ( s>=0 ) return s;
-						break;
-
-					case 17 : 
+					case 2 : 
 						int LA90_217 = input.LA(1);
 						 
 						int index90_217 = input.index();
@@ -44710,42 +44521,237 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 18 : 
-						int LA90_118 = input.LA(1);
+					case 3 : 
+						int LA90_309 = input.LA(1);
 						 
-						int index90_118 = input.index();
+						int index90_309 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred125_Delphi()) ) {s = 15;}
 						else if ( (true) ) {s = 2;}
 						 
-						input.seek(index90_118);
+						input.seek(index90_309);
+						if ( s>=0 ) return s;
+						break;
+
+					case 4 : 
+						int LA90_158 = input.LA(1);
+						 
+						int index90_158 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_158);
+						if ( s>=0 ) return s;
+						break;
+
+					case 5 : 
+						int LA90_87 = input.LA(1);
+						 
+						int index90_87 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_87);
+						if ( s>=0 ) return s;
+						break;
+
+					case 6 : 
+						int LA90_316 = input.LA(1);
+						 
+						int index90_316 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_316);
+						if ( s>=0 ) return s;
+						break;
+
+					case 7 : 
+						int LA90_282 = input.LA(1);
+						 
+						int index90_282 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_282);
+						if ( s>=0 ) return s;
+						break;
+
+					case 8 : 
+						int LA90_296 = input.LA(1);
+						 
+						int index90_296 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_296);
+						if ( s>=0 ) return s;
+						break;
+
+					case 9 : 
+						int LA90_439 = input.LA(1);
+						 
+						int index90_439 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_439);
+						if ( s>=0 ) return s;
+						break;
+
+					case 10 : 
+						int LA90_88 = input.LA(1);
+						 
+						int index90_88 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_88);
+						if ( s>=0 ) return s;
+						break;
+
+					case 11 : 
+						int LA90_89 = input.LA(1);
+						 
+						int index90_89 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_89);
+						if ( s>=0 ) return s;
+						break;
+
+					case 12 : 
+						int LA90_90 = input.LA(1);
+						 
+						int index90_90 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_90);
+						if ( s>=0 ) return s;
+						break;
+
+					case 13 : 
+						int LA90_92 = input.LA(1);
+						 
+						int index90_92 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_92);
+						if ( s>=0 ) return s;
+						break;
+
+					case 14 : 
+						int LA90_95 = input.LA(1);
+						 
+						int index90_95 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_95);
+						if ( s>=0 ) return s;
+						break;
+
+					case 15 : 
+						int LA90_93 = input.LA(1);
+						 
+						int index90_93 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_93);
+						if ( s>=0 ) return s;
+						break;
+
+					case 16 : 
+						int LA90_220 = input.LA(1);
+						 
+						int index90_220 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_220);
+						if ( s>=0 ) return s;
+						break;
+
+					case 17 : 
+						int LA90_219 = input.LA(1);
+						 
+						int index90_219 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_219);
+						if ( s>=0 ) return s;
+						break;
+
+					case 18 : 
+						int LA90_24 = input.LA(1);
+						 
+						int index90_24 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_24);
 						if ( s>=0 ) return s;
 						break;
 
 					case 19 : 
-						int LA90_71 = input.LA(1);
+						int LA90_23 = input.LA(1);
 						 
-						int index90_71 = input.index();
+						int index90_23 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred125_Delphi()) ) {s = 15;}
 						else if ( (true) ) {s = 2;}
 						 
-						input.seek(index90_71);
+						input.seek(index90_23);
 						if ( s>=0 ) return s;
 						break;
 
 					case 20 : 
-						int LA90_19 = input.LA(1);
+						int LA90_21 = input.LA(1);
 						 
-						int index90_19 = input.index();
+						int index90_21 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred125_Delphi()) ) {s = 15;}
 						else if ( (true) ) {s = 2;}
 						 
-						input.seek(index90_19);
+						input.seek(index90_21);
 						if ( s>=0 ) return s;
 						break;
 
@@ -44763,71 +44769,6 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 22 : 
-						int LA90_21 = input.LA(1);
-						 
-						int index90_21 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_21);
-						if ( s>=0 ) return s;
-						break;
-
-					case 23 : 
-						int LA90_68 = input.LA(1);
-						 
-						int index90_68 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_68);
-						if ( s>=0 ) return s;
-						break;
-
-					case 24 : 
-						int LA90_138 = input.LA(1);
-						 
-						int index90_138 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_138);
-						if ( s>=0 ) return s;
-						break;
-
-					case 25 : 
-						int LA90_22 = input.LA(1);
-						 
-						int index90_22 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_22);
-						if ( s>=0 ) return s;
-						break;
-
-					case 26 : 
-						int LA90_23 = input.LA(1);
-						 
-						int index90_23 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_23);
-						if ( s>=0 ) return s;
-						break;
-
-					case 27 : 
 						int LA90_27 = input.LA(1);
 						 
 						int index90_27 = input.index();
@@ -44840,98 +44781,59 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 28 : 
-						int LA90_70 = input.LA(1);
+					case 23 : 
+						int LA90_29 = input.LA(1);
 						 
-						int index90_70 = input.index();
+						int index90_29 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred125_Delphi()) ) {s = 15;}
 						else if ( (true) ) {s = 2;}
 						 
-						input.seek(index90_70);
+						input.seek(index90_29);
 						if ( s>=0 ) return s;
 						break;
 
-					case 29 : 
-						int LA90_104 = input.LA(1);
+					case 24 : 
+						int LA90_19 = input.LA(1);
 						 
-						int index90_104 = input.index();
+						int index90_19 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred125_Delphi()) ) {s = 15;}
 						else if ( (true) ) {s = 2;}
 						 
-						input.seek(index90_104);
+						input.seek(index90_19);
 						if ( s>=0 ) return s;
 						break;
 
-					case 30 : 
-						int LA90_24 = input.LA(1);
+					case 25 : 
+						int LA90_68 = input.LA(1);
 						 
-						int index90_24 = input.index();
+						int index90_68 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred125_Delphi()) ) {s = 15;}
 						else if ( (true) ) {s = 2;}
 						 
-						input.seek(index90_24);
+						input.seek(index90_68);
 						if ( s>=0 ) return s;
 						break;
 
-					case 31 : 
-						int LA90_266 = input.LA(1);
+					case 26 : 
+						int LA90_138 = input.LA(1);
 						 
-						int index90_266 = input.index();
+						int index90_138 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred125_Delphi()) ) {s = 15;}
 						else if ( (true) ) {s = 2;}
 						 
-						input.seek(index90_266);
+						input.seek(index90_138);
 						if ( s>=0 ) return s;
 						break;
 
-					case 32 : 
-						int LA90_25 = input.LA(1);
-						 
-						int index90_25 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_25);
-						if ( s>=0 ) return s;
-						break;
-
-					case 33 : 
-						int LA90_254 = input.LA(1);
-						 
-						int index90_254 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_254);
-						if ( s>=0 ) return s;
-						break;
-
-					case 34 : 
-						int LA90_26 = input.LA(1);
-						 
-						int index90_26 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred125_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index90_26);
-						if ( s>=0 ) return s;
-						break;
-
-					case 35 : 
+					case 27 : 
 						int LA90_131 = input.LA(1);
 						 
 						int index90_131 = input.index();
@@ -44944,16 +44846,120 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 36 : 
-						int LA90_29 = input.LA(1);
+					case 28 : 
+						int LA90_22 = input.LA(1);
 						 
-						int index90_29 = input.index();
+						int index90_22 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred125_Delphi()) ) {s = 15;}
 						else if ( (true) ) {s = 2;}
 						 
-						input.seek(index90_29);
+						input.seek(index90_22);
+						if ( s>=0 ) return s;
+						break;
+
+					case 29 : 
+						int LA90_25 = input.LA(1);
+						 
+						int index90_25 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_25);
+						if ( s>=0 ) return s;
+						break;
+
+					case 30 : 
+						int LA90_71 = input.LA(1);
+						 
+						int index90_71 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_71);
+						if ( s>=0 ) return s;
+						break;
+
+					case 31 : 
+						int LA90_118 = input.LA(1);
+						 
+						int index90_118 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_118);
+						if ( s>=0 ) return s;
+						break;
+
+					case 32 : 
+						int LA90_26 = input.LA(1);
+						 
+						int index90_26 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_26);
+						if ( s>=0 ) return s;
+						break;
+
+					case 33 : 
+						int LA90_70 = input.LA(1);
+						 
+						int index90_70 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_70);
+						if ( s>=0 ) return s;
+						break;
+
+					case 34 : 
+						int LA90_104 = input.LA(1);
+						 
+						int index90_104 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_104);
+						if ( s>=0 ) return s;
+						break;
+
+					case 35 : 
+						int LA90_254 = input.LA(1);
+						 
+						int index90_254 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_254);
+						if ( s>=0 ) return s;
+						break;
+
+					case 36 : 
+						int LA90_266 = input.LA(1);
+						 
+						int index90_266 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred125_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index90_266);
 						if ( s>=0 ) return s;
 						break;
 			}
@@ -45028,12 +45034,12 @@ public class DelphiParser extends Parser {
 	static final String DFA102_acceptS =
 		"\2\uffff\1\2\14\uffff\1\1\u021a\uffff";
 	static final String DFA102_specialS =
-		"\23\uffff\1\23\1\uffff\1\24\1\31\1\32\1\34\1\35\1\41\1\43\1\uffff\1\44"+
-		"\33\uffff\1\40\12\uffff\1\42\1\uffff\1\22\1\36\15\uffff\1\1\1\uffff\1"+
-		"\0\1\3\1\4\1\10\1\12\1\13\1\16\1\uffff\1\17\10\uffff\1\33\15\uffff\1\30"+
-		"\14\uffff\1\26\6\uffff\1\27\23\uffff\1\5\72\uffff\1\7\1\uffff\1\11\1\15"+
-		"\41\uffff\1\25\13\uffff\1\37\17\uffff\1\6\15\uffff\1\14\14\uffff\1\20"+
-		"\6\uffff\1\21\172\uffff\1\2\162\uffff}>";
+		"\23\uffff\1\23\1\uffff\1\22\1\25\1\26\1\30\1\31\1\32\1\34\1\uffff\1\44"+
+		"\33\uffff\1\24\12\uffff\1\33\1\uffff\1\42\1\27\15\uffff\1\2\1\uffff\1"+
+		"\5\1\1\1\12\1\13\1\14\1\15\1\20\1\uffff\1\0\10\uffff\1\43\15\uffff\1\40"+
+		"\14\uffff\1\41\6\uffff\1\37\23\uffff\1\16\72\uffff\1\6\1\uffff\1\21\1"+
+		"\17\41\uffff\1\35\13\uffff\1\36\17\uffff\1\7\15\uffff\1\10\14\uffff\1"+
+		"\4\6\uffff\1\11\172\uffff\1\3\162\uffff}>";
 	static final String[] DFA102_transitionS = {
 			"\4\2\1\uffff\1\2\2\uffff\2\2\2\uffff\3\2\1\uffff\7\2\1\uffff\5\2\1\uffff"+
 			"\4\2\2\uffff\1\2\1\uffff\2\2\2\uffff\1\2\2\uffff\17\2\1\uffff\2\2\2\uffff"+
@@ -48524,201 +48530,6 @@ public class DelphiParser extends Parser {
 			int _s = s;
 			switch ( s ) {
 					case 0 : 
-						int LA102_87 = input.LA(1);
-						 
-						int index102_87 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_87);
-						if ( s>=0 ) return s;
-						break;
-
-					case 1 : 
-						int LA102_85 = input.LA(1);
-						 
-						int index102_85 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_85);
-						if ( s>=0 ) return s;
-						break;
-
-					case 2 : 
-						int LA102_439 = input.LA(1);
-						 
-						int index102_439 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_439);
-						if ( s>=0 ) return s;
-						break;
-
-					case 3 : 
-						int LA102_88 = input.LA(1);
-						 
-						int index102_88 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_88);
-						if ( s>=0 ) return s;
-						break;
-
-					case 4 : 
-						int LA102_89 = input.LA(1);
-						 
-						int index102_89 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_89);
-						if ( s>=0 ) return s;
-						break;
-
-					case 5 : 
-						int LA102_158 = input.LA(1);
-						 
-						int index102_158 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_158);
-						if ( s>=0 ) return s;
-						break;
-
-					case 6 : 
-						int LA102_282 = input.LA(1);
-						 
-						int index102_282 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_282);
-						if ( s>=0 ) return s;
-						break;
-
-					case 7 : 
-						int LA102_217 = input.LA(1);
-						 
-						int index102_217 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_217);
-						if ( s>=0 ) return s;
-						break;
-
-					case 8 : 
-						int LA102_90 = input.LA(1);
-						 
-						int index102_90 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_90);
-						if ( s>=0 ) return s;
-						break;
-
-					case 9 : 
-						int LA102_219 = input.LA(1);
-						 
-						int index102_219 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_219);
-						if ( s>=0 ) return s;
-						break;
-
-					case 10 : 
-						int LA102_91 = input.LA(1);
-						 
-						int index102_91 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_91);
-						if ( s>=0 ) return s;
-						break;
-
-					case 11 : 
-						int LA102_92 = input.LA(1);
-						 
-						int index102_92 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_92);
-						if ( s>=0 ) return s;
-						break;
-
-					case 12 : 
-						int LA102_296 = input.LA(1);
-						 
-						int index102_296 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_296);
-						if ( s>=0 ) return s;
-						break;
-
-					case 13 : 
-						int LA102_220 = input.LA(1);
-						 
-						int index102_220 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_220);
-						if ( s>=0 ) return s;
-						break;
-
-					case 14 : 
-						int LA102_93 = input.LA(1);
-						 
-						int index102_93 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_93);
-						if ( s>=0 ) return s;
-						break;
-
-					case 15 : 
 						int LA102_95 = input.LA(1);
 						 
 						int index102_95 = input.index();
@@ -48731,7 +48542,46 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 16 : 
+					case 1 : 
+						int LA102_88 = input.LA(1);
+						 
+						int index102_88 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_88);
+						if ( s>=0 ) return s;
+						break;
+
+					case 2 : 
+						int LA102_85 = input.LA(1);
+						 
+						int index102_85 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_85);
+						if ( s>=0 ) return s;
+						break;
+
+					case 3 : 
+						int LA102_439 = input.LA(1);
+						 
+						int index102_439 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_439);
+						if ( s>=0 ) return s;
+						break;
+
+					case 4 : 
 						int LA102_309 = input.LA(1);
 						 
 						int index102_309 = input.index();
@@ -48744,7 +48594,59 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 17 : 
+					case 5 : 
+						int LA102_87 = input.LA(1);
+						 
+						int index102_87 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_87);
+						if ( s>=0 ) return s;
+						break;
+
+					case 6 : 
+						int LA102_217 = input.LA(1);
+						 
+						int index102_217 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_217);
+						if ( s>=0 ) return s;
+						break;
+
+					case 7 : 
+						int LA102_282 = input.LA(1);
+						 
+						int index102_282 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_282);
+						if ( s>=0 ) return s;
+						break;
+
+					case 8 : 
+						int LA102_296 = input.LA(1);
+						 
+						int index102_296 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_296);
+						if ( s>=0 ) return s;
+						break;
+
+					case 9 : 
 						int LA102_316 = input.LA(1);
 						 
 						int index102_316 = input.index();
@@ -48757,16 +48659,120 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 18 : 
-						int LA102_70 = input.LA(1);
+					case 10 : 
+						int LA102_89 = input.LA(1);
 						 
-						int index102_70 = input.index();
+						int index102_89 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred145_Delphi()) ) {s = 15;}
 						else if ( (true) ) {s = 2;}
 						 
-						input.seek(index102_70);
+						input.seek(index102_89);
+						if ( s>=0 ) return s;
+						break;
+
+					case 11 : 
+						int LA102_90 = input.LA(1);
+						 
+						int index102_90 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_90);
+						if ( s>=0 ) return s;
+						break;
+
+					case 12 : 
+						int LA102_91 = input.LA(1);
+						 
+						int index102_91 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_91);
+						if ( s>=0 ) return s;
+						break;
+
+					case 13 : 
+						int LA102_92 = input.LA(1);
+						 
+						int index102_92 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_92);
+						if ( s>=0 ) return s;
+						break;
+
+					case 14 : 
+						int LA102_158 = input.LA(1);
+						 
+						int index102_158 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_158);
+						if ( s>=0 ) return s;
+						break;
+
+					case 15 : 
+						int LA102_220 = input.LA(1);
+						 
+						int index102_220 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_220);
+						if ( s>=0 ) return s;
+						break;
+
+					case 16 : 
+						int LA102_93 = input.LA(1);
+						 
+						int index102_93 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_93);
+						if ( s>=0 ) return s;
+						break;
+
+					case 17 : 
+						int LA102_219 = input.LA(1);
+						 
+						int index102_219 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_219);
+						if ( s>=0 ) return s;
+						break;
+
+					case 18 : 
+						int LA102_21 = input.LA(1);
+						 
+						int index102_21 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_21);
 						if ( s>=0 ) return s;
 						break;
 
@@ -48784,162 +48790,6 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 20 : 
-						int LA102_21 = input.LA(1);
-						 
-						int index102_21 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_21);
-						if ( s>=0 ) return s;
-						break;
-
-					case 21 : 
-						int LA102_254 = input.LA(1);
-						 
-						int index102_254 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_254);
-						if ( s>=0 ) return s;
-						break;
-
-					case 22 : 
-						int LA102_131 = input.LA(1);
-						 
-						int index102_131 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_131);
-						if ( s>=0 ) return s;
-						break;
-
-					case 23 : 
-						int LA102_138 = input.LA(1);
-						 
-						int index102_138 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_138);
-						if ( s>=0 ) return s;
-						break;
-
-					case 24 : 
-						int LA102_118 = input.LA(1);
-						 
-						int index102_118 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_118);
-						if ( s>=0 ) return s;
-						break;
-
-					case 25 : 
-						int LA102_22 = input.LA(1);
-						 
-						int index102_22 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_22);
-						if ( s>=0 ) return s;
-						break;
-
-					case 26 : 
-						int LA102_23 = input.LA(1);
-						 
-						int index102_23 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_23);
-						if ( s>=0 ) return s;
-						break;
-
-					case 27 : 
-						int LA102_104 = input.LA(1);
-						 
-						int index102_104 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_104);
-						if ( s>=0 ) return s;
-						break;
-
-					case 28 : 
-						int LA102_24 = input.LA(1);
-						 
-						int index102_24 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_24);
-						if ( s>=0 ) return s;
-						break;
-
-					case 29 : 
-						int LA102_25 = input.LA(1);
-						 
-						int index102_25 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_25);
-						if ( s>=0 ) return s;
-						break;
-
-					case 30 : 
-						int LA102_71 = input.LA(1);
-						 
-						int index102_71 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_71);
-						if ( s>=0 ) return s;
-						break;
-
-					case 31 : 
-						int LA102_266 = input.LA(1);
-						 
-						int index102_266 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred145_Delphi()) ) {s = 15;}
-						else if ( (true) ) {s = 2;}
-						 
-						input.seek(index102_266);
-						if ( s>=0 ) return s;
-						break;
-
-					case 32 : 
 						int LA102_57 = input.LA(1);
 						 
 						int index102_57 = input.index();
@@ -48952,7 +48802,72 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 33 : 
+					case 21 : 
+						int LA102_22 = input.LA(1);
+						 
+						int index102_22 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_22);
+						if ( s>=0 ) return s;
+						break;
+
+					case 22 : 
+						int LA102_23 = input.LA(1);
+						 
+						int index102_23 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_23);
+						if ( s>=0 ) return s;
+						break;
+
+					case 23 : 
+						int LA102_71 = input.LA(1);
+						 
+						int index102_71 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_71);
+						if ( s>=0 ) return s;
+						break;
+
+					case 24 : 
+						int LA102_24 = input.LA(1);
+						 
+						int index102_24 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_24);
+						if ( s>=0 ) return s;
+						break;
+
+					case 25 : 
+						int LA102_25 = input.LA(1);
+						 
+						int index102_25 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_25);
+						if ( s>=0 ) return s;
+						break;
+
+					case 26 : 
 						int LA102_26 = input.LA(1);
 						 
 						int index102_26 = input.index();
@@ -48965,7 +48880,7 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 34 : 
+					case 27 : 
 						int LA102_68 = input.LA(1);
 						 
 						int index102_68 = input.index();
@@ -48978,7 +48893,7 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 35 : 
+					case 28 : 
 						int LA102_27 = input.LA(1);
 						 
 						int index102_27 = input.index();
@@ -48988,6 +48903,97 @@ public class DelphiParser extends Parser {
 						else if ( (true) ) {s = 2;}
 						 
 						input.seek(index102_27);
+						if ( s>=0 ) return s;
+						break;
+
+					case 29 : 
+						int LA102_254 = input.LA(1);
+						 
+						int index102_254 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_254);
+						if ( s>=0 ) return s;
+						break;
+
+					case 30 : 
+						int LA102_266 = input.LA(1);
+						 
+						int index102_266 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_266);
+						if ( s>=0 ) return s;
+						break;
+
+					case 31 : 
+						int LA102_138 = input.LA(1);
+						 
+						int index102_138 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_138);
+						if ( s>=0 ) return s;
+						break;
+
+					case 32 : 
+						int LA102_118 = input.LA(1);
+						 
+						int index102_118 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_118);
+						if ( s>=0 ) return s;
+						break;
+
+					case 33 : 
+						int LA102_131 = input.LA(1);
+						 
+						int index102_131 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_131);
+						if ( s>=0 ) return s;
+						break;
+
+					case 34 : 
+						int LA102_70 = input.LA(1);
+						 
+						int index102_70 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_70);
+						if ( s>=0 ) return s;
+						break;
+
+					case 35 : 
+						int LA102_104 = input.LA(1);
+						 
+						int index102_104 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred145_Delphi()) ) {s = 15;}
+						else if ( (true) ) {s = 2;}
+						 
+						input.seek(index102_104);
 						if ( s>=0 ) return s;
 						break;
 
@@ -50866,11 +50872,11 @@ public class DelphiParser extends Parser {
 	static final String DFA279_acceptS =
 		"\1\uffff\1\2\12\uffff\1\1\2\uffff\1\1\152\uffff";
 	static final String DFA279_specialS =
-		"\6\uffff\1\40\4\uffff\1\11\5\uffff\1\41\1\12\2\uffff\1\14\1\uffff\1\15"+
-		"\1\uffff\1\16\1\17\16\uffff\1\42\1\13\1\uffff\1\20\1\uffff\1\32\1\34\2"+
-		"\uffff\1\37\3\uffff\1\2\1\0\1\3\1\4\1\5\1\7\1\1\1\uffff\1\10\4\uffff\1"+
-		"\26\1\uffff\1\27\1\uffff\1\21\1\uffff\1\35\4\uffff\1\6\5\uffff\1\25\1"+
-		"\uffff\1\36\1\uffff\1\31\1\uffff\1\33\5\uffff\1\22\1\24\1\30\1\23\26\uffff}>";
+		"\6\uffff\1\40\4\uffff\1\11\5\uffff\1\41\1\12\2\uffff\1\16\1\uffff\1\15"+
+		"\1\uffff\1\17\1\14\16\uffff\1\42\1\13\1\uffff\1\27\1\uffff\1\31\1\34\2"+
+		"\uffff\1\35\3\uffff\1\2\1\4\1\0\1\5\1\6\1\1\1\7\1\uffff\1\10\4\uffff\1"+
+		"\20\1\uffff\1\32\1\uffff\1\30\1\uffff\1\25\4\uffff\1\3\5\uffff\1\21\1"+
+		"\uffff\1\22\1\uffff\1\26\1\uffff\1\23\5\uffff\1\24\1\37\1\36\1\33\26\uffff}>";
 	static final String[] DFA279_transitionS = {
 			"\1\1\10\uffff\1\1\5\uffff\1\2\14\uffff\1\1\25\uffff\1\1\13\uffff\1\1"+
 			"\1\uffff\1\1\25\uffff\1\1\35\uffff\1\1",
@@ -51550,28 +51556,28 @@ public class DelphiParser extends Parser {
 			int _s = s;
 			switch ( s ) {
 					case 0 : 
-						int LA279_55 = input.LA(1);
+						int LA279_56 = input.LA(1);
 						 
-						int index279_55 = input.index();
+						int index279_56 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred591_Delphi()) ) {s = 12;}
 						else if ( (true) ) {s = 1;}
 						 
-						input.seek(index279_55);
+						input.seek(index279_56);
 						if ( s>=0 ) return s;
 						break;
 
 					case 1 : 
-						int LA279_60 = input.LA(1);
+						int LA279_59 = input.LA(1);
 						 
-						int index279_60 = input.index();
+						int index279_59 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred591_Delphi()) ) {s = 12;}
 						else if ( (true) ) {s = 1;}
 						 
-						input.seek(index279_60);
+						input.seek(index279_59);
 						if ( s>=0 ) return s;
 						break;
 
@@ -51589,45 +51595,6 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 3 : 
-						int LA279_56 = input.LA(1);
-						 
-						int index279_56 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred591_Delphi()) ) {s = 12;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index279_56);
-						if ( s>=0 ) return s;
-						break;
-
-					case 4 : 
-						int LA279_57 = input.LA(1);
-						 
-						int index279_57 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred591_Delphi()) ) {s = 12;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index279_57);
-						if ( s>=0 ) return s;
-						break;
-
-					case 5 : 
-						int LA279_58 = input.LA(1);
-						 
-						int index279_58 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred591_Delphi()) ) {s = 12;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index279_58);
-						if ( s>=0 ) return s;
-						break;
-
-					case 6 : 
 						int LA279_78 = input.LA(1);
 						 
 						int index279_78 = input.index();
@@ -51640,16 +51607,55 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 7 : 
-						int LA279_59 = input.LA(1);
+					case 4 : 
+						int LA279_55 = input.LA(1);
 						 
-						int index279_59 = input.index();
+						int index279_55 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred591_Delphi()) ) {s = 12;}
 						else if ( (true) ) {s = 1;}
 						 
-						input.seek(index279_59);
+						input.seek(index279_55);
+						if ( s>=0 ) return s;
+						break;
+
+					case 5 : 
+						int LA279_57 = input.LA(1);
+						 
+						int index279_57 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred591_Delphi()) ) {s = 12;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index279_57);
+						if ( s>=0 ) return s;
+						break;
+
+					case 6 : 
+						int LA279_58 = input.LA(1);
+						 
+						int index279_58 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred591_Delphi()) ) {s = 12;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index279_58);
+						if ( s>=0 ) return s;
+						break;
+
+					case 7 : 
+						int LA279_60 = input.LA(1);
+						 
+						int index279_60 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred591_Delphi()) ) {s = 12;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index279_60);
 						if ( s>=0 ) return s;
 						break;
 
@@ -51706,15 +51712,15 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 12 : 
-						int LA279_21 = input.LA(1);
+						int LA279_26 = input.LA(1);
 						 
-						int index279_21 = input.index();
+						int index279_26 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred591_Delphi()) ) {s = 12;}
 						else if ( (true) ) {s = 1;}
 						 
-						input.seek(index279_21);
+						input.seek(index279_26);
 						if ( s>=0 ) return s;
 						break;
 
@@ -51732,6 +51738,19 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 14 : 
+						int LA279_21 = input.LA(1);
+						 
+						int index279_21 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred591_Delphi()) ) {s = 12;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index279_21);
+						if ( s>=0 ) return s;
+						break;
+
+					case 15 : 
 						int LA279_25 = input.LA(1);
 						 
 						int index279_25 = input.index();
@@ -51744,98 +51763,7 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 15 : 
-						int LA279_26 = input.LA(1);
-						 
-						int index279_26 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred591_Delphi()) ) {s = 12;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index279_26);
-						if ( s>=0 ) return s;
-						break;
-
 					case 16 : 
-						int LA279_44 = input.LA(1);
-						 
-						int index279_44 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred591_Delphi()) ) {s = 12;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index279_44);
-						if ( s>=0 ) return s;
-						break;
-
-					case 17 : 
-						int LA279_71 = input.LA(1);
-						 
-						int index279_71 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred591_Delphi()) ) {s = 12;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index279_71);
-						if ( s>=0 ) return s;
-						break;
-
-					case 18 : 
-						int LA279_96 = input.LA(1);
-						 
-						int index279_96 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred591_Delphi()) ) {s = 12;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index279_96);
-						if ( s>=0 ) return s;
-						break;
-
-					case 19 : 
-						int LA279_99 = input.LA(1);
-						 
-						int index279_99 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred591_Delphi()) ) {s = 12;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index279_99);
-						if ( s>=0 ) return s;
-						break;
-
-					case 20 : 
-						int LA279_97 = input.LA(1);
-						 
-						int index279_97 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred591_Delphi()) ) {s = 12;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index279_97);
-						if ( s>=0 ) return s;
-						break;
-
-					case 21 : 
-						int LA279_84 = input.LA(1);
-						 
-						int index279_84 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred591_Delphi()) ) {s = 12;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index279_84);
-						if ( s>=0 ) return s;
-						break;
-
-					case 22 : 
 						int LA279_67 = input.LA(1);
 						 
 						int index279_67 = input.index();
@@ -51848,33 +51776,72 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 23 : 
-						int LA279_69 = input.LA(1);
+					case 17 : 
+						int LA279_84 = input.LA(1);
 						 
-						int index279_69 = input.index();
+						int index279_84 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred591_Delphi()) ) {s = 12;}
 						else if ( (true) ) {s = 1;}
 						 
-						input.seek(index279_69);
+						input.seek(index279_84);
 						if ( s>=0 ) return s;
 						break;
 
-					case 24 : 
-						int LA279_98 = input.LA(1);
+					case 18 : 
+						int LA279_86 = input.LA(1);
 						 
-						int index279_98 = input.index();
+						int index279_86 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred591_Delphi()) ) {s = 12;}
 						else if ( (true) ) {s = 1;}
 						 
-						input.seek(index279_98);
+						input.seek(index279_86);
 						if ( s>=0 ) return s;
 						break;
 
-					case 25 : 
+					case 19 : 
+						int LA279_90 = input.LA(1);
+						 
+						int index279_90 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred591_Delphi()) ) {s = 12;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index279_90);
+						if ( s>=0 ) return s;
+						break;
+
+					case 20 : 
+						int LA279_96 = input.LA(1);
+						 
+						int index279_96 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred591_Delphi()) ) {s = 12;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index279_96);
+						if ( s>=0 ) return s;
+						break;
+
+					case 21 : 
+						int LA279_73 = input.LA(1);
+						 
+						int index279_73 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred591_Delphi()) ) {s = 12;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index279_73);
+						if ( s>=0 ) return s;
+						break;
+
+					case 22 : 
 						int LA279_88 = input.LA(1);
 						 
 						int index279_88 = input.index();
@@ -51887,7 +51854,33 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 26 : 
+					case 23 : 
+						int LA279_44 = input.LA(1);
+						 
+						int index279_44 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred591_Delphi()) ) {s = 12;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index279_44);
+						if ( s>=0 ) return s;
+						break;
+
+					case 24 : 
+						int LA279_71 = input.LA(1);
+						 
+						int index279_71 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred591_Delphi()) ) {s = 12;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index279_71);
+						if ( s>=0 ) return s;
+						break;
+
+					case 25 : 
 						int LA279_46 = input.LA(1);
 						 
 						int index279_46 = input.index();
@@ -51900,16 +51893,29 @@ public class DelphiParser extends Parser {
 						if ( s>=0 ) return s;
 						break;
 
-					case 27 : 
-						int LA279_90 = input.LA(1);
+					case 26 : 
+						int LA279_69 = input.LA(1);
 						 
-						int index279_90 = input.index();
+						int index279_69 = input.index();
 						input.rewind();
 						s = -1;
 						if ( (synpred591_Delphi()) ) {s = 12;}
 						else if ( (true) ) {s = 1;}
 						 
-						input.seek(index279_90);
+						input.seek(index279_69);
+						if ( s>=0 ) return s;
+						break;
+
+					case 27 : 
+						int LA279_99 = input.LA(1);
+						 
+						int index279_99 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred591_Delphi()) ) {s = 12;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index279_99);
 						if ( s>=0 ) return s;
 						break;
 
@@ -51927,32 +51933,6 @@ public class DelphiParser extends Parser {
 						break;
 
 					case 29 : 
-						int LA279_73 = input.LA(1);
-						 
-						int index279_73 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred591_Delphi()) ) {s = 12;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index279_73);
-						if ( s>=0 ) return s;
-						break;
-
-					case 30 : 
-						int LA279_86 = input.LA(1);
-						 
-						int index279_86 = input.index();
-						input.rewind();
-						s = -1;
-						if ( (synpred591_Delphi()) ) {s = 12;}
-						else if ( (true) ) {s = 1;}
-						 
-						input.seek(index279_86);
-						if ( s>=0 ) return s;
-						break;
-
-					case 31 : 
 						int LA279_50 = input.LA(1);
 						 
 						int index279_50 = input.index();
@@ -51962,6 +51942,32 @@ public class DelphiParser extends Parser {
 						else if ( (true) ) {s = 1;}
 						 
 						input.seek(index279_50);
+						if ( s>=0 ) return s;
+						break;
+
+					case 30 : 
+						int LA279_98 = input.LA(1);
+						 
+						int index279_98 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred591_Delphi()) ) {s = 12;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index279_98);
+						if ( s>=0 ) return s;
+						break;
+
+					case 31 : 
+						int LA279_97 = input.LA(1);
+						 
+						int index279_97 = input.index();
+						input.rewind();
+						s = -1;
+						if ( (synpred591_Delphi()) ) {s = 12;}
+						else if ( (true) ) {s = 1;}
+						 
+						input.seek(index279_97);
 						if ( s>=0 ) return s;
 						break;
 
@@ -52775,79 +52781,79 @@ public class DelphiParser extends Parser {
 	public static final BitSet FOLLOW_ASM_in_assemblerStatement16773 = new BitSet(new long[]{0xFFFFFFFFFFFFFFF0L,0xFFFFFFFFFFFFFFFFL,0xFFFFFFFFFFFFFFFFL,0x0000000000007FFFL});
 	public static final BitSet FOLLOW_assemblerInstructions_in_assemblerStatement16775 = new BitSet(new long[]{0x0004000000000000L});
 	public static final BitSet FOLLOW_END_in_assemblerStatement16777 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_SEMI_in_methodDirectiveSection16886 = new BitSet(new long[]{0x28C0402800802020L,0x0001980113010000L,0x0000000000301030L,0x0000000000000100L});
-	public static final BitSet FOLLOW_methodDirective_in_methodDirectiveSection16890 = new BitSet(new long[]{0x28C0402800802020L,0x0001980113010000L,0x0000000000305030L,0x0000000000000100L});
-	public static final BitSet FOLLOW_SEMI_in_methodDirectiveSection16894 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_standaloneOverloadDirective_in_methodDirectiveSection16927 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_SEMI_in_functionDirectiveSection16970 = new BitSet(new long[]{0x0AC0000800802000L,0x0001880103010002L,0x0000000000201010L,0x0000000000000042L});
-	public static final BitSet FOLLOW_functionDirective_in_functionDirectiveSection16974 = new BitSet(new long[]{0x0AC0000800802000L,0x0001880103010002L,0x0000000000205010L,0x0000000000000042L});
-	public static final BitSet FOLLOW_SEMI_in_functionDirectiveSection16978 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_standaloneOverloadDirective_in_functionDirectiveSection17011 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_SEMI_in_standaloneOverloadDirective17049 = new BitSet(new long[]{0x0000000000000000L,0x0000080000000000L});
-	public static final BitSet FOLLOW_OVERLOAD_in_standaloneOverloadDirective17051 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000004000L});
-	public static final BitSet FOLLOW_SEMI_in_standaloneOverloadDirective17054 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_OVERLOAD_in_methodDirective17106 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_REINTRODUCE_in_methodDirective17139 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_bindingDirective_in_methodDirective17172 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_abstractDirective_in_methodDirective17205 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_inlineDirective_in_methodDirective17239 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_callConvention_in_methodDirective17275 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_hintingDirective_in_methodDirective17308 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_oldCallConventionDirective_in_methodDirective17343 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_dispIDDirective_in_methodDirective17376 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_FORWARD_in_functionDirective17424 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_OVERLOAD_in_functionDirective17457 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_inlineDirective_in_functionDirective17490 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_callConvention_in_functionDirective17523 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_oldCallConventionDirective_in_functionDirective17556 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_hintingDirective_in_functionDirective17589 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_externalDirective_in_functionDirective17622 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_UNSAFE_in_functionDirective17655 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_MESSAGE_in_bindingDirective17706 = new BitSet(new long[]{0x34A0000DC02302C0L,0x0826252AB6106844L,0x041C000211C0005BL,0x0000000000000880L});
-	public static final BitSet FOLLOW_expression_in_bindingDirective17708 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_STATIC_in_bindingDirective17741 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_DYNAMIC_in_bindingDirective17774 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_OVERRIDE_in_bindingDirective17807 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_VIRTUAL_in_bindingDirective17840 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_DEPRECATED_in_hintingDirective18404 = new BitSet(new long[]{0x0000000100000002L,0x0800000000000000L});
-	public static final BitSet FOLLOW_stringFactor_in_hintingDirective18407 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_EXPERIMENTAL_in_hintingDirective18442 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_PLATFORM_in_hintingDirective18477 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_LIBRARY_in_hintingDirective18510 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_VARARGS_in_externalDirective18558 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_EXTERNAL_in_externalDirective18594 = new BitSet(new long[]{0x34A0000DC02302C2L,0x0826252AB6106844L,0x041C000211C0005BL,0x0000000000000880L});
-	public static final BitSet FOLLOW_expression_in_externalDirective18597 = new BitSet(new long[]{0x0000000000000002L,0x0000000080002000L});
-	public static final BitSet FOLLOW_externalSpecifier_in_externalDirective18602 = new BitSet(new long[]{0x0000000000000002L,0x0000000080002000L});
-	public static final BitSet FOLLOW_NAME_in_externalSpecifier18653 = new BitSet(new long[]{0x34A0000DC02302C0L,0x0826252AB6106844L,0x041C000211C0005BL,0x0000000000000880L});
-	public static final BitSet FOLLOW_constExpression_in_externalSpecifier18655 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_INDEX_in_externalSpecifier18688 = new BitSet(new long[]{0x34A0000DC02302C0L,0x0826252AB6106844L,0x041C000211C0005BL,0x0000000000000880L});
-	public static final BitSet FOLLOW_constExpression_in_externalSpecifier18690 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_DISPID_in_dispIDDirective18743 = new BitSet(new long[]{0x34A0000DC02302C0L,0x0826252AB6106844L,0x041C000211C0005BL,0x0000000000000880L});
-	public static final BitSet FOLLOW_expression_in_dispIDDirective18745 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_TkIdentifier_in_ident18808 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_AMPERSAND_in_ident18841 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0008000000000000L});
-	public static final BitSet FOLLOW_TkIdentifier_in_ident18843 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_keywordsUsedAsNames_in_ident18876 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_ident_in_identList20154 = new BitSet(new long[]{0x0000000004000002L});
-	public static final BitSet FOLLOW_COMMA_in_identList20157 = new BitSet(new long[]{0x20A0000CC02102C0L,0x0004252092002840L,0x0008000001C0005BL,0x0000000000000880L});
-	public static final BitSet FOLLOW_ident_in_identList20159 = new BitSet(new long[]{0x0000000004000002L});
-	public static final BitSet FOLLOW_ident_in_identListFlat20224 = new BitSet(new long[]{0x0000000004000002L});
-	public static final BitSet FOLLOW_COMMA_in_identListFlat20227 = new BitSet(new long[]{0x20A0000CC02102C0L,0x0004252092002840L,0x0008000001C0005BL,0x0000000000000880L});
-	public static final BitSet FOLLOW_ident_in_identListFlat20229 = new BitSet(new long[]{0x0000000004000002L});
-	public static final BitSet FOLLOW_TkIdentifier_in_label20303 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_TkIntNum_in_label20336 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_TkHexNum_in_label20369 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_keywordsUsedAsNames_in_label20402 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_TkRealNum_in_realNum20552 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_namespaceName_in_namespacedQualifiedIdent20594 = new BitSet(new long[]{0x0000020000000000L});
-	public static final BitSet FOLLOW_DOT_in_namespacedQualifiedIdent20596 = new BitSet(new long[]{0xFFF679FCF1F57FF0L,0x17F5FFEFD30FFE57L,0x000800007FF3B7FFL,0x0000000000005FEFL});
-	public static final BitSet FOLLOW_qualifiedIdent_in_namespacedQualifiedIdent20600 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_ident_in_namespaceName20652 = new BitSet(new long[]{0x0000020000000002L});
-	public static final BitSet FOLLOW_DOT_in_namespaceName20655 = new BitSet(new long[]{0x20A0000CC02102C0L,0x0004252092002840L,0x0008000001C0005BL,0x0000000000000880L});
-	public static final BitSet FOLLOW_ident_in_namespaceName20657 = new BitSet(new long[]{0x0000020000000002L});
-	public static final BitSet FOLLOW_ident_in_qualifiedIdent20711 = new BitSet(new long[]{0x0000020000000000L});
-	public static final BitSet FOLLOW_DOT_in_qualifiedIdent20713 = new BitSet(new long[]{0xFFF679FCF1F57FF0L,0x17F5FFEFD30FFE57L,0x000800007FF3B7FFL,0x0000000000005FEFL});
-	public static final BitSet FOLLOW_extendedIdent_in_qualifiedIdent20718 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_SEMI_in_methodDirectiveSection16888 = new BitSet(new long[]{0x28C0402800802020L,0x0001980113010000L,0x0000000000301030L,0x0000000000000100L});
+	public static final BitSet FOLLOW_methodDirective_in_methodDirectiveSection16892 = new BitSet(new long[]{0x28C0402800802020L,0x0001980113010000L,0x0000000000305030L,0x0000000000000100L});
+	public static final BitSet FOLLOW_SEMI_in_methodDirectiveSection16896 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_standaloneOverloadDirective_in_methodDirectiveSection16929 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_SEMI_in_functionDirectiveSection16972 = new BitSet(new long[]{0x0AC0000800802000L,0x0001880103010002L,0x0000000000201010L,0x0000000000000042L});
+	public static final BitSet FOLLOW_functionDirective_in_functionDirectiveSection16976 = new BitSet(new long[]{0x0AC0000800802000L,0x0001880103010002L,0x0000000000205010L,0x0000000000000042L});
+	public static final BitSet FOLLOW_SEMI_in_functionDirectiveSection16980 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_standaloneOverloadDirective_in_functionDirectiveSection17013 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_SEMI_in_standaloneOverloadDirective17051 = new BitSet(new long[]{0x0000000000000000L,0x0000080000000000L});
+	public static final BitSet FOLLOW_OVERLOAD_in_standaloneOverloadDirective17053 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000004000L});
+	public static final BitSet FOLLOW_SEMI_in_standaloneOverloadDirective17056 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_OVERLOAD_in_methodDirective17108 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_REINTRODUCE_in_methodDirective17141 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_bindingDirective_in_methodDirective17174 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_abstractDirective_in_methodDirective17207 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_inlineDirective_in_methodDirective17241 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_callConvention_in_methodDirective17277 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_hintingDirective_in_methodDirective17310 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_oldCallConventionDirective_in_methodDirective17345 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_dispIDDirective_in_methodDirective17378 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_FORWARD_in_functionDirective17426 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_OVERLOAD_in_functionDirective17459 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_inlineDirective_in_functionDirective17492 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_callConvention_in_functionDirective17525 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_oldCallConventionDirective_in_functionDirective17558 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_hintingDirective_in_functionDirective17591 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_externalDirective_in_functionDirective17624 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_UNSAFE_in_functionDirective17657 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_MESSAGE_in_bindingDirective17708 = new BitSet(new long[]{0x34A0000DC02302C0L,0x0826252AB6106844L,0x041C000211C0005BL,0x0000000000000880L});
+	public static final BitSet FOLLOW_expression_in_bindingDirective17710 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_STATIC_in_bindingDirective17743 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_DYNAMIC_in_bindingDirective17776 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_OVERRIDE_in_bindingDirective17809 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_VIRTUAL_in_bindingDirective17842 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_DEPRECATED_in_hintingDirective18406 = new BitSet(new long[]{0x0000000100000002L,0x0800000000000000L});
+	public static final BitSet FOLLOW_stringFactor_in_hintingDirective18409 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_EXPERIMENTAL_in_hintingDirective18444 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_PLATFORM_in_hintingDirective18479 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_LIBRARY_in_hintingDirective18512 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_VARARGS_in_externalDirective18560 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_EXTERNAL_in_externalDirective18596 = new BitSet(new long[]{0x34A0000DC02302C2L,0x0826252AB6106844L,0x041C000211C0005BL,0x0000000000000880L});
+	public static final BitSet FOLLOW_expression_in_externalDirective18599 = new BitSet(new long[]{0x0000000000000002L,0x0000000080002000L});
+	public static final BitSet FOLLOW_externalSpecifier_in_externalDirective18604 = new BitSet(new long[]{0x0000000000000002L,0x0000000080002000L});
+	public static final BitSet FOLLOW_NAME_in_externalSpecifier18655 = new BitSet(new long[]{0x34A0000DC02302C0L,0x0826252AB6106844L,0x041C000211C0005BL,0x0000000000000880L});
+	public static final BitSet FOLLOW_constExpression_in_externalSpecifier18657 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_INDEX_in_externalSpecifier18690 = new BitSet(new long[]{0x34A0000DC02302C0L,0x0826252AB6106844L,0x041C000211C0005BL,0x0000000000000880L});
+	public static final BitSet FOLLOW_constExpression_in_externalSpecifier18692 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_DISPID_in_dispIDDirective18745 = new BitSet(new long[]{0x34A0000DC02302C0L,0x0826252AB6106844L,0x041C000211C0005BL,0x0000000000000880L});
+	public static final BitSet FOLLOW_expression_in_dispIDDirective18747 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_TkIdentifier_in_ident18810 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_AMPERSAND_in_ident18843 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0008000000000000L});
+	public static final BitSet FOLLOW_TkIdentifier_in_ident18845 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_keywordsUsedAsNames_in_ident18878 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_ident_in_identList20156 = new BitSet(new long[]{0x0000000004000002L});
+	public static final BitSet FOLLOW_COMMA_in_identList20159 = new BitSet(new long[]{0x20A0000CC02102C0L,0x0004252092002840L,0x0008000001C0005BL,0x0000000000000880L});
+	public static final BitSet FOLLOW_ident_in_identList20161 = new BitSet(new long[]{0x0000000004000002L});
+	public static final BitSet FOLLOW_ident_in_identListFlat20226 = new BitSet(new long[]{0x0000000004000002L});
+	public static final BitSet FOLLOW_COMMA_in_identListFlat20229 = new BitSet(new long[]{0x20A0000CC02102C0L,0x0004252092002840L,0x0008000001C0005BL,0x0000000000000880L});
+	public static final BitSet FOLLOW_ident_in_identListFlat20231 = new BitSet(new long[]{0x0000000004000002L});
+	public static final BitSet FOLLOW_TkIdentifier_in_label20305 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_TkIntNum_in_label20338 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_TkHexNum_in_label20371 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_keywordsUsedAsNames_in_label20404 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_TkRealNum_in_realNum20554 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_namespaceName_in_namespacedQualifiedIdent20596 = new BitSet(new long[]{0x0000020000000000L});
+	public static final BitSet FOLLOW_DOT_in_namespacedQualifiedIdent20598 = new BitSet(new long[]{0xFFF679FCF1F57FF0L,0x17F5FFEFD30FFE57L,0x000800007FF3B7FFL,0x0000000000005FEFL});
+	public static final BitSet FOLLOW_qualifiedIdent_in_namespacedQualifiedIdent20602 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_ident_in_namespaceName20654 = new BitSet(new long[]{0x0000020000000002L});
+	public static final BitSet FOLLOW_DOT_in_namespaceName20657 = new BitSet(new long[]{0x20A0000CC02102C0L,0x0004252092002840L,0x0008000001C0005BL,0x0000000000000880L});
+	public static final BitSet FOLLOW_ident_in_namespaceName20659 = new BitSet(new long[]{0x0000020000000002L});
+	public static final BitSet FOLLOW_ident_in_qualifiedIdent20713 = new BitSet(new long[]{0x0000020000000000L});
+	public static final BitSet FOLLOW_DOT_in_qualifiedIdent20715 = new BitSet(new long[]{0xFFF679FCF1F57FF0L,0x17F5FFEFD30FFE57L,0x000800007FF3B7FFL,0x0000000000005FEFL});
+	public static final BitSet FOLLOW_extendedIdent_in_qualifiedIdent20720 = new BitSet(new long[]{0x0000000000000002L});
 	public static final BitSet FOLLOW_blockBody_in_synpred23_Delphi1604 = new BitSet(new long[]{0x0000000000000002L});
 	public static final BitSet FOLLOW_declSection_in_synpred24_Delphi1658 = new BitSet(new long[]{0x0000000000000002L});
 	public static final BitSet FOLLOW_methodDecl_in_synpred30_Delphi1946 = new BitSet(new long[]{0x0000000000000002L});
@@ -53058,20 +53064,20 @@ public class DelphiParser extends Parser {
 	public static final BitSet FOLLOW_expression_in_synpred373_Delphi16714 = new BitSet(new long[]{0x0000000000000002L});
 	public static final BitSet FOLLOW_AT_in_synpred374_Delphi16719 = new BitSet(new long[]{0x34A0000DC02302C0L,0x0826252AB6106844L,0x041C000211C0005BL,0x0000000000000880L});
 	public static final BitSet FOLLOW_expression_in_synpred374_Delphi16721 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_SEMI_in_synpred378_Delphi16886 = new BitSet(new long[]{0x28C0402800802020L,0x0001980113010000L,0x0000000000301030L,0x0000000000000100L});
-	public static final BitSet FOLLOW_methodDirective_in_synpred378_Delphi16890 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_SEMI_in_synpred379_Delphi16886 = new BitSet(new long[]{0x28C0402800802020L,0x0001980113010000L,0x0000000000301030L,0x0000000000000100L});
-	public static final BitSet FOLLOW_methodDirective_in_synpred379_Delphi16890 = new BitSet(new long[]{0x28C0402800802020L,0x0001980113010000L,0x0000000000305030L,0x0000000000000100L});
-	public static final BitSet FOLLOW_SEMI_in_synpred379_Delphi16894 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_SEMI_in_synpred381_Delphi16970 = new BitSet(new long[]{0x0AC0000800802000L,0x0001880103010002L,0x0000000000201010L,0x0000000000000042L});
-	public static final BitSet FOLLOW_functionDirective_in_synpred381_Delphi16974 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_SEMI_in_synpred382_Delphi16970 = new BitSet(new long[]{0x0AC0000800802000L,0x0001880103010002L,0x0000000000201010L,0x0000000000000042L});
-	public static final BitSet FOLLOW_functionDirective_in_synpred382_Delphi16974 = new BitSet(new long[]{0x0AC0000800802000L,0x0001880103010002L,0x0000000000205010L,0x0000000000000042L});
-	public static final BitSet FOLLOW_SEMI_in_synpred382_Delphi16978 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_SEMI_in_synpred383_Delphi17054 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_expression_in_synpred417_Delphi18597 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_namespaceName_in_synpred590_Delphi20594 = new BitSet(new long[]{0x0000020000000000L});
-	public static final BitSet FOLLOW_DOT_in_synpred590_Delphi20596 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_DOT_in_synpred591_Delphi20655 = new BitSet(new long[]{0x20A0000CC02102C0L,0x0004252092002840L,0x0008000001C0005BL,0x0000000000000880L});
-	public static final BitSet FOLLOW_ident_in_synpred591_Delphi20657 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_SEMI_in_synpred378_Delphi16888 = new BitSet(new long[]{0x28C0402800802020L,0x0001980113010000L,0x0000000000301030L,0x0000000000000100L});
+	public static final BitSet FOLLOW_methodDirective_in_synpred378_Delphi16892 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_SEMI_in_synpred379_Delphi16888 = new BitSet(new long[]{0x28C0402800802020L,0x0001980113010000L,0x0000000000301030L,0x0000000000000100L});
+	public static final BitSet FOLLOW_methodDirective_in_synpred379_Delphi16892 = new BitSet(new long[]{0x28C0402800802020L,0x0001980113010000L,0x0000000000305030L,0x0000000000000100L});
+	public static final BitSet FOLLOW_SEMI_in_synpred379_Delphi16896 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_SEMI_in_synpred381_Delphi16972 = new BitSet(new long[]{0x0AC0000800802000L,0x0001880103010002L,0x0000000000201010L,0x0000000000000042L});
+	public static final BitSet FOLLOW_functionDirective_in_synpred381_Delphi16976 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_SEMI_in_synpred382_Delphi16972 = new BitSet(new long[]{0x0AC0000800802000L,0x0001880103010002L,0x0000000000201010L,0x0000000000000042L});
+	public static final BitSet FOLLOW_functionDirective_in_synpred382_Delphi16976 = new BitSet(new long[]{0x0AC0000800802000L,0x0001880103010002L,0x0000000000205010L,0x0000000000000042L});
+	public static final BitSet FOLLOW_SEMI_in_synpred382_Delphi16980 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_SEMI_in_synpred383_Delphi17056 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_expression_in_synpred417_Delphi18599 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_namespaceName_in_synpred590_Delphi20596 = new BitSet(new long[]{0x0000020000000000L});
+	public static final BitSet FOLLOW_DOT_in_synpred590_Delphi20598 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_DOT_in_synpred591_Delphi20657 = new BitSet(new long[]{0x20A0000CC02102C0L,0x0004252092002840L,0x0008000001C0005BL,0x0000000000000880L});
+	public static final BitSet FOLLOW_ident_in_synpred591_Delphi20659 = new BitSet(new long[]{0x0000000000000002L});
 }
