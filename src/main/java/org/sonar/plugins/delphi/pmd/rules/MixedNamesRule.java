@@ -40,21 +40,20 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 @Smell(
     minutes = 60,
-    reason = "Won't handle function name mixing when the type is declared in the implementation.",
+    reason = "Won't handle function name mixing when the type is declared in the implementation."
+        + "Also doesn't handle argument names.",
     type = SmellType.WRONG_LOGIC
 )
 public class MixedNamesRule extends DelphiRule {
 
   private final List<String> functionNames = new ArrayList<>();
   private final List<String> variableNames = new ArrayList<>();
-  private boolean onInterface = true;
   private String typeName = "";
 
   @Override
   public void init() {
     functionNames.clear();
     variableNames.clear();
-    onInterface = true;
   }
 
   @Override
@@ -79,13 +78,12 @@ public class MixedNamesRule extends DelphiRule {
 
       default:
         if (isBlockNode(node)) {
-          handleBegin(node, ctx);
+          handleBlock(node, ctx);
         }
     }
   }
 
   private void handleImplementation() {
-    onInterface = false;
     typeName = "";
   }
 
@@ -95,7 +93,7 @@ public class MixedNamesRule extends DelphiRule {
   }
 
   private void handleFunctionName(DelphiPMDNode node, RuleContext ctx) {
-    if (onInterface) {
+    if (isInterfaceSection()) {
       functionNames.addAll(buildNames(node, false));
     } else {
       checkFunctionNames(node, ctx);
@@ -103,13 +101,13 @@ public class MixedNamesRule extends DelphiRule {
   }
 
   private void handleVar(DelphiPMDNode node) {
-    if (!onInterface) {
+    if (isImplementationSection()) {
       variableNames.addAll(buildNames(node.getChild(0), true));
     }
   }
 
-  private void handleBegin(DelphiPMDNode node, RuleContext ctx) {
-    if (!onInterface) {
+  private void handleBlock(DelphiPMDNode node, RuleContext ctx) {
+    if (isImplementationSection()) {
       checkVariableNames(node, ctx, true);
     }
   }
@@ -127,7 +125,10 @@ public class MixedNamesRule extends DelphiRule {
 
       if (isBlockNode(child)) {
         checkVariableNames(child, ctx, false);
-      } else {
+        continue;
+      }
+
+      if (child.getType() == DelphiLexer.TkIdentifier) {
         String name = child.getText();
         String globalName = getGlobalName(name, variableNames);
         if (!globalName.equals(name)) {
@@ -144,6 +145,7 @@ public class MixedNamesRule extends DelphiRule {
 
   private boolean isBlockNode(Tree node) {
     return node.getType() == DelphiLexer.BEGIN
+        || node.getType() == DelphiLexer.ASM
         || node.getType() == DelphiLexer.TkAssemblerInstructions;
   }
 

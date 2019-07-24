@@ -46,6 +46,7 @@ public class UnusedArgumentsRule extends DelphiRule {
   public void visit(DelphiPMDNode node, RuleContext ctx) {
     handleTypes(node);
     handleAssignments(node);
+    handlePointerOperators(node);
     handleMethods(node, ctx);
     handleEndOfFile(node);
   }
@@ -143,7 +144,7 @@ public class UnusedArgumentsRule extends DelphiRule {
 
   /**
    * Excludes methods from this rule if they have been assigned to a variable
-   * This indicates that the method has to satisfy some handler method signature
+   * This indicates that the method has to satisfy some callback method signature
    *
    * @param node The current node
    */
@@ -158,8 +159,32 @@ public class UnusedArgumentsRule extends DelphiRule {
     }
 
     DelphiPMDNode nextNode = nameNode.nextNode();
-    if (nextNode == null ||
-       (nextNode.getType() != DelphiLexer.SEMI && nextNode.getType() != DelphiLexer.END)) {
+    if (nextNode != null && nextNode.getType() == DelphiLexer.DOT) {
+      return;
+    }
+
+    String methodName = nameNode.getText().toLowerCase();
+    excludedMethods.add(currentTypeName + "." + methodName);
+  }
+
+  /**
+   * Excludes methods from this rule if their pointer address has been passed around
+   * This indicates that the method has to satisfy some callback method signature
+   *
+   * @param node The current node
+   */
+  private void handlePointerOperators(DelphiPMDNode node) {
+    if (node.getType() != DelphiLexer.AT2) {
+      return;
+    }
+
+    DelphiPMDNode nameNode = node.nextNode();
+    if (nameNode == null || nameNode.getType() != DelphiLexer.TkIdentifier) {
+      return;
+    }
+
+    DelphiPMDNode nextNode = nameNode.nextNode();
+    if (nextNode != null && nextNode.getType() == DelphiLexer.DOT) {
       return;
     }
 
@@ -320,6 +345,7 @@ public class UnusedArgumentsRule extends DelphiRule {
 
   private boolean isBlockNode(Tree node) {
     return node.getType() == DelphiLexer.BEGIN
+        || node.getType() == DelphiLexer.ASM
         || node.getType() == DelphiLexer.TkAssemblerInstructions;
   }
 

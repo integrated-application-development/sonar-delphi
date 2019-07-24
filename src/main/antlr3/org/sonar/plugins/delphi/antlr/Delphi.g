@@ -631,7 +631,7 @@ raiseStatement               : 'raise' (expression)? (AT expression)?
 //****************************
 //section AssemblerStatement
 //****************************
-assemblerStatement           : 'asm' assemblerInstructions 'end' -> 'asm' ^(TkAssemblerInstructions assemblerInstructions) 'end'
+assemblerStatement           : 'asm' assemblerInstructions 'end' -> ^('asm' ^(TkAssemblerInstructions assemblerInstructions) 'end')
                              ;
 assemblerInstructions        : ~('end')* // Skip asm statements
                              ;
