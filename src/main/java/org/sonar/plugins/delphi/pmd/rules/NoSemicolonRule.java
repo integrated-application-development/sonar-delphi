@@ -88,7 +88,9 @@ public class NoSemicolonRule extends DelphiRule {
   }
 
   private boolean isBlockNode(Tree node) {
-    return node.getType() == DelphiLexer.BEGIN || node.getType() == DelphiLexer.EXCEPT;
+    return node.getType() == DelphiLexer.BEGIN
+        || node.getType() == DelphiLexer.ASM
+        || node.getType() == DelphiLexer.EXCEPT;
   }
 
   private boolean isMissingSemicolonInBlock(Tree beginNode) {
