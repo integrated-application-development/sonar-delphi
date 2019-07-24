@@ -35,12 +35,7 @@ import org.xml.sax.SAXException;
 public class DelphiASTTest {
 
   private static final String TEST_FILE = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
-  private ASTTree ast;
-
-  @Before
-  public void setup() {
-    ast = new DelphiAST(DelphiUtils.getResource(TEST_FILE));
-  }
+  private ASTTree ast = new DelphiAST(DelphiUtils.getResource(TEST_FILE));
 
   @Test
   public void testGenerateXML() throws IOException, ParserConfigurationException, SAXException {
