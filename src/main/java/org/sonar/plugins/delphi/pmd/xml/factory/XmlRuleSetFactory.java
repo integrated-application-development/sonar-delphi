@@ -83,7 +83,7 @@ public class XmlRuleSetFactory implements RuleSetFactory {
     if (DelphiPmdConstants.XPATH_EXPRESSION_PARAM.equals(property.getName())) {
       Element xpathElement = getChild(eltProperty, "value", namespace);
       if (xpathElement != null) {
-        property.setCdataValue(xpathElement.getValue());
+        property.setCdataValue(xpathElement.getValue().trim());
       }
     } else {
       property.setCdataValue(eltProperty.getAttributeValue("value"));
