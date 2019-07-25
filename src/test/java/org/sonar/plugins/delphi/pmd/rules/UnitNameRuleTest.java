@@ -53,7 +53,7 @@ public class UnitNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testInvalidNamespace() {
-    execute(new DelphiTestUnitBuilder().unitName("bad_Namespace.omGoodUnit"));
+    execute(new DelphiTestUnitBuilder().unitName("bad_Namespace.GoodUnit"));
 
     assertIssues(hasSize(1));
     assertIssues(hasItem(hasRuleKeyAtLine("UnitNameRule", 1)));
@@ -63,7 +63,7 @@ public class UnitNameRuleTest extends BasePmdRuleTest {
   public void testInvalidUnitAndNameSpace() {
     execute(new DelphiTestUnitBuilder().unitName("bad_Namespace.SUPER_bad_UNIT"));
 
-    assertIssues(hasSize(2));
-    assertIssues(everyItem(hasRuleKeyAtLine("UnitNameRule", 1)));
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("UnitNameRule", 1)));
   }
 }
