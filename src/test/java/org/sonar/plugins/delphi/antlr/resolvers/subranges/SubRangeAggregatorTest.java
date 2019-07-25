@@ -40,10 +40,13 @@ public class SubRangeAggregatorTest {
 
   @Test
   public void testSort() {
-    SubRange[] data = {new IntegerSubRange(0, 10), new IntegerSubRange(-5, -1),
-        new IntegerSubRange(12, 12),
-        new IntegerSubRange(15, 19),
-        new IntegerSubRange(-10, -6)};
+    SubRange[] data = {
+      new IntegerSubRange(0, 10),
+      new IntegerSubRange(-5, -1),
+      new IntegerSubRange(12, 12),
+      new IntegerSubRange(15, 19),
+      new IntegerSubRange(-10, -6)
+    };
 
     for (SubRange range : data) {
       aggregator.add(range);
@@ -56,7 +59,6 @@ public class SubRangeAggregatorTest {
     for (SubRange sortedRange : aggregator.getRanges()) {
       assertEquals(data[index++], sortedRange);
     }
-
   }
 
   @Test
@@ -78,5 +80,4 @@ public class SubRangeAggregatorTest {
     aggregator.add(new IntegerSubRange(2, 3)); // should not add
     assertEquals(4, aggregator.getRanges().size());
   }
-
 }

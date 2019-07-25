@@ -37,64 +37,78 @@ import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileImporter;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRulesDefinition;
 import org.sonar.plugins.delphi.surefire.SurefireSensor;
 
-/**
- * Main Sonar DelphiLanguage plugin class
- */
+/** Main Sonar DelphiLanguage plugin class */
 @Properties({
-    @Property(key = DelphiPlugin.EXCLUDED_DIRECTORIES_KEY,
-        name = "Excluded sources",
-        description = "List of excluded directories or files, that will not be parsed.",
-        project = true,
-        multiValues = true),
-    @Property(key = DelphiPlugin.CC_EXCLUDED_KEY,
-        name = "Code coverage excluded directories",
-        description = "Code coverage excluded directories list. Files in those "
-            + "directories will not be checked for code coverage.",
-        project = true),
-    @Property(key = DelphiPlugin.INCLUDED_DIRECTORIES_KEY,
-        name = "Include directories",
-        description = "Include directories that will be looked for include files for "
-            + "preprocessor directive {$include}",
-        project = true,
-        multiValues = true),
-    @Property(key = DelphiPlugin.INCLUDE_EXTEND_KEY, defaultValue = "true",
-        name = "Include extend option",
-        description = "Include extend options, can be: 'true' (include files will be processed) "
-            + "or 'false' (turn the feature off)",
-        project = true),
-    @Property(
-        key = DelphiPlugin.PROJECT_FILE_KEY,
-        name = "Project file",
-        description = "Project file. If provided, will be parsed for include lookup path, "
-            + "project source files and preprocessor definitions.",
-        project = true),
-    @Property(key = DelphiPlugin.WORKGROUP_FILE_KEY,
-        name = "Workgroup file",
-        description = "Workgroup file. If provided, will be parsed, then all "
-            + "*.dproj files found in workgroup file will be parsed.",
-        project = true),
-    @Property(key = DelphiPlugin.CONDITIONAL_DEFINES_KEY,
-        name = "Conditional Defines",
-        description = "List of conditional defines to define while parsing the project",
-        project = true,
-        multiValues = true),
-    @Property(key = DelphiPlugin.CODECOVERAGE_TOOL_KEY, defaultValue = "delphi code coverage",
-        name = "Code coverage tool",
-        description = "Used code coverage tool (AQTime or Delphi Code Coverage)",
-        project = true,
-        global = false),
-    @Property(key = DelphiPlugin.CODECOVERAGE_REPORT_KEY,
-        defaultValue = "delphi code coverage report",
-        name = "Code coverage report file",
-        description = "Code coverage report to be parsed by Delphi Code Coverage",
-        project = true,
-        global = false),
-    @Property(key = DelphiPlugin.GENERATE_PMD_REPORT_XML,
-        defaultValue = "false",
-        name = "Generate XML Report",
-        description = "Whether a PMD Report XML file should be generated",
-        project = true,
-        global = false),
+  @Property(
+      key = DelphiPlugin.EXCLUDED_DIRECTORIES_KEY,
+      name = "Excluded sources",
+      description = "List of excluded directories or files, that will not be parsed.",
+      project = true,
+      multiValues = true),
+  @Property(
+      key = DelphiPlugin.CC_EXCLUDED_KEY,
+      name = "Code coverage excluded directories",
+      description =
+          "Code coverage excluded directories list. Files in those "
+              + "directories will not be checked for code coverage.",
+      project = true),
+  @Property(
+      key = DelphiPlugin.INCLUDED_DIRECTORIES_KEY,
+      name = "Include directories",
+      description =
+          "Include directories that will be looked for include files for "
+              + "preprocessor directive {$include}",
+      project = true,
+      multiValues = true),
+  @Property(
+      key = DelphiPlugin.INCLUDE_EXTEND_KEY,
+      defaultValue = "true",
+      name = "Include extend option",
+      description =
+          "Include extend options, can be: 'true' (include files will be processed) "
+              + "or 'false' (turn the feature off)",
+      project = true),
+  @Property(
+      key = DelphiPlugin.PROJECT_FILE_KEY,
+      name = "Project file",
+      description =
+          "Project file. If provided, will be parsed for include lookup path, "
+              + "project source files and preprocessor definitions.",
+      project = true),
+  @Property(
+      key = DelphiPlugin.WORKGROUP_FILE_KEY,
+      name = "Workgroup file",
+      description =
+          "Workgroup file. If provided, will be parsed, then all "
+              + "*.dproj files found in workgroup file will be parsed.",
+      project = true),
+  @Property(
+      key = DelphiPlugin.CONDITIONAL_DEFINES_KEY,
+      name = "Conditional Defines",
+      description = "List of conditional defines to define while parsing the project",
+      project = true,
+      multiValues = true),
+  @Property(
+      key = DelphiPlugin.CODECOVERAGE_TOOL_KEY,
+      defaultValue = "delphi code coverage",
+      name = "Code coverage tool",
+      description = "Used code coverage tool (AQTime or Delphi Code Coverage)",
+      project = true,
+      global = false),
+  @Property(
+      key = DelphiPlugin.CODECOVERAGE_REPORT_KEY,
+      defaultValue = "delphi code coverage report",
+      name = "Code coverage report file",
+      description = "Code coverage report to be parsed by Delphi Code Coverage",
+      project = true,
+      global = false),
+  @Property(
+      key = DelphiPlugin.GENERATE_PMD_REPORT_XML,
+      defaultValue = "false",
+      name = "Generate XML Report",
+      description = "Whether a PMD Report XML file should be generated",
+      project = true,
+      global = false),
 })
 public class DelphiPlugin implements Plugin {
   public static final String EXCLUDED_DIRECTORIES_KEY = "sonar.delphi.sources.excluded";
@@ -108,18 +122,13 @@ public class DelphiPlugin implements Plugin {
   public static final String CODECOVERAGE_REPORT_KEY = "sonar.delphi.codecoverage.report";
   public static final String GENERATE_PMD_REPORT_XML = "sonar.delphi.pmd.generateXml";
 
-
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public String toString() {
     return getClass().getSimpleName();
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public void define(Context context) {
     context.addExtensions(
@@ -139,7 +148,6 @@ public class DelphiPlugin implements Plugin {
         DefaultDelphiProfile.class,
         DelphiPmdProfileExporter.class,
         DelphiPmdProfileImporter.class,
-        DelphiPmdViolationRecorder.class
-    );
+        DelphiPmdViolationRecorder.class);
   }
 }

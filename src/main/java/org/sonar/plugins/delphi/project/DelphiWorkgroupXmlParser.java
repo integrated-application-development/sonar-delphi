@@ -36,9 +36,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-/**
- * Parser for Delphi *.groupproj XML file
- */
+/** Parser for Delphi *.groupproj XML file */
 public class DelphiWorkgroupXmlParser extends DefaultHandler {
   private static final Logger LOG = Loggers.get(DelphiWorkgroupXmlParser.class);
   private final File xml;
@@ -78,8 +76,8 @@ public class DelphiWorkgroupXmlParser extends DefaultHandler {
   public void startElement(String uri, String localName, String rawName, Attributes attributes) {
     if ("Projects".equals(rawName)) {
       // new .dproj file
-      String projectPath = DelphiUtils
-          .resolveBacktracePath(currentDir, attributes.getValue("Include"));
+      String projectPath =
+          DelphiUtils.resolveBacktracePath(currentDir, attributes.getValue("Include"));
 
       try {
         workGroup.addProject(new DelphiProject(new File(projectPath)));

@@ -42,16 +42,18 @@ public class DelphiCoverageToolParserTest {
   private DelphiProjectHelper delphiProjectHelper;
 
   private static final String ROOT_NAME = "/org/sonar/plugins/delphi/projects/SimpleProject";
-  private static final String REPORT_FILE = "/org/sonar/plugins/delphi/projects/SimpleProject/reports/Coverage.xml";
+  private static final String REPORT_FILE =
+      "/org/sonar/plugins/delphi/projects/SimpleProject/reports/Coverage.xml";
 
   private final File reportFile = DelphiUtils.getResource(REPORT_FILE);
 
   private void addFile(String fileName) throws IOException {
     File file = DelphiUtils.getResource(fileName);
-    final InputFile inputFile = TestInputFileBuilder.create("", baseDir, file)
-        .setLanguage(DelphiLanguage.KEY)
-        .setContents(DelphiUtils.readFileContent(file, delphiProjectHelper.encoding()))
-        .build();
+    final InputFile inputFile =
+        TestInputFileBuilder.create("", baseDir, file)
+            .setLanguage(DelphiLanguage.KEY)
+            .setContents(DelphiUtils.readFileContent(file, delphiProjectHelper.encoding()))
+            .build();
     context.fileSystem().add(inputFile);
   }
 
@@ -70,8 +72,8 @@ public class DelphiCoverageToolParserTest {
 
   @Test
   public void testParse() {
-    DelphiCodeCoverageToolParser parser = new DelphiCodeCoverageToolParser(reportFile,
-        delphiProjectHelper);
+    DelphiCodeCoverageToolParser parser =
+        new DelphiCodeCoverageToolParser(reportFile, delphiProjectHelper);
     parser.parse(context);
 
     assertEquals((Integer) 1, context.lineHits(":Globals.pas", 16));
@@ -85,5 +87,4 @@ public class DelphiCoverageToolParserTest {
     assertEquals((Integer) 1, context.lineHits(":MainWindow.pas", 39));
     assertEquals((Integer) 1, context.lineHits(":MainWindow.pas", 40));
   }
-
 }

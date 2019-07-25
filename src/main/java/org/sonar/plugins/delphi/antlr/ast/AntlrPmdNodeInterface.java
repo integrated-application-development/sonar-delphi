@@ -34,256 +34,194 @@ import org.w3c.dom.Document;
 /**
  * Boilerplate interface to override all of the API methods that PMD wants implemented
  *
- * An antlr implementation really doesn't use most of these methods, and it's better not to pollute
- * the DelphiPMDNode class with 300 lines of unsupported operations.
+ * <p>An antlr implementation really doesn't use most of these methods, and it's better not to
+ * pollute the DelphiPMDNode class with 300 lines of unsupported operations.
  */
 interface AntlrPmdNodeInterface extends ScopedNode {
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default void jjtOpen() {
     throw new UnsupportedOperationException("Won't be needed on Antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default void jjtClose() {
     throw new UnsupportedOperationException("Won't be needed on Antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default void jjtSetParent(Node n) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default Node jjtGetParent() {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default void jjtAddChild(Node n, int i) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default Node jjtGetChild(int i) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default void jjtSetChildIndex(int var1) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default int jjtGetChildIndex() {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default int jjtGetNumChildren() {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default int jjtGetId() {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default Document getAsDocument() {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default Object getUserData() {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default String getImage() {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default void setImage(String image) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default boolean hasImageEqualTo(String image) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default DataFlowNode getDataFlowNode() {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default void setDataFlowNode(DataFlowNode dataFlowNode) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default boolean isFindBoundary() {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default Node getNthParent(int n) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default <T> T getFirstParentOfType(Class<T> parentType) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default <T> List<T> getParentsOfType(Class<T> parentType) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @SuppressWarnings("unchecked")
   @Override
   default <T> T getFirstParentOfAnyType(Class<? extends T>... classes) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default <T> List<T> findChildrenOfType(Class<T> childType) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default <T> List<T> findDescendantsOfType(Class<T> targetType) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
-  default <T> void findDescendantsOfType(Class<T> targetType, List<T> results,
-      boolean crossFindBoundaries) {
+  default <T> void findDescendantsOfType(
+      Class<T> targetType, List<T> results, boolean crossFindBoundaries) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default <T> T getFirstChildOfType(Class<T> childType) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default <T> T getFirstDescendantOfType(Class<T> descendantType) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default <T> boolean hasDescendantOfType(Class<T> type) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default List<? extends Node> findChildNodesWithXPath(String xpathString) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default boolean hasDescendantMatchingXPath(String xpathString) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   default void setUserData(Object userData) {
     throw new UnsupportedOperationException("Out of scope for antlr implementation");

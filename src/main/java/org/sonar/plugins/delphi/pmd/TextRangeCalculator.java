@@ -27,7 +27,8 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
 /**
- * Calculates a {@link org.sonar.api.batch.fs.TextRange} for a given {@link net.sourceforge.pmd.RuleViolation}.
+ * Calculates a {@link org.sonar.api.batch.fs.TextRange} for a given {@link
+ * net.sourceforge.pmd.RuleViolation}.
  */
 class TextRangeCalculator {
   private static final Logger LOG = Loggers.get(TextRangeCalculator.class);
@@ -89,7 +90,7 @@ class TextRangeCalculator {
    *
    * @param pmdViolation The violation for which the beginLine should be calculated.
    * @return The beginLine is assumed to be the line with the smallest number. However, if the
-   * smallest number is out-of-range (non-positive), it takes the other number.
+   *     smallest number is out-of-range (non-positive), it takes the other number.
    */
   private static int calculateSafeBeginLine(RuleViolation pmdViolation) {
     int minLine = Math.min(pmdViolation.getBeginLine(), pmdViolation.getEndLine());

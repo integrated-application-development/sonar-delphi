@@ -32,16 +32,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
-import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveParser;
-import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
 import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveSyntaxException;
 import org.sonar.plugins.delphi.antlr.directives.exceptions.UnsupportedCompilerDirectiveException;
 import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
 public class CompilerDirectiveParserTest extends FileTestsCommon {
   private static final Logger LOG = Loggers.get(CompilerDirectiveParser.class);
-  private static final String TEST_FILE = "/org/sonar/plugins/delphi/directives/FileWithDirectives.pas";
+  private static final String TEST_FILE =
+      "/org/sonar/plugins/delphi/directives/FileWithDirectives.pas";
   private static final int TEST_FILE_DIRECTIVES_COUNT = 19;
   private CompilerDirectiveParser parser;
   private CompilerDirective directive;
@@ -52,8 +50,8 @@ public class CompilerDirectiveParserTest extends FileTestsCommon {
   }
 
   @Test
-  public void testCreateIncludeDirective() throws CompilerDirectiveSyntaxException,
-      UnsupportedCompilerDirectiveException {
+  public void testCreateIncludeDirective()
+      throws CompilerDirectiveSyntaxException, UnsupportedCompilerDirectiveException {
     directive = parseOne("{$include file.inc}");
     assertEquals(CompilerDirectiveType.INCLUDE, directive.getType());
     assertEquals("file.inc", directive.getItem());
@@ -68,8 +66,8 @@ public class CompilerDirectiveParserTest extends FileTestsCommon {
   }
 
   @Test
-  public void testCreateUnusedDirective() throws CompilerDirectiveSyntaxException,
-      UnsupportedCompilerDirectiveException {
+  public void testCreateUnusedDirective()
+      throws CompilerDirectiveSyntaxException, UnsupportedCompilerDirectiveException {
     directive = parseOne("{$i+}");
     assertEquals(CompilerDirectiveType.UNUSED, directive.getType());
     assertEquals("", directive.getItem());
@@ -90,8 +88,8 @@ public class CompilerDirectiveParserTest extends FileTestsCommon {
   }
 
   @Test
-  public void testCreateIfDirective() throws CompilerDirectiveSyntaxException,
-      UnsupportedCompilerDirectiveException {
+  public void testCreateIfDirective()
+      throws CompilerDirectiveSyntaxException, UnsupportedCompilerDirectiveException {
     directive = parseOne("{$if file.inc}");
     assertEquals(CompilerDirectiveType.IF, directive.getType());
     assertEquals("file.inc", directive.getItem());
@@ -100,8 +98,8 @@ public class CompilerDirectiveParserTest extends FileTestsCommon {
   }
 
   @Test
-  public void testCreateDefineDirective() throws CompilerDirectiveSyntaxException,
-      UnsupportedCompilerDirectiveException {
+  public void testCreateDefineDirective()
+      throws CompilerDirectiveSyntaxException, UnsupportedCompilerDirectiveException {
     directive = parseOne("{$define _DEBUG}");
     assertEquals(CompilerDirectiveType.DEFINE, directive.getType());
     assertEquals("_DEBUG", directive.getItem());
@@ -110,8 +108,8 @@ public class CompilerDirectiveParserTest extends FileTestsCommon {
   }
 
   @Test
-  public void testCreateUndefineDirective() throws CompilerDirectiveSyntaxException,
-      UnsupportedCompilerDirectiveException {
+  public void testCreateUndefineDirective()
+      throws CompilerDirectiveSyntaxException, UnsupportedCompilerDirectiveException {
     directive = parseOne("{$undef _DEBUG}");
     assertEquals(CompilerDirectiveType.UNDEFINE, directive.getType());
     assertEquals("_DEBUG", directive.getItem());
@@ -120,8 +118,8 @@ public class CompilerDirectiveParserTest extends FileTestsCommon {
   }
 
   @Test
-  public void testCreateElseDirective() throws CompilerDirectiveSyntaxException,
-      UnsupportedCompilerDirectiveException {
+  public void testCreateElseDirective()
+      throws CompilerDirectiveSyntaxException, UnsupportedCompilerDirectiveException {
     directive = parseOne("{$else}");
     assertEquals(CompilerDirectiveType.ELSE, directive.getType());
     assertEquals("", directive.getItem());
@@ -142,8 +140,8 @@ public class CompilerDirectiveParserTest extends FileTestsCommon {
   }
 
   @Test
-  public void testCreateIfEndDirective() throws CompilerDirectiveSyntaxException,
-      UnsupportedCompilerDirectiveException {
+  public void testCreateIfEndDirective()
+      throws CompilerDirectiveSyntaxException, UnsupportedCompilerDirectiveException {
     directive = parseOne("{$ifend}");
     assertEquals(CompilerDirectiveType.IFEND, directive.getType());
     assertEquals("", directive.getItem());
@@ -155,22 +153,59 @@ public class CompilerDirectiveParserTest extends FileTestsCommon {
   public void testProduce() throws IOException, CompilerDirectiveSyntaxException {
     loadFile(TEST_FILE);
 
-    String[] names = {"include", "include", "define", "undefine", "if", "else",
-        "ifend", "ifdef", "ifndef", "ifdef", "else", "endif", "else", "if",
-        "ifend", "if", "ifend", "endif", "endif"};
+    String[] names = {
+      "include",
+      "include",
+      "define",
+      "undefine",
+      "if",
+      "else",
+      "ifend",
+      "ifdef",
+      "ifndef",
+      "ifdef",
+      "else",
+      "endif",
+      "else",
+      "if",
+      "ifend",
+      "if",
+      "ifend",
+      "endif",
+      "endif"
+    };
 
-    String[] items = {"include1.inc", "include2.inc", "TEST", "TEST", "I_FEEL_HAPPY",
-        "", "", "TEST", "UseMe", "EnableMemoryLeakReporting", "", "", "",
-        "VERSION >= 18", "", "RTLVersion < 18", "", "", ""};
+    String[] items = {
+      "include1.inc",
+      "include2.inc",
+      "TEST",
+      "TEST",
+      "I_FEEL_HAPPY",
+      "",
+      "",
+      "TEST",
+      "UseMe",
+      "EnableMemoryLeakReporting",
+      "",
+      "",
+      "",
+      "VERSION >= 18",
+      "",
+      "RTLVersion < 18",
+      "",
+      "",
+      ""
+    };
 
     CompilerDirectiveType[] types = {
-        CompilerDirectiveType.INCLUDE, CompilerDirectiveType.INCLUDE, CompilerDirectiveType.DEFINE,
-        CompilerDirectiveType.UNDEFINE, CompilerDirectiveType.IF, CompilerDirectiveType.ELSE,
-        CompilerDirectiveType.IFEND, CompilerDirectiveType.IFDEF, CompilerDirectiveType.IFDEF,
-        CompilerDirectiveType.IFDEF, CompilerDirectiveType.ELSE, CompilerDirectiveType.ENDIF,
-        CompilerDirectiveType.ELSE, CompilerDirectiveType.IF, CompilerDirectiveType.IFEND,
-        CompilerDirectiveType.IF, CompilerDirectiveType.IFEND, CompilerDirectiveType.ENDIF,
-        CompilerDirectiveType.ENDIF};
+      CompilerDirectiveType.INCLUDE, CompilerDirectiveType.INCLUDE, CompilerDirectiveType.DEFINE,
+      CompilerDirectiveType.UNDEFINE, CompilerDirectiveType.IF, CompilerDirectiveType.ELSE,
+      CompilerDirectiveType.IFEND, CompilerDirectiveType.IFDEF, CompilerDirectiveType.IFDEF,
+      CompilerDirectiveType.IFDEF, CompilerDirectiveType.ELSE, CompilerDirectiveType.ENDIF,
+      CompilerDirectiveType.ELSE, CompilerDirectiveType.IF, CompilerDirectiveType.IFEND,
+      CompilerDirectiveType.IF, CompilerDirectiveType.IFEND, CompilerDirectiveType.ENDIF,
+      CompilerDirectiveType.ENDIF
+    };
 
     List<CompilerDirective> allDirectives = parser.parse(testFileString.toString());
     LOG.info(allDirectives.toString());

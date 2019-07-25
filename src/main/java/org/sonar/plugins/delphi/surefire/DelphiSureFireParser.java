@@ -49,9 +49,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-/**
- * Parses unit test reports from XML file.
- */
+/** Parses unit test reports from XML file. */
 public class DelphiSureFireParser {
   private static final Logger LOG = Loggers.get(DelphiSureFireParser.class);
   private final DelphiProjectHelper delphiProjectHelper;
@@ -121,8 +119,9 @@ public class DelphiSureFireParser {
     String name = testCase.getNamedItem("name").getTextContent();
     String classname = testCase.getNamedItem("classname").getTextContent();
     String testCaseName =
-        StringUtils.contains(classname, "$") ? (StringUtils.substringAfter(classname, "$") + "/"
-            + name) : name;
+        StringUtils.contains(classname, "$")
+            ? (StringUtils.substringAfter(classname, "$") + "/" + name)
+            : name;
     detail.setName(testCaseName);
     String status = "ok";
     String time = testCase.getNamedItem("time").getTextContent();
@@ -207,26 +206,48 @@ public class DelphiSureFireParser {
     }
   }
 
-  private void save(UnitTestClassReport report, InputFile resource,
-      SensorContext context) {
+  private void save(UnitTestClassReport report, InputFile resource, SensorContext context) {
     int testsCount = report.getTests() - report.getSkipped();
-    context.<Integer>newMeasure().forMetric(CoreMetrics.SKIPPED_TESTS).on(resource)
-        .withValue(report.getSkipped()).save();
-    context.<Integer>newMeasure().forMetric(CoreMetrics.TESTS).on(resource).withValue(testsCount)
+    context
+        .<Integer>newMeasure()
+        .forMetric(CoreMetrics.SKIPPED_TESTS)
+        .on(resource)
+        .withValue(report.getSkipped())
         .save();
-    context.<Integer>newMeasure().forMetric(CoreMetrics.TEST_ERRORS).on(resource)
-        .withValue(report.getErrors()).save();
-    context.<Integer>newMeasure().forMetric(CoreMetrics.TEST_FAILURES).on(resource)
-        .withValue(report.getFailures()).save();
-    context.<Long>newMeasure().forMetric(CoreMetrics.TEST_EXECUTION_TIME).on(resource)
-        .withValue(report.getDurationMilliseconds()).save();
+    context
+        .<Integer>newMeasure()
+        .forMetric(CoreMetrics.TESTS)
+        .on(resource)
+        .withValue(testsCount)
+        .save();
+    context
+        .<Integer>newMeasure()
+        .forMetric(CoreMetrics.TEST_ERRORS)
+        .on(resource)
+        .withValue(report.getErrors())
+        .save();
+    context
+        .<Integer>newMeasure()
+        .forMetric(CoreMetrics.TEST_FAILURES)
+        .on(resource)
+        .withValue(report.getFailures())
+        .save();
+    context
+        .<Long>newMeasure()
+        .forMetric(CoreMetrics.TEST_EXECUTION_TIME)
+        .on(resource)
+        .withValue(report.getDurationMilliseconds())
+        .save();
 
     int passedTests = testsCount - report.getErrors() - report.getFailures();
     if (testsCount > 0) {
       double percentage = passedTests * 100d / testsCount;
-      context.<Double>newMeasure().forMetric(CoreMetrics.TEST_SUCCESS_DENSITY).on(resource)
-          .withValue(ParsingUtils.scaleValue(percentage)).save();
+      context
+          .<Double>newMeasure()
+          .forMetric(CoreMetrics.TEST_SUCCESS_DENSITY)
+          .on(resource)
+          .withValue(ParsingUtils.scaleValue(percentage))
+          .save();
     }
   }
-
 }

@@ -51,8 +51,10 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 public class ComplexityMetricsTest {
 
   private static final String ROOT_NAME = "/org/sonar/plugins/delphi/metrics/";
-  private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/ComplexityMetricsTest.pas";
-  private static final String FILE_NAME_LIST_UTILS = "/org/sonar/plugins/delphi/metrics/ListUtils.pas";
+  private static final String FILE_NAME =
+      "/org/sonar/plugins/delphi/metrics/ComplexityMetricsTest.pas";
+  private static final String FILE_NAME_LIST_UTILS =
+      "/org/sonar/plugins/delphi/metrics/ListUtils.pas";
 
   private File baseDir = null;
   private SensorContextTester sensorContext;
@@ -64,10 +66,12 @@ public class ComplexityMetricsTest {
     baseDir = DelphiUtils.getResource(ROOT_NAME);
     sensorContext = SensorContextTester.create(baseDir);
 
-    NewActiveRule rule = new NewActiveRule.Builder()
-        .setRuleKey(ComplexityMetrics.RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY)
-        .setParam("limit", "3").setLanguage(DelphiLanguage.KEY)
-        .build();
+    NewActiveRule rule =
+        new NewActiveRule.Builder()
+            .setRuleKey(ComplexityMetrics.RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY)
+            .setParam("limit", "3")
+            .setLanguage(DelphiLanguage.KEY)
+            .build();
 
     activeRules = new ActiveRulesBuilder().addRule(rule).build();
   }
@@ -83,13 +87,13 @@ public class ComplexityMetricsTest {
     // processing
     ComplexityMetrics metrics = new ComplexityMetrics(activeRules, sensorContext);
 
-    DefaultInputFile inputFile = TestInputFileBuilder
-        .create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, testFile)
-        .setModuleBaseDir(baseDir.toPath())
-        .setLanguage(DelphiLanguage.KEY)
-        .setType(InputFile.Type.MAIN)
-        .setContents(DelphiUtils.readFileContent(testFile, Charset.defaultCharset().name()))
-        .build();
+    DefaultInputFile inputFile =
+        TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, testFile)
+            .setModuleBaseDir(baseDir.toPath())
+            .setLanguage(DelphiLanguage.KEY)
+            .setType(InputFile.Type.MAIN)
+            .setContents(DelphiUtils.readFileContent(testFile, Charset.defaultCharset().name()))
+            .build();
 
     metrics.analyse(inputFile, results.getClasses(), results.getFunctions(), null);
 
@@ -111,16 +115,15 @@ public class ComplexityMetricsTest {
     ASTAnalyzer analyzer = new DelphiASTAnalyzer();
     CodeAnalysisResults results = analyzer.analyze(new DelphiAST(testFile));
 
-    DefaultInputFile inputFile = TestInputFileBuilder
-        .create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, testFile)
-        .setModuleBaseDir(baseDir.toPath())
-        .setLanguage(DelphiLanguage.KEY)
-        .setType(InputFile.Type.MAIN)
-        .setContents(DelphiUtils.readFileContent(testFile, Charset.defaultCharset().name()))
-        .build();
+    DefaultInputFile inputFile =
+        TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, testFile)
+            .setModuleBaseDir(baseDir.toPath())
+            .setLanguage(DelphiLanguage.KEY)
+            .setType(InputFile.Type.MAIN)
+            .setContents(DelphiUtils.readFileContent(testFile, Charset.defaultCharset().name()))
+            .build();
 
     ComplexityMetrics metrics = new ComplexityMetrics(activeRules, sensorContext);
     metrics.analyse(inputFile, results.getClasses(), results.getFunctions(), null);
   }
-
 }

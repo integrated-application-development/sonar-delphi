@@ -22,12 +22,10 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
-/**
- * Rule class searching for variables in a .dpr file
- */
+/** Rule class searching for variables in a .dpr file */
 public class DprVariableRule extends DprFunctionRule {
 
   @Override
@@ -35,5 +33,4 @@ public class DprVariableRule extends DprFunctionRule {
     int type = node.getType();
     return type == DelphiLexer.TkVariableIdents;
   }
-
 }

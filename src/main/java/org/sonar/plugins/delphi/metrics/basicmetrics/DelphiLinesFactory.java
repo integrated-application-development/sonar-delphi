@@ -30,9 +30,7 @@ import java.util.List;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
-/**
- * Class for parsing source code lines and calculating statistic for each line.
- */
+/** Class for parsing source code lines and calculating statistic for each line. */
 public class DelphiLinesFactory {
   private static final Logger LOG = Loggers.get(DelphiLinesFactory.class);
   private static final char LF = '\n';
@@ -112,8 +110,8 @@ public class DelphiLinesFactory {
   }
 
   private void notifyHandlersAboutEndOfLine() {
-    if (currentHandler != null && currentHandler
-        .matchWithEndOfLine(currentLine, currentStringBuilder)) {
+    if (currentHandler != null
+        && currentHandler.matchWithEndOfLine(currentLine, currentStringBuilder)) {
       currentHandler = null;
     }
   }

@@ -33,9 +33,7 @@ import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.core.language.impl.UnresolvedFunctionCall;
 
-/**
- * Holds cached results in static variables
- */
+/** Holds cached results in static variables */
 public class CodeAnalysisCacheResults {
 
   private static final Set<UnitInterface> allUnits = new HashSet<>();
@@ -43,9 +41,7 @@ public class CodeAnalysisCacheResults {
   private static final Map<String, FunctionInterface> allFunctions = new HashMap<>();
   private static final Map<String, UnresolvedFunctionCall> unresolvedCalls = new HashMap<>();
 
-  /**
-   * resets results cache
-   */
+  /** resets results cache */
   public static void resetCache() {
     allClasses.clear();
     allFunctions.clear();
@@ -53,9 +49,7 @@ public class CodeAnalysisCacheResults {
     unresolvedCalls.clear();
   }
 
-  /**
-   * @return map of unresolved function calls
-   */
+  /** @return map of unresolved function calls */
   public Map<String, UnresolvedFunctionCall> getUnresolvedCalls() {
     return unresolvedCalls;
   }
@@ -91,7 +85,7 @@ public class CodeAnalysisCacheResults {
     final String fileToSearch = File.pathSeparator + unitName + ".pas";
     Map<String, ClassInterface> unitClasses = null;
 
-    for (var entry: allClasses.entrySet()) {
+    for (var entry : allClasses.entrySet()) {
       if (StringUtils.containsIgnoreCase(entry.getKey(), fileToSearch)) {
         unitClasses = entry.getValue();
         break;
@@ -121,16 +115,12 @@ public class CodeAnalysisCacheResults {
     return allUnits.contains(unit);
   }
 
-  /**
-   * @return set of cached units
-   */
+  /** @return set of cached units */
   public Set<UnitInterface> getCachedUnits() {
     return allUnits;
   }
 
-  /**
-   * @return list of cached units
-   */
+  /** @return list of cached units */
   public Set<UnitInterface> getCachedUnitsAsList() {
     return new HashSet<>(allUnits);
   }
@@ -150,8 +140,8 @@ public class CodeAnalysisCacheResults {
    * @param clazz class
    */
   public void cacheClass(ClassInterface clazz) {
-    Map<String, ClassInterface> unitClasses = allClasses
-        .computeIfAbsent(clazz.getFileName(), k -> new HashMap<>());
+    Map<String, ClassInterface> unitClasses =
+        allClasses.computeIfAbsent(clazz.getFileName(), k -> new HashMap<>());
     unitClasses.put(clazz.getName(), clazz);
   }
 
@@ -164,5 +154,4 @@ public class CodeAnalysisCacheResults {
   public void cacheFunction(String funcName, FunctionInterface function) {
     allFunctions.put(funcName, function);
   }
-
 }

@@ -31,9 +31,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/**
- * Class for parsing value.xml file, used for DelphiSensorTest
- */
+/** Class for parsing value.xml file, used for DelphiSensorTest */
 public class ProjectMetricsXMLParser extends SimpleXMLParser {
 
   private Map<String, Node> fileMap;
@@ -54,7 +52,8 @@ public class ProjectMetricsXMLParser extends SimpleXMLParser {
     {
       Node file = filesNode.item(i); // get file
       // get its "name" node
-      String fileName = getNodeValueText(Objects.requireNonNull(getValueNodes(file, "name")).item(0));
+      String fileName =
+          getNodeValueText(Objects.requireNonNull(getValueNodes(file, "name")).item(0));
       fileMap.put(fileName, file); // put to map
     }
   }
@@ -74,7 +73,6 @@ public class ProjectMetricsXMLParser extends SimpleXMLParser {
    * @param filename File name
    * @return Expected values, array of doubles
    */
-
   public Map<String, String> getFileValues(String filename) {
 
     if (!fileMap.containsKey(filename)) {

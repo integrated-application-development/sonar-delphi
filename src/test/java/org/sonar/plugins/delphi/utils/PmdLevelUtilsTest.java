@@ -19,15 +19,15 @@
  */
 package org.sonar.plugins.delphi.utils;
 
-import java.lang.reflect.Constructor;
-import org.junit.Test;
-import org.sonar.api.rule.Severity;
-import org.sonar.api.rules.RulePriority;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertFalse;
+
+import java.lang.reflect.Constructor;
+import org.junit.Test;
+import org.sonar.api.rule.Severity;
+import org.sonar.api.rules.RulePriority;
 
 public class PmdLevelUtilsTest {
 

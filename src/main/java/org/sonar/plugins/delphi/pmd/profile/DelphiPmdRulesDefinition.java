@@ -22,7 +22,6 @@ package org.sonar.plugins.delphi.pmd.profile;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.InputStreamReader;
-
 import org.sonar.api.rules.RuleParam;
 import org.sonar.api.server.ServerSide;
 import org.sonar.api.server.rule.RuleParamType;
@@ -32,9 +31,7 @@ import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSetHelper;
 
-/**
- * Delphi rules definition
- */
+/** Delphi rules definition */
 @ServerSide
 public class DelphiPmdRulesDefinition implements RulesDefinition {
   private static final String RULES_XML = "/org/sonar/plugins/delphi/pmd/rules.xml";
@@ -45,9 +42,10 @@ public class DelphiPmdRulesDefinition implements RulesDefinition {
 
   @Override
   public void define(Context context) {
-    NewRepository repository = context
-        .createRepository(DelphiPmdConstants.REPOSITORY_KEY, DelphiLanguage.KEY)
-        .setName(DelphiPmdConstants.REPOSITORY_NAME);
+    NewRepository repository =
+        context
+            .createRepository(DelphiPmdConstants.REPOSITORY_KEY, DelphiLanguage.KEY)
+            .setName(DelphiPmdConstants.REPOSITORY_NAME);
 
     extractRulesData(repository);
 

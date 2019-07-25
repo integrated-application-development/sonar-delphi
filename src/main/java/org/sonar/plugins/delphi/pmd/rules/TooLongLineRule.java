@@ -3,13 +3,11 @@ package org.sonar.plugins.delphi.pmd.rules;
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-/**
- * Class for counting line characters. If too long, creates a violation.
- */
+/** Class for counting line characters. If too long, creates a violation. */
 public class TooLongLineRule extends DelphiRule {
 
-  private static final String MESSAGE = "Line too long (%s characters). Maximum length is %s "
-      + "characters.";
+  private static final String MESSAGE =
+      "Line too long (%s characters). Maximum length is %s " + "characters.";
 
   private int lastLineChecked;
 

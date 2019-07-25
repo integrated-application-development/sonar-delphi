@@ -38,9 +38,7 @@ import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRangeFirstOccurrenc
 import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRangeMergingAggregator;
 import org.sonar.plugins.delphi.antlr.resolvers.subranges.impl.IntegerSubRange;
 
-/**
- * Resolves defines in a given file, cuts out the unwanted definitions
- */
+/** Resolves defines in a given file, cuts out the unwanted definitions */
 public class DefineResolver extends SourceResolver {
   private static final Logger LOG = Loggers.get(DefineResolver.class);
 
@@ -84,8 +82,8 @@ public class DefineResolver extends SourceResolver {
     return str;
   }
 
-  private SubRangeAggregator processCompilerDirectives(List<CompilerDirective> directives,
-      Set<String> defines) {
+  private SubRangeAggregator processCompilerDirectives(
+      List<CompilerDirective> directives, Set<String> defines) {
     SubRangeMergingAggregator toDelete = new SubRangeMergingAggregator();
 
     for (int i = 0; i < directives.size(); ++i) {
@@ -99,7 +97,7 @@ public class DefineResolver extends SourceResolver {
         defines.remove(directive.getItem());
       } else if (type == CompilerDirectiveType.IF) {
         // mark places to cut off
-        toDelete.addAll(getMatchingEndIfCutRange(directives, i,true));
+        toDelete.addAll(getMatchingEndIfCutRange(directives, i, true));
       } else if (type == CompilerDirectiveType.IFDEF) {
         boolean isDefined = defines.contains(directive.getItem());
         boolean isPositive = ((IfDefDirective) directive).isPositive();
@@ -111,8 +109,8 @@ public class DefineResolver extends SourceResolver {
     return toDelete;
   }
 
-  private SubRange[] getMatchingEndIfCutRange(List<CompilerDirective> directives,
-      int startDirectiveIndex, boolean shouldCut) {
+  private SubRange[] getMatchingEndIfCutRange(
+      List<CompilerDirective> directives, int startDirectiveIndex, boolean shouldCut) {
     CompilerDirective firstDirective = directives.get(startDirectiveIndex);
     CompilerDirective lastDirective = null;
     CompilerDirective elseDirective = null;
@@ -148,7 +146,8 @@ public class DefineResolver extends SourceResolver {
     return calculateCutSubRange(firstDirective, lastDirective, elseDirective, shouldCut);
   }
 
-  private SubRange[] calculateCutSubRange(CompilerDirective firstDirective,
+  private SubRange[] calculateCutSubRange(
+      CompilerDirective firstDirective,
       CompilerDirective lastDirective,
       CompilerDirective elseDirective,
       boolean shouldCut) {
@@ -167,8 +166,9 @@ public class DefineResolver extends SourceResolver {
       } else {
         // cut to $else
         cutEnd = elseDirective.getLastCharPosition() + 1;
-        subRange2 = new IntegerSubRange(lastDirective.getFirstCharPosition(),
-            lastDirective.getLastCharPosition() + 1);
+        subRange2 =
+            new IntegerSubRange(
+                lastDirective.getFirstCharPosition(), lastDirective.getLastCharPosition() + 1);
       }
     } else {
       // statement defined, but need to cut else if present
@@ -176,20 +176,22 @@ public class DefineResolver extends SourceResolver {
         // start with $else
         cutStart = elseDirective.getFirstCharPosition();
         cutEnd = lastDirective.getLastCharPosition() + 1;
-        subRange2 = new IntegerSubRange(firstDirective.getFirstCharPosition(),
-            firstDirective.getLastCharPosition() + 1);
+        subRange2 =
+            new IntegerSubRange(
+                firstDirective.getFirstCharPosition(), firstDirective.getLastCharPosition() + 1);
       } else {
         cutEnd = firstDirective.getLastCharPosition() + 1;
-        subRange2 = new IntegerSubRange(lastDirective.getFirstCharPosition(),
-            lastDirective.getLastCharPosition() + 1);
+        subRange2 =
+            new IntegerSubRange(
+                lastDirective.getFirstCharPosition(), lastDirective.getLastCharPosition() + 1);
       }
     }
 
     if (cutEnd != -1 && cutStart != -1) {
       if (subRange2 != null) {
-        return new SubRange[]{new IntegerSubRange(cutStart, cutEnd), subRange2};
+        return new SubRange[] {new IntegerSubRange(cutStart, cutEnd), subRange2};
       }
-      return new SubRange[]{new IntegerSubRange(cutStart, cutEnd)};
+      return new SubRange[] {new IntegerSubRange(cutStart, cutEnd)};
     }
 
     return new SubRange[0];
@@ -200,8 +202,8 @@ public class DefineResolver extends SourceResolver {
     toComment.sort(new SubRangeFirstOccurrenceComparator());
     for (SubRange range : toComment.getRanges()) {
 
-      final String strRange = str
-          .substring(range.getBegin() + insertedChars, range.getEnd() + insertedChars);
+      final String strRange =
+          str.substring(range.getBegin() + insertedChars, range.getEnd() + insertedChars);
 
       if (strRange.contains("*)")) {
         String newRange = "(*".concat(strRange.replace("*)", " )")).concat("*)");
@@ -215,5 +217,4 @@ public class DefineResolver extends SourceResolver {
       }
     }
   }
-
 }

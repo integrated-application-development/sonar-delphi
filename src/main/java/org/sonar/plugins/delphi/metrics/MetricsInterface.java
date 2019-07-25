@@ -29,9 +29,7 @@ import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
 
-/**
- * Interface for metrics
- */
+/** Interface for metrics */
 public interface MetricsInterface {
 
   /**
@@ -42,7 +40,9 @@ public interface MetricsInterface {
    * @param functions Functions in source file
    * @param units Units in project
    */
-  void analyse(InputFile resource, List<ClassInterface> classes,
+  void analyse(
+      InputFile resource,
+      List<ClassInterface> classes,
       List<FunctionInterface> functions,
       Set<UnitInterface> units);
 

@@ -28,9 +28,7 @@ import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 
-/**
- * Used to advance to specific AST tree node
- */
+/** Used to advance to specific AST tree node */
 public class AdvanceToNodeOperation implements NodeOperation {
 
   private List<LexerMetrics> to = new ArrayList<>();

@@ -41,9 +41,11 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 public class StatementVerifierTest {
 
   private static final int FILE_COMPLEX_STMT_COUNT = 11;
-  private static final int[] FILE_STATEMENT_LINES =
-      {23, 30, 37, 40, 46, 46, 47, 47, 48, 48, 55, 56, 57, 59, 59, 60, 60, 66, 66, 67};
-  private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/ComplexityMetricsTest.pas";
+  private static final int[] FILE_STATEMENT_LINES = {
+    23, 30, 37, 40, 46, 46, 47, 47, 48, 48, 55, 56, 57, 59, 59, 60, 60, 66, 66, 67
+  };
+  private static final String FILE_NAME =
+      "/org/sonar/plugins/delphi/metrics/ComplexityMetricsTest.pas";
 
   private StatementVerifier verifier;
   private CodeTree codeTree;
@@ -100,5 +102,4 @@ public class StatementVerifierTest {
     assertEquals(FILE_STATEMENT_LINES.length, statementCount);
     assertEquals(FILE_COMPLEX_STMT_COUNT, complexStatementsCount);
   }
-
 }

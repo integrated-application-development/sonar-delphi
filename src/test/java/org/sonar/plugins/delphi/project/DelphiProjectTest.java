@@ -35,8 +35,10 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiProjectTest {
 
-  private static final String XML_FILE = "/org/sonar/plugins/delphi/projects/SimpleProject/dproj/SimpleDelphiProject.dproj";
-  private static final String INC_DIR = "/org/sonar/plugins/delphi/projects/SimpleProject/includes1";
+  private static final String XML_FILE =
+      "/org/sonar/plugins/delphi/projects/SimpleProject/dproj/SimpleDelphiProject.dproj";
+  private static final String INC_DIR =
+      "/org/sonar/plugins/delphi/projects/SimpleProject/includes1";
 
   private DelphiProject project;
 
@@ -88,9 +90,16 @@ public class DelphiProjectTest {
 
     assertEquals(8, project.getSourceFiles().size()); // checking source
     // files
-    String[] fileNames = {"Globals.pas", "MainWindow.pas", "OverloadTest.pas", "StatementTest.pas",
-        "CommentsTest.pas",
-        "AccessorsTest.Pas", "FunctionTest.pas", "GlobalsTest.pas"};
+    String[] fileNames = {
+      "Globals.pas",
+      "MainWindow.pas",
+      "OverloadTest.pas",
+      "StatementTest.pas",
+      "CommentsTest.pas",
+      "AccessorsTest.Pas",
+      "FunctionTest.pas",
+      "GlobalsTest.pas"
+    };
     for (int i = 0; i < fileNames.length; ++i) {
       assertEquals(fileNames[i], project.getSourceFiles().get(i).getName());
     }
@@ -109,5 +118,4 @@ public class DelphiProjectTest {
       assertEquals(definitionNames[i], project.getDefinitions().get(i));
     }
   }
-
 }

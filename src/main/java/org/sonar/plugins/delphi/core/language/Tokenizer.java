@@ -9,7 +9,6 @@ import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 public class Tokenizer {
 
-
   /**
    * Create tokens from text.
    *
@@ -28,9 +27,8 @@ public class Tokenizer {
         token = lexer.nextToken();
       }
     }
-    //has been changed to add compatibility for SonarQube 5.2
+    // has been changed to add compatibility for SonarQube 5.2
     tokens.add(new CommonToken(Token.EOF));
     return tokens;
   }
-
 }

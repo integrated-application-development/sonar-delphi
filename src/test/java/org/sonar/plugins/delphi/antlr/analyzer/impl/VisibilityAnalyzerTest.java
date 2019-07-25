@@ -54,11 +54,12 @@ public class VisibilityAnalyzerTest {
 
   @Test
   public void testAnalyze() {
-    LexerMetrics[] metrics = {LexerMetrics.PRIVATE, LexerMetrics.PUBLIC, LexerMetrics.PUBLISHED,
-        LexerMetrics.PROTECTED};
+    LexerMetrics[] metrics = {
+      LexerMetrics.PRIVATE, LexerMetrics.PUBLIC, LexerMetrics.PUBLISHED, LexerMetrics.PROTECTED
+    };
     for (LexerMetrics metric : metrics) {
-      when(code.getCurrentCodeNode()).thenReturn(
-          new CodeNode<>(new CommonTree(new CommonToken(metric.toMetrics(), "token"))));
+      when(code.getCurrentCodeNode())
+          .thenReturn(new CodeNode<>(new CommonTree(new CommonToken(metric.toMetrics(), "token"))));
       analyzer.analyze(code, results);
       assertEquals(metric, results.getParseVisibility());
     }
@@ -66,26 +67,30 @@ public class VisibilityAnalyzerTest {
 
   @Test
   public void testCanAnalyze() {
-    when(code.getCurrentCodeNode()).thenReturn(
-        new CodeNode<>(
-            new CommonTree(new CommonToken(LexerMetrics.PRIVATE.toMetrics(), "private"))));
+    when(code.getCurrentCodeNode())
+        .thenReturn(
+            new CodeNode<>(
+                new CommonTree(new CommonToken(LexerMetrics.PRIVATE.toMetrics(), "private"))));
     assertTrue(analyzer.canAnalyze(code));
-    when(code.getCurrentCodeNode()).thenReturn(
-        new CodeNode<>(
-            new CommonTree(new CommonToken(LexerMetrics.PUBLIC.toMetrics(), "public"))));
+    when(code.getCurrentCodeNode())
+        .thenReturn(
+            new CodeNode<>(
+                new CommonTree(new CommonToken(LexerMetrics.PUBLIC.toMetrics(), "public"))));
     assertTrue(analyzer.canAnalyze(code));
-    when(code.getCurrentCodeNode()).thenReturn(
-        new CodeNode<>(
-            new CommonTree(new CommonToken(LexerMetrics.PUBLISHED.toMetrics(), "published"))));
+    when(code.getCurrentCodeNode())
+        .thenReturn(
+            new CodeNode<>(
+                new CommonTree(new CommonToken(LexerMetrics.PUBLISHED.toMetrics(), "published"))));
     assertTrue(analyzer.canAnalyze(code));
-    when(code.getCurrentCodeNode()).thenReturn(
-        new CodeNode<>(
-            new CommonTree(new CommonToken(LexerMetrics.PROTECTED.toMetrics(), "protected"))));
+    when(code.getCurrentCodeNode())
+        .thenReturn(
+            new CodeNode<>(
+                new CommonTree(new CommonToken(LexerMetrics.PROTECTED.toMetrics(), "protected"))));
     assertTrue(analyzer.canAnalyze(code));
-    when(code.getCurrentCodeNode()).thenReturn(
-        new CodeNode<>(
-            new CommonTree(new CommonToken(LexerMetrics.IMPLEMENTATION.toMetrics(), "impl"))));
+    when(code.getCurrentCodeNode())
+        .thenReturn(
+            new CodeNode<>(
+                new CommonTree(new CommonToken(LexerMetrics.IMPLEMENTATION.toMetrics(), "impl"))));
     assertFalse(analyzer.canAnalyze(code));
   }
-
 }

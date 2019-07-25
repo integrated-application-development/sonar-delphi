@@ -46,7 +46,8 @@ import org.sonar.plugins.delphi.core.DelphiLanguage;
 
 public class DelphiPmdSensorTest {
   private final DelphiPmdExecutor executor = mock(DelphiPmdExecutor.class);
-  private final DelphiPmdViolationRecorder violationRecorder = mock(DelphiPmdViolationRecorder.class);
+  private final DelphiPmdViolationRecorder violationRecorder =
+      mock(DelphiPmdViolationRecorder.class);
   private final SensorContext context = mock(SensorContext.class);
   private final DefaultFileSystem fs = new DefaultFileSystem(new File("."));
 
@@ -100,9 +101,7 @@ public class DelphiPmdSensorTest {
 
     final Throwable thrown = catchThrowable(() -> sensor.execute(context));
 
-    assertThat(thrown)
-        .isInstanceOf(RuntimeException.class)
-        .isEqualTo(expectedException);
+    assertThat(thrown).isInstanceOf(RuntimeException.class).isEqualTo(expectedException);
   }
 
   @Test
@@ -137,11 +136,9 @@ public class DelphiPmdSensorTest {
     mockEmptyReport();
     File file = new File("x");
     fs.add(
-      TestInputFileBuilder.create("sonar-pmd-test", file.getName())
-        .setLanguage(DelphiLanguage.KEY)
-        .setType(Type.MAIN)
-        .build()
-    );
+        TestInputFileBuilder.create("sonar-pmd-test", file.getName())
+            .setLanguage(DelphiLanguage.KEY)
+            .setType(Type.MAIN)
+            .build());
   }
-
 }

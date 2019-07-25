@@ -24,9 +24,7 @@ package org.sonar.plugins.delphi.antlr.directives.impl;
 
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
 
-/**
- * {$include ...} or {$i ...} directive
- */
+/** {$include ...} or {$i ...} directive */
 public class IncludeDirective extends CommonCompilerDirective {
 
   private static final String DIRECTIVE_NAME = "include";

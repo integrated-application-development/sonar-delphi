@@ -303,5 +303,4 @@ public class DefineResolverTest {
     assertThat(resultSourceCode, containsString("{$ELSE}*)"));
     assertThat(resultSourceCode, containsString("(*{$IFNDEF FPC}*)"));
   }
-
 }

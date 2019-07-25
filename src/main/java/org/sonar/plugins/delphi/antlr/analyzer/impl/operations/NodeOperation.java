@@ -25,9 +25,7 @@ package org.sonar.plugins.delphi.antlr.analyzer.impl.operations;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeNode;
 
-/**
- * Node operation interface
- */
+/** Node operation interface */
 public interface NodeOperation {
 
   /**

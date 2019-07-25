@@ -24,9 +24,7 @@ package org.sonar.plugins.delphi.antlr.directives.impl;
 
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
 
-/**
- * {$define XXX} directive
- */
+/** {$define XXX} directive */
 public class DefineDirective extends CommonCompilerDirective {
 
   private static final String DIRECTIVE_NAME = "define";
@@ -46,5 +44,4 @@ public class DefineDirective extends CommonCompilerDirective {
   public CompilerDirectiveType getType() {
     return CompilerDirectiveType.DEFINE;
   }
-
 }

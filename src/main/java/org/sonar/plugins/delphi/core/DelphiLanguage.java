@@ -24,9 +24,7 @@ package org.sonar.plugins.delphi.core;
 
 import org.sonar.api.resources.AbstractLanguage;
 
-/**
- * Class representing Delphi language
- */
+/** Class representing Delphi language */
 public class DelphiLanguage extends AbstractLanguage {
 
   public static final String KEY = "delph";
@@ -38,20 +36,16 @@ public class DelphiLanguage extends AbstractLanguage {
 
   private static final String LANGUAGE_NAME = "Delphi";
 
-  private static final String[] FILE_SUFFIXES = {FILE_SOURCE_CODE_SUFFIX, FILE_PROJECT_SUFFIX,
-      FILE_PACKAGE_SUFFIX};
+  private static final String[] FILE_SUFFIXES = {
+    FILE_SOURCE_CODE_SUFFIX, FILE_PROJECT_SUFFIX, FILE_PACKAGE_SUFFIX
+  };
 
-  /**
-   * Default ctor
-   */
+  /** Default ctor */
   public DelphiLanguage() {
     super(KEY, LANGUAGE_NAME);
   }
 
-  /**
-   * @return Delphi source code file suffixes
-   */
-
+  /** @return Delphi source code file suffixes */
   @Override
   public String[] getFileSuffixes() {
     return FILE_SUFFIXES;

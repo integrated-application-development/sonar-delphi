@@ -40,9 +40,10 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiASTAnalyzerTest {
 
-  static private int fileComplexity = 0;
-  static private ASTAnalyzer analyser = null;
-  private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
+  private static int fileComplexity = 0;
+  private static ASTAnalyzer analyser = null;
+  private static final String FILE_NAME =
+      "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
 
   @BeforeClass
   public static void setUp() {
@@ -63,9 +64,14 @@ public class DelphiASTAnalyzerTest {
   }
 
   private void testFunctions(CodeAnalysisResults results) {
-    String[] names = {"tdemo.bshowtrackerclick", "tdemo.getfunction", "tmyclass.myprocedure",
-        "tmyclass.setsomething",
-        "standaloneprocedure", "standalonefunction"};
+    String[] names = {
+      "tdemo.bshowtrackerclick",
+      "tdemo.getfunction",
+      "tmyclass.myprocedure",
+      "tmyclass.setsomething",
+      "standaloneprocedure",
+      "standalonefunction"
+    };
     int[] complexities = {1, 0, 2, 0, 3, 1};
     int[] statements = {1, 2, 2, 0, 7, 0};
     int[] calledFunc = {0, 0, 1, 0, 0, 1};
@@ -89,7 +95,9 @@ public class DelphiASTAnalyzerTest {
       // complexities
       assertEquals(statements[index], func.getStatements().size()); // checking
       // statements
-      assertEquals("Called functions at " + names[index], calledFunc[index],
+      assertEquals(
+          "Called functions at " + names[index],
+          calledFunc[index],
           func.getCalledFunctions().length); // chcecking
       // called
       // functions

@@ -67,7 +67,9 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
     execute(builder);
 
     assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("ConstructorWithoutInheritedStatementRule", builder.getOffSet() + 1)));
+    assertIssues(
+        hasItem(
+            hasRuleKeyAtLine("ConstructorWithoutInheritedStatementRule", builder.getOffSet() + 1)));
   }
 
   @Test
@@ -89,5 +91,4 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
 
     assertIssues(empty());
   }
-
 }

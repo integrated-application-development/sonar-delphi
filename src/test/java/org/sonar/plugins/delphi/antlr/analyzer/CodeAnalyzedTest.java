@@ -40,15 +40,17 @@ public class CodeAnalyzedTest {
   @Before
   public void init() {
     ast = new DelphiAST();
-    CommonTree[] nodes = new CommonTree[]{
-        new CommonTree(new CommonToken(0, "a")),
-        new CommonTree(new CommonToken(0, "ab1")),
-        new CommonTree(new CommonToken(0, "ab1c1")),
-        new CommonTree(new CommonToken(0, "ab1c2")),
-        new CommonTree(new CommonToken(0, "ab2")),
-        new CommonTree(new CommonToken(0, "ab2c1")),
-        new CommonTree(new CommonToken(0, "ab2c2")),
-        new CommonTree(new CommonToken(0, "ab2c3"))};
+    CommonTree[] nodes =
+        new CommonTree[] {
+          new CommonTree(new CommonToken(0, "a")),
+          new CommonTree(new CommonToken(0, "ab1")),
+          new CommonTree(new CommonToken(0, "ab1c1")),
+          new CommonTree(new CommonToken(0, "ab1c2")),
+          new CommonTree(new CommonToken(0, "ab2")),
+          new CommonTree(new CommonToken(0, "ab2c1")),
+          new CommonTree(new CommonToken(0, "ab2c2")),
+          new CommonTree(new CommonToken(0, "ab2c3"))
+        };
 
     ast.addChild(nodes[0]);
     nodes[0].addChild(nodes[1]); // a->ab1
@@ -70,5 +72,4 @@ public class CodeAnalyzedTest {
     assertTrue(code.getRootCodeNode().isValid());
     assertEquals(ast, code.getRootCodeNode().getNode());
   }
-
 }

@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.resolvers.exceptions;
 
-/**
- * Include resolver exception
- */
+/** Include resolver exception */
 public class IncludeResolverException extends RuntimeException {
   /**
    * ctor

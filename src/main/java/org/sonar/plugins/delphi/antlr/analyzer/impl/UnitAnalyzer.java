@@ -23,23 +23,22 @@
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
+import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 
-/**
- * Creates unit that is currently parsed
- */
+/** Creates unit that is currently parsed */
 public class UnitAnalyzer extends CodeAnalyzer {
 
   @Override
   public void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
     results.setActiveUnit(
-        createUnit(codeTree.getCurrentCodeNode().getNode(), codeTree.getRootCodeNode().getNode()
-            .getFileName()));
+        createUnit(
+            codeTree.getCurrentCodeNode().getNode(),
+            codeTree.getRootCodeNode().getNode().getFileName()));
     results.cacheUnit(results.getActiveUnit());
   }
 
@@ -61,5 +60,4 @@ public class UnitAnalyzer extends CodeAnalyzer {
   private String getUnitName(Tree node) {
     return node.getChild(0).getText();
   }
-
 }

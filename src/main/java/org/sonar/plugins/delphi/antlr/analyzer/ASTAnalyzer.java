@@ -24,9 +24,7 @@ package org.sonar.plugins.delphi.antlr.analyzer;
 
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 
-/**
- * AST tree analyzer interface
- */
+/** AST tree analyzer interface */
 public interface ASTAnalyzer {
 
   /**
@@ -36,5 +34,4 @@ public interface ASTAnalyzer {
    * @return Result the result of analysis.
    */
   CodeAnalysisResults analyze(ASTTree ast);
-
 }

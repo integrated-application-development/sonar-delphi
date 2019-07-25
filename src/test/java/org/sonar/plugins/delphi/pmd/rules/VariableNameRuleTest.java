@@ -92,5 +92,4 @@ public class VariableNameRuleTest extends BasePmdRuleTest {
     assertIssues(hasItem(hasRuleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 4)));
     assertIssues(not(hasItem(hasRuleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 6))));
   }
-
 }

@@ -43,8 +43,8 @@ public class UnresolvedFunctionCall {
    * @param called Called function
    * @param callerUnit Caller function unit
    */
-  public UnresolvedFunctionCall(FunctionInterface caller, FunctionInterface called,
-      UnitInterface callerUnit) {
+  public UnresolvedFunctionCall(
+      FunctionInterface caller, FunctionInterface called, UnitInterface callerUnit) {
     this.caller = caller;
     this.called = called;
     this.callerUnit = callerUnit;
@@ -116,5 +116,4 @@ public class UnresolvedFunctionCall {
     }
     return false;
   }
-
 }

@@ -41,13 +41,9 @@ public class UnusedDirective extends CommonCompilerDirective {
     super("unused", "", firstCharPos, lastCharPos);
   }
 
-  /**
-   * returns UNUSED
-   */
-
+  /** returns UNUSED */
   @Override
   public CompilerDirectiveType getType() {
     return CompilerDirectiveType.UNUSED;
   }
-
 }

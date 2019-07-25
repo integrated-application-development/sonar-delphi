@@ -11,14 +11,15 @@ import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 public class NoGuidRuleTest extends BasePmdRuleTest {
   @Test
   public void testInterfaceWithGuidShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-        .appendDecl("type")
-        .appendDecl("  IPublisher = interface")
-        .appendDecl("    ['{E1787C21-0FF2-11D5-A978-006067000685}']")
-        .appendDecl("      procedure RegisterSubscriber(Handler: TNotifyEvent);")
-        .appendDecl("      procedure DeregisterSubscriber(Handler: TNotifyEvent);")
-        .appendDecl("      procedure Notify(Event: TObject);")
-        .appendDecl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  IPublisher = interface")
+            .appendDecl("    ['{E1787C21-0FF2-11D5-A978-006067000685}']")
+            .appendDecl("      procedure RegisterSubscriber(Handler: TNotifyEvent);")
+            .appendDecl("      procedure DeregisterSubscriber(Handler: TNotifyEvent);")
+            .appendDecl("      procedure Notify(Event: TObject);")
+            .appendDecl("end;");
 
     execute(builder);
 
@@ -27,18 +28,18 @@ public class NoGuidRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testInterfaceWithoutGuidShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-        .appendDecl("type")
-        .appendDecl("  IPublisher = interface")
-        .appendDecl("    procedure RegisterSubscriber(Handler: TNotifyEvent);")
-        .appendDecl("    procedure DeregisterSubscriber(Handler: TNotifyEvent);")
-        .appendDecl("    procedure Notify(Event: TObject);")
-        .appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  IPublisher = interface")
+            .appendDecl("    procedure RegisterSubscriber(Handler: TNotifyEvent);")
+            .appendDecl("    procedure DeregisterSubscriber(Handler: TNotifyEvent);")
+            .appendDecl("    procedure Notify(Event: TObject);")
+            .appendDecl("  end;");
 
     execute(builder);
 
     assertIssues(hasSize(1));
     assertIssues(hasItem(hasRuleKeyAtLine("NoGuidRule", builder.getOffsetDecl() + 2)));
   }
-
 }

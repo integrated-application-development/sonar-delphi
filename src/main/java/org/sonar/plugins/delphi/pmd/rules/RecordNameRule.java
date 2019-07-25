@@ -19,8 +19,8 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import org.antlr.runtime.tree.CommonTree;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 public class RecordNameRule extends NameConventionRule {
   private static final String RECORD_PREFIX = "T";

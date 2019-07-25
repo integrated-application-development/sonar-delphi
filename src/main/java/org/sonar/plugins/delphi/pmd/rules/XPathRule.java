@@ -40,25 +40,16 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/**
- * DelphiLanguage rule for XPath, use it to parse XPath rules
- */
+/** DelphiLanguage rule for XPath, use it to parse XPath rules */
 public class XPathRule extends DelphiRule {
   private static final Logger LOG = Loggers.get(XPathRule.class);
 
-  private static final PropertyDescriptor<String> XPATH = PropertyFactory
-      .stringProperty("xpath")
-      .desc("The xpath expression")
-      .defaultValue("")
-      .build();
+  private static final PropertyDescriptor<String> XPATH =
+      PropertyFactory.stringProperty("xpath").desc("The xpath expression").defaultValue("").build();
 
-  /**
-   * Last cached document.
-   */
+  /** Last cached document. */
   private static Document cachedData;
-  /**
-   * Last cached file name.
-   */
+  /** Last cached file name. */
   private static String cachedFile = "";
 
   public XPathRule() {
@@ -104,14 +95,16 @@ public class XPathRule extends DelphiRule {
             .save();
       }
     } catch (Exception e) {
-      LOG.warn("{}: XPath error: '{}' at rule {}",
-          node.getASTTree().getFileName(), e.getMessage(), getName(), e);
+      LOG.warn(
+          "{}: XPath error: '{}' at rule {}",
+          node.getASTTree().getFileName(),
+          e.getMessage(),
+          getName(),
+          e);
     }
   }
 
-  /**
-   * Preform only one visit per file, not per node cause we parse the whole file nodes at a time
-   */
+  /** Preform only one visit per file, not per node cause we parse the whole file nodes at a time */
   @Override
   protected void visitAll(List<? extends net.sourceforge.pmd.lang.ast.Node> acus, RuleContext ctx) {
     init();
@@ -133,5 +126,4 @@ public class XPathRule extends DelphiRule {
     }
     return cachedData;
   }
-
 }

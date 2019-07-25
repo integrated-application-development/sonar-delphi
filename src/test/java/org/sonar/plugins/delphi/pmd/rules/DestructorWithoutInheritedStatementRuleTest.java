@@ -18,8 +18,8 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
@@ -67,7 +67,8 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
     execute(builder);
 
     assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("DestructorWithoutInheritedStatementRule", builder.getOffSet() + 1)));
+    assertIssues(
+        hasItem(
+            hasRuleKeyAtLine("DestructorWithoutInheritedStatementRule", builder.getOffSet() + 1)));
   }
-
 }

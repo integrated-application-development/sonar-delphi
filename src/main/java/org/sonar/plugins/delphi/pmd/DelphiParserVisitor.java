@@ -24,9 +24,7 @@ package org.sonar.plugins.delphi.pmd;
 
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-/**
- * visits delphi pmd node
- */
+/** visits delphi pmd node */
 public interface DelphiParserVisitor {
 
   /**

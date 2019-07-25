@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
 import javax.annotation.Nullable;
-
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -33,13 +32,11 @@ import org.sonar.api.utils.ValidationMessages;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
-import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 
-/**
- * Factory class to create {@link DelphiRuleSet} out of XML.
- */
+/** Factory class to create {@link DelphiRuleSet} out of XML. */
 public class XmlRuleSetFactory implements RuleSetFactory {
 
   private static final Logger LOG = Loggers.get(XmlRuleSetFactory.class);
@@ -81,8 +78,8 @@ public class XmlRuleSetFactory implements RuleSetFactory {
     }
   }
 
-  private void parsePmdPropertyValue(Element eltProperty, DelphiRuleProperty property,
-      @Nullable Namespace namespace) {
+  private void parsePmdPropertyValue(
+      Element eltProperty, DelphiRuleProperty property, @Nullable Namespace namespace) {
     if (DelphiPmdConstants.XPATH_EXPRESSION_PARAM.equals(property.getName())) {
       Element xpathElement = getChild(eltProperty, "value", namespace);
       if (xpathElement != null) {

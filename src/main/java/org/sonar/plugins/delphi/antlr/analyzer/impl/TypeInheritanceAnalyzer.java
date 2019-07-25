@@ -31,9 +31,7 @@ import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiClass;
 
-/**
- * Analyzes inheritance tree for specific class
- */
+/** Analyzes inheritance tree for specific class */
 public class TypeInheritanceAnalyzer extends CodeAnalyzer {
 
   @Override
@@ -74,13 +72,11 @@ public class TypeInheritanceAnalyzer extends CodeAnalyzer {
 
   @Override
   public boolean canAnalyze(CodeTree codeTree) {
-    return codeTree.getCurrentCodeNode().getNode().getType() == LexerMetrics.CLASS_PARENTS
-        .toMetrics();
+    return codeTree.getCurrentCodeNode().getNode().getType()
+        == LexerMetrics.CLASS_PARENTS.toMetrics();
   }
 
-  /**
-   * check if parent is in one of the parsed units
-   */
+  /** check if parent is in one of the parsed units */
   private ClassInterface checkParentInUnits(String parentName, CodeAnalysisResults results) {
     for (UnitInterface unit : results.getCachedUnits()) {
       // if not in this unit, continue
@@ -95,17 +91,13 @@ public class TypeInheritanceAnalyzer extends CodeAnalyzer {
     return null;
   }
 
-  /**
-   * check if parent is in one of classes in current file
-   */
+  /** check if parent is in one of classes in current file */
   private ClassInterface checkParentInFile(String parentName, CodeAnalysisResults results) {
     for (ClassInterface clazz : results.getClasses()) {
-      if (!clazz.equals(results.getActiveClass()) && clazz.getName()
-          .equalsIgnoreCase(parentName)) {
+      if (!clazz.equals(results.getActiveClass()) && clazz.getName().equalsIgnoreCase(parentName)) {
         return clazz;
       }
     }
     return null;
   }
-
 }

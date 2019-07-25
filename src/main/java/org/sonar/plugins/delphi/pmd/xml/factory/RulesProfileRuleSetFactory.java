@@ -20,7 +20,6 @@
 package org.sonar.plugins.delphi.pmd.xml.factory;
 
 import java.util.List;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.sonar.api.profiles.RulesProfile;
@@ -31,9 +30,7 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 import org.sonar.plugins.delphi.utils.PmdLevelUtils;
 
-/**
- * Factory class to create {@link DelphiRuleSet} out of {@link RulesProfile}.
- */
+/** Factory class to create {@link DelphiRuleSet} out of {@link RulesProfile}. */
 public class RulesProfileRuleSetFactory implements RuleSetFactory {
 
   private final RulesProfile rulesProfile;
@@ -87,11 +84,10 @@ public class RulesProfileRuleSetFactory implements RuleSetFactory {
   /**
    * Takes an HTML string and parses out the description and example
    *
-   * This is needed because PMD separates the description and example into separate XML elements.
+   * <p>This is needed because PMD separates the description and example into separate XML elements.
    * Meanwhile, Sonar is given one HTML description which we created by appending the PMD
-   * description and example in {@link DelphiRule#getHtmlDescription()}
-   * As a result, we can't reverse-engineer a PMD rule from an {@link ActiveRule} without parsing
-   * that HTML.
+   * description and example in {@link DelphiRule#getHtmlDescription()} As a result, we can't
+   * reverse-engineer a PMD rule from an {@link ActiveRule} without parsing that HTML.
    *
    * @param pmdRule The rule we are creating a description and/or example for
    * @param htmlDescription HTML containing a description and/or example

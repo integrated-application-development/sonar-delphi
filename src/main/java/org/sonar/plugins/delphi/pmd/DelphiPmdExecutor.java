@@ -27,9 +27,7 @@ import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.ProgressReporter;
 import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
 
-/**
- * PMD sensor
- */
+/** PMD sensor */
 @ScannerSide
 public class DelphiPmdExecutor {
   private static final Logger LOG = Loggers.get(DelphiPmdExecutor.class);
@@ -47,16 +45,17 @@ public class DelphiPmdExecutor {
    * @param rulesProfile profile used to export active rules
    * @param pmdConfiguration a helper class for PMD report/ruleset configuration and manipulation
    */
-  public DelphiPmdExecutor(DelphiProjectHelper delphiProjectHelper,
-      ActiveRules rulesProfile, DelphiPmdConfiguration pmdConfiguration) {
+  public DelphiPmdExecutor(
+      DelphiProjectHelper delphiProjectHelper,
+      ActiveRules rulesProfile,
+      DelphiPmdConfiguration pmdConfiguration) {
     this.delphiProjectHelper = delphiProjectHelper;
     this.rulesProfile = rulesProfile;
     this.pmdConfiguration = pmdConfiguration;
   }
 
   public Report execute() {
-    final Profiler profiler = Profiler.create(LOG).startInfo(
-        "Execute PMD " + PMDVersion.VERSION);
+    final Profiler profiler = Profiler.create(LOG).startInfo("Execute PMD " + PMDVersion.VERSION);
 
     Report result = executePmd();
 
@@ -85,12 +84,13 @@ public class DelphiPmdExecutor {
     return report;
   }
 
-  private void addToPmdReport(DelphiProject delphiProject, DelphiPMD pmd, RuleContext ruleContext,
-      RuleSets ruleSets) {
+  private void addToPmdReport(
+      DelphiProject delphiProject, DelphiPMD pmd, RuleContext ruleContext, RuleSets ruleSets) {
     LOG.info("PMD Parsing project {}", delphiProject.getName());
 
-    ProgressReporter progressReporter = new ProgressReporter(
-        delphiProject.getSourceFiles().size(), 10, new ProgressReporterLogger(LOG));
+    ProgressReporter progressReporter =
+        new ProgressReporter(
+            delphiProject.getSourceFiles().size(), 10, new ProgressReporterLogger(LOG));
 
     for (File pmdFile : delphiProject.getSourceFiles()) {
       progressReporter.progress();
@@ -123,18 +123,17 @@ public class DelphiPmdExecutor {
     return writer.toString();
   }
 
-  private void processPmdParse(DelphiPMD pmd, RuleContext ruleContext, RuleSets ruleSets,
-      File pmdFile) {
+  private void processPmdParse(
+      DelphiPMD pmd, RuleContext ruleContext, RuleSets ruleSets, File pmdFile) {
     try {
       pmd.processFile(pmdFile, ruleSets, ruleContext, fileStreamConfig);
     } catch (ParseException e) {
-      String errorMsg = "PMD error while parsing " + pmdFile.getAbsolutePath() + ": "
-          + e.getMessage();
+      String errorMsg =
+          "PMD error while parsing " + pmdFile.getAbsolutePath() + ": " + e.getMessage();
       LOG.warn(errorMsg);
       errors.add(errorMsg);
     }
   }
-
 
   @Override
   public String toString() {

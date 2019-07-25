@@ -35,14 +35,23 @@ public class CastAndFreeRule extends DelphiRule {
 
   private int sequenceHardCastIndex;
   private int sequenceSoftCastIndex;
-  private final LexerMetrics[] hardCastSequence = {LexerMetrics.IDENT, LexerMetrics.LPAREN,
-      LexerMetrics.IDENT,
-      LexerMetrics.RPAREN,
-      LexerMetrics.DOT, LexerMetrics.IDENT};
-  private final LexerMetrics[] softCastSequence = {LexerMetrics.LPAREN, LexerMetrics.IDENT,
-      LexerMetrics.AS,
-      LexerMetrics.IDENT,
-      LexerMetrics.RPAREN, LexerMetrics.DOT, LexerMetrics.IDENT};
+  private final LexerMetrics[] hardCastSequence = {
+    LexerMetrics.IDENT,
+    LexerMetrics.LPAREN,
+    LexerMetrics.IDENT,
+    LexerMetrics.RPAREN,
+    LexerMetrics.DOT,
+    LexerMetrics.IDENT
+  };
+  private final LexerMetrics[] softCastSequence = {
+    LexerMetrics.LPAREN,
+    LexerMetrics.IDENT,
+    LexerMetrics.AS,
+    LexerMetrics.IDENT,
+    LexerMetrics.RPAREN,
+    LexerMetrics.DOT,
+    LexerMetrics.IDENT
+  };
 
   @Override
   public void init() {
@@ -56,8 +65,8 @@ public class CastAndFreeRule extends DelphiRule {
     sequenceSoftCastIndex = processSequence(softCastSequence, sequenceSoftCastIndex, node, ctx);
   }
 
-  private int processSequence(LexerMetrics[] sequence, int sequenceIndex, DelphiPMDNode node,
-      RuleContext ctx) {
+  private int processSequence(
+      LexerMetrics[] sequence, int sequenceIndex, DelphiPMDNode node, RuleContext ctx) {
     int resultIndex = sequenceIndex;
     if (resultIndex >= sequence.length) {
       resultIndex = 0;

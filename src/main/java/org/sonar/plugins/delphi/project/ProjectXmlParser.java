@@ -36,9 +36,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-/**
- * Class for parsing .dproj xml file
- */
+/** Class for parsing .dproj xml file */
 public class ProjectXmlParser extends DefaultHandler {
   private static final Logger LOG = Loggers.get(ProjectXmlParser.class);
 
@@ -62,6 +60,7 @@ public class ProjectXmlParser extends DefaultHandler {
 
   /**
    * Parses the document
+   *
    * @throws IOException If the SAXParser indicates a problem with the character stream
    */
   public void parse() throws IOException {
@@ -133,7 +132,6 @@ public class ProjectXmlParser extends DefaultHandler {
       isReading = true;
     }
   }
-
 
   private void handleVersionInfoKeysEnd() {
     project.setName(readData);

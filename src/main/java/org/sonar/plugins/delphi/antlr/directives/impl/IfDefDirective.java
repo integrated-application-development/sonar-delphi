@@ -24,9 +24,7 @@ package org.sonar.plugins.delphi.antlr.directives.impl;
 
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
 
-/**
- * {$ifdef ...} or {$ifndef ...} directive
- */
+/** {$ifdef ...} or {$ifndef ...} directive */
 public class IfDefDirective extends CommonCompilerDirective {
 
   private final boolean positive;
@@ -46,9 +44,9 @@ public class IfDefDirective extends CommonCompilerDirective {
 
   /**
    * Is compiler directive looking for positive checks?
-   * <p>
-   * example: <code>{$ifdef XXX}</code> will return <b>true</b>
-   * <code>{$ifNdef YYY}</code> will return <b>false</b>
+   *
+   * <p>example: <code>{$ifdef XXX}</code> will return <b>true</b> <code>{$ifNdef YYY}</code> will
+   * return <b>false</b>
    *
    * @return true if so, false otherwise
    */
@@ -60,5 +58,4 @@ public class IfDefDirective extends CommonCompilerDirective {
   public CompilerDirectiveType getType() {
     return CompilerDirectiveType.IFDEF;
   }
-
 }

@@ -22,8 +22,8 @@
  */
 package org.sonar.plugins.delphi.antlr.directives;
 
-import org.sonar.plugins.delphi.antlr.directives.exceptions.UnsupportedCompilerDirectiveException;
 import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveSyntaxException;
+import org.sonar.plugins.delphi.antlr.directives.exceptions.UnsupportedCompilerDirectiveException;
 import org.sonar.plugins.delphi.antlr.directives.impl.DefineDirective;
 import org.sonar.plugins.delphi.antlr.directives.impl.ElseDirective;
 import org.sonar.plugins.delphi.antlr.directives.impl.EndIfDirective;
@@ -34,9 +34,7 @@ import org.sonar.plugins.delphi.antlr.directives.impl.IncludeDirective;
 import org.sonar.plugins.delphi.antlr.directives.impl.UndefineDirective;
 import org.sonar.plugins.delphi.antlr.directives.impl.UnusedDirective;
 
-/**
- * Compiler directive interface
- */
+/** Compiler directive interface */
 public interface CompilerDirective {
 
   /**
@@ -53,19 +51,13 @@ public interface CompilerDirective {
    */
   String getItem();
 
-  /**
-   * @return first definition char position in whole file
-   */
+  /** @return first definition char position in whole file */
   int getFirstCharPosition();
 
-  /**
-   * @return last definition char position
-   */
+  /** @return last definition char position */
   int getLastCharPosition();
 
-  /**
-   * @return preprocessor definition type
-   */
+  /** @return preprocessor definition type */
   CompilerDirectiveType getType();
 
   /**
@@ -75,7 +67,6 @@ public interface CompilerDirective {
    */
   int getLength();
 
-
   /**
    * Creates a concrete compiler directive class base on a given string
    *
@@ -84,7 +75,6 @@ public interface CompilerDirective {
    * @param startPos Start position of the compiler directive in the input string
    * @param endPos End position of the compiler directive in the input string
    * @return concrete compiler directive class
-   *
    * @throws UnsupportedCompilerDirectiveException when directive name is unknown
    * @throws CompilerDirectiveSyntaxException when no compiler directive could be created
    */

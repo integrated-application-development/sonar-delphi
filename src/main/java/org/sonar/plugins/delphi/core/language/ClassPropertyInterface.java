@@ -25,7 +25,8 @@ package org.sonar.plugins.delphi.core.language;
 /**
  * Interface used for class properties (DelphiLanguage style) Class property is a class field, but
  * uses class functions to read and write from another class field. Functions used to read and write
- * are not counted as unused functions.<br> Example:<br>
+ * are not counted as unused functions.<br>
+ * Example:<br>
  * <code>
  * type myClass = class(myAncestor)<br> private<br> integer age;<br> function getAge: integer;<br>
  * procedure setAge(value: integer);<br> published<br> property personAge : Boolean read getAge

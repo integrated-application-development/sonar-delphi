@@ -111,6 +111,7 @@ public class EmptyBeginStatementTest extends BasePmdRuleTest {
     assertIssues(hasItem(hasRuleKeyAtLine("EmptyBeginStatementRule", builder.getOffSet() + 13)));
     assertIssues(hasItem(hasRuleKeyAtLine("EmptyBeginStatementRule", builder.getOffSet() + 23)));
   }
+
   @Test
   public void testEmptyMethodShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
@@ -127,6 +128,7 @@ public class EmptyBeginStatementTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(not(hasItem(hasRuleKeyAtLine("EmptyBeginStatementRule", builder.getOffSet() + 2))));
+    assertIssues(
+        not(hasItem(hasRuleKeyAtLine("EmptyBeginStatementRule", builder.getOffSet() + 2))));
   }
 }

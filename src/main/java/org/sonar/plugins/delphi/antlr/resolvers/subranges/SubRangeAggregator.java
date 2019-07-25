@@ -26,9 +26,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * Aggregates sub ranges
- */
+/** Aggregates sub ranges */
 public class SubRangeAggregator {
 
   protected final ArrayList<SubRange> data = new ArrayList<>();
@@ -98,9 +96,7 @@ public class SubRangeAggregator {
     data.sort(comparator);
   }
 
-  /**
-   * @return get the list of all aggregated sub ranges
-   */
+  /** @return get the list of all aggregated sub ranges */
   public List<SubRange> getRanges() {
     return data;
   }

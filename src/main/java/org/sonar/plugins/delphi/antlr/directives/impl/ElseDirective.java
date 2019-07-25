@@ -24,9 +24,7 @@ package org.sonar.plugins.delphi.antlr.directives.impl;
 
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
 
-/**
- * {$else} or {$elseif ...} directive
- */
+/** {$else} or {$elseif ...} directive */
 public class ElseDirective extends CommonCompilerDirective {
 
   private static final String DIRECTIVE_NAME = "else";

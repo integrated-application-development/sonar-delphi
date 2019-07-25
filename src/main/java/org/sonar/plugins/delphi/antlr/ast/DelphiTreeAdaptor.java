@@ -26,9 +26,7 @@ import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTreeAdaptor;
 
-/**
- * DelphiLanguage Tree Adaptor class, used for creating DelphiPMDNodes in ANTLR
- */
+/** DelphiLanguage Tree Adaptor class, used for creating DelphiPMDNodes in ANTLR */
 class DelphiTreeAdaptor extends CommonTreeAdaptor {
 
   private final DelphiAST astTree;

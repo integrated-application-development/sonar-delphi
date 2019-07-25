@@ -24,9 +24,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-/**
- * Checks for rule violation: if not (x = false) then (redundant)
- */
+/** Checks for rule violation: if not (x = false) then (redundant) */
 public class IfNotFalseRule extends IfTrueRule {
 
   private boolean wasNot;

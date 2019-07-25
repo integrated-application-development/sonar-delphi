@@ -11,15 +11,16 @@ import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   @Test
   public void testExceptBlockShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-      .appendImpl("procedure Test();")
-      .appendImpl("begin")
-      .appendImpl("  try")
-      .appendImpl("    ThrowException;")
-      .appendImpl("  except")
-      .appendImpl("    Log.Debug('except block');")
-      .appendImpl("  end;")
-      .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test();")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    ThrowException;")
+            .appendImpl("  except")
+            .appendImpl("    Log.Debug('except block');")
+            .appendImpl("  end;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -28,17 +29,18 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testHandlerShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-        .appendImpl("procedure Test();")
-        .appendImpl("begin")
-        .appendImpl("  try")
-        .appendImpl("    ThrowException;")
-        .appendImpl("  except")
-        .appendImpl("    on E: MyException do begin")
-        .appendImpl("      Log.Debug('exception handler');")
-        .appendImpl("    end;")
-        .appendImpl("  end;")
-        .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test();")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    ThrowException;")
+            .appendImpl("  except")
+            .appendImpl("    on E: MyException do begin")
+            .appendImpl("      Log.Debug('exception handler');")
+            .appendImpl("    end;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -47,15 +49,16 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testEmptyExceptBlockShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-        .appendImpl("procedure Test();")
-        .appendImpl("begin")
-        .appendImpl("  try")
-        .appendImpl("    ThrowException;")
-        .appendImpl("  except")
-        .appendImpl("    // Do nothing")
-        .appendImpl("  end;")
-        .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test();")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    ThrowException;")
+            .appendImpl("  except")
+            .appendImpl("    // Do nothing")
+            .appendImpl("  end;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -65,17 +68,18 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testEmptyHandlerShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-        .appendImpl("procedure Test();")
-        .appendImpl("begin")
-        .appendImpl("  try")
-        .appendImpl("    ThrowException;")
-        .appendImpl("  except")
-        .appendImpl("    on E: MyException do begin")
-        .appendImpl("      // Do nothing")
-        .appendImpl("    end;")
-        .appendImpl("  end;")
-        .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test();")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    ThrowException;")
+            .appendImpl("  except")
+            .appendImpl("    on E: MyException do begin")
+            .appendImpl("      // Do nothing")
+            .appendImpl("    end;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -85,15 +89,16 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testEmptyHandlerWithoutBeginShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-        .appendImpl("procedure Test();")
-        .appendImpl("begin")
-        .appendImpl("  try")
-        .appendImpl("    ThrowException;")
-        .appendImpl("  except")
-        .appendImpl("    on E: MyException do;")
-        .appendImpl("  end;")
-        .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test();")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    ThrowException;")
+            .appendImpl("  except")
+            .appendImpl("    on E: MyException do;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
 
     execute(builder);
 

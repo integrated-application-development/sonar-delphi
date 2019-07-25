@@ -48,8 +48,9 @@ public class SingleLineCommentHandler extends LineContextHandler {
 
   @Override
   boolean matchToBegin(Line line, StringBuilder pendingLine) {
-    boolean doContextBegin = matchEndOfString(pendingLine, commentStartTag)
-        && (commentNotStartTag == null || !matchEndOfString(pendingLine, commentNotStartTag));
+    boolean doContextBegin =
+        matchEndOfString(pendingLine, commentStartTag)
+            && (commentNotStartTag == null || !matchEndOfString(pendingLine, commentNotStartTag));
     if (doContextBegin) {
       comment = new StringBuilder(commentStartTag);
     }

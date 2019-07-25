@@ -23,17 +23,13 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
-/**
- * Rule class searching for procedures, functions and variables in a .dpr file
- */
+/** Rule class searching for procedures, functions and variables in a .dpr file */
 public class DprFunctionRule extends DelphiRule {
 
-  /**
-   * Check for *.dpr.
-   */
+  /** Check for *.dpr. */
   private int check;
 
   @Override
@@ -46,8 +42,8 @@ public class DprFunctionRule extends DelphiRule {
   public void visit(DelphiPMDNode node, RuleContext ctx) {
     // checking if we are on .dpr/.dpk
     if (check == -1) {
-      if (node.getASTTree().getFileName().endsWith(".dpr") || node.getASTTree().getFileName()
-          .endsWith(".dpk")) {
+      if (node.getASTTree().getFileName().endsWith(".dpr")
+          || node.getASTTree().getFileName().endsWith(".dpk")) {
         check = 1;
       } else {
         check = 0;

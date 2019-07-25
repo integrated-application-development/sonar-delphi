@@ -69,16 +69,15 @@ public class UnitAnalyzerTest {
 
   @Test
   public void testCanAnalyze() {
-    code.setCurrentNode(new CodeNode<>(
-        new CommonTree(new CommonToken(LexerMetrics.UNIT.toMetrics(), "token"))));
-    assertTrue(analyzer.canAnalyze(code));
-    code.setCurrentNode(new CodeNode<>(new CommonTree(
-        new CommonToken(LexerMetrics.LIBRARY.toMetrics(), "token"))));
+    code.setCurrentNode(
+        new CodeNode<>(new CommonTree(new CommonToken(LexerMetrics.UNIT.toMetrics(), "token"))));
     assertTrue(analyzer.canAnalyze(code));
     code.setCurrentNode(
-        new CodeNode<>(new CommonTree(new CommonToken(LexerMetrics.IMPLEMENTATION.toMetrics(),
-            "token"))));
+        new CodeNode<>(new CommonTree(new CommonToken(LexerMetrics.LIBRARY.toMetrics(), "token"))));
+    assertTrue(analyzer.canAnalyze(code));
+    code.setCurrentNode(
+        new CodeNode<>(
+            new CommonTree(new CommonToken(LexerMetrics.IMPLEMENTATION.toMetrics(), "token"))));
     assertFalse(analyzer.canAnalyze(code));
   }
-
 }

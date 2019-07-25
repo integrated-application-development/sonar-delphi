@@ -120,5 +120,4 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
     assertIssues(hasSize(1));
     assertIssues(hasItem(hasRuleKeyAtLine("ClassNameRule", builder.getOffsetDecl() + 2)));
   }
-
 }

@@ -33,9 +33,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/**
- * Simple class for parsing XML files in DOM manner
- */
+/** Simple class for parsing XML files in DOM manner */
 public class SimpleXMLParser {
   private static final Logger LOG = Loggers.get(SimpleXMLParser.class);
   /**

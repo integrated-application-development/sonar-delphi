@@ -31,9 +31,7 @@ import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSetHelper;
 
-/**
- * ServerSide component that is able to export all currently active PMD rules as XML.
- */
+/** ServerSide component that is able to export all currently active PMD rules as XML. */
 @ServerSide
 public class DelphiPmdProfileExporter extends ProfileExporter {
 
@@ -52,8 +50,11 @@ public class DelphiPmdProfileExporter extends ProfileExporter {
     try {
       tree.writeTo(writer);
     } catch (IllegalStateException e) {
-      throw new IllegalStateException("An exception occurred while generating the PMD "
-          + "configuration file from profile: " + profile.getName(), e);
+      throw new IllegalStateException(
+          "An exception occurred while generating the PMD "
+              + "configuration file from profile: "
+              + profile.getName(),
+          e);
     }
   }
 }

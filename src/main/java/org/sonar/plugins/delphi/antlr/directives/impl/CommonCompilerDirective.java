@@ -25,9 +25,7 @@ package org.sonar.plugins.delphi.antlr.directives.impl;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
 
-/**
- * Common functionality for all compiler directives
- */
+/** Common functionality for all compiler directives */
 public class CommonCompilerDirective implements CompilerDirective {
 
   private final String name;
@@ -43,7 +41,7 @@ public class CommonCompilerDirective implements CompilerDirective {
    * @param firstCharPos directive first character occurrence
    * @param lastCharPos directive last character occurrence
    * @throws IllegalArgumentException if name was null, or firstCharPos &lt; 0, or firstCharPos &lt;
-   * lastCharPos
+   *     lastCharPos
    */
   public CommonCompilerDirective(String name, String item, int firstCharPos, int lastCharPos) {
     assertValues(name, firstCharPos, lastCharPos);
@@ -90,7 +88,6 @@ public class CommonCompilerDirective implements CompilerDirective {
       throw new IllegalArgumentException(
           "Compiler directive first character must be <= last character");
     }
-
   }
 
   @Override
@@ -102,5 +99,4 @@ public class CommonCompilerDirective implements CompilerDirective {
   public int getLength() {
     return lastCharPos - firstCharPos;
   }
-
 }

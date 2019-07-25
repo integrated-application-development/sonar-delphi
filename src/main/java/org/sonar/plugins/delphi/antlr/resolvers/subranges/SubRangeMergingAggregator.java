@@ -24,15 +24,10 @@ package org.sonar.plugins.delphi.antlr.resolvers.subranges;
 
 import java.util.Iterator;
 
-/**
- * Aggregates sub ranges, merges them if necessary to reduce workload
- */
+/** Aggregates sub ranges, merges them if necessary to reduce workload */
 public class SubRangeMergingAggregator extends SubRangeAggregator {
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void add(SubRange newRange) {
     if (newRange == null) {
@@ -89,5 +84,4 @@ public class SubRangeMergingAggregator extends SubRangeAggregator {
       }
     }
   }
-
 }

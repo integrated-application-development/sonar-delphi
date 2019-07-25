@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer;
 
-/**
- * Base class doing AST node analysis, extend it to provide custom analyzers
- */
+/** Base class doing AST node analysis, extend it to provide custom analyzers */
 public abstract class CodeAnalyzer {
 
   private CodeAnalyzer successor;

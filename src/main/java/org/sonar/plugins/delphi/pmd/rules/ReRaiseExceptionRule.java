@@ -1,8 +1,8 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 public class ReRaiseExceptionRule extends DelphiRule {
   /**
@@ -38,8 +38,8 @@ public class ReRaiseExceptionRule extends DelphiRule {
         DelphiPMDNode exceptionDeclarationNode = (DelphiPMDNode) node.getChild(i + 1);
 
         // Only raise exception if the declared name is re raised later on
-        if (exceptionDeclarationNode != null &&
-            exceptionDeclarationNode.getText().equals(exceptionName)) {
+        if (exceptionDeclarationNode != null
+            && exceptionDeclarationNode.getText().equals(exceptionName)) {
           addViolation(ctx, childNode);
         }
       }

@@ -24,12 +24,10 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
-/**
- * Checks if semicolons are properly placed
- */
+/** Checks if semicolons are properly placed */
 public class NoSemicolonRule extends DelphiRule {
 
   @Override
@@ -44,8 +42,10 @@ public class NoSemicolonRule extends DelphiRule {
   }
 
   private boolean shouldVisit(DelphiPMDNode node) {
-    return isImplementationSection() && node.getType() == DelphiLexer.END
-        && previousNodeValid(node.prevNode()) && nextNodeValid(node.nextNode());
+    return isImplementationSection()
+        && node.getType() == DelphiLexer.END
+        && previousNodeValid(node.prevNode())
+        && nextNodeValid(node.nextNode());
   }
 
   private boolean previousNodeValid(Tree node) {
@@ -101,5 +101,4 @@ public class NoSemicolonRule extends DelphiRule {
   private boolean notSemicolonNode(Tree node) {
     return node != null && node.getType() != DelphiLexer.SEMI;
   }
-
 }

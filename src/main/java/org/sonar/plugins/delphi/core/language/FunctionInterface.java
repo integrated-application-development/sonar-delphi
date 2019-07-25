@@ -24,9 +24,7 @@ package org.sonar.plugins.delphi.core.language;
 
 import java.util.List;
 
-/**
- * Interface used to create custom, language-dependent functions. Used by AbstractAnalyser.
- */
+/** Interface used to create custom, language-dependent functions. Used by AbstractAnalyser. */
 public interface FunctionInterface extends HasNameInterface {
 
   /**
@@ -71,9 +69,7 @@ public interface FunctionInterface extends HasNameInterface {
    */
   boolean isDeclaration();
 
-  /**
-   * Increases function Cyclomatic Complexity by 1
-   */
+  /** Increases function Cyclomatic Complexity by 1 */
   void increaseComplexity();
 
   /**
@@ -83,9 +79,7 @@ public interface FunctionInterface extends HasNameInterface {
    */
   int getOverloadsCount();
 
-  /**
-   * Increase number of function overloads
-   */
+  /** Increase number of function overloads */
   void increaseFunctionOverload();
 
   /**
@@ -333,5 +327,4 @@ public interface FunctionInterface extends HasNameInterface {
    * @return True if function is a message function, false otherwise
    */
   boolean isMessage();
-
 }

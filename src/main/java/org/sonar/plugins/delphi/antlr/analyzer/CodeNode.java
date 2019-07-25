@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer;
 
-/**
- * Template class holding specific node
- */
+/** Template class holding specific node */
 public class CodeNode<T> {
 
   private final T node;
@@ -38,9 +36,7 @@ public class CodeNode<T> {
     node = n;
   }
 
-  /**
-   * @return node
-   */
+  /** @return node */
   public T getNode() {
     return node;
   }

@@ -42,16 +42,20 @@ public class DelphiTestUtils {
     DelphiProjectHelper mock = mock(DelphiProjectHelper.class);
     when(mock.shouldExecuteOnProject()).thenReturn(true);
 
-    when(mock.getFile(any(File.class))).thenAnswer((Answer<InputFile>) invocation -> {
-      File file = (File) invocation.getArguments()[0];
-      return TestInputFileBuilder
-          .create("ROOT_KEY_CHANGE_AT_SONARAPI_5", file.getParentFile(), file)
-          .setModuleBaseDir(file.getParentFile().toPath())
-          .setLanguage(DelphiLanguage.KEY)
-          .setType(Type.MAIN)
-          .setContents(DelphiUtils.readFileContent(file, Charset.defaultCharset().name()))
-          .build();
-    });
+    when(mock.getFile(any(File.class)))
+        .thenAnswer(
+            (Answer<InputFile>)
+                invocation -> {
+                  File file = (File) invocation.getArguments()[0];
+                  return TestInputFileBuilder.create(
+                          "ROOT_KEY_CHANGE_AT_SONARAPI_5", file.getParentFile(), file)
+                      .setModuleBaseDir(file.getParentFile().toPath())
+                      .setLanguage(DelphiLanguage.KEY)
+                      .setType(Type.MAIN)
+                      .setContents(
+                          DelphiUtils.readFileContent(file, Charset.defaultCharset().name()))
+                      .build();
+                });
 
     return mock;
   }

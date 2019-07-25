@@ -49,5 +49,4 @@ public class HasRuleKey<T extends Issue> extends TypeSafeMatcher<T> {
   public static <T extends Issue> Matcher<T> hasRuleKey(String key) {
     return new HasRuleKey<>(key);
   }
-
 }

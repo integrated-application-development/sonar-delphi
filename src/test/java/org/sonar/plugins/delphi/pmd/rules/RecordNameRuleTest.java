@@ -65,5 +65,4 @@ public class RecordNameRuleTest extends BasePmdRuleTest {
     assertIssues(hasSize(1));
     assertIssues(hasItem(hasRuleKeyAtLine("RecordNameRule", builder.getOffsetDecl() + 2)));
   }
-
 }

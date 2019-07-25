@@ -31,12 +31,10 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
-/**
- * Rule violation for unused function/procedure/method arguments
- */
+/** Rule violation for unused function/procedure/method arguments */
 public class UnusedArgumentsRule extends DelphiRule {
   private String currentTypeName;
   private Set<String> excludedMethods;
@@ -132,9 +130,9 @@ public class UnusedArgumentsRule extends DelphiRule {
     for (int i = 0; i < methodNode.getChildCount(); ++i) {
       int type = methodNode.getChild(i).getType();
 
-      if (type == DelphiLexer.OVERRIDE ||
-          type == DelphiLexer.VIRTUAL ||
-          type == DelphiLexer.MESSAGE) {
+      if (type == DelphiLexer.OVERRIDE
+          || type == DelphiLexer.VIRTUAL
+          || type == DelphiLexer.MESSAGE) {
         return true;
       }
     }
@@ -143,8 +141,8 @@ public class UnusedArgumentsRule extends DelphiRule {
   }
 
   /**
-   * Excludes methods from this rule if they have been assigned to a variable
-   * This indicates that the method has to satisfy some callback method signature
+   * Excludes methods from this rule if they have been assigned to a variable This indicates that
+   * the method has to satisfy some callback method signature
    *
    * @param node The current node
    */
@@ -168,8 +166,8 @@ public class UnusedArgumentsRule extends DelphiRule {
   }
 
   /**
-   * Excludes methods from this rule if their pointer address has been passed around
-   * This indicates that the method has to satisfy some callback method signature
+   * Excludes methods from this rule if their pointer address has been passed around This indicates
+   * that the method has to satisfy some callback method signature
    *
    * @param node The current node
    */
@@ -251,9 +249,10 @@ public class UnusedArgumentsRule extends DelphiRule {
   private void findSubProcedureBeginNodes(DelphiPMDNode node, List<Tree> beginNodes) {
     final int[] types = {DelphiLexer.PROCEDURE, DelphiLexer.FUNCTION};
 
-    List<DelphiPMDNode> methodNodes = node.findAllChildren(types).stream()
-        .map(treeNode -> (DelphiPMDNode) treeNode)
-        .collect(Collectors.toList());
+    List<DelphiPMDNode> methodNodes =
+        node.findAllChildren(types).stream()
+            .map(treeNode -> (DelphiPMDNode) treeNode)
+            .collect(Collectors.toList());
 
     for (DelphiPMDNode methodNode : methodNodes) {
       int childIndex = methodNode.getChildIndex();
@@ -306,8 +305,8 @@ public class UnusedArgumentsRule extends DelphiRule {
    * @param node PMDNode
    * @param methodName Method name
    */
-  private void addViolationsForUnusedArguments(Map<String, Integer> args, RuleContext ctx,
-      DelphiPMDNode node, String methodName) {
+  private void addViolationsForUnusedArguments(
+      Map<String, Integer> args, RuleContext ctx, DelphiPMDNode node, String methodName) {
     for (Map.Entry<String, Integer> entry : args.entrySet()) {
       if (entry.getValue() > 0) {
         continue;
@@ -410,8 +409,8 @@ public class UnusedArgumentsRule extends DelphiRule {
 }
 
 /**
- * Stores information about a potential unused argument violation.
- * When the end of the file is reached, violations are created from these objects.
+ * Stores information about a potential unused argument violation. When the end of the file is
+ * reached, violations are created from these objects.
  */
 class PossibleUnusedArgument {
   private UnusedArgumentsRule rule;
@@ -420,8 +419,12 @@ class PossibleUnusedArgument {
   private String argName;
   private String methodName;
 
-  PossibleUnusedArgument(UnusedArgumentsRule rule, RuleContext ctx, DelphiPMDNode node,
-      String argName, String methodName) {
+  PossibleUnusedArgument(
+      UnusedArgumentsRule rule,
+      RuleContext ctx,
+      DelphiPMDNode node,
+      String argName,
+      String methodName) {
     this.rule = rule;
     this.ctx = ctx;
     this.node = node;
@@ -429,9 +432,7 @@ class PossibleUnusedArgument {
     this.methodName = methodName;
   }
 
-  /**
-   * Creates a violation for this unused argument (unless the method is excluded)
-   */
+  /** Creates a violation for this unused argument (unless the method is excluded) */
   void processViolation() {
     if (rule.isExcluded(methodName)) {
       return;

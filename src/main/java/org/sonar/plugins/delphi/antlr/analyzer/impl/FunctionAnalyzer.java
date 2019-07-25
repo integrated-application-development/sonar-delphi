@@ -40,20 +40,20 @@ import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
 import org.sonar.plugins.delphi.core.language.impl.DelphiUnit;
 import org.sonar.plugins.delphi.core.language.impl.UnresolvedFunctionCall;
 
-/**
- * Class used for function analysis
- */
+/** Class used for function analysis */
 public class FunctionAnalyzer extends CodeAnalyzer {
 
   private static final String PROP_MESSAGE = "message";
   private static final String PROP_VIRTUAL = "virtual";
   public static final String UNTYPED_PARAMETER_NAME = "UntypedParameter";
 
-  private static final LexerMetrics[] FUNCTION_NODE_TYPE = {LexerMetrics.FUNCTION,
-      LexerMetrics.PROCEDURE,
-      LexerMetrics.DESTRUCTOR,
-      LexerMetrics.CONSTRUCTOR,
-      LexerMetrics.OPERATOR};
+  private static final LexerMetrics[] FUNCTION_NODE_TYPE = {
+    LexerMetrics.FUNCTION,
+    LexerMetrics.PROCEDURE,
+    LexerMetrics.DESTRUCTOR,
+    LexerMetrics.CONSTRUCTOR,
+    LexerMetrics.OPERATOR
+  };
 
   private String functionName;
   private String functionRealName;
@@ -95,8 +95,8 @@ public class FunctionAnalyzer extends CodeAnalyzer {
     }
 
     ClassInterface currentClass = results.getActiveClass(); // null?
-    functionName = checkFunctionName(functionRealName.toLowerCase(), currentClass, results)
-        .toLowerCase();
+    functionName =
+        checkFunctionName(functionRealName.toLowerCase(), currentClass, results).toLowerCase();
     functionArguments = getFunctionArguments(functionNode);
     functionLongName = getLongName();
     functionProperties = getFunctionProperties(codeTree.getCurrentCodeNode().getNode());
@@ -121,8 +121,8 @@ public class FunctionAnalyzer extends CodeAnalyzer {
     return props;
   }
 
-  private String checkFunctionName(String functionName, ClassInterface currentClass,
-      CodeAnalysisResults results) {
+  private String checkFunctionName(
+      String functionName, ClassInterface currentClass, CodeAnalysisResults results) {
     if (currentClass != null) {
       if (functionName.startsWith(currentClass.getName().toLowerCase())) {
         return functionName;
@@ -217,8 +217,8 @@ public class FunctionAnalyzer extends CodeAnalyzer {
     return longNameBuilder.toString();
   }
 
-  private FunctionInterface createFunction(CodeAnalysisResults results,
-      ClassInterface currentClass) {
+  private FunctionInterface createFunction(
+      CodeAnalysisResults results, ClassInterface currentClass) {
     FunctionInterface activeFunction = results.getCachedFunction(functionLongName);
     if (activeFunction == null) {
       activeFunction = new DelphiFunction();
@@ -247,8 +247,8 @@ public class FunctionAnalyzer extends CodeAnalyzer {
       results.cacheFunction(functionLongName, activeFunction);
 
       // check for unresolved function calls
-      UnresolvedFunctionCall unresolved = results.getUnresolvedCalls()
-          .get(activeFunction.getShortName());
+      UnresolvedFunctionCall unresolved =
+          results.getUnresolvedCalls().get(activeFunction.getShortName());
       if (unresolved != null && unresolved.resolve(activeFunction, results.getCachedUnits())) {
         results.getUnresolvedCalls().remove(activeFunction.getShortName());
       }
@@ -256,8 +256,8 @@ public class FunctionAnalyzer extends CodeAnalyzer {
     return activeFunction;
   }
 
-  private void processFunction(FunctionInterface activeFunction, CodeAnalysisResults results,
-      ClassInterface currentClass) {
+  private void processFunction(
+      FunctionInterface activeFunction, CodeAnalysisResults results, ClassInterface currentClass) {
     // if we found a global function before, add it to this file
     if (activeFunction.isGlobal() && !results.hasFunction(activeFunction)) {
       results.addFunction(activeFunction);

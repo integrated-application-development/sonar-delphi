@@ -54,8 +54,8 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser {
     return "CodeCoverage_Summary.xml".equalsIgnoreCase(path.getFileName().toString());
   }
 
-  private void parseLineHit(String lineCoverage, int startPos, int endPos,
-      NewCoverage newCoverage) {
+  private void parseLineHit(
+      String lineCoverage, int startPos, int endPos, NewCoverage newCoverage) {
     String lineHit = lineCoverage.substring(startPos, endPos);
     int eq = lineHit.indexOf('=');
     if (eq > 0) {

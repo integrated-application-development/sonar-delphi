@@ -19,12 +19,18 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-
 import net.sourceforge.pmd.Report;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -33,13 +39,6 @@ import org.junit.Test;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.internal.MapSettings;
 import org.sonar.plugins.delphi.DelphiPlugin;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
 
 public class DelphiPmdConfigurationTest {
 
@@ -87,8 +86,7 @@ public class DelphiPmdConfigurationTest {
   public void testShouldFailToDumpXmlRuleSet() {
     when(fs.workDir()).thenReturn(new File("xxx"));
 
-    final Throwable thrown = catchThrowable(
-        () -> configuration.dumpXmlRuleSet("pmd", "<xml>"));
+    final Throwable thrown = catchThrowable(() -> configuration.dumpXmlRuleSet("pmd", "<xml>"));
 
     assertThat(thrown)
         .isInstanceOf(IllegalStateException.class)

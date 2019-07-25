@@ -103,5 +103,4 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
     assertIssues(empty());
   }
-
 }

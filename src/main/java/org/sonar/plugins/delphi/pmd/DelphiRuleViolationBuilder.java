@@ -33,8 +33,8 @@ public class DelphiRuleViolationBuilder {
         node.getBeginLine(), node.getBeginColumn(), node.getEndLine(), node.getEndColumn());
   }
 
-  public DelphiRuleViolationBuilder logicalLocation(String packageName, String className,
-      String methodName) {
+  public DelphiRuleViolationBuilder logicalLocation(
+      String packageName, String className, String methodName) {
     ruleViolation.setPackageName(packageName);
     ruleViolation.setClassName(className);
     ruleViolation.setMethodName(methodName);
@@ -54,7 +54,6 @@ public class DelphiRuleViolationBuilder {
   public void save() {
     ctx.getReport().addRuleViolation(ruleViolation);
   }
-
 
   private void findLogicalLocation(DelphiPMDNode node) {
     Tree unitNode = node.getAncestor(DelphiLexer.UNIT);
@@ -145,5 +144,4 @@ public class DelphiRuleViolationBuilder {
   private boolean isProcedureOrFunction(int type) {
     return type == DelphiLexer.PROCEDURE || type == DelphiLexer.FUNCTION;
   }
-
 }

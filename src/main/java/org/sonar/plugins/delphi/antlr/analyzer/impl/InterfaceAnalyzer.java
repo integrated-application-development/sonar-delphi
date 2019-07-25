@@ -23,23 +23,20 @@
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
-import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
 
-/**
- * Set the section of file currently being parsed (interface / implementation sections)
- */
+/** Set the section of file currently being parsed (interface / implementation sections) */
 public class InterfaceAnalyzer extends CodeAnalyzer {
 
   @Override
   public void doAnalyze(CodeTree codeTree, CodeAnalysisResults results) {
-    LexerMetrics lexerMetrics = LexerMetrics
-        .getLexerMetricsForType(codeTree.getCurrentCodeNode().getNode()
-            .getType());
+    LexerMetrics lexerMetrics =
+        LexerMetrics.getLexerMetricsForType(codeTree.getCurrentCodeNode().getNode().getType());
     if (lexerMetrics == LexerMetrics.IMPLEMENTATION) {
       results.setActiveClass(null);
       results.setParseVisibility(LexerMetrics.PRIVATE);
@@ -54,5 +51,4 @@ public class InterfaceAnalyzer extends CodeAnalyzer {
     int type = currentNode.getType();
     return (type == DelphiLexer.INTERFACE || type == DelphiParser.IMPLEMENTATION);
   }
-
 }

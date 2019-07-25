@@ -22,7 +22,6 @@ package org.sonar.plugins.delphi.utils;
 
 import java.util.Objects;
 import javax.annotation.Nullable;
-
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rule.Severity;
 import org.sonar.api.rules.Rule;
@@ -31,14 +30,15 @@ import org.sonar.api.rules.RulePriority;
 /**
  * A helper class which converts between PMD levels and Sonar {@link Severity}/{@link RulePriority}
  *
- * RulePriority is deprecated and should be removed as soon as Severity is a viable option
- * The Sonar API still returns or expects RulePriority in several places, including
- * {@link RulesProfile#activateRule} and {@link Rule#setSeverity}
+ * <p>RulePriority is deprecated and should be removed as soon as Severity is a viable option The
+ * Sonar API still returns or expects RulePriority in several places, including {@link
+ * RulesProfile#activateRule} and {@link Rule#setSeverity}
  */
 @SuppressWarnings("deprecation")
 public final class PmdLevelUtils {
 
   private static final int INDEX_LEVEL = RulePriority.values().length;
+
   private PmdLevelUtils() {
     // only static methods
   }

@@ -29,8 +29,8 @@ import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /**
  * Rule that checks if you are using function/variables names correctly, that is you don't misspell
@@ -40,10 +40,10 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 @Smell(
     minutes = 60,
-    reason = "Won't handle function name mixing when the type is declared in the implementation."
-        + "Also doesn't handle argument names.",
-    type = SmellType.WRONG_LOGIC
-)
+    reason =
+        "Won't handle function name mixing when the type is declared in the implementation."
+            + "Also doesn't handle argument names.",
+    type = SmellType.WRONG_LOGIC)
 public class MixedNamesRule extends DelphiRule {
 
   private final List<String> functionNames = new ArrayList<>();
@@ -112,9 +112,7 @@ public class MixedNamesRule extends DelphiRule {
     }
   }
 
-  /**
-   * Check variable names between begin...end statements
-   */
+  /** Check variable names between begin...end statements */
   private void checkVariableNames(DelphiPMDNode node, RuleContext ctx, boolean clear) {
     for (int i = 0; i < node.getChildCount(); ++i) {
       DelphiPMDNode child = new DelphiPMDNode((CommonTree) node.getChild(i), node.getASTTree());
@@ -132,8 +130,14 @@ public class MixedNamesRule extends DelphiRule {
         String name = child.getText();
         String globalName = getGlobalName(name, variableNames);
         if (!globalName.equals(name)) {
-          addViolation(ctx, child, "Avoid mixing variable names (found: '" + child.getText()
-              + "' expected: '" + globalName + "').");
+          addViolation(
+              ctx,
+              child,
+              "Avoid mixing variable names (found: '"
+                  + child.getText()
+                  + "' expected: '"
+                  + globalName
+                  + "').");
         }
       }
     }
@@ -158,16 +162,16 @@ public class MixedNamesRule extends DelphiRule {
     return name;
   }
 
-  /**
-   * Check function names
-   */
+  /** Check function names */
   private void checkFunctionNames(DelphiPMDNode node, RuleContext ctx) {
     List<String> currentNames = buildNames(node, false);
     for (String name : currentNames) {
       String globalName = getGlobalName(name, functionNames);
       if (!name.equals(globalName)) {
-        addViolation(ctx, node, "Avoid mixing function names (found: '" + name + "' expected: '"
-            + globalName + "').");
+        addViolation(
+            ctx,
+            node,
+            "Avoid mixing function names (found: '" + name + "' expected: '" + globalName + "').");
       }
     }
   }

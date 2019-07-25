@@ -35,13 +35,9 @@ public class CountRule extends DelphiRule {
   private int typeToSearch;
   protected int definedLimit;
   protected int count;
-  /**
-   * Number to increase the count.
-   */
+  /** Number to increase the count. */
   protected int strength = 1;
-  /**
-   * Should we reset the counter after exceeding the limit.
-   */
+  /** Should we reset the counter after exceeding the limit. */
   protected boolean reset = true;
 
   String getStringToSearch() {

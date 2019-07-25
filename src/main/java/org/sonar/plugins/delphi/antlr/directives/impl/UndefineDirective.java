@@ -24,9 +24,7 @@ package org.sonar.plugins.delphi.antlr.directives.impl;
 
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
 
-/**
- * {$UNDEF ...} directive
- */
+/** {$UNDEF ...} directive */
 public class UndefineDirective extends CommonCompilerDirective {
 
   private static final String DIRECTIVE_NAME = "undefine";
@@ -46,5 +44,4 @@ public class UndefineDirective extends CommonCompilerDirective {
   public CompilerDirectiveType getType() {
     return CompilerDirectiveType.UNDEFINE;
   }
-
 }

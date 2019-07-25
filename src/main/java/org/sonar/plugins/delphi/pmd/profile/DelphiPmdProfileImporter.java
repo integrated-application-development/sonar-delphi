@@ -41,20 +41,18 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSetHelper;
 import org.sonar.plugins.delphi.utils.PmdLevelUtils;
 
-/**
- * imports Delphi rules profile from Sonar
- */
+/** imports Delphi rules profile from Sonar */
 @ServerSide
 public class DelphiPmdProfileImporter extends ProfileImporter {
   private static final Logger LOG = Loggers.get(DelphiPmdProfileImporter.class);
 
-  private static final String MISSING_CLASS_WARNING = "A PMD rule without 'class' attribute can't "
-      + "be imported. see '%s'";
+  private static final String MISSING_CLASS_WARNING =
+      "A PMD rule without 'class' attribute can't " + "be imported. see '%s'";
 
   private static final String UNKNOWN_PMD_RULE_WARNING = "Unable to import unknown PMD rule '%s'";
 
-  private static final String PROP_NOT_SUPPORTED_WARNING = "The property '%s' is not supported in "
-      + "the pmd rule: %s";
+  private static final String PROP_NOT_SUPPORTED_WARNING =
+      "The property '%s' is not supported in " + "the pmd rule: %s";
 
   private final RuleFinder ruleFinder;
   private ValidationMessages messages;
@@ -79,15 +77,14 @@ public class DelphiPmdProfileImporter extends ProfileImporter {
 
   private void createActiveRule(DelphiRule delphiRule, RulesProfile profile) {
     String ruleName = delphiRule.getName();
-    
+
     if (delphiRule.getClazz() == null) {
       addWarning(String.format(MISSING_CLASS_WARNING, ruleName));
       return;
     }
 
-    RuleQuery query = RuleQuery.create()
-        .withRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY)
-        .withKey(ruleName);
+    RuleQuery query =
+        RuleQuery.create().withRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY).withKey(ruleName);
 
     Rule rule = ruleFinder.find(query);
 

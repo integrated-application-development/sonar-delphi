@@ -38,9 +38,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 
-/**
- * Preforms PMD check for Delphi source files
- */
+/** Preforms PMD check for Delphi source files */
 public class DelphiPMD {
 
   private final Report report = new Report();
@@ -53,8 +51,8 @@ public class DelphiPMD {
    * @param ctx context in which PMD is operating. This contains the Renderer and whatnot
    * @param fileStreamConfig configures the filestream that creates the AST
    */
-  public void processFile(File pmdFile, RuleSets ruleSets, RuleContext ctx,
-      DelphiFileStreamConfig fileStreamConfig) {
+  public void processFile(
+      File pmdFile, RuleSets ruleSets, RuleContext ctx, DelphiFileStreamConfig fileStreamConfig) {
     ctx.setSourceCodeFile(pmdFile);
     ctx.setReport(report);
 
@@ -97,7 +95,7 @@ public class DelphiPMD {
    * @param list List of DelphiPMDNodes being built
    */
   private void indexNode(Tree parent, int childIndex, DelphiAST ast, List<Node> list) {
-    CommonTree node = (CommonTree)parent.getChild(childIndex);
+    CommonTree node = (CommonTree) parent.getChild(childIndex);
 
     if (node == null) {
       return;

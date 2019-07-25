@@ -24,17 +24,15 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
-/**
- * Class for counting method lines. If too long, creates a violation.
- */
+/** Class for counting method lines. If too long, creates a violation. */
 public class TooLongMethodRule extends DelphiRule {
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    if (notMethodNode(node)){
+    if (notMethodNode(node)) {
       return;
     }
 

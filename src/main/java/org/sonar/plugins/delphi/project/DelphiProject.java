@@ -31,9 +31,7 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-/**
- * DelphiLanguage project class, it holds values parsed from *.dproj file.
- */
+/** DelphiLanguage project class, it holds values parsed from *.dproj file. */
 public class DelphiProject {
   private static final Logger LOG = Loggers.get(DelphiProject.class);
 
@@ -173,5 +171,4 @@ public class DelphiProject {
   public void setSourceFiles(List<File> list) {
     this.files = list;
   }
-
 }

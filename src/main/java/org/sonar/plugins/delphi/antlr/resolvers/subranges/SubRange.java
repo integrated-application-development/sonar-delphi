@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.resolvers.subranges;
 
-/**
- * Sub range interface
- */
+/** Sub range interface */
 public interface SubRange {
 
   /**
@@ -70,5 +68,4 @@ public interface SubRange {
    * @param value new begin value
    */
   void setBegin(int value);
-
 }

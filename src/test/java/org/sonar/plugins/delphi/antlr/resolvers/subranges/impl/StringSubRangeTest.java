@@ -50,5 +50,4 @@ public class StringSubRangeTest {
     range.setBegin(11);
     assertEquals("[11, 15] test", range.toString());
   }
-
 }

@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.core.language;
 
-/**
- * Interface used for class fields (variables).
- */
+/** Interface used for class fields (variables). */
 public interface ClassFieldInterface extends ArgumentInterface {
 
   /**
@@ -41,9 +39,7 @@ public interface ClassFieldInterface extends ArgumentInterface {
    */
   ClassInterface getParent();
 
-  /**
-   * @return Fields visibility (, protected or private)
-   */
+  /** @return Fields visibility (, protected or private) */
   int getVisibility();
 
   /**
