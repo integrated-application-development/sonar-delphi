@@ -153,7 +153,7 @@ public class DelphiSensor implements Sensor {
   private void processCpd(SensorContext context, InputFile inputFile) {
     String fileName = DelphiUtils.uriToAbsolutePath(inputFile.uri());
 
-    if (!delphiProjectHelper.isExcluded(fileName)) {
+    if (delphiProjectHelper.isExcluded(fileName)) {
       return;
     }
 

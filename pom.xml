@@ -1,166 +1,164 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-
-
-	<artifactId>sonar-delphi-plugin</artifactId>
-	<version>0.1</version>
-	<groupId>org.delphi.plugin</groupId>
-	<name>SonarDelphi Plugin</name>
-	<description>Enables analysis of Delphi projects in SonarQube 7.9+.
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>sonar-delphi-plugin</artifactId>
+  <version>0.1</version>
+  <groupId>org.delphi.plugin</groupId>
+  <name>Sonar Delphi Plugin</name>
+  <description>Enables analysis of Delphi projects in SonarQube 7.9+.
     Originally developed by Sabre Airline solutions and numerous open source developers.
     Modified for use for IntegraDev (IAD) with custom rules and functions by
     Monash University students.</description>
-
-	<inceptionYear>2011</inceptionYear>
-
-	<developers>
-		<developer>
-			<id>sandroluck</id>
-			<email>sandro.luck@gmx.ch</email>
-			<name>Sandro Luck</name>
-			<roles>
-				<role>developer</role>
-			</roles>
-		</developer>
-		<developer>
-			<id>fabriciocolombo</id>
-			<email>fabricio.colombo.mva@gmail.com</email>
-			<name>Fabricio Colombo</name>
-			<roles>
-				<role>developer</role>
-			</roles>
-		</developer>
-		<developer>
-			<id>pk</id>
-			<email>przemyslaw.kociolek@sabre.com</email>
-			<name>Przemyslaw Kociolek</name>
-			<roles>
-				<role>developer</role>
-			</roles>
-		</developer>
-		<developer>
-			<id>mgw</id>
-			<name>Michal Wojcik</name>
-			<email>michal.wojcik@sabre.com</email>
-			<organization>Sabre Airline Solutions</organization>
-			<organizationUrl>http://www.sabreairlinesolutions.com</organizationUrl>
-			<roles>
-				<role>architect</role>
-				<role>developer</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
-		<developer>
-			<id>agt</id>
-			<name>The Agile Excuse Team - Monash University</name>
-			<roles>
-				<role>developer</role>
-			</roles>
-		</developer>
-	</developers>
-
-	<properties>
-		<!--Version Fields-->
-		<sonarQubeMinVersion>7.9</sonarQubeMinVersion>
-		<sonar.version>7.9</sonar.version>
-		<antlr-runtime.version>3.4</antlr-runtime.version>
-		<slf4j.version>1.7.5</slf4j.version>
-		<pmd.version>6.15.0</pmd.version>
-		<hamcrest-all.version>1.3</hamcrest-all.version>
-		<junit.version>4.12</junit.version>
-		<org.mockit.version>3.0.0</org.mockit.version>
-		<slf4j.version>1.8.0-beta4</slf4j.version>
-		<java-surefire.version>5.13.0.18197</java-surefire.version>
-		<guava.version>27.1-jre</guava.version>
-		<jdom.version>1.0</jdom.version>
-		<sonarqube-smell-plugin.version>4.0.0</sonarqube-smell-plugin.version>
-		<errorprone.version>2.3.3</errorprone.version>
-		<!--Maven plugins-->
-		<antlr3-plugin.version>3.5.2</antlr3-plugin.version>
-		<jacoco-plugin.version>0.8.4</jacoco-plugin.version>
-		<surefire-plugin.version>2.22.0</surefire-plugin.version>
-		<sonar-packaging-plugin.version>1.16</sonar-packaging-plugin.version>
-		<license-plugin.version>1.9.0</license-plugin.version>
-		<javadoc-plugin>3.1.0</javadoc-plugin>
-		<dependency-plugin.version>2.10</dependency-plugin.version>
-		<dependency-check-plugin.version>5.0.0</dependency-check-plugin.version>
-		<compiler-plugin.version>3.5.1</compiler-plugin.version>
-		<!--Version Fields end here-->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<sonar.pluginName>Delphi</sonar.pluginName>
-		<sonar.pluginClass>org.sonar.plugins.delphi.DelphiPlugin</sonar.pluginClass>
-		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
-		<sonar.issuesReport.html.enable>true</sonar.issuesReport.html.enable>
-		<maven.test.skip>false</maven.test.skip>
-		<maven.showDeprecation.showWarnings>true</maven.showDeprecation.showWarnings>
-		<maven.compiler.showWarnings>true</maven.compiler.showWarnings>
-	</properties>
-
-	<!-- this is important for sonar-packaging-maven-plugin -->
-	<packaging>sonar-plugin</packaging>
-
-	<dependencies>
-		<!-- Sonar provided deps -->
-		<dependency>
-			<groupId>org.sonarsource.sonarqube</groupId>
-			<artifactId>sonar-plugin-api</artifactId>
-			<version>${sonar.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<!-- Plugin's specific deps -->
-		<dependency>
-			<groupId>org.antlr</groupId>
-			<artifactId>antlr-runtime</artifactId>
-			<version>${antlr-runtime.version}</version>
-		</dependency>
-		<dependency>
-				<groupId>net.sourceforge.pmd</groupId>
-				<artifactId>pmd-core</artifactId>
-				<version>${pmd.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.sonarsource.sonarqube</groupId>
-			<artifactId>sonar-testing-harness</artifactId>
-			<version>${sonar.version}</version>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>hamcrest-all</artifactId>
-					<groupId>org.hamcrest</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-all</artifactId>
-			<version>${hamcrest-all.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>${org.mockit.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.sonarsource.java</groupId>
-			<artifactId>java-surefire</artifactId>
-			<version>${java-surefire.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>${guava.version}</version>
-			<scope>compile</scope>
-		</dependency>
+  <inceptionYear>2011</inceptionYear>
+  <developers>
+    <developer>
+      <id>sandroluck</id>
+      <email>sandro.luck@gmx.ch</email>
+      <name>Sandro Luck</name>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>fabriciocolombo</id>
+      <email>fabricio.colombo.mva@gmail.com</email>
+      <name>Fabricio Colombo</name>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>pk</id>
+      <email>przemyslaw.kociolek@sabre.com</email>
+      <name>Przemyslaw Kociolek</name>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>mgw</id>
+      <name>Michal Wojcik</name>
+      <email>michal.wojcik@sabre.com</email>
+      <organization>Sabre Airline Solutions</organization>
+      <organizationUrl>http://www.sabreairlinesolutions.com</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+    <developer>
+      <id>agt</id>
+      <name>The Agile Excuse Team - Monash University</name>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+  </developers>
+  <distributionManagement>
+    <site>
+      <id>doc</id>
+      <url>file://${java.io.tmpdir}/sonar-delphi-plugin-docs</url>
+    </site>
+  </distributionManagement>
+  <properties>
+    <!--Version Fields-->
+    <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
+    <sonar.version>7.9</sonar.version>
+    <antlr-runtime.version>3.4</antlr-runtime.version>
+    <slf4j.version>1.7.5</slf4j.version>
+    <pmd.version>6.15.0</pmd.version>
+    <hamcrest-all.version>1.3</hamcrest-all.version>
+    <junit.version>4.12</junit.version>
+    <org.mockit.version>3.0.0</org.mockit.version>
+    <slf4j.version>1.8.0-beta4</slf4j.version>
+    <java-surefire.version>5.13.0.18197</java-surefire.version>
+    <guava.version>27.1-jre</guava.version>
+    <jdom.version>1.0</jdom.version>
+    <sonarqube-smell-plugin.version>4.0.0</sonarqube-smell-plugin.version>
+    <errorprone.version>2.3.4</errorprone.version>
+    <!--Maven plugins-->
+    <antlr3-plugin.version>3.5.2</antlr3-plugin.version>
+    <jacoco-plugin.version>0.8.4</jacoco-plugin.version>
+    <surefire-plugin.version>2.22.0</surefire-plugin.version>
+    <sonar-packaging-plugin.version>1.16</sonar-packaging-plugin.version>
+    <license-plugin.version>1.9.0</license-plugin.version>
+    <javadoc-plugin>3.1.0</javadoc-plugin>
+    <dependency-plugin.version>2.10</dependency-plugin.version>
+    <dependency-check-plugin.version>5.0.0</dependency-check-plugin.version>
+    <compiler-plugin.version>3.5.1</compiler-plugin.version>
+    <!--Version Fields end here-->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <sonar.pluginName>Delphi</sonar.pluginName>
+    <sonar.pluginClass>org.sonar.plugins.delphi.DelphiPlugin</sonar.pluginClass>
+    <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
+    <sonar.issuesReport.html.enable>true</sonar.issuesReport.html.enable>
+    <maven.test.skip>false</maven.test.skip>
+    <maven.showDeprecation.showWarnings>true</maven.showDeprecation.showWarnings>
+    <maven.compiler.showWarnings>true</maven.compiler.showWarnings>
+  </properties>
+  <!-- this is important for sonar-packaging-maven-plugin -->
+  <packaging>sonar-plugin</packaging>
+  <dependencies>
+    <!-- Sonar provided deps -->
+    <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-plugin-api</artifactId>
+      <version>${sonar.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- Plugin's specific deps -->
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr-runtime</artifactId>
+      <version>${antlr-runtime.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sourceforge.pmd</groupId>
+      <artifactId>pmd-core</artifactId>
+      <version>${pmd.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-testing-harness</artifactId>
+      <version>${sonar.version}</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>hamcrest-all</artifactId>
+          <groupId>org.hamcrest</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-all</artifactId>
+      <version>${hamcrest-all.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${org.mockit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.sonarsource.java</groupId>
+      <artifactId>java-surefire</artifactId>
+      <version>${java-surefire.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${guava.version}</version>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>org.jacoco</groupId>
       <artifactId>jacoco-maven-plugin</artifactId>
@@ -168,93 +166,91 @@
       <type>maven-plugin</type>
       <scope>provided</scope>
     </dependency>
-		<dependency>
-			<groupId>jdom</groupId>
-			<artifactId>jdom</artifactId>
-			<version>${jdom.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.qualinsight.plugins.sonarqube</groupId>
-			<artifactId>qualinsight-plugins-sonarqube-smell-plugin</artifactId>
-			<version>${sonarqube-smell-plugin.version}</version>
-		</dependency>
-	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
+    <dependency>
+      <groupId>jdom</groupId>
+      <artifactId>jdom</artifactId>
+      <version>${jdom.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.qualinsight.plugins.sonarqube</groupId>
+      <artifactId>qualinsight-plugins-sonarqube-smell-plugin</artifactId>
+      <version>${sonarqube-smell-plugin.version}</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
         <version>${surefire-plugin.version}</version>
-			</plugin>
-			<plugin>
-				<groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
-				<artifactId>sonar-packaging-maven-plugin</artifactId>
-				<version>${sonar-packaging-plugin.version}</version>
-				<extensions>true</extensions>
-			</plugin>
-			<plugin>
-				<groupId>com.mycila.maven-license-plugin</groupId>
-				<artifactId>maven-license-plugin</artifactId>
-				<version>${license-plugin.version}</version>
-				<configuration>
-					<validHeaders>
-						<value>/src/SABRE_AIRLINE_LICENSE.txt</value>
-						<value>/src/LUCK_LICENSE.txt</value>
-						<value>/src/COLOMBO_LICENSE.txt</value>
-						<value>/src/COLOMBO_LICENSE.txt</value>
-					</validHeaders>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.antlr</groupId>
-				<artifactId>antlr3-maven-plugin</artifactId>
-				<version>${antlr3-plugin.version}</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>${javadoc-plugin}</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<source>11</source>
-					<javadocExecutable>${env.JAVA_HOME}/bin/javadoc.exe</javadocExecutable>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>${dependency-plugin.version}</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${compiler-plugin.version}</version>
-				<configuration>
-					<source>11</source>
-					<target>11</target>
-					<compilerArgs>
-						<arg>-XDcompilePolicy=simple</arg>
-						<arg>-Werror</arg>
-						<arg>-Xlint:all,-serial,-path,-processing,-rawtypes,-cast,-classfile</arg>
-						<arg>-Xplugin:ErrorProne -XepDisableWarningsInGeneratedCode -XepExcludedPaths:.*/antlr/generated/.*</arg>
-					</compilerArgs>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>com.google.errorprone</groupId>
-							<artifactId>error_prone_core</artifactId>
-							<version>${errorprone.version}</version>
-						</path>
-					</annotationProcessorPaths>
-				</configuration>
-			</plugin>
+      </plugin>
+      <plugin>
+        <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
+        <artifactId>sonar-packaging-maven-plugin</artifactId>
+        <version>${sonar-packaging-plugin.version}</version>
+        <extensions>true</extensions>
+      </plugin>
+      <plugin>
+        <groupId>com.mycila.maven-license-plugin</groupId>
+        <artifactId>maven-license-plugin</artifactId>
+        <version>${license-plugin.version}</version>
+        <configuration>
+          <validHeaders>
+            <value>/src/SABRE_AIRLINE_LICENSE.txt</value>
+            <value>/src/LUCK_LICENSE.txt</value>
+            <value>/src/COLOMBO_LICENSE.txt</value>
+            <value>/src/COLOMBO_LICENSE.txt</value>
+          </validHeaders>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.antlr</groupId>
+        <artifactId>antlr3-maven-plugin</artifactId>
+        <version>${antlr3-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${javadoc-plugin}</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <source>11</source>
+          <javadocExecutable>${env.JAVA_HOME}/bin/javadoc.exe</javadocExecutable>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>${dependency-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${compiler-plugin.version}</version>
+        <configuration>
+          <source>11</source>
+          <target>11</target>
+          <compilerArgs>
+            <arg>-XDcompilePolicy=simple</arg>
+            <arg>-Xlint:all,-serial,-path,-processing,-rawtypes,-cast,-classfile</arg>
+            <arg>-Xplugin:ErrorProne -XepDisableWarningsInGeneratedCode -XepExcludedPaths:.*/antlr/generated/.*</arg>
+          </compilerArgs>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>com.google.errorprone</groupId>
+              <artifactId>error_prone_core</artifactId>
+              <version>${errorprone.version}</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
@@ -277,30 +273,29 @@
             </goals>
             <configuration>
               <dataFile>${basedir}/target/jacoco/jacoco-unit.exec</dataFile>
-							<outputDirectory>${basedir}/target/jacoco/report/</outputDirectory>
+              <outputDirectory>${basedir}/target/jacoco/report/</outputDirectory>
             </configuration>
           </execution>
         </executions>
       </plugin>
-			<plugin>
-				<groupId>org.owasp</groupId>
-				<artifactId>dependency-check-maven</artifactId>
-				<version>${dependency-check-plugin.version}</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>check</goal>
-						</goals>
-						<configuration>
-							<formats>
-								<format>HTML</format>
-								<format>XML</format>
-							</formats>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
-
+      <plugin>
+        <groupId>org.owasp</groupId>
+        <artifactId>dependency-check-maven</artifactId>
+        <version>${dependency-check-plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <configuration>
+              <formats>
+                <format>HTML</format>
+                <format>XML</format>
+              </formats>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
