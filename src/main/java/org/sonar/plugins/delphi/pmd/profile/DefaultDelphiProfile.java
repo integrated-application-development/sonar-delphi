@@ -34,9 +34,7 @@ import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 
-/**
- * default Delphi rules profile
- */
+/** default Delphi rules profile */
 @ServerSide
 public class DefaultDelphiProfile implements BuiltInQualityProfilesDefinition {
   public static final String DEFAULT_PROFILE_NAME = "Sonar way";
@@ -53,16 +51,19 @@ public class DefaultDelphiProfile implements BuiltInQualityProfilesDefinition {
 
   @Override
   public void define(Context context) {
-    NewBuiltInQualityProfile qualityProfile = context
-        .createBuiltInQualityProfile(DEFAULT_PROFILE_NAME, DelphiLanguage.KEY);
+    NewBuiltInQualityProfile qualityProfile =
+        context.createBuiltInQualityProfile(DEFAULT_PROFILE_NAME, DelphiLanguage.KEY);
 
-    Reader reader = new InputStreamReader(getClass().getResourceAsStream(
-        "/org/sonar/plugins/delphi/pmd/default-delphi-profile.xml"), UTF_8);
+    Reader reader =
+        new InputStreamReader(
+            getClass()
+                .getResourceAsStream("/org/sonar/plugins/delphi/pmd/default-delphi-profile.xml"),
+            UTF_8);
     RulesProfile rulesProfile = importer.importProfile(reader, null);
 
     for (ActiveRule rule : rulesProfile.getActiveRules()) {
-      NewBuiltInActiveRule activeRule = qualityProfile
-          .activateRule(DelphiPmdConstants.REPOSITORY_KEY, rule.getRuleKey());
+      NewBuiltInActiveRule activeRule =
+          qualityProfile.activateRule(DelphiPmdConstants.REPOSITORY_KEY, rule.getRuleKey());
       activeRule.overrideSeverity(rule.getSeverity().toString());
       for (ActiveRuleParam ruleParam : rule.getActiveRuleParams()) {
         activeRule.overrideParam(ruleParam.getKey(), ruleParam.getValue());

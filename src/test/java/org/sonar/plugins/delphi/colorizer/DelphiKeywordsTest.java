@@ -32,5 +32,4 @@ public class DelphiKeywordsTest {
   public void testDelphiKeywords() {
     assertEquals(183, DelphiKeywords.get().size());
   }
-
 }

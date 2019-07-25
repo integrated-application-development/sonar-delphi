@@ -19,20 +19,19 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import org.antlr.runtime.tree.CommonTree;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /**
- * This rule looks for the interface name and if it doesn't start with "I" it raises a
- * violation.
+ * This rule looks for the interface name and if it doesn't start with "I" it raises a violation.
  */
 public class InterfaceNameRule extends NameConventionRule {
   private static final String INTERFACE_PREFIX = "I";
 
   @Override
   public DelphiPMDNode findNode(DelphiPMDNode node) {
-    if (node.getType() != DelphiLexer.TkNewTypeName ||
-        node.nextNode().getType() != DelphiLexer.TkInterface) {
+    if (node.getType() != DelphiLexer.TkNewTypeName
+        || node.nextNode().getType() != DelphiLexer.TkInterface) {
       return null;
     }
 

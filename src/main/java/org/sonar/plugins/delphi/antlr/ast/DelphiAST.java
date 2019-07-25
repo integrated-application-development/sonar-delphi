@@ -46,16 +46,14 @@ import org.antlr.runtime.tree.Tree;
 import org.apache.commons.io.FileUtils;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
-import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
 import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStream;
 import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-/**
- * DelphiLanguage AST tree.
- */
+/** DelphiLanguage AST tree. */
 public class DelphiAST extends CommonTree implements ASTTree {
   private static final Logger LOG = Loggers.get(DelphiAST.class);
 
@@ -113,34 +111,22 @@ public class DelphiAST extends CommonTree implements ASTTree {
     isError = parser.getNumberOfSyntaxErrors() != 0;
   }
 
-  /**
-   * Empty, default c-tor.
-   */
-  public DelphiAST() {
-  }
+  /** Empty, default c-tor. */
+  public DelphiAST() {}
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public String getFileName() {
     return fileName;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public boolean isError() {
     return isError;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void generateXML(String fileName) {
     Source source = new DOMSource(generateDocument());
@@ -159,7 +145,6 @@ public class DelphiAST extends CommonTree implements ASTTree {
     } catch (TransformerException e) {
       LOG.error("Failed to generate Node XML", e);
     }
-
   }
 
   /**
@@ -167,7 +152,6 @@ public class DelphiAST extends CommonTree implements ASTTree {
    *
    * @return XML document
    */
-
   @Override
   public Document generateDocument() {
     try {
@@ -227,9 +211,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public String getFileSource() {
     return fileStream.toString();

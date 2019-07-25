@@ -5,12 +5,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.antlr.runtime.tree.CommonTree;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /**
- * This rule looks at all variable names to ensure they follow basic Pascal Case.
- * At the moment it only checks if the first character is uppercase
+ * This rule looks at all variable names to ensure they follow basic Pascal Case. At the moment it
+ * only checks if the first character is uppercase
  */
 public class VariableNameRule extends NameConventionRule {
 
@@ -26,9 +26,10 @@ public class VariableNameRule extends NameConventionRule {
         if (childNode.getType() == DelphiLexer.TkVariableIdents) {
           List<?> children = childNode.getChildren();
 
-          nameNodes.addAll(children.stream()
-              .map(varName -> new DelphiPMDNode((CommonTree) varName, node.getASTTree()))
-              .collect(Collectors.toList()));
+          nameNodes.addAll(
+              children.stream()
+                  .map(varName -> new DelphiPMDNode((CommonTree) varName, node.getASTTree()))
+                  .collect(Collectors.toList()));
         }
       }
 
@@ -51,8 +52,8 @@ public class VariableNameRule extends NameConventionRule {
   }
 
   private boolean isNotAutoCreateFormVar(DelphiPMDNode node, List<DelphiPMDNode> nameNodes) {
-    return !(isInterfaceSection() && nameNodes.size() == 1
+    return !(isInterfaceSection()
+        && nameNodes.size() == 1
         && node.getChildIndex() == node.getParent().getChildCount() - 1);
   }
 }
-

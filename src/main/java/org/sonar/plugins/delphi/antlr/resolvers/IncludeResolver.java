@@ -37,9 +37,7 @@ import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRangeFirstOccurrenc
 import org.sonar.plugins.delphi.antlr.resolvers.subranges.impl.ReplacementSubRange;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-/**
- * add include files to a given file
- */
+/** add include files to a given file */
 public class IncludeResolver extends SourceResolver {
   private static final Logger LOG = Loggers.get(IncludeResolver.class);
   private static final int REPLACEMENT_OFFSET = 2;
@@ -58,9 +56,7 @@ public class IncludeResolver extends SourceResolver {
     includes = includesList;
   }
 
-  /**
-   * @return list of directories holding include files
-   */
+  /** @return list of directories holding include files */
   public List<String> getIncludedFilesPath() {
     return includedFiles;
   }
@@ -95,8 +91,8 @@ public class IncludeResolver extends SourceResolver {
         String includeFileName = directive.getItem();
 
         String currentDir = baseFileName.substring(0, baseFileName.lastIndexOf('/'));
-        currentDir = backtrackDirectory(currentDir,
-            DelphiUtils.countSubstrings(includeFileName, ".."));
+        currentDir =
+            backtrackDirectory(currentDir, DelphiUtils.countSubstrings(includeFileName, ".."));
 
         dataToInclude.add(processIncludedFile(directive, includeFileName, currentDir));
       }
@@ -107,8 +103,8 @@ public class IncludeResolver extends SourceResolver {
     return introduceIncludedData(newData, dataToInclude);
   }
 
-  private ReplacementSubRange processIncludedFile(CompilerDirective directive,
-      String includeFileName, String currentDir) {
+  private ReplacementSubRange processIncludedFile(
+      CompilerDirective directive, String includeFileName, String currentDir) {
     // This string will be inserted in place of the include directive
     String copyData = "";
 
@@ -142,12 +138,14 @@ public class IncludeResolver extends SourceResolver {
     return currentDir;
   }
 
-  private StringBuilder introduceIncludedData(StringBuilder newData,
-      List<ReplacementSubRange> dataToInclude) {
+  private StringBuilder introduceIncludedData(
+      StringBuilder newData, List<ReplacementSubRange> dataToInclude) {
     int replacedCharsShift = 0;
     dataToInclude.sort(new SubRangeFirstOccurrenceComparator());
     for (SubRange range : dataToInclude) {
-      newData.replace(range.getBegin() + replacedCharsShift, range.getEnd() + replacedCharsShift,
+      newData.replace(
+          range.getBegin() + replacedCharsShift,
+          range.getEnd() + replacedCharsShift,
           range.toString());
       replacedCharsShift += range.toString().length() - (range.getEnd() - range.getBegin());
     }
@@ -180,5 +178,4 @@ public class IncludeResolver extends SourceResolver {
     }
     return null;
   }
-
 }

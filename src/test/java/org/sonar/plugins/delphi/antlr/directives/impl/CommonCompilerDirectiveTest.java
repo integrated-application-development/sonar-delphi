@@ -26,7 +26,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
-import org.sonar.plugins.delphi.antlr.directives.impl.CommonCompilerDirective;
 
 public class CommonCompilerDirectiveTest {
 
@@ -64,5 +63,4 @@ public class CommonCompilerDirectiveTest {
     directive = new CommonCompilerDirective("name", "item", 0, 0);
     assertEquals(CompilerDirectiveType.UNKNOWN, directive.getType());
   }
-
 }

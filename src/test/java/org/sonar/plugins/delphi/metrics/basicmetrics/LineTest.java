@@ -67,8 +67,7 @@ public class LineTest {
   }
 
   @Before
-  public void setUp() {
-  }
+  public void setUp() {}
 
   @Test
   public void testMultiLineCommentHandler() {
@@ -101,7 +100,6 @@ public class LineTest {
     assertThat(line8.getInt(Metric.PUBLIC_DOC_API), is(1));
   }
 
-
   @Test
   public void testSingleLineCommentHandler() {
     // test lines
@@ -122,5 +120,4 @@ public class LineTest {
     assertThat(line2.isThereComment(), is(true));
     assertThat(line3.isThereComment(), is(true));
   }
-
 }

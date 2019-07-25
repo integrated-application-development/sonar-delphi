@@ -44,19 +44,19 @@ import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-/**
- * Metric used to search for "dead code" (unused units, unused methods).
- */
+/** Metric used to search for "dead code" (unused units, unused methods). */
 public class DeadCodeMetrics extends DefaultMetrics {
   private static final Logger LOG = Loggers.get(DeadCodeMetrics.class);
 
-  private static final String DEAD_UNIT_VIOLATION_MESSAGE = " - unused unit. No other unit nor " +
-      "project has this unit in it's uses section. Probably you could remove this unit from " +
-      "project.";
+  private static final String DEAD_UNIT_VIOLATION_MESSAGE =
+      " - unused unit. No other unit nor "
+          + "project has this unit in it's uses section. Probably you could remove this unit from "
+          + "project.";
 
-  private static final String DEAD_FUNCTION_VIOLATION_MESSAGE = " - unused function/procedure. " +
-      "No other function and procedure in a project refers to it. " +
-      "Probably you could remove it.";
+  private static final String DEAD_FUNCTION_VIOLATION_MESSAGE =
+      " - unused function/procedure. "
+          + "No other function and procedure in a project refers to it. "
+          + "Probably you could remove it.";
 
   private boolean isCalculated;
   private List<String> unusedUnits;
@@ -64,14 +64,12 @@ public class DeadCodeMetrics extends DefaultMetrics {
   private final List<UnitInterface> allUnits;
   private final SensorContext context;
 
-  public static final RuleKey RULE_KEY_UNUSED_UNIT = RuleKey
-      .of(DelphiPmdConstants.REPOSITORY_KEY, "UnusedUnitRule");
-  public static final RuleKey RULE_KEY_UNUSED_FUNCTION = RuleKey
-      .of(DelphiPmdConstants.REPOSITORY_KEY, "UnusedFunctionRule");
+  public static final RuleKey RULE_KEY_UNUSED_UNIT =
+      RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, "UnusedUnitRule");
+  public static final RuleKey RULE_KEY_UNUSED_FUNCTION =
+      RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, "UnusedFunctionRule");
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   public DeadCodeMetrics(SensorContext sensorContext) {
     super();
     context = sensorContext;
@@ -79,12 +77,11 @@ public class DeadCodeMetrics extends DefaultMetrics {
     allUnits = new ArrayList<>();
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
-  public void analyse(InputFile resource, List<ClassInterface> classes,
+  public void analyse(
+      InputFile resource,
+      List<ClassInterface> classes,
       List<FunctionInterface> functions,
       Set<UnitInterface> units) {
     if (!isCalculated) {
@@ -96,13 +93,9 @@ public class DeadCodeMetrics extends DefaultMetrics {
       unusedFunctions = findUnusedFunctions(units);
       isCalculated = true;
     }
-
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void save(InputFile inputFile) {
     if (inputFile.type() == Type.TEST) {
@@ -121,10 +114,12 @@ public class DeadCodeMetrics extends DefaultMetrics {
       NewIssue newIssue = context.newIssue();
       newIssue
           .forRule(RULE_KEY_UNUSED_UNIT)
-          .at(newIssue.newLocation()
-              .on(inputFile)
-              .at(inputFile.selectLine(1))
-              .message(unit.getName() + DEAD_UNIT_VIOLATION_MESSAGE))
+          .at(
+              newIssue
+                  .newLocation()
+                  .on(inputFile)
+                  .at(inputFile.selectLine(1))
+                  .message(unit.getName() + DEAD_UNIT_VIOLATION_MESSAGE))
           .save();
     }
 
@@ -140,18 +135,20 @@ public class DeadCodeMetrics extends DefaultMetrics {
       NewIssue newIssue = context.newIssue();
       newIssue
           .forRule(RULE_KEY_UNUSED_FUNCTION)
-          .at(newIssue.newLocation()
-              .on(inputFile)
-              .at(inputFile.newRange(line, beginCol, line, endCol))
-              .message(function.getRealName() + DEAD_FUNCTION_VIOLATION_MESSAGE))
+          .at(
+              newIssue
+                  .newLocation()
+                  .on(inputFile)
+                  .at(inputFile.newRange(line, beginCol, line, endCol))
+                  .message(function.getRealName() + DEAD_FUNCTION_VIOLATION_MESSAGE))
           .save();
     }
   }
 
   private boolean isDeadFunction(FunctionInterface function) {
-    if (function.isMessage() ||
-        function.isVirtual() ||
-        function.getVisibility() == DelphiLexer.PUBLISHED) {
+    if (function.isMessage()
+        || function.isVirtual()
+        || function.getVisibility() == DelphiLexer.PUBLISHED) {
       return false;
     }
 
@@ -214,7 +211,6 @@ public class DeadCodeMetrics extends DefaultMetrics {
       for (FunctionInterface unitFunction : unitFunctions) {
         Collections.addAll(usedFunctions, unitFunction.getCalledFunctions());
       }
-
     }
     allFunctions.removeAll(usedFunctions);
     return allFunctions;
@@ -244,10 +240,7 @@ public class DeadCodeMetrics extends DefaultMetrics {
     return result;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public boolean executeOnResource(InputFile resource) {
     return DelphiUtils.acceptFile(resource.filename());
@@ -267,5 +260,4 @@ public class DeadCodeMetrics extends DefaultMetrics {
     }
     return null;
   }
-
 }

@@ -23,15 +23,13 @@
 package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
+import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
 
-/**
- * Analyzes current visibility scope and changes it
- */
+/** Analyzes current visibility scope and changes it */
 public class VisibilityAnalyzer extends CodeAnalyzer {
 
   @Override
@@ -44,7 +42,8 @@ public class VisibilityAnalyzer extends CodeAnalyzer {
   public boolean canAnalyze(CodeTree codeTree) {
     Tree currentNode = codeTree.getCurrentCodeNode().getNode();
     int type = currentNode.getType();
-    return type == DelphiParser.PUBLIC || type == DelphiParser.PRIVATE
+    return type == DelphiParser.PUBLIC
+        || type == DelphiParser.PRIVATE
         || type == DelphiParser.PROTECTED
         || type == DelphiParser.PUBLISHED;
   }

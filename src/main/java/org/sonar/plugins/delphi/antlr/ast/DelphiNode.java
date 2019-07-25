@@ -25,9 +25,7 @@ package org.sonar.plugins.delphi.antlr.ast;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 
-/**
- * Delphi Node used by ANTLR generated parser
- */
+/** Delphi Node used by ANTLR generated parser */
 public class DelphiNode extends CommonTree {
 
   private DelphiAST mainTree;
@@ -73,5 +71,4 @@ public class DelphiNode extends CommonTree {
   public DelphiAST getASTTree() {
     return mainTree;
   }
-
 }

@@ -24,9 +24,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-/**
- * Checks for rule violation: if x = true then (redundant)
- */
+/** Checks for rule violation: if x = true then (redundant) */
 public class IfTrueRule extends BlockCounterRule {
 
   private boolean wasEquals;

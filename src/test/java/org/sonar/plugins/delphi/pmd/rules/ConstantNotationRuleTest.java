@@ -32,7 +32,6 @@ public class ConstantNotationRuleTest extends BasePmdRuleTest {
     assertIssues(empty());
   }
 
-
   @Test
   public void testBadPrefixShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();

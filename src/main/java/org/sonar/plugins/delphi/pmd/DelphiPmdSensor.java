@@ -30,9 +30,7 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 
-/**
- * PMD sensor
- */
+/** PMD sensor */
 public class DelphiPmdSensor implements Sensor {
 
   private final DelphiPmdExecutor executor;
@@ -49,18 +47,13 @@ public class DelphiPmdSensor implements Sensor {
     this.violationRecorder = violationRecorder;
   }
 
-  /**
-   * Populate {@link SensorDescriptor} of this sensor.
-   */
+  /** Populate {@link SensorDescriptor} of this sensor. */
   @Override
   public void describe(SensorDescriptor descriptor) {
-    descriptor.onlyOnLanguage(DelphiLanguage.KEY)
-        .name("DelphiPmdSensor");
+    descriptor.onlyOnLanguage(DelphiLanguage.KEY).name("DelphiPmdSensor");
   }
 
-  /**
-   * The actual sensor code.
-   */
+  /** The actual sensor code. */
   @Override
   public void execute(@NonNull SensorContext context) {
     if (executor.shouldExecuteOnProject()) {

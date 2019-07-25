@@ -64,18 +64,17 @@ public class SurefireSensor implements Sensor {
     descriptor.onlyOnLanguage(DelphiLanguage.KEY);
   }
 
-  /**
-   * The actual sensor code.
-   */
+  /** The actual sensor code. */
   @Override
   public void execute(@NonNull SensorContext context) {
     LOG.info("Delphi sensor execute...");
     String[] paths = configuration.getStringArray(SurefireUtils.SUREFIRE_REPORT_PATHS_PROPERTY);
 
     if (paths == null || paths.length == 0) {
-      LOG.warn("No Surefire reports directory found! Using default directory: "
-          + DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY);
-      paths = new String[]{DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY};
+      LOG.warn(
+          "No Surefire reports directory found! Using default directory: "
+              + DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY);
+      paths = new String[] {DEFAULT_SUREFIRE_REPORTS_PATH_PROPERTY};
     }
 
     String mainPath = context.fileSystem().baseDir().getAbsolutePath();

@@ -34,9 +34,7 @@ import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
 
-/**
- * Verifies if we are calling a function, from a given tree node
- */
+/** Verifies if we are calling a function, from a given tree node */
 public class CalledFunctionVerifier {
 
   private boolean isUnresolved = true;
@@ -59,8 +57,8 @@ public class CalledFunctionVerifier {
   @Smell(
       minutes = 30,
       reason =
-          "We can't assume that a function call always looks like an identifier followed by '(' " +
-           "or ';', considering empty parentheses are optional in Delphi."
+          "We can't assume that a function call always looks like an identifier followed by '(' "
+              + "or ';', considering empty parentheses are optional in Delphi."
               + "Example: 'Result := FunctionWithoutArguments + 5;' will not see a function call."
               + "It's indistinguishable from a variable until we have a symbol table."
               + "This causes false positives in dead code analysis.",
@@ -96,7 +94,7 @@ public class CalledFunctionVerifier {
     return node.getType() == LexerMetrics.IDENT.toMetrics()
         && nextNode != null
         && (nextNode.getType() == LexerMetrics.LPAREN.toMetrics()
-        || nextNode.getType() == LexerMetrics.SEMI.toMetrics());
+            || nextNode.getType() == LexerMetrics.SEMI.toMetrics());
   }
 
   private boolean resolveFunction(String functionName, UnitInterface unit) {
@@ -118,5 +116,4 @@ public class CalledFunctionVerifier {
   public boolean isUnresolvedFunctionCall() {
     return isUnresolved;
   }
-
 }

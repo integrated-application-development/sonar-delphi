@@ -39,7 +39,8 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class AdvanceNodeOperationTest extends OperationsTestsCommon {
 
-  private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/ComplexityMetricsTest.pas";
+  private static final String FILE_NAME =
+      "/org/sonar/plugins/delphi/metrics/ComplexityMetricsTest.pas";
 
   public AdvanceNodeOperationTest() {
     super(new AdvanceNodeOperation());
@@ -79,7 +80,5 @@ public class AdvanceNodeOperationTest extends OperationsTestsCommon {
       lastLine = codeNodeLine;
       codeNode = operation.execute(codeNode.getNode());
     } while (codeNode.isValid());
-
   }
-
 }

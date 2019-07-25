@@ -27,9 +27,7 @@ import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.RuleViolation;
 import org.sonar.plugins.delphi.pmd.rules.DelphiRule;
 
-/**
- * Delphi pmd rule violation
- */
+/** Delphi pmd rule violation */
 public class DelphiRuleViolation implements RuleViolation {
 
   private final Rule rule;
@@ -57,97 +55,73 @@ public class DelphiRuleViolation implements RuleViolation {
     this.description = rule.getMessage();
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public String getFilename() {
     return filename;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public int getBeginLine() {
     return beginLine;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public int getBeginColumn() {
     return beginColumn;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public int getEndLine() {
     return endLine;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public int getEndColumn() {
     return endColumn;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public Rule getRule() {
     return rule;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public String getDescription() {
     return description;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public String getPackageName() {
     return packageName;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public String getMethodName() {
     return methodName;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public String getClassName() {
     return className;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public boolean isSuppressed() {
     return false;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public String getVariableName() {
     return "";

@@ -69,9 +69,7 @@ public class DelphiFunction implements FunctionInterface {
 
   private static int unknownFunctionCounter;
 
-  /**
-   * Ctor, creates function with default name
-   */
+  /** Ctor, creates function with default name */
   public DelphiFunction() {
     name = UNKNOWN_FUNCTION_NAME + unknownFunctionCounter++;
     longName = name + "()";
@@ -88,130 +86,97 @@ public class DelphiFunction implements FunctionInterface {
     setRealName(functionName);
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public boolean isAccessor() {
     return isAccessor;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public void setDeclaration(boolean value) {
     isDeclaration = value;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public int getVisibility() {
     return visibility;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void setVisibility(int value) {
     visibility = value;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public boolean isDeclaration() {
     return isDeclaration;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public void increaseComplexity() {
     complexity++;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public int getComplexity() {
     return complexity;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public void setComplexity(int complexity) {
     this.complexity = complexity;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public int getLine() {
     return line;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public void setLine(int line) {
     this.line = line;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public int getBeginColumn() {
     return beginColumn;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public int getEndColumn() {
     return endColumn;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public void setEndColumn(int column) {
     this.endColumn = column;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public void setBeginColumn(int column) {
     this.beginColumn = column;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public final String getName() {
     return name;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   @Smell(
       minutes = 30,
@@ -234,37 +199,25 @@ public class DelphiFunction implements FunctionInterface {
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void addStatement(StatementInterface st) {
     statements.add(st);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public List<StatementInterface> getStatements() {
     return statements;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public FunctionInterface[] getCalledFunctions() {
     return called.toArray(new FunctionInterface[0]);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void addCalledFunction(FunctionInterface function) {
     if (function != null && !function.equals(this)) {
@@ -272,19 +225,13 @@ public class DelphiFunction implements FunctionInterface {
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public boolean isCalling(FunctionInterface calledFunc) {
     return called.contains(calledFunc);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public String getShortName() {
     int dot = name.lastIndexOf('.');
@@ -309,82 +256,55 @@ public class DelphiFunction implements FunctionInterface {
     return o != null && toString().equalsIgnoreCase(o.toString());
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public boolean hasBody() {
     return complexity != 0 && !isDeclaration();
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public boolean isGlobal() {
     return parentClass == null;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void setParentClass(ClassInterface parent) {
     parentClass = parent;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public ClassInterface getParentClass() {
     return parentClass;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public ArgumentInterface[] getArguments() {
     return args.toArray(new ArgumentInterface[0]);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void addArgument(ArgumentInterface arg) {
     args.add(arg);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void setLongName(String functionLongName) {
     longName = functionLongName;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public String getLongName() {
     return longName;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public int getOverloadsCount() {
     if (overloads < 0) {
@@ -393,142 +313,103 @@ public class DelphiFunction implements FunctionInterface {
     return overloads;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void increaseFunctionOverload() {
     ++overloads;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void addOverloadFunction(FunctionInterface func) {
     overFunc.add(func);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public FunctionInterface[] getOverloadedFunctions() {
     return overFunc.toArray(new FunctionInterface[0]);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public UnitInterface getUnit() {
     return parentUnit;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void setUnit(UnitInterface functionUnit) {
     parentUnit = functionUnit;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public void setVirtual(boolean value) {
     virtual = value;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public boolean isVirtual() {
     return virtual;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public void setMessage(boolean value) {
     message = value;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public boolean isMessage() {
     return message;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public final String getRealName() {
     return realName;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public final void setRealName(String name) {
     realName = name;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public int getBodyLine() {
     return bodyLine;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public void setBodyLine(int line) {
     bodyLine = line;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public int getBodyBeginColumn() {
     return bodyBeginColumn;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public int getBodyEndColumn() {
     return bodyEndColumn;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public void setBodyEndColumn(int column) {
     this.bodyEndColumn = column;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public void setBodyBeginColumn(int column) {
     this.bodyBeginColumn = column;

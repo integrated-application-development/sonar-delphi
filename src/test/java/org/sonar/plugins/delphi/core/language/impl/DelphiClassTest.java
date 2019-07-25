@@ -32,7 +32,6 @@ import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.core.language.ClassFieldInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 
-
 public class DelphiClassTest {
 
   private DelphiClass ancestor = null;

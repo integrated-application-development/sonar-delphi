@@ -53,17 +53,17 @@ public class SurefireSensorTest {
 
     sensorContext = SensorContextTester.create(DelphiUtils.getResource(PROJECT_DIR));
 
-    delphiProjectHelper = new DelphiProjectHelper(sensorContext.config(),
-        sensorContext.fileSystem());
+    delphiProjectHelper =
+        new DelphiProjectHelper(sensorContext.config(), sensorContext.fileSystem());
 
     File[] unitTestFiles = baseDir.listFiles((dir, name) -> name.endsWith(".pas"));
 
     for (File unitTestFile : Objects.requireNonNull(unitTestFiles)) {
-      InputFile inputFile = TestInputFileBuilder.create("",
-          baseDir, unitTestFile)
-          .setLanguage(DelphiLanguage.KEY)
-          .setType(InputFile.Type.TEST)
-          .build();
+      InputFile inputFile =
+          TestInputFileBuilder.create("", baseDir, unitTestFile)
+              .setLanguage(DelphiLanguage.KEY)
+              .setType(InputFile.Type.TEST)
+              .build();
       sensorContext.fileSystem().add(inputFile);
     }
 

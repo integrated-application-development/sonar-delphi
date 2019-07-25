@@ -42,29 +42,21 @@ import org.sonar.plugins.delphi.core.language.UnitInterface;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-/**
- * Class counting function cyclomatic complexity.
- */
+/** Class counting function cyclomatic complexity. */
 public class ComplexityMetrics extends DefaultMetrics {
   private static final Logger LOG = Loggers.get(ComplexityMetrics.class);
-  public static final RuleKey RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY = RuleKey
-      .of(DelphiPmdConstants.REPOSITORY_KEY, "MethodCyclomaticComplexityRule");
+  public static final RuleKey RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY =
+      RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, "MethodCyclomaticComplexityRule");
 
   private final ActiveRule methodCyclomaticComplexityRule;
 
-  /**
-   * The Cyclomatic Complexity Number.
-   */
+  /** The Cyclomatic Complexity Number. */
   private int fileComplexity;
 
-  /**
-   * Number of classes including nested classes, interfaces, enums and annotations.
-   */
+  /** Number of classes including nested classes, interfaces, enums and annotations. */
   private int classCount;
 
-  /**
-   * Number of Methods without including  accessors. A constructor is considered  to be a method.
-   */
+  /** Number of Methods without including accessors. A constructor is considered to be a method. */
   private int methodsCount;
 
   /**
@@ -74,7 +66,7 @@ public class ComplexityMetrics extends DefaultMetrics {
   private int statementsCount;
 
   /**
-   * Number of public classes, public methods  (without accessors) and public properties  (without
+   * Number of public classes, public methods (without accessors) and public properties (without
    * public final static ones).
    */
   private int publicApi;
@@ -83,9 +75,7 @@ public class ComplexityMetrics extends DefaultMetrics {
   private final SensorContext context;
   private final Set<String> processedFunctions = new HashSet<>();
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   public ComplexityMetrics(ActiveRules activeRules, SensorContext sensorContext) {
     super();
     context = sensorContext;
@@ -104,10 +94,12 @@ public class ComplexityMetrics extends DefaultMetrics {
    * @param classes Classes that were found in that file
    * @param functions Functions that were found in that file
    */
-
   @Override
-  public void analyse(InputFile resource, List<ClassInterface> classes,
-      List<FunctionInterface> functions, Set<UnitInterface> units) {
+  public void analyse(
+      InputFile resource,
+      List<ClassInterface> classes,
+      List<FunctionInterface> functions,
+      Set<UnitInterface> units) {
     reset();
     analyseClasses(resource, classes);
     analyseFunctions(resource, functions);
@@ -168,10 +160,7 @@ public class ComplexityMetrics extends DefaultMetrics {
     statementsCount += func.getStatements().size();
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void save(InputFile resource) {
     if (resource == null) {
@@ -181,21 +170,41 @@ public class ComplexityMetrics extends DefaultMetrics {
 
       /* Number of statements as defined in the DelphiLanguage Language Specification
       but without block definitions.*/
-      context.<Integer>newMeasure().forMetric(CoreMetrics.STATEMENTS).on(resource)
-          .withValue(getIntMetric("STATEMENTS")).save();
+      context
+          .<Integer>newMeasure()
+          .forMetric(CoreMetrics.STATEMENTS)
+          .on(resource)
+          .withValue(getIntMetric("STATEMENTS"))
+          .save();
       // The Cyclomatic Complexity Number
-      context.<Integer>newMeasure().forMetric(CoreMetrics.COMPLEXITY).on(resource)
-          .withValue(getIntMetric("COMPLEXITY")).save();
+      context
+          .<Integer>newMeasure()
+          .forMetric(CoreMetrics.COMPLEXITY)
+          .on(resource)
+          .withValue(getIntMetric("COMPLEXITY"))
+          .save();
       // Number of classes including nested classes, interfaces, enums and annotations
-      context.<Integer>newMeasure().forMetric(CoreMetrics.CLASSES).on(resource)
-          .withValue(getIntMetric("CLASSES")).save();
+      context
+          .<Integer>newMeasure()
+          .forMetric(CoreMetrics.CLASSES)
+          .on(resource)
+          .withValue(getIntMetric("CLASSES"))
+          .save();
       // Number of Methods without including accessors. A constructor is considered to be a method.
-      context.<Integer>newMeasure().forMetric(CoreMetrics.FUNCTIONS).on(resource)
-          .withValue(getIntMetric("FUNCTIONS")).save();
+      context
+          .<Integer>newMeasure()
+          .forMetric(CoreMetrics.FUNCTIONS)
+          .on(resource)
+          .withValue(getIntMetric("FUNCTIONS"))
+          .save();
       /* Number of public classes, public methods (without accessors) and
       public properties (without public static final ones)*/
-      context.<Integer>newMeasure().forMetric(CoreMetrics.PUBLIC_API).on(resource)
-          .withValue(getIntMetric("PUBLIC_API")).save();
+      context
+          .<Integer>newMeasure()
+          .forMetric(CoreMetrics.PUBLIC_API)
+          .on(resource)
+          .withValue(getIntMetric("PUBLIC_API"))
+          .save();
 
     } catch (IllegalStateException e) {
       LOG.error("{}: Error while saving Complexity metrics: ", resource.filename(), e);
@@ -219,10 +228,7 @@ public class ComplexityMetrics extends DefaultMetrics {
     clearMetrics();
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public boolean executeOnResource(InputFile resource) {
     return DelphiUtils.acceptFile(resource.filename());
@@ -236,13 +242,16 @@ public class ComplexityMetrics extends DefaultMetrics {
       int endCol = func.getBodyEndColumn();
       newIssue
           .forRule(methodCyclomaticComplexityRule.ruleKey())
-          .at(newIssue.newLocation()
-              .on(inputFile)
-              .at(inputFile.newRange(line, beginCol, line, endCol))
-              .message(String.format(
-                  "The Cyclomatic Complexity of this method \"%s\" is %d which is " +
-                      "greater than %d authorized.",
-                  func.getRealName(), func.getComplexity(), threshold)));
+          .at(
+              newIssue
+                  .newLocation()
+                  .on(inputFile)
+                  .at(inputFile.newRange(line, beginCol, line, endCol))
+                  .message(
+                      String.format(
+                          "The Cyclomatic Complexity of this method \"%s\" is %d which is "
+                              + "greater than %d authorized.",
+                          func.getRealName(), func.getComplexity(), threshold)));
       newIssue.save();
     }
   }

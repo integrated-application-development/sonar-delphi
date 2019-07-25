@@ -31,11 +31,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang.StringUtils;
-import org.sonar.api.scanner.ScannerSide;
+import org.apache.commons.lang3.ArrayUtils;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.config.Configuration;
+import org.sonar.api.scanner.ScannerSide;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.DelphiPlugin;
@@ -43,11 +44,8 @@ import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.project.DelphiWorkgroup;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-import org.apache.commons.lang3.ArrayUtils;
 
-/**
- * Class that helps get the maven/ant configuration from .xml file
- */
+/** Class that helps get the maven/ant configuration from .xml file */
 @ScannerSide
 public class DelphiProjectHelper {
   private static final Logger LOG = Loggers.get(DelphiProjectHelper.class);
@@ -76,9 +74,7 @@ public class DelphiProjectHelper {
    * @return True if so, false otherwise
    */
   public boolean shouldExtendIncludes() {
-    return settings.get(DelphiPlugin.INCLUDE_EXTEND_KEY)
-                   .orElse("false")
-                   .equals("true");
+    return settings.get(DelphiPlugin.INCLUDE_EXTEND_KEY).orElse("false").equals("true");
   }
 
   /**
@@ -97,15 +93,13 @@ public class DelphiProjectHelper {
         if (StringUtils.isEmpty(path)) {
           continue;
         }
-        File included = DelphiUtils
-            .resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
+        File included =
+            DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
 
         if (!included.exists()) {
-          LOG.warn("{} {}", "Include directory does not exist: ",
-              included.getAbsolutePath());
+          LOG.warn("{} {}", "Include directory does not exist: ", included.getAbsolutePath());
         } else if (!included.isDirectory()) {
-          LOG.warn("{} {}", "Include path is not a directory: ",
-              included.getAbsolutePath());
+          LOG.warn("{} {}", "Include path is not a directory: ", included.getAbsolutePath());
         } else {
           result.add(included);
         }
@@ -136,12 +130,11 @@ public class DelphiProjectHelper {
         if (StringUtils.isEmpty(path)) {
           continue;
         }
-        File excluded = DelphiUtils
-            .resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
+        File excluded =
+            DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
         result.add(excluded);
         if (!excluded.exists()) {
-          LOG.warn("{} {}", "Exclude directory does not exist: ",
-              excluded.getAbsolutePath());
+          LOG.warn("{} {}", "Exclude directory does not exist: ", excluded.getAbsolutePath());
         }
       }
     } else {
@@ -188,8 +181,9 @@ public class DelphiProjectHelper {
   }
 
   /**
-   * Creates a list of DelphiLanguage projects based on the settings file
-   * If the .gproj and .dproj paths are undefined, an empty list is returned
+   * Creates a list of DelphiLanguage projects based on the settings file If the .gproj and .dproj
+   * paths are undefined, an empty list is returned
+   *
    * @return List of DelphiProjects.
    */
   private List<DelphiProject> getProjectsFromSettings() {
@@ -207,6 +201,7 @@ public class DelphiProjectHelper {
 
   /**
    * Creates a list of DelphiLanguage projects from a workgroup file
+   *
    * @param gprojPath Path to the .gproj file
    * @return List of DelphiProjects
    */
@@ -226,6 +221,7 @@ public class DelphiProjectHelper {
 
   /**
    * Creates a single-element list of DelphiLanguage projects from a dproj file
+   *
    * @param dprojPath Path to the .dproj file
    * @return List of DelphiProjects
    */
@@ -245,6 +241,7 @@ public class DelphiProjectHelper {
 
   /**
    * Creates a single-element list of DelphiLanguage projects, assuming a default configuration
+   *
    * @return List of DelphiProjects
    */
   private List<DelphiProject> getDefaultProject() {
@@ -256,8 +253,8 @@ public class DelphiProjectHelper {
 
   private List<InputFile> mainFiles() {
     FilePredicates p = fs.predicates();
-    Iterable<InputFile> inputFiles = fs.inputFiles(p.and(p.hasLanguage(DelphiLanguage.KEY),
-        p.hasType(InputFile.Type.MAIN)));
+    Iterable<InputFile> inputFiles =
+        fs.inputFiles(p.and(p.hasLanguage(DelphiLanguage.KEY), p.hasType(InputFile.Type.MAIN)));
     List<InputFile> list = new ArrayList<>();
     inputFiles.forEach(list::add);
     return list;
@@ -265,8 +262,8 @@ public class DelphiProjectHelper {
 
   private List<InputFile> testFiles() {
     FilePredicates p = fs.predicates();
-    Iterable<InputFile> inputFiles = fs.inputFiles(p.and(p.hasLanguage(DelphiLanguage.KEY),
-        p.hasType(InputFile.Type.TEST)));
+    Iterable<InputFile> inputFiles =
+        fs.inputFiles(p.and(p.hasLanguage(DelphiLanguage.KEY), p.hasType(InputFile.Type.TEST)));
     List<InputFile> list = new ArrayList<>();
     inputFiles.forEach(list::add);
     return list;
@@ -330,8 +327,8 @@ public class DelphiProjectHelper {
     }
     for (File excludedDir : excludedDirectories) {
       String normalizedFileName = DelphiUtils.normalizeFileName(fileName.toLowerCase());
-      String excludedDirNormalizedPath = DelphiUtils.normalizeFileName(excludedDir.getAbsolutePath()
-          .toLowerCase());
+      String excludedDirNormalizedPath =
+          DelphiUtils.normalizeFileName(excludedDir.getAbsolutePath().toLowerCase());
       if (normalizedFileName.startsWith(excludedDirNormalizedPath)) {
         return true;
       }
@@ -367,10 +364,12 @@ public class DelphiProjectHelper {
       }
       File excluded = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
       if (!excluded.exists()) {
-        LOG.warn("{} {}", "Excluded code coverage path does not exist: ",
-            excluded.getAbsolutePath());
+        LOG.warn(
+            "{} {}", "Excluded code coverage path does not exist: ", excluded.getAbsolutePath());
       } else if (!excluded.isDirectory()) {
-        LOG.warn("{} {}", "Excluded code coverage path is not a directory: ",
+        LOG.warn(
+            "{} {}",
+            "Excluded code coverage path is not a directory: ",
             excluded.getAbsolutePath());
       } else {
         list.add(excluded);
@@ -378,5 +377,4 @@ public class DelphiProjectHelper {
     }
     return list;
   }
-
 }

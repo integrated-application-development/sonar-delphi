@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.resolvers.subranges;
 
-/**
- * comparator class for SubRange, returns which subrange is defined first
- */
+/** comparator class for SubRange, returns which subrange is defined first */
 public class SubRangeFirstOccurrenceComparator implements java.util.Comparator<SubRange> {
 
   @Override

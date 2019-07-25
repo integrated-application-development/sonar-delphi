@@ -25,7 +25,6 @@ import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
 import net.sourceforge.pmd.Report;
 import net.sourceforge.pmd.renderers.Renderer;
 import net.sourceforge.pmd.renderers.XMLRenderer;
@@ -73,8 +72,8 @@ public class DelphiPmdConfiguration {
   }
 
   /**
-   * Writes an XML Report about the analyzed project into the current working directory
-   * unless <code>sonar.pmd.generateXml</code> is set to false.
+   * Writes an XML Report about the analyzed project into the current working directory unless
+   * <code>sonar.pmd.generateXml</code> is set to false.
    *
    * @param report The report which shall be written into an XML file.
    * @return Path to the report

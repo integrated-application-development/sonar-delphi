@@ -46,7 +46,8 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class CalledFunctionVerifierTest {
 
-  private static final String TEST_FILE = "/org/sonar/plugins/delphi/verifier/CalledFunctionsTest.pas";
+  private static final String TEST_FILE =
+      "/org/sonar/plugins/delphi/verifier/CalledFunctionsTest.pas";
   private static final int BEGIN_STATEMENTS_IN_TEST_FILE = 2;
   private CalledFunctionVerifier verifier;
   private CodeTree code;
@@ -84,8 +85,9 @@ public class CalledFunctionVerifierTest {
   @Test
   public void testVerify() {
     final boolean[] unresolved = {false, false, false, true};
-    final String[] names = {"mySecondProcedure", "unitB_Procedure", "unitA_Procedure",
-        "unitC_Procedure"};
+    final String[] names = {
+      "mySecondProcedure", "unitB_Procedure", "unitA_Procedure", "unitC_Procedure"
+    };
 
     NodeOperation advanceToOperation = new AdvanceToNodeOperation(LexerMetrics.FUNCTION_BODY);
     NodeOperation advanceOperation = new AdvanceNodeOperation();
@@ -110,7 +112,5 @@ public class CalledFunctionVerifierTest {
         endNode = (atNode.getNode().getType() == LexerMetrics.END.toMetrics());
       }
     }
-
   }
-
 }

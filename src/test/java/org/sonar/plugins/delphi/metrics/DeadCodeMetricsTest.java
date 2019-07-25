@@ -57,7 +57,8 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DeadCodeMetricsTest {
   private static final String ROOT_NAME = "/org/sonar/plugins/delphi/metrics/dead-code/";
-  private static final String TEST_FILE = "/org/sonar/plugins/delphi/metrics/dead-code/DeadCodeMetricsTest.pas";
+  private static final String TEST_FILE =
+      "/org/sonar/plugins/delphi/metrics/dead-code/DeadCodeMetricsTest.pas";
   private static final String UNIT_FILE_1 = "/org/sonar/plugins/delphi/metrics/dead-code/Unit1.pas";
   private static final String UNIT_FILE_2 = "/org/sonar/plugins/delphi/metrics/dead-code/Unit2.pas";
   private static final String UNIT_FILE_3 = "/org/sonar/plugins/delphi/metrics/dead-code/Unit3.pas";
@@ -128,26 +129,26 @@ public class DeadCodeMetricsTest {
   public void testAnalyse() throws IOException {
     metrics.analyse(null, classes, functions, units);
 
-    DefaultInputFile unit1 = TestInputFileBuilder
-        .create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, unitFile1)
-        .setLanguage(DelphiLanguage.KEY)
-        .setType(InputFile.Type.MAIN)
-        .setContents(DelphiUtils.readFileContent(unitFile1, Charset.defaultCharset().name()))
-        .build();
+    DefaultInputFile unit1 =
+        TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, unitFile1)
+            .setLanguage(DelphiLanguage.KEY)
+            .setType(InputFile.Type.MAIN)
+            .setContents(DelphiUtils.readFileContent(unitFile1, Charset.defaultCharset().name()))
+            .build();
 
-    DefaultInputFile unit2 = TestInputFileBuilder
-        .create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, unitFile2)
-        .setLanguage(DelphiLanguage.KEY)
-        .setType(InputFile.Type.MAIN)
-        .setContents(DelphiUtils.readFileContent(unitFile2, Charset.defaultCharset().name()))
-        .build();
+    DefaultInputFile unit2 =
+        TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, unitFile2)
+            .setLanguage(DelphiLanguage.KEY)
+            .setType(InputFile.Type.MAIN)
+            .setContents(DelphiUtils.readFileContent(unitFile2, Charset.defaultCharset().name()))
+            .build();
 
-    DefaultInputFile unit3 = TestInputFileBuilder
-        .create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, unitFile3)
-        .setLanguage(DelphiLanguage.KEY)
-        .setType(InputFile.Type.MAIN)
-        .setContents(DelphiUtils.readFileContent(unitFile3, Charset.defaultCharset().name()))
-        .build();
+    DefaultInputFile unit3 =
+        TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, unitFile3)
+            .setLanguage(DelphiLanguage.KEY)
+            .setType(InputFile.Type.MAIN)
+            .setContents(DelphiUtils.readFileContent(unitFile3, Charset.defaultCharset().name()))
+            .build();
 
     metrics.save(unit1);
     metrics.save(unit2);
@@ -166,15 +167,15 @@ public class DeadCodeMetricsTest {
     ASTAnalyzer analyser = new DelphiASTAnalyzer();
     CodeAnalysisResults results = analyser.analyze(ast);
 
-    DefaultInputFile testFile = TestInputFileBuilder
-        .create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, file)
-        .setLanguage(DelphiLanguage.KEY)
-        .setType(InputFile.Type.MAIN)
-        .setContents(DelphiUtils.readFileContent(file, Charset.defaultCharset().name()))
-        .build();
+    DefaultInputFile testFile =
+        TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, file)
+            .setLanguage(DelphiLanguage.KEY)
+            .setType(InputFile.Type.MAIN)
+            .setContents(DelphiUtils.readFileContent(file, Charset.defaultCharset().name()))
+            .build();
 
-    metrics.analyse(testFile, results.getClasses(), results.getFunctions(),
-        results.getCachedUnits());
+    metrics.analyse(
+        testFile, results.getClasses(), results.getFunctions(), results.getCachedUnits());
 
     metrics.save(testFile);
 

@@ -24,17 +24,13 @@ package org.sonar.plugins.delphi.core.language.impl;
 
 import org.sonar.plugins.delphi.core.language.ArgumentInterface;
 
-/**
- * Delphi language function argument (parameter)
- */
+/** Delphi language function argument (parameter) */
 public class DelphiArgument implements ArgumentInterface {
 
   protected String name;
   private String type;
 
-  /**
-   * Default ctor, creates argument with default name and type
-   */
+  /** Default ctor, creates argument with default name and type */
   DelphiArgument() {
     name = "UNKNOWN_ARGUMENT";
     type = "UNKNOWN_TYPE";
@@ -85,5 +81,4 @@ public class DelphiArgument implements ArgumentInterface {
   public int hashCode() {
     return toString().hashCode();
   }
-
 }

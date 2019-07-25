@@ -61,5 +61,4 @@ public class DelphiUtilsTest {
     assertThat(DelphiUtils.acceptFile("Project.dPr"), is(true));
     assertThat(DelphiUtils.acceptFile("Package.DPK"), is(true));
   }
-
 }

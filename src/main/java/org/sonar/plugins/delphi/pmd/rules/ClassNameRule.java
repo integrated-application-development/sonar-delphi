@@ -2,8 +2,8 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /**
  * Checks the name declarations used for the names of classes and enumerated class types, and raises

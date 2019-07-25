@@ -141,9 +141,7 @@ public interface UnitInterface {
    */
   void setLine(int lineNumber);
 
-  /**
-   * @return unit line number
-   */
+  /** @return unit line number */
   int getLine();
 
   /**

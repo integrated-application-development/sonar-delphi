@@ -24,9 +24,7 @@ package org.sonar.plugins.delphi.antlr.directives.impl;
 
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
 
-/**
- * {$if ...} directive
- */
+/** {$if ...} directive */
 public class IfDirective extends CommonCompilerDirective {
 
   private static final String DIRECTIVE_NAME = "if";

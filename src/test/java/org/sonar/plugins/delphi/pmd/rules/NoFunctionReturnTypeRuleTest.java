@@ -11,11 +11,12 @@ import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 public class NoFunctionReturnTypeRuleTest extends BasePmdRuleTest {
   @Test
   public void testFunctionWithReturnTypeShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-        .appendImpl("function TClass.MyFunction: String;")
-        .appendImpl("begin")
-        .appendImpl("  Result := 'MyString';")
-        .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("function TClass.MyFunction: String;")
+            .appendImpl("begin")
+            .appendImpl("  Result := 'MyString';")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -24,11 +25,12 @@ public class NoFunctionReturnTypeRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testFunctionWithoutReturnTypeShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-        .appendImpl("function TClass.MyFunction;")
-        .appendImpl("begin")
-        .appendImpl("  Result := 'MyString';")
-        .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("function TClass.MyFunction;")
+            .appendImpl("begin")
+            .appendImpl("  Result := 'MyString';")
+            .appendImpl("end;");
     execute(builder);
 
     assertIssues(hasSize(1));

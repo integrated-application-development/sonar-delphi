@@ -55,18 +55,14 @@ public class DelphiPmdViolationRecorder {
       return;
     }
 
-    final NewIssue issue = context.newIssue()
-        .forRule(ruleKey);
+    final NewIssue issue = context.newIssue().forRule(ruleKey);
 
     final TextRange issueTextRange = TextRangeCalculator.calculate(pmdViolation, inputFile);
 
-    final NewIssueLocation issueLocation = issue.newLocation()
-        .on(inputFile)
-        .message(pmdViolation.getDescription())
-        .at(issueTextRange);
+    final NewIssueLocation issueLocation =
+        issue.newLocation().on(inputFile).message(pmdViolation.getDescription()).at(issueTextRange);
 
-    issue.at(issueLocation)
-        .save();
+    issue.at(issueLocation).save();
   }
 
   private InputFile findResourceFor(RuleViolation violation) {

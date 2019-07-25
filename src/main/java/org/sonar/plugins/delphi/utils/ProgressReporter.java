@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.utils;
 
-/**
- * Class used to report some progress
- */
+/** Class used to report some progress */
 public class ProgressReporter {
 
   private double currentProgress;
@@ -35,9 +33,7 @@ public class ProgressReporter {
   private final ProgressReporterLogger logger;
   private boolean firstProgress = true;
 
-  /**
-   * Default ctor, no logging!
-   */
+  /** Default ctor, no logging! */
   public ProgressReporter() {
     logger = new ProgressReporterLogger();
   }
@@ -96,11 +92,8 @@ public class ProgressReporter {
     logger.log(currentPercent + "% done...");
   }
 
-  /**
-   * @return target progress
-   */
+  /** @return target progress */
   public int getTargetProgress() {
     return targetProgress;
   }
-
 }

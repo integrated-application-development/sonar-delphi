@@ -24,11 +24,11 @@ package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.StatementInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiFunction;
@@ -36,18 +36,21 @@ import org.sonar.plugins.delphi.core.language.impl.UnresolvedFunctionCall;
 import org.sonar.plugins.delphi.core.language.verifiers.CalledFunctionVerifier;
 import org.sonar.plugins.delphi.core.language.verifiers.StatementVerifier;
 
-/**
- * Analyzes body of a function
- */
+/** Analyzes body of a function */
 public class FunctionBodyAnalyzer extends CodeAnalyzer {
 
   private CodeAnalysisResults results;
   private StatementVerifier statementverifier;
 
-  private static final LexerMetrics[] BRANCHING_NODES = {LexerMetrics.IF, LexerMetrics.FOR,
-      LexerMetrics.WHILE,
-      LexerMetrics.CASE,
-      LexerMetrics.REPEAT, LexerMetrics.AND, LexerMetrics.OR};
+  private static final LexerMetrics[] BRANCHING_NODES = {
+    LexerMetrics.IF,
+    LexerMetrics.FOR,
+    LexerMetrics.WHILE,
+    LexerMetrics.CASE,
+    LexerMetrics.REPEAT,
+    LexerMetrics.AND,
+    LexerMetrics.OR
+  };
 
   public FunctionBodyAnalyzer(CodeAnalysisResults results) {
     if (results == null) {
@@ -133,14 +136,14 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
    * Only functions existing in your project and in include directories are counted, so system
    * functions like 'writeln' are NOT counted.
    */
-  private void countCalledFunctions(Tree node, FunctionInterface function,
-      CodeAnalysisResults results) {
+  private void countCalledFunctions(
+      Tree node, FunctionInterface function, CodeAnalysisResults results) {
     CalledFunctionVerifier verifier = new CalledFunctionVerifier(results);
     if (verifier.verify(node)) {
       FunctionInterface calledFunction = verifier.fetchCalledFunction();
       if (verifier.isUnresolvedFunctionCall()) {
-        UnresolvedFunctionCall unresolvedCall = new UnresolvedFunctionCall(function, calledFunction,
-            results.getActiveUnit());
+        UnresolvedFunctionCall unresolvedCall =
+            new UnresolvedFunctionCall(function, calledFunction, results.getActiveUnit());
         results.addUnresolvedCall(calledFunction.getName(), unresolvedCall);
       } else {
         function.addCalledFunction(calledFunction);
@@ -151,7 +154,6 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
     for (int i = 0; i < node.getChildCount(); ++i) {
       countCalledFunctions(node.getChild(i), function, results);
     }
-
   }
 
   private void countStatements(Tree node, FunctionInterface function) {
@@ -191,5 +193,4 @@ public class FunctionBodyAnalyzer extends CodeAnalyzer {
     }
     return false;
   }
-
 }

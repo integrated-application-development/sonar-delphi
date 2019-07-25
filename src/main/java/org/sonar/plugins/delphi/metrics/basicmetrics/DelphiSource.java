@@ -27,9 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Class representing Delphi source code. It holds statistics for code lines.
- */
+/** Class representing Delphi source code. It holds statistics for code lines. */
 public class DelphiSource {
 
   private final List<Line> lines;
@@ -66,8 +64,11 @@ public class DelphiSource {
    */
   public int getMeasure(Metric metric, int fromLine, int toLine) {
     if (toLine > lines.size()) {
-      throw new IllegalStateException("There are only " + lines.size()
-          + " lines in the file and you're trying to reach line " + toLine);
+      throw new IllegalStateException(
+          "There are only "
+              + lines.size()
+              + " lines in the file and you're trying to reach line "
+              + toLine);
     }
     if (fromLine < 1) {
       throw new IllegalStateException("Line index starts from 1 and not from " + fromLine);
@@ -109,8 +110,9 @@ public class DelphiSource {
   }
 
   private void computeHeaderCommentLine(Line line) {
-    if (line.isThereComment() && !line.isThereBlankComment() && line
-        .isThereLicenseHeaderComment()) {
+    if (line.isThereComment()
+        && !line.isThereBlankComment()
+        && line.isThereLicenseHeaderComment()) {
       line.setMeasure(Metric.HEADER_COMMENT_LINES, 1);
     }
   }

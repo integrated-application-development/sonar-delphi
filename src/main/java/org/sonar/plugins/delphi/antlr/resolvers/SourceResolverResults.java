@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.resolvers;
 
-/**
- * class holding results for resolvers
- */
+/** class holding results for resolvers */
 public class SourceResolverResults {
 
   private final String fileName;
@@ -41,9 +39,7 @@ public class SourceResolverResults {
     this.fileName = fileName;
   }
 
-  /**
-   * @return string data
-   */
+  /** @return string data */
   public StringBuilder getFileData() {
     return data;
   }
@@ -57,9 +53,7 @@ public class SourceResolverResults {
     data = newData;
   }
 
-
   public String getFileName() {
     return fileName;
   }
-
 }

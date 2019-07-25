@@ -30,8 +30,8 @@ import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveSyn
 import org.sonar.plugins.delphi.antlr.directives.exceptions.UnsupportedCompilerDirectiveException;
 
 /**
- * Parses a list of compiler directives out of a given string.
- * Example: "{$include unit.pas}" will create 1 IncludeDirective instance
+ * Parses a list of compiler directives out of a given string. Example: "{$include unit.pas}" will
+ * create 1 IncludeDirective instance
  */
 public class CompilerDirectiveParser {
   private static final Logger LOG = Loggers.get(CompilerDirectiveParser.class);

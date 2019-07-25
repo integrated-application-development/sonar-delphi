@@ -132,8 +132,8 @@ class Line {
     int commentStartIndex = stringLine.indexOf(comment);
     int commentEndIndex = commentStartIndex + comment.length() - 1;
     if (commentStartIndex > 0) {
-      isThereCodeBeforeComment = !StringUtils
-          .isBlank(stringLine.substring(0, commentStartIndex - 1));
+      isThereCodeBeforeComment =
+          !StringUtils.isBlank(stringLine.substring(0, commentStartIndex - 1));
     }
     if (commentEndIndex > 0 && commentEndIndex != stringLine.length() - 1) {
       isThereCodeAfterComment = !StringUtils.isBlank(stringLine.substring(commentEndIndex + 1));

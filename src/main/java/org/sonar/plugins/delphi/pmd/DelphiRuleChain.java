@@ -28,9 +28,7 @@ import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.Language;
 import net.sourceforge.pmd.lang.ast.Node;
 
-/**
- * Delphi pmd rule chain
- */
+/** Delphi pmd rule chain */
 public class DelphiRuleChain extends RuleChain {
 
   private final DelphiRuleChainVisitor visitor = new DelphiRuleChainVisitor();
@@ -39,5 +37,4 @@ public class DelphiRuleChain extends RuleChain {
   public void apply(List<Node> astCompilationUnits, RuleContext ctx, Language language) {
     visitor.visitAll(astCompilationUnits, ctx);
   }
-
 }

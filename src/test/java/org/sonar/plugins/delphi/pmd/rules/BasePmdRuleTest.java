@@ -83,8 +83,8 @@ abstract class BasePmdRuleTest {
     File testFile = builder.buildFile(ROOT_DIR);
     testFile.deleteOnExit();
 
-    String relativePathTestFile = DelphiUtils
-        .getRelativePath(testFile, Collections.singletonList(ROOT_DIR));
+    String relativePathTestFile =
+        DelphiUtils.getRelativePath(testFile, Collections.singletonList(ROOT_DIR));
 
     configureTest(ROOT_DIR_NAME + "/" + relativePathTestFile, builder);
   }
@@ -103,12 +103,12 @@ abstract class BasePmdRuleTest {
     baseDir = DelphiUtils.getResource(ROOT_DIR_NAME);
     StringBuilder builderSourceCode = builder.getSourceCode(true);
 
-    InputFile inputFile = TestInputFileBuilder
-        .create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, srcFile)
-        .setModuleBaseDir(baseDir.toPath())
-        .setContents(builderSourceCode.toString())
-        .setLanguage(DelphiLanguage.KEY)
-        .build();
+    InputFile inputFile =
+        TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, srcFile)
+            .setModuleBaseDir(baseDir.toPath())
+            .setContents(builderSourceCode.toString())
+            .setLanguage(DelphiLanguage.KEY)
+            .build();
 
     fileSystem.add(inputFile);
 
@@ -122,18 +122,18 @@ abstract class BasePmdRuleTest {
     File rulesFile = new File(fileName);
 
     ActiveRules rulesProfile = mock(ActiveRules.class);
-    when(rulesProfile.find(any(RuleKey.class))).thenAnswer((Answer<ActiveRule>) invocation -> {
-      RuleKey ruleKey = (RuleKey) invocation.getArguments()[0];
-      NewActiveRule newActiveRule = new NewActiveRule.Builder()
-          .setRuleKey(ruleKey)
-          .build();
+    when(rulesProfile.find(any(RuleKey.class)))
+        .thenAnswer(
+            (Answer<ActiveRule>)
+                invocation -> {
+                  RuleKey ruleKey = (RuleKey) invocation.getArguments()[0];
+                  NewActiveRule newActiveRule =
+                      new NewActiveRule.Builder().setRuleKey(ruleKey).build();
 
-      ActiveRules rules = new ActiveRulesBuilder()
-          .addRule(newActiveRule)
-          .build();
+                  ActiveRules rules = new ActiveRulesBuilder().addRule(newActiveRule).build();
 
-      return rules.find(ruleKey);
-    });
+                  return rules.find(ruleKey);
+                });
 
     var pmdConfig = mock(DelphiPmdConfiguration.class);
     when(pmdConfig.dumpXmlRuleSet(any(String.class), any(String.class))).thenReturn(rulesFile);

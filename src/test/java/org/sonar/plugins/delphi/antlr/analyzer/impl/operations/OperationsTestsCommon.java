@@ -27,9 +27,9 @@ import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
 class OperationsTestsCommon // private class
-{
+ {
 
-  protected final static int LAYER_NODES = 3;
+  protected static final int LAYER_NODES = 3;
 
   protected final NodeOperation operation;
   protected Tree parent;
@@ -46,5 +46,4 @@ class OperationsTestsCommon // private class
       parent.addChild(child);
     }
   }
-
 }

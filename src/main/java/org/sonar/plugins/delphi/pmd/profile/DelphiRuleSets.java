@@ -33,9 +33,7 @@ import net.sourceforge.pmd.lang.Language;
 import net.sourceforge.pmd.lang.ast.Node;
 import org.sonar.plugins.delphi.pmd.DelphiRuleChain;
 
-/**
- * Class representing Delphi rule set
- */
+/** Class representing Delphi rule set */
 public class DelphiRuleSets extends RuleSets {
 
   private final DelphiRuleChain delphiRuleChain = new DelphiRuleChain();
@@ -60,5 +58,4 @@ public class DelphiRuleSets extends RuleSets {
   public boolean applies(File file) {
     return true;
   }
-
 }

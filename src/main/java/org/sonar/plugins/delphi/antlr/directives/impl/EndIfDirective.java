@@ -24,9 +24,7 @@ package org.sonar.plugins.delphi.antlr.directives.impl;
 
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
 
-/**
- * {$endif} directive
- */
+/** {$endif} directive */
 public class EndIfDirective extends CommonCompilerDirective {
 
   private static final String DIRECTIVE_NAME = "endif";
@@ -46,5 +44,4 @@ public class EndIfDirective extends CommonCompilerDirective {
   public CompilerDirectiveType getType() {
     return CompilerDirectiveType.ENDIF;
   }
-
 }

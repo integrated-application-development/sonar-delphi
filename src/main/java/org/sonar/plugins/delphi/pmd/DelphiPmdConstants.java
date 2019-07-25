@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-/**
- * Constants for Delphi pmd
- */
+/** Constants for Delphi pmd */
 public final class DelphiPmdConstants {
 
   public static final String REPOSITORY_KEY = "delph";
@@ -32,7 +30,5 @@ public final class DelphiPmdConstants {
   public static final String XPATH_CLASS = "org.sonar.plugins.delphi.pmd.rules.XPathRule";
   public static final String XPATH_EXPRESSION_PARAM = "xpath";
 
-  private DelphiPmdConstants() {
-
-  }
+  private DelphiPmdConstants() {}
 }

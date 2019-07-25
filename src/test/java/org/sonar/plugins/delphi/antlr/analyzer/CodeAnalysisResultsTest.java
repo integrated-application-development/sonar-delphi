@@ -42,5 +42,4 @@ public class CodeAnalysisResultsTest {
     result.setActiveUnit(new DelphiUnit("test"));
     assertEquals(new DelphiUnit("test"), result.getActiveUnit());
   }
-
 }

@@ -55,5 +55,4 @@ public class EnumNameTest extends BasePmdRuleTest {
 
     assertIssues(hasItem(hasRuleKeyAtLine("ClassNameRule", builder.getOffsetDecl() + 2)));
   }
-
 }

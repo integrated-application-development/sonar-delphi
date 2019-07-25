@@ -72,7 +72,8 @@ public class IncludeAnalyzerTest {
     UnitInterface unit = results.getActiveUnit();
     String[] includes = unit.getIncludes();
     String[] expected = {
-        "Types", "SysUtils", "System.Classes", "System.Generics.Collections", "System.Rtti"};
+      "Types", "SysUtils", "System.Classes", "System.Generics.Collections", "System.Rtti"
+    };
 
     Arrays.sort(includes);
     Arrays.sort(expected);

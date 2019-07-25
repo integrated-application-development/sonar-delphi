@@ -28,10 +28,8 @@ public class DelphiLanguageModule extends BaseLanguageModule {
   private static final String TERSE_NAME = DelphiLanguage.KEY;
 
   public DelphiLanguageModule() {
-    super(LANGUAGE_NAME, null, TERSE_NAME, DelphiRuleChainVisitor.class,
-        "pas", "dpr", "dpk");
+    super(LANGUAGE_NAME, null, TERSE_NAME, DelphiRuleChainVisitor.class, "pas", "dpr", "dpk");
     // Delphi 10.2
     addVersion("32", null, true);
   }
-
 }

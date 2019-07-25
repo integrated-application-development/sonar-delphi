@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.core.language;
 
-/**
- * For each class that consists of name and realName (real name is not converted to lowercase)
- */
+/** For each class that consists of name and realName (real name is not converted to lowercase) */
 public interface HasNameInterface {
 
   /**

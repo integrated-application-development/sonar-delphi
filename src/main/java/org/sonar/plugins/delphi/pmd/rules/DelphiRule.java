@@ -33,46 +33,44 @@ import net.sourceforge.pmd.lang.rule.ImmutableLanguage;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
 import net.sourceforge.pmd.properties.constraints.NumericConstraints;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.pmd.DelphiLanguageModule;
 import org.sonar.plugins.delphi.pmd.DelphiParserVisitor;
 import org.sonar.plugins.delphi.pmd.DelphiRuleViolationBuilder;
 
-/**
- * Basic rule class, extend this class to make your own rules. Do NOT extend from AbstractRule.
- */
+/** Basic rule class, extend this class to make your own rules. Do NOT extend from AbstractRule. */
 public class DelphiRule extends AbstractRule implements DelphiParserVisitor, ImmutableLanguage {
 
   protected int skipToLine;
   private int currentVisibility;
   private boolean inImplementationSection;
 
-  protected static final PropertyDescriptor<Integer> LIMIT = PropertyFactory
-      .intProperty("limit")
-      .desc("The max limit.")
-      .require(NumericConstraints.inRange(1, 150))
-      .defaultValue(1)
-      .build();
+  protected static final PropertyDescriptor<Integer> LIMIT =
+      PropertyFactory.intProperty("limit")
+          .desc("The max limit.")
+          .require(NumericConstraints.inRange(1, 150))
+          .defaultValue(1)
+          .build();
 
-  private static final PropertyDescriptor<String> BASE_EFFORT = PropertyFactory
-      .stringProperty("baseEffort")
-      .desc("The base effort to correct")
-      .defaultValue("")
-      .build();
+  private static final PropertyDescriptor<String> BASE_EFFORT =
+      PropertyFactory.stringProperty("baseEffort")
+          .desc("The base effort to correct")
+          .defaultValue("")
+          .build();
 
-  protected static final PropertyDescriptor<String> START_AST = PropertyFactory
-      .stringProperty("start")
-      .desc("The AST node to start from")
-      .defaultValue("")
-      .build();
+  protected static final PropertyDescriptor<String> START_AST =
+      PropertyFactory.stringProperty("start")
+          .desc("The AST node to start from")
+          .defaultValue("")
+          .build();
 
-  protected static final PropertyDescriptor<String> END_AST = PropertyFactory
-      .stringProperty("end")
-      .desc("The AST node to stop the search")
-      .defaultValue("")
-      .build();
+  protected static final PropertyDescriptor<String> END_AST =
+      PropertyFactory.stringProperty("end")
+          .desc("The AST node to stop the search")
+          .defaultValue("")
+          .build();
 
   public DelphiRule() {
     setLanguage(LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME));
@@ -84,8 +82,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
   }
 
   /**
-   * Visits all nodes in a file
-   * overload this method in derived class
+   * Visits all nodes in a file overload this method in derived class
    *
    * @param node the current node
    * @param ctx the ruleContext to store the violations
@@ -94,17 +91,13 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
     // do nothing
   }
 
-  /**
-   * Visits all nodes in a file
-   */
+  /** Visits all nodes in a file */
   @Override
   public void visit(DelphiPMDNode node, Object data) {
     // do nothing
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public void apply(List<? extends Node> nodes, RuleContext ctx) {
     visitAll(nodes, ctx);
@@ -114,12 +107,11 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
       minutes = 60,
       reason =
           "The //NOSONAR line skip is poorly implemented."
-            + "We completely skip visiting any nodes on that line, which could lead to surprising"
-            + "behavior when a rule traverses nodes on multiple lines."
-            + "We're also doing a String.endsWith check on every line in the codebase."
-            + "That probably isn't performing very well.",
-      type = SmellType.BAD_DESIGN
-  )
+              + "We completely skip visiting any nodes on that line, which could lead to surprising"
+              + "behavior when a rule traverses nodes on multiple lines."
+              + "We're also doing a String.endsWith check on every line in the codebase."
+              + "That probably isn't performing very well.",
+      type = SmellType.BAD_DESIGN)
   protected void visitAll(List<? extends Node> acus, RuleContext ctx) {
     skipToLine = -1;
     currentVisibility = DelphiLexer.PUBLISHED;
@@ -148,9 +140,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
     }
   }
 
-  /**
-   * Overload this method in derived class to initialize your rule instance with default values
-   */
+  /** Overload this method in derived class to initialize your rule instance with default values */
   protected void init() {
     // Used to overload default values in a rule, does not have to be used
   }
@@ -162,10 +152,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
    * @param node Node
    */
   protected void addViolation(RuleContext ctx, DelphiPMDNode node) {
-    newViolation(ctx)
-        .fileLocation(node)
-        .logicalLocation(node)
-        .save();
+    newViolation(ctx).fileLocation(node).logicalLocation(node).save();
   }
 
   /**
@@ -176,11 +163,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
    * @param msg Violation message
    */
   protected void addViolation(RuleContext ctx, DelphiPMDNode node, String msg) {
-    newViolation(ctx)
-        .fileLocation(node)
-        .logicalLocation(node)
-        .message(msg)
-        .save();
+    newViolation(ctx).fileLocation(node).logicalLocation(node).message(msg).save();
   }
 
   protected DelphiRuleViolationBuilder newViolation(RuleContext ctx) {

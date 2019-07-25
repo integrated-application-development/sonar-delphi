@@ -55,13 +55,16 @@ import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
 public class FunctionBodyAnalyzerTest extends FileTestsCommon {
 
-  private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
-  private static final String FILE_NAME_OPERATOR_TEST = "/org/sonar/plugins/delphi/metrics/FunctionOperatorTest.pas";
-  private static final String FILE_NAME_LIST_UTILS = "/org/sonar/plugins/delphi/metrics/ListUtils.pas";
+  private static final String FILE_NAME =
+      "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
+  private static final String FILE_NAME_OPERATOR_TEST =
+      "/org/sonar/plugins/delphi/metrics/FunctionOperatorTest.pas";
+  private static final String FILE_NAME_LIST_UTILS =
+      "/org/sonar/plugins/delphi/metrics/ListUtils.pas";
 
   private static final Tree EMPTY_NODE = new CommonTree(new CommonToken(0, "nil"));
-  private static final Tree BEGIN_NODE = new CommonTree(
-      new CommonToken(LexerMetrics.BEGIN.toMetrics(), "begin"));
+  private static final Tree BEGIN_NODE =
+      new CommonTree(new CommonToken(LexerMetrics.BEGIN.toMetrics(), "begin"));
 
   private FunctionBodyAnalyzer analyzer;
   private CodeAnalysisResults results;
@@ -123,12 +126,12 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
 
   private FunctionInterface findFunction(String functionName) {
     DelphiFunction activeFunction = new DelphiFunction(functionName);
-    final AdvanceToNodeOperation advanceToImplementationSection = new AdvanceToNodeOperation(
-        Collections.singletonList(LexerMetrics.IMPLEMENTATION));
-    final AdvanceToNodeOperation advanceToFunctionName = new AdvanceToNodeOperation(
-        Collections.singletonList(LexerMetrics.FUNCTION_NAME));
-    final AdvanceToNodeOperation advanceToFunctionBody = new AdvanceToNodeOperation(
-        Collections.singletonList(LexerMetrics.FUNCTION_BODY));
+    final AdvanceToNodeOperation advanceToImplementationSection =
+        new AdvanceToNodeOperation(Collections.singletonList(LexerMetrics.IMPLEMENTATION));
+    final AdvanceToNodeOperation advanceToFunctionName =
+        new AdvanceToNodeOperation(Collections.singletonList(LexerMetrics.FUNCTION_NAME));
+    final AdvanceToNodeOperation advanceToFunctionBody =
+        new AdvanceToNodeOperation(Collections.singletonList(LexerMetrics.FUNCTION_BODY));
 
     CodeNode<Tree> initialNode = codeTree.getCurrentCodeNode();
     try {
@@ -138,11 +141,11 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
       CodeNode<Tree> currentNode = codeTree.getCurrentCodeNode();
       while (currentNode != null) {
         try {
-          CodeNode<Tree> functionNode = advanceToFunctionName
-              .execute(codeTree.getCurrentCodeNode().getNode());
+          CodeNode<Tree> functionNode =
+              advanceToFunctionName.execute(codeTree.getCurrentCodeNode().getNode());
           codeTree.setCurrentNode(functionNode);
-          final String currentFunctionName = functionNode.getNode()
-              .getChild(functionNode.getNode().getChildCount() - 1).getText();
+          final String currentFunctionName =
+              functionNode.getNode().getChild(functionNode.getNode().getChildCount() - 1).getText();
           if (currentFunctionName.equalsIgnoreCase(functionName)) {
             results.setActiveFunction(activeFunction);
             codeTree.setCurrentNode(
@@ -190,5 +193,4 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
     assertThat(function.getBodyLine(), is(24));
     assertThat(function.getStatements(), hasSize(1));
   }
-
 }

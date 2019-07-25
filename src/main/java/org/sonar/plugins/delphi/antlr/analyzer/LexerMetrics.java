@@ -24,9 +24,7 @@ package org.sonar.plugins.delphi.antlr.analyzer;
 
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
-/**
- * Enum class holing lexer metrics used during file analysis
- */
+/** Enum class holing lexer metrics used during file analysis */
 public enum LexerMetrics {
   PRIVATE(0, DelphiLexer.PRIVATE),
   PUBLIC(1, DelphiLexer.PUBLIC),
@@ -88,16 +86,12 @@ public enum LexerMetrics {
     this.metrics = metrics;
   }
 
-  /**
-   * @return Delphi lexer metrics
-   */
+  /** @return Delphi lexer metrics */
   public int toMetrics() {
     return metrics;
   }
 
-  /**
-   * @return metric id
-   */
+  /** @return metric id */
   public int toCode() {
     return code;
   }

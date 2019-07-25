@@ -47,7 +47,8 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class TypeInheritanceAnalyzerTest {
 
-  private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
+  private static final String FILE_NAME =
+      "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
 
   private TypeInheritanceAnalyzer analyzer;
   private CodeAnalysisResults results;

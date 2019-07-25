@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.core.language;
 
-/**
- * Interface used for function arguments
- */
+/** Interface used for function arguments */
 public interface ArgumentInterface {
 
   /**

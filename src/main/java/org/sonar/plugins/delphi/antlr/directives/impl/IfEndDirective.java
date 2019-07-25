@@ -24,9 +24,7 @@ package org.sonar.plugins.delphi.antlr.directives.impl;
 
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
 
-/**
- * {$ifend} directive
- */
+/** {$ifend} directive */
 public class IfEndDirective extends CommonCompilerDirective {
 
   private static final String DIRECTIVE_NAME = "ifend";
@@ -46,5 +44,4 @@ public class IfEndDirective extends CommonCompilerDirective {
   public CompilerDirectiveType getType() {
     return CompilerDirectiveType.IFEND;
   }
-
 }

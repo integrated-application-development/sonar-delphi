@@ -19,9 +19,9 @@
  */
 
 package org.sonar.plugins.delphi.pmd.xml;
+
 import java.io.IOException;
 import java.io.Reader;
-
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.utils.ValidationMessages;
@@ -33,9 +33,7 @@ import org.sonar.plugins.delphi.pmd.xml.factory.RuleSetFactory;
 import org.sonar.plugins.delphi.pmd.xml.factory.RulesProfileRuleSetFactory;
 import org.sonar.plugins.delphi.pmd.xml.factory.XmlRuleSetFactory;
 
-/**
- * Convenience class that creates {@link DelphiRuleSet} instances out of the given input.
- */
+/** Convenience class that creates {@link DelphiRuleSet} instances out of the given input. */
 public class DelphiRuleSetHelper {
   private static final Logger LOG = Loggers.get(DelphiRuleSetHelper.class);
 
@@ -61,7 +59,7 @@ public class DelphiRuleSetHelper {
   }
 
   /**
-   * @param activeRules   The currently active rules.
+   * @param activeRules The currently active rules.
    * @param repositoryKey The key identifier of the rule repository.
    * @return An instance of DelphiRuleSet. The output may be empty but never null.
    */
@@ -70,7 +68,7 @@ public class DelphiRuleSetHelper {
   }
 
   /**
-   * @param rulesProfile  The current rules profile.
+   * @param rulesProfile The current rules profile.
    * @param repositoryKey The key identifier of the rule repository.
    * @return An instance of DelphiRuleSet. The output may be empty but never null.
    */

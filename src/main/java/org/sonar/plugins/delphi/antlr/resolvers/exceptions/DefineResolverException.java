@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.resolvers.exceptions;
 
-/**
- * DefineResolver exception
- */
+/** DefineResolver exception */
 public class DefineResolverException extends RuntimeException {
   /**
    * ctor
@@ -34,5 +32,4 @@ public class DefineResolverException extends RuntimeException {
   public DefineResolverException(String msg) {
     super(msg);
   }
-
 }

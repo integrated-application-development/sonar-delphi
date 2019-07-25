@@ -25,9 +25,7 @@ package org.sonar.plugins.delphi.antlr.ast;
 import org.antlr.runtime.tree.Tree;
 import org.w3c.dom.Document;
 
-/**
- * AST Tree interface, used by AbstractAnalyser.
- */
+/** AST Tree interface, used by AbstractAnalyser. */
 public interface ASTTree extends Tree {
 
   /**
@@ -58,9 +56,7 @@ public interface ASTTree extends Tree {
    */
   void generateXML(String fileName);
 
-  /**
-   * @return Gets the file source
-   */
+  /** @return Gets the file source */
   String getFileSource();
 
   /**
@@ -70,5 +66,4 @@ public interface ASTTree extends Tree {
    * @return Gets the source file at line
    */
   String getFileSourceLine(int lineNr);
-
 }

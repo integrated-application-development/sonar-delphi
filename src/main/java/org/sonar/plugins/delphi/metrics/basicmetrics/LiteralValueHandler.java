@@ -32,8 +32,8 @@ public class LiteralValueHandler extends LineContextHandler {
 
   @Override
   boolean matchToEnd(Line line, StringBuilder pendingLine) {
-    return matchEndOfString(pendingLine, delimiter) && evenNumberOfBackSlashBeforeDelimiter(
-        pendingLine);
+    return matchEndOfString(pendingLine, delimiter)
+        && evenNumberOfBackSlashBeforeDelimiter(pendingLine);
   }
 
   private boolean evenNumberOfBackSlashBeforeDelimiter(StringBuilder pendingLine) {

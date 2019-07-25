@@ -18,17 +18,13 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.plugins.delphi.pmd.xml.factory;
-import java.io.Closeable;
 
+import java.io.Closeable;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 
-/**
- * Interface for all RuleSetFactories.
- */
+/** Interface for all RuleSetFactories. */
 public interface RuleSetFactory extends Closeable {
 
-  /**
-   * @return A DelphiRuleset.
-   */
+  /** @return A DelphiRuleset. */
   DelphiRuleSet create();
 }

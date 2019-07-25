@@ -28,9 +28,7 @@ import java.util.Objects;
 import javax.annotation.Nullable;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 
-/**
- * Delphi PMD rule loaded from xml file
- */
+/** Delphi PMD rule loaded from xml file */
 public final class DelphiRule {
 
   private Integer priority;
@@ -41,12 +39,9 @@ public final class DelphiRule {
   private String example;
   private List<DelphiRuleProperty> properties;
 
-  public DelphiRule() {
-  }
+  public DelphiRule() {}
 
-  /**
-   * @param clazz The class which implements this rule
-   */
+  /** @param clazz The class which implements this rule */
   public DelphiRule(String clazz) {
     this(clazz, null);
   }
@@ -158,8 +153,11 @@ public final class DelphiRule {
       DelphiRuleProperty xpathExp = getProperty(DelphiPmdConstants.XPATH_EXPRESSION_PARAM);
 
       if (xpathExp == null) {
-        throw new IllegalArgumentException("Property '" + DelphiPmdConstants.XPATH_EXPRESSION_PARAM
-            + "' should be set for PMD rule " + sonarRuleKey);
+        throw new IllegalArgumentException(
+            "Property '"
+                + DelphiPmdConstants.XPATH_EXPRESSION_PARAM
+                + "' should be set for PMD rule "
+                + sonarRuleKey);
       }
 
       if (!xpathExp.isCdataValue()) {

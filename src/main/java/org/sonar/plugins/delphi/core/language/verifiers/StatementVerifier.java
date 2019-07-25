@@ -34,15 +34,16 @@ import org.sonar.plugins.delphi.core.language.StatementInterface;
 import org.sonar.plugins.delphi.core.language.Tokenizer;
 import org.sonar.plugins.delphi.core.language.impl.DelphiStatement;
 
-/**
- * Checks if a node can be transformed into a simple or complex statement
- */
+/** Checks if a node can be transformed into a simple or complex statement */
 public class StatementVerifier {
 
-  private static final LexerMetrics[] STATEMENT_NODES = {LexerMetrics.IF, LexerMetrics.ELSE,
-      LexerMetrics.WHILE,
-      LexerMetrics.BREAK,
-      LexerMetrics.CONTINUE};
+  private static final LexerMetrics[] STATEMENT_NODES = {
+    LexerMetrics.IF,
+    LexerMetrics.ELSE,
+    LexerMetrics.WHILE,
+    LexerMetrics.BREAK,
+    LexerMetrics.CONTINUE
+  };
   private static final int MIN_TOKENS_FOR_COMPLEX_STMT = 4;
 
   private Tree checkedNode;
@@ -67,19 +68,16 @@ public class StatementVerifier {
     return isSimple || isComplex;
   }
 
-  /**
-   * @return a Delphi statement
-   */
+  /** @return a Delphi statement */
   public StatementInterface createStatement() {
-    StatementInterface statement = new DelphiStatement(lastStatementText, checkedNode.getLine(),
-        checkedNode.getCharPositionInLine());
+    StatementInterface statement =
+        new DelphiStatement(
+            lastStatementText, checkedNode.getLine(), checkedNode.getCharPositionInLine());
     statement.setComplexity(isComplex);
     return statement;
   }
 
-  /**
-   * @return True if a statement is a complex statement, false otherwise
-   */
+  /** @return True if a statement is a complex statement, false otherwise */
   public boolean isComplexStatement() {
     return isComplex;
   }
@@ -150,7 +148,7 @@ public class StatementVerifier {
       lineBuilder.append(" ").append(actualNode.getText());
     }
 
-    String[] line = new String[]{lineBuilder.toString()};
+    String[] line = new String[] {lineBuilder.toString()};
     List<Token> tokens = tokenizer.tokenize(line);
     tokens.removeIf(token -> (token.getType() == DelphiLexer.WS));
 
@@ -167,7 +165,8 @@ public class StatementVerifier {
   }
 
   private boolean isBlockNode(int code) {
-    return code == LexerMetrics.BEGIN.toMetrics() || code == LexerMetrics.TRY.toMetrics()
+    return code == LexerMetrics.BEGIN.toMetrics()
+        || code == LexerMetrics.TRY.toMetrics()
         || code == LexerMetrics.CASE.toMetrics();
   }
 
@@ -181,5 +180,4 @@ public class StatementVerifier {
     }
     return false;
   }
-
 }

@@ -27,24 +27,18 @@ import java.util.List;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 
-/**
- * Class holding results of source code parsing
- */
+/** Class holding results of source code parsing */
 public class CodeAnalysisResults extends CodeAnalysisState {
 
   private final List<FunctionInterface> functions = new ArrayList<>();
   private final List<ClassInterface> classes = new ArrayList<>();
 
-  /**
-   * @return class list in current file
-   */
+  /** @return class list in current file */
   public List<ClassInterface> getClasses() {
     return classes;
   }
 
-  /**
-   * @return function list in current file
-   */
+  /** @return function list in current file */
   public List<FunctionInterface> getFunctions() {
     return functions;
   }

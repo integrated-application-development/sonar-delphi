@@ -44,5 +44,4 @@ public class DelphiPropertyTest {
     assertThat(property.getValue(), is("cDataValue"));
     assertThat(property.isCdataValue(), is(true));
   }
-
 }

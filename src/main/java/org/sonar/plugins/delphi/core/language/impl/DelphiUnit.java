@@ -50,11 +50,8 @@ public class DelphiUnit implements UnitInterface {
   private final List<FunctionInterface> functions = new ArrayList<>();
   private int line = 1;
 
-  /**
-   * Default ctor
-   */
-  public DelphiUnit() {
-  }
+  /** Default ctor */
+  public DelphiUnit() {}
 
   /**
    * Name ctor
@@ -66,18 +63,13 @@ public class DelphiUnit implements UnitInterface {
     realName = unitName;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public String getFileName() {
     return file.getName();
   }
 
-  /**
-   * @return real unit name (with camelcase)
-   */
+  /** @return real unit name (with camelcase) */
   public String getRealName() {
     return realName;
   }
@@ -91,109 +83,74 @@ public class DelphiUnit implements UnitInterface {
     realName = name;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void setPath(String path) {
     file = new File(path);
     uri = file.toPath().toUri();
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public String getPath() {
     return file.getAbsolutePath();
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public URI getUri() {
     return uri;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void setName(String unitName) {
     name = unitName;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public String getName() {
     return name;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void addClass(ClassInterface cl) {
     classes.add(cl);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public ClassInterface[] getClasses() {
     return classes.toArray(new ClassInterface[0]);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void addFunction(FunctionInterface func) {
     functions.add(func);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public FunctionInterface[] getFunctions() {
     return functions.toArray(new FunctionInterface[0]);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void addIncludes(String includeName) {
     includes.add(includeName);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public String[] getIncludes() {
     return includes.toArray(new String[0]);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public ClassInterface findClass(String classShortName) {
     for (ClassInterface cl : classes) {
@@ -204,10 +161,7 @@ public class DelphiUnit implements UnitInterface {
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public FunctionInterface findFunction(String functionName) {
     for (FunctionInterface func : functions) {
@@ -238,10 +192,7 @@ public class DelphiUnit implements UnitInterface {
     return toString().hashCode();
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public boolean isIncluding(UnitInterface unit) {
     for (String includeName : includes) {
@@ -253,28 +204,19 @@ public class DelphiUnit implements UnitInterface {
     return false;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void setLine(int lineNumber) {
     line = lineNumber;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public int getLine() {
     return line;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public FunctionInterface[] getAllFunctions() {
     Set<FunctionInterface> result = new HashSet<>(functions);
@@ -286,10 +228,7 @@ public class DelphiUnit implements UnitInterface {
     return result.toArray(new FunctionInterface[0]);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public Set<UnitInterface> getIncludedUnits(Set<UnitInterface> allUnits) {
     Set<UnitInterface> result = new HashSet<>();

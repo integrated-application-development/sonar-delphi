@@ -38,9 +38,7 @@ import org.sonar.plugins.delphi.metrics.basicmetrics.DelphiSource;
 import org.sonar.plugins.delphi.metrics.basicmetrics.Metric;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-/**
- * Class calculating basic file metrics: lines of code and comments, documentation.
- */
+/** Class calculating basic file metrics: lines of code and comments, documentation. */
 public class BasicMetrics extends DefaultMetrics {
   private static final Logger LOG = Loggers.get(BasicMetrics.class);
   private final SensorContext context;
@@ -51,12 +49,14 @@ public class BasicMetrics extends DefaultMetrics {
   }
 
   @Override
-  public void analyse(InputFile resource, List<ClassInterface> classes,
+  public void analyse(
+      InputFile resource,
+      List<ClassInterface> classes,
       List<FunctionInterface> functions,
       Set<UnitInterface> units) {
     clearMetrics();
 
-    try (Reader reader = new StringReader(resource.contents())){
+    try (Reader reader = new StringReader(resource.contents())) {
       DelphiSource source = new DelphiSource(reader);
       setIntMetric("NCLOC", source.getMeasure(Metric.LINES_OF_CODE));
       setIntMetric("COMMENT_LINES", source.getMeasure(Metric.COMMENT_LINES));
@@ -67,25 +67,26 @@ public class BasicMetrics extends DefaultMetrics {
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void save(InputFile resource) {
-    context.<Integer>newMeasure().forMetric(CoreMetrics.NCLOC).on(resource)
-        .withValue(getIntMetric("NCLOC")).save();
-    context.<Integer>newMeasure().forMetric(CoreMetrics.COMMENT_LINES).on(resource)
-        .withValue(getIntMetric("COMMENT_LINES")).save();
+    context
+        .<Integer>newMeasure()
+        .forMetric(CoreMetrics.NCLOC)
+        .on(resource)
+        .withValue(getIntMetric("NCLOC"))
+        .save();
+    context
+        .<Integer>newMeasure()
+        .forMetric(CoreMetrics.COMMENT_LINES)
+        .on(resource)
+        .withValue(getIntMetric("COMMENT_LINES"))
+        .save();
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public boolean executeOnResource(InputFile resource) {
     return DelphiUtils.acceptFile(resource.filename());
   }
-
 }

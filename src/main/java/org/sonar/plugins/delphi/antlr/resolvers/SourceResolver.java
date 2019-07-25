@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.resolvers;
 
-/**
- * Abstract class for source resolvers, applies chain-of-command design pattern
- */
+/** Abstract class for source resolvers, applies chain-of-command design pattern */
 public abstract class SourceResolver {
 
   private SourceResolver next;

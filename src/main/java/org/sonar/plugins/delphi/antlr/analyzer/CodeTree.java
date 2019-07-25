@@ -25,9 +25,7 @@ package org.sonar.plugins.delphi.antlr.analyzer;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 
-/**
- * Code analyzed class provides us with information about code being currently analysed.
- */
+/** Code analyzed class provides us with information about code being currently analysed. */
 public class CodeTree {
 
   private final CodeNode<ASTTree> rootNode;
@@ -44,16 +42,12 @@ public class CodeTree {
     this.currentNode = current;
   }
 
-  /**
-   * @return current node
-   */
+  /** @return current node */
   public CodeNode<Tree> getCurrentCodeNode() {
     return currentNode;
   }
 
-  /**
-   * @return root node
-   */
+  /** @return root node */
   public CodeNode<ASTTree> getRootCodeNode() {
     return rootNode;
   }
@@ -66,5 +60,4 @@ public class CodeTree {
   public void setCurrentNode(CodeNode<Tree> n) {
     currentNode = n;
   }
-
 }

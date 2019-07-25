@@ -19,19 +19,19 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import net.sourceforge.pmd.Rule;
-import net.sourceforge.pmd.RuleViolation;
-import org.junit.Test;
-import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.TextRange;
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import net.sourceforge.pmd.Rule;
+import net.sourceforge.pmd.RuleViolation;
+import org.junit.Test;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.TextRange;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 
 public class TextRangeCalculatorTest {
 
@@ -85,8 +85,8 @@ public class TextRangeCalculatorTest {
     assertTextRangeValues(range, 2, 0, 2, 5);
   }
 
-  private void assertTextRangeValues(TextRange range, int beginLine, int beginCol, int endLine,
-      int endCol) {
+  private void assertTextRangeValues(
+      TextRange range, int beginLine, int beginCol, int endLine, int endCol) {
     assertThat(range, is(not(nullValue())));
 
     assertThat(range.start(), is(not(nullValue())));
@@ -123,14 +123,8 @@ public class TextRangeCalculatorTest {
   }
 
   private InputFile createTestInput() {
-    return TestInputFileBuilder
-        .create("moduleKey", "relPath")
-        .setContents(
-            "This\n" +
-            "is a \n" +
-            "multi-line file. \n"
-        )
+    return TestInputFileBuilder.create("moduleKey", "relPath")
+        .setContents("This\n" + "is a \n" + "multi-line file. \n")
         .build();
   }
-
 }

@@ -44,7 +44,8 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class TypeFieldsAnalyzerTest {
 
-  private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
+  private static final String FILE_NAME =
+      "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
   private TypeFieldsAnalyzer analyzer;
   private CodeAnalysisResults results;
   private CodeTree code;
@@ -81,5 +82,4 @@ public class TypeFieldsAnalyzerTest {
     code.setCurrentNode(advanceToOp.execute(code.getCurrentCodeNode().getNode()));
     assertTrue(analyzer.canAnalyze(code));
   }
-
 }

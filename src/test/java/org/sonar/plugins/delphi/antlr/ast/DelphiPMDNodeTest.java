@@ -187,7 +187,6 @@ public class DelphiPMDNodeTest {
     node.remove();
   }
 
-
   @Test(expected = UnsupportedOperationException.class)
   public void testRemoveChildAtIndex() {
     node.removeChildAtIndex(0);

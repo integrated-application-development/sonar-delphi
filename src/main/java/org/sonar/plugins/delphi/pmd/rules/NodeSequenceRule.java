@@ -37,17 +37,17 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 @Smell(
     minutes = 30,
-    reason = "Effectively a poor man's xpath. Considering XPathRule is much more flexible, I see "
-        + "no reason to keep it.",
-    type = SmellType.ODDBALL_SOLUTION
-)
+    reason =
+        "Effectively a poor man's xpath. Considering XPathRule is much more flexible, I see "
+            + "no reason to keep it.",
+    type = SmellType.ODDBALL_SOLUTION)
 public class NodeSequenceRule extends DelphiRule {
 
   private static final PropertyDescriptor<List<String>> AST_SEQUENCE =
       PropertyFactory.stringListProperty("sequence")
-        .desc("The AST sequence nodes to find")
-        .defaultValue(new ArrayList<>())
-        .build();
+          .desc("The AST sequence nodes to find")
+          .defaultValue(new ArrayList<>())
+          .build();
 
   private List<String> sequence;
   private int count;

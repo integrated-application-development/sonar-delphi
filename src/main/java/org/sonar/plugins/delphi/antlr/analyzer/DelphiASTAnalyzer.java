@@ -36,9 +36,7 @@ import org.sonar.plugins.delphi.antlr.analyzer.impl.VisibilityAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.impl.operations.AdvanceNodeOperation;
 import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 
-/**
- * Class for analyzing a DelphiLanguage AST tree
- */
+/** Class for analyzing a DelphiLanguage AST tree */
 public class DelphiASTAnalyzer implements ASTAnalyzer {
 
   @Override
@@ -47,7 +45,8 @@ public class DelphiASTAnalyzer implements ASTAnalyzer {
     final CodeTree code = new CodeTree(new CodeNode<>(tree), new CodeNode<>(tree.getChild(0)));
 
     CodeAnalyzer analyzer = new UnitAnalyzer();
-    analyzer.chain(new IncludeAnalyzer())
+    analyzer
+        .chain(new IncludeAnalyzer())
         .chain(new InterfaceAnalyzer())
         .chain(new VisibilityAnalyzer())
         .chain(new TypeAnalyzer())
@@ -67,5 +66,4 @@ public class DelphiASTAnalyzer implements ASTAnalyzer {
 
     return result;
   }
-
 }

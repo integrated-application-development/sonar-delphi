@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.metrics.basicmetrics;
 
-/**
- * Class for handling custom block comments. Can also count documentation comments.
- */
+/** Class for handling custom block comments. Can also count documentation comments. */
 public class DelphiCommentHandler extends LineContextHandler {
   private StringBuilder currentLineComment;
   private boolean isFirstLineOfComment;
@@ -42,7 +40,7 @@ public class DelphiCommentHandler extends LineContextHandler {
    * @param start The start tag, like "{", "(*" etc
    * @param end The end tag, like "}", *)" etc
    * @param isDocumentation If this param is set, the class will look for additional start tag "**"
-   * and count comment as documentation
+   *     and count comment as documentation
    */
   public DelphiCommentHandler(String start, String end, boolean isDocumentation) {
     if (start == null || end == null) {
@@ -65,8 +63,8 @@ public class DelphiCommentHandler extends LineContextHandler {
     currentLineComment.append(getLastCharacter(pendingLine));
     boolean match = matchEndOfString(pendingLine, endCommentTag);
     if (match
-        && !(isFirstLineOfComment && pendingLine.indexOf(startCommentTag) + 1 == pendingLine
-        .indexOf(endCommentTag))) {
+        && !(isFirstLineOfComment
+            && pendingLine.indexOf(startCommentTag) + 1 == pendingLine.indexOf(endCommentTag))) {
       endOfCommentLine(line, pendingLine);
       initProperties();
       return true;

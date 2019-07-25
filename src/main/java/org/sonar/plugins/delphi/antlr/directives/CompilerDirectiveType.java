@@ -62,16 +62,12 @@ public enum CompilerDirectiveType {
     }
   }
 
-  /**
-   * @return directive name
-   */
+  /** @return directive name */
   public String getName() {
     return name;
   }
 
-  /**
-   * @return directive number
-   */
+  /** @return directive number */
   public int getNumber() {
     return number;
   }

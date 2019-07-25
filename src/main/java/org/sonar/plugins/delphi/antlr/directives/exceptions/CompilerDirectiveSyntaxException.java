@@ -22,15 +22,10 @@
  */
 package org.sonar.plugins.delphi.antlr.directives.exceptions;
 
-/**
- * Compiler directive exception
- */
+/** Compiler directive exception */
 public class CompilerDirectiveSyntaxException extends RuntimeException {
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   public CompilerDirectiveSyntaxException(String msg) {
     super(msg);
   }
-
 }

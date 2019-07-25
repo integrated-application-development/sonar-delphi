@@ -63,12 +63,10 @@ public class DelphiProjectHelperTest {
     settings = mock(Configuration.class);
 
     String[] includes = {"BadSyntaxProject"};
-    when(settings.getStringArray(DelphiPlugin.INCLUDED_DIRECTORIES_KEY))
-        .thenReturn(includes);
+    when(settings.getStringArray(DelphiPlugin.INCLUDED_DIRECTORIES_KEY)).thenReturn(includes);
 
     String[] defines = {"DefineFromSettings"};
-    when(settings.getStringArray(DelphiPlugin.CONDITIONAL_DEFINES_KEY))
-        .thenReturn(defines);
+    when(settings.getStringArray(DelphiPlugin.CONDITIONAL_DEFINES_KEY)).thenReturn(defines);
   }
 
   @Test
@@ -93,8 +91,7 @@ public class DelphiProjectHelperTest {
   @Test
   public void testInvalidIncludesShouldBeSkipped() {
     String[] includes = {"EmptyProject/empty", "BadSyntaxProject", "BadPath/Spooky"};
-    when(settings.getStringArray(DelphiPlugin.INCLUDED_DIRECTORIES_KEY))
-        .thenReturn(includes);
+    when(settings.getStringArray(DelphiPlugin.INCLUDED_DIRECTORIES_KEY)).thenReturn(includes);
 
     DelphiProject project = getProject();
 
@@ -104,8 +101,7 @@ public class DelphiProjectHelperTest {
   @Test
   public void testExcludedDirectories() {
     String[] excludes = {"BadSyntaxProject"};
-    when(settings.getStringArray(DelphiPlugin.EXCLUDED_DIRECTORIES_KEY))
-        .thenReturn(excludes);
+    when(settings.getStringArray(DelphiPlugin.EXCLUDED_DIRECTORIES_KEY)).thenReturn(excludes);
 
     DelphiProjectHelper delphiProjectHelper = new DelphiProjectHelper(settings, fs);
 
@@ -128,7 +124,8 @@ public class DelphiProjectHelperTest {
     assertThat(project.getIncludeDirectories(), hasSize(2));
     assertThat(project.getSourceFiles(), hasSize(8));
     assertThat(project.getDefinitions(), hasSize(5));
-    assertThat(project.getDefinitions(),
+    assertThat(
+        project.getDefinitions(),
         hasItems("GGMSGDEBUGx", "LOGTOFILEx", "FullDebugMode", "RELEASE", "DefineFromSettings"));
   }
 
@@ -143,7 +140,8 @@ public class DelphiProjectHelperTest {
     assertThat(project.getIncludeDirectories(), hasSize(2));
     assertThat(project.getSourceFiles(), hasSize(8));
     assertThat(project.getDefinitions(), hasSize(5));
-    assertThat(project.getDefinitions(),
+    assertThat(
+        project.getDefinitions(),
         hasItems("GGMSGDEBUGx", "LOGTOFILEx", "FullDebugMode", "RELEASE", "DefineFromSettings"));
   }
 }

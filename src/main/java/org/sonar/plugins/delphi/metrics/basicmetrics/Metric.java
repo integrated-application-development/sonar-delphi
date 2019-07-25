@@ -20,7 +20,6 @@
 package org.sonar.plugins.delphi.metrics.basicmetrics;
 
 public enum Metric {
-
   LINES(false),
   BLANK_LINES(false),
   COMMENT_LINES(false),

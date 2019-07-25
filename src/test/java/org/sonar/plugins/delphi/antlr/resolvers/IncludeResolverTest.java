@@ -48,11 +48,10 @@ public class IncludeResolverTest extends FileTestsCommon {
 
   @Test
   public void testResolveIncludes() {
-    SourceResolverResults results = new SourceResolverResults(testFile.getAbsolutePath(),
-        testFileString);
+    SourceResolverResults results =
+        new SourceResolverResults(testFile.getAbsolutePath(), testFileString);
 
     resolver.resolve(results);
     assertEquals(4, resolver.getIncludedFilesPath().size());
   }
-
 }

@@ -27,8 +27,8 @@ import java.util.Deque;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /**
  * It counts how many classes there are in one file.
@@ -38,9 +38,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
  */
 public class ClassPerFileRule extends CountRule {
 
-  /**
-   * Store the visited inner classes to to ignore the count.
-   */
+  /** Store the visited inner classes to to ignore the count. */
   private Deque<Tree> visitedInnerClasses;
 
   @Override
@@ -53,8 +51,8 @@ public class ClassPerFileRule extends CountRule {
 
   @Override
   public String getMessage() {
-    return String.format("File has too many classes, maximum number of classes is %d.",
-        definedLimit);
+    return String.format(
+        "File has too many classes, maximum number of classes is %d.", definedLimit);
   }
 
   @Override

@@ -4,7 +4,6 @@ import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-
 public class DuplicatesRule extends DelphiRule {
   private static final String[] DUPLICATES_LINE = {".", "duplicates", ":="};
   private static final String[] SORTED_LINE = {".", "sorted", ":=", "true"};
@@ -100,4 +99,3 @@ public class DuplicatesRule extends DelphiRule {
     return true;
   }
 }
-

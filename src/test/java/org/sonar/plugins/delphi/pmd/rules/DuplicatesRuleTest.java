@@ -30,12 +30,13 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testSortedOnNextLineShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-      .appendImpl("procedure MyProcedure;")
-      .appendImpl("begin")
-      .appendImpl("  List.Duplicates := dupIgnore;")
-      .appendImpl("  List.Sorted := True;")
-      .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  List.Duplicates := dupIgnore;")
+            .appendImpl("  List.Sorted := True;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -44,12 +45,13 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testSortedOnPreviousLineShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-      .appendImpl("procedure MyProcedure;")
-      .appendImpl("begin")
-      .appendImpl("  List.Sorted := True;")
-      .appendImpl("  List.Duplicates := dupError;")
-      .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  List.Sorted := True;")
+            .appendImpl("  List.Duplicates := dupError;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -58,11 +60,12 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testUnsortedShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-      .appendImpl("procedure MyProcedure;")
-      .appendImpl("begin")
-      .appendImpl("  List.Duplicates := dupIgnore;")
-      .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  List.Duplicates := dupIgnore;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -72,12 +75,13 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testSortedFalseOnPreviousLineShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-      .appendImpl("procedure MyProcedure;")
-      .appendImpl("begin")
-      .appendImpl("  List.Sorted := False;")
-      .appendImpl("  List.Duplicates := dupError;")
-      .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  List.Sorted := False;")
+            .appendImpl("  List.Duplicates := dupError;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -87,12 +91,13 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testSortedFalseOnNextLineShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-      .appendImpl("procedure MyProcedure;")
-      .appendImpl("begin")
-      .appendImpl("  List.Duplicates := dupIgnore;")
-      .appendImpl("  List.Sorted := False;")
-      .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  List.Duplicates := dupIgnore;")
+            .appendImpl("  List.Sorted := False;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -102,12 +107,13 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testSortedDifferentListOnPreviousLineShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-        .appendImpl("procedure MyProcedure;")
-        .appendImpl("begin")
-        .appendImpl("  OtherList.Sorted := False;")
-        .appendImpl("  List.Duplicates := dupError;")
-        .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  OtherList.Sorted := False;")
+            .appendImpl("  List.Duplicates := dupError;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -117,12 +123,13 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testSortedDifferentListOnNextLineShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-        .appendImpl("procedure MyProcedure;")
-        .appendImpl("begin")
-        .appendImpl("  OtherList.Duplicates := dupIgnore;")
-        .appendImpl("  List.Sorted := False;")
-        .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  OtherList.Duplicates := dupIgnore;")
+            .appendImpl("  List.Sorted := False;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -130,19 +137,17 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
     assertIssues(hasItem(hasRuleKeyAtLine("DuplicatesRule", builder.getOffSet() + 3)));
   }
 
-
   @Test
   public void testDupAcceptShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-        .appendImpl("procedure MyProcedure;")
-        .appendImpl("begin")
-        .appendImpl("  List.Duplicates := dupAccept;")
-        .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  List.Duplicates := dupAccept;")
+            .appendImpl("end;");
 
     execute(builder);
 
     assertIssues(empty());
   }
-
 }
-

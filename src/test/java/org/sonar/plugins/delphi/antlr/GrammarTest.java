@@ -22,7 +22,6 @@
  */
 package org.sonar.plugins.delphi.antlr;
 
-
 import static org.junit.Assert.assertFalse;
 
 import java.io.File;
@@ -49,8 +48,11 @@ public class GrammarTest {
     String name = fileName.replace(".pas", "");
 
     String outputFileName =
-        File.createTempFile(name, "").getParentFile().getAbsolutePath() + File.separatorChar
-            + "AST_" + name + ".xml";
+        File.createTempFile(name, "").getParentFile().getAbsolutePath()
+            + File.separatorChar
+            + "AST_"
+            + name
+            + ".xml";
     ast.generateXML(outputFileName);
     LOG.info("Generated AST XML file at " + outputFileName);
   }

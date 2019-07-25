@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.core.language;
 
-/**
- * Statement interface used to declare language specific statements.
- */
+/** Statement interface used to declare language specific statements. */
 public interface StatementInterface {
 
   /**

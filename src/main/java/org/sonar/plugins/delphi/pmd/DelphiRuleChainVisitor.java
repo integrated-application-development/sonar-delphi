@@ -29,9 +29,7 @@ import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.rule.AbstractRuleChainVisitor;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 
-/**
- * Delphi pmd rule chain visitor
- */
+/** Delphi pmd rule chain visitor */
 public class DelphiRuleChainVisitor extends AbstractRuleChainVisitor {
 
   @Override
@@ -43,5 +41,4 @@ public class DelphiRuleChainVisitor extends AbstractRuleChainVisitor {
   protected void indexNodes(List<Node> astCompilationUnits, RuleContext ctx) {
     // Unused but necessary override
   }
-
 }

@@ -29,9 +29,7 @@ import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.pmd.DelphiParserVisitor;
 
-/**
- * AST node extended with PMD interfaces for analysis PMD analysis
- */
+/** AST node extended with PMD interfaces for analysis PMD analysis */
 public class DelphiPMDNode extends DelphiNode implements AntlrPmdNodeInterface {
 
   /**
@@ -86,9 +84,7 @@ public class DelphiPMDNode extends DelphiNode implements AntlrPmdNodeInterface {
     return result;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public int getBeginLine() {
     int line = getLine();
@@ -101,22 +97,18 @@ public class DelphiPMDNode extends DelphiNode implements AntlrPmdNodeInterface {
     return line;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public int getBeginColumn() {
     return getCharPositionInLine();
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public int getEndLine() {
     if (getChildCount() > 0) {
-      DelphiPMDNode lastChild = new DelphiPMDNode((CommonTree) getChild(getChildCount() - 1),
-          getASTTree());
+      DelphiPMDNode lastChild =
+          new DelphiPMDNode((CommonTree) getChild(getChildCount() - 1), getASTTree());
 
       return lastChild.getEndLine();
     }
@@ -124,14 +116,12 @@ public class DelphiPMDNode extends DelphiNode implements AntlrPmdNodeInterface {
     return getLine();
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public int getEndColumn() {
     if (getChildCount() > 0) {
-      DelphiPMDNode lastChild = new DelphiPMDNode((CommonTree) getChild(getChildCount() - 1),
-          getASTTree());
+      DelphiPMDNode lastChild =
+          new DelphiPMDNode((CommonTree) getChild(getChildCount() - 1), getASTTree());
 
       return lastChild.getEndColumn();
     }
@@ -141,7 +131,7 @@ public class DelphiPMDNode extends DelphiNode implements AntlrPmdNodeInterface {
     if (isNil()) {
       return maxColumn;
     }
-    
+
     int calcColumn = getBeginColumn() + getText().length();
     return Math.min(maxColumn, calcColumn);
   }

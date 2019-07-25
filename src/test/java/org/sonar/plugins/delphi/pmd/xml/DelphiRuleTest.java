@@ -52,8 +52,7 @@ public class DelphiRuleTest {
 
   private DelphiRule rule;
 
-  @Rule
-  public ExpectedException exceptionCatcher = ExpectedException.none();
+  @Rule public ExpectedException exceptionCatcher = ExpectedException.none();
 
   @Before
   public void init() {
@@ -138,8 +137,8 @@ public class DelphiRuleTest {
   public void testProcessXpath() {
     final DelphiRule rule = new DelphiRule(DelphiPmdConstants.XPATH_CLASS);
     rule.setName("MyOwnRule");
-    DelphiRuleProperty xpathProperty = new DelphiRuleProperty(
-        DelphiPmdConstants.XPATH_EXPRESSION_PARAM, "myXpathExpression");
+    DelphiRuleProperty xpathProperty =
+        new DelphiRuleProperty(DelphiPmdConstants.XPATH_EXPRESSION_PARAM, "myXpathExpression");
 
     rule.addProperty(xpathProperty);
     rule.processXpath("sonarRuleKey");

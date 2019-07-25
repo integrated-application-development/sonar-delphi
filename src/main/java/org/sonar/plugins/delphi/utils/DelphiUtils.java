@@ -34,13 +34,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 
-/**
- * Some utilities
- */
+/** Some utilities */
 public final class DelphiUtils {
-  private DelphiUtils() {
-  }
-
+  private DelphiUtils() {}
 
   /**
    * Normalizes file name, changes all '\' into '/'
@@ -61,8 +57,7 @@ public final class DelphiUtils {
   public static File getResource(String fileName) {
     URL url = DelphiUtils.class.getResource(fileName);
     if (url == null) {
-      throw new IllegalStateException("Resource file not found: "
-          + fileName);
+      throw new IllegalStateException("Resource file not found: " + fileName);
     }
     String fName = url.getPath();
     File file = new File(fName);
@@ -217,8 +212,7 @@ public final class DelphiUtils {
 
   private static boolean containsFile(List<File> dirs, File cursor) {
     for (File dir : dirs) {
-      if (FilenameUtils.equalsNormalizedOnSystem(dir.getAbsolutePath(),
-          cursor.getAbsolutePath())) {
+      if (FilenameUtils.equalsNormalizedOnSystem(dir.getAbsolutePath(), cursor.getAbsolutePath())) {
         return true;
       }
     }

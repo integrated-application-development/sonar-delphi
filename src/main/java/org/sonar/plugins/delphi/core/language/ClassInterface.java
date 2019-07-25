@@ -22,10 +22,7 @@
  */
 package org.sonar.plugins.delphi.core.language;
 
-/**
- * Interface used for custom class creation.
- */
-
+/** Interface used for custom class creation. */
 public interface ClassInterface extends HasNameInterface {
 
   /**
@@ -175,5 +172,4 @@ public interface ClassInterface extends HasNameInterface {
    * @return True if function is a member of class, false otherwise
    */
   boolean hasFunction(FunctionInterface func);
-
 }

@@ -24,9 +24,7 @@ package org.sonar.plugins.delphi.antlr.resolvers.subranges.impl;
 
 import java.util.Objects;
 
-/**
- * Used to replace a specific range with a specific string
- */
+/** Used to replace a specific range with a specific string */
 public class ReplacementSubRange extends IntegerSubRange {
 
   private final String replacementString;

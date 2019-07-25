@@ -27,9 +27,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import org.antlr.runtime.ANTLRStringStream;
-import org.sonar.plugins.delphi.antlr.resolvers.SourceResolver;
 import org.sonar.plugins.delphi.antlr.resolvers.DefineResolver;
 import org.sonar.plugins.delphi.antlr.resolvers.IncludeResolver;
+import org.sonar.plugins.delphi.antlr.resolvers.SourceResolver;
 import org.sonar.plugins.delphi.antlr.resolvers.SourceResolverResults;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.project.DelphiProject;
@@ -47,16 +47,13 @@ public class DelphiFileStream extends ANTLRStringStream {
    * @param config Configures file encoding and pre-processing
    * @throws IOException If file not found
    */
-  public DelphiFileStream(String fileName, DelphiFileStreamConfig config)
-      throws IOException {
+  public DelphiFileStream(String fileName, DelphiFileStreamConfig config) throws IOException {
     this.fileName = fileName;
     this.config = config;
     load();
   }
 
-  /**
-   * Overrides AntlrStringStream LookAhead for case insensitivity.
-   */
+  /** Overrides AntlrStringStream LookAhead for case insensitivity. */
   @Override
   public int LA(int i) {
     int la = super.LA(i);
@@ -75,8 +72,8 @@ public class DelphiFileStream extends ANTLRStringStream {
 
     SourceResolverResults resolverResult = new SourceResolverResults(fileName, fileData);
 
-    SourceResolver resolver = new IncludeResolver(extendIncludes, includeDirectories)
-        .chain(new DefineResolver(defs));
+    SourceResolver resolver =
+        new IncludeResolver(extendIncludes, includeDirectories).chain(new DefineResolver(defs));
 
     resolver.resolve(resolverResult);
     data = resolverResult.getFileData().toString().toCharArray();
@@ -91,12 +88,13 @@ public class DelphiFileStream extends ANTLRStringStream {
 
   /**
    * Creates a DelphiFileStreamConfig for a given DelphiProject
+   *
    * @param delphiProject a DelphiProject with its own include directories and compiler definitions
    * @param delphiProjectHelper the delphiProjectHelper, provides user settings like encoding
    * @return a new DelphiFileStreamConfig instance
    */
-  public static DelphiFileStreamConfig createConfig(DelphiProject delphiProject,
-      DelphiProjectHelper delphiProjectHelper) {
+  public static DelphiFileStreamConfig createConfig(
+      DelphiProject delphiProject, DelphiProjectHelper delphiProjectHelper) {
     String encoding = delphiProjectHelper.encoding();
     List<File> includedDirs = delphiProject.getIncludeDirectories();
     List<String> definitions = delphiProject.getDefinitions();

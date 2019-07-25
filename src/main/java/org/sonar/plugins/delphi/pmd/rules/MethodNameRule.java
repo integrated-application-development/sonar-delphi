@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 public class MethodNameRule extends NameConventionRule {
 

@@ -31,9 +31,7 @@ import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
 import org.sonar.plugins.delphi.core.language.ClassPropertyInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiClassProperty;
 
-/**
- * Analyzes property fields
- */
+/** Analyzes property fields */
 public class TypePropertyAnalyzer extends CodeAnalyzer {
 
   @Override
@@ -51,8 +49,9 @@ public class TypePropertyAnalyzer extends CodeAnalyzer {
     String read = getPropertyReadFunction((CommonTree) codeTree.getCurrentCodeNode().getNode());
     String write = getPropertyWriteFunction((CommonTree) codeTree.getCurrentCodeNode().getNode());
 
-    ClassPropertyInterface property = new DelphiClassProperty(varName, varType,
-        results.getParseVisibility().toMetrics(), read, write);
+    ClassPropertyInterface property =
+        new DelphiClassProperty(
+            varName, varType, results.getParseVisibility().toMetrics(), read, write);
     property.setParent(results.getActiveClass());
     results.getActiveClass().addProperty(property);
   }
@@ -90,5 +89,4 @@ public class TypePropertyAnalyzer extends CodeAnalyzer {
     }
     return null;
   }
-
 }

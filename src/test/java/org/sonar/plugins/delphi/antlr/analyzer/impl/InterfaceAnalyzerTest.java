@@ -81,5 +81,4 @@ public class InterfaceAnalyzerTest {
     code.setCurrentNode(advanceOp.execute(code.getCurrentCodeNode().getNode()));
     assertTrue(analyzer.canAnalyze(code));
   }
-
 }

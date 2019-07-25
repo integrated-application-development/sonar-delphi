@@ -57,55 +57,37 @@ public class DelphiStatement implements StatementInterface {
     setText(text);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public final int getLine() {
     return line;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public final int getColumn() {
     return column;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public final String getText() {
     return text;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public final void setText(String value) {
     text = value;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public final void setLine(int value) {
     line = value;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public final void setColumn(int value) {
     column = value;
@@ -119,7 +101,7 @@ public class DelphiStatement implements StatementInterface {
     ClassFieldInterface[] fields = fromClass.getFields();
     List<ClassFieldInterface> result = new ArrayList<>();
 
-    List<Token> tokens = tokenizer.tokenize(new String[]{text});
+    List<Token> tokens = tokenizer.tokenize(new String[] {text});
 
     for (Token token : tokens) {
       if (token.getType() != DelphiLexer.TkIdentifier) {
@@ -134,19 +116,13 @@ public class DelphiStatement implements StatementInterface {
     return result.toArray(new ClassFieldInterface[0]);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public final void setComplexity(boolean isComplex) {
     complex = isComplex;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public final boolean isComplex() {
     return complex;
@@ -156,5 +132,4 @@ public class DelphiStatement implements StatementInterface {
   public String toString() {
     return text + " (line: " + line + " column: " + column + " complex: " + complex + ")";
   }
-
 }

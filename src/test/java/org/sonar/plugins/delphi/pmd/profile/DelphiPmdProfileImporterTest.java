@@ -19,11 +19,23 @@
  */
 package org.sonar.plugins.delphi.pmd.profile;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertFalse;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.sonar.plugins.delphi.utils.PmdLevelUtils.fromLevel;
+import static org.sonar.plugins.delphi.utils.PmdLevelUtils.toLevel;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import org.junit.Before;
@@ -37,19 +49,6 @@ import org.sonar.api.rules.RuleQuery;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertFalse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.sonar.plugins.delphi.utils.PmdLevelUtils.fromLevel;
-import static org.sonar.plugins.delphi.utils.PmdLevelUtils.toLevel;
 
 public class DelphiPmdProfileImporterTest {
   private static final int DEFAULT_LEVEL = 1;

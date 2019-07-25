@@ -26,28 +26,20 @@ import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 import org.sonar.plugins.delphi.core.language.UnitInterface;
 
-/**
- * Class holding temporary analysis state
- */
+/** Class holding temporary analysis state */
 public class CodeAnalysisState extends CodeAnalysisCacheResults {
 
   private UnitInterface activeUnit;
   private FunctionInterface activeFunction;
   private ClassInterface activeClass;
 
-  /**
-   * File, Implementation or Interface section.
-   */
+  /** File, Implementation or Interface section. */
   private LexerMetrics parseStatus = LexerMetrics.FILE;
 
-  /**
-   * We start with public because whole classes in interface are public.
-   */
+  /** We start with public because whole classes in interface are public. */
   private LexerMetrics parseVisibility = LexerMetrics.PUBLIC;
 
-  /**
-   * @return unit currently being processed
-   */
+  /** @return unit currently being processed */
   public UnitInterface getActiveUnit() {
     return activeUnit;
   }
@@ -88,9 +80,7 @@ public class CodeAnalysisState extends CodeAnalysisCacheResults {
     this.parseVisibility = parseVisibility;
   }
 
-  /**
-   * @return current visibility scope
-   */
+  /** @return current visibility scope */
   public LexerMetrics getParseVisibility() {
     return parseVisibility;
   }
@@ -104,16 +94,12 @@ public class CodeAnalysisState extends CodeAnalysisCacheResults {
     this.activeClass = activeClass;
   }
 
-  /**
-   * @return active class being processed
-   */
+  /** @return active class being processed */
   public ClassInterface getActiveClass() {
     return activeClass;
   }
 
-  /**
-   * @return parse status
-   */
+  /** @return parse status */
   public LexerMetrics getParseStatus() {
     return parseStatus;
   }
@@ -126,5 +112,4 @@ public class CodeAnalysisState extends CodeAnalysisCacheResults {
   public void setParseStatus(LexerMetrics status) {
     parseStatus = status;
   }
-
 }

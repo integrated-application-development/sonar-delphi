@@ -1,8 +1,8 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 public class EmptyBracketsRule extends DelphiRule {
 
@@ -23,16 +23,13 @@ public class EmptyBracketsRule extends DelphiRule {
       for (int i = 0; i < node.getChildCount() - 1; i++) {
 
         DelphiPMDNode childNode = (DelphiPMDNode) node.getChild(i);
-        if (childNode.getType() == DelphiLexer.TkIdentifier &&
-            node.getChild(i + 1).getType() == DelphiLexer.LPAREN &&
-            node.getChild(i + 2).getType() == DelphiLexer.RPAREN) {
+        if (childNode.getType() == DelphiLexer.TkIdentifier
+            && node.getChild(i + 1).getType() == DelphiLexer.LPAREN
+            && node.getChild(i + 2).getType() == DelphiLexer.RPAREN) {
           // The next node and the subsequent nodes were parentheses, no arguments passed
           addViolation(ctx, childNode);
         }
       }
-
     }
   }
-
 }
-

@@ -25,27 +25,19 @@ package org.sonar.plugins.delphi.metrics;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Metric class providing default behavior
- */
+/** Metric class providing default behavior */
 public abstract class DefaultMetrics implements MetricsInterface {
 
   protected final Map<String, Double> metrics = new HashMap<>();
   protected final Map<String, Integer> intMetrics = new HashMap<>();
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public String[] getMetricKeys() {
     return metrics.keySet().toArray(new String[0]);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public Integer getIntMetric(String metric) {
     if (!intMetrics.containsKey(metric)) {
@@ -54,10 +46,7 @@ public abstract class DefaultMetrics implements MetricsInterface {
     return intMetrics.get(metric);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public double getMetric(String metric) {
     if (!metrics.containsKey(metric)) {
@@ -66,9 +55,7 @@ public abstract class DefaultMetrics implements MetricsInterface {
     return metrics.get(metric);
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   public void setMetric(String metric, double value) {
     metrics.put(metric, value);
   }

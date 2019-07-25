@@ -55,5 +55,4 @@ abstract class LineContextHandler {
     }
     return pendingLine.charAt(pendingLine.length() - 1);
   }
-
 }

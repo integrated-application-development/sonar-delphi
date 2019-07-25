@@ -36,11 +36,8 @@ public class DelphiClassField extends DelphiArgument implements ClassFieldInterf
   private ClassInterface parent;
   private int visibility = DelphiParser.PRIVATE;
 
-  /**
-   * ctor
-   */
-  public DelphiClassField() {
-  }
+  /** ctor */
+  public DelphiClassField() {}
 
   /**
    * ctor
@@ -91,5 +88,4 @@ public class DelphiClassField extends DelphiArgument implements ClassFieldInterf
   public int hashCode() {
     return toString().hashCode();
   }
-
 }

@@ -34,9 +34,7 @@ import org.sonar.api.SonarRuntime;
 import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.utils.Version;
 
-/**
- * @author Evgeny Mandrikov
- */
+/** @author Evgeny Mandrikov */
 public class DelphiPluginTest {
 
   private DelphiPlugin plugin;
@@ -53,13 +51,13 @@ public class DelphiPluginTest {
 
   @Test
   public void testExtensions() {
-    SonarRuntime runtime = SonarRuntimeImpl.forSonarQube(
-        Version.create(1, 0), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
+    SonarRuntime runtime =
+        SonarRuntimeImpl.forSonarQube(
+            Version.create(1, 0), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
 
     Plugin.Context context = new Plugin.Context(runtime);
     plugin.define(context);
 
     assertThat(context.getExtensions().size(), is(12));
   }
-
 }

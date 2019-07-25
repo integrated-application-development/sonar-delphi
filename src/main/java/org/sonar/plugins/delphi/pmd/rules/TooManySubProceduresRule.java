@@ -2,8 +2,8 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 public class TooManySubProceduresRule extends DelphiRule {
 
@@ -11,8 +11,8 @@ public class TooManySubProceduresRule extends DelphiRule {
    * This rule adds violations when there are too many defined sub procedures in a defined
    * implementation block, as defined by a user defined LIMIT value.
    *
-   * Subprocedures can be nested, so this rule attempts to account for that by searching at multiple
-   * depths in the tree.
+   * <p>Subprocedures can be nested, so this rule attempts to account for that by searching at
+   * multiple depths in the tree.
    *
    * @param node the current node
    * @param ctx the ruleContext to store the violations
@@ -58,9 +58,13 @@ public class TooManySubProceduresRule extends DelphiRule {
       }
 
       if (subProcedureCounter > getProperty(LIMIT)) {
-        addViolation(ctx, node,
-            "Code should not contain too many sub-procedures, " +
-                "limit of " + getProperty(LIMIT) + " exceeded.");
+        addViolation(
+            ctx,
+            node,
+            "Code should not contain too many sub-procedures, "
+                + "limit of "
+                + getProperty(LIMIT)
+                + " exceeded.");
         // Avoid adding multiple violations of same type
         return;
       }

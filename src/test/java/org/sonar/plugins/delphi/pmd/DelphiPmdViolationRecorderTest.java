@@ -19,8 +19,14 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import java.io.File;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
+import java.io.File;
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleViolation;
 import org.junit.Test;
@@ -39,13 +45,6 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
-
 public class DelphiPmdViolationRecorderTest {
   private final File baseDir = new File("").getAbsoluteFile();
   private final DefaultFileSystem spiedFs = spy(new DefaultFileSystem(baseDir));
@@ -60,7 +59,7 @@ public class DelphiPmdViolationRecorderTest {
   @Test
   public void testShouldConvertPmdViolationToSonarViolation() {
     final ActiveRule rule = createRuleInActiveRules();
-    final File file1 = new File(baseDir,"FileWithViolation.java");
+    final File file1 = new File(baseDir, "FileWithViolation.java");
     final DefaultInputFile inputFile1 = addToFileSystem(file1);
     final RuleViolation pmdViolation = createPmdViolation(file1, "RULE");
     final NewIssue newIssue = mock(NewIssue.class);
@@ -110,11 +109,11 @@ public class DelphiPmdViolationRecorderTest {
   }
 
   private DefaultInputFile addToFileSystem(File file) {
-    DefaultInputFile inputFile = TestInputFileBuilder
-        .create("test", spiedFs.baseDir(), file.getAbsoluteFile())
-        .setContents("This\nis\na text\nfile.")
-        .setLanguage(DelphiLanguage.KEY)
-        .build();
+    DefaultInputFile inputFile =
+        TestInputFileBuilder.create("test", spiedFs.baseDir(), file.getAbsoluteFile())
+            .setContents("This\nis\na text\nfile.")
+            .setLanguage(DelphiLanguage.KEY)
+            .build();
     spiedFs.add(inputFile);
     return inputFile;
   }

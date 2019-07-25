@@ -56,5 +56,4 @@ public class TraceBackNodeOperationTest extends OperationsTestsCommon {
     assertFalse(operation.execute(parent.getChild(LAYER_NODES - 1).getChild(0)).isValid());
     assertFalse(operation.execute(parent.getChild(LAYER_NODES - 1)).isValid());
   }
-
 }

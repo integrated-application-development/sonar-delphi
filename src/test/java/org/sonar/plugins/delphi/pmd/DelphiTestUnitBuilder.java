@@ -78,7 +78,6 @@ public class DelphiTestUnitBuilder {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-
   }
 
   public StringBuilder getSourceCode() {

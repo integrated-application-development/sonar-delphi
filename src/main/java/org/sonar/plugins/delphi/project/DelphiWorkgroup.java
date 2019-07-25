@@ -27,18 +27,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Workgroup class, used to parse .groupproj file and holds list of projects
- */
+/** Workgroup class, used to parse .groupproj file and holds list of projects */
 public class DelphiWorkgroup {
 
   private final List<DelphiProject> projects = new ArrayList<>();
 
-  /**
-   * Default, empty C-tor
-   */
-  public DelphiWorkgroup() {
-  }
+  /** Default, empty C-tor */
+  public DelphiWorkgroup() {}
 
   /**
    * C-tor, gets project list from xml file
@@ -59,9 +54,7 @@ public class DelphiWorkgroup {
     parser.parse();
   }
 
-  /**
-   * @return list of projects
-   */
+  /** @return list of projects */
   public List<DelphiProject> getProjects() {
     return projects;
   }
@@ -74,5 +67,4 @@ public class DelphiWorkgroup {
   public void addProject(DelphiProject newProject) {
     projects.add(newProject);
   }
-
 }

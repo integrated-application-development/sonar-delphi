@@ -42,9 +42,9 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputDir;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
-import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
+import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.measure.Measure;
@@ -63,7 +63,8 @@ public class DelphiSensorTest {
   private ActiveRules activeRules;
 
   private static final String SIMPLE_PROJECT = "/org/sonar/plugins/delphi/projects/SimpleProject";
-  private static final String SIMPLE_PROJECT_METRICS = "/org/sonar/plugins/delphi/projects/SimpleProject/metrics.xml";
+  private static final String SIMPLE_PROJECT_METRICS =
+      "/org/sonar/plugins/delphi/projects/SimpleProject/metrics.xml";
   private static final String BAD_PROJECT = "/org/sonar/plugins/delphi/projects/BadSyntaxProject";
   private static final String EMPTY_PROJECT = "/org/sonar/plugins/delphi/projects/EmptyProject";
   private static final String MODULE_KEY = "TEST_MODULE";
@@ -75,27 +76,31 @@ public class DelphiSensorTest {
 
   @Before
   public void init() {
-    NewActiveRule complexityRule = new NewActiveRule.Builder()
-        .setRuleKey(ComplexityMetrics.RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY)
-        .setParam("limit", "3")
-        .setLanguage(DelphiLanguage.KEY)
-        .build();
+    NewActiveRule complexityRule =
+        new NewActiveRule.Builder()
+            .setRuleKey(ComplexityMetrics.RULE_KEY_METHOD_CYCLOMATIC_COMPLEXITY)
+            .setParam("limit", "3")
+            .setLanguage(DelphiLanguage.KEY)
+            .build();
 
-    NewActiveRule unusedFunctionRule = new NewActiveRule.Builder()
-        .setRuleKey(DeadCodeMetrics.RULE_KEY_UNUSED_FUNCTION)
-        .setLanguage(DelphiLanguage.KEY)
-        .build();
+    NewActiveRule unusedFunctionRule =
+        new NewActiveRule.Builder()
+            .setRuleKey(DeadCodeMetrics.RULE_KEY_UNUSED_FUNCTION)
+            .setLanguage(DelphiLanguage.KEY)
+            .build();
 
-    NewActiveRule unusedUnitRule = new NewActiveRule.Builder()
-        .setRuleKey(DeadCodeMetrics.RULE_KEY_UNUSED_UNIT)
-        .setLanguage(DelphiLanguage.KEY)
-        .build();
+    NewActiveRule unusedUnitRule =
+        new NewActiveRule.Builder()
+            .setRuleKey(DeadCodeMetrics.RULE_KEY_UNUSED_UNIT)
+            .setLanguage(DelphiLanguage.KEY)
+            .build();
 
-    activeRules = new ActiveRulesBuilder()
-        .addRule(complexityRule)
-        .addRule(unusedFunctionRule)
-        .addRule(unusedUnitRule)
-        .build();
+    activeRules =
+        new ActiveRulesBuilder()
+            .addRule(complexityRule)
+            .addRule(unusedFunctionRule)
+            .addRule(unusedUnitRule)
+            .build();
   }
 
   @Test
@@ -109,7 +114,7 @@ public class DelphiSensorTest {
   }
 
   @Test
-  public void testExecuteTest() throws IOException  {
+  public void testExecuteTest() throws IOException {
     setupProject(SIMPLE_PROJECT);
     sensor.execute(context);
 
@@ -160,8 +165,8 @@ public class DelphiSensorTest {
   private void setupProject(String projectPath) throws IOException {
     File baseDir = DelphiUtils.getResource(projectPath);
     context = SensorContextTester.create(baseDir);
-    DelphiProjectHelper delphiProjectHelper = new DelphiProjectHelper(context.config(),
-        context.fileSystem());
+    DelphiProjectHelper delphiProjectHelper =
+        new DelphiProjectHelper(context.config(), context.fileSystem());
     sensor = new DelphiSensor(delphiProjectHelper, activeRules, context);
 
     DefaultInputDir inputBaseDir = new DefaultInputDir(MODULE_KEY, "");
@@ -172,11 +177,12 @@ public class DelphiSensorTest {
     assertNotNull(baseDirFiles);
 
     for (File source : baseDirFiles) {
-      InputFile baseInputFile = TestInputFileBuilder.create(MODULE_KEY, baseDir, source)
-          .setLanguage(DelphiLanguage.KEY)
-          .setType(InputFile.Type.MAIN)
-          .setContents(DelphiUtils.readFileContent(source, delphiProjectHelper.encoding()))
-          .build();
+      InputFile baseInputFile =
+          TestInputFileBuilder.create(MODULE_KEY, baseDir, source)
+              .setLanguage(DelphiLanguage.KEY)
+              .setType(InputFile.Type.MAIN)
+              .setContents(DelphiUtils.readFileContent(source, delphiProjectHelper.encoding()))
+              .build();
 
       sourceFiles.add(source);
       context.fileSystem().add(baseInputFile);
@@ -191,18 +197,20 @@ public class DelphiSensorTest {
       assertNotNull(dirFiles);
 
       for (File sourceFile : dirFiles) {
-        DefaultInputFile inputFile = TestInputFileBuilder.create(MODULE_KEY, baseDir, sourceFile)
-            .setLanguage(DelphiLanguage.KEY)
-            .setType(InputFile.Type.MAIN)
-            .setContents(DelphiUtils.readFileContent(sourceFile, delphiProjectHelper.encoding()))
-            .build();
+        DefaultInputFile inputFile =
+            TestInputFileBuilder.create(MODULE_KEY, baseDir, sourceFile)
+                .setLanguage(DelphiLanguage.KEY)
+                .setType(InputFile.Type.MAIN)
+                .setContents(
+                    DelphiUtils.readFileContent(sourceFile, delphiProjectHelper.encoding()))
+                .build();
 
         context.fileSystem().add(inputFile);
         sourceFiles.add(sourceFile);
       }
 
-      DefaultInputDir inputDir = new DefaultInputDir(MODULE_KEY,
-          getRelativePath(baseDir, directory.getPath()));
+      DefaultInputDir inputDir =
+          new DefaultInputDir(MODULE_KEY, getRelativePath(baseDir, directory.getPath()));
       inputDir.setModuleBaseDir(baseDir.toPath());
     }
 

@@ -12,39 +12,44 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-      .appendImpl("procedure MyProcedure;")
-      .appendImpl("begin")
-      .appendImpl("  inherited;")
-      .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  inherited;")
+            .appendImpl("end;");
 
     execute(builder);
 
     assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffSet() + 3)));
+    assertIssues(
+        hasItem(hasRuleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffSet() + 3)));
   }
 
   @Test
   public void testNoSemicolonShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-        .appendImpl("procedure MyProcedure;")
-        .appendImpl("begin")
-        .appendImpl("  inherited")
-        .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  inherited")
+            .appendImpl("end;");
 
     execute(builder);
 
-    assertIssues(hasItem(hasRuleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffSet() + 3)));
+    assertIssues(
+        hasItem(hasRuleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffSet() + 3)));
   }
 
   @Test
   public void testImplementationShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-        .appendImpl("procedure MyProcedure;")
-        .appendImpl("begin")
-        .appendImpl("  inherited;")
-        .appendImpl("  FMyField := 5;")
-        .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  inherited;")
+            .appendImpl("  FMyField := 5;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -53,12 +58,13 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testImplementationWithInheritedAtEndShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-        .appendImpl("procedure MyProcedure;")
-        .appendImpl("begin")
-        .appendImpl("  FMyField := 5;")
-        .appendImpl("  inherited;")
-        .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  FMyField := 5;")
+            .appendImpl("  inherited;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -67,14 +73,15 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testFalsePositiveImplementationShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder()
-      .appendImpl("procedure MyProcedure;")
-      .appendImpl("begin")
-      .appendImpl("  FMyField := 5;")
-      .appendImpl("  if MyBoolean then begin")
-      .appendImpl("    inherited;")
-      .appendImpl("  end;")
-      .appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  FMyField := 5;")
+            .appendImpl("  if MyBoolean then begin")
+            .appendImpl("    inherited;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
 
     execute(builder);
 

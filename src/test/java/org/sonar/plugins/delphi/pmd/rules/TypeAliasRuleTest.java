@@ -141,6 +141,4 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
 
     assertIssues(empty());
   }
-
-
 }

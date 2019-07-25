@@ -55,14 +55,18 @@ import org.sonar.plugins.delphi.debug.FileTestsCommon;
 
 public class FunctionAnalyzerTest extends FileTestsCommon {
 
-  private static final String FILE_NAME = "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
-  private static final String FILE_NAME_MESSAGE_TEST = "/org/sonar/plugins/delphi/metrics/FunctionMessageTest.pas";
-  private static final String FILE_NAME_VIRTUAL_TEST = "/org/sonar/plugins/delphi/metrics/FunctionVirtualTest.pas";
-  private static final String FILE_NAME_OPERATOR_TEST = "/org/sonar/plugins/delphi/metrics/FunctionOperatorTest.pas";
-  private static final String FILE_NAME_PARAMETERS_TEST = "/org/sonar/plugins/delphi/syntax/FunctionParametersAnalyzerTest.pas";
+  private static final String FILE_NAME =
+      "/org/sonar/plugins/delphi/metrics/FunctionMetricsTest.pas";
+  private static final String FILE_NAME_MESSAGE_TEST =
+      "/org/sonar/plugins/delphi/metrics/FunctionMessageTest.pas";
+  private static final String FILE_NAME_VIRTUAL_TEST =
+      "/org/sonar/plugins/delphi/metrics/FunctionVirtualTest.pas";
+  private static final String FILE_NAME_OPERATOR_TEST =
+      "/org/sonar/plugins/delphi/metrics/FunctionOperatorTest.pas";
+  private static final String FILE_NAME_PARAMETERS_TEST =
+      "/org/sonar/plugins/delphi/syntax/FunctionParametersAnalyzerTest.pas";
 
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
+  @Rule public ExpectedException expectedException = ExpectedException.none();
 
   private final FunctionAnalyzer analyzer = new FunctionAnalyzer();
 
@@ -77,11 +81,14 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
     results.setActiveUnit(new DelphiUnit("test"));
     DelphiAST ast = new DelphiAST(testFile);
     code = new CodeTree(new CodeNode<>(ast), new CodeNode<>(ast.getChild(0)));
-    advanceToFunction = new AdvanceToNodeOperation(
-        Arrays.asList(LexerMetrics.FUNCTION, LexerMetrics.PROCEDURE,
-            LexerMetrics.CONSTRUCTOR,
-            LexerMetrics.DESTRUCTOR,
-            LexerMetrics.OPERATOR));
+    advanceToFunction =
+        new AdvanceToNodeOperation(
+            Arrays.asList(
+                LexerMetrics.FUNCTION,
+                LexerMetrics.PROCEDURE,
+                LexerMetrics.CONSTRUCTOR,
+                LexerMetrics.DESTRUCTOR,
+                LexerMetrics.OPERATOR));
 
     CodeAnalysisCacheResults.resetCache();
   }
@@ -124,11 +131,18 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
 
     int index = 0;
     int[] lines = {10, 11, 19, 20, 42, 48, 58, 69, 75, 89};
-    String[] names = {"bShowTrackerClick", "getFunction", "myProcedure", "setSomething",
-        "TDemo.getFunction",
-        "TDemo.bShowTrackerClick",
-        "TMyClass.myProcedure", "TMyClass.setSomething", "StandAloneProcedure",
-        "StandAloneFunction"};
+    String[] names = {
+      "bShowTrackerClick",
+      "getFunction",
+      "myProcedure",
+      "setSomething",
+      "TDemo.getFunction",
+      "TDemo.bShowTrackerClick",
+      "TMyClass.myProcedure",
+      "TMyClass.setSomething",
+      "StandAloneProcedure",
+      "StandAloneFunction"
+    };
 
     CodeNode<Tree> currentNode = code.getCurrentCodeNode();
     while (currentNode != null) {
@@ -165,7 +179,6 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
       } catch (IllegalStateException e) {
         currentNode = null;
       }
-
     }
   }
 
@@ -207,7 +220,9 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
     }
 
     assertThat("activeFunction", results.getActiveFunction(), notNullValue());
-    assertThat("function real name", results.getActiveFunction().getRealName(),
+    assertThat(
+        "function real name",
+        results.getActiveFunction().getRealName(),
         containsString("Implicit"));
   }
 
@@ -222,10 +237,12 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
 
     analyzer.analyze(code, results);
 
-    ArgumentInterface[] expectedArgs = {new DelphiArgument("x", "real"),
-        new DelphiArgument("y", "integer"),
-        new DelphiArgument("z", "integer"),
-        new DelphiArgument("q", FunctionAnalyzer.UNTYPED_PARAMETER_NAME)};
+    ArgumentInterface[] expectedArgs = {
+      new DelphiArgument("x", "real"),
+      new DelphiArgument("y", "integer"),
+      new DelphiArgument("z", "integer"),
+      new DelphiArgument("q", FunctionAnalyzer.UNTYPED_PARAMETER_NAME)
+    };
 
     FunctionInterface function = results.getActiveFunction();
     ArgumentInterface[] arguments = function.getArguments();

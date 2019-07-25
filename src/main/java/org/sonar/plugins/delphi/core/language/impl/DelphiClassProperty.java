@@ -35,11 +35,8 @@ public class DelphiClassProperty extends DelphiClassField implements ClassProper
   private String readFunction;
   private String writeFunction;
 
-  /**
-   * Default ctor
-   */
-  public DelphiClassProperty() {
-  }
+  /** Default ctor */
+  public DelphiClassProperty() {}
 
   /**
    * Ctor
@@ -50,54 +47,38 @@ public class DelphiClassProperty extends DelphiClassField implements ClassProper
    * @param read property getter
    * @param write property setter
    */
-  public DelphiClassProperty(String name, String type, int visibility, String read,
-      String write) {
+  public DelphiClassProperty(String name, String type, int visibility, String read, String write) {
     super(name, type, visibility);
     readFunction = read;
     writeFunction = write;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public String getReadFunction() {
     return readFunction;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public String getWriteFunction() {
     return writeFunction;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public boolean hasFunction(FunctionInterface function) {
     String name = function.getShortName();
     return name.equalsIgnoreCase(writeFunction) || name.equalsIgnoreCase(readFunction);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void setReadFunction(String newFunction) {
     readFunction = newFunction;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-
+  /** {@inheritDoc} */
   @Override
   public void setWriteFunction(String newFunction) {
     writeFunction = newFunction;

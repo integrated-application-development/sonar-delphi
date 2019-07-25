@@ -24,18 +24,16 @@ package org.sonar.plugins.delphi.antlr.analyzer.impl;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
-import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalysisResults;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeAnalyzer;
 import org.sonar.plugins.delphi.antlr.analyzer.CodeTree;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
+import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.impl.DelphiClass;
 
-/**
- * Delphi class analyzer, used to analyze types in a source file
- */
+/** Delphi class analyzer, used to analyze types in a source file */
 public class TypeAnalyzer extends CodeAnalyzer {
 
   @Override
@@ -96,5 +94,4 @@ public class TypeAnalyzer extends CodeAnalyzer {
   private Tree getClassNameNode(CommonTree node) {
     return node.getFirstChildWithType(DelphiLexer.TkNewTypeName).getChild(0);
   }
-
 }

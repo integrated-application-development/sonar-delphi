@@ -24,18 +24,13 @@ package org.sonar.plugins.delphi.utils;
 
 import org.sonar.api.utils.log.Logger;
 
-/**
- * Logger used to report progress from ProgressReporter
- */
+/** Logger used to report progress from ProgressReporter */
 public class ProgressReporterLogger {
 
   private Logger log;
 
-  /**
-   * Default ctor, no logging
-   */
-  public ProgressReporterLogger() {
-  }
+  /** Default ctor, no logging */
+  public ProgressReporterLogger() {}
 
   /**
    * Ctor, specify your own logger to write to
@@ -56,5 +51,4 @@ public class ProgressReporterLogger {
       log.info(msg);
     }
   }
-
 }

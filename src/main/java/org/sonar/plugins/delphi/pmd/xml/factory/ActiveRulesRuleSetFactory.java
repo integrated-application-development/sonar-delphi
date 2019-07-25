@@ -20,7 +20,6 @@
 package org.sonar.plugins.delphi.pmd.xml.factory;
 
 import java.util.Collection;
-
 import org.sonar.api.batch.rule.ActiveRule;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
@@ -29,7 +28,8 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 import org.sonar.plugins.delphi.utils.PmdLevelUtils;
 
 /**
- * Factory class to create {@link org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet} out of {@link org.sonar.api.batch.rule.ActiveRules}.
+ * Factory class to create {@link org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet} out of {@link
+ * org.sonar.api.batch.rule.ActiveRules}.
  */
 public class ActiveRulesRuleSetFactory implements RuleSetFactory {
 

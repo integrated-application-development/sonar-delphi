@@ -17,10 +17,7 @@ public class DelphiFileStreamConfig {
   private final Set<String> definitions;
   private final boolean extendIncludes;
 
-  /**
-   * Constructor with default values
-   *
-   */
+  /** Constructor with default values */
   public DelphiFileStreamConfig() {
     this.encoding = null;
     this.includedDirs = new ArrayList<>();
@@ -46,8 +43,8 @@ public class DelphiFileStreamConfig {
    * @param definitions Compiler definitions, used by the Define Resolver
    * @param extendIncludes Whether the Include Resolver should insert includes into files
    */
-  public DelphiFileStreamConfig(String encoding, List<File> includedDirs,
-      List<String> definitions, boolean extendIncludes) {
+  public DelphiFileStreamConfig(
+      String encoding, List<File> includedDirs, List<String> definitions, boolean extendIncludes) {
     this.encoding = encoding;
     this.includedDirs = includedDirs;
     this.definitions = new HashSet<>(definitions);

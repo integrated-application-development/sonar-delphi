@@ -31,7 +31,8 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiWorkgroupTest {
 
-  private static final String XML_FILE = "/org/sonar/plugins/delphi/projects/SimpleProject/dproj/workgroup/All.groupproj";
+  private static final String XML_FILE =
+      "/org/sonar/plugins/delphi/projects/SimpleProject/dproj/workgroup/All.groupproj";
   private DelphiWorkgroup workGroup;
 
   @Before
@@ -52,5 +53,4 @@ public class DelphiWorkgroupTest {
     assertEquals(1, workGroup.getProjects().size());
     assertEquals("Simple Delphi Project", workGroup.getProjects().get(0).getName());
   }
-
 }

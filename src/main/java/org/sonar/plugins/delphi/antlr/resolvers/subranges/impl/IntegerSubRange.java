@@ -53,7 +53,6 @@ public class IntegerSubRange implements SubRange {
    * @param value Value to check
    * @return True if value &gt;= begin &nbsp;&nbsp; value &lt;= end, false otherwise
    */
-
   @Override
   public boolean inRange(int value) {
     return value >= begin && value <= end;
@@ -65,7 +64,6 @@ public class IntegerSubRange implements SubRange {
    * @param range Range to check
    * @return True if range includes itself in current range, false otherwise
    */
-
   @Override
   public boolean inRange(SubRange range) {
     return range.getBegin() >= begin && range.getEnd() <= end;
@@ -76,7 +74,6 @@ public class IntegerSubRange implements SubRange {
    *
    * @return Beginning of the range
    */
-
   @Override
   public int getBegin() {
     return begin;
@@ -87,7 +84,6 @@ public class IntegerSubRange implements SubRange {
    *
    * @return End of the range
    */
-
   @Override
   public int getEnd() {
     return end;
@@ -134,5 +130,4 @@ public class IntegerSubRange implements SubRange {
   public int hashCode() {
     return super.hashCode();
   }
-
 }

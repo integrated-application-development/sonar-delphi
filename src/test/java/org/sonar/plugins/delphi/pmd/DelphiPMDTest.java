@@ -44,5 +44,4 @@ public class DelphiPMDTest {
 
     assertEquals(7, nodes.size());
   }
-
 }
