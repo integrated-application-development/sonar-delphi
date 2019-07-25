@@ -24,7 +24,7 @@ package org.sonar.plugins.delphi.metrics;
 
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.List;
+import java.util.Deque;
 import java.util.Set;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -51,8 +51,8 @@ public class BasicMetrics extends DefaultMetrics {
   @Override
   public void analyse(
       InputFile resource,
-      List<ClassInterface> classes,
-      List<FunctionInterface> functions,
+      Deque<ClassInterface> classes,
+      Deque<FunctionInterface> functions,
       Set<UnitInterface> units) {
     clearMetrics();
 

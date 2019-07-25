@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -85,8 +86,8 @@ public class DelphiSensor implements Sensor {
 
   private int scannedFiles;
   private final List<InputFile> resourceList = new ArrayList<>();
-  private final Map<InputFile, List<ClassInterface>> fileClasses = new HashMap<>();
-  private final Map<InputFile, List<FunctionInterface>> fileFunctions = new HashMap<>();
+  private final Map<InputFile, Deque<ClassInterface>> fileClasses = new HashMap<>();
+  private final Map<InputFile, Deque<FunctionInterface>> fileFunctions = new HashMap<>();
   private final Set<UnitInterface> units = new HashSet<>();
   private DelphiFileStreamConfig fileStreamConfig;
 
@@ -363,11 +364,11 @@ public class DelphiSensor implements Sensor {
     return units;
   }
 
-  Map<InputFile, List<ClassInterface>> getFileClasses() {
+  Map<InputFile, Deque<ClassInterface>> getFileClasses() {
     return fileClasses;
   }
 
-  Map<InputFile, List<FunctionInterface>> getFileFunctions() {
+  Map<InputFile, Deque<FunctionInterface>> getFileFunctions() {
     return fileFunctions;
   }
 }

@@ -22,6 +22,7 @@ package org.sonar.plugins.delphi.pmd.xml.factory;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -50,13 +51,16 @@ public class XmlRuleSetFactory implements RuleSetFactory {
     this.messages = messages;
   }
 
-  @SuppressWarnings("unchecked")
   private List<Element> getChildren(Element parent, String child, @Nullable Namespace namespace) {
     if (namespace == null) {
-      return parent.getChildren(child);
-    } else {
-      return parent.getChildren(child, namespace);
+      namespace = Namespace.NO_NAMESPACE;
     }
+
+    List<?> children = parent.getChildren(child, namespace);
+    return children.stream()
+        .filter(element -> element instanceof Element)
+        .map(element -> (Element) element)
+        .collect(Collectors.toList());
   }
 
   private Element getChild(Element parent, String child, @Nullable Namespace namespace) {
@@ -85,9 +89,10 @@ public class XmlRuleSetFactory implements RuleSetFactory {
       if (xpathElement != null) {
         property.setCdataValue(xpathElement.getValue().trim());
       }
-    } else {
-      property.setCdataValue(eltProperty.getAttributeValue("value"));
+      return;
     }
+
+    property.setValue(eltProperty.getAttributeValue("value"));
   }
 
   private void parsePmdPriority(Element eltRule, DelphiRule rule, @Nullable Namespace namespace) {

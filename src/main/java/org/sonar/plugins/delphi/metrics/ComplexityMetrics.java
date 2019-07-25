@@ -22,8 +22,8 @@
  */
 package org.sonar.plugins.delphi.metrics;
 
+import java.util.Deque;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import org.sonar.api.batch.fs.InputFile;
@@ -97,8 +97,8 @@ public class ComplexityMetrics extends DefaultMetrics {
   @Override
   public void analyse(
       InputFile resource,
-      List<ClassInterface> classes,
-      List<FunctionInterface> functions,
+      Deque<ClassInterface> classes,
+      Deque<FunctionInterface> functions,
       Set<UnitInterface> units) {
     reset();
     analyseClasses(resource, classes);
@@ -106,7 +106,7 @@ public class ComplexityMetrics extends DefaultMetrics {
     saveAllMetrics();
   }
 
-  private void analyseClasses(InputFile resource, List<ClassInterface> classes) {
+  private void analyseClasses(InputFile resource, Deque<ClassInterface> classes) {
     if (classes != null) {
       for (ClassInterface cl : classes) {
         if (cl == null) {
@@ -125,7 +125,7 @@ public class ComplexityMetrics extends DefaultMetrics {
     }
   }
 
-  private void analyseFunctions(InputFile resource, List<FunctionInterface> functions) {
+  private void analyseFunctions(InputFile resource, Deque<FunctionInterface> functions) {
     if (functions == null) {
       return;
     }
