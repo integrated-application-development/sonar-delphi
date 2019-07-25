@@ -1,5 +1,5 @@
 /*
- * SonarDelphi Plugin
+ * Sonar Delphi Plugin
  * Copyright (C) 2015 Fabricio Colombo
  *
  * This program is free software; you can redistribute it and/or
