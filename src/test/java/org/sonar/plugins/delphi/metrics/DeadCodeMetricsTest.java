@@ -30,9 +30,9 @@ import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,8 +65,8 @@ public class DeadCodeMetricsTest {
 
   private DeadCodeMetrics metrics;
   private Set<UnitInterface> units;
-  private List<ClassInterface> classes;
-  private List<FunctionInterface> functions;
+  private Deque<ClassInterface> classes;
+  private Deque<FunctionInterface> functions;
   private SensorContextTester sensorContext;
   private File baseDir;
   private File unitFile1;
@@ -75,8 +75,8 @@ public class DeadCodeMetricsTest {
 
   @Before
   public void init() {
-    functions = new ArrayList<>();
-    classes = new ArrayList<>();
+    functions = new ArrayDeque<>();
+    classes = new ArrayDeque<>();
     units = new HashSet<>();
     unitFile1 = DelphiUtils.getResource(UNIT_FILE_1);
     unitFile2 = DelphiUtils.getResource(UNIT_FILE_2);

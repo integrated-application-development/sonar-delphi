@@ -22,24 +22,24 @@
  */
 package org.sonar.plugins.delphi.antlr.analyzer;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
 import org.sonar.plugins.delphi.core.language.FunctionInterface;
 
 /** Class holding results of source code parsing */
 public class CodeAnalysisResults extends CodeAnalysisState {
 
-  private final List<FunctionInterface> functions = new ArrayList<>();
-  private final List<ClassInterface> classes = new ArrayList<>();
+  private final Deque<FunctionInterface> functions = new ArrayDeque<>();
+  private final Deque<ClassInterface> classes = new ArrayDeque<>();
 
   /** @return class list in current file */
-  public List<ClassInterface> getClasses() {
+  public Deque<ClassInterface> getClasses() {
     return classes;
   }
 
   /** @return function list in current file */
-  public List<FunctionInterface> getFunctions() {
+  public Deque<FunctionInterface> getFunctions() {
     return functions;
   }
 

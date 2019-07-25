@@ -22,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.metrics;
 
-import java.util.List;
+import java.util.Deque;
 import java.util.Set;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.delphi.core.language.ClassInterface;
@@ -42,8 +42,8 @@ public interface MetricsInterface {
    */
   void analyse(
       InputFile resource,
-      List<ClassInterface> classes,
-      List<FunctionInterface> functions,
+      Deque<ClassInterface> classes,
+      Deque<FunctionInterface> functions,
       Set<UnitInterface> units);
 
   /**

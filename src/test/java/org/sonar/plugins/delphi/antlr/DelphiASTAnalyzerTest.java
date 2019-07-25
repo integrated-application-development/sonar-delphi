@@ -25,6 +25,7 @@ package org.sonar.plugins.delphi.antlr;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.util.Deque;
 import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -65,19 +66,19 @@ public class DelphiASTAnalyzerTest {
 
   private void testFunctions(CodeAnalysisResults results) {
     String[] names = {
-      "tdemo.bshowtrackerclick",
-      "tdemo.getfunction",
-      "tmyclass.myprocedure",
-      "tmyclass.setsomething",
-      "standaloneprocedure",
-      "standalonefunction"
+        "tdemo.bshowtrackerclick",
+        "tdemo.getfunction",
+        "tmyclass.myprocedure",
+        "tmyclass.setsomething",
+        "standaloneprocedure",
+        "standalonefunction"
     };
     int[] complexities = {1, 0, 2, 0, 3, 1};
     int[] statements = {1, 2, 2, 0, 7, 0};
     int[] calledFunc = {0, 0, 1, 0, 0, 1};
     int[] numArgs = {0, 0, 0, 0, 4, 1};
     boolean[] global = {false, false, false, false, true, true};
-    List<FunctionInterface> functions = results.getFunctions();
+    Deque<FunctionInterface> functions = results.getFunctions();
     assertEquals(6, functions.size()); // checking total function number
 
     int declarations = 0;
@@ -90,26 +91,12 @@ public class DelphiASTAnalyzerTest {
       if (func.isAccessor()) {
         ++accessors;
       }
-      assertEquals(names[index], func.getName()); // checking names
-      assertEquals(complexities[index], func.getComplexity()); // checking
-      // complexities
-      assertEquals(statements[index], func.getStatements().size()); // checking
-      // statements
-      assertEquals(
-          "Called functions at " + names[index],
-          calledFunc[index],
-          func.getCalledFunctions().length); // chcecking
-      // called
-      // functions
-      assertEquals(names[index], global[index], func.isGlobal()); // checking
-      // if
-      // function
-      // is
-      // global
-      assertEquals(names[index], numArgs[index], func.getArguments().length); // number
-      // of
-      // arguments
-
+      assertEquals(names[index], func.getName());
+      assertEquals(complexities[index], func.getComplexity());
+      assertEquals(statements[index], func.getStatements().size());
+      assertEquals(calledFunc[index], func.getCalledFunctions().length);
+      assertEquals(names[index], global[index], func.isGlobal());
+      assertEquals(names[index], numArgs[index], func.getArguments().length);
       if (func.isGlobal()) {
         fileComplexity += func.getComplexity();
       }
@@ -135,7 +122,7 @@ public class DelphiASTAnalyzerTest {
     int[] descendants = {0, 1, 1, 2};
     int[] children = {0, 1, 1, 1};
 
-    List<ClassInterface> classes = results.getClasses();
+    Deque<ClassInterface> classes = results.getClasses();
     assertEquals(4, classes.size());
 
     int index = 0, findex = 0;

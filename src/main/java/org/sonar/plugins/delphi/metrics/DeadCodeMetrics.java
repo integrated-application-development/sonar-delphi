@@ -25,6 +25,7 @@ package org.sonar.plugins.delphi.metrics;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -81,8 +82,8 @@ public class DeadCodeMetrics extends DefaultMetrics {
   @Override
   public void analyse(
       InputFile resource,
-      List<ClassInterface> classes,
-      List<FunctionInterface> functions,
+      Deque<ClassInterface> classes,
+      Deque<FunctionInterface> functions,
       Set<UnitInterface> units) {
     if (!isCalculated) {
       if (units == null || units.isEmpty()) {
