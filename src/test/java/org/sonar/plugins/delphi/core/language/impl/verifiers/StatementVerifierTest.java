@@ -42,7 +42,7 @@ public class StatementVerifierTest {
 
   private static final int FILE_COMPLEX_STMT_COUNT = 11;
   private static final int[] FILE_STATEMENT_LINES = {
-    23, 30, 37, 40, 46, 46, 47, 47, 48, 48, 55, 56, 57, 59, 59, 60, 60, 66, 66, 67
+    25, 32, 39, 42, 48, 48, 49, 49, 50, 50, 57, 58, 59, 61, 61, 62, 62, 68, 68, 69
   };
   private static final String FILE_NAME =
       "/org/sonar/plugins/delphi/metrics/ComplexityMetricsTest.pas";
@@ -74,7 +74,6 @@ public class StatementVerifierTest {
         CodeNode<Tree> atNode = currentNode;
         do {
           if (verifier.verify(atNode.getNode())) {
-
             StatementInterface statement = verifier.createStatement();
             assertEquals(FILE_STATEMENT_LINES[statementCount], statement.getLine());
             ++statementCount;

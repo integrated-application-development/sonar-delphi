@@ -121,7 +121,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
     FunctionInterface function = findFunction("getFunction");
     assertThat(function, notNullValue());
     assertThat(function.hasBody(), is(true));
-    assertThat(function.getBodyLine(), is(42));
+    assertThat(function.getBodyLine(), is(44));
   }
 
   private FunctionInterface findFunction(String functionName) {
@@ -172,7 +172,7 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
     FunctionInterface function = findFunction("Implicit");
     assertThat(function, notNullValue());
     assertThat(function.hasBody(), is(true));
-    assertThat(function.getBodyLine(), is(18));
+    assertThat(function.getBodyLine(), is(20));
   }
 
   @Test
@@ -184,13 +184,13 @@ public class FunctionBodyAnalyzerTest extends FileTestsCommon {
     FunctionInterface functionSingleStatement = findFunction("SingleStatement");
     assertThat(functionSingleStatement, notNullValue());
     assertThat(functionSingleStatement.hasBody(), is(true));
-    assertThat(functionSingleStatement.getBodyLine(), is(63));
+    assertThat(functionSingleStatement.getBodyLine(), is(65));
     assertThat(functionSingleStatement.getStatements(), hasSize(0));
 
     FunctionInterface function = findFunction("AddAll1");
     assertThat(function, notNullValue());
     assertThat(function.hasBody(), is(true));
-    assertThat(function.getBodyLine(), is(24));
+    assertThat(function.getBodyLine(), is(26));
     assertThat(function.getStatements(), hasSize(1));
   }
 }

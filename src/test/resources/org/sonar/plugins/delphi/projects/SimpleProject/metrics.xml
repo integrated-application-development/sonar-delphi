@@ -38,7 +38,7 @@
 		<metric name="function_complexity">1</metric>
 		<metric name="classes">1</metric>
 		<metric name="lines">47</metric>
-		<metric name="comment_lines">1</metric>
+		<metric name="comment_lines">2</metric>
 		<metric name="accessors">0</metric>
 		<metric name="public_undocumented_api">6</metric>
 		<metric name="ncloc">36</metric>
@@ -63,7 +63,7 @@
 		<metric name="function_complexity">1</metric>
 		<metric name="classes">1</metric>
 		<metric name="lines">60</metric>
-		<metric name="comment_lines">0</metric>
+		<metric name="comment_lines">1</metric>
 		<metric name="accessors">2</metric>
 		<metric name="public_undocumented_api">2</metric>
 		<metric name="ncloc">50</metric>
@@ -88,7 +88,7 @@
 		<metric name="function_complexity">1</metric>
 		<metric name="classes">1</metric>
 		<metric name="lines">27</metric>
-		<metric name="comment_lines">2</metric>
+		<metric name="comment_lines">3</metric>
 		<metric name="accessors">0</metric>
 		<metric name="public_undocumented_api">2</metric>
 		<metric name="ncloc">18</metric>
@@ -113,7 +113,7 @@
 		<metric name="function_complexity">1</metric>
 		<metric name="classes">0</metric>
 		<metric name="lines">26</metric>
-		<metric name="comment_lines">1</metric>
+		<metric name="comment_lines">2</metric>
 		<metric name="accessors">0</metric>
 		<metric name="public_undocumented_api">1</metric>
 		<metric name="ncloc">18</metric>
@@ -138,7 +138,7 @@
 		<metric name="function_complexity">2</metric>
 		<metric name="classes">1</metric>
 		<metric name="lines">43</metric>
-		<metric name="comment_lines">0</metric>
+		<metric name="comment_lines">1</metric>
 		<metric name="accessors">0</metric>
 		<metric name="public_undocumented_api">2</metric>
 		<metric name="ncloc">35</metric>
@@ -163,7 +163,7 @@
 		<metric name="function_complexity">1</metric>
 		<metric name="classes">1</metric>
 		<metric name="lines">37</metric>
-		<metric name="comment_lines">0</metric>
+		<metric name="comment_lines">1</metric>
 		<metric name="accessors">3</metric>
 		<metric name="public_undocumented_api">1</metric>
 		<metric name="ncloc">28</metric>
@@ -188,7 +188,7 @@
 		<metric name="function_complexity">0</metric>
 		<metric name="classes">1</metric>
 		<metric name="lines">42</metric>
-		<metric name="comment_lines">14</metric>
+		<metric name="comment_lines">15</metric>
 		<metric name="accessors">0</metric>
 		<metric name="public_undocumented_api">1</metric>
 		<metric name="ncloc">15</metric>
@@ -213,7 +213,7 @@
 		<metric name="function_complexity">1</metric>
 		<metric name="classes">1</metric>
 		<metric name="lines">52</metric>
-		<metric name="comment_lines">5</metric>
+		<metric name="comment_lines">6</metric>
 		<metric name="accessors">0</metric>
 		<metric name="public_undocumented_api">2</metric>
 		<metric name="ncloc">38</metric>

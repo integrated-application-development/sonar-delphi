@@ -87,7 +87,7 @@ public class DeadCodeMetricsTest {
     FunctionInterface f3 = new DelphiFunction("function3");
     f1.addCalledFunction(f2);
     f2.addCalledFunction(f1);
-    f3.setLine(11);
+    f3.setLine(13);
     f3.setBeginColumn(14);
     f3.setEndColumn(23);
 
@@ -157,7 +157,7 @@ public class DeadCodeMetricsTest {
     var issues = sensorContext.allIssues();
     assertThat(issues, hasSize(2));
     assertThat(issues, hasItem(hasRuleKeyAtLine("UnusedUnitRule", 1)));
-    assertThat(issues, hasItem(hasRuleKeyAtLine("UnusedFunctionRule", 11)));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("UnusedFunctionRule", 13)));
   }
 
   @Test
@@ -182,7 +182,7 @@ public class DeadCodeMetricsTest {
     var issues = sensorContext.allIssues();
     assertThat(issues, hasSize(3));
     assertThat(issues, hasItem(hasRuleKeyAtLine("UnusedUnitRule", 1)));
-    assertThat(issues, hasItem(hasRuleKeyAtLine("UnusedFunctionRule", 14)));
-    assertThat(issues, hasItem(hasRuleKeyAtLine("UnusedFunctionRule", 21)));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("UnusedFunctionRule", 16)));
+    assertThat(issues, hasItem(hasRuleKeyAtLine("UnusedFunctionRule", 23)));
   }
 }

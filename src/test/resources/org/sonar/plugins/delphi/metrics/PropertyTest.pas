@@ -1,5 +1,7 @@
 unit DemoForm;
 
+{This is a sample Delphi file.}
+
 interface
 
 type
