@@ -1,5 +1,7 @@
 unit Unit1;
 
+{This is a sample Delphi file.}
+
 interface
 
 uses Unit2;

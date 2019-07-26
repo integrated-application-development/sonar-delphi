@@ -1,5 +1,7 @@
 unit CommentsTest;
 
+{This is a sample Delphi file.}
+
 interface
 
 {** documented class **}

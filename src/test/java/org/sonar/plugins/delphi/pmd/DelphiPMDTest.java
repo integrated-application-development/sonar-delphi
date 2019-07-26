@@ -33,7 +33,7 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiPMDTest {
 
-  private static final String TEST_FILE = "/org/sonar/plugins/delphi/PMDTest/smallpmd.pas";
+  private static final String TEST_FILE = "/org/sonar/plugins/delphi/pmd/smallpmd.pas";
 
   @Test
   public void testGetNodesFromASTTest() {

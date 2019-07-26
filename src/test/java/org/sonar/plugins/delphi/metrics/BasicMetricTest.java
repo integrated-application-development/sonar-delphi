@@ -72,14 +72,14 @@ public class BasicMetricTest {
 
   @Test
   public void testComments() {
-    assertThat(source.getMeasure(Metric.COMMENT_LINES), is(14));
+    assertThat(source.getMeasure(Metric.COMMENT_LINES), is(15));
     assertThat(source.getMeasure(Metric.COMMENT_BLANK_LINES), is(1));
     assertThat(source.getMeasure(Metric.PUBLIC_DOC_API), is(2));
   }
 
   @Test
   public void testLines() {
-    assertThat(source.getMeasure(Metric.LINES), is(72));
+    assertThat(source.getMeasure(Metric.LINES), is(74));
     assertThat(source.getMeasure(Metric.LINES_OF_CODE), is(43));
   }
 }

@@ -1,5 +1,6 @@
-unit DUnitX.AutoDetect.Console;
+﻿unit DUnitX.AutoDetect.Console;
 
+{This is a sample Delphi file.}
 { Copyright Unicode Support}
 
 interface
@@ -28,13 +29,13 @@ type
   TDUnitXEnumerable = class(TInterfacedObject, IEnumerable)
   protected
     //function IEnumerable.GetEnumerator = GetNonGenEnumerator;
-    //function GetNonGenEnumerator : IEnumerator; virtual; abstract;
+    function GetNonGenEnumerator : IEnumerator; virtual; abstract;
   end;
 
   TDUnitXTestFixture = class(TWeakReferencedObject, ITestFixture,ITestFixtureInfo)
-//    function ITestFixtureInfo.GetTests = ITestFixtureInfo_GetTests;
+    //function ITestFixtureInfo.GetTests = ITestFixtureInfo_GetTests;
   end;
-       
+
 implementation
 
 procedure testUnicode;
@@ -42,7 +43,7 @@ var
   vString: string;
   vTest: string;
 begin
-  //vString := vTest;
+  vString := vTest;
   vString := #1234;
   vString := 'aaaa';
   vString := '©';

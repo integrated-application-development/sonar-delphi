@@ -1,5 +1,7 @@
 unit DeadCodeMetricsTest;
 
+{This is a sample Delphi file.}
+
 interface
 
 type

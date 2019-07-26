@@ -64,7 +64,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
   private static final String FILE_NAME_OPERATOR_TEST =
       "/org/sonar/plugins/delphi/metrics/FunctionOperatorTest.pas";
   private static final String FILE_NAME_PARAMETERS_TEST =
-      "/org/sonar/plugins/delphi/syntax/FunctionParametersAnalyzerTest.pas";
+      "/org/sonar/plugins/delphi/metrics/FunctionParametersAnalyzerTest.pas";
 
   @Rule public ExpectedException expectedException = ExpectedException.none();
 
@@ -130,7 +130,7 @@ public class FunctionAnalyzerTest extends FileTestsCommon {
     setupFile(FILE_NAME);
 
     int index = 0;
-    int[] lines = {10, 11, 19, 20, 42, 48, 58, 69, 75, 89};
+    int[] lines = {12, 13, 21, 22, 44, 50, 60, 71, 77, 91};
     String[] names = {
       "bShowTrackerClick",
       "getFunction",
