@@ -77,9 +77,6 @@ public class IncludeAnalyzerTest {
 
     Arrays.sort(includes);
     Arrays.sort(expected);
-    for (String s : includes) {
-      System.out.print("'" + s + "' ");
-    }
     assertArrayEquals(expected, includes);
   }
 

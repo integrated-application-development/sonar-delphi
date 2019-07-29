@@ -26,11 +26,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveParser;
 import org.sonar.plugins.delphi.antlr.directives.exceptions.CompilerDirectiveSyntaxException;
+import org.sonar.plugins.delphi.antlr.directives.impl.IncludeDirective;
 import org.sonar.plugins.delphi.antlr.resolvers.exceptions.IncludeResolverException;
 import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRange;
 import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRangeFirstOccurrenceComparator;
@@ -85,14 +87,15 @@ public class IncludeResolver extends SourceResolver {
 
     try {
       CompilerDirectiveParser factory = new CompilerDirectiveParser();
-      List<CompilerDirective> allDirectives = factory.parse(baseFileData.toString());
+      List<CompilerDirective> allDirectives = factory.parse(baseFileData.toString()).stream()
+          .filter(directive -> directive instanceof IncludeDirective)
+          .collect(Collectors.toList());
 
       for (CompilerDirective directive : allDirectives) {
         String includeFileName = directive.getItem();
-
         String currentDir = baseFileName.substring(0, baseFileName.lastIndexOf('/'));
-        currentDir =
-            backtrackDirectory(currentDir, DelphiUtils.countSubstrings(includeFileName, ".."));
+        int dotDotCount = DelphiUtils.countSubstrings(includeFileName, "..");
+        currentDir = backtrackDirectory(currentDir, dotDotCount);
 
         dataToInclude.add(processIncludedFile(directive, includeFileName, currentDir));
       }
