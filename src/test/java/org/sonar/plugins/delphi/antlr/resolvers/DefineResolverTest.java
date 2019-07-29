@@ -109,12 +109,9 @@ public class DefineResolverTest {
     builder.appendDecl("{$ifend}");
 
     results = new SourceResolverResults("", builder.getSourceCode());
-
     resolver.resolve(results);
 
     String resultSourceCode = results.getFileData().toString();
-    System.out.println(resultSourceCode);
-
     assertThat(resultSourceCode, containsString("(*{$IFDEF"));
     assertThat(resultSourceCode, containsString("$ENDIF}*)"));
     assertThat(resultSourceCode, containsString("(*{$if"));
@@ -145,11 +142,9 @@ public class DefineResolverTest {
     builder.appendDecl("{$ifend}");
 
     results = new SourceResolverResults("", builder.getSourceCode());
-
     resolver.resolve(results);
 
     String resultSourceCode = results.getFileData().toString();
-    System.out.println(resultSourceCode);
     assertThat(resultSourceCode, containsString("(*{$if"));
     assertThat(resultSourceCode, containsString("$else}*)"));
     assertThat(resultSourceCode, containsString("(*{$ifend}*)"));
@@ -174,11 +169,9 @@ public class DefineResolverTest {
     builder.appendDecl("{$ENDIF}");
 
     results = new SourceResolverResults("", builder.getSourceCode());
-
     resolver.resolve(results);
 
     String resultSourceCode = results.getFileData().toString();
-    System.out.println(resultSourceCode);
     assertThat(resultSourceCode, containsString("(*{$IFDEF"));
     assertThat(resultSourceCode, containsString("$ELSE}*)"));
     assertThat(resultSourceCode, containsString("(*{$ENDIF}*)"));
@@ -196,11 +189,9 @@ public class DefineResolverTest {
     builder.appendDecl("{$ENDIF}");
 
     results = new SourceResolverResults("", builder.getSourceCode());
-
     resolver.resolve(results);
 
     String resultSourceCode = results.getFileData().toString();
-    System.out.println(resultSourceCode);
     assertThat(resultSourceCode, containsString("(*{$IFDEF FPC}*)"));
     assertThat(resultSourceCode, containsString("(*{$ENDIF}*)"));
     assertThat(resultSourceCode, containsString("SOString = UnicodeString;"));
@@ -217,11 +208,9 @@ public class DefineResolverTest {
     builder.appendDecl("{$ENDIF}");
 
     results = new SourceResolverResults("", builder.getSourceCode());
-
     resolver.resolve(results);
 
     String resultSourceCode = results.getFileData().toString();
-    System.out.println(resultSourceCode);
     assertThat(resultSourceCode, containsString("(*{$IFDEF FPC}"));
     assertThat(resultSourceCode, containsString("{$ENDIF}*)"));
   }
@@ -237,11 +226,9 @@ public class DefineResolverTest {
     builder.appendDecl("{$ENDIF}");
 
     results = new SourceResolverResults("", builder.getSourceCode());
-
     resolver.resolve(results);
 
     String resultSourceCode = results.getFileData().toString();
-    System.out.println(resultSourceCode);
     assertThat(resultSourceCode, containsString("(*{$IFDEF FPC}"));
     assertThat(resultSourceCode, containsString("(*{$ELSE"));
     assertThat(resultSourceCode, containsString("$ENDIF}*)"));
@@ -268,11 +255,9 @@ public class DefineResolverTest {
     builder.appendDecl("{$ifend}");
 
     results = new SourceResolverResults("", builder.getSourceCode());
-
     resolver.resolve(results);
 
     String resultSourceCode = results.getFileData().toString();
-    System.out.println(resultSourceCode);
     assertThat(resultSourceCode, containsString("(*{$IFDEF FPC}"));
     assertThat(resultSourceCode, containsString("$ENDIF}*)"));
     assertThat(resultSourceCode, containsString("(* unicode  )"));
@@ -294,11 +279,9 @@ public class DefineResolverTest {
     builder.appendImpl("{$ENDIF}");
 
     results = new SourceResolverResults("", builder.getSourceCode());
-
     resolver.resolve(results);
 
     String resultSourceCode = results.getFileData().toString();
-    System.out.println(resultSourceCode);
     assertThat(resultSourceCode, containsString("(*{$IFDEF FPC}"));
     assertThat(resultSourceCode, containsString("{$ELSE}*)"));
     assertThat(resultSourceCode, containsString("(*{$IFNDEF FPC}*)"));

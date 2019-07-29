@@ -28,9 +28,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 
 public class DelphiTestUnitBuilder {
-
+  private static final Logger LOG = Loggers.get(DelphiTestUnitBuilder.class);
   private final StringBuilder declaration = new StringBuilder();
   private final StringBuilder implementation = new StringBuilder();
 
@@ -121,7 +123,7 @@ public class DelphiTestUnitBuilder {
     int lineNumber = 0;
     try {
       while ((line = lineReader.readLine()) != null) {
-        System.out.println(String.format("%03d %s", ++lineNumber, line));
+        LOG.info(String.format("%03d %s", ++lineNumber, line));
       }
     } catch (IOException e) {
       throw new RuntimeException("Failed to print source code.", e);
