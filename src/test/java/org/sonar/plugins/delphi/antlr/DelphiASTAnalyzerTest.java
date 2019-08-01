@@ -65,12 +65,12 @@ public class DelphiASTAnalyzerTest {
 
   private void testFunctions(CodeAnalysisResults results) {
     String[] names = {
-        "tdemo.bshowtrackerclick",
-        "tdemo.getfunction",
-        "tmyclass.myprocedure",
-        "tmyclass.setsomething",
-        "standaloneprocedure",
-        "standalonefunction"
+      "tdemo.bshowtrackerclick",
+      "tdemo.getfunction",
+      "tmyclass.myprocedure",
+      "tmyclass.setsomething",
+      "standaloneprocedure",
+      "standalonefunction"
     };
     int[] complexities = {1, 0, 2, 0, 3, 1};
     int[] statements = {1, 2, 2, 0, 7, 0};
