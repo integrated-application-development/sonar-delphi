@@ -56,7 +56,7 @@ public class DelphiRuleViolationBuilder {
   }
 
   private void findLogicalLocation(DelphiPMDNode node) {
-    Tree unitNode = node.getAncestor(DelphiLexer.UNIT);
+    Tree unitNode = findUnitNode(node);
 
     if (unitNode != null) {
       StringBuilder name = new StringBuilder();
@@ -76,19 +76,26 @@ public class DelphiRuleViolationBuilder {
     Tree methodNode = findMethodNode(node);
 
     if (methodNode != null) {
-      StringBuilder name = new StringBuilder();
+      StringBuilder qualifiedName = new StringBuilder();
       Tree nameNode = ((CommonTree) methodNode).getFirstChildWithType(DelphiLexer.TkFunctionName);
       for (int i = 0; i < nameNode.getChildCount(); ++i) {
-        name.append(nameNode.getChild(i).getText());
+        qualifiedName.append(nameNode.getChild(i).getText());
       }
 
-      ruleViolation.setMethodName(name.toString());
+      String methodName = qualifiedName.toString();
+      int dotIndex = methodName.lastIndexOf('.');
 
-      if (nameNode.getChildCount() > 1) {
-        // class name from function name
-        ruleViolation.setClassName(nameNode.getChild(0).getText());
+      if (dotIndex > 0) {
+        ruleViolation.setClassName(methodName.substring(0, dotIndex));
+        ruleViolation.setMethodName(methodName.substring(dotIndex + 1));
+      } else {
+        ruleViolation.setMethodName(methodName);
       }
     }
+  }
+
+  private Tree findUnitNode(DelphiPMDNode node) {
+    return node.getASTTree().getFirstChildWithType(DelphiLexer.UNIT);
   }
 
   private Tree findMethodNode(DelphiPMDNode node) {
