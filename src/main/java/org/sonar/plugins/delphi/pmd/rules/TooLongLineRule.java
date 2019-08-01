@@ -24,8 +24,7 @@ public class TooLongLineRule extends DelphiRule {
     if (lineNumber > lastLineChecked) {
       lastLineChecked = lineNumber;
       String line = node.getASTTree().getFileSourceLine(lineNumber);
-
-      int lineLength = getLineLengthWithoutComment(line);
+      int lineLength = getLineLength(line);
       int lineLimit = getProperty(LIMIT);
 
       if (lineLength > lineLimit) {
@@ -38,9 +37,17 @@ public class TooLongLineRule extends DelphiRule {
     }
   }
 
-  private int getLineLengthWithoutComment(String line) {
-    int commentIndex = line.indexOf("//");
-    return (commentIndex == -1) ? line.length() : ++commentIndex;
+  private int getLineLength(String line) {
+    int length = line.length();
+
+    // For the purposes of line length, we don't care about whitespace at the end of the line
+    for (; length > 0; length--) {
+      if (!Character.isWhitespace(line.charAt(length - 1))) {
+        break;
+      }
+    }
+
+    return length;
   }
 
   @Override
