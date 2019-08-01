@@ -26,7 +26,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.util.Deque;
-import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.analyzer.ASTAnalyzer;
