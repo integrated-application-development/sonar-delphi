@@ -22,15 +22,34 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import net.sourceforge.pmd.RuleContext;
+import org.antlr.runtime.tree.CommonTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /** Rule class searching for variables in a .dpr file */
-public class DprVariableRule extends DprFunctionRule {
+public class DprVariableRule extends DprRule {
 
   @Override
-  protected boolean isViolationNode(DelphiPMDNode node) {
-    int type = node.getType();
-    return type == DelphiLexer.TkVariableIdents;
+  public void visit(DelphiPMDNode node, RuleContext ctx) {
+    if (node.getType() != DelphiLexer.VAR) {
+      return;
+    }
+
+    if (insideMethod(node)) {
+      // Skip variables inside of methods. See DprFunctionRule
+      return;
+    }
+
+    addViolation(ctx, node);
+  }
+
+  private boolean insideMethod(DelphiPMDNode node) {
+    DelphiPMDNode parent = new DelphiPMDNode((CommonTree) node.getParent(), node.getASTTree());
+    return isMethodHeader(parent.prevNode());
+  }
+
+  private boolean isMethodHeader(DelphiPMDNode node) {
+    return node.getType() == DelphiLexer.PROCEDURE || node.getType() == DelphiLexer.FUNCTION;
   }
 }

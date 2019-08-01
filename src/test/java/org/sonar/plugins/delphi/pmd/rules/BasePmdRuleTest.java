@@ -56,7 +56,7 @@ import org.sonar.plugins.delphi.pmd.DelphiPmdConfiguration;
 import org.sonar.plugins.delphi.pmd.DelphiPmdExecutor;
 import org.sonar.plugins.delphi.pmd.DelphiPmdSensor;
 import org.sonar.plugins.delphi.pmd.DelphiPmdViolationRecorder;
-import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
+import org.sonar.plugins.delphi.pmd.DelphiTestFileBuilder;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
@@ -69,7 +69,7 @@ abstract class BasePmdRuleTest {
   private Collection<Issue> issues = new ArrayList<>();
   private File baseDir;
 
-  public void execute(DelphiTestUnitBuilder builder) {
+  public void execute(DelphiTestFileBuilder builder) {
     configureTest(builder);
 
     SensorContextTester sensorContext = SensorContextTester.create(baseDir);
@@ -79,7 +79,7 @@ abstract class BasePmdRuleTest {
     assertThat("Errors: " + sensor.getErrors(), sensor.getErrors(), empty());
   }
 
-  private void configureTest(DelphiTestUnitBuilder builder) {
+  private void configureTest(DelphiTestFileBuilder builder) {
     File testFile = builder.buildFile(ROOT_DIR);
     testFile.deleteOnExit();
 
@@ -89,7 +89,7 @@ abstract class BasePmdRuleTest {
     configureTest(ROOT_DIR_NAME + "/" + relativePathTestFile, builder);
   }
 
-  private void configureTest(String testFileName, DelphiTestUnitBuilder builder) {
+  private void configureTest(String testFileName, DelphiTestFileBuilder builder) {
     SensorContextTester sensorContext = SensorContextTester.create(ROOT_DIR);
     DelphiProjectHelper delphiProjectHelper = DelphiTestUtils.mockProjectHelper();
 
