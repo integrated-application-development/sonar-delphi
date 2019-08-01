@@ -31,7 +31,7 @@ public class InterfaceNameRule extends NameConventionRule {
   @Override
   public DelphiPMDNode findNode(DelphiPMDNode node) {
     if (node.getType() != DelphiLexer.TkNewTypeName
-        || node.nextNode().getType() != DelphiLexer.TkInterface) {
+        || node.nextNode().getChildType(0) != DelphiLexer.TkInterface) {
       return null;
     }
 
