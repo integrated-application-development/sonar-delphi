@@ -28,6 +28,10 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +49,7 @@ import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.rule.internal.NewActiveRule;
+import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.measure.Measure;
@@ -104,17 +109,19 @@ public class DelphiSensorTest {
   }
 
   @Test
-  public void testDescribeTest() throws IOException {
+  public void testDescribe() throws IOException {
     setupProject(EMPTY_PROJECT);
-    DefaultSensorDescriptor sensorDescriptor = new DefaultSensorDescriptor();
-    sensor.describe(sensorDescriptor);
-    assertEquals("Combined LCOV and LOC sensor", sensorDescriptor.name());
-    String[] expected = {DelphiLanguage.KEY};
-    assertArrayEquals(expected, sensorDescriptor.languages().toArray());
+    final SensorDescriptor mockDescriptor = mock(SensorDescriptor.class);
+    when(mockDescriptor.onlyOnLanguage(anyString())).thenReturn(mockDescriptor);
+
+    sensor.describe(mockDescriptor);
+
+    verify(mockDescriptor).onlyOnLanguage(DelphiLanguage.KEY);
+    verify(mockDescriptor).name("DelphiSensor: Combined LCOV and LOC sensor");
   }
 
   @Test
-  public void testExecuteTest() throws IOException {
+  public void testExecute() throws IOException {
     setupProject(SIMPLE_PROJECT);
     sensor.execute(context);
 
