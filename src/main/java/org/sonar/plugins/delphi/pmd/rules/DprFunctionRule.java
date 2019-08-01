@@ -26,57 +26,17 @@ import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
-/** Rule class searching for procedures, functions and variables in a .dpr file */
-public class DprFunctionRule extends DelphiRule {
-
-  /** Check for *.dpr. */
-  private int check;
-
-  @Override
-  public void init() {
-    // needs to check at new file
-    check = -1;
-  }
+public class DprFunctionRule extends DprRule {
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    // checking if we are on .dpr/.dpk
-    if (check == -1) {
-      if (node.getASTTree().getFileName().endsWith(".dpr")
-          || node.getASTTree().getFileName().endsWith(".dpk")) {
-        check = 1;
-      } else {
-        check = 0;
-      }
-    }
-    if (check != 1) {
-      // not a .dpr/.dpk file
-      return;
-    }
-
-    if (isViolationNode(node)) {
+    if (isMethod(node)) {
       addViolation(ctx, node);
     }
   }
 
-  /**
-   * Check if node is a procedure/function node, or a variable node
-   *
-   * @param node Node to check
-   * @return True if so, false otherwise
-   */
-  protected boolean isViolationNode(DelphiPMDNode node) {
+  private boolean isMethod(DelphiPMDNode node) {
     int type = node.getType();
     return type == DelphiLexer.PROCEDURE || type == DelphiLexer.FUNCTION;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
-  }
-
-  @Override
-  public int hashCode() {
-    return super.hashCode();
   }
 }

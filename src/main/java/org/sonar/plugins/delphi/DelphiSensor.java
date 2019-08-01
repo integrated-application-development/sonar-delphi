@@ -64,7 +64,6 @@ import org.sonar.plugins.delphi.metrics.ComplexityMetrics;
 import org.sonar.plugins.delphi.metrics.DeadCodeMetrics;
 import org.sonar.plugins.delphi.metrics.MetricsInterface;
 import org.sonar.plugins.delphi.project.DelphiProject;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.ProgressReporter;
 import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
 
@@ -170,13 +169,15 @@ public class DelphiSensor implements Sensor {
         LOG.debug("Stacktrace: ", e);
       }
 
-      if (basicMetrics.hasMetric("PUBLIC_DOC_API") && complexityMetrics.hasMetric("PUBLIC_API")) {
-        int undocumentedApi =
-            DelphiUtils.checkIntRange(
-                complexityMetrics.getIntMetric("PUBLIC_API")
-                    - basicMetrics.getIntMetric("PUBLIC_DOC_API"),
-                0,
-                Integer.MAX_VALUE);
+      if (complexityMetrics.hasMetric("PUBLIC_API")) {
+        int publicApi = complexityMetrics.getIntMetric("PUBLIC_API");
+        int documentedApi = 0;
+
+        if (basicMetrics.hasMetric("PUBLIC_DOC_API")) {
+          documentedApi = basicMetrics.getIntMetric("PUBLIC_DOC_API");
+        }
+
+        int undocumentedApi = Math.max(publicApi - documentedApi, 0);
 
         // Number of public API without a documentation block
         sensorContext

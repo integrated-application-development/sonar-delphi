@@ -44,7 +44,7 @@ public abstract class NameConventionRule extends DelphiRule implements NodeFinde
   }
 
   protected boolean compliesWithPrefixNamingConvention(final String name, final String prefix) {
-    return name.startsWith(prefix) && charAfterPrefixIsUppercase(name, prefix);
+    return name.startsWith(prefix) && compliesWithPascalCase(name, prefix);
   }
 
   protected boolean compliesWithPrefixNamingConvention(final String name, final String[] prefixes) {
@@ -57,12 +57,13 @@ public abstract class NameConventionRule extends DelphiRule implements NodeFinde
     return false;
   }
 
-  private static boolean charAfterPrefixIsUppercase(final String name, final String prefix) {
+  private static boolean compliesWithPascalCase(final String name, final String prefix) {
     if (name.length() == prefix.length()) {
       return false;
     }
 
-    return Character.isUpperCase(name.charAt(prefix.length()));
+    char character = name.charAt(prefix.length());
+    return Character.isUpperCase(character) || Character.isDigit(character);
   }
 
   protected abstract boolean isViolation(DelphiPMDNode nameNode);

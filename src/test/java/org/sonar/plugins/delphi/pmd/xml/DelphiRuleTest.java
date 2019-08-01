@@ -22,25 +22,14 @@
  */
 package org.sonar.plugins.delphi.pmd.xml;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import net.sourceforge.pmd.RuleSet;
-import net.sourceforge.pmd.RuleSetFactory;
-import org.apache.commons.io.FileUtils;
 import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.Before;
 import org.junit.Rule;
@@ -110,27 +99,6 @@ public class DelphiRuleTest {
     rule.setExample("123");
     assertThat(rule.getExample(), is("123"));
     assertThat(rule.getHtmlDescription(), is("<p>abc</p><pre>123</pre>"));
-  }
-
-  @Test
-  public void testWriteToIsValidPmdRuleSetSyntax() throws Exception {
-    StringWriter writer = new StringWriter();
-    String testRulesXmlPath = "org/sonar/plugins/delphi/pmd/xml/rules.xml";
-    URL url = getClass().getClassLoader().getResource(testRulesXmlPath);
-    assertThat(url, is(not(nullValue())));
-    InputStreamReader stream = new InputStreamReader(new FileInputStream(url.getPath()), UTF_8);
-
-    DelphiRuleSet ruleSet = DelphiRuleSetHelper.createFrom(stream);
-    ruleSet.writeTo(writer);
-    String rulesXml = writer.toString();
-
-    File ruleSetFile = File.createTempFile("delphiPmdRuleSet_", ".xml");
-    FileUtils.writeStringToFile(ruleSetFile, rulesXml, UTF_8);
-
-    RuleSetFactory ruleSetFactory = new RuleSetFactory();
-    RuleSet parsedRuleSet = ruleSetFactory.createRuleSet(ruleSetFile.getAbsolutePath());
-
-    assertThat(parsedRuleSet.getRules(), hasSize(ruleSet.getPmdRules().size()));
   }
 
   @Test

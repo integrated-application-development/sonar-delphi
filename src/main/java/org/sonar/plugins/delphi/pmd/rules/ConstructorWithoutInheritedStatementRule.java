@@ -27,31 +27,38 @@ import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 public class ConstructorWithoutInheritedStatementRule extends NoInheritedStatementRule {
 
-  private final Deque<String> knownRecords = new ArrayDeque<>();
+  private final Deque<String> recordTypes = new ArrayDeque<>();
 
   @Override
   protected void init() {
-    super.init();
-    knownRecords.clear();
-    setLookFor("constructor");
+    recordTypes.clear();
   }
 
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    if (node.getType() == DelphiLexer.TkNewType && isRecordType(node)) {
-      knownRecords.add(getTypeName(node));
-    }
+    handleNewTypes(node);
 
-    super.visit(node, ctx);
+    if (node.getType() == DelphiLexer.CONSTRUCTOR) {
+      if (isRecordConstructor(node) || isClassMethod(node)) {
+        return;
+      }
+
+      checkViolation(ctx, node);
+    }
   }
 
-  @Override
-  protected boolean shouldAddRule(DelphiPMDNode node) {
+  private void handleNewTypes(DelphiPMDNode node) {
+    if (node.getType() == DelphiLexer.TkNewType && isRecordType(node)) {
+      recordTypes.add(getTypeName(node));
+    }
+  }
+
+  private boolean isRecordConstructor(DelphiPMDNode node) {
     if (node.getChild(0).getType() == DelphiLexer.TkFunctionName) {
       String typeName = node.getChild(0).getChild(0).getText();
-      return !knownRecords.contains(typeName);
+      return recordTypes.contains(typeName);
     }
-    return true;
+    return false;
   }
 
   private boolean isRecordType(DelphiPMDNode newTypeNode) {

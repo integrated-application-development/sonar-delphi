@@ -66,6 +66,9 @@ public class DelphiUnit implements UnitInterface {
   /** {@inheritDoc} */
   @Override
   public String getFileName() {
+    if (file == null) {
+      return "<Invalid file>";
+    }
     return file.getName();
   }
 
@@ -175,11 +178,7 @@ public class DelphiUnit implements UnitInterface {
 
   @Override
   public String toString() {
-    String fileName = "no file";
-    if (file != null) {
-      fileName = file.getAbsolutePath();
-    }
-    return name + "(" + fileName + ")";
+    return name + "(" + getFileName() + ")";
   }
 
   @Override

@@ -74,7 +74,7 @@ package org.sonar.plugins.delphi.antlr.generated;
   private void saveLineNumber() {
     Token token = input.LT(1);
     if (token == null) {
-      throw new IllegalStateException("Failed to save line number: Previous token is null");
+      throw new IllegalStateException("Failed to save line number: Current token is null");
     }
 
     this.savedLineNumber = token.getLine();
@@ -83,6 +83,12 @@ package org.sonar.plugins.delphi.antlr.generated;
   private Token token(int type) {
     CommonToken t = new CommonToken(type, tokenNames[type]);
     t.setLine(savedLineNumber);
+    return t;
+  }
+
+  private Token changeTokenType(int type) {
+    CommonToken t = new CommonToken(input.LT(-1));
+    t.setType(type);
     return t;
   }
 }
@@ -297,7 +303,7 @@ genericPostfix               : '<' typeDecl (',' typeDecl)* '>'
 //section class
 //****************************
 classDecl                    : classHelperDecl -> ^(TkClass classHelperDecl)
-			     | classTypeTypeDecl
+                             | classTypeTypeDecl
                              | classTypeDecl -> ^(TkClass classTypeDecl)
                              | interfaceTypeDecl -> ^(TkInterface interfaceTypeDecl)
                              | objectDecl -> ^(TkObject objectDecl)
@@ -488,10 +494,10 @@ particle                     : intNum
                              | realNum
                              | TkAsmHexNum
                              | stringFactor
-                             | ident
                              | 'nil'
                              | 'true'
                              | 'false'
+                             | ident
                              | parenthesizedExpression
                              | setLiteral
                              | 'string'
@@ -631,7 +637,7 @@ raiseStatement               : 'raise' (expression)? (AT expression)?
 //****************************
 //section AssemblerStatement
 //****************************
-assemblerStatement           : 'asm' assemblerInstructions 'end' -> 'asm' ^(TkAssemblerInstructions assemblerInstructions) 'end'
+assemblerStatement           : 'asm' assemblerInstructions 'end' -> ^('asm' ^(TkAssemblerInstructions assemblerInstructions) 'end')
                              ;
 assemblerInstructions        : ~('end')* // Skip asm statements
                              ;
@@ -706,7 +712,7 @@ dispIDDirective              : 'dispid' expression
 //****************************
 ident                        : TkIdentifier
                              | '&' TkIdentifier
-                             | keywordsUsedAsNames
+                             | (keywordsUsedAsNames) -> ^({changeTokenType(TkIdentifier)})
                              ;
 keywordsUsedAsNames          : (NAME | READONLY | ADD | AT | MESSAGE | POINTER | INDEX | DEFAULT | STRING | CONTINUE)
                              | (READ | WRITE | REGISTER | VARIANT | OPERATOR | REMOVE | LOCAL | REFERENCE | CONTAINS | FINAL)
@@ -1013,7 +1019,7 @@ Hexdigit                : Digit | 'a'..'f' | 'A'..'F'
                         ;
 fragment
 Hexdigitseq		          : Hexdigit (Hexdigit)*
-			                  ;
+                        ;
 //----------------------------------------------------------------------------
 // Hidden
 //----------------------------------------------------------------------------		

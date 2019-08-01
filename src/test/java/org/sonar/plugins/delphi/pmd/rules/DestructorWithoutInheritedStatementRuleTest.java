@@ -71,4 +71,24 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
         hasItem(
             hasRuleKeyAtLine("DestructorWithoutInheritedStatementRule", builder.getOffSet() + 1)));
   }
+
+  @Test
+  public void testClassDestructorShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+
+    builder.appendDecl("type");
+    builder.appendDecl("  TTestDestructor = class");
+    builder.appendDecl("  public");
+    builder.appendDecl("    class destructor Destroy; override;");
+    builder.appendDecl("  end;");
+
+    builder.appendImpl("class destructor TTestConstructor.Destroy;");
+    builder.appendImpl("begin");
+    builder.appendImpl("  Writeln('do something');");
+    builder.appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
 }

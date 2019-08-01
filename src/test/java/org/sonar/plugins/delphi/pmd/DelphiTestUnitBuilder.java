@@ -22,119 +22,68 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import com.google.common.io.LineReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringReader;
-import java.nio.charset.StandardCharsets;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+public class DelphiTestUnitBuilder extends DelphiTestFileBuilder<DelphiTestUnitBuilder> {
 
-public class DelphiTestUnitBuilder {
-  private static final Logger LOG = Loggers.get(DelphiTestUnitBuilder.class);
-  private final StringBuilder declaration = new StringBuilder();
-  private final StringBuilder implementation = new StringBuilder();
-
-  private int offset;
-  private int offsetDecl;
-  private int declCount;
   private String unitName = "TestUnits";
 
-  public DelphiTestUnitBuilder appendDecl(String value) {
-    declaration.append(value).append("\n");
-    declCount++;
+  @Override
+  protected DelphiTestUnitBuilder getThis() {
     return this;
   }
 
-  public DelphiTestUnitBuilder appendImpl(String value) {
-    implementation.append(value).append("\n");
-    return this;
+  @Override
+  public int getOffsetDecl() {
+    return 4;
   }
 
-  public String declaration() {
-    return declaration.toString();
-  }
-
-  public String implementation() {
-    return implementation.toString();
-  }
-
-  public DelphiTestUnitBuilder unitName(String unitName) {
-    this.unitName = unitName;
-    return this;
-  }
-
-  public File buildFile(File baseDir) {
-    StringBuilder source = getSourceCode();
-
-    try {
-      File file = File.createTempFile("unit", ".pas", baseDir);
-      file.deleteOnExit();
-
-      try (FileWriter fileWriter = new FileWriter(file, StandardCharsets.UTF_8)) {
-        fileWriter.write(source.toString());
-        fileWriter.flush();
-      }
-      return file;
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+  @Override
+  public int getOffSet() {
+    int offset = getDeclCount() + getOffsetDecl() + 2;
+    if (!getDeclaration().isEmpty()) {
+      ++offset;
     }
+
+    return offset;
   }
 
-  public StringBuilder getSourceCode() {
-    return getSourceCode(false);
-  }
-
-  public StringBuilder getSourceCode(boolean print) {
-    // fixed lines
-    offsetDecl = 4;
-    offset = declCount + 6;
-
+  @Override
+  protected StringBuilder generateSourceCode() {
     StringBuilder source = new StringBuilder();
     source.append(String.format("unit %s;\n", this.unitName));
     source.append("\n");
     source.append("interface\n");
     source.append("\n");
 
-    if (this.declaration.length() > 0) {
-      source.append(this.declaration()).append("\n");
-      offset++;
+    if (!getDeclaration().isEmpty()) {
+      source.append(getDeclaration());
+      source.append("\n");
     }
+
     source.append("implementation\n");
     source.append("\n");
 
-    if (this.implementation.length() > 0) {
-      source.append(this.implementation()).append("\n");
+    if (!getImplementation().isEmpty()) {
+      source.append(this.getImplementation());
+      source.append("\n");
     }
-    source.append("end.\n");
 
-    if (print) {
-      printSourceCode(source);
-    }
+    source.append("end.\n");
 
     return source;
   }
 
-  private void printSourceCode(StringBuilder source) {
-    Readable reader = new StringReader(source.toString());
-    LineReader lineReader = new LineReader(reader);
-    String line;
-    int lineNumber = 0;
-    try {
-      while ((line = lineReader.readLine()) != null) {
-        LOG.info(String.format("%03d %s", ++lineNumber, line));
-      }
-    } catch (IOException e) {
-      throw new RuntimeException("Failed to print source code.", e);
-    }
+  @Override
+  protected String getFilenamePrefix() {
+    return "unit";
   }
 
-  public int getOffSet() {
-    return offset;
+  @Override
+  protected String getFileExtension() {
+    return ".pas";
   }
 
-  public int getOffsetDecl() {
-    return offsetDecl;
+  public DelphiTestUnitBuilder unitName(String unitName) {
+    this.unitName = unitName;
+    return getThis();
   }
 }

@@ -22,6 +22,17 @@ public class ConstantNotationRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  public void testFirstCharacterIsNumberShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+    builder.appendDecl("const");
+    builder.appendDecl("  C_85Constant = 'Value';");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
   public void testTypedConstantWithPrefixShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("const");

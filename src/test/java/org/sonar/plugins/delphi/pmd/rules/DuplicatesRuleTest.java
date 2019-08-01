@@ -74,11 +74,26 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  public void testUnsortedWithoutSemicolonShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  List.Duplicates := dupIgnore")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(hasItem(hasRuleKeyAtLine("DuplicatesRule", builder.getOffSet() + 3)));
+  }
+
+  @Test
   public void testSortedFalseOnPreviousLineShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
             .appendImpl("begin")
+            .appendImpl("  List.Sorted := True;")
             .appendImpl("  List.Sorted := False;")
             .appendImpl("  List.Duplicates := dupError;")
             .appendImpl("end;");
@@ -86,7 +101,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("DuplicatesRule", builder.getOffSet() + 4)));
+    assertIssues(hasItem(hasRuleKeyAtLine("DuplicatesRule", builder.getOffSet() + 5)));
   }
 
   @Test
@@ -149,5 +164,95 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues(empty());
+  }
+
+  @Test
+  public void testUnassignedDuplicatesShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  List.Duplicates;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testUnassignedSortedShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  List.Duplicates := dupIgnore;")
+            .appendImpl("  List.Sorted")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(hasItem(hasRuleKeyAtLine("DuplicatesRule", builder.getOffSet() + 3)));
+  }
+
+  @Test
+  public void testStandaloneSortedShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  List.Duplicates := dupIgnore;")
+            .appendImpl("  Sorted;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("DuplicatesRule", builder.getOffSet() + 3)));
+  }
+
+  @Test
+  public void testProcedureOnNextLineShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  List.Duplicates := dupIgnore;")
+            .appendImpl("  List.SomeProcedure")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(hasItem(hasRuleKeyAtLine("DuplicatesRule", builder.getOffSet() + 3)));
+  }
+
+  @Test
+  public void testQualifiedSortedShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  SomeClass.List.Duplicates := dupIgnore;")
+            .appendImpl("  SomeClass.List.Sorted := True;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testQualifiedNotSortedShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  SomeClass.List.Duplicates := dupIgnore;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("DuplicatesRule", builder.getOffSet() + 3)));
   }
 }

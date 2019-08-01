@@ -87,4 +87,18 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
     assertIssues(empty());
   }
+
+  @Test
+  public void testFalseNegativeInheritedSyntaxShouldFailOnUpgrade() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  inherited MyProcedure;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
 }

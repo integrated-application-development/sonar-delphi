@@ -87,9 +87,10 @@ public class IncludeResolver extends SourceResolver {
 
     try {
       CompilerDirectiveParser factory = new CompilerDirectiveParser();
-      List<CompilerDirective> allDirectives = factory.parse(baseFileData.toString()).stream()
-          .filter(directive -> directive instanceof IncludeDirective)
-          .collect(Collectors.toList());
+      List<CompilerDirective> allDirectives =
+          factory.parse(baseFileData.toString()).stream()
+              .filter(directive -> directive instanceof IncludeDirective)
+              .collect(Collectors.toList());
 
       for (CompilerDirective directive : allDirectives) {
         String includeFileName = directive.getItem();

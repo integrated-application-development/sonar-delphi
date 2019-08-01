@@ -23,71 +23,47 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.antlr.runtime.tree.Tree;
-import org.apache.commons.lang.StringUtils;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
-/**
- * Class that checks if 'inherited' statement is in some function or procedure. If no, it triggers a
- * violation.
- */
 public abstract class NoInheritedStatementRule extends DelphiRule {
 
-  private static final int MAX_LOOK_AHEAD = 3;
-  private String lookFor = "";
+  protected void checkViolation(RuleContext ctx, DelphiPMDNode node) {
+    DelphiPMDNode beginNode = findBeginNode(node);
 
-  public void setLookFor(String lookFor) {
-    this.lookFor = lookFor;
-  }
-
-  @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
-    if (StringUtils.isEmpty(lookFor) || !node.getText().equalsIgnoreCase(lookFor)) {
+    if (beginNode == null || hasInheritedStatement(beginNode)) {
       return;
     }
 
-    Tree beginNode = findBeginNode(node);
-    if (beginNode == null) {
-      return;
+    addViolation(ctx, node);
+  }
+
+  private DelphiPMDNode findBeginNode(DelphiPMDNode node) {
+    DelphiPMDNode declSection = node.nextNode();
+    if (declSection == null || declSection.getType() != DelphiLexer.TkBlockDeclSection) {
+      return null;
     }
 
-    boolean wasInherited = false;
-    for (int c = 0; c < beginNode.getChildCount(); c++) {
-      if (beginNode.getChild(c).getType() == DelphiLexer.INHERITED) {
-        wasInherited = true;
-        break;
+    DelphiPMDNode beginNode = declSection.nextNode();
+    if (beginNode == null || beginNode.getType() != DelphiLexer.BEGIN) {
+      return null;
+    }
+
+    return beginNode;
+  }
+
+  private boolean hasInheritedStatement(DelphiPMDNode beginNode) {
+    for (int i = 0; i < beginNode.getChildCount(); i++) {
+      if (beginNode.getChildType(i) == DelphiLexer.INHERITED) {
+        return true;
       }
     }
 
-    if (!wasInherited && shouldAddRule(node)) {
-      addViolation(ctx, node);
-    }
+    return false;
   }
 
-  private Tree findBeginNode(DelphiPMDNode node) {
-    Tree parent = node.getParent();
-    int childIndex = node.getChildIndex();
-    int childCount = parent.getChildCount();
-
-    for (int i = childIndex + 1; i < childIndex + MAX_LOOK_AHEAD && i < childCount; ++i) {
-      if (parent.getChild(i).getType() == DelphiLexer.BEGIN) {
-        return parent.getChild(i);
-      }
-    }
-
-    return null;
-  }
-
-  protected abstract boolean shouldAddRule(DelphiPMDNode node);
-
-  @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
-  }
-
-  @Override
-  public int hashCode() {
-    return super.hashCode();
+  protected boolean isClassMethod(DelphiPMDNode node) {
+    DelphiPMDNode prevNode = node.prevNode();
+    return prevNode != null && prevNode.getType() == DelphiLexer.CLASS;
   }
 }

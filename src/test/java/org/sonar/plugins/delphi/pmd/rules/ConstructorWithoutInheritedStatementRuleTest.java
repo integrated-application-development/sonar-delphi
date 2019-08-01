@@ -73,6 +73,26 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
   }
 
   @Test
+  public void testClassConstructorShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+
+    builder.appendDecl("type");
+    builder.appendDecl("  TTestConstructor = class");
+    builder.appendDecl("  public");
+    builder.appendDecl("    class constructor Create;");
+    builder.appendDecl("  end;");
+
+    builder.appendImpl("class constructor TTestConstructor.Create;");
+    builder.appendImpl("begin");
+    builder.appendImpl("  Writeln('do something');");
+    builder.appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
   public void testRecordConstructorShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
