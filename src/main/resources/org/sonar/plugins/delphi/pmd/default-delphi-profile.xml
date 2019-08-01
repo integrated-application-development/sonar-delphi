@@ -1,264 +1,213 @@
 <?xml version="1.0"?>
 <ruleset name="PMD extensions"
-	xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
-    <description>All default rules</description>
+  xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+  <description>All default rules</description>
 
-	<!-- PRIORITY: 1 - blocker, 2 - critical, 3 - major, 4 - minor, 5 - info -->
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ThenTryRule"
+    name="ThenTryRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.ThenTryRule"
-				name="ThenTryRule">
-		<priority>3</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.CountRule"
+    name="ClassPerFileRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.CountRule"
-				name="ClassPerFileRule">
-		<priority>3</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+    name="InheritedMethodWithNoCodeRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
-				name="InheritedMethodWithNoCodeRule">
-		<priority>2</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.SwallowedExceptionsRule"
+    name="SwallowedExceptionsRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.SwallowedExceptionsRule"
-				name="SwallowedExceptionsRule">
-		<priority>1</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
+    name="EmptyFinallyBlockRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
-				name="EmptyFinallyBlockRule">
-		<priority>2</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+    name="EmptyInterfaceRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
-				name="EmptyInterfaceRule">
-		<priority>2</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.TooLongMethodRule"
+    name="TooLongMethodRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.TooLongMethodRule"
-				name="TooLongMethodRule">
-		<priority>3</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.TooManyArgumentsRule"
+    name="TooManyArgumentsRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.TooManyArgumentsRule"
-				name="TooManyArgumentsRule">
-		<priority>3</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.TooManyVariablesRule"
+    name="TooManyVariablesRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.TooManyVariablesRule"
-				name="TooManyVariablesRule">
-		<priority>3</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+    name="NoSemiAfterMethodDeclarationRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
-				name="NoSemiAfterMethodDeclarationRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+    name="NoFunctionReturnTypeRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
-				name="NoFunctionReturnTypeRule">
-		<priority>3</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.InterfaceNameRule"
+    name="InterfaceNameRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.InterfaceNameRule"
-				name="InterfaceNameRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ClassNameRule"
+    name="ClassNameRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.ClassNameRule"
-				name="ClassNameRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+    name="RecordNameRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
-				name="RecordNameRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.PointerNameRule"
+    name="PointerNameRule">
+    <priority>4</priority>
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.PointerNameRule"
-				name="PointerNameRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.MethodNameRule"
+    name="MethodNameRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.MethodNameRule"
-				name="MethodNameRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.FieldNameRule"
+    name="FieldNameRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.FieldNameRule"
-				name="FieldNameRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.UnitNameRule"
+    name="UnitNameRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.UnitNameRule"
-				name="UnitNameRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
+    name="CatchingGeneralExceptionRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
-				name="CatchingGeneralExceptionRule">
-		<priority>3</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
+    name="RaisingGeneralExceptionRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
-				name="RaisingGeneralExceptionRule">
-		<priority>3</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+    name="AvoidOutParameterRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
-				name="AvoidOutParameterRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.IfTrueRule"
+    name="IfTrueRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.IfTrueRule"
-				name="IfTrueRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.IfNotFalseRule"
+    name="IfNotFalseRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.IfNotFalseRule"
-				name="IfNotFalseRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.PublicFieldsRule"
+    name="PublicFieldsRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.PublicFieldsRule"
-				name="PublicFieldsRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedArgumentsRule"
+    name="UnusedArgumentsRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.UnusedArgumentsRule"
-				name="UnusedArgumentsRule">
-		<priority>3</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+    name="NoGuidRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
-				name="NoGuidRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.AssignedAndFreeRule"
+    name="AssignedAndFreeRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.AssignedAndFreeRule"
-				name="AssignedAndFreeRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+    name="EmptyElseStatementRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
-				name="EmptyElseStatementRule">
-		<priority>2</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+    name="EmptyBeginStatementRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
-				name="EmptyBeginStatementRule">
-		<priority>2</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+    name="EmptyMethodRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
-		name="EmptyMethodRule">
-		<priority>2</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.DprFunctionRule"
+    name="ProjectFileNoFunctionsRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.DprFunctionRule"
-				name="ProjectFileNoFunctionsRule">
-		<priority>3</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.DprVariableRule"
+    name="ProjectFileNoVariablesRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.DprVariableRule"
-				name="ProjectFileNoVariablesRule">
-		<priority>3</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+    name="TypeAliasRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
-				name="TypeAliasRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.MixedNamesRule"
+    name="MixedNamesRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.MixedNamesRule"
-				name="MixedNamesRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.DelphiRule"
+    name="UnusedUnitRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.DelphiRule"
-				name="UnusedUnitRule">
-		<priority>5</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.DelphiRule"
+    name="UnusedFunctionRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.DelphiRule"
-				name="UnusedFunctionRule">
-		<priority>5</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.NoInheritedStatementRule"
+    name="ConstructorWithoutInheritedStatementRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.NoInheritedStatementRule"
-				name="ConstructorWithoutInheritedStatementRule">
-		<priority>2</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.NoInheritedStatementRule"
+    name="DestructorWithoutInheritedStatementRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.NoInheritedStatementRule"
-				name="DestructorWithoutInheritedStatementRule">
-		<priority>2</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.NoBeginAfterDoRule"
+    name="NoBeginAfterDoRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.NoBeginAfterDoRule"
-				name="NoBeginAfterDoRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.NoSemicolonRule"
+    name="NoSemicolonRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.NoSemicolonRule"
-				name="NoSemicolonRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.CastAndFreeRule"
+    name="CastAndFreeRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.CastAndFreeRule"
-				name="CastAndFreeRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.DelphiRule"
+    name="MethodCyclomaticComplexityRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.DelphiRule"
-				name="MethodCyclomaticComplexityRule">
-		<priority>2</priority>
-	</rule>
-
-	<rule class="org.sonar.plugins.delphi.pmd.rules.ConstantNotationRule"
-				name="ConstantNotationRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ConstantNotationRule"
+    name="ConstantNotationRule">
+  </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.TooManySubProceduresRule"
-				name="TooManySubProceduresRule">
-      <priority>3</priority>
+    name="TooManySubProceduresRule">
   </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.AvoidWithRule"
-				name="AvoidWithRule">
-		<priority>3</priority>
-	</rule>
-
-	<rule class="org.sonar.plugins.delphi.pmd.rules.TooLongLineRule"
-				name="TooLongLineRule">
-		<priority>4</priority>
-	</rule>
-
-	<rule class="org.sonar.plugins.delphi.pmd.rules.ConstructorCreateRule"
-				name="ConstructorCreateRule">
-		<priority>4</priority>
-	</rule>
-
-	<rule class="org.sonar.plugins.delphi.pmd.rules.ReRaiseExceptionRule"
-				name="ReRaiseExceptionRule">
-		<priority>3</priority>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.AvoidWithRule"
+    name="AvoidWithRule">
   </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.EmptyBracketsRule"
-				name="EmptyBracketsRule">
-		<priority>5</priority>
-   </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.TooLongLineRule"
+    name="TooLongLineRule">
+  </rule>
 
-	<rule class="org.sonar.plugins.delphi.pmd.rules.DuplicatesRule"
-				name="DuplicatesRule">
-		<priority>4</priority>
-	</rule>
-	<rule class = "org.sonar.plugins.delphi.pmd.rules.VariableNameRule"
-				name="VariableNameRule">
-		<priority>4</priority>
-	</rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ConstructorCreateRule"
+    name="ConstructorCreateRule">
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ReRaiseExceptionRule"
+    name="ReRaiseExceptionRule">
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyBracketsRule"
+    name="EmptyBracketsRule">
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.DuplicatesRule"
+    name="DuplicatesRule">
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableNameRule"
+    name="VariableNameRule">
+  </rule>
 
 </ruleset>

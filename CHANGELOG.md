@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Update severity metadata for all rules.
+
 ### Fixed
 
 - Parsing ambiguities between identifiers and keywords.

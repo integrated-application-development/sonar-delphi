@@ -1,9 +1,12 @@
 <ruleset name="Delphi Default">
-  <description>All default rules</description>
+  <description>All rules</description>
+
+  <!-- PRIORITY: 1 - blocker, 2 - critical, 3 - major, 4 - minor, 5 - info -->
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.ThenTryRule"
         message="'if-then-try' should become 'if-then-begin-try'"
         name="ThenTryRule">
+    <priority>4</priority>
     <description>You always should place a 'begin' statement before 'try', this helps to prevent errors.</description>
     <properties>
       <property name="baseEffort" value="5min" />
@@ -30,6 +33,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
         message="Function return types should always be specified"
         name="NoFunctionReturnTypeRule">
+    <priority>3</priority>
     <description>
       Delphi allows Function return types to be omitted in the implementation section. We have no desire to use this "feature".
       Function return types should always be specified.
@@ -56,6 +60,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.ClassPerFileRule"
         message="Files should not contain too many classes"
         name="ClassPerFileRule">
+    <priority>3</priority>
     <description>A file should not include too many classes.</description>
     <properties>
       <property name="baseEffort" value="1h" />
@@ -66,6 +71,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
         message="Overriding methods should do more than simply call the same method in the super class"
         name="InheritedMethodWithNoCodeRule">
+    <priority>3</priority>
     <description>Overriding a method just to call the same method from the super class without performing any other actions is useless and misleading.</description>
     <properties>
       <property name="baseEffort" value="10min" />
@@ -86,6 +92,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.SwallowedExceptionsRule"
         message="Exceptions should not be swallowed"
         name="SwallowedExceptionsRule">
+    <priority>2</priority>
     <description>
       Exceptions should not be swallowed.
       Exception handlers should contain logic to handle the caught exception.</description>
@@ -122,6 +129,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
         message="'finally' blocks should not be empty"
         name="EmptyFinallyBlockRule">
+    <priority>2</priority>
     <description>Empty finally blocks are superfluous.</description>
     <properties>
       <property name="baseEffort" value="5min" />
@@ -147,6 +155,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
         message="Interface declarations should not be empty"
         name="EmptyInterfaceRule">
+    <priority>3</priority>
     <description>Interface declarations without methods are useless.</description>
     <properties>
       <property name="baseEffort" value="20min" />
@@ -163,6 +172,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.TooLongMethodRule"
         message="Methods should not have too many lines of code"
         name="TooLongMethodRule">
+    <priority>2</priority>
     <description>A method that grow too large tends to aggregate too many responsibilities.
       Such methods inevitably become harder to understand and therefore harder to maintain.
       Above a specific threshold, it is strongly advised to refactor into smaller methods which focus on well-defined tasks.
@@ -177,6 +187,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.TooManyArgumentsRule"
         message="Methods should not have too many arguments"
         name="TooManyArgumentsRule">
+    <priority>3</priority>
     <description>Method has too many arguments, maximum number of arguments is 6</description>
     <properties>
       <property name="baseEffort" value="1h" />
@@ -187,6 +198,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.TooManyVariablesRule"
         message="Methods should not have too many variables"
         name="TooManyVariablesRule">
+    <priority>3</priority>
     <description>Method has too many variables, maximum number of variables is 10</description>
     <properties>
       <property name="baseEffort" value="30min" />
@@ -197,6 +209,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
     message="Method declarations should be followed by a semicolon"
     name="NoSemiAfterMethodDeclarationRule">
+    <priority>3</priority>
     <description>Delphi syntax has corner cases which sometimes allow the semicolon to be omitted from the end of a method declaration.
       Regardless, there should always be a semicolon ';' at the end of method declarations.
     </description>
@@ -224,6 +237,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.InterfaceNameRule"
         message="Interface names should comply with a naming convention"
         name="InterfaceNameRule">
+    <priority>4</priority>
     <description>
       Interface names should begin with 'I' and follow Pascal case.
     </description>
@@ -235,6 +249,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.RecordNameRule"
         message="Record names should comply with a naming convention"
         name="RecordNameRule">
+    <priority>4</priority>
     <description>
       Record names should begin with 'T' and follow Pascal case.
     </description>
@@ -246,6 +261,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.PointerNameRule"
         message="Pointer names should comply with a naming convention"
         name="PointerNameRule">
+    <priority>4</priority>
     <description>Pointer names should begin with 'P' and follow Pascal case.</description>
     <properties>
       <property name="baseEffort" value="30min" />
@@ -255,6 +271,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.MethodNameRule"
         message="Method names should comply with a naming convention"
         name="MethodNameRule">
+    <priority>4</priority>
     <description>Method names should follow Pascal case.</description>
     <properties>
       <property name="baseEffort" value="30min" />
@@ -264,6 +281,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.FieldNameRule"
         message="Field names should comply with a naming convention"
         name="FieldNameRule">
+    <priority>4</priority>
     <description>Field names should begin with 'F' and follow Pascal case.</description>
     <properties>
       <property name="baseEffort" value="5min" />
@@ -273,6 +291,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.UnitNameRule"
         message="Unit names should comply with a naming convention"
         name="UnitNameRule">
+    <priority>4</priority>
     <description>Unit name should follow Pascal Case.</description>
     <properties>
       <property name="baseEffort" value="30min" />
@@ -282,6 +301,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.ConstantNotationRule"
     message="Constants should comply with a naming convention"
     name="ConstantNotationRule">
+    <priority>4</priority>
     <description>Constants should begin with 'C_' and follow Pascal case.</description>
     <properties>
       <property name="baseEffort" value="1min" />
@@ -291,6 +311,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.ClassNameRule"
     message="Class and enumeration names should comply with a naming convention"
     name="ClassNameRule">
+    <priority>4</priority>
     <description>Class and enumeration names should begin with 'T', 'TForm', or 'E', and follow Pascal case.</description>
     <properties>
       <property name="baseEffort" value="1min" />
@@ -300,6 +321,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.ConstructorCreateRule"
     message="Constructor names should comply with a naming convention"
     name="ConstructorCreateRule">
+    <priority>4</priority>
     <description>Constructor names should begin with 'Create' and follow Pascal case.</description>
     <properties>
       <property name="baseEffort" value="1min" />
@@ -309,6 +331,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.VariableNameRule"
     message="Variable names should comply with a naming convention"
     name="VariableNameRule">
+    <priority>4</priority>
     <description>Variable names should follow Pascal case.</description>
     <properties>
       <property name="baseEffort" value="1min" />
@@ -318,6 +341,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
         message="General exceptions should not be caught"
         name="CatchingGeneralExceptionRule">
+    <priority>2</priority>
     <description>General exceptions should not be caught. Catch specific exception types instead.</description>
     <properties>
       <property name="baseEffort" value="15min" />
@@ -347,6 +371,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
         message="General exceptions should not be raised"
         name="RaisingGeneralExceptionRule">
+    <priority>2</priority>
     <description>General exceptions should not be raised. Instead, raise a specific exception type.</description>
     <properties>
       <property name="baseEffort" value="15min" />
@@ -364,6 +389,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
         message="'out' parameters should be avoided"
         name="AvoidOutParameterRule">
+    <priority>3</priority>
     <description>Avoid 'out' variable parameters.</description>
     <properties>
       <property name="baseEffort" value="30min" />
@@ -387,6 +413,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.IfTrueRule"
         message="Instances of 'if (x = true)' can be simplified to 'if x'"
         name="IfTrueRule">
+    <priority>3</priority>
     <description>You don't need to write 'if x = true', this is redundant. Instead write 'if x'.</description>
     <properties>
       <property name="baseEffort" value="1min" />
@@ -410,6 +437,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.IfNotFalseRule"
         message="Instances of 'if (x = false)' can be simplified to 'if not x'"
         name="IfNotFalseRule">
+    <priority>3</priority>
     <description>You don't need to write 'if (x = false)', this is redundant. Instead write 'if not x'.
     </description>
     <properties>
@@ -434,6 +462,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.PublicFieldsRule"
         message="Fields should not have public visibility"
         name="PublicFieldsRule">
+    <priority>3</priority>
     <description>Public fields do not respect the encapsulation principle. Use properties instead.</description>
     <properties>
       <property name="baseEffort" value="3min" />
@@ -443,6 +472,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedArgumentsRule"
         message="Unused method parameters should be removed"
         name="UnusedArgumentsRule">
+    <priority>1</priority>
     <description>Unused parameters are misleading. Whatever the values passed to such parameters, the behavior will be the same.</description>
     <properties>
       <property name="baseEffort" value="5min" />
@@ -452,6 +482,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
         message="Interfaces should have unique GUIDs"
         name="NoGuidRule">
+    <priority>3</priority>
     <description>Every interface should have a unique GUID.</description>
     <properties>
       <property name="baseEffort" value="5min" />
@@ -468,6 +499,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.AssignedAndFreeRule"
         message="Objects should not be checked for assignment before being freed"
         name="AssignedAndFreeRule">
+    <priority>3</priority>
     <description>The TObject.Free method already checks for assignment before freeing. Additional checks are redundant.</description>
     <properties>
       <property name="baseEffort" value="5min" />
@@ -500,6 +532,7 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
         message="'else' statements should not be empty"
         name="EmptyElseStatementRule">
+    <priority>4</priority>
     <description>Empty else statements are superfluous.</description>
     <properties>
       <property name="baseEffort" value="5min" />
@@ -516,6 +549,7 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
         message="Code blocks should not be empty"
         name="EmptyBeginStatementRule">
+    <priority>4</priority>
     <description>Empty code blocks are not allowed.</description>
     <properties>
       <property name="baseEffort" value="5min" />
@@ -532,6 +566,7 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
     message="Methods should not be empty"
     name="EmptyMethodRule">
+    <priority>3</priority>
     <description>Empty methods are not allowed.</description>
     <properties>
       <property name="baseEffort" value="5min" />
@@ -546,27 +581,30 @@ FreeAndNil(Foo); // Compliant
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.DprFunctionRule"
-        message=".dpr and .dpk files should not have methods"
+        message="Project files should not have methods"
         name="ProjectFileNoFunctionsRule">
-    <description>.dpr and .dpk files should not have methods.</description>
+    <priority>3</priority>
+    <description>Project files should not have methods.</description>
     <properties>
       <property name="baseEffort" value="15min" />
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.DprVariableRule"
-        message=".dpr and .dpk files should not have variables"
+        message="Project files should not have variables"
         name="ProjectFileNoVariablesRule">
-    <description>.dpr and .dpk files should not have variables.</description>
+    <priority>3</priority>
+    <description>Project files should not have variables.</description>
     <properties>
       <property name="baseEffort" value="15min" />
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
-        message="Type aliases should not be used."
+        message="Track uses of type aliases"
         name="TypeAliasRule">
-    <description>You should not use type aliases.</description>
+    <priority>5</priority>
+    <description>Track uses of type aliases.</description>
     <properties>
       <property name="baseEffort" value="10min" />
       <property name="xpath">
@@ -583,6 +621,7 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.MixedNamesRule"
         message="Method/variable name casing should be kept consistent"
         name="MixedNamesRule">
+    <priority>3</priority>
     <description>Delphi is case-insensitive, but casing of method and variable names should be kept consistent.</description>
     <properties>
       <property name="baseEffort" value="5min" />
@@ -592,6 +631,7 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.DelphiRule"
         message="Unused units should be removed"
         name="UnusedUnitRule">
+    <priority>1</priority>
     <description>Unused unit. No other unit has this unit in its uses section. It can most likely be removed.</description>
     <properties>
       <property name="baseEffort" value="5min" />
@@ -601,6 +641,7 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.DelphiRule"
         message="Unused methods should be removed"
         name="UnusedFunctionRule">
+    <priority>1</priority>
     <description>Unused method. No other method calls this method. It can most likely be removed.</description>
     <properties>
       <property name="baseEffort" value="15min" />
@@ -610,6 +651,7 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.ConstructorWithoutInheritedStatementRule"
         message="Constructors should contain an 'inherited' statement"
         name="ConstructorWithoutInheritedStatementRule">
+    <priority>2</priority>
     <description>Constructors should contain an 'inherited' statement.</description>
     <properties>
       <property name="baseEffort" value="5min" />
@@ -619,6 +661,7 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.DestructorWithoutInheritedStatementRule"
         message="Destructors should contain an 'inherited' statement"
         name="DestructorWithoutInheritedStatementRule">
+    <priority>2</priority>
     <description>Destructors should contain an 'inherited' statement.</description>
     <properties>
       <property name="baseEffort" value="30min" />
@@ -628,6 +671,7 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.NoBeginAfterDoRule"
         message="'do' statements should be followed by 'begin'"
         name="NoBeginAfterDoRule">
+    <priority>4</priority>
     <description>'Begin' statement should be placed after 'do' statement to prevent errors.</description>
     <properties>
       <property name="baseEffort" value="10min" />
@@ -637,6 +681,7 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.NoSemicolonRule"
         message="Statements should end in a semicolon"
         name="NoSemicolonRule">
+    <priority>4</priority>
     <description>
       Semicolons are used as statement separators rather than statement terminators in Delphi's syntax.
       As a result, the last semicolon in a code block is optional.
@@ -650,6 +695,7 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.CastAndFreeRule"
         message="Objects should not be casted only to be freed"
         name="CastAndFreeRule">
+    <priority>3</priority>
     <description>Casting an object only to free it is superfluous.</description>
     <properties>
       <property name="baseEffort" value="5min" />
@@ -659,6 +705,7 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.DelphiRule"
         message="Methods should not be too complex"
         name="MethodCyclomaticComplexityRule">
+    <priority>2</priority>
     <description>
       The cyclomatic complexity of methods should not exceed a defined threshold.
       Complex code can perform poorly and will in any case be difficult to understand and therefore to maintain.
@@ -672,28 +719,31 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.TooManySubProceduresRule"
         message="Methods should not contain too many sub-procedures"
         name="TooManySubProceduresRule">
+    <priority>2</priority>
       <description>Methods should not contain too many sub-procedures. The limit is 3.</description>
       <properties>
-          <property name="baseEffort" value="30min" />
-          <property name="limit" value="3" />
+        <property name="baseEffort" value="30min" />
+        <property name="limit" value="3" />
       </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.AvoidWithRule"
         message="'with' statements should not be used"
         name="AvoidWithRule">
+    <priority>2</priority>
     <description>
       'with' statements should not be used.
       They are difficult to debug, and make it easy to write ambiguous statements which may unexpectedly change meaning.
     </description>
     <properties>
-        <property name="baseEffort" value="5min" />
+      <property name="baseEffort" value="5min" />
     </properties>
   </rule>
   
   <rule class="org.sonar.plugins.delphi.pmd.rules.TooLongLineRule"
         message="Lines should not be too long"
         name="TooLongLineRule">
+    <priority>3</priority>
     <description>Code lines should not be too long.</description>
     <properties>
       <property name="baseEffort" value="2min" />
@@ -704,6 +754,7 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.ReRaiseExceptionRule"
         message="Exception instances should not be explicitly re-raised"
         name="ReRaiseExceptionRule">
+    <priority>1</priority>
     <description>
       Raising a caught exception at the end of an except block creates a second exception and fails to preserve the stacktrace.
       Use 'raise;' instead of 'raise E;'.</description>
@@ -728,9 +779,10 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyBracketsRule"
         message="Method calls should not be followed by empty brackets"
         name="EmptyBracketsRule">
-      <description>
-        When calling a method, there is no need to use brackets if there are no parameters to be passed.
-      </description>
+    <priority>4</priority>
+    <description>
+      When calling a method, there is no need to use brackets if there are no parameters to be passed.
+    </description>
     <properties>
       <property name="baseEffort" value="1min" />
     </properties>
@@ -746,9 +798,10 @@ FunctionWithoutArguments;	// Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.DuplicatesRule"
         message="TStringLists should be sorted when setting Duplicates"
         name="DuplicatesRule">
+    <priority>2</priority>
     <description>TStringLists must be sorted if setting the Duplicates property.</description>
     <properties>
-        <property name="baseEffort" value="2min" />
+      <property name="baseEffort" value="2min" />
     </properties>
     <example>
       <![CDATA[
@@ -770,7 +823,8 @@ List2.Duplicates := <i>dupError</i>; // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.LowerCaseReservedWordsRule"
         message="Keywords should be lowercase"
         name="LowerCaseReservedWordsRule">
-    <description> Reserved keywords should always be lowercase.</description>
+    <priority>3</priority>
+    <description>Reserved keywords should always be lowercase.</description>
     <properties>
       <property name="baseEffort" value="1min" />
     </properties>
