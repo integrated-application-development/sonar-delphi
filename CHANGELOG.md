@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- FPs around class constructors in `ConstructorWithoutInheritedStatementRule`.
+- FPs around class destructors in `DestructorWithoutInheritedStatementRule`.
 - Parsing ambiguities between identifiers and keywords.
 
 ## [0.2.0] - 2019-08-01
