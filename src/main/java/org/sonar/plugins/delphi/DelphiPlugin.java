@@ -36,6 +36,7 @@ import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileExporter;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileImporter;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRulesDefinition;
 import org.sonar.plugins.delphi.surefire.SurefireSensor;
+import org.sonar.plugins.delphi.token.DelphiTokenSensor;
 
 /** Main Sonar DelphiLanguage plugin class */
 @Properties({
@@ -134,6 +135,8 @@ public class DelphiPlugin implements Plugin {
     context.addExtensions(
         // Sensors
         DelphiSensor.class,
+        DelphiPmdSensor.class,
+        DelphiTokenSensor.class,
         // Core
         DelphiLanguage.class,
         // Core helpers
@@ -141,9 +144,8 @@ public class DelphiPlugin implements Plugin {
         // Surefire
         SurefireSensor.class,
         // PMD
-        DelphiPmdSensor.class,
-        DelphiPmdConfiguration.class,
         DelphiPmdExecutor.class,
+        DelphiPmdConfiguration.class,
         DelphiPmdRulesDefinition.class,
         DefaultDelphiProfile.class,
         DelphiPmdProfileExporter.class,

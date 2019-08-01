@@ -111,7 +111,7 @@ public class DelphiPmdSensorTest {
   }
 
   @Test
-  public void testWhenDescribeCalledThenSensorDescriptionIsWritten() {
+  public void testDescribe() {
     final SensorDescriptor mockDescriptor = mock(SensorDescriptor.class);
     when(mockDescriptor.onlyOnLanguage(anyString())).thenReturn(mockDescriptor);
 

@@ -65,6 +65,8 @@
     <!--Version Fields-->
     <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
     <sonar.version>7.9</sonar.version>
+    <sonarqube-smell-plugin.version>4.0.0</sonarqube-smell-plugin.version>
+    <sonar-orchestrator.version>3.26.0.2111</sonar-orchestrator.version>
     <antlr-runtime.version>3.4</antlr-runtime.version>
     <pmd.version>6.15.0</pmd.version>
     <hamcrest-all.version>1.3</hamcrest-all.version>
@@ -73,7 +75,6 @@
     <java-surefire.version>5.13.0.18197</java-surefire.version>
     <guava.version>27.1-jre</guava.version>
     <jdom.version>1.0</jdom.version>
-    <sonarqube-smell-plugin.version>4.0.0</sonarqube-smell-plugin.version>
     <errorprone.version>2.3.4</errorprone.version>
     <!--Maven plugins-->
     <antlr3-plugin.version>3.5.2</antlr3-plugin.version>
@@ -85,6 +86,7 @@
     <dependency-plugin.version>2.10</dependency-plugin.version>
     <dependency-check-plugin.version>5.0.0</dependency-check-plugin.version>
     <compiler-plugin.version>3.5.1</compiler-plugin.version>
+    <build-helper-plugin.version>3.0.0</build-helper-plugin.version>
     <!--Version Fields end here-->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <sonar.pluginName>Delphi</sonar.pluginName>
@@ -94,27 +96,21 @@
     <maven.test.skip>false</maven.test.skip>
     <maven.showDeprecation.showWarnings>true</maven.showDeprecation.showWarnings>
     <maven.compiler.showWarnings>true</maven.compiler.showWarnings>
+    <!--Jacoco properties-->
+    <jacoco.dataFile>${basedir}/target/jacoco/jacoco.exec</jacoco.dataFile>
+    <jacoco.outputDirectory>${basedir}/target/jacoco/report/</jacoco.outputDirectory>
+    <jacoco.dataFile.it>${basedir}/target/jacoco/jacoco-it.exec</jacoco.dataFile.it>
+    <jacoco.outputDirectory.it>${basedir}/target/jacoco/report-it/</jacoco.outputDirectory.it>
   </properties>
   <!-- this is important for sonar-packaging-maven-plugin -->
   <packaging>sonar-plugin</packaging>
   <dependencies>
-    <!-- Sonar provided deps -->
+    <!-- Sonar-specific deps -->
     <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
       <artifactId>sonar-plugin-api</artifactId>
       <version>${sonar.version}</version>
       <scope>provided</scope>
-    </dependency>
-    <!-- Plugin's specific deps -->
-    <dependency>
-      <groupId>org.antlr</groupId>
-      <artifactId>antlr-runtime</artifactId>
-      <version>${antlr-runtime.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>net.sourceforge.pmd</groupId>
-      <artifactId>pmd-core</artifactId>
-      <version>${pmd.version}</version>
     </dependency>
     <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
@@ -127,6 +123,39 @@
           <groupId>org.hamcrest</groupId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-ws</artifactId>
+      <version>${sonar.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.sonarsource.java</groupId>
+      <artifactId>java-surefire</artifactId>
+      <version>${java-surefire.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.qualinsight.plugins.sonarqube</groupId>
+      <artifactId>qualinsight-plugins-sonarqube-smell-plugin</artifactId>
+      <version>${sonarqube-smell-plugin.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.sonarsource.orchestrator</groupId>
+      <artifactId>sonar-orchestrator</artifactId>
+      <version>${sonar-orchestrator.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- Plugin-specific deps -->
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr-runtime</artifactId>
+      <version>${antlr-runtime.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sourceforge.pmd</groupId>
+      <artifactId>pmd-core</artifactId>
+      <version>${pmd.version}</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -147,49 +176,19 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.sonarsource.java</groupId>
-      <artifactId>java-surefire</artifactId>
-      <version>${java-surefire.version}</version>
-    </dependency>
-    <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <version>${guava.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.jacoco</groupId>
-      <artifactId>jacoco-maven-plugin</artifactId>
-      <version>${jacoco-plugin.version}</version>
-      <type>maven-plugin</type>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>jdom</groupId>
       <artifactId>jdom</artifactId>
       <version>${jdom.version}</version>
     </dependency>
-    <dependency>
-      <groupId>com.qualinsight.plugins.sonarqube</groupId>
-      <artifactId>qualinsight-plugins-sonarqube-smell-plugin</artifactId>
-      <version>${sonarqube-smell-plugin.version}</version>
-    </dependency>
   </dependencies>
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>${surefire-plugin.version}</version>
-        <configuration>
-          <systemProperties>
-            <property>
-              <name>java.util.logging.config.file</name>
-              <value>src/test/resources/logging.properties</value>
-            </property>
-          </systemProperties>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
         <artifactId>sonar-packaging-maven-plugin</artifactId>
@@ -269,19 +268,69 @@
               <goal>prepare-agent</goal>
             </goals>
             <configuration>
-              <destFile>${basedir}/target/jacoco/jacoco-unit.exec</destFile>
+              <destFile>${jacoco.dataFile}</destFile>
             </configuration>
           </execution>
           <execution>
             <id>post-unit-test</id>
-            <phase>test</phase>
+            <phase>verify</phase>
             <goals>
               <goal>report</goal>
             </goals>
             <configuration>
-              <dataFile>${basedir}/target/jacoco/jacoco-unit.exec</dataFile>
-              <outputDirectory>${basedir}/target/jacoco/report/</outputDirectory>
+              <dataFile>${jacoco.dataFile}</dataFile>
+              <outputDirectory>${jacoco.outputDirectory}</outputDirectory>
             </configuration>
+          </execution>
+          <execution>
+            <id>pre-integration-test</id>
+            <goals>
+              <goal>prepare-agent-integration</goal>
+            </goals>
+            <configuration>
+              <destFile>${jacoco.dataFile.it}</destFile>
+            </configuration>
+          </execution>
+          <execution>
+            <id>post-integration-test</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>report-integration</goal>
+            </goals>
+            <configuration>
+              <dataFile>${jacoco.dataFile.it}</dataFile>
+              <outputDirectory>${jacoco.outputDirectory.it}</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${surefire-plugin.version}</version>
+        <configuration>
+          <excludes>
+            <exclude>**/IntegrationTests.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>3.0.0-M3</version>
+        <configuration>
+          <includes>
+            <include>**/IntegrationTests.java</include>
+          </includes>
+          <failIfNoTests>true</failIfNoTests>
+          <argLine>@{argLine} -Dhttps.proxyHost= -Dhttps.proxyPort=${env.HTTP_PROXY_PORT}</argLine>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
@@ -299,6 +348,25 @@
                 <format>HTML</format>
                 <format>XML</format>
               </formats>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>${build-helper-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>add-integration-test-source</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/it/java</source>
+              </sources>
             </configuration>
           </execution>
         </executions>

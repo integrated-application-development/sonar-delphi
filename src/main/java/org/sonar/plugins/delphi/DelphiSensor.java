@@ -23,7 +23,6 @@
 package org.sonar.plugins.delphi;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,15 +36,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
-import org.antlr.runtime.Token;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
-import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
@@ -56,7 +52,6 @@ import org.sonar.plugins.delphi.antlr.analyzer.DelphiASTAnalyzer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStream;
 import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.codecoverage.DelphiCodeCoverageParser;
 import org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
@@ -95,7 +90,6 @@ public class DelphiSensor implements Sensor {
       DelphiProjectHelper delphiProjectHelper,
       ActiveRules activeRules,
       SensorContext sensorContext) {
-    LOG.info("Delphi sensor DelphiSensor...");
     this.delphiProjectHelper = delphiProjectHelper;
 
     basicMetrics = new BasicMetrics(sensorContext);
@@ -106,15 +100,14 @@ public class DelphiSensor implements Sensor {
   /** Populate {@link SensorDescriptor} of this sensor. */
   @Override
   public void describe(SensorDescriptor descriptor) {
-    LOG.info("Delphi sensor describe...");
-    descriptor.name("Combined LCOV and LOC sensor");
+    descriptor.name("DelphiSensor: Combined LCOV and LOC sensor");
     descriptor.onlyOnLanguage(DelphiLanguage.KEY);
   }
 
-  @Override
   /*
    * The actual sensor code.
    */
+  @Override
   public void execute(@NonNull SensorContext context) {
     LOG.info("Delphi sensor execute...");
     List<DelphiProject> projects = delphiProjectHelper.getProjects();
@@ -148,45 +141,6 @@ public class DelphiSensor implements Sensor {
           LOG.error("Error while parsing Coverage Reports:", e);
         }
       }
-    }
-  }
-
-  private void processCpd(SensorContext context, InputFile inputFile) {
-    String fileName = DelphiUtils.uriToAbsolutePath(inputFile.uri());
-
-    if (delphiProjectHelper.isExcluded(fileName)) {
-      return;
-    }
-
-    try {
-      DelphiLexer lexer = new DelphiLexer(new DelphiFileStream(fileName, fileStreamConfig));
-      Token prevToken;
-      Token token = lexer.nextToken();
-      NewCpdTokens cpdTokens = context.newCpdTokens().onFile(inputFile);
-      while (true) {
-        prevToken = token;
-        token = lexer.nextToken();
-        if (token.getType() == Token.EOF) {
-          break;
-        }
-
-        TextRange endLineRange = inputFile.selectLine(token.getLine());
-        int endPosition = Math.min(endLineRange.end().lineOffset(), token.getCharPositionInLine());
-        TextRange startLineRange = inputFile.selectLine(prevToken.getLine());
-        int startPosition =
-            Math.min(startLineRange.end().lineOffset(), prevToken.getCharPositionInLine());
-        int startLine = prevToken.getLine();
-        int endLine = token.getLine();
-
-        if (endLine <= startLine && startPosition < endPosition) {
-          cpdTokens.addToken(startLine, startPosition, endLine, endPosition, prevToken.getText());
-        }
-      }
-      cpdTokens.save();
-    } catch (FileNotFoundException ex) {
-      LOG.error("{} {} {}", "Cpd could not find : ", inputFile.toString(), ex);
-    } catch (IOException ex) {
-      LOG.error("{} {} {}", "Cpd IO Exception on ", inputFile.toString(), ex);
     }
   }
 
@@ -233,7 +187,6 @@ public class DelphiSensor implements Sensor {
             .save();
       }
 
-      processCpd(sensorContext, resource);
       progressReporter.progress();
     }
 

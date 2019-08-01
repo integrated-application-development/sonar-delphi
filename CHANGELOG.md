@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Copy/paste detection (CPD)
+- Syntax highlighting
+
 ## [0.1.0] - 2019-07-29
 
 ### Added
