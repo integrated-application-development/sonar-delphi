@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Ignore test code in `TooLongLineRule`.
+- Ignore test code in `SwallowedExceptionsRule`.
 
 ## [0.3.0] - 2019-08-01
 

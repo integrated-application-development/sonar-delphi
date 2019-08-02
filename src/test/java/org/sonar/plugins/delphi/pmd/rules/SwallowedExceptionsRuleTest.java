@@ -13,7 +13,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   public void testExceptBlockShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test();")
+            .appendImpl("procedure Test;")
             .appendImpl("begin")
             .appendImpl("  try")
             .appendImpl("    ThrowException;")
@@ -31,7 +31,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   public void testHandlerShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test();")
+            .appendImpl("procedure Test;")
             .appendImpl("begin")
             .appendImpl("  try")
             .appendImpl("    ThrowException;")
@@ -51,7 +51,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   public void testEmptyExceptBlockShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test();")
+            .appendImpl("procedure Test;")
             .appendImpl("begin")
             .appendImpl("  try")
             .appendImpl("    ThrowException;")
@@ -70,7 +70,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   public void testEmptyHandlerShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test();")
+            .appendImpl("procedure Test;")
             .appendImpl("begin")
             .appendImpl("  try")
             .appendImpl("    ThrowException;")
@@ -91,7 +91,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   public void testEmptyHandlerWithoutBeginShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test();")
+            .appendImpl("procedure Test;")
             .appendImpl("begin")
             .appendImpl("  try")
             .appendImpl("    ThrowException;")
@@ -104,5 +104,54 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
 
     assertIssues(hasSize(1));
     assertIssues(hasItem(hasRuleKeyAtLine("SwallowedExceptionsRule", builder.getOffSet() + 6)));
+  }
+
+  @Test
+  public void testEmptyHandlerInTestCodeShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure TTestSuite_SwallowedExceptions.Test;")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    ThrowException;")
+            .appendImpl("  except")
+            .appendImpl("    on E: MyException do;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testNestedEmptyHandlerInTestCodeShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure TTestSuite_SwallowedExceptions.Test;")
+            .appendImpl("var")
+            .appendImpl("  MyVar: TClass;")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    ThrowException;;")
+            .appendImpl("  except")
+            .appendImpl("    on E:ESpookyError do begin")
+            .appendImpl("      // Do nothing")
+            .appendImpl("    end;")
+            .appendImpl("  end;")
+            .appendImpl("  for Status := Low(SomeEnum) to High(SomeEnum) do begin")
+            .appendImpl("    try")
+            .appendImpl("      ThrowException;")
+            .appendImpl("    except")
+            .appendImpl("      on E:ESpookyError do begin")
+            .appendImpl("        // Do nothing")
+            .appendImpl("      end;")
+            .appendImpl("    end;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
   }
 }

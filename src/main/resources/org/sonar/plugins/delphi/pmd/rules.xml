@@ -98,6 +98,7 @@
       Exception handlers should contain logic to handle the caught exception.</description>
     <properties>
       <property name="baseEffort" value="10min" />
+      <property name="tests" value="false" />
     </properties>
     <example>
       <![CDATA[
