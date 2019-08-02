@@ -60,6 +60,12 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
           .defaultValue("")
           .build();
 
+  public static final PropertyDescriptor<Boolean> TESTS =
+      PropertyFactory.booleanProperty("tests")
+          .desc("Whether the rule applies to tests")
+          .defaultValue(true)
+          .build();
+
   protected static final PropertyDescriptor<String> START_AST =
       PropertyFactory.stringProperty("start")
           .desc("The AST node to start from")
@@ -75,10 +81,11 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
   public DelphiRule() {
     setLanguage(LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME));
 
+    definePropertyDescriptor(BASE_EFFORT);
     definePropertyDescriptor(LIMIT);
+    definePropertyDescriptor(TESTS);
     definePropertyDescriptor(START_AST);
     definePropertyDescriptor(END_AST);
-    definePropertyDescriptor(BASE_EFFORT);
   }
 
   /**

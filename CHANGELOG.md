@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `sonar.delphi.pmd.testTypeRegex` property to specify types that will be treated as test code.
+
 ## [0.3.0] - 2019-08-01
 
 ### Changed

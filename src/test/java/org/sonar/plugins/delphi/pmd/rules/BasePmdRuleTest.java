@@ -33,6 +33,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -40,7 +44,6 @@ import org.hamcrest.Matcher;
 import org.mockito.stubbing.Answer;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
-import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.ActiveRule;
 import org.sonar.api.batch.rule.ActiveRules;
@@ -57,6 +60,10 @@ import org.sonar.plugins.delphi.pmd.DelphiPmdExecutor;
 import org.sonar.plugins.delphi.pmd.DelphiPmdSensor;
 import org.sonar.plugins.delphi.pmd.DelphiPmdViolationRecorder;
 import org.sonar.plugins.delphi.pmd.DelphiTestFileBuilder;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSetHelper;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
@@ -91,16 +98,13 @@ abstract class BasePmdRuleTest {
 
   private void configureTest(String testFileName, DelphiTestFileBuilder builder) {
     SensorContextTester sensorContext = SensorContextTester.create(ROOT_DIR);
+
     DelphiProjectHelper delphiProjectHelper = DelphiTestUtils.mockProjectHelper();
-
-    DefaultFileSystem fileSystem = sensorContext.fileSystem();
-
-    // Don't pollute current working directory
     when(delphiProjectHelper.workDir()).thenReturn(new File("target"));
-
-    File srcFile = DelphiUtils.getResource(testFileName);
+    when(delphiProjectHelper.testTypeRegex()).thenReturn("TTestSuite_.*");
 
     baseDir = DelphiUtils.getResource(ROOT_DIR_NAME);
+    File srcFile = DelphiUtils.getResource(testFileName);
     StringBuilder builderSourceCode = builder.getSourceCode(true);
 
     InputFile inputFile =
@@ -110,7 +114,7 @@ abstract class BasePmdRuleTest {
             .setLanguage(DelphiLanguage.KEY)
             .build();
 
-    fileSystem.add(inputFile);
+    sensorContext.fileSystem().add(inputFile);
 
     DelphiProject delphiProject = new DelphiProject("Default Project");
     delphiProject.setSourceFiles(Collections.singletonList(srcFile));
@@ -121,19 +125,7 @@ abstract class BasePmdRuleTest {
     String fileName = getClass().getResource("/org/sonar/plugins/delphi/pmd/rules.xml").getPath();
     File rulesFile = new File(fileName);
 
-    ActiveRules rulesProfile = mock(ActiveRules.class);
-    when(rulesProfile.find(any(RuleKey.class)))
-        .thenAnswer(
-            (Answer<ActiveRule>)
-                invocation -> {
-                  RuleKey ruleKey = (RuleKey) invocation.getArguments()[0];
-                  NewActiveRule newActiveRule =
-                      new NewActiveRule.Builder().setRuleKey(ruleKey).build();
-
-                  ActiveRules rules = new ActiveRulesBuilder().addRule(newActiveRule).build();
-
-                  return rules.find(ruleKey);
-                });
+    ActiveRules rulesProfile = mockActiveRules(rulesFile);
 
     var pmdConfig = mock(DelphiPmdConfiguration.class);
     when(pmdConfig.dumpXmlRuleSet(any(String.class), any(String.class))).thenReturn(rulesFile);
@@ -142,6 +134,45 @@ abstract class BasePmdRuleTest {
     var violationRecorder = new DelphiPmdViolationRecorder(delphiProjectHelper, rulesProfile);
 
     sensor = new DelphiPmdSensor(executor, violationRecorder);
+  }
+
+  private ActiveRules mockActiveRules(File rulesFile) {
+    final DelphiRuleSet ruleSet;
+
+    try {
+      ruleSet = DelphiRuleSetHelper.createFrom(new FileReader(rulesFile, StandardCharsets.UTF_8));
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+
+    ActiveRules rulesProfile = mock(ActiveRules.class);
+    when(rulesProfile.find(any(RuleKey.class)))
+        .thenAnswer(
+            (Answer<ActiveRule>)
+                invocation -> {
+                  RuleKey ruleKey = (RuleKey) invocation.getArguments()[0];
+                  return makeActiveRule(ruleKey, ruleSet);
+                });
+    return rulesProfile;
+  }
+
+  private ActiveRule makeActiveRule(RuleKey ruleKey, DelphiRuleSet ruleSet) {
+    NewActiveRule.Builder builder = new NewActiveRule.Builder();
+
+    for (DelphiRule rule : ruleSet.getPmdRules()) {
+      if (!rule.getName().equals(ruleKey.rule())) {
+        continue;
+      }
+
+      for (DelphiRuleProperty property : rule.getProperties()) {
+        builder.setParam(property.getName(), property.getValue());
+      }
+    }
+
+    NewActiveRule newActiveRule = builder.setRuleKey(ruleKey).build();
+    ActiveRules rules = new ActiveRulesBuilder().addRule(newActiveRule).build();
+
+    return rules.find(ruleKey);
   }
 
   private String stringifyIssues() {

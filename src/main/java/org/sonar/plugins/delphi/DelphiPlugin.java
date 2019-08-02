@@ -104,12 +104,20 @@ import org.sonar.plugins.delphi.token.DelphiTokenSensor;
       project = true,
       global = false),
   @Property(
-      key = DelphiPlugin.GENERATE_PMD_REPORT_XML,
+      key = DelphiPlugin.GENERATE_PMD_REPORT_XML_KEY,
       defaultValue = "false",
       name = "Generate XML Report",
       description = "Whether a PMD Report XML file should be generated",
       project = true,
       global = false),
+  @Property(
+      key = DelphiPlugin.TEST_TYPE_REGEX_KEY,
+      defaultValue = "(?!)",
+      name = "Test-Harness type regex",
+      description =
+          "Rules can be configured not to apply to test code. "
+              + "A type name that matches this regex will have its methods considered as test code",
+      project = true),
 })
 public class DelphiPlugin implements Plugin {
   public static final String EXCLUDED_DIRECTORIES_KEY = "sonar.delphi.sources.excluded";
@@ -121,7 +129,8 @@ public class DelphiPlugin implements Plugin {
   public static final String CONDITIONAL_DEFINES_KEY = "sonar.delphi.conditionalDefines";
   public static final String CODECOVERAGE_TOOL_KEY = "sonar.delphi.codecoverage.tool";
   public static final String CODECOVERAGE_REPORT_KEY = "sonar.delphi.codecoverage.report";
-  public static final String GENERATE_PMD_REPORT_XML = "sonar.delphi.pmd.generateXml";
+  public static final String GENERATE_PMD_REPORT_XML_KEY = "sonar.delphi.pmd.generateXml";
+  public static final String TEST_TYPE_REGEX_KEY = "sonar.delphi.pmd.testTypeRegex";
 
   /** {@inheritDoc} */
   @Override

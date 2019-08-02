@@ -8,6 +8,10 @@ import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.pmd.rules.DelphiRule;
 
 public class DelphiRuleViolationBuilder {
+  private static final int[] METHOD_TYPES = {
+    DelphiLexer.CONSTRUCTOR, DelphiLexer.DESTRUCTOR, DelphiLexer.FUNCTION, DelphiLexer.PROCEDURE
+  };
+
   private DelphiRuleViolation ruleViolation;
   private RuleContext ctx;
 
@@ -99,30 +103,26 @@ public class DelphiRuleViolationBuilder {
   }
 
   private Tree findMethodNode(DelphiPMDNode node) {
-    Tree methodNode = node.getAncestor(DelphiLexer.FUNCTION);
+    Tree methodNode = null;
 
-    if (methodNode != null) {
-      return methodNode;
-    }
+    for (int methodType : METHOD_TYPES) {
+      methodNode = node.getAncestor(methodType);
 
-    methodNode = node.getAncestor(DelphiLexer.PROCEDURE);
-
-    if (methodNode != null) {
-      return methodNode;
+      if (methodNode != null) {
+        return methodNode;
+      }
     }
 
     // look for method from begin...end statements
     Tree currentNode = node;
-    Tree beginNode;
 
     while (methodNode == null) {
-      beginNode = currentNode.getAncestor(DelphiLexer.BEGIN);
-      if (beginNode == null) {
+      currentNode = currentNode.getAncestor(DelphiLexer.BEGIN);
+      if (currentNode == null) {
         break;
       }
 
-      currentNode = beginNode.getParent();
-      methodNode = findMethodNodeFromBeginNode(beginNode);
+      methodNode = findMethodNodeFromBeginNode(currentNode);
     }
 
     return methodNode;
@@ -130,25 +130,25 @@ public class DelphiRuleViolationBuilder {
 
   private Tree findMethodNodeFromBeginNode(Tree beginNode) {
     int index = beginNode.getChildIndex();
-    Tree parent = beginNode.getParent();
-    Tree possibleMethodNode;
-    Tree methodNode = null;
 
-    for (int lookBack = 1; lookBack <= 2; ++lookBack) {
-      if (index - lookBack > -1) {
-        possibleMethodNode = parent.getChild(index - lookBack);
+    if (index > 1) {
+      Tree parent = beginNode.getParent();
+      Tree node = parent.getChild(index - 2);
 
-        if (isProcedureOrFunction(possibleMethodNode.getType())) {
-          methodNode = possibleMethodNode;
-          break;
-        }
+      if (isMethodNode(node.getType())) {
+        return node;
       }
     }
 
-    return methodNode;
+    return null;
   }
 
-  private boolean isProcedureOrFunction(int type) {
-    return type == DelphiLexer.PROCEDURE || type == DelphiLexer.FUNCTION;
+  private static boolean isMethodNode(int type) {
+    for (int methodType : METHOD_TYPES) {
+      if (methodType == type) {
+        return true;
+      }
+    }
+    return false;
   }
 }

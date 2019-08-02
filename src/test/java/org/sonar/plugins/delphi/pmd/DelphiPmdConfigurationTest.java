@@ -97,7 +97,7 @@ public class DelphiPmdConfigurationTest {
   public void testShouldDumpXmlReport() throws IOException {
     when(fs.workDir()).thenReturn(WORK_DIR);
 
-    settings.setProperty(DelphiPlugin.GENERATE_PMD_REPORT_XML, true);
+    settings.setProperty(DelphiPlugin.GENERATE_PMD_REPORT_XML_KEY, true);
     Path reportFile = configuration.dumpXmlReport(new Report());
 
     assertThat(reportFile.toFile()).isEqualTo(new File(WORK_DIR, "pmd-result.xml"));
@@ -110,7 +110,7 @@ public class DelphiPmdConfigurationTest {
   public void testShouldFailToDumpXmlReport() {
     when(fs.workDir()).thenReturn(new File("xxx"));
 
-    settings.setProperty(DelphiPlugin.GENERATE_PMD_REPORT_XML, true);
+    settings.setProperty(DelphiPlugin.GENERATE_PMD_REPORT_XML_KEY, true);
 
     final Throwable thrown = catchThrowable(() -> configuration.dumpXmlReport(new Report()));
 

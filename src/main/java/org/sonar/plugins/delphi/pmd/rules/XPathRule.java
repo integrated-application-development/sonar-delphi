@@ -33,7 +33,6 @@ import net.sourceforge.pmd.properties.PropertyFactory;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.antlr.ast.ASTTree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -47,11 +46,6 @@ public class XPathRule extends DelphiRule {
   private static final PropertyDescriptor<String> XPATH =
       PropertyFactory.stringProperty("xpath").desc("The xpath expression").defaultValue("").build();
 
-  /** Last cached document. */
-  private static Document cachedData;
-  /** Last cached file name. */
-  private static String cachedFile = "";
-
   public XPathRule() {
     definePropertyDescriptor(XPATH);
   }
@@ -60,9 +54,12 @@ public class XPathRule extends DelphiRule {
   public void visit(DelphiPMDNode node, RuleContext ctx) {
     String xPathString = getProperty(XPATH);
     if (StringUtils.isEmpty(xPathString)) {
+      LOG.error("Skipped empty XPath expression in XPathRule: {}.", getName());
       return;
     }
-    Document doc = getCachedDocument(node.getASTTree());
+
+    Document doc = node.getASTTree().generateDocument();
+
     try {
       XPath xPath = XPathFactory.newInstance().newXPath();
       XPathExpression expression = xPath.compile(xPathString);
@@ -104,26 +101,12 @@ public class XPathRule extends DelphiRule {
     }
   }
 
-  /** Preform only one visit per file, not per node cause we parse the whole file nodes at a time */
+  /** Perform only one visit per file. We parse the entire file when we visit it. */
   @Override
   protected void visitAll(List<? extends net.sourceforge.pmd.lang.ast.Node> acus, RuleContext ctx) {
     init();
     if (acus.iterator().hasNext()) {
       visit((DelphiPMDNode) acus.iterator().next(), ctx);
     }
-  }
-
-  /**
-   * Gets the cached AST document, create new if not found in cache
-   *
-   * @param astTree AST tree
-   * @return AST tree document
-   */
-  private static Document getCachedDocument(ASTTree astTree) {
-    if (!astTree.getFileName().equals(cachedFile)) {
-      cachedData = astTree.generateDocument();
-      cachedFile = astTree.getFileName();
-    }
-    return cachedData;
   }
 }

@@ -22,45 +22,28 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
-import static org.apache.commons.lang.StringEscapeUtils.escapeXml;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import javax.annotation.Nullable;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenRewriteStream;
 import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 import org.apache.commons.io.FileUtils;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.delphi.antlr.ast.xml.DelphiAstSerializer;
 import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStream;
 import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /** DelphiLanguage AST tree. */
 public class DelphiAST extends CommonTree implements ASTTree {
-  private static final Logger LOG = Loggers.get(DelphiAST.class);
-
   private String fileName;
   private boolean isError;
   private DelphiFileStream fileStream;
   private List<String> codeLines;
+  private Document document;
 
   private static class FileReadFailException extends RuntimeException {
 
@@ -129,86 +112,20 @@ public class DelphiAST extends CommonTree implements ASTTree {
   /** {@inheritDoc} */
   @Override
   public void generateXML(String fileName) {
-    Source source = new DOMSource(generateDocument());
-
-    File file = new File(fileName);
-    Result result = new StreamResult(file);
-
-    try {
-      // Write the DOM document to the file
-      TransformerFactory transformerFactory = TransformerFactory.newInstance();
-      transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-      Transformer transformer = transformerFactory.newTransformer();
-      transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-
-      transformer.transform(source, result);
-    } catch (TransformerException e) {
-      LOG.error("Failed to generate Node XML", e);
-    }
+    DelphiAstSerializer serializer = new DelphiAstSerializer(this);
+    serializer.dumpXml(fileName, generateDocument());
   }
 
-  /**
-   * Generates an XML document from current node
-   *
-   * @return XML document
-   */
+  /** {@inheritDoc} */
   @Override
+  @Nullable
   public Document generateDocument() {
-    try {
-      return generateDocument(createNewDocument(), "file");
-    } catch (Exception e) {
-      LOG.error("{} {}", "Failed to generate Node XML: ", e);
-      return null;
-    }
-  }
-
-  private Document generateDocument(Document doc, String rootName) {
-    Element root = doc.createElement(rootName);
-    doc.appendChild(root);
-
-    // create root children, and their children, and so on
-    generateDocumentChildren(root, doc, this);
-    doc.getDocumentElement().normalize();
-    return doc;
-  }
-
-  private Document createNewDocument() throws ParserConfigurationException {
-    DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-    docBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-    DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-    return docBuilder.newDocument();
-  }
-
-  /**
-   * Generate children for specified root element from delphi node
-   *
-   * @param root Element
-   * @param doc Document
-   * @param delphiNode DelphiNode
-   */
-  private void generateDocumentChildren(Element root, Document doc, Tree delphiNode) {
-    if (root == null || doc == null) {
-      return;
+    if (document == null) {
+      DelphiAstSerializer serializer = new DelphiAstSerializer(this);
+      document = serializer.generateDocument();
     }
 
-    for (int i = 0; i < delphiNode.getChildCount(); ++i) {
-      DelphiPMDNode childNode = new DelphiPMDNode((CommonTree) delphiNode.getChild(i), this);
-      String tag = escapeXml(DelphiParser.tokenNames[childNode.getType()]);
-
-      Element child = doc.createElement(tag);
-      child.setTextContent(childNode.getText());
-      child.setAttribute("beginLine", String.valueOf(childNode.getBeginLine()));
-      child.setAttribute("beginColumn", String.valueOf(childNode.getBeginColumn()));
-      child.setAttribute("endLine", String.valueOf(childNode.getBeginLine()));
-      child.setAttribute("endColumn", String.valueOf(childNode.getBeginColumn()));
-      child.setAttribute("class", "");
-      child.setAttribute("method", "");
-      child.setAttribute("package", "");
-      child.setAttribute("type", String.valueOf(childNode.getType()));
-
-      root.appendChild(child);
-      generateDocumentChildren(child, doc, childNode);
-    }
+    return document;
   }
 
   /** {@inheritDoc} */

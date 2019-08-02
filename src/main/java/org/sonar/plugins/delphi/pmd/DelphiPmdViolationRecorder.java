@@ -19,9 +19,13 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
+import static java.lang.Boolean.parseBoolean;
+
+import java.util.Objects;
 import net.sourceforge.pmd.RuleViolation;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
+import org.sonar.api.batch.rule.ActiveRule;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
@@ -29,6 +33,7 @@ import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.scanner.ScannerSide;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
+import org.sonar.plugins.delphi.pmd.rules.DelphiRule;
 
 @ScannerSide
 public class DelphiPmdViolationRecorder {
@@ -48,14 +53,19 @@ public class DelphiPmdViolationRecorder {
       return;
     }
 
-    final RuleKey ruleKey = findActiveRuleKeyFor(pmdViolation);
+    final ActiveRule activeRule = findActiveRuleFor(pmdViolation);
 
-    if (ruleKey == null) {
+    if (activeRule == null) {
       // Save violations only for enabled rules
       return;
     }
 
-    final NewIssue issue = context.newIssue().forRule(ruleKey);
+    if (shouldSkipTests(activeRule) && isInsideTestMethod(pmdViolation)) {
+      // This rule only applies to the main code
+      return;
+    }
+
+    final NewIssue issue = context.newIssue().forRule(activeRule.ruleKey());
 
     final TextRange issueTextRange = TextRangeCalculator.calculate(pmdViolation, inputFile);
 
@@ -69,14 +79,19 @@ public class DelphiPmdViolationRecorder {
     return delphiProjectHelper.getFile(violation.getFilename());
   }
 
-  private RuleKey findActiveRuleKeyFor(RuleViolation violation) {
+  private ActiveRule findActiveRuleFor(RuleViolation violation) {
     final String internalRuleKey = violation.getRule().getName();
     RuleKey ruleKey = RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, internalRuleKey);
 
-    if (activeRules.find(ruleKey) != null) {
-      return ruleKey;
-    }
+    return activeRules.find(ruleKey);
+  }
 
-    return null;
+  private boolean shouldSkipTests(ActiveRule activeRule) {
+    String testsParam = activeRule.param(DelphiRule.TESTS.name());
+    return !parseBoolean(Objects.requireNonNullElse(testsParam, "true"));
+  }
+
+  private boolean isInsideTestMethod(RuleViolation pmdRuleViolation) {
+    return pmdRuleViolation.getClassName().matches(delphiProjectHelper.testTypeRegex());
   }
 }
