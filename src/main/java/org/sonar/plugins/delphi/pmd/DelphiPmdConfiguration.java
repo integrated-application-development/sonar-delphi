@@ -79,7 +79,7 @@ public class DelphiPmdConfiguration {
    * @return Path to the report
    */
   Path dumpXmlReport(Report report) {
-    if (!settings.getBoolean(DelphiPlugin.GENERATE_PMD_REPORT_XML).orElse(false)) {
+    if (!settings.getBoolean(DelphiPlugin.GENERATE_PMD_REPORT_XML_KEY).orElse(false)) {
       return null;
     }
 
