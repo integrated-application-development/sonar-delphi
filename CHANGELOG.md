@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `sonar.delphi.pmd.testTypeRegex` property to specify types that will be treated as test code.
 
+### Changed
+
+- Ignore test code in `TooLongLineRule`.
+
 ## [0.3.0] - 2019-08-01
 
 ### Changed

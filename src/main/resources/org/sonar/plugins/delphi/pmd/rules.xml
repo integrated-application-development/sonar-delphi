@@ -748,6 +748,7 @@ FreeAndNil(Foo); // Compliant
     <properties>
       <property name="baseEffort" value="2min" />
       <property name="limit" value="100" />
+      <property name="tests" value="false" />
     </properties>
   </rule>
 
