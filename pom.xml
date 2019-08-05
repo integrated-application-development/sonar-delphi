@@ -87,6 +87,7 @@
     <dependency-check-plugin.version>5.0.0</dependency-check-plugin.version>
     <compiler-plugin.version>3.5.1</compiler-plugin.version>
     <build-helper-plugin.version>3.0.0</build-helper-plugin.version>
+    <fmt-maven-plugin.version>2.9</fmt-maven-plugin.version>
     <!--Version Fields end here-->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <sonar.pluginName>Delphi</sonar.pluginName>
@@ -367,6 +368,23 @@
               <sources>
                 <source>src/it/java</source>
               </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.coveo</groupId>
+        <artifactId>fmt-maven-plugin</artifactId>
+        <version>${fmt-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>format</goal>
+            </goals>
+            <configuration>
+              <additionalSourceDirectories>
+                <param>${project.basedir}/src/it/java</param>
+              </additionalSourceDirectories>
             </configuration>
           </execution>
         </executions>
