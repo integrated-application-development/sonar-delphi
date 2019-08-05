@@ -17,7 +17,8 @@ public class ConstantNotationRule extends NameConventionRule {
       return Collections.emptyList();
     }
 
-    return node.findAllChildren(DelphiLexer.TkConstantName).stream()
+    return node.findAllChildren(DelphiLexer.TkConstantName)
+        .stream()
         .map(name -> new DelphiPMDNode((CommonTree) name.getChild(0), node.getASTTree()))
         .collect(Collectors.toList());
   }

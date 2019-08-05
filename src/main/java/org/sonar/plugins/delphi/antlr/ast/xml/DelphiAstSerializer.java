@@ -204,7 +204,8 @@ public class DelphiAstSerializer {
 
   private String extractName(CommonTree node) {
     List<?> children = node.getChildren();
-    return children.stream()
+    return children
+        .stream()
         .map(child -> (Tree) child)
         .map(Tree::getText)
         .collect(Collectors.joining());

@@ -250,7 +250,8 @@ public class UnusedArgumentsRule extends DelphiRule {
     final int[] types = {DelphiLexer.PROCEDURE, DelphiLexer.FUNCTION};
 
     List<DelphiPMDNode> methodNodes =
-        node.findAllChildren(types).stream()
+        node.findAllChildren(types)
+            .stream()
             .map(treeNode -> (DelphiPMDNode) treeNode)
             .collect(Collectors.toList());
 

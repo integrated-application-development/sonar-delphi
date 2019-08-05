@@ -57,7 +57,8 @@ public class XmlRuleSetFactory implements RuleSetFactory {
     }
 
     List<?> children = parent.getChildren(child, namespace);
-    return children.stream()
+    return children
+        .stream()
         .filter(element -> element instanceof Element)
         .map(element -> (Element) element)
         .collect(Collectors.toList());
