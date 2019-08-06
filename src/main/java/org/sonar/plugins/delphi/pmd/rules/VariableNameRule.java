@@ -27,8 +27,7 @@ public class VariableNameRule extends NameConventionRule {
           List<?> children = childNode.getChildren();
 
           nameNodes.addAll(
-              children
-                  .stream()
+              children.stream()
                   .map(varName -> new DelphiPMDNode((CommonTree) varName, node.getASTTree()))
                   .collect(Collectors.toList()));
         }

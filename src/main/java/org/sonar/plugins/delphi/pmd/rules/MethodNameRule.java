@@ -36,8 +36,7 @@ public class MethodNameRule extends NameConventionRule {
 
     List<Tree> nameParentNodes = node.findAllChildren(DelphiLexer.TkFunctionName);
 
-    return nameParentNodes
-        .stream()
+    return nameParentNodes.stream()
         .map(parent -> new DelphiPMDNode((CommonTree) parent.getChild(0), node.getASTTree()))
         .collect(Collectors.toList());
   }

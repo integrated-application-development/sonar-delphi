@@ -19,8 +19,7 @@ public class TooManyVariablesRule extends VariableCounterRule {
       if (nextNode != null && nextNode.getType() == DelphiLexer.TkBlockDeclSection) {
         List<?> children = nextNode.getChildren();
         if (children != null) {
-          return children
-              .stream()
+          return children.stream()
               .map(child -> new DelphiPMDNode((CommonTree) child, node.getASTTree()))
               .filter(child -> child.getType() == DelphiLexer.VAR)
               .collect(Collectors.toList());

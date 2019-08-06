@@ -44,9 +44,7 @@ public class DelphiTokenSensor implements Sensor {
   @Override
   public void execute(@NonNull SensorContext context) {
     for (DelphiProject project : delphiProjectHelper.getProjects()) {
-      project
-          .getSourceFiles()
-          .stream()
+      project.getSourceFiles().stream()
           .map(file -> delphiProjectHelper.getFile(file))
           .forEach(this::doExecute);
     }

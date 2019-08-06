@@ -33,8 +33,7 @@ public class UnitNameRule extends NameConventionRule {
     if (node.getType() == DelphiLexer.UNIT) {
       List<?> children = node.getChildren();
 
-      return children
-          .stream()
+      return children.stream()
           .filter(child -> ((CommonTree) child).getType() != DelphiLexer.DOT)
           .map(child -> new DelphiPMDNode((CommonTree) child, node.getASTTree()))
           .collect(Collectors.toList());
