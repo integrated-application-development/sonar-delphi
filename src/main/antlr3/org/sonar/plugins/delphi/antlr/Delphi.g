@@ -627,7 +627,7 @@ handlerList                  : (handler)* ('else' statementList)?
                              ;
 handler                      : 'on' (handlerIdent)? typeId 'do' handlerStatement  //CHANGED - ; is not required ; handlerIdent not required, example:  "on einvalidoperation do;"
                              ;
-handlerIdent                 : ident ':'
+handlerIdent                 : ident ':' -> ^(TkExceptionHandlerIdent ident)
                              ;
 handlerStatement             : statement (';')? -> ^(TkExceptionHandler statement) (';')?
                              | ';' -> ^(TkExceptionHandler) ';'
@@ -975,6 +975,8 @@ TkAnonymousExpression   : 'ANONYMOUS_EXPRESSION'
 TkAssemblerInstructions : 'ASSEMBLER_INSTRUCTIONS'
                         ;
 TkBlockDeclSection      : 'BLOCK_DECL_SECTION'
+                        ;
+TkExceptionHandlerIdent : 'EXCEPTION_HANDLER_IDENT'
                         ;
 TkExceptionHandler      : 'EXCEPTION_HANDLER'
                         ;

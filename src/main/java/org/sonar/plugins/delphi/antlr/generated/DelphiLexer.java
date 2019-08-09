@@ -1,5 +1,5 @@
 // $ANTLR 3.5.1
-// ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g 2019-08-06 10:35:17
+// ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g 2019-08-08 15:56:12
 
 /*
  * Sonar Delphi Plugin
@@ -197,41 +197,42 @@ public class DelphiLexer extends Lexer {
   public static final int TkCustomAttribute = 169;
   public static final int TkCustomAttributeArgs = 170;
   public static final int TkExceptionHandler = 171;
-  public static final int TkFunctionArgs = 172;
-  public static final int TkFunctionBody = 173;
-  public static final int TkFunctionName = 174;
-  public static final int TkFunctionReturn = 175;
-  public static final int TkGlobalFunction = 176;
-  public static final int TkGuid = 177;
-  public static final int TkHexNum = 178;
-  public static final int TkIdentifier = 179;
-  public static final int TkIntNum = 180;
-  public static final int TkInterface = 181;
-  public static final int TkNewType = 182;
-  public static final int TkNewTypeDecl = 183;
-  public static final int TkNewTypeName = 184;
-  public static final int TkObject = 185;
-  public static final int TkRealNum = 186;
-  public static final int TkRecord = 187;
-  public static final int TkRecordHelper = 188;
-  public static final int TkVariableIdents = 189;
-  public static final int TkVariableParam = 190;
-  public static final int TkVariableType = 191;
-  public static final int UNIT = 192;
-  public static final int UNSAFE = 193;
-  public static final int UNTIL = 194;
-  public static final int USES = 195;
-  public static final int UnicodeBOM = 196;
-  public static final int VAR = 197;
-  public static final int VARARGS = 198;
-  public static final int VARIANT = 199;
-  public static final int VIRTUAL = 200;
-  public static final int WHILE = 201;
-  public static final int WITH = 202;
-  public static final int WRITE = 203;
-  public static final int WRITEONLY = 204;
-  public static final int WS = 205;
-  public static final int XOR = 206;
+  public static final int TkExceptionHandlerIdent = 172;
+  public static final int TkFunctionArgs = 173;
+  public static final int TkFunctionBody = 174;
+  public static final int TkFunctionName = 175;
+  public static final int TkFunctionReturn = 176;
+  public static final int TkGlobalFunction = 177;
+  public static final int TkGuid = 178;
+  public static final int TkHexNum = 179;
+  public static final int TkIdentifier = 180;
+  public static final int TkIntNum = 181;
+  public static final int TkInterface = 182;
+  public static final int TkNewType = 183;
+  public static final int TkNewTypeDecl = 184;
+  public static final int TkNewTypeName = 185;
+  public static final int TkObject = 186;
+  public static final int TkRealNum = 187;
+  public static final int TkRecord = 188;
+  public static final int TkRecordHelper = 189;
+  public static final int TkVariableIdents = 190;
+  public static final int TkVariableParam = 191;
+  public static final int TkVariableType = 192;
+  public static final int UNIT = 193;
+  public static final int UNSAFE = 194;
+  public static final int UNTIL = 195;
+  public static final int USES = 196;
+  public static final int UnicodeBOM = 197;
+  public static final int VAR = 198;
+  public static final int VARARGS = 199;
+  public static final int VARIANT = 200;
+  public static final int VIRTUAL = 201;
+  public static final int WHILE = 202;
+  public static final int WITH = 203;
+  public static final int WRITE = 204;
+  public static final int WRITEONLY = 205;
+  public static final int WS = 206;
+  public static final int XOR = 207;
 
   boolean asmMode = false;
 
@@ -3775,13 +3776,32 @@ public class DelphiLexer extends Lexer {
   }
   // $ANTLR end "TkBlockDeclSection"
 
+  // $ANTLR start "TkExceptionHandlerIdent"
+  public final void mTkExceptionHandlerIdent() throws RecognitionException {
+    try {
+      int _type = TkExceptionHandlerIdent;
+      int _channel = DEFAULT_TOKEN_CHANNEL;
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:979:25: ( 'EXCEPTION_HANDLER_IDENT' )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:979:27: 'EXCEPTION_HANDLER_IDENT'
+      {
+        match("EXCEPTION_HANDLER_IDENT");
+      }
+
+      state.type = _type;
+      state.channel = _channel;
+    } finally {
+      // do for sure before leaving
+    }
+  }
+  // $ANTLR end "TkExceptionHandlerIdent"
+
   // $ANTLR start "TkExceptionHandler"
   public final void mTkExceptionHandler() throws RecognitionException {
     try {
       int _type = TkExceptionHandler;
       int _channel = DEFAULT_TOKEN_CHANNEL;
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:979:25: ( 'EXCEPTION_HANDLER' )
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:979:27: 'EXCEPTION_HANDLER'
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:981:25: ( 'EXCEPTION_HANDLER' )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:981:27: 'EXCEPTION_HANDLER'
       {
         match("EXCEPTION_HANDLER");
       }
@@ -3799,10 +3819,10 @@ public class DelphiLexer extends Lexer {
     try {
       int _type = TkIdentifier;
       int _channel = DEFAULT_TOKEN_CHANNEL;
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:981:25: ( ( Alpha | '_' ) ( Alpha | Digit | '_' )* )
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:981:27: ( Alpha | '_' ) ( Alpha | Digit | '_' )*
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:25: ( ( Alpha | '_' ) ( Alpha | Digit | '_' )* )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:27: ( Alpha | '_' ) ( Alpha | Digit | '_' )*
       {
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:981:27: ( Alpha | '_' )
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:27: ( Alpha | '_' )
         int alt1 = 2;
         int LA1_0 = input.LA(1);
         if (((LA1_0 >= 'A' && LA1_0 <= 'Z')
@@ -3818,20 +3838,20 @@ public class DelphiLexer extends Lexer {
 
         switch (alt1) {
           case 1:
-            // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:981:28: Alpha
+            // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:28: Alpha
             {
               mAlpha();
             }
             break;
           case 2:
-            // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:981:36: '_'
+            // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:36: '_'
             {
               match('_');
             }
             break;
         }
 
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:981:41: ( Alpha | Digit | '_' )*
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:41: ( Alpha | Digit | '_' )*
         loop2:
         while (true) {
           int alt2 = 4;
@@ -3848,19 +3868,19 @@ public class DelphiLexer extends Lexer {
 
           switch (alt2) {
             case 1:
-              // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:981:42: Alpha
+              // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:42: Alpha
               {
                 mAlpha();
               }
               break;
             case 2:
-              // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:981:50: Digit
+              // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:50: Digit
               {
                 mDigit();
               }
               break;
             case 3:
-              // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:981:58: '_'
+              // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:58: '_'
               {
                 match('_');
               }
@@ -3885,8 +3905,8 @@ public class DelphiLexer extends Lexer {
     try {
       int _type = TkIntNum;
       int _channel = DEFAULT_TOKEN_CHANNEL;
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:25: ( Digitseq )
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:983:27: Digitseq
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:985:25: ( Digitseq )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:985:27: Digitseq
       {
         mDigitseq();
       }
@@ -3904,12 +3924,12 @@ public class DelphiLexer extends Lexer {
     try {
       int _type = TkRealNum;
       int _channel = DEFAULT_TOKEN_CHANNEL;
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:986:25: ( Digitseq ({...}? => '.' Digitseq )? ( ( 'e' | 'E' ) ( '+' | '-' )? Digitseq )? )
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:986:27: Digitseq ({...}? => '.' Digitseq )? ( ( 'e' | 'E' ) ( '+' | '-' )? Digitseq )?
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:988:25: ( Digitseq ({...}? => '.' Digitseq )? ( ( 'e' | 'E' ) ( '+' | '-' )? Digitseq )? )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:988:27: Digitseq ({...}? => '.' Digitseq )? ( ( 'e' | 'E' ) ( '+' | '-' )? Digitseq )?
       {
         mDigitseq();
 
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:986:36: ({...}? => '.' Digitseq )?
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:988:36: ({...}? => '.' Digitseq )?
         int alt3 = 2;
         int LA3_0 = input.LA(1);
         if ((LA3_0 == '.') && ((input.LA(2) != '.'))) {
@@ -3917,7 +3937,7 @@ public class DelphiLexer extends Lexer {
         }
         switch (alt3) {
           case 1:
-            // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:986:37: {...}? => '.' Digitseq
+            // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:988:37: {...}? => '.' Digitseq
             {
               if (!((input.LA(2) != '.'))) {
                 throw new FailedPredicateException(input, "TkRealNum", " input.LA(2) != '.' ");
@@ -3928,7 +3948,7 @@ public class DelphiLexer extends Lexer {
             break;
         }
 
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:986:79: ( ( 'e' | 'E' ) ( '+' | '-' )? Digitseq )?
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:988:79: ( ( 'e' | 'E' ) ( '+' | '-' )? Digitseq )?
         int alt5 = 2;
         int LA5_0 = input.LA(1);
         if ((LA5_0 == 'E' || LA5_0 == 'e')) {
@@ -3936,7 +3956,7 @@ public class DelphiLexer extends Lexer {
         }
         switch (alt5) {
           case 1:
-            // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:986:80: ( 'e' | 'E' ) ( '+' | '-' )? Digitseq
+            // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:988:80: ( 'e' | 'E' ) ( '+' | '-' )? Digitseq
             {
               if (input.LA(1) == 'E' || input.LA(1) == 'e') {
                 input.consume();
@@ -3945,7 +3965,7 @@ public class DelphiLexer extends Lexer {
                 recover(mse);
                 throw mse;
               }
-              // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:986:90: ( '+' | '-' )?
+              // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:988:90: ( '+' | '-' )?
               int alt4 = 2;
               int LA4_0 = input.LA(1);
               if ((LA4_0 == '+' || LA4_0 == '-')) {
@@ -3985,8 +4005,8 @@ public class DelphiLexer extends Lexer {
     try {
       int _type = TkHexNum;
       int _channel = DEFAULT_TOKEN_CHANNEL;
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:988:25: ( '$' Hexdigitseq )
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:988:27: '$' Hexdigitseq
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:990:25: ( '$' Hexdigitseq )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:990:27: '$' Hexdigitseq
       {
         match('$');
         mHexdigitseq();
@@ -4005,8 +4025,8 @@ public class DelphiLexer extends Lexer {
     try {
       int _type = TkAsmHexNum;
       int _channel = DEFAULT_TOKEN_CHANNEL;
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:990:25: ({...}? => Hexdigitseq ( 'h' | 'H' ) )
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:990:27: {...}? => Hexdigitseq ( 'h' | 'H' )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:992:25: ({...}? => Hexdigitseq ( 'h' | 'H' ) )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:992:27: {...}? => Hexdigitseq ( 'h' | 'H' )
       {
         if (!((asmMode))) {
           throw new FailedPredicateException(input, "TkAsmHexNum", " asmMode ");
@@ -4035,8 +4055,8 @@ public class DelphiLexer extends Lexer {
     try {
       int _type = TkAsmHexLabel;
       int _channel = DEFAULT_TOKEN_CHANNEL;
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:992:25: ({...}? => Hexdigitseq ':' )
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:992:27: {...}? => Hexdigitseq ':'
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:994:25: ({...}? => Hexdigitseq ':' )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:994:27: {...}? => Hexdigitseq ':'
       {
         if (!((asmMode))) {
           throw new FailedPredicateException(input, "TkAsmHexLabel", " asmMode ");
@@ -4059,11 +4079,11 @@ public class DelphiLexer extends Lexer {
     try {
       int _type = QuotedString;
       int _channel = DEFAULT_TOKEN_CHANNEL;
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:994:25: ( '\\'' ( '\\'\\'' |~ ( '\\'' ) )* '\\'' )
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:994:27: '\\'' ( '\\'\\'' |~ ( '\\'' ) )* '\\''
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:996:25: ( '\\'' ( '\\'\\'' |~ ( '\\'' ) )* '\\'' )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:996:27: '\\'' ( '\\'\\'' |~ ( '\\'' ) )* '\\''
       {
         match('\'');
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:994:32: ( '\\'\\'' |~ ( '\\'' ) )*
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:996:32: ( '\\'\\'' |~ ( '\\'' ) )*
         loop6:
         while (true) {
           int alt6 = 3;
@@ -4080,13 +4100,13 @@ public class DelphiLexer extends Lexer {
 
           switch (alt6) {
             case 1:
-              // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:994:33: '\\'\\''
+              // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:996:33: '\\'\\''
               {
                 match("''");
               }
               break;
             case 2:
-              // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:994:42: ~ ( '\\'' )
+              // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:996:42: ~ ( '\\'' )
               {
                 if ((input.LA(1) >= '\u0000' && input.LA(1) <= '&')
                     || (input.LA(1) >= '(' && input.LA(1) <= '\uFFFF')) {
@@ -4120,12 +4140,12 @@ public class DelphiLexer extends Lexer {
     try {
       int _type = ControlString;
       int _channel = DEFAULT_TOKEN_CHANNEL;
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:996:25: ( Controlchar ( Controlchar )* )
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:996:27: Controlchar ( Controlchar )*
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:998:25: ( Controlchar ( Controlchar )* )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:998:27: Controlchar ( Controlchar )*
       {
         mControlchar();
 
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:996:39: ( Controlchar )*
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:998:39: ( Controlchar )*
         loop7:
         while (true) {
           int alt7 = 2;
@@ -4136,7 +4156,7 @@ public class DelphiLexer extends Lexer {
 
           switch (alt7) {
             case 1:
-              // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:996:40: Controlchar
+              // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:998:40: Controlchar
               {
                 mControlchar();
               }
@@ -4159,7 +4179,7 @@ public class DelphiLexer extends Lexer {
   // $ANTLR start "Controlchar"
   public final void mControlchar() throws RecognitionException {
     try {
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1004:25: ( '#' Digitseq | '#' '$' Hexdigitseq )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1006:25: ( '#' Digitseq | '#' '$' Hexdigitseq )
       int alt8 = 2;
       int LA8_0 = input.LA(1);
       if ((LA8_0 == '#')) {
@@ -4186,14 +4206,14 @@ public class DelphiLexer extends Lexer {
 
       switch (alt8) {
         case 1:
-          // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1004:27: '#' Digitseq
+          // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1006:27: '#' Digitseq
           {
             match('#');
             mDigitseq();
           }
           break;
         case 2:
-          // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1005:27: '#' '$' Hexdigitseq
+          // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1007:27: '#' '$' Hexdigitseq
           {
             match('#');
             match('$');
@@ -4210,7 +4230,7 @@ public class DelphiLexer extends Lexer {
   // $ANTLR start "Alpha"
   public final void mAlpha() throws RecognitionException {
     try {
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1008:25: ( 'a' .. 'z' | 'A' .. 'Z' | '\\u0080' .. '\\uFFFE' ~ ( '\\uFEFF' ) )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1010:25: ( 'a' .. 'z' | 'A' .. 'Z' | '\\u0080' .. '\\uFFFE' ~ ( '\\uFEFF' ) )
       int alt9 = 3;
       int LA9_0 = input.LA(1);
       if (((LA9_0 >= 'a' && LA9_0 <= 'z'))) {
@@ -4226,19 +4246,19 @@ public class DelphiLexer extends Lexer {
 
       switch (alt9) {
         case 1:
-          // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1008:27: 'a' .. 'z'
+          // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1010:27: 'a' .. 'z'
           {
             matchRange('a', 'z');
           }
           break;
         case 2:
-          // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1009:27: 'A' .. 'Z'
+          // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1011:27: 'A' .. 'Z'
           {
             matchRange('A', 'Z');
           }
           break;
         case 3:
-          // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1010:27: '\\u0080' .. '\\uFFFE' ~ ( '\\uFEFF' )
+          // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1012:27: '\\u0080' .. '\\uFFFE' ~ ( '\\uFEFF' )
           {
             matchRange('\u0080', '\uFFFE');
             if ((input.LA(1) >= '\u0000' && input.LA(1) <= '\uFEFE')
@@ -4261,7 +4281,7 @@ public class DelphiLexer extends Lexer {
   // $ANTLR start "Digit"
   public final void mDigit() throws RecognitionException {
     try {
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1013:25: ( '0' .. '9' )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1015:25: ( '0' .. '9' )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:
       {
         if ((input.LA(1) >= '0' && input.LA(1) <= '9')) {
@@ -4282,12 +4302,12 @@ public class DelphiLexer extends Lexer {
   // $ANTLR start "Digitseq"
   public final void mDigitseq() throws RecognitionException {
     try {
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1016:25: ( Digit ( Digit )* )
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1016:27: Digit ( Digit )*
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1018:25: ( Digit ( Digit )* )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1018:27: Digit ( Digit )*
       {
         mDigit();
 
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1016:33: ( Digit )*
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1018:33: ( Digit )*
         loop10:
         while (true) {
           int alt10 = 2;
@@ -4325,7 +4345,7 @@ public class DelphiLexer extends Lexer {
   // $ANTLR start "Hexdigit"
   public final void mHexdigit() throws RecognitionException {
     try {
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1019:25: ( Digit | 'a' .. 'f' | 'A' .. 'F' )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1021:25: ( Digit | 'a' .. 'f' | 'A' .. 'F' )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:
       {
         if ((input.LA(1) >= '0' && input.LA(1) <= '9')
@@ -4348,12 +4368,12 @@ public class DelphiLexer extends Lexer {
   // $ANTLR start "Hexdigitseq"
   public final void mHexdigitseq() throws RecognitionException {
     try {
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1022:24: ( Hexdigit ( Hexdigit )* )
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1022:26: Hexdigit ( Hexdigit )*
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1024:24: ( Hexdigit ( Hexdigit )* )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1024:26: Hexdigit ( Hexdigit )*
       {
         mHexdigit();
 
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1022:35: ( Hexdigit )*
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1024:35: ( Hexdigit )*
         loop11:
         while (true) {
           int alt11 = 2;
@@ -4397,7 +4417,7 @@ public class DelphiLexer extends Lexer {
     try {
       int _type = COMMENT;
       int _channel = DEFAULT_TOKEN_CHANNEL;
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1026:25: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '(*' ( options {greedy=false; } : . )* '*)' | '{' ( options {greedy=false; } : . )* '}' )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1028:25: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '(*' ( options {greedy=false; } : . )* '*)' | '{' ( options {greedy=false; } : . )* '}' )
       int alt16 = 3;
       switch (input.LA(1)) {
         case '/':
@@ -4421,11 +4441,11 @@ public class DelphiLexer extends Lexer {
       }
       switch (alt16) {
         case 1:
-          // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1026:28: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
+          // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1028:28: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
           {
             match("//");
 
-            // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1026:33: (~ ( '\\n' | '\\r' ) )*
+            // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1028:33: (~ ( '\\n' | '\\r' ) )*
             loop12:
             while (true) {
               int alt12 = 2;
@@ -4457,7 +4477,7 @@ public class DelphiLexer extends Lexer {
               }
             }
 
-            // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1026:47: ( '\\r' )?
+            // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1028:47: ( '\\r' )?
             int alt13 = 2;
             int LA13_0 = input.LA(1);
             if ((LA13_0 == '\r')) {
@@ -4465,7 +4485,7 @@ public class DelphiLexer extends Lexer {
             }
             switch (alt13) {
               case 1:
-                // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1026:47: '\\r'
+                // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1028:47: '\\r'
                 {
                   match('\r');
                 }
@@ -4477,11 +4497,11 @@ public class DelphiLexer extends Lexer {
           }
           break;
         case 2:
-          // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1027:28: '(*' ( options {greedy=false; } : . )* '*)'
+          // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1029:28: '(*' ( options {greedy=false; } : . )* '*)'
           {
             match("(*");
 
-            // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1027:33: ( options {greedy=false; } : . )*
+            // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1029:33: ( options {greedy=false; } : . )*
             loop14:
             while (true) {
               int alt14 = 2;
@@ -4502,7 +4522,7 @@ public class DelphiLexer extends Lexer {
 
               switch (alt14) {
                 case 1:
-                  // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1027:61: .
+                  // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1029:61: .
                   {
                     matchAny();
                   }
@@ -4519,10 +4539,10 @@ public class DelphiLexer extends Lexer {
           }
           break;
         case 3:
-          // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1028:28: '{' ( options {greedy=false; } : . )* '}'
+          // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1030:28: '{' ( options {greedy=false; } : . )* '}'
           {
             match('{');
-            // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1028:32: ( options {greedy=false; } : . )*
+            // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1030:32: ( options {greedy=false; } : . )*
             loop15:
             while (true) {
               int alt15 = 2;
@@ -4536,7 +4556,7 @@ public class DelphiLexer extends Lexer {
 
               switch (alt15) {
                 case 1:
-                  // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1028:60: .
+                  // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1030:60: .
                   {
                     matchAny();
                   }
@@ -4565,10 +4585,10 @@ public class DelphiLexer extends Lexer {
     try {
       int _type = WS;
       int _channel = DEFAULT_TOKEN_CHANNEL;
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1030:25: ( ( ' ' | '\\t' | '\\r' | '\\n' | '\\f' )+ )
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1030:27: ( ' ' | '\\t' | '\\r' | '\\n' | '\\f' )+
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1032:25: ( ( ' ' | '\\t' | '\\r' | '\\n' | '\\f' )+ )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1032:27: ( ' ' | '\\t' | '\\r' | '\\n' | '\\f' )+
       {
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1030:27: ( ' ' | '\\t' | '\\r' | '\\n' | '\\f' )+
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1032:27: ( ' ' | '\\t' | '\\r' | '\\n' | '\\f' )+
         int cnt17 = 0;
         loop17:
         while (true) {
@@ -4620,8 +4640,8 @@ public class DelphiLexer extends Lexer {
     try {
       int _type = UnicodeBOM;
       int _channel = DEFAULT_TOKEN_CHANNEL;
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1032:25: ( '\\uFEFF' )
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1032:27: '\\uFEFF'
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1034:25: ( '\\uFEFF' )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1034:27: '\\uFEFF'
       {
         match('\uFEFF');
         _channel = HIDDEN;
@@ -4637,8 +4657,8 @@ public class DelphiLexer extends Lexer {
 
   @Override
   public void mTokens() throws RecognitionException {
-    // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:8: ( ABSOLUTE | ABSTRACT | ADD | AND | ANSISTRING | ARRAY | AS | ASM | ASSEMBLER | ASSEMBLY | AT | AUTOMATED | BEGIN | BREAK | CASE | CDECL | CLASS | CONST | CONSTRUCTOR | CONTAINS | CONTINUE | DEFAULT | DEPRECATED | DESTRUCTOR | DISPID | DISPINTERFACE | DIV | DO | DOWNTO | DQ | DW | DYNAMIC | ELSE | END | EXCEPT | EXIT | EXPERIMENTAL | EXPORT | EXPORTS | EXTERNAL | FAR | FILE | FINAL | FINALIZATION | FINALLY | FOR | FORWARD | FUNCTION | GOTO | HELPER | IF | IMPLEMENTATION | IMPLEMENTS | IN | INDEX | INHERITED | INITIALIZATION | INLINE | INTERFACE | IS | LABEL | LIBRARY | LOCAL | MESSAGE | MOD | NAME | NEAR | NIL | NODEFAULT | NOT | OBJECT | OF | ON | OPERATOR | OR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PACKED | PASCAL | PLATFORM | POINTER | PRIVATE | PROCEDURE | PROGRAM | PROPERTY | PROTECTED | PUBLIC | PUBLISHED | RAISE | READ | READONLY | RECORD | REFERENCE | REGISTER | REINTRODUCE | REMOVE | REPEAT | REQUIRES | RESIDENT | RESOURCESTRING | SAFECALL | SEALED | SET | SHL | SHR | STATIC | STDCALL | STORED | STRICT | STRING | THEN | THREADVAR | TO | TRY | TYPE | UNIT | UNSAFE | UNTIL | USES | VAR | VARARGS | VARIANT | VIRTUAL | WHILE | WITH | WRITE | WRITEONLY | XOR | FALSE | TRUE | PLUS | MINUS | STAR | SLASH | ASSIGN | COMMA | SEMI | COLON | EQUAL | NOT_EQUAL | LT | LE | GE | GT | LPAREN | RPAREN | LBRACK | LBRACK2 | RBRACK | RBRACK2 | POINTER2 | AT2 | DOT | DOTDOT | LCURLY | RCURLY | AMPERSAND | TkGlobalFunction | TkFunctionName | TkConstantName | TkFunctionArgs | TkFunctionBody | TkFunctionReturn | TkCustomAttribute | TkCustomAttributeArgs | TkNewType | TkNewTypeName | TkNewTypeDecl | TkClass | TkRecord | TkRecordHelper | TkInterface | TkObject | TkClassOfType | TkVariableType | TkVariableIdents | TkVariableParam | TkGuid | TkClassParents | TkClassField | TkAnonymousExpression | TkAssemblerInstructions | TkBlockDeclSection | TkExceptionHandler | TkIdentifier | TkIntNum | TkRealNum | TkHexNum | TkAsmHexNum | TkAsmHexLabel | QuotedString | ControlString | COMMENT | WS | UnicodeBOM )
-    int alt18 = 197;
+    // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:8: ( ABSOLUTE | ABSTRACT | ADD | AND | ANSISTRING | ARRAY | AS | ASM | ASSEMBLER | ASSEMBLY | AT | AUTOMATED | BEGIN | BREAK | CASE | CDECL | CLASS | CONST | CONSTRUCTOR | CONTAINS | CONTINUE | DEFAULT | DEPRECATED | DESTRUCTOR | DISPID | DISPINTERFACE | DIV | DO | DOWNTO | DQ | DW | DYNAMIC | ELSE | END | EXCEPT | EXIT | EXPERIMENTAL | EXPORT | EXPORTS | EXTERNAL | FAR | FILE | FINAL | FINALIZATION | FINALLY | FOR | FORWARD | FUNCTION | GOTO | HELPER | IF | IMPLEMENTATION | IMPLEMENTS | IN | INDEX | INHERITED | INITIALIZATION | INLINE | INTERFACE | IS | LABEL | LIBRARY | LOCAL | MESSAGE | MOD | NAME | NEAR | NIL | NODEFAULT | NOT | OBJECT | OF | ON | OPERATOR | OR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PACKED | PASCAL | PLATFORM | POINTER | PRIVATE | PROCEDURE | PROGRAM | PROPERTY | PROTECTED | PUBLIC | PUBLISHED | RAISE | READ | READONLY | RECORD | REFERENCE | REGISTER | REINTRODUCE | REMOVE | REPEAT | REQUIRES | RESIDENT | RESOURCESTRING | SAFECALL | SEALED | SET | SHL | SHR | STATIC | STDCALL | STORED | STRICT | STRING | THEN | THREADVAR | TO | TRY | TYPE | UNIT | UNSAFE | UNTIL | USES | VAR | VARARGS | VARIANT | VIRTUAL | WHILE | WITH | WRITE | WRITEONLY | XOR | FALSE | TRUE | PLUS | MINUS | STAR | SLASH | ASSIGN | COMMA | SEMI | COLON | EQUAL | NOT_EQUAL | LT | LE | GE | GT | LPAREN | RPAREN | LBRACK | LBRACK2 | RBRACK | RBRACK2 | POINTER2 | AT2 | DOT | DOTDOT | LCURLY | RCURLY | AMPERSAND | TkGlobalFunction | TkFunctionName | TkConstantName | TkFunctionArgs | TkFunctionBody | TkFunctionReturn | TkCustomAttribute | TkCustomAttributeArgs | TkNewType | TkNewTypeName | TkNewTypeDecl | TkClass | TkRecord | TkRecordHelper | TkInterface | TkObject | TkClassOfType | TkVariableType | TkVariableIdents | TkVariableParam | TkGuid | TkClassParents | TkClassField | TkAnonymousExpression | TkAssemblerInstructions | TkBlockDeclSection | TkExceptionHandlerIdent | TkExceptionHandler | TkIdentifier | TkIntNum | TkRealNum | TkHexNum | TkAsmHexNum | TkAsmHexLabel | QuotedString | ControlString | COMMENT | WS | UnicodeBOM )
+    int alt18 = 198;
     alt18 = dfa18.predict(input);
     switch (alt18) {
       case 1:
@@ -5752,73 +5772,79 @@ public class DelphiLexer extends Lexer {
         }
         break;
       case 186:
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1496: TkExceptionHandler
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1496: TkExceptionHandlerIdent
+        {
+          mTkExceptionHandlerIdent();
+        }
+        break;
+      case 187:
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1520: TkExceptionHandler
         {
           mTkExceptionHandler();
         }
         break;
-      case 187:
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1515: TkIdentifier
+      case 188:
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1539: TkIdentifier
         {
           mTkIdentifier();
         }
         break;
-      case 188:
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1528: TkIntNum
+      case 189:
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1552: TkIntNum
         {
           mTkIntNum();
         }
         break;
-      case 189:
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1537: TkRealNum
+      case 190:
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1561: TkRealNum
         {
           mTkRealNum();
         }
         break;
-      case 190:
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1547: TkHexNum
+      case 191:
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1571: TkHexNum
         {
           mTkHexNum();
         }
         break;
-      case 191:
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1556: TkAsmHexNum
+      case 192:
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1580: TkAsmHexNum
         {
           mTkAsmHexNum();
         }
         break;
-      case 192:
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1568: TkAsmHexLabel
+      case 193:
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1592: TkAsmHexLabel
         {
           mTkAsmHexLabel();
         }
         break;
-      case 193:
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1582: QuotedString
+      case 194:
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1606: QuotedString
         {
           mQuotedString();
         }
         break;
-      case 194:
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1595: ControlString
+      case 195:
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1619: ControlString
         {
           mControlString();
         }
         break;
-      case 195:
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1609: COMMENT
+      case 196:
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1633: COMMENT
         {
           mCOMMENT();
         }
         break;
-      case 196:
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1617: WS
+      case 197:
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1641: WS
         {
           mWS();
         }
         break;
-      case 197:
-        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1620: UnicodeBOM
+      case 198:
+        // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:1:1644: UnicodeBOM
         {
           mUnicodeBOM();
         }
@@ -5872,10 +5898,10 @@ public class DelphiLexer extends Lexer {
           + "\u03dc\1\u03dd\1\u03de\1\u03df\1\u03e0\2\64\1\u03e3\6\64\1\uffff\1\u03ea"
           + "\1\u03eb\1\u03ec\1\64\3\uffff\1\64\1\uffff\1\64\5\uffff\1\u03f0\1\u03f1"
           + "\1\uffff\1\64\1\u03f3\4\64\3\uffff\1\u03f8\1\u03f9\1\64\2\uffff\1\u03fb"
-          + "\1\uffff\4\64\2\uffff\1\u0401\1\uffff\5\64\1\uffff\3\64\1\u040a\3\64\1"
-          + "\u040e\1\uffff\3\64\1\uffff\1\64\1\u0413\1\64\1\u0415\1\uffff\1\64\1\uffff"
-          + "\1\u0417\1\uffff";
-  static final String DFA18_eofS = "\u0418\uffff";
+          + "\1\uffff\4\64\2\uffff\1\u0401\1\uffff\5\64\1\uffff\3\64\1\u040b\3\64\1"
+          + "\u040f\1\64\1\uffff\3\64\1\uffff\2\64\1\u0416\2\64\1\u0419\1\uffff\2\64"
+          + "\1\uffff\1\u041c\1\64\1\uffff\1\u041e\1\uffff";
+  static final String DFA18_eofS = "\u041f\uffff";
   static final String DFA18_minS =
       "\1\11\6\60\1\157\1\145\1\146\1\141\1\145\1\141\1\142\3\141\1\150\1\156"
           + "\1\141\1\150\1\157\3\uffff\1\57\1\75\3\uffff\2\75\1\52\3\uffff\1\51\2"
@@ -5951,9 +5977,9 @@ public class DelphiLexer extends Lexer {
           + "\1\104\1\uffff\3\60\1\114\3\uffff\1\116\1\uffff\1\124\5\uffff\2\60\1\uffff"
           + "\1\123\1\60\1\105\1\122\1\124\1\114\3\uffff\2\60\1\105\2\uffff\1\60\1"
           + "\uffff\1\123\1\125\1\111\1\105\2\uffff\1\60\1\uffff\1\123\1\103\1\117"
-          + "\1\122\1\101\1\uffff\1\111\1\124\1\116\1\60\1\122\1\117\1\111\1\60\1\uffff"
-          + "\1\107\1\116\1\117\1\uffff\1\123\1\60\1\116\1\60\1\uffff\1\123\1\uffff"
-          + "\1\60\1\uffff";
+          + "\1\122\1\101\1\uffff\1\111\1\124\1\116\1\60\1\122\1\117\1\111\1\60\1\111"
+          + "\1\uffff\1\107\1\116\1\117\1\uffff\1\104\1\123\1\60\1\116\1\105\1\60\1"
+          + "\uffff\1\123\1\116\1\uffff\1\60\1\124\1\uffff\1\60\1\uffff";
   static final String DFA18_maxS =
       "\1\ufffe\1\165\1\162\1\157\1\171\1\170\1\165\1\157\1\145\1\163\3\157\1"
           + "\166\1\165\1\145\1\164\1\171\1\163\1\151\1\162\1\157\3\uffff\1\57\1\75"
@@ -6035,15 +6061,16 @@ public class DelphiLexer extends Lexer {
           + "\1\124\5\uffff\2\ufffe\1\uffff\1\123\1\ufffe\1\105\1\122\1\124\1\114\3"
           + "\uffff\2\ufffe\1\105\2\uffff\1\ufffe\1\uffff\1\123\1\125\1\111\1\105\2"
           + "\uffff\1\ufffe\1\uffff\1\123\1\103\1\117\1\122\1\101\1\uffff\1\111\1\124"
-          + "\1\116\1\ufffe\1\122\1\117\1\111\1\ufffe\1\uffff\1\107\1\116\1\117\1\uffff"
-          + "\1\123\1\ufffe\1\116\1\ufffe\1\uffff\1\123\1\uffff\1\ufffe\1\uffff";
+          + "\1\116\1\ufffe\1\122\1\117\1\111\1\ufffe\1\111\1\uffff\1\107\1\116\1\117"
+          + "\1\uffff\1\104\1\123\1\ufffe\1\116\1\105\1\ufffe\1\uffff\1\123\1\116\1"
+          + "\uffff\1\ufffe\1\124\1\uffff\1\ufffe\1\uffff";
   static final String DFA18_acceptS =
       "\26\uffff\1\u0085\1\u0086\1\u0087\2\uffff\1\u008a\1\u008b\1\u008d\3\uffff"
           + "\1\u0094\1\u0095\1\u0097\1\uffff\1\u0099\1\u009a\1\uffff\1\u009e\1\u009f"
-          + "\12\uffff\1\u00bb\3\uffff\1\u00be\1\u00c1\1\u00c2\1\u00c4\14\uffff\1\u00c0"
-          + "\100\uffff\1\u00c3\1\u0088\1\u0089\1\u008c\1\u008e\1\u0090\1\u008f\1\u0091"
-          + "\1\u0092\1\u0096\1\u0093\1\u0098\1\u009c\1\u009b\1\u009d\15\uffff\1\u00c5"
-          + "\1\u00bc\1\uffff\1\u00bd\2\uffff\1\u00bf\7\uffff\1\7\1\13\17\uffff\1\34"
+          + "\12\uffff\1\u00bc\3\uffff\1\u00bf\1\u00c2\1\u00c3\1\u00c5\14\uffff\1\u00c1"
+          + "\100\uffff\1\u00c4\1\u0088\1\u0089\1\u008c\1\u008e\1\u0090\1\u008f\1\u0091"
+          + "\1\u0092\1\u0096\1\u0093\1\u0098\1\u009c\1\u009b\1\u009d\15\uffff\1\u00c6"
+          + "\1\u00bd\1\uffff\1\u00be\2\uffff\1\u00c0\7\uffff\1\7\1\13\17\uffff\1\34"
           + "\1\36\1\37\17\uffff\1\63\6\uffff\1\66\1\74\13\uffff\1\110\1\111\1\uffff"
           + "\1\113\36\uffff\1\163\35\uffff\1\3\1\4\2\uffff\1\10\15\uffff\1\33\3\uffff"
           + "\1\42\5\uffff\1\51\4\uffff\1\56\15\uffff\1\101\2\uffff\1\104\1\uffff\1"
@@ -6068,15 +6095,16 @@ public class DelphiLexer extends Lexer {
           + "\1\u00af\10\uffff\1\45\1\54\30\uffff\1\32\4\uffff\1\u00a1\1\u00a3\1\u00a4"
           + "\1\uffff\1\u00a2\1\uffff\1\u00b0\1\u00b5\1\u00a9\1\u00aa\1\u00ad\2\uffff"
           + "\1\u00b1\6\uffff\1\64\1\71\1\146\3\uffff\1\u00ae\1\u00b4\1\uffff\1\u00b3"
-          + "\4\uffff\1\u00a0\1\u00a5\1\uffff\1\u00b2\5\uffff\1\u00a6\10\uffff\1\u00ba"
-          + "\3\uffff\1\u00b9\4\uffff\1\u00b7\1\uffff\1\u00a7\1\uffff\1\u00b8";
+          + "\4\uffff\1\u00a0\1\u00a5\1\uffff\1\u00b2\5\uffff\1\u00a6\11\uffff\1\u00bb"
+          + "\3\uffff\1\u00b9\6\uffff\1\u00b7\2\uffff\1\u00a7\2\uffff\1\u00b8\1\uffff"
+          + "\1\u00ba";
   static final String DFA18_specialS =
-      "\1\uffff\1\2\1\41\1\17\1\40\1\15\1\20\40\uffff\1\43\2\uffff\1\30\1\44"
-          + "\5\uffff\1\25\1\23\1\24\1\uffff\1\22\1\33\1\27\4\uffff\1\16\1\1\5\uffff"
-          + "\1\35\1\36\1\31\3\uffff\1\3\1\uffff\1\4\1\10\2\uffff\1\32\10\uffff\1\0"
-          + "\116\uffff\1\42\1\uffff\1\21\1\37\2\uffff\1\26\10\uffff\1\5\1\6\3\uffff"
-          + "\1\7\2\uffff\1\13\150\uffff\1\34\14\uffff\1\11\3\uffff\1\14\146\uffff"
-          + "\1\12\u0278\uffff}>";
+      "\1\uffff\1\33\1\17\1\37\1\20\1\36\1\41\40\uffff\1\1\2\uffff\1\11\1\23"
+          + "\5\uffff\1\44\1\43\1\2\1\uffff\1\42\1\40\1\14\4\uffff\1\35\1\22\5\uffff"
+          + "\1\12\1\13\1\7\3\uffff\1\24\1\uffff\1\25\1\26\2\uffff\1\10\10\uffff\1"
+          + "\21\116\uffff\1\16\1\uffff\1\34\1\0\2\uffff\1\3\10\uffff\1\5\1\6\3\uffff"
+          + "\1\30\2\uffff\1\32\150\uffff\1\4\14\uffff\1\27\3\uffff\1\31\146\uffff"
+          + "\1\15\u027f\uffff}>";
   static final String[] DFA18_transitionS = {
     "\2\73\1\uffff\2\73\22\uffff\1\73\2\uffff\1\72\1\70\1\uffff\1\51\1\71"
         + "\1\40\1\41\1\30\1\26\1\33\1\27\1\44\1\31\12\67\1\32\1\34\1\36\1\35\1"
@@ -7132,22 +7160,29 @@ public class DelphiLexer extends Lexer {
     "\1\u0407",
     "\1\u0408",
     "\1\u0409",
-    "\12\64\7\uffff\32\64\4\uffff\1\64\1\uffff\32\64\5\uffff\uff7f\64",
-    "\1\u040b",
+    "\12\64\7\uffff\32\64\4\uffff\1\u040a\1\uffff\32\64\5\uffff\uff7f\64",
     "\1\u040c",
     "\1\u040d",
+    "\1\u040e",
     "\12\64\7\uffff\32\64\4\uffff\1\64\1\uffff\32\64\5\uffff\uff7f\64",
-    "",
-    "\1\u040f",
     "\1\u0410",
+    "",
     "\1\u0411",
-    "",
     "\1\u0412",
-    "\12\64\7\uffff\32\64\4\uffff\1\64\1\uffff\32\64\5\uffff\uff7f\64",
+    "\1\u0413",
+    "",
     "\1\u0414",
+    "\1\u0415",
+    "\12\64\7\uffff\32\64\4\uffff\1\64\1\uffff\32\64\5\uffff\uff7f\64",
+    "\1\u0417",
+    "\1\u0418",
     "\12\64\7\uffff\32\64\4\uffff\1\64\1\uffff\32\64\5\uffff\uff7f\64",
     "",
-    "\1\u0416",
+    "\1\u041a",
+    "\1\u041b",
+    "",
+    "\12\64\7\uffff\32\64\4\uffff\1\64\1\uffff\32\64\5\uffff\uff7f\64",
+    "\1\u041d",
     "",
     "\12\64\7\uffff\32\64\4\uffff\1\64\1\uffff\32\64\5\uffff\uff7f\64",
     ""
@@ -7185,7 +7220,7 @@ public class DelphiLexer extends Lexer {
 
     @Override
     public String getDescription() {
-      return "1:1: Tokens : ( ABSOLUTE | ABSTRACT | ADD | AND | ANSISTRING | ARRAY | AS | ASM | ASSEMBLER | ASSEMBLY | AT | AUTOMATED | BEGIN | BREAK | CASE | CDECL | CLASS | CONST | CONSTRUCTOR | CONTAINS | CONTINUE | DEFAULT | DEPRECATED | DESTRUCTOR | DISPID | DISPINTERFACE | DIV | DO | DOWNTO | DQ | DW | DYNAMIC | ELSE | END | EXCEPT | EXIT | EXPERIMENTAL | EXPORT | EXPORTS | EXTERNAL | FAR | FILE | FINAL | FINALIZATION | FINALLY | FOR | FORWARD | FUNCTION | GOTO | HELPER | IF | IMPLEMENTATION | IMPLEMENTS | IN | INDEX | INHERITED | INITIALIZATION | INLINE | INTERFACE | IS | LABEL | LIBRARY | LOCAL | MESSAGE | MOD | NAME | NEAR | NIL | NODEFAULT | NOT | OBJECT | OF | ON | OPERATOR | OR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PACKED | PASCAL | PLATFORM | POINTER | PRIVATE | PROCEDURE | PROGRAM | PROPERTY | PROTECTED | PUBLIC | PUBLISHED | RAISE | READ | READONLY | RECORD | REFERENCE | REGISTER | REINTRODUCE | REMOVE | REPEAT | REQUIRES | RESIDENT | RESOURCESTRING | SAFECALL | SEALED | SET | SHL | SHR | STATIC | STDCALL | STORED | STRICT | STRING | THEN | THREADVAR | TO | TRY | TYPE | UNIT | UNSAFE | UNTIL | USES | VAR | VARARGS | VARIANT | VIRTUAL | WHILE | WITH | WRITE | WRITEONLY | XOR | FALSE | TRUE | PLUS | MINUS | STAR | SLASH | ASSIGN | COMMA | SEMI | COLON | EQUAL | NOT_EQUAL | LT | LE | GE | GT | LPAREN | RPAREN | LBRACK | LBRACK2 | RBRACK | RBRACK2 | POINTER2 | AT2 | DOT | DOTDOT | LCURLY | RCURLY | AMPERSAND | TkGlobalFunction | TkFunctionName | TkConstantName | TkFunctionArgs | TkFunctionBody | TkFunctionReturn | TkCustomAttribute | TkCustomAttributeArgs | TkNewType | TkNewTypeName | TkNewTypeDecl | TkClass | TkRecord | TkRecordHelper | TkInterface | TkObject | TkClassOfType | TkVariableType | TkVariableIdents | TkVariableParam | TkGuid | TkClassParents | TkClassField | TkAnonymousExpression | TkAssemblerInstructions | TkBlockDeclSection | TkExceptionHandler | TkIdentifier | TkIntNum | TkRealNum | TkHexNum | TkAsmHexNum | TkAsmHexLabel | QuotedString | ControlString | COMMENT | WS | UnicodeBOM );";
+      return "1:1: Tokens : ( ABSOLUTE | ABSTRACT | ADD | AND | ANSISTRING | ARRAY | AS | ASM | ASSEMBLER | ASSEMBLY | AT | AUTOMATED | BEGIN | BREAK | CASE | CDECL | CLASS | CONST | CONSTRUCTOR | CONTAINS | CONTINUE | DEFAULT | DEPRECATED | DESTRUCTOR | DISPID | DISPINTERFACE | DIV | DO | DOWNTO | DQ | DW | DYNAMIC | ELSE | END | EXCEPT | EXIT | EXPERIMENTAL | EXPORT | EXPORTS | EXTERNAL | FAR | FILE | FINAL | FINALIZATION | FINALLY | FOR | FORWARD | FUNCTION | GOTO | HELPER | IF | IMPLEMENTATION | IMPLEMENTS | IN | INDEX | INHERITED | INITIALIZATION | INLINE | INTERFACE | IS | LABEL | LIBRARY | LOCAL | MESSAGE | MOD | NAME | NEAR | NIL | NODEFAULT | NOT | OBJECT | OF | ON | OPERATOR | OR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PACKED | PASCAL | PLATFORM | POINTER | PRIVATE | PROCEDURE | PROGRAM | PROPERTY | PROTECTED | PUBLIC | PUBLISHED | RAISE | READ | READONLY | RECORD | REFERENCE | REGISTER | REINTRODUCE | REMOVE | REPEAT | REQUIRES | RESIDENT | RESOURCESTRING | SAFECALL | SEALED | SET | SHL | SHR | STATIC | STDCALL | STORED | STRICT | STRING | THEN | THREADVAR | TO | TRY | TYPE | UNIT | UNSAFE | UNTIL | USES | VAR | VARARGS | VARIANT | VIRTUAL | WHILE | WITH | WRITE | WRITEONLY | XOR | FALSE | TRUE | PLUS | MINUS | STAR | SLASH | ASSIGN | COMMA | SEMI | COLON | EQUAL | NOT_EQUAL | LT | LE | GE | GT | LPAREN | RPAREN | LBRACK | LBRACK2 | RBRACK | RBRACK2 | POINTER2 | AT2 | DOT | DOTDOT | LCURLY | RCURLY | AMPERSAND | TkGlobalFunction | TkFunctionName | TkConstantName | TkFunctionArgs | TkFunctionBody | TkFunctionReturn | TkCustomAttribute | TkCustomAttributeArgs | TkNewType | TkNewTypeName | TkNewTypeDecl | TkClass | TkRecord | TkRecordHelper | TkInterface | TkObject | TkClassOfType | TkVariableType | TkVariableIdents | TkVariableParam | TkGuid | TkClassParents | TkClassField | TkAnonymousExpression | TkAssemblerInstructions | TkBlockDeclSection | TkExceptionHandlerIdent | TkExceptionHandler | TkIdentifier | TkIntNum | TkRealNum | TkHexNum | TkAsmHexNum | TkAsmHexLabel | QuotedString | ControlString | COMMENT | WS | UnicodeBOM );";
     }
 
     @Override
@@ -7194,6 +7229,415 @@ public class DelphiLexer extends Lexer {
       int _s = s;
       switch (s) {
         case 0:
+          int LA18_170 = input.LA(1);
+
+          int index18_170 = input.index();
+          input.rewind();
+          s = -1;
+          if ((LA18_170 == 'H' || LA18_170 == 'h') && ((asmMode))) {
+            s = 171;
+          } else if (((LA18_170 >= '0' && LA18_170 <= '9')
+                  || (LA18_170 >= 'A' && LA18_170 <= 'F')
+                  || (LA18_170 >= 'a' && LA18_170 <= 'f'))
+              && ((asmMode))) {
+            s = 170;
+          } else if ((LA18_170 == ':') && ((asmMode))) {
+            s = 72;
+          }
+
+          input.seek(index18_170);
+          if (s >= 0) return s;
+          break;
+
+        case 1:
+          int LA18_39 = input.LA(1);
+          s = -1;
+          if (((LA18_39 >= '\u0000' && LA18_39 <= '\uFFFF'))) {
+            s = 137;
+          } else s = 151;
+          if (s >= 0) return s;
+          break;
+
+        case 2:
+          int LA18_51 = input.LA(1);
+
+          int index18_51 = input.index();
+          input.rewind();
+          s = -1;
+          if ((LA18_51 == 'X')) {
+            s = 164;
+          } else if (((LA18_51 >= 'a' && LA18_51 <= 'f'))) {
+            s = 67;
+          } else if (((LA18_51 >= 'A' && LA18_51 <= 'F'))) {
+            s = 68;
+          } else if (((LA18_51 >= '0' && LA18_51 <= '9'))) {
+            s = 69;
+          } else if ((LA18_51 == 'h')) {
+            s = 70;
+          } else if ((LA18_51 == 'H')) {
+            s = 71;
+          } else if ((LA18_51 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 52;
+
+          input.seek(index18_51);
+          if (s >= 0) return s;
+          break;
+
+        case 3:
+          int LA18_173 = input.LA(1);
+
+          int index18_173 = input.index();
+          input.rewind();
+          s = -1;
+          if ((LA18_173 == 'h')) {
+            s = 70;
+          } else if ((LA18_173 == 'H')) {
+            s = 71;
+          } else if ((LA18_173 == 'G'
+              || (LA18_173 >= 'I' && LA18_173 <= 'Z')
+              || LA18_173 == '_'
+              || LA18_173 == 'g'
+              || (LA18_173 >= 'i' && LA18_173 <= 'z')
+              || (LA18_173 >= '\u0080' && LA18_173 <= '\uFFFE'))) {
+            s = 52;
+          } else if (((LA18_173 >= '0' && LA18_173 <= '9'))) {
+            s = 69;
+          } else if (((LA18_173 >= 'a' && LA18_173 <= 'f'))) {
+            s = 67;
+          } else if (((LA18_173 >= 'A' && LA18_173 <= 'F'))) {
+            s = 68;
+          } else if ((LA18_173 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 298;
+
+          input.seek(index18_173);
+          if (s >= 0) return s;
+          break;
+
+        case 4:
+          int LA18_295 = input.LA(1);
+
+          int index18_295 = input.index();
+          input.rewind();
+          s = -1;
+          if (((LA18_295 >= '0' && LA18_295 <= '9'))) {
+            s = 415;
+          } else if ((LA18_295 == 'H' || LA18_295 == 'h') && ((asmMode))) {
+            s = 171;
+          } else if (((LA18_295 >= 'A' && LA18_295 <= 'F') || (LA18_295 >= 'a' && LA18_295 <= 'f'))
+              && ((asmMode))) {
+            s = 170;
+          } else if ((LA18_295 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 168;
+
+          input.seek(index18_295);
+          if (s >= 0) return s;
+          break;
+
+        case 5:
+          int LA18_182 = input.LA(1);
+
+          int index18_182 = input.index();
+          input.rewind();
+          s = -1;
+          if ((!(((asmMode))))) {
+            s = 52;
+          } else if (((asmMode))) {
+            s = 171;
+          }
+
+          input.seek(index18_182);
+          if (s >= 0) return s;
+          break;
+
+        case 6:
+          int LA18_183 = input.LA(1);
+
+          int index18_183 = input.index();
+          input.rewind();
+          s = -1;
+          if ((!(((asmMode))))) {
+            s = 52;
+          } else if (((asmMode))) {
+            s = 171;
+          }
+
+          input.seek(index18_183);
+          if (s >= 0) return s;
+          break;
+
+        case 7:
+          int LA18_69 = input.LA(1);
+
+          int index18_69 = input.index();
+          input.rewind();
+          s = -1;
+          if ((LA18_69 == 'h')) {
+            s = 70;
+          } else if ((LA18_69 == 'H')) {
+            s = 71;
+          } else if (((LA18_69 >= '0' && LA18_69 <= '9'))) {
+            s = 69;
+          } else if (((LA18_69 >= 'a' && LA18_69 <= 'f'))) {
+            s = 67;
+          } else if (((LA18_69 >= 'A' && LA18_69 <= 'F'))) {
+            s = 68;
+          } else if ((LA18_69 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 52;
+
+          input.seek(index18_69);
+          if (s >= 0) return s;
+          break;
+
+        case 8:
+          int LA18_79 = input.LA(1);
+
+          int index18_79 = input.index();
+          input.rewind();
+          s = -1;
+          if ((LA18_79 == 'f')) {
+            s = 190;
+          } else if ((LA18_79 == 'p')) {
+            s = 191;
+          } else if ((LA18_79 == 's')) {
+            s = 192;
+          } else if ((LA18_79 == 'h')) {
+            s = 70;
+          } else if ((LA18_79 == 'H')) {
+            s = 71;
+          } else if (((LA18_79 >= '0' && LA18_79 <= '9'))) {
+            s = 69;
+          } else if (((LA18_79 >= 'a' && LA18_79 <= 'e'))) {
+            s = 67;
+          } else if (((LA18_79 >= 'A' && LA18_79 <= 'F'))) {
+            s = 68;
+          } else if ((LA18_79 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 52;
+
+          input.seek(index18_79);
+          if (s >= 0) return s;
+          break;
+
+        case 9:
+          int LA18_42 = input.LA(1);
+
+          int index18_42 = input.index();
+          input.rewind();
+          s = -1;
+          if ((LA18_42 == 'U')) {
+            s = 152;
+          } else if (((LA18_42 >= 'a' && LA18_42 <= 'f'))) {
+            s = 67;
+          } else if (((LA18_42 >= 'A' && LA18_42 <= 'F'))) {
+            s = 68;
+          } else if (((LA18_42 >= '0' && LA18_42 <= '9'))) {
+            s = 69;
+          } else if ((LA18_42 == 'h')) {
+            s = 70;
+          } else if ((LA18_42 == 'H')) {
+            s = 71;
+          } else if ((LA18_42 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 52;
+
+          input.seek(index18_42);
+          if (s >= 0) return s;
+          break;
+
+        case 10:
+          int LA18_67 = input.LA(1);
+
+          int index18_67 = input.index();
+          input.rewind();
+          s = -1;
+          if ((LA18_67 == 'h')) {
+            s = 70;
+          } else if ((LA18_67 == 'H')) {
+            s = 71;
+          } else if (((LA18_67 >= '0' && LA18_67 <= '9'))) {
+            s = 69;
+          } else if (((LA18_67 >= 'a' && LA18_67 <= 'f'))) {
+            s = 67;
+          } else if (((LA18_67 >= 'A' && LA18_67 <= 'F'))) {
+            s = 68;
+          } else if ((LA18_67 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 52;
+
+          input.seek(index18_67);
+          if (s >= 0) return s;
+          break;
+
+        case 11:
+          int LA18_68 = input.LA(1);
+
+          int index18_68 = input.index();
+          input.rewind();
+          s = -1;
+          if ((LA18_68 == 'h')) {
+            s = 70;
+          } else if ((LA18_68 == 'H')) {
+            s = 71;
+          } else if (((LA18_68 >= '0' && LA18_68 <= '9'))) {
+            s = 69;
+          } else if (((LA18_68 >= 'a' && LA18_68 <= 'f'))) {
+            s = 67;
+          } else if (((LA18_68 >= 'A' && LA18_68 <= 'F'))) {
+            s = 68;
+          } else if ((LA18_68 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 52;
+
+          input.seek(index18_68);
+          if (s >= 0) return s;
+          break;
+
+        case 12:
+          int LA18_55 = input.LA(1);
+
+          int index18_55 = input.index();
+          input.rewind();
+          s = -1;
+          if (((LA18_55 >= '0' && LA18_55 <= '9'))) {
+            s = 167;
+          } else if ((LA18_55 == '.')) {
+            s = 168;
+          } else if ((LA18_55 == 'E' || LA18_55 == 'e')) {
+            s = 169;
+          } else if (((LA18_55 >= 'A' && LA18_55 <= 'D')
+                  || LA18_55 == 'F'
+                  || (LA18_55 >= 'a' && LA18_55 <= 'd')
+                  || LA18_55 == 'f')
+              && ((asmMode))) {
+            s = 170;
+          } else if ((LA18_55 == 'H' || LA18_55 == 'h') && ((asmMode))) {
+            s = 171;
+          } else if ((LA18_55 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 166;
+
+          input.seek(index18_55);
+          if (s >= 0) return s;
+          break;
+
+        case 13:
+          int LA18_415 = input.LA(1);
+
+          int index18_415 = input.index();
+          input.rewind();
+          s = -1;
+          if (((LA18_415 >= '0' && LA18_415 <= '9'))) {
+            s = 415;
+          } else if ((LA18_415 == 'H' || LA18_415 == 'h') && ((asmMode))) {
+            s = 171;
+          } else if (((LA18_415 >= 'A' && LA18_415 <= 'F') || (LA18_415 >= 'a' && LA18_415 <= 'f'))
+              && ((asmMode))) {
+            s = 170;
+          } else if ((LA18_415 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 168;
+
+          input.seek(index18_415);
+          if (s >= 0) return s;
+          break;
+
+        case 14:
+          int LA18_167 = input.LA(1);
+
+          int index18_167 = input.index();
+          input.rewind();
+          s = -1;
+          if (((LA18_167 >= '0' && LA18_167 <= '9'))) {
+            s = 167;
+          } else if ((LA18_167 == '.')) {
+            s = 168;
+          } else if ((LA18_167 == 'E' || LA18_167 == 'e')) {
+            s = 169;
+          } else if ((LA18_167 == 'H' || LA18_167 == 'h') && ((asmMode))) {
+            s = 171;
+          } else if (((LA18_167 >= 'A' && LA18_167 <= 'D')
+                  || LA18_167 == 'F'
+                  || (LA18_167 >= 'a' && LA18_167 <= 'd')
+                  || LA18_167 == 'f')
+              && ((asmMode))) {
+            s = 170;
+          } else if ((LA18_167 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 166;
+
+          input.seek(index18_167);
+          if (s >= 0) return s;
+          break;
+
+        case 15:
+          int LA18_2 = input.LA(1);
+
+          int index18_2 = input.index();
+          input.rewind();
+          s = -1;
+          if ((LA18_2 == 'e')) {
+            s = 73;
+          } else if ((LA18_2 == 'r')) {
+            s = 74;
+          } else if (((LA18_2 >= 'a' && LA18_2 <= 'd') || LA18_2 == 'f')) {
+            s = 67;
+          } else if (((LA18_2 >= 'A' && LA18_2 <= 'F'))) {
+            s = 68;
+          } else if (((LA18_2 >= '0' && LA18_2 <= '9'))) {
+            s = 69;
+          } else if ((LA18_2 == 'h')) {
+            s = 70;
+          } else if ((LA18_2 == 'H')) {
+            s = 71;
+          } else if ((LA18_2 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 52;
+
+          input.seek(index18_2);
+          if (s >= 0) return s;
+          break;
+
+        case 16:
+          int LA18_4 = input.LA(1);
+
+          int index18_4 = input.index();
+          input.rewind();
+          s = -1;
+          if ((LA18_4 == 'e')) {
+            s = 79;
+          } else if ((LA18_4 == 'i')) {
+            s = 80;
+          } else if ((LA18_4 == 'o')) {
+            s = 81;
+          } else if ((LA18_4 == 'q')) {
+            s = 82;
+          } else if ((LA18_4 == 'w')) {
+            s = 83;
+          } else if ((LA18_4 == 'y')) {
+            s = 84;
+          } else if (((LA18_4 >= 'a' && LA18_4 <= 'd') || LA18_4 == 'f')) {
+            s = 67;
+          } else if (((LA18_4 >= 'A' && LA18_4 <= 'F'))) {
+            s = 68;
+          } else if (((LA18_4 >= '0' && LA18_4 <= '9'))) {
+            s = 69;
+          } else if ((LA18_4 == 'h')) {
+            s = 70;
+          } else if ((LA18_4 == 'H')) {
+            s = 71;
+          } else if ((LA18_4 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 52;
+
+          input.seek(index18_4);
+          if (s >= 0) return s;
+          break;
+
+        case 17:
           int LA18_88 = input.LA(1);
 
           int index18_88 = input.index();
@@ -7221,7 +7665,7 @@ public class DelphiLexer extends Lexer {
           if (s >= 0) return s;
           break;
 
-        case 1:
+        case 18:
           int LA18_61 = input.LA(1);
 
           int index18_61 = input.index();
@@ -7247,7 +7691,220 @@ public class DelphiLexer extends Lexer {
           if (s >= 0) return s;
           break;
 
-        case 2:
+        case 19:
+          int LA18_43 = input.LA(1);
+
+          int index18_43 = input.index();
+          input.rewind();
+          s = -1;
+          if ((LA18_43 == 'O')) {
+            s = 153;
+          } else if ((LA18_43 == 'U')) {
+            s = 154;
+          } else if ((LA18_43 == 'L')) {
+            s = 155;
+          } else if (((LA18_43 >= 'a' && LA18_43 <= 'f'))) {
+            s = 67;
+          } else if (((LA18_43 >= 'A' && LA18_43 <= 'F'))) {
+            s = 68;
+          } else if (((LA18_43 >= '0' && LA18_43 <= '9'))) {
+            s = 69;
+          } else if ((LA18_43 == 'h')) {
+            s = 70;
+          } else if ((LA18_43 == 'H')) {
+            s = 71;
+          } else if ((LA18_43 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 52;
+
+          input.seek(index18_43);
+          if (s >= 0) return s;
+          break;
+
+        case 20:
+          int LA18_73 = input.LA(1);
+
+          int index18_73 = input.index();
+          input.rewind();
+          s = -1;
+          if ((LA18_73 == 'g')) {
+            s = 184;
+          } else if ((LA18_73 == 'h')) {
+            s = 70;
+          } else if ((LA18_73 == 'H')) {
+            s = 71;
+          } else if (((LA18_73 >= '0' && LA18_73 <= '9'))) {
+            s = 69;
+          } else if (((LA18_73 >= 'a' && LA18_73 <= 'f'))) {
+            s = 67;
+          } else if (((LA18_73 >= 'A' && LA18_73 <= 'F'))) {
+            s = 68;
+          } else if ((LA18_73 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 52;
+
+          input.seek(index18_73);
+          if (s >= 0) return s;
+          break;
+
+        case 21:
+          int LA18_75 = input.LA(1);
+
+          int index18_75 = input.index();
+          input.rewind();
+          s = -1;
+          if ((LA18_75 == 's')) {
+            s = 186;
+          } else if ((LA18_75 == 'h')) {
+            s = 70;
+          } else if ((LA18_75 == 'H')) {
+            s = 71;
+          } else if (((LA18_75 >= '0' && LA18_75 <= '9'))) {
+            s = 69;
+          } else if (((LA18_75 >= 'a' && LA18_75 <= 'f'))) {
+            s = 67;
+          } else if (((LA18_75 >= 'A' && LA18_75 <= 'F'))) {
+            s = 68;
+          } else if ((LA18_75 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 52;
+
+          input.seek(index18_75);
+          if (s >= 0) return s;
+          break;
+
+        case 22:
+          int LA18_76 = input.LA(1);
+
+          int index18_76 = input.index();
+          input.rewind();
+          s = -1;
+          if ((LA18_76 == 'e')) {
+            s = 187;
+          } else if ((LA18_76 == 'h')) {
+            s = 70;
+          } else if ((LA18_76 == 'H')) {
+            s = 71;
+          } else if (((LA18_76 >= '0' && LA18_76 <= '9'))) {
+            s = 69;
+          } else if (((LA18_76 >= 'a' && LA18_76 <= 'd') || LA18_76 == 'f')) {
+            s = 67;
+          } else if (((LA18_76 >= 'A' && LA18_76 <= 'F'))) {
+            s = 68;
+          } else if ((LA18_76 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 52;
+
+          input.seek(index18_76);
+          if (s >= 0) return s;
+          break;
+
+        case 23:
+          int LA18_308 = input.LA(1);
+
+          int index18_308 = input.index();
+          input.rewind();
+          s = -1;
+          if ((LA18_308 == 'l')) {
+            s = 425;
+          } else if ((LA18_308 == 'h')) {
+            s = 70;
+          } else if ((LA18_308 == 'H')) {
+            s = 71;
+          } else if (((LA18_308 >= '0' && LA18_308 <= '9'))) {
+            s = 69;
+          } else if (((LA18_308 >= 'a' && LA18_308 <= 'f'))) {
+            s = 67;
+          } else if (((LA18_308 >= 'A' && LA18_308 <= 'F'))) {
+            s = 68;
+          } else if ((LA18_308 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 52;
+
+          input.seek(index18_308);
+          if (s >= 0) return s;
+          break;
+
+        case 24:
+          int LA18_187 = input.LA(1);
+
+          int index18_187 = input.index();
+          input.rewind();
+          s = -1;
+          if ((LA18_187 == 'c')) {
+            s = 308;
+          } else if ((LA18_187 == 'h')) {
+            s = 70;
+          } else if ((LA18_187 == 'H')) {
+            s = 71;
+          } else if (((LA18_187 >= '0' && LA18_187 <= '9'))) {
+            s = 69;
+          } else if (((LA18_187 >= 'a' && LA18_187 <= 'b')
+              || (LA18_187 >= 'd' && LA18_187 <= 'f'))) {
+            s = 67;
+          } else if (((LA18_187 >= 'A' && LA18_187 <= 'F'))) {
+            s = 68;
+          } else if ((LA18_187 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 52;
+
+          input.seek(index18_187);
+          if (s >= 0) return s;
+          break;
+
+        case 25:
+          int LA18_312 = input.LA(1);
+
+          int index18_312 = input.index();
+          input.rewind();
+          s = -1;
+          if ((LA18_312 == 'u')) {
+            s = 430;
+          } else if ((LA18_312 == 'h')) {
+            s = 70;
+          } else if ((LA18_312 == 'H')) {
+            s = 71;
+          } else if (((LA18_312 >= '0' && LA18_312 <= '9'))) {
+            s = 69;
+          } else if (((LA18_312 >= 'a' && LA18_312 <= 'f'))) {
+            s = 67;
+          } else if (((LA18_312 >= 'A' && LA18_312 <= 'F'))) {
+            s = 68;
+          } else if ((LA18_312 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 52;
+
+          input.seek(index18_312);
+          if (s >= 0) return s;
+          break;
+
+        case 26:
+          int LA18_190 = input.LA(1);
+
+          int index18_190 = input.index();
+          input.rewind();
+          s = -1;
+          if ((LA18_190 == 'a')) {
+            s = 312;
+          } else if ((LA18_190 == 'h')) {
+            s = 70;
+          } else if ((LA18_190 == 'H')) {
+            s = 71;
+          } else if (((LA18_190 >= '0' && LA18_190 <= '9'))) {
+            s = 69;
+          } else if (((LA18_190 >= 'b' && LA18_190 <= 'f'))) {
+            s = 67;
+          } else if (((LA18_190 >= 'A' && LA18_190 <= 'F'))) {
+            s = 68;
+          } else if ((LA18_190 == ':') && ((asmMode))) {
+            s = 72;
+          } else s = 52;
+
+          input.seek(index18_190);
+          if (s >= 0) return s;
+          break;
+
+        case 27:
           int LA18_1 = input.LA(1);
 
           int index18_1 = input.index();
@@ -7285,243 +7942,56 @@ public class DelphiLexer extends Lexer {
           if (s >= 0) return s;
           break;
 
-        case 3:
-          int LA18_73 = input.LA(1);
+        case 28:
+          int LA18_169 = input.LA(1);
 
-          int index18_73 = input.index();
+          int index18_169 = input.index();
           input.rewind();
           s = -1;
-          if ((LA18_73 == 'g')) {
-            s = 184;
-          } else if ((LA18_73 == 'h')) {
-            s = 70;
-          } else if ((LA18_73 == 'H')) {
-            s = 71;
-          } else if (((LA18_73 >= '0' && LA18_73 <= '9'))) {
-            s = 69;
-          } else if (((LA18_73 >= 'a' && LA18_73 <= 'f'))) {
-            s = 67;
-          } else if (((LA18_73 >= 'A' && LA18_73 <= 'F'))) {
-            s = 68;
-          } else if ((LA18_73 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 52;
-
-          input.seek(index18_73);
-          if (s >= 0) return s;
-          break;
-
-        case 4:
-          int LA18_75 = input.LA(1);
-
-          int index18_75 = input.index();
-          input.rewind();
-          s = -1;
-          if ((LA18_75 == 's')) {
-            s = 186;
-          } else if ((LA18_75 == 'h')) {
-            s = 70;
-          } else if ((LA18_75 == 'H')) {
-            s = 71;
-          } else if (((LA18_75 >= '0' && LA18_75 <= '9'))) {
-            s = 69;
-          } else if (((LA18_75 >= 'a' && LA18_75 <= 'f'))) {
-            s = 67;
-          } else if (((LA18_75 >= 'A' && LA18_75 <= 'F'))) {
-            s = 68;
-          } else if ((LA18_75 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 52;
-
-          input.seek(index18_75);
-          if (s >= 0) return s;
-          break;
-
-        case 5:
-          int LA18_182 = input.LA(1);
-
-          int index18_182 = input.index();
-          input.rewind();
-          s = -1;
-          if ((!(((asmMode))))) {
-            s = 52;
-          } else if (((asmMode))) {
+          if ((LA18_169 == '+' || LA18_169 == '-')) {
+            s = 168;
+          } else if (((LA18_169 >= '0' && LA18_169 <= '9'))) {
+            s = 295;
+          } else if ((LA18_169 == 'H' || LA18_169 == 'h') && ((asmMode))) {
             s = 171;
-          }
-
-          input.seek(index18_182);
-          if (s >= 0) return s;
-          break;
-
-        case 6:
-          int LA18_183 = input.LA(1);
-
-          int index18_183 = input.index();
-          input.rewind();
-          s = -1;
-          if ((!(((asmMode))))) {
-            s = 52;
-          } else if (((asmMode))) {
-            s = 171;
-          }
-
-          input.seek(index18_183);
-          if (s >= 0) return s;
-          break;
-
-        case 7:
-          int LA18_187 = input.LA(1);
-
-          int index18_187 = input.index();
-          input.rewind();
-          s = -1;
-          if ((LA18_187 == 'c')) {
-            s = 308;
-          } else if ((LA18_187 == 'h')) {
-            s = 70;
-          } else if ((LA18_187 == 'H')) {
-            s = 71;
-          } else if (((LA18_187 >= '0' && LA18_187 <= '9'))) {
-            s = 69;
-          } else if (((LA18_187 >= 'a' && LA18_187 <= 'b')
-              || (LA18_187 >= 'd' && LA18_187 <= 'f'))) {
-            s = 67;
-          } else if (((LA18_187 >= 'A' && LA18_187 <= 'F'))) {
-            s = 68;
-          } else if ((LA18_187 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 52;
-
-          input.seek(index18_187);
-          if (s >= 0) return s;
-          break;
-
-        case 8:
-          int LA18_76 = input.LA(1);
-
-          int index18_76 = input.index();
-          input.rewind();
-          s = -1;
-          if ((LA18_76 == 'e')) {
-            s = 187;
-          } else if ((LA18_76 == 'h')) {
-            s = 70;
-          } else if ((LA18_76 == 'H')) {
-            s = 71;
-          } else if (((LA18_76 >= '0' && LA18_76 <= '9'))) {
-            s = 69;
-          } else if (((LA18_76 >= 'a' && LA18_76 <= 'd') || LA18_76 == 'f')) {
-            s = 67;
-          } else if (((LA18_76 >= 'A' && LA18_76 <= 'F'))) {
-            s = 68;
-          } else if ((LA18_76 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 52;
-
-          input.seek(index18_76);
-          if (s >= 0) return s;
-          break;
-
-        case 9:
-          int LA18_308 = input.LA(1);
-
-          int index18_308 = input.index();
-          input.rewind();
-          s = -1;
-          if ((LA18_308 == 'l')) {
-            s = 425;
-          } else if ((LA18_308 == 'h')) {
-            s = 70;
-          } else if ((LA18_308 == 'H')) {
-            s = 71;
-          } else if (((LA18_308 >= '0' && LA18_308 <= '9'))) {
-            s = 69;
-          } else if (((LA18_308 >= 'a' && LA18_308 <= 'f'))) {
-            s = 67;
-          } else if (((LA18_308 >= 'A' && LA18_308 <= 'F'))) {
-            s = 68;
-          } else if ((LA18_308 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 52;
-
-          input.seek(index18_308);
-          if (s >= 0) return s;
-          break;
-
-        case 10:
-          int LA18_415 = input.LA(1);
-
-          int index18_415 = input.index();
-          input.rewind();
-          s = -1;
-          if (((LA18_415 >= '0' && LA18_415 <= '9'))) {
-            s = 415;
-          } else if ((LA18_415 == 'H' || LA18_415 == 'h') && ((asmMode))) {
-            s = 171;
-          } else if (((LA18_415 >= 'A' && LA18_415 <= 'F') || (LA18_415 >= 'a' && LA18_415 <= 'f'))
+          } else if (((LA18_169 >= 'A' && LA18_169 <= 'F') || (LA18_169 >= 'a' && LA18_169 <= 'f'))
               && ((asmMode))) {
             s = 170;
-          } else if ((LA18_415 == ':') && ((asmMode))) {
+          } else if ((LA18_169 == ':') && ((asmMode))) {
             s = 72;
-          } else s = 168;
+          }
 
-          input.seek(index18_415);
+          input.seek(index18_169);
           if (s >= 0) return s;
           break;
 
-        case 11:
-          int LA18_190 = input.LA(1);
+        case 29:
+          int LA18_60 = input.LA(1);
 
-          int index18_190 = input.index();
+          int index18_60 = input.index();
           input.rewind();
           s = -1;
-          if ((LA18_190 == 'a')) {
-            s = 312;
-          } else if ((LA18_190 == 'h')) {
+          if ((LA18_60 == 's')) {
+            s = 172;
+          } else if ((LA18_60 == 'h')) {
             s = 70;
-          } else if ((LA18_190 == 'H')) {
+          } else if ((LA18_60 == 'H')) {
             s = 71;
-          } else if (((LA18_190 >= '0' && LA18_190 <= '9'))) {
+          } else if (((LA18_60 >= '0' && LA18_60 <= '9'))) {
             s = 69;
-          } else if (((LA18_190 >= 'b' && LA18_190 <= 'f'))) {
+          } else if (((LA18_60 >= 'a' && LA18_60 <= 'f'))) {
             s = 67;
-          } else if (((LA18_190 >= 'A' && LA18_190 <= 'F'))) {
+          } else if (((LA18_60 >= 'A' && LA18_60 <= 'F'))) {
             s = 68;
-          } else if ((LA18_190 == ':') && ((asmMode))) {
+          } else if ((LA18_60 == ':') && ((asmMode))) {
             s = 72;
           } else s = 52;
 
-          input.seek(index18_190);
+          input.seek(index18_60);
           if (s >= 0) return s;
           break;
 
-        case 12:
-          int LA18_312 = input.LA(1);
-
-          int index18_312 = input.index();
-          input.rewind();
-          s = -1;
-          if ((LA18_312 == 'u')) {
-            s = 430;
-          } else if ((LA18_312 == 'h')) {
-            s = 70;
-          } else if ((LA18_312 == 'H')) {
-            s = 71;
-          } else if (((LA18_312 >= '0' && LA18_312 <= '9'))) {
-            s = 69;
-          } else if (((LA18_312 >= 'a' && LA18_312 <= 'f'))) {
-            s = 67;
-          } else if (((LA18_312 >= 'A' && LA18_312 <= 'F'))) {
-            s = 68;
-          } else if ((LA18_312 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 52;
-
-          input.seek(index18_312);
-          if (s >= 0) return s;
-          break;
-
-        case 13:
+        case 30:
           int LA18_5 = input.LA(1);
 
           int index18_5 = input.index();
@@ -7551,33 +8021,7 @@ public class DelphiLexer extends Lexer {
           if (s >= 0) return s;
           break;
 
-        case 14:
-          int LA18_60 = input.LA(1);
-
-          int index18_60 = input.index();
-          input.rewind();
-          s = -1;
-          if ((LA18_60 == 's')) {
-            s = 172;
-          } else if ((LA18_60 == 'h')) {
-            s = 70;
-          } else if ((LA18_60 == 'H')) {
-            s = 71;
-          } else if (((LA18_60 >= '0' && LA18_60 <= '9'))) {
-            s = 69;
-          } else if (((LA18_60 >= 'a' && LA18_60 <= 'f'))) {
-            s = 67;
-          } else if (((LA18_60 >= 'A' && LA18_60 <= 'F'))) {
-            s = 68;
-          } else if ((LA18_60 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 52;
-
-          input.seek(index18_60);
-          if (s >= 0) return s;
-          break;
-
-        case 15:
+        case 31:
           int LA18_3 = input.LA(1);
 
           int index18_3 = input.index();
@@ -7609,7 +8053,17 @@ public class DelphiLexer extends Lexer {
           if (s >= 0) return s;
           break;
 
-        case 16:
+        case 32:
+          int LA18_54 = input.LA(1);
+          s = -1;
+          if (((LA18_54 >= '\u0000' && LA18_54 <= '\uFEFE')
+              || (LA18_54 >= '\uFF00' && LA18_54 <= '\uFFFF'))) {
+            s = 52;
+          } else s = 165;
+          if (s >= 0) return s;
+          break;
+
+        case 33:
           int LA18_6 = input.LA(1);
 
           int index18_6 = input.index();
@@ -7641,30 +8095,7 @@ public class DelphiLexer extends Lexer {
           if (s >= 0) return s;
           break;
 
-        case 17:
-          int LA18_169 = input.LA(1);
-
-          int index18_169 = input.index();
-          input.rewind();
-          s = -1;
-          if ((LA18_169 == '+' || LA18_169 == '-')) {
-            s = 168;
-          } else if (((LA18_169 >= '0' && LA18_169 <= '9'))) {
-            s = 295;
-          } else if ((LA18_169 == 'H' || LA18_169 == 'h') && ((asmMode))) {
-            s = 171;
-          } else if (((LA18_169 >= 'A' && LA18_169 <= 'F') || (LA18_169 >= 'a' && LA18_169 <= 'f'))
-              && ((asmMode))) {
-            s = 170;
-          } else if ((LA18_169 == ':') && ((asmMode))) {
-            s = 72;
-          }
-
-          input.seek(index18_169);
-          if (s >= 0) return s;
-          break;
-
-        case 18:
+        case 34:
           int LA18_53 = input.LA(1);
 
           int index18_53 = input.index();
@@ -7688,7 +8119,7 @@ public class DelphiLexer extends Lexer {
           if (s >= 0) return s;
           break;
 
-        case 19:
+        case 35:
           int LA18_50 = input.LA(1);
 
           int index18_50 = input.index();
@@ -7714,33 +8145,7 @@ public class DelphiLexer extends Lexer {
           if (s >= 0) return s;
           break;
 
-        case 20:
-          int LA18_51 = input.LA(1);
-
-          int index18_51 = input.index();
-          input.rewind();
-          s = -1;
-          if ((LA18_51 == 'X')) {
-            s = 164;
-          } else if (((LA18_51 >= 'a' && LA18_51 <= 'f'))) {
-            s = 67;
-          } else if (((LA18_51 >= 'A' && LA18_51 <= 'F'))) {
-            s = 68;
-          } else if (((LA18_51 >= '0' && LA18_51 <= '9'))) {
-            s = 69;
-          } else if ((LA18_51 == 'h')) {
-            s = 70;
-          } else if ((LA18_51 == 'H')) {
-            s = 71;
-          } else if ((LA18_51 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 52;
-
-          input.seek(index18_51);
-          if (s >= 0) return s;
-          break;
-
-        case 21:
+        case 36:
           int LA18_49 = input.LA(1);
 
           int index18_49 = input.index();
@@ -7765,376 +8170,6 @@ public class DelphiLexer extends Lexer {
           } else s = 52;
 
           input.seek(index18_49);
-          if (s >= 0) return s;
-          break;
-
-        case 22:
-          int LA18_173 = input.LA(1);
-
-          int index18_173 = input.index();
-          input.rewind();
-          s = -1;
-          if ((LA18_173 == 'h')) {
-            s = 70;
-          } else if ((LA18_173 == 'H')) {
-            s = 71;
-          } else if ((LA18_173 == 'G'
-              || (LA18_173 >= 'I' && LA18_173 <= 'Z')
-              || LA18_173 == '_'
-              || LA18_173 == 'g'
-              || (LA18_173 >= 'i' && LA18_173 <= 'z')
-              || (LA18_173 >= '\u0080' && LA18_173 <= '\uFFFE'))) {
-            s = 52;
-          } else if (((LA18_173 >= '0' && LA18_173 <= '9'))) {
-            s = 69;
-          } else if (((LA18_173 >= 'a' && LA18_173 <= 'f'))) {
-            s = 67;
-          } else if (((LA18_173 >= 'A' && LA18_173 <= 'F'))) {
-            s = 68;
-          } else if ((LA18_173 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 298;
-
-          input.seek(index18_173);
-          if (s >= 0) return s;
-          break;
-
-        case 23:
-          int LA18_55 = input.LA(1);
-
-          int index18_55 = input.index();
-          input.rewind();
-          s = -1;
-          if (((LA18_55 >= '0' && LA18_55 <= '9'))) {
-            s = 167;
-          } else if ((LA18_55 == '.')) {
-            s = 168;
-          } else if ((LA18_55 == 'E' || LA18_55 == 'e')) {
-            s = 169;
-          } else if (((LA18_55 >= 'A' && LA18_55 <= 'D')
-                  || LA18_55 == 'F'
-                  || (LA18_55 >= 'a' && LA18_55 <= 'd')
-                  || LA18_55 == 'f')
-              && ((asmMode))) {
-            s = 170;
-          } else if ((LA18_55 == 'H' || LA18_55 == 'h') && ((asmMode))) {
-            s = 171;
-          } else if ((LA18_55 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 166;
-
-          input.seek(index18_55);
-          if (s >= 0) return s;
-          break;
-
-        case 24:
-          int LA18_42 = input.LA(1);
-
-          int index18_42 = input.index();
-          input.rewind();
-          s = -1;
-          if ((LA18_42 == 'U')) {
-            s = 152;
-          } else if (((LA18_42 >= 'a' && LA18_42 <= 'f'))) {
-            s = 67;
-          } else if (((LA18_42 >= 'A' && LA18_42 <= 'F'))) {
-            s = 68;
-          } else if (((LA18_42 >= '0' && LA18_42 <= '9'))) {
-            s = 69;
-          } else if ((LA18_42 == 'h')) {
-            s = 70;
-          } else if ((LA18_42 == 'H')) {
-            s = 71;
-          } else if ((LA18_42 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 52;
-
-          input.seek(index18_42);
-          if (s >= 0) return s;
-          break;
-
-        case 25:
-          int LA18_69 = input.LA(1);
-
-          int index18_69 = input.index();
-          input.rewind();
-          s = -1;
-          if ((LA18_69 == 'h')) {
-            s = 70;
-          } else if ((LA18_69 == 'H')) {
-            s = 71;
-          } else if (((LA18_69 >= '0' && LA18_69 <= '9'))) {
-            s = 69;
-          } else if (((LA18_69 >= 'a' && LA18_69 <= 'f'))) {
-            s = 67;
-          } else if (((LA18_69 >= 'A' && LA18_69 <= 'F'))) {
-            s = 68;
-          } else if ((LA18_69 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 52;
-
-          input.seek(index18_69);
-          if (s >= 0) return s;
-          break;
-
-        case 26:
-          int LA18_79 = input.LA(1);
-
-          int index18_79 = input.index();
-          input.rewind();
-          s = -1;
-          if ((LA18_79 == 'f')) {
-            s = 190;
-          } else if ((LA18_79 == 'p')) {
-            s = 191;
-          } else if ((LA18_79 == 's')) {
-            s = 192;
-          } else if ((LA18_79 == 'h')) {
-            s = 70;
-          } else if ((LA18_79 == 'H')) {
-            s = 71;
-          } else if (((LA18_79 >= '0' && LA18_79 <= '9'))) {
-            s = 69;
-          } else if (((LA18_79 >= 'a' && LA18_79 <= 'e'))) {
-            s = 67;
-          } else if (((LA18_79 >= 'A' && LA18_79 <= 'F'))) {
-            s = 68;
-          } else if ((LA18_79 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 52;
-
-          input.seek(index18_79);
-          if (s >= 0) return s;
-          break;
-
-        case 27:
-          int LA18_54 = input.LA(1);
-          s = -1;
-          if (((LA18_54 >= '\u0000' && LA18_54 <= '\uFEFE')
-              || (LA18_54 >= '\uFF00' && LA18_54 <= '\uFFFF'))) {
-            s = 52;
-          } else s = 165;
-          if (s >= 0) return s;
-          break;
-
-        case 28:
-          int LA18_295 = input.LA(1);
-
-          int index18_295 = input.index();
-          input.rewind();
-          s = -1;
-          if (((LA18_295 >= '0' && LA18_295 <= '9'))) {
-            s = 415;
-          } else if ((LA18_295 == 'H' || LA18_295 == 'h') && ((asmMode))) {
-            s = 171;
-          } else if (((LA18_295 >= 'A' && LA18_295 <= 'F') || (LA18_295 >= 'a' && LA18_295 <= 'f'))
-              && ((asmMode))) {
-            s = 170;
-          } else if ((LA18_295 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 168;
-
-          input.seek(index18_295);
-          if (s >= 0) return s;
-          break;
-
-        case 29:
-          int LA18_67 = input.LA(1);
-
-          int index18_67 = input.index();
-          input.rewind();
-          s = -1;
-          if ((LA18_67 == 'h')) {
-            s = 70;
-          } else if ((LA18_67 == 'H')) {
-            s = 71;
-          } else if (((LA18_67 >= '0' && LA18_67 <= '9'))) {
-            s = 69;
-          } else if (((LA18_67 >= 'a' && LA18_67 <= 'f'))) {
-            s = 67;
-          } else if (((LA18_67 >= 'A' && LA18_67 <= 'F'))) {
-            s = 68;
-          } else if ((LA18_67 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 52;
-
-          input.seek(index18_67);
-          if (s >= 0) return s;
-          break;
-
-        case 30:
-          int LA18_68 = input.LA(1);
-
-          int index18_68 = input.index();
-          input.rewind();
-          s = -1;
-          if ((LA18_68 == 'h')) {
-            s = 70;
-          } else if ((LA18_68 == 'H')) {
-            s = 71;
-          } else if (((LA18_68 >= '0' && LA18_68 <= '9'))) {
-            s = 69;
-          } else if (((LA18_68 >= 'a' && LA18_68 <= 'f'))) {
-            s = 67;
-          } else if (((LA18_68 >= 'A' && LA18_68 <= 'F'))) {
-            s = 68;
-          } else if ((LA18_68 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 52;
-
-          input.seek(index18_68);
-          if (s >= 0) return s;
-          break;
-
-        case 31:
-          int LA18_170 = input.LA(1);
-
-          int index18_170 = input.index();
-          input.rewind();
-          s = -1;
-          if ((LA18_170 == 'H' || LA18_170 == 'h') && ((asmMode))) {
-            s = 171;
-          } else if (((LA18_170 >= '0' && LA18_170 <= '9')
-                  || (LA18_170 >= 'A' && LA18_170 <= 'F')
-                  || (LA18_170 >= 'a' && LA18_170 <= 'f'))
-              && ((asmMode))) {
-            s = 170;
-          } else if ((LA18_170 == ':') && ((asmMode))) {
-            s = 72;
-          }
-
-          input.seek(index18_170);
-          if (s >= 0) return s;
-          break;
-
-        case 32:
-          int LA18_4 = input.LA(1);
-
-          int index18_4 = input.index();
-          input.rewind();
-          s = -1;
-          if ((LA18_4 == 'e')) {
-            s = 79;
-          } else if ((LA18_4 == 'i')) {
-            s = 80;
-          } else if ((LA18_4 == 'o')) {
-            s = 81;
-          } else if ((LA18_4 == 'q')) {
-            s = 82;
-          } else if ((LA18_4 == 'w')) {
-            s = 83;
-          } else if ((LA18_4 == 'y')) {
-            s = 84;
-          } else if (((LA18_4 >= 'a' && LA18_4 <= 'd') || LA18_4 == 'f')) {
-            s = 67;
-          } else if (((LA18_4 >= 'A' && LA18_4 <= 'F'))) {
-            s = 68;
-          } else if (((LA18_4 >= '0' && LA18_4 <= '9'))) {
-            s = 69;
-          } else if ((LA18_4 == 'h')) {
-            s = 70;
-          } else if ((LA18_4 == 'H')) {
-            s = 71;
-          } else if ((LA18_4 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 52;
-
-          input.seek(index18_4);
-          if (s >= 0) return s;
-          break;
-
-        case 33:
-          int LA18_2 = input.LA(1);
-
-          int index18_2 = input.index();
-          input.rewind();
-          s = -1;
-          if ((LA18_2 == 'e')) {
-            s = 73;
-          } else if ((LA18_2 == 'r')) {
-            s = 74;
-          } else if (((LA18_2 >= 'a' && LA18_2 <= 'd') || LA18_2 == 'f')) {
-            s = 67;
-          } else if (((LA18_2 >= 'A' && LA18_2 <= 'F'))) {
-            s = 68;
-          } else if (((LA18_2 >= '0' && LA18_2 <= '9'))) {
-            s = 69;
-          } else if ((LA18_2 == 'h')) {
-            s = 70;
-          } else if ((LA18_2 == 'H')) {
-            s = 71;
-          } else if ((LA18_2 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 52;
-
-          input.seek(index18_2);
-          if (s >= 0) return s;
-          break;
-
-        case 34:
-          int LA18_167 = input.LA(1);
-
-          int index18_167 = input.index();
-          input.rewind();
-          s = -1;
-          if (((LA18_167 >= '0' && LA18_167 <= '9'))) {
-            s = 167;
-          } else if ((LA18_167 == '.')) {
-            s = 168;
-          } else if ((LA18_167 == 'E' || LA18_167 == 'e')) {
-            s = 169;
-          } else if ((LA18_167 == 'H' || LA18_167 == 'h') && ((asmMode))) {
-            s = 171;
-          } else if (((LA18_167 >= 'A' && LA18_167 <= 'D')
-                  || LA18_167 == 'F'
-                  || (LA18_167 >= 'a' && LA18_167 <= 'd')
-                  || LA18_167 == 'f')
-              && ((asmMode))) {
-            s = 170;
-          } else if ((LA18_167 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 166;
-
-          input.seek(index18_167);
-          if (s >= 0) return s;
-          break;
-
-        case 35:
-          int LA18_39 = input.LA(1);
-          s = -1;
-          if (((LA18_39 >= '\u0000' && LA18_39 <= '\uFFFF'))) {
-            s = 137;
-          } else s = 151;
-          if (s >= 0) return s;
-          break;
-
-        case 36:
-          int LA18_43 = input.LA(1);
-
-          int index18_43 = input.index();
-          input.rewind();
-          s = -1;
-          if ((LA18_43 == 'O')) {
-            s = 153;
-          } else if ((LA18_43 == 'U')) {
-            s = 154;
-          } else if ((LA18_43 == 'L')) {
-            s = 155;
-          } else if (((LA18_43 >= 'a' && LA18_43 <= 'f'))) {
-            s = 67;
-          } else if (((LA18_43 >= 'A' && LA18_43 <= 'F'))) {
-            s = 68;
-          } else if (((LA18_43 >= '0' && LA18_43 <= '9'))) {
-            s = 69;
-          } else if ((LA18_43 == 'h')) {
-            s = 70;
-          } else if ((LA18_43 == 'H')) {
-            s = 71;
-          } else if ((LA18_43 == ':') && ((asmMode))) {
-            s = 72;
-          } else s = 52;
-
-          input.seek(index18_43);
           if (s >= 0) return s;
           break;
       }

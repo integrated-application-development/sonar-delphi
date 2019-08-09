@@ -1,73 +1,56 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.List;
 import net.sourceforge.pmd.RuleContext;
+import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
+/**
+ * This rule adds violations when there are too many defined sub-procedures in a top-level method,
+ * regardless of sub-procedure nesting level
+ */
 public class TooManySubProceduresRule extends DelphiRule {
+  private static final String VIOLATION_MESSAGE =
+      "Code should not contain too many sub-procedures. Method has %d sub-procedures (Limit is %d)";
 
-  /**
-   * This rule adds violations when there are too many defined sub procedures in a defined
-   * implementation block, as defined by a user defined LIMIT value.
-   *
-   * <p>Subprocedures can be nested, so this rule attempts to account for that by searching at
-   * multiple depths in the tree.
-   *
-   * @param node the current node
-   * @param ctx the ruleContext to store the violations
-   */
   @Override
   public void visit(DelphiPMDNode node, RuleContext ctx) {
-    if (node.getType() != DelphiLexer.IMPLEMENTATION) {
-      return;
-    }
+    if (shouldVisit(node)) {
+      int count = countSubProcedures(node);
+      int limit = getProperty(LIMIT);
 
-    List children = node.getChildren();
-    // Some implementation nodes may not have any code yet, hence no children
-    if (children == null) {
-      return;
-    }
-
-    int subProcedureCounter = 0;
-
-    // subProcedureDepth tracks whether we are in a procedure, sub procedure,
-    // or sub-sub procedures.
-    // -1 means not in a procedure
-    // 0 means in an out procedure
-    // 1 means in a sub procedure
-    // n means in a nth level sub procedure
-    // we treat any nth level sub procedure the same as any sub procedures
-    int subProcedureDepth = -1;
-
-    for (Object child : children) {
-      String value = child.toString();
-
-      if (value.equals("begin")) {
-        --subProcedureDepth;
-      }
-
-      if (!value.equals("procedure") && !value.equals("function")) {
-        continue;
-      }
-
-      ++subProcedureDepth;
-
-      if (subProcedureDepth > 0) {
-        ++subProcedureCounter;
-      }
-
-      if (subProcedureCounter > getProperty(LIMIT)) {
-        addViolation(
-            ctx,
-            node,
-            "Code should not contain too many sub-procedures, "
-                + "limit of "
-                + getProperty(LIMIT)
-                + " exceeded.");
-        // Avoid adding multiple violations of same type
-        return;
+      if (count > limit) {
+        var violationNode = (DelphiPMDNode) node.getFirstChildWithType(DelphiLexer.TkFunctionName);
+        addViolation(ctx, violationNode, String.format(VIOLATION_MESSAGE, count, limit));
       }
     }
+  }
+
+  private int countSubProcedures(DelphiPMDNode node) {
+    int count = 0;
+
+    DelphiPMDNode blockDeclSection = node.nextNode();
+    if (blockDeclSection != null) {
+      for (int i = 0; i < blockDeclSection.getChildCount(); ++i) {
+        Tree child = blockDeclSection.getChild(i);
+        if (isMethodNode(child)) {
+          count += countSubProcedures((DelphiPMDNode) child) + 1;
+        }
+      }
+    }
+
+    return count;
+  }
+
+  private boolean shouldVisit(Tree node) {
+    return isMethodNode(node) || node.getParent().getType() == DelphiLexer.IMPLEMENTATION;
+  }
+
+  private boolean isMethodNode(Tree node) {
+    int type = node.getType();
+    return type == DelphiLexer.CONSTRUCTOR
+        || type == DelphiLexer.DESTRUCTOR
+        || type == DelphiLexer.FUNCTION
+        || type == DelphiLexer.PROCEDURE;
   }
 }
