@@ -83,7 +83,7 @@ public class XPathRule extends DelphiRule {
           continue;
         }
 
-        String msg = this.getMessage().replaceAll("\\{}", resultNode.getTextContent());
+        String msg = this.getMessage().replace("{}", resultNode.getTextContent());
 
         newViolation(ctx)
             .logicalLocation(packageName, className, methodName)

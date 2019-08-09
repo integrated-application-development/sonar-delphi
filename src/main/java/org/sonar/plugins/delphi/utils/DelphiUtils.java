@@ -45,7 +45,7 @@ public final class DelphiUtils {
    * @return normalized file name
    */
   public static String normalizeFileName(String fileName) {
-    return fileName.replaceAll("\\\\", "/");
+    return fileName.replace("\\", "/");
   }
 
   /**
@@ -62,7 +62,7 @@ public final class DelphiUtils {
     String fName = url.getPath();
     File file = new File(fName);
     if (!file.exists()) {
-      fName = fName.replaceAll("%20", " ");
+      fName = fName.replace("%20", " ");
       file = new File(fName);
     }
     return file;
@@ -152,7 +152,7 @@ public final class DelphiUtils {
     // number of '..' in file name
     int dotdotCount = DelphiUtils.countSubstrings(result, "..");
     // get rid of '../'
-    result = result.replaceAll("\\.\\./", "");
+    result = result.replace("../", "");
 
     for (int i = 0; i < dotdotCount; ++i) {
       currentDir = currentDir.substring(0, currentDir.lastIndexOf('/'));
