@@ -18,7 +18,7 @@ public class EmptyInterfaceRuleTest extends BasePmdRuleTest {
             .appendDecl("  IPublisher = interface")
             .appendDecl("    ['{E1787C21-0FF2-11D5-A978-006067000685}']")
             .appendDecl("      procedure RegisterSubscriber(Handler: TNotifyEvent);")
-            .appendDecl("end;");
+            .appendDecl("  end;");
 
     execute(builder);
 
@@ -32,7 +32,7 @@ public class EmptyInterfaceRuleTest extends BasePmdRuleTest {
             .appendDecl("type")
             .appendDecl("  IPublisher = interface")
             .appendDecl("    procedure RegisterSubscriber(Handler: TNotifyEvent);")
-            .appendDecl("end;");
+            .appendDecl("  end;");
 
     execute(builder);
 
@@ -46,7 +46,7 @@ public class EmptyInterfaceRuleTest extends BasePmdRuleTest {
             .appendDecl("type")
             .appendDecl("  IPublisher = interface")
             .appendDecl("    ['{E1787C21-0FF2-11D5-A978-006067000685}']")
-            .appendDecl("end;");
+            .appendDecl("  end;");
 
     execute(builder);
 
@@ -54,15 +54,20 @@ public class EmptyInterfaceRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInterfaceWithoutMethodsOrGuidShouldAddIssue() {
+  public void testInterfaceForwardDeclarationShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
+            .appendDecl("  // Forward declaration")
+            .appendDecl("  IPublisher = interface;")
+            .appendDecl("  // Actual interface")
             .appendDecl("  IPublisher = interface")
-            .appendDecl("end;");
+            .appendDecl("    ['{E1787C21-0FF2-11D5-A978-006067000685}']")
+            .appendDecl("      procedure RegisterSubscriber(Handler: TNotifyEvent);")
+            .appendDecl("  end;");
 
     execute(builder);
 
-    assertIssues(hasItem(hasRuleKeyAtLine("EmptyInterfaceRule", builder.getOffsetDecl() + 2)));
+    assertIssues(empty());
   }
 }
