@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2019-08-09
+
 ### Added
 
 - `TooLargeMethodRule` analysis rule, which flags methods with too many statements.
@@ -93,7 +95,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.1.0...v0.2.0
