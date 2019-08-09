@@ -170,9 +170,9 @@
     </properties>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.TooLongMethodRule"
-        message="Methods should not have too many lines of code"
-        name="TooLongMethodRule">
+  <rule class="org.sonar.plugins.delphi.pmd.rules.TooLargeMethodRule"
+        message="Methods should not be too large"
+        name="TooLargeMethodRule">
     <priority>2</priority>
     <description>A method that grow too large tends to aggregate too many responsibilities.
       Such methods inevitably become harder to understand and therefore harder to maintain.
@@ -181,7 +181,7 @@
     </description>
     <properties>
       <property name="baseEffort" value="30min" />
-      <property name="limit" value="150" />
+      <property name="limit" value="100" />
     </properties>
   </rule>
 

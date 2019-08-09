@@ -7,10 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `TooLargeMethodRule` analysis rule, which flags methods with too many statements.
+
 ### Changed
 
 - Update rule description for `ReRaiseExceptionRule`.
 - Support constructors and destructors in `TooManySubproceduresRule`.
+
+### Removed
+
+- `TooLongMethodRule` analysis rule.
 
 ### Fixed
 

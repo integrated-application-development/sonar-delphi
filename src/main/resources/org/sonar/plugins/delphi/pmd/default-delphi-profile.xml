@@ -29,8 +29,8 @@
     name="EmptyInterfaceRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.TooLongMethodRule"
-    name="TooLongMethodRule">
+  <rule class="org.sonar.plugins.delphi.pmd.rules.TooLargeMethodRule"
+    name="TooLargeMethodRule">
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.TooManyArgumentsRule"
