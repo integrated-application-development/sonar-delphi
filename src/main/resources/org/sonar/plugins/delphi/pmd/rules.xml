@@ -754,11 +754,12 @@ FreeAndNil(Foo); // Compliant
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.ReRaiseExceptionRule"
-        message="Exception instances should not be explicitly re-raised"
+        message="Caught exceptions should not be explicitly re-raised"
         name="ReRaiseExceptionRule">
     <priority>1</priority>
     <description>
-      Raising a caught exception at the end of an except block creates a second exception and fails to preserve the stacktrace.
+      You should never explicitly re-raise a caught exception.
+      The exception will still be freed at the end of the exception handler, causing tricky access violations.
       Use 'raise;' instead of 'raise E;'.</description>
     <properties>
       <property name="baseEffort" value="5min" />
