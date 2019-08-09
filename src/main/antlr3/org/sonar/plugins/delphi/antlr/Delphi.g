@@ -578,7 +578,9 @@ ifStatement                  : 'if' expression 'then' statement ('else' statemen
                              ;
 caseStatement                : 'case' expression 'of' (caseItem)* ('else' statementList (';')?)? 'end'
                              ;
-caseItem                     : caseLabel (',' caseLabel)* ':' (statement)? (';')?
+caseItem                     : caseItemSelector ':' (statement)? (';')?
+                             ;
+caseItemSelector             : caseLabel (',' caseLabel)* -> ^(TkCaseItemSelector caseLabel (',' caseLabel)*)
                              ;
 caseLabel                    : expression ('..' expression)?
                              ;
@@ -979,6 +981,8 @@ TkBlockDeclSection      : 'BLOCK_DECL_SECTION'
 TkExceptionHandlerIdent : 'EXCEPTION_HANDLER_IDENT'
                         ;
 TkExceptionHandler      : 'EXCEPTION_HANDLER'
+                        ;
+TkCaseItemSelector      : 'CASE_ITEM_SELECTOR'
                         ;
 TkIdentifier            : (Alpha | '_') (Alpha | Digit | '_')*
                         ;
