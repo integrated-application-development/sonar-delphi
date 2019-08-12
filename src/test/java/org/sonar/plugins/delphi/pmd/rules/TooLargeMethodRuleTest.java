@@ -20,6 +20,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.not;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
@@ -74,6 +75,18 @@ public class TooLargeMethodRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues(empty());
+  }
+
+  @Test
+  public void testEmptyMethod() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+    builder.appendImpl("function Foo: Integer;");
+    builder.appendImpl("begin");
+    builder.appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(not(hasItem(hasRuleKeyAtLine("TooLargeMethodRule", builder.getOffSet() + 1))));
   }
 
   @Test

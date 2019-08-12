@@ -127,8 +127,13 @@ public class TooLargeMethodRule extends DelphiRule {
         && type != DelphiLexer.FINALLY) {
       return false;
     }
-    Tree parent = node.getParent();
-    int prevType = parent.getChild(node.getChildIndex() - 1).getType();
+
+    int childIndex = node.getChildIndex();
+    if (childIndex == 0) {
+      return false;
+    }
+
+    int prevType = node.getParent().getChild(childIndex - 1).getType();
 
     return (prevType != DelphiLexer.SEMI
         && prevType != DelphiLexer.EXCEPT
