@@ -1,5 +1,5 @@
 // $ANTLR 3.5.1
-// ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g 2019-08-09 13:12:26
+// ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g 2019-08-16 15:23:53
 
 /*
  * Sonar Delphi Plugin
@@ -1586,7 +1586,7 @@ public class DelphiParser extends Parser {
         if (state.backtracking == 0) stream_SEMI.add(char_literal42);
 
         // AST REWRITE
-        // elements: namespaceName, hintingDirective, UNIT
+        // elements: hintingDirective, namespaceName, UNIT
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -1738,7 +1738,7 @@ public class DelphiParser extends Parser {
         }
 
         // AST REWRITE
-        // elements: usesClause, INTERFACE, interfaceDecl
+        // elements: usesClause, interfaceDecl, INTERFACE
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -1897,7 +1897,7 @@ public class DelphiParser extends Parser {
         }
 
         // AST REWRITE
-        // elements: usesClause, IMPLEMENTATION, declSection
+        // elements: declSection, IMPLEMENTATION, usesClause
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -2507,7 +2507,7 @@ public class DelphiParser extends Parser {
         if (state.backtracking == 0)
           stream_namespaceFileNameList.add(namespaceFileNameList65.getTree());
         // AST REWRITE
-        // elements: USES, namespaceFileNameList
+        // elements: namespaceFileNameList, USES
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -2751,7 +2751,7 @@ public class DelphiParser extends Parser {
         }
 
         // AST REWRITE
-        // elements: namespaceName, QuotedString
+        // elements: QuotedString, namespaceName
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -3951,7 +3951,7 @@ public class DelphiParser extends Parser {
         }
 
         // AST REWRITE
-        // elements: constKey, constDeclaration
+        // elements: constDeclaration, constKey
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -4272,7 +4272,7 @@ public class DelphiParser extends Parser {
         if (state.backtracking == 0) stream_SEMI.add(char_literal112);
 
         // AST REWRITE
-        // elements: ident, typeDecl, EQUAL, constExpression
+        // elements: EQUAL, constExpression, ident, typeDecl
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -4400,7 +4400,7 @@ public class DelphiParser extends Parser {
         }
 
         // AST REWRITE
-        // elements: typeDeclaration, typeDeclaration, TYPE
+        // elements: TYPE, typeDeclaration, typeDeclaration
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -5128,7 +5128,7 @@ public class DelphiParser extends Parser {
         if (state.backtracking == 0) stream_SEMI.add(char_literal123);
 
         // AST REWRITE
-        // elements: typeDecl, hintingDirective, genericTypeIdent, customAttribute
+        // elements: hintingDirective, genericTypeIdent, customAttribute, typeDecl
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -5595,7 +5595,7 @@ public class DelphiParser extends Parser {
         if (state.backtracking == 0) stream_SEMI.add(char_literal134);
 
         // AST REWRITE
-        // elements: typeDecl, customAttribute, identListFlat
+        // elements: customAttribute, typeDecl, identListFlat
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -7541,7 +7541,7 @@ public class DelphiParser extends Parser {
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_arraySubType.add(arraySubType178.getTree());
         // AST REWRITE
-        // elements: COMMA, arrayIndex, ARRAY, arraySubType, LBRACK, arrayIndex, RBRACK
+        // elements: LBRACK, COMMA, arraySubType, RBRACK, arrayIndex, arrayIndex, ARRAY
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -7563,10 +7563,10 @@ public class DelphiParser extends Parser {
               root_1 = (Object) adaptor.becomeRoot(stream_arraySubType.nextNode(), root_1);
               adaptor.addChild(root_1, stream_ARRAY.nextNode());
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:231:56: ( '[' ( arrayIndex )? ( ',' ( arrayIndex )? )* ']' )?
-              if (stream_COMMA.hasNext()
-                  || stream_arrayIndex.hasNext()
-                  || stream_LBRACK.hasNext()
-                  || stream_RBRACK.hasNext()) {
+              if (stream_LBRACK.hasNext()
+                  || stream_COMMA.hasNext()
+                  || stream_RBRACK.hasNext()
+                  || stream_arrayIndex.hasNext()) {
                 adaptor.addChild(root_1, stream_LBRACK.nextNode());
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:231:61: ( arrayIndex )?
                 if (stream_arrayIndex.hasNext()) {
@@ -7587,10 +7587,10 @@ public class DelphiParser extends Parser {
 
                 adaptor.addChild(root_1, stream_RBRACK.nextNode());
               }
-              stream_COMMA.reset();
-              stream_arrayIndex.reset();
               stream_LBRACK.reset();
+              stream_COMMA.reset();
               stream_RBRACK.reset();
+              stream_arrayIndex.reset();
 
               adaptor.addChild(root_0, root_1);
             }
@@ -8152,7 +8152,7 @@ public class DelphiParser extends Parser {
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_typeDecl.add(typeDecl187.getTree());
         // AST REWRITE
-        // elements: SET, typeDecl
+        // elements: typeDecl, SET
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -9583,7 +9583,7 @@ public class DelphiParser extends Parser {
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_typeDecl.add(typeDecl220.getTree());
             // AST REWRITE
-            // elements: FUNCTION, typeDecl, formalParameterSection
+            // elements: formalParameterSection, FUNCTION, typeDecl
             // token labels:
             // rule labels: retval
             // token list labels:
@@ -10211,7 +10211,7 @@ public class DelphiParser extends Parser {
   };
 
   // $ANTLR start "genericTypeIdent"
-  // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:281:1: genericTypeIdent : qualifiedIdent ( genericDefinition )? -> qualifiedIdent ;
+  // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:281:1: genericTypeIdent : qualifiedIdent ( genericDefinition )? ;
   public final DelphiParser.genericTypeIdent_return genericTypeIdent() throws RecognitionException {
     DelphiParser.genericTypeIdent_return retval = new DelphiParser.genericTypeIdent_return();
     retval.start = input.LT(1);
@@ -10222,24 +10222,22 @@ public class DelphiParser extends Parser {
     ParserRuleReturnScope qualifiedIdent242 = null;
     ParserRuleReturnScope genericDefinition243 = null;
 
-    RewriteRuleSubtreeStream stream_genericDefinition =
-        new RewriteRuleSubtreeStream(adaptor, "rule genericDefinition");
-    RewriteRuleSubtreeStream stream_qualifiedIdent =
-        new RewriteRuleSubtreeStream(adaptor, "rule qualifiedIdent");
-
     try {
       if (state.backtracking > 0 && alreadyParsedRule(input, 62)) {
         return retval;
       }
 
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:281:30: ( qualifiedIdent ( genericDefinition )? -> qualifiedIdent )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:281:30: ( qualifiedIdent ( genericDefinition )? )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:281:32: qualifiedIdent ( genericDefinition )?
       {
+        root_0 = (Object) adaptor.nil();
+
         pushFollow(FOLLOW_qualifiedIdent_in_genericTypeIdent5419);
         qualifiedIdent242 = qualifiedIdent();
         state._fsp--;
         if (state.failed) return retval;
-        if (state.backtracking == 0) stream_qualifiedIdent.add(qualifiedIdent242.getTree());
+        if (state.backtracking == 0) adaptor.addChild(root_0, qualifiedIdent242.getTree());
+
         // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:281:47: ( genericDefinition )?
         int alt74 = 2;
         int LA74_0 = input.LA(1);
@@ -10254,32 +10252,9 @@ public class DelphiParser extends Parser {
               genericDefinition243 = genericDefinition();
               state._fsp--;
               if (state.failed) return retval;
-              if (state.backtracking == 0)
-                stream_genericDefinition.add(genericDefinition243.getTree());
+              if (state.backtracking == 0) adaptor.addChild(root_0, genericDefinition243.getTree());
             }
             break;
-        }
-
-        // AST REWRITE
-        // elements: qualifiedIdent
-        // token labels:
-        // rule labels: retval
-        // token list labels:
-        // rule list labels:
-        // wildcard labels:
-        if (state.backtracking == 0) {
-          retval.tree = root_0;
-          RewriteRuleSubtreeStream stream_retval =
-              new RewriteRuleSubtreeStream(
-                  adaptor, "rule retval", retval != null ? retval.getTree() : null);
-
-          root_0 = (Object) adaptor.nil();
-          // 281:68: -> qualifiedIdent
-          {
-            adaptor.addChild(root_0, stream_qualifiedIdent.nextTree());
-          }
-
-          retval.tree = root_0;
         }
       }
 
@@ -10340,7 +10315,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_simpleGenericDefinition_in_genericDefinition5480);
+            pushFollow(FOLLOW_simpleGenericDefinition_in_genericDefinition5472);
             simpleGenericDefinition244 = simpleGenericDefinition();
             state._fsp--;
             if (state.failed) return retval;
@@ -10353,7 +10328,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_complexGenericDefinition_in_genericDefinition5513);
+            pushFollow(FOLLOW_complexGenericDefinition_in_genericDefinition5505);
             complexGenericDefinition245 = complexGenericDefinition();
             state._fsp--;
             if (state.failed) return retval;
@@ -10366,7 +10341,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_constrainedGenericDefinition_in_genericDefinition5546);
+            pushFollow(FOLLOW_constrainedGenericDefinition_in_genericDefinition5538);
             constrainedGenericDefinition246 = constrainedGenericDefinition();
             state._fsp--;
             if (state.failed) return retval;
@@ -10435,14 +10410,14 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        char_literal247 = (Token) match(input, LT, FOLLOW_LT_in_simpleGenericDefinition5588);
+        char_literal247 = (Token) match(input, LT, FOLLOW_LT_in_simpleGenericDefinition5580);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal247_tree = (Object) adaptor.create(char_literal247);
           adaptor.addChild(root_0, char_literal247_tree);
         }
 
-        pushFollow(FOLLOW_ident_in_simpleGenericDefinition5590);
+        pushFollow(FOLLOW_ident_in_simpleGenericDefinition5582);
         ident248 = ident();
         state._fsp--;
         if (state.failed) return retval;
@@ -10462,14 +10437,14 @@ public class DelphiParser extends Parser {
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:287:43: ',' ident
               {
                 char_literal249 =
-                    (Token) match(input, COMMA, FOLLOW_COMMA_in_simpleGenericDefinition5593);
+                    (Token) match(input, COMMA, FOLLOW_COMMA_in_simpleGenericDefinition5585);
                 if (state.failed) return retval;
                 if (state.backtracking == 0) {
                   char_literal249_tree = (Object) adaptor.create(char_literal249);
                   adaptor.addChild(root_0, char_literal249_tree);
                 }
 
-                pushFollow(FOLLOW_ident_in_simpleGenericDefinition5595);
+                pushFollow(FOLLOW_ident_in_simpleGenericDefinition5587);
                 ident250 = ident();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -10482,7 +10457,7 @@ public class DelphiParser extends Parser {
           }
         }
 
-        char_literal251 = (Token) match(input, GT, FOLLOW_GT_in_simpleGenericDefinition5599);
+        char_literal251 = (Token) match(input, GT, FOLLOW_GT_in_simpleGenericDefinition5591);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal251_tree = (Object) adaptor.create(char_literal251);
@@ -10552,14 +10527,14 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        char_literal252 = (Token) match(input, LT, FOLLOW_LT_in_complexGenericDefinition5640);
+        char_literal252 = (Token) match(input, LT, FOLLOW_LT_in_complexGenericDefinition5632);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal252_tree = (Object) adaptor.create(char_literal252);
           adaptor.addChild(root_0, char_literal252_tree);
         }
 
-        pushFollow(FOLLOW_qualifiedIdent_in_complexGenericDefinition5642);
+        pushFollow(FOLLOW_qualifiedIdent_in_complexGenericDefinition5634);
         qualifiedIdent253 = qualifiedIdent();
         state._fsp--;
         if (state.failed) return retval;
@@ -10575,7 +10550,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:289:52: simpleGenericDefinition
             {
-              pushFollow(FOLLOW_simpleGenericDefinition_in_complexGenericDefinition5645);
+              pushFollow(FOLLOW_simpleGenericDefinition_in_complexGenericDefinition5637);
               simpleGenericDefinition254 = simpleGenericDefinition();
               state._fsp--;
               if (state.failed) return retval;
@@ -10599,14 +10574,14 @@ public class DelphiParser extends Parser {
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:289:79: ',' qualifiedIdent ( simpleGenericDefinition )?
               {
                 char_literal255 =
-                    (Token) match(input, COMMA, FOLLOW_COMMA_in_complexGenericDefinition5650);
+                    (Token) match(input, COMMA, FOLLOW_COMMA_in_complexGenericDefinition5642);
                 if (state.failed) return retval;
                 if (state.backtracking == 0) {
                   char_literal255_tree = (Object) adaptor.create(char_literal255);
                   adaptor.addChild(root_0, char_literal255_tree);
                 }
 
-                pushFollow(FOLLOW_qualifiedIdent_in_complexGenericDefinition5652);
+                pushFollow(FOLLOW_qualifiedIdent_in_complexGenericDefinition5644);
                 qualifiedIdent256 = qualifiedIdent();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -10622,7 +10597,7 @@ public class DelphiParser extends Parser {
                   case 1:
                     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:289:99: simpleGenericDefinition
                     {
-                      pushFollow(FOLLOW_simpleGenericDefinition_in_complexGenericDefinition5655);
+                      pushFollow(FOLLOW_simpleGenericDefinition_in_complexGenericDefinition5647);
                       simpleGenericDefinition257 = simpleGenericDefinition();
                       state._fsp--;
                       if (state.failed) return retval;
@@ -10639,7 +10614,7 @@ public class DelphiParser extends Parser {
           }
         }
 
-        char_literal258 = (Token) match(input, GT, FOLLOW_GT_in_complexGenericDefinition5661);
+        char_literal258 = (Token) match(input, GT, FOLLOW_GT_in_complexGenericDefinition5653);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal258_tree = (Object) adaptor.create(char_literal258);
@@ -10707,14 +10682,14 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        char_literal259 = (Token) match(input, LT, FOLLOW_LT_in_constrainedGenericDefinition5698);
+        char_literal259 = (Token) match(input, LT, FOLLOW_LT_in_constrainedGenericDefinition5690);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal259_tree = (Object) adaptor.create(char_literal259);
           adaptor.addChild(root_0, char_literal259_tree);
         }
 
-        pushFollow(FOLLOW_constrainedGeneric_in_constrainedGenericDefinition5700);
+        pushFollow(FOLLOW_constrainedGeneric_in_constrainedGenericDefinition5692);
         constrainedGeneric260 = constrainedGeneric();
         state._fsp--;
         if (state.failed) return retval;
@@ -10734,14 +10709,14 @@ public class DelphiParser extends Parser {
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:291:56: ';' constrainedGeneric
               {
                 char_literal261 =
-                    (Token) match(input, SEMI, FOLLOW_SEMI_in_constrainedGenericDefinition5703);
+                    (Token) match(input, SEMI, FOLLOW_SEMI_in_constrainedGenericDefinition5695);
                 if (state.failed) return retval;
                 if (state.backtracking == 0) {
                   char_literal261_tree = (Object) adaptor.create(char_literal261);
                   adaptor.addChild(root_0, char_literal261_tree);
                 }
 
-                pushFollow(FOLLOW_constrainedGeneric_in_constrainedGenericDefinition5705);
+                pushFollow(FOLLOW_constrainedGeneric_in_constrainedGenericDefinition5697);
                 constrainedGeneric262 = constrainedGeneric();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -10755,7 +10730,7 @@ public class DelphiParser extends Parser {
           }
         }
 
-        char_literal263 = (Token) match(input, GT, FOLLOW_GT_in_constrainedGenericDefinition5709);
+        char_literal263 = (Token) match(input, GT, FOLLOW_GT_in_constrainedGenericDefinition5701);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal263_tree = (Object) adaptor.create(char_literal263);
@@ -10821,7 +10796,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        pushFollow(FOLLOW_ident_in_constrainedGeneric5756);
+        pushFollow(FOLLOW_ident_in_constrainedGeneric5748);
         ident264 = ident();
         state._fsp--;
         if (state.failed) return retval;
@@ -10837,14 +10812,14 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:293:39: ':' genericConstraint ( ',' genericConstraint )*
             {
-              char_literal265 = (Token) match(input, COLON, FOLLOW_COLON_in_constrainedGeneric5759);
+              char_literal265 = (Token) match(input, COLON, FOLLOW_COLON_in_constrainedGeneric5751);
               if (state.failed) return retval;
               if (state.backtracking == 0) {
                 char_literal265_tree = (Object) adaptor.create(char_literal265);
                 adaptor.addChild(root_0, char_literal265_tree);
               }
 
-              pushFollow(FOLLOW_genericConstraint_in_constrainedGeneric5761);
+              pushFollow(FOLLOW_genericConstraint_in_constrainedGeneric5753);
               genericConstraint266 = genericConstraint();
               state._fsp--;
               if (state.failed) return retval;
@@ -10864,14 +10839,14 @@ public class DelphiParser extends Parser {
                     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:293:62: ',' genericConstraint
                     {
                       char_literal267 =
-                          (Token) match(input, COMMA, FOLLOW_COMMA_in_constrainedGeneric5764);
+                          (Token) match(input, COMMA, FOLLOW_COMMA_in_constrainedGeneric5756);
                       if (state.failed) return retval;
                       if (state.backtracking == 0) {
                         char_literal267_tree = (Object) adaptor.create(char_literal267);
                         adaptor.addChild(root_0, char_literal267_tree);
                       }
 
-                      pushFollow(FOLLOW_genericConstraint_in_constrainedGeneric5766);
+                      pushFollow(FOLLOW_genericConstraint_in_constrainedGeneric5758);
                       genericConstraint268 = genericConstraint();
                       state._fsp--;
                       if (state.failed) return retval;
@@ -11012,7 +10987,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_ident_in_genericConstraint5818);
+            pushFollow(FOLLOW_ident_in_genericConstraint5810);
             ident269 = ident();
             state._fsp--;
             if (state.failed) return retval;
@@ -11025,7 +11000,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal270 =
-                (Token) match(input, RECORD, FOLLOW_RECORD_in_genericConstraint5851);
+                (Token) match(input, RECORD, FOLLOW_RECORD_in_genericConstraint5843);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal270_tree = (Object) adaptor.create(string_literal270);
@@ -11038,7 +11013,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            string_literal271 = (Token) match(input, CLASS, FOLLOW_CLASS_in_genericConstraint5884);
+            string_literal271 = (Token) match(input, CLASS, FOLLOW_CLASS_in_genericConstraint5876);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal271_tree = (Object) adaptor.create(string_literal271);
@@ -11052,7 +11027,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal272 =
-                (Token) match(input, CONSTRUCTOR, FOLLOW_CONSTRUCTOR_in_genericConstraint5917);
+                (Token) match(input, CONSTRUCTOR, FOLLOW_CONSTRUCTOR_in_genericConstraint5909);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal272_tree = (Object) adaptor.create(string_literal272);
@@ -11119,14 +11094,14 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        char_literal273 = (Token) match(input, LT, FOLLOW_LT_in_genericPostfix5968);
+        char_literal273 = (Token) match(input, LT, FOLLOW_LT_in_genericPostfix5960);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal273_tree = (Object) adaptor.create(char_literal273);
           adaptor.addChild(root_0, char_literal273_tree);
         }
 
-        pushFollow(FOLLOW_typeDecl_in_genericPostfix5970);
+        pushFollow(FOLLOW_typeDecl_in_genericPostfix5962);
         typeDecl274 = typeDecl();
         state._fsp--;
         if (state.failed) return retval;
@@ -11145,14 +11120,14 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:300:46: ',' typeDecl
               {
-                char_literal275 = (Token) match(input, COMMA, FOLLOW_COMMA_in_genericPostfix5973);
+                char_literal275 = (Token) match(input, COMMA, FOLLOW_COMMA_in_genericPostfix5965);
                 if (state.failed) return retval;
                 if (state.backtracking == 0) {
                   char_literal275_tree = (Object) adaptor.create(char_literal275);
                   adaptor.addChild(root_0, char_literal275_tree);
                 }
 
-                pushFollow(FOLLOW_typeDecl_in_genericPostfix5975);
+                pushFollow(FOLLOW_typeDecl_in_genericPostfix5967);
                 typeDecl276 = typeDecl();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -11165,7 +11140,7 @@ public class DelphiParser extends Parser {
           }
         }
 
-        char_literal277 = (Token) match(input, GT, FOLLOW_GT_in_genericPostfix5979);
+        char_literal277 = (Token) match(input, GT, FOLLOW_GT_in_genericPostfix5971);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal277_tree = (Object) adaptor.create(char_literal277);
@@ -11298,7 +11273,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:305:32: classHelperDecl
           {
-            pushFollow(FOLLOW_classHelperDecl_in_classDecl6038);
+            pushFollow(FOLLOW_classHelperDecl_in_classDecl6030);
             classHelperDecl278 = classHelperDecl();
             state._fsp--;
             if (state.failed) return retval;
@@ -11339,7 +11314,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_classTypeTypeDecl_in_classDecl6079);
+            pushFollow(FOLLOW_classTypeTypeDecl_in_classDecl6071);
             classTypeTypeDecl279 = classTypeTypeDecl();
             state._fsp--;
             if (state.failed) return retval;
@@ -11349,7 +11324,7 @@ public class DelphiParser extends Parser {
         case 3:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:307:32: classTypeDecl
           {
-            pushFollow(FOLLOW_classTypeDecl_in_classDecl6112);
+            pushFollow(FOLLOW_classTypeDecl_in_classDecl6104);
             classTypeDecl280 = classTypeDecl();
             state._fsp--;
             if (state.failed) return retval;
@@ -11388,7 +11363,7 @@ public class DelphiParser extends Parser {
         case 4:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:308:32: interfaceTypeDecl
           {
-            pushFollow(FOLLOW_interfaceTypeDecl_in_classDecl6153);
+            pushFollow(FOLLOW_interfaceTypeDecl_in_classDecl6145);
             interfaceTypeDecl281 = interfaceTypeDecl();
             state._fsp--;
             if (state.failed) return retval;
@@ -11429,7 +11404,7 @@ public class DelphiParser extends Parser {
         case 5:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:309:32: objectDecl
           {
-            pushFollow(FOLLOW_objectDecl_in_classDecl6194);
+            pushFollow(FOLLOW_objectDecl_in_classDecl6186);
             objectDecl282 = objectDecl();
             state._fsp--;
             if (state.failed) return retval;
@@ -11468,7 +11443,7 @@ public class DelphiParser extends Parser {
         case 6:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:310:32: recordDecl
           {
-            pushFollow(FOLLOW_recordDecl_in_classDecl6235);
+            pushFollow(FOLLOW_recordDecl_in_classDecl6227);
             recordDecl283 = recordDecl();
             state._fsp--;
             if (state.failed) return retval;
@@ -11507,7 +11482,7 @@ public class DelphiParser extends Parser {
         case 7:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:311:32: recordHelperDecl
           {
-            pushFollow(FOLLOW_recordHelperDecl_in_classDecl6276);
+            pushFollow(FOLLOW_recordHelperDecl_in_classDecl6268);
             recordHelperDecl284 = recordHelperDecl();
             state._fsp--;
             if (state.failed) return retval;
@@ -11602,15 +11577,15 @@ public class DelphiParser extends Parser {
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:313:30: ( 'class' 'of' typeId -> ^( TkClassOfType typeId ) )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:313:32: 'class' 'of' typeId
       {
-        string_literal285 = (Token) match(input, CLASS, FOLLOW_CLASS_in_classTypeTypeDecl6332);
+        string_literal285 = (Token) match(input, CLASS, FOLLOW_CLASS_in_classTypeTypeDecl6324);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_CLASS.add(string_literal285);
 
-        string_literal286 = (Token) match(input, OF, FOLLOW_OF_in_classTypeTypeDecl6334);
+        string_literal286 = (Token) match(input, OF, FOLLOW_OF_in_classTypeTypeDecl6326);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_OF.add(string_literal286);
 
-        pushFollow(FOLLOW_typeId_in_classTypeTypeDecl6336);
+        pushFollow(FOLLOW_typeId_in_classTypeTypeDecl6328);
         typeId287 = typeId();
         state._fsp--;
         if (state.failed) return retval;
@@ -11735,7 +11710,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:315:32: 'class' ( classState )? ( classParent )? ( classItem )* 'end'
           {
-            string_literal288 = (Token) match(input, CLASS, FOLLOW_CLASS_in_classTypeDecl6396);
+            string_literal288 = (Token) match(input, CLASS, FOLLOW_CLASS_in_classTypeDecl6388);
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_CLASS.add(string_literal288);
 
@@ -11749,7 +11724,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:315:41: classState
                 {
-                  pushFollow(FOLLOW_classState_in_classTypeDecl6399);
+                  pushFollow(FOLLOW_classState_in_classTypeDecl6391);
                   classState289 = classState();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -11768,7 +11743,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:315:55: classParent
                 {
-                  pushFollow(FOLLOW_classParent_in_classTypeDecl6404);
+                  pushFollow(FOLLOW_classParent_in_classTypeDecl6396);
                   classParent290 = classParent();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -11826,7 +11801,7 @@ public class DelphiParser extends Parser {
                 case 1:
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:315:70: classItem
                   {
-                    pushFollow(FOLLOW_classItem_in_classTypeDecl6409);
+                    pushFollow(FOLLOW_classItem_in_classTypeDecl6401);
                     classItem291 = classItem();
                     state._fsp--;
                     if (state.failed) return retval;
@@ -11839,12 +11814,12 @@ public class DelphiParser extends Parser {
               }
             }
 
-            string_literal292 = (Token) match(input, END, FOLLOW_END_in_classTypeDecl6413);
+            string_literal292 = (Token) match(input, END, FOLLOW_END_in_classTypeDecl6405);
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_END.add(string_literal292);
 
             // AST REWRITE
-            // elements: classParent, CLASS, classItem
+            // elements: classItem, CLASS, classParent
             // token labels:
             // rule labels: retval
             // token list labels:
@@ -11890,7 +11865,7 @@ public class DelphiParser extends Parser {
         case 2:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:316:32: 'class' ( classState )? ( classParent )?
           {
-            string_literal293 = (Token) match(input, CLASS, FOLLOW_CLASS_in_classTypeDecl6464);
+            string_literal293 = (Token) match(input, CLASS, FOLLOW_CLASS_in_classTypeDecl6456);
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_CLASS.add(string_literal293);
 
@@ -11909,7 +11884,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:316:41: classState
                 {
-                  pushFollow(FOLLOW_classState_in_classTypeDecl6467);
+                  pushFollow(FOLLOW_classState_in_classTypeDecl6459);
                   classState294 = classState();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -11925,7 +11900,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:316:55: classParent
                 {
-                  pushFollow(FOLLOW_classParent_in_classTypeDecl6472);
+                  pushFollow(FOLLOW_classParent_in_classTypeDecl6464);
                   classParent295 = classParent();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -11935,7 +11910,7 @@ public class DelphiParser extends Parser {
             }
 
             // AST REWRITE
-            // elements: CLASS, classParent
+            // elements: classParent, CLASS
             // token labels:
             // rule labels: retval
             // token list labels:
@@ -12102,11 +12077,11 @@ public class DelphiParser extends Parser {
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:321:30: ( '(' genericTypeIdent ( ',' genericTypeIdent )* ')' -> genericTypeIdent ( genericTypeIdent )* )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:321:32: '(' genericTypeIdent ( ',' genericTypeIdent )* ')'
       {
-        char_literal297 = (Token) match(input, LPAREN, FOLLOW_LPAREN_in_classParent6629);
+        char_literal297 = (Token) match(input, LPAREN, FOLLOW_LPAREN_in_classParent6621);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_LPAREN.add(char_literal297);
 
-        pushFollow(FOLLOW_genericTypeIdent_in_classParent6631);
+        pushFollow(FOLLOW_genericTypeIdent_in_classParent6623);
         genericTypeIdent298 = genericTypeIdent();
         state._fsp--;
         if (state.failed) return retval;
@@ -12124,11 +12099,11 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:321:54: ',' genericTypeIdent
               {
-                char_literal299 = (Token) match(input, COMMA, FOLLOW_COMMA_in_classParent6634);
+                char_literal299 = (Token) match(input, COMMA, FOLLOW_COMMA_in_classParent6626);
                 if (state.failed) return retval;
                 if (state.backtracking == 0) stream_COMMA.add(char_literal299);
 
-                pushFollow(FOLLOW_genericTypeIdent_in_classParent6636);
+                pushFollow(FOLLOW_genericTypeIdent_in_classParent6628);
                 genericTypeIdent300 = genericTypeIdent();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -12142,7 +12117,7 @@ public class DelphiParser extends Parser {
           }
         }
 
-        char_literal301 = (Token) match(input, RPAREN, FOLLOW_RPAREN_in_classParent6640);
+        char_literal301 = (Token) match(input, RPAREN, FOLLOW_RPAREN_in_classParent6632);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_RPAREN.add(char_literal301);
 
@@ -12403,7 +12378,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_visibility_in_classItem6708);
+            pushFollow(FOLLOW_visibility_in_classItem6700);
             visibility302 = visibility();
             state._fsp--;
             if (state.failed) return retval;
@@ -12415,7 +12390,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_classMethod_in_classItem6741);
+            pushFollow(FOLLOW_classMethod_in_classItem6733);
             classMethod303 = classMethod();
             state._fsp--;
             if (state.failed) return retval;
@@ -12427,7 +12402,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_classField_in_classItem6774);
+            pushFollow(FOLLOW_classField_in_classItem6766);
             classField304 = classField();
             state._fsp--;
             if (state.failed) return retval;
@@ -12439,7 +12414,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_classProperty_in_classItem6807);
+            pushFollow(FOLLOW_classProperty_in_classItem6799);
             classProperty305 = classProperty();
             state._fsp--;
             if (state.failed) return retval;
@@ -12451,7 +12426,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_constSection_in_classItem6840);
+            pushFollow(FOLLOW_constSection_in_classItem6832);
             constSection306 = constSection();
             state._fsp--;
             if (state.failed) return retval;
@@ -12463,7 +12438,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_innerTypeSection_in_classItem6873);
+            pushFollow(FOLLOW_innerTypeSection_in_classItem6865);
             innerTypeSection307 = innerTypeSection();
             state._fsp--;
             if (state.failed) return retval;
@@ -12485,7 +12460,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:329:33: 'class'
                 {
-                  string_literal308 = (Token) match(input, CLASS, FOLLOW_CLASS_in_classItem6907);
+                  string_literal308 = (Token) match(input, CLASS, FOLLOW_CLASS_in_classItem6899);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) {
                     string_literal308_tree = (Object) adaptor.create(string_literal308);
@@ -12495,7 +12470,7 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            pushFollow(FOLLOW_varSection_in_classItem6911);
+            pushFollow(FOLLOW_varSection_in_classItem6903);
             varSection309 = varSection();
             state._fsp--;
             if (state.failed) return retval;
@@ -12571,11 +12546,11 @@ public class DelphiParser extends Parser {
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:331:30: ( 'class' 'helper' ( classParent )? 'for' typeId ( classHelperItem )* 'end' -> ^( 'class' typeId ) ( classHelperItem )* )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:331:32: 'class' 'helper' ( classParent )? 'for' typeId ( classHelperItem )* 'end'
       {
-        string_literal310 = (Token) match(input, CLASS, FOLLOW_CLASS_in_classHelperDecl6961);
+        string_literal310 = (Token) match(input, CLASS, FOLLOW_CLASS_in_classHelperDecl6953);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_CLASS.add(string_literal310);
 
-        string_literal311 = (Token) match(input, HELPER, FOLLOW_HELPER_in_classHelperDecl6963);
+        string_literal311 = (Token) match(input, HELPER, FOLLOW_HELPER_in_classHelperDecl6955);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_HELPER.add(string_literal311);
 
@@ -12589,7 +12564,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:331:50: classParent
             {
-              pushFollow(FOLLOW_classParent_in_classHelperDecl6966);
+              pushFollow(FOLLOW_classParent_in_classHelperDecl6958);
               classParent312 = classParent();
               state._fsp--;
               if (state.failed) return retval;
@@ -12598,11 +12573,11 @@ public class DelphiParser extends Parser {
             break;
         }
 
-        string_literal313 = (Token) match(input, FOR, FOLLOW_FOR_in_classHelperDecl6970);
+        string_literal313 = (Token) match(input, FOR, FOLLOW_FOR_in_classHelperDecl6962);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_FOR.add(string_literal313);
 
-        pushFollow(FOLLOW_typeId_in_classHelperDecl6972);
+        pushFollow(FOLLOW_typeId_in_classHelperDecl6964);
         typeId314 = typeId();
         state._fsp--;
         if (state.failed) return retval;
@@ -12631,7 +12606,7 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:331:78: classHelperItem
               {
-                pushFollow(FOLLOW_classHelperItem_in_classHelperDecl6975);
+                pushFollow(FOLLOW_classHelperItem_in_classHelperDecl6967);
                 classHelperItem315 = classHelperItem();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -12645,12 +12620,12 @@ public class DelphiParser extends Parser {
           }
         }
 
-        string_literal316 = (Token) match(input, END, FOLLOW_END_in_classHelperDecl6979);
+        string_literal316 = (Token) match(input, END, FOLLOW_END_in_classHelperDecl6971);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_END.add(string_literal316);
 
         // AST REWRITE
-        // elements: classHelperItem, typeId, CLASS
+        // elements: classHelperItem, CLASS, typeId
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -12817,7 +12792,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_visibility_in_classHelperItem7044);
+            pushFollow(FOLLOW_visibility_in_classHelperItem7036);
             visibility317 = visibility();
             state._fsp--;
             if (state.failed) return retval;
@@ -12829,7 +12804,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_classMethod_in_classHelperItem7077);
+            pushFollow(FOLLOW_classMethod_in_classHelperItem7069);
             classMethod318 = classMethod();
             state._fsp--;
             if (state.failed) return retval;
@@ -12841,7 +12816,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_classProperty_in_classHelperItem7110);
+            pushFollow(FOLLOW_classProperty_in_classHelperItem7102);
             classProperty319 = classProperty();
             state._fsp--;
             if (state.failed) return retval;
@@ -12864,7 +12839,7 @@ public class DelphiParser extends Parser {
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:336:33: 'class'
                 {
                   string_literal320 =
-                      (Token) match(input, CLASS, FOLLOW_CLASS_in_classHelperItem7144);
+                      (Token) match(input, CLASS, FOLLOW_CLASS_in_classHelperItem7136);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) {
                     string_literal320_tree = (Object) adaptor.create(string_literal320);
@@ -12874,7 +12849,7 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            pushFollow(FOLLOW_varSection_in_classHelperItem7148);
+            pushFollow(FOLLOW_varSection_in_classHelperItem7140);
             varSection321 = varSection();
             state._fsp--;
             if (state.failed) return retval;
@@ -12969,7 +12944,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:338:32: interfaceKey ( classParent )? ( interfaceGuid )? ( interfaceItem )* 'end'
           {
-            pushFollow(FOLLOW_interfaceKey_in_interfaceTypeDecl7196);
+            pushFollow(FOLLOW_interfaceKey_in_interfaceTypeDecl7188);
             interfaceKey322 = interfaceKey();
             state._fsp--;
             if (state.failed) return retval;
@@ -12984,7 +12959,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:338:46: classParent
                 {
-                  pushFollow(FOLLOW_classParent_in_interfaceTypeDecl7199);
+                  pushFollow(FOLLOW_classParent_in_interfaceTypeDecl7191);
                   classParent323 = classParent();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -13006,7 +12981,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:338:61: interfaceGuid
                 {
-                  pushFollow(FOLLOW_interfaceGuid_in_interfaceTypeDecl7204);
+                  pushFollow(FOLLOW_interfaceGuid_in_interfaceTypeDecl7196);
                   interfaceGuid324 = interfaceGuid();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -13035,7 +13010,7 @@ public class DelphiParser extends Parser {
                 case 1:
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:338:78: interfaceItem
                   {
-                    pushFollow(FOLLOW_interfaceItem_in_interfaceTypeDecl7209);
+                    pushFollow(FOLLOW_interfaceItem_in_interfaceTypeDecl7201);
                     interfaceItem325 = interfaceItem();
                     state._fsp--;
                     if (state.failed) return retval;
@@ -13049,12 +13024,12 @@ public class DelphiParser extends Parser {
               }
             }
 
-            string_literal326 = (Token) match(input, END, FOLLOW_END_in_interfaceTypeDecl7213);
+            string_literal326 = (Token) match(input, END, FOLLOW_END_in_interfaceTypeDecl7205);
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_END.add(string_literal326);
 
             // AST REWRITE
-            // elements: interfaceKey, classParent, interfaceItem, interfaceGuid
+            // elements: classParent, interfaceKey, interfaceGuid, interfaceItem
             // token labels:
             // rule labels: retval
             // token list labels:
@@ -13116,7 +13091,7 @@ public class DelphiParser extends Parser {
         case 2:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:340:32: interfaceKey ( classParent )?
           {
-            pushFollow(FOLLOW_interfaceKey_in_interfaceTypeDecl7304);
+            pushFollow(FOLLOW_interfaceKey_in_interfaceTypeDecl7296);
             interfaceKey327 = interfaceKey();
             state._fsp--;
             if (state.failed) return retval;
@@ -13128,7 +13103,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:340:46: classParent
                 {
-                  pushFollow(FOLLOW_classParent_in_interfaceTypeDecl7307);
+                  pushFollow(FOLLOW_classParent_in_interfaceTypeDecl7299);
                   classParent328 = classParent();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -13138,7 +13113,7 @@ public class DelphiParser extends Parser {
             }
 
             // AST REWRITE
-            // elements: classParent, interfaceKey
+            // elements: interfaceKey, classParent
             // token labels:
             // rule labels: retval
             // token list labels:
@@ -13302,16 +13277,16 @@ public class DelphiParser extends Parser {
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:346:30: ( '[' QuotedString ']' -> QuotedString )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:346:32: '[' QuotedString ']'
       {
-        char_literal330 = (Token) match(input, LBRACK, FOLLOW_LBRACK_in_interfaceGuid7490);
+        char_literal330 = (Token) match(input, LBRACK, FOLLOW_LBRACK_in_interfaceGuid7482);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_LBRACK.add(char_literal330);
 
         QuotedString331 =
-            (Token) match(input, QuotedString, FOLLOW_QuotedString_in_interfaceGuid7492);
+            (Token) match(input, QuotedString, FOLLOW_QuotedString_in_interfaceGuid7484);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_QuotedString.add(QuotedString331);
 
-        char_literal332 = (Token) match(input, RBRACK, FOLLOW_RBRACK_in_interfaceGuid7494);
+        char_literal332 = (Token) match(input, RBRACK, FOLLOW_RBRACK_in_interfaceGuid7486);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_RBRACK.add(char_literal332);
 
@@ -13438,7 +13413,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_classMethod_in_interfaceItem7550);
+            pushFollow(FOLLOW_classMethod_in_interfaceItem7542);
             classMethod333 = classMethod();
             state._fsp--;
             if (state.failed) return retval;
@@ -13464,7 +13439,7 @@ public class DelphiParser extends Parser {
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:349:33: 'class'
                 {
                   string_literal334 =
-                      (Token) match(input, CLASS, FOLLOW_CLASS_in_interfaceItem7584);
+                      (Token) match(input, CLASS, FOLLOW_CLASS_in_interfaceItem7576);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) {
                     string_literal334_tree = (Object) adaptor.create(string_literal334);
@@ -13474,7 +13449,7 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            pushFollow(FOLLOW_classProperty_in_interfaceItem7588);
+            pushFollow(FOLLOW_classProperty_in_interfaceItem7580);
             classProperty335 = classProperty();
             state._fsp--;
             if (state.failed) return retval;
@@ -13542,7 +13517,7 @@ public class DelphiParser extends Parser {
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:351:30: ( 'object' ( classParent )? ( objectItem )* 'end' -> 'object' ( classParent )? ( objectItem )* )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:351:32: 'object' ( classParent )? ( objectItem )* 'end'
       {
-        string_literal336 = (Token) match(input, OBJECT, FOLLOW_OBJECT_in_objectDecl7643);
+        string_literal336 = (Token) match(input, OBJECT, FOLLOW_OBJECT_in_objectDecl7635);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_OBJECT.add(string_literal336);
 
@@ -13556,7 +13531,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:351:42: classParent
             {
-              pushFollow(FOLLOW_classParent_in_objectDecl7646);
+              pushFollow(FOLLOW_classParent_in_objectDecl7638);
               classParent337 = classParent();
               state._fsp--;
               if (state.failed) return retval;
@@ -13610,7 +13585,7 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:351:57: objectItem
               {
-                pushFollow(FOLLOW_objectItem_in_objectDecl7651);
+                pushFollow(FOLLOW_objectItem_in_objectDecl7643);
                 objectItem338 = objectItem();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -13623,12 +13598,12 @@ public class DelphiParser extends Parser {
           }
         }
 
-        string_literal339 = (Token) match(input, END, FOLLOW_END_in_objectDecl7655);
+        string_literal339 = (Token) match(input, END, FOLLOW_END_in_objectDecl7647);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_END.add(string_literal339);
 
         // AST REWRITE
-        // elements: classParent, objectItem, OBJECT
+        // elements: OBJECT, objectItem, classParent
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -13809,7 +13784,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_visibility_in_objectItem7724);
+            pushFollow(FOLLOW_visibility_in_objectItem7716);
             visibility340 = visibility();
             state._fsp--;
             if (state.failed) return retval;
@@ -13821,7 +13796,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_classMethod_in_objectItem7757);
+            pushFollow(FOLLOW_classMethod_in_objectItem7749);
             classMethod341 = classMethod();
             state._fsp--;
             if (state.failed) return retval;
@@ -13833,7 +13808,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_classField_in_objectItem7790);
+            pushFollow(FOLLOW_classField_in_objectItem7782);
             classField342 = classField();
             state._fsp--;
             if (state.failed) return retval;
@@ -13901,7 +13876,7 @@ public class DelphiParser extends Parser {
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:357:30: ( 'record' ( recordItem )* ( recordVariantSection )? 'end' -> 'record' ( recordItem )* ( recordVariantSection )? )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:357:32: 'record' ( recordItem )* ( recordVariantSection )? 'end'
       {
-        string_literal343 = (Token) match(input, RECORD, FOLLOW_RECORD_in_recordDecl7845);
+        string_literal343 = (Token) match(input, RECORD, FOLLOW_RECORD_in_recordDecl7837);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_RECORD.add(string_literal343);
 
@@ -13954,7 +13929,7 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:357:42: recordItem
               {
-                pushFollow(FOLLOW_recordItem_in_recordDecl7848);
+                pushFollow(FOLLOW_recordItem_in_recordDecl7840);
                 recordItem344 = recordItem();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -13977,7 +13952,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:357:56: recordVariantSection
             {
-              pushFollow(FOLLOW_recordVariantSection_in_recordDecl7853);
+              pushFollow(FOLLOW_recordVariantSection_in_recordDecl7845);
               recordVariantSection345 = recordVariantSection();
               state._fsp--;
               if (state.failed) return retval;
@@ -13987,12 +13962,12 @@ public class DelphiParser extends Parser {
             break;
         }
 
-        string_literal346 = (Token) match(input, END, FOLLOW_END_in_recordDecl7857);
+        string_literal346 = (Token) match(input, END, FOLLOW_END_in_recordDecl7849);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_END.add(string_literal346);
 
         // AST REWRITE
-        // elements: recordVariantSection, RECORD, recordItem
+        // elements: recordItem, recordVariantSection, RECORD
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -14252,7 +14227,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_visibility_in_recordItem7955);
+            pushFollow(FOLLOW_visibility_in_recordItem7947);
             visibility347 = visibility();
             state._fsp--;
             if (state.failed) return retval;
@@ -14264,7 +14239,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_classMethod_in_recordItem7988);
+            pushFollow(FOLLOW_classMethod_in_recordItem7980);
             classMethod348 = classMethod();
             state._fsp--;
             if (state.failed) return retval;
@@ -14276,7 +14251,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_classProperty_in_recordItem8021);
+            pushFollow(FOLLOW_classProperty_in_recordItem8013);
             classProperty349 = classProperty();
             state._fsp--;
             if (state.failed) return retval;
@@ -14288,7 +14263,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_constSection_in_recordItem8054);
+            pushFollow(FOLLOW_constSection_in_recordItem8046);
             constSection350 = constSection();
             state._fsp--;
             if (state.failed) return retval;
@@ -14300,7 +14275,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_innerTypeSection_in_recordItem8087);
+            pushFollow(FOLLOW_innerTypeSection_in_recordItem8079);
             innerTypeSection351 = innerTypeSection();
             state._fsp--;
             if (state.failed) return retval;
@@ -14312,7 +14287,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_recordField_in_recordItem8120);
+            pushFollow(FOLLOW_recordField_in_recordItem8112);
             recordField352 = recordField();
             state._fsp--;
             if (state.failed) return retval;
@@ -14334,7 +14309,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:366:33: 'class'
                 {
-                  string_literal353 = (Token) match(input, CLASS, FOLLOW_CLASS_in_recordItem8154);
+                  string_literal353 = (Token) match(input, CLASS, FOLLOW_CLASS_in_recordItem8146);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) {
                     string_literal353_tree = (Object) adaptor.create(string_literal353);
@@ -14344,7 +14319,7 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            pushFollow(FOLLOW_varSection_in_recordItem8158);
+            pushFollow(FOLLOW_varSection_in_recordItem8150);
             varSection354 = varSection();
             state._fsp--;
             if (state.failed) return retval;
@@ -14415,16 +14390,16 @@ public class DelphiParser extends Parser {
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:368:30: ( identList ':' typeDecl ( hintingDirective )* ( ';' )? -> identList ^( TkVariableType typeDecl ) )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:368:32: identList ':' typeDecl ( hintingDirective )* ( ';' )?
       {
-        pushFollow(FOLLOW_identList_in_recordField8212);
+        pushFollow(FOLLOW_identList_in_recordField8204);
         identList355 = identList();
         state._fsp--;
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_identList.add(identList355.getTree());
-        char_literal356 = (Token) match(input, COLON, FOLLOW_COLON_in_recordField8214);
+        char_literal356 = (Token) match(input, COLON, FOLLOW_COLON_in_recordField8206);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_COLON.add(char_literal356);
 
-        pushFollow(FOLLOW_typeDecl_in_recordField8216);
+        pushFollow(FOLLOW_typeDecl_in_recordField8208);
         typeDecl357 = typeDecl();
         state._fsp--;
         if (state.failed) return retval;
@@ -14487,7 +14462,7 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:368:56: hintingDirective
               {
-                pushFollow(FOLLOW_hintingDirective_in_recordField8219);
+                pushFollow(FOLLOW_hintingDirective_in_recordField8211);
                 hintingDirective358 = hintingDirective();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -14511,7 +14486,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:368:76: ';'
             {
-              char_literal359 = (Token) match(input, SEMI, FOLLOW_SEMI_in_recordField8224);
+              char_literal359 = (Token) match(input, SEMI, FOLLOW_SEMI_in_recordField8216);
               if (state.failed) return retval;
               if (state.backtracking == 0) stream_SEMI.add(char_literal359);
             }
@@ -14612,7 +14587,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        string_literal360 = (Token) match(input, CASE, FOLLOW_CASE_in_recordVariantSection8312);
+        string_literal360 = (Token) match(input, CASE, FOLLOW_CASE_in_recordVariantSection8304);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal360_tree = (Object) adaptor.create(string_literal360);
@@ -14685,14 +14660,14 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:371:40: ident ':'
             {
-              pushFollow(FOLLOW_ident_in_recordVariantSection8315);
+              pushFollow(FOLLOW_ident_in_recordVariantSection8307);
               ident361 = ident();
               state._fsp--;
               if (state.failed) return retval;
               if (state.backtracking == 0) adaptor.addChild(root_0, ident361.getTree());
 
               char_literal362 =
-                  (Token) match(input, COLON, FOLLOW_COLON_in_recordVariantSection8317);
+                  (Token) match(input, COLON, FOLLOW_COLON_in_recordVariantSection8309);
               if (state.failed) return retval;
               if (state.backtracking == 0) {
                 char_literal362_tree = (Object) adaptor.create(char_literal362);
@@ -14702,13 +14677,13 @@ public class DelphiParser extends Parser {
             break;
         }
 
-        pushFollow(FOLLOW_qualifiedIdent_in_recordVariantSection8321);
+        pushFollow(FOLLOW_qualifiedIdent_in_recordVariantSection8313);
         qualifiedIdent363 = qualifiedIdent();
         state._fsp--;
         if (state.failed) return retval;
         if (state.backtracking == 0) adaptor.addChild(root_0, qualifiedIdent363.getTree());
 
-        string_literal364 = (Token) match(input, OF, FOLLOW_OF_in_recordVariantSection8323);
+        string_literal364 = (Token) match(input, OF, FOLLOW_OF_in_recordVariantSection8315);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal364_tree = (Object) adaptor.create(string_literal364);
@@ -14765,7 +14740,7 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:371:73: recordVariant
               {
-                pushFollow(FOLLOW_recordVariant_in_recordVariantSection8326);
+                pushFollow(FOLLOW_recordVariant_in_recordVariantSection8318);
                 recordVariant365 = recordVariant();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -14847,20 +14822,20 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        pushFollow(FOLLOW_expressionList_in_recordVariant8380);
+        pushFollow(FOLLOW_expressionList_in_recordVariant8372);
         expressionList366 = expressionList();
         state._fsp--;
         if (state.failed) return retval;
         if (state.backtracking == 0) adaptor.addChild(root_0, expressionList366.getTree());
 
-        char_literal367 = (Token) match(input, COLON, FOLLOW_COLON_in_recordVariant8382);
+        char_literal367 = (Token) match(input, COLON, FOLLOW_COLON_in_recordVariant8374);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal367_tree = (Object) adaptor.create(char_literal367);
           adaptor.addChild(root_0, char_literal367_tree);
         }
 
-        char_literal368 = (Token) match(input, LPAREN, FOLLOW_LPAREN_in_recordVariant8384);
+        char_literal368 = (Token) match(input, LPAREN, FOLLOW_LPAREN_in_recordVariant8376);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal368_tree = (Object) adaptor.create(char_literal368);
@@ -14906,7 +14881,7 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:373:56: recordField
               {
-                pushFollow(FOLLOW_recordField_in_recordVariant8387);
+                pushFollow(FOLLOW_recordField_in_recordVariant8379);
                 recordField369 = recordField();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -14929,7 +14904,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:373:71: recordVariantSection
             {
-              pushFollow(FOLLOW_recordVariantSection_in_recordVariant8392);
+              pushFollow(FOLLOW_recordVariantSection_in_recordVariant8384);
               recordVariantSection370 = recordVariantSection();
               state._fsp--;
               if (state.failed) return retval;
@@ -14939,7 +14914,7 @@ public class DelphiParser extends Parser {
             break;
         }
 
-        char_literal371 = (Token) match(input, RPAREN, FOLLOW_RPAREN_in_recordVariant8396);
+        char_literal371 = (Token) match(input, RPAREN, FOLLOW_RPAREN_in_recordVariant8388);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal371_tree = (Object) adaptor.create(char_literal371);
@@ -14956,7 +14931,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:373:99: ';'
             {
-              char_literal372 = (Token) match(input, SEMI, FOLLOW_SEMI_in_recordVariant8399);
+              char_literal372 = (Token) match(input, SEMI, FOLLOW_SEMI_in_recordVariant8391);
               if (state.failed) return retval;
               if (state.backtracking == 0) {
                 char_literal372_tree = (Object) adaptor.create(char_literal372);
@@ -15027,28 +15002,28 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        string_literal373 = (Token) match(input, RECORD, FOLLOW_RECORD_in_recordHelperDecl8450);
+        string_literal373 = (Token) match(input, RECORD, FOLLOW_RECORD_in_recordHelperDecl8442);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal373_tree = (Object) adaptor.create(string_literal373);
           adaptor.addChild(root_0, string_literal373_tree);
         }
 
-        string_literal374 = (Token) match(input, HELPER, FOLLOW_HELPER_in_recordHelperDecl8452);
+        string_literal374 = (Token) match(input, HELPER, FOLLOW_HELPER_in_recordHelperDecl8444);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal374_tree = (Object) adaptor.create(string_literal374);
           adaptor.addChild(root_0, string_literal374_tree);
         }
 
-        string_literal375 = (Token) match(input, FOR, FOLLOW_FOR_in_recordHelperDecl8454);
+        string_literal375 = (Token) match(input, FOR, FOLLOW_FOR_in_recordHelperDecl8446);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal375_tree = (Object) adaptor.create(string_literal375);
           adaptor.addChild(root_0, string_literal375_tree);
         }
 
-        pushFollow(FOLLOW_typeId_in_recordHelperDecl8456);
+        pushFollow(FOLLOW_typeId_in_recordHelperDecl8448);
         typeId376 = typeId();
         state._fsp--;
         if (state.failed) return retval;
@@ -15077,7 +15052,7 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:375:64: recordHelperItem
               {
-                pushFollow(FOLLOW_recordHelperItem_in_recordHelperDecl8459);
+                pushFollow(FOLLOW_recordHelperItem_in_recordHelperDecl8451);
                 recordHelperItem377 = recordHelperItem();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -15091,7 +15066,7 @@ public class DelphiParser extends Parser {
           }
         }
 
-        string_literal378 = (Token) match(input, END, FOLLOW_END_in_recordHelperDecl8463);
+        string_literal378 = (Token) match(input, END, FOLLOW_END_in_recordHelperDecl8455);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal378_tree = (Object) adaptor.create(string_literal378);
@@ -15240,7 +15215,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_visibility_in_recordHelperItem8512);
+            pushFollow(FOLLOW_visibility_in_recordHelperItem8504);
             visibility379 = visibility();
             state._fsp--;
             if (state.failed) return retval;
@@ -15252,7 +15227,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_classMethod_in_recordHelperItem8545);
+            pushFollow(FOLLOW_classMethod_in_recordHelperItem8537);
             classMethod380 = classMethod();
             state._fsp--;
             if (state.failed) return retval;
@@ -15264,7 +15239,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_classProperty_in_recordHelperItem8578);
+            pushFollow(FOLLOW_classProperty_in_recordHelperItem8570);
             classProperty381 = classProperty();
             state._fsp--;
             if (state.failed) return retval;
@@ -15276,7 +15251,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_constSection_in_recordHelperItem8611);
+            pushFollow(FOLLOW_constSection_in_recordHelperItem8603);
             constSection382 = constSection();
             state._fsp--;
             if (state.failed) return retval;
@@ -15314,7 +15289,7 @@ public class DelphiParser extends Parser {
   };
 
   // $ANTLR start "classMethod"
-  // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:382:1: classMethod : ( ( customAttribute )? ( 'class' )? methodKey ident ( genericDefinition )? ( formalParameterSection )? methodDirectiveSection -> ( customAttribute )? ( 'class' )? ^( methodKey ^( TkFunctionName ident ) ( genericDefinition )? ^( TkFunctionArgs ( formalParameterSection )? ) methodDirectiveSection ) | ( customAttribute )? ( 'class' )? 'function' ident ( genericDefinition )? ( formalParameterSection )? ':' ( customAttribute )? typeDecl methodDirectiveSection -> ( customAttribute )? ( 'class' )? ^( 'function' ^( TkFunctionName ident ) ( genericDefinition )? ^( TkFunctionArgs ( formalParameterSection )? ) ( customAttribute )? ^( TkFunctionReturn typeDecl ) methodDirectiveSection ) | ( customAttribute )? ( 'class' )? 'operator' ident ( genericDefinition )? ( formalParameterSection )? ':' ( customAttribute )? typeDecl ';' -> ( customAttribute )? ( 'class' )? ^( 'operator' ^( TkFunctionName ident ) ( genericDefinition )? ^( TkFunctionArgs ( formalParameterSection )? ) ( customAttribute )? typeDecl ) );
+  // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:382:1: classMethod : ( ( customAttribute )? ( 'class' )? methodKey ident ( genericDefinition )? ( formalParameterSection )? methodDirectiveSection -> ( customAttribute )? ( 'class' )? ^( methodKey ^( TkFunctionName ident ( genericDefinition )? ) ^( TkFunctionArgs ( formalParameterSection )? ) methodDirectiveSection ) | ( customAttribute )? ( 'class' )? 'function' ident ( genericDefinition )? ( formalParameterSection )? ':' ( customAttribute )? typeDecl methodDirectiveSection -> ( customAttribute )? ( 'class' )? ^( 'function' ^( TkFunctionName ident ( genericDefinition )? ) ^( TkFunctionArgs ( formalParameterSection )? ) ( customAttribute )? ^( TkFunctionReturn typeDecl ) methodDirectiveSection ) | ( customAttribute )? ( 'class' )? 'operator' ident ( genericDefinition )? ( formalParameterSection )? ':' ( customAttribute )? typeDecl ';' -> ( customAttribute )? ( 'class' )? ^( 'operator' ^( TkFunctionName ident ( genericDefinition )? ) ^( TkFunctionArgs ( formalParameterSection )? ) ( customAttribute )? typeDecl ) );
   public final DelphiParser.classMethod_return classMethod() throws RecognitionException {
     DelphiParser.classMethod_return retval = new DelphiParser.classMethod_return();
     retval.start = input.LT(1);
@@ -15382,7 +15357,7 @@ public class DelphiParser extends Parser {
         return retval;
       }
 
-      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:382:30: ( ( customAttribute )? ( 'class' )? methodKey ident ( genericDefinition )? ( formalParameterSection )? methodDirectiveSection -> ( customAttribute )? ( 'class' )? ^( methodKey ^( TkFunctionName ident ) ( genericDefinition )? ^( TkFunctionArgs ( formalParameterSection )? ) methodDirectiveSection ) | ( customAttribute )? ( 'class' )? 'function' ident ( genericDefinition )? ( formalParameterSection )? ':' ( customAttribute )? typeDecl methodDirectiveSection -> ( customAttribute )? ( 'class' )? ^( 'function' ^( TkFunctionName ident ) ( genericDefinition )? ^( TkFunctionArgs ( formalParameterSection )? ) ( customAttribute )? ^( TkFunctionReturn typeDecl ) methodDirectiveSection ) | ( customAttribute )? ( 'class' )? 'operator' ident ( genericDefinition )? ( formalParameterSection )? ':' ( customAttribute )? typeDecl ';' -> ( customAttribute )? ( 'class' )? ^( 'operator' ^( TkFunctionName ident ) ( genericDefinition )? ^( TkFunctionArgs ( formalParameterSection )? ) ( customAttribute )? typeDecl ) )
+      // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:382:30: ( ( customAttribute )? ( 'class' )? methodKey ident ( genericDefinition )? ( formalParameterSection )? methodDirectiveSection -> ( customAttribute )? ( 'class' )? ^( methodKey ^( TkFunctionName ident ( genericDefinition )? ) ^( TkFunctionArgs ( formalParameterSection )? ) methodDirectiveSection ) | ( customAttribute )? ( 'class' )? 'function' ident ( genericDefinition )? ( formalParameterSection )? ':' ( customAttribute )? typeDecl methodDirectiveSection -> ( customAttribute )? ( 'class' )? ^( 'function' ^( TkFunctionName ident ( genericDefinition )? ) ^( TkFunctionArgs ( formalParameterSection )? ) ( customAttribute )? ^( TkFunctionReturn typeDecl ) methodDirectiveSection ) | ( customAttribute )? ( 'class' )? 'operator' ident ( genericDefinition )? ( formalParameterSection )? ':' ( customAttribute )? typeDecl ';' -> ( customAttribute )? ( 'class' )? ^( 'operator' ^( TkFunctionName ident ( genericDefinition )? ) ^( TkFunctionArgs ( formalParameterSection )? ) ( customAttribute )? typeDecl ) )
       int alt136 = 3;
       switch (input.LA(1)) {
         case LBRACK:
@@ -15469,7 +15444,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:382:33: customAttribute
                 {
-                  pushFollow(FOLLOW_customAttribute_in_classMethod8666);
+                  pushFollow(FOLLOW_customAttribute_in_classMethod8658);
                   customAttribute383 = customAttribute();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -15489,19 +15464,19 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:382:52: 'class'
                 {
-                  string_literal384 = (Token) match(input, CLASS, FOLLOW_CLASS_in_classMethod8671);
+                  string_literal384 = (Token) match(input, CLASS, FOLLOW_CLASS_in_classMethod8663);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) stream_CLASS.add(string_literal384);
                 }
                 break;
             }
 
-            pushFollow(FOLLOW_methodKey_in_classMethod8675);
+            pushFollow(FOLLOW_methodKey_in_classMethod8667);
             methodKey385 = methodKey();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_methodKey.add(methodKey385.getTree());
-            pushFollow(FOLLOW_ident_in_classMethod8677);
+            pushFollow(FOLLOW_ident_in_classMethod8669);
             ident386 = ident();
             state._fsp--;
             if (state.failed) return retval;
@@ -15516,7 +15491,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:382:79: genericDefinition
                 {
-                  pushFollow(FOLLOW_genericDefinition_in_classMethod8680);
+                  pushFollow(FOLLOW_genericDefinition_in_classMethod8672);
                   genericDefinition387 = genericDefinition();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -15536,7 +15511,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:382:100: formalParameterSection
                 {
-                  pushFollow(FOLLOW_formalParameterSection_in_classMethod8685);
+                  pushFollow(FOLLOW_formalParameterSection_in_classMethod8677);
                   formalParameterSection388 = formalParameterSection();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -15546,15 +15521,15 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            pushFollow(FOLLOW_methodDirectiveSection_in_classMethod8689);
+            pushFollow(FOLLOW_methodDirectiveSection_in_classMethod8681);
             methodDirectiveSection389 = methodDirectiveSection();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0)
               stream_methodDirectiveSection.add(methodDirectiveSection389.getTree());
             // AST REWRITE
-            // elements: formalParameterSection, genericDefinition, methodKey, CLASS,
-            // methodDirectiveSection, customAttribute, ident
+            // elements: ident, methodDirectiveSection, customAttribute, methodKey,
+            // genericDefinition, formalParameterSection, CLASS
             // token labels:
             // rule labels: retval
             // token list labels:
@@ -15567,8 +15542,8 @@ public class DelphiParser extends Parser {
                       adaptor, "rule retval", retval != null ? retval.getTree() : null);
 
               root_0 = (Object) adaptor.nil();
-              // 383:30: -> ( customAttribute )? ( 'class' )? ^( methodKey ^( TkFunctionName ident )
-              // ( genericDefinition )? ^( TkFunctionArgs ( formalParameterSection )? )
+              // 383:30: -> ( customAttribute )? ( 'class' )? ^( methodKey ^( TkFunctionName ident (
+              // genericDefinition )? ) ^( TkFunctionArgs ( formalParameterSection )? )
               // methodDirectiveSection )
               {
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:383:34: ( customAttribute )?
@@ -15583,11 +15558,11 @@ public class DelphiParser extends Parser {
                 }
                 stream_CLASS.reset();
 
-                // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:383:64: ^( methodKey ^( TkFunctionName ident ) ( genericDefinition )? ^( TkFunctionArgs ( formalParameterSection )? ) methodDirectiveSection )
+                // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:383:64: ^( methodKey ^( TkFunctionName ident ( genericDefinition )? ) ^( TkFunctionArgs ( formalParameterSection )? ) methodDirectiveSection )
                 {
                   Object root_1 = (Object) adaptor.nil();
                   root_1 = (Object) adaptor.becomeRoot(stream_methodKey.nextNode(), root_1);
-                  // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:383:76: ^( TkFunctionName ident )
+                  // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:383:76: ^( TkFunctionName ident ( genericDefinition )? )
                   {
                     Object root_2 = (Object) adaptor.nil();
                     root_2 =
@@ -15595,14 +15570,14 @@ public class DelphiParser extends Parser {
                             adaptor.becomeRoot(
                                 (Object) adaptor.create(TkFunctionName, "TkFunctionName"), root_2);
                     adaptor.addChild(root_2, stream_ident.nextTree());
+                    // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:383:99: ( genericDefinition )?
+                    if (stream_genericDefinition.hasNext()) {
+                      adaptor.addChild(root_2, stream_genericDefinition.nextTree());
+                    }
+                    stream_genericDefinition.reset();
+
                     adaptor.addChild(root_1, root_2);
                   }
-
-                  // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:383:100: ( genericDefinition )?
-                  if (stream_genericDefinition.hasNext()) {
-                    adaptor.addChild(root_1, stream_genericDefinition.nextTree());
-                  }
-                  stream_genericDefinition.reset();
 
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:383:121: ^( TkFunctionArgs ( formalParameterSection )? )
                   {
@@ -15661,7 +15636,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:384:33: customAttribute
                 {
-                  pushFollow(FOLLOW_customAttribute_in_classMethod8791);
+                  pushFollow(FOLLOW_customAttribute_in_classMethod8783);
                   customAttribute390 = customAttribute();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -15681,18 +15656,18 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:384:52: 'class'
                 {
-                  string_literal391 = (Token) match(input, CLASS, FOLLOW_CLASS_in_classMethod8796);
+                  string_literal391 = (Token) match(input, CLASS, FOLLOW_CLASS_in_classMethod8788);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) stream_CLASS.add(string_literal391);
                 }
                 break;
             }
 
-            string_literal392 = (Token) match(input, FUNCTION, FOLLOW_FUNCTION_in_classMethod8800);
+            string_literal392 = (Token) match(input, FUNCTION, FOLLOW_FUNCTION_in_classMethod8792);
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_FUNCTION.add(string_literal392);
 
-            pushFollow(FOLLOW_ident_in_classMethod8802);
+            pushFollow(FOLLOW_ident_in_classMethod8794);
             ident393 = ident();
             state._fsp--;
             if (state.failed) return retval;
@@ -15707,7 +15682,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:384:80: genericDefinition
                 {
-                  pushFollow(FOLLOW_genericDefinition_in_classMethod8805);
+                  pushFollow(FOLLOW_genericDefinition_in_classMethod8797);
                   genericDefinition394 = genericDefinition();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -15727,7 +15702,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:384:101: formalParameterSection
                 {
-                  pushFollow(FOLLOW_formalParameterSection_in_classMethod8810);
+                  pushFollow(FOLLOW_formalParameterSection_in_classMethod8802);
                   formalParameterSection395 = formalParameterSection();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -15737,7 +15712,7 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            char_literal396 = (Token) match(input, COLON, FOLLOW_COLON_in_classMethod8814);
+            char_literal396 = (Token) match(input, COLON, FOLLOW_COLON_in_classMethod8806);
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_COLON.add(char_literal396);
 
@@ -16133,7 +16108,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:384:131: customAttribute
                 {
-                  pushFollow(FOLLOW_customAttribute_in_classMethod8817);
+                  pushFollow(FOLLOW_customAttribute_in_classMethod8809);
                   customAttribute397 = customAttribute();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -16143,20 +16118,20 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            pushFollow(FOLLOW_typeDecl_in_classMethod8821);
+            pushFollow(FOLLOW_typeDecl_in_classMethod8813);
             typeDecl398 = typeDecl();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_typeDecl.add(typeDecl398.getTree());
-            pushFollow(FOLLOW_methodDirectiveSection_in_classMethod8823);
+            pushFollow(FOLLOW_methodDirectiveSection_in_classMethod8815);
             methodDirectiveSection399 = methodDirectiveSection();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0)
               stream_methodDirectiveSection.add(methodDirectiveSection399.getTree());
             // AST REWRITE
-            // elements: customAttribute, ident, formalParameterSection, methodDirectiveSection,
-            // typeDecl, customAttribute, CLASS, genericDefinition, FUNCTION
+            // elements: customAttribute, ident, formalParameterSection, CLASS, FUNCTION,
+            // methodDirectiveSection, typeDecl, customAttribute, genericDefinition
             // token labels:
             // rule labels: retval
             // token list labels:
@@ -16170,7 +16145,7 @@ public class DelphiParser extends Parser {
 
               root_0 = (Object) adaptor.nil();
               // 385:30: -> ( customAttribute )? ( 'class' )? ^( 'function' ^( TkFunctionName ident
-              // ) ( genericDefinition )? ^( TkFunctionArgs ( formalParameterSection )? ) (
+              // ( genericDefinition )? ) ^( TkFunctionArgs ( formalParameterSection )? ) (
               // customAttribute )? ^( TkFunctionReturn typeDecl ) methodDirectiveSection )
               {
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:385:33: ( customAttribute )?
@@ -16185,11 +16160,11 @@ public class DelphiParser extends Parser {
                 }
                 stream_CLASS.reset();
 
-                // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:385:63: ^( 'function' ^( TkFunctionName ident ) ( genericDefinition )? ^( TkFunctionArgs ( formalParameterSection )? ) ( customAttribute )? ^( TkFunctionReturn typeDecl ) methodDirectiveSection )
+                // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:385:63: ^( 'function' ^( TkFunctionName ident ( genericDefinition )? ) ^( TkFunctionArgs ( formalParameterSection )? ) ( customAttribute )? ^( TkFunctionReturn typeDecl ) methodDirectiveSection )
                 {
                   Object root_1 = (Object) adaptor.nil();
                   root_1 = (Object) adaptor.becomeRoot(stream_FUNCTION.nextNode(), root_1);
-                  // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:385:76: ^( TkFunctionName ident )
+                  // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:385:76: ^( TkFunctionName ident ( genericDefinition )? )
                   {
                     Object root_2 = (Object) adaptor.nil();
                     root_2 =
@@ -16197,14 +16172,14 @@ public class DelphiParser extends Parser {
                             adaptor.becomeRoot(
                                 (Object) adaptor.create(TkFunctionName, "TkFunctionName"), root_2);
                     adaptor.addChild(root_2, stream_ident.nextTree());
+                    // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:385:99: ( genericDefinition )?
+                    if (stream_genericDefinition.hasNext()) {
+                      adaptor.addChild(root_2, stream_genericDefinition.nextTree());
+                    }
+                    stream_genericDefinition.reset();
+
                     adaptor.addChild(root_1, root_2);
                   }
-
-                  // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:385:100: ( genericDefinition )?
-                  if (stream_genericDefinition.hasNext()) {
-                    adaptor.addChild(root_1, stream_genericDefinition.nextTree());
-                  }
-                  stream_genericDefinition.reset();
 
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:385:121: ^( TkFunctionArgs ( formalParameterSection )? )
                   {
@@ -16281,7 +16256,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:386:33: customAttribute
                 {
-                  pushFollow(FOLLOW_customAttribute_in_classMethod8935);
+                  pushFollow(FOLLOW_customAttribute_in_classMethod8927);
                   customAttribute400 = customAttribute();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -16301,18 +16276,18 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:386:52: 'class'
                 {
-                  string_literal401 = (Token) match(input, CLASS, FOLLOW_CLASS_in_classMethod8940);
+                  string_literal401 = (Token) match(input, CLASS, FOLLOW_CLASS_in_classMethod8932);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) stream_CLASS.add(string_literal401);
                 }
                 break;
             }
 
-            string_literal402 = (Token) match(input, OPERATOR, FOLLOW_OPERATOR_in_classMethod8944);
+            string_literal402 = (Token) match(input, OPERATOR, FOLLOW_OPERATOR_in_classMethod8936);
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_OPERATOR.add(string_literal402);
 
-            pushFollow(FOLLOW_ident_in_classMethod8946);
+            pushFollow(FOLLOW_ident_in_classMethod8938);
             ident403 = ident();
             state._fsp--;
             if (state.failed) return retval;
@@ -16327,7 +16302,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:386:80: genericDefinition
                 {
-                  pushFollow(FOLLOW_genericDefinition_in_classMethod8949);
+                  pushFollow(FOLLOW_genericDefinition_in_classMethod8941);
                   genericDefinition404 = genericDefinition();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -16347,7 +16322,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:386:101: formalParameterSection
                 {
-                  pushFollow(FOLLOW_formalParameterSection_in_classMethod8954);
+                  pushFollow(FOLLOW_formalParameterSection_in_classMethod8946);
                   formalParameterSection405 = formalParameterSection();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -16357,7 +16332,7 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            char_literal406 = (Token) match(input, COLON, FOLLOW_COLON_in_classMethod8958);
+            char_literal406 = (Token) match(input, COLON, FOLLOW_COLON_in_classMethod8950);
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_COLON.add(char_literal406);
 
@@ -16753,7 +16728,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:386:131: customAttribute
                 {
-                  pushFollow(FOLLOW_customAttribute_in_classMethod8961);
+                  pushFollow(FOLLOW_customAttribute_in_classMethod8953);
                   customAttribute407 = customAttribute();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -16763,18 +16738,18 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            pushFollow(FOLLOW_typeDecl_in_classMethod8965);
+            pushFollow(FOLLOW_typeDecl_in_classMethod8957);
             typeDecl408 = typeDecl();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_typeDecl.add(typeDecl408.getTree());
-            char_literal409 = (Token) match(input, SEMI, FOLLOW_SEMI_in_classMethod8967);
+            char_literal409 = (Token) match(input, SEMI, FOLLOW_SEMI_in_classMethod8959);
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_SEMI.add(char_literal409);
 
             // AST REWRITE
-            // elements: CLASS, customAttribute, ident, OPERATOR, typeDecl, customAttribute,
-            // genericDefinition, formalParameterSection
+            // elements: customAttribute, ident, genericDefinition, formalParameterSection,
+            // typeDecl, customAttribute, OPERATOR, CLASS
             // token labels:
             // rule labels: retval
             // token list labels:
@@ -16788,7 +16763,7 @@ public class DelphiParser extends Parser {
 
               root_0 = (Object) adaptor.nil();
               // 387:30: -> ( customAttribute )? ( 'class' )? ^( 'operator' ^( TkFunctionName ident
-              // ) ( genericDefinition )? ^( TkFunctionArgs ( formalParameterSection )? ) (
+              // ( genericDefinition )? ) ^( TkFunctionArgs ( formalParameterSection )? ) (
               // customAttribute )? typeDecl )
               {
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:387:33: ( customAttribute )?
@@ -16803,11 +16778,11 @@ public class DelphiParser extends Parser {
                 }
                 stream_CLASS.reset();
 
-                // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:387:63: ^( 'operator' ^( TkFunctionName ident ) ( genericDefinition )? ^( TkFunctionArgs ( formalParameterSection )? ) ( customAttribute )? typeDecl )
+                // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:387:63: ^( 'operator' ^( TkFunctionName ident ( genericDefinition )? ) ^( TkFunctionArgs ( formalParameterSection )? ) ( customAttribute )? typeDecl )
                 {
                   Object root_1 = (Object) adaptor.nil();
                   root_1 = (Object) adaptor.becomeRoot(stream_OPERATOR.nextNode(), root_1);
-                  // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:387:76: ^( TkFunctionName ident )
+                  // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:387:76: ^( TkFunctionName ident ( genericDefinition )? )
                   {
                     Object root_2 = (Object) adaptor.nil();
                     root_2 =
@@ -16815,14 +16790,14 @@ public class DelphiParser extends Parser {
                             adaptor.becomeRoot(
                                 (Object) adaptor.create(TkFunctionName, "TkFunctionName"), root_2);
                     adaptor.addChild(root_2, stream_ident.nextTree());
+                    // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:387:99: ( genericDefinition )?
+                    if (stream_genericDefinition.hasNext()) {
+                      adaptor.addChild(root_2, stream_genericDefinition.nextTree());
+                    }
+                    stream_genericDefinition.reset();
+
                     adaptor.addChild(root_1, root_2);
                   }
-
-                  // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:387:100: ( genericDefinition )?
-                  if (stream_genericDefinition.hasNext()) {
-                    adaptor.addChild(root_1, stream_genericDefinition.nextTree());
-                  }
-                  stream_genericDefinition.reset();
 
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:387:121: ^( TkFunctionArgs ( formalParameterSection )? )
                   {
@@ -16990,7 +16965,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:389:33: customAttribute
             {
-              pushFollow(FOLLOW_customAttribute_in_classField9096);
+              pushFollow(FOLLOW_customAttribute_in_classField9088);
               customAttribute410 = customAttribute();
               state._fsp--;
               if (state.failed) return retval;
@@ -16999,21 +16974,21 @@ public class DelphiParser extends Parser {
             break;
         }
 
-        pushFollow(FOLLOW_identList_in_classField9100);
+        pushFollow(FOLLOW_identList_in_classField9092);
         identList411 = identList();
         state._fsp--;
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_identList.add(identList411.getTree());
-        char_literal412 = (Token) match(input, COLON, FOLLOW_COLON_in_classField9102);
+        char_literal412 = (Token) match(input, COLON, FOLLOW_COLON_in_classField9094);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_COLON.add(char_literal412);
 
-        pushFollow(FOLLOW_typeDecl_in_classField9104);
+        pushFollow(FOLLOW_typeDecl_in_classField9096);
         typeDecl413 = typeDecl();
         state._fsp--;
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_typeDecl.add(typeDecl413.getTree());
-        char_literal414 = (Token) match(input, SEMI, FOLLOW_SEMI_in_classField9106);
+        char_literal414 = (Token) match(input, SEMI, FOLLOW_SEMI_in_classField9098);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_SEMI.add(char_literal414);
 
@@ -17074,7 +17049,7 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:389:79: hintingDirective
               {
-                pushFollow(FOLLOW_hintingDirective_in_classField9109);
+                pushFollow(FOLLOW_hintingDirective_in_classField9101);
                 hintingDirective415 = hintingDirective();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -17089,7 +17064,7 @@ public class DelphiParser extends Parser {
         }
 
         // AST REWRITE
-        // elements: typeDecl, customAttribute, identList
+        // elements: identList, customAttribute, typeDecl
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -17251,7 +17226,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:392:33: customAttribute
             {
-              pushFollow(FOLLOW_customAttribute_in_classProperty9216);
+              pushFollow(FOLLOW_customAttribute_in_classProperty9208);
               customAttribute416 = customAttribute();
               state._fsp--;
               if (state.failed) return retval;
@@ -17270,18 +17245,18 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:392:52: 'class'
             {
-              string_literal417 = (Token) match(input, CLASS, FOLLOW_CLASS_in_classProperty9221);
+              string_literal417 = (Token) match(input, CLASS, FOLLOW_CLASS_in_classProperty9213);
               if (state.failed) return retval;
               if (state.backtracking == 0) stream_CLASS.add(string_literal417);
             }
             break;
         }
 
-        string_literal418 = (Token) match(input, PROPERTY, FOLLOW_PROPERTY_in_classProperty9225);
+        string_literal418 = (Token) match(input, PROPERTY, FOLLOW_PROPERTY_in_classProperty9217);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_PROPERTY.add(string_literal418);
 
-        pushFollow(FOLLOW_ident_in_classProperty9227);
+        pushFollow(FOLLOW_ident_in_classProperty9219);
         ident419 = ident();
         state._fsp--;
         if (state.failed) return retval;
@@ -17296,7 +17271,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:392:80: classPropertyArray
             {
-              pushFollow(FOLLOW_classPropertyArray_in_classProperty9230);
+              pushFollow(FOLLOW_classPropertyArray_in_classProperty9222);
               classPropertyArray420 = classPropertyArray();
               state._fsp--;
               if (state.failed) return retval;
@@ -17316,11 +17291,11 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:392:102: ':' genericTypeIdent
             {
-              char_literal421 = (Token) match(input, COLON, FOLLOW_COLON_in_classProperty9235);
+              char_literal421 = (Token) match(input, COLON, FOLLOW_COLON_in_classProperty9227);
               if (state.failed) return retval;
               if (state.backtracking == 0) stream_COLON.add(char_literal421);
 
-              pushFollow(FOLLOW_genericTypeIdent_in_classProperty9237);
+              pushFollow(FOLLOW_genericTypeIdent_in_classProperty9229);
               genericTypeIdent422 = genericTypeIdent();
               state._fsp--;
               if (state.failed) return retval;
@@ -17367,7 +17342,7 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:392:126: classPropertyDirective
               {
-                pushFollow(FOLLOW_classPropertyDirective_in_classProperty9242);
+                pushFollow(FOLLOW_classPropertyDirective_in_classProperty9234);
                 classPropertyDirective423 = classPropertyDirective();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -17381,12 +17356,12 @@ public class DelphiParser extends Parser {
           }
         }
 
-        char_literal424 = (Token) match(input, SEMI, FOLLOW_SEMI_in_classProperty9246);
+        char_literal424 = (Token) match(input, SEMI, FOLLOW_SEMI_in_classProperty9238);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_SEMI.add(char_literal424);
 
         // AST REWRITE
-        // elements: ident, genericTypeIdent, classPropertyDirective, PROPERTY
+        // elements: ident, PROPERTY, classPropertyDirective, genericTypeIdent
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -17503,20 +17478,20 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        char_literal425 = (Token) match(input, LBRACK, FOLLOW_LBRACK_in_classPropertyArray9346);
+        char_literal425 = (Token) match(input, LBRACK, FOLLOW_LBRACK_in_classPropertyArray9338);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal425_tree = (Object) adaptor.create(char_literal425);
           adaptor.addChild(root_0, char_literal425_tree);
         }
 
-        pushFollow(FOLLOW_formalParameterList_in_classPropertyArray9348);
+        pushFollow(FOLLOW_formalParameterList_in_classPropertyArray9340);
         formalParameterList426 = formalParameterList();
         state._fsp--;
         if (state.failed) return retval;
         if (state.backtracking == 0) adaptor.addChild(root_0, formalParameterList426.getTree());
 
-        char_literal427 = (Token) match(input, RBRACK, FOLLOW_RBRACK_in_classPropertyArray9350);
+        char_literal427 = (Token) match(input, RBRACK, FOLLOW_RBRACK_in_classPropertyArray9342);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal427_tree = (Object) adaptor.create(char_literal427);
@@ -17651,7 +17626,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            char_literal428 = (Token) match(input, SEMI, FOLLOW_SEMI_in_classPropertyDirective9393);
+            char_literal428 = (Token) match(input, SEMI, FOLLOW_SEMI_in_classPropertyDirective9385);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               char_literal428_tree = (Object) adaptor.create(char_literal428);
@@ -17659,7 +17634,7 @@ public class DelphiParser extends Parser {
             }
 
             string_literal429 =
-                (Token) match(input, DEFAULT, FOLLOW_DEFAULT_in_classPropertyDirective9395);
+                (Token) match(input, DEFAULT, FOLLOW_DEFAULT_in_classPropertyDirective9387);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal429_tree = (Object) adaptor.create(string_literal429);
@@ -17673,14 +17648,14 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal430 =
-                (Token) match(input, DEFAULT, FOLLOW_DEFAULT_in_classPropertyDirective9428);
+                (Token) match(input, DEFAULT, FOLLOW_DEFAULT_in_classPropertyDirective9420);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal430_tree = (Object) adaptor.create(string_literal430);
               adaptor.addChild(root_0, string_literal430_tree);
             }
 
-            pushFollow(FOLLOW_expression_in_classPropertyDirective9430);
+            pushFollow(FOLLOW_expression_in_classPropertyDirective9422);
             expression431 = expression();
             state._fsp--;
             if (state.failed) return retval;
@@ -17692,7 +17667,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_classPropertyReadWrite_in_classPropertyDirective9463);
+            pushFollow(FOLLOW_classPropertyReadWrite_in_classPropertyDirective9455);
             classPropertyReadWrite432 = classPropertyReadWrite();
             state._fsp--;
             if (state.failed) return retval;
@@ -17705,7 +17680,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_classPropertyDispInterface_in_classPropertyDirective9496);
+            pushFollow(FOLLOW_classPropertyDispInterface_in_classPropertyDirective9488);
             classPropertyDispInterface433 = classPropertyDispInterface();
             state._fsp--;
             if (state.failed) return retval;
@@ -17719,14 +17694,14 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             IMPLEMENTS434 =
-                (Token) match(input, IMPLEMENTS, FOLLOW_IMPLEMENTS_in_classPropertyDirective9529);
+                (Token) match(input, IMPLEMENTS, FOLLOW_IMPLEMENTS_in_classPropertyDirective9521);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               IMPLEMENTS434_tree = (Object) adaptor.create(IMPLEMENTS434);
               adaptor.addChild(root_0, IMPLEMENTS434_tree);
             }
 
-            pushFollow(FOLLOW_typeId_in_classPropertyDirective9531);
+            pushFollow(FOLLOW_typeId_in_classPropertyDirective9523);
             typeId435 = typeId();
             state._fsp--;
             if (state.failed) return retval;
@@ -17739,14 +17714,14 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal436 =
-                (Token) match(input, INDEX, FOLLOW_INDEX_in_classPropertyDirective9564);
+                (Token) match(input, INDEX, FOLLOW_INDEX_in_classPropertyDirective9556);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal436_tree = (Object) adaptor.create(string_literal436);
               adaptor.addChild(root_0, string_literal436_tree);
             }
 
-            pushFollow(FOLLOW_expression_in_classPropertyDirective9566);
+            pushFollow(FOLLOW_expression_in_classPropertyDirective9558);
             expression437 = expression();
             state._fsp--;
             if (state.failed) return retval;
@@ -17759,7 +17734,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal438 =
-                (Token) match(input, NODEFAULT, FOLLOW_NODEFAULT_in_classPropertyDirective9599);
+                (Token) match(input, NODEFAULT, FOLLOW_NODEFAULT_in_classPropertyDirective9591);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal438_tree = (Object) adaptor.create(string_literal438);
@@ -17772,14 +17747,14 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            STORED439 = (Token) match(input, STORED, FOLLOW_STORED_in_classPropertyDirective9632);
+            STORED439 = (Token) match(input, STORED, FOLLOW_STORED_in_classPropertyDirective9624);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               STORED439_tree = (Object) adaptor.create(STORED439);
               adaptor.addChild(root_0, STORED439_tree);
             }
 
-            pushFollow(FOLLOW_expression_in_classPropertyDirective9634);
+            pushFollow(FOLLOW_expression_in_classPropertyDirective9626);
             expression440 = expression();
             state._fsp--;
             if (state.failed) return retval;
@@ -17879,11 +17854,11 @@ public class DelphiParser extends Parser {
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:406:32: 'read' qualifiedIdent ( '[' expression ']' )?
           {
             string_literal441 =
-                (Token) match(input, READ, FOLLOW_READ_in_classPropertyReadWrite9677);
+                (Token) match(input, READ, FOLLOW_READ_in_classPropertyReadWrite9669);
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_READ.add(string_literal441);
 
-            pushFollow(FOLLOW_qualifiedIdent_in_classPropertyReadWrite9679);
+            pushFollow(FOLLOW_qualifiedIdent_in_classPropertyReadWrite9671);
             qualifiedIdent442 = qualifiedIdent();
             state._fsp--;
             if (state.failed) return retval;
@@ -17899,17 +17874,17 @@ public class DelphiParser extends Parser {
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:406:55: '[' expression ']'
                 {
                   char_literal443 =
-                      (Token) match(input, LBRACK, FOLLOW_LBRACK_in_classPropertyReadWrite9682);
+                      (Token) match(input, LBRACK, FOLLOW_LBRACK_in_classPropertyReadWrite9674);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) stream_LBRACK.add(char_literal443);
 
-                  pushFollow(FOLLOW_expression_in_classPropertyReadWrite9684);
+                  pushFollow(FOLLOW_expression_in_classPropertyReadWrite9676);
                   expression444 = expression();
                   state._fsp--;
                   if (state.failed) return retval;
                   if (state.backtracking == 0) stream_expression.add(expression444.getTree());
                   char_literal445 =
-                      (Token) match(input, RBRACK, FOLLOW_RBRACK_in_classPropertyReadWrite9686);
+                      (Token) match(input, RBRACK, FOLLOW_RBRACK_in_classPropertyReadWrite9678);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) stream_RBRACK.add(char_literal445);
                 }
@@ -17917,7 +17892,7 @@ public class DelphiParser extends Parser {
             }
 
             // AST REWRITE
-            // elements: qualifiedIdent, READ
+            // elements: READ, qualifiedIdent
             // token labels:
             // rule labels: retval
             // token list labels:
@@ -17949,11 +17924,11 @@ public class DelphiParser extends Parser {
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:408:32: 'write' qualifiedIdent ( '[' expression ']' )?
           {
             string_literal446 =
-                (Token) match(input, WRITE, FOLLOW_WRITE_in_classPropertyReadWrite9760);
+                (Token) match(input, WRITE, FOLLOW_WRITE_in_classPropertyReadWrite9752);
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_WRITE.add(string_literal446);
 
-            pushFollow(FOLLOW_qualifiedIdent_in_classPropertyReadWrite9762);
+            pushFollow(FOLLOW_qualifiedIdent_in_classPropertyReadWrite9754);
             qualifiedIdent447 = qualifiedIdent();
             state._fsp--;
             if (state.failed) return retval;
@@ -17969,17 +17944,17 @@ public class DelphiParser extends Parser {
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:408:56: '[' expression ']'
                 {
                   char_literal448 =
-                      (Token) match(input, LBRACK, FOLLOW_LBRACK_in_classPropertyReadWrite9765);
+                      (Token) match(input, LBRACK, FOLLOW_LBRACK_in_classPropertyReadWrite9757);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) stream_LBRACK.add(char_literal448);
 
-                  pushFollow(FOLLOW_expression_in_classPropertyReadWrite9767);
+                  pushFollow(FOLLOW_expression_in_classPropertyReadWrite9759);
                   expression449 = expression();
                   state._fsp--;
                   if (state.failed) return retval;
                   if (state.backtracking == 0) stream_expression.add(expression449.getTree());
                   char_literal450 =
-                      (Token) match(input, RBRACK, FOLLOW_RBRACK_in_classPropertyReadWrite9769);
+                      (Token) match(input, RBRACK, FOLLOW_RBRACK_in_classPropertyReadWrite9761);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) stream_RBRACK.add(char_literal450);
                 }
@@ -18101,7 +18076,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal451 =
-                (Token) match(input, READONLY, FOLLOW_READONLY_in_classPropertyDispInterface9848);
+                (Token) match(input, READONLY, FOLLOW_READONLY_in_classPropertyDispInterface9840);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal451_tree = (Object) adaptor.create(string_literal451);
@@ -18115,7 +18090,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal452 =
-                (Token) match(input, WRITEONLY, FOLLOW_WRITEONLY_in_classPropertyDispInterface9881);
+                (Token) match(input, WRITEONLY, FOLLOW_WRITEONLY_in_classPropertyDispInterface9873);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal452_tree = (Object) adaptor.create(string_literal452);
@@ -18128,7 +18103,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_dispIDDirective_in_classPropertyDispInterface9914);
+            pushFollow(FOLLOW_dispIDDirective_in_classPropertyDispInterface9906);
             dispIDDirective453 = dispIDDirective();
             state._fsp--;
             if (state.failed) return retval;
@@ -18270,7 +18245,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:415:33: STRICT
                 {
-                  STRICT454 = (Token) match(input, STRICT, FOLLOW_STRICT_in_visibility9970);
+                  STRICT454 = (Token) match(input, STRICT, FOLLOW_STRICT_in_visibility9962);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) {
                     STRICT454_tree = (Object) adaptor.create(STRICT454);
@@ -18280,7 +18255,7 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            string_literal455 = (Token) match(input, PROTECTED, FOLLOW_PROTECTED_in_visibility9974);
+            string_literal455 = (Token) match(input, PROTECTED, FOLLOW_PROTECTED_in_visibility9966);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal455_tree = (Object) adaptor.create(string_literal455);
@@ -18303,7 +18278,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:416:33: STRICT
                 {
-                  STRICT456 = (Token) match(input, STRICT, FOLLOW_STRICT_in_visibility10008);
+                  STRICT456 = (Token) match(input, STRICT, FOLLOW_STRICT_in_visibility10000);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) {
                     STRICT456_tree = (Object) adaptor.create(STRICT456);
@@ -18313,7 +18288,7 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            string_literal457 = (Token) match(input, PRIVATE, FOLLOW_PRIVATE_in_visibility10012);
+            string_literal457 = (Token) match(input, PRIVATE, FOLLOW_PRIVATE_in_visibility10004);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal457_tree = (Object) adaptor.create(string_literal457);
@@ -18326,7 +18301,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            string_literal458 = (Token) match(input, PUBLIC, FOLLOW_PUBLIC_in_visibility10045);
+            string_literal458 = (Token) match(input, PUBLIC, FOLLOW_PUBLIC_in_visibility10037);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal458_tree = (Object) adaptor.create(string_literal458);
@@ -18340,7 +18315,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal459 =
-                (Token) match(input, PUBLISHED, FOLLOW_PUBLISHED_in_visibility10078);
+                (Token) match(input, PUBLISHED, FOLLOW_PUBLISHED_in_visibility10070);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal459_tree = (Object) adaptor.create(string_literal459);
@@ -18354,7 +18329,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal460 =
-                (Token) match(input, AUTOMATED, FOLLOW_AUTOMATED_in_visibility10111);
+                (Token) match(input, AUTOMATED, FOLLOW_AUTOMATED_in_visibility10103);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal460_tree = (Object) adaptor.create(string_literal460);
@@ -18446,14 +18421,14 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal461 =
-                (Token) match(input, PROCEDURE, FOLLOW_PROCEDURE_in_exportedProcHeading10165);
+                (Token) match(input, PROCEDURE, FOLLOW_PROCEDURE_in_exportedProcHeading10157);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal461_tree = (Object) adaptor.create(string_literal461);
               adaptor.addChild(root_0, string_literal461_tree);
             }
 
-            pushFollow(FOLLOW_ident_in_exportedProcHeading10167);
+            pushFollow(FOLLOW_ident_in_exportedProcHeading10159);
             ident462 = ident();
             state._fsp--;
             if (state.failed) return retval;
@@ -18469,7 +18444,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:424:51: formalParameterSection
                 {
-                  pushFollow(FOLLOW_formalParameterSection_in_exportedProcHeading10170);
+                  pushFollow(FOLLOW_formalParameterSection_in_exportedProcHeading10162);
                   formalParameterSection463 = formalParameterSection();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -18479,7 +18454,7 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            char_literal464 = (Token) match(input, COLON, FOLLOW_COLON_in_exportedProcHeading10174);
+            char_literal464 = (Token) match(input, COLON, FOLLOW_COLON_in_exportedProcHeading10166);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               char_literal464_tree = (Object) adaptor.create(char_literal464);
@@ -18878,7 +18853,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:424:81: customAttribute
                 {
-                  pushFollow(FOLLOW_customAttribute_in_exportedProcHeading10177);
+                  pushFollow(FOLLOW_customAttribute_in_exportedProcHeading10169);
                   customAttribute465 = customAttribute();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -18888,13 +18863,13 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            pushFollow(FOLLOW_typeDecl_in_exportedProcHeading10181);
+            pushFollow(FOLLOW_typeDecl_in_exportedProcHeading10173);
             typeDecl466 = typeDecl();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) adaptor.addChild(root_0, typeDecl466.getTree());
 
-            pushFollow(FOLLOW_functionDirectiveSection_in_exportedProcHeading10183);
+            pushFollow(FOLLOW_functionDirectiveSection_in_exportedProcHeading10175);
             functionDirectiveSection467 = functionDirectiveSection();
             state._fsp--;
             if (state.failed) return retval;
@@ -18908,14 +18883,14 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal468 =
-                (Token) match(input, FUNCTION, FOLLOW_FUNCTION_in_exportedProcHeading10216);
+                (Token) match(input, FUNCTION, FOLLOW_FUNCTION_in_exportedProcHeading10208);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal468_tree = (Object) adaptor.create(string_literal468);
               adaptor.addChild(root_0, string_literal468_tree);
             }
 
-            pushFollow(FOLLOW_ident_in_exportedProcHeading10218);
+            pushFollow(FOLLOW_ident_in_exportedProcHeading10210);
             ident469 = ident();
             state._fsp--;
             if (state.failed) return retval;
@@ -18931,7 +18906,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:425:50: formalParameterSection
                 {
-                  pushFollow(FOLLOW_formalParameterSection_in_exportedProcHeading10221);
+                  pushFollow(FOLLOW_formalParameterSection_in_exportedProcHeading10213);
                   formalParameterSection470 = formalParameterSection();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -18941,7 +18916,7 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            pushFollow(FOLLOW_functionDirectiveSection_in_exportedProcHeading10225);
+            pushFollow(FOLLOW_functionDirectiveSection_in_exportedProcHeading10217);
             functionDirectiveSection471 = functionDirectiveSection();
             state._fsp--;
             if (state.failed) return retval;
@@ -19001,7 +18976,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        pushFollow(FOLLOW_methodDeclHeading_in_methodDecl10280);
+        pushFollow(FOLLOW_methodDeclHeading_in_methodDecl10272);
         methodDeclHeading472 = methodDeclHeading();
         state._fsp--;
         if (state.failed) return retval;
@@ -19122,7 +19097,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:427:51: methodBody
             {
-              pushFollow(FOLLOW_methodBody_in_methodDecl10283);
+              pushFollow(FOLLOW_methodBody_in_methodDecl10275);
               methodBody473 = methodBody();
               state._fsp--;
               if (state.failed) return retval;
@@ -19307,7 +19282,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:429:33: customAttribute
                 {
-                  pushFollow(FOLLOW_customAttribute_in_methodDeclHeading10334);
+                  pushFollow(FOLLOW_customAttribute_in_methodDeclHeading10326);
                   customAttribute474 = customAttribute();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -19328,19 +19303,19 @@ public class DelphiParser extends Parser {
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:429:52: 'class'
                 {
                   string_literal475 =
-                      (Token) match(input, CLASS, FOLLOW_CLASS_in_methodDeclHeading10339);
+                      (Token) match(input, CLASS, FOLLOW_CLASS_in_methodDeclHeading10331);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) stream_CLASS.add(string_literal475);
                 }
                 break;
             }
 
-            pushFollow(FOLLOW_methodKey_in_methodDeclHeading10344);
+            pushFollow(FOLLOW_methodKey_in_methodDeclHeading10336);
             methodKey476 = methodKey();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_methodKey.add(methodKey476.getTree());
-            pushFollow(FOLLOW_methodName_in_methodDeclHeading10346);
+            pushFollow(FOLLOW_methodName_in_methodDeclHeading10338);
             methodName477 = methodName();
             state._fsp--;
             if (state.failed) return retval;
@@ -19355,7 +19330,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:429:85: formalParameterSection
                 {
-                  pushFollow(FOLLOW_formalParameterSection_in_methodDeclHeading10349);
+                  pushFollow(FOLLOW_formalParameterSection_in_methodDeclHeading10341);
                   formalParameterSection478 = formalParameterSection();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -19365,15 +19340,15 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            pushFollow(FOLLOW_methodDirectiveSection_in_methodDeclHeading10353);
+            pushFollow(FOLLOW_methodDirectiveSection_in_methodDeclHeading10345);
             methodDirectiveSection479 = methodDirectiveSection();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0)
               stream_methodDirectiveSection.add(methodDirectiveSection479.getTree());
             // AST REWRITE
-            // elements: formalParameterSection, methodDirectiveSection, CLASS, methodKey,
-            // customAttribute, methodName
+            // elements: CLASS, methodName, customAttribute, methodKey, formalParameterSection,
+            // methodDirectiveSection
             // token labels:
             // rule labels: retval
             // token list labels:
@@ -19474,7 +19449,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:431:33: customAttribute
                 {
-                  pushFollow(FOLLOW_customAttribute_in_methodDeclHeading10450);
+                  pushFollow(FOLLOW_customAttribute_in_methodDeclHeading10442);
                   customAttribute480 = customAttribute();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -19495,7 +19470,7 @@ public class DelphiParser extends Parser {
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:431:52: 'class'
                 {
                   string_literal481 =
-                      (Token) match(input, CLASS, FOLLOW_CLASS_in_methodDeclHeading10455);
+                      (Token) match(input, CLASS, FOLLOW_CLASS_in_methodDeclHeading10447);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) stream_CLASS.add(string_literal481);
                 }
@@ -19503,11 +19478,11 @@ public class DelphiParser extends Parser {
             }
 
             string_literal482 =
-                (Token) match(input, FUNCTION, FOLLOW_FUNCTION_in_methodDeclHeading10459);
+                (Token) match(input, FUNCTION, FOLLOW_FUNCTION_in_methodDeclHeading10451);
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_FUNCTION.add(string_literal482);
 
-            pushFollow(FOLLOW_methodName_in_methodDeclHeading10461);
+            pushFollow(FOLLOW_methodName_in_methodDeclHeading10453);
             methodName483 = methodName();
             state._fsp--;
             if (state.failed) return retval;
@@ -19522,7 +19497,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:431:85: formalParameterSection
                 {
-                  pushFollow(FOLLOW_formalParameterSection_in_methodDeclHeading10464);
+                  pushFollow(FOLLOW_formalParameterSection_in_methodDeclHeading10456);
                   formalParameterSection484 = formalParameterSection();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -19543,7 +19518,7 @@ public class DelphiParser extends Parser {
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:431:111: ':' ( customAttribute )? typeDecl
                 {
                   char_literal485 =
-                      (Token) match(input, COLON, FOLLOW_COLON_in_methodDeclHeading10469);
+                      (Token) match(input, COLON, FOLLOW_COLON_in_methodDeclHeading10461);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) stream_COLON.add(char_literal485);
 
@@ -19939,7 +19914,7 @@ public class DelphiParser extends Parser {
                     case 1:
                       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:431:116: customAttribute
                       {
-                        pushFollow(FOLLOW_customAttribute_in_methodDeclHeading10472);
+                        pushFollow(FOLLOW_customAttribute_in_methodDeclHeading10464);
                         customAttribute486 = customAttribute();
                         state._fsp--;
                         if (state.failed) return retval;
@@ -19949,7 +19924,7 @@ public class DelphiParser extends Parser {
                       break;
                   }
 
-                  pushFollow(FOLLOW_typeDecl_in_methodDeclHeading10476);
+                  pushFollow(FOLLOW_typeDecl_in_methodDeclHeading10468);
                   typeDecl487 = typeDecl();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -19958,15 +19933,15 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            pushFollow(FOLLOW_methodDirectiveSection_in_methodDeclHeading10480);
+            pushFollow(FOLLOW_methodDirectiveSection_in_methodDeclHeading10472);
             methodDirectiveSection488 = methodDirectiveSection();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0)
               stream_methodDirectiveSection.add(methodDirectiveSection488.getTree());
             // AST REWRITE
-            // elements: customAttribute, methodName, CLASS, methodDirectiveSection, FUNCTION,
-            // formalParameterSection, typeDecl, customAttribute
+            // elements: CLASS, typeDecl, customAttribute, formalParameterSection,
+            // methodDirectiveSection, methodName, customAttribute, FUNCTION
             // token labels:
             // rule labels: retval
             // token list labels:
@@ -20076,7 +20051,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:433:33: customAttribute
                 {
-                  pushFollow(FOLLOW_customAttribute_in_methodDeclHeading10588);
+                  pushFollow(FOLLOW_customAttribute_in_methodDeclHeading10580);
                   customAttribute489 = customAttribute();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -20086,16 +20061,16 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            string_literal490 = (Token) match(input, CLASS, FOLLOW_CLASS_in_methodDeclHeading10592);
+            string_literal490 = (Token) match(input, CLASS, FOLLOW_CLASS_in_methodDeclHeading10584);
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_CLASS.add(string_literal490);
 
             string_literal491 =
-                (Token) match(input, OPERATOR, FOLLOW_OPERATOR_in_methodDeclHeading10594);
+                (Token) match(input, OPERATOR, FOLLOW_OPERATOR_in_methodDeclHeading10586);
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_OPERATOR.add(string_literal491);
 
-            pushFollow(FOLLOW_methodName_in_methodDeclHeading10596);
+            pushFollow(FOLLOW_methodName_in_methodDeclHeading10588);
             methodName492 = methodName();
             state._fsp--;
             if (state.failed) return retval;
@@ -20110,7 +20085,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:433:82: formalParameterSection
                 {
-                  pushFollow(FOLLOW_formalParameterSection_in_methodDeclHeading10599);
+                  pushFollow(FOLLOW_formalParameterSection_in_methodDeclHeading10591);
                   formalParameterSection493 = formalParameterSection();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -20131,7 +20106,7 @@ public class DelphiParser extends Parser {
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:433:108: ':' ( customAttribute )? typeDecl
                 {
                   char_literal494 =
-                      (Token) match(input, COLON, FOLLOW_COLON_in_methodDeclHeading10604);
+                      (Token) match(input, COLON, FOLLOW_COLON_in_methodDeclHeading10596);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) stream_COLON.add(char_literal494);
 
@@ -20527,7 +20502,7 @@ public class DelphiParser extends Parser {
                     case 1:
                       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:433:113: customAttribute
                       {
-                        pushFollow(FOLLOW_customAttribute_in_methodDeclHeading10607);
+                        pushFollow(FOLLOW_customAttribute_in_methodDeclHeading10599);
                         customAttribute495 = customAttribute();
                         state._fsp--;
                         if (state.failed) return retval;
@@ -20537,7 +20512,7 @@ public class DelphiParser extends Parser {
                       break;
                   }
 
-                  pushFollow(FOLLOW_typeDecl_in_methodDeclHeading10611);
+                  pushFollow(FOLLOW_typeDecl_in_methodDeclHeading10603);
                   typeDecl496 = typeDecl();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -20546,15 +20521,15 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            pushFollow(FOLLOW_methodDirectiveSection_in_methodDeclHeading10615);
+            pushFollow(FOLLOW_methodDirectiveSection_in_methodDeclHeading10607);
             methodDirectiveSection497 = methodDirectiveSection();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0)
               stream_methodDirectiveSection.add(methodDirectiveSection497.getTree());
             // AST REWRITE
-            // elements: OPERATOR, typeDecl, methodName, customAttribute, customAttribute,
-            // methodDirectiveSection, CLASS, formalParameterSection
+            // elements: CLASS, customAttribute, customAttribute, methodDirectiveSection,
+            // formalParameterSection, typeDecl, methodName, OPERATOR
             // token labels:
             // rule labels: retval
             // token list labels:
@@ -20770,7 +20745,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        pushFollow(FOLLOW_ident_in_methodName10863);
+        pushFollow(FOLLOW_ident_in_methodName10855);
         ident499 = ident();
         state._fsp--;
         if (state.failed) return retval;
@@ -20786,7 +20761,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:440:39: genericDefinition
             {
-              pushFollow(FOLLOW_genericDefinition_in_methodName10866);
+              pushFollow(FOLLOW_genericDefinition_in_methodName10858);
               genericDefinition500 = genericDefinition();
               state._fsp--;
               if (state.failed) return retval;
@@ -20802,14 +20777,14 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:440:60: '.' ident ( genericDefinition )?
             {
-              char_literal501 = (Token) match(input, DOT, FOLLOW_DOT_in_methodName10871);
+              char_literal501 = (Token) match(input, DOT, FOLLOW_DOT_in_methodName10863);
               if (state.failed) return retval;
               if (state.backtracking == 0) {
                 char_literal501_tree = (Object) adaptor.create(char_literal501);
                 adaptor.addChild(root_0, char_literal501_tree);
               }
 
-              pushFollow(FOLLOW_ident_in_methodName10873);
+              pushFollow(FOLLOW_ident_in_methodName10865);
               ident502 = ident();
               state._fsp--;
               if (state.failed) return retval;
@@ -20825,7 +20800,7 @@ public class DelphiParser extends Parser {
                 case 1:
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:440:71: genericDefinition
                   {
-                    pushFollow(FOLLOW_genericDefinition_in_methodName10876);
+                    pushFollow(FOLLOW_genericDefinition_in_methodName10868);
                     genericDefinition503 = genericDefinition();
                     state._fsp--;
                     if (state.failed) return retval;
@@ -20838,14 +20813,14 @@ public class DelphiParser extends Parser {
             break;
         }
 
-        char_literal504 = (Token) match(input, DOT, FOLLOW_DOT_in_methodName10882);
+        char_literal504 = (Token) match(input, DOT, FOLLOW_DOT_in_methodName10874);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal504_tree = (Object) adaptor.create(char_literal504);
           adaptor.addChild(root_0, char_literal504_tree);
         }
 
-        pushFollow(FOLLOW_ident_in_methodName10884);
+        pushFollow(FOLLOW_ident_in_methodName10876);
         ident505 = ident();
         state._fsp--;
         if (state.failed) return retval;
@@ -20861,7 +20836,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:440:104: genericDefinition
             {
-              pushFollow(FOLLOW_genericDefinition_in_methodName10887);
+              pushFollow(FOLLOW_genericDefinition_in_methodName10879);
               genericDefinition506 = genericDefinition();
               state._fsp--;
               if (state.failed) return retval;
@@ -20922,7 +20897,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        pushFollow(FOLLOW_procDeclHeading_in_procDecl10946);
+        pushFollow(FOLLOW_procDeclHeading_in_procDecl10938);
         procDeclHeading507 = procDeclHeading();
         state._fsp--;
         if (state.failed) return retval;
@@ -21043,7 +21018,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:442:49: procBody
             {
-              pushFollow(FOLLOW_procBody_in_procDecl10949);
+              pushFollow(FOLLOW_procBody_in_procDecl10941);
               procBody508 = procBody();
               state._fsp--;
               if (state.failed) return retval;
@@ -21176,7 +21151,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:444:33: customAttribute
                 {
-                  pushFollow(FOLLOW_customAttribute_in_procDeclHeading11002);
+                  pushFollow(FOLLOW_customAttribute_in_procDeclHeading10994);
                   customAttribute509 = customAttribute();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -21187,11 +21162,11 @@ public class DelphiParser extends Parser {
             }
 
             string_literal510 =
-                (Token) match(input, PROCEDURE, FOLLOW_PROCEDURE_in_procDeclHeading11006);
+                (Token) match(input, PROCEDURE, FOLLOW_PROCEDURE_in_procDeclHeading10998);
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_PROCEDURE.add(string_literal510);
 
-            pushFollow(FOLLOW_ident_in_procDeclHeading11008);
+            pushFollow(FOLLOW_ident_in_procDeclHeading11000);
             ident511 = ident();
             state._fsp--;
             if (state.failed) return retval;
@@ -21206,7 +21181,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:444:70: formalParameterSection
                 {
-                  pushFollow(FOLLOW_formalParameterSection_in_procDeclHeading11011);
+                  pushFollow(FOLLOW_formalParameterSection_in_procDeclHeading11003);
                   formalParameterSection512 = formalParameterSection();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -21216,14 +21191,14 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            pushFollow(FOLLOW_functionDirectiveSection_in_procDeclHeading11015);
+            pushFollow(FOLLOW_functionDirectiveSection_in_procDeclHeading11007);
             functionDirectiveSection513 = functionDirectiveSection();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0)
               stream_functionDirectiveSection.add(functionDirectiveSection513.getTree());
             // AST REWRITE
-            // elements: PROCEDURE, ident, formalParameterSection, functionDirectiveSection
+            // elements: formalParameterSection, PROCEDURE, ident, functionDirectiveSection
             // token labels:
             // rule labels: retval
             // token list labels:
@@ -21297,7 +21272,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:446:33: customAttribute
                 {
-                  pushFollow(FOLLOW_customAttribute_in_procDeclHeading11102);
+                  pushFollow(FOLLOW_customAttribute_in_procDeclHeading11094);
                   customAttribute514 = customAttribute();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -21308,11 +21283,11 @@ public class DelphiParser extends Parser {
             }
 
             string_literal515 =
-                (Token) match(input, FUNCTION, FOLLOW_FUNCTION_in_procDeclHeading11106);
+                (Token) match(input, FUNCTION, FOLLOW_FUNCTION_in_procDeclHeading11098);
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_FUNCTION.add(string_literal515);
 
-            pushFollow(FOLLOW_ident_in_procDeclHeading11108);
+            pushFollow(FOLLOW_ident_in_procDeclHeading11100);
             ident516 = ident();
             state._fsp--;
             if (state.failed) return retval;
@@ -21327,7 +21302,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:446:69: formalParameterSection
                 {
-                  pushFollow(FOLLOW_formalParameterSection_in_procDeclHeading11111);
+                  pushFollow(FOLLOW_formalParameterSection_in_procDeclHeading11103);
                   formalParameterSection517 = formalParameterSection();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -21348,11 +21323,11 @@ public class DelphiParser extends Parser {
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:446:95: ':' typeDecl
                 {
                   char_literal518 =
-                      (Token) match(input, COLON, FOLLOW_COLON_in_procDeclHeading11116);
+                      (Token) match(input, COLON, FOLLOW_COLON_in_procDeclHeading11108);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) stream_COLON.add(char_literal518);
 
-                  pushFollow(FOLLOW_typeDecl_in_procDeclHeading11118);
+                  pushFollow(FOLLOW_typeDecl_in_procDeclHeading11110);
                   typeDecl519 = typeDecl();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -21361,14 +21336,14 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            pushFollow(FOLLOW_functionDirectiveSection_in_procDeclHeading11122);
+            pushFollow(FOLLOW_functionDirectiveSection_in_procDeclHeading11114);
             functionDirectiveSection520 = functionDirectiveSection();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0)
               stream_functionDirectiveSection.add(functionDirectiveSection520.getTree());
             // AST REWRITE
-            // elements: FUNCTION, typeDecl, formalParameterSection, functionDirectiveSection, ident
+            // elements: functionDirectiveSection, typeDecl, ident, FUNCTION, formalParameterSection
             // token labels:
             // rule labels: retval
             // token list labels:
@@ -21503,7 +21478,7 @@ public class DelphiParser extends Parser {
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:449:32: '(' ( formalParameterList )? ')'
       {
         char_literal521 =
-            (Token) match(input, LPAREN, FOLLOW_LPAREN_in_formalParameterSection11227);
+            (Token) match(input, LPAREN, FOLLOW_LPAREN_in_formalParameterSection11219);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_LPAREN.add(char_literal521);
 
@@ -21541,7 +21516,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:449:37: formalParameterList
             {
-              pushFollow(FOLLOW_formalParameterList_in_formalParameterSection11230);
+              pushFollow(FOLLOW_formalParameterList_in_formalParameterSection11222);
               formalParameterList522 = formalParameterList();
               state._fsp--;
               if (state.failed) return retval;
@@ -21552,7 +21527,7 @@ public class DelphiParser extends Parser {
         }
 
         char_literal523 =
-            (Token) match(input, RPAREN, FOLLOW_RPAREN_in_formalParameterSection11234);
+            (Token) match(input, RPAREN, FOLLOW_RPAREN_in_formalParameterSection11226);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_RPAREN.add(char_literal523);
 
@@ -21639,7 +21614,7 @@ public class DelphiParser extends Parser {
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:451:30: ( formalParameter ( ';' formalParameter )* -> formalParameter ( formalParameter )* )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:451:32: formalParameter ( ';' formalParameter )*
       {
-        pushFollow(FOLLOW_formalParameter_in_formalParameterList11287);
+        pushFollow(FOLLOW_formalParameter_in_formalParameterList11279);
         formalParameter524 = formalParameter();
         state._fsp--;
         if (state.failed) return retval;
@@ -21658,11 +21633,11 @@ public class DelphiParser extends Parser {
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:451:49: ';' formalParameter
               {
                 char_literal525 =
-                    (Token) match(input, SEMI, FOLLOW_SEMI_in_formalParameterList11290);
+                    (Token) match(input, SEMI, FOLLOW_SEMI_in_formalParameterList11282);
                 if (state.failed) return retval;
                 if (state.backtracking == 0) stream_SEMI.add(char_literal525);
 
-                pushFollow(FOLLOW_formalParameter_in_formalParameterList11292);
+                pushFollow(FOLLOW_formalParameter_in_formalParameterList11284);
                 formalParameter526 = formalParameter();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -21857,7 +21832,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:453:33: customAttribute
             {
-              pushFollow(FOLLOW_customAttribute_in_formalParameter11354);
+              pushFollow(FOLLOW_customAttribute_in_formalParameter11346);
               customAttribute527 = customAttribute();
               state._fsp--;
               if (state.failed) return retval;
@@ -21907,7 +21882,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:453:52: parmType
             {
-              pushFollow(FOLLOW_parmType_in_formalParameter11359);
+              pushFollow(FOLLOW_parmType_in_formalParameter11351);
               parmType528 = parmType();
               state._fsp--;
               if (state.failed) return retval;
@@ -21916,7 +21891,7 @@ public class DelphiParser extends Parser {
             break;
         }
 
-        pushFollow(FOLLOW_identListFlat_in_formalParameter11363);
+        pushFollow(FOLLOW_identListFlat_in_formalParameter11355);
         identListFlat529 = identListFlat();
         state._fsp--;
         if (state.failed) return retval;
@@ -21931,11 +21906,11 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:453:78: ':' typeDecl
             {
-              char_literal530 = (Token) match(input, COLON, FOLLOW_COLON_in_formalParameter11366);
+              char_literal530 = (Token) match(input, COLON, FOLLOW_COLON_in_formalParameter11358);
               if (state.failed) return retval;
               if (state.backtracking == 0) stream_COLON.add(char_literal530);
 
-              pushFollow(FOLLOW_typeDecl_in_formalParameter11368);
+              pushFollow(FOLLOW_typeDecl_in_formalParameter11360);
               typeDecl531 = typeDecl();
               state._fsp--;
               if (state.failed) return retval;
@@ -21954,11 +21929,11 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:453:94: '=' expression
             {
-              char_literal532 = (Token) match(input, EQUAL, FOLLOW_EQUAL_in_formalParameter11373);
+              char_literal532 = (Token) match(input, EQUAL, FOLLOW_EQUAL_in_formalParameter11365);
               if (state.failed) return retval;
               if (state.backtracking == 0) stream_EQUAL.add(char_literal532);
 
-              pushFollow(FOLLOW_expression_in_formalParameter11375);
+              pushFollow(FOLLOW_expression_in_formalParameter11367);
               expression533 = expression();
               state._fsp--;
               if (state.failed) return retval;
@@ -21968,7 +21943,7 @@ public class DelphiParser extends Parser {
         }
 
         // AST REWRITE
-        // elements: customAttribute, parmType, identListFlat, typeDecl
+        // elements: customAttribute, typeDecl, parmType, identListFlat
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -22158,12 +22133,12 @@ public class DelphiParser extends Parser {
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:460:30: ( block ';' -> block )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:460:32: block ';'
       {
-        pushFollow(FOLLOW_block_in_methodBody11612);
+        pushFollow(FOLLOW_block_in_methodBody11604);
         block535 = block();
         state._fsp--;
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_block.add(block535.getTree());
-        char_literal536 = (Token) match(input, SEMI, FOLLOW_SEMI_in_methodBody11614);
+        char_literal536 = (Token) match(input, SEMI, FOLLOW_SEMI_in_methodBody11606);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_SEMI.add(char_literal536);
 
@@ -22243,13 +22218,13 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        pushFollow(FOLLOW_block_in_procBody11675);
+        pushFollow(FOLLOW_block_in_procBody11667);
         block537 = block();
         state._fsp--;
         if (state.failed) return retval;
         if (state.backtracking == 0) adaptor.addChild(root_0, block537.getTree());
 
-        char_literal538 = (Token) match(input, SEMI, FOLLOW_SEMI_in_procBody11677);
+        char_literal538 = (Token) match(input, SEMI, FOLLOW_SEMI_in_procBody11669);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal538_tree = (Object) adaptor.create(char_literal538);
@@ -22307,7 +22282,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        pushFollow(FOLLOW_customAttributeList_in_customAttribute11730);
+        pushFollow(FOLLOW_customAttributeList_in_customAttribute11722);
         customAttributeList539 = customAttributeList();
         state._fsp--;
         if (state.failed) return retval;
@@ -22381,7 +22356,7 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:469:33: customAttributeDecl
               {
-                pushFollow(FOLLOW_customAttributeDecl_in_customAttributeList11777);
+                pushFollow(FOLLOW_customAttributeDecl_in_customAttributeList11769);
                 customAttributeDecl540 = customAttributeDecl();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -22463,11 +22438,11 @@ public class DelphiParser extends Parser {
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:471:30: ( '[' namespacedQualifiedIdent ( '(' ( expressionList )? ')' )? ']' -> ^( TkCustomAttribute '[' namespacedQualifiedIdent ( '(' ( expressionList )? ')' )? ']' ) )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:471:32: '[' namespacedQualifiedIdent ( '(' ( expressionList )? ')' )? ']'
       {
-        char_literal541 = (Token) match(input, LBRACK, FOLLOW_LBRACK_in_customAttributeDecl11825);
+        char_literal541 = (Token) match(input, LBRACK, FOLLOW_LBRACK_in_customAttributeDecl11817);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_LBRACK.add(char_literal541);
 
-        pushFollow(FOLLOW_namespacedQualifiedIdent_in_customAttributeDecl11827);
+        pushFollow(FOLLOW_namespacedQualifiedIdent_in_customAttributeDecl11819);
         namespacedQualifiedIdent542 = namespacedQualifiedIdent();
         state._fsp--;
         if (state.failed) return retval;
@@ -22484,7 +22459,7 @@ public class DelphiParser extends Parser {
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:471:62: '(' ( expressionList )? ')'
             {
               char_literal543 =
-                  (Token) match(input, LPAREN, FOLLOW_LPAREN_in_customAttributeDecl11830);
+                  (Token) match(input, LPAREN, FOLLOW_LPAREN_in_customAttributeDecl11822);
               if (state.failed) return retval;
               if (state.backtracking == 0) stream_LPAREN.add(char_literal543);
 
@@ -22534,7 +22509,7 @@ public class DelphiParser extends Parser {
                 case 1:
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:471:67: expressionList
                   {
-                    pushFollow(FOLLOW_expressionList_in_customAttributeDecl11833);
+                    pushFollow(FOLLOW_expressionList_in_customAttributeDecl11825);
                     expressionList544 = expressionList();
                     state._fsp--;
                     if (state.failed) return retval;
@@ -22545,19 +22520,19 @@ public class DelphiParser extends Parser {
               }
 
               char_literal545 =
-                  (Token) match(input, RPAREN, FOLLOW_RPAREN_in_customAttributeDecl11837);
+                  (Token) match(input, RPAREN, FOLLOW_RPAREN_in_customAttributeDecl11829);
               if (state.failed) return retval;
               if (state.backtracking == 0) stream_RPAREN.add(char_literal545);
             }
             break;
         }
 
-        char_literal546 = (Token) match(input, RBRACK, FOLLOW_RBRACK_in_customAttributeDecl11841);
+        char_literal546 = (Token) match(input, RBRACK, FOLLOW_RBRACK_in_customAttributeDecl11833);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_RBRACK.add(char_literal546);
 
         // AST REWRITE
-        // elements: LPAREN, LBRACK, expressionList, RPAREN, namespacedQualifiedIdent, RBRACK
+        // elements: namespacedQualifiedIdent, LPAREN, LBRACK, RPAREN, expressionList, RBRACK
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -22584,8 +22559,8 @@ public class DelphiParser extends Parser {
               adaptor.addChild(root_1, stream_namespacedQualifiedIdent.nextTree());
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:471:147: ( '(' ( expressionList )? ')' )?
               if (stream_LPAREN.hasNext()
-                  || stream_expressionList.hasNext()
-                  || stream_RPAREN.hasNext()) {
+                  || stream_RPAREN.hasNext()
+                  || stream_expressionList.hasNext()) {
                 adaptor.addChild(root_1, stream_LPAREN.nextNode());
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:471:152: ( expressionList )?
                 if (stream_expressionList.hasNext()) {
@@ -22596,8 +22571,8 @@ public class DelphiParser extends Parser {
                 adaptor.addChild(root_1, stream_RPAREN.nextNode());
               }
               stream_LPAREN.reset();
-              stream_expressionList.reset();
               stream_RPAREN.reset();
+              stream_expressionList.reset();
 
               adaptor.addChild(root_1, stream_RBRACK.nextNode());
               adaptor.addChild(root_0, root_1);
@@ -22716,7 +22691,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:477:32: anonymousExpression
           {
-            pushFollow(FOLLOW_anonymousExpression_in_expression11925);
+            pushFollow(FOLLOW_anonymousExpression_in_expression11917);
             anonymousExpression547 = anonymousExpression();
             state._fsp--;
             if (state.failed) return retval;
@@ -22761,7 +22736,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_simpleExpression_in_expression11966);
+            pushFollow(FOLLOW_simpleExpression_in_expression11958);
             simpleExpression548 = simpleExpression();
             state._fsp--;
             if (state.failed) return retval;
@@ -22776,14 +22751,14 @@ public class DelphiParser extends Parser {
                 case 1:
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:478:50: relationalOperator simpleExpression
                   {
-                    pushFollow(FOLLOW_relationalOperator_in_expression11969);
+                    pushFollow(FOLLOW_relationalOperator_in_expression11961);
                     relationalOperator549 = relationalOperator();
                     state._fsp--;
                     if (state.failed) return retval;
                     if (state.backtracking == 0)
                       adaptor.addChild(root_0, relationalOperator549.getTree());
 
-                    pushFollow(FOLLOW_simpleExpression_in_expression11971);
+                    pushFollow(FOLLOW_simpleExpression_in_expression11963);
                     simpleExpression550 = simpleExpression();
                     state._fsp--;
                     if (state.failed) return retval;
@@ -22804,14 +22779,14 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:478:89: '=' expression
                 {
-                  char_literal551 = (Token) match(input, EQUAL, FOLLOW_EQUAL_in_expression11976);
+                  char_literal551 = (Token) match(input, EQUAL, FOLLOW_EQUAL_in_expression11968);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) {
                     char_literal551_tree = (Object) adaptor.create(char_literal551);
                     adaptor.addChild(root_0, char_literal551_tree);
                   }
 
-                  pushFollow(FOLLOW_expression_in_expression11978);
+                  pushFollow(FOLLOW_expression_in_expression11970);
                   expression552 = expression();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -22902,7 +22877,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal553 =
-                (Token) match(input, PROCEDURE, FOLLOW_PROCEDURE_in_anonymousExpression12026);
+                (Token) match(input, PROCEDURE, FOLLOW_PROCEDURE_in_anonymousExpression12018);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal553_tree = (Object) adaptor.create(string_literal553);
@@ -22916,7 +22891,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:480:45: formalParameterSection
                 {
-                  pushFollow(FOLLOW_formalParameterSection_in_anonymousExpression12029);
+                  pushFollow(FOLLOW_formalParameterSection_in_anonymousExpression12021);
                   formalParameterSection554 = formalParameterSection();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -22926,7 +22901,7 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            pushFollow(FOLLOW_block_in_anonymousExpression12033);
+            pushFollow(FOLLOW_block_in_anonymousExpression12025);
             block555 = block();
             state._fsp--;
             if (state.failed) return retval;
@@ -22939,7 +22914,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal556 =
-                (Token) match(input, FUNCTION, FOLLOW_FUNCTION_in_anonymousExpression12066);
+                (Token) match(input, FUNCTION, FOLLOW_FUNCTION_in_anonymousExpression12058);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal556_tree = (Object) adaptor.create(string_literal556);
@@ -22956,7 +22931,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:481:44: formalParameterSection
                 {
-                  pushFollow(FOLLOW_formalParameterSection_in_anonymousExpression12069);
+                  pushFollow(FOLLOW_formalParameterSection_in_anonymousExpression12061);
                   formalParameterSection557 = formalParameterSection();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -22966,20 +22941,20 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            char_literal558 = (Token) match(input, COLON, FOLLOW_COLON_in_anonymousExpression12073);
+            char_literal558 = (Token) match(input, COLON, FOLLOW_COLON_in_anonymousExpression12065);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               char_literal558_tree = (Object) adaptor.create(char_literal558);
               adaptor.addChild(root_0, char_literal558_tree);
             }
 
-            pushFollow(FOLLOW_typeDecl_in_anonymousExpression12075);
+            pushFollow(FOLLOW_typeDecl_in_anonymousExpression12067);
             typeDecl559 = typeDecl();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) adaptor.addChild(root_0, typeDecl559.getTree());
 
-            pushFollow(FOLLOW_block_in_anonymousExpression12077);
+            pushFollow(FOLLOW_block_in_anonymousExpression12069);
             block560 = block();
             state._fsp--;
             if (state.failed) return retval;
@@ -23039,7 +23014,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        pushFollow(FOLLOW_term_in_simpleExpression12126);
+        pushFollow(FOLLOW_term_in_simpleExpression12118);
         term561 = term();
         state._fsp--;
         if (state.failed) return retval;
@@ -23054,13 +23029,13 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:483:38: addOperator term
               {
-                pushFollow(FOLLOW_addOperator_in_simpleExpression12129);
+                pushFollow(FOLLOW_addOperator_in_simpleExpression12121);
                 addOperator562 = addOperator();
                 state._fsp--;
                 if (state.failed) return retval;
                 if (state.backtracking == 0) adaptor.addChild(root_0, addOperator562.getTree());
 
-                pushFollow(FOLLOW_term_in_simpleExpression12131);
+                pushFollow(FOLLOW_term_in_simpleExpression12123);
                 term563 = term();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -23126,7 +23101,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        pushFollow(FOLLOW_factor_in_term12194);
+        pushFollow(FOLLOW_factor_in_term12186);
         factor564 = factor();
         state._fsp--;
         if (state.failed) return retval;
@@ -23148,13 +23123,13 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:485:40: multOperator factor
               {
-                pushFollow(FOLLOW_multOperator_in_term12197);
+                pushFollow(FOLLOW_multOperator_in_term12189);
                 multOperator565 = multOperator();
                 state._fsp--;
                 if (state.failed) return retval;
                 if (state.backtracking == 0) adaptor.addChild(root_0, multOperator565.getTree());
 
-                pushFollow(FOLLOW_factor_in_term12199);
+                pushFollow(FOLLOW_factor_in_term12191);
                 factor566 = factor();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -23299,7 +23274,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_atom_in_factor12260);
+            pushFollow(FOLLOW_atom_in_factor12252);
             atom567 = atom();
             state._fsp--;
             if (state.failed) return retval;
@@ -23311,13 +23286,13 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_unaryOperator_in_factor12293);
+            pushFollow(FOLLOW_unaryOperator_in_factor12285);
             unaryOperator568 = unaryOperator();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) adaptor.addChild(root_0, unaryOperator568.getTree());
 
-            pushFollow(FOLLOW_factor_in_factor12295);
+            pushFollow(FOLLOW_factor_in_factor12287);
             factor569 = factor();
             state._fsp--;
             if (state.failed) return retval;
@@ -23329,7 +23304,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            string_literal570 = (Token) match(input, INHERITED, FOLLOW_INHERITED_in_factor12328);
+            string_literal570 = (Token) match(input, INHERITED, FOLLOW_INHERITED_in_factor12320);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal570_tree = (Object) adaptor.create(string_literal570);
@@ -23343,7 +23318,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:489:45: factor
                 {
-                  pushFollow(FOLLOW_factor_in_factor12331);
+                  pushFollow(FOLLOW_factor_in_factor12323);
                   factor571 = factor();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -23405,7 +23380,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        pushFollow(FOLLOW_particle_in_atom12394);
+        pushFollow(FOLLOW_particle_in_atom12386);
         particle572 = particle();
         state._fsp--;
         if (state.failed) return retval;
@@ -23420,7 +23395,7 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:491:41: particleItem
               {
-                pushFollow(FOLLOW_particleItem_in_atom12396);
+                pushFollow(FOLLOW_particleItem_in_atom12388);
                 particleItem573 = particleItem();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -23626,7 +23601,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_intNum_in_particle12454);
+            pushFollow(FOLLOW_intNum_in_particle12446);
             intNum574 = intNum();
             state._fsp--;
             if (state.failed) return retval;
@@ -23638,7 +23613,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_realNum_in_particle12487);
+            pushFollow(FOLLOW_realNum_in_particle12479);
             realNum575 = realNum();
             state._fsp--;
             if (state.failed) return retval;
@@ -23650,7 +23625,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            TkAsmHexNum576 = (Token) match(input, TkAsmHexNum, FOLLOW_TkAsmHexNum_in_particle12520);
+            TkAsmHexNum576 = (Token) match(input, TkAsmHexNum, FOLLOW_TkAsmHexNum_in_particle12512);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               TkAsmHexNum576_tree = (Object) adaptor.create(TkAsmHexNum576);
@@ -23663,7 +23638,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_stringFactor_in_particle12553);
+            pushFollow(FOLLOW_stringFactor_in_particle12545);
             stringFactor577 = stringFactor();
             state._fsp--;
             if (state.failed) return retval;
@@ -23675,7 +23650,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            string_literal578 = (Token) match(input, NIL, FOLLOW_NIL_in_particle12586);
+            string_literal578 = (Token) match(input, NIL, FOLLOW_NIL_in_particle12578);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal578_tree = (Object) adaptor.create(string_literal578);
@@ -23688,7 +23663,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            string_literal579 = (Token) match(input, TRUE, FOLLOW_TRUE_in_particle12619);
+            string_literal579 = (Token) match(input, TRUE, FOLLOW_TRUE_in_particle12611);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal579_tree = (Object) adaptor.create(string_literal579);
@@ -23701,7 +23676,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            string_literal580 = (Token) match(input, FALSE, FOLLOW_FALSE_in_particle12652);
+            string_literal580 = (Token) match(input, FALSE, FOLLOW_FALSE_in_particle12644);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal580_tree = (Object) adaptor.create(string_literal580);
@@ -23714,7 +23689,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_ident_in_particle12685);
+            pushFollow(FOLLOW_ident_in_particle12677);
             ident581 = ident();
             state._fsp--;
             if (state.failed) return retval;
@@ -23726,7 +23701,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_parenthesizedExpression_in_particle12718);
+            pushFollow(FOLLOW_parenthesizedExpression_in_particle12710);
             parenthesizedExpression582 = parenthesizedExpression();
             state._fsp--;
             if (state.failed) return retval;
@@ -23739,7 +23714,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_setLiteral_in_particle12751);
+            pushFollow(FOLLOW_setLiteral_in_particle12743);
             setLiteral583 = setLiteral();
             state._fsp--;
             if (state.failed) return retval;
@@ -23751,7 +23726,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            string_literal584 = (Token) match(input, STRING, FOLLOW_STRING_in_particle12784);
+            string_literal584 = (Token) match(input, STRING, FOLLOW_STRING_in_particle12776);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal584_tree = (Object) adaptor.create(string_literal584);
@@ -23764,7 +23739,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            string_literal585 = (Token) match(input, FILE, FOLLOW_FILE_in_particle12817);
+            string_literal585 = (Token) match(input, FILE, FOLLOW_FILE_in_particle12809);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal585_tree = (Object) adaptor.create(string_literal585);
@@ -23901,7 +23876,7 @@ public class DelphiParser extends Parser {
               MismatchedSetException mse = new MismatchedSetException(null, input);
               throw mse;
             }
-            pushFollow(FOLLOW_extendedIdent_in_particleItem12878);
+            pushFollow(FOLLOW_extendedIdent_in_particleItem12870);
             extendedIdent587 = extendedIdent();
             state._fsp--;
             if (state.failed) return retval;
@@ -23916,14 +23891,14 @@ public class DelphiParser extends Parser {
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:507:32: ( '<' genericTypeIdent ( ',' genericTypeIdent )* '>' )
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:507:33: '<' genericTypeIdent ( ',' genericTypeIdent )* '>'
             {
-              char_literal588 = (Token) match(input, LT, FOLLOW_LT_in_particleItem12912);
+              char_literal588 = (Token) match(input, LT, FOLLOW_LT_in_particleItem12904);
               if (state.failed) return retval;
               if (state.backtracking == 0) {
                 char_literal588_tree = (Object) adaptor.create(char_literal588);
                 adaptor.addChild(root_0, char_literal588_tree);
               }
 
-              pushFollow(FOLLOW_genericTypeIdent_in_particleItem12914);
+              pushFollow(FOLLOW_genericTypeIdent_in_particleItem12906);
               genericTypeIdent589 = genericTypeIdent();
               state._fsp--;
               if (state.failed) return retval;
@@ -23943,14 +23918,14 @@ public class DelphiParser extends Parser {
                     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:507:55: ',' genericTypeIdent
                     {
                       char_literal590 =
-                          (Token) match(input, COMMA, FOLLOW_COMMA_in_particleItem12917);
+                          (Token) match(input, COMMA, FOLLOW_COMMA_in_particleItem12909);
                       if (state.failed) return retval;
                       if (state.backtracking == 0) {
                         char_literal590_tree = (Object) adaptor.create(char_literal590);
                         adaptor.addChild(root_0, char_literal590_tree);
                       }
 
-                      pushFollow(FOLLOW_genericTypeIdent_in_particleItem12919);
+                      pushFollow(FOLLOW_genericTypeIdent_in_particleItem12911);
                       genericTypeIdent591 = genericTypeIdent();
                       state._fsp--;
                       if (state.failed) return retval;
@@ -23964,7 +23939,7 @@ public class DelphiParser extends Parser {
                 }
               }
 
-              char_literal592 = (Token) match(input, GT, FOLLOW_GT_in_particleItem12923);
+              char_literal592 = (Token) match(input, GT, FOLLOW_GT_in_particleItem12915);
               if (state.failed) return retval;
               if (state.backtracking == 0) {
                 char_literal592_tree = (Object) adaptor.create(char_literal592);
@@ -23978,20 +23953,20 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            char_literal593 = (Token) match(input, LBRACK, FOLLOW_LBRACK_in_particleItem12957);
+            char_literal593 = (Token) match(input, LBRACK, FOLLOW_LBRACK_in_particleItem12949);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               char_literal593_tree = (Object) adaptor.create(char_literal593);
               adaptor.addChild(root_0, char_literal593_tree);
             }
 
-            pushFollow(FOLLOW_expressionList_in_particleItem12959);
+            pushFollow(FOLLOW_expressionList_in_particleItem12951);
             expressionList594 = expressionList();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) adaptor.addChild(root_0, expressionList594.getTree());
 
-            char_literal595 = (Token) match(input, RBRACK, FOLLOW_RBRACK_in_particleItem12961);
+            char_literal595 = (Token) match(input, RBRACK, FOLLOW_RBRACK_in_particleItem12953);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               char_literal595_tree = (Object) adaptor.create(char_literal595);
@@ -24004,7 +23979,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            char_literal596 = (Token) match(input, POINTER2, FOLLOW_POINTER2_in_particleItem12994);
+            char_literal596 = (Token) match(input, POINTER2, FOLLOW_POINTER2_in_particleItem12986);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               char_literal596_tree = (Object) adaptor.create(char_literal596);
@@ -24017,7 +23992,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            char_literal597 = (Token) match(input, LPAREN, FOLLOW_LPAREN_in_particleItem13027);
+            char_literal597 = (Token) match(input, LPAREN, FOLLOW_LPAREN_in_particleItem13019);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               char_literal597_tree = (Object) adaptor.create(char_literal597);
@@ -24073,7 +24048,7 @@ public class DelphiParser extends Parser {
                 case 1:
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:510:37: parameterExpression ( ',' )?
                   {
-                    pushFollow(FOLLOW_parameterExpression_in_particleItem13030);
+                    pushFollow(FOLLOW_parameterExpression_in_particleItem13022);
                     parameterExpression598 = parameterExpression();
                     state._fsp--;
                     if (state.failed) return retval;
@@ -24091,7 +24066,7 @@ public class DelphiParser extends Parser {
                         // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:510:58: ','
                         {
                           char_literal599 =
-                              (Token) match(input, COMMA, FOLLOW_COMMA_in_particleItem13033);
+                              (Token) match(input, COMMA, FOLLOW_COMMA_in_particleItem13025);
                           if (state.failed) return retval;
                           if (state.backtracking == 0) {
                             char_literal599_tree = (Object) adaptor.create(char_literal599);
@@ -24108,7 +24083,7 @@ public class DelphiParser extends Parser {
               }
             }
 
-            char_literal600 = (Token) match(input, RPAREN, FOLLOW_RPAREN_in_particleItem13039);
+            char_literal600 = (Token) match(input, RPAREN, FOLLOW_RPAREN_in_particleItem13031);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               char_literal600_tree = (Object) adaptor.create(char_literal600);
@@ -24331,7 +24306,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_ident_in_extendedIdent13091);
+            pushFollow(FOLLOW_ident_in_extendedIdent13083);
             ident601 = ident();
             state._fsp--;
             if (state.failed) return retval;
@@ -24343,7 +24318,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_keywords_in_extendedIdent13124);
+            pushFollow(FOLLOW_keywords_in_extendedIdent13116);
             keywords602 = keywords();
             state._fsp--;
             if (state.failed) return retval;
@@ -24454,7 +24429,7 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:515:33: expression ( ',' )?
               {
-                pushFollow(FOLLOW_expression_in_expressionList13176);
+                pushFollow(FOLLOW_expression_in_expressionList13168);
                 expression603 = expression();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -24471,7 +24446,7 @@ public class DelphiParser extends Parser {
                     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:515:45: ','
                     {
                       char_literal604 =
-                          (Token) match(input, COMMA, FOLLOW_COMMA_in_expressionList13179);
+                          (Token) match(input, COMMA, FOLLOW_COMMA_in_expressionList13171);
                       if (state.failed) return retval;
                       if (state.backtracking == 0) {
                         char_literal604_tree = (Object) adaptor.create(char_literal604);
@@ -24554,7 +24529,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        pushFollow(FOLLOW_expression_in_parameterExpression13229);
+        pushFollow(FOLLOW_expression_in_parameterExpression13221);
         expression605 = expression();
         state._fsp--;
         if (state.failed) return retval;
@@ -24571,14 +24546,14 @@ public class DelphiParser extends Parser {
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:517:44: ':' expression ( ':' expression )?
             {
               char_literal606 =
-                  (Token) match(input, COLON, FOLLOW_COLON_in_parameterExpression13232);
+                  (Token) match(input, COLON, FOLLOW_COLON_in_parameterExpression13224);
               if (state.failed) return retval;
               if (state.backtracking == 0) {
                 char_literal606_tree = (Object) adaptor.create(char_literal606);
                 adaptor.addChild(root_0, char_literal606_tree);
               }
 
-              pushFollow(FOLLOW_expression_in_parameterExpression13234);
+              pushFollow(FOLLOW_expression_in_parameterExpression13226);
               expression607 = expression();
               state._fsp--;
               if (state.failed) return retval;
@@ -24595,14 +24570,14 @@ public class DelphiParser extends Parser {
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:517:60: ':' expression
                   {
                     char_literal608 =
-                        (Token) match(input, COLON, FOLLOW_COLON_in_parameterExpression13237);
+                        (Token) match(input, COLON, FOLLOW_COLON_in_parameterExpression13229);
                     if (state.failed) return retval;
                     if (state.backtracking == 0) {
                       char_literal608_tree = (Object) adaptor.create(char_literal608);
                       adaptor.addChild(root_0, char_literal608_tree);
                     }
 
-                    pushFollow(FOLLOW_expression_in_parameterExpression13239);
+                    pushFollow(FOLLOW_expression_in_parameterExpression13231);
                     expression609 = expression();
                     state._fsp--;
                     if (state.failed) return retval;
@@ -24699,7 +24674,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             ControlString610 =
-                (Token) match(input, ControlString, FOLLOW_ControlString_in_stringFactor13296);
+                (Token) match(input, ControlString, FOLLOW_ControlString_in_stringFactor13288);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               ControlString610_tree = (Object) adaptor.create(ControlString610);
@@ -24727,7 +24702,7 @@ public class DelphiParser extends Parser {
                   {
                     QuotedString611 =
                         (Token)
-                            match(input, QuotedString, FOLLOW_QuotedString_in_stringFactor13299);
+                            match(input, QuotedString, FOLLOW_QuotedString_in_stringFactor13291);
                     if (state.failed) return retval;
                     if (state.backtracking == 0) {
                       QuotedString611_tree = (Object) adaptor.create(QuotedString611);
@@ -24736,7 +24711,7 @@ public class DelphiParser extends Parser {
 
                     ControlString612 =
                         (Token)
-                            match(input, ControlString, FOLLOW_ControlString_in_stringFactor13301);
+                            match(input, ControlString, FOLLOW_ControlString_in_stringFactor13293);
                     if (state.failed) return retval;
                     if (state.backtracking == 0) {
                       ControlString612_tree = (Object) adaptor.create(ControlString612);
@@ -24764,7 +24739,7 @@ public class DelphiParser extends Parser {
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:519:77: QuotedString
                 {
                   QuotedString613 =
-                      (Token) match(input, QuotedString, FOLLOW_QuotedString_in_stringFactor13306);
+                      (Token) match(input, QuotedString, FOLLOW_QuotedString_in_stringFactor13298);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) {
                     QuotedString613_tree = (Object) adaptor.create(QuotedString613);
@@ -24781,7 +24756,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             QuotedString614 =
-                (Token) match(input, QuotedString, FOLLOW_QuotedString_in_stringFactor13341);
+                (Token) match(input, QuotedString, FOLLOW_QuotedString_in_stringFactor13333);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               QuotedString614_tree = (Object) adaptor.create(QuotedString614);
@@ -24809,7 +24784,7 @@ public class DelphiParser extends Parser {
                   {
                     ControlString615 =
                         (Token)
-                            match(input, ControlString, FOLLOW_ControlString_in_stringFactor13344);
+                            match(input, ControlString, FOLLOW_ControlString_in_stringFactor13336);
                     if (state.failed) return retval;
                     if (state.backtracking == 0) {
                       ControlString615_tree = (Object) adaptor.create(ControlString615);
@@ -24818,7 +24793,7 @@ public class DelphiParser extends Parser {
 
                     QuotedString616 =
                         (Token)
-                            match(input, QuotedString, FOLLOW_QuotedString_in_stringFactor13346);
+                            match(input, QuotedString, FOLLOW_QuotedString_in_stringFactor13338);
                     if (state.failed) return retval;
                     if (state.backtracking == 0) {
                       QuotedString616_tree = (Object) adaptor.create(QuotedString616);
@@ -24847,7 +24822,7 @@ public class DelphiParser extends Parser {
                 {
                   ControlString617 =
                       (Token)
-                          match(input, ControlString, FOLLOW_ControlString_in_stringFactor13351);
+                          match(input, ControlString, FOLLOW_ControlString_in_stringFactor13343);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) {
                     ControlString617_tree = (Object) adaptor.create(ControlString617);
@@ -24917,21 +24892,21 @@ public class DelphiParser extends Parser {
         root_0 = (Object) adaptor.nil();
 
         char_literal618 =
-            (Token) match(input, LPAREN, FOLLOW_LPAREN_in_parenthesizedExpression13395);
+            (Token) match(input, LPAREN, FOLLOW_LPAREN_in_parenthesizedExpression13387);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal618_tree = (Object) adaptor.create(char_literal618);
           adaptor.addChild(root_0, char_literal618_tree);
         }
 
-        pushFollow(FOLLOW_expression_in_parenthesizedExpression13397);
+        pushFollow(FOLLOW_expression_in_parenthesizedExpression13389);
         expression619 = expression();
         state._fsp--;
         if (state.failed) return retval;
         if (state.backtracking == 0) adaptor.addChild(root_0, expression619.getTree());
 
         char_literal620 =
-            (Token) match(input, RPAREN, FOLLOW_RPAREN_in_parenthesizedExpression13399);
+            (Token) match(input, RPAREN, FOLLOW_RPAREN_in_parenthesizedExpression13391);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal620_tree = (Object) adaptor.create(char_literal620);
@@ -24994,7 +24969,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        char_literal621 = (Token) match(input, LBRACK, FOLLOW_LBRACK_in_setLiteral13454);
+        char_literal621 = (Token) match(input, LBRACK, FOLLOW_LBRACK_in_setLiteral13446);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal621_tree = (Object) adaptor.create(char_literal621);
@@ -25045,7 +25020,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:524:37: expressionOrRangeList
             {
-              pushFollow(FOLLOW_expressionOrRangeList_in_setLiteral13457);
+              pushFollow(FOLLOW_expressionOrRangeList_in_setLiteral13449);
               expressionOrRangeList622 = expressionOrRangeList();
               state._fsp--;
               if (state.failed) return retval;
@@ -25055,7 +25030,7 @@ public class DelphiParser extends Parser {
             break;
         }
 
-        char_literal623 = (Token) match(input, RBRACK, FOLLOW_RBRACK_in_setLiteral13461);
+        char_literal623 = (Token) match(input, RBRACK, FOLLOW_RBRACK_in_setLiteral13453);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal623_tree = (Object) adaptor.create(char_literal623);
@@ -25166,7 +25141,7 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:526:33: expressionOrRange ( ',' )?
               {
-                pushFollow(FOLLOW_expressionOrRange_in_expressionOrRangeList13506);
+                pushFollow(FOLLOW_expressionOrRange_in_expressionOrRangeList13498);
                 expressionOrRange624 = expressionOrRange();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -25184,7 +25159,7 @@ public class DelphiParser extends Parser {
                     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:526:52: ','
                     {
                       char_literal625 =
-                          (Token) match(input, COMMA, FOLLOW_COMMA_in_expressionOrRangeList13509);
+                          (Token) match(input, COMMA, FOLLOW_COMMA_in_expressionOrRangeList13501);
                       if (state.failed) return retval;
                       if (state.backtracking == 0) {
                         char_literal625_tree = (Object) adaptor.create(char_literal625);
@@ -25264,7 +25239,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        pushFollow(FOLLOW_simpleExpression_in_expressionOrRange13561);
+        pushFollow(FOLLOW_simpleExpression_in_expressionOrRange13553);
         simpleExpression626 = simpleExpression();
         state._fsp--;
         if (state.failed) return retval;
@@ -25281,14 +25256,14 @@ public class DelphiParser extends Parser {
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:528:50: '..' simpleExpression
             {
               string_literal627 =
-                  (Token) match(input, DOTDOT, FOLLOW_DOTDOT_in_expressionOrRange13564);
+                  (Token) match(input, DOTDOT, FOLLOW_DOTDOT_in_expressionOrRange13556);
               if (state.failed) return retval;
               if (state.backtracking == 0) {
                 string_literal627_tree = (Object) adaptor.create(string_literal627);
                 adaptor.addChild(root_0, string_literal627_tree);
               }
 
-              pushFollow(FOLLOW_simpleExpression_in_expressionOrRange13566);
+              pushFollow(FOLLOW_simpleExpression_in_expressionOrRange13558);
               simpleExpression628 = simpleExpression();
               state._fsp--;
               if (state.failed) return retval;
@@ -25348,7 +25323,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        pushFollow(FOLLOW_factor_in_designator13623);
+        pushFollow(FOLLOW_factor_in_designator13615);
         factor629 = factor();
         state._fsp--;
         if (state.failed) return retval;
@@ -26324,7 +26299,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_ifStatement_in_statement14549);
+            pushFollow(FOLLOW_ifStatement_in_statement14541);
             ifStatement634 = ifStatement();
             state._fsp--;
             if (state.failed) return retval;
@@ -26336,7 +26311,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_caseStatement_in_statement14582);
+            pushFollow(FOLLOW_caseStatement_in_statement14574);
             caseStatement635 = caseStatement();
             state._fsp--;
             if (state.failed) return retval;
@@ -26348,7 +26323,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_repeatStatement_in_statement14615);
+            pushFollow(FOLLOW_repeatStatement_in_statement14607);
             repeatStatement636 = repeatStatement();
             state._fsp--;
             if (state.failed) return retval;
@@ -26360,7 +26335,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_whileStatement_in_statement14648);
+            pushFollow(FOLLOW_whileStatement_in_statement14640);
             whileStatement637 = whileStatement();
             state._fsp--;
             if (state.failed) return retval;
@@ -26372,7 +26347,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_forStatement_in_statement14681);
+            pushFollow(FOLLOW_forStatement_in_statement14673);
             forStatement638 = forStatement();
             state._fsp--;
             if (state.failed) return retval;
@@ -26384,7 +26359,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_withStatement_in_statement14714);
+            pushFollow(FOLLOW_withStatement_in_statement14706);
             withStatement639 = withStatement();
             state._fsp--;
             if (state.failed) return retval;
@@ -26396,7 +26371,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_tryStatement_in_statement14747);
+            pushFollow(FOLLOW_tryStatement_in_statement14739);
             tryStatement640 = tryStatement();
             state._fsp--;
             if (state.failed) return retval;
@@ -26408,7 +26383,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_raiseStatement_in_statement14780);
+            pushFollow(FOLLOW_raiseStatement_in_statement14772);
             raiseStatement641 = raiseStatement();
             state._fsp--;
             if (state.failed) return retval;
@@ -26420,7 +26395,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_assemblerStatement_in_statement14813);
+            pushFollow(FOLLOW_assemblerStatement_in_statement14805);
             assemblerStatement642 = assemblerStatement();
             state._fsp--;
             if (state.failed) return retval;
@@ -26432,7 +26407,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_compoundStatement_in_statement14846);
+            pushFollow(FOLLOW_compoundStatement_in_statement14838);
             compoundStatement643 = compoundStatement();
             state._fsp--;
             if (state.failed) return retval;
@@ -26444,20 +26419,20 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_label_in_statement14879);
+            pushFollow(FOLLOW_label_in_statement14871);
             label644 = label();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) adaptor.addChild(root_0, label644.getTree());
 
-            char_literal645 = (Token) match(input, COLON, FOLLOW_COLON_in_statement14881);
+            char_literal645 = (Token) match(input, COLON, FOLLOW_COLON_in_statement14873);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               char_literal645_tree = (Object) adaptor.create(char_literal645);
               adaptor.addChild(root_0, char_literal645_tree);
             }
 
-            pushFollow(FOLLOW_statement_in_statement14883);
+            pushFollow(FOLLOW_statement_in_statement14875);
             statement646 = statement();
             state._fsp--;
             if (state.failed) return retval;
@@ -26469,7 +26444,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_simpleStatement_in_statement14916);
+            pushFollow(FOLLOW_simpleStatement_in_statement14908);
             simpleStatement647 = simpleStatement();
             state._fsp--;
             if (state.failed) return retval;
@@ -26536,27 +26511,27 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        string_literal648 = (Token) match(input, IF, FOLLOW_IF_in_ifStatement14970);
+        string_literal648 = (Token) match(input, IF, FOLLOW_IF_in_ifStatement14962);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal648_tree = (Object) adaptor.create(string_literal648);
           adaptor.addChild(root_0, string_literal648_tree);
         }
 
-        pushFollow(FOLLOW_expression_in_ifStatement14972);
+        pushFollow(FOLLOW_expression_in_ifStatement14964);
         expression649 = expression();
         state._fsp--;
         if (state.failed) return retval;
         if (state.backtracking == 0) adaptor.addChild(root_0, expression649.getTree());
 
-        string_literal650 = (Token) match(input, THEN, FOLLOW_THEN_in_ifStatement14974);
+        string_literal650 = (Token) match(input, THEN, FOLLOW_THEN_in_ifStatement14966);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal650_tree = (Object) adaptor.create(string_literal650);
           adaptor.addChild(root_0, string_literal650_tree);
         }
 
-        pushFollow(FOLLOW_statement_in_ifStatement14976);
+        pushFollow(FOLLOW_statement_in_ifStatement14968);
         statement651 = statement();
         state._fsp--;
         if (state.failed) return retval;
@@ -26575,14 +26550,14 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:577:66: 'else' statement
             {
-              string_literal652 = (Token) match(input, ELSE, FOLLOW_ELSE_in_ifStatement14979);
+              string_literal652 = (Token) match(input, ELSE, FOLLOW_ELSE_in_ifStatement14971);
               if (state.failed) return retval;
               if (state.backtracking == 0) {
                 string_literal652_tree = (Object) adaptor.create(string_literal652);
                 adaptor.addChild(root_0, string_literal652_tree);
               }
 
-              pushFollow(FOLLOW_statement_in_ifStatement14981);
+              pushFollow(FOLLOW_statement_in_ifStatement14973);
               statement653 = statement();
               state._fsp--;
               if (state.failed) return retval;
@@ -26655,20 +26630,20 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        string_literal654 = (Token) match(input, CASE, FOLLOW_CASE_in_caseStatement15035);
+        string_literal654 = (Token) match(input, CASE, FOLLOW_CASE_in_caseStatement15027);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal654_tree = (Object) adaptor.create(string_literal654);
           adaptor.addChild(root_0, string_literal654_tree);
         }
 
-        pushFollow(FOLLOW_expression_in_caseStatement15037);
+        pushFollow(FOLLOW_expression_in_caseStatement15029);
         expression655 = expression();
         state._fsp--;
         if (state.failed) return retval;
         if (state.backtracking == 0) adaptor.addChild(root_0, expression655.getTree());
 
-        string_literal656 = (Token) match(input, OF, FOLLOW_OF_in_caseStatement15039);
+        string_literal656 = (Token) match(input, OF, FOLLOW_OF_in_caseStatement15031);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal656_tree = (Object) adaptor.create(string_literal656);
@@ -26724,7 +26699,7 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:579:56: caseItem
               {
-                pushFollow(FOLLOW_caseItem_in_caseStatement15042);
+                pushFollow(FOLLOW_caseItem_in_caseStatement15034);
                 caseItem657 = caseItem();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -26747,14 +26722,14 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:579:68: 'else' statementList ( ';' )?
             {
-              string_literal658 = (Token) match(input, ELSE, FOLLOW_ELSE_in_caseStatement15047);
+              string_literal658 = (Token) match(input, ELSE, FOLLOW_ELSE_in_caseStatement15039);
               if (state.failed) return retval;
               if (state.backtracking == 0) {
                 string_literal658_tree = (Object) adaptor.create(string_literal658);
                 adaptor.addChild(root_0, string_literal658_tree);
               }
 
-              pushFollow(FOLLOW_statementList_in_caseStatement15049);
+              pushFollow(FOLLOW_statementList_in_caseStatement15041);
               statementList659 = statementList();
               state._fsp--;
               if (state.failed) return retval;
@@ -26770,7 +26745,7 @@ public class DelphiParser extends Parser {
                 case 1:
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:579:90: ';'
                   {
-                    char_literal660 = (Token) match(input, SEMI, FOLLOW_SEMI_in_caseStatement15052);
+                    char_literal660 = (Token) match(input, SEMI, FOLLOW_SEMI_in_caseStatement15044);
                     if (state.failed) return retval;
                     if (state.backtracking == 0) {
                       char_literal660_tree = (Object) adaptor.create(char_literal660);
@@ -26783,7 +26758,7 @@ public class DelphiParser extends Parser {
             break;
         }
 
-        string_literal661 = (Token) match(input, END, FOLLOW_END_in_caseStatement15058);
+        string_literal661 = (Token) match(input, END, FOLLOW_END_in_caseStatement15050);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal661_tree = (Object) adaptor.create(string_literal661);
@@ -26847,13 +26822,13 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        pushFollow(FOLLOW_caseItemSelector_in_caseItem15115);
+        pushFollow(FOLLOW_caseItemSelector_in_caseItem15107);
         caseItemSelector662 = caseItemSelector();
         state._fsp--;
         if (state.failed) return retval;
         if (state.backtracking == 0) adaptor.addChild(root_0, caseItemSelector662.getTree());
 
-        char_literal663 = (Token) match(input, COLON, FOLLOW_COLON_in_caseItem15117);
+        char_literal663 = (Token) match(input, COLON, FOLLOW_COLON_in_caseItem15109);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal663_tree = (Object) adaptor.create(char_literal663);
@@ -27081,7 +27056,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:581:54: statement
             {
-              pushFollow(FOLLOW_statement_in_caseItem15120);
+              pushFollow(FOLLOW_statement_in_caseItem15112);
               statement664 = statement();
               state._fsp--;
               if (state.failed) return retval;
@@ -27100,7 +27075,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:581:67: ';'
             {
-              char_literal665 = (Token) match(input, SEMI, FOLLOW_SEMI_in_caseItem15125);
+              char_literal665 = (Token) match(input, SEMI, FOLLOW_SEMI_in_caseItem15117);
               if (state.failed) return retval;
               if (state.backtracking == 0) {
                 char_literal665_tree = (Object) adaptor.create(char_literal665);
@@ -27166,7 +27141,7 @@ public class DelphiParser extends Parser {
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:583:30: ( caseLabel ( ',' caseLabel )* -> ^( TkCaseItemSelector caseLabel ( ',' caseLabel )* ) )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:583:32: caseLabel ( ',' caseLabel )*
       {
-        pushFollow(FOLLOW_caseLabel_in_caseItemSelector15176);
+        pushFollow(FOLLOW_caseLabel_in_caseItemSelector15168);
         caseLabel666 = caseLabel();
         state._fsp--;
         if (state.failed) return retval;
@@ -27185,11 +27160,11 @@ public class DelphiParser extends Parser {
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:583:43: ',' caseLabel
               {
                 char_literal667 =
-                    (Token) match(input, COMMA, FOLLOW_COMMA_in_caseItemSelector15179);
+                    (Token) match(input, COMMA, FOLLOW_COMMA_in_caseItemSelector15171);
                 if (state.failed) return retval;
                 if (state.backtracking == 0) stream_COMMA.add(char_literal667);
 
-                pushFollow(FOLLOW_caseLabel_in_caseItemSelector15181);
+                pushFollow(FOLLOW_caseLabel_in_caseItemSelector15173);
                 caseLabel668 = caseLabel();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -27297,7 +27272,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        pushFollow(FOLLOW_expression_in_caseLabel15254);
+        pushFollow(FOLLOW_expression_in_caseLabel15246);
         expression669 = expression();
         state._fsp--;
         if (state.failed) return retval;
@@ -27313,14 +27288,14 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:585:44: '..' expression
             {
-              string_literal670 = (Token) match(input, DOTDOT, FOLLOW_DOTDOT_in_caseLabel15257);
+              string_literal670 = (Token) match(input, DOTDOT, FOLLOW_DOTDOT_in_caseLabel15249);
               if (state.failed) return retval;
               if (state.backtracking == 0) {
                 string_literal670_tree = (Object) adaptor.create(string_literal670);
                 adaptor.addChild(root_0, string_literal670_tree);
               }
 
-              pushFollow(FOLLOW_expression_in_caseLabel15259);
+              pushFollow(FOLLOW_expression_in_caseLabel15251);
               expression671 = expression();
               state._fsp--;
               if (state.failed) return retval;
@@ -27386,7 +27361,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        string_literal672 = (Token) match(input, REPEAT, FOLLOW_REPEAT_in_repeatStatement15311);
+        string_literal672 = (Token) match(input, REPEAT, FOLLOW_REPEAT_in_repeatStatement15303);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal672_tree = (Object) adaptor.create(string_literal672);
@@ -27447,7 +27422,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:587:42: statementList
             {
-              pushFollow(FOLLOW_statementList_in_repeatStatement15314);
+              pushFollow(FOLLOW_statementList_in_repeatStatement15306);
               statementList673 = statementList();
               state._fsp--;
               if (state.failed) return retval;
@@ -27456,14 +27431,14 @@ public class DelphiParser extends Parser {
             break;
         }
 
-        string_literal674 = (Token) match(input, UNTIL, FOLLOW_UNTIL_in_repeatStatement15318);
+        string_literal674 = (Token) match(input, UNTIL, FOLLOW_UNTIL_in_repeatStatement15310);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal674_tree = (Object) adaptor.create(string_literal674);
           adaptor.addChild(root_0, string_literal674_tree);
         }
 
-        pushFollow(FOLLOW_expression_in_repeatStatement15320);
+        pushFollow(FOLLOW_expression_in_repeatStatement15312);
         expression675 = expression();
         state._fsp--;
         if (state.failed) return retval;
@@ -27526,27 +27501,27 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        string_literal676 = (Token) match(input, WHILE, FOLLOW_WHILE_in_whileStatement15371);
+        string_literal676 = (Token) match(input, WHILE, FOLLOW_WHILE_in_whileStatement15363);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal676_tree = (Object) adaptor.create(string_literal676);
           adaptor.addChild(root_0, string_literal676_tree);
         }
 
-        pushFollow(FOLLOW_expression_in_whileStatement15373);
+        pushFollow(FOLLOW_expression_in_whileStatement15365);
         expression677 = expression();
         state._fsp--;
         if (state.failed) return retval;
         if (state.backtracking == 0) adaptor.addChild(root_0, expression677.getTree());
 
-        string_literal678 = (Token) match(input, DO, FOLLOW_DO_in_whileStatement15375);
+        string_literal678 = (Token) match(input, DO, FOLLOW_DO_in_whileStatement15367);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal678_tree = (Object) adaptor.create(string_literal678);
           adaptor.addChild(root_0, string_literal678_tree);
         }
 
-        pushFollow(FOLLOW_statement_in_whileStatement15377);
+        pushFollow(FOLLOW_statement_in_whileStatement15369);
         statement679 = statement();
         state._fsp--;
         if (state.failed) return retval;
@@ -27659,53 +27634,53 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            string_literal680 = (Token) match(input, FOR, FOLLOW_FOR_in_forStatement15430);
+            string_literal680 = (Token) match(input, FOR, FOLLOW_FOR_in_forStatement15422);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal680_tree = (Object) adaptor.create(string_literal680);
               adaptor.addChild(root_0, string_literal680_tree);
             }
 
-            pushFollow(FOLLOW_designator_in_forStatement15432);
+            pushFollow(FOLLOW_designator_in_forStatement15424);
             designator681 = designator();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) adaptor.addChild(root_0, designator681.getTree());
 
-            string_literal682 = (Token) match(input, ASSIGN, FOLLOW_ASSIGN_in_forStatement15434);
+            string_literal682 = (Token) match(input, ASSIGN, FOLLOW_ASSIGN_in_forStatement15426);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal682_tree = (Object) adaptor.create(string_literal682);
               adaptor.addChild(root_0, string_literal682_tree);
             }
 
-            pushFollow(FOLLOW_expression_in_forStatement15436);
+            pushFollow(FOLLOW_expression_in_forStatement15428);
             expression683 = expression();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) adaptor.addChild(root_0, expression683.getTree());
 
-            string_literal684 = (Token) match(input, TO, FOLLOW_TO_in_forStatement15438);
+            string_literal684 = (Token) match(input, TO, FOLLOW_TO_in_forStatement15430);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal684_tree = (Object) adaptor.create(string_literal684);
               adaptor.addChild(root_0, string_literal684_tree);
             }
 
-            pushFollow(FOLLOW_expression_in_forStatement15440);
+            pushFollow(FOLLOW_expression_in_forStatement15432);
             expression685 = expression();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) adaptor.addChild(root_0, expression685.getTree());
 
-            string_literal686 = (Token) match(input, DO, FOLLOW_DO_in_forStatement15442);
+            string_literal686 = (Token) match(input, DO, FOLLOW_DO_in_forStatement15434);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal686_tree = (Object) adaptor.create(string_literal686);
               adaptor.addChild(root_0, string_literal686_tree);
             }
 
-            pushFollow(FOLLOW_statement_in_forStatement15444);
+            pushFollow(FOLLOW_statement_in_forStatement15436);
             statement687 = statement();
             state._fsp--;
             if (state.failed) return retval;
@@ -27717,53 +27692,53 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            string_literal688 = (Token) match(input, FOR, FOLLOW_FOR_in_forStatement15477);
+            string_literal688 = (Token) match(input, FOR, FOLLOW_FOR_in_forStatement15469);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal688_tree = (Object) adaptor.create(string_literal688);
               adaptor.addChild(root_0, string_literal688_tree);
             }
 
-            pushFollow(FOLLOW_designator_in_forStatement15479);
+            pushFollow(FOLLOW_designator_in_forStatement15471);
             designator689 = designator();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) adaptor.addChild(root_0, designator689.getTree());
 
-            string_literal690 = (Token) match(input, ASSIGN, FOLLOW_ASSIGN_in_forStatement15481);
+            string_literal690 = (Token) match(input, ASSIGN, FOLLOW_ASSIGN_in_forStatement15473);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal690_tree = (Object) adaptor.create(string_literal690);
               adaptor.addChild(root_0, string_literal690_tree);
             }
 
-            pushFollow(FOLLOW_expression_in_forStatement15483);
+            pushFollow(FOLLOW_expression_in_forStatement15475);
             expression691 = expression();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) adaptor.addChild(root_0, expression691.getTree());
 
-            string_literal692 = (Token) match(input, DOWNTO, FOLLOW_DOWNTO_in_forStatement15485);
+            string_literal692 = (Token) match(input, DOWNTO, FOLLOW_DOWNTO_in_forStatement15477);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal692_tree = (Object) adaptor.create(string_literal692);
               adaptor.addChild(root_0, string_literal692_tree);
             }
 
-            pushFollow(FOLLOW_expression_in_forStatement15487);
+            pushFollow(FOLLOW_expression_in_forStatement15479);
             expression693 = expression();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) adaptor.addChild(root_0, expression693.getTree());
 
-            string_literal694 = (Token) match(input, DO, FOLLOW_DO_in_forStatement15489);
+            string_literal694 = (Token) match(input, DO, FOLLOW_DO_in_forStatement15481);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal694_tree = (Object) adaptor.create(string_literal694);
               adaptor.addChild(root_0, string_literal694_tree);
             }
 
-            pushFollow(FOLLOW_statement_in_forStatement15491);
+            pushFollow(FOLLOW_statement_in_forStatement15483);
             statement695 = statement();
             state._fsp--;
             if (state.failed) return retval;
@@ -27775,40 +27750,40 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            string_literal696 = (Token) match(input, FOR, FOLLOW_FOR_in_forStatement15524);
+            string_literal696 = (Token) match(input, FOR, FOLLOW_FOR_in_forStatement15516);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal696_tree = (Object) adaptor.create(string_literal696);
               adaptor.addChild(root_0, string_literal696_tree);
             }
 
-            pushFollow(FOLLOW_designator_in_forStatement15526);
+            pushFollow(FOLLOW_designator_in_forStatement15518);
             designator697 = designator();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) adaptor.addChild(root_0, designator697.getTree());
 
-            string_literal698 = (Token) match(input, IN, FOLLOW_IN_in_forStatement15528);
+            string_literal698 = (Token) match(input, IN, FOLLOW_IN_in_forStatement15520);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal698_tree = (Object) adaptor.create(string_literal698);
               adaptor.addChild(root_0, string_literal698_tree);
             }
 
-            pushFollow(FOLLOW_expression_in_forStatement15530);
+            pushFollow(FOLLOW_expression_in_forStatement15522);
             expression699 = expression();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) adaptor.addChild(root_0, expression699.getTree());
 
-            string_literal700 = (Token) match(input, DO, FOLLOW_DO_in_forStatement15532);
+            string_literal700 = (Token) match(input, DO, FOLLOW_DO_in_forStatement15524);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal700_tree = (Object) adaptor.create(string_literal700);
               adaptor.addChild(root_0, string_literal700_tree);
             }
 
-            pushFollow(FOLLOW_statement_in_forStatement15534);
+            pushFollow(FOLLOW_statement_in_forStatement15526);
             statement701 = statement();
             state._fsp--;
             if (state.failed) return retval;
@@ -27872,27 +27847,27 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        string_literal702 = (Token) match(input, WITH, FOLLOW_WITH_in_withStatement15586);
+        string_literal702 = (Token) match(input, WITH, FOLLOW_WITH_in_withStatement15578);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal702_tree = (Object) adaptor.create(string_literal702);
           adaptor.addChild(root_0, string_literal702_tree);
         }
 
-        pushFollow(FOLLOW_withItem_in_withStatement15588);
+        pushFollow(FOLLOW_withItem_in_withStatement15580);
         withItem703 = withItem();
         state._fsp--;
         if (state.failed) return retval;
         if (state.backtracking == 0) adaptor.addChild(root_0, withItem703.getTree());
 
-        string_literal704 = (Token) match(input, DO, FOLLOW_DO_in_withStatement15590);
+        string_literal704 = (Token) match(input, DO, FOLLOW_DO_in_withStatement15582);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal704_tree = (Object) adaptor.create(string_literal704);
           adaptor.addChild(root_0, string_literal704_tree);
         }
 
-        pushFollow(FOLLOW_statement_in_withStatement15592);
+        pushFollow(FOLLOW_statement_in_withStatement15584);
         statement705 = statement();
         state._fsp--;
         if (state.failed) return retval;
@@ -28173,20 +28148,20 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_designator_in_withItem15649);
+            pushFollow(FOLLOW_designator_in_withItem15641);
             designator706 = designator();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) adaptor.addChild(root_0, designator706.getTree());
 
-            string_literal707 = (Token) match(input, AS, FOLLOW_AS_in_withItem15651);
+            string_literal707 = (Token) match(input, AS, FOLLOW_AS_in_withItem15643);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal707_tree = (Object) adaptor.create(string_literal707);
               adaptor.addChild(root_0, string_literal707_tree);
             }
 
-            pushFollow(FOLLOW_designator_in_withItem15653);
+            pushFollow(FOLLOW_designator_in_withItem15645);
             designator708 = designator();
             state._fsp--;
             if (state.failed) return retval;
@@ -28198,7 +28173,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_designator_in_withItem15693);
+            pushFollow(FOLLOW_designator_in_withItem15685);
             designator709 = designator();
             state._fsp--;
             if (state.failed) return retval;
@@ -28217,14 +28192,14 @@ public class DelphiParser extends Parser {
                 case 1:
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:598:44: ',' designator
                   {
-                    char_literal710 = (Token) match(input, COMMA, FOLLOW_COMMA_in_withItem15696);
+                    char_literal710 = (Token) match(input, COMMA, FOLLOW_COMMA_in_withItem15688);
                     if (state.failed) return retval;
                     if (state.backtracking == 0) {
                       char_literal710_tree = (Object) adaptor.create(char_literal710);
                       adaptor.addChild(root_0, char_literal710_tree);
                     }
 
-                    pushFollow(FOLLOW_designator_in_withItem15698);
+                    pushFollow(FOLLOW_designator_in_withItem15690);
                     designator711 = designator();
                     state._fsp--;
                     if (state.failed) return retval;
@@ -28297,7 +28272,7 @@ public class DelphiParser extends Parser {
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:600:30: ( 'begin' ( statementList )? 'end' -> ^( 'begin' ( statementList )? 'end' ) )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:600:32: 'begin' ( statementList )? 'end'
       {
-        string_literal712 = (Token) match(input, BEGIN, FOLLOW_BEGIN_in_compoundStatement15748);
+        string_literal712 = (Token) match(input, BEGIN, FOLLOW_BEGIN_in_compoundStatement15740);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_BEGIN.add(string_literal712);
 
@@ -28355,7 +28330,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:600:41: statementList
             {
-              pushFollow(FOLLOW_statementList_in_compoundStatement15751);
+              pushFollow(FOLLOW_statementList_in_compoundStatement15743);
               statementList713 = statementList();
               state._fsp--;
               if (state.failed) return retval;
@@ -28364,12 +28339,12 @@ public class DelphiParser extends Parser {
             break;
         }
 
-        string_literal714 = (Token) match(input, END, FOLLOW_END_in_compoundStatement15755);
+        string_literal714 = (Token) match(input, END, FOLLOW_END_in_compoundStatement15747);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_END.add(string_literal714);
 
         // AST REWRITE
-        // elements: BEGIN, statementList, END
+        // elements: statementList, BEGIN, END
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -28505,7 +28480,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:602:33: statement
             {
-              pushFollow(FOLLOW_statement_in_statementList15821);
+              pushFollow(FOLLOW_statement_in_statementList15813);
               statement715 = statement();
               state._fsp--;
               if (state.failed) return retval;
@@ -28530,7 +28505,7 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:602:46: ';' ( statement )?
               {
-                char_literal716 = (Token) match(input, SEMI, FOLLOW_SEMI_in_statementList15826);
+                char_literal716 = (Token) match(input, SEMI, FOLLOW_SEMI_in_statementList15818);
                 if (state.failed) return retval;
                 if (state.backtracking == 0) {
                   char_literal716_tree = (Object) adaptor.create(char_literal716);
@@ -28585,7 +28560,7 @@ public class DelphiParser extends Parser {
                   case 1:
                     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:602:51: statement
                     {
-                      pushFollow(FOLLOW_statement_in_statementList15829);
+                      pushFollow(FOLLOW_statement_in_statementList15821);
                       statement717 = statement();
                       state._fsp--;
                       if (state.failed) return retval;
@@ -29133,20 +29108,20 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_designator_in_simpleStatement15883);
+            pushFollow(FOLLOW_designator_in_simpleStatement15875);
             designator718 = designator();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) adaptor.addChild(root_0, designator718.getTree());
 
-            string_literal719 = (Token) match(input, ASSIGN, FOLLOW_ASSIGN_in_simpleStatement15885);
+            string_literal719 = (Token) match(input, ASSIGN, FOLLOW_ASSIGN_in_simpleStatement15877);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal719_tree = (Object) adaptor.create(string_literal719);
               adaptor.addChild(root_0, string_literal719_tree);
             }
 
-            pushFollow(FOLLOW_expression_in_simpleStatement15887);
+            pushFollow(FOLLOW_expression_in_simpleStatement15879);
             expression720 = expression();
             state._fsp--;
             if (state.failed) return retval;
@@ -29158,7 +29133,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_designator_in_simpleStatement15920);
+            pushFollow(FOLLOW_designator_in_simpleStatement15912);
             designator721 = designator();
             state._fsp--;
             if (state.failed) return retval;
@@ -29170,7 +29145,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_gotoStatement_in_simpleStatement15954);
+            pushFollow(FOLLOW_gotoStatement_in_simpleStatement15946);
             gotoStatement722 = gotoStatement();
             state._fsp--;
             if (state.failed) return retval;
@@ -29274,14 +29249,14 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            string_literal723 = (Token) match(input, GOTO, FOLLOW_GOTO_in_gotoStatement16006);
+            string_literal723 = (Token) match(input, GOTO, FOLLOW_GOTO_in_gotoStatement15998);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal723_tree = (Object) adaptor.create(string_literal723);
               adaptor.addChild(root_0, string_literal723_tree);
             }
 
-            pushFollow(FOLLOW_label_in_gotoStatement16008);
+            pushFollow(FOLLOW_label_in_gotoStatement16000);
             label724 = label();
             state._fsp--;
             if (state.failed) return retval;
@@ -29293,7 +29268,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            string_literal725 = (Token) match(input, EXIT, FOLLOW_EXIT_in_gotoStatement16041);
+            string_literal725 = (Token) match(input, EXIT, FOLLOW_EXIT_in_gotoStatement16033);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal725_tree = (Object) adaptor.create(string_literal725);
@@ -29314,21 +29289,21 @@ public class DelphiParser extends Parser {
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:609:40: '(' expression ')'
                 {
                   char_literal726 =
-                      (Token) match(input, LPAREN, FOLLOW_LPAREN_in_gotoStatement16044);
+                      (Token) match(input, LPAREN, FOLLOW_LPAREN_in_gotoStatement16036);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) {
                     char_literal726_tree = (Object) adaptor.create(char_literal726);
                     adaptor.addChild(root_0, char_literal726_tree);
                   }
 
-                  pushFollow(FOLLOW_expression_in_gotoStatement16046);
+                  pushFollow(FOLLOW_expression_in_gotoStatement16038);
                   expression727 = expression();
                   state._fsp--;
                   if (state.failed) return retval;
                   if (state.backtracking == 0) adaptor.addChild(root_0, expression727.getTree());
 
                   char_literal728 =
-                      (Token) match(input, RPAREN, FOLLOW_RPAREN_in_gotoStatement16048);
+                      (Token) match(input, RPAREN, FOLLOW_RPAREN_in_gotoStatement16040);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) {
                     char_literal728_tree = (Object) adaptor.create(char_literal728);
@@ -29344,7 +29319,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            string_literal729 = (Token) match(input, BREAK, FOLLOW_BREAK_in_gotoStatement16083);
+            string_literal729 = (Token) match(input, BREAK, FOLLOW_BREAK_in_gotoStatement16075);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal729_tree = (Object) adaptor.create(string_literal729);
@@ -29358,7 +29333,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal730 =
-                (Token) match(input, CONTINUE, FOLLOW_CONTINUE_in_gotoStatement16116);
+                (Token) match(input, CONTINUE, FOLLOW_CONTINUE_in_gotoStatement16108);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal730_tree = (Object) adaptor.create(string_literal730);
@@ -29502,7 +29477,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_expression_in_constExpression16169);
+            pushFollow(FOLLOW_expression_in_constExpression16161);
             expression731 = expression();
             state._fsp--;
             if (state.failed) return retval;
@@ -29514,7 +29489,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            char_literal732 = (Token) match(input, LPAREN, FOLLOW_LPAREN_in_constExpression16202);
+            char_literal732 = (Token) match(input, LPAREN, FOLLOW_LPAREN_in_constExpression16194);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               char_literal732_tree = (Object) adaptor.create(char_literal732);
@@ -29561,21 +29536,21 @@ public class DelphiParser extends Parser {
                 case 1:
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:617:37: ident ':' constExpression ( ';' )?
                   {
-                    pushFollow(FOLLOW_ident_in_constExpression16205);
+                    pushFollow(FOLLOW_ident_in_constExpression16197);
                     ident733 = ident();
                     state._fsp--;
                     if (state.failed) return retval;
                     if (state.backtracking == 0) adaptor.addChild(root_0, ident733.getTree());
 
                     char_literal734 =
-                        (Token) match(input, COLON, FOLLOW_COLON_in_constExpression16207);
+                        (Token) match(input, COLON, FOLLOW_COLON_in_constExpression16199);
                     if (state.failed) return retval;
                     if (state.backtracking == 0) {
                       char_literal734_tree = (Object) adaptor.create(char_literal734);
                       adaptor.addChild(root_0, char_literal734_tree);
                     }
 
-                    pushFollow(FOLLOW_constExpression_in_constExpression16209);
+                    pushFollow(FOLLOW_constExpression_in_constExpression16201);
                     constExpression735 = constExpression();
                     state._fsp--;
                     if (state.failed) return retval;
@@ -29593,7 +29568,7 @@ public class DelphiParser extends Parser {
                         // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:617:64: ';'
                         {
                           char_literal736 =
-                              (Token) match(input, SEMI, FOLLOW_SEMI_in_constExpression16212);
+                              (Token) match(input, SEMI, FOLLOW_SEMI_in_constExpression16204);
                           if (state.failed) return retval;
                           if (state.backtracking == 0) {
                             char_literal736_tree = (Object) adaptor.create(char_literal736);
@@ -29617,7 +29592,7 @@ public class DelphiParser extends Parser {
               cnt241++;
             }
 
-            char_literal737 = (Token) match(input, RPAREN, FOLLOW_RPAREN_in_constExpression16218);
+            char_literal737 = (Token) match(input, RPAREN, FOLLOW_RPAREN_in_constExpression16210);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               char_literal737_tree = (Object) adaptor.create(char_literal737);
@@ -29630,7 +29605,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            char_literal738 = (Token) match(input, LPAREN, FOLLOW_LPAREN_in_constExpression16252);
+            char_literal738 = (Token) match(input, LPAREN, FOLLOW_LPAREN_in_constExpression16244);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               char_literal738_tree = (Object) adaptor.create(char_literal738);
@@ -29687,7 +29662,7 @@ public class DelphiParser extends Parser {
                 case 1:
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:618:37: constExpression ( ',' )?
                   {
-                    pushFollow(FOLLOW_constExpression_in_constExpression16255);
+                    pushFollow(FOLLOW_constExpression_in_constExpression16247);
                     constExpression739 = constExpression();
                     state._fsp--;
                     if (state.failed) return retval;
@@ -29705,7 +29680,7 @@ public class DelphiParser extends Parser {
                         // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:618:54: ','
                         {
                           char_literal740 =
-                              (Token) match(input, COMMA, FOLLOW_COMMA_in_constExpression16258);
+                              (Token) match(input, COMMA, FOLLOW_COMMA_in_constExpression16250);
                           if (state.failed) return retval;
                           if (state.backtracking == 0) {
                             char_literal740_tree = (Object) adaptor.create(char_literal740);
@@ -29729,7 +29704,7 @@ public class DelphiParser extends Parser {
               cnt243++;
             }
 
-            char_literal741 = (Token) match(input, RPAREN, FOLLOW_RPAREN_in_constExpression16264);
+            char_literal741 = (Token) match(input, RPAREN, FOLLOW_RPAREN_in_constExpression16256);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               char_literal741_tree = (Object) adaptor.create(char_literal741);
@@ -29742,14 +29717,14 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            char_literal742 = (Token) match(input, LPAREN, FOLLOW_LPAREN_in_constExpression16298);
+            char_literal742 = (Token) match(input, LPAREN, FOLLOW_LPAREN_in_constExpression16290);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               char_literal742_tree = (Object) adaptor.create(char_literal742);
               adaptor.addChild(root_0, char_literal742_tree);
             }
 
-            char_literal743 = (Token) match(input, RPAREN, FOLLOW_RPAREN_in_constExpression16300);
+            char_literal743 = (Token) match(input, RPAREN, FOLLOW_RPAREN_in_constExpression16292);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               char_literal743_tree = (Object) adaptor.create(char_literal743);
@@ -29845,7 +29820,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            string_literal744 = (Token) match(input, TRY, FOLLOW_TRY_in_tryStatement16356);
+            string_literal744 = (Token) match(input, TRY, FOLLOW_TRY_in_tryStatement16348);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal744_tree = (Object) adaptor.create(string_literal744);
@@ -29906,7 +29881,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:624:39: statementList
                 {
-                  pushFollow(FOLLOW_statementList_in_tryStatement16359);
+                  pushFollow(FOLLOW_statementList_in_tryStatement16351);
                   statementList745 = statementList();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -29915,20 +29890,20 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            string_literal746 = (Token) match(input, EXCEPT, FOLLOW_EXCEPT_in_tryStatement16363);
+            string_literal746 = (Token) match(input, EXCEPT, FOLLOW_EXCEPT_in_tryStatement16355);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal746_tree = (Object) adaptor.create(string_literal746);
               adaptor.addChild(root_0, string_literal746_tree);
             }
 
-            pushFollow(FOLLOW_handlerList_in_tryStatement16365);
+            pushFollow(FOLLOW_handlerList_in_tryStatement16357);
             handlerList747 = handlerList();
             state._fsp--;
             if (state.failed) return retval;
             if (state.backtracking == 0) adaptor.addChild(root_0, handlerList747.getTree());
 
-            string_literal748 = (Token) match(input, END, FOLLOW_END_in_tryStatement16367);
+            string_literal748 = (Token) match(input, END, FOLLOW_END_in_tryStatement16359);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal748_tree = (Object) adaptor.create(string_literal748);
@@ -29941,7 +29916,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            string_literal749 = (Token) match(input, TRY, FOLLOW_TRY_in_tryStatement16400);
+            string_literal749 = (Token) match(input, TRY, FOLLOW_TRY_in_tryStatement16392);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal749_tree = (Object) adaptor.create(string_literal749);
@@ -30002,7 +29977,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:625:39: statementList
                 {
-                  pushFollow(FOLLOW_statementList_in_tryStatement16403);
+                  pushFollow(FOLLOW_statementList_in_tryStatement16395);
                   statementList750 = statementList();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -30011,7 +29986,7 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            string_literal751 = (Token) match(input, FINALLY, FOLLOW_FINALLY_in_tryStatement16407);
+            string_literal751 = (Token) match(input, FINALLY, FOLLOW_FINALLY_in_tryStatement16399);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal751_tree = (Object) adaptor.create(string_literal751);
@@ -30072,7 +30047,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:625:66: statementList
                 {
-                  pushFollow(FOLLOW_statementList_in_tryStatement16410);
+                  pushFollow(FOLLOW_statementList_in_tryStatement16402);
                   statementList752 = statementList();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -30081,7 +30056,7 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            string_literal753 = (Token) match(input, END, FOLLOW_END_in_tryStatement16414);
+            string_literal753 = (Token) match(input, END, FOLLOW_END_in_tryStatement16406);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal753_tree = (Object) adaptor.create(string_literal753);
@@ -30253,7 +30228,7 @@ public class DelphiParser extends Parser {
                 case 1:
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:627:33: handler
                   {
-                    pushFollow(FOLLOW_handler_in_handlerList16469);
+                    pushFollow(FOLLOW_handler_in_handlerList16461);
                     handler754 = handler();
                     state._fsp--;
                     if (state.failed) return retval;
@@ -30276,14 +30251,14 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:627:44: 'else' statementList
                 {
-                  string_literal755 = (Token) match(input, ELSE, FOLLOW_ELSE_in_handlerList16474);
+                  string_literal755 = (Token) match(input, ELSE, FOLLOW_ELSE_in_handlerList16466);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) {
                     string_literal755_tree = (Object) adaptor.create(string_literal755);
                     adaptor.addChild(root_0, string_literal755_tree);
                   }
 
-                  pushFollow(FOLLOW_statementList_in_handlerList16476);
+                  pushFollow(FOLLOW_statementList_in_handlerList16468);
                   statementList756 = statementList();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -30298,7 +30273,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_statementList_in_handlerList16511);
+            pushFollow(FOLLOW_statementList_in_handlerList16503);
             statementList757 = statementList();
             state._fsp--;
             if (state.failed) return retval;
@@ -30363,7 +30338,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        string_literal758 = (Token) match(input, ON, FOLLOW_ON_in_handler16569);
+        string_literal758 = (Token) match(input, ON, FOLLOW_ON_in_handler16561);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal758_tree = (Object) adaptor.create(string_literal758);
@@ -30436,7 +30411,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:630:38: handlerIdent
             {
-              pushFollow(FOLLOW_handlerIdent_in_handler16572);
+              pushFollow(FOLLOW_handlerIdent_in_handler16564);
               handlerIdent759 = handlerIdent();
               state._fsp--;
               if (state.failed) return retval;
@@ -30445,20 +30420,20 @@ public class DelphiParser extends Parser {
             break;
         }
 
-        pushFollow(FOLLOW_typeId_in_handler16576);
+        pushFollow(FOLLOW_typeId_in_handler16568);
         typeId760 = typeId();
         state._fsp--;
         if (state.failed) return retval;
         if (state.backtracking == 0) adaptor.addChild(root_0, typeId760.getTree());
 
-        string_literal761 = (Token) match(input, DO, FOLLOW_DO_in_handler16578);
+        string_literal761 = (Token) match(input, DO, FOLLOW_DO_in_handler16570);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal761_tree = (Object) adaptor.create(string_literal761);
           adaptor.addChild(root_0, string_literal761_tree);
         }
 
-        pushFollow(FOLLOW_handlerStatement_in_handler16580);
+        pushFollow(FOLLOW_handlerStatement_in_handler16572);
         handlerStatement762 = handlerStatement();
         state._fsp--;
         if (state.failed) return retval;
@@ -30518,12 +30493,12 @@ public class DelphiParser extends Parser {
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:632:30: ( ident ':' -> ^( TkExceptionHandlerIdent ident ) )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:632:32: ident ':'
       {
-        pushFollow(FOLLOW_ident_in_handlerIdent16635);
+        pushFollow(FOLLOW_ident_in_handlerIdent16627);
         ident763 = ident();
         state._fsp--;
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_ident.add(ident763.getTree());
-        char_literal764 = (Token) match(input, COLON, FOLLOW_COLON_in_handlerIdent16637);
+        char_literal764 = (Token) match(input, COLON, FOLLOW_COLON_in_handlerIdent16629);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_COLON.add(char_literal764);
 
@@ -30672,7 +30647,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:634:32: statement ( ';' )?
           {
-            pushFollow(FOLLOW_statement_in_handlerStatement16694);
+            pushFollow(FOLLOW_statement_in_handlerStatement16686);
             statement765 = statement();
             state._fsp--;
             if (state.failed) return retval;
@@ -30688,7 +30663,7 @@ public class DelphiParser extends Parser {
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:634:43: ';'
                 {
                   char_literal766 =
-                      (Token) match(input, SEMI, FOLLOW_SEMI_in_handlerStatement16697);
+                      (Token) match(input, SEMI, FOLLOW_SEMI_in_handlerStatement16689);
                   if (state.failed) return retval;
                   if (state.backtracking == 0) stream_SEMI.add(char_literal766);
                 }
@@ -30737,7 +30712,7 @@ public class DelphiParser extends Parser {
         case 2:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:635:32: ';'
           {
-            char_literal767 = (Token) match(input, SEMI, FOLLOW_SEMI_in_handlerStatement16745);
+            char_literal767 = (Token) match(input, SEMI, FOLLOW_SEMI_in_handlerStatement16737);
             if (state.failed) return retval;
             if (state.backtracking == 0) stream_SEMI.add(char_literal767);
 
@@ -30832,7 +30807,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        string_literal768 = (Token) match(input, RAISE, FOLLOW_RAISE_in_raiseStatement16804);
+        string_literal768 = (Token) match(input, RAISE, FOLLOW_RAISE_in_raiseStatement16796);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal768_tree = (Object) adaptor.create(string_literal768);
@@ -31040,7 +31015,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:637:41: expression
             {
-              pushFollow(FOLLOW_expression_in_raiseStatement16807);
+              pushFollow(FOLLOW_expression_in_raiseStatement16799);
               expression769 = expression();
               state._fsp--;
               if (state.failed) return retval;
@@ -31062,14 +31037,14 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:637:55: AT expression
             {
-              AT770 = (Token) match(input, AT, FOLLOW_AT_in_raiseStatement16812);
+              AT770 = (Token) match(input, AT, FOLLOW_AT_in_raiseStatement16804);
               if (state.failed) return retval;
               if (state.backtracking == 0) {
                 AT770_tree = (Object) adaptor.create(AT770);
                 adaptor.addChild(root_0, AT770_tree);
               }
 
-              pushFollow(FOLLOW_expression_in_raiseStatement16814);
+              pushFollow(FOLLOW_expression_in_raiseStatement16806);
               expression771 = expression();
               state._fsp--;
               if (state.failed) return retval;
@@ -31137,22 +31112,22 @@ public class DelphiParser extends Parser {
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:642:30: ( 'asm' assemblerInstructions 'end' -> ^( 'asm' ^( TkAssemblerInstructions assemblerInstructions ) 'end' ) )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:642:32: 'asm' assemblerInstructions 'end'
       {
-        string_literal772 = (Token) match(input, ASM, FOLLOW_ASM_in_assemblerStatement16866);
+        string_literal772 = (Token) match(input, ASM, FOLLOW_ASM_in_assemblerStatement16858);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_ASM.add(string_literal772);
 
-        pushFollow(FOLLOW_assemblerInstructions_in_assemblerStatement16868);
+        pushFollow(FOLLOW_assemblerInstructions_in_assemblerStatement16860);
         assemblerInstructions773 = assemblerInstructions();
         state._fsp--;
         if (state.failed) return retval;
         if (state.backtracking == 0)
           stream_assemblerInstructions.add(assemblerInstructions773.getTree());
-        string_literal774 = (Token) match(input, END, FOLLOW_END_in_assemblerStatement16870);
+        string_literal774 = (Token) match(input, END, FOLLOW_END_in_assemblerStatement16862);
         if (state.failed) return retval;
         if (state.backtracking == 0) stream_END.add(string_literal774);
 
         // AST REWRITE
-        // elements: assemblerInstructions, END, ASM
+        // elements: END, assemblerInstructions, ASM
         // token labels:
         // rule labels: retval
         // token list labels:
@@ -31489,7 +31464,7 @@ public class DelphiParser extends Parser {
                         {
                           char_literal776 =
                               (Token)
-                                  match(input, SEMI, FOLLOW_SEMI_in_methodDirectiveSection16981);
+                                  match(input, SEMI, FOLLOW_SEMI_in_methodDirectiveSection16973);
                           if (state.failed) return retval;
                           if (state.backtracking == 0) {
                             char_literal776_tree = (Object) adaptor.create(char_literal776);
@@ -31499,7 +31474,7 @@ public class DelphiParser extends Parser {
                         break;
                     }
 
-                    pushFollow(FOLLOW_methodDirective_in_methodDirectiveSection16985);
+                    pushFollow(FOLLOW_methodDirective_in_methodDirectiveSection16977);
                     methodDirective777 = methodDirective();
                     state._fsp--;
                     if (state.failed) return retval;
@@ -31514,7 +31489,7 @@ public class DelphiParser extends Parser {
             }
 
             char_literal778 =
-                (Token) match(input, SEMI, FOLLOW_SEMI_in_methodDirectiveSection16989);
+                (Token) match(input, SEMI, FOLLOW_SEMI_in_methodDirectiveSection16981);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               char_literal778_tree = (Object) adaptor.create(char_literal778);
@@ -31527,7 +31502,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_standaloneOverloadDirective_in_methodDirectiveSection17022);
+            pushFollow(FOLLOW_standaloneOverloadDirective_in_methodDirectiveSection17014);
             standaloneOverloadDirective779 = standaloneOverloadDirective();
             state._fsp--;
             if (state.failed) return retval;
@@ -31736,7 +31711,7 @@ public class DelphiParser extends Parser {
                         {
                           char_literal780 =
                               (Token)
-                                  match(input, SEMI, FOLLOW_SEMI_in_functionDirectiveSection17065);
+                                  match(input, SEMI, FOLLOW_SEMI_in_functionDirectiveSection17057);
                           if (state.failed) return retval;
                           if (state.backtracking == 0) {
                             char_literal780_tree = (Object) adaptor.create(char_literal780);
@@ -31746,7 +31721,7 @@ public class DelphiParser extends Parser {
                         break;
                     }
 
-                    pushFollow(FOLLOW_functionDirective_in_functionDirectiveSection17069);
+                    pushFollow(FOLLOW_functionDirective_in_functionDirectiveSection17061);
                     functionDirective781 = functionDirective();
                     state._fsp--;
                     if (state.failed) return retval;
@@ -31761,7 +31736,7 @@ public class DelphiParser extends Parser {
             }
 
             char_literal782 =
-                (Token) match(input, SEMI, FOLLOW_SEMI_in_functionDirectiveSection17073);
+                (Token) match(input, SEMI, FOLLOW_SEMI_in_functionDirectiveSection17065);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               char_literal782_tree = (Object) adaptor.create(char_literal782);
@@ -31774,7 +31749,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_standaloneOverloadDirective_in_functionDirectiveSection17106);
+            pushFollow(FOLLOW_standaloneOverloadDirective_in_functionDirectiveSection17098);
             standaloneOverloadDirective783 = standaloneOverloadDirective();
             state._fsp--;
             if (state.failed) return retval;
@@ -31842,7 +31817,7 @@ public class DelphiParser extends Parser {
         root_0 = (Object) adaptor.nil();
 
         char_literal784 =
-            (Token) match(input, SEMI, FOLLOW_SEMI_in_standaloneOverloadDirective17144);
+            (Token) match(input, SEMI, FOLLOW_SEMI_in_standaloneOverloadDirective17136);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           char_literal784_tree = (Object) adaptor.create(char_literal784);
@@ -31850,7 +31825,7 @@ public class DelphiParser extends Parser {
         }
 
         string_literal785 =
-            (Token) match(input, OVERLOAD, FOLLOW_OVERLOAD_in_standaloneOverloadDirective17146);
+            (Token) match(input, OVERLOAD, FOLLOW_OVERLOAD_in_standaloneOverloadDirective17138);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal785_tree = (Object) adaptor.create(string_literal785);
@@ -31871,7 +31846,7 @@ public class DelphiParser extends Parser {
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:655:48: ';'
             {
               char_literal786 =
-                  (Token) match(input, SEMI, FOLLOW_SEMI_in_standaloneOverloadDirective17149);
+                  (Token) match(input, SEMI, FOLLOW_SEMI_in_standaloneOverloadDirective17141);
               if (state.failed) return retval;
               if (state.backtracking == 0) {
                 char_literal786_tree = (Object) adaptor.create(char_literal786);
@@ -32017,7 +31992,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal787 =
-                (Token) match(input, OVERLOAD, FOLLOW_OVERLOAD_in_methodDirective17201);
+                (Token) match(input, OVERLOAD, FOLLOW_OVERLOAD_in_methodDirective17193);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal787_tree = (Object) adaptor.create(string_literal787);
@@ -32031,7 +32006,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal788 =
-                (Token) match(input, REINTRODUCE, FOLLOW_REINTRODUCE_in_methodDirective17234);
+                (Token) match(input, REINTRODUCE, FOLLOW_REINTRODUCE_in_methodDirective17226);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal788_tree = (Object) adaptor.create(string_literal788);
@@ -32044,7 +32019,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_bindingDirective_in_methodDirective17267);
+            pushFollow(FOLLOW_bindingDirective_in_methodDirective17259);
             bindingDirective789 = bindingDirective();
             state._fsp--;
             if (state.failed) return retval;
@@ -32056,7 +32031,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_abstractDirective_in_methodDirective17300);
+            pushFollow(FOLLOW_abstractDirective_in_methodDirective17292);
             abstractDirective790 = abstractDirective();
             state._fsp--;
             if (state.failed) return retval;
@@ -32068,7 +32043,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_inlineDirective_in_methodDirective17334);
+            pushFollow(FOLLOW_inlineDirective_in_methodDirective17326);
             inlineDirective791 = inlineDirective();
             state._fsp--;
             if (state.failed) return retval;
@@ -32080,7 +32055,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_callConvention_in_methodDirective17370);
+            pushFollow(FOLLOW_callConvention_in_methodDirective17362);
             callConvention792 = callConvention();
             state._fsp--;
             if (state.failed) return retval;
@@ -32092,7 +32067,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_hintingDirective_in_methodDirective17403);
+            pushFollow(FOLLOW_hintingDirective_in_methodDirective17395);
             hintingDirective793 = hintingDirective();
             state._fsp--;
             if (state.failed) return retval;
@@ -32104,7 +32079,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_oldCallConventionDirective_in_methodDirective17438);
+            pushFollow(FOLLOW_oldCallConventionDirective_in_methodDirective17430);
             oldCallConventionDirective794 = oldCallConventionDirective();
             state._fsp--;
             if (state.failed) return retval;
@@ -32117,7 +32092,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_dispIDDirective_in_methodDirective17471);
+            pushFollow(FOLLOW_dispIDDirective_in_methodDirective17463);
             dispIDDirective795 = dispIDDirective();
             state._fsp--;
             if (state.failed) return retval;
@@ -32252,7 +32227,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal796 =
-                (Token) match(input, FORWARD, FOLLOW_FORWARD_in_functionDirective17519);
+                (Token) match(input, FORWARD, FOLLOW_FORWARD_in_functionDirective17511);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal796_tree = (Object) adaptor.create(string_literal796);
@@ -32266,7 +32241,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal797 =
-                (Token) match(input, OVERLOAD, FOLLOW_OVERLOAD_in_functionDirective17552);
+                (Token) match(input, OVERLOAD, FOLLOW_OVERLOAD_in_functionDirective17544);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal797_tree = (Object) adaptor.create(string_literal797);
@@ -32279,7 +32254,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_inlineDirective_in_functionDirective17585);
+            pushFollow(FOLLOW_inlineDirective_in_functionDirective17577);
             inlineDirective798 = inlineDirective();
             state._fsp--;
             if (state.failed) return retval;
@@ -32291,7 +32266,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_callConvention_in_functionDirective17618);
+            pushFollow(FOLLOW_callConvention_in_functionDirective17610);
             callConvention799 = callConvention();
             state._fsp--;
             if (state.failed) return retval;
@@ -32303,7 +32278,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_oldCallConventionDirective_in_functionDirective17651);
+            pushFollow(FOLLOW_oldCallConventionDirective_in_functionDirective17643);
             oldCallConventionDirective800 = oldCallConventionDirective();
             state._fsp--;
             if (state.failed) return retval;
@@ -32316,7 +32291,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_hintingDirective_in_functionDirective17684);
+            pushFollow(FOLLOW_hintingDirective_in_functionDirective17676);
             hintingDirective801 = hintingDirective();
             state._fsp--;
             if (state.failed) return retval;
@@ -32328,7 +32303,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_externalDirective_in_functionDirective17717);
+            pushFollow(FOLLOW_externalDirective_in_functionDirective17709);
             externalDirective802 = externalDirective();
             state._fsp--;
             if (state.failed) return retval;
@@ -32341,7 +32316,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal803 =
-                (Token) match(input, UNSAFE, FOLLOW_UNSAFE_in_functionDirective17750);
+                (Token) match(input, UNSAFE, FOLLOW_UNSAFE_in_functionDirective17742);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal803_tree = (Object) adaptor.create(string_literal803);
@@ -32449,14 +32424,14 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal804 =
-                (Token) match(input, MESSAGE, FOLLOW_MESSAGE_in_bindingDirective17801);
+                (Token) match(input, MESSAGE, FOLLOW_MESSAGE_in_bindingDirective17793);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal804_tree = (Object) adaptor.create(string_literal804);
               adaptor.addChild(root_0, string_literal804_tree);
             }
 
-            pushFollow(FOLLOW_expression_in_bindingDirective17803);
+            pushFollow(FOLLOW_expression_in_bindingDirective17795);
             expression805 = expression();
             state._fsp--;
             if (state.failed) return retval;
@@ -32469,7 +32444,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal806 =
-                (Token) match(input, STATIC, FOLLOW_STATIC_in_bindingDirective17836);
+                (Token) match(input, STATIC, FOLLOW_STATIC_in_bindingDirective17828);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal806_tree = (Object) adaptor.create(string_literal806);
@@ -32483,7 +32458,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal807 =
-                (Token) match(input, DYNAMIC, FOLLOW_DYNAMIC_in_bindingDirective17869);
+                (Token) match(input, DYNAMIC, FOLLOW_DYNAMIC_in_bindingDirective17861);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal807_tree = (Object) adaptor.create(string_literal807);
@@ -32497,7 +32472,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal808 =
-                (Token) match(input, OVERRIDE, FOLLOW_OVERRIDE_in_bindingDirective17902);
+                (Token) match(input, OVERRIDE, FOLLOW_OVERRIDE_in_bindingDirective17894);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal808_tree = (Object) adaptor.create(string_literal808);
@@ -32511,7 +32486,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal809 =
-                (Token) match(input, VIRTUAL, FOLLOW_VIRTUAL_in_bindingDirective17935);
+                (Token) match(input, VIRTUAL, FOLLOW_VIRTUAL_in_bindingDirective17927);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal809_tree = (Object) adaptor.create(string_literal809);
@@ -32892,7 +32867,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal814 =
-                (Token) match(input, DEPRECATED, FOLLOW_DEPRECATED_in_hintingDirective18499);
+                (Token) match(input, DEPRECATED, FOLLOW_DEPRECATED_in_hintingDirective18491);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal814_tree = (Object) adaptor.create(string_literal814);
@@ -32909,7 +32884,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:699:46: stringFactor
                 {
-                  pushFollow(FOLLOW_stringFactor_in_hintingDirective18502);
+                  pushFollow(FOLLOW_stringFactor_in_hintingDirective18494);
                   stringFactor815 = stringFactor();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -32925,7 +32900,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal816 =
-                (Token) match(input, EXPERIMENTAL, FOLLOW_EXPERIMENTAL_in_hintingDirective18537);
+                (Token) match(input, EXPERIMENTAL, FOLLOW_EXPERIMENTAL_in_hintingDirective18529);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal816_tree = (Object) adaptor.create(string_literal816);
@@ -32939,7 +32914,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal817 =
-                (Token) match(input, PLATFORM, FOLLOW_PLATFORM_in_hintingDirective18572);
+                (Token) match(input, PLATFORM, FOLLOW_PLATFORM_in_hintingDirective18564);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal817_tree = (Object) adaptor.create(string_literal817);
@@ -32953,7 +32928,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal818 =
-                (Token) match(input, LIBRARY, FOLLOW_LIBRARY_in_hintingDirective18605);
+                (Token) match(input, LIBRARY, FOLLOW_LIBRARY_in_hintingDirective18597);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal818_tree = (Object) adaptor.create(string_literal818);
@@ -33037,7 +33012,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal819 =
-                (Token) match(input, VARARGS, FOLLOW_VARARGS_in_externalDirective18653);
+                (Token) match(input, VARARGS, FOLLOW_VARARGS_in_externalDirective18645);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal819_tree = (Object) adaptor.create(string_literal819);
@@ -33051,7 +33026,7 @@ public class DelphiParser extends Parser {
             root_0 = (Object) adaptor.nil();
 
             string_literal820 =
-                (Token) match(input, EXTERNAL, FOLLOW_EXTERNAL_in_externalDirective18689);
+                (Token) match(input, EXTERNAL, FOLLOW_EXTERNAL_in_externalDirective18681);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal820_tree = (Object) adaptor.create(string_literal820);
@@ -33158,7 +33133,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:705:44: expression
                 {
-                  pushFollow(FOLLOW_expression_in_externalDirective18692);
+                  pushFollow(FOLLOW_expression_in_externalDirective18684);
                   expression821 = expression();
                   state._fsp--;
                   if (state.failed) return retval;
@@ -33180,7 +33155,7 @@ public class DelphiParser extends Parser {
                 case 1:
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:705:58: externalSpecifier
                   {
-                    pushFollow(FOLLOW_externalSpecifier_in_externalDirective18697);
+                    pushFollow(FOLLOW_externalSpecifier_in_externalDirective18689);
                     externalSpecifier822 = externalSpecifier();
                     state._fsp--;
                     if (state.failed) return retval;
@@ -33270,14 +33245,14 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            string_literal823 = (Token) match(input, NAME, FOLLOW_NAME_in_externalSpecifier18748);
+            string_literal823 = (Token) match(input, NAME, FOLLOW_NAME_in_externalSpecifier18740);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal823_tree = (Object) adaptor.create(string_literal823);
               adaptor.addChild(root_0, string_literal823_tree);
             }
 
-            pushFollow(FOLLOW_constExpression_in_externalSpecifier18750);
+            pushFollow(FOLLOW_constExpression_in_externalSpecifier18742);
             constExpression824 = constExpression();
             state._fsp--;
             if (state.failed) return retval;
@@ -33289,14 +33264,14 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            string_literal825 = (Token) match(input, INDEX, FOLLOW_INDEX_in_externalSpecifier18783);
+            string_literal825 = (Token) match(input, INDEX, FOLLOW_INDEX_in_externalSpecifier18775);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               string_literal825_tree = (Object) adaptor.create(string_literal825);
               adaptor.addChild(root_0, string_literal825_tree);
             }
 
-            pushFollow(FOLLOW_constExpression_in_externalSpecifier18785);
+            pushFollow(FOLLOW_constExpression_in_externalSpecifier18777);
             constExpression826 = constExpression();
             state._fsp--;
             if (state.failed) return retval;
@@ -33357,14 +33332,14 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        string_literal827 = (Token) match(input, DISPID, FOLLOW_DISPID_in_dispIDDirective18838);
+        string_literal827 = (Token) match(input, DISPID, FOLLOW_DISPID_in_dispIDDirective18830);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           string_literal827_tree = (Object) adaptor.create(string_literal827);
           adaptor.addChild(root_0, string_literal827_tree);
         }
 
-        pushFollow(FOLLOW_expression_in_dispIDDirective18840);
+        pushFollow(FOLLOW_expression_in_dispIDDirective18832);
         expression828 = expression();
         state._fsp--;
         if (state.failed) return retval;
@@ -33488,7 +33463,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            TkIdentifier829 = (Token) match(input, TkIdentifier, FOLLOW_TkIdentifier_in_ident18903);
+            TkIdentifier829 = (Token) match(input, TkIdentifier, FOLLOW_TkIdentifier_in_ident18895);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               TkIdentifier829_tree = (Object) adaptor.create(TkIdentifier829);
@@ -33501,14 +33476,14 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            char_literal830 = (Token) match(input, AMPERSAND, FOLLOW_AMPERSAND_in_ident18936);
+            char_literal830 = (Token) match(input, AMPERSAND, FOLLOW_AMPERSAND_in_ident18928);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               char_literal830_tree = (Object) adaptor.create(char_literal830);
               adaptor.addChild(root_0, char_literal830_tree);
             }
 
-            TkIdentifier831 = (Token) match(input, TkIdentifier, FOLLOW_TkIdentifier_in_ident18938);
+            TkIdentifier831 = (Token) match(input, TkIdentifier, FOLLOW_TkIdentifier_in_ident18930);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               TkIdentifier831_tree = (Object) adaptor.create(TkIdentifier831);
@@ -33522,7 +33497,7 @@ public class DelphiParser extends Parser {
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:717:32: ( keywordsUsedAsNames )
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:717:33: keywordsUsedAsNames
             {
-              pushFollow(FOLLOW_keywordsUsedAsNames_in_ident18972);
+              pushFollow(FOLLOW_keywordsUsedAsNames_in_ident18964);
               keywordsUsedAsNames832 = keywordsUsedAsNames();
               state._fsp--;
               if (state.failed) return retval;
@@ -33801,7 +33776,7 @@ public class DelphiParser extends Parser {
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:738:30: ( ident ( ',' ident )* -> ^( ident ( ident )* ) )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:738:32: ident ( ',' ident )*
       {
-        pushFollow(FOLLOW_ident_in_identList20257);
+        pushFollow(FOLLOW_ident_in_identList20249);
         ident835 = ident();
         state._fsp--;
         if (state.failed) return retval;
@@ -33819,11 +33794,11 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:738:39: ',' ident
               {
-                char_literal836 = (Token) match(input, COMMA, FOLLOW_COMMA_in_identList20260);
+                char_literal836 = (Token) match(input, COMMA, FOLLOW_COMMA_in_identList20252);
                 if (state.failed) return retval;
                 if (state.backtracking == 0) stream_COMMA.add(char_literal836);
 
-                pushFollow(FOLLOW_ident_in_identList20262);
+                pushFollow(FOLLOW_ident_in_identList20254);
                 ident837 = ident();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -33924,7 +33899,7 @@ public class DelphiParser extends Parser {
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:740:30: ( ident ( ',' ident )* -> ident ( ident )* )
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:740:32: ident ( ',' ident )*
       {
-        pushFollow(FOLLOW_ident_in_identListFlat20327);
+        pushFollow(FOLLOW_ident_in_identListFlat20319);
         ident838 = ident();
         state._fsp--;
         if (state.failed) return retval;
@@ -33942,11 +33917,11 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:740:39: ',' ident
               {
-                char_literal839 = (Token) match(input, COMMA, FOLLOW_COMMA_in_identListFlat20330);
+                char_literal839 = (Token) match(input, COMMA, FOLLOW_COMMA_in_identListFlat20322);
                 if (state.failed) return retval;
                 if (state.backtracking == 0) stream_COMMA.add(char_literal839);
 
-                pushFollow(FOLLOW_ident_in_identListFlat20332);
+                pushFollow(FOLLOW_ident_in_identListFlat20324);
                 ident840 = ident();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -34107,7 +34082,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            TkIdentifier841 = (Token) match(input, TkIdentifier, FOLLOW_TkIdentifier_in_label20406);
+            TkIdentifier841 = (Token) match(input, TkIdentifier, FOLLOW_TkIdentifier_in_label20398);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               TkIdentifier841_tree = (Object) adaptor.create(TkIdentifier841);
@@ -34120,7 +34095,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            TkIntNum842 = (Token) match(input, TkIntNum, FOLLOW_TkIntNum_in_label20439);
+            TkIntNum842 = (Token) match(input, TkIntNum, FOLLOW_TkIntNum_in_label20431);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               TkIntNum842_tree = (Object) adaptor.create(TkIntNum842);
@@ -34133,7 +34108,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            TkHexNum843 = (Token) match(input, TkHexNum, FOLLOW_TkHexNum_in_label20472);
+            TkHexNum843 = (Token) match(input, TkHexNum, FOLLOW_TkHexNum_in_label20464);
             if (state.failed) return retval;
             if (state.backtracking == 0) {
               TkHexNum843_tree = (Object) adaptor.create(TkHexNum843);
@@ -34146,7 +34121,7 @@ public class DelphiParser extends Parser {
           {
             root_0 = (Object) adaptor.nil();
 
-            pushFollow(FOLLOW_keywordsUsedAsNames_in_label20505);
+            pushFollow(FOLLOW_keywordsUsedAsNames_in_label20497);
             keywordsUsedAsNames844 = keywordsUsedAsNames();
             state._fsp--;
             if (state.failed) return retval;
@@ -34274,7 +34249,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        TkRealNum846 = (Token) match(input, TkRealNum, FOLLOW_TkRealNum_in_realNum20655);
+        TkRealNum846 = (Token) match(input, TkRealNum, FOLLOW_TkRealNum_in_realNum20647);
         if (state.failed) return retval;
         if (state.backtracking == 0) {
           TkRealNum846_tree = (Object) adaptor.create(TkRealNum846);
@@ -34413,14 +34388,14 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:752:33: namespaceName '.'
             {
-              pushFollow(FOLLOW_namespaceName_in_namespacedQualifiedIdent20697);
+              pushFollow(FOLLOW_namespaceName_in_namespacedQualifiedIdent20689);
               namespaceName847 = namespaceName();
               state._fsp--;
               if (state.failed) return retval;
               if (state.backtracking == 0) adaptor.addChild(root_0, namespaceName847.getTree());
 
               char_literal848 =
-                  (Token) match(input, DOT, FOLLOW_DOT_in_namespacedQualifiedIdent20699);
+                  (Token) match(input, DOT, FOLLOW_DOT_in_namespacedQualifiedIdent20691);
               if (state.failed) return retval;
               if (state.backtracking == 0) {
                 char_literal848_tree = (Object) adaptor.create(char_literal848);
@@ -34430,7 +34405,7 @@ public class DelphiParser extends Parser {
             break;
         }
 
-        pushFollow(FOLLOW_qualifiedIdent_in_namespacedQualifiedIdent20703);
+        pushFollow(FOLLOW_qualifiedIdent_in_namespacedQualifiedIdent20695);
         qualifiedIdent849 = qualifiedIdent();
         state._fsp--;
         if (state.failed) return retval;
@@ -34491,7 +34466,7 @@ public class DelphiParser extends Parser {
       {
         root_0 = (Object) adaptor.nil();
 
-        pushFollow(FOLLOW_ident_in_namespaceName20755);
+        pushFollow(FOLLOW_ident_in_namespaceName20747);
         ident850 = ident();
         state._fsp--;
         if (state.failed) return retval;
@@ -34506,14 +34481,14 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:754:39: '.' ident
               {
-                char_literal851 = (Token) match(input, DOT, FOLLOW_DOT_in_namespaceName20758);
+                char_literal851 = (Token) match(input, DOT, FOLLOW_DOT_in_namespaceName20750);
                 if (state.failed) return retval;
                 if (state.backtracking == 0) {
                   char_literal851_tree = (Object) adaptor.create(char_literal851);
                   adaptor.addChild(root_0, char_literal851_tree);
                 }
 
-                pushFollow(FOLLOW_ident_in_namespaceName20760);
+                pushFollow(FOLLOW_ident_in_namespaceName20752);
                 ident852 = ident();
                 state._fsp--;
                 if (state.failed) return retval;
@@ -34649,13 +34624,13 @@ public class DelphiParser extends Parser {
             case 1:
               // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:756:33: ident '.'
               {
-                pushFollow(FOLLOW_ident_in_qualifiedIdent20814);
+                pushFollow(FOLLOW_ident_in_qualifiedIdent20806);
                 ident853 = ident();
                 state._fsp--;
                 if (state.failed) return retval;
                 if (state.backtracking == 0) adaptor.addChild(root_0, ident853.getTree());
 
-                char_literal854 = (Token) match(input, DOT, FOLLOW_DOT_in_qualifiedIdent20816);
+                char_literal854 = (Token) match(input, DOT, FOLLOW_DOT_in_qualifiedIdent20808);
                 if (state.failed) return retval;
                 if (state.backtracking == 0) {
                   char_literal854_tree = (Object) adaptor.create(char_literal854);
@@ -34669,7 +34644,7 @@ public class DelphiParser extends Parser {
           }
         }
 
-        pushFollow(FOLLOW_extendedIdent_in_qualifiedIdent20821);
+        pushFollow(FOLLOW_extendedIdent_in_qualifiedIdent20813);
         extendedIdent855 = extendedIdent();
         state._fsp--;
         if (state.failed) return retval;
@@ -35223,7 +35198,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:283:32: ( simpleGenericDefinition )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:283:32: simpleGenericDefinition
     {
-      pushFollow(FOLLOW_simpleGenericDefinition_in_synpred101_Delphi5480);
+      pushFollow(FOLLOW_simpleGenericDefinition_in_synpred101_Delphi5472);
       simpleGenericDefinition();
       state._fsp--;
       if (state.failed) return;
@@ -35236,7 +35211,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:284:32: ( complexGenericDefinition )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:284:32: complexGenericDefinition
     {
-      pushFollow(FOLLOW_complexGenericDefinition_in_synpred102_Delphi5513);
+      pushFollow(FOLLOW_complexGenericDefinition_in_synpred102_Delphi5505);
       complexGenericDefinition();
       state._fsp--;
       if (state.failed) return;
@@ -35249,7 +35224,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:305:32: ( classHelperDecl )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:305:32: classHelperDecl
     {
-      pushFollow(FOLLOW_classHelperDecl_in_synpred114_Delphi6038);
+      pushFollow(FOLLOW_classHelperDecl_in_synpred114_Delphi6030);
       classHelperDecl();
       state._fsp--;
       if (state.failed) return;
@@ -35262,7 +35237,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:306:32: ( classTypeTypeDecl )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:306:32: classTypeTypeDecl
     {
-      pushFollow(FOLLOW_classTypeTypeDecl_in_synpred115_Delphi6079);
+      pushFollow(FOLLOW_classTypeTypeDecl_in_synpred115_Delphi6071);
       classTypeTypeDecl();
       state._fsp--;
       if (state.failed) return;
@@ -35275,7 +35250,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:307:32: ( classTypeDecl )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:307:32: classTypeDecl
     {
-      pushFollow(FOLLOW_classTypeDecl_in_synpred116_Delphi6112);
+      pushFollow(FOLLOW_classTypeDecl_in_synpred116_Delphi6104);
       classTypeDecl();
       state._fsp--;
       if (state.failed) return;
@@ -35288,7 +35263,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:310:32: ( recordDecl )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:310:32: recordDecl
     {
-      pushFollow(FOLLOW_recordDecl_in_synpred119_Delphi6235);
+      pushFollow(FOLLOW_recordDecl_in_synpred119_Delphi6227);
       recordDecl();
       state._fsp--;
       if (state.failed) return;
@@ -35301,7 +35276,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:315:32: ( 'class' ( classState )? ( classParent )? ( classItem )* 'end' )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:315:32: 'class' ( classState )? ( classParent )? ( classItem )* 'end'
     {
-      match(input, CLASS, FOLLOW_CLASS_in_synpred123_Delphi6396);
+      match(input, CLASS, FOLLOW_CLASS_in_synpred123_Delphi6388);
       if (state.failed) return;
 
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:315:40: ( classState )?
@@ -35314,7 +35289,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:315:41: classState
           {
-            pushFollow(FOLLOW_classState_in_synpred123_Delphi6399);
+            pushFollow(FOLLOW_classState_in_synpred123_Delphi6391);
             classState();
             state._fsp--;
             if (state.failed) return;
@@ -35332,7 +35307,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:315:55: classParent
           {
-            pushFollow(FOLLOW_classParent_in_synpred123_Delphi6404);
+            pushFollow(FOLLOW_classParent_in_synpred123_Delphi6396);
             classParent();
             state._fsp--;
             if (state.failed) return;
@@ -35389,7 +35364,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:315:70: classItem
             {
-              pushFollow(FOLLOW_classItem_in_synpred123_Delphi6409);
+              pushFollow(FOLLOW_classItem_in_synpred123_Delphi6401);
               classItem();
               state._fsp--;
               if (state.failed) return;
@@ -35401,7 +35376,7 @@ public class DelphiParser extends Parser {
         }
       }
 
-      match(input, END, FOLLOW_END_in_synpred123_Delphi6413);
+      match(input, END, FOLLOW_END_in_synpred123_Delphi6405);
       if (state.failed) return;
     }
   }
@@ -35412,7 +35387,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:316:41: ( classState )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:316:41: classState
     {
-      pushFollow(FOLLOW_classState_in_synpred124_Delphi6467);
+      pushFollow(FOLLOW_classState_in_synpred124_Delphi6459);
       classState();
       state._fsp--;
       if (state.failed) return;
@@ -35425,7 +35400,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:316:55: ( classParent )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:316:55: classParent
     {
-      pushFollow(FOLLOW_classParent_in_synpred125_Delphi6472);
+      pushFollow(FOLLOW_classParent_in_synpred125_Delphi6464);
       classParent();
       state._fsp--;
       if (state.failed) return;
@@ -35438,7 +35413,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:323:32: ( visibility )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:323:32: visibility
     {
-      pushFollow(FOLLOW_visibility_in_synpred128_Delphi6708);
+      pushFollow(FOLLOW_visibility_in_synpred128_Delphi6700);
       visibility();
       state._fsp--;
       if (state.failed) return;
@@ -35451,7 +35426,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:324:32: ( classMethod )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:324:32: classMethod
     {
-      pushFollow(FOLLOW_classMethod_in_synpred129_Delphi6741);
+      pushFollow(FOLLOW_classMethod_in_synpred129_Delphi6733);
       classMethod();
       state._fsp--;
       if (state.failed) return;
@@ -35464,7 +35439,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:325:32: ( classField )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:325:32: classField
     {
-      pushFollow(FOLLOW_classField_in_synpred130_Delphi6774);
+      pushFollow(FOLLOW_classField_in_synpred130_Delphi6766);
       classField();
       state._fsp--;
       if (state.failed) return;
@@ -35477,7 +35452,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:326:32: ( classProperty )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:326:32: classProperty
     {
-      pushFollow(FOLLOW_classProperty_in_synpred131_Delphi6807);
+      pushFollow(FOLLOW_classProperty_in_synpred131_Delphi6799);
       classProperty();
       state._fsp--;
       if (state.failed) return;
@@ -35490,7 +35465,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:334:32: ( classMethod )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:334:32: classMethod
     {
-      pushFollow(FOLLOW_classMethod_in_synpred138_Delphi7077);
+      pushFollow(FOLLOW_classMethod_in_synpred138_Delphi7069);
       classMethod();
       state._fsp--;
       if (state.failed) return;
@@ -35503,7 +35478,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:335:32: ( classProperty )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:335:32: classProperty
     {
-      pushFollow(FOLLOW_classProperty_in_synpred139_Delphi7110);
+      pushFollow(FOLLOW_classProperty_in_synpred139_Delphi7102);
       classProperty();
       state._fsp--;
       if (state.failed) return;
@@ -35516,7 +35491,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:338:32: ( interfaceKey ( classParent )? ( interfaceGuid )? ( interfaceItem )* 'end' )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:338:32: interfaceKey ( classParent )? ( interfaceGuid )? ( interfaceItem )* 'end'
     {
-      pushFollow(FOLLOW_interfaceKey_in_synpred144_Delphi7196);
+      pushFollow(FOLLOW_interfaceKey_in_synpred144_Delphi7188);
       interfaceKey();
       state._fsp--;
       if (state.failed) return;
@@ -35531,7 +35506,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:338:46: classParent
           {
-            pushFollow(FOLLOW_classParent_in_synpred144_Delphi7199);
+            pushFollow(FOLLOW_classParent_in_synpred144_Delphi7191);
             classParent();
             state._fsp--;
             if (state.failed) return;
@@ -35552,7 +35527,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:338:61: interfaceGuid
           {
-            pushFollow(FOLLOW_interfaceGuid_in_synpred144_Delphi7204);
+            pushFollow(FOLLOW_interfaceGuid_in_synpred144_Delphi7196);
             interfaceGuid();
             state._fsp--;
             if (state.failed) return;
@@ -35580,7 +35555,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:338:78: interfaceItem
             {
-              pushFollow(FOLLOW_interfaceItem_in_synpred144_Delphi7209);
+              pushFollow(FOLLOW_interfaceItem_in_synpred144_Delphi7201);
               interfaceItem();
               state._fsp--;
               if (state.failed) return;
@@ -35592,7 +35567,7 @@ public class DelphiParser extends Parser {
         }
       }
 
-      match(input, END, FOLLOW_END_in_synpred144_Delphi7213);
+      match(input, END, FOLLOW_END_in_synpred144_Delphi7205);
       if (state.failed) return;
     }
   }
@@ -35603,7 +35578,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:340:46: ( classParent )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:340:46: classParent
     {
-      pushFollow(FOLLOW_classParent_in_synpred145_Delphi7307);
+      pushFollow(FOLLOW_classParent_in_synpred145_Delphi7299);
       classParent();
       state._fsp--;
       if (state.failed) return;
@@ -35616,7 +35591,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:348:32: ( classMethod )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:348:32: classMethod
     {
-      pushFollow(FOLLOW_classMethod_in_synpred147_Delphi7550);
+      pushFollow(FOLLOW_classMethod_in_synpred147_Delphi7542);
       classMethod();
       state._fsp--;
       if (state.failed) return;
@@ -35629,7 +35604,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:349:33: ( 'class' )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:349:33: 'class'
     {
-      match(input, CLASS, FOLLOW_CLASS_in_synpred148_Delphi7584);
+      match(input, CLASS, FOLLOW_CLASS_in_synpred148_Delphi7576);
       if (state.failed) return;
     }
   }
@@ -35640,7 +35615,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:353:32: ( visibility )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:353:32: visibility
     {
-      pushFollow(FOLLOW_visibility_in_synpred151_Delphi7724);
+      pushFollow(FOLLOW_visibility_in_synpred151_Delphi7716);
       visibility();
       state._fsp--;
       if (state.failed) return;
@@ -35653,7 +35628,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:354:32: ( classMethod )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:354:32: classMethod
     {
-      pushFollow(FOLLOW_classMethod_in_synpred152_Delphi7757);
+      pushFollow(FOLLOW_classMethod_in_synpred152_Delphi7749);
       classMethod();
       state._fsp--;
       if (state.failed) return;
@@ -35666,7 +35641,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:360:32: ( visibility )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:360:32: visibility
     {
-      pushFollow(FOLLOW_visibility_in_synpred155_Delphi7955);
+      pushFollow(FOLLOW_visibility_in_synpred155_Delphi7947);
       visibility();
       state._fsp--;
       if (state.failed) return;
@@ -35679,7 +35654,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:361:32: ( classMethod )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:361:32: classMethod
     {
-      pushFollow(FOLLOW_classMethod_in_synpred156_Delphi7988);
+      pushFollow(FOLLOW_classMethod_in_synpred156_Delphi7980);
       classMethod();
       state._fsp--;
       if (state.failed) return;
@@ -35692,7 +35667,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:362:32: ( classProperty )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:362:32: classProperty
     {
-      pushFollow(FOLLOW_classProperty_in_synpred157_Delphi8021);
+      pushFollow(FOLLOW_classProperty_in_synpred157_Delphi8013);
       classProperty();
       state._fsp--;
       if (state.failed) return;
@@ -35705,7 +35680,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:365:32: ( recordField )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:365:32: recordField
     {
-      pushFollow(FOLLOW_recordField_in_synpred160_Delphi8120);
+      pushFollow(FOLLOW_recordField_in_synpred160_Delphi8112);
       recordField();
       state._fsp--;
       if (state.failed) return;
@@ -35718,7 +35693,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:378:32: ( classMethod )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:378:32: classMethod
     {
-      pushFollow(FOLLOW_classMethod_in_synpred171_Delphi8545);
+      pushFollow(FOLLOW_classMethod_in_synpred171_Delphi8537);
       classMethod();
       state._fsp--;
       if (state.failed) return;
@@ -35731,7 +35706,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:379:32: ( classProperty )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:379:32: classProperty
     {
-      pushFollow(FOLLOW_classProperty_in_synpred172_Delphi8578);
+      pushFollow(FOLLOW_classProperty_in_synpred172_Delphi8570);
       classProperty();
       state._fsp--;
       if (state.failed) return;
@@ -35744,7 +35719,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:382:33: ( customAttribute )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:382:33: customAttribute
     {
-      pushFollow(FOLLOW_customAttribute_in_synpred173_Delphi8666);
+      pushFollow(FOLLOW_customAttribute_in_synpred173_Delphi8658);
       customAttribute();
       state._fsp--;
       if (state.failed) return;
@@ -35788,7 +35763,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:382:33: customAttribute
           {
-            pushFollow(FOLLOW_customAttribute_in_synpred177_Delphi8666);
+            pushFollow(FOLLOW_customAttribute_in_synpred177_Delphi8658);
             customAttribute();
             state._fsp--;
             if (state.failed) return;
@@ -35806,18 +35781,18 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:382:52: 'class'
           {
-            match(input, CLASS, FOLLOW_CLASS_in_synpred177_Delphi8671);
+            match(input, CLASS, FOLLOW_CLASS_in_synpred177_Delphi8663);
             if (state.failed) return;
           }
           break;
       }
 
-      pushFollow(FOLLOW_methodKey_in_synpred177_Delphi8675);
+      pushFollow(FOLLOW_methodKey_in_synpred177_Delphi8667);
       methodKey();
       state._fsp--;
       if (state.failed) return;
 
-      pushFollow(FOLLOW_ident_in_synpred177_Delphi8677);
+      pushFollow(FOLLOW_ident_in_synpred177_Delphi8669);
       ident();
       state._fsp--;
       if (state.failed) return;
@@ -35832,7 +35807,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:382:79: genericDefinition
           {
-            pushFollow(FOLLOW_genericDefinition_in_synpred177_Delphi8680);
+            pushFollow(FOLLOW_genericDefinition_in_synpred177_Delphi8672);
             genericDefinition();
             state._fsp--;
             if (state.failed) return;
@@ -35850,7 +35825,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:382:100: formalParameterSection
           {
-            pushFollow(FOLLOW_formalParameterSection_in_synpred177_Delphi8685);
+            pushFollow(FOLLOW_formalParameterSection_in_synpred177_Delphi8677);
             formalParameterSection();
             state._fsp--;
             if (state.failed) return;
@@ -35858,7 +35833,7 @@ public class DelphiParser extends Parser {
           break;
       }
 
-      pushFollow(FOLLOW_methodDirectiveSection_in_synpred177_Delphi8689);
+      pushFollow(FOLLOW_methodDirectiveSection_in_synpred177_Delphi8681);
       methodDirectiveSection();
       state._fsp--;
       if (state.failed) return;
@@ -35871,7 +35846,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:384:33: ( customAttribute )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:384:33: customAttribute
     {
-      pushFollow(FOLLOW_customAttribute_in_synpred178_Delphi8791);
+      pushFollow(FOLLOW_customAttribute_in_synpred178_Delphi8783);
       customAttribute();
       state._fsp--;
       if (state.failed) return;
@@ -35884,7 +35859,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:384:131: ( customAttribute )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:384:131: customAttribute
     {
-      pushFollow(FOLLOW_customAttribute_in_synpred182_Delphi8817);
+      pushFollow(FOLLOW_customAttribute_in_synpred182_Delphi8809);
       customAttribute();
       state._fsp--;
       if (state.failed) return;
@@ -35926,7 +35901,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:384:33: customAttribute
           {
-            pushFollow(FOLLOW_customAttribute_in_synpred183_Delphi8791);
+            pushFollow(FOLLOW_customAttribute_in_synpred183_Delphi8783);
             customAttribute();
             state._fsp--;
             if (state.failed) return;
@@ -35944,16 +35919,16 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:384:52: 'class'
           {
-            match(input, CLASS, FOLLOW_CLASS_in_synpred183_Delphi8796);
+            match(input, CLASS, FOLLOW_CLASS_in_synpred183_Delphi8788);
             if (state.failed) return;
           }
           break;
       }
 
-      match(input, FUNCTION, FOLLOW_FUNCTION_in_synpred183_Delphi8800);
+      match(input, FUNCTION, FOLLOW_FUNCTION_in_synpred183_Delphi8792);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_ident_in_synpred183_Delphi8802);
+      pushFollow(FOLLOW_ident_in_synpred183_Delphi8794);
       ident();
       state._fsp--;
       if (state.failed) return;
@@ -35968,7 +35943,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:384:80: genericDefinition
           {
-            pushFollow(FOLLOW_genericDefinition_in_synpred183_Delphi8805);
+            pushFollow(FOLLOW_genericDefinition_in_synpred183_Delphi8797);
             genericDefinition();
             state._fsp--;
             if (state.failed) return;
@@ -35986,7 +35961,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:384:101: formalParameterSection
           {
-            pushFollow(FOLLOW_formalParameterSection_in_synpred183_Delphi8810);
+            pushFollow(FOLLOW_formalParameterSection_in_synpred183_Delphi8802);
             formalParameterSection();
             state._fsp--;
             if (state.failed) return;
@@ -35994,7 +35969,7 @@ public class DelphiParser extends Parser {
           break;
       }
 
-      match(input, COLON, FOLLOW_COLON_in_synpred183_Delphi8814);
+      match(input, COLON, FOLLOW_COLON_in_synpred183_Delphi8806);
       if (state.failed) return;
 
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:384:130: ( customAttribute )?
@@ -36389,7 +36364,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:384:131: customAttribute
           {
-            pushFollow(FOLLOW_customAttribute_in_synpred183_Delphi8817);
+            pushFollow(FOLLOW_customAttribute_in_synpred183_Delphi8809);
             customAttribute();
             state._fsp--;
             if (state.failed) return;
@@ -36397,12 +36372,12 @@ public class DelphiParser extends Parser {
           break;
       }
 
-      pushFollow(FOLLOW_typeDecl_in_synpred183_Delphi8821);
+      pushFollow(FOLLOW_typeDecl_in_synpred183_Delphi8813);
       typeDecl();
       state._fsp--;
       if (state.failed) return;
 
-      pushFollow(FOLLOW_methodDirectiveSection_in_synpred183_Delphi8823);
+      pushFollow(FOLLOW_methodDirectiveSection_in_synpred183_Delphi8815);
       methodDirectiveSection();
       state._fsp--;
       if (state.failed) return;
@@ -36415,7 +36390,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:386:33: ( customAttribute )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:386:33: customAttribute
     {
-      pushFollow(FOLLOW_customAttribute_in_synpred184_Delphi8935);
+      pushFollow(FOLLOW_customAttribute_in_synpred184_Delphi8927);
       customAttribute();
       state._fsp--;
       if (state.failed) return;
@@ -36428,7 +36403,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:386:131: ( customAttribute )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:386:131: customAttribute
     {
-      pushFollow(FOLLOW_customAttribute_in_synpred188_Delphi8961);
+      pushFollow(FOLLOW_customAttribute_in_synpred188_Delphi8953);
       customAttribute();
       state._fsp--;
       if (state.failed) return;
@@ -36441,7 +36416,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:389:33: ( customAttribute )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:389:33: customAttribute
     {
-      pushFollow(FOLLOW_customAttribute_in_synpred189_Delphi9096);
+      pushFollow(FOLLOW_customAttribute_in_synpred189_Delphi9088);
       customAttribute();
       state._fsp--;
       if (state.failed) return;
@@ -36454,7 +36429,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:392:33: ( customAttribute )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:392:33: customAttribute
     {
-      pushFollow(FOLLOW_customAttribute_in_synpred191_Delphi9216);
+      pushFollow(FOLLOW_customAttribute_in_synpred191_Delphi9208);
       customAttribute();
       state._fsp--;
       if (state.failed) return;
@@ -36467,7 +36442,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:424:81: ( customAttribute )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:424:81: customAttribute
     {
-      pushFollow(FOLLOW_customAttribute_in_synpred215_Delphi10177);
+      pushFollow(FOLLOW_customAttribute_in_synpred215_Delphi10169);
       customAttribute();
       state._fsp--;
       if (state.failed) return;
@@ -36480,7 +36455,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:427:51: ( methodBody )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:427:51: methodBody
     {
-      pushFollow(FOLLOW_methodBody_in_synpred218_Delphi10283);
+      pushFollow(FOLLOW_methodBody_in_synpred218_Delphi10275);
       methodBody();
       state._fsp--;
       if (state.failed) return;
@@ -36493,7 +36468,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:429:33: ( customAttribute )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:429:33: customAttribute
     {
-      pushFollow(FOLLOW_customAttribute_in_synpred219_Delphi10334);
+      pushFollow(FOLLOW_customAttribute_in_synpred219_Delphi10326);
       customAttribute();
       state._fsp--;
       if (state.failed) return;
@@ -36537,7 +36512,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:429:33: customAttribute
           {
-            pushFollow(FOLLOW_customAttribute_in_synpred222_Delphi10334);
+            pushFollow(FOLLOW_customAttribute_in_synpred222_Delphi10326);
             customAttribute();
             state._fsp--;
             if (state.failed) return;
@@ -36555,18 +36530,18 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:429:52: 'class'
           {
-            match(input, CLASS, FOLLOW_CLASS_in_synpred222_Delphi10339);
+            match(input, CLASS, FOLLOW_CLASS_in_synpred222_Delphi10331);
             if (state.failed) return;
           }
           break;
       }
 
-      pushFollow(FOLLOW_methodKey_in_synpred222_Delphi10344);
+      pushFollow(FOLLOW_methodKey_in_synpred222_Delphi10336);
       methodKey();
       state._fsp--;
       if (state.failed) return;
 
-      pushFollow(FOLLOW_methodName_in_synpred222_Delphi10346);
+      pushFollow(FOLLOW_methodName_in_synpred222_Delphi10338);
       methodName();
       state._fsp--;
       if (state.failed) return;
@@ -36581,7 +36556,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:429:85: formalParameterSection
           {
-            pushFollow(FOLLOW_formalParameterSection_in_synpred222_Delphi10349);
+            pushFollow(FOLLOW_formalParameterSection_in_synpred222_Delphi10341);
             formalParameterSection();
             state._fsp--;
             if (state.failed) return;
@@ -36589,7 +36564,7 @@ public class DelphiParser extends Parser {
           break;
       }
 
-      pushFollow(FOLLOW_methodDirectiveSection_in_synpred222_Delphi10353);
+      pushFollow(FOLLOW_methodDirectiveSection_in_synpred222_Delphi10345);
       methodDirectiveSection();
       state._fsp--;
       if (state.failed) return;
@@ -36602,7 +36577,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:431:33: ( customAttribute )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:431:33: customAttribute
     {
-      pushFollow(FOLLOW_customAttribute_in_synpred223_Delphi10450);
+      pushFollow(FOLLOW_customAttribute_in_synpred223_Delphi10442);
       customAttribute();
       state._fsp--;
       if (state.failed) return;
@@ -36615,7 +36590,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:431:116: ( customAttribute )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:431:116: customAttribute
     {
-      pushFollow(FOLLOW_customAttribute_in_synpred226_Delphi10472);
+      pushFollow(FOLLOW_customAttribute_in_synpred226_Delphi10464);
       customAttribute();
       state._fsp--;
       if (state.failed) return;
@@ -36657,7 +36632,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:431:33: customAttribute
           {
-            pushFollow(FOLLOW_customAttribute_in_synpred228_Delphi10450);
+            pushFollow(FOLLOW_customAttribute_in_synpred228_Delphi10442);
             customAttribute();
             state._fsp--;
             if (state.failed) return;
@@ -36675,16 +36650,16 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:431:52: 'class'
           {
-            match(input, CLASS, FOLLOW_CLASS_in_synpred228_Delphi10455);
+            match(input, CLASS, FOLLOW_CLASS_in_synpred228_Delphi10447);
             if (state.failed) return;
           }
           break;
       }
 
-      match(input, FUNCTION, FOLLOW_FUNCTION_in_synpred228_Delphi10459);
+      match(input, FUNCTION, FOLLOW_FUNCTION_in_synpred228_Delphi10451);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_methodName_in_synpred228_Delphi10461);
+      pushFollow(FOLLOW_methodName_in_synpred228_Delphi10453);
       methodName();
       state._fsp--;
       if (state.failed) return;
@@ -36699,7 +36674,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:431:85: formalParameterSection
           {
-            pushFollow(FOLLOW_formalParameterSection_in_synpred228_Delphi10464);
+            pushFollow(FOLLOW_formalParameterSection_in_synpred228_Delphi10456);
             formalParameterSection();
             state._fsp--;
             if (state.failed) return;
@@ -36717,7 +36692,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:431:111: ':' ( customAttribute )? typeDecl
           {
-            match(input, COLON, FOLLOW_COLON_in_synpred228_Delphi10469);
+            match(input, COLON, FOLLOW_COLON_in_synpred228_Delphi10461);
             if (state.failed) return;
 
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:431:115: ( customAttribute )?
@@ -37112,7 +37087,7 @@ public class DelphiParser extends Parser {
               case 1:
                 // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:431:116: customAttribute
                 {
-                  pushFollow(FOLLOW_customAttribute_in_synpred228_Delphi10472);
+                  pushFollow(FOLLOW_customAttribute_in_synpred228_Delphi10464);
                   customAttribute();
                   state._fsp--;
                   if (state.failed) return;
@@ -37120,7 +37095,7 @@ public class DelphiParser extends Parser {
                 break;
             }
 
-            pushFollow(FOLLOW_typeDecl_in_synpred228_Delphi10476);
+            pushFollow(FOLLOW_typeDecl_in_synpred228_Delphi10468);
             typeDecl();
             state._fsp--;
             if (state.failed) return;
@@ -37128,7 +37103,7 @@ public class DelphiParser extends Parser {
           break;
       }
 
-      pushFollow(FOLLOW_methodDirectiveSection_in_synpred228_Delphi10480);
+      pushFollow(FOLLOW_methodDirectiveSection_in_synpred228_Delphi10472);
       methodDirectiveSection();
       state._fsp--;
       if (state.failed) return;
@@ -37141,7 +37116,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:433:33: ( customAttribute )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:433:33: customAttribute
     {
-      pushFollow(FOLLOW_customAttribute_in_synpred229_Delphi10588);
+      pushFollow(FOLLOW_customAttribute_in_synpred229_Delphi10580);
       customAttribute();
       state._fsp--;
       if (state.failed) return;
@@ -37154,7 +37129,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:433:113: ( customAttribute )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:433:113: customAttribute
     {
-      pushFollow(FOLLOW_customAttribute_in_synpred231_Delphi10607);
+      pushFollow(FOLLOW_customAttribute_in_synpred231_Delphi10599);
       customAttribute();
       state._fsp--;
       if (state.failed) return;
@@ -37167,7 +37142,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:442:49: ( procBody )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:442:49: procBody
     {
-      pushFollow(FOLLOW_procBody_in_synpred239_Delphi10949);
+      pushFollow(FOLLOW_procBody_in_synpred239_Delphi10941);
       procBody();
       state._fsp--;
       if (state.failed) return;
@@ -37180,7 +37155,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:444:33: ( customAttribute )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:444:33: customAttribute
     {
-      pushFollow(FOLLOW_customAttribute_in_synpred240_Delphi11002);
+      pushFollow(FOLLOW_customAttribute_in_synpred240_Delphi10994);
       customAttribute();
       state._fsp--;
       if (state.failed) return;
@@ -37208,7 +37183,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:444:33: customAttribute
           {
-            pushFollow(FOLLOW_customAttribute_in_synpred242_Delphi11002);
+            pushFollow(FOLLOW_customAttribute_in_synpred242_Delphi10994);
             customAttribute();
             state._fsp--;
             if (state.failed) return;
@@ -37216,10 +37191,10 @@ public class DelphiParser extends Parser {
           break;
       }
 
-      match(input, PROCEDURE, FOLLOW_PROCEDURE_in_synpred242_Delphi11006);
+      match(input, PROCEDURE, FOLLOW_PROCEDURE_in_synpred242_Delphi10998);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_ident_in_synpred242_Delphi11008);
+      pushFollow(FOLLOW_ident_in_synpred242_Delphi11000);
       ident();
       state._fsp--;
       if (state.failed) return;
@@ -37234,7 +37209,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:444:70: formalParameterSection
           {
-            pushFollow(FOLLOW_formalParameterSection_in_synpred242_Delphi11011);
+            pushFollow(FOLLOW_formalParameterSection_in_synpred242_Delphi11003);
             formalParameterSection();
             state._fsp--;
             if (state.failed) return;
@@ -37242,7 +37217,7 @@ public class DelphiParser extends Parser {
           break;
       }
 
-      pushFollow(FOLLOW_functionDirectiveSection_in_synpred242_Delphi11015);
+      pushFollow(FOLLOW_functionDirectiveSection_in_synpred242_Delphi11007);
       functionDirectiveSection();
       state._fsp--;
       if (state.failed) return;
@@ -37255,7 +37230,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:446:33: ( customAttribute )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:446:33: customAttribute
     {
-      pushFollow(FOLLOW_customAttribute_in_synpred243_Delphi11102);
+      pushFollow(FOLLOW_customAttribute_in_synpred243_Delphi11094);
       customAttribute();
       state._fsp--;
       if (state.failed) return;
@@ -37268,7 +37243,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:453:33: ( customAttribute )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:453:33: customAttribute
     {
-      pushFollow(FOLLOW_customAttribute_in_synpred248_Delphi11354);
+      pushFollow(FOLLOW_customAttribute_in_synpred248_Delphi11346);
       customAttribute();
       state._fsp--;
       if (state.failed) return;
@@ -37281,7 +37256,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:469:33: ( customAttributeDecl )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:469:33: customAttributeDecl
     {
-      pushFollow(FOLLOW_customAttributeDecl_in_synpred254_Delphi11777);
+      pushFollow(FOLLOW_customAttributeDecl_in_synpred254_Delphi11769);
       customAttributeDecl();
       state._fsp--;
       if (state.failed) return;
@@ -37294,12 +37269,12 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:478:50: ( relationalOperator simpleExpression )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:478:50: relationalOperator simpleExpression
     {
-      pushFollow(FOLLOW_relationalOperator_in_synpred258_Delphi11969);
+      pushFollow(FOLLOW_relationalOperator_in_synpred258_Delphi11961);
       relationalOperator();
       state._fsp--;
       if (state.failed) return;
 
-      pushFollow(FOLLOW_simpleExpression_in_synpred258_Delphi11971);
+      pushFollow(FOLLOW_simpleExpression_in_synpred258_Delphi11963);
       simpleExpression();
       state._fsp--;
       if (state.failed) return;
@@ -37312,10 +37287,10 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:478:89: ( '=' expression )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:478:89: '=' expression
     {
-      match(input, EQUAL, FOLLOW_EQUAL_in_synpred259_Delphi11976);
+      match(input, EQUAL, FOLLOW_EQUAL_in_synpred259_Delphi11968);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_expression_in_synpred259_Delphi11978);
+      pushFollow(FOLLOW_expression_in_synpred259_Delphi11970);
       expression();
       state._fsp--;
       if (state.failed) return;
@@ -37328,7 +37303,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:480:45: ( formalParameterSection )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:480:45: formalParameterSection
     {
-      pushFollow(FOLLOW_formalParameterSection_in_synpred260_Delphi12029);
+      pushFollow(FOLLOW_formalParameterSection_in_synpred260_Delphi12021);
       formalParameterSection();
       state._fsp--;
       if (state.failed) return;
@@ -37341,12 +37316,12 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:483:38: ( addOperator term )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:483:38: addOperator term
     {
-      pushFollow(FOLLOW_addOperator_in_synpred263_Delphi12129);
+      pushFollow(FOLLOW_addOperator_in_synpred263_Delphi12121);
       addOperator();
       state._fsp--;
       if (state.failed) return;
 
-      pushFollow(FOLLOW_term_in_synpred263_Delphi12131);
+      pushFollow(FOLLOW_term_in_synpred263_Delphi12123);
       term();
       state._fsp--;
       if (state.failed) return;
@@ -37359,7 +37334,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:489:45: ( factor )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:489:45: factor
     {
-      pushFollow(FOLLOW_factor_in_synpred267_Delphi12331);
+      pushFollow(FOLLOW_factor_in_synpred267_Delphi12323);
       factor();
       state._fsp--;
       if (state.failed) return;
@@ -37372,7 +37347,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:491:41: ( particleItem )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:491:41: particleItem
     {
-      pushFollow(FOLLOW_particleItem_in_synpred268_Delphi12396);
+      pushFollow(FOLLOW_particleItem_in_synpred268_Delphi12388);
       particleItem();
       state._fsp--;
       if (state.failed) return;
@@ -37385,7 +37360,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:500:32: ( ident )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:500:32: ident
     {
-      pushFollow(FOLLOW_ident_in_synpred276_Delphi12685);
+      pushFollow(FOLLOW_ident_in_synpred276_Delphi12677);
       ident();
       state._fsp--;
       if (state.failed) return;
@@ -37398,7 +37373,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:503:32: ( 'string' )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:503:32: 'string'
     {
-      match(input, STRING, FOLLOW_STRING_in_synpred279_Delphi12784);
+      match(input, STRING, FOLLOW_STRING_in_synpred279_Delphi12776);
       if (state.failed) return;
     }
   }
@@ -37409,7 +37384,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:512:32: ( ident )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:512:32: ident
     {
-      pushFollow(FOLLOW_ident_in_synpred288_Delphi13091);
+      pushFollow(FOLLOW_ident_in_synpred288_Delphi13083);
       ident();
       state._fsp--;
       if (state.failed) return;
@@ -37422,10 +37397,10 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:519:47: ( QuotedString ControlString )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:519:47: QuotedString ControlString
     {
-      match(input, QuotedString, FOLLOW_QuotedString_in_synpred293_Delphi13299);
+      match(input, QuotedString, FOLLOW_QuotedString_in_synpred293_Delphi13291);
       if (state.failed) return;
 
-      match(input, ControlString, FOLLOW_ControlString_in_synpred293_Delphi13301);
+      match(input, ControlString, FOLLOW_ControlString_in_synpred293_Delphi13293);
       if (state.failed) return;
     }
   }
@@ -37436,7 +37411,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:519:77: ( QuotedString )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:519:77: QuotedString
     {
-      match(input, QuotedString, FOLLOW_QuotedString_in_synpred294_Delphi13306);
+      match(input, QuotedString, FOLLOW_QuotedString_in_synpred294_Delphi13298);
       if (state.failed) return;
     }
   }
@@ -37447,10 +37422,10 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:520:46: ( ControlString QuotedString )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:520:46: ControlString QuotedString
     {
-      match(input, ControlString, FOLLOW_ControlString_in_synpred296_Delphi13344);
+      match(input, ControlString, FOLLOW_ControlString_in_synpred296_Delphi13336);
       if (state.failed) return;
 
-      match(input, QuotedString, FOLLOW_QuotedString_in_synpred296_Delphi13346);
+      match(input, QuotedString, FOLLOW_QuotedString_in_synpred296_Delphi13338);
       if (state.failed) return;
     }
   }
@@ -37461,7 +37436,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:520:76: ( ControlString )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:520:76: ControlString
     {
-      match(input, ControlString, FOLLOW_ControlString_in_synpred297_Delphi13351);
+      match(input, ControlString, FOLLOW_ControlString_in_synpred297_Delphi13343);
       if (state.failed) return;
     }
   }
@@ -37472,10 +37447,10 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:577:66: ( 'else' statement )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:577:66: 'else' statement
     {
-      match(input, ELSE, FOLLOW_ELSE_in_synpred333_Delphi14979);
+      match(input, ELSE, FOLLOW_ELSE_in_synpred333_Delphi14971);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_statement_in_synpred333_Delphi14981);
+      pushFollow(FOLLOW_statement_in_synpred333_Delphi14973);
       statement();
       state._fsp--;
       if (state.failed) return;
@@ -37488,7 +37463,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:581:54: ( statement )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:581:54: statement
     {
-      pushFollow(FOLLOW_statement_in_synpred337_Delphi15120);
+      pushFollow(FOLLOW_statement_in_synpred337_Delphi15112);
       statement();
       state._fsp--;
       if (state.failed) return;
@@ -37501,7 +37476,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:587:42: ( statementList )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:587:42: statementList
     {
-      pushFollow(FOLLOW_statementList_in_synpred341_Delphi15314);
+      pushFollow(FOLLOW_statementList_in_synpred341_Delphi15306);
       statementList();
       state._fsp--;
       if (state.failed) return;
@@ -37514,34 +37489,34 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:591:32: ( 'for' designator ':=' expression 'to' expression 'do' statement )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:591:32: 'for' designator ':=' expression 'to' expression 'do' statement
     {
-      match(input, FOR, FOLLOW_FOR_in_synpred342_Delphi15430);
+      match(input, FOR, FOLLOW_FOR_in_synpred342_Delphi15422);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_designator_in_synpred342_Delphi15432);
+      pushFollow(FOLLOW_designator_in_synpred342_Delphi15424);
       designator();
       state._fsp--;
       if (state.failed) return;
 
-      match(input, ASSIGN, FOLLOW_ASSIGN_in_synpred342_Delphi15434);
+      match(input, ASSIGN, FOLLOW_ASSIGN_in_synpred342_Delphi15426);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_expression_in_synpred342_Delphi15436);
+      pushFollow(FOLLOW_expression_in_synpred342_Delphi15428);
       expression();
       state._fsp--;
       if (state.failed) return;
 
-      match(input, TO, FOLLOW_TO_in_synpred342_Delphi15438);
+      match(input, TO, FOLLOW_TO_in_synpred342_Delphi15430);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_expression_in_synpred342_Delphi15440);
+      pushFollow(FOLLOW_expression_in_synpred342_Delphi15432);
       expression();
       state._fsp--;
       if (state.failed) return;
 
-      match(input, DO, FOLLOW_DO_in_synpred342_Delphi15442);
+      match(input, DO, FOLLOW_DO_in_synpred342_Delphi15434);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_statement_in_synpred342_Delphi15444);
+      pushFollow(FOLLOW_statement_in_synpred342_Delphi15436);
       statement();
       state._fsp--;
       if (state.failed) return;
@@ -37554,34 +37529,34 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:592:32: ( 'for' designator ':=' expression 'downto' expression 'do' statement )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:592:32: 'for' designator ':=' expression 'downto' expression 'do' statement
     {
-      match(input, FOR, FOLLOW_FOR_in_synpred343_Delphi15477);
+      match(input, FOR, FOLLOW_FOR_in_synpred343_Delphi15469);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_designator_in_synpred343_Delphi15479);
+      pushFollow(FOLLOW_designator_in_synpred343_Delphi15471);
       designator();
       state._fsp--;
       if (state.failed) return;
 
-      match(input, ASSIGN, FOLLOW_ASSIGN_in_synpred343_Delphi15481);
+      match(input, ASSIGN, FOLLOW_ASSIGN_in_synpred343_Delphi15473);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_expression_in_synpred343_Delphi15483);
+      pushFollow(FOLLOW_expression_in_synpred343_Delphi15475);
       expression();
       state._fsp--;
       if (state.failed) return;
 
-      match(input, DOWNTO, FOLLOW_DOWNTO_in_synpred343_Delphi15485);
+      match(input, DOWNTO, FOLLOW_DOWNTO_in_synpred343_Delphi15477);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_expression_in_synpred343_Delphi15487);
+      pushFollow(FOLLOW_expression_in_synpred343_Delphi15479);
       expression();
       state._fsp--;
       if (state.failed) return;
 
-      match(input, DO, FOLLOW_DO_in_synpred343_Delphi15489);
+      match(input, DO, FOLLOW_DO_in_synpred343_Delphi15481);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_statement_in_synpred343_Delphi15491);
+      pushFollow(FOLLOW_statement_in_synpred343_Delphi15483);
       statement();
       state._fsp--;
       if (state.failed) return;
@@ -37594,15 +37569,15 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:597:32: ( designator 'as' designator )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:597:32: designator 'as' designator
     {
-      pushFollow(FOLLOW_designator_in_synpred344_Delphi15649);
+      pushFollow(FOLLOW_designator_in_synpred344_Delphi15641);
       designator();
       state._fsp--;
       if (state.failed) return;
 
-      match(input, AS, FOLLOW_AS_in_synpred344_Delphi15651);
+      match(input, AS, FOLLOW_AS_in_synpred344_Delphi15643);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_designator_in_synpred344_Delphi15653);
+      pushFollow(FOLLOW_designator_in_synpred344_Delphi15645);
       designator();
       state._fsp--;
       if (state.failed) return;
@@ -37615,7 +37590,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:600:41: ( statementList )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:600:41: statementList
     {
-      pushFollow(FOLLOW_statementList_in_synpred346_Delphi15751);
+      pushFollow(FOLLOW_statementList_in_synpred346_Delphi15743);
       statementList();
       state._fsp--;
       if (state.failed) return;
@@ -37628,7 +37603,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:602:46: ( ';' ( statement )? )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:602:46: ';' ( statement )?
     {
-      match(input, SEMI, FOLLOW_SEMI_in_synpred349_Delphi15826);
+      match(input, SEMI, FOLLOW_SEMI_in_synpred349_Delphi15818);
       if (state.failed) return;
 
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:602:50: ( statement )?
@@ -37679,7 +37654,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:602:51: statement
           {
-            pushFollow(FOLLOW_statement_in_synpred349_Delphi15829);
+            pushFollow(FOLLOW_statement_in_synpred349_Delphi15821);
             statement();
             state._fsp--;
             if (state.failed) return;
@@ -37695,15 +37670,15 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:604:32: ( designator ':=' expression )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:604:32: designator ':=' expression
     {
-      pushFollow(FOLLOW_designator_in_synpred350_Delphi15883);
+      pushFollow(FOLLOW_designator_in_synpred350_Delphi15875);
       designator();
       state._fsp--;
       if (state.failed) return;
 
-      match(input, ASSIGN, FOLLOW_ASSIGN_in_synpred350_Delphi15885);
+      match(input, ASSIGN, FOLLOW_ASSIGN_in_synpred350_Delphi15877);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_expression_in_synpred350_Delphi15887);
+      pushFollow(FOLLOW_expression_in_synpred350_Delphi15879);
       expression();
       state._fsp--;
       if (state.failed) return;
@@ -37716,7 +37691,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:605:32: ( designator )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:605:32: designator
     {
-      pushFollow(FOLLOW_designator_in_synpred351_Delphi15920);
+      pushFollow(FOLLOW_designator_in_synpred351_Delphi15912);
       designator();
       state._fsp--;
       if (state.failed) return;
@@ -37729,15 +37704,15 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:609:40: ( '(' expression ')' )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:609:40: '(' expression ')'
     {
-      match(input, LPAREN, FOLLOW_LPAREN_in_synpred353_Delphi16044);
+      match(input, LPAREN, FOLLOW_LPAREN_in_synpred353_Delphi16036);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_expression_in_synpred353_Delphi16046);
+      pushFollow(FOLLOW_expression_in_synpred353_Delphi16038);
       expression();
       state._fsp--;
       if (state.failed) return;
 
-      match(input, RPAREN, FOLLOW_RPAREN_in_synpred353_Delphi16048);
+      match(input, RPAREN, FOLLOW_RPAREN_in_synpred353_Delphi16040);
       if (state.failed) return;
     }
   }
@@ -37748,7 +37723,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:616:32: ( expression )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:616:32: expression
     {
-      pushFollow(FOLLOW_expression_in_synpred356_Delphi16169);
+      pushFollow(FOLLOW_expression_in_synpred356_Delphi16161);
       expression();
       state._fsp--;
       if (state.failed) return;
@@ -37761,7 +37736,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:617:32: ( '(' ( ident ':' constExpression ( ';' )? )+ ')' )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:617:32: '(' ( ident ':' constExpression ( ';' )? )+ ')'
     {
-      match(input, LPAREN, FOLLOW_LPAREN_in_synpred359_Delphi16202);
+      match(input, LPAREN, FOLLOW_LPAREN_in_synpred359_Delphi16194);
       if (state.failed) return;
 
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:617:36: ( ident ':' constExpression ( ';' )? )+
@@ -37804,15 +37779,15 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:617:37: ident ':' constExpression ( ';' )?
             {
-              pushFollow(FOLLOW_ident_in_synpred359_Delphi16205);
+              pushFollow(FOLLOW_ident_in_synpred359_Delphi16197);
               ident();
               state._fsp--;
               if (state.failed) return;
 
-              match(input, COLON, FOLLOW_COLON_in_synpred359_Delphi16207);
+              match(input, COLON, FOLLOW_COLON_in_synpred359_Delphi16199);
               if (state.failed) return;
 
-              pushFollow(FOLLOW_constExpression_in_synpred359_Delphi16209);
+              pushFollow(FOLLOW_constExpression_in_synpred359_Delphi16201);
               constExpression();
               state._fsp--;
               if (state.failed) return;
@@ -37827,7 +37802,7 @@ public class DelphiParser extends Parser {
                 case 1:
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:617:64: ';'
                   {
-                    match(input, SEMI, FOLLOW_SEMI_in_synpred359_Delphi16212);
+                    match(input, SEMI, FOLLOW_SEMI_in_synpred359_Delphi16204);
                     if (state.failed) return;
                   }
                   break;
@@ -37847,7 +37822,7 @@ public class DelphiParser extends Parser {
         cnt343++;
       }
 
-      match(input, RPAREN, FOLLOW_RPAREN_in_synpred359_Delphi16218);
+      match(input, RPAREN, FOLLOW_RPAREN_in_synpred359_Delphi16210);
       if (state.failed) return;
     }
   }
@@ -37858,7 +37833,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:618:32: ( '(' ( constExpression ( ',' )? )+ ')' )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:618:32: '(' ( constExpression ( ',' )? )+ ')'
     {
-      match(input, LPAREN, FOLLOW_LPAREN_in_synpred362_Delphi16252);
+      match(input, LPAREN, FOLLOW_LPAREN_in_synpred362_Delphi16244);
       if (state.failed) return;
 
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:618:36: ( constExpression ( ',' )? )+
@@ -37911,7 +37886,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:618:37: constExpression ( ',' )?
             {
-              pushFollow(FOLLOW_constExpression_in_synpred362_Delphi16255);
+              pushFollow(FOLLOW_constExpression_in_synpred362_Delphi16247);
               constExpression();
               state._fsp--;
               if (state.failed) return;
@@ -37926,7 +37901,7 @@ public class DelphiParser extends Parser {
                 case 1:
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:618:54: ','
                   {
-                    match(input, COMMA, FOLLOW_COMMA_in_synpred362_Delphi16258);
+                    match(input, COMMA, FOLLOW_COMMA_in_synpred362_Delphi16250);
                     if (state.failed) return;
                   }
                   break;
@@ -37946,7 +37921,7 @@ public class DelphiParser extends Parser {
         cnt346++;
       }
 
-      match(input, RPAREN, FOLLOW_RPAREN_in_synpred362_Delphi16264);
+      match(input, RPAREN, FOLLOW_RPAREN_in_synpred362_Delphi16256);
       if (state.failed) return;
     }
   }
@@ -37957,7 +37932,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:624:39: ( statementList )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:624:39: statementList
     {
-      pushFollow(FOLLOW_statementList_in_synpred363_Delphi16359);
+      pushFollow(FOLLOW_statementList_in_synpred363_Delphi16351);
       statementList();
       state._fsp--;
       if (state.failed) return;
@@ -37970,7 +37945,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:624:32: ( 'try' ( statementList )? 'except' handlerList 'end' )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:624:32: 'try' ( statementList )? 'except' handlerList 'end'
     {
-      match(input, TRY, FOLLOW_TRY_in_synpred364_Delphi16356);
+      match(input, TRY, FOLLOW_TRY_in_synpred364_Delphi16348);
       if (state.failed) return;
 
       // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:624:38: ( statementList )?
@@ -38027,7 +38002,7 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:624:39: statementList
           {
-            pushFollow(FOLLOW_statementList_in_synpred364_Delphi16359);
+            pushFollow(FOLLOW_statementList_in_synpred364_Delphi16351);
             statementList();
             state._fsp--;
             if (state.failed) return;
@@ -38035,15 +38010,15 @@ public class DelphiParser extends Parser {
           break;
       }
 
-      match(input, EXCEPT, FOLLOW_EXCEPT_in_synpred364_Delphi16363);
+      match(input, EXCEPT, FOLLOW_EXCEPT_in_synpred364_Delphi16355);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_handlerList_in_synpred364_Delphi16365);
+      pushFollow(FOLLOW_handlerList_in_synpred364_Delphi16357);
       handlerList();
       state._fsp--;
       if (state.failed) return;
 
-      match(input, END, FOLLOW_END_in_synpred364_Delphi16367);
+      match(input, END, FOLLOW_END_in_synpred364_Delphi16359);
       if (state.failed) return;
     }
   }
@@ -38054,7 +38029,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:625:39: ( statementList )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:625:39: statementList
     {
-      pushFollow(FOLLOW_statementList_in_synpred365_Delphi16403);
+      pushFollow(FOLLOW_statementList_in_synpred365_Delphi16395);
       statementList();
       state._fsp--;
       if (state.failed) return;
@@ -38067,7 +38042,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:625:66: ( statementList )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:625:66: statementList
     {
-      pushFollow(FOLLOW_statementList_in_synpred366_Delphi16410);
+      pushFollow(FOLLOW_statementList_in_synpred366_Delphi16402);
       statementList();
       state._fsp--;
       if (state.failed) return;
@@ -38093,7 +38068,7 @@ public class DelphiParser extends Parser {
           case 1:
             // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:627:33: handler
             {
-              pushFollow(FOLLOW_handler_in_synpred369_Delphi16469);
+              pushFollow(FOLLOW_handler_in_synpred369_Delphi16461);
               handler();
               state._fsp--;
               if (state.failed) return;
@@ -38115,10 +38090,10 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:627:44: 'else' statementList
           {
-            match(input, ELSE, FOLLOW_ELSE_in_synpred369_Delphi16474);
+            match(input, ELSE, FOLLOW_ELSE_in_synpred369_Delphi16466);
             if (state.failed) return;
 
-            pushFollow(FOLLOW_statementList_in_synpred369_Delphi16476);
+            pushFollow(FOLLOW_statementList_in_synpred369_Delphi16468);
             statementList();
             state._fsp--;
             if (state.failed) return;
@@ -38134,7 +38109,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:637:41: ( expression )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:637:41: expression
     {
-      pushFollow(FOLLOW_expression_in_synpred373_Delphi16807);
+      pushFollow(FOLLOW_expression_in_synpred373_Delphi16799);
       expression();
       state._fsp--;
       if (state.failed) return;
@@ -38147,10 +38122,10 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:637:55: ( AT expression )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:637:55: AT expression
     {
-      match(input, AT, FOLLOW_AT_in_synpred374_Delphi16812);
+      match(input, AT, FOLLOW_AT_in_synpred374_Delphi16804);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_expression_in_synpred374_Delphi16814);
+      pushFollow(FOLLOW_expression_in_synpred374_Delphi16806);
       expression();
       state._fsp--;
       if (state.failed) return;
@@ -38173,13 +38148,13 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:649:34: ';'
           {
-            match(input, SEMI, FOLLOW_SEMI_in_synpred378_Delphi16981);
+            match(input, SEMI, FOLLOW_SEMI_in_synpred378_Delphi16973);
             if (state.failed) return;
           }
           break;
       }
 
-      pushFollow(FOLLOW_methodDirective_in_synpred378_Delphi16985);
+      pushFollow(FOLLOW_methodDirective_in_synpred378_Delphi16977);
       methodDirective();
       state._fsp--;
       if (state.failed) return;
@@ -38257,13 +38232,13 @@ public class DelphiParser extends Parser {
                 case 1:
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:649:34: ';'
                   {
-                    match(input, SEMI, FOLLOW_SEMI_in_synpred379_Delphi16981);
+                    match(input, SEMI, FOLLOW_SEMI_in_synpred379_Delphi16973);
                     if (state.failed) return;
                   }
                   break;
               }
 
-              pushFollow(FOLLOW_methodDirective_in_synpred379_Delphi16985);
+              pushFollow(FOLLOW_methodDirective_in_synpred379_Delphi16977);
               methodDirective();
               state._fsp--;
               if (state.failed) return;
@@ -38275,7 +38250,7 @@ public class DelphiParser extends Parser {
         }
       }
 
-      match(input, SEMI, FOLLOW_SEMI_in_synpred379_Delphi16989);
+      match(input, SEMI, FOLLOW_SEMI_in_synpred379_Delphi16981);
       if (state.failed) return;
     }
   }
@@ -38296,13 +38271,13 @@ public class DelphiParser extends Parser {
         case 1:
           // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:652:34: ';'
           {
-            match(input, SEMI, FOLLOW_SEMI_in_synpred381_Delphi17065);
+            match(input, SEMI, FOLLOW_SEMI_in_synpred381_Delphi17057);
             if (state.failed) return;
           }
           break;
       }
 
-      pushFollow(FOLLOW_functionDirective_in_synpred381_Delphi17069);
+      pushFollow(FOLLOW_functionDirective_in_synpred381_Delphi17061);
       functionDirective();
       state._fsp--;
       if (state.failed) return;
@@ -38376,13 +38351,13 @@ public class DelphiParser extends Parser {
                 case 1:
                   // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:652:34: ';'
                   {
-                    match(input, SEMI, FOLLOW_SEMI_in_synpred382_Delphi17065);
+                    match(input, SEMI, FOLLOW_SEMI_in_synpred382_Delphi17057);
                     if (state.failed) return;
                   }
                   break;
               }
 
-              pushFollow(FOLLOW_functionDirective_in_synpred382_Delphi17069);
+              pushFollow(FOLLOW_functionDirective_in_synpred382_Delphi17061);
               functionDirective();
               state._fsp--;
               if (state.failed) return;
@@ -38394,7 +38369,7 @@ public class DelphiParser extends Parser {
         }
       }
 
-      match(input, SEMI, FOLLOW_SEMI_in_synpred382_Delphi17073);
+      match(input, SEMI, FOLLOW_SEMI_in_synpred382_Delphi17065);
       if (state.failed) return;
     }
   }
@@ -38405,7 +38380,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:655:48: ( ';' )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:655:48: ';'
     {
-      match(input, SEMI, FOLLOW_SEMI_in_synpred383_Delphi17149);
+      match(input, SEMI, FOLLOW_SEMI_in_synpred383_Delphi17141);
       if (state.failed) return;
     }
   }
@@ -38416,7 +38391,7 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:705:44: ( expression )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:705:44: expression
     {
-      pushFollow(FOLLOW_expression_in_synpred417_Delphi18692);
+      pushFollow(FOLLOW_expression_in_synpred417_Delphi18684);
       expression();
       state._fsp--;
       if (state.failed) return;
@@ -38429,12 +38404,12 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:752:33: ( namespaceName '.' )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:752:33: namespaceName '.'
     {
-      pushFollow(FOLLOW_namespaceName_in_synpred590_Delphi20697);
+      pushFollow(FOLLOW_namespaceName_in_synpred590_Delphi20689);
       namespaceName();
       state._fsp--;
       if (state.failed) return;
 
-      match(input, DOT, FOLLOW_DOT_in_synpred590_Delphi20699);
+      match(input, DOT, FOLLOW_DOT_in_synpred590_Delphi20691);
       if (state.failed) return;
     }
   }
@@ -38445,10 +38420,10 @@ public class DelphiParser extends Parser {
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:754:39: ( '.' ident )
     // ***REMOVED***\\Utilities\\sonar-delphi\\src\\main\\antlr3\\org\\sonar\\plugins\\delphi\\antlr\\Delphi.g:754:39: '.' ident
     {
-      match(input, DOT, FOLLOW_DOT_in_synpred591_Delphi20758);
+      match(input, DOT, FOLLOW_DOT_in_synpred591_Delphi20750);
       if (state.failed) return;
 
-      pushFollow(FOLLOW_ident_in_synpred591_Delphi20760);
+      pushFollow(FOLLOW_ident_in_synpred591_Delphi20752);
       ident();
       state._fsp--;
       if (state.failed) return;
@@ -43640,12 +43615,12 @@ public class DelphiParser extends Parser {
           + "\u00b5\3\u00d0\1\u00b5\4\u00d0\1\105\1\133\1\u00cd\3\u00d0";
   static final String DFA90_acceptS = "\2\uffff\1\2\14\uffff\1\1\u021a\uffff";
   static final String DFA90_specialS =
-      "\23\uffff\1\2\1\uffff\1\3\1\1\1\4\1\5\1\13\1\0\1\16\1\uffff\1\21\33\uffff"
-          + "\1\6\12\uffff\1\14\1\uffff\1\12\1\10\15\uffff\1\24\1\uffff\1\23\1\25\1"
-          + "\26\1\30\1\33\1\35\1\42\1\uffff\1\36\10\uffff\1\17\15\uffff\1\22\14\uffff"
-          + "\1\11\6\uffff\1\15\23\uffff\1\44\72\uffff\1\41\1\uffff\1\32\1\37\41\uffff"
-          + "\1\20\13\uffff\1\7\17\uffff\1\31\15\uffff\1\27\14\uffff\1\40\6\uffff\1"
-          + "\43\172\uffff\1\34\162\uffff}>";
+      "\23\uffff\1\1\1\uffff\1\2\1\0\1\5\1\6\1\13\1\14\1\15\1\uffff\1\16\33\uffff"
+          + "\1\22\12\uffff\1\10\1\uffff\1\17\1\11\15\uffff\1\25\1\uffff\1\26\1\32"
+          + "\1\36\1\37\1\23\1\40\1\44\1\uffff\1\42\10\uffff\1\4\15\uffff\1\7\14\uffff"
+          + "\1\3\6\uffff\1\21\23\uffff\1\35\72\uffff\1\27\1\uffff\1\31\1\41\41\uffff"
+          + "\1\20\13\uffff\1\12\17\uffff\1\24\15\uffff\1\30\14\uffff\1\43\6\uffff"
+          + "\1\34\172\uffff\1\33\162\uffff}>";
   static final String[] DFA90_transitionS = {
     "\4\2\1\uffff\1\2\2\uffff\2\2\2\uffff\3\2\1\uffff\7\2\1\uffff\5\2\1\uffff"
         + "\4\2\2\uffff\1\2\1\uffff\2\2\2\uffff\1\2\2\uffff\17\2\1\uffff\2\2\2\uffff"
@@ -47138,22 +47113,6 @@ public class DelphiParser extends Parser {
       int _s = s;
       switch (s) {
         case 0:
-          int LA90_26 = input.LA(1);
-
-          int index90_26 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred125_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index90_26);
-          if (s >= 0) return s;
-          break;
-
-        case 1:
           int LA90_22 = input.LA(1);
 
           int index90_22 = input.index();
@@ -47169,7 +47128,7 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 2:
+        case 1:
           int LA90_19 = input.LA(1);
 
           int index90_19 = input.index();
@@ -47185,7 +47144,7 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 3:
+        case 2:
           int LA90_21 = input.LA(1);
 
           int index90_21 = input.index();
@@ -47201,87 +47160,7 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 4:
-          int LA90_23 = input.LA(1);
-
-          int index90_23 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred125_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index90_23);
-          if (s >= 0) return s;
-          break;
-
-        case 5:
-          int LA90_24 = input.LA(1);
-
-          int index90_24 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred125_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index90_24);
-          if (s >= 0) return s;
-          break;
-
-        case 6:
-          int LA90_57 = input.LA(1);
-
-          int index90_57 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred125_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index90_57);
-          if (s >= 0) return s;
-          break;
-
-        case 7:
-          int LA90_266 = input.LA(1);
-
-          int index90_266 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred125_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index90_266);
-          if (s >= 0) return s;
-          break;
-
-        case 8:
-          int LA90_71 = input.LA(1);
-
-          int index90_71 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred125_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index90_71);
-          if (s >= 0) return s;
-          break;
-
-        case 9:
+        case 3:
           int LA90_131 = input.LA(1);
 
           int index90_131 = input.index();
@@ -47297,10 +47176,10 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 10:
-          int LA90_70 = input.LA(1);
+        case 4:
+          int LA90_104 = input.LA(1);
 
-          int index90_70 = input.index();
+          int index90_104 = input.index();
           input.rewind();
           s = -1;
           if ((synpred125_Delphi())) {
@@ -47309,7 +47188,103 @@ public class DelphiParser extends Parser {
             s = 2;
           }
 
-          input.seek(index90_70);
+          input.seek(index90_104);
+          if (s >= 0) return s;
+          break;
+
+        case 5:
+          int LA90_23 = input.LA(1);
+
+          int index90_23 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred125_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index90_23);
+          if (s >= 0) return s;
+          break;
+
+        case 6:
+          int LA90_24 = input.LA(1);
+
+          int index90_24 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred125_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index90_24);
+          if (s >= 0) return s;
+          break;
+
+        case 7:
+          int LA90_118 = input.LA(1);
+
+          int index90_118 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred125_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index90_118);
+          if (s >= 0) return s;
+          break;
+
+        case 8:
+          int LA90_68 = input.LA(1);
+
+          int index90_68 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred125_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index90_68);
+          if (s >= 0) return s;
+          break;
+
+        case 9:
+          int LA90_71 = input.LA(1);
+
+          int index90_71 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred125_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index90_71);
+          if (s >= 0) return s;
+          break;
+
+        case 10:
+          int LA90_266 = input.LA(1);
+
+          int index90_266 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred125_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index90_266);
           if (s >= 0) return s;
           break;
 
@@ -47330,9 +47305,9 @@ public class DelphiParser extends Parser {
           break;
 
         case 12:
-          int LA90_68 = input.LA(1);
+          int LA90_26 = input.LA(1);
 
-          int index90_68 = input.index();
+          int index90_26 = input.index();
           input.rewind();
           s = -1;
           if ((synpred125_Delphi())) {
@@ -47341,27 +47316,11 @@ public class DelphiParser extends Parser {
             s = 2;
           }
 
-          input.seek(index90_68);
+          input.seek(index90_26);
           if (s >= 0) return s;
           break;
 
         case 13:
-          int LA90_138 = input.LA(1);
-
-          int index90_138 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred125_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index90_138);
-          if (s >= 0) return s;
-          break;
-
-        case 14:
           int LA90_27 = input.LA(1);
 
           int index90_27 = input.index();
@@ -47377,10 +47336,10 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 15:
-          int LA90_104 = input.LA(1);
+        case 14:
+          int LA90_29 = input.LA(1);
 
-          int index90_104 = input.index();
+          int index90_29 = input.index();
           input.rewind();
           s = -1;
           if ((synpred125_Delphi())) {
@@ -47389,7 +47348,23 @@ public class DelphiParser extends Parser {
             s = 2;
           }
 
-          input.seek(index90_104);
+          input.seek(index90_29);
+          if (s >= 0) return s;
+          break;
+
+        case 15:
+          int LA90_70 = input.LA(1);
+
+          int index90_70 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred125_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index90_70);
           if (s >= 0) return s;
           break;
 
@@ -47410,9 +47385,9 @@ public class DelphiParser extends Parser {
           break;
 
         case 17:
-          int LA90_29 = input.LA(1);
+          int LA90_138 = input.LA(1);
 
-          int index90_29 = input.index();
+          int index90_138 = input.index();
           input.rewind();
           s = -1;
           if ((synpred125_Delphi())) {
@@ -47421,14 +47396,14 @@ public class DelphiParser extends Parser {
             s = 2;
           }
 
-          input.seek(index90_29);
+          input.seek(index90_138);
           if (s >= 0) return s;
           break;
 
         case 18:
-          int LA90_118 = input.LA(1);
+          int LA90_57 = input.LA(1);
 
-          int index90_118 = input.index();
+          int index90_57 = input.index();
           input.rewind();
           s = -1;
           if ((synpred125_Delphi())) {
@@ -47437,139 +47412,11 @@ public class DelphiParser extends Parser {
             s = 2;
           }
 
-          input.seek(index90_118);
+          input.seek(index90_57);
           if (s >= 0) return s;
           break;
 
         case 19:
-          int LA90_87 = input.LA(1);
-
-          int index90_87 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred125_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index90_87);
-          if (s >= 0) return s;
-          break;
-
-        case 20:
-          int LA90_85 = input.LA(1);
-
-          int index90_85 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred125_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index90_85);
-          if (s >= 0) return s;
-          break;
-
-        case 21:
-          int LA90_88 = input.LA(1);
-
-          int index90_88 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred125_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index90_88);
-          if (s >= 0) return s;
-          break;
-
-        case 22:
-          int LA90_89 = input.LA(1);
-
-          int index90_89 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred125_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index90_89);
-          if (s >= 0) return s;
-          break;
-
-        case 23:
-          int LA90_296 = input.LA(1);
-
-          int index90_296 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred125_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index90_296);
-          if (s >= 0) return s;
-          break;
-
-        case 24:
-          int LA90_90 = input.LA(1);
-
-          int index90_90 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred125_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index90_90);
-          if (s >= 0) return s;
-          break;
-
-        case 25:
-          int LA90_282 = input.LA(1);
-
-          int index90_282 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred125_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index90_282);
-          if (s >= 0) return s;
-          break;
-
-        case 26:
-          int LA90_219 = input.LA(1);
-
-          int index90_219 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred125_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index90_219);
-          if (s >= 0) return s;
-          break;
-
-        case 27:
           int LA90_91 = input.LA(1);
 
           int index90_91 = input.index();
@@ -47585,10 +47432,10 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 28:
-          int LA90_439 = input.LA(1);
+        case 20:
+          int LA90_282 = input.LA(1);
 
-          int index90_439 = input.index();
+          int index90_282 = input.index();
           input.rewind();
           s = -1;
           if ((synpred125_Delphi())) {
@@ -47597,14 +47444,14 @@ public class DelphiParser extends Parser {
             s = 2;
           }
 
-          input.seek(index90_439);
+          input.seek(index90_282);
           if (s >= 0) return s;
           break;
 
-        case 29:
-          int LA90_92 = input.LA(1);
+        case 21:
+          int LA90_85 = input.LA(1);
 
-          int index90_92 = input.index();
+          int index90_85 = input.index();
           input.rewind();
           s = -1;
           if ((synpred125_Delphi())) {
@@ -47613,14 +47460,14 @@ public class DelphiParser extends Parser {
             s = 2;
           }
 
-          input.seek(index90_92);
+          input.seek(index90_85);
           if (s >= 0) return s;
           break;
 
-        case 30:
-          int LA90_95 = input.LA(1);
+        case 22:
+          int LA90_87 = input.LA(1);
 
-          int index90_95 = input.index();
+          int index90_87 = input.index();
           input.rewind();
           s = -1;
           if ((synpred125_Delphi())) {
@@ -47629,43 +47476,11 @@ public class DelphiParser extends Parser {
             s = 2;
           }
 
-          input.seek(index90_95);
+          input.seek(index90_87);
           if (s >= 0) return s;
           break;
 
-        case 31:
-          int LA90_220 = input.LA(1);
-
-          int index90_220 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred125_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index90_220);
-          if (s >= 0) return s;
-          break;
-
-        case 32:
-          int LA90_309 = input.LA(1);
-
-          int index90_309 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred125_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index90_309);
-          if (s >= 0) return s;
-          break;
-
-        case 33:
+        case 23:
           int LA90_217 = input.LA(1);
 
           int index90_217 = input.index();
@@ -47681,10 +47496,10 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 34:
-          int LA90_93 = input.LA(1);
+        case 24:
+          int LA90_296 = input.LA(1);
 
-          int index90_93 = input.index();
+          int index90_296 = input.index();
           input.rewind();
           s = -1;
           if ((synpred125_Delphi())) {
@@ -47693,11 +47508,59 @@ public class DelphiParser extends Parser {
             s = 2;
           }
 
-          input.seek(index90_93);
+          input.seek(index90_296);
           if (s >= 0) return s;
           break;
 
-        case 35:
+        case 25:
+          int LA90_219 = input.LA(1);
+
+          int index90_219 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred125_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index90_219);
+          if (s >= 0) return s;
+          break;
+
+        case 26:
+          int LA90_88 = input.LA(1);
+
+          int index90_88 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred125_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index90_88);
+          if (s >= 0) return s;
+          break;
+
+        case 27:
+          int LA90_439 = input.LA(1);
+
+          int index90_439 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred125_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index90_439);
+          if (s >= 0) return s;
+          break;
+
+        case 28:
           int LA90_316 = input.LA(1);
 
           int index90_316 = input.index();
@@ -47713,7 +47576,7 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 36:
+        case 29:
           int LA90_158 = input.LA(1);
 
           int index90_158 = input.index();
@@ -47726,6 +47589,118 @@ public class DelphiParser extends Parser {
           }
 
           input.seek(index90_158);
+          if (s >= 0) return s;
+          break;
+
+        case 30:
+          int LA90_89 = input.LA(1);
+
+          int index90_89 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred125_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index90_89);
+          if (s >= 0) return s;
+          break;
+
+        case 31:
+          int LA90_90 = input.LA(1);
+
+          int index90_90 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred125_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index90_90);
+          if (s >= 0) return s;
+          break;
+
+        case 32:
+          int LA90_92 = input.LA(1);
+
+          int index90_92 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred125_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index90_92);
+          if (s >= 0) return s;
+          break;
+
+        case 33:
+          int LA90_220 = input.LA(1);
+
+          int index90_220 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred125_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index90_220);
+          if (s >= 0) return s;
+          break;
+
+        case 34:
+          int LA90_95 = input.LA(1);
+
+          int index90_95 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred125_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index90_95);
+          if (s >= 0) return s;
+          break;
+
+        case 35:
+          int LA90_309 = input.LA(1);
+
+          int index90_309 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred125_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index90_309);
+          if (s >= 0) return s;
+          break;
+
+        case 36:
+          int LA90_93 = input.LA(1);
+
+          int index90_93 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred125_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index90_93);
           if (s >= 0) return s;
           break;
       }
@@ -47799,12 +47774,12 @@ public class DelphiParser extends Parser {
           + "\u00b5\3\u00d0\1\u00b5\4\u00d0\1\105\1\133\1\u00cd\3\u00d0";
   static final String DFA102_acceptS = "\2\uffff\1\2\14\uffff\1\1\u021a\uffff";
   static final String DFA102_specialS =
-      "\23\uffff\1\1\1\uffff\1\0\1\2\1\3\1\5\1\7\1\14\1\22\1\uffff\1\10\33\uffff"
-          + "\1\16\12\uffff\1\17\1\uffff\1\12\1\20\15\uffff\1\23\1\uffff\1\24\1\25"
-          + "\1\26\1\27\1\32\1\37\1\41\1\uffff\1\42\10\uffff\1\4\15\uffff\1\21\14\uffff"
-          + "\1\11\6\uffff\1\15\23\uffff\1\40\72\uffff\1\35\1\uffff\1\33\1\44\41\uffff"
-          + "\1\13\13\uffff\1\6\17\uffff\1\43\15\uffff\1\31\14\uffff\1\30\6\uffff\1"
-          + "\34\172\uffff\1\36\162\uffff}>";
+      "\23\uffff\1\2\1\uffff\1\4\1\6\1\11\1\1\1\13\1\17\1\22\1\uffff\1\12\33"
+          + "\uffff\1\16\12\uffff\1\5\1\uffff\1\20\1\0\15\uffff\1\24\1\uffff\1\25\1"
+          + "\26\1\23\1\30\1\31\1\32\1\33\1\uffff\1\44\10\uffff\1\7\15\uffff\1\3\14"
+          + "\uffff\1\14\6\uffff\1\15\23\uffff\1\37\72\uffff\1\34\1\uffff\1\43\1\40"
+          + "\41\uffff\1\10\13\uffff\1\21\17\uffff\1\35\15\uffff\1\27\14\uffff\1\41"
+          + "\6\uffff\1\42\172\uffff\1\36\162\uffff}>";
   static final String[] DFA102_transitionS = {
     "\4\2\1\uffff\1\2\2\uffff\2\2\2\uffff\3\2\1\uffff\7\2\1\uffff\5\2\1\uffff"
         + "\4\2\2\uffff\1\2\1\uffff\2\2\2\uffff\1\2\2\uffff\17\2\1\uffff\2\2\2\uffff"
@@ -51297,9 +51272,9 @@ public class DelphiParser extends Parser {
       int _s = s;
       switch (s) {
         case 0:
-          int LA102_21 = input.LA(1);
+          int LA102_71 = input.LA(1);
 
-          int index102_21 = input.index();
+          int index102_71 = input.index();
           input.rewind();
           s = -1;
           if ((synpred145_Delphi())) {
@@ -51308,75 +51283,11 @@ public class DelphiParser extends Parser {
             s = 2;
           }
 
-          input.seek(index102_21);
+          input.seek(index102_71);
           if (s >= 0) return s;
           break;
 
         case 1:
-          int LA102_19 = input.LA(1);
-
-          int index102_19 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred145_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index102_19);
-          if (s >= 0) return s;
-          break;
-
-        case 2:
-          int LA102_22 = input.LA(1);
-
-          int index102_22 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred145_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index102_22);
-          if (s >= 0) return s;
-          break;
-
-        case 3:
-          int LA102_23 = input.LA(1);
-
-          int index102_23 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred145_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index102_23);
-          if (s >= 0) return s;
-          break;
-
-        case 4:
-          int LA102_104 = input.LA(1);
-
-          int index102_104 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred145_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index102_104);
-          if (s >= 0) return s;
-          break;
-
-        case 5:
           int LA102_24 = input.LA(1);
 
           int index102_24 = input.index();
@@ -51392,10 +51303,10 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 6:
-          int LA102_266 = input.LA(1);
+        case 2:
+          int LA102_19 = input.LA(1);
 
-          int index102_266 = input.index();
+          int index102_19 = input.index();
           input.rewind();
           s = -1;
           if ((synpred145_Delphi())) {
@@ -51404,14 +51315,78 @@ public class DelphiParser extends Parser {
             s = 2;
           }
 
-          input.seek(index102_266);
+          input.seek(index102_19);
+          if (s >= 0) return s;
+          break;
+
+        case 3:
+          int LA102_118 = input.LA(1);
+
+          int index102_118 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred145_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index102_118);
+          if (s >= 0) return s;
+          break;
+
+        case 4:
+          int LA102_21 = input.LA(1);
+
+          int index102_21 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred145_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index102_21);
+          if (s >= 0) return s;
+          break;
+
+        case 5:
+          int LA102_68 = input.LA(1);
+
+          int index102_68 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred145_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index102_68);
+          if (s >= 0) return s;
+          break;
+
+        case 6:
+          int LA102_22 = input.LA(1);
+
+          int index102_22 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred145_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index102_22);
           if (s >= 0) return s;
           break;
 
         case 7:
-          int LA102_25 = input.LA(1);
+          int LA102_104 = input.LA(1);
 
-          int index102_25 = input.index();
+          int index102_104 = input.index();
           input.rewind();
           s = -1;
           if ((synpred145_Delphi())) {
@@ -51420,59 +51395,11 @@ public class DelphiParser extends Parser {
             s = 2;
           }
 
-          input.seek(index102_25);
+          input.seek(index102_104);
           if (s >= 0) return s;
           break;
 
         case 8:
-          int LA102_29 = input.LA(1);
-
-          int index102_29 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred145_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index102_29);
-          if (s >= 0) return s;
-          break;
-
-        case 9:
-          int LA102_131 = input.LA(1);
-
-          int index102_131 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred145_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index102_131);
-          if (s >= 0) return s;
-          break;
-
-        case 10:
-          int LA102_70 = input.LA(1);
-
-          int index102_70 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred145_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index102_70);
-          if (s >= 0) return s;
-          break;
-
-        case 11:
           int LA102_254 = input.LA(1);
 
           int index102_254 = input.index();
@@ -51488,10 +51415,10 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 12:
-          int LA102_26 = input.LA(1);
+        case 9:
+          int LA102_23 = input.LA(1);
 
-          int index102_26 = input.index();
+          int index102_23 = input.index();
           input.rewind();
           s = -1;
           if ((synpred145_Delphi())) {
@@ -51500,7 +51427,55 @@ public class DelphiParser extends Parser {
             s = 2;
           }
 
-          input.seek(index102_26);
+          input.seek(index102_23);
+          if (s >= 0) return s;
+          break;
+
+        case 10:
+          int LA102_29 = input.LA(1);
+
+          int index102_29 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred145_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index102_29);
+          if (s >= 0) return s;
+          break;
+
+        case 11:
+          int LA102_25 = input.LA(1);
+
+          int index102_25 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred145_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index102_25);
+          if (s >= 0) return s;
+          break;
+
+        case 12:
+          int LA102_131 = input.LA(1);
+
+          int index102_131 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred145_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index102_131);
           if (s >= 0) return s;
           break;
 
@@ -51537,9 +51512,9 @@ public class DelphiParser extends Parser {
           break;
 
         case 15:
-          int LA102_68 = input.LA(1);
+          int LA102_26 = input.LA(1);
 
-          int index102_68 = input.index();
+          int index102_26 = input.index();
           input.rewind();
           s = -1;
           if ((synpred145_Delphi())) {
@@ -51548,14 +51523,14 @@ public class DelphiParser extends Parser {
             s = 2;
           }
 
-          input.seek(index102_68);
+          input.seek(index102_26);
           if (s >= 0) return s;
           break;
 
         case 16:
-          int LA102_71 = input.LA(1);
+          int LA102_70 = input.LA(1);
 
-          int index102_71 = input.index();
+          int index102_70 = input.index();
           input.rewind();
           s = -1;
           if ((synpred145_Delphi())) {
@@ -51564,14 +51539,14 @@ public class DelphiParser extends Parser {
             s = 2;
           }
 
-          input.seek(index102_71);
+          input.seek(index102_70);
           if (s >= 0) return s;
           break;
 
         case 17:
-          int LA102_118 = input.LA(1);
+          int LA102_266 = input.LA(1);
 
-          int index102_118 = input.index();
+          int index102_266 = input.index();
           input.rewind();
           s = -1;
           if ((synpred145_Delphi())) {
@@ -51580,7 +51555,7 @@ public class DelphiParser extends Parser {
             s = 2;
           }
 
-          input.seek(index102_118);
+          input.seek(index102_266);
           if (s >= 0) return s;
           break;
 
@@ -51601,54 +51576,6 @@ public class DelphiParser extends Parser {
           break;
 
         case 19:
-          int LA102_85 = input.LA(1);
-
-          int index102_85 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred145_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index102_85);
-          if (s >= 0) return s;
-          break;
-
-        case 20:
-          int LA102_87 = input.LA(1);
-
-          int index102_87 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred145_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index102_87);
-          if (s >= 0) return s;
-          break;
-
-        case 21:
-          int LA102_88 = input.LA(1);
-
-          int index102_88 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred145_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index102_88);
-          if (s >= 0) return s;
-          break;
-
-        case 22:
           int LA102_89 = input.LA(1);
 
           int index102_89 = input.index();
@@ -51664,39 +51591,55 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
+        case 20:
+          int LA102_85 = input.LA(1);
+
+          int index102_85 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred145_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index102_85);
+          if (s >= 0) return s;
+          break;
+
+        case 21:
+          int LA102_87 = input.LA(1);
+
+          int index102_87 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred145_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index102_87);
+          if (s >= 0) return s;
+          break;
+
+        case 22:
+          int LA102_88 = input.LA(1);
+
+          int index102_88 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred145_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index102_88);
+          if (s >= 0) return s;
+          break;
+
         case 23:
-          int LA102_90 = input.LA(1);
-
-          int index102_90 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred145_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index102_90);
-          if (s >= 0) return s;
-          break;
-
-        case 24:
-          int LA102_309 = input.LA(1);
-
-          int index102_309 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred145_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index102_309);
-          if (s >= 0) return s;
-          break;
-
-        case 25:
           int LA102_296 = input.LA(1);
 
           int index102_296 = input.index();
@@ -51712,7 +51655,23 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 26:
+        case 24:
+          int LA102_90 = input.LA(1);
+
+          int index102_90 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred145_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index102_90);
+          if (s >= 0) return s;
+          break;
+
+        case 25:
           int LA102_91 = input.LA(1);
 
           int index102_91 = input.index();
@@ -51728,10 +51687,10 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 27:
-          int LA102_219 = input.LA(1);
+        case 26:
+          int LA102_92 = input.LA(1);
 
-          int index102_219 = input.index();
+          int index102_92 = input.index();
           input.rewind();
           s = -1;
           if ((synpred145_Delphi())) {
@@ -51740,27 +51699,27 @@ public class DelphiParser extends Parser {
             s = 2;
           }
 
-          input.seek(index102_219);
+          input.seek(index102_92);
+          if (s >= 0) return s;
+          break;
+
+        case 27:
+          int LA102_93 = input.LA(1);
+
+          int index102_93 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred145_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index102_93);
           if (s >= 0) return s;
           break;
 
         case 28:
-          int LA102_316 = input.LA(1);
-
-          int index102_316 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred145_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index102_316);
-          if (s >= 0) return s;
-          break;
-
-        case 29:
           int LA102_217 = input.LA(1);
 
           int index102_217 = input.index();
@@ -51773,6 +51732,22 @@ public class DelphiParser extends Parser {
           }
 
           input.seek(index102_217);
+          if (s >= 0) return s;
+          break;
+
+        case 29:
+          int LA102_282 = input.LA(1);
+
+          int index102_282 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred145_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index102_282);
           if (s >= 0) return s;
           break;
 
@@ -51793,22 +51768,6 @@ public class DelphiParser extends Parser {
           break;
 
         case 31:
-          int LA102_92 = input.LA(1);
-
-          int index102_92 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred145_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index102_92);
-          if (s >= 0) return s;
-          break;
-
-        case 32:
           int LA102_158 = input.LA(1);
 
           int index102_158 = input.index();
@@ -51824,55 +51783,7 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 33:
-          int LA102_93 = input.LA(1);
-
-          int index102_93 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred145_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index102_93);
-          if (s >= 0) return s;
-          break;
-
-        case 34:
-          int LA102_95 = input.LA(1);
-
-          int index102_95 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred145_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index102_95);
-          if (s >= 0) return s;
-          break;
-
-        case 35:
-          int LA102_282 = input.LA(1);
-
-          int index102_282 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred145_Delphi())) {
-            s = 15;
-          } else if ((true)) {
-            s = 2;
-          }
-
-          input.seek(index102_282);
-          if (s >= 0) return s;
-          break;
-
-        case 36:
+        case 32:
           int LA102_220 = input.LA(1);
 
           int index102_220 = input.index();
@@ -51885,6 +51796,70 @@ public class DelphiParser extends Parser {
           }
 
           input.seek(index102_220);
+          if (s >= 0) return s;
+          break;
+
+        case 33:
+          int LA102_309 = input.LA(1);
+
+          int index102_309 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred145_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index102_309);
+          if (s >= 0) return s;
+          break;
+
+        case 34:
+          int LA102_316 = input.LA(1);
+
+          int index102_316 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred145_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index102_316);
+          if (s >= 0) return s;
+          break;
+
+        case 35:
+          int LA102_219 = input.LA(1);
+
+          int index102_219 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred145_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index102_219);
+          if (s >= 0) return s;
+          break;
+
+        case 36:
+          int LA102_95 = input.LA(1);
+
+          int index102_95 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred145_Delphi())) {
+            s = 15;
+          } else if ((true)) {
+            s = 2;
+          }
+
+          input.seek(index102_95);
           if (s >= 0) return s;
           break;
       }
@@ -53870,11 +53845,11 @@ public class DelphiParser extends Parser {
           + "\u00b5\4\u00d0\1\u00cd\2\u00d0\1\u00b5\3\u00d0";
   static final String DFA279_acceptS = "\1\uffff\1\2\12\uffff\1\1\2\uffff\1\1\152\uffff";
   static final String DFA279_specialS =
-      "\6\uffff\1\40\4\uffff\1\0\5\uffff\1\41\1\1\2\uffff\1\4\1\uffff\1\3\1\uffff"
-          + "\1\5\1\6\16\uffff\1\42\1\2\1\uffff\1\11\1\uffff\1\14\1\21\2\uffff\1\25"
-          + "\3\uffff\1\31\1\32\1\30\1\33\1\27\1\34\1\36\1\uffff\1\37\4\uffff\1\13"
-          + "\1\uffff\1\15\1\uffff\1\26\1\uffff\1\7\4\uffff\1\35\5\uffff\1\23\1\uffff"
-          + "\1\20\1\uffff\1\16\1\uffff\1\24\5\uffff\1\12\1\17\1\22\1\10\26\uffff}>";
+      "\6\uffff\1\40\4\uffff\1\0\5\uffff\1\41\1\1\2\uffff\1\5\1\uffff\1\13\1"
+          + "\uffff\1\4\1\17\16\uffff\1\42\1\2\1\uffff\1\20\1\uffff\1\24\1\25\2\uffff"
+          + "\1\3\3\uffff\1\30\1\31\1\27\1\32\1\33\1\34\1\35\1\uffff\1\36\4\uffff\1"
+          + "\21\1\uffff\1\15\1\uffff\1\22\1\uffff\1\12\4\uffff\1\37\5\uffff\1\23\1"
+          + "\uffff\1\16\1\uffff\1\7\1\uffff\1\10\5\uffff\1\14\1\11\1\6\1\26\26\uffff}>";
   static final String[] DFA279_transitionS = {
     "\1\1\10\uffff\1\1\5\uffff\1\2\14\uffff\1\1\25\uffff\1\1\13\uffff\1\1"
         + "\1\uffff\1\1\25\uffff\1\1\35\uffff\1\1",
@@ -54604,9 +54579,9 @@ public class DelphiParser extends Parser {
           break;
 
         case 3:
-          int LA279_23 = input.LA(1);
+          int LA279_50 = input.LA(1);
 
-          int index279_23 = input.index();
+          int index279_50 = input.index();
           input.rewind();
           s = -1;
           if ((synpred591_Delphi())) {
@@ -54615,27 +54590,11 @@ public class DelphiParser extends Parser {
             s = 1;
           }
 
-          input.seek(index279_23);
+          input.seek(index279_50);
           if (s >= 0) return s;
           break;
 
         case 4:
-          int LA279_21 = input.LA(1);
-
-          int index279_21 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred591_Delphi())) {
-            s = 12;
-          } else if ((true)) {
-            s = 1;
-          }
-
-          input.seek(index279_21);
-          if (s >= 0) return s;
-          break;
-
-        case 5:
           int LA279_25 = input.LA(1);
 
           int index279_25 = input.index();
@@ -54651,10 +54610,10 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 6:
-          int LA279_26 = input.LA(1);
+        case 5:
+          int LA279_21 = input.LA(1);
 
-          int index279_26 = input.index();
+          int index279_21 = input.index();
           input.rewind();
           s = -1;
           if ((synpred591_Delphi())) {
@@ -54663,11 +54622,75 @@ public class DelphiParser extends Parser {
             s = 1;
           }
 
-          input.seek(index279_26);
+          input.seek(index279_21);
+          if (s >= 0) return s;
+          break;
+
+        case 6:
+          int LA279_98 = input.LA(1);
+
+          int index279_98 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred591_Delphi())) {
+            s = 12;
+          } else if ((true)) {
+            s = 1;
+          }
+
+          input.seek(index279_98);
           if (s >= 0) return s;
           break;
 
         case 7:
+          int LA279_88 = input.LA(1);
+
+          int index279_88 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred591_Delphi())) {
+            s = 12;
+          } else if ((true)) {
+            s = 1;
+          }
+
+          input.seek(index279_88);
+          if (s >= 0) return s;
+          break;
+
+        case 8:
+          int LA279_90 = input.LA(1);
+
+          int index279_90 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred591_Delphi())) {
+            s = 12;
+          } else if ((true)) {
+            s = 1;
+          }
+
+          input.seek(index279_90);
+          if (s >= 0) return s;
+          break;
+
+        case 9:
+          int LA279_97 = input.LA(1);
+
+          int index279_97 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred591_Delphi())) {
+            s = 12;
+          } else if ((true)) {
+            s = 1;
+          }
+
+          input.seek(index279_97);
+          if (s >= 0) return s;
+          break;
+
+        case 10:
           int LA279_73 = input.LA(1);
 
           int index279_73 = input.index();
@@ -54683,10 +54706,10 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 8:
-          int LA279_99 = input.LA(1);
+        case 11:
+          int LA279_23 = input.LA(1);
 
-          int index279_99 = input.index();
+          int index279_23 = input.index();
           input.rewind();
           s = -1;
           if ((synpred591_Delphi())) {
@@ -54695,27 +54718,11 @@ public class DelphiParser extends Parser {
             s = 1;
           }
 
-          input.seek(index279_99);
+          input.seek(index279_23);
           if (s >= 0) return s;
           break;
 
-        case 9:
-          int LA279_44 = input.LA(1);
-
-          int index279_44 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred591_Delphi())) {
-            s = 12;
-          } else if ((true)) {
-            s = 1;
-          }
-
-          input.seek(index279_44);
-          if (s >= 0) return s;
-          break;
-
-        case 10:
+        case 12:
           int LA279_96 = input.LA(1);
 
           int index279_96 = input.index();
@@ -54728,38 +54735,6 @@ public class DelphiParser extends Parser {
           }
 
           input.seek(index279_96);
-          if (s >= 0) return s;
-          break;
-
-        case 11:
-          int LA279_67 = input.LA(1);
-
-          int index279_67 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred591_Delphi())) {
-            s = 12;
-          } else if ((true)) {
-            s = 1;
-          }
-
-          input.seek(index279_67);
-          if (s >= 0) return s;
-          break;
-
-        case 12:
-          int LA279_46 = input.LA(1);
-
-          int index279_46 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred591_Delphi())) {
-            s = 12;
-          } else if ((true)) {
-            s = 1;
-          }
-
-          input.seek(index279_46);
           if (s >= 0) return s;
           break;
 
@@ -54780,38 +54755,6 @@ public class DelphiParser extends Parser {
           break;
 
         case 14:
-          int LA279_88 = input.LA(1);
-
-          int index279_88 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred591_Delphi())) {
-            s = 12;
-          } else if ((true)) {
-            s = 1;
-          }
-
-          input.seek(index279_88);
-          if (s >= 0) return s;
-          break;
-
-        case 15:
-          int LA279_97 = input.LA(1);
-
-          int index279_97 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred591_Delphi())) {
-            s = 12;
-          } else if ((true)) {
-            s = 1;
-          }
-
-          input.seek(index279_97);
-          if (s >= 0) return s;
-          break;
-
-        case 16:
           int LA279_86 = input.LA(1);
 
           int index279_86 = input.index();
@@ -54827,10 +54770,10 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 17:
-          int LA279_47 = input.LA(1);
+        case 15:
+          int LA279_26 = input.LA(1);
 
-          int index279_47 = input.index();
+          int index279_26 = input.index();
           input.rewind();
           s = -1;
           if ((synpred591_Delphi())) {
@@ -54839,14 +54782,46 @@ public class DelphiParser extends Parser {
             s = 1;
           }
 
-          input.seek(index279_47);
+          input.seek(index279_26);
+          if (s >= 0) return s;
+          break;
+
+        case 16:
+          int LA279_44 = input.LA(1);
+
+          int index279_44 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred591_Delphi())) {
+            s = 12;
+          } else if ((true)) {
+            s = 1;
+          }
+
+          input.seek(index279_44);
+          if (s >= 0) return s;
+          break;
+
+        case 17:
+          int LA279_67 = input.LA(1);
+
+          int index279_67 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred591_Delphi())) {
+            s = 12;
+          } else if ((true)) {
+            s = 1;
+          }
+
+          input.seek(index279_67);
           if (s >= 0) return s;
           break;
 
         case 18:
-          int LA279_98 = input.LA(1);
+          int LA279_71 = input.LA(1);
 
-          int index279_98 = input.index();
+          int index279_71 = input.index();
           input.rewind();
           s = -1;
           if ((synpred591_Delphi())) {
@@ -54855,7 +54830,7 @@ public class DelphiParser extends Parser {
             s = 1;
           }
 
-          input.seek(index279_98);
+          input.seek(index279_71);
           if (s >= 0) return s;
           break;
 
@@ -54876,9 +54851,9 @@ public class DelphiParser extends Parser {
           break;
 
         case 20:
-          int LA279_90 = input.LA(1);
+          int LA279_46 = input.LA(1);
 
-          int index279_90 = input.index();
+          int index279_46 = input.index();
           input.rewind();
           s = -1;
           if ((synpred591_Delphi())) {
@@ -54887,14 +54862,14 @@ public class DelphiParser extends Parser {
             s = 1;
           }
 
-          input.seek(index279_90);
+          input.seek(index279_46);
           if (s >= 0) return s;
           break;
 
         case 21:
-          int LA279_50 = input.LA(1);
+          int LA279_47 = input.LA(1);
 
-          int index279_50 = input.index();
+          int index279_47 = input.index();
           input.rewind();
           s = -1;
           if ((synpred591_Delphi())) {
@@ -54903,14 +54878,14 @@ public class DelphiParser extends Parser {
             s = 1;
           }
 
-          input.seek(index279_50);
+          input.seek(index279_47);
           if (s >= 0) return s;
           break;
 
         case 22:
-          int LA279_71 = input.LA(1);
+          int LA279_99 = input.LA(1);
 
-          int index279_71 = input.index();
+          int index279_99 = input.index();
           input.rewind();
           s = -1;
           if ((synpred591_Delphi())) {
@@ -54919,27 +54894,11 @@ public class DelphiParser extends Parser {
             s = 1;
           }
 
-          input.seek(index279_71);
+          input.seek(index279_99);
           if (s >= 0) return s;
           break;
 
         case 23:
-          int LA279_58 = input.LA(1);
-
-          int index279_58 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred591_Delphi())) {
-            s = 12;
-          } else if ((true)) {
-            s = 1;
-          }
-
-          input.seek(index279_58);
-          if (s >= 0) return s;
-          break;
-
-        case 24:
           int LA279_56 = input.LA(1);
 
           int index279_56 = input.index();
@@ -54955,7 +54914,7 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 25:
+        case 24:
           int LA279_54 = input.LA(1);
 
           int index279_54 = input.index();
@@ -54971,7 +54930,7 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 26:
+        case 25:
           int LA279_55 = input.LA(1);
 
           int index279_55 = input.index();
@@ -54987,7 +54946,7 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 27:
+        case 26:
           int LA279_57 = input.LA(1);
 
           int index279_57 = input.index();
@@ -55000,6 +54959,22 @@ public class DelphiParser extends Parser {
           }
 
           input.seek(index279_57);
+          if (s >= 0) return s;
+          break;
+
+        case 27:
+          int LA279_58 = input.LA(1);
+
+          int index279_58 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred591_Delphi())) {
+            s = 12;
+          } else if ((true)) {
+            s = 1;
+          }
+
+          input.seek(index279_58);
           if (s >= 0) return s;
           break;
 
@@ -55020,22 +54995,6 @@ public class DelphiParser extends Parser {
           break;
 
         case 29:
-          int LA279_78 = input.LA(1);
-
-          int index279_78 = input.index();
-          input.rewind();
-          s = -1;
-          if ((synpred591_Delphi())) {
-            s = 12;
-          } else if ((true)) {
-            s = 1;
-          }
-
-          input.seek(index279_78);
-          if (s >= 0) return s;
-          break;
-
-        case 30:
           int LA279_60 = input.LA(1);
 
           int index279_60 = input.index();
@@ -55051,7 +55010,7 @@ public class DelphiParser extends Parser {
           if (s >= 0) return s;
           break;
 
-        case 31:
+        case 30:
           int LA279_62 = input.LA(1);
 
           int index279_62 = input.index();
@@ -55064,6 +55023,22 @@ public class DelphiParser extends Parser {
           }
 
           input.seek(index279_62);
+          if (s >= 0) return s;
+          break;
+
+        case 31:
+          int LA279_78 = input.LA(1);
+
+          int index279_78 = input.index();
+          input.rewind();
+          s = -1;
+          if ((synpred591_Delphi())) {
+            s = 12;
+          } else if ((true)) {
+            s = 1;
+          }
+
+          input.seek(index279_78);
           if (s >= 0) return s;
           break;
 
@@ -55812,1803 +55787,1803 @@ public class DelphiParser extends Parser {
       new BitSet(new long[] {0x0000000000000002L, 0x0000000008000000L});
   public static final BitSet FOLLOW_genericDefinition_in_genericTypeIdent5422 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_simpleGenericDefinition_in_genericDefinition5480 =
+  public static final BitSet FOLLOW_simpleGenericDefinition_in_genericDefinition5472 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_complexGenericDefinition_in_genericDefinition5513 =
+  public static final BitSet FOLLOW_complexGenericDefinition_in_genericDefinition5505 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_constrainedGenericDefinition_in_genericDefinition5546 =
+  public static final BitSet FOLLOW_constrainedGenericDefinition_in_genericDefinition5538 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LT_in_simpleGenericDefinition5588 =
+  public static final BitSet FOLLOW_LT_in_simpleGenericDefinition5580 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_simpleGenericDefinition5590 =
+  public static final BitSet FOLLOW_ident_in_simpleGenericDefinition5582 =
       new BitSet(new long[] {0x0000000004000000L, 0x0000000000000020L});
-  public static final BitSet FOLLOW_COMMA_in_simpleGenericDefinition5593 =
+  public static final BitSet FOLLOW_COMMA_in_simpleGenericDefinition5585 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_simpleGenericDefinition5595 =
+  public static final BitSet FOLLOW_ident_in_simpleGenericDefinition5587 =
       new BitSet(new long[] {0x0000000004000000L, 0x0000000000000020L});
-  public static final BitSet FOLLOW_GT_in_simpleGenericDefinition5599 =
+  public static final BitSet FOLLOW_GT_in_simpleGenericDefinition5591 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LT_in_complexGenericDefinition5640 =
+  public static final BitSet FOLLOW_LT_in_complexGenericDefinition5632 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_qualifiedIdent_in_complexGenericDefinition5642 =
+  public static final BitSet FOLLOW_qualifiedIdent_in_complexGenericDefinition5634 =
       new BitSet(new long[] {0x0000000004000000L, 0x0000000008000020L});
-  public static final BitSet FOLLOW_simpleGenericDefinition_in_complexGenericDefinition5645 =
+  public static final BitSet FOLLOW_simpleGenericDefinition_in_complexGenericDefinition5637 =
       new BitSet(new long[] {0x0000000004000000L, 0x0000000000000020L});
-  public static final BitSet FOLLOW_COMMA_in_complexGenericDefinition5650 =
+  public static final BitSet FOLLOW_COMMA_in_complexGenericDefinition5642 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_qualifiedIdent_in_complexGenericDefinition5652 =
+  public static final BitSet FOLLOW_qualifiedIdent_in_complexGenericDefinition5644 =
       new BitSet(new long[] {0x0000000004000000L, 0x0000000008000020L});
-  public static final BitSet FOLLOW_simpleGenericDefinition_in_complexGenericDefinition5655 =
+  public static final BitSet FOLLOW_simpleGenericDefinition_in_complexGenericDefinition5647 =
       new BitSet(new long[] {0x0000000004000000L, 0x0000000000000020L});
-  public static final BitSet FOLLOW_GT_in_complexGenericDefinition5661 =
+  public static final BitSet FOLLOW_GT_in_complexGenericDefinition5653 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LT_in_constrainedGenericDefinition5698 =
+  public static final BitSet FOLLOW_LT_in_constrainedGenericDefinition5690 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_constrainedGeneric_in_constrainedGenericDefinition5700 =
+  public static final BitSet FOLLOW_constrainedGeneric_in_constrainedGenericDefinition5692 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000020L, 0x0000000000004000L});
-  public static final BitSet FOLLOW_SEMI_in_constrainedGenericDefinition5703 =
+  public static final BitSet FOLLOW_SEMI_in_constrainedGenericDefinition5695 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_constrainedGeneric_in_constrainedGenericDefinition5705 =
+  public static final BitSet FOLLOW_constrainedGeneric_in_constrainedGenericDefinition5697 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000020L, 0x0000000000004000L});
-  public static final BitSet FOLLOW_GT_in_constrainedGenericDefinition5709 =
+  public static final BitSet FOLLOW_GT_in_constrainedGenericDefinition5701 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_ident_in_constrainedGeneric5756 =
+  public static final BitSet FOLLOW_ident_in_constrainedGeneric5748 =
       new BitSet(new long[] {0x0000000002000002L});
-  public static final BitSet FOLLOW_COLON_in_constrainedGeneric5759 =
+  public static final BitSet FOLLOW_COLON_in_constrainedGeneric5751 =
       new BitSet(
           new long[] {
             0x20A0000CE12102C0L, 0x0004252092002840L, 0x0020000001C0005FL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_genericConstraint_in_constrainedGeneric5761 =
+  public static final BitSet FOLLOW_genericConstraint_in_constrainedGeneric5753 =
       new BitSet(new long[] {0x0000000004000002L});
-  public static final BitSet FOLLOW_COMMA_in_constrainedGeneric5764 =
+  public static final BitSet FOLLOW_COMMA_in_constrainedGeneric5756 =
       new BitSet(
           new long[] {
             0x20A0000CE12102C0L, 0x0004252092002840L, 0x0020000001C0005FL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_genericConstraint_in_constrainedGeneric5766 =
+  public static final BitSet FOLLOW_genericConstraint_in_constrainedGeneric5758 =
       new BitSet(new long[] {0x0000000004000002L});
-  public static final BitSet FOLLOW_ident_in_genericConstraint5818 =
+  public static final BitSet FOLLOW_ident_in_genericConstraint5810 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_RECORD_in_genericConstraint5851 =
+  public static final BitSet FOLLOW_RECORD_in_genericConstraint5843 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_CLASS_in_genericConstraint5884 =
+  public static final BitSet FOLLOW_CLASS_in_genericConstraint5876 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_CONSTRUCTOR_in_genericConstraint5917 =
+  public static final BitSet FOLLOW_CONSTRUCTOR_in_genericConstraint5909 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LT_in_genericPostfix5968 =
+  public static final BitSet FOLLOW_LT_in_genericPostfix5960 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeDecl_in_genericPostfix5970 =
+  public static final BitSet FOLLOW_typeDecl_in_genericPostfix5962 =
       new BitSet(new long[] {0x0000000004000000L, 0x0000000000000020L});
-  public static final BitSet FOLLOW_COMMA_in_genericPostfix5973 =
+  public static final BitSet FOLLOW_COMMA_in_genericPostfix5965 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeDecl_in_genericPostfix5975 =
+  public static final BitSet FOLLOW_typeDecl_in_genericPostfix5967 =
       new BitSet(new long[] {0x0000000004000000L, 0x0000000000000020L});
-  public static final BitSet FOLLOW_GT_in_genericPostfix5979 =
+  public static final BitSet FOLLOW_GT_in_genericPostfix5971 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classHelperDecl_in_classDecl6038 =
+  public static final BitSet FOLLOW_classHelperDecl_in_classDecl6030 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classTypeTypeDecl_in_classDecl6079 =
+  public static final BitSet FOLLOW_classTypeTypeDecl_in_classDecl6071 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classTypeDecl_in_classDecl6112 =
+  public static final BitSet FOLLOW_classTypeDecl_in_classDecl6104 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_interfaceTypeDecl_in_classDecl6153 =
+  public static final BitSet FOLLOW_interfaceTypeDecl_in_classDecl6145 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_objectDecl_in_classDecl6194 =
+  public static final BitSet FOLLOW_objectDecl_in_classDecl6186 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_recordDecl_in_classDecl6235 =
+  public static final BitSet FOLLOW_recordDecl_in_classDecl6227 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_recordHelperDecl_in_classDecl6276 =
+  public static final BitSet FOLLOW_recordHelperDecl_in_classDecl6268 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_CLASS_in_classTypeTypeDecl6332 =
+  public static final BitSet FOLLOW_CLASS_in_classTypeTypeDecl6324 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000004000000000L});
-  public static final BitSet FOLLOW_OF_in_classTypeTypeDecl6334 =
+  public static final BitSet FOLLOW_OF_in_classTypeTypeDecl6326 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeId_in_classTypeTypeDecl6336 =
+  public static final BitSet FOLLOW_typeId_in_classTypeTypeDecl6328 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_CLASS_in_classTypeDecl6396 =
+  public static final BitSet FOLLOW_CLASS_in_classTypeDecl6388 =
       new BitSet(
           new long[] {
             0x20A4001CF12502E0L, 0x07B4252096102844L, 0x0020000045C0245BL, 0x0000000000002280L
           });
-  public static final BitSet FOLLOW_classState_in_classTypeDecl6399 =
+  public static final BitSet FOLLOW_classState_in_classTypeDecl6391 =
       new BitSet(
           new long[] {
             0x20A4001CF12502C0L, 0x07B4252096102844L, 0x0020000045C0045BL, 0x0000000000002280L
           });
-  public static final BitSet FOLLOW_classParent_in_classTypeDecl6404 =
+  public static final BitSet FOLLOW_classParent_in_classTypeDecl6396 =
       new BitSet(
           new long[] {
             0x20A4001CF12502C0L, 0x07B4252092102844L, 0x0020000045C0045BL, 0x0000000000002280L
           });
-  public static final BitSet FOLLOW_classItem_in_classTypeDecl6409 =
+  public static final BitSet FOLLOW_classItem_in_classTypeDecl6401 =
       new BitSet(
           new long[] {
             0x20A4001CF12502C0L, 0x07B4252092102844L, 0x0020000045C0045BL, 0x0000000000002280L
           });
-  public static final BitSet FOLLOW_END_in_classTypeDecl6413 =
+  public static final BitSet FOLLOW_END_in_classTypeDecl6405 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_CLASS_in_classTypeDecl6464 =
+  public static final BitSet FOLLOW_CLASS_in_classTypeDecl6456 =
       new BitSet(new long[] {0x0000000000000022L, 0x0000000004000000L, 0x0000000000002000L});
-  public static final BitSet FOLLOW_classState_in_classTypeDecl6467 =
+  public static final BitSet FOLLOW_classState_in_classTypeDecl6459 =
       new BitSet(new long[] {0x0000000000000002L, 0x0000000004000000L});
-  public static final BitSet FOLLOW_classParent_in_classTypeDecl6472 =
+  public static final BitSet FOLLOW_classParent_in_classTypeDecl6464 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LPAREN_in_classParent6629 =
+  public static final BitSet FOLLOW_LPAREN_in_classParent6621 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_genericTypeIdent_in_classParent6631 =
+  public static final BitSet FOLLOW_genericTypeIdent_in_classParent6623 =
       new BitSet(new long[] {0x0000000004000000L, 0x0000000000000000L, 0x0000000000000800L});
-  public static final BitSet FOLLOW_COMMA_in_classParent6634 =
+  public static final BitSet FOLLOW_COMMA_in_classParent6626 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_genericTypeIdent_in_classParent6636 =
+  public static final BitSet FOLLOW_genericTypeIdent_in_classParent6628 =
       new BitSet(new long[] {0x0000000004000000L, 0x0000000000000000L, 0x0000000000000800L});
-  public static final BitSet FOLLOW_RPAREN_in_classParent6640 =
+  public static final BitSet FOLLOW_RPAREN_in_classParent6632 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_visibility_in_classItem6708 =
+  public static final BitSet FOLLOW_visibility_in_classItem6700 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classMethod_in_classItem6741 =
+  public static final BitSet FOLLOW_classMethod_in_classItem6733 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classField_in_classItem6774 =
+  public static final BitSet FOLLOW_classField_in_classItem6766 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classProperty_in_classItem6807 =
+  public static final BitSet FOLLOW_classProperty_in_classItem6799 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_constSection_in_classItem6840 =
+  public static final BitSet FOLLOW_constSection_in_classItem6832 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_innerTypeSection_in_classItem6873 =
+  public static final BitSet FOLLOW_innerTypeSection_in_classItem6865 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_CLASS_in_classItem6907 =
+  public static final BitSet FOLLOW_CLASS_in_classItem6899 =
       new BitSet(
           new long[] {
             0x0000000000000000L, 0x0000000000000000L, 0x0000000004000000L, 0x0000000000000080L
           });
-  public static final BitSet FOLLOW_varSection_in_classItem6911 =
+  public static final BitSet FOLLOW_varSection_in_classItem6903 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_CLASS_in_classHelperDecl6961 =
+  public static final BitSet FOLLOW_CLASS_in_classHelperDecl6953 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000040L});
-  public static final BitSet FOLLOW_HELPER_in_classHelperDecl6963 =
+  public static final BitSet FOLLOW_HELPER_in_classHelperDecl6955 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000004000001L});
-  public static final BitSet FOLLOW_classParent_in_classHelperDecl6966 =
+  public static final BitSet FOLLOW_classParent_in_classHelperDecl6958 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000001L});
-  public static final BitSet FOLLOW_FOR_in_classHelperDecl6970 =
+  public static final BitSet FOLLOW_FOR_in_classHelperDecl6962 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeId_in_classHelperDecl6972 =
+  public static final BitSet FOLLOW_typeId_in_classHelperDecl6964 =
       new BitSet(
           new long[] {
             0x0004001021040000L, 0x07B0010000100004L, 0x0000000004800000L, 0x0000000000000080L
           });
-  public static final BitSet FOLLOW_classHelperItem_in_classHelperDecl6975 =
+  public static final BitSet FOLLOW_classHelperItem_in_classHelperDecl6967 =
       new BitSet(
           new long[] {
             0x0004001021040000L, 0x07B0010000100004L, 0x0000000004800000L, 0x0000000000000080L
           });
-  public static final BitSet FOLLOW_END_in_classHelperDecl6979 =
+  public static final BitSet FOLLOW_END_in_classHelperDecl6971 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_visibility_in_classHelperItem7044 =
+  public static final BitSet FOLLOW_visibility_in_classHelperItem7036 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classMethod_in_classHelperItem7077 =
+  public static final BitSet FOLLOW_classMethod_in_classHelperItem7069 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classProperty_in_classHelperItem7110 =
+  public static final BitSet FOLLOW_classProperty_in_classHelperItem7102 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_CLASS_in_classHelperItem7144 =
+  public static final BitSet FOLLOW_CLASS_in_classHelperItem7136 =
       new BitSet(
           new long[] {
             0x0000000000000000L, 0x0000000000000000L, 0x0000000004000000L, 0x0000000000000080L
           });
-  public static final BitSet FOLLOW_varSection_in_classHelperItem7148 =
+  public static final BitSet FOLLOW_varSection_in_classHelperItem7140 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_interfaceKey_in_interfaceTypeDecl7196 =
+  public static final BitSet FOLLOW_interfaceKey_in_interfaceTypeDecl7188 =
       new BitSet(new long[] {0x0004001021000000L, 0x00A0010004100004L});
-  public static final BitSet FOLLOW_classParent_in_interfaceTypeDecl7199 =
+  public static final BitSet FOLLOW_classParent_in_interfaceTypeDecl7191 =
       new BitSet(new long[] {0x0004001021000000L, 0x00A0010000100004L});
-  public static final BitSet FOLLOW_interfaceGuid_in_interfaceTypeDecl7204 =
+  public static final BitSet FOLLOW_interfaceGuid_in_interfaceTypeDecl7196 =
       new BitSet(new long[] {0x0004001021000000L, 0x00A0010000100004L});
-  public static final BitSet FOLLOW_interfaceItem_in_interfaceTypeDecl7209 =
+  public static final BitSet FOLLOW_interfaceItem_in_interfaceTypeDecl7201 =
       new BitSet(new long[] {0x0004001021000000L, 0x00A0010000100004L});
-  public static final BitSet FOLLOW_END_in_interfaceTypeDecl7213 =
+  public static final BitSet FOLLOW_END_in_interfaceTypeDecl7205 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_interfaceKey_in_interfaceTypeDecl7304 =
+  public static final BitSet FOLLOW_interfaceKey_in_interfaceTypeDecl7296 =
       new BitSet(new long[] {0x0000000000000002L, 0x0000000004000000L});
-  public static final BitSet FOLLOW_classParent_in_interfaceTypeDecl7307 =
+  public static final BitSet FOLLOW_classParent_in_interfaceTypeDecl7299 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LBRACK_in_interfaceGuid7490 =
+  public static final BitSet FOLLOW_LBRACK_in_interfaceGuid7482 =
       new BitSet(new long[] {0x0000000000000000L, 0x0800000000000000L});
-  public static final BitSet FOLLOW_QuotedString_in_interfaceGuid7492 =
+  public static final BitSet FOLLOW_QuotedString_in_interfaceGuid7484 =
       new BitSet(new long[] {0x0000000000000000L, 0x2000000000000000L});
-  public static final BitSet FOLLOW_RBRACK_in_interfaceGuid7494 =
+  public static final BitSet FOLLOW_RBRACK_in_interfaceGuid7486 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classMethod_in_interfaceItem7550 =
+  public static final BitSet FOLLOW_classMethod_in_interfaceItem7542 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_CLASS_in_interfaceItem7584 =
+  public static final BitSet FOLLOW_CLASS_in_interfaceItem7576 =
       new BitSet(new long[] {0x0000000001000000L, 0x0080000000100000L});
-  public static final BitSet FOLLOW_classProperty_in_interfaceItem7588 =
+  public static final BitSet FOLLOW_classProperty_in_interfaceItem7580 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_OBJECT_in_objectDecl7643 =
+  public static final BitSet FOLLOW_OBJECT_in_objectDecl7635 =
       new BitSet(
           new long[] {
             0x20A4001CE12502C0L, 0x0734252096102844L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_classParent_in_objectDecl7646 =
+  public static final BitSet FOLLOW_classParent_in_objectDecl7638 =
       new BitSet(
           new long[] {
             0x20A4001CE12502C0L, 0x0734252092102844L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_objectItem_in_objectDecl7651 =
+  public static final BitSet FOLLOW_objectItem_in_objectDecl7643 =
       new BitSet(
           new long[] {
             0x20A4001CE12502C0L, 0x0734252092102844L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_END_in_objectDecl7655 =
+  public static final BitSet FOLLOW_END_in_objectDecl7647 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_visibility_in_objectItem7724 =
+  public static final BitSet FOLLOW_visibility_in_objectItem7716 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classMethod_in_objectItem7757 =
+  public static final BitSet FOLLOW_classMethod_in_objectItem7749 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classField_in_objectItem7790 =
+  public static final BitSet FOLLOW_classField_in_objectItem7782 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_RECORD_in_recordDecl7845 =
+  public static final BitSet FOLLOW_RECORD_in_recordDecl7837 =
       new BitSet(
           new long[] {
             0x20A4001CF16502C0L, 0x07B4252092102844L, 0x0020000045C0045BL, 0x0000000000002280L
           });
-  public static final BitSet FOLLOW_recordItem_in_recordDecl7848 =
+  public static final BitSet FOLLOW_recordItem_in_recordDecl7840 =
       new BitSet(
           new long[] {
             0x20A4001CF16502C0L, 0x07B4252092102844L, 0x0020000045C0045BL, 0x0000000000002280L
           });
-  public static final BitSet FOLLOW_recordVariantSection_in_recordDecl7853 =
+  public static final BitSet FOLLOW_recordVariantSection_in_recordDecl7845 =
       new BitSet(new long[] {0x0004000000000000L});
-  public static final BitSet FOLLOW_END_in_recordDecl7857 =
+  public static final BitSet FOLLOW_END_in_recordDecl7849 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_visibility_in_recordItem7955 =
+  public static final BitSet FOLLOW_visibility_in_recordItem7947 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classMethod_in_recordItem7988 =
+  public static final BitSet FOLLOW_classMethod_in_recordItem7980 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classProperty_in_recordItem8021 =
+  public static final BitSet FOLLOW_classProperty_in_recordItem8013 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_constSection_in_recordItem8054 =
+  public static final BitSet FOLLOW_constSection_in_recordItem8046 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_innerTypeSection_in_recordItem8087 =
+  public static final BitSet FOLLOW_innerTypeSection_in_recordItem8079 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_recordField_in_recordItem8120 =
+  public static final BitSet FOLLOW_recordField_in_recordItem8112 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_CLASS_in_recordItem8154 =
+  public static final BitSet FOLLOW_CLASS_in_recordItem8146 =
       new BitSet(
           new long[] {
             0x0000000000000000L, 0x0000000000000000L, 0x0000000004000000L, 0x0000000000000080L
           });
-  public static final BitSet FOLLOW_varSection_in_recordItem8158 =
+  public static final BitSet FOLLOW_varSection_in_recordItem8150 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_identList_in_recordField8212 =
+  public static final BitSet FOLLOW_identList_in_recordField8204 =
       new BitSet(new long[] {0x0000000002000000L});
-  public static final BitSet FOLLOW_COLON_in_recordField8214 =
+  public static final BitSet FOLLOW_COLON_in_recordField8206 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeDecl_in_recordField8216 =
+  public static final BitSet FOLLOW_typeDecl_in_recordField8208 =
       new BitSet(new long[] {0x0040000800000002L, 0x0001000001000000L, 0x0000000000004000L});
-  public static final BitSet FOLLOW_hintingDirective_in_recordField8219 =
+  public static final BitSet FOLLOW_hintingDirective_in_recordField8211 =
       new BitSet(new long[] {0x0040000800000002L, 0x0001000001000000L, 0x0000000000004000L});
-  public static final BitSet FOLLOW_SEMI_in_recordField8224 =
+  public static final BitSet FOLLOW_SEMI_in_recordField8216 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_CASE_in_recordVariantSection8312 =
+  public static final BitSet FOLLOW_CASE_in_recordVariantSection8304 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_ident_in_recordVariantSection8315 =
+  public static final BitSet FOLLOW_ident_in_recordVariantSection8307 =
       new BitSet(new long[] {0x0000000002000000L});
-  public static final BitSet FOLLOW_COLON_in_recordVariantSection8317 =
+  public static final BitSet FOLLOW_COLON_in_recordVariantSection8309 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_qualifiedIdent_in_recordVariantSection8321 =
+  public static final BitSet FOLLOW_qualifiedIdent_in_recordVariantSection8313 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000004000000000L});
-  public static final BitSet FOLLOW_OF_in_recordVariantSection8323 =
+  public static final BitSet FOLLOW_OF_in_recordVariantSection8315 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_recordVariant_in_recordVariantSection8326 =
+  public static final BitSet FOLLOW_recordVariant_in_recordVariantSection8318 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C2L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expressionList_in_recordVariant8380 =
+  public static final BitSet FOLLOW_expressionList_in_recordVariant8372 =
       new BitSet(new long[] {0x0000000002000000L});
-  public static final BitSet FOLLOW_COLON_in_recordVariant8382 =
+  public static final BitSet FOLLOW_COLON_in_recordVariant8374 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000004000000L});
-  public static final BitSet FOLLOW_LPAREN_in_recordVariant8384 =
+  public static final BitSet FOLLOW_LPAREN_in_recordVariant8376 =
       new BitSet(
           new long[] {
             0x20A0000CC06102C0L, 0x0004252092002840L, 0x0020000001C0085BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_recordField_in_recordVariant8387 =
+  public static final BitSet FOLLOW_recordField_in_recordVariant8379 =
       new BitSet(
           new long[] {
             0x20A0000CC06102C0L, 0x0004252092002840L, 0x0020000001C0085BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_recordVariantSection_in_recordVariant8392 =
+  public static final BitSet FOLLOW_recordVariantSection_in_recordVariant8384 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000000L, 0x0000000000000800L});
-  public static final BitSet FOLLOW_RPAREN_in_recordVariant8396 =
+  public static final BitSet FOLLOW_RPAREN_in_recordVariant8388 =
       new BitSet(new long[] {0x0000000000000002L, 0x0000000000000000L, 0x0000000000004000L});
-  public static final BitSet FOLLOW_SEMI_in_recordVariant8399 =
+  public static final BitSet FOLLOW_SEMI_in_recordVariant8391 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_RECORD_in_recordHelperDecl8450 =
+  public static final BitSet FOLLOW_RECORD_in_recordHelperDecl8442 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000040L});
-  public static final BitSet FOLLOW_HELPER_in_recordHelperDecl8452 =
+  public static final BitSet FOLLOW_HELPER_in_recordHelperDecl8444 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000001L});
-  public static final BitSet FOLLOW_FOR_in_recordHelperDecl8454 =
+  public static final BitSet FOLLOW_FOR_in_recordHelperDecl8446 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeId_in_recordHelperDecl8456 =
+  public static final BitSet FOLLOW_typeId_in_recordHelperDecl8448 =
       new BitSet(new long[] {0x0004001031040000L, 0x07B0010000100004L, 0x0000000000800400L});
-  public static final BitSet FOLLOW_recordHelperItem_in_recordHelperDecl8459 =
+  public static final BitSet FOLLOW_recordHelperItem_in_recordHelperDecl8451 =
       new BitSet(new long[] {0x0004001031040000L, 0x07B0010000100004L, 0x0000000000800400L});
-  public static final BitSet FOLLOW_END_in_recordHelperDecl8463 =
+  public static final BitSet FOLLOW_END_in_recordHelperDecl8455 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_visibility_in_recordHelperItem8512 =
+  public static final BitSet FOLLOW_visibility_in_recordHelperItem8504 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classMethod_in_recordHelperItem8545 =
+  public static final BitSet FOLLOW_classMethod_in_recordHelperItem8537 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classProperty_in_recordHelperItem8578 =
+  public static final BitSet FOLLOW_classProperty_in_recordHelperItem8570 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_constSection_in_recordHelperItem8611 =
+  public static final BitSet FOLLOW_constSection_in_recordHelperItem8603 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_classMethod8666 =
+  public static final BitSet FOLLOW_customAttribute_in_classMethod8658 =
       new BitSet(new long[] {0x0000001021000000L, 0x0020000000000000L});
-  public static final BitSet FOLLOW_CLASS_in_classMethod8671 =
+  public static final BitSet FOLLOW_CLASS_in_classMethod8663 =
       new BitSet(new long[] {0x0000001020000000L, 0x0020000000000000L});
-  public static final BitSet FOLLOW_methodKey_in_classMethod8675 =
+  public static final BitSet FOLLOW_methodKey_in_classMethod8667 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_classMethod8677 =
+  public static final BitSet FOLLOW_ident_in_classMethod8669 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x000198011F010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_genericDefinition_in_classMethod8680 =
+  public static final BitSet FOLLOW_genericDefinition_in_classMethod8672 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x0001980117010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_formalParameterSection_in_classMethod8685 =
+  public static final BitSet FOLLOW_formalParameterSection_in_classMethod8677 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x0001980113010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_methodDirectiveSection_in_classMethod8689 =
+  public static final BitSet FOLLOW_methodDirectiveSection_in_classMethod8681 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_classMethod8791 =
+  public static final BitSet FOLLOW_customAttribute_in_classMethod8783 =
       new BitSet(new long[] {0x0000000001000000L, 0x0000000000000004L});
-  public static final BitSet FOLLOW_CLASS_in_classMethod8796 =
+  public static final BitSet FOLLOW_CLASS_in_classMethod8788 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000004L});
-  public static final BitSet FOLLOW_FUNCTION_in_classMethod8800 =
+  public static final BitSet FOLLOW_FUNCTION_in_classMethod8792 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_classMethod8802 =
+  public static final BitSet FOLLOW_ident_in_classMethod8794 =
       new BitSet(new long[] {0x0000000002000000L, 0x000000000C000000L});
-  public static final BitSet FOLLOW_genericDefinition_in_classMethod8805 =
+  public static final BitSet FOLLOW_genericDefinition_in_classMethod8797 =
       new BitSet(new long[] {0x0000000002000000L, 0x0000000004000000L});
-  public static final BitSet FOLLOW_formalParameterSection_in_classMethod8810 =
+  public static final BitSet FOLLOW_formalParameterSection_in_classMethod8802 =
       new BitSet(new long[] {0x0000000002000000L});
-  public static final BitSet FOLLOW_COLON_in_classMethod8814 =
+  public static final BitSet FOLLOW_COLON_in_classMethod8806 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_customAttribute_in_classMethod8817 =
+  public static final BitSet FOLLOW_customAttribute_in_classMethod8809 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeDecl_in_classMethod8821 =
+  public static final BitSet FOLLOW_typeDecl_in_classMethod8813 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x0001980113010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_methodDirectiveSection_in_classMethod8823 =
+  public static final BitSet FOLLOW_methodDirectiveSection_in_classMethod8815 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_classMethod8935 =
+  public static final BitSet FOLLOW_customAttribute_in_classMethod8927 =
       new BitSet(new long[] {0x0000000001000000L, 0x0000010000000000L});
-  public static final BitSet FOLLOW_CLASS_in_classMethod8940 =
+  public static final BitSet FOLLOW_CLASS_in_classMethod8932 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000010000000000L});
-  public static final BitSet FOLLOW_OPERATOR_in_classMethod8944 =
+  public static final BitSet FOLLOW_OPERATOR_in_classMethod8936 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_classMethod8946 =
+  public static final BitSet FOLLOW_ident_in_classMethod8938 =
       new BitSet(new long[] {0x0000000002000000L, 0x000000000C000000L});
-  public static final BitSet FOLLOW_genericDefinition_in_classMethod8949 =
+  public static final BitSet FOLLOW_genericDefinition_in_classMethod8941 =
       new BitSet(new long[] {0x0000000002000000L, 0x0000000004000000L});
-  public static final BitSet FOLLOW_formalParameterSection_in_classMethod8954 =
+  public static final BitSet FOLLOW_formalParameterSection_in_classMethod8946 =
       new BitSet(new long[] {0x0000000002000000L});
-  public static final BitSet FOLLOW_COLON_in_classMethod8958 =
+  public static final BitSet FOLLOW_COLON_in_classMethod8950 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_customAttribute_in_classMethod8961 =
+  public static final BitSet FOLLOW_customAttribute_in_classMethod8953 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeDecl_in_classMethod8965 =
+  public static final BitSet FOLLOW_typeDecl_in_classMethod8957 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000000L, 0x0000000000004000L});
-  public static final BitSet FOLLOW_SEMI_in_classMethod8967 =
+  public static final BitSet FOLLOW_SEMI_in_classMethod8959 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_classField9096 =
+  public static final BitSet FOLLOW_customAttribute_in_classField9088 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_identList_in_classField9100 =
+  public static final BitSet FOLLOW_identList_in_classField9092 =
       new BitSet(new long[] {0x0000000002000000L});
-  public static final BitSet FOLLOW_COLON_in_classField9102 =
+  public static final BitSet FOLLOW_COLON_in_classField9094 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeDecl_in_classField9104 =
+  public static final BitSet FOLLOW_typeDecl_in_classField9096 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000000L, 0x0000000000004000L});
-  public static final BitSet FOLLOW_SEMI_in_classField9106 =
+  public static final BitSet FOLLOW_SEMI_in_classField9098 =
       new BitSet(new long[] {0x0040000800000002L, 0x0001000001000000L});
-  public static final BitSet FOLLOW_hintingDirective_in_classField9109 =
+  public static final BitSet FOLLOW_hintingDirective_in_classField9101 =
       new BitSet(new long[] {0x0040000800000002L, 0x0001000001000000L});
-  public static final BitSet FOLLOW_customAttribute_in_classProperty9216 =
+  public static final BitSet FOLLOW_customAttribute_in_classProperty9208 =
       new BitSet(new long[] {0x0000000001000000L, 0x0080000000000000L});
-  public static final BitSet FOLLOW_CLASS_in_classProperty9221 =
+  public static final BitSet FOLLOW_CLASS_in_classProperty9213 =
       new BitSet(new long[] {0x0000000000000000L, 0x0080000000000000L});
-  public static final BitSet FOLLOW_PROPERTY_in_classProperty9225 =
+  public static final BitSet FOLLOW_PROPERTY_in_classProperty9217 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_classProperty9227 =
+  public static final BitSet FOLLOW_ident_in_classProperty9219 =
       new BitSet(
           new long[] {
             0x0000002402000000L, 0x0000000400102800L, 0x0000000000404003L, 0x0000000000006000L
           });
-  public static final BitSet FOLLOW_classPropertyArray_in_classProperty9230 =
+  public static final BitSet FOLLOW_classPropertyArray_in_classProperty9222 =
       new BitSet(
           new long[] {
             0x0000002402000000L, 0x0000000400002800L, 0x0000000000404003L, 0x0000000000006000L
           });
-  public static final BitSet FOLLOW_COLON_in_classProperty9235 =
+  public static final BitSet FOLLOW_COLON_in_classProperty9227 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_genericTypeIdent_in_classProperty9237 =
+  public static final BitSet FOLLOW_genericTypeIdent_in_classProperty9229 =
       new BitSet(
           new long[] {
             0x0000002400000000L, 0x0000000400002800L, 0x0000000000404003L, 0x0000000000006000L
           });
-  public static final BitSet FOLLOW_classPropertyDirective_in_classProperty9242 =
+  public static final BitSet FOLLOW_classPropertyDirective_in_classProperty9234 =
       new BitSet(
           new long[] {
             0x0000002400000000L, 0x0000000400002800L, 0x0000000000404003L, 0x0000000000006000L
           });
-  public static final BitSet FOLLOW_SEMI_in_classProperty9246 =
+  public static final BitSet FOLLOW_SEMI_in_classProperty9238 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LBRACK_in_classPropertyArray9346 =
+  public static final BitSet FOLLOW_LBRACK_in_classPropertyArray9338 =
       new BitSet(
           new long[] {
             0x20A0000CD02102C0L, 0x0004252092102840L, 0x0020000001C0005BL, 0x0000000000002280L
           });
-  public static final BitSet FOLLOW_formalParameterList_in_classPropertyArray9348 =
+  public static final BitSet FOLLOW_formalParameterList_in_classPropertyArray9340 =
       new BitSet(new long[] {0x0000000000000000L, 0x2000000000000000L});
-  public static final BitSet FOLLOW_RBRACK_in_classPropertyArray9350 =
+  public static final BitSet FOLLOW_RBRACK_in_classPropertyArray9342 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_SEMI_in_classPropertyDirective9393 =
+  public static final BitSet FOLLOW_SEMI_in_classPropertyDirective9385 =
       new BitSet(new long[] {0x0000000400000000L});
-  public static final BitSet FOLLOW_DEFAULT_in_classPropertyDirective9395 =
+  public static final BitSet FOLLOW_DEFAULT_in_classPropertyDirective9387 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_DEFAULT_in_classPropertyDirective9428 =
+  public static final BitSet FOLLOW_DEFAULT_in_classPropertyDirective9420 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_classPropertyDirective9430 =
+  public static final BitSet FOLLOW_expression_in_classPropertyDirective9422 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classPropertyReadWrite_in_classPropertyDirective9463 =
+  public static final BitSet FOLLOW_classPropertyReadWrite_in_classPropertyDirective9455 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classPropertyDispInterface_in_classPropertyDirective9496 =
+  public static final BitSet FOLLOW_classPropertyDispInterface_in_classPropertyDirective9488 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_IMPLEMENTS_in_classPropertyDirective9529 =
+  public static final BitSet FOLLOW_IMPLEMENTS_in_classPropertyDirective9521 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeId_in_classPropertyDirective9531 =
+  public static final BitSet FOLLOW_typeId_in_classPropertyDirective9523 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_INDEX_in_classPropertyDirective9564 =
+  public static final BitSet FOLLOW_INDEX_in_classPropertyDirective9556 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_classPropertyDirective9566 =
+  public static final BitSet FOLLOW_expression_in_classPropertyDirective9558 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_NODEFAULT_in_classPropertyDirective9599 =
+  public static final BitSet FOLLOW_NODEFAULT_in_classPropertyDirective9591 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_STORED_in_classPropertyDirective9632 =
+  public static final BitSet FOLLOW_STORED_in_classPropertyDirective9624 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_classPropertyDirective9634 =
+  public static final BitSet FOLLOW_expression_in_classPropertyDirective9626 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_READ_in_classPropertyReadWrite9677 =
+  public static final BitSet FOLLOW_READ_in_classPropertyReadWrite9669 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_qualifiedIdent_in_classPropertyReadWrite9679 =
+  public static final BitSet FOLLOW_qualifiedIdent_in_classPropertyReadWrite9671 =
       new BitSet(new long[] {0x0000000000000002L, 0x0000000000100000L});
-  public static final BitSet FOLLOW_LBRACK_in_classPropertyReadWrite9682 =
+  public static final BitSet FOLLOW_LBRACK_in_classPropertyReadWrite9674 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_classPropertyReadWrite9684 =
+  public static final BitSet FOLLOW_expression_in_classPropertyReadWrite9676 =
       new BitSet(new long[] {0x0000000000000000L, 0x2000000000000000L});
-  public static final BitSet FOLLOW_RBRACK_in_classPropertyReadWrite9686 =
+  public static final BitSet FOLLOW_RBRACK_in_classPropertyReadWrite9678 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_WRITE_in_classPropertyReadWrite9760 =
+  public static final BitSet FOLLOW_WRITE_in_classPropertyReadWrite9752 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_qualifiedIdent_in_classPropertyReadWrite9762 =
+  public static final BitSet FOLLOW_qualifiedIdent_in_classPropertyReadWrite9754 =
       new BitSet(new long[] {0x0000000000000002L, 0x0000000000100000L});
-  public static final BitSet FOLLOW_LBRACK_in_classPropertyReadWrite9765 =
+  public static final BitSet FOLLOW_LBRACK_in_classPropertyReadWrite9757 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_classPropertyReadWrite9767 =
+  public static final BitSet FOLLOW_expression_in_classPropertyReadWrite9759 =
       new BitSet(new long[] {0x0000000000000000L, 0x2000000000000000L});
-  public static final BitSet FOLLOW_RBRACK_in_classPropertyReadWrite9769 =
+  public static final BitSet FOLLOW_RBRACK_in_classPropertyReadWrite9761 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_READONLY_in_classPropertyDispInterface9848 =
+  public static final BitSet FOLLOW_READONLY_in_classPropertyDispInterface9840 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_WRITEONLY_in_classPropertyDispInterface9881 =
+  public static final BitSet FOLLOW_WRITEONLY_in_classPropertyDispInterface9873 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_dispIDDirective_in_classPropertyDispInterface9914 =
+  public static final BitSet FOLLOW_dispIDDirective_in_classPropertyDispInterface9906 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_STRICT_in_visibility9970 =
+  public static final BitSet FOLLOW_STRICT_in_visibility9962 =
       new BitSet(new long[] {0x0000000000000000L, 0x0100000000000000L});
-  public static final BitSet FOLLOW_PROTECTED_in_visibility9974 =
+  public static final BitSet FOLLOW_PROTECTED_in_visibility9966 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_STRICT_in_visibility10008 =
+  public static final BitSet FOLLOW_STRICT_in_visibility10000 =
       new BitSet(new long[] {0x0000000000000000L, 0x0010000000000000L});
-  public static final BitSet FOLLOW_PRIVATE_in_visibility10012 =
+  public static final BitSet FOLLOW_PRIVATE_in_visibility10004 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_PUBLIC_in_visibility10045 =
+  public static final BitSet FOLLOW_PUBLIC_in_visibility10037 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_PUBLISHED_in_visibility10078 =
+  public static final BitSet FOLLOW_PUBLISHED_in_visibility10070 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_AUTOMATED_in_visibility10111 =
+  public static final BitSet FOLLOW_AUTOMATED_in_visibility10103 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_PROCEDURE_in_exportedProcHeading10165 =
+  public static final BitSet FOLLOW_PROCEDURE_in_exportedProcHeading10157 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_exportedProcHeading10167 =
+  public static final BitSet FOLLOW_ident_in_exportedProcHeading10159 =
       new BitSet(new long[] {0x0000000002000000L, 0x0000000004000000L});
-  public static final BitSet FOLLOW_formalParameterSection_in_exportedProcHeading10170 =
+  public static final BitSet FOLLOW_formalParameterSection_in_exportedProcHeading10162 =
       new BitSet(new long[] {0x0000000002000000L});
-  public static final BitSet FOLLOW_COLON_in_exportedProcHeading10174 =
+  public static final BitSet FOLLOW_COLON_in_exportedProcHeading10166 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_customAttribute_in_exportedProcHeading10177 =
+  public static final BitSet FOLLOW_customAttribute_in_exportedProcHeading10169 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeDecl_in_exportedProcHeading10181 =
+  public static final BitSet FOLLOW_typeDecl_in_exportedProcHeading10173 =
       new BitSet(
           new long[] {
             0x0AC0000800802000L, 0x0001880103010002L, 0x0000000000205010L, 0x0000000000000108L
           });
-  public static final BitSet FOLLOW_functionDirectiveSection_in_exportedProcHeading10183 =
+  public static final BitSet FOLLOW_functionDirectiveSection_in_exportedProcHeading10175 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_FUNCTION_in_exportedProcHeading10216 =
+  public static final BitSet FOLLOW_FUNCTION_in_exportedProcHeading10208 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_exportedProcHeading10218 =
+  public static final BitSet FOLLOW_ident_in_exportedProcHeading10210 =
       new BitSet(
           new long[] {
             0x0AC0000800802000L, 0x0001880107010002L, 0x0000000000205010L, 0x0000000000000108L
           });
-  public static final BitSet FOLLOW_formalParameterSection_in_exportedProcHeading10221 =
+  public static final BitSet FOLLOW_formalParameterSection_in_exportedProcHeading10213 =
       new BitSet(
           new long[] {
             0x0AC0000800802000L, 0x0001880103010002L, 0x0000000000205010L, 0x0000000000000108L
           });
-  public static final BitSet FOLLOW_functionDirectiveSection_in_exportedProcHeading10225 =
+  public static final BitSet FOLLOW_functionDirectiveSection_in_exportedProcHeading10217 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_methodDeclHeading_in_methodDecl10280 =
+  public static final BitSet FOLLOW_methodDeclHeading_in_methodDecl10272 =
       new BitSet(
           new long[] {
             0x0100001031101002L, 0x0020000000180004L, 0x0000000044000400L, 0x0000000000000080L
           });
-  public static final BitSet FOLLOW_methodBody_in_methodDecl10283 =
+  public static final BitSet FOLLOW_methodBody_in_methodDecl10275 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_methodDeclHeading10334 =
+  public static final BitSet FOLLOW_customAttribute_in_methodDeclHeading10326 =
       new BitSet(new long[] {0x0000001021000000L, 0x0020000000000000L});
-  public static final BitSet FOLLOW_CLASS_in_methodDeclHeading10339 =
+  public static final BitSet FOLLOW_CLASS_in_methodDeclHeading10331 =
       new BitSet(new long[] {0x0000001020000000L, 0x0020000000000000L});
-  public static final BitSet FOLLOW_methodKey_in_methodDeclHeading10344 =
+  public static final BitSet FOLLOW_methodKey_in_methodDeclHeading10336 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_methodName_in_methodDeclHeading10346 =
+  public static final BitSet FOLLOW_methodName_in_methodDeclHeading10338 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x0001980117010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_formalParameterSection_in_methodDeclHeading10349 =
+  public static final BitSet FOLLOW_formalParameterSection_in_methodDeclHeading10341 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x0001980113010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_methodDirectiveSection_in_methodDeclHeading10353 =
+  public static final BitSet FOLLOW_methodDirectiveSection_in_methodDeclHeading10345 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_methodDeclHeading10450 =
+  public static final BitSet FOLLOW_customAttribute_in_methodDeclHeading10442 =
       new BitSet(new long[] {0x0000000001000000L, 0x0000000000000004L});
-  public static final BitSet FOLLOW_CLASS_in_methodDeclHeading10455 =
+  public static final BitSet FOLLOW_CLASS_in_methodDeclHeading10447 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000004L});
-  public static final BitSet FOLLOW_FUNCTION_in_methodDeclHeading10459 =
+  public static final BitSet FOLLOW_FUNCTION_in_methodDeclHeading10451 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_methodName_in_methodDeclHeading10461 =
+  public static final BitSet FOLLOW_methodName_in_methodDeclHeading10453 =
       new BitSet(
           new long[] {
             0x28C0402802802020L, 0x0001980117010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_formalParameterSection_in_methodDeclHeading10464 =
+  public static final BitSet FOLLOW_formalParameterSection_in_methodDeclHeading10456 =
       new BitSet(
           new long[] {
             0x28C0402802802020L, 0x0001980113010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_COLON_in_methodDeclHeading10469 =
+  public static final BitSet FOLLOW_COLON_in_methodDeclHeading10461 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_customAttribute_in_methodDeclHeading10472 =
+  public static final BitSet FOLLOW_customAttribute_in_methodDeclHeading10464 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeDecl_in_methodDeclHeading10476 =
+  public static final BitSet FOLLOW_typeDecl_in_methodDeclHeading10468 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x0001980113010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_methodDirectiveSection_in_methodDeclHeading10480 =
+  public static final BitSet FOLLOW_methodDirectiveSection_in_methodDeclHeading10472 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_methodDeclHeading10588 =
+  public static final BitSet FOLLOW_customAttribute_in_methodDeclHeading10580 =
       new BitSet(new long[] {0x0000000001000000L});
-  public static final BitSet FOLLOW_CLASS_in_methodDeclHeading10592 =
+  public static final BitSet FOLLOW_CLASS_in_methodDeclHeading10584 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000010000000000L});
-  public static final BitSet FOLLOW_OPERATOR_in_methodDeclHeading10594 =
+  public static final BitSet FOLLOW_OPERATOR_in_methodDeclHeading10586 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_methodName_in_methodDeclHeading10596 =
+  public static final BitSet FOLLOW_methodName_in_methodDeclHeading10588 =
       new BitSet(
           new long[] {
             0x28C0402802802020L, 0x0001980117010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_formalParameterSection_in_methodDeclHeading10599 =
+  public static final BitSet FOLLOW_formalParameterSection_in_methodDeclHeading10591 =
       new BitSet(
           new long[] {
             0x28C0402802802020L, 0x0001980113010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_COLON_in_methodDeclHeading10604 =
+  public static final BitSet FOLLOW_COLON_in_methodDeclHeading10596 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_customAttribute_in_methodDeclHeading10607 =
+  public static final BitSet FOLLOW_customAttribute_in_methodDeclHeading10599 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeDecl_in_methodDeclHeading10611 =
+  public static final BitSet FOLLOW_typeDecl_in_methodDeclHeading10603 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x0001980113010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_methodDirectiveSection_in_methodDeclHeading10615 =
+  public static final BitSet FOLLOW_methodDirectiveSection_in_methodDeclHeading10607 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_ident_in_methodName10863 =
+  public static final BitSet FOLLOW_ident_in_methodName10855 =
       new BitSet(new long[] {0x0000020000000000L, 0x0000000008000000L});
-  public static final BitSet FOLLOW_genericDefinition_in_methodName10866 =
+  public static final BitSet FOLLOW_genericDefinition_in_methodName10858 =
       new BitSet(new long[] {0x0000020000000000L});
-  public static final BitSet FOLLOW_DOT_in_methodName10871 =
+  public static final BitSet FOLLOW_DOT_in_methodName10863 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_methodName10873 =
+  public static final BitSet FOLLOW_ident_in_methodName10865 =
       new BitSet(new long[] {0x0000020000000000L, 0x0000000008000000L});
-  public static final BitSet FOLLOW_genericDefinition_in_methodName10876 =
+  public static final BitSet FOLLOW_genericDefinition_in_methodName10868 =
       new BitSet(new long[] {0x0000020000000000L});
-  public static final BitSet FOLLOW_DOT_in_methodName10882 =
+  public static final BitSet FOLLOW_DOT_in_methodName10874 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_methodName10884 =
+  public static final BitSet FOLLOW_ident_in_methodName10876 =
       new BitSet(new long[] {0x0000000000000002L, 0x0000000008000000L});
-  public static final BitSet FOLLOW_genericDefinition_in_methodName10887 =
+  public static final BitSet FOLLOW_genericDefinition_in_methodName10879 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_procDeclHeading_in_procDecl10946 =
+  public static final BitSet FOLLOW_procDeclHeading_in_procDecl10938 =
       new BitSet(
           new long[] {
             0x0100001031101002L, 0x0020000000180004L, 0x0000000044000400L, 0x0000000000000080L
           });
-  public static final BitSet FOLLOW_procBody_in_procDecl10949 =
+  public static final BitSet FOLLOW_procBody_in_procDecl10941 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_procDeclHeading11002 =
+  public static final BitSet FOLLOW_customAttribute_in_procDeclHeading10994 =
       new BitSet(new long[] {0x0000000000000000L, 0x0020000000000000L});
-  public static final BitSet FOLLOW_PROCEDURE_in_procDeclHeading11006 =
+  public static final BitSet FOLLOW_PROCEDURE_in_procDeclHeading10998 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_procDeclHeading11008 =
+  public static final BitSet FOLLOW_ident_in_procDeclHeading11000 =
       new BitSet(
           new long[] {
             0x0AC0000800802000L, 0x0001880107010002L, 0x0000000000205010L, 0x0000000000000108L
           });
-  public static final BitSet FOLLOW_formalParameterSection_in_procDeclHeading11011 =
+  public static final BitSet FOLLOW_formalParameterSection_in_procDeclHeading11003 =
       new BitSet(
           new long[] {
             0x0AC0000800802000L, 0x0001880103010002L, 0x0000000000205010L, 0x0000000000000108L
           });
-  public static final BitSet FOLLOW_functionDirectiveSection_in_procDeclHeading11015 =
+  public static final BitSet FOLLOW_functionDirectiveSection_in_procDeclHeading11007 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_procDeclHeading11102 =
+  public static final BitSet FOLLOW_customAttribute_in_procDeclHeading11094 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000004L});
-  public static final BitSet FOLLOW_FUNCTION_in_procDeclHeading11106 =
+  public static final BitSet FOLLOW_FUNCTION_in_procDeclHeading11098 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_procDeclHeading11108 =
+  public static final BitSet FOLLOW_ident_in_procDeclHeading11100 =
       new BitSet(
           new long[] {
             0x0AC0000802802000L, 0x0001880107010002L, 0x0000000000205010L, 0x0000000000000108L
           });
-  public static final BitSet FOLLOW_formalParameterSection_in_procDeclHeading11111 =
+  public static final BitSet FOLLOW_formalParameterSection_in_procDeclHeading11103 =
       new BitSet(
           new long[] {
             0x0AC0000802802000L, 0x0001880103010002L, 0x0000000000205010L, 0x0000000000000108L
           });
-  public static final BitSet FOLLOW_COLON_in_procDeclHeading11116 =
+  public static final BitSet FOLLOW_COLON_in_procDeclHeading11108 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeDecl_in_procDeclHeading11118 =
+  public static final BitSet FOLLOW_typeDecl_in_procDeclHeading11110 =
       new BitSet(
           new long[] {
             0x0AC0000800802000L, 0x0001880103010002L, 0x0000000000205010L, 0x0000000000000108L
           });
-  public static final BitSet FOLLOW_functionDirectiveSection_in_procDeclHeading11122 =
+  public static final BitSet FOLLOW_functionDirectiveSection_in_procDeclHeading11114 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LPAREN_in_formalParameterSection11227 =
+  public static final BitSet FOLLOW_LPAREN_in_formalParameterSection11219 =
       new BitSet(
           new long[] {
             0x20A0000CD02102C0L, 0x0004252092102840L, 0x0020000001C0085BL, 0x0000000000002280L
           });
-  public static final BitSet FOLLOW_formalParameterList_in_formalParameterSection11230 =
+  public static final BitSet FOLLOW_formalParameterList_in_formalParameterSection11222 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000000L, 0x0000000000000800L});
-  public static final BitSet FOLLOW_RPAREN_in_formalParameterSection11234 =
+  public static final BitSet FOLLOW_RPAREN_in_formalParameterSection11226 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_formalParameter_in_formalParameterList11287 =
+  public static final BitSet FOLLOW_formalParameter_in_formalParameterList11279 =
       new BitSet(new long[] {0x0000000000000002L, 0x0000000000000000L, 0x0000000000004000L});
-  public static final BitSet FOLLOW_SEMI_in_formalParameterList11290 =
+  public static final BitSet FOLLOW_SEMI_in_formalParameterList11282 =
       new BitSet(
           new long[] {
             0x20A0000CD02102C0L, 0x0004252092102840L, 0x0020000001C0005BL, 0x0000000000002280L
           });
-  public static final BitSet FOLLOW_formalParameter_in_formalParameterList11292 =
+  public static final BitSet FOLLOW_formalParameter_in_formalParameterList11284 =
       new BitSet(new long[] {0x0000000000000002L, 0x0000000000000000L, 0x0000000000004000L});
-  public static final BitSet FOLLOW_customAttribute_in_formalParameter11354 =
+  public static final BitSet FOLLOW_customAttribute_in_formalParameter11346 =
       new BitSet(
           new long[] {
             0x20A0000CD02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002280L
           });
-  public static final BitSet FOLLOW_parmType_in_formalParameter11359 =
+  public static final BitSet FOLLOW_parmType_in_formalParameter11351 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_identListFlat_in_formalParameter11363 =
+  public static final BitSet FOLLOW_identListFlat_in_formalParameter11355 =
       new BitSet(new long[] {0x0008000002000002L});
-  public static final BitSet FOLLOW_COLON_in_formalParameter11366 =
+  public static final BitSet FOLLOW_COLON_in_formalParameter11358 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeDecl_in_formalParameter11368 =
+  public static final BitSet FOLLOW_typeDecl_in_formalParameter11360 =
       new BitSet(new long[] {0x0008000000000002L});
-  public static final BitSet FOLLOW_EQUAL_in_formalParameter11373 =
+  public static final BitSet FOLLOW_EQUAL_in_formalParameter11365 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_formalParameter11375 =
+  public static final BitSet FOLLOW_expression_in_formalParameter11367 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_block_in_methodBody11612 =
+  public static final BitSet FOLLOW_block_in_methodBody11604 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000000L, 0x0000000000004000L});
-  public static final BitSet FOLLOW_SEMI_in_methodBody11614 =
+  public static final BitSet FOLLOW_SEMI_in_methodBody11606 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_block_in_procBody11675 =
+  public static final BitSet FOLLOW_block_in_procBody11667 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000000L, 0x0000000000004000L});
-  public static final BitSet FOLLOW_SEMI_in_procBody11677 =
+  public static final BitSet FOLLOW_SEMI_in_procBody11669 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttributeList_in_customAttribute11730 =
+  public static final BitSet FOLLOW_customAttributeList_in_customAttribute11722 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttributeDecl_in_customAttributeList11777 =
+  public static final BitSet FOLLOW_customAttributeDecl_in_customAttributeList11769 =
       new BitSet(new long[] {0x0000000000000002L, 0x0000000000100000L});
-  public static final BitSet FOLLOW_LBRACK_in_customAttributeDecl11825 =
+  public static final BitSet FOLLOW_LBRACK_in_customAttributeDecl11817 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_namespacedQualifiedIdent_in_customAttributeDecl11827 =
+  public static final BitSet FOLLOW_namespacedQualifiedIdent_in_customAttributeDecl11819 =
       new BitSet(new long[] {0x0000000000000000L, 0x2000000004000000L});
-  public static final BitSet FOLLOW_LPAREN_in_customAttributeDecl11830 =
+  public static final BitSet FOLLOW_LPAREN_in_customAttributeDecl11822 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0085BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expressionList_in_customAttributeDecl11833 =
+  public static final BitSet FOLLOW_expressionList_in_customAttributeDecl11825 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000000L, 0x0000000000000800L});
-  public static final BitSet FOLLOW_RPAREN_in_customAttributeDecl11837 =
+  public static final BitSet FOLLOW_RPAREN_in_customAttributeDecl11829 =
       new BitSet(new long[] {0x0000000000000000L, 0x2000000000000000L});
-  public static final BitSet FOLLOW_RBRACK_in_customAttributeDecl11841 =
+  public static final BitSet FOLLOW_RBRACK_in_customAttributeDecl11833 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_anonymousExpression_in_expression11925 =
+  public static final BitSet FOLLOW_anonymousExpression_in_expression11917 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_simpleExpression_in_expression11966 =
+  public static final BitSet FOLLOW_simpleExpression_in_expression11958 =
       new BitSet(new long[] {0x0008000000000802L, 0x0000001008841028L});
-  public static final BitSet FOLLOW_relationalOperator_in_expression11969 =
+  public static final BitSet FOLLOW_relationalOperator_in_expression11961 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_simpleExpression_in_expression11971 =
+  public static final BitSet FOLLOW_simpleExpression_in_expression11963 =
       new BitSet(new long[] {0x0008000000000802L, 0x0000001008841028L});
-  public static final BitSet FOLLOW_EQUAL_in_expression11976 =
+  public static final BitSet FOLLOW_EQUAL_in_expression11968 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_expression11978 =
+  public static final BitSet FOLLOW_expression_in_expression11970 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_PROCEDURE_in_anonymousExpression12026 =
+  public static final BitSet FOLLOW_PROCEDURE_in_anonymousExpression12018 =
       new BitSet(
           new long[] {
             0x0100001031101000L, 0x0020000004180004L, 0x0000000044000400L, 0x0000000000000080L
           });
-  public static final BitSet FOLLOW_formalParameterSection_in_anonymousExpression12029 =
+  public static final BitSet FOLLOW_formalParameterSection_in_anonymousExpression12021 =
       new BitSet(
           new long[] {
             0x0100001031101000L, 0x0020000000180004L, 0x0000000044000400L, 0x0000000000000080L
           });
-  public static final BitSet FOLLOW_block_in_anonymousExpression12033 =
+  public static final BitSet FOLLOW_block_in_anonymousExpression12025 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_FUNCTION_in_anonymousExpression12066 =
+  public static final BitSet FOLLOW_FUNCTION_in_anonymousExpression12058 =
       new BitSet(new long[] {0x0000000002000000L, 0x0000000004000000L});
-  public static final BitSet FOLLOW_formalParameterSection_in_anonymousExpression12069 =
+  public static final BitSet FOLLOW_formalParameterSection_in_anonymousExpression12061 =
       new BitSet(new long[] {0x0000000002000000L});
-  public static final BitSet FOLLOW_COLON_in_anonymousExpression12073 =
+  public static final BitSet FOLLOW_COLON_in_anonymousExpression12065 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeDecl_in_anonymousExpression12075 =
+  public static final BitSet FOLLOW_typeDecl_in_anonymousExpression12067 =
       new BitSet(
           new long[] {
             0x0100001031101000L, 0x0020000000180004L, 0x0000000044000400L, 0x0000000000000080L
           });
-  public static final BitSet FOLLOW_block_in_anonymousExpression12077 =
+  public static final BitSet FOLLOW_block_in_anonymousExpression12069 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_term_in_simpleExpression12126 =
+  public static final BitSet FOLLOW_term_in_simpleExpression12118 =
       new BitSet(
           new long[] {
             0x0000000000000002L, 0x0002020020000000L, 0x0000000000000000L, 0x0000000000010000L
           });
-  public static final BitSet FOLLOW_addOperator_in_simpleExpression12129 =
+  public static final BitSet FOLLOW_addOperator_in_simpleExpression12121 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_term_in_simpleExpression12131 =
+  public static final BitSet FOLLOW_term_in_simpleExpression12123 =
       new BitSet(
           new long[] {
             0x0000000000000002L, 0x0002020020000000L, 0x0000000000000000L, 0x0000000000010000L
           });
-  public static final BitSet FOLLOW_factor_in_term12194 =
+  public static final BitSet FOLLOW_factor_in_term12186 =
       new BitSet(new long[] {0x0000008000000102L, 0x0000000040000000L, 0x00000000000F0000L});
-  public static final BitSet FOLLOW_multOperator_in_term12197 =
+  public static final BitSet FOLLOW_multOperator_in_term12189 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_factor_in_term12199 =
+  public static final BitSet FOLLOW_factor_in_term12191 =
       new BitSet(new long[] {0x0000008000000102L, 0x0000000040000000L, 0x00000000000F0000L});
-  public static final BitSet FOLLOW_atom_in_factor12260 =
+  public static final BitSet FOLLOW_atom_in_factor12252 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_unaryOperator_in_factor12293 =
+  public static final BitSet FOLLOW_unaryOperator_in_factor12285 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_factor_in_factor12295 =
+  public static final BitSet FOLLOW_factor_in_factor12287 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_INHERITED_in_factor12328 =
+  public static final BitSet FOLLOW_INHERITED_in_factor12320 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C2L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_factor_in_factor12331 =
+  public static final BitSet FOLLOW_factor_in_factor12323 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_particle_in_atom12394 =
+  public static final BitSet FOLLOW_particle_in_atom12386 =
       new BitSet(new long[] {0x0000020000020002L, 0x000800000C100000L});
-  public static final BitSet FOLLOW_particleItem_in_atom12396 =
+  public static final BitSet FOLLOW_particleItem_in_atom12388 =
       new BitSet(new long[] {0x0000020000020002L, 0x000800000C100000L});
-  public static final BitSet FOLLOW_intNum_in_particle12454 =
+  public static final BitSet FOLLOW_intNum_in_particle12446 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_realNum_in_particle12487 =
+  public static final BitSet FOLLOW_realNum_in_particle12479 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_TkAsmHexNum_in_particle12520 =
+  public static final BitSet FOLLOW_TkAsmHexNum_in_particle12512 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_stringFactor_in_particle12553 =
+  public static final BitSet FOLLOW_stringFactor_in_particle12545 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_NIL_in_particle12586 =
+  public static final BitSet FOLLOW_NIL_in_particle12578 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_TRUE_in_particle12619 =
+  public static final BitSet FOLLOW_TRUE_in_particle12611 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_FALSE_in_particle12652 =
+  public static final BitSet FOLLOW_FALSE_in_particle12644 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_ident_in_particle12685 =
+  public static final BitSet FOLLOW_ident_in_particle12677 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_parenthesizedExpression_in_particle12718 =
+  public static final BitSet FOLLOW_parenthesizedExpression_in_particle12710 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_setLiteral_in_particle12751 =
+  public static final BitSet FOLLOW_setLiteral_in_particle12743 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_STRING_in_particle12784 =
+  public static final BitSet FOLLOW_STRING_in_particle12776 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_FILE_in_particle12817 =
+  public static final BitSet FOLLOW_FILE_in_particle12809 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_set_in_particleItem12870 =
+  public static final BitSet FOLLOW_set_in_particleItem12862 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_extendedIdent_in_particleItem12878 =
+  public static final BitSet FOLLOW_extendedIdent_in_particleItem12870 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LT_in_particleItem12912 =
+  public static final BitSet FOLLOW_LT_in_particleItem12904 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_genericTypeIdent_in_particleItem12914 =
+  public static final BitSet FOLLOW_genericTypeIdent_in_particleItem12906 =
       new BitSet(new long[] {0x0000000004000000L, 0x0000000000000020L});
-  public static final BitSet FOLLOW_COMMA_in_particleItem12917 =
+  public static final BitSet FOLLOW_COMMA_in_particleItem12909 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_genericTypeIdent_in_particleItem12919 =
+  public static final BitSet FOLLOW_genericTypeIdent_in_particleItem12911 =
       new BitSet(new long[] {0x0000000004000000L, 0x0000000000000020L});
-  public static final BitSet FOLLOW_GT_in_particleItem12923 =
+  public static final BitSet FOLLOW_GT_in_particleItem12915 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LBRACK_in_particleItem12957 =
+  public static final BitSet FOLLOW_LBRACK_in_particleItem12949 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expressionList_in_particleItem12959 =
+  public static final BitSet FOLLOW_expressionList_in_particleItem12951 =
       new BitSet(new long[] {0x0000000000000000L, 0x2000000000000000L});
-  public static final BitSet FOLLOW_RBRACK_in_particleItem12961 =
+  public static final BitSet FOLLOW_RBRACK_in_particleItem12953 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_POINTER2_in_particleItem12994 =
+  public static final BitSet FOLLOW_POINTER2_in_particleItem12986 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LPAREN_in_particleItem13027 =
+  public static final BitSet FOLLOW_LPAREN_in_particleItem13019 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0085BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_parameterExpression_in_particleItem13030 =
+  public static final BitSet FOLLOW_parameterExpression_in_particleItem13022 =
       new BitSet(
           new long[] {
             0x34A0000DC42302C0L, 0x0826252AB6106844L, 0x1070000211C0085BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_COMMA_in_particleItem13033 =
+  public static final BitSet FOLLOW_COMMA_in_particleItem13025 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0085BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_RPAREN_in_particleItem13039 =
+  public static final BitSet FOLLOW_RPAREN_in_particleItem13031 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_ident_in_extendedIdent13091 =
+  public static final BitSet FOLLOW_ident_in_extendedIdent13083 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_keywords_in_extendedIdent13124 =
+  public static final BitSet FOLLOW_keywords_in_extendedIdent13116 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_expression_in_expressionList13176 =
+  public static final BitSet FOLLOW_expression_in_expressionList13168 =
       new BitSet(
           new long[] {
             0x34A0000DC42302C2L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_COMMA_in_expressionList13179 =
+  public static final BitSet FOLLOW_COMMA_in_expressionList13171 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C2L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_parameterExpression13229 =
+  public static final BitSet FOLLOW_expression_in_parameterExpression13221 =
       new BitSet(new long[] {0x0000000002000002L});
-  public static final BitSet FOLLOW_COLON_in_parameterExpression13232 =
+  public static final BitSet FOLLOW_COLON_in_parameterExpression13224 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_parameterExpression13234 =
+  public static final BitSet FOLLOW_expression_in_parameterExpression13226 =
       new BitSet(new long[] {0x0000000002000002L});
-  public static final BitSet FOLLOW_COLON_in_parameterExpression13237 =
+  public static final BitSet FOLLOW_COLON_in_parameterExpression13229 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_parameterExpression13239 =
+  public static final BitSet FOLLOW_expression_in_parameterExpression13231 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_ControlString_in_stringFactor13296 =
+  public static final BitSet FOLLOW_ControlString_in_stringFactor13288 =
       new BitSet(new long[] {0x0000000000000002L, 0x0800000000000000L});
-  public static final BitSet FOLLOW_QuotedString_in_stringFactor13299 =
+  public static final BitSet FOLLOW_QuotedString_in_stringFactor13291 =
       new BitSet(new long[] {0x0000000100000000L});
-  public static final BitSet FOLLOW_ControlString_in_stringFactor13301 =
+  public static final BitSet FOLLOW_ControlString_in_stringFactor13293 =
       new BitSet(new long[] {0x0000000000000002L, 0x0800000000000000L});
-  public static final BitSet FOLLOW_QuotedString_in_stringFactor13306 =
+  public static final BitSet FOLLOW_QuotedString_in_stringFactor13298 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_QuotedString_in_stringFactor13341 =
+  public static final BitSet FOLLOW_QuotedString_in_stringFactor13333 =
       new BitSet(new long[] {0x0000000100000002L});
-  public static final BitSet FOLLOW_ControlString_in_stringFactor13344 =
+  public static final BitSet FOLLOW_ControlString_in_stringFactor13336 =
       new BitSet(new long[] {0x0000000000000000L, 0x0800000000000000L});
-  public static final BitSet FOLLOW_QuotedString_in_stringFactor13346 =
+  public static final BitSet FOLLOW_QuotedString_in_stringFactor13338 =
       new BitSet(new long[] {0x0000000100000002L});
-  public static final BitSet FOLLOW_ControlString_in_stringFactor13351 =
+  public static final BitSet FOLLOW_ControlString_in_stringFactor13343 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LPAREN_in_parenthesizedExpression13395 =
+  public static final BitSet FOLLOW_LPAREN_in_parenthesizedExpression13387 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_parenthesizedExpression13397 =
+  public static final BitSet FOLLOW_expression_in_parenthesizedExpression13389 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000000L, 0x0000000000000800L});
-  public static final BitSet FOLLOW_RPAREN_in_parenthesizedExpression13399 =
+  public static final BitSet FOLLOW_RPAREN_in_parenthesizedExpression13391 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LBRACK_in_setLiteral13454 =
+  public static final BitSet FOLLOW_LBRACK_in_setLiteral13446 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x2806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expressionOrRangeList_in_setLiteral13457 =
+  public static final BitSet FOLLOW_expressionOrRangeList_in_setLiteral13449 =
       new BitSet(new long[] {0x0000000000000000L, 0x2000000000000000L});
-  public static final BitSet FOLLOW_RBRACK_in_setLiteral13461 =
+  public static final BitSet FOLLOW_RBRACK_in_setLiteral13453 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_expressionOrRange_in_expressionOrRangeList13506 =
+  public static final BitSet FOLLOW_expressionOrRange_in_expressionOrRangeList13498 =
       new BitSet(
           new long[] {
             0x34A0000DC42302C2L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_COMMA_in_expressionOrRangeList13509 =
+  public static final BitSet FOLLOW_COMMA_in_expressionOrRangeList13501 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C2L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_simpleExpression_in_expressionOrRange13561 =
+  public static final BitSet FOLLOW_simpleExpression_in_expressionOrRange13553 =
       new BitSet(new long[] {0x0000040000000002L});
-  public static final BitSet FOLLOW_DOTDOT_in_expressionOrRange13564 =
+  public static final BitSet FOLLOW_DOTDOT_in_expressionOrRange13556 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_simpleExpression_in_expressionOrRange13566 =
+  public static final BitSet FOLLOW_simpleExpression_in_expressionOrRange13558 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_factor_in_designator13623 =
+  public static final BitSet FOLLOW_factor_in_designator13615 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_ifStatement_in_statement14549 =
+  public static final BitSet FOLLOW_ifStatement_in_statement14541 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_caseStatement_in_statement14582 =
+  public static final BitSet FOLLOW_caseStatement_in_statement14574 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_repeatStatement_in_statement14615 =
+  public static final BitSet FOLLOW_repeatStatement_in_statement14607 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_whileStatement_in_statement14648 =
+  public static final BitSet FOLLOW_whileStatement_in_statement14640 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_forStatement_in_statement14681 =
+  public static final BitSet FOLLOW_forStatement_in_statement14673 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_withStatement_in_statement14714 =
+  public static final BitSet FOLLOW_withStatement_in_statement14706 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_tryStatement_in_statement14747 =
+  public static final BitSet FOLLOW_tryStatement_in_statement14739 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_raiseStatement_in_statement14780 =
+  public static final BitSet FOLLOW_raiseStatement_in_statement14772 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_assemblerStatement_in_statement14813 =
+  public static final BitSet FOLLOW_assemblerStatement_in_statement14805 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_compoundStatement_in_statement14846 =
+  public static final BitSet FOLLOW_compoundStatement_in_statement14838 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_label_in_statement14879 =
+  public static final BitSet FOLLOW_label_in_statement14871 =
       new BitSet(new long[] {0x0000000002000000L});
-  public static final BitSet FOLLOW_COLON_in_statement14881 =
+  public static final BitSet FOLLOW_COLON_in_statement14873 =
       new BitSet(
           new long[] {
             0x34A0000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C000DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statement_in_statement14883 =
+  public static final BitSet FOLLOW_statement_in_statement14875 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_simpleStatement_in_statement14916 =
+  public static final BitSet FOLLOW_simpleStatement_in_statement14908 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_IF_in_ifStatement14970 =
+  public static final BitSet FOLLOW_IF_in_ifStatement14962 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_ifStatement14972 =
+  public static final BitSet FOLLOW_expression_in_ifStatement14964 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000000L, 0x0000000002000000L});
-  public static final BitSet FOLLOW_THEN_in_ifStatement14974 =
+  public static final BitSet FOLLOW_THEN_in_ifStatement14966 =
       new BitSet(
           new long[] {
             0x34A0000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C000DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statement_in_ifStatement14976 =
+  public static final BitSet FOLLOW_statement_in_ifStatement14968 =
       new BitSet(new long[] {0x0002000000000002L});
-  public static final BitSet FOLLOW_ELSE_in_ifStatement14979 =
+  public static final BitSet FOLLOW_ELSE_in_ifStatement14971 =
       new BitSet(
           new long[] {
             0x34A0000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C000DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statement_in_ifStatement14981 =
+  public static final BitSet FOLLOW_statement_in_ifStatement14973 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_CASE_in_caseStatement15035 =
+  public static final BitSet FOLLOW_CASE_in_caseStatement15027 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_caseStatement15037 =
+  public static final BitSet FOLLOW_expression_in_caseStatement15029 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000004000000000L});
-  public static final BitSet FOLLOW_OF_in_caseStatement15039 =
+  public static final BitSet FOLLOW_OF_in_caseStatement15031 =
       new BitSet(
           new long[] {
             0x34A6000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_caseItem_in_caseStatement15042 =
+  public static final BitSet FOLLOW_caseItem_in_caseStatement15034 =
       new BitSet(
           new long[] {
             0x34A6000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ELSE_in_caseStatement15047 =
+  public static final BitSet FOLLOW_ELSE_in_caseStatement15039 =
       new BitSet(
           new long[] {
             0x34A4000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C040DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statementList_in_caseStatement15049 =
+  public static final BitSet FOLLOW_statementList_in_caseStatement15041 =
       new BitSet(new long[] {0x0004000000000000L, 0x0000000000000000L, 0x0000000000004000L});
-  public static final BitSet FOLLOW_SEMI_in_caseStatement15052 =
+  public static final BitSet FOLLOW_SEMI_in_caseStatement15044 =
       new BitSet(new long[] {0x0004000000000000L});
-  public static final BitSet FOLLOW_END_in_caseStatement15058 =
+  public static final BitSet FOLLOW_END_in_caseStatement15050 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_caseItemSelector_in_caseItem15115 =
+  public static final BitSet FOLLOW_caseItemSelector_in_caseItem15107 =
       new BitSet(new long[] {0x0000000002000000L});
-  public static final BitSet FOLLOW_COLON_in_caseItem15117 =
+  public static final BitSet FOLLOW_COLON_in_caseItem15109 =
       new BitSet(
           new long[] {
             0x34A0000DC07312C2L, 0x1806252AB6106A51L, 0x1070000231C040DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statement_in_caseItem15120 =
+  public static final BitSet FOLLOW_statement_in_caseItem15112 =
       new BitSet(new long[] {0x0000000000000002L, 0x0000000000000000L, 0x0000000000004000L});
-  public static final BitSet FOLLOW_SEMI_in_caseItem15125 =
+  public static final BitSet FOLLOW_SEMI_in_caseItem15117 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_caseLabel_in_caseItemSelector15176 =
+  public static final BitSet FOLLOW_caseLabel_in_caseItemSelector15168 =
       new BitSet(new long[] {0x0000000004000002L});
-  public static final BitSet FOLLOW_COMMA_in_caseItemSelector15179 =
+  public static final BitSet FOLLOW_COMMA_in_caseItemSelector15171 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_caseLabel_in_caseItemSelector15181 =
+  public static final BitSet FOLLOW_caseLabel_in_caseItemSelector15173 =
       new BitSet(new long[] {0x0000000004000002L});
-  public static final BitSet FOLLOW_expression_in_caseLabel15254 =
+  public static final BitSet FOLLOW_expression_in_caseLabel15246 =
       new BitSet(new long[] {0x0000040000000002L});
-  public static final BitSet FOLLOW_DOTDOT_in_caseLabel15257 =
+  public static final BitSet FOLLOW_DOTDOT_in_caseLabel15249 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_caseLabel15259 =
+  public static final BitSet FOLLOW_expression_in_caseLabel15251 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_REPEAT_in_repeatStatement15311 =
+  public static final BitSet FOLLOW_REPEAT_in_repeatStatement15303 =
       new BitSet(
           new long[] {
             0x34A0000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C040DBL, 0x0000000000003A10L
           });
-  public static final BitSet FOLLOW_statementList_in_repeatStatement15314 =
+  public static final BitSet FOLLOW_statementList_in_repeatStatement15306 =
       new BitSet(
           new long[] {
             0x0000000000000000L, 0x0000000000000000L, 0x0000000000000000L, 0x0000000000000010L
           });
-  public static final BitSet FOLLOW_UNTIL_in_repeatStatement15318 =
+  public static final BitSet FOLLOW_UNTIL_in_repeatStatement15310 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_repeatStatement15320 =
+  public static final BitSet FOLLOW_expression_in_repeatStatement15312 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_WHILE_in_whileStatement15371 =
+  public static final BitSet FOLLOW_WHILE_in_whileStatement15363 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_whileStatement15373 =
+  public static final BitSet FOLLOW_expression_in_whileStatement15365 =
       new BitSet(new long[] {0x0000010000000000L});
-  public static final BitSet FOLLOW_DO_in_whileStatement15375 =
+  public static final BitSet FOLLOW_DO_in_whileStatement15367 =
       new BitSet(
           new long[] {
             0x34A0000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C000DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statement_in_whileStatement15377 =
+  public static final BitSet FOLLOW_statement_in_whileStatement15369 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_FOR_in_forStatement15430 =
+  public static final BitSet FOLLOW_FOR_in_forStatement15422 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_designator_in_forStatement15432 =
+  public static final BitSet FOLLOW_designator_in_forStatement15424 =
       new BitSet(new long[] {0x0000000000008000L});
-  public static final BitSet FOLLOW_ASSIGN_in_forStatement15434 =
+  public static final BitSet FOLLOW_ASSIGN_in_forStatement15426 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_forStatement15436 =
+  public static final BitSet FOLLOW_expression_in_forStatement15428 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000000L, 0x0000000008000000L});
-  public static final BitSet FOLLOW_TO_in_forStatement15438 =
+  public static final BitSet FOLLOW_TO_in_forStatement15430 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_forStatement15440 =
+  public static final BitSet FOLLOW_expression_in_forStatement15432 =
       new BitSet(new long[] {0x0000010000000000L});
-  public static final BitSet FOLLOW_DO_in_forStatement15442 =
+  public static final BitSet FOLLOW_DO_in_forStatement15434 =
       new BitSet(
           new long[] {
             0x34A0000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C000DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statement_in_forStatement15444 =
+  public static final BitSet FOLLOW_statement_in_forStatement15436 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_FOR_in_forStatement15477 =
+  public static final BitSet FOLLOW_FOR_in_forStatement15469 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_designator_in_forStatement15479 =
+  public static final BitSet FOLLOW_designator_in_forStatement15471 =
       new BitSet(new long[] {0x0000000000008000L});
-  public static final BitSet FOLLOW_ASSIGN_in_forStatement15481 =
+  public static final BitSet FOLLOW_ASSIGN_in_forStatement15473 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_forStatement15483 =
+  public static final BitSet FOLLOW_expression_in_forStatement15475 =
       new BitSet(new long[] {0x0000080000000000L});
-  public static final BitSet FOLLOW_DOWNTO_in_forStatement15485 =
+  public static final BitSet FOLLOW_DOWNTO_in_forStatement15477 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_forStatement15487 =
+  public static final BitSet FOLLOW_expression_in_forStatement15479 =
       new BitSet(new long[] {0x0000010000000000L});
-  public static final BitSet FOLLOW_DO_in_forStatement15489 =
+  public static final BitSet FOLLOW_DO_in_forStatement15481 =
       new BitSet(
           new long[] {
             0x34A0000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C000DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statement_in_forStatement15491 =
+  public static final BitSet FOLLOW_statement_in_forStatement15483 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_FOR_in_forStatement15524 =
+  public static final BitSet FOLLOW_FOR_in_forStatement15516 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_designator_in_forStatement15526 =
+  public static final BitSet FOLLOW_designator_in_forStatement15518 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000001000L});
-  public static final BitSet FOLLOW_IN_in_forStatement15528 =
+  public static final BitSet FOLLOW_IN_in_forStatement15520 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_forStatement15530 =
+  public static final BitSet FOLLOW_expression_in_forStatement15522 =
       new BitSet(new long[] {0x0000010000000000L});
-  public static final BitSet FOLLOW_DO_in_forStatement15532 =
+  public static final BitSet FOLLOW_DO_in_forStatement15524 =
       new BitSet(
           new long[] {
             0x34A0000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C000DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statement_in_forStatement15534 =
+  public static final BitSet FOLLOW_statement_in_forStatement15526 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_WITH_in_withStatement15586 =
+  public static final BitSet FOLLOW_WITH_in_withStatement15578 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_withItem_in_withStatement15588 =
+  public static final BitSet FOLLOW_withItem_in_withStatement15580 =
       new BitSet(new long[] {0x0000010000000000L});
-  public static final BitSet FOLLOW_DO_in_withStatement15590 =
+  public static final BitSet FOLLOW_DO_in_withStatement15582 =
       new BitSet(
           new long[] {
             0x34A0000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C000DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statement_in_withStatement15592 =
+  public static final BitSet FOLLOW_statement_in_withStatement15584 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_designator_in_withItem15649 =
+  public static final BitSet FOLLOW_designator_in_withItem15641 =
       new BitSet(new long[] {0x0000000000000800L});
-  public static final BitSet FOLLOW_AS_in_withItem15651 =
+  public static final BitSet FOLLOW_AS_in_withItem15643 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_designator_in_withItem15653 =
+  public static final BitSet FOLLOW_designator_in_withItem15645 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_designator_in_withItem15693 =
+  public static final BitSet FOLLOW_designator_in_withItem15685 =
       new BitSet(new long[] {0x0000000004000002L});
-  public static final BitSet FOLLOW_COMMA_in_withItem15696 =
+  public static final BitSet FOLLOW_COMMA_in_withItem15688 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_designator_in_withItem15698 =
+  public static final BitSet FOLLOW_designator_in_withItem15690 =
       new BitSet(new long[] {0x0000000004000002L});
-  public static final BitSet FOLLOW_BEGIN_in_compoundStatement15748 =
+  public static final BitSet FOLLOW_BEGIN_in_compoundStatement15740 =
       new BitSet(
           new long[] {
             0x34A4000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C040DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statementList_in_compoundStatement15751 =
+  public static final BitSet FOLLOW_statementList_in_compoundStatement15743 =
       new BitSet(new long[] {0x0004000000000000L});
-  public static final BitSet FOLLOW_END_in_compoundStatement15755 =
+  public static final BitSet FOLLOW_END_in_compoundStatement15747 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_statement_in_statementList15821 =
+  public static final BitSet FOLLOW_statement_in_statementList15813 =
       new BitSet(new long[] {0x0000000000000002L, 0x0000000000000000L, 0x0000000000004000L});
-  public static final BitSet FOLLOW_SEMI_in_statementList15826 =
+  public static final BitSet FOLLOW_SEMI_in_statementList15818 =
       new BitSet(
           new long[] {
             0x34A0000DC07312C2L, 0x1806252AB6106A51L, 0x1070000231C040DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statement_in_statementList15829 =
+  public static final BitSet FOLLOW_statement_in_statementList15821 =
       new BitSet(new long[] {0x0000000000000002L, 0x0000000000000000L, 0x0000000000004000L});
-  public static final BitSet FOLLOW_designator_in_simpleStatement15883 =
+  public static final BitSet FOLLOW_designator_in_simpleStatement15875 =
       new BitSet(new long[] {0x0000000000008000L});
-  public static final BitSet FOLLOW_ASSIGN_in_simpleStatement15885 =
+  public static final BitSet FOLLOW_ASSIGN_in_simpleStatement15877 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_simpleStatement15887 =
+  public static final BitSet FOLLOW_expression_in_simpleStatement15879 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_designator_in_simpleStatement15920 =
+  public static final BitSet FOLLOW_designator_in_simpleStatement15912 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_gotoStatement_in_simpleStatement15954 =
+  public static final BitSet FOLLOW_gotoStatement_in_simpleStatement15946 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_GOTO_in_gotoStatement16006 =
+  public static final BitSet FOLLOW_GOTO_in_gotoStatement15998 =
       new BitSet(
           new long[] {
             0x20A0000CC0210240L, 0x0004252092002840L, 0x0070000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_label_in_gotoStatement16008 =
+  public static final BitSet FOLLOW_label_in_gotoStatement16000 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_EXIT_in_gotoStatement16041 =
+  public static final BitSet FOLLOW_EXIT_in_gotoStatement16033 =
       new BitSet(new long[] {0x0000000000000002L, 0x0000000004000000L});
-  public static final BitSet FOLLOW_LPAREN_in_gotoStatement16044 =
+  public static final BitSet FOLLOW_LPAREN_in_gotoStatement16036 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_gotoStatement16046 =
+  public static final BitSet FOLLOW_expression_in_gotoStatement16038 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000000L, 0x0000000000000800L});
-  public static final BitSet FOLLOW_RPAREN_in_gotoStatement16048 =
+  public static final BitSet FOLLOW_RPAREN_in_gotoStatement16040 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_BREAK_in_gotoStatement16083 =
+  public static final BitSet FOLLOW_BREAK_in_gotoStatement16075 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_CONTINUE_in_gotoStatement16116 =
+  public static final BitSet FOLLOW_CONTINUE_in_gotoStatement16108 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_expression_in_constExpression16169 =
+  public static final BitSet FOLLOW_expression_in_constExpression16161 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LPAREN_in_constExpression16202 =
+  public static final BitSet FOLLOW_LPAREN_in_constExpression16194 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_constExpression16205 =
+  public static final BitSet FOLLOW_ident_in_constExpression16197 =
       new BitSet(new long[] {0x0000000002000000L});
-  public static final BitSet FOLLOW_COLON_in_constExpression16207 =
+  public static final BitSet FOLLOW_COLON_in_constExpression16199 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_constExpression_in_constExpression16209 =
+  public static final BitSet FOLLOW_constExpression_in_constExpression16201 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0485BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_SEMI_in_constExpression16212 =
+  public static final BitSet FOLLOW_SEMI_in_constExpression16204 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0085BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_RPAREN_in_constExpression16218 =
+  public static final BitSet FOLLOW_RPAREN_in_constExpression16210 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LPAREN_in_constExpression16252 =
+  public static final BitSet FOLLOW_LPAREN_in_constExpression16244 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_constExpression_in_constExpression16255 =
+  public static final BitSet FOLLOW_constExpression_in_constExpression16247 =
       new BitSet(
           new long[] {
             0x34A0000DC42302C0L, 0x0826252AB6106844L, 0x1070000211C0085BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_COMMA_in_constExpression16258 =
+  public static final BitSet FOLLOW_COMMA_in_constExpression16250 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0085BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_RPAREN_in_constExpression16264 =
+  public static final BitSet FOLLOW_RPAREN_in_constExpression16256 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LPAREN_in_constExpression16298 =
+  public static final BitSet FOLLOW_LPAREN_in_constExpression16290 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000000L, 0x0000000000000800L});
-  public static final BitSet FOLLOW_RPAREN_in_constExpression16300 =
+  public static final BitSet FOLLOW_RPAREN_in_constExpression16292 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_TRY_in_tryStatement16356 =
+  public static final BitSet FOLLOW_TRY_in_tryStatement16348 =
       new BitSet(
           new long[] {
             0x34B0000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C040DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statementList_in_tryStatement16359 =
+  public static final BitSet FOLLOW_statementList_in_tryStatement16351 =
       new BitSet(new long[] {0x0010000000000000L});
-  public static final BitSet FOLLOW_EXCEPT_in_tryStatement16363 =
+  public static final BitSet FOLLOW_EXCEPT_in_tryStatement16355 =
       new BitSet(
           new long[] {
             0x34A6000DC07312C0L, 0x180625AAB6106A51L, 0x1070000231C040DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_handlerList_in_tryStatement16365 =
+  public static final BitSet FOLLOW_handlerList_in_tryStatement16357 =
       new BitSet(new long[] {0x0004000000000000L});
-  public static final BitSet FOLLOW_END_in_tryStatement16367 =
+  public static final BitSet FOLLOW_END_in_tryStatement16359 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_TRY_in_tryStatement16400 =
+  public static final BitSet FOLLOW_TRY_in_tryStatement16392 =
       new BitSet(
           new long[] {
             0xB4A0000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C040DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statementList_in_tryStatement16403 =
+  public static final BitSet FOLLOW_statementList_in_tryStatement16395 =
       new BitSet(new long[] {0x8000000000000000L});
-  public static final BitSet FOLLOW_FINALLY_in_tryStatement16407 =
+  public static final BitSet FOLLOW_FINALLY_in_tryStatement16399 =
       new BitSet(
           new long[] {
             0x34A4000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C040DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statementList_in_tryStatement16410 =
+  public static final BitSet FOLLOW_statementList_in_tryStatement16402 =
       new BitSet(new long[] {0x0004000000000000L});
-  public static final BitSet FOLLOW_END_in_tryStatement16414 =
+  public static final BitSet FOLLOW_END_in_tryStatement16406 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_handler_in_handlerList16469 =
+  public static final BitSet FOLLOW_handler_in_handlerList16461 =
       new BitSet(new long[] {0x0002000000000002L, 0x0000008000000000L});
-  public static final BitSet FOLLOW_ELSE_in_handlerList16474 =
+  public static final BitSet FOLLOW_ELSE_in_handlerList16466 =
       new BitSet(
           new long[] {
             0x34A0000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C040DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statementList_in_handlerList16476 =
+  public static final BitSet FOLLOW_statementList_in_handlerList16468 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_statementList_in_handlerList16511 =
+  public static final BitSet FOLLOW_statementList_in_handlerList16503 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_ON_in_handler16569 =
+  public static final BitSet FOLLOW_ON_in_handler16561 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_handlerIdent_in_handler16572 =
+  public static final BitSet FOLLOW_handlerIdent_in_handler16564 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeId_in_handler16576 =
+  public static final BitSet FOLLOW_typeId_in_handler16568 =
       new BitSet(new long[] {0x0000010000000000L});
-  public static final BitSet FOLLOW_DO_in_handler16578 =
+  public static final BitSet FOLLOW_DO_in_handler16570 =
       new BitSet(
           new long[] {
             0x34A0000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C040DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_handlerStatement_in_handler16580 =
+  public static final BitSet FOLLOW_handlerStatement_in_handler16572 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_ident_in_handlerIdent16635 =
+  public static final BitSet FOLLOW_ident_in_handlerIdent16627 =
       new BitSet(new long[] {0x0000000002000000L});
-  public static final BitSet FOLLOW_COLON_in_handlerIdent16637 =
+  public static final BitSet FOLLOW_COLON_in_handlerIdent16629 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_statement_in_handlerStatement16694 =
+  public static final BitSet FOLLOW_statement_in_handlerStatement16686 =
       new BitSet(new long[] {0x0000000000000002L, 0x0000000000000000L, 0x0000000000004000L});
-  public static final BitSet FOLLOW_SEMI_in_handlerStatement16697 =
+  public static final BitSet FOLLOW_SEMI_in_handlerStatement16689 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_SEMI_in_handlerStatement16745 =
+  public static final BitSet FOLLOW_SEMI_in_handlerStatement16737 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_RAISE_in_raiseStatement16804 =
+  public static final BitSet FOLLOW_RAISE_in_raiseStatement16796 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C2L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_raiseStatement16807 =
+  public static final BitSet FOLLOW_expression_in_raiseStatement16799 =
       new BitSet(new long[] {0x0000000000010002L});
-  public static final BitSet FOLLOW_AT_in_raiseStatement16812 =
+  public static final BitSet FOLLOW_AT_in_raiseStatement16804 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_raiseStatement16814 =
+  public static final BitSet FOLLOW_expression_in_raiseStatement16806 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_ASM_in_assemblerStatement16866 =
+  public static final BitSet FOLLOW_ASM_in_assemblerStatement16858 =
       new BitSet(
           new long[] {
             0xFFFFFFFFFFFFFFF0L, 0xFFFFFFFFFFFFFFFFL, 0xFFFFFFFFFFFFFFFFL, 0x000000000001FFFFL
           });
-  public static final BitSet FOLLOW_assemblerInstructions_in_assemblerStatement16868 =
+  public static final BitSet FOLLOW_assemblerInstructions_in_assemblerStatement16860 =
       new BitSet(new long[] {0x0004000000000000L});
-  public static final BitSet FOLLOW_END_in_assemblerStatement16870 =
+  public static final BitSet FOLLOW_END_in_assemblerStatement16862 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_SEMI_in_methodDirectiveSection16981 =
+  public static final BitSet FOLLOW_SEMI_in_methodDirectiveSection16973 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x0001980113010000L, 0x0000000000301030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_methodDirective_in_methodDirectiveSection16985 =
+  public static final BitSet FOLLOW_methodDirective_in_methodDirectiveSection16977 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x0001980113010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_SEMI_in_methodDirectiveSection16989 =
+  public static final BitSet FOLLOW_SEMI_in_methodDirectiveSection16981 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_standaloneOverloadDirective_in_methodDirectiveSection17022 =
+  public static final BitSet FOLLOW_standaloneOverloadDirective_in_methodDirectiveSection17014 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_SEMI_in_functionDirectiveSection17065 =
+  public static final BitSet FOLLOW_SEMI_in_functionDirectiveSection17057 =
       new BitSet(
           new long[] {
             0x0AC0000800802000L, 0x0001880103010002L, 0x0000000000201010L, 0x0000000000000108L
           });
-  public static final BitSet FOLLOW_functionDirective_in_functionDirectiveSection17069 =
+  public static final BitSet FOLLOW_functionDirective_in_functionDirectiveSection17061 =
       new BitSet(
           new long[] {
             0x0AC0000800802000L, 0x0001880103010002L, 0x0000000000205010L, 0x0000000000000108L
           });
-  public static final BitSet FOLLOW_SEMI_in_functionDirectiveSection17073 =
+  public static final BitSet FOLLOW_SEMI_in_functionDirectiveSection17065 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_standaloneOverloadDirective_in_functionDirectiveSection17106 =
+  public static final BitSet FOLLOW_standaloneOverloadDirective_in_functionDirectiveSection17098 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_SEMI_in_standaloneOverloadDirective17144 =
+  public static final BitSet FOLLOW_SEMI_in_standaloneOverloadDirective17136 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000080000000000L});
-  public static final BitSet FOLLOW_OVERLOAD_in_standaloneOverloadDirective17146 =
+  public static final BitSet FOLLOW_OVERLOAD_in_standaloneOverloadDirective17138 =
       new BitSet(new long[] {0x0000000000000002L, 0x0000000000000000L, 0x0000000000004000L});
-  public static final BitSet FOLLOW_SEMI_in_standaloneOverloadDirective17149 =
+  public static final BitSet FOLLOW_SEMI_in_standaloneOverloadDirective17141 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_OVERLOAD_in_methodDirective17201 =
+  public static final BitSet FOLLOW_OVERLOAD_in_methodDirective17193 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_REINTRODUCE_in_methodDirective17234 =
+  public static final BitSet FOLLOW_REINTRODUCE_in_methodDirective17226 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_bindingDirective_in_methodDirective17267 =
+  public static final BitSet FOLLOW_bindingDirective_in_methodDirective17259 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_abstractDirective_in_methodDirective17300 =
+  public static final BitSet FOLLOW_abstractDirective_in_methodDirective17292 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_inlineDirective_in_methodDirective17334 =
+  public static final BitSet FOLLOW_inlineDirective_in_methodDirective17326 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_callConvention_in_methodDirective17370 =
+  public static final BitSet FOLLOW_callConvention_in_methodDirective17362 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_hintingDirective_in_methodDirective17403 =
+  public static final BitSet FOLLOW_hintingDirective_in_methodDirective17395 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_oldCallConventionDirective_in_methodDirective17438 =
+  public static final BitSet FOLLOW_oldCallConventionDirective_in_methodDirective17430 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_dispIDDirective_in_methodDirective17471 =
+  public static final BitSet FOLLOW_dispIDDirective_in_methodDirective17463 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_FORWARD_in_functionDirective17519 =
+  public static final BitSet FOLLOW_FORWARD_in_functionDirective17511 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_OVERLOAD_in_functionDirective17552 =
+  public static final BitSet FOLLOW_OVERLOAD_in_functionDirective17544 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_inlineDirective_in_functionDirective17585 =
+  public static final BitSet FOLLOW_inlineDirective_in_functionDirective17577 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_callConvention_in_functionDirective17618 =
+  public static final BitSet FOLLOW_callConvention_in_functionDirective17610 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_oldCallConventionDirective_in_functionDirective17651 =
+  public static final BitSet FOLLOW_oldCallConventionDirective_in_functionDirective17643 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_hintingDirective_in_functionDirective17684 =
+  public static final BitSet FOLLOW_hintingDirective_in_functionDirective17676 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_externalDirective_in_functionDirective17717 =
+  public static final BitSet FOLLOW_externalDirective_in_functionDirective17709 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_UNSAFE_in_functionDirective17750 =
+  public static final BitSet FOLLOW_UNSAFE_in_functionDirective17742 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_MESSAGE_in_bindingDirective17801 =
+  public static final BitSet FOLLOW_MESSAGE_in_bindingDirective17793 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_bindingDirective17803 =
+  public static final BitSet FOLLOW_expression_in_bindingDirective17795 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_STATIC_in_bindingDirective17836 =
+  public static final BitSet FOLLOW_STATIC_in_bindingDirective17828 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_DYNAMIC_in_bindingDirective17869 =
+  public static final BitSet FOLLOW_DYNAMIC_in_bindingDirective17861 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_OVERRIDE_in_bindingDirective17902 =
+  public static final BitSet FOLLOW_OVERRIDE_in_bindingDirective17894 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_VIRTUAL_in_bindingDirective17935 =
+  public static final BitSet FOLLOW_VIRTUAL_in_bindingDirective17927 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_DEPRECATED_in_hintingDirective18499 =
+  public static final BitSet FOLLOW_DEPRECATED_in_hintingDirective18491 =
       new BitSet(new long[] {0x0000000100000002L, 0x0800000000000000L});
-  public static final BitSet FOLLOW_stringFactor_in_hintingDirective18502 =
+  public static final BitSet FOLLOW_stringFactor_in_hintingDirective18494 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_EXPERIMENTAL_in_hintingDirective18537 =
+  public static final BitSet FOLLOW_EXPERIMENTAL_in_hintingDirective18529 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_PLATFORM_in_hintingDirective18572 =
+  public static final BitSet FOLLOW_PLATFORM_in_hintingDirective18564 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LIBRARY_in_hintingDirective18605 =
+  public static final BitSet FOLLOW_LIBRARY_in_hintingDirective18597 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_VARARGS_in_externalDirective18653 =
+  public static final BitSet FOLLOW_VARARGS_in_externalDirective18645 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_EXTERNAL_in_externalDirective18689 =
+  public static final BitSet FOLLOW_EXTERNAL_in_externalDirective18681 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C2L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_externalDirective18692 =
+  public static final BitSet FOLLOW_expression_in_externalDirective18684 =
       new BitSet(new long[] {0x0000000000000002L, 0x0000000080002000L});
-  public static final BitSet FOLLOW_externalSpecifier_in_externalDirective18697 =
+  public static final BitSet FOLLOW_externalSpecifier_in_externalDirective18689 =
       new BitSet(new long[] {0x0000000000000002L, 0x0000000080002000L});
-  public static final BitSet FOLLOW_NAME_in_externalSpecifier18748 =
+  public static final BitSet FOLLOW_NAME_in_externalSpecifier18740 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_constExpression_in_externalSpecifier18750 =
+  public static final BitSet FOLLOW_constExpression_in_externalSpecifier18742 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_INDEX_in_externalSpecifier18783 =
+  public static final BitSet FOLLOW_INDEX_in_externalSpecifier18775 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_constExpression_in_externalSpecifier18785 =
+  public static final BitSet FOLLOW_constExpression_in_externalSpecifier18777 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_DISPID_in_dispIDDirective18838 =
+  public static final BitSet FOLLOW_DISPID_in_dispIDDirective18830 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_dispIDDirective18840 =
+  public static final BitSet FOLLOW_expression_in_dispIDDirective18832 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_TkIdentifier_in_ident18903 =
+  public static final BitSet FOLLOW_TkIdentifier_in_ident18895 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_AMPERSAND_in_ident18936 =
+  public static final BitSet FOLLOW_AMPERSAND_in_ident18928 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000000L, 0x0020000000000000L});
-  public static final BitSet FOLLOW_TkIdentifier_in_ident18938 =
+  public static final BitSet FOLLOW_TkIdentifier_in_ident18930 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_keywordsUsedAsNames_in_ident18972 =
+  public static final BitSet FOLLOW_keywordsUsedAsNames_in_ident18964 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_ident_in_identList20257 =
+  public static final BitSet FOLLOW_ident_in_identList20249 =
       new BitSet(new long[] {0x0000000004000002L});
-  public static final BitSet FOLLOW_COMMA_in_identList20260 =
+  public static final BitSet FOLLOW_COMMA_in_identList20252 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_identList20262 =
+  public static final BitSet FOLLOW_ident_in_identList20254 =
       new BitSet(new long[] {0x0000000004000002L});
-  public static final BitSet FOLLOW_ident_in_identListFlat20327 =
+  public static final BitSet FOLLOW_ident_in_identListFlat20319 =
       new BitSet(new long[] {0x0000000004000002L});
-  public static final BitSet FOLLOW_COMMA_in_identListFlat20330 =
+  public static final BitSet FOLLOW_COMMA_in_identListFlat20322 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_identListFlat20332 =
+  public static final BitSet FOLLOW_ident_in_identListFlat20324 =
       new BitSet(new long[] {0x0000000004000002L});
-  public static final BitSet FOLLOW_TkIdentifier_in_label20406 =
+  public static final BitSet FOLLOW_TkIdentifier_in_label20398 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_TkIntNum_in_label20439 =
+  public static final BitSet FOLLOW_TkIntNum_in_label20431 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_TkHexNum_in_label20472 =
+  public static final BitSet FOLLOW_TkHexNum_in_label20464 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_keywordsUsedAsNames_in_label20505 =
+  public static final BitSet FOLLOW_keywordsUsedAsNames_in_label20497 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_TkRealNum_in_realNum20655 =
+  public static final BitSet FOLLOW_TkRealNum_in_realNum20647 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_namespaceName_in_namespacedQualifiedIdent20697 =
+  public static final BitSet FOLLOW_namespaceName_in_namespacedQualifiedIdent20689 =
       new BitSet(new long[] {0x0000020000000000L});
-  public static final BitSet FOLLOW_DOT_in_namespacedQualifiedIdent20699 =
+  public static final BitSet FOLLOW_DOT_in_namespacedQualifiedIdent20691 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_qualifiedIdent_in_namespacedQualifiedIdent20703 =
+  public static final BitSet FOLLOW_qualifiedIdent_in_namespacedQualifiedIdent20695 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_ident_in_namespaceName20755 =
+  public static final BitSet FOLLOW_ident_in_namespaceName20747 =
       new BitSet(new long[] {0x0000020000000002L});
-  public static final BitSet FOLLOW_DOT_in_namespaceName20758 =
+  public static final BitSet FOLLOW_DOT_in_namespaceName20750 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_namespaceName20760 =
+  public static final BitSet FOLLOW_ident_in_namespaceName20752 =
       new BitSet(new long[] {0x0000020000000002L});
-  public static final BitSet FOLLOW_ident_in_qualifiedIdent20814 =
+  public static final BitSet FOLLOW_ident_in_qualifiedIdent20806 =
       new BitSet(new long[] {0x0000020000000000L});
-  public static final BitSet FOLLOW_DOT_in_qualifiedIdent20816 =
+  public static final BitSet FOLLOW_DOT_in_qualifiedIdent20808 =
       new BitSet(
           new long[] {
             0xFFF679FCF1F57FF0L, 0x17F5FFEFD30FFE57L, 0x002000007FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_extendedIdent_in_qualifiedIdent20821 =
+  public static final BitSet FOLLOW_extendedIdent_in_qualifiedIdent20813 =
       new BitSet(new long[] {0x0000000000000002L});
   public static final BitSet FOLLOW_blockBody_in_synpred23_Delphi1604 =
       new BitSet(new long[] {0x0000000000000002L});
@@ -57714,544 +57689,544 @@ public class DelphiParser extends Parser {
       new BitSet(new long[] {0x0000000000000002L});
   public static final BitSet FOLLOW_formalParameterSection_in_synpred93_Delphi5011 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_simpleGenericDefinition_in_synpred101_Delphi5480 =
+  public static final BitSet FOLLOW_simpleGenericDefinition_in_synpred101_Delphi5472 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_complexGenericDefinition_in_synpred102_Delphi5513 =
+  public static final BitSet FOLLOW_complexGenericDefinition_in_synpred102_Delphi5505 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classHelperDecl_in_synpred114_Delphi6038 =
+  public static final BitSet FOLLOW_classHelperDecl_in_synpred114_Delphi6030 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classTypeTypeDecl_in_synpred115_Delphi6079 =
+  public static final BitSet FOLLOW_classTypeTypeDecl_in_synpred115_Delphi6071 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classTypeDecl_in_synpred116_Delphi6112 =
+  public static final BitSet FOLLOW_classTypeDecl_in_synpred116_Delphi6104 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_recordDecl_in_synpred119_Delphi6235 =
+  public static final BitSet FOLLOW_recordDecl_in_synpred119_Delphi6227 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_CLASS_in_synpred123_Delphi6396 =
+  public static final BitSet FOLLOW_CLASS_in_synpred123_Delphi6388 =
       new BitSet(
           new long[] {
             0x20A4001CF12502E0L, 0x07B4252096102844L, 0x0020000045C0245BL, 0x0000000000002280L
           });
-  public static final BitSet FOLLOW_classState_in_synpred123_Delphi6399 =
+  public static final BitSet FOLLOW_classState_in_synpred123_Delphi6391 =
       new BitSet(
           new long[] {
             0x20A4001CF12502C0L, 0x07B4252096102844L, 0x0020000045C0045BL, 0x0000000000002280L
           });
-  public static final BitSet FOLLOW_classParent_in_synpred123_Delphi6404 =
+  public static final BitSet FOLLOW_classParent_in_synpred123_Delphi6396 =
       new BitSet(
           new long[] {
             0x20A4001CF12502C0L, 0x07B4252092102844L, 0x0020000045C0045BL, 0x0000000000002280L
           });
-  public static final BitSet FOLLOW_classItem_in_synpred123_Delphi6409 =
+  public static final BitSet FOLLOW_classItem_in_synpred123_Delphi6401 =
       new BitSet(
           new long[] {
             0x20A4001CF12502C0L, 0x07B4252092102844L, 0x0020000045C0045BL, 0x0000000000002280L
           });
-  public static final BitSet FOLLOW_END_in_synpred123_Delphi6413 =
+  public static final BitSet FOLLOW_END_in_synpred123_Delphi6405 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classState_in_synpred124_Delphi6467 =
+  public static final BitSet FOLLOW_classState_in_synpred124_Delphi6459 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classParent_in_synpred125_Delphi6472 =
+  public static final BitSet FOLLOW_classParent_in_synpred125_Delphi6464 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_visibility_in_synpred128_Delphi6708 =
+  public static final BitSet FOLLOW_visibility_in_synpred128_Delphi6700 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classMethod_in_synpred129_Delphi6741 =
+  public static final BitSet FOLLOW_classMethod_in_synpred129_Delphi6733 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classField_in_synpred130_Delphi6774 =
+  public static final BitSet FOLLOW_classField_in_synpred130_Delphi6766 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classProperty_in_synpred131_Delphi6807 =
+  public static final BitSet FOLLOW_classProperty_in_synpred131_Delphi6799 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classMethod_in_synpred138_Delphi7077 =
+  public static final BitSet FOLLOW_classMethod_in_synpred138_Delphi7069 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classProperty_in_synpred139_Delphi7110 =
+  public static final BitSet FOLLOW_classProperty_in_synpred139_Delphi7102 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_interfaceKey_in_synpred144_Delphi7196 =
+  public static final BitSet FOLLOW_interfaceKey_in_synpred144_Delphi7188 =
       new BitSet(new long[] {0x0004001021000000L, 0x00A0010004100004L});
-  public static final BitSet FOLLOW_classParent_in_synpred144_Delphi7199 =
+  public static final BitSet FOLLOW_classParent_in_synpred144_Delphi7191 =
       new BitSet(new long[] {0x0004001021000000L, 0x00A0010000100004L});
-  public static final BitSet FOLLOW_interfaceGuid_in_synpred144_Delphi7204 =
+  public static final BitSet FOLLOW_interfaceGuid_in_synpred144_Delphi7196 =
       new BitSet(new long[] {0x0004001021000000L, 0x00A0010000100004L});
-  public static final BitSet FOLLOW_interfaceItem_in_synpred144_Delphi7209 =
+  public static final BitSet FOLLOW_interfaceItem_in_synpred144_Delphi7201 =
       new BitSet(new long[] {0x0004001021000000L, 0x00A0010000100004L});
-  public static final BitSet FOLLOW_END_in_synpred144_Delphi7213 =
+  public static final BitSet FOLLOW_END_in_synpred144_Delphi7205 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classParent_in_synpred145_Delphi7307 =
+  public static final BitSet FOLLOW_classParent_in_synpred145_Delphi7299 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classMethod_in_synpred147_Delphi7550 =
+  public static final BitSet FOLLOW_classMethod_in_synpred147_Delphi7542 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_CLASS_in_synpred148_Delphi7584 =
+  public static final BitSet FOLLOW_CLASS_in_synpred148_Delphi7576 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_visibility_in_synpred151_Delphi7724 =
+  public static final BitSet FOLLOW_visibility_in_synpred151_Delphi7716 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classMethod_in_synpred152_Delphi7757 =
+  public static final BitSet FOLLOW_classMethod_in_synpred152_Delphi7749 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_visibility_in_synpred155_Delphi7955 =
+  public static final BitSet FOLLOW_visibility_in_synpred155_Delphi7947 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classMethod_in_synpred156_Delphi7988 =
+  public static final BitSet FOLLOW_classMethod_in_synpred156_Delphi7980 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classProperty_in_synpred157_Delphi8021 =
+  public static final BitSet FOLLOW_classProperty_in_synpred157_Delphi8013 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_recordField_in_synpred160_Delphi8120 =
+  public static final BitSet FOLLOW_recordField_in_synpred160_Delphi8112 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classMethod_in_synpred171_Delphi8545 =
+  public static final BitSet FOLLOW_classMethod_in_synpred171_Delphi8537 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_classProperty_in_synpred172_Delphi8578 =
+  public static final BitSet FOLLOW_classProperty_in_synpred172_Delphi8570 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred173_Delphi8666 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred173_Delphi8658 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred177_Delphi8666 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred177_Delphi8658 =
       new BitSet(new long[] {0x0000001021000000L, 0x0020000000000000L});
-  public static final BitSet FOLLOW_CLASS_in_synpred177_Delphi8671 =
+  public static final BitSet FOLLOW_CLASS_in_synpred177_Delphi8663 =
       new BitSet(new long[] {0x0000001020000000L, 0x0020000000000000L});
-  public static final BitSet FOLLOW_methodKey_in_synpred177_Delphi8675 =
+  public static final BitSet FOLLOW_methodKey_in_synpred177_Delphi8667 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_synpred177_Delphi8677 =
+  public static final BitSet FOLLOW_ident_in_synpred177_Delphi8669 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x000198011F010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_genericDefinition_in_synpred177_Delphi8680 =
+  public static final BitSet FOLLOW_genericDefinition_in_synpred177_Delphi8672 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x0001980117010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_formalParameterSection_in_synpred177_Delphi8685 =
+  public static final BitSet FOLLOW_formalParameterSection_in_synpred177_Delphi8677 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x0001980113010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_methodDirectiveSection_in_synpred177_Delphi8689 =
+  public static final BitSet FOLLOW_methodDirectiveSection_in_synpred177_Delphi8681 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred178_Delphi8791 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred178_Delphi8783 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred182_Delphi8817 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred182_Delphi8809 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred183_Delphi8791 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred183_Delphi8783 =
       new BitSet(new long[] {0x0000000001000000L, 0x0000000000000004L});
-  public static final BitSet FOLLOW_CLASS_in_synpred183_Delphi8796 =
+  public static final BitSet FOLLOW_CLASS_in_synpred183_Delphi8788 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000004L});
-  public static final BitSet FOLLOW_FUNCTION_in_synpred183_Delphi8800 =
+  public static final BitSet FOLLOW_FUNCTION_in_synpred183_Delphi8792 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_synpred183_Delphi8802 =
+  public static final BitSet FOLLOW_ident_in_synpred183_Delphi8794 =
       new BitSet(new long[] {0x0000000002000000L, 0x000000000C000000L});
-  public static final BitSet FOLLOW_genericDefinition_in_synpred183_Delphi8805 =
+  public static final BitSet FOLLOW_genericDefinition_in_synpred183_Delphi8797 =
       new BitSet(new long[] {0x0000000002000000L, 0x0000000004000000L});
-  public static final BitSet FOLLOW_formalParameterSection_in_synpred183_Delphi8810 =
+  public static final BitSet FOLLOW_formalParameterSection_in_synpred183_Delphi8802 =
       new BitSet(new long[] {0x0000000002000000L});
-  public static final BitSet FOLLOW_COLON_in_synpred183_Delphi8814 =
+  public static final BitSet FOLLOW_COLON_in_synpred183_Delphi8806 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_customAttribute_in_synpred183_Delphi8817 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred183_Delphi8809 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeDecl_in_synpred183_Delphi8821 =
+  public static final BitSet FOLLOW_typeDecl_in_synpred183_Delphi8813 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x0001980113010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_methodDirectiveSection_in_synpred183_Delphi8823 =
+  public static final BitSet FOLLOW_methodDirectiveSection_in_synpred183_Delphi8815 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred184_Delphi8935 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred184_Delphi8927 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred188_Delphi8961 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred188_Delphi8953 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred189_Delphi9096 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred189_Delphi9088 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred191_Delphi9216 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred191_Delphi9208 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred215_Delphi10177 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred215_Delphi10169 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_methodBody_in_synpred218_Delphi10283 =
+  public static final BitSet FOLLOW_methodBody_in_synpred218_Delphi10275 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred219_Delphi10334 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred219_Delphi10326 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred222_Delphi10334 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred222_Delphi10326 =
       new BitSet(new long[] {0x0000001021000000L, 0x0020000000000000L});
-  public static final BitSet FOLLOW_CLASS_in_synpred222_Delphi10339 =
+  public static final BitSet FOLLOW_CLASS_in_synpred222_Delphi10331 =
       new BitSet(new long[] {0x0000001020000000L, 0x0020000000000000L});
-  public static final BitSet FOLLOW_methodKey_in_synpred222_Delphi10344 =
+  public static final BitSet FOLLOW_methodKey_in_synpred222_Delphi10336 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_methodName_in_synpred222_Delphi10346 =
+  public static final BitSet FOLLOW_methodName_in_synpred222_Delphi10338 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x0001980117010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_formalParameterSection_in_synpred222_Delphi10349 =
+  public static final BitSet FOLLOW_formalParameterSection_in_synpred222_Delphi10341 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x0001980113010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_methodDirectiveSection_in_synpred222_Delphi10353 =
+  public static final BitSet FOLLOW_methodDirectiveSection_in_synpred222_Delphi10345 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred223_Delphi10450 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred223_Delphi10442 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred226_Delphi10472 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred226_Delphi10464 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred228_Delphi10450 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred228_Delphi10442 =
       new BitSet(new long[] {0x0000000001000000L, 0x0000000000000004L});
-  public static final BitSet FOLLOW_CLASS_in_synpred228_Delphi10455 =
+  public static final BitSet FOLLOW_CLASS_in_synpred228_Delphi10447 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000004L});
-  public static final BitSet FOLLOW_FUNCTION_in_synpred228_Delphi10459 =
+  public static final BitSet FOLLOW_FUNCTION_in_synpred228_Delphi10451 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_methodName_in_synpred228_Delphi10461 =
+  public static final BitSet FOLLOW_methodName_in_synpred228_Delphi10453 =
       new BitSet(
           new long[] {
             0x28C0402802802020L, 0x0001980117010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_formalParameterSection_in_synpred228_Delphi10464 =
+  public static final BitSet FOLLOW_formalParameterSection_in_synpred228_Delphi10456 =
       new BitSet(
           new long[] {
             0x28C0402802802020L, 0x0001980113010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_COLON_in_synpred228_Delphi10469 =
+  public static final BitSet FOLLOW_COLON_in_synpred228_Delphi10461 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_customAttribute_in_synpred228_Delphi10472 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred228_Delphi10464 =
       new BitSet(
           new long[] {
             0xFFF679FDF1F77FF0L, 0x1FFFFFEFF71FFE57L, 0x107000027FF3B7FFL, 0x0000000000017FBCL
           });
-  public static final BitSet FOLLOW_typeDecl_in_synpred228_Delphi10476 =
+  public static final BitSet FOLLOW_typeDecl_in_synpred228_Delphi10468 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x0001980113010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_methodDirectiveSection_in_synpred228_Delphi10480 =
+  public static final BitSet FOLLOW_methodDirectiveSection_in_synpred228_Delphi10472 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred229_Delphi10588 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred229_Delphi10580 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred231_Delphi10607 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred231_Delphi10599 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_procBody_in_synpred239_Delphi10949 =
+  public static final BitSet FOLLOW_procBody_in_synpred239_Delphi10941 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred240_Delphi11002 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred240_Delphi10994 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred242_Delphi11002 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred242_Delphi10994 =
       new BitSet(new long[] {0x0000000000000000L, 0x0020000000000000L});
-  public static final BitSet FOLLOW_PROCEDURE_in_synpred242_Delphi11006 =
+  public static final BitSet FOLLOW_PROCEDURE_in_synpred242_Delphi10998 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_synpred242_Delphi11008 =
+  public static final BitSet FOLLOW_ident_in_synpred242_Delphi11000 =
       new BitSet(
           new long[] {
             0x0AC0000800802000L, 0x0001880107010002L, 0x0000000000205010L, 0x0000000000000108L
           });
-  public static final BitSet FOLLOW_formalParameterSection_in_synpred242_Delphi11011 =
+  public static final BitSet FOLLOW_formalParameterSection_in_synpred242_Delphi11003 =
       new BitSet(
           new long[] {
             0x0AC0000800802000L, 0x0001880103010002L, 0x0000000000205010L, 0x0000000000000108L
           });
-  public static final BitSet FOLLOW_functionDirectiveSection_in_synpred242_Delphi11015 =
+  public static final BitSet FOLLOW_functionDirectiveSection_in_synpred242_Delphi11007 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred243_Delphi11102 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred243_Delphi11094 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttribute_in_synpred248_Delphi11354 =
+  public static final BitSet FOLLOW_customAttribute_in_synpred248_Delphi11346 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_customAttributeDecl_in_synpred254_Delphi11777 =
+  public static final BitSet FOLLOW_customAttributeDecl_in_synpred254_Delphi11769 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_relationalOperator_in_synpred258_Delphi11969 =
+  public static final BitSet FOLLOW_relationalOperator_in_synpred258_Delphi11961 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_simpleExpression_in_synpred258_Delphi11971 =
+  public static final BitSet FOLLOW_simpleExpression_in_synpred258_Delphi11963 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_EQUAL_in_synpred259_Delphi11976 =
+  public static final BitSet FOLLOW_EQUAL_in_synpred259_Delphi11968 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_synpred259_Delphi11978 =
+  public static final BitSet FOLLOW_expression_in_synpred259_Delphi11970 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_formalParameterSection_in_synpred260_Delphi12029 =
+  public static final BitSet FOLLOW_formalParameterSection_in_synpred260_Delphi12021 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_addOperator_in_synpred263_Delphi12129 =
+  public static final BitSet FOLLOW_addOperator_in_synpred263_Delphi12121 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_term_in_synpred263_Delphi12131 =
+  public static final BitSet FOLLOW_term_in_synpred263_Delphi12123 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_factor_in_synpred267_Delphi12331 =
+  public static final BitSet FOLLOW_factor_in_synpred267_Delphi12323 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_particleItem_in_synpred268_Delphi12396 =
+  public static final BitSet FOLLOW_particleItem_in_synpred268_Delphi12388 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_ident_in_synpred276_Delphi12685 =
+  public static final BitSet FOLLOW_ident_in_synpred276_Delphi12677 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_STRING_in_synpred279_Delphi12784 =
+  public static final BitSet FOLLOW_STRING_in_synpred279_Delphi12776 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_ident_in_synpred288_Delphi13091 =
+  public static final BitSet FOLLOW_ident_in_synpred288_Delphi13083 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_QuotedString_in_synpred293_Delphi13299 =
+  public static final BitSet FOLLOW_QuotedString_in_synpred293_Delphi13291 =
       new BitSet(new long[] {0x0000000100000000L});
-  public static final BitSet FOLLOW_ControlString_in_synpred293_Delphi13301 =
+  public static final BitSet FOLLOW_ControlString_in_synpred293_Delphi13293 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_QuotedString_in_synpred294_Delphi13306 =
+  public static final BitSet FOLLOW_QuotedString_in_synpred294_Delphi13298 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_ControlString_in_synpred296_Delphi13344 =
+  public static final BitSet FOLLOW_ControlString_in_synpred296_Delphi13336 =
       new BitSet(new long[] {0x0000000000000000L, 0x0800000000000000L});
-  public static final BitSet FOLLOW_QuotedString_in_synpred296_Delphi13346 =
+  public static final BitSet FOLLOW_QuotedString_in_synpred296_Delphi13338 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_ControlString_in_synpred297_Delphi13351 =
+  public static final BitSet FOLLOW_ControlString_in_synpred297_Delphi13343 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_ELSE_in_synpred333_Delphi14979 =
+  public static final BitSet FOLLOW_ELSE_in_synpred333_Delphi14971 =
       new BitSet(
           new long[] {
             0x34A0000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C000DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statement_in_synpred333_Delphi14981 =
+  public static final BitSet FOLLOW_statement_in_synpred333_Delphi14973 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_statement_in_synpred337_Delphi15120 =
+  public static final BitSet FOLLOW_statement_in_synpred337_Delphi15112 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_statementList_in_synpred341_Delphi15314 =
+  public static final BitSet FOLLOW_statementList_in_synpred341_Delphi15306 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_FOR_in_synpred342_Delphi15430 =
+  public static final BitSet FOLLOW_FOR_in_synpred342_Delphi15422 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_designator_in_synpred342_Delphi15432 =
+  public static final BitSet FOLLOW_designator_in_synpred342_Delphi15424 =
       new BitSet(new long[] {0x0000000000008000L});
-  public static final BitSet FOLLOW_ASSIGN_in_synpred342_Delphi15434 =
+  public static final BitSet FOLLOW_ASSIGN_in_synpred342_Delphi15426 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_synpred342_Delphi15436 =
+  public static final BitSet FOLLOW_expression_in_synpred342_Delphi15428 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000000L, 0x0000000008000000L});
-  public static final BitSet FOLLOW_TO_in_synpred342_Delphi15438 =
+  public static final BitSet FOLLOW_TO_in_synpred342_Delphi15430 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_synpred342_Delphi15440 =
+  public static final BitSet FOLLOW_expression_in_synpred342_Delphi15432 =
       new BitSet(new long[] {0x0000010000000000L});
-  public static final BitSet FOLLOW_DO_in_synpred342_Delphi15442 =
+  public static final BitSet FOLLOW_DO_in_synpred342_Delphi15434 =
       new BitSet(
           new long[] {
             0x34A0000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C000DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statement_in_synpred342_Delphi15444 =
+  public static final BitSet FOLLOW_statement_in_synpred342_Delphi15436 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_FOR_in_synpred343_Delphi15477 =
+  public static final BitSet FOLLOW_FOR_in_synpred343_Delphi15469 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_designator_in_synpred343_Delphi15479 =
+  public static final BitSet FOLLOW_designator_in_synpred343_Delphi15471 =
       new BitSet(new long[] {0x0000000000008000L});
-  public static final BitSet FOLLOW_ASSIGN_in_synpred343_Delphi15481 =
+  public static final BitSet FOLLOW_ASSIGN_in_synpred343_Delphi15473 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_synpred343_Delphi15483 =
+  public static final BitSet FOLLOW_expression_in_synpred343_Delphi15475 =
       new BitSet(new long[] {0x0000080000000000L});
-  public static final BitSet FOLLOW_DOWNTO_in_synpred343_Delphi15485 =
+  public static final BitSet FOLLOW_DOWNTO_in_synpred343_Delphi15477 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_synpred343_Delphi15487 =
+  public static final BitSet FOLLOW_expression_in_synpred343_Delphi15479 =
       new BitSet(new long[] {0x0000010000000000L});
-  public static final BitSet FOLLOW_DO_in_synpred343_Delphi15489 =
+  public static final BitSet FOLLOW_DO_in_synpred343_Delphi15481 =
       new BitSet(
           new long[] {
             0x34A0000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C000DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statement_in_synpred343_Delphi15491 =
+  public static final BitSet FOLLOW_statement_in_synpred343_Delphi15483 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_designator_in_synpred344_Delphi15649 =
+  public static final BitSet FOLLOW_designator_in_synpred344_Delphi15641 =
       new BitSet(new long[] {0x0000000000000800L});
-  public static final BitSet FOLLOW_AS_in_synpred344_Delphi15651 =
+  public static final BitSet FOLLOW_AS_in_synpred344_Delphi15643 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0806252AB6106840L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_designator_in_synpred344_Delphi15653 =
+  public static final BitSet FOLLOW_designator_in_synpred344_Delphi15645 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_statementList_in_synpred346_Delphi15751 =
+  public static final BitSet FOLLOW_statementList_in_synpred346_Delphi15743 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_SEMI_in_synpred349_Delphi15826 =
+  public static final BitSet FOLLOW_SEMI_in_synpred349_Delphi15818 =
       new BitSet(
           new long[] {
             0x34A0000DC07312C2L, 0x1806252AB6106A51L, 0x1070000231C000DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statement_in_synpred349_Delphi15829 =
+  public static final BitSet FOLLOW_statement_in_synpred349_Delphi15821 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_designator_in_synpred350_Delphi15883 =
+  public static final BitSet FOLLOW_designator_in_synpred350_Delphi15875 =
       new BitSet(new long[] {0x0000000000008000L});
-  public static final BitSet FOLLOW_ASSIGN_in_synpred350_Delphi15885 =
+  public static final BitSet FOLLOW_ASSIGN_in_synpred350_Delphi15877 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_synpred350_Delphi15887 =
+  public static final BitSet FOLLOW_expression_in_synpred350_Delphi15879 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_designator_in_synpred351_Delphi15920 =
+  public static final BitSet FOLLOW_designator_in_synpred351_Delphi15912 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LPAREN_in_synpred353_Delphi16044 =
+  public static final BitSet FOLLOW_LPAREN_in_synpred353_Delphi16036 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_synpred353_Delphi16046 =
+  public static final BitSet FOLLOW_expression_in_synpred353_Delphi16038 =
       new BitSet(new long[] {0x0000000000000000L, 0x0000000000000000L, 0x0000000000000800L});
-  public static final BitSet FOLLOW_RPAREN_in_synpred353_Delphi16048 =
+  public static final BitSet FOLLOW_RPAREN_in_synpred353_Delphi16040 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_expression_in_synpred356_Delphi16169 =
+  public static final BitSet FOLLOW_expression_in_synpred356_Delphi16161 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LPAREN_in_synpred359_Delphi16202 =
+  public static final BitSet FOLLOW_LPAREN_in_synpred359_Delphi16194 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_synpred359_Delphi16205 =
+  public static final BitSet FOLLOW_ident_in_synpred359_Delphi16197 =
       new BitSet(new long[] {0x0000000002000000L});
-  public static final BitSet FOLLOW_COLON_in_synpred359_Delphi16207 =
+  public static final BitSet FOLLOW_COLON_in_synpred359_Delphi16199 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_constExpression_in_synpred359_Delphi16209 =
+  public static final BitSet FOLLOW_constExpression_in_synpred359_Delphi16201 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0485BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_SEMI_in_synpred359_Delphi16212 =
+  public static final BitSet FOLLOW_SEMI_in_synpred359_Delphi16204 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0085BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_RPAREN_in_synpred359_Delphi16218 =
+  public static final BitSet FOLLOW_RPAREN_in_synpred359_Delphi16210 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_LPAREN_in_synpred362_Delphi16252 =
+  public static final BitSet FOLLOW_LPAREN_in_synpred362_Delphi16244 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_constExpression_in_synpred362_Delphi16255 =
+  public static final BitSet FOLLOW_constExpression_in_synpred362_Delphi16247 =
       new BitSet(
           new long[] {
             0x34A0000DC42302C0L, 0x0826252AB6106844L, 0x1070000211C0085BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_COMMA_in_synpred362_Delphi16258 =
+  public static final BitSet FOLLOW_COMMA_in_synpred362_Delphi16250 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0085BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_RPAREN_in_synpred362_Delphi16264 =
+  public static final BitSet FOLLOW_RPAREN_in_synpred362_Delphi16256 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_statementList_in_synpred363_Delphi16359 =
+  public static final BitSet FOLLOW_statementList_in_synpred363_Delphi16351 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_TRY_in_synpred364_Delphi16356 =
+  public static final BitSet FOLLOW_TRY_in_synpred364_Delphi16348 =
       new BitSet(
           new long[] {
             0x34B0000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C040DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statementList_in_synpred364_Delphi16359 =
+  public static final BitSet FOLLOW_statementList_in_synpred364_Delphi16351 =
       new BitSet(new long[] {0x0010000000000000L});
-  public static final BitSet FOLLOW_EXCEPT_in_synpred364_Delphi16363 =
+  public static final BitSet FOLLOW_EXCEPT_in_synpred364_Delphi16355 =
       new BitSet(
           new long[] {
             0x34A6000DC07312C0L, 0x180625AAB6106A51L, 0x1070000231C040DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_handlerList_in_synpred364_Delphi16365 =
+  public static final BitSet FOLLOW_handlerList_in_synpred364_Delphi16357 =
       new BitSet(new long[] {0x0004000000000000L});
-  public static final BitSet FOLLOW_END_in_synpred364_Delphi16367 =
+  public static final BitSet FOLLOW_END_in_synpred364_Delphi16359 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_statementList_in_synpred365_Delphi16403 =
+  public static final BitSet FOLLOW_statementList_in_synpred365_Delphi16395 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_statementList_in_synpred366_Delphi16410 =
+  public static final BitSet FOLLOW_statementList_in_synpred366_Delphi16402 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_handler_in_synpred369_Delphi16469 =
+  public static final BitSet FOLLOW_handler_in_synpred369_Delphi16461 =
       new BitSet(new long[] {0x0002000000000002L, 0x0000008000000000L});
-  public static final BitSet FOLLOW_ELSE_in_synpred369_Delphi16474 =
+  public static final BitSet FOLLOW_ELSE_in_synpred369_Delphi16466 =
       new BitSet(
           new long[] {
             0x34A0000DC07312C0L, 0x1806252AB6106A51L, 0x1070000231C040DBL, 0x0000000000003A00L
           });
-  public static final BitSet FOLLOW_statementList_in_synpred369_Delphi16476 =
+  public static final BitSet FOLLOW_statementList_in_synpred369_Delphi16468 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_expression_in_synpred373_Delphi16807 =
+  public static final BitSet FOLLOW_expression_in_synpred373_Delphi16799 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_AT_in_synpred374_Delphi16812 =
+  public static final BitSet FOLLOW_AT_in_synpred374_Delphi16804 =
       new BitSet(
           new long[] {
             0x34A0000DC02302C0L, 0x0826252AB6106844L, 0x1070000211C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_expression_in_synpred374_Delphi16814 =
+  public static final BitSet FOLLOW_expression_in_synpred374_Delphi16806 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_SEMI_in_synpred378_Delphi16981 =
+  public static final BitSet FOLLOW_SEMI_in_synpred378_Delphi16973 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x0001980113010000L, 0x0000000000301030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_methodDirective_in_synpred378_Delphi16985 =
+  public static final BitSet FOLLOW_methodDirective_in_synpred378_Delphi16977 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_SEMI_in_synpred379_Delphi16981 =
+  public static final BitSet FOLLOW_SEMI_in_synpred379_Delphi16973 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x0001980113010000L, 0x0000000000301030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_methodDirective_in_synpred379_Delphi16985 =
+  public static final BitSet FOLLOW_methodDirective_in_synpred379_Delphi16977 =
       new BitSet(
           new long[] {
             0x28C0402800802020L, 0x0001980113010000L, 0x0000000000305030L, 0x0000000000000400L
           });
-  public static final BitSet FOLLOW_SEMI_in_synpred379_Delphi16989 =
+  public static final BitSet FOLLOW_SEMI_in_synpred379_Delphi16981 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_SEMI_in_synpred381_Delphi17065 =
+  public static final BitSet FOLLOW_SEMI_in_synpred381_Delphi17057 =
       new BitSet(
           new long[] {
             0x0AC0000800802000L, 0x0001880103010002L, 0x0000000000201010L, 0x0000000000000108L
           });
-  public static final BitSet FOLLOW_functionDirective_in_synpred381_Delphi17069 =
+  public static final BitSet FOLLOW_functionDirective_in_synpred381_Delphi17061 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_SEMI_in_synpred382_Delphi17065 =
+  public static final BitSet FOLLOW_SEMI_in_synpred382_Delphi17057 =
       new BitSet(
           new long[] {
             0x0AC0000800802000L, 0x0001880103010002L, 0x0000000000201010L, 0x0000000000000108L
           });
-  public static final BitSet FOLLOW_functionDirective_in_synpred382_Delphi17069 =
+  public static final BitSet FOLLOW_functionDirective_in_synpred382_Delphi17061 =
       new BitSet(
           new long[] {
             0x0AC0000800802000L, 0x0001880103010002L, 0x0000000000205010L, 0x0000000000000108L
           });
-  public static final BitSet FOLLOW_SEMI_in_synpred382_Delphi17073 =
+  public static final BitSet FOLLOW_SEMI_in_synpred382_Delphi17065 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_SEMI_in_synpred383_Delphi17149 =
+  public static final BitSet FOLLOW_SEMI_in_synpred383_Delphi17141 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_expression_in_synpred417_Delphi18692 =
+  public static final BitSet FOLLOW_expression_in_synpred417_Delphi18684 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_namespaceName_in_synpred590_Delphi20697 =
+  public static final BitSet FOLLOW_namespaceName_in_synpred590_Delphi20689 =
       new BitSet(new long[] {0x0000020000000000L});
-  public static final BitSet FOLLOW_DOT_in_synpred590_Delphi20699 =
+  public static final BitSet FOLLOW_DOT_in_synpred590_Delphi20691 =
       new BitSet(new long[] {0x0000000000000002L});
-  public static final BitSet FOLLOW_DOT_in_synpred591_Delphi20758 =
+  public static final BitSet FOLLOW_DOT_in_synpred591_Delphi20750 =
       new BitSet(
           new long[] {
             0x20A0000CC02102C0L, 0x0004252092002840L, 0x0020000001C0005BL, 0x0000000000002200L
           });
-  public static final BitSet FOLLOW_ident_in_synpred591_Delphi20760 =
+  public static final BitSet FOLLOW_ident_in_synpred591_Delphi20752 =
       new BitSet(new long[] {0x0000000000000002L});
 }
