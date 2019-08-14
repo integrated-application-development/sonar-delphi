@@ -35,7 +35,7 @@ import org.w3c.dom.Document;
  * Boilerplate interface to override all of the API methods that PMD wants implemented
  *
  * <p>An antlr implementation really doesn't use most of these methods, and it's better not to
- * pollute the DelphiPMDNode class with 300 lines of unsupported operations.
+ * pollute the DelphiNode class with 300 lines of unsupported operations.
  */
 interface AntlrPmdNodeInterface extends ScopedNode {
 

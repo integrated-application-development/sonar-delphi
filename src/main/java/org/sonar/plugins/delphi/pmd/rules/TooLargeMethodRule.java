@@ -24,7 +24,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /** Class for counting method statements. If too many, creates a violation. */
@@ -33,7 +33,7 @@ public class TooLargeMethodRule extends DelphiRule {
       "%s is too large. Method has %d statements (Limit is %d)";
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
+  public void visit(DelphiNode node, RuleContext ctx) {
     if (shouldSkip(node)) {
       return;
     }
@@ -140,7 +140,7 @@ public class TooLargeMethodRule extends DelphiRule {
         && prevType != DelphiLexer.FINALLY);
   }
 
-  private boolean shouldSkip(DelphiPMDNode node) {
+  private boolean shouldSkip(DelphiNode node) {
     int type = node.getType();
 
     return type != DelphiLexer.CONSTRUCTOR
@@ -149,7 +149,7 @@ public class TooLargeMethodRule extends DelphiRule {
         && type != DelphiLexer.PROCEDURE;
   }
 
-  private Tree findBeginNode(DelphiPMDNode parent) {
+  private Tree findBeginNode(DelphiNode parent) {
     for (int i = parent.getChildIndex() + 1; i < parent.getParent().getChildCount(); ++i) {
       Tree sibling = parent.getParent().getChild(i);
       int type = sibling.getType();
@@ -166,7 +166,7 @@ public class TooLargeMethodRule extends DelphiRule {
     return null;
   }
 
-  private String getMethodName(DelphiPMDNode node) {
+  private String getMethodName(DelphiNode node) {
     StringBuilder methodName = new StringBuilder();
     Tree nameNode = node.getFirstChildWithType(DelphiLexer.TkFunctionName);
 

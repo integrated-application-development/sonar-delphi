@@ -22,43 +22,33 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.List;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.properties.PropertyDescriptor;
-import net.sourceforge.pmd.properties.PropertyFactory;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/** DelphiLanguage rule for XPath, use it to parse XPath rules */
-public class XPathRule extends DelphiRule {
+public abstract class XPathRule extends DelphiRule {
   private static final Logger LOG = Loggers.get(XPathRule.class);
 
-  private static final PropertyDescriptor<String> XPATH =
-      PropertyFactory.stringProperty("xpath").desc("The xpath expression").defaultValue("").build();
-
-  public XPathRule() {
-    definePropertyDescriptor(XPATH);
-  }
-
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
-    String xPathString = getProperty(XPATH);
+  public void visitFile(DelphiAST ast, RuleContext ctx) {
+    String xPathString = getXPathExpression();
+
     if (StringUtils.isEmpty(xPathString)) {
       LOG.error("Skipped empty XPath expression in XPathRule: {}.", getName());
       return;
     }
 
-    Document doc = node.getASTTree().generateDocument();
+    Document doc = ast.generateDocument();
 
     try {
       XPath xPath = XPathFactory.newInstance().newXPath();
@@ -77,36 +67,18 @@ public class XPathRule extends DelphiRule {
         int endLine = Integer.parseInt(attributes.getNamedItem("endLine").getTextContent());
         int endColumn = Integer.parseInt(attributes.getNamedItem("endColumn").getTextContent());
 
-        String codeLine = node.getASTTree().getFileSourceLine(beginLine).trim();
-
-        if (codeLine.endsWith("//NOSONAR")) {
-          continue;
-        }
-
-        String msg = this.getMessage().replace("{}", resultNode.getTextContent());
-
         newViolation(ctx)
             .logicalLocation(packageName, className, methodName)
             .fileLocation(beginLine, beginColumn, endLine, endColumn)
-            .message(msg)
+            .message(getViolationMessage())
             .save();
       }
     } catch (Exception e) {
-      LOG.warn(
-          "{}: XPath error: '{}' at rule {}",
-          node.getASTTree().getFileName(),
-          e.getMessage(),
-          getName(),
-          e);
+      LOG.warn("{}: XPath error: '{}' at rule {}", ast.getFileName(), e.getMessage(), getName(), e);
     }
   }
 
-  /** Perform only one visit per file. We parse the entire file when we visit it. */
-  @Override
-  protected void visitAll(List<? extends net.sourceforge.pmd.lang.ast.Node> acus, RuleContext ctx) {
-    init();
-    if (acus.iterator().hasNext()) {
-      visit((DelphiPMDNode) acus.iterator().next(), ctx);
-    }
-  }
+  protected abstract String getXPathExpression();
+
+  protected abstract String getViolationMessage();
 }

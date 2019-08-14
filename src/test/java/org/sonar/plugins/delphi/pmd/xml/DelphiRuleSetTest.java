@@ -69,15 +69,13 @@ public class DelphiRuleSetTest {
 
   @Test
   public void testRules() {
-    assertThat(ruleset.getPmdRules(), is(empty()));
-    assertThat(ruleset.getSonarRules(), is(empty()));
+    assertThat(ruleset.getRules(), is(empty()));
 
     DelphiRule pmdRule = new DelphiRule("testRule");
     ruleset.addRule(pmdRule);
 
-    assertThat(ruleset.getPmdRules(), hasItems(pmdRule));
-    assertThat(ruleset.getPmdRules(), IsCollectionWithSize.hasSize(1));
-    assertThat(ruleset.getSonarRules(), IsCollectionWithSize.hasSize(1));
+    assertThat(ruleset.getRules(), hasItems(pmdRule));
+    assertThat(ruleset.getRules(), IsCollectionWithSize.hasSize(1));
   }
 
   @Test
@@ -98,6 +96,6 @@ public class DelphiRuleSetTest {
     RuleSetFactory ruleSetFactory = new RuleSetFactory();
     RuleSet parsedRuleSet = ruleSetFactory.createRuleSet(ruleSetFile.getAbsolutePath());
 
-    MatcherAssert.assertThat(parsedRuleSet.getRules(), hasSize(ruleSet.getPmdRules().size()));
+    MatcherAssert.assertThat(parsedRuleSet.getRules(), hasSize(ruleSet.getRules().size()));
   }
 }

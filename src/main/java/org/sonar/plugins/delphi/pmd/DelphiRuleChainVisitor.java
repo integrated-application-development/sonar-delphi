@@ -27,14 +27,14 @@ import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.rule.AbstractRuleChainVisitor;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 
 /** Delphi pmd rule chain visitor */
 public class DelphiRuleChainVisitor extends AbstractRuleChainVisitor {
 
   @Override
   protected void visit(Rule rule, Node node, RuleContext ctx) {
-    ((DelphiPMDNode) node).jjtAccept((DelphiParserVisitor) rule, ctx);
+    ((DelphiNode) node).jjtAccept((DelphiParserVisitor) rule, ctx);
   }
 
   @Override

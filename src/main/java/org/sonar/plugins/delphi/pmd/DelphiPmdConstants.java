@@ -27,8 +27,21 @@ public final class DelphiPmdConstants {
 
   public static final String REPOSITORY_KEY = "delph";
   public static final String REPOSITORY_NAME = "Delphi PMD";
-  public static final String XPATH_CLASS = "org.sonar.plugins.delphi.pmd.rules.XPathRule";
-  public static final String XPATH_EXPRESSION_PARAM = "xpath";
+
+  public static final String RULES_XML = "/org/sonar/plugins/delphi/pmd/rules.xml";
+
+  public static final String TEMPLATE_XPATH_CLASS =
+      "org.sonar.plugins.delphi.pmd.rules.XPathTemplateRule";
+  public static final String BUILTIN_XPATH_CLASS =
+      "org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule";
+
+  public static final String TEMPLATE_XPATH_EXPRESSION_PARAM = "xPath";
+  public static final String BUILTIN_XPATH_EXPRESSION_PARAM = "builtinXPath";
+
+  public static final String BASE_EFFORT = "baseEffort";
+  public static final String SCOPE = "scope";
+  public static final String TEMPLATE = "template";
+  public static final String TYPE = "type";
 
   private DelphiPmdConstants() {}
 }

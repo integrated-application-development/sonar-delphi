@@ -42,6 +42,7 @@ public class DelphiRuleViolation implements RuleViolation {
   private int endLine;
   private int beginColumn;
   private int endColumn;
+  private boolean suppressed;
 
   /**
    * C-tor used by DelphiRuleViolationBuilder
@@ -118,7 +119,7 @@ public class DelphiRuleViolation implements RuleViolation {
   /** {@inheritDoc} */
   @Override
   public boolean isSuppressed() {
-    return false;
+    return suppressed;
   }
 
   /** {@inheritDoc} */
@@ -157,5 +158,9 @@ public class DelphiRuleViolation implements RuleViolation {
 
   public void setEndColumn(int endColumn) {
     this.endColumn = endColumn;
+  }
+
+  public void setSuppressed(boolean suppressed) {
+    this.suppressed = suppressed;
   }
 }

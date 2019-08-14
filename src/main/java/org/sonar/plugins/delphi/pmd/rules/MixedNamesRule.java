@@ -27,9 +27,8 @@ import com.qualinsight.plugins.sonarqube.smell.api.model.SmellType;
 import java.util.ArrayList;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
-import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /**
@@ -51,13 +50,13 @@ public class MixedNamesRule extends DelphiRule {
   private String typeName = "";
 
   @Override
-  public void init() {
+  public void start(RuleContext ctx) {
     functionNames.clear();
     variableNames.clear();
   }
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
+  public void visit(DelphiNode node, RuleContext ctx) {
     int type = node.getType();
     switch (type) {
       case DelphiLexer.IMPLEMENTATION:
@@ -87,12 +86,12 @@ public class MixedNamesRule extends DelphiRule {
     typeName = "";
   }
 
-  private void handleNewType(DelphiPMDNode node) {
+  private void handleNewType(DelphiNode node) {
     Tree typeNameNode = node.getFirstChildWithType(DelphiLexer.TkNewTypeName).getChild(0);
     typeName = typeNameNode.getText() + ".";
   }
 
-  private void handleFunctionName(DelphiPMDNode node, RuleContext ctx) {
+  private void handleFunctionName(DelphiNode node, RuleContext ctx) {
     if (isInterfaceSection()) {
       functionNames.addAll(buildNames(node, false));
     } else {
@@ -100,26 +99,22 @@ public class MixedNamesRule extends DelphiRule {
     }
   }
 
-  private void handleVar(DelphiPMDNode node) {
+  private void handleVar(DelphiNode node) {
     if (isImplementationSection()) {
       variableNames.addAll(buildNames(node.getChild(0), true));
     }
   }
 
-  private void handleBlock(DelphiPMDNode node, RuleContext ctx) {
+  private void handleBlock(DelphiNode node, RuleContext ctx) {
     if (isImplementationSection()) {
       checkVariableNames(node, ctx, true);
     }
   }
 
   /** Check variable names between begin...end statements */
-  private void checkVariableNames(DelphiPMDNode node, RuleContext ctx, boolean clear) {
+  private void checkVariableNames(DelphiNode node, RuleContext ctx, boolean clear) {
     for (int i = 0; i < node.getChildCount(); ++i) {
-      DelphiPMDNode child = new DelphiPMDNode((CommonTree) node.getChild(i), node.getASTTree());
-
-      if (child.getLine() > skipToLine) {
-        skipToLine = child.getLine();
-      }
+      DelphiNode child = (DelphiNode) node.getChild(i);
 
       if (isBlockNode(child)) {
         checkVariableNames(child, ctx, false);
@@ -163,7 +158,7 @@ public class MixedNamesRule extends DelphiRule {
   }
 
   /** Check function names */
-  private void checkFunctionNames(DelphiPMDNode node, RuleContext ctx) {
+  private void checkFunctionNames(DelphiNode node, RuleContext ctx) {
     List<String> currentNames = buildNames(node, false);
     for (String name : currentNames) {
       String globalName = getGlobalName(name, functionNames);

@@ -26,7 +26,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 
 public class DelphiRuleTest {
 
@@ -99,29 +97,5 @@ public class DelphiRuleTest {
     rule.setExample("123");
     assertThat(rule.getExample(), is("123"));
     assertThat(rule.getHtmlDescription(), is("<p>abc</p><pre>123</pre>"));
-  }
-
-  @Test
-  public void testProcessXpath() {
-    final DelphiRule rule = new DelphiRule(DelphiPmdConstants.XPATH_CLASS);
-    rule.setName("MyOwnRule");
-    DelphiRuleProperty xpathProperty =
-        new DelphiRuleProperty(DelphiPmdConstants.XPATH_EXPRESSION_PARAM, "myXpathExpression");
-
-    rule.addProperty(xpathProperty);
-    rule.processXpath("sonarRuleKey");
-
-    assertTrue(xpathProperty.isCdataValue());
-    assertThat(xpathProperty.getValue(), is("myXpathExpression"));
-    assertThat(rule.getName(), is("sonarRuleKey"));
-  }
-
-  @Test
-  public void testProcessXpathShouldFailIfXpathNotProvided() {
-    final DelphiRule rule = new DelphiRule(DelphiPmdConstants.XPATH_CLASS);
-    rule.setName("MyOwnRule");
-    exceptionCatcher.expect(IllegalArgumentException.class);
-
-    rule.processXpath("xpathKey");
   }
 }

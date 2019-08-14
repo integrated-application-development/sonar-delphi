@@ -22,16 +22,34 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import net.sourceforge.pmd.RuleContext;
+import org.antlr.runtime.Token;
+import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 
-/** visits delphi pmd node */
 public interface DelphiParserVisitor {
 
   /**
-   * perform visit to a specific node with given data
+   * Visits nodes in a file
    *
-   * @param node node to visit
-   * @param data data
+   * @param node AST node being visited
+   * @param ctx the ruleContext to store violations
    */
-  void visit(DelphiPMDNode node, Object data);
+  void visit(DelphiNode node, RuleContext ctx);
+
+  /**
+   * perform visit to a file
+   *
+   * @param ast The AST for the file
+   * @param ctx the ruleContext to store violations
+   */
+  void visitFile(DelphiAST ast, RuleContext ctx);
+
+  /**
+   * perform visit to a comment
+   *
+   * @param comment Comment token being visited
+   * @param ctx the ruleContext to store violations
+   */
+  void visitComment(Token comment, RuleContext ctx);
 }

@@ -39,6 +39,7 @@ import org.junit.Test;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.internal.MapSettings;
 import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
 
 public class DelphiPmdConfigurationTest {
 
@@ -69,7 +70,8 @@ public class DelphiPmdConfigurationTest {
   @Before
   public void setUpPmdConfiguration() {
     settings = new MapSettings();
-    configuration = new DelphiPmdConfiguration(fs, settings.asConfig());
+    DelphiPmdRuleSetDefinitionProvider provider = new DelphiPmdRuleSetDefinitionProvider();
+    configuration = new DelphiPmdConfiguration(fs, settings.asConfig(), provider);
   }
 
   @Test
@@ -116,7 +118,7 @@ public class DelphiPmdConfigurationTest {
 
     assertThat(thrown)
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Fail to save the PMD report");
+        .hasMessage("Failed to save the PMD report");
   }
 
   @Test

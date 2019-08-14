@@ -4,9 +4,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.VariableCounterRule" message="Too many variables" name="TooManyVariablesRule" language="delph">
     <priority>3</priority>
     <properties>
-      <property>
-        <property name="UNKNOWN" value="blablabla" />
-      </property>
+      <property name="UNKNOWN" value="blablabla" />
     </properties>
     <description>Function may have too many variables, maximum number of variables is 10</description>
   </rule>

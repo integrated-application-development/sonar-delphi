@@ -46,7 +46,7 @@ class DelphiTreeAdaptor extends CommonTreeAdaptor {
     if (payload != null) {
       lastLine = payload.getLine();
     }
-    return new DelphiPMDNode(payload, astTree);
+    return new DelphiNode(payload, astTree);
   }
 
   /**

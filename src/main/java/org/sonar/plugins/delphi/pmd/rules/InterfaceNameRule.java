@@ -18,8 +18,7 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import org.antlr.runtime.tree.CommonTree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /**
@@ -29,17 +28,17 @@ public class InterfaceNameRule extends NameConventionRule {
   private static final String INTERFACE_PREFIX = "I";
 
   @Override
-  public DelphiPMDNode findNode(DelphiPMDNode node) {
+  public DelphiNode findNode(DelphiNode node) {
     if (node.getType() != DelphiLexer.TkNewTypeName
         || node.nextNode().getChildType(0) != DelphiLexer.TkInterface) {
       return null;
     }
 
-    return new DelphiPMDNode((CommonTree) node.getChild(0), node.getASTTree());
+    return (DelphiNode) node.getChild(0);
   }
 
   @Override
-  protected boolean isViolation(DelphiPMDNode nameNode) {
+  protected boolean isViolation(DelphiNode nameNode) {
     return !compliesWithPrefixNamingConvention(nameNode.getText(), INTERFACE_PREFIX);
   }
 }

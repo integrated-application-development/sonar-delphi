@@ -54,6 +54,10 @@ public class DelphiPmdProfileImporter extends ProfileImporter {
   private static final String PROP_NOT_SUPPORTED_WARNING =
       "The property '%s' is not supported in " + "the pmd rule: %s";
 
+  private static final String XPATH_RULE_WARNING =
+      "XPath rule %s can't be imported automatically. "
+          + "The rule must be created manually through the SonarQube web interface.";
+
   private final RuleFinder ruleFinder;
   private ValidationMessages messages;
 
@@ -69,7 +73,7 @@ public class DelphiPmdProfileImporter extends ProfileImporter {
     DelphiRuleSet ruleSet = DelphiRuleSetHelper.createFrom(pmdConfigurationFile, messages);
     RulesProfile profile = RulesProfile.create();
 
-    for (DelphiRule delphiRule : ruleSet.getPmdRules()) {
+    for (DelphiRule delphiRule : ruleSet.getRules()) {
       createActiveRule(delphiRule, profile);
     }
     return profile;
@@ -80,6 +84,11 @@ public class DelphiPmdProfileImporter extends ProfileImporter {
 
     if (delphiRule.getClazz() == null) {
       addWarning(String.format(MISSING_CLASS_WARNING, ruleName));
+      return;
+    }
+
+    if (delphiRule.getClazz().equals(DelphiPmdConstants.TEMPLATE_XPATH_CLASS)) {
+      addWarning(String.format(XPATH_RULE_WARNING, ruleName));
       return;
     }
 
@@ -98,17 +107,27 @@ public class DelphiPmdProfileImporter extends ProfileImporter {
     setParameters(activeRule, delphiRule, rule);
   }
 
-  private void setParameters(ActiveRule activeRule, DelphiRule delphiRule, Rule rule) {
-    for (DelphiRuleProperty prop : delphiRule.getProperties()) {
-      String paramName = prop.getName();
-      if (rule.getParam(paramName) == null) {
-        String errMsg = String.format(PROP_NOT_SUPPORTED_WARNING, paramName, delphiRule.getClazz());
-        addWarning(errMsg);
-        continue;
+  private void setParameters(ActiveRule activeRule, DelphiRule delphiRule, Rule sonarRule) {
+    for (DelphiRuleProperty property : delphiRule.getProperties()) {
+      if (shouldAddParameter(sonarRule, property)) {
+        activeRule.setParameter(property.getName(), property.getValue());
       }
-
-      activeRule.setParameter(paramName, prop.getValue());
     }
+  }
+
+  private boolean shouldAddParameter(Rule sonarRule, DelphiRuleProperty property) {
+    if (property.isBuiltinProperty()) {
+      return false;
+    }
+
+    String propertyName = property.getName();
+
+    if (sonarRule.getParam(property.getName()) == null) {
+      addWarning(String.format(PROP_NOT_SUPPORTED_WARNING, propertyName, sonarRule.getName()));
+      return false;
+    }
+
+    return true;
   }
 
   private void addWarning(String warning) {

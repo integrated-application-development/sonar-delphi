@@ -22,32 +22,139 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
+import java.util.ArrayList;
+import java.util.List;
+import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
+import org.sonar.plugins.delphi.pmd.DelphiParserVisitor;
 
-/** Delphi Node used by ANTLR generated parser */
-public class DelphiNode extends CommonTree {
+/** AST node extended with PMD interfaces for PMD analysis */
+public class DelphiNode extends CommonTree implements AntlrPmdNodeInterface {
 
   private DelphiAST mainTree;
 
   /**
-   * Default C-tor as in CommonTree
+   * C-tor
    *
-   * @param payload Provided token
-   */
-  DelphiNode(Token payload) {
-    super(payload);
-  }
-
-  /**
-   * C-tor with token and AST tree that has this node
-   *
-   * @param payload Provided token
+   * @param payload Token
    * @param tree AST Tree
    */
-  DelphiNode(Token payload, DelphiAST tree) {
+  public DelphiNode(Token payload, DelphiAST tree) {
     super(payload);
     mainTree = tree;
+  }
+
+  @Override
+  public Tree dupNode() {
+    return new DelphiNode(this.token, mainTree);
+  }
+
+  public void jjtAccept(DelphiParserVisitor visitor, RuleContext ctx) {
+    visitor.visit(this, ctx);
+  }
+
+  public List<Tree> findAllChildren(int[] types) {
+    List<Tree> children = new ArrayList<>();
+    for (int type : types) {
+      children.addAll(internalFindAllChildren(this, type));
+    }
+    return children;
+  }
+
+  public List<Tree> findAllChildren(int type) {
+    return internalFindAllChildren(this, type);
+  }
+
+  private List<Tree> internalFindAllChildren(Tree node, int type) {
+    List<Tree> result = new ArrayList<>();
+    for (int i = 0; i < node.getChildCount(); i++) {
+      Tree child = node.getChild(i);
+      if (child.getType() == type) {
+        result.add(child);
+      } else {
+        result.addAll(internalFindAllChildren(child, type));
+      }
+    }
+    return result;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public int getBeginLine() {
+    int line = getLine();
+    if (getChildCount() > 0) {
+      DelphiNode firstChild = (DelphiNode) getChild(0);
+
+      line = Math.min(line, firstChild.getBeginLine());
+    }
+
+    return line;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public int getBeginColumn() {
+    return getCharPositionInLine();
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public int getEndLine() {
+    if (getChildCount() > 0) {
+      DelphiNode lastChild = (DelphiNode) getChild(getChildCount() - 1);
+      return lastChild.getEndLine();
+    }
+
+    return getLine();
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public int getEndColumn() {
+    if (getChildCount() > 0) {
+      DelphiNode lastChild = (DelphiNode) getChild(getChildCount() - 1);
+      return lastChild.getEndColumn();
+    }
+
+    int maxColumn = mainTree.getFileSourceLine(getEndLine()).length();
+
+    if (isNil()) {
+      return maxColumn;
+    }
+
+    int calcColumn = getBeginColumn() + getText().length();
+    return Math.min(maxColumn, calcColumn);
+  }
+
+  public DelphiNode prevNode() {
+    if (parent == null || childIndex == 0) {
+      return null;
+    }
+
+    return (DelphiNode) parent.getChild(childIndex - 1);
+  }
+
+  public DelphiNode nextNode() {
+    if (parent == null || parent.getChildCount() == childIndex + 1) {
+      return null;
+    }
+
+    return (DelphiNode) parent.getChild(childIndex + 1);
+  }
+
+  public DelphiNode findNextSiblingOfType(int type) {
+    if (parent != null) {
+      for (int i = childIndex; i < parent.getChildCount(); ++i) {
+        Tree child = parent.getChild(i);
+
+        if (child.getType() == type) {
+          return (DelphiNode) parent.getChild(i);
+        }
+      }
+    }
+    return null;
   }
 
   /**
@@ -70,5 +177,14 @@ public class DelphiNode extends CommonTree {
    */
   public DelphiAST getASTTree() {
     return mainTree;
+  }
+
+  /**
+   * Gets any comments nested inside of this node
+   *
+   * @return List of comment tokens
+   */
+  public List<Token> getComments() {
+    return mainTree.getCommentsInsideNode(this);
   }
 }

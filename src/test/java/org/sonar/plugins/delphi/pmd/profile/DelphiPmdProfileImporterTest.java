@@ -82,7 +82,11 @@ public class DelphiPmdProfileImporterTest {
                   }
 
                   if (rule.getKey().equals("MyXpathRule")) {
-                    rule.createParameter("xpath");
+                    rule.createParameter(DelphiPmdConstants.TEMPLATE_XPATH_EXPRESSION_PARAM);
+                  }
+
+                  if (rule.getKey().equals("MyBuiltinXpathRule")) {
+                    rule.createParameter(DelphiPmdConstants.BUILTIN_XPATH_EXPRESSION_PARAM);
                   }
 
                   return rule;
@@ -114,15 +118,24 @@ public class DelphiPmdProfileImporterTest {
   }
 
   @Test
-  public void testShouldImportXpathRule() {
-    Reader reader = read("export_xpath_rules.xml");
+  public void testShouldNotImportXpathRule() {
+    Reader reader = read("xpath_rules.xml");
 
     RulesProfile profile = importer.importProfile(reader, messages);
-    ActiveRule rule = getRule(profile, "MyXpathRule");
+    assertThat(profile.getActiveRules(), empty());
+  }
+
+  @Test
+  public void testShouldNotImportBuiltinProperties() {
+    Reader reader = read("builtin_xpath_rules.xml");
+
+    RulesProfile profile = importer.importProfile(reader, messages);
+    ActiveRule rule = getRule(profile, "MyBuiltinXpathRule");
 
     assertThat(profile.getActiveRules(), hasSize(1));
     assertThat(rule, is(not(nullValue())));
-    assertThat(rule.getParameter(DelphiPmdConstants.XPATH_EXPRESSION_PARAM), is(not(nullValue())));
+    assertThat(
+        rule.getParameter(DelphiPmdConstants.BUILTIN_XPATH_EXPRESSION_PARAM), is(nullValue()));
   }
 
   @Test
@@ -160,7 +173,7 @@ public class DelphiPmdProfileImporterTest {
 
   @Test
   public void testShouldImportPmdConfigurationWithUnknownNodes() {
-    Reader reader = read("complex-with-unknown-nodes.xml");
+    Reader reader = read("complex_with_unknown_nodes.xml");
 
     RulesProfile profile = importer.importProfile(reader, messages);
 

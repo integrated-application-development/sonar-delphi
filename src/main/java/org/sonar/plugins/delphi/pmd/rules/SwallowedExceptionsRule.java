@@ -2,7 +2,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /**
@@ -12,7 +12,7 @@ import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 public class SwallowedExceptionsRule extends DelphiRule {
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
+  public void visit(DelphiNode node, RuleContext ctx) {
     if (node.getType() == DelphiLexer.EXCEPT && isEmptyExceptBlock(node)) {
       addViolation(ctx, node);
     }
@@ -22,13 +22,13 @@ public class SwallowedExceptionsRule extends DelphiRule {
     }
   }
 
-  private boolean isEmptyExceptBlock(DelphiPMDNode node) {
-    DelphiPMDNode nextNode = node.nextNode();
+  private boolean isEmptyExceptBlock(DelphiNode node) {
+    DelphiNode nextNode = node.nextNode();
 
     return nextNode != null && nextNode.getType() == DelphiLexer.END;
   }
 
-  private boolean isEmptyExceptionHandler(DelphiPMDNode node) {
+  private boolean isEmptyExceptionHandler(DelphiNode node) {
     if (node.getChildCount() == 0) {
       return true;
     }

@@ -1,8 +1,7 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /**
@@ -17,12 +16,12 @@ public class ConstructorCreateRule extends NameConventionRule {
   private static final String PREFIX = "Create";
 
   @Override
-  public DelphiPMDNode findNode(DelphiPMDNode node) {
+  public DelphiNode findNode(DelphiNode node) {
     if (isInterfaceSection() && node.getType() == DelphiLexer.CONSTRUCTOR) {
       Tree functionName = node.getFirstChildWithType(DelphiLexer.TkFunctionName);
 
       if (functionName != null) {
-        return new DelphiPMDNode((CommonTree) functionName.getChild(0), node.getASTTree());
+        return (DelphiNode) functionName.getChild(0);
       }
     }
 
@@ -30,7 +29,7 @@ public class ConstructorCreateRule extends NameConventionRule {
   }
 
   @Override
-  protected boolean isViolation(DelphiPMDNode node) {
+  protected boolean isViolation(DelphiNode node) {
     String name = node.getText();
     return !name.equals(PREFIX) && !compliesWithPrefixNamingConvention(name, PREFIX);
   }

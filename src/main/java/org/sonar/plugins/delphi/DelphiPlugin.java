@@ -34,6 +34,7 @@ import org.sonar.plugins.delphi.pmd.DelphiPmdViolationRecorder;
 import org.sonar.plugins.delphi.pmd.profile.DefaultDelphiProfile;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileExporter;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileImporter;
+import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRulesDefinition;
 import org.sonar.plugins.delphi.surefire.SurefireSensor;
 import org.sonar.plugins.delphi.token.DelphiTokenSensor;
@@ -156,6 +157,7 @@ public class DelphiPlugin implements Plugin {
         DelphiPmdExecutor.class,
         DelphiPmdConfiguration.class,
         DelphiPmdRulesDefinition.class,
+        DelphiPmdRuleSetDefinitionProvider.class,
         DefaultDelphiProfile.class,
         DelphiPmdProfileExporter.class,
         DelphiPmdProfileImporter.class,

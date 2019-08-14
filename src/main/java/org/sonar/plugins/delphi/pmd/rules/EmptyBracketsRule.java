@@ -1,7 +1,7 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 public class EmptyBracketsRule extends DelphiRule {
@@ -14,7 +14,7 @@ public class EmptyBracketsRule extends DelphiRule {
    * @param ctx the ruleContext to store the violations
    */
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
+  public void visit(DelphiNode node, RuleContext ctx) {
 
     // Look for any method call nodes under a begin block ('TkIdentifier'), check if the next two
     // are parentheses
@@ -22,7 +22,7 @@ public class EmptyBracketsRule extends DelphiRule {
 
       for (int i = 0; i < node.getChildCount() - 1; i++) {
 
-        DelphiPMDNode childNode = (DelphiPMDNode) node.getChild(i);
+        DelphiNode childNode = (DelphiNode) node.getChild(i);
         if (childNode.getType() == DelphiLexer.TkIdentifier
             && node.getChild(i + 1).getType() == DelphiLexer.LPAREN
             && node.getChild(i + 2).getType() == DelphiLexer.RPAREN) {

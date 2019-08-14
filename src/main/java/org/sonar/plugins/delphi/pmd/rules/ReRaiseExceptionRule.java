@@ -3,7 +3,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /**
@@ -20,12 +20,12 @@ import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 public class ReRaiseExceptionRule extends DelphiRule {
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
+  public void visit(DelphiNode node, RuleContext ctx) {
     if (node.getType() != DelphiLexer.TkExceptionHandlerIdent) {
       return;
     }
 
-    DelphiPMDNode handler = node.findNextSiblingOfType(DelphiLexer.TkExceptionHandler);
+    DelphiNode handler = node.findNextSiblingOfType(DelphiLexer.TkExceptionHandler);
     String exceptionHandlerIdent = node.getChild(0).getText();
     List<Tree> raiseNodes = handler.findAllChildren(DelphiLexer.RAISE);
 
@@ -40,7 +40,7 @@ public class ReRaiseExceptionRule extends DelphiRule {
       Tree nextNode = parent.getChild(childIndex + 1);
 
       if (nextNode.getText().equalsIgnoreCase(exceptionHandlerIdent)) {
-        addViolation(ctx, (DelphiPMDNode) nextNode);
+        addViolation(ctx, (DelphiNode) nextNode);
       }
     }
   }

@@ -27,21 +27,30 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 import org.junit.Test;
+import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 
 public class DelphiPropertyTest {
 
   @Test
-  public void testProperty() {
+  public void testConstructors() {
     DelphiRuleProperty property = new DelphiRuleProperty("name");
     assertThat(property.getName(), is("name"));
     assertThat(property.getValue(), is(nullValue()));
 
-    property.setValue("value");
+    property = new DelphiRuleProperty("name", "value");
+    assertThat(property.getName(), is("name"));
     assertThat(property.getValue(), is("value"));
+  }
+
+  @Test
+  public void testIsCdataValue() {
+    DelphiRuleProperty property = new DelphiRuleProperty("name", "value");
     assertThat(property.isCdataValue(), is(false));
 
-    property.setCdataValue("cDataValue");
-    assertThat(property.getValue(), is("cDataValue"));
+    property = new DelphiRuleProperty(DelphiPmdConstants.TEMPLATE_XPATH_EXPRESSION_PARAM);
+    assertThat(property.isCdataValue(), is(true));
+
+    property = new DelphiRuleProperty(DelphiPmdConstants.BUILTIN_XPATH_EXPRESSION_PARAM);
     assertThat(property.isCdataValue(), is(true));
   }
 }

@@ -3,24 +3,23 @@ package org.sonar.plugins.delphi.pmd.rules;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.antlr.runtime.tree.CommonTree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 public class TooManyVariablesRule extends VariableCounterRule {
   private static final String VIOLATION_MESSAGE = "Too many variables: %d (max %d)";
 
   @Override
-  public List<DelphiPMDNode> findNodes(DelphiPMDNode node) {
+  public List<DelphiNode> findNodes(DelphiNode node) {
     if (node.getType() == DelphiLexer.TkFunctionName) {
-      DelphiPMDNode method = new DelphiPMDNode((CommonTree) node.getParent(), node.getASTTree());
-      DelphiPMDNode nextNode = method.nextNode();
+      DelphiNode method = (DelphiNode) node.getParent();
+      DelphiNode nextNode = method.nextNode();
 
       if (nextNode != null && nextNode.getType() == DelphiLexer.TkBlockDeclSection) {
         List<?> children = nextNode.getChildren();
         if (children != null) {
           return children.stream()
-              .map(child -> new DelphiPMDNode((CommonTree) child, node.getASTTree()))
+              .map(child -> (DelphiNode) child)
               .filter(child -> child.getType() == DelphiLexer.VAR)
               .collect(Collectors.toList());
         }

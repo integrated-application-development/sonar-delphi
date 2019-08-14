@@ -64,7 +64,6 @@ public class RulesProfileRuleSetFactory implements RuleSetFactory {
 
         addRuleProperties(activeRule, rule);
         ruleSet.addRule(rule);
-        rule.processXpath(name);
       }
     }
 
@@ -97,13 +96,13 @@ public class RulesProfileRuleSetFactory implements RuleSetFactory {
       return;
     }
 
-    Pattern descriptionPattern = Pattern.compile("(?<=<p>)(.*)(?=</p>)");
+    Pattern descriptionPattern = Pattern.compile("(?<=<p>)(.*)(?=</p>)", Pattern.DOTALL);
     Matcher descriptionMatcher = descriptionPattern.matcher(htmlDescription);
     if (descriptionMatcher.find()) {
       pmdRule.setDescription(descriptionMatcher.group(1));
     }
 
-    Pattern examplePattern = Pattern.compile("(?<=<pre>)(.*)(?=</pre>)");
+    Pattern examplePattern = Pattern.compile("(?<=<pre>)(.*)(?=</pre>)", Pattern.DOTALL);
     Matcher exampleMatcher = examplePattern.matcher(htmlDescription);
     if (exampleMatcher.find()) {
       pmdRule.setExample(exampleMatcher.group(1));

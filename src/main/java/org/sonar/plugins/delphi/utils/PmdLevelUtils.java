@@ -30,8 +30,9 @@ import org.sonar.api.rules.RulePriority;
 /**
  * A helper class which converts between PMD levels and Sonar {@link Severity}/{@link RulePriority}
  *
- * <p>RulePriority is deprecated and should be removed as soon as Severity is a viable option The
- * Sonar API still returns or expects RulePriority in several places, including {@link
+ * <p>RulePriority is deprecated and should be removed as soon as Severity is a viable option.
+ *
+ * <p>The Sonar API still returns or expects RulePriority in several places, including {@link
  * RulesProfile#activateRule} and {@link Rule#setSeverity}
  */
 @SuppressWarnings("deprecation")
@@ -43,8 +44,17 @@ public final class PmdLevelUtils {
     // only static methods
   }
 
-  public static RulePriority fromLevel(@Nullable Integer level) {
+  public static String severityFromLevel(@Nullable Integer level) {
+    if (Objects.isNull(level)) {
+      return null;
+    }
 
+    final int index = Math.abs(INDEX_LEVEL - level);
+
+    return (index < INDEX_LEVEL) ? Severity.ALL.get(index) : null;
+  }
+
+  public static RulePriority fromLevel(@Nullable Integer level) {
     if (Objects.isNull(level)) {
       return null;
     }

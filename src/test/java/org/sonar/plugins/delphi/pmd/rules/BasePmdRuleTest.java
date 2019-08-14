@@ -159,7 +159,7 @@ abstract class BasePmdRuleTest {
   private ActiveRule makeActiveRule(RuleKey ruleKey, DelphiRuleSet ruleSet) {
     NewActiveRule.Builder builder = new NewActiveRule.Builder();
 
-    for (DelphiRule rule : ruleSet.getPmdRules()) {
+    for (DelphiRule rule : ruleSet.getRules()) {
       if (!rule.getName().equals(ruleKey.rule())) {
         continue;
       }

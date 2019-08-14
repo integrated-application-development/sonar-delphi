@@ -22,7 +22,8 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import net.sourceforge.pmd.RuleContext;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 
 /** Checks for rule violation: if not (x = false) then (redundant) */
 public class IfNotFalseRule extends IfTrueRule {
@@ -30,14 +31,14 @@ public class IfNotFalseRule extends IfTrueRule {
   private boolean wasNot;
 
   @Override
-  protected void init() {
-    super.init();
+  public void start(RuleContext ctx) {
+    super.start(ctx);
     wasNot = false;
     setStringToSearch("false");
   }
 
   @Override
-  protected boolean accept(DelphiPMDNode node) {
+  protected boolean accept(DelphiNode node) {
     if (!wasNot && "not".equals(node.getText())) {
       wasNot = true;
     } else {

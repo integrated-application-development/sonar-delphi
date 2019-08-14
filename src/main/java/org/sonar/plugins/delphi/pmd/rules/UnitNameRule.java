@@ -22,20 +22,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.antlr.runtime.tree.CommonTree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 public class UnitNameRule extends NameConventionRule {
   private static final String[] PREFIXES = {""};
 
   @Override
-  public List<DelphiPMDNode> findNodes(DelphiPMDNode node) {
+  public List<DelphiNode> findNodes(DelphiNode node) {
     if (node.getType() == DelphiLexer.UNIT) {
       List<?> children = node.getChildren();
 
       return children.stream()
           .filter(child -> ((CommonTree) child).getType() != DelphiLexer.DOT)
-          .map(child -> new DelphiPMDNode((CommonTree) child, node.getASTTree()))
+          .map(child -> (DelphiNode) child)
           .collect(Collectors.toList());
     }
 
@@ -43,7 +43,7 @@ public class UnitNameRule extends NameConventionRule {
   }
 
   @Override
-  protected boolean isViolation(DelphiPMDNode nameNode) {
+  protected boolean isViolation(DelphiNode nameNode) {
     return !compliesWithPrefixNamingConvention(nameNode.getText(), PREFIXES);
   }
 }

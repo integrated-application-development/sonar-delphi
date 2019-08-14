@@ -19,11 +19,23 @@
  */
 package org.sonar.plugins.delphi.pmd.xml;
 
+import static org.sonar.plugins.delphi.pmd.rules.DelphiRule.BASE_EFFORT;
+import static org.sonar.plugins.delphi.pmd.rules.DelphiRule.SCOPE;
+import static org.sonar.plugins.delphi.pmd.rules.DelphiRule.TEMPLATE;
+import static org.sonar.plugins.delphi.pmd.rules.DelphiRule.TYPE;
+import static org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule.BUILTIN_XPATH;
+
+import java.util.Set;
+import net.sourceforge.pmd.properties.PropertyDescriptor;
+import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
+
 public class DelphiRuleProperty {
 
   private final String name;
   private String value;
-  private boolean cdataValue;
+
+  private static final Set<PropertyDescriptor> BUILTIN_PROPERTIES =
+      Set.of(BASE_EFFORT, SCOPE, TEMPLATE, TYPE, BUILTIN_XPATH);
 
   public DelphiRuleProperty(String name) {
     this(name, null);
@@ -32,7 +44,6 @@ public class DelphiRuleProperty {
   public DelphiRuleProperty(String name, String value) {
     this.name = name;
     this.value = value;
-    this.cdataValue = false;
   }
 
   public String getName() {
@@ -43,17 +54,16 @@ public class DelphiRuleProperty {
     return value;
   }
 
-  public boolean isCdataValue() {
-    return cdataValue;
-  }
-
   public void setValue(String value) {
     this.value = value;
-    this.cdataValue = false;
   }
 
-  public void setCdataValue(String cdataValue) {
-    this.value = cdataValue;
-    this.cdataValue = true;
+  public boolean isCdataValue() {
+    return name.equals(DelphiPmdConstants.TEMPLATE_XPATH_EXPRESSION_PARAM)
+        || name.equals(DelphiPmdConstants.BUILTIN_XPATH_EXPRESSION_PARAM);
+  }
+
+  public boolean isBuiltinProperty() {
+    return BUILTIN_PROPERTIES.stream().anyMatch(builtin -> builtin.name().equals(name));
   }
 }
