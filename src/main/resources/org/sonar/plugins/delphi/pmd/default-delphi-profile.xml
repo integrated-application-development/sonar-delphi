@@ -13,7 +13,7 @@
     name="ClassPerFileRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     name="InheritedMethodWithNoCodeRule">
   </rule>
 
@@ -25,7 +25,7 @@
     name="EmptyFinallyBlockRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     name="EmptyInterfaceRule">
   </rule>
 
@@ -41,11 +41,11 @@
     name="TooManyVariablesRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     name="NoSemiAfterMethodDeclarationRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     name="NoFunctionReturnTypeRule">
   </rule>
 
@@ -57,7 +57,7 @@
     name="ClassNameRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     name="RecordNameRule">
   </rule>
 
@@ -86,7 +86,7 @@
     name="RaisingGeneralExceptionRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     name="AvoidOutParameterRule">
   </rule>
 
@@ -106,7 +106,7 @@
     name="UnusedArgumentsRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     name="NoGuidRule">
   </rule>
 
@@ -114,15 +114,15 @@
     name="AssignedAndFreeRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     name="EmptyElseStatementRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     name="EmptyBeginStatementRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     name="EmptyMethodRule">
   </rule>
 
@@ -134,7 +134,7 @@
     name="ProjectFileNoVariablesRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     name="TypeAliasRule">
   </rule>
 

@@ -18,28 +18,27 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import org.antlr.runtime.tree.CommonTree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 public class RecordNameRule extends NameConventionRule {
   private static final String RECORD_PREFIX = "T";
 
   @Override
-  public DelphiPMDNode findNode(DelphiPMDNode node) {
+  public DelphiNode findNode(DelphiNode node) {
     if (node.getType() != DelphiLexer.TkNewTypeName || !isRecordType(node.nextNode())) {
       return null;
     }
 
-    return new DelphiPMDNode((CommonTree) node.getChild(0), node.getASTTree());
+    return (DelphiNode) node.getChild(0);
   }
 
-  private boolean isRecordType(DelphiPMDNode typeDeclNode) {
+  private boolean isRecordType(DelphiNode typeDeclNode) {
     return typeDeclNode.getChild(0).getType() == DelphiLexer.TkRecord;
   }
 
   @Override
-  protected boolean isViolation(DelphiPMDNode nameNode) {
+  protected boolean isViolation(DelphiNode nameNode) {
     return !compliesWithPrefixNamingConvention(nameNode.getText(), RECORD_PREFIX);
   }
 }

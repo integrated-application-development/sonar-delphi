@@ -22,13 +22,20 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
+import com.qualinsight.plugins.sonarqube.smell.api.annotation.Smell;
+import com.qualinsight.plugins.sonarqube.smell.api.model.SmellType;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+import org.antlr.runtime.BufferedTokenStream;
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenRewriteStream;
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
+import org.antlr.runtime.tree.TreeAdaptor;
 import org.apache.commons.io.FileUtils;
 import org.sonar.plugins.delphi.antlr.ast.xml.DelphiAstSerializer;
 import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStream;
@@ -42,6 +49,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
   private String fileName;
   private boolean isError;
   private DelphiFileStream fileStream;
+  private List<Token> comments;
   private List<String> codeLines;
   private Document document;
 
@@ -81,11 +89,16 @@ public class DelphiAST extends CommonTree implements ASTTree {
     } catch (IOException e) {
       throw new FileReadFailException("Failed to read file " + file.getAbsolutePath(), e);
     }
-    DelphiParser parser = new DelphiParser(new TokenRewriteStream(new DelphiLexer(fileStream)));
-    parser.setTreeAdaptor(new DelphiTreeAdaptor(this));
+
+    TokenRewriteStream tokenStream = new TokenRewriteStream(new DelphiLexer(fileStream));
+    comments = extractComments(tokenStream);
+
+    DelphiParser parser = new DelphiParser(tokenStream);
+    TreeAdaptor adaptor = new DelphiTreeAdaptor(this);
+    parser.setTreeAdaptor(adaptor);
+
     try {
       children = ((CommonTree) parser.file().getTree()).getChildren();
-
     } catch (RecognitionException e) {
       throw new FileParseFailException("Failed to parse the file " + file.getAbsolutePath(), e);
     }
@@ -94,8 +107,24 @@ public class DelphiAST extends CommonTree implements ASTTree {
     isError = parser.getNumberOfSyntaxErrors() != 0;
   }
 
-  /** Empty, default c-tor. */
+  @Smell(
+      minutes = 120,
+      reason =
+          "This constructor only exists for tests, and doesn't make much sense."
+              + " The contract of DelphiAST appears to be that you feed it a file,"
+              + " and it populates itself with nodes."
+              + " Using this empty constructor and then trying to actually use the object "
+              + " would only yield NPEs.",
+      type = SmellType.BAD_DESIGN)
   public DelphiAST() {}
+
+  private List<Token> extractComments(BufferedTokenStream tokenStream) {
+    List<?> tokens = tokenStream.getTokens();
+    return tokens.stream()
+        .map(token -> (Token) token)
+        .filter(token -> token.getType() == DelphiLexer.COMMENT)
+        .collect(Collectors.toList());
+  }
 
   /** {@inheritDoc} */
   @Override
@@ -134,6 +163,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
     return fileStream.toString();
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getFileSourceLine(int line) {
     if (line < 1) {
@@ -144,6 +174,24 @@ public class DelphiAST extends CommonTree implements ASTTree {
           toString() + "Source code line number too high: " + line + " / " + codeLines.size());
     }
     return codeLines.get(line - 1);
+  }
+
+  public List<Token> getComments() {
+    return comments;
+  }
+
+  private List<Token> getCommentsBetweenTokenIndices(int startIndex, int endIndex) {
+    return comments.stream()
+        .filter(
+            token -> {
+              int index = token.getTokenIndex();
+              return index > startIndex && index < endIndex;
+            })
+        .collect(Collectors.toList());
+  }
+
+  public List<Token> getCommentsInsideNode(Tree node) {
+    return getCommentsBetweenTokenIndices(node.getTokenStartIndex(), node.getTokenStopIndex());
   }
 
   @Override

@@ -19,14 +19,16 @@
  */
 package org.sonar.plugins.delphi.pmd.profile;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.google.common.base.CharMatcher;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
@@ -36,7 +38,6 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import org.assertj.core.api.Condition;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.stubbing.Answer;
@@ -49,22 +50,28 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Param;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSetHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiPmdProfileExporterTest {
 
-  private static final CharMatcher EOLS = CharMatcher.anyOf("\n\r");
   private final DelphiPmdProfileExporter exporter = new DelphiPmdProfileExporter();
 
   @org.junit.Rule public ExpectedException exceptionCatcher = ExpectedException.none();
 
   private static RulesProfile importProfile(String configuration) {
-    DelphiPmdRulesDefinition definition = new DelphiPmdRulesDefinition();
+    var definitionProvider = mock(DelphiPmdRuleSetDefinitionProvider.class);
+    DelphiRuleSet ruleSet = DelphiRuleSetHelper.createFrom(new StringReader(configuration));
+
+    when(definitionProvider.getDefinition()).thenReturn(ruleSet);
+
+    DelphiPmdRulesDefinition definition = new DelphiPmdRulesDefinition(definitionProvider);
     RulesDefinition.Context context = new RulesDefinition.Context();
     definition.define(context);
 
     RulesDefinition.Repository repository = context.repository(DelphiPmdConstants.REPOSITORY_KEY);
-    assertThat(repository).isNotNull();
+    assertThat(repository, is(not(nullValue())));
 
     RuleFinder ruleFinder = createRuleFinder(repository.rules());
     DelphiPmdProfileImporter importer = new DelphiPmdProfileImporter(ruleFinder);
@@ -109,17 +116,6 @@ public class DelphiPmdProfileExporterTest {
     return results;
   }
 
-  private static Condition<String> equalsIgnoreEOL(String text) {
-    final String strippedText = EOLS.removeFrom(text);
-
-    return new Condition<String>() {
-      @Override
-      public boolean matches(String value) {
-        return EOLS.removeFrom(value).equals(strippedText);
-      }
-    }.as("equal to " + text);
-  }
-
   private static String getRuleSetXml(String fileName) {
     try {
       File xmlFile = DelphiUtils.getResource("/org/sonar/plugins/delphi/pmd/xml/" + fileName);
@@ -129,68 +125,30 @@ public class DelphiPmdProfileExporterTest {
     }
   }
 
-  @Test
-  public void testShouldExportPmdProfileOnWriter() {
-    String importedXml = getRuleSetXml("export_simple.xml");
-    StringWriter stringWriter = new StringWriter();
+  private void assertExportFormat(String importFile, String exportFile) {
+    String importedXml = getRuleSetXml(importFile);
+    String expected = getRuleSetXml(exportFile);
 
+    StringWriter stringWriter = new StringWriter();
     exporter.exportProfile(importProfile(importedXml), stringWriter);
 
-    assertThat(stringWriter.toString()).satisfies(equalsIgnoreEOL(importedXml));
+    assertThat(stringWriter.toString(), is(expected));
   }
 
   @Test
-  public void testShouldAbortExportOnWriterException() throws IOException {
-    String importedXml = getRuleSetXml("export_simple.xml");
-    final Writer writer = mock(Writer.class);
-    doThrow(new IOException("test")).when(writer).write(anyString());
-
-    exceptionCatcher.expect(IllegalStateException.class);
-    exceptionCatcher.expectMessage(
-        "An exception occurred while generating the PMD configuration file from profile: null");
-
-    exporter.exportProfile(importProfile(importedXml), writer);
+  public void testShouldExportPmdProfileOnWriter() {
+    assertExportFormat("import_simple.xml", "export_simple.xml");
   }
 
   @Test
-  public void testShouldSkipEmptyParam() {
-    String importedXml = getRuleSetXml("export_rule_with_empty_param.xml");
-
-    String expected =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            + "<ruleset name=\"delph\">\n"
-            + "  <description>Sonar Profile: delph</description>\n"
-            + "  <rule class=\"org.sonar.plugins.delphi.pmd.rules.TooLongLineRule\" message=\"Lines should not be too long\" name=\"TooLongLineRule\" language=\"delph\">\n"
-            + "    <priority>3</priority>\n"
-            + "    <description>Code lines should not be too long.</description>\n"
-            + "    <properties>\n"
-            + "      <property name=\"baseEffort\" value=\"2min\" />\n"
-            + "    </properties>\n"
-            + "  </rule>\n"
-            + "</ruleset>";
-
-    final StringWriter writer = new StringWriter();
-    exporter.exportProfile(importProfile(importedXml), writer);
-    assertThat(writer.toString()).satisfies(equalsIgnoreEOL(expected));
+  public void testShouldSkipBuiltinProperties() {
+    assertExportFormat(
+        "import_rule_with_builtin_properties.xml", "export_rule_with_builtin_properties.xml");
   }
 
   @Test
-  public void testShouldSkipAllEmptyParams() {
-    String importedXml = getRuleSetXml("export_rule_with_all_params_empty.xml");
-
-    String expected =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            + "<ruleset name=\"delph\">\n"
-            + "  <description>Sonar Profile: delph</description>\n"
-            + "  <rule class=\"org.sonar.plugins.delphi.pmd.rules.TooLongLineRule\" message=\"Lines should not be too long\" name=\"TooLongLineRule\" language=\"delph\">\n"
-            + "    <priority>3</priority>\n"
-            + "    <description>Code lines should not be too long.</description>\n"
-            + "  </rule>\n"
-            + "</ruleset>";
-
-    final StringWriter writer = new StringWriter();
-    exporter.exportProfile(importProfile(importedXml), writer);
-    assertThat(writer.toString()).satisfies(equalsIgnoreEOL(expected));
+  public void testShouldSkipEmptyProperty() {
+    assertExportFormat("import_rule_with_empty_param.xml", "export_rule_with_empty_param.xml");
   }
 
   @Test
@@ -203,27 +161,39 @@ public class DelphiPmdProfileExporterTest {
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
             + "<ruleset name=\"delph\">\n"
             + "  <description>Sonar Profile: delph</description>\n"
-            + "</ruleset>";
+            + "</ruleset>\n\n";
 
-    assertThat(writer.toString()).satisfies(equalsIgnoreEOL(expected));
+    assertThat(writer.toString(), is(expected));
+  }
+
+  @Test
+  public void testShouldAbortExportOnWriterException() throws IOException {
+    String importedXml = getRuleSetXml("import_simple.xml");
+    final Writer writer = mock(Writer.class);
+    doThrow(new IOException("test")).when(writer).write(anyString());
+
+    exceptionCatcher.expect(IllegalStateException.class);
+    exceptionCatcher.expectMessage(
+        String.format(DelphiPmdProfileExporter.PROFILE_EXPORT_ERROR, "null"));
+
+    exporter.exportProfile(importProfile(importedXml), writer);
   }
 
   @Test
   public void testShouldExportXPathRule() {
     Rule rule =
         Rule.create(DelphiPmdConstants.REPOSITORY_KEY, "MyXpathRule", "This is my own xpath rule.")
-            .setConfigKey(DelphiPmdConstants.XPATH_CLASS)
+            .setConfigKey(DelphiPmdConstants.TEMPLATE_XPATH_CLASS)
             .setRepositoryKey(DelphiPmdConstants.REPOSITORY_KEY);
-    rule.createParameter(DelphiPmdConstants.XPATH_EXPRESSION_PARAM);
+    rule.createParameter(DelphiPmdConstants.TEMPLATE_XPATH_EXPRESSION_PARAM);
 
     RulesProfile profile = RulesProfile.create();
     ActiveRule xpath = profile.activateRule(rule, null);
-    xpath.setParameter(DelphiPmdConstants.XPATH_EXPRESSION_PARAM, "//FieldDeclaration");
+    xpath.setParameter(DelphiPmdConstants.TEMPLATE_XPATH_EXPRESSION_PARAM, "//FieldDeclaration");
 
     final StringWriter writer = new StringWriter();
     exporter.exportProfile(profile, writer);
 
-    String expected = getRuleSetXml("/export_xpath_rules.xml");
-    assertThat(writer.toString()).satisfies(equalsIgnoreEOL(expected));
+    assertThat(writer.toString(), is(getRuleSetXml("/xpath_rules.xml")));
   }
 }

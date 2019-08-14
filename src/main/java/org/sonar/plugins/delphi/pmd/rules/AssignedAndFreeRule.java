@@ -24,7 +24,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /**
@@ -44,13 +44,13 @@ public class AssignedAndFreeRule extends DelphiRule {
   private AssignCheckType assignCheckType;
 
   @Override
-  protected void init() {
+  public void start(RuleContext ctx) {
     variableName = "";
     assignCheckType = AssignCheckType.NOT_APPLICABLE;
   }
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
+  public void visit(DelphiNode node, RuleContext ctx) {
     assignCheckType = findAssignCheckType(node);
     variableName = getVariableName(node);
 
@@ -58,7 +58,7 @@ public class AssignedAndFreeRule extends DelphiRule {
       return;
     }
 
-    DelphiPMDNode violationNode = findViolationNode(node);
+    DelphiNode violationNode = findViolationNode(node);
 
     if (violationNode == null) {
       return;
@@ -67,16 +67,16 @@ public class AssignedAndFreeRule extends DelphiRule {
     addViolation(ctx, violationNode);
   }
 
-  private AssignCheckType findAssignCheckType(DelphiPMDNode node) {
+  private AssignCheckType findAssignCheckType(DelphiNode node) {
     int type = node.getType();
 
     if (type == DelphiLexer.NIL) {
-      DelphiPMDNode prevNode = node.prevNode();
+      DelphiNode prevNode = node.prevNode();
       if (prevNode != null && prevNode.getType() == DelphiLexer.NOT_EQUAL) {
         return AssignCheckType.NIL_COMPARE;
       }
 
-      DelphiPMDNode nextNode = node.nextNode();
+      DelphiNode nextNode = node.nextNode();
       if (nextNode != null && nextNode.getType() == DelphiLexer.NOT_EQUAL) {
         return AssignCheckType.NIL_COMPARE_BACKWARDS;
       }
@@ -89,8 +89,8 @@ public class AssignedAndFreeRule extends DelphiRule {
     return AssignCheckType.NOT_APPLICABLE;
   }
 
-  private String getVariableName(DelphiPMDNode node) {
-    DelphiPMDNode identStart;
+  private String getVariableName(DelphiNode node) {
+    DelphiNode identStart;
 
     switch (assignCheckType) {
       case ASSIGNED:
@@ -111,9 +111,9 @@ public class AssignedAndFreeRule extends DelphiRule {
     return "";
   }
 
-  private String getQualifiedIdent(DelphiPMDNode node) {
+  private String getQualifiedIdent(DelphiNode node) {
     StringBuilder nameBuilder = new StringBuilder();
-    DelphiPMDNode currentNode = node;
+    DelphiNode currentNode = node;
 
     while (isInsideQualifiedIdent(currentNode)) {
       nameBuilder.append(currentNode.getText());
@@ -123,9 +123,9 @@ public class AssignedAndFreeRule extends DelphiRule {
     return nameBuilder.toString();
   }
 
-  private String getQualifiedIdentInReverse(DelphiPMDNode node) {
+  private String getQualifiedIdentInReverse(DelphiNode node) {
     StringBuilder nameBuilder = new StringBuilder();
-    DelphiPMDNode currentNode = node;
+    DelphiNode currentNode = node;
 
     while (isInsideQualifiedIdent(currentNode)) {
       nameBuilder.insert(0, currentNode.getText());
@@ -135,7 +135,7 @@ public class AssignedAndFreeRule extends DelphiRule {
     return nameBuilder.toString();
   }
 
-  private boolean isInsideQualifiedIdent(DelphiPMDNode node) {
+  private boolean isInsideQualifiedIdent(DelphiNode node) {
     if (node == null) {
       return false;
     }
@@ -143,29 +143,29 @@ public class AssignedAndFreeRule extends DelphiRule {
     return node.getType() == DelphiLexer.TkIdentifier || node.getType() == DelphiLexer.DOT;
   }
 
-  private DelphiPMDNode findViolationNode(DelphiPMDNode node) {
+  private DelphiNode findViolationNode(DelphiNode node) {
     if (hasConditionsAfterAssignCheck(node)) {
       // This caters to cases where the assignment check is reasonably used as a short-circuit
       // Example: "if Assigned(X) and X.ShouldBeFreed then X.Free;"
       return null;
     }
 
-    DelphiPMDNode thenNode = node.findNextSiblingOfType(DelphiLexer.THEN);
+    DelphiNode thenNode = node.findNextSiblingOfType(DelphiLexer.THEN);
 
     if (thenNode == null) {
       return null;
     }
 
-    DelphiPMDNode startNode = thenNode.nextNode();
+    DelphiNode startNode = thenNode.nextNode();
 
     if (startNode.getType() == DelphiLexer.BEGIN) {
-      startNode = (DelphiPMDNode) startNode.getChild(0);
+      startNode = (DelphiNode) startNode.getChild(0);
     }
 
     return findViolationNodeInStatement(startNode);
   }
 
-  private boolean hasConditionsAfterAssignCheck(DelphiPMDNode node) {
+  private boolean hasConditionsAfterAssignCheck(DelphiNode node) {
     Tree parent = node.getParent();
 
     if (parent != null) {
@@ -185,12 +185,12 @@ public class AssignedAndFreeRule extends DelphiRule {
     return false;
   }
 
-  private DelphiPMDNode findViolationNodeInStatement(DelphiPMDNode node) {
+  private DelphiNode findViolationNodeInStatement(DelphiNode node) {
     if (node.getType() == DelphiLexer.END) {
       return null;
     }
 
-    DelphiPMDNode violationNode = findFreeViolationNode(node);
+    DelphiNode violationNode = findFreeViolationNode(node);
 
     if (violationNode == null) {
       violationNode = findFreeAndNilViolationNode(node);
@@ -199,12 +199,12 @@ public class AssignedAndFreeRule extends DelphiRule {
     return violationNode;
   }
 
-  private DelphiPMDNode findFreeViolationNode(DelphiPMDNode node) {
+  private DelphiNode findFreeViolationNode(DelphiNode node) {
     StringBuilder freedVariableName = new StringBuilder();
-    DelphiPMDNode currentNode = node;
+    DelphiNode currentNode = node;
 
     while (isInsideQualifiedIdent(currentNode)) {
-      DelphiPMDNode nextNode = currentNode.nextNode();
+      DelphiNode nextNode = currentNode.nextNode();
       if (isFreeViolation(currentNode, nextNode, freedVariableName)) {
         return nextNode;
       }
@@ -216,13 +216,13 @@ public class AssignedAndFreeRule extends DelphiRule {
     return null;
   }
 
-  private boolean isFreeViolation(DelphiPMDNode current, DelphiPMDNode next, StringBuilder name) {
+  private boolean isFreeViolation(DelphiNode current, DelphiNode next, StringBuilder name) {
     return current.getType() == DelphiLexer.DOT
         && next.getText().equalsIgnoreCase("Free")
         && name.toString().equalsIgnoreCase(variableName);
   }
 
-  private DelphiPMDNode findFreeAndNilViolationNode(DelphiPMDNode node) {
+  private DelphiNode findFreeAndNilViolationNode(DelphiNode node) {
     if (node.getText().equalsIgnoreCase("FreeAndNil")) {
       String freedVariableName = getQualifiedIdent(node.nextNode().nextNode());
 

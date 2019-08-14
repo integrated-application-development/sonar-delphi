@@ -19,25 +19,32 @@
  */
 package org.sonar.plugins.delphi.pmd.profile;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.commons.lang3.StringUtils.isNumeric;
 
-import java.io.InputStreamReader;
-import org.sonar.api.rules.RuleParam;
+import java.util.Objects;
+import org.sonar.api.rule.RuleScope;
+import org.sonar.api.rule.Severity;
+import org.sonar.api.rules.RuleType;
 import org.sonar.api.server.ServerSide;
 import org.sonar.api.server.rule.RuleParamType;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
-import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSetHelper;
+import org.sonar.plugins.delphi.utils.PmdLevelUtils;
 
 /** Delphi rules definition */
 @ServerSide
 public class DelphiPmdRulesDefinition implements RulesDefinition {
-  private static final String RULES_XML = "/org/sonar/plugins/delphi/pmd/rules.xml";
+  public static final String UNDEFINED_BASE_EFFORT =
+      "Builtin property 'baseEffort' must be defined for rule: %s";
 
-  public DelphiPmdRulesDefinition() {
-    // do nothing
+  private DelphiPmdRuleSetDefinitionProvider ruleSetDefinitionProvider;
+
+  public DelphiPmdRulesDefinition(DelphiPmdRuleSetDefinitionProvider ruleSetDefinitionProvider) {
+    this.ruleSetDefinitionProvider = ruleSetDefinitionProvider;
   }
 
   @Override
@@ -53,30 +60,75 @@ public class DelphiPmdRulesDefinition implements RulesDefinition {
   }
 
   private void extractRulesData(NewRepository repository) {
-    var rulesReader = new InputStreamReader(getClass().getResourceAsStream(RULES_XML), UTF_8);
-    DelphiRuleSet ruleSet = DelphiRuleSetHelper.createFrom(rulesReader);
+    DelphiRuleSet ruleSet = ruleSetDefinitionProvider.getDefinition();
 
-    for (org.sonar.api.rules.Rule rule : ruleSet.getSonarRules()) {
-      NewRule newRule =
+    for (DelphiRule pmdRule : ruleSet.getRules()) {
+      NewRule sonarRule =
           repository
-              .createRule(rule.getKey())
-              .setName(rule.getName())
-              .setHtmlDescription(rule.getDescription())
-              .setInternalKey(rule.getConfigKey())
-              .setSeverity(rule.getSeverity().name());
+              .createRule(pmdRule.getName())
+              .setName(pmdRule.getMessage())
+              .setHtmlDescription(pmdRule.getHtmlDescription())
+              .setInternalKey(pmdRule.getClazz());
 
-      newRule.setDebtRemediationFunction(
-          newRule
-              .debtRemediationFunctions()
-              .constantPerIssue(rule.getParam("baseEffort").getDefaultValue()));
+      extractSeverity(pmdRule, sonarRule);
+      extractDebtRemediationFunction(pmdRule, sonarRule);
+      extractScope(pmdRule, sonarRule);
+      extractTemplate(pmdRule, sonarRule);
+      extractType(pmdRule, sonarRule);
+      extractProperties(pmdRule, sonarRule);
+    }
+  }
 
-      for (RuleParam param : rule.getParams()) {
-        newRule
-            .createParam(param.getKey())
-            .setDefaultValue(param.getDefaultValue())
-            .setType(RuleParamType.parse(param.getType()))
-            .setDescription(param.getDescription());
+  private void extractSeverity(DelphiRule pmdRule, NewRule sonarRule) {
+    String severity =
+        Objects.requireNonNullElse(
+            PmdLevelUtils.severityFromLevel(pmdRule.getPriority()), Severity.defaultSeverity());
+
+    sonarRule.setSeverity(severity);
+  }
+
+  private void extractDebtRemediationFunction(DelphiRule pmdRule, NewRule sonarRule) {
+    DelphiRuleProperty baseEffortProperty = pmdRule.getProperty(DelphiPmdConstants.BASE_EFFORT);
+    if (baseEffortProperty == null) {
+      throw new IllegalArgumentException(String.format(UNDEFINED_BASE_EFFORT, pmdRule.getName()));
+    }
+
+    sonarRule.setDebtRemediationFunction(
+        sonarRule.debtRemediationFunctions().constantPerIssue(baseEffortProperty.getValue()));
+  }
+
+  private void extractScope(DelphiRule pmdRule, NewRule sonarRule) {
+    DelphiRuleProperty scopeProperty = pmdRule.getProperty(DelphiPmdConstants.SCOPE);
+    if (scopeProperty != null) {
+      sonarRule.setScope(RuleScope.valueOf(scopeProperty.getValue()));
+    }
+  }
+
+  private void extractTemplate(DelphiRule pmdRule, NewRule sonarRule) {
+    DelphiRuleProperty templateProperty = pmdRule.getProperty(DelphiPmdConstants.TEMPLATE);
+    if (templateProperty != null) {
+      sonarRule.setTemplate(Boolean.parseBoolean(templateProperty.getValue()));
+    }
+  }
+
+  private void extractType(DelphiRule pmdRule, NewRule sonarRule) {
+    DelphiRuleProperty typeProperty = pmdRule.getProperty(DelphiPmdConstants.TYPE);
+    if (typeProperty != null) {
+      sonarRule.setType(RuleType.valueOf(typeProperty.getValue()));
+    }
+  }
+
+  private void extractProperties(DelphiRule pmdRule, NewRule sonarRule) {
+    for (DelphiRuleProperty property : pmdRule.getProperties()) {
+      if (property.isBuiltinProperty()) {
+        continue;
       }
+
+      sonarRule
+          .createParam(property.getName())
+          .setDefaultValue(property.getValue())
+          .setType(isNumeric(property.getValue()) ? RuleParamType.INTEGER : RuleParamType.STRING)
+          .setDescription(property.getName());
     }
   }
 }

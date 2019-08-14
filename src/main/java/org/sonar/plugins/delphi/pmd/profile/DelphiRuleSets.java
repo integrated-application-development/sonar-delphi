@@ -55,6 +55,20 @@ public class DelphiRuleSets extends RuleSets {
   }
 
   @Override
+  public void start(RuleContext ctx) {
+    for (RuleSet ruleSet : ruleSets) {
+      ruleSet.start(ctx);
+    }
+  }
+
+  @Override
+  public void end(RuleContext ctx) {
+    for (RuleSet ruleSet : ruleSets) {
+      ruleSet.end(ctx);
+    }
+  }
+
+  @Override
   public boolean applies(File file) {
     return true;
   }

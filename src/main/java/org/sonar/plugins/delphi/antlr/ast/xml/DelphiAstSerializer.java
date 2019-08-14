@@ -25,7 +25,7 @@ import org.antlr.runtime.tree.Tree;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
 import org.w3c.dom.Document;
@@ -90,9 +90,9 @@ public class DelphiAstSerializer {
   /**
    * Recursively generates XML elements for the whole AST
    *
-   * @param root Element
-   * @param doc Document
-   * @param delphiNode DelphiNode
+   * @param root Parent element
+   * @param doc Target document
+   * @param delphiNode Node that XML is being generated for
    */
   private void generateNode(Element root, Document doc, CommonTree delphiNode) {
     if (root == null || doc == null) {
@@ -102,7 +102,7 @@ public class DelphiAstSerializer {
     handleEnter(delphiNode);
 
     for (int i = 0; i < delphiNode.getChildCount(); ++i) {
-      DelphiPMDNode childNode = new DelphiPMDNode((CommonTree) delphiNode.getChild(i), ast);
+      DelphiNode childNode = (DelphiNode) delphiNode.getChild(i);
       String tag = escapeXml(DelphiParser.tokenNames[childNode.getType()]);
 
       Element child = doc.createElement(tag);
@@ -110,7 +110,7 @@ public class DelphiAstSerializer {
       child.setAttribute("beginLine", String.valueOf(childNode.getBeginLine()));
       child.setAttribute("beginColumn", String.valueOf(childNode.getBeginColumn()));
       child.setAttribute("endLine", String.valueOf(childNode.getBeginLine()));
-      child.setAttribute("endColumn", String.valueOf(childNode.getBeginColumn()));
+      child.setAttribute("endColumn", String.valueOf(childNode.getEndColumn()));
       child.setAttribute("class", getTypeName());
       child.setAttribute("method", getMethodName());
       child.setAttribute("package", getUnitName());

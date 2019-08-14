@@ -9,15 +9,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-public class DelphiPMDNodeTest {
+public class DelphiNodeTest {
 
   private static final String TEST_FILE = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
   private ASTTree ast = new DelphiAST(DelphiUtils.getResource(TEST_FILE));
-  private DelphiPMDNode node;
+  private DelphiNode node;
 
   @Before
   public void setup() {
-    node = (DelphiPMDNode) ast.getChild(0);
+    node = (DelphiNode) ast.getChild(0);
   }
 
   @Test(expected = UnsupportedOperationException.class)

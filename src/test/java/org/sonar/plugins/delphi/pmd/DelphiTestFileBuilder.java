@@ -6,9 +6,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.sonarqube.ws.FilenameUtils;
 
 public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> {
   private static final Logger LOG = Loggers.get(DelphiTestFileBuilder.class);
@@ -40,7 +43,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
     StringBuilder source = getSourceCode();
 
     try {
-      File file = File.createTempFile(getFilenamePrefix(), getFileExtension(), baseDir);
+      File file = File.createTempFile(getFilenamePrefix(), "." + getFileExtension(), baseDir);
       file.deleteOnExit();
 
       try (FileWriter fileWriter = new FileWriter(file, StandardCharsets.UTF_8)) {
@@ -96,4 +99,61 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
   protected abstract String getFilenamePrefix();
 
   protected abstract String getFileExtension();
+
+  public static DelphiTestFileBuilder.ResourceBuilder fromResource(String path) {
+    return new ResourceBuilder(DelphiUtils.getResource(path));
+  }
+
+  private static class ResourceBuilder extends DelphiTestFileBuilder<ResourceBuilder> {
+    private File resource;
+
+    ResourceBuilder(File resource) {
+      this.resource = resource;
+    }
+
+    @Override
+    public int getOffsetDecl() {
+      return 0;
+    }
+
+    @Override
+    public int getOffSet() {
+      return 0;
+    }
+
+    @Override
+    protected ResourceBuilder getThis() {
+      return this;
+    }
+
+    @Override
+    public ResourceBuilder appendDecl(String value) {
+      throw new UnsupportedOperationException("Appending not supported for ResourceBuilder");
+    }
+
+    @Override
+    public ResourceBuilder appendImpl(String value) {
+      throw new UnsupportedOperationException("Appending not supported for ResourceBuilder");
+    }
+
+    @Override
+    protected StringBuilder generateSourceCode() {
+      try {
+        return new StringBuilder(
+            DelphiUtils.readFileContent(resource, StandardCharsets.UTF_8.name()));
+      } catch (IOException e) {
+        throw new UncheckedIOException(e);
+      }
+    }
+
+    @Override
+    protected String getFilenamePrefix() {
+      return "resource";
+    }
+
+    @Override
+    protected String getFileExtension() {
+      return FilenameUtils.getExtension(resource.getName());
+    }
+  }
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="delph">
+  <description>Sonar Profile: delph</description>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.InterfaceNameRule" message="Interface names should comply with a naming convention" name="InterfaceNameRule" language="delph">
+    <priority>1</priority>
+    <description>Interface names should begin with 'I' and follow Pascal case.</description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.TooManyArgumentsRule" message="Methods should not have too many arguments" name="TooManyArgumentsRule" language="delph">
+    <priority>1</priority>
+    <description>Method has too many arguments, maximum number of arguments is 6</description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+      <property name="limit" value="6" />
+    </properties>
+  </rule>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.TooManyVariablesRule" message="Methods should not have too many variables" name="TooManyVariablesRule" language="delph">
+    <priority>3</priority>
+    <description>Method has too many variables, maximum number of variables is 10</description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+      <property name="limit" value="10" />
+    </properties>
+  </rule>
+</ruleset>
+

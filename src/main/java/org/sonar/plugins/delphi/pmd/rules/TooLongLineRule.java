@@ -1,7 +1,7 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 
 /** Class for counting line characters. If too long, creates a violation. */
 public class TooLongLineRule extends DelphiRule {
@@ -12,12 +12,12 @@ public class TooLongLineRule extends DelphiRule {
   private int lastLineChecked;
 
   @Override
-  public void init() {
+  public void start(RuleContext ctx) {
     lastLineChecked = 0;
   }
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
+  public void visit(DelphiNode node, RuleContext ctx) {
     // Retrieve and store the astTree from the first node
     int lineNumber = node.getLine();
 

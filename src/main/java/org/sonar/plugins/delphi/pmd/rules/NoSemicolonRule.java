@@ -24,16 +24,16 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /** Checks if semicolons are properly placed */
 public class NoSemicolonRule extends DelphiRule {
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
+  public void visit(DelphiNode node, RuleContext ctx) {
     if (shouldVisit(node)) {
-      DelphiPMDNode violationNode = findViolationNode(node);
+      DelphiNode violationNode = findViolationNode(node);
 
       if (violationNode != null) {
         addViolation(ctx, violationNode);
@@ -41,7 +41,7 @@ public class NoSemicolonRule extends DelphiRule {
     }
   }
 
-  private boolean shouldVisit(DelphiPMDNode node) {
+  private boolean shouldVisit(DelphiNode node) {
     return isImplementationSection()
         && node.getType() == DelphiLexer.END
         && previousNodeValid(node.prevNode())
@@ -59,12 +59,12 @@ public class NoSemicolonRule extends DelphiRule {
         && node.getType() != DelphiLexer.TkAssemblerInstructions;
   }
 
-  private boolean nextNodeValid(DelphiPMDNode node) {
+  private boolean nextNodeValid(DelphiNode node) {
     return node == null || node.getType() != DelphiLexer.DOT;
   }
 
-  private DelphiPMDNode findViolationNode(DelphiPMDNode node) {
-    DelphiPMDNode previousNode = node.prevNode();
+  private DelphiNode findViolationNode(DelphiNode node) {
+    DelphiNode previousNode = node.prevNode();
 
     if (isBlockNode(previousNode)) {
       return findViolationNodeInBlock(previousNode);
@@ -73,14 +73,14 @@ public class NoSemicolonRule extends DelphiRule {
     }
   }
 
-  private DelphiPMDNode findViolationNodeInBlock(DelphiPMDNode node) {
+  private DelphiNode findViolationNodeInBlock(DelphiNode node) {
     if (isMissingSemicolonInBlock(node)) {
-      return (DelphiPMDNode) node.getChild(node.getChildCount() - 1);
+      return (DelphiNode) node.getChild(node.getChildCount() - 1);
     }
     return null;
   }
 
-  private DelphiPMDNode findViolationNodeInStatement(DelphiPMDNode node) {
+  private DelphiNode findViolationNodeInStatement(DelphiNode node) {
     if (notSemicolonNode(node)) {
       return node;
     }

@@ -22,7 +22,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 public class ConstructorWithoutInheritedStatementRule extends NoInheritedStatementRule {
@@ -30,12 +30,12 @@ public class ConstructorWithoutInheritedStatementRule extends NoInheritedStateme
   private final Deque<String> recordTypes = new ArrayDeque<>();
 
   @Override
-  protected void init() {
+  public void start(RuleContext ctx) {
     recordTypes.clear();
   }
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
+  public void visit(DelphiNode node, RuleContext ctx) {
     handleNewTypes(node);
 
     if (node.getType() == DelphiLexer.CONSTRUCTOR) {
@@ -47,13 +47,13 @@ public class ConstructorWithoutInheritedStatementRule extends NoInheritedStateme
     }
   }
 
-  private void handleNewTypes(DelphiPMDNode node) {
+  private void handleNewTypes(DelphiNode node) {
     if (node.getType() == DelphiLexer.TkNewType && isRecordType(node)) {
       recordTypes.add(getTypeName(node));
     }
   }
 
-  private boolean isRecordConstructor(DelphiPMDNode node) {
+  private boolean isRecordConstructor(DelphiNode node) {
     if (node.getChild(0).getType() == DelphiLexer.TkFunctionName) {
       String typeName = node.getChild(0).getChild(0).getText();
       return recordTypes.contains(typeName);
@@ -61,14 +61,14 @@ public class ConstructorWithoutInheritedStatementRule extends NoInheritedStateme
     return false;
   }
 
-  private boolean isRecordType(DelphiPMDNode newTypeNode) {
+  private boolean isRecordType(DelphiNode newTypeNode) {
     Tree typeDeclNode = newTypeNode.getFirstChildWithType(DelphiLexer.TkNewTypeDecl);
     int type = typeDeclNode.getChild(0).getType();
 
     return type == DelphiLexer.TkRecord;
   }
 
-  private String getTypeName(DelphiPMDNode newTypeNode) {
+  private String getTypeName(DelphiNode newTypeNode) {
     Tree typeNameNode = newTypeNode.getFirstChildWithType(DelphiLexer.TkNewTypeName);
     return typeNameNode.getChild(0).getText();
   }

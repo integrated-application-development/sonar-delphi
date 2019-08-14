@@ -22,9 +22,9 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import com.qualinsight.plugins.sonarqube.smell.api.annotation.Smell;
-import com.qualinsight.plugins.sonarqube.smell.api.model.SmellType;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.LanguageRegistry;
 import net.sourceforge.pmd.lang.ast.Node;
@@ -33,19 +33,22 @@ import net.sourceforge.pmd.lang.rule.ImmutableLanguage;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
 import net.sourceforge.pmd.properties.constraints.NumericConstraints;
-import org.sonar.plugins.delphi.antlr.ast.ASTTree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.antlr.runtime.Token;
+import org.sonar.api.rule.RuleScope;
+import org.sonar.api.rules.RuleType;
+import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.pmd.DelphiLanguageModule;
 import org.sonar.plugins.delphi.pmd.DelphiParserVisitor;
+import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.pmd.DelphiRuleViolationBuilder;
 
 /** Basic rule class, extend this class to make your own rules. Do NOT extend from AbstractRule. */
 public class DelphiRule extends AbstractRule implements DelphiParserVisitor, ImmutableLanguage {
-
-  protected int skipToLine;
   private int currentVisibility;
   private boolean inImplementationSection;
+  private Set<Integer> suppressions;
 
   protected static final PropertyDescriptor<Integer> LIMIT =
       PropertyFactory.intProperty("limit")
@@ -54,16 +57,28 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
           .defaultValue(1)
           .build();
 
-  private static final PropertyDescriptor<String> BASE_EFFORT =
-      PropertyFactory.stringProperty("baseEffort")
+  public static final PropertyDescriptor<String> BASE_EFFORT =
+      PropertyFactory.stringProperty(DelphiPmdConstants.BASE_EFFORT)
           .desc("The base effort to correct")
           .defaultValue("")
           .build();
 
-  public static final PropertyDescriptor<Boolean> TESTS =
-      PropertyFactory.booleanProperty("tests")
-          .desc("Whether the rule applies to tests")
-          .defaultValue(true)
+  public static final PropertyDescriptor<String> SCOPE =
+      PropertyFactory.stringProperty(DelphiPmdConstants.SCOPE)
+          .desc("The type of code this rule should apply to")
+          .defaultValue(RuleScope.ALL.name())
+          .build();
+
+  public static final PropertyDescriptor<Boolean> TEMPLATE =
+      PropertyFactory.booleanProperty(DelphiPmdConstants.TEMPLATE)
+          .desc("Whether the rule is a template")
+          .defaultValue(false)
+          .build();
+
+  public static final PropertyDescriptor<String> TYPE =
+      PropertyFactory.stringProperty(DelphiPmdConstants.TYPE)
+          .desc("Rule type: Options are 'CODE_SMELL', 'BUG', 'VULNERABILITY' or 'SECURITY_HOTSPOT'")
+          .defaultValue(RuleType.CODE_SMELL.name())
           .build();
 
   protected static final PropertyDescriptor<String> START_AST =
@@ -83,101 +98,119 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
 
     definePropertyDescriptor(BASE_EFFORT);
     definePropertyDescriptor(LIMIT);
-    definePropertyDescriptor(TESTS);
+    definePropertyDescriptor(SCOPE);
+    definePropertyDescriptor(TEMPLATE);
+    definePropertyDescriptor(TYPE);
     definePropertyDescriptor(START_AST);
     definePropertyDescriptor(END_AST);
   }
 
-  /**
-   * Visits all nodes in a file overload this method in derived class
-   *
-   * @param node the current node
-   * @param ctx the ruleContext to store the violations
-   */
-  protected void visit(DelphiPMDNode node, RuleContext ctx) {
-    // do nothing
+  @Override
+  public void visit(DelphiNode node, RuleContext ctx) {
+    // Do nothing
   }
 
-  /** Visits all nodes in a file */
   @Override
-  public void visit(DelphiPMDNode node, Object data) {
-    // do nothing
+  public void visitFile(DelphiAST ast, RuleContext ctx) {
+    // Do nothing
+  }
+
+  @Override
+  public void visitComment(Token comment, RuleContext ctx) {
+    // Do nothing
   }
 
   /** {@inheritDoc} */
   @Override
   public void apply(List<? extends Node> nodes, RuleContext ctx) {
-    visitAll(nodes, ctx);
+    if (getProperty(TEMPLATE) || nodes.isEmpty()) {
+      return;
+    }
+
+    DelphiNode firstNode = (DelphiNode) nodes.get(0);
+    DelphiAST ast = firstNode.getASTTree();
+
+    updateSuppressions(ast);
+
+    visitNodes(nodes, ctx);
+    visitFile(ast, ctx);
+    visitComments(ast, ctx);
   }
 
-  @Smell(
-      minutes = 60,
-      reason =
-          "The //NOSONAR line skip is poorly implemented."
-              + "We completely skip visiting any nodes on that line, which could lead to surprising"
-              + "behavior when a rule traverses nodes on multiple lines."
-              + "We're also doing a String.endsWith check on every line in the codebase."
-              + "That probably isn't performing very well.",
-      type = SmellType.BAD_DESIGN)
-  protected void visitAll(List<? extends Node> acus, RuleContext ctx) {
-    skipToLine = -1;
+  private void updateSuppressions(DelphiAST ast) {
+    suppressions =
+        ast.getComments().stream()
+            .filter(comment -> comment.getText().contains("NOSONAR"))
+            .map(Token::getLine)
+            .collect(Collectors.toSet());
+  }
+
+  private void visitNodes(List<? extends Node> nodes, RuleContext ctx) {
     currentVisibility = DelphiLexer.PUBLISHED;
     inImplementationSection = false;
 
-    init();
+    for (Node acu : nodes) {
+      DelphiNode node = (DelphiNode) acu;
 
-    for (Node acu : acus) {
-      DelphiPMDNode node = (DelphiPMDNode) acu;
-      ASTTree ast = node.getASTTree();
-      int nodeLine = node.getLine();
-
-      if (ast != null && nodeLine > skipToLine) {
-        String codeLine = node.getASTTree().getFileSourceLine(nodeLine);
-        // skip pmd analysis
-        if (codeLine.trim().endsWith("//NOSONAR")) {
-          skipToLine = nodeLine + 1;
-        }
-      }
-
-      if (nodeLine >= skipToLine) {
-        updateVisibility(node);
-        updateIsImplementation(node);
-        visit(node, ctx);
-      }
+      updateVisibility(node);
+      updateIsImplementation(node);
+      visit(node, ctx);
     }
   }
 
-  /** Overload this method in derived class to initialize your rule instance with default values */
-  protected void init() {
-    // Used to overload default values in a rule, does not have to be used
+  private void visitComments(DelphiAST ast, RuleContext ctx) {
+    for (Token comment : ast.getComments()) {
+      visitComment(comment, ctx);
+    }
   }
 
   /**
-   * Adds violation to pmd report
+   * Adds violation to pmd report for a DelphiNode
    *
    * @param ctx RuleContext
    * @param node Node
    */
-  protected void addViolation(RuleContext ctx, DelphiPMDNode node) {
+  protected void addViolation(RuleContext ctx, DelphiNode node) {
     newViolation(ctx).fileLocation(node).logicalLocation(node).save();
   }
 
   /**
-   * Adds violation to pmd report with override message
+   * Adds violation to pmd report for a DelphiNode (with override message)
    *
    * @param ctx RuleContext
-   * @param node Node
+   * @param node Violation node
    * @param msg Violation message
    */
-  protected void addViolation(RuleContext ctx, DelphiPMDNode node, String msg) {
+  protected void addViolation(RuleContext ctx, DelphiNode node, String msg) {
     newViolation(ctx).fileLocation(node).logicalLocation(node).message(msg).save();
+  }
+
+  /**
+   * Adds violation to pmd report for a token
+   *
+   * @param ctx RuleContext
+   * @param token Violation token
+   */
+  protected void addViolation(RuleContext ctx, Token token) {
+    newViolation(ctx).fileLocation(token).save();
+  }
+
+  /**
+   * Adds violation to pmd report for a token (with override message)
+   *
+   * @param ctx RuleContext
+   * @param token Violation token
+   * @param msg Violation message
+   */
+  protected void addViolation(RuleContext ctx, Token token, String msg) {
+    newViolation(ctx).fileLocation(token).message(msg).save();
   }
 
   protected DelphiRuleViolationBuilder newViolation(RuleContext ctx) {
     return DelphiRuleViolationBuilder.newViolation(this, ctx);
   }
 
-  private void updateVisibility(DelphiPMDNode node) {
+  private void updateVisibility(DelphiNode node) {
     switch (node.getType()) {
       case DelphiLexer.PRIVATE:
       case DelphiLexer.PROTECTED:
@@ -194,7 +227,7 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
     }
   }
 
-  private void updateIsImplementation(DelphiPMDNode node) {
+  private void updateIsImplementation(DelphiNode node) {
     if (!inImplementationSection) {
       inImplementationSection = node.getType() == DelphiLexer.IMPLEMENTATION;
     }
@@ -218,6 +251,10 @@ public class DelphiRule extends AbstractRule implements DelphiParserVisitor, Imm
 
   boolean isImplementationSection() {
     return inImplementationSection;
+  }
+
+  public Set<Integer> getSuppressions() {
+    return suppressions;
   }
 
   @Override

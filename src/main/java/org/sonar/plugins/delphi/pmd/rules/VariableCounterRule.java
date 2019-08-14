@@ -26,14 +26,14 @@ import java.util.Collections;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 public abstract class VariableCounterRule extends DelphiRule implements NodeFinderInterface {
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
-    List<DelphiPMDNode> nodes = getVarParentNodes(node);
+  public void visit(DelphiNode node, RuleContext ctx) {
+    List<DelphiNode> nodes = getVarParentNodes(node);
 
     if (nodes.isEmpty()) {
       return;
@@ -41,7 +41,7 @@ public abstract class VariableCounterRule extends DelphiRule implements NodeFind
 
     int variableCount = 0;
 
-    for (DelphiPMDNode varBlockNode : nodes) {
+    for (DelphiNode varBlockNode : nodes) {
       variableCount += countVariables(varBlockNode);
     }
 
@@ -52,7 +52,7 @@ public abstract class VariableCounterRule extends DelphiRule implements NodeFind
     }
   }
 
-  private int countVariables(DelphiPMDNode node) {
+  private int countVariables(DelphiNode node) {
     int count = 0;
 
     for (int i = 0; i < node.getChildCount(); ++i) {
@@ -65,8 +65,8 @@ public abstract class VariableCounterRule extends DelphiRule implements NodeFind
     return count;
   }
 
-  private List<DelphiPMDNode> getVarParentNodes(DelphiPMDNode node) {
-    DelphiPMDNode singleNode = findNode(node);
+  private List<DelphiNode> getVarParentNodes(DelphiNode node) {
+    DelphiNode singleNode = findNode(node);
     if (singleNode != null) {
       return Collections.singletonList(singleNode);
     }

@@ -19,9 +19,7 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import static java.lang.Boolean.parseBoolean;
-
-import java.util.Objects;
+import com.google.common.base.Enums;
 import net.sourceforge.pmd.RuleViolation;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
@@ -31,6 +29,7 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
+import org.sonar.api.rule.RuleScope;
 import org.sonar.api.scanner.ScannerSide;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.pmd.rules.DelphiRule;
@@ -53,15 +52,20 @@ public class DelphiPmdViolationRecorder {
       return;
     }
 
+    if (pmdViolation.isSuppressed()) {
+      // Suppressed violations shouldn't be saved
+      return;
+    }
+
+    if (isOutOfScope(pmdViolation)) {
+      // Save violations only if they occur within the rule's specified scope (ALL/MAIN/TEST)
+      return;
+    }
+
     final ActiveRule activeRule = findActiveRuleFor(pmdViolation);
 
     if (activeRule == null) {
       // Save violations only for enabled rules
-      return;
-    }
-
-    if (shouldSkipTests(activeRule) && isInsideTestMethod(pmdViolation)) {
-      // This rule only applies to the main code
       return;
     }
 
@@ -86,12 +90,21 @@ public class DelphiPmdViolationRecorder {
     return activeRules.find(ruleKey);
   }
 
-  private boolean shouldSkipTests(ActiveRule activeRule) {
-    String testsParam = activeRule.param(DelphiRule.TESTS.name());
-    return !parseBoolean(Objects.requireNonNullElse(testsParam, "true"));
+  private boolean isOutOfScope(RuleViolation violation) {
+    String scopeProperty = violation.getRule().getProperty(DelphiRule.SCOPE);
+    RuleScope scope = Enums.getIfPresent(RuleScope.class, scopeProperty).or(RuleScope.ALL);
+
+    switch (scope) {
+      case MAIN:
+        return isInsideTestMethod(violation);
+      case TEST:
+        return !isInsideTestMethod(violation);
+      default:
+        return false;
+    }
   }
 
-  private boolean isInsideTestMethod(RuleViolation pmdRuleViolation) {
-    return pmdRuleViolation.getClassName().matches(delphiProjectHelper.testTypeRegex());
+  private boolean isInsideTestMethod(RuleViolation violation) {
+    return violation.getClassName().matches(delphiProjectHelper.testTypeRegex());
   }
 }

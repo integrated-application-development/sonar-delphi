@@ -1,23 +1,27 @@
 package org.sonar.plugins.delphi.pmd;
 
 import net.sourceforge.pmd.RuleContext;
+import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 import org.sonar.plugins.delphi.pmd.rules.DelphiRule;
+import org.sonarsource.analyzer.commons.TokenLocation;
 
 public class DelphiRuleViolationBuilder {
   private static final int[] METHOD_TYPES = {
     DelphiLexer.CONSTRUCTOR, DelphiLexer.DESTRUCTOR, DelphiLexer.FUNCTION, DelphiLexer.PROCEDURE
   };
 
-  private DelphiRuleViolation ruleViolation;
+  private DelphiRule rule;
   private RuleContext ctx;
+  private DelphiRuleViolation ruleViolation;
 
   private DelphiRuleViolationBuilder(DelphiRule rule, RuleContext ctx) {
-    this.ruleViolation = new DelphiRuleViolation(rule, ctx);
+    this.rule = rule;
     this.ctx = ctx;
+    this.ruleViolation = new DelphiRuleViolation(rule, ctx);
   }
 
   public static DelphiRuleViolationBuilder newViolation(DelphiRule rule, RuleContext ctx) {
@@ -32,9 +36,20 @@ public class DelphiRuleViolationBuilder {
     return this;
   }
 
-  public DelphiRuleViolationBuilder fileLocation(DelphiPMDNode node) {
+  public DelphiRuleViolationBuilder fileLocation(DelphiNode node) {
     return fileLocation(
         node.getBeginLine(), node.getBeginColumn(), node.getEndLine(), node.getEndColumn());
+  }
+
+  public DelphiRuleViolationBuilder fileLocation(Token token) {
+    TokenLocation location =
+        new TokenLocation(token.getLine(), token.getCharPositionInLine(), token.getText());
+
+    return fileLocation(
+        location.startLine(),
+        location.startLineOffset(),
+        location.endLine(),
+        location.endLineOffset());
   }
 
   public DelphiRuleViolationBuilder logicalLocation(
@@ -45,7 +60,7 @@ public class DelphiRuleViolationBuilder {
     return this;
   }
 
-  public DelphiRuleViolationBuilder logicalLocation(DelphiPMDNode node) {
+  public DelphiRuleViolationBuilder logicalLocation(DelphiNode node) {
     findLogicalLocation(node);
     return this;
   }
@@ -56,10 +71,16 @@ public class DelphiRuleViolationBuilder {
   }
 
   public void save() {
+    checkIfViolationSuppressed();
     ctx.getReport().addRuleViolation(ruleViolation);
   }
 
-  private void findLogicalLocation(DelphiPMDNode node) {
+  private void checkIfViolationSuppressed() {
+    boolean suppressed = rule.getSuppressions().contains(ruleViolation.getBeginLine());
+    ruleViolation.setSuppressed(suppressed);
+  }
+
+  private void findLogicalLocation(DelphiNode node) {
     Tree unitNode = findUnitNode(node);
 
     if (unitNode != null) {
@@ -98,11 +119,11 @@ public class DelphiRuleViolationBuilder {
     }
   }
 
-  private Tree findUnitNode(DelphiPMDNode node) {
+  private Tree findUnitNode(DelphiNode node) {
     return node.getASTTree().getFirstChildWithType(DelphiLexer.UNIT);
   }
 
-  private Tree findMethodNode(DelphiPMDNode node) {
+  private Tree findMethodNode(DelphiNode node) {
     Tree methodNode = null;
 
     for (int methodType : METHOD_TYPES) {

@@ -35,6 +35,9 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSetHelper;
 @ServerSide
 public class DelphiPmdProfileExporter extends ProfileExporter {
 
+  public static final String PROFILE_EXPORT_ERROR =
+      "An exception occurred while generating the PMD configuration file from profile: %s";
+
   private static final String CONTENT_TYPE_APPLICATION_XML = "application/xml";
 
   public DelphiPmdProfileExporter() {
@@ -50,11 +53,7 @@ public class DelphiPmdProfileExporter extends ProfileExporter {
     try {
       tree.writeTo(writer);
     } catch (IllegalStateException e) {
-      throw new IllegalStateException(
-          "An exception occurred while generating the PMD "
-              + "configuration file from profile: "
-              + profile.getName(),
-          e);
+      throw new IllegalStateException(String.format(PROFILE_EXPORT_ERROR, profile.getName()), e);
     }
   }
 }

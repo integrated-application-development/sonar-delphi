@@ -5,8 +5,9 @@
     <priority>3</priority>
     <description>Code lines should not be too long.</description>
     <properties>
-      <property name="baseEffort" value="" />
-      <property name="limit" value="" />
+      <property name="baseEffort" value="1min" />
+      <property name="scope" value="MAIN" />
+      <property name="type" value="CODE_SMELL" />
     </properties>
   </rule>
 </ruleset>

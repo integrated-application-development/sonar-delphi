@@ -23,13 +23,13 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 public abstract class NoInheritedStatementRule extends DelphiRule {
 
-  protected void checkViolation(RuleContext ctx, DelphiPMDNode node) {
-    DelphiPMDNode beginNode = findBeginNode(node);
+  protected void checkViolation(RuleContext ctx, DelphiNode node) {
+    DelphiNode beginNode = findBeginNode(node);
 
     if (beginNode == null || hasInheritedStatement(beginNode)) {
       return;
@@ -38,13 +38,13 @@ public abstract class NoInheritedStatementRule extends DelphiRule {
     addViolation(ctx, node);
   }
 
-  private DelphiPMDNode findBeginNode(DelphiPMDNode node) {
-    DelphiPMDNode declSection = node.nextNode();
+  private DelphiNode findBeginNode(DelphiNode node) {
+    DelphiNode declSection = node.nextNode();
     if (declSection == null || declSection.getType() != DelphiLexer.TkBlockDeclSection) {
       return null;
     }
 
-    DelphiPMDNode beginNode = declSection.nextNode();
+    DelphiNode beginNode = declSection.nextNode();
     if (beginNode == null || beginNode.getType() != DelphiLexer.BEGIN) {
       return null;
     }
@@ -52,7 +52,7 @@ public abstract class NoInheritedStatementRule extends DelphiRule {
     return beginNode;
   }
 
-  private boolean hasInheritedStatement(DelphiPMDNode beginNode) {
+  private boolean hasInheritedStatement(DelphiNode beginNode) {
     for (int i = 0; i < beginNode.getChildCount(); i++) {
       if (beginNode.getChildType(i) == DelphiLexer.INHERITED) {
         return true;
@@ -62,8 +62,8 @@ public abstract class NoInheritedStatementRule extends DelphiRule {
     return false;
   }
 
-  protected boolean isClassMethod(DelphiPMDNode node) {
-    DelphiPMDNode prevNode = node.prevNode();
+  protected boolean isClassMethod(DelphiNode node) {
+    DelphiNode prevNode = node.prevNode();
     return prevNode != null && prevNode.getType() == DelphiLexer.CLASS;
   }
 }

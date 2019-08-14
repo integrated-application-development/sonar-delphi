@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset name="delph">
   <description>Sonar Profile: delph</description>
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule" message="This is my own xpath rule." name="MyXpathRule" language="delph">
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule" message="This is my builtin xpath rule." name="MyBuiltinXpathRule" language="delph">
     <priority>3</priority>
     <properties>
-      <property name="xpath">
+      <property name="builtinXPath">
         <value><![CDATA[//FieldDeclaration]]></value>
       </property>
     </properties>

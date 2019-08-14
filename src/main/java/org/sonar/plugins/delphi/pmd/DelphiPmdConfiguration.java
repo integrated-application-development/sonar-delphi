@@ -34,17 +34,30 @@ import org.sonar.api.scanner.ScannerSide;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 
 @ScannerSide
 public class DelphiPmdConfiguration {
+
   private static final String PMD_RESULT_XML = "pmd-result.xml";
   private static final Logger LOG = Loggers.get(DelphiPmdConfiguration.class);
+
   private final FileSystem fileSystem;
   private final Configuration settings;
+  private DelphiPmdRuleSetDefinitionProvider ruleSetDefinitionProvider;
 
-  public DelphiPmdConfiguration(FileSystem fileSystem, Configuration settings) {
+  public DelphiPmdConfiguration(
+      FileSystem fileSystem,
+      Configuration settings,
+      DelphiPmdRuleSetDefinitionProvider ruleSetDefinitionProvider) {
     this.fileSystem = fileSystem;
     this.settings = settings;
+    this.ruleSetDefinitionProvider = ruleSetDefinitionProvider;
+  }
+
+  public DelphiRuleSet getRuleSetDefinition() {
+    return ruleSetDefinitionProvider.getDefinition();
   }
 
   private static String reportToString(Report report) throws IOException {
@@ -91,7 +104,7 @@ public class DelphiPmdConfiguration {
 
       return reportFile;
     } catch (IOException e) {
-      throw new IllegalStateException("Fail to save the PMD report", e);
+      throw new IllegalStateException("Failed to save the PMD report", e);
     }
   }
 

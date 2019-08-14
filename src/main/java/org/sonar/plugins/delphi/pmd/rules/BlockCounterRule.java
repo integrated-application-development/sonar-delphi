@@ -23,7 +23,7 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 
 /**
  * Rule that count's the number of lines between to statement pairs. Produces a violation if the
@@ -35,12 +35,12 @@ public class BlockCounterRule extends CountRule {
   private int lastLine;
   protected String start;
   protected String end;
-  protected DelphiPMDNode firstNode;
+  protected DelphiNode firstNode;
   private int startIndex;
 
   @Override
-  protected void init() {
-    super.init();
+  public void start(RuleContext ctx) {
+    super.start(ctx);
     start = getProperty(START_AST);
     end = getProperty(END_AST);
     lastLine = 0;
@@ -55,7 +55,7 @@ public class BlockCounterRule extends CountRule {
    * @param node Node to check
    */
   @Override
-  protected boolean shouldCount(DelphiPMDNode node) {
+  protected boolean shouldCount(DelphiNode node) {
     if (!isCounting && isStartNode(node)) {
       isCounting = true;
       count = 0;
@@ -82,7 +82,7 @@ public class BlockCounterRule extends CountRule {
 
   /** Overload, so we could pass the firstNode */
   @Override
-  protected void addViolation(RuleContext ctx, DelphiPMDNode node) {
+  protected void addViolation(RuleContext ctx, DelphiNode node) {
     super.addViolation(ctx, firstNode);
   }
 
@@ -92,7 +92,7 @@ public class BlockCounterRule extends CountRule {
    * @param node Node
    * @return True if so, false otherwise
    */
-  private boolean isStartNode(DelphiPMDNode node) {
+  private boolean isStartNode(DelphiNode node) {
     return node.getText().equals(start);
   }
 
@@ -102,7 +102,7 @@ public class BlockCounterRule extends CountRule {
    * @param node Node
    * @return True if so, false otherwise
    */
-  private boolean isEndNode(DelphiPMDNode node) {
+  private boolean isEndNode(DelphiNode node) {
     return node.getText().equals(end);
   }
 
@@ -112,7 +112,7 @@ public class BlockCounterRule extends CountRule {
    * @param node Node to count
    * @return True if so, false otherwise
    */
-  protected boolean accept(DelphiPMDNode node) {
+  protected boolean accept(DelphiNode node) {
     return node.getLine() > lastLine;
   }
 

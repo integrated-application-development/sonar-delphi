@@ -23,7 +23,7 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 
 /**
  * Rule that counts the number of specified nodes, and if the count exceeds the specified limit,
@@ -53,7 +53,7 @@ public class CountRule extends DelphiRule {
   }
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
+  public void visit(DelphiNode node, RuleContext ctx) {
     if (shouldCount(node)) {
       increaseCounter(strength);
 
@@ -66,15 +66,15 @@ public class CountRule extends DelphiRule {
     }
   }
 
-  protected boolean shouldCount(DelphiPMDNode node) {
+  protected boolean shouldCount(DelphiNode node) {
     return matchesText(node) || matchesType(node);
   }
 
-  private boolean matchesText(DelphiPMDNode node) {
+  private boolean matchesText(DelphiNode node) {
     return node.getText().equals(stringToSearch);
   }
 
-  private boolean matchesType(DelphiPMDNode node) {
+  private boolean matchesType(DelphiNode node) {
     return node.getType() == typeToSearch;
   }
 
@@ -87,7 +87,7 @@ public class CountRule extends DelphiRule {
   }
 
   @Override
-  protected void init() {
+  public void start(RuleContext ctx) {
     count = 0;
     strength = 1;
     definedLimit = getProperty(LIMIT);

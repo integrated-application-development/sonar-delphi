@@ -84,15 +84,20 @@ public class XmlRuleSetFactory implements RuleSetFactory {
 
   private void parsePmdPropertyValue(
       Element eltProperty, DelphiRuleProperty property, @Nullable Namespace namespace) {
-    if (DelphiPmdConstants.XPATH_EXPRESSION_PARAM.equals(property.getName())) {
+    if (isXpathProperty(property)) {
       Element xpathElement = getChild(eltProperty, "value", namespace);
       if (xpathElement != null) {
-        property.setCdataValue(xpathElement.getValue().trim());
+        property.setValue(xpathElement.getValue().trim());
       }
       return;
     }
 
     property.setValue(eltProperty.getAttributeValue("value"));
+  }
+
+  private boolean isXpathProperty(DelphiRuleProperty property) {
+    return DelphiPmdConstants.TEMPLATE_XPATH_EXPRESSION_PARAM.equals(property.getName())
+        || DelphiPmdConstants.BUILTIN_XPATH_EXPRESSION_PARAM.equals(property.getName());
   }
 
   private void parsePmdPriority(Element eltRule, DelphiRule rule, @Nullable Namespace namespace) {

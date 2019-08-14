@@ -29,7 +29,7 @@ import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 
 /**
  * Rule that checks, if sequence of nodes occur in file. Sequence should be lowercase, since it is
@@ -51,14 +51,14 @@ public class NodeSequenceRule extends DelphiRule {
 
   private List<String> sequence;
   private int count;
-  private DelphiPMDNode firstMatchNode;
+  private DelphiNode firstMatchNode;
 
   public NodeSequenceRule() {
     definePropertyDescriptor(AST_SEQUENCE);
   }
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
+  public void visit(DelphiNode node, RuleContext ctx) {
 
     if (node.getText().equalsIgnoreCase(sequence.get(count))) {
       if (++count == 1) {
@@ -75,7 +75,7 @@ public class NodeSequenceRule extends DelphiRule {
   }
 
   @Override
-  protected void init() {
+  public void start(RuleContext ctx) {
     count = 0;
     firstMatchNode = null;
     sequence = getProperty(AST_SEQUENCE);

@@ -58,7 +58,7 @@ public class DelphiTestProgramBuilder extends DelphiTestFileBuilder<DelphiTestPr
 
   @Override
   protected String getFileExtension() {
-    return ".dpr";
+    return "dpr";
   }
 
   public DelphiTestProgramBuilder programName(String programName) {

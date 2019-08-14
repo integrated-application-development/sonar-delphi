@@ -22,14 +22,15 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
+
 import java.io.File;
-import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import org.antlr.runtime.tree.Tree;
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-import org.xml.sax.SAXException;
 
 public class DelphiASTTest {
 
@@ -37,7 +38,7 @@ public class DelphiASTTest {
   private ASTTree ast = new DelphiAST(DelphiUtils.getResource(TEST_FILE));
 
   @Test
-  public void testGenerateXML() throws IOException, ParserConfigurationException, SAXException {
+  public void testGenerateXML() throws Exception {
     File xml = File.createTempFile("DelphiAST", ".xml");
     ast.generateXML(xml.getAbsolutePath());
 
@@ -45,5 +46,18 @@ public class DelphiASTTest {
     parser.parse(xml);
 
     xml.deleteOnExit();
+  }
+
+  @Test
+  public void testNodesAreExpectedType() {
+    checkTypes(ast);
+  }
+
+  private void checkTypes(Tree node) {
+    for (int i = 0; i < node.getChildCount(); ++i) {
+      Tree child = node.getChild(i);
+      assertThat(child, instanceOf(DelphiNode.class));
+      checkTypes(child);
+    }
   }
 }

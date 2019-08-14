@@ -30,7 +30,7 @@
     </example>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
         message="Function return types should always be specified"
         name="NoFunctionReturnTypeRule">
     <priority>3</priority>
@@ -40,7 +40,7 @@
     </description>
     <properties>
       <property name="baseEffort" value="1min" />
-      <property name="xpath">
+      <property name="builtinXPath">
         <value>
           <![CDATA[
             //FUNCTION/TkFunctionReturn[count(child::*)=0]
@@ -68,14 +68,14 @@
     </properties>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
         message="Overriding methods should do more than simply call the same method in the super class"
         name="InheritedMethodWithNoCodeRule">
     <priority>3</priority>
     <description>Overriding a method just to call the same method from the super class without performing any other actions is useless and misleading.</description>
     <properties>
       <property name="baseEffort" value="10min" />
-      <property name="xpath">
+      <property name="builtinXPath">
         <value>
           <![CDATA[
             //TkBlockDeclSection/following-sibling::BEGIN/*[1][name() = 'INHERITED']
@@ -98,7 +98,7 @@
       Exception handlers should contain logic to handle the caught exception.</description>
     <properties>
       <property name="baseEffort" value="10min" />
-      <property name="tests" value="false" />
+      <property name="scope" value="MAIN" />
     </properties>
     <example>
       <![CDATA[
@@ -153,14 +153,14 @@
     </example>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
         message="Interface declarations should not be empty"
         name="EmptyInterfaceRule">
     <priority>3</priority>
     <description>Interface declarations without methods are useless.</description>
     <properties>
       <property name="baseEffort" value="20min" />
-      <property name="xpath">
+      <property name="builtinXPath">
         <value>
           <![CDATA[
             //TkNewType/*/TkInterface/INTERFACE[count(following-sibling::*) = 2]
@@ -207,17 +207,16 @@
     </properties>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="Method declarations should be followed by a semicolon"
     name="NoSemiAfterMethodDeclarationRule">
     <priority>3</priority>
     <description>Delphi syntax has corner cases which sometimes allow the semicolon to be omitted from the end of a method declaration.
       Regardless, there should always be a semicolon ';' at the end of method declarations.
     </description>
-    <priority>5</priority>
     <properties>
       <property name="baseEffort" value="5min" />
-      <property name="xpath">
+      <property name="builtinXPath">
         <value>
           <![CDATA[
               //PROCEDURE/*[last()][name() != "SEMI"] |
@@ -387,14 +386,14 @@
     </example>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
         message="'out' parameters should be avoided"
         name="AvoidOutParameterRule">
     <priority>3</priority>
     <description>Avoid 'out' variable parameters.</description>
     <properties>
       <property name="baseEffort" value="30min" />
-      <property name="xpath">
+      <property name="builtinXPath">
         <value>
           <![CDATA[
             //TkVariableParam/OUT
@@ -480,14 +479,14 @@
     </properties>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
         message="Interfaces should have unique GUIDs"
         name="NoGuidRule">
     <priority>3</priority>
     <description>Every interface should have a unique GUID.</description>
     <properties>
       <property name="baseEffort" value="5min" />
-      <property name="xpath">
+      <property name="builtinXPath">
         <value>
           <![CDATA[
             //TkNewType/*/TkInterface/INTERFACE[following-sibling::*[2][count(child::*) = 0]]
@@ -530,7 +529,7 @@ FreeAndNil(Foo); // Compliant
     </example>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
         message="'else' statements should not be empty"
         name="EmptyElseStatementRule">
     <priority>4</priority>
@@ -540,7 +539,7 @@ FreeAndNil(Foo); // Compliant
     </description>
     <properties>
       <property name="baseEffort" value="5min" />
-      <property name="xpath">
+      <property name="builtinXPath">
         <value>
           <![CDATA[
             //ELSE[following-sibling::*[1][name()='END']]
@@ -550,7 +549,7 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
         message="Code blocks should not be empty"
         name="EmptyBeginStatementRule">
     <priority>4</priority>
@@ -560,7 +559,7 @@ FreeAndNil(Foo); // Compliant
     </description>
     <properties>
       <property name="baseEffort" value="5min" />
-      <property name="xpath">
+      <property name="builtinXPath">
         <value>
           <![CDATA[
             //BEGIN[count(child::*) = 1][preceding-sibling::*[1][name() != 'TkBlockDeclSection']]
@@ -570,7 +569,7 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="Methods should not be empty"
     name="EmptyMethodRule">
     <priority>3</priority>
@@ -580,7 +579,7 @@ FreeAndNil(Foo); // Compliant
     </description>
     <properties>
       <property name="baseEffort" value="5min" />
-      <property name="xpath">
+      <property name="builtinXPath">
         <value>
           <![CDATA[
             //BEGIN[count(child::*) = 1][preceding-sibling::*[1][name() = 'TkBlockDeclSection']]
@@ -610,14 +609,14 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
         message="Track uses of type aliases"
         name="TypeAliasRule">
     <priority>5</priority>
     <description>Track uses of type aliases.</description>
     <properties>
       <property name="baseEffort" value="10min" />
-      <property name="xpath">
+      <property name="builtinXPath">
         <value>
           <![CDATA[
             //TkNewType[TkNewTypeDecl/*[1][name() = 'TkIdentifier'][not(child::ARRAY)][not(following-sibling::DOTDOT)]] |
@@ -758,7 +757,7 @@ FreeAndNil(Foo); // Compliant
     <properties>
       <property name="baseEffort" value="2min" />
       <property name="limit" value="100" />
-      <property name="tests" value="false" />
+      <property name="scope" value="MAIN" />
     </properties>
   </rule>
 
@@ -811,7 +810,10 @@ FunctionWithoutArguments;	// Compliant
         message="TStringLists should be sorted when setting Duplicates"
         name="DuplicatesRule">
     <priority>2</priority>
-    <description>TStringLists must be sorted if setting the Duplicates property.</description>
+    <description>TStringLists must be sorted if setting the Duplicates property. &lt;br&gt;
+      NOTE: Fixing existing cases of this issue may change the behavior of the code. &lt;br&gt;
+      Please ensure that impact analysis is performed on such cases.
+    </description>
     <properties>
       <property name="baseEffort" value="2min" />
     </properties>
@@ -821,13 +823,13 @@ List1.Duplicates := <i>dupIgnore</i>; // Noncompliant
 
 List2.Duplicates := <i>dupError</i>; // Noncompliant
 
-List2.Duplicates := <i>dupAccept</i>; // Compliant (dupAccept doesn't require a sorted list)
+List3.Duplicates := <i>dupAccept</i>; // Compliant (dupAccept doesn't require a sorted list)
 
-List1.Sorted := True;
-List1.Duplicates := <i>dupIgnore</i>; // Compliant
+List4.Sorted := True;
+List4.Duplicates := <i>dupIgnore</i>; // Compliant
 
-List1.Sorted := True;
-List2.Duplicates := <i>dupError</i>; // Compliant
+List5.Sorted := True;
+List5.Duplicates := <i>dupError</i>; // Compliant
         ]]>
     </example>
   </rule>
@@ -839,6 +841,18 @@ List2.Duplicates := <i>dupError</i>; // Compliant
     <description>Reserved keywords should always be lowercase.</description>
     <properties>
       <property name="baseEffort" value="1min" />
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathTemplateRule"
+    message="Track breaches of an XPath rule"
+    name="XPathRule">
+    <priority>3</priority>
+    <description>Track breaches of an XPath rule</description>
+    <properties>
+      <property name="baseEffort" value="5min" />
+      <property name="template" value="true" />
+      <property name="xPath" />
     </properties>
   </rule>
 </ruleset>

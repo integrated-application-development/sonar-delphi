@@ -22,14 +22,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.antlr.runtime.tree.CommonTree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 public class FieldNameRule extends NameConventionRule {
   private static final String FIELD_PREFIX = "F";
 
   @Override
-  public List<DelphiPMDNode> findNodes(DelphiPMDNode node) {
+  public List<DelphiNode> findNodes(DelphiNode node) {
     if (node.getType() != DelphiLexer.TkClassField || isPublished()) {
       return Collections.emptyList();
     }
@@ -37,14 +37,14 @@ public class FieldNameRule extends NameConventionRule {
     return getFieldNames(node);
   }
 
-  private List<DelphiPMDNode> getFieldNames(DelphiPMDNode node) {
-    List<DelphiPMDNode> nodes = new ArrayList<>();
+  private List<DelphiNode> getFieldNames(DelphiNode node) {
+    List<DelphiNode> nodes = new ArrayList<>();
     CommonTree nameNode = (CommonTree) node.getFirstChildWithType(DelphiLexer.TkVariableIdents);
 
     if (nameNode != null) {
       CommonTree currentNode = nameNode;
       while ((currentNode = (CommonTree) currentNode.getChild(0)) != null) {
-        nodes.add(new DelphiPMDNode(currentNode, node.getASTTree()));
+        nodes.add((DelphiNode) currentNode);
       }
     }
 
@@ -52,7 +52,7 @@ public class FieldNameRule extends NameConventionRule {
   }
 
   @Override
-  protected boolean isViolation(DelphiPMDNode nameNode) {
+  protected boolean isViolation(DelphiNode nameNode) {
     return !compliesWithPrefixNamingConvention(nameNode.getText(), FIELD_PREFIX);
   }
 }

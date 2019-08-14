@@ -22,7 +22,8 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import net.sourceforge.pmd.RuleContext;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 
 /** Checks for rule violation: if x = true then (redundant) */
 public class IfTrueRule extends BlockCounterRule {
@@ -30,14 +31,14 @@ public class IfTrueRule extends BlockCounterRule {
   private boolean wasEquals;
 
   @Override
-  protected void init() {
-    super.init();
+  public void start(RuleContext ctx) {
+    super.start(ctx);
     wasEquals = false;
     setStringToSearch("true");
   }
 
   @Override
-  protected boolean accept(DelphiPMDNode node) {
+  protected boolean accept(DelphiNode node) {
     if (!wasEquals && "=".equals(node.getText())) {
       wasEquals = true;
     } else if (wasEquals && node.getText().equals(getStringToSearch())) {

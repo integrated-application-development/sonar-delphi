@@ -21,21 +21,21 @@ package org.sonar.plugins.delphi.pmd.rules;
 import java.util.Collections;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 
 public abstract class NameConventionRule extends DelphiRule implements NodeFinderInterface {
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
-    for (DelphiPMDNode nameNode : getNameNodes(node)) {
+  public void visit(DelphiNode node, RuleContext ctx) {
+    for (DelphiNode nameNode : getNameNodes(node)) {
       if (nameNode != null && isViolation(nameNode)) {
         addViolation(ctx, nameNode);
       }
     }
   }
 
-  private List<DelphiPMDNode> getNameNodes(DelphiPMDNode node) {
-    DelphiPMDNode singleNode = findNode(node);
+  private List<DelphiNode> getNameNodes(DelphiNode node) {
+    DelphiNode singleNode = findNode(node);
     if (singleNode != null) {
       return Collections.singletonList(singleNode);
     }
@@ -66,5 +66,5 @@ public abstract class NameConventionRule extends DelphiRule implements NodeFinde
     return Character.isUpperCase(character) || Character.isDigit(character);
   }
 
-  protected abstract boolean isViolation(DelphiPMDNode nameNode);
+  protected abstract boolean isViolation(DelphiNode nameNode);
 }

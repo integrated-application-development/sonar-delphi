@@ -3,7 +3,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /**
@@ -15,7 +15,7 @@ public class DuplicatesRule extends DelphiRule {
   private String listName;
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
+  public void visit(DelphiNode node, RuleContext ctx) {
     List children = node.getChildren();
     if (children == null) {
       return;
@@ -33,7 +33,7 @@ public class DuplicatesRule extends DelphiRule {
           return;
         }
 
-        addViolation(ctx, (DelphiPMDNode) children.get(i + 2));
+        addViolation(ctx, (DelphiNode) children.get(i + 2));
       }
     }
   }

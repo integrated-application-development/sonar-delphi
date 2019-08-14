@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.pmd;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStream;
 import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.pmd.profile.DelphiRuleSets;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSetHelper;
 import org.sonar.plugins.delphi.project.DelphiProject;
@@ -118,9 +121,33 @@ public class DelphiPmdExecutor {
   private String dumpXml(ActiveRules rulesProfile, String repositoryKey) {
     final StringWriter writer = new StringWriter();
     final DelphiRuleSet ruleSet = DelphiRuleSetHelper.createFrom(rulesProfile, repositoryKey);
+    addBuiltinProperties(ruleSet);
     ruleSet.writeTo(writer);
 
     return writer.toString();
+  }
+
+  @VisibleForTesting
+  void addBuiltinProperties(DelphiRuleSet ruleSet) {
+    DelphiRuleSet ruleSetDefinition = pmdConfiguration.getRuleSetDefinition();
+    for (DelphiRule rule : ruleSet.getRules()) {
+      DelphiRule definition =
+          ruleSetDefinition.getRules().stream()
+              .filter(def -> def.getName().equals(rule.getName()))
+              .findFirst()
+              .orElse(null);
+
+      if (definition == null) {
+        // Custom template rules are defined via SonarQube web interface
+        continue;
+      }
+
+      for (DelphiRuleProperty propertyDefinition : definition.getProperties()) {
+        if (propertyDefinition.isBuiltinProperty()) {
+          rule.addProperty(propertyDefinition);
+        }
+      }
+    }
   }
 
   private void processPmdParse(
@@ -128,16 +155,10 @@ public class DelphiPmdExecutor {
     try {
       pmd.processFile(pmdFile, ruleSets, ruleContext, fileStreamConfig);
     } catch (ParseException e) {
-      String errorMsg =
-          "PMD error while parsing " + pmdFile.getAbsolutePath() + ": " + e.getMessage();
-      LOG.warn(errorMsg);
-      errors.add(errorMsg);
+      String error = "PMD error while parsing " + pmdFile.getAbsolutePath() + ": " + e.getMessage();
+      LOG.warn(error);
+      errors.add(error);
     }
-  }
-
-  @Override
-  public String toString() {
-    return getClass().getSimpleName();
   }
 
   public List<String> getErrors() {

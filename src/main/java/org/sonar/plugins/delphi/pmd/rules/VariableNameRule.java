@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.antlr.runtime.tree.CommonTree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /**
@@ -15,10 +15,10 @@ import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 public class VariableNameRule extends NameConventionRule {
 
   @Override
-  public List<DelphiPMDNode> findNodes(DelphiPMDNode node) {
+  public List<DelphiNode> findNodes(DelphiNode node) {
     // Within a var block, look for variable identifiers
     if (shouldVisit(node)) {
-      List<DelphiPMDNode> nameNodes = new ArrayList<>();
+      List<DelphiNode> nameNodes = new ArrayList<>();
 
       for (Object child : node.getChildren()) {
         CommonTree childNode = (CommonTree) child;
@@ -27,9 +27,7 @@ public class VariableNameRule extends NameConventionRule {
           List<?> children = childNode.getChildren();
 
           nameNodes.addAll(
-              children.stream()
-                  .map(varName -> new DelphiPMDNode((CommonTree) varName, node.getASTTree()))
-                  .collect(Collectors.toList()));
+              children.stream().map(varName -> (DelphiNode) varName).collect(Collectors.toList()));
         }
       }
 
@@ -42,16 +40,16 @@ public class VariableNameRule extends NameConventionRule {
   }
 
   @Override
-  protected boolean isViolation(DelphiPMDNode nameNode) {
+  protected boolean isViolation(DelphiNode nameNode) {
     String name = nameNode.getText();
     return !Character.isUpperCase(name.charAt(0));
   }
 
-  private boolean shouldVisit(DelphiPMDNode node) {
+  private boolean shouldVisit(DelphiNode node) {
     return node.getType() == DelphiLexer.VAR && node.getChildCount() != 0;
   }
 
-  private boolean isNotAutoCreateFormVar(DelphiPMDNode node, List<DelphiPMDNode> nameNodes) {
+  private boolean isNotAutoCreateFormVar(DelphiNode node, List<DelphiNode> nameNodes) {
     return !(isInterfaceSection()
         && nameNodes.size() == 1
         && node.getChildIndex() == node.getParent().getChildCount() - 1);

@@ -79,7 +79,7 @@ public class DelphiTestUnitBuilder extends DelphiTestFileBuilder<DelphiTestUnitB
 
   @Override
   protected String getFileExtension() {
-    return ".pas";
+    return "pas";
   }
 
   public DelphiTestUnitBuilder unitName(String unitName) {

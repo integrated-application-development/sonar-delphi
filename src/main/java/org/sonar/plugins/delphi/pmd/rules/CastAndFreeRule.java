@@ -25,7 +25,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 
 /**
  * Cast And Free rule - don't cast, just to free something, example: TMyObject(sth).free; (sth as
@@ -54,19 +54,19 @@ public class CastAndFreeRule extends DelphiRule {
   };
 
   @Override
-  public void init() {
+  public void start(RuleContext ctx) {
     sequenceHardCastIndex = 0;
     sequenceSoftCastIndex = 0;
   }
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
+  public void visit(DelphiNode node, RuleContext ctx) {
     sequenceHardCastIndex = processSequence(hardCastSequence, sequenceHardCastIndex, node, ctx);
     sequenceSoftCastIndex = processSequence(softCastSequence, sequenceSoftCastIndex, node, ctx);
   }
 
   private int processSequence(
-      LexerMetrics[] sequence, int sequenceIndex, DelphiPMDNode node, RuleContext ctx) {
+      LexerMetrics[] sequence, int sequenceIndex, DelphiNode node, RuleContext ctx) {
     int resultIndex = sequenceIndex;
     if (resultIndex >= sequence.length) {
       resultIndex = 0;

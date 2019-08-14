@@ -31,7 +31,7 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /** Rule violation for unused function/procedure/method arguments */
@@ -41,7 +41,7 @@ public class UnusedArgumentsRule extends DelphiRule {
   private List<PossibleUnusedArgument> possibleUnusedArguments;
 
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
+  public void visit(DelphiNode node, RuleContext ctx) {
     handleTypes(node);
     handleAssignments(node);
     handlePointerOperators(node);
@@ -49,7 +49,7 @@ public class UnusedArgumentsRule extends DelphiRule {
     handleEndOfFile(node);
   }
 
-  private void handleTypes(DelphiPMDNode node) {
+  private void handleTypes(DelphiNode node) {
     if (node.getType() == DelphiLexer.TkNewType) {
       extractTypeName(node);
 
@@ -58,8 +58,8 @@ public class UnusedArgumentsRule extends DelphiRule {
     }
   }
 
-  private void extractTypeName(DelphiPMDNode typeNode) {
-    DelphiPMDNode node = typeNode;
+  private void extractTypeName(DelphiNode typeNode) {
+    DelphiNode node = typeNode;
     StringBuilder typeName = new StringBuilder();
 
     do {
@@ -75,12 +75,12 @@ public class UnusedArgumentsRule extends DelphiRule {
     currentTypeName = typeName.toString();
   }
 
-  private DelphiPMDNode findParentType(DelphiPMDNode currentNode) {
+  private DelphiNode findParentType(DelphiNode currentNode) {
     Tree node = currentNode;
 
     while ((node = node.getParent()) != null) {
       if (node.getType() == DelphiLexer.TkNewType) {
-        return (DelphiPMDNode) node;
+        return (DelphiNode) node;
       }
     }
 
@@ -146,17 +146,17 @@ public class UnusedArgumentsRule extends DelphiRule {
    *
    * @param node The current node
    */
-  private void handleAssignments(DelphiPMDNode node) {
+  private void handleAssignments(DelphiNode node) {
     if (node.getType() != DelphiLexer.ASSIGN) {
       return;
     }
 
-    DelphiPMDNode nameNode = node.nextNode();
+    DelphiNode nameNode = node.nextNode();
     if (nameNode == null || nameNode.getType() != DelphiLexer.TkIdentifier) {
       return;
     }
 
-    DelphiPMDNode nextNode = nameNode.nextNode();
+    DelphiNode nextNode = nameNode.nextNode();
     if (nextNode != null && nextNode.getType() == DelphiLexer.DOT) {
       return;
     }
@@ -171,17 +171,17 @@ public class UnusedArgumentsRule extends DelphiRule {
    *
    * @param node The current node
    */
-  private void handlePointerOperators(DelphiPMDNode node) {
+  private void handlePointerOperators(DelphiNode node) {
     if (node.getType() != DelphiLexer.AT2) {
       return;
     }
 
-    DelphiPMDNode nameNode = node.nextNode();
+    DelphiNode nameNode = node.nextNode();
     if (nameNode == null || nameNode.getType() != DelphiLexer.TkIdentifier) {
       return;
     }
 
-    DelphiPMDNode nextNode = nameNode.nextNode();
+    DelphiNode nextNode = nameNode.nextNode();
     if (nextNode != null && nextNode.getType() == DelphiLexer.DOT) {
       return;
     }
@@ -190,7 +190,7 @@ public class UnusedArgumentsRule extends DelphiRule {
     excludedMethods.add(currentTypeName + "." + methodName);
   }
 
-  private void handleMethods(DelphiPMDNode node, RuleContext ctx) {
+  private void handleMethods(DelphiNode node, RuleContext ctx) {
     if (!isMethodNode(node) || !isImplementationSection()) {
       return;
     }
@@ -228,15 +228,15 @@ public class UnusedArgumentsRule extends DelphiRule {
     addViolationsForUnusedArguments(args, ctx, node, methodName);
   }
 
-  private List<Tree> findBeginNodes(DelphiPMDNode node) {
+  private List<Tree> findBeginNodes(DelphiNode node) {
     List<Tree> beginNodes = new ArrayList<>();
 
-    DelphiPMDNode blockDeclSection = node.nextNode();
+    DelphiNode blockDeclSection = node.nextNode();
     if (blockDeclSection == null || blockDeclSection.getType() != DelphiLexer.TkBlockDeclSection) {
       return beginNodes;
     }
 
-    DelphiPMDNode mainBegin = blockDeclSection.nextNode();
+    DelphiNode mainBegin = blockDeclSection.nextNode();
     if (mainBegin != null) {
       beginNodes.add(mainBegin);
     }
@@ -246,15 +246,15 @@ public class UnusedArgumentsRule extends DelphiRule {
     return beginNodes;
   }
 
-  private void findSubProcedureBeginNodes(DelphiPMDNode node, List<Tree> beginNodes) {
+  private void findSubProcedureBeginNodes(DelphiNode node, List<Tree> beginNodes) {
     final int[] types = {DelphiLexer.PROCEDURE, DelphiLexer.FUNCTION};
 
-    List<DelphiPMDNode> methodNodes =
+    List<DelphiNode> methodNodes =
         node.findAllChildren(types).stream()
-            .map(treeNode -> (DelphiPMDNode) treeNode)
+            .map(treeNode -> (DelphiNode) treeNode)
             .collect(Collectors.toList());
 
-    for (DelphiPMDNode methodNode : methodNodes) {
+    for (DelphiNode methodNode : methodNodes) {
       int childIndex = methodNode.getChildIndex();
       Tree parent = methodNode.getParent();
 
@@ -271,7 +271,7 @@ public class UnusedArgumentsRule extends DelphiRule {
     return node.getParent().getType() != DelphiLexer.TkBlockDeclSection;
   }
 
-  private String extractMethodName(DelphiPMDNode node) {
+  private String extractMethodName(DelphiNode node) {
     final StringBuilder methodName = new StringBuilder();
     Tree nameNode = node.getFirstChildWithType(DelphiLexer.TkFunctionName);
     if (nameNode != null) {
@@ -306,7 +306,7 @@ public class UnusedArgumentsRule extends DelphiRule {
    * @param methodName Method name
    */
   private void addViolationsForUnusedArguments(
-      Map<String, Integer> args, RuleContext ctx, DelphiPMDNode node, String methodName) {
+      Map<String, Integer> args, RuleContext ctx, DelphiNode node, String methodName) {
     for (Map.Entry<String, Integer> entry : args.entrySet()) {
       if (entry.getValue() > 0) {
         continue;
@@ -375,12 +375,12 @@ public class UnusedArgumentsRule extends DelphiRule {
     return args;
   }
 
-  private void handleEndOfFile(DelphiPMDNode node) {
+  private void handleEndOfFile(DelphiNode node) {
     if (node.getType() != DelphiLexer.DOT) {
       return;
     }
 
-    DelphiPMDNode endNode = node.prevNode();
+    DelphiNode endNode = node.prevNode();
     if (endNode == null || endNode.getType() != DelphiLexer.END) {
       return;
     }
@@ -391,7 +391,7 @@ public class UnusedArgumentsRule extends DelphiRule {
   }
 
   @Override
-  protected void init() {
+  public void start(RuleContext ctx) {
     currentTypeName = "";
     excludedMethods = new HashSet<>();
     possibleUnusedArguments = new ArrayList<>();
@@ -415,14 +415,14 @@ public class UnusedArgumentsRule extends DelphiRule {
 class PossibleUnusedArgument {
   private UnusedArgumentsRule rule;
   private RuleContext ctx;
-  private DelphiPMDNode node;
+  private DelphiNode node;
   private String argName;
   private String methodName;
 
   PossibleUnusedArgument(
       UnusedArgumentsRule rule,
       RuleContext ctx,
-      DelphiPMDNode node,
+      DelphiNode node,
       String argName,
       String methodName) {
     this.rule = rule;

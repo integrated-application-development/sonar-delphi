@@ -32,10 +32,9 @@ import net.sourceforge.pmd.lang.Language;
 import net.sourceforge.pmd.lang.LanguageRegistry;
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.ast.ParseException;
-import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 
 /** Preforms PMD check for Delphi source files */
@@ -57,7 +56,6 @@ public class DelphiPMD {
     ctx.setReport(report);
 
     if (ruleSets.applies(ctx.getSourceCodeFile())) {
-
       Language language = LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME);
       ctx.setLanguageVersion(language.getDefaultVersion());
 
@@ -67,8 +65,9 @@ public class DelphiPMD {
         throw new ParseException("grammar error");
       }
 
-      List<Node> nodes = getNodesFromAST(ast);
-      ruleSets.apply(nodes, ctx, language);
+      ruleSets.start(ctx);
+      ruleSets.apply(getNodesFromAST(ast), ctx, language);
+      ruleSets.end(ctx);
     }
   }
 
@@ -78,10 +77,7 @@ public class DelphiPMD {
    */
   public List<Node> getNodesFromAST(DelphiAST ast) {
     List<Node> nodes = new ArrayList<>();
-
-    for (int i = 0; i < ast.getChildCount(); ++i) {
-      indexNode(ast, i, ast, nodes);
-    }
+    indexNodes(ast, nodes);
 
     return nodes;
   }
@@ -90,25 +86,13 @@ public class DelphiPMD {
    * Adds children nodes to list
    *
    * @param parent The node whose children are being indexed
-   * @param childIndex Index of the node in its parent
-   * @param ast AST tree
    * @param list List of DelphiPMDNodes being built
    */
-  private void indexNode(Tree parent, int childIndex, DelphiAST ast, List<Node> list) {
-    CommonTree node = (CommonTree) parent.getChild(childIndex);
-
-    if (node == null) {
-      return;
-    }
-
-    if (node instanceof DelphiPMDNode) {
-      list.add((DelphiPMDNode) node);
-    } else {
-      list.add(new DelphiPMDNode(node, ast));
-    }
-
-    for (int i = 0; i < node.getChildCount(); ++i) {
-      indexNode(node, i, ast, list);
+  private void indexNodes(Tree parent, List<Node> list) {
+    for (int i = 0; i < parent.getChildCount(); ++i) {
+      Tree child = parent.getChild(i);
+      list.add((DelphiNode) child);
+      indexNodes(parent.getChild(i), list);
     }
   }
 

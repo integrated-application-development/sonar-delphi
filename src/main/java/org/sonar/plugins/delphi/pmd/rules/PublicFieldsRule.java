@@ -24,7 +24,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
 import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiPMDNode;
+import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
 import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
 
 /** This rule will find any public fields in class declaration(s) and raise violations on them. */
@@ -39,7 +39,7 @@ public class PublicFieldsRule extends DelphiRule {
    * @param ctx the ruleContext to store the violations
    */
   @Override
-  public void visit(DelphiPMDNode node, RuleContext ctx) {
+  public void visit(DelphiNode node, RuleContext ctx) {
 
     // Wherever there is a class definition
     if (node.getType() == DelphiLexer.TkClass) {
@@ -64,7 +64,7 @@ public class PublicFieldsRule extends DelphiRule {
 
         // raise violations on any fields
         if (child.getType() == DelphiLexer.TkClassField) {
-          addViolation(ctx, (DelphiPMDNode) child);
+          addViolation(ctx, (DelphiNode) child);
         }
       }
     }
