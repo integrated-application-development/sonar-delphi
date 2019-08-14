@@ -54,6 +54,18 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  public void testNotAcceptPrefixAlone() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+    builder.appendDecl("type");
+    builder.appendDecl("  T = class(TObject)");
+    builder.appendDecl("  end;");
+
+    execute(builder);
+
+    assertIssues(hasItem(hasRuleKeyAtLine("ClassNameRule", builder.getOffsetDecl() + 2)));
+  }
+
+  @Test
   public void testNestedType() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
@@ -88,6 +100,31 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  tformMyForm = class(TForm)");
+    builder.appendDecl("  end;");
+
+    execute(builder);
+
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("ClassNameRule", builder.getOffsetDecl() + 2)));
+  }
+
+  @Test
+  public void testAcceptTFrame() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+    builder.appendDecl("type");
+    builder.appendDecl("  TFrameMyFrame = class(TFrame)");
+    builder.appendDecl("  end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testNotAcceptLowercaseTFrame() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+    builder.appendDecl("type");
+    builder.appendDecl("  tframeMyFrame = class(TFrame)");
     builder.appendDecl("  end;");
 
     execute(builder);
