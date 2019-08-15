@@ -87,9 +87,12 @@ public class DefineResolver extends SourceResolver {
     SubRangeMergingAggregator toDelete = new SubRangeMergingAggregator();
 
     for (int i = 0; i < directives.size(); ++i) {
-
       CompilerDirective directive = directives.get(i);
       CompilerDirectiveType type = directive.getType();
+
+      if (toDelete.inRange(directive.getFirstCharPosition())) {
+        continue;
+      }
 
       if (type == CompilerDirectiveType.DEFINE) {
         defines.add(directive.getItem());

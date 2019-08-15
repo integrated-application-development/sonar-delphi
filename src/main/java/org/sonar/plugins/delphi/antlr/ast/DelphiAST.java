@@ -119,6 +119,7 @@ public class DelphiAST extends CommonTree implements ASTTree {
   public DelphiAST() {}
 
   private List<Token> extractComments(BufferedTokenStream tokenStream) {
+    tokenStream.fill();
     List<?> tokens = tokenStream.getTokens();
     return tokens.stream()
         .map(token -> (Token) token)

@@ -220,7 +220,9 @@
         <value>
           <![CDATA[
               //PROCEDURE/*[last()][name() != "SEMI"] |
-              //FUNCTION/*[last()][name() != "SEMI"]
+              //FUNCTION/*[last()][name() != "SEMI"] |
+              //CONSTRUCTOR/*[last()][name() != "SEMI"] |
+              //DESTRUCTOR/*[last()][name() != "SEMI"]
             ]]>
         </value>
       </property>
@@ -569,23 +571,19 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyMethodRule"
     message="Methods should not be empty"
     name="EmptyMethodRule">
     <priority>3</priority>
-    <description>Empty methods are not allowed.
-      (This rule also flags empty methods containing comments.
-      In the future, this will change. For now, please mark these cases as false-positives.)
+    <description>
+      Reasons for a method not to have a method body:
+      &lt;br&gt;
+      - It is an unintentional omission, and should be fixed to prevent an unexpected behavior in production.
+      &lt;br&gt;
+      - The method is an intentionally-blank override. In this case a nested comment should explain the reason for the blank override.
     </description>
     <properties>
       <property name="baseEffort" value="5min" />
-      <property name="builtinXPath">
-        <value>
-          <![CDATA[
-            //BEGIN[count(child::*) = 1][preceding-sibling::*[1][name() = 'TkBlockDeclSection']]
-          ]]>
-        </value>
-      </property>
     </properties>
   </rule>
 

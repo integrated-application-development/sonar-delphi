@@ -14,7 +14,7 @@ import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
  * enumeration keyword in Delphi), but may give some false positives.
  */
 public class ClassNameRule extends NameConventionRule {
-  private static final String[] PREFIXES = {"T", "TForm", "E"};
+  private static final String[] PREFIXES = {"T", "TForm", "TFrame", "E"};
 
   @Override
   public DelphiNode findNode(DelphiNode node) {

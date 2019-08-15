@@ -278,7 +278,7 @@ typeId                       : namespacedQualifiedIdent (genericPostfix ('.' typ
 //****************************
 //section generics
 //****************************
-genericTypeIdent             : qualifiedIdent (genericDefinition)? -> qualifiedIdent    //CHANGED we don't need <Type> data, it produced empty nodes
+genericTypeIdent             : qualifiedIdent (genericDefinition)?
                              ;
 genericDefinition            : simpleGenericDefinition
                              | complexGenericDefinition
@@ -380,11 +380,11 @@ recordHelperItem             : visibility
                              | constSection
                              ;
 classMethod                  : (customAttribute)? ('class')? methodKey ident (genericDefinition)? (formalParameterSection)? methodDirectiveSection
-                             ->  (customAttribute)? ('class')? ^(methodKey ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) methodDirectiveSection)
+                             ->  (customAttribute)? ('class')? ^(methodKey ^(TkFunctionName ident (genericDefinition)?) ^(TkFunctionArgs (formalParameterSection)?) methodDirectiveSection)
                              | (customAttribute)? ('class')? 'function' ident (genericDefinition)? (formalParameterSection)? ':' (customAttribute)? typeDecl methodDirectiveSection
-                             -> (customAttribute)? ('class')? ^('function' ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) (customAttribute)? ^(TkFunctionReturn typeDecl) methodDirectiveSection)
+                             -> (customAttribute)? ('class')? ^('function' ^(TkFunctionName ident (genericDefinition)?) ^(TkFunctionArgs (formalParameterSection)?) (customAttribute)? ^(TkFunctionReturn typeDecl) methodDirectiveSection)
                              | (customAttribute)? ('class')? 'operator' ident (genericDefinition)? (formalParameterSection)? ':' (customAttribute)? typeDecl ';'
-                             -> (customAttribute)? ('class')? ^('operator' ^(TkFunctionName ident) (genericDefinition)? ^(TkFunctionArgs (formalParameterSection)?) (customAttribute)? typeDecl )
+                             -> (customAttribute)? ('class')? ^('operator' ^(TkFunctionName ident (genericDefinition)?) ^(TkFunctionArgs (formalParameterSection)?) (customAttribute)? typeDecl )
                              ;
 classField                   : (customAttribute)? identList ':' typeDecl ';' (hintingDirective)*
                              -> (customAttribute)? ^(TkClassField ^(TkVariableIdents identList) ^(TkVariableType typeDecl))
