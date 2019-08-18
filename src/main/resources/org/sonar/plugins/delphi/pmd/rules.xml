@@ -851,6 +851,51 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       <property name="baseEffort" value="5min" />
       <property name="template" value="true" />
       <property name="xPath" />
+      <property name="message" />
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.CommentRegexRule"
+    message="Track comments matching a regular expression"
+    name="CommentRegexRule">
+    <priority>3</priority>
+    <description>
+      This rule template can be used to create rules which will be triggered when the full content
+      of a comment matches a given regular expression.
+      Note that the regular expression should be expressed using the dotall format
+      (where the &lt;code&gt;.&lt;/code&gt; character matches any character).
+      &lt;br&gt;
+      &lt;br&gt;
+      For example, one can create a rule with the regular expression &lt;code&gt;.*REVIEW.*&lt;/code&gt; to match all
+      comments containing "REVIEW".
+      &lt;br&gt;
+      &lt;br&gt;
+      Note that, in order to match REVIEW regardless of the case, the &lt;code&gt;(?i)&lt;/code&gt; modifier should be
+      prepended to the expression, as in &lt;code&gt;(?i).*REVIEW.*&lt;/code&gt;.
+    </description>
+    <properties>
+      <property name="baseEffort" value="20min" />
+      <property name="template" value="true" />
+      <property name="regex" />
+      <property name="message" />
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.InheritedTypeNameRule"
+    message="Types which inherit from some other specified type should comply with a naming convention"
+    name="InheritedTypeNameRule">
+    <priority>3</priority>
+    <description>
+      This rule template can be used to enforce naming convention on a type which inherits from some other type.
+      &lt;br&gt;
+      Please note that this only supports direct inheritance and does not traverse the inheritance tree.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+      <property name="template" value="true" />
+      <property name="nameRegex" />
+      <property name="parentNameRegex" />
+      <property name="message" />
     </properties>
   </rule>
 </ruleset>
