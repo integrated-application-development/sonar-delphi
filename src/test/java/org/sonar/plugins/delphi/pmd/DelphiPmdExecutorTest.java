@@ -3,6 +3,9 @@ package org.sonar.plugins.delphi.pmd;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -65,7 +68,7 @@ public class DelphiPmdExecutorTest {
 
   @Test
   public void testAddBuiltinProperties() {
-    // The SwallowedExceptionsRule has 2 builtin properties: BASE_EFFORT and SCOPE
+    // The SwallowedExceptionsRule has 3 builtin properties: BASE_EFFORT, SCOPE and TYPE
     DelphiRule rule = new DelphiRule();
     rule.setName("SwallowedExceptionsRule");
     rule.setClazz("org.sonar.plugins.delphi.pmd.rules.SwallowedExceptionsRule");
@@ -76,7 +79,10 @@ public class DelphiPmdExecutorTest {
 
     executor.addBuiltinProperties(ruleSet);
 
-    assertThat(rule.getProperties(), hasSize(2));
+    assertThat(rule.getProperties(), hasSize(3));
+    assertThat(rule.getProperty(DelphiPmdConstants.BASE_EFFORT), is(not(nullValue())));
+    assertThat(rule.getProperty(DelphiPmdConstants.SCOPE), is(not(nullValue())));
+    assertThat(rule.getProperty(DelphiPmdConstants.TYPE), is(not(nullValue())));
   }
 
   @Test
