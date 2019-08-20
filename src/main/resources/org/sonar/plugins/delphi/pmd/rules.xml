@@ -36,6 +36,7 @@
     <priority>3</priority>
     <description>
       Delphi allows Function return types to be omitted in the implementation section. We have no desire to use this "feature".
+      &lt;br&gt;
       Function return types should always be specified.
     </description>
     <properties>
@@ -43,7 +44,7 @@
       <property name="builtinXPath">
         <value>
           <![CDATA[
-            //FUNCTION/TkFunctionReturn[count(child::*)=0]
+            //FUNCTION[TkFunctionReturn[count(child::*)=0]]
             ]]>
         </value>
       </property>
@@ -72,7 +73,10 @@
         message="Overriding methods should do more than simply call the same method in the super class"
         name="InheritedMethodWithNoCodeRule">
     <priority>3</priority>
-    <description>Overriding a method just to call the same method from the super class without performing any other actions is useless and misleading.</description>
+    <description>
+      Overriding a method just to call the same method from the super class without
+      performing any other actions is useless and misleading.
+    </description>
     <properties>
       <property name="baseEffort" value="10min" />
       <property name="builtinXPath">
@@ -95,10 +99,13 @@
     <priority>2</priority>
     <description>
       Exceptions should not be swallowed.
-      Exception handlers should contain logic to handle the caught exception.</description>
+      &lt;br&gt;
+      Exception handlers should contain logic to handle the caught exception.
+    </description>
     <properties>
       <property name="baseEffort" value="10min" />
       <property name="scope" value="MAIN" />
+      <property name="type" value="BUG" />
     </properties>
     <example>
       <![CDATA[
@@ -176,6 +183,8 @@
     <priority>2</priority>
     <description>A method that grow too large tends to aggregate too many responsibilities.
       Such methods inevitably become harder to understand and therefore harder to maintain.
+      &lt;br&gt;
+      &lt;br&gt;
       Above a specific threshold, it is strongly advised to refactor into smaller methods which focus on well-defined tasks.
       Those smaller methods will not only be easier to understand, but also easier to test.
     </description>
@@ -211,8 +220,12 @@
     message="Method declarations should be followed by a semicolon"
     name="NoSemiAfterMethodDeclarationRule">
     <priority>3</priority>
-    <description>Delphi syntax has corner cases which sometimes allow the semicolon to be omitted from the end of a method declaration.
+    <description>
+      Delphi syntax has corner cases which sometimes allow the semicolon to be omitted from the end of a method declaration.
+      &lt;br&gt;
       Regardless, there should always be a semicolon ';' at the end of method declarations.
+      &lt;br&gt;
+      &lt;br&gt;
     </description>
     <properties>
       <property name="baseEffort" value="5min" />
@@ -242,6 +255,8 @@
     <priority>4</priority>
     <description>
       Interface names should begin with 'I' and follow Pascal case.
+      &lt;br&gt;
+      &lt;br&gt;
     </description>
     <properties>
       <property name="baseEffort" value="1min" />
@@ -254,6 +269,8 @@
     <priority>4</priority>
     <description>
       Record names should begin with 'T' and follow Pascal case.
+      &lt;br&gt;
+      &lt;br&gt;
     </description>
     <properties>
       <property name="baseEffort" value="30min" />
@@ -264,7 +281,11 @@
         message="Pointer names should comply with a naming convention"
         name="PointerNameRule">
     <priority>4</priority>
-    <description>Pointer names should begin with 'P' and follow Pascal case.</description>
+    <description>
+      Pointer names should begin with 'P' and follow Pascal case.
+      &lt;br&gt;
+      &lt;br&gt;
+    </description>
     <properties>
       <property name="baseEffort" value="30min" />
     </properties>
@@ -274,7 +295,11 @@
         message="Method names should comply with a naming convention"
         name="MethodNameRule">
     <priority>4</priority>
-    <description>Method names should follow Pascal case.</description>
+    <description>
+      Method names should follow Pascal case.
+      &lt;br&gt;
+      &lt;br&gt;
+    </description>
     <properties>
       <property name="baseEffort" value="30min" />
     </properties>
@@ -284,7 +309,11 @@
         message="Field names should comply with a naming convention"
         name="FieldNameRule">
     <priority>4</priority>
-    <description>Field names should begin with 'F' and follow Pascal case.</description>
+    <description>
+      Field names should begin with 'F' and follow Pascal case.
+      &lt;br&gt;
+      Published fields are excluded from this check due to Delphi's generated form fields.
+    </description>
     <properties>
       <property name="baseEffort" value="5min" />
     </properties>
@@ -304,7 +333,11 @@
     message="Constants should comply with a naming convention"
     name="ConstantNotationRule">
     <priority>4</priority>
-    <description>Constants should begin with 'C_' and follow Pascal case.</description>
+    <description>
+      Constants should begin with 'C_' and follow Pascal case.
+      &lt;br&gt;
+      &lt;br&gt;
+    </description>
     <properties>
       <property name="baseEffort" value="1min" />
     </properties>
@@ -314,7 +347,11 @@
     message="Class and enumeration names should comply with a naming convention"
     name="ClassNameRule">
     <priority>4</priority>
-    <description>Class and enumeration names should begin with 'T', 'TForm', or 'E', and follow Pascal case.</description>
+    <description>
+      Class and enumeration names should begin with 'T', 'TForm', 'TFrame', or 'E', and follow Pascal case.
+      &lt;br&gt;
+      &lt;br&gt;
+    </description>
     <properties>
       <property name="baseEffort" value="1min" />
     </properties>
@@ -324,7 +361,11 @@
     message="Constructor names should comply with a naming convention"
     name="ConstructorCreateRule">
     <priority>4</priority>
-    <description>Constructor names should begin with 'Create' and follow Pascal case.</description>
+    <description>
+      Constructor names should begin with 'Create' and follow Pascal case.
+      &lt;br&gt;
+      &lt;br&gt;
+    </description>
     <properties>
       <property name="baseEffort" value="1min" />
     </properties>
@@ -334,7 +375,11 @@
     message="Variable names should comply with a naming convention"
     name="VariableNameRule">
     <priority>4</priority>
-    <description>Variable names should follow Pascal case.</description>
+    <description>
+      Variable names should follow Pascal case.
+      &lt;br&gt;
+      &lt;br&gt;
+    </description>
     <properties>
       <property name="baseEffort" value="1min" />
     </properties>
@@ -362,7 +407,7 @@
 <b>try</b>
   ThrowMyException;
 <b>except</b>
-  <b>on</b> e : MyException <b>do begin</b>		//GOOD, catching specific exception type
+  <b>on</b> e : MyException <b>do begin</b> // Compliant
     HandleException;
   <b>end;</b>
 <b>end;</b>
@@ -488,6 +533,7 @@
     <description>Every interface should have a unique GUID.</description>
     <properties>
       <property name="baseEffort" value="5min" />
+      <property name="type" value="BUG" />
       <property name="builtinXPath">
         <value>
           <![CDATA[
@@ -574,7 +620,7 @@ FreeAndNil(Foo); // Compliant
       &lt;br&gt;
       - It is an unintentional omission, and should be fixed.
       &lt;br&gt;
-      - The method is an intentionally-blank override. In this case, a nested comment should explain the reason for the blank override.
+      - It is an intentionally-blank override. In this case, a nested comment should explain the reason for the blank override.
     </description>
     <properties>
       <property name="baseEffort" value="5min" />
@@ -656,6 +702,7 @@ FreeAndNil(Foo); // Compliant
     <description>Constructors should contain an 'inherited' statement.</description>
     <properties>
       <property name="baseEffort" value="5min" />
+      <property name="type" value="BUG" />
     </properties>
   </rule>
 
@@ -666,6 +713,7 @@ FreeAndNil(Foo); // Compliant
     <description>Destructors should contain an 'inherited' statement.</description>
     <properties>
       <property name="baseEffort" value="30min" />
+      <property name="type" value="BUG" />
     </properties>
   </rule>
 
@@ -685,8 +733,12 @@ FreeAndNil(Foo); // Compliant
     <priority>4</priority>
     <description>
       Semicolons are used as statement separators rather than statement terminators in Delphi's syntax.
+      &lt;br&gt;
       As a result, the last semicolon in a code block is optional.
+      &lt;br&gt;
       Regardless, each statement should be terminated with a semicolon.
+      &lt;br&gt;
+      &lt;br&gt;
     </description>
     <properties>
       <property name="baseEffort" value="1min" />
@@ -734,7 +786,10 @@ FreeAndNil(Foo); // Compliant
     <priority>2</priority>
     <description>
       'with' statements should not be used.
+      &lt;br&gt;
       They are difficult to debug, and make it easy to write ambiguous statements which may unexpectedly change meaning.
+      &lt;br&gt;
+      &lt;br&gt;
     </description>
     <properties>
       <property name="baseEffort" value="5min" />
@@ -745,7 +800,11 @@ FreeAndNil(Foo); // Compliant
         message="Lines should not be too long"
         name="TooLongLineRule">
     <priority>3</priority>
-    <description>Code lines should not be too long.</description>
+    <description>
+      Having to scroll horizontally makes it harder to get a quick overview and understanding of any piece of code.
+      &lt;br&gt;
+      &lt;br&gt;
+    </description>
     <properties>
       <property name="baseEffort" value="2min" />
       <property name="limit" value="100" />
@@ -759,10 +818,25 @@ FreeAndNil(Foo); // Compliant
     <priority>1</priority>
     <description>
       You should never explicitly re-raise a caught exception.
+      &lt;br&gt;
       The exception will still be freed at the end of the exception handler, causing tricky access violations.
-      Use 'raise;' instead of 'raise E;'.</description>
+      &lt;br&gt;
+      Use 'raise;' instead of 'raise E;'.
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='http://zerolith.com/delphi/on-delphi-exception-raising-re-raising-and-try-except-blocks.html'&gt;
+        On Delphi Exception raising, re-raising and try-except blocks
+      &lt;/a&gt;
+      &lt;br&gt;
+      - &lt;a href='http://delphi.org/2017/06/really-bad-exception-abuse/'&gt;
+        Exceptionally Bad Exception Abuse
+      &lt;/a&gt;
+    </description>
     <properties>
       <property name="baseEffort" value="5min" />
+      <property name="type" value="BUG" />
     </properties>
     <example>
       <![CDATA[
@@ -785,6 +859,8 @@ FreeAndNil(Foo); // Compliant
     <priority>4</priority>
     <description>
       When calling a method, there is no need to use brackets if there are no parameters to be passed.
+      &lt;br&gt;
+      &lt;br&gt;
     </description>
     <properties>
       <property name="baseEffort" value="1min" />
@@ -802,12 +878,16 @@ FunctionWithoutArguments;	// Compliant
         message="TStringLists should be sorted when setting Duplicates"
         name="DuplicatesRule">
     <priority>2</priority>
-    <description>TStringLists must be sorted if setting the Duplicates property. &lt;br&gt;
-      NOTE: Fixing existing cases of this issue may change the behavior of the code. &lt;br&gt;
-      Please ensure that impact analysis is performed on such cases.
+    <description>TStringLists must be sorted if setting the Duplicates property.
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='http://docwiki.embarcadero.com/Libraries/XE3/en/System.Classes.TStringList.Duplicates'&gt;API Documentation&lt;/a&gt;
     </description>
     <properties>
       <property name="baseEffort" value="2min" />
+      <property name="type" value="BUG" />
     </properties>
     <example>
       <![CDATA[
@@ -830,7 +910,11 @@ List5.Duplicates := <i>dupError</i>; // Compliant
         message="Keywords should be lowercase"
         name="LowerCaseReservedWordsRule">
     <priority>3</priority>
-    <description>Reserved keywords should always be lowercase.</description>
+    <description>
+      Reserved keywords should always be lowercase.
+      &lt;br&gt;
+      &lt;br&gt;
+    </description>
     <properties>
       <property name="baseEffort" value="1min" />
     </properties>

@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Exclude empty `virtual` and `override` methods in `EmptyMethodRule` if they have comments.
 - Include constructors and destructors in `NoSemiAfterMethodDeclarationRule`.
 - Allow `TFrame` prefix in `ClassNameRule`.
+- Update various rule descriptions and issue types.
 
 ## [0.5.0] - 2019-08-09
 
