@@ -198,7 +198,10 @@
         message="Methods should not have too many arguments"
         name="TooManyArgumentsRule">
     <priority>3</priority>
-    <description>Method has too many arguments, maximum number of arguments is 6</description>
+    <description>
+      A long parameter list can indicate that a new structure should be created to wrap
+      the numerous parameters or that the method is doing too many things.
+    </description>
     <properties>
       <property name="baseEffort" value="1h" />
       <property name="limit" value="6" />
@@ -209,7 +212,8 @@
         message="Methods should not have too many variables"
         name="TooManyVariablesRule">
     <priority>3</priority>
-    <description>Method has too many variables, maximum number of variables is 10</description>
+    <description>
+      Too many variables can indicate that a method is doing too many things.</description>
     <properties>
       <property name="baseEffort" value="30min" />
       <property name="limit" value="10" />
@@ -244,7 +248,7 @@
       <![CDATA[
 <b>procedure</b> Foo(Bar: Integer); <b>overload</b>	// Noncompliant
 
-<b>procedure</b> Foo(Bar: Integer); <b>overload</b>;	// Compliant
+<b>procedure</b> Foo(Bar: Integer); <b>overload</b>; // Compliant
         ]]>
     </example>
   </rule>
@@ -620,7 +624,7 @@ FreeAndNil(Foo); // Compliant
       &lt;br&gt;
       - It is an unintentional omission, and should be fixed.
       &lt;br&gt;
-      - It is an intentionally-blank override. In this case, a nested comment should explain the reason for the blank override.
+      - It is an intentionally-blank override or virtual method. In this case, a nested comment should explain the reason for the blank method.
     </description>
     <properties>
       <property name="baseEffort" value="5min" />
@@ -878,7 +882,10 @@ FunctionWithoutArguments;	// Compliant
         message="TStringLists should be sorted when setting Duplicates"
         name="DuplicatesRule">
     <priority>2</priority>
-    <description>TStringLists must be sorted if setting the Duplicates property.
+    <description>
+      TStringLists must be sorted if setting the Duplicates property.
+      &lt;br&gt;
+      For the purposes of this rule, the list must be sorted on the next or previous line.
       &lt;br&gt;
       &lt;br&gt;
       &lt;b&gt;See:&lt;/b&gt;
