@@ -44,6 +44,22 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  public void testQualifiedVarNamesShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("var")
+            .appendImpl("  MyVar: Boolean;")
+            .appendImpl("begin")
+            .appendImpl("  FMyField.myvar := True;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
   public void testMatchingFunctionNamesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()

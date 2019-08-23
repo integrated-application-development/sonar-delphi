@@ -1,12 +1,10 @@
 package org.sonar.plugins.delphi.pmd;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -25,14 +23,12 @@ import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
-import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiPmdExecutorTest {
 
   private static final String ROOT_PATH = "/org/sonar/plugins/delphi";
   private static final File ROOT_DIR = DelphiUtils.getResource(ROOT_PATH);
-  private static final String BAD_SYNTAX = ROOT_PATH + "/projects/BadSyntaxProject/BadSyntax.Pas";
 
   private DelphiProjectHelper projectHelper;
   private DelphiPmdExecutor executor;
@@ -83,35 +79,5 @@ public class DelphiPmdExecutorTest {
     assertThat(rule.getProperty(DelphiPmdConstants.BASE_EFFORT), is(not(nullValue())));
     assertThat(rule.getProperty(DelphiPmdConstants.SCOPE), is(not(nullValue())));
     assertThat(rule.getProperty(DelphiPmdConstants.TYPE), is(not(nullValue())));
-  }
-
-  @Test
-  public void testAddBuiltinPropertiesToCustomRule() {
-    // A custom template rule, created via the SonarQube web interface
-    // There's no plugin-side rule definition and no builtin properties to add.
-    DelphiRule rule = new DelphiRule();
-    rule.setName("SomeCustomXPathRule");
-    rule.setClazz(DelphiPmdConstants.TEMPLATE_XPATH_CLASS);
-    rule.setPriority(2);
-
-    DelphiRuleSet ruleSet = new DelphiRuleSet();
-    ruleSet.addRule(rule);
-
-    executor.addBuiltinProperties(ruleSet);
-
-    assertThat(rule.getProperties(), empty());
-  }
-
-  @Test
-  public void testParsingExceptionShouldAddError() {
-    DelphiProject project = new DelphiProject("Test");
-    project.addFile(DelphiUtils.getResource(BAD_SYNTAX).getPath());
-
-    when(projectHelper.getProjects()).thenReturn(Collections.singletonList(project));
-    when(projectHelper.isExcluded(any(File.class))).thenReturn(false);
-
-    executor.execute();
-
-    assertThat(executor.getErrors(), hasSize(1));
   }
 }

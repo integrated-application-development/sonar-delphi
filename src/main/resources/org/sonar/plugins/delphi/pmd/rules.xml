@@ -198,7 +198,10 @@
         message="Methods should not have too many arguments"
         name="TooManyArgumentsRule">
     <priority>3</priority>
-    <description>Method has too many arguments, maximum number of arguments is 6</description>
+    <description>
+      A long parameter list can indicate that a new structure should be created to wrap
+      the numerous parameters or that the method is doing too many things.
+    </description>
     <properties>
       <property name="baseEffort" value="1h" />
       <property name="limit" value="6" />
@@ -209,7 +212,8 @@
         message="Methods should not have too many variables"
         name="TooManyVariablesRule">
     <priority>3</priority>
-    <description>Method has too many variables, maximum number of variables is 10</description>
+    <description>
+      Too many variables can indicate that a method is doing too many things.</description>
     <properties>
       <property name="baseEffort" value="30min" />
       <property name="limit" value="10" />
@@ -244,7 +248,7 @@
       <![CDATA[
 <b>procedure</b> Foo(Bar: Integer); <b>overload</b>	// Noncompliant
 
-<b>procedure</b> Foo(Bar: Integer); <b>overload</b>;	// Compliant
+<b>procedure</b> Foo(Bar: Integer); <b>overload</b>; // Compliant
         ]]>
     </example>
   </rule>
@@ -634,6 +638,7 @@ FreeAndNil(Foo); // Compliant
       &lt;br&gt;
       &lt;br&gt;
       &lt;b&gt;Known false-positives:&lt;/b&gt;
+      &lt;br&gt;
       - This rule does not detect if a method is an implementation for an interface.
       In the future, such implementations will be considered overrides and excluded if there is a comment inside.
     </description>
@@ -893,7 +898,10 @@ FunctionWithoutArguments;	// Compliant
         message="TStringLists should be sorted when setting Duplicates"
         name="DuplicatesRule">
     <priority>2</priority>
-    <description>TStringLists must be sorted if setting the Duplicates property.
+    <description>
+      TStringLists must be sorted if setting the Duplicates property.
+      &lt;br&gt;
+      For the purposes of this rule, the list must be sorted on the next or previous line.
       &lt;br&gt;
       &lt;br&gt;
       &lt;b&gt;See:&lt;/b&gt;
@@ -969,6 +977,33 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     <properties>
       <property name="baseEffort" value="20min" />
       <property name="template" value="true" />
+      <property name="regex" />
+      <property name="message" />
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.StringLiteralRegexRule"
+    message="Track string literals matching a regular expression"
+    name="StringLiteralRegexRule">
+    <priority>3</priority>
+    <description>
+      This rule template can be used to create rules which will be triggered when the full content
+      of a string literal matches a given regular expression.
+      Note that the regular expression should be expressed using the dotall format
+      (where the &lt;code&gt;.&lt;/code&gt; character matches any character).
+      &lt;br&gt;
+      &lt;br&gt;
+      For example, one can create a rule with the regular expression &lt;code&gt;.*REVIEW.*&lt;/code&gt; to match all
+      strings containing "REVIEW".
+      &lt;br&gt;
+      &lt;br&gt;
+      Note that, in order to match REVIEW regardless of the case, the &lt;code&gt;(?i)&lt;/code&gt; modifier should be
+      prepended to the expression, as in &lt;code&gt;(?i).*REVIEW.*&lt;/code&gt;.
+    </description>
+    <properties>
+      <property name="baseEffort" value="20min" />
+      <property name="template" value="true" />
+      <property name="scope" value="MAIN" />
       <property name="regex" />
       <property name="message" />
     </properties>

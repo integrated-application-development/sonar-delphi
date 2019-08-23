@@ -20,6 +20,7 @@
 package org.sonar.plugins.delphi.pmd.xml.factory;
 
 import java.util.Collection;
+import java.util.Map;
 import org.sonar.api.batch.rule.ActiveRule;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
@@ -43,27 +44,32 @@ public class ActiveRulesRuleSetFactory implements RuleSetFactory {
 
   @Override
   public DelphiRuleSet create() {
-
     final Collection<ActiveRule> rules = this.activeRules.findByRepository(repositoryKey);
     DelphiRuleSet ruleset = new DelphiRuleSet();
     ruleset.setName(repositoryKey);
     ruleset.setDescription(String.format("Sonar Profile: %s", repositoryKey));
+
     for (ActiveRule rule : rules) {
       String configKey = rule.internalKey();
       DelphiRule delphiRule = new DelphiRule(configKey, PmdLevelUtils.toLevel(rule.severity()));
       delphiRule.setName(rule.ruleKey().rule());
+      delphiRule.setTemplateName(rule.templateRuleKey());
       addRuleProperties(rule, delphiRule);
       ruleset.addRule(delphiRule);
     }
+
     return ruleset;
   }
 
   private void addRuleProperties(ActiveRule activeRule, DelphiRule pmdRule) {
-    if ((activeRule.params() != null) && !activeRule.params().isEmpty()) {
-      for (var activeRuleParam : activeRule.params().entrySet()) {
-        var property = new DelphiRuleProperty(activeRuleParam.getKey(), activeRuleParam.getValue());
-        pmdRule.addProperty(property);
-      }
+    Map<String, String> params = activeRule.params();
+    if (params == null || params.isEmpty()) {
+      return;
+    }
+
+    for (var activeRuleParam : params.entrySet()) {
+      var property = new DelphiRuleProperty(activeRuleParam.getKey(), activeRuleParam.getValue());
+      pmdRule.addProperty(property);
     }
   }
 

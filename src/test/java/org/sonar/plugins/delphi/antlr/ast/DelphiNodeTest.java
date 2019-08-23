@@ -115,10 +115,9 @@ public class DelphiNodeTest {
     node.getNthParent(0);
   }
 
-  @SuppressWarnings("unchecked")
   @Test(expected = UnsupportedOperationException.class)
   public void testGetFirstParentOfType() {
-    node.getFirstParentOfAnyType(Object.class);
+    node.getFirstParentOfType(Object.class);
   }
 
   @Test(expected = UnsupportedOperationException.class)
@@ -149,7 +148,7 @@ public class DelphiNodeTest {
 
   @Test(expected = UnsupportedOperationException.class)
   public void testGetFirstChildOfType() {
-    node.getFirstParentOfType(Object.class);
+    node.getFirstChildOfType(Object.class);
   }
 
   @Test(expected = UnsupportedOperationException.class)

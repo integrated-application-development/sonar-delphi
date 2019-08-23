@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
-import com.google.common.base.Enums;
 import net.sourceforge.pmd.RuleViolation;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
@@ -92,7 +91,7 @@ public class DelphiPmdViolationRecorder {
 
   private boolean isOutOfScope(RuleViolation violation) {
     String scopeProperty = violation.getRule().getProperty(DelphiRule.SCOPE);
-    RuleScope scope = Enums.getIfPresent(RuleScope.class, scopeProperty).or(RuleScope.ALL);
+    RuleScope scope = RuleScope.valueOf(scopeProperty);
 
     switch (scope) {
       case MAIN:

@@ -24,7 +24,6 @@ package org.sonar.plugins.delphi.pmd.xml;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import javax.annotation.Nullable;
 
 /** Delphi PMD rule loaded from xml file */
@@ -32,6 +31,7 @@ public final class DelphiRule {
 
   private Integer priority;
   private String name;
+  private String templateName;
   private String message;
   private String clazz;
   private String description;
@@ -92,6 +92,15 @@ public final class DelphiRule {
     this.name = name;
   }
 
+  @Nullable
+  public String getTemplateName() {
+    return templateName;
+  }
+
+  public void setTemplateName(String templateName) {
+    this.templateName = templateName;
+  }
+
   public String getMessage() {
     return message;
   }
@@ -144,22 +153,5 @@ public final class DelphiRule {
       desc += "<pre>" + example + "</pre>";
     }
     return desc;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    DelphiRule that = (DelphiRule) o;
-    return clazz.equals(that.clazz);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(clazz);
   }
 }

@@ -2,6 +2,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
@@ -27,7 +28,7 @@ public class DprFunctionRuleTest extends BasePmdRuleTest {
             .appendDecl("begin")
             .appendDecl("  DoSomething;")
             .appendDecl("end;")
-            .appendDecl("function MyFunction;")
+            .appendDecl("function MyFunction: Integer;")
             .appendDecl("begin")
             .appendDecl("  Result := 5;")
             .appendDecl("end;")
@@ -35,6 +36,8 @@ public class DprFunctionRuleTest extends BasePmdRuleTest {
             .appendImpl("MyVar := MyFunction;");
 
     execute(builder);
+
+    assertIssues(hasSize(2));
 
     assertIssues(
         hasItem(hasRuleKeyAtLine("ProjectFileNoFunctionsRule", builder.getOffsetDecl() + 1)));

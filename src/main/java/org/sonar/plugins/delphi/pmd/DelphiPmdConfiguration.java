@@ -25,6 +25,7 @@ import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import net.sourceforge.pmd.Report;
 import net.sourceforge.pmd.renderers.Renderer;
 import net.sourceforge.pmd.renderers.XMLRenderer;
@@ -35,13 +36,18 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 
 @ScannerSide
 public class DelphiPmdConfiguration {
 
-  private static final String PMD_RESULT_XML = "pmd-result.xml";
   private static final Logger LOG = Loggers.get(DelphiPmdConfiguration.class);
+  private static final String PMD_RESULT_XML = "pmd-result.xml";
+
+  private static final String PMD_CONFIG_SAVE_FAILURE = "Failed to save the PMD configuration";
+  private static final String PMD_REPORT_SAVE_FAILURE = "Failed to save the PMD report";
+  private static final String DEF_NOT_FOUND = "Rule definition not found for %s";
 
   private final FileSystem fileSystem;
   private final Configuration settings;
@@ -58,6 +64,23 @@ public class DelphiPmdConfiguration {
 
   public DelphiRuleSet getRuleSetDefinition() {
     return ruleSetDefinitionProvider.getDefinition();
+  }
+
+  public DelphiRule getRuleDefinition(DelphiRule rule) {
+    List<DelphiRule> ruleDefinitions = ruleSetDefinitionProvider.getDefinition().getRules();
+
+    return ruleDefinitions.stream()
+        .filter(def -> def.getName().equals(rule.getTemplateName()))
+        .findFirst()
+        .orElseGet(
+            () ->
+                ruleDefinitions.stream()
+                    .filter(def -> def.getName().equals(rule.getName()))
+                    .findFirst()
+                    .orElseThrow(
+                        () ->
+                            new IllegalStateException(
+                                String.format(DEF_NOT_FOUND, rule.getName()))));
   }
 
   private static String reportToString(Report report) throws IOException {
@@ -80,7 +103,7 @@ public class DelphiPmdConfiguration {
 
       return configurationFile;
     } catch (IOException e) {
-      throw new IllegalStateException("Failed to save the PMD configuration", e);
+      throw new IllegalStateException(PMD_CONFIG_SAVE_FAILURE, e);
     }
   }
 
@@ -104,7 +127,7 @@ public class DelphiPmdConfiguration {
 
       return reportFile;
     } catch (IOException e) {
-      throw new IllegalStateException("Failed to save the PMD report", e);
+      throw new IllegalStateException(PMD_REPORT_SAVE_FAILURE, e);
     }
   }
 

@@ -121,7 +121,7 @@ public class MixedNamesRule extends DelphiRule {
         continue;
       }
 
-      if (child.getType() == DelphiLexer.TkIdentifier) {
+      if (isUnqualifiedIdentifier(child)) {
         String name = child.getText();
         String globalName = getGlobalName(name, variableNames);
         if (!globalName.equals(name)) {
@@ -140,6 +140,15 @@ public class MixedNamesRule extends DelphiRule {
     if (clear) {
       variableNames.clear();
     }
+  }
+
+  private boolean isUnqualifiedIdentifier(DelphiNode node) {
+    if (node.getType() == DelphiLexer.TkIdentifier) {
+      DelphiNode prevNode = node.prevNode();
+      return prevNode == null || prevNode.getType() != DelphiLexer.DOT;
+    }
+
+    return false;
   }
 
   private boolean isBlockNode(Tree node) {
