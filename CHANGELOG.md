@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Proper support for rule templates.
+- `StringLiteralRegexRule` analysis rule template, which flags string literals matching a regular
+  expression.
 
 ### Fixed
 

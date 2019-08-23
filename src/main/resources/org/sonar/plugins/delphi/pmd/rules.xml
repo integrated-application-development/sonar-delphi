@@ -966,6 +966,33 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.StringLiteralRegexRule"
+    message="Track string literals matching a regular expression"
+    name="StringLiteralRegexRule">
+    <priority>3</priority>
+    <description>
+      This rule template can be used to create rules which will be triggered when the full content
+      of a string literal matches a given regular expression.
+      Note that the regular expression should be expressed using the dotall format
+      (where the &lt;code&gt;.&lt;/code&gt; character matches any character).
+      &lt;br&gt;
+      &lt;br&gt;
+      For example, one can create a rule with the regular expression &lt;code&gt;.*REVIEW.*&lt;/code&gt; to match all
+      strings containing "REVIEW".
+      &lt;br&gt;
+      &lt;br&gt;
+      Note that, in order to match REVIEW regardless of the case, the &lt;code&gt;(?i)&lt;/code&gt; modifier should be
+      prepended to the expression, as in &lt;code&gt;(?i).*REVIEW.*&lt;/code&gt;.
+    </description>
+    <properties>
+      <property name="baseEffort" value="20min" />
+      <property name="template" value="true" />
+      <property name="scope" value="MAIN" />
+      <property name="regex" />
+      <property name="message" />
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.InheritedTypeNameRule"
     message="Types which inherit from some other specified type should comply with a naming convention"
     name="InheritedTypeNameRule">
