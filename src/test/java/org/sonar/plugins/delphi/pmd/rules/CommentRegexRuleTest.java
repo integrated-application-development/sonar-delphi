@@ -21,6 +21,7 @@ public class CommentRegexRuleTest extends BasePmdRuleTest {
     regexProperty = new DelphiRuleProperty(CommentRegexRule.REGEX.name(), "(?i).*todo.*");
 
     rule.setName("TodoCommentsRule");
+    rule.setTemplateName("CommentRegexRule");
     rule.setPriority(5);
     rule.addProperty(regexProperty);
     rule.setClazz("org.sonar.plugins.delphi.pmd.rules.CommentRegexRule");

@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.ActiveRuleParam;
+import org.sonar.api.rules.Rule;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
@@ -54,15 +55,23 @@ public class RulesProfileRuleSetFactory implements RuleSetFactory {
         String clazz = activeRule.getRule().getConfigKey();
         Integer level = PmdLevelUtils.toLevel(activeRule.getSeverity().name());
         String name = activeRule.getRule().getKey();
+        String templateName = null;
         String message = activeRule.getRule().getName();
         String description = activeRule.getRule().getDescription();
 
+        Rule template = activeRule.getRule().getTemplate();
+        if (template != null) {
+          templateName = template.getKey();
+        }
+
         DelphiRule rule = new DelphiRule(clazz, level);
         rule.setName(name);
+        rule.setTemplateName(templateName);
         rule.setMessage(message);
         parseDescription(rule, description);
 
         addRuleProperties(activeRule, rule);
+
         ruleSet.addRule(rule);
       }
     }

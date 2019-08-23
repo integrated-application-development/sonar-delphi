@@ -66,4 +66,8 @@ public class DelphiRuleProperty {
   public boolean isBuiltinProperty() {
     return BUILTIN_PROPERTIES.stream().anyMatch(builtin -> builtin.name().equals(name));
   }
+
+  public boolean isTemplateProperty() {
+    return name.equals(TEMPLATE.name());
+  }
 }
