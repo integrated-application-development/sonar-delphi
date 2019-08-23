@@ -94,7 +94,7 @@ public class DelphiRuleViolationBuilder {
 
     Tree classTypeNode = node.getAncestor(DelphiLexer.TkNewType);
     if (classTypeNode != null) {
-      Tree classNameNode = classTypeNode.getChild(0);
+      Tree classNameNode = classTypeNode.getChild(0).getChild(0);
       ruleViolation.setClassName(classNameNode.getText());
     }
 
@@ -124,29 +124,41 @@ public class DelphiRuleViolationBuilder {
   }
 
   private Tree findMethodNode(DelphiNode node) {
-    Tree methodNode = null;
-
+    // Node is inside of the method signature
     for (int methodType : METHOD_TYPES) {
-      methodNode = node.getAncestor(methodType);
+      Tree ancestor = node.getAncestor(methodType);
 
+      if (ancestor != null) {
+        return ancestor;
+      }
+    }
+
+    // Node is inside of the method declaration section
+    DelphiNode blockDeclSection = (DelphiNode) node.getAncestor(DelphiLexer.TkBlockDeclSection);
+    if (blockDeclSection != null) {
+      return findMethodNodeFromBlockDeclSection(blockDeclSection);
+    }
+
+    // Node is inside of the method body
+    Tree currentNode = node;
+
+    while ((currentNode = currentNode.getAncestor(DelphiLexer.BEGIN)) != null) {
+      Tree methodNode = findMethodNodeFromBeginNode(currentNode);
       if (methodNode != null) {
         return methodNode;
       }
     }
 
-    // look for method from begin...end statements
-    Tree currentNode = node;
+    return null;
+  }
 
-    while (methodNode == null) {
-      currentNode = currentNode.getAncestor(DelphiLexer.BEGIN);
-      if (currentNode == null) {
-        break;
-      }
-
-      methodNode = findMethodNodeFromBeginNode(currentNode);
+  private Tree findMethodNodeFromBlockDeclSection(DelphiNode blockDeclSection) {
+    Tree prevNode = blockDeclSection.prevNode();
+    if (isMethodNode(prevNode)) {
+      return prevNode;
     }
 
-    return methodNode;
+    return null;
   }
 
   private Tree findMethodNodeFromBeginNode(Tree beginNode) {
@@ -156,7 +168,7 @@ public class DelphiRuleViolationBuilder {
       Tree parent = beginNode.getParent();
       Tree node = parent.getChild(index - 2);
 
-      if (isMethodNode(node.getType())) {
+      if (isMethodNode(node)) {
         return node;
       }
     }
@@ -164,9 +176,9 @@ public class DelphiRuleViolationBuilder {
     return null;
   }
 
-  private static boolean isMethodNode(int type) {
+  private static boolean isMethodNode(Tree node) {
     for (int methodType : METHOD_TYPES) {
-      if (methodType == type) {
+      if (methodType == node.getType()) {
         return true;
       }
     }
