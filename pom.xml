@@ -324,7 +324,7 @@
             <include>**/IntegrationTests.java</include>
           </includes>
           <failIfNoTests>true</failIfNoTests>
-          <argLine>@{argLine} -Dhttps.proxyHost= -Dhttps.proxyPort=${env.HTTP_PROXY_PORT}</argLine>
+          <argLine>@{argLine} -Dhttps.proxyHost=${env.HTTP_PROXY_SERVER} -Dhttps.proxyPort=${env.HTTP_PROXY_PORT}</argLine>
         </configuration>
         <executions>
           <execution>
