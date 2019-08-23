@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix FPs around qualified identifiers in `MixedNamesRule`.
+
 ## [0.6.0] - 2019-08-20
 
 ### Added
