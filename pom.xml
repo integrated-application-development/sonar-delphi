@@ -2,7 +2,7 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>sonar-delphi-plugin</artifactId>
-  <version>0.7.0</version>
+  <version>0.8.0</version>
   <groupId>org.delphi.plugin</groupId>
   <name>Sonar Delphi Plugin</name>
   <description>Enables analysis of Delphi projects in SonarQube 7.9+.
