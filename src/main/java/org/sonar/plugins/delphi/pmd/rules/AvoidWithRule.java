@@ -1,15 +1,17 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.delphi.pmd.FilePosition;
 
-public class AvoidWithRule extends DelphiRule {
+public class AvoidWithRule extends AbstractDelphiRule {
 
   @Override
-  public void visit(DelphiNode node, RuleContext ctx) {
-    if (node.getType() == DelphiLexer.WITH) {
-      addViolation(ctx, node);
+  public RuleContext visit(DelphiNode node, RuleContext data) {
+    if (node.jjtGetId() == DelphiLexer.WITH) {
+      newViolation(data).atPosition(FilePosition.from(node.getToken())).atLocation(node).save();
     }
+    return super.visit(node, data);
   }
 }

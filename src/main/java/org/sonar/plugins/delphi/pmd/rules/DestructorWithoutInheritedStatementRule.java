@@ -19,19 +19,15 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 
 public class DestructorWithoutInheritedStatementRule extends NoInheritedStatementRule {
 
   @Override
-  public void visit(DelphiNode node, RuleContext ctx) {
-    if (node.getType() == DelphiLexer.DESTRUCTOR) {
-      if (isClassMethod(node)) {
-        return;
-      }
-
-      checkViolation(ctx, node);
+  public RuleContext visit(MethodImplementationNode method, RuleContext data) {
+    if (method.isDestructor()) {
+      checkViolation(method, data);
     }
+    return super.visit(method, data);
   }
 }

@@ -21,15 +21,15 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
-import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
-import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
+import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class TooLargeMethodRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testValidRule() {
+  public void testSmallMethod() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")
@@ -43,7 +43,7 @@ public class TooLargeMethodRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testAlmostTooLongMethod() {
+  public void testAlmostTooLargeMethod() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("function Foo: Integer;");
     builder.appendImpl("begin");
@@ -90,7 +90,7 @@ public class TooLargeMethodRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTooLongMethod() {
+  public void testTooLargeMethod() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("function Foo: Integer;");
     builder.appendImpl("begin");
@@ -107,56 +107,57 @@ public class TooLargeMethodRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testComplexTooLongMethod() {
+  public void testComplexTooLargeMethod() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")
             .appendImpl("begin")
-            .appendImpl("  if X then begin") // 1 (then)
-            .appendImpl("    Bar;") // 2 (semicolon)
+            .appendImpl("  if X then begin") // 1
+            .appendImpl("    Bar;") // 2
             .appendImpl("  end;")
-            .appendImpl("  if X then MyProcedure;") // 3 (then)
-            // 4 (semicolon)
-            .appendImpl("  if X then ") // 5 (then)
-            .appendImpl("    Bar")
-            .appendImpl("  else") // 6 (else)
-            .appendImpl("    Baz(1, 2, 3);") // 7 (semicolon)
-            .appendImpl("  if X then begin") // 8 (then)
-            .appendImpl("    Bar") // 9 (No semicolon before an end)
+            .appendImpl("  if X then MyProcedure;") // 3 4
+            .appendImpl("  if X then ") // 5
+            .appendImpl("    Bar") // 6
+            .appendImpl("  else")
+            .appendImpl("    Baz(1, 2, 3);") // 7
+            .appendImpl("  if X then begin") // 8
+            .appendImpl("    Bar") // 9
             .appendImpl("  end;")
-            .appendImpl("  case MyProperty of") // 10 (case)
-            .appendImpl("    1: begin") // 11 (case-item)
-            .appendImpl("       Bar;") // 12 (semicolon)
+            .appendImpl("  case MyProperty of") // 10
+            .appendImpl("    1: begin") // 11
+            .appendImpl("       Bar;") // 12
             .appendImpl("    end;")
-            .appendImpl("    2: Bar;") // 13 (case-item)
-            // 14 (semicolon)
-            .appendImpl("    3: Bar") // 15 (case-item)
-            // 16 (No semicolon before an end)
+            .appendImpl("    2: Bar;") // 13 14
+            .appendImpl("    3: Bar") // 15 16
             .appendImpl("  end;")
-            .appendImpl("  repeat")
-            .appendImpl("    Bar;") // 17 (semicolon)
-            .appendImpl("    Baz(3, 2, 1)") // 18 (No semicolon before an until)
-            .appendImpl("  until ConditionMet;") // 19 (semicolon)
-            .appendImpl("  asm")
+            .appendImpl("  repeat") // 17
+            .appendImpl("    Bar;") // 18
+            .appendImpl("    Baz(3, 2, 1)") // 19
+            .appendImpl("  until ConditionMet;")
+            .appendImpl("  asm") // 20
             .appendImpl("    push eax")
-            .appendImpl("  end;") // 20 (semicolon after asm statement)
-            .appendImpl("  try") // 21 (try)
-            .appendImpl("    Bar;") // 22 (semicolon)
-            .appendImpl("    Xyzzy") // 23 (No semicolon before an except)
-            .appendImpl("  except") // 24 (except)
             .appendImpl("  end;")
-            .appendImpl("  try") // 25 (try)
-            .appendImpl("    Xyzzy") // 26 (No semicolon before a finally)
-            .appendImpl("  finally") // 27 (finally)
+            .appendImpl("  try") // 21
+            .appendImpl("    Bar;") // 22
+            .appendImpl("    Xyzzy") // 23
+            .appendImpl("  except")
+            .appendImpl("    on E : MyException do;") // 24
+            .appendImpl("    on Exception do begin") // 25
+            .appendImpl("      HandleException;") // 26
+            .appendImpl("    end;")
             .appendImpl("  end;")
-            .appendImpl("  while MyCondition do") // 28 (do)
-            .appendImpl("    Bar;") // 29 (semicolon)
-            .appendImpl("  if X then begin") // 30 (then)
-            .appendImpl("    Bar") // 31 (No semicolon before an end)
+            .appendImpl("  try") // 27
+            .appendImpl("    Xyzzy") // 28
+            .appendImpl("  finally")
+            .appendImpl("  end;")
+            .appendImpl("  while MyCondition do") // 29
+            .appendImpl("    Bar;") // 30
+            .appendImpl("  if X then begin") // 31
+            .appendImpl("    Bar") // 32
             .appendImpl("  end;");
 
-    for (int i = 1; i <= 70; i++) {
-      builder.appendImpl(" Result := 1;"); // 101 (semicolon)
+    for (int i = 1; i <= 69; i++) {
+      builder.appendImpl(" Result := 1;"); // 101
     }
 
     builder.appendImpl("end;");

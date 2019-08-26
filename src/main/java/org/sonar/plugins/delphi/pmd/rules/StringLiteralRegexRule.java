@@ -6,10 +6,9 @@ import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.node.LiteralNode;
 
-public class StringLiteralRegexRule extends DelphiRule {
+public class StringLiteralRegexRule extends AbstractDelphiRule {
   private static final Logger LOG = Loggers.get(StringLiteralRegexRule.class);
 
   public static final PropertyDescriptor<String> REGEX =
@@ -34,32 +33,27 @@ public class StringLiteralRegexRule extends DelphiRule {
 
     try {
       pattern = Pattern.compile(regularExpression, Pattern.DOTALL);
-    } catch (RuntimeException e) {
-      pattern = null;
-      LOG.error("Unable to compile regular expression: " + regularExpression, e);
+    } catch (IllegalArgumentException e) {
+      LOG.debug("Unable to compile regular expression: " + regularExpression, e);
     }
   }
 
   @Override
-  public void visit(DelphiNode node, RuleContext ctx) {
-    if (node.getType() != DelphiLexer.QuotedString) {
-      return;
+  public RuleContext visit(LiteralNode literal, RuleContext data) {
+    if (literal.isStringLiteral()) {
+      String string = literal.getImage().substring(1, literal.getImage().length() - 1);
+
+      if (pattern != null && pattern.matcher(string).matches()) {
+        addViolationWithMessage(data, literal, getProperty(MESSAGE));
+      }
     }
 
-    String string = node.getText().substring(1, node.getText().length() - 1);
-
-    if (pattern != null && pattern.matcher(string).matches()) {
-      addViolation(ctx, node, getProperty(MESSAGE));
-    }
+    return super.visit(literal, data);
   }
 
   @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
-  }
-
-  @Override
-  public int hashCode() {
-    return super.hashCode();
+  public String dysfunctionReason() {
+    start(null);
+    return pattern == null ? ("Unable to compile regular expression: " + getProperty(REGEX)) : null;
   }
 }

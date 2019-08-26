@@ -9,11 +9,11 @@
     name="ThenTryRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.CountRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ClassPerFileRule"
     name="ClassPerFileRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.InheritedMethodWithNoCodeRule"
     name="InheritedMethodWithNoCodeRule">
   </rule>
 
@@ -21,7 +21,7 @@
     name="SwallowedExceptionsRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     name="EmptyFinallyBlockRule">
   </rule>
 
@@ -45,7 +45,7 @@
     name="NoSemiAfterMethodDeclarationRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.NoFunctionReturnTypeRule"
     name="NoFunctionReturnTypeRule">
   </rule>
 
@@ -57,7 +57,7 @@
     name="ClassNameRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.RecordNameRule"
     name="RecordNameRule">
   </rule>
 
@@ -78,24 +78,16 @@
     name="UnitNameRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.CatchingGeneralExceptionRule"
     name="CatchingGeneralExceptionRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.NodeSequenceRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.RaisingGeneralExceptionRule"
     name="RaisingGeneralExceptionRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
-    name="AvoidOutParameterRule">
-  </rule>
-
-  <rule class="org.sonar.plugins.delphi.pmd.rules.IfTrueRule"
-    name="IfTrueRule">
-  </rule>
-
-  <rule class="org.sonar.plugins.delphi.pmd.rules.IfNotFalseRule"
-    name="IfNotFalseRule">
+  <rule class="org.sonar.plugins.delphi.pmd.rules.RedundantBooleanRule"
+    name="RedundantBooleanRule">
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.PublicFieldsRule"
@@ -114,15 +106,11 @@
     name="AssignedAndFreeRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
-    name="EmptyElseStatementRule">
-  </rule>
-
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyBeginStatementRule"
     name="EmptyBeginStatementRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyMethodRule"
     name="EmptyMethodRule">
   </rule>
 
@@ -134,20 +122,12 @@
     name="ProjectFileNoVariablesRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.TypeAliasRule"
     name="TypeAliasRule">
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.MixedNamesRule"
     name="MixedNamesRule">
-  </rule>
-
-  <rule class="org.sonar.plugins.delphi.pmd.rules.DelphiRule"
-    name="UnusedUnitRule">
-  </rule>
-
-  <rule class="org.sonar.plugins.delphi.pmd.rules.DelphiRule"
-    name="UnusedFunctionRule">
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.NoInheritedStatementRule"
@@ -158,8 +138,8 @@
     name="DestructorWithoutInheritedStatementRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.NoBeginAfterDoRule"
-    name="NoBeginAfterDoRule">
+  <rule class="org.sonar.plugins.delphi.pmd.rules.BeginEndRequiredRule"
+    name="BeginEndRequiredRule">
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.NoSemicolonRule"
@@ -170,9 +150,14 @@
     name="CastAndFreeRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.DelphiRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.CyclomaticComplexityRule"
     name="MethodCyclomaticComplexityRule">
   </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.CognitiveComplexityRule"
+    name="MethodCognitiveComplexityRule">
+  </rule>
+
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.ConstantNotationRule"
     name="ConstantNotationRule">

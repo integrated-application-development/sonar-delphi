@@ -21,10 +21,10 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
-import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
-import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
+import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class DuplicatesRuleTest extends BasePmdRuleTest {
 
@@ -248,6 +248,53 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
             .appendImpl("procedure MyProcedure;")
             .appendImpl("begin")
             .appendImpl("  SomeClass.List.Duplicates := dupIgnore;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("DuplicatesRule", builder.getOffSet() + 3)));
+  }
+
+  @Test
+  public void testQualifiedTrueShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  List.Duplicates := dupIgnore;")
+            .appendImpl("  List.Sorted := System.True;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testQualifiedFalseShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  List.Duplicates := dupIgnore;")
+            .appendImpl("  List.Sorted := System.False;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("DuplicatesRule", builder.getOffSet() + 3)));
+  }
+
+  @Test
+  public void testSettingWrongPropertyShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  List.Duplicates := dupIgnore;")
+            .appendImpl("  List.X := True;")
             .appendImpl("end;");
 
     execute(builder);

@@ -18,41 +18,24 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import org.antlr.runtime.tree.CommonTree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import net.sourceforge.pmd.RuleContext;
+import org.sonar.plugins.delphi.antlr.ast.node.FieldDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
+import org.sonar.plugins.delphi.utils.NameConventionUtils;
 
-public class FieldNameRule extends NameConventionRule {
+public class FieldNameRule extends AbstractDelphiRule {
   private static final String FIELD_PREFIX = "F";
 
   @Override
-  public List<DelphiNode> findNodes(DelphiNode node) {
-    if (node.getType() != DelphiLexer.TkClassField || isPublished()) {
-      return Collections.emptyList();
-    }
-
-    return getFieldNames(node);
-  }
-
-  private List<DelphiNode> getFieldNames(DelphiNode node) {
-    List<DelphiNode> nodes = new ArrayList<>();
-    CommonTree nameNode = (CommonTree) node.getFirstChildWithType(DelphiLexer.TkVariableIdents);
-
-    if (nameNode != null) {
-      CommonTree currentNode = nameNode;
-      while ((currentNode = (CommonTree) currentNode.getChild(0)) != null) {
-        nodes.add((DelphiNode) currentNode);
+  public RuleContext visit(FieldDeclarationNode field, RuleContext data) {
+    if (field.isPrivate() || field.isProtected()) {
+      for (IdentifierNode identifier : field.getIdentifierList().getIdentifiers()) {
+        if (!NameConventionUtils.compliesWithPrefix(identifier.getImage(), FIELD_PREFIX)) {
+          addViolation(data, identifier);
+        }
       }
     }
 
-    return nodes;
-  }
-
-  @Override
-  protected boolean isViolation(DelphiNode nameNode) {
-    return !compliesWithPrefixNamingConvention(nameNode.getText(), FIELD_PREFIX);
+    return super.visit(field, data);
   }
 }

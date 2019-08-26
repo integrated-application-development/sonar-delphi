@@ -23,50 +23,15 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.node.FieldDeclarationNode;
 
-/** This rule will find any public fields in class declaration(s) and raise violations on them. */
-public class PublicFieldsRule extends DelphiRule {
+public class PublicFieldsRule extends AbstractDelphiRule {
 
-  /**
-   * This rule searches for any fields declared under a 'public' block which are also fields. These
-   * should be avoided, so a violation will be raised if any of these types are declared under a
-   * 'public' block.
-   *
-   * @param node the current node
-   * @param ctx the ruleContext to store the violations
-   */
   @Override
-  public void visit(DelphiNode node, RuleContext ctx) {
-
-    // Wherever there is a class definition
-    if (node.getType() == DelphiLexer.TkClass) {
-      boolean inPublic = false;
-
-      // visits all its children
-      for (int i = 0; i < node.getChildCount(); i++) {
-        Tree child = node.getChild(i);
-        // Do nothing until the public section.
-        if (!inPublic) {
-          inPublic = (child.getType() == DelphiLexer.PUBLIC);
-          continue;
-        }
-
-        // Check if still in public before continuing
-        if (child.getType() != DelphiLexer.TkClassField
-            && child.getType() != DelphiLexer.PROPERTY
-            && child.getType() != DelphiLexer.PROCEDURE
-            && child.getType() != DelphiLexer.CONSTRUCTOR) {
-          return;
-        }
-
-        // raise violations on any fields
-        if (child.getType() == DelphiLexer.TkClassField) {
-          addViolation(ctx, (DelphiNode) child);
-        }
-      }
+  public RuleContext visit(FieldDeclarationNode field, RuleContext data) {
+    if (field.isPublic()) {
+      addViolation(data, field);
     }
+    return super.visit(field, data);
   }
 }

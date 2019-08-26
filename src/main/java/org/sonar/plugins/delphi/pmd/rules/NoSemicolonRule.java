@@ -22,83 +22,55 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import java.util.Set;
 import net.sourceforge.pmd.RuleContext;
-import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import net.sourceforge.pmd.lang.ast.Node;
+import org.sonar.plugins.delphi.antlr.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.node.CaseItemStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ExceptItemNode;
+import org.sonar.plugins.delphi.antlr.ast.node.StatementListNode;
+import org.sonar.plugins.delphi.antlr.ast.node.StatementNode;
 
-/** Checks if semicolons are properly placed */
-public class NoSemicolonRule extends DelphiRule {
+public class NoSemicolonRule extends AbstractDelphiRule {
+
+  private static final Set<Class> VALID_PARENTS =
+      Set.of(CaseItemStatementNode.class, ExceptItemNode.class, StatementListNode.class);
 
   @Override
-  public void visit(DelphiNode node, RuleContext ctx) {
+  public RuleContext visit(StatementNode node, RuleContext data) {
     if (shouldVisit(node)) {
       DelphiNode violationNode = findViolationNode(node);
 
       if (violationNode != null) {
-        addViolation(ctx, violationNode);
+        addViolation(data, violationNode);
       }
     }
+
+    return super.visit(node, data);
   }
 
   private boolean shouldVisit(DelphiNode node) {
-    return isImplementationSection()
-        && node.getType() == DelphiLexer.END
-        && previousNodeValid(node.prevNode())
-        && nextNodeValid(node.nextNode());
-  }
-
-  private boolean previousNodeValid(Tree node) {
-    if (node == null) {
-      return false;
-    }
-
-    return node.getType() != DelphiLexer.ELSE
-        && node.getType() != DelphiLexer.FINALLY
-        && node.getType() != DelphiLexer.IMPLEMENTATION
-        && node.getType() != DelphiLexer.TkAssemblerInstructions;
-  }
-
-  private boolean nextNodeValid(DelphiNode node) {
-    return node == null || node.getType() != DelphiLexer.DOT;
+    return VALID_PARENTS.contains(node.jjtGetParent().getClass());
   }
 
   private DelphiNode findViolationNode(DelphiNode node) {
-    DelphiNode previousNode = node.prevNode();
-
-    if (isBlockNode(previousNode)) {
-      return findViolationNodeInBlock(previousNode);
-    } else {
-      return findViolationNodeInStatement(previousNode);
-    }
-  }
-
-  private DelphiNode findViolationNodeInBlock(DelphiNode node) {
-    if (isMissingSemicolonInBlock(node)) {
-      return (DelphiNode) node.getChild(node.getChildCount() - 1);
+    Node nextNode = node.nextNode();
+    if (nextNode == null || nextNode.jjtGetId() != DelphiLexer.SEMI) {
+      return findNodePrecedingMissingSemicolon(node);
     }
     return null;
   }
 
-  private DelphiNode findViolationNodeInStatement(DelphiNode node) {
-    if (notSemicolonNode(node)) {
-      return node;
+  private DelphiNode findNodePrecedingMissingSemicolon(DelphiNode node) {
+    Node lastNode = node;
+    int childCount = lastNode.jjtGetNumChildren();
+
+    while (childCount > 0) {
+      lastNode = lastNode.jjtGetChild(childCount - 1);
+      childCount = lastNode.jjtGetNumChildren();
     }
-    return null;
-  }
 
-  private boolean isBlockNode(Tree node) {
-    return node.getType() == DelphiLexer.BEGIN
-        || node.getType() == DelphiLexer.ASM
-        || node.getType() == DelphiLexer.EXCEPT;
-  }
-
-  private boolean isMissingSemicolonInBlock(Tree beginNode) {
-    Tree lastChild = beginNode.getChild(beginNode.getChildCount() - 1);
-    return notSemicolonNode(lastChild);
-  }
-
-  private boolean notSemicolonNode(Tree node) {
-    return node != null && node.getType() != DelphiLexer.SEMI;
+    return (DelphiNode) lastNode;
   }
 }

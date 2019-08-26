@@ -10,11 +10,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Cognitive Complexity metric.
+- `BeginEndRequiredRule` analysis rule, which flags any place where `begin..end` can be used.
+- `MethodCognitiveComplexityRule` analysis rule, which flags methods that are too complex.
+- `EnumNameRule` analysis rule, which flags enums that don't match an expected naming convention.
+- `RedundantBooleanRule` analysis rule, which flags redundant boolean expressions.
+- `XPathTemplateRule` analysis rule template, which flags AST structures matching an XPath.
 
 ### Changed
 
 - Refactor the whole AST.
+- Reimplement all analysis rules.
 - Rewrite metrics calculation from scratch.
+
+### Removed
+
+- `IfNotFalseRule` analysis rule.
+- `IfTrueRule` analysis rule.
+- `NoBeginAfterDoRule` analysis rule.
+- `ThenTryRule` analysis rule.
 
 ### Fixed
 

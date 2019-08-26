@@ -4,11 +4,11 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
-import static org.sonar.plugins.delphi.HasRuleKey.hasRuleKey;
-import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.matchers.HasRuleKey.hasRuleKey;
+import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
-import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
+import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
 
@@ -335,7 +335,23 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testEdgeCases() {
+  public void testUnrelatedGuardConditionShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure AndProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  if 2 + 2 = 4 then begin")
+            .appendImpl("    FreeAndNil(MyVar);")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testEdgeCasesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -351,6 +367,18 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
             .appendImpl("  end;")
             .appendImpl("  if Assigned(MyVar) then begin")
             .appendImpl("    // Do nothing")
+            .appendImpl("  end;")
+            .appendImpl("  if Assigned(MyVar) then begin")
+            .appendImpl("    MyVar := nil;")
+            .appendImpl("  end;")
+            .appendImpl("  if Assigned.NotAnArgumentList then begin")
+            .appendImpl("    FMyField.Free;")
+            .appendImpl("  end;")
+            .appendImpl("  if True then begin")
+            .appendImpl("    FMyField.Free;")
+            .appendImpl("  end;")
+            .appendImpl("  if not True then begin")
+            .appendImpl("    FMyField.Free;")
             .appendImpl("  end;")
             .appendImpl("end;");
 

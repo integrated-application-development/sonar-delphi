@@ -22,158 +22,49 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.LIMIT;
+
+import java.util.function.Predicate;
 import net.sourceforge.pmd.RuleContext;
-import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.node.CompoundStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ExceptItemNode;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodBodyNode;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 
 /** Class for counting method statements. If too many, creates a violation. */
-public class TooLargeMethodRule extends DelphiRule {
+public class TooLargeMethodRule extends AbstractDelphiRule {
   private static final String VIOLATION_MESSAGE =
       "%s is too large. Method has %d statements (Limit is %d)";
 
   @Override
-  public void visit(DelphiNode node, RuleContext ctx) {
-    if (shouldSkip(node)) {
-      return;
+  public RuleContext visit(MethodImplementationNode method, RuleContext data) {
+    long statements = countStatements(method);
+    int limit = getProperty(LIMIT);
+
+    if (statements > limit) {
+      addViolationWithMessage(
+          data,
+          method.getMethodHeading().getMethodName(),
+          String.format(VIOLATION_MESSAGE, method.getSimpleName(), statements, limit));
     }
 
-    Tree beginNode = findBeginNode(node);
+    return super.visit(method, data);
+  }
 
-    if (beginNode != null) {
-      int statements = countStatements(beginNode);
-      int limit = getProperty(LIMIT);
+  private long countStatements(MethodImplementationNode method) {
+    if (method.hasMethodBody()) {
+      MethodBodyNode body = method.getMethodBody();
+      if (body.hasStatementBlock()) {
+        int handlers = body.getStatementBlock().findDescendantsOfType(ExceptItemNode.class).size();
+        long statements =
+            body.getStatementBlock()
+                .statementStream()
+                .filter(Predicate.not(CompoundStatementNode.class::isInstance))
+                .count();
 
-      if (statements > limit) {
-        String methodName = getMethodName(node);
-        addViolation(ctx, node, String.format(VIOLATION_MESSAGE, methodName, statements, limit));
+        return handlers + statements;
       }
     }
-  }
-
-  private int countStatements(Tree node) {
-    if (node.getType() == DelphiLexer.BEGIN) {
-      return countCompoundStatement(node);
-    }
-
-    int count = 0;
-
-    if (isStatementType(node)) {
-      ++count;
-    }
-
-    if (isStatementTerminator(node)) {
-      ++count;
-    }
-
-    return count;
-  }
-
-  private int countCompoundStatement(Tree node) {
-    int count = 0;
-
-    for (int i = 0; i < node.getChildCount(); ++i) {
-      count += countStatements(node.getChild(i));
-    }
-
-    return count;
-  }
-
-  private boolean isStatementType(Tree node) {
-    switch (node.getType()) {
-      case DelphiLexer.CASE:
-      case DelphiLexer.DO:
-      case DelphiLexer.ELSE:
-      case DelphiLexer.EXCEPT:
-      case DelphiLexer.FINALLY:
-      case DelphiLexer.TkCaseItemSelector:
-      case DelphiLexer.THEN:
-      case DelphiLexer.TRY:
-        return true;
-
-      default:
-        // Do nothing
-    }
-
-    return false;
-  }
-
-  private boolean isStatementTerminator(Tree node) {
-    return isSemicolonAfterSingleStatement(node) || isBlockTerminatorAfterMissingSemicolon(node);
-  }
-
-  private boolean isSemicolonAfterSingleStatement(Tree node) {
-    return node.getType() == DelphiLexer.SEMI && followsSingleStatement(node);
-  }
-
-  private boolean followsSingleStatement(Tree node) {
-    int childIndex = node.getChildIndex();
-    if (childIndex == 0) {
-      return false;
-    }
-
-    Tree parent = node.getParent();
-    int prevType = parent.getChild(childIndex - 1).getType();
-
-    return prevType != DelphiLexer.BEGIN && prevType != DelphiLexer.END;
-  }
-
-  private boolean isBlockTerminatorAfterMissingSemicolon(Tree node) {
-    int type = node.getType();
-
-    if (type != DelphiLexer.END
-        && type != DelphiLexer.UNTIL
-        && type != DelphiLexer.EXCEPT
-        && type != DelphiLexer.FINALLY) {
-      return false;
-    }
-
-    int childIndex = node.getChildIndex();
-    if (childIndex == 0) {
-      return false;
-    }
-
-    int prevType = node.getParent().getChild(childIndex - 1).getType();
-
-    return (prevType != DelphiLexer.SEMI
-        && prevType != DelphiLexer.EXCEPT
-        && prevType != DelphiLexer.FINALLY);
-  }
-
-  private boolean shouldSkip(DelphiNode node) {
-    int type = node.getType();
-
-    return type != DelphiLexer.CONSTRUCTOR
-        && type != DelphiLexer.DESTRUCTOR
-        && type != DelphiLexer.FUNCTION
-        && type != DelphiLexer.PROCEDURE;
-  }
-
-  private Tree findBeginNode(DelphiNode parent) {
-    for (int i = parent.getChildIndex() + 1; i < parent.getParent().getChildCount(); ++i) {
-      Tree sibling = parent.getParent().getChild(i);
-      int type = sibling.getType();
-
-      if (type == DelphiLexer.BEGIN) {
-        return sibling;
-      }
-
-      if (type != DelphiLexer.TkBlockDeclSection) {
-        break;
-      }
-    }
-
-    return null;
-  }
-
-  private String getMethodName(DelphiNode node) {
-    StringBuilder methodName = new StringBuilder();
-    Tree nameNode = node.getFirstChildWithType(DelphiLexer.TkFunctionName);
-
-    for (int c = 0; c < nameNode.getChildCount(); ++c) {
-      methodName.append(nameNode.getChild(c).getText());
-    }
-
-    return methodName.toString();
+    return 0;
   }
 }

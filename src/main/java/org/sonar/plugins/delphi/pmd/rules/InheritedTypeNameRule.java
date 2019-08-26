@@ -5,13 +5,12 @@ import java.util.regex.PatternSyntaxException;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
-import org.antlr.runtime.tree.Tree;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
 
-public class InheritedTypeNameRule extends NameConventionRule {
+public class InheritedTypeNameRule extends AbstractDelphiRule {
   private static final Logger LOG = Loggers.get(InheritedTypeNameRule.class);
 
   public static final PropertyDescriptor<String> NAME_REGEX =
@@ -40,65 +39,45 @@ public class InheritedTypeNameRule extends NameConventionRule {
 
   @Override
   public void start(RuleContext ctx) {
-    namePattern = tryCompilePattern(getProperty(NAME_REGEX));
-    parentPattern = tryCompilePattern(getProperty(PARENT_REGEX));
+    if (namePattern == null && parentPattern == null) {
+      namePattern = tryCompilePattern(getProperty(NAME_REGEX));
+      parentPattern = tryCompilePattern(getProperty(PARENT_REGEX));
+    }
   }
 
   private Pattern tryCompilePattern(String regularExpression) {
     try {
       return Pattern.compile(regularExpression);
     } catch (PatternSyntaxException e) {
-      LOG.error("Unable to compile regular expression: " + regularExpression, e);
+      LOG.debug("Unable to compile regular expression: " + regularExpression, e);
       return null;
     }
   }
 
   @Override
-  public DelphiNode findNode(DelphiNode node) {
-    if (node.getType() != DelphiLexer.TkNewTypeName) {
-      return null;
-    }
-
-    Tree typeDeclNode = node.nextNode();
-    int type = typeDeclNode.getChild(0).getType();
-
-    if (type != DelphiLexer.TkClass && type != DelphiLexer.TkInterface) {
-      return null;
-    }
-
-    return (DelphiNode) node.getChild(0);
-  }
-
-  @Override
-  protected boolean isViolation(DelphiNode node) {
-    return inheritsFromType(node) && !namePattern.matcher(node.getText()).matches();
-  }
-
-  private boolean inheritsFromType(DelphiNode node) {
-    DelphiNode newTypeName = (DelphiNode) node.getParent();
-    DelphiNode typeDeclNode = (DelphiNode) newTypeName.nextNode().getChild(0);
-    Tree classParents = typeDeclNode.getFirstChildWithType(DelphiLexer.TkClassParents);
-
-    if (classParents != null) {
-      for (int i = 0; i < classParents.getChildCount(); ++i) {
-        String parentName = classParents.getChild(i).getText();
-
-        if (parentPattern.matcher(parentName).matches()) {
-          return true;
-        }
+  public RuleContext visit(TypeDeclarationNode type, RuleContext data) {
+    if (parentPattern != null && namePattern != null) {
+      TypeNode typeDecl = type.getTypeDeclaration();
+      if (inheritsFromType(typeDecl) && !namePattern.matcher(type.getSimpleName()).matches()) {
+        addViolation(data, type.getTypeName());
       }
     }
+    return super.visit(type, data);
+  }
 
-    return false;
+  private boolean inheritsFromType(TypeNode typeDecl) {
+    return typeDecl.getParentTypeNames().stream()
+        .anyMatch(qName -> parentPattern.matcher(qName.getQualifiedName()).matches());
   }
 
   @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
-  }
-
-  @Override
-  public int hashCode() {
-    return super.hashCode();
+  public String dysfunctionReason() {
+    start(null);
+    if (parentPattern == null) {
+      return "Unable to compile regular expression: " + getProperty(PARENT_REGEX);
+    } else if (namePattern == null) {
+      return "Unable to compile regular expression: " + getProperty(NAME_REGEX);
+    }
+    return null;
   }
 }

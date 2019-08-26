@@ -18,28 +18,18 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import net.sourceforge.pmd.RuleContext;
+import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
+import org.sonar.plugins.delphi.utils.NameConventionUtils;
 
-public class PointerNameRule extends NameConventionRule {
-  private static final String POINTER_PREFIX = "P";
+public class PointerNameRule extends AbstractDelphiRule {
+  private static final String PREFIX = "P";
 
   @Override
-  public DelphiNode findNode(DelphiNode node) {
-    if (node.getType() != DelphiLexer.TkNewTypeName || !isPointerType(node.nextNode())) {
-      return null;
+  public RuleContext visit(TypeDeclarationNode type, RuleContext data) {
+    if (type.isPointer() && !NameConventionUtils.compliesWithPrefix(type.getSimpleName(), PREFIX)) {
+      addViolation(data, type.getTypeName());
     }
-
-    return (DelphiNode) node.getChild(0);
-  }
-
-  @Override
-  protected boolean isViolation(DelphiNode nameNode) {
-    return !compliesWithPrefixNamingConvention(nameNode.getText(), POINTER_PREFIX);
-  }
-
-  private boolean isPointerType(DelphiNode typeDeclNode) {
-    int type = typeDeclNode.getChild(0).getType();
-    return type == DelphiLexer.POINTER2;
+    return super.visit(type, data);
   }
 }

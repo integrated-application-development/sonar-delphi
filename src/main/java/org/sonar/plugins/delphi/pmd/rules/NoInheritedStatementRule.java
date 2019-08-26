@@ -22,48 +22,33 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.node.ExpressionStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 
-public abstract class NoInheritedStatementRule extends DelphiRule {
+public abstract class NoInheritedStatementRule extends AbstractDelphiRule {
 
-  protected void checkViolation(RuleContext ctx, DelphiNode node) {
-    DelphiNode beginNode = findBeginNode(node);
-
-    if (beginNode == null || hasInheritedStatement(beginNode)) {
+  protected final void checkViolation(MethodImplementationNode method, Object data) {
+    if (!method.hasMethodBody()
+        || !method.getMethodBody().hasStatementBlock()
+        || method.isClassMethod()
+        || hasInheritedStatement(method)) {
       return;
     }
 
-    addViolation(ctx, node);
+    addViolation(data, method.getMethodHeading().getMethodName());
   }
 
-  private DelphiNode findBeginNode(DelphiNode node) {
-    DelphiNode declSection = node.nextNode();
-    if (declSection == null || declSection.getType() != DelphiLexer.TkBlockDeclSection) {
-      return null;
-    }
-
-    DelphiNode beginNode = declSection.nextNode();
-    if (beginNode == null || beginNode.getType() != DelphiLexer.BEGIN) {
-      return null;
-    }
-
-    return beginNode;
-  }
-
-  private boolean hasInheritedStatement(DelphiNode beginNode) {
-    for (int i = 0; i < beginNode.getChildCount(); i++) {
-      if (beginNode.getChildType(i) == DelphiLexer.INHERITED) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  protected boolean isClassMethod(DelphiNode node) {
-    DelphiNode prevNode = node.prevNode();
-    return prevNode != null && prevNode.getType() == DelphiLexer.CLASS;
+  private boolean hasInheritedStatement(MethodImplementationNode method) {
+    return method
+        .getMethodBody()
+        .getStatementBlock()
+        .statementStream()
+        .filter(ExpressionStatementNode.class::isInstance)
+        .map(ExpressionStatementNode.class::cast)
+        .map(ExpressionStatementNode::getExpression)
+        .filter(PrimaryExpressionNode.class::isInstance)
+        .map(PrimaryExpressionNode.class::cast)
+        .anyMatch(PrimaryExpressionNode::isInheritedCall);
   }
 }

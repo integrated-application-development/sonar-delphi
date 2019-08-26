@@ -23,20 +23,13 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 
 public class DprFunctionRule extends DprRule {
 
   @Override
-  public void visit(DelphiNode node, RuleContext ctx) {
-    if (isMethod(node)) {
-      addViolation(ctx, node);
-    }
-  }
-
-  private boolean isMethod(DelphiNode node) {
-    int type = node.getType();
-    return type == DelphiLexer.PROCEDURE || type == DelphiLexer.FUNCTION;
+  public RuleContext visit(MethodImplementationNode node, RuleContext data) {
+    addViolation(data, node.getMethodHeading().getMethodName());
+    return super.visit(node, data);
   }
 }

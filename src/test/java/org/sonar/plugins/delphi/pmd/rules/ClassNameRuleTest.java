@@ -21,10 +21,10 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
-import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
-import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
+import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class ClassNameRuleTest extends BasePmdRuleTest {
 
@@ -50,18 +50,6 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("ClassNameRule", builder.getOffsetDecl() + 2)));
-  }
-
-  @Test
-  public void testNotAcceptPrefixAlone() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  T = class(TObject)");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
     assertIssues(hasItem(hasRuleKeyAtLine("ClassNameRule", builder.getOffsetDecl() + 2)));
   }
 

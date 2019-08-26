@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2015 Fabricio Colombo
+ * Copyright (C) 2015 Fabricio Colbo
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,10 +22,10 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
-import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
-import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
+import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class UnitNameRuleTest extends BasePmdRuleTest {
 
@@ -64,6 +64,6 @@ public class UnitNameRuleTest extends BasePmdRuleTest {
     execute(new DelphiTestUnitBuilder().unitName("bad_Namespace.SUPER_bad_UNIT"));
 
     assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("UnitNameRule", 1)));
+    assertIssues(everyItem(hasRuleKeyAtLine("UnitNameRule", 1)));
   }
 }

@@ -1,28 +1,18 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import net.sourceforge.pmd.RuleContext;
+import org.sonar.plugins.delphi.antlr.ast.node.ConstDeclarationNode;
+import org.sonar.plugins.delphi.utils.NameConventionUtils;
 
-public class ConstantNotationRule extends NameConventionRule {
+public class ConstantNotationRule extends AbstractDelphiRule {
 
   private static final String PREFIX = "C_";
 
   @Override
-  public List<DelphiNode> findNodes(DelphiNode node) {
-    if (node.getType() != DelphiLexer.CONST) {
-      return Collections.emptyList();
+  public RuleContext visit(ConstDeclarationNode declaration, RuleContext data) {
+    if (!NameConventionUtils.compliesWithPrefix(declaration.getIdentifier().getImage(), PREFIX)) {
+      addViolation(data, declaration.getIdentifier());
     }
-
-    return node.findAllChildren(DelphiLexer.TkConstantName).stream()
-        .map(name -> (DelphiNode) name.getChild(0))
-        .collect(Collectors.toList());
-  }
-
-  @Override
-  protected boolean isViolation(DelphiNode node) {
-    return !compliesWithPrefixNamingConvention(node.getText(), PREFIX);
+    return super.visit(declaration, data);
   }
 }

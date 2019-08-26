@@ -18,32 +18,18 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import org.antlr.runtime.tree.CommonTree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import net.sourceforge.pmd.RuleContext;
+import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
+import org.sonar.plugins.delphi.antlr.ast.node.UnitDeclarationNode;
+import org.sonar.plugins.delphi.utils.NameConventionUtils;
 
-public class UnitNameRule extends NameConventionRule {
-  private static final String[] PREFIXES = {""};
-
+public class UnitNameRule extends AbstractDelphiRule {
   @Override
-  public List<DelphiNode> findNodes(DelphiNode node) {
-    if (node.getType() == DelphiLexer.UNIT) {
-      List<?> children = node.getChildren();
+  public RuleContext visit(UnitDeclarationNode unit, RuleContext data) {
+    unit.getQualifiedIdentifier().findChildrenOfType(IdentifierNode.class).stream()
+        .filter(ident -> !NameConventionUtils.compliesWithPascalCase(ident.getImage()))
+        .forEach(ident -> addViolation(data, ident));
 
-      return children.stream()
-          .filter(child -> ((CommonTree) child).getType() != DelphiLexer.DOT)
-          .map(child -> (DelphiNode) child)
-          .collect(Collectors.toList());
-    }
-
-    return Collections.emptyList();
-  }
-
-  @Override
-  protected boolean isViolation(DelphiNode nameNode) {
-    return !compliesWithPrefixNamingConvention(nameNode.getText(), PREFIXES);
+    return data;
   }
 }

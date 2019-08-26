@@ -20,18 +20,17 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.hasSize;
-import static org.sonar.plugins.delphi.HasRuleKey.hasRuleKey;
-import static org.sonar.plugins.delphi.IssueMatchers.hasRuleLine;
+import static org.sonar.plugins.delphi.pmd.FilePosition.UNDEFINED_LINE;
+import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
-import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
+import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testValidRule() {
+  public void testOneClassShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
@@ -43,7 +42,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMoreThanOneClassShouldAddIssue() {
+  public void testTwoClassesShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
@@ -54,12 +53,11 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKey("ClassPerFileRule")));
-    assertIssues(hasItem(hasRuleLine(builder.getOffsetDecl() + 4)));
+    assertIssues(hasItem(hasRuleKeyAtLine("ClassPerFileRule", UNDEFINED_LINE)));
   }
 
   @Test
-  public void testAllClassesAfterFirstOneShouldAddIssue() {
+  public void testMultipleViolationsShouldAddOneIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
@@ -71,10 +69,8 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(2));
-    assertIssues(everyItem(hasRuleKey("ClassPerFileRule")));
-    assertIssues(hasItem(hasRuleLine(builder.getOffsetDecl() + 4)));
-    assertIssues(hasItem(hasRuleLine(builder.getOffsetDecl() + 6)));
+    assertIssues(hasSize(1));
+    assertIssues(hasItem(hasRuleKeyAtLine("ClassPerFileRule", UNDEFINED_LINE)));
   }
 
   @Test

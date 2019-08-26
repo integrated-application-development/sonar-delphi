@@ -1,10 +1,13 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.LIMIT;
+
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
+import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.delphi.pmd.FilePosition;
 
 /** Class for counting line characters. If too long, creates a violation. */
-public class TooLongLineRule extends DelphiRule {
+public class TooLongLineRule extends AbstractDelphiRule {
 
   private static final String MESSAGE =
       "Line too long (%s characters). Maximum length is %s " + "characters.";
@@ -17,24 +20,26 @@ public class TooLongLineRule extends DelphiRule {
   }
 
   @Override
-  public void visit(DelphiNode node, RuleContext ctx) {
+  public RuleContext visit(DelphiNode node, RuleContext data) {
     // Retrieve and store the astTree from the first node
-    int lineNumber = node.getLine();
+    int lineNumber = node.getBeginLine();
 
     if (lineNumber > lastLineChecked) {
       lastLineChecked = lineNumber;
-      String line = node.getASTTree().getFileSourceLine(lineNumber);
+      String line = node.getASTTree().getDelphiFile().getSourceCodeLine(lineNumber);
       int lineLength = getLineLength(line);
       int lineLimit = getProperty(LIMIT);
 
       if (lineLength > lineLimit) {
-        newViolation(ctx)
-            .fileLocation(lineNumber, 0, lineNumber, lineLength)
-            .logicalLocation(node)
+        newViolation(data)
+            .atPosition(FilePosition.from(lineNumber, 0, lineNumber, lineLength))
+            .atLocation(node)
             .message(String.format(MESSAGE, lineLength, lineLimit))
             .save();
       }
     }
+
+    return super.visit(node, data);
   }
 
   private int getLineLength(String line) {
@@ -48,15 +53,5 @@ public class TooLongLineRule extends DelphiRule {
     }
 
     return length;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
-  }
-
-  @Override
-  public int hashCode() {
-    return super.hashCode();
   }
 }

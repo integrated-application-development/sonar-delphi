@@ -23,224 +23,100 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import net.sourceforge.pmd.lang.ast.Node;
+import org.sonar.plugins.delphi.antlr.ast.node.ArgumentListNode;
+import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode.BinaryOp;
+import org.sonar.plugins.delphi.antlr.ast.node.CompoundStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ExpressionStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.IfStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.StatementNode;
 
-/**
- * Class for checking if we are using .Free with checking if variable is assigned (redundant): if
- * assigned(x) then x.free; if x &lt;&gt; nil then x.free;
- */
-public class AssignedAndFreeRule extends DelphiRule {
-
-  private enum AssignCheckType {
-    NOT_APPLICABLE,
-    ASSIGNED,
-    NIL_COMPARE,
-    NIL_COMPARE_BACKWARDS
-  }
-
-  private String variableName;
-  private AssignCheckType assignCheckType;
+public class AssignedAndFreeRule extends AbstractDelphiRule {
 
   @Override
-  public void start(RuleContext ctx) {
-    variableName = "";
-    assignCheckType = AssignCheckType.NOT_APPLICABLE;
+  public RuleContext visit(IfStatementNode statement, RuleContext data) {
+    DelphiNode violation = findViolation(statement);
+    if (violation != null) {
+      addViolation(data, violation);
+    }
+    return super.visit(statement, data);
   }
 
-  @Override
-  public void visit(DelphiNode node, RuleContext ctx) {
-    assignCheckType = findAssignCheckType(node);
-    variableName = getVariableName(node);
+  private static DelphiNode findViolation(IfStatementNode ifStatement) {
+    ExpressionNode guard = ifStatement.getGuardExpression().skipParentheses();
+    String variableName = findVariableName(guard);
 
-    if (variableName.isEmpty()) {
-      return;
-    }
-
-    DelphiNode violationNode = findViolationNode(node);
-
-    if (violationNode == null) {
-      return;
-    }
-
-    addViolation(ctx, violationNode);
-  }
-
-  private AssignCheckType findAssignCheckType(DelphiNode node) {
-    int type = node.getType();
-
-    if (type == DelphiLexer.NIL) {
-      DelphiNode prevNode = node.prevNode();
-      if (prevNode != null && prevNode.getType() == DelphiLexer.NOT_EQUAL) {
-        return AssignCheckType.NIL_COMPARE;
-      }
-
-      DelphiNode nextNode = node.nextNode();
-      if (nextNode != null && nextNode.getType() == DelphiLexer.NOT_EQUAL) {
-        return AssignCheckType.NIL_COMPARE_BACKWARDS;
-      }
-    }
-
-    if (type == DelphiLexer.TkIdentifier && node.getText().equalsIgnoreCase("Assigned")) {
-      return AssignCheckType.ASSIGNED;
-    }
-
-    return AssignCheckType.NOT_APPLICABLE;
-  }
-
-  private String getVariableName(DelphiNode node) {
-    DelphiNode identStart;
-
-    switch (assignCheckType) {
-      case ASSIGNED:
-      case NIL_COMPARE_BACKWARDS:
-        // Jump forward two nodes and get the variable name
-        identStart = node.nextNode().nextNode();
-        return getQualifiedIdent(identStart);
-
-      case NIL_COMPARE:
-        // Jump back two nodes and get the variable name in reverse
-        identStart = node.prevNode().prevNode();
-        return getQualifiedIdentInReverse(identStart);
-
-      default:
-        // Do nothing
-    }
-
-    return "";
-  }
-
-  private String getQualifiedIdent(DelphiNode node) {
-    StringBuilder nameBuilder = new StringBuilder();
-    DelphiNode currentNode = node;
-
-    while (isInsideQualifiedIdent(currentNode)) {
-      nameBuilder.append(currentNode.getText());
-      currentNode = currentNode.nextNode();
-    }
-
-    return nameBuilder.toString();
-  }
-
-  private String getQualifiedIdentInReverse(DelphiNode node) {
-    StringBuilder nameBuilder = new StringBuilder();
-    DelphiNode currentNode = node;
-
-    while (isInsideQualifiedIdent(currentNode)) {
-      nameBuilder.insert(0, currentNode.getText());
-      currentNode = currentNode.prevNode();
-    }
-
-    return nameBuilder.toString();
-  }
-
-  private boolean isInsideQualifiedIdent(DelphiNode node) {
-    if (node == null) {
-      return false;
-    }
-
-    return node.getType() == DelphiLexer.TkIdentifier || node.getType() == DelphiLexer.DOT;
-  }
-
-  private DelphiNode findViolationNode(DelphiNode node) {
-    if (hasConditionsAfterAssignCheck(node)) {
-      // This caters to cases where the assignment check is reasonably used as a short-circuit
-      // Example: "if Assigned(X) and X.ShouldBeFreed then X.Free;"
+    if (variableName == null) {
       return null;
     }
 
-    DelphiNode thenNode = node.findNextSiblingOfType(DelphiLexer.THEN);
-
-    if (thenNode == null) {
-      return null;
-    }
-
-    DelphiNode startNode = thenNode.nextNode();
-
-    if (startNode.getType() == DelphiLexer.BEGIN) {
-      startNode = (DelphiNode) startNode.getChild(0);
-    }
-
-    return findViolationNodeInStatement(startNode);
+    return findFreeStatement(ifStatement.getThenBranch(), variableName);
   }
 
-  private boolean hasConditionsAfterAssignCheck(DelphiNode node) {
-    Tree parent = node.getParent();
-
-    if (parent != null) {
-      for (int i = node.getChildIndex(); i < parent.getChildCount(); ++i) {
-        int type = parent.getChild(i).getType();
-
-        if (type == DelphiLexer.OR || type == DelphiLexer.AND) {
-          return true;
-        }
-
-        if (type == DelphiLexer.THEN) {
-          return false;
-        }
-      }
-    }
-
-    return false;
-  }
-
-  private DelphiNode findViolationNodeInStatement(DelphiNode node) {
-    if (node.getType() == DelphiLexer.END) {
-      return null;
-    }
-
-    DelphiNode violationNode = findFreeViolationNode(node);
-
-    if (violationNode == null) {
-      violationNode = findFreeAndNilViolationNode(node);
-    }
-
-    return violationNode;
-  }
-
-  private DelphiNode findFreeViolationNode(DelphiNode node) {
-    StringBuilder freedVariableName = new StringBuilder();
-    DelphiNode currentNode = node;
-
-    while (isInsideQualifiedIdent(currentNode)) {
-      DelphiNode nextNode = currentNode.nextNode();
-      if (isFreeViolation(currentNode, nextNode, freedVariableName)) {
-        return nextNode;
-      }
-
-      freedVariableName.append(currentNode.getText());
-      currentNode = nextNode;
+  private static String findVariableName(ExpressionNode guard) {
+    if (guard instanceof PrimaryExpressionNode) {
+      return findVariableNameForAssigned(guard);
+    } else if (guard instanceof BinaryExpressionNode) {
+      return findVariableNameForNilComparison(guard);
     }
 
     return null;
   }
 
-  private boolean isFreeViolation(DelphiNode current, DelphiNode next, StringBuilder name) {
-    return current.getType() == DelphiLexer.DOT
-        && next.getText().equalsIgnoreCase("Free")
-        && name.toString().equalsIgnoreCase(variableName);
-  }
+  private static String findVariableNameForAssigned(ExpressionNode guard) {
+    Node method = guard.jjtGetChild(0);
+    if (guard.jjtGetNumChildren() < 2 || !method.getImage().equalsIgnoreCase("Assigned")) {
+      return null;
+    }
 
-  private DelphiNode findFreeAndNilViolationNode(DelphiNode node) {
-    if (node.getText().equalsIgnoreCase("FreeAndNil")) {
-      String freedVariableName = getQualifiedIdent(node.nextNode().nextNode());
-
-      if (freedVariableName.equalsIgnoreCase(variableName)) {
-        return node;
+    Node sibling = guard.jjtGetChild(1);
+    if (sibling instanceof ArgumentListNode) {
+      ArgumentListNode argumentList = (ArgumentListNode) sibling;
+      if (!argumentList.getArguments().isEmpty()) {
+        return argumentList.jjtGetChild(0).getImage();
       }
     }
 
     return null;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
+  private static String findVariableNameForNilComparison(ExpressionNode guard) {
+    BinaryExpressionNode expr = (BinaryExpressionNode) guard;
+    if (expr.getOperator() == BinaryOp.NOT_EQUAL) {
+      if (expr.getLeft().isNilLiteral()) {
+        return expr.getRight().getImage();
+      }
+
+      if (expr.getRight().isNilLiteral()) {
+        return expr.getLeft().getImage();
+      }
+    }
+
+    return null;
   }
 
-  @Override
-  public int hashCode() {
-    return super.hashCode();
+  private static DelphiNode findFreeStatement(StatementNode statement, String variableName) {
+    if (statement instanceof CompoundStatementNode) {
+      CompoundStatementNode beginStatement = (CompoundStatementNode) statement;
+      if (!beginStatement.isEmpty()) {
+        return findFreeStatement(beginStatement.getStatements().get(0), variableName);
+      }
+    } else if (statement instanceof ExpressionStatementNode) {
+      ExpressionNode expr = ((ExpressionStatementNode) statement).getExpression();
+      if (isFreeExpression(expr, variableName)) {
+        return statement;
+      }
+    }
+    return null;
+  }
+
+  private static boolean isFreeExpression(ExpressionNode expr, String variableName) {
+    return expr.getImage().equalsIgnoreCase("FreeAndNil(" + variableName + ")")
+        || expr.getImage().equalsIgnoreCase(variableName + ".Free")
+        || expr.getImage().equalsIgnoreCase(variableName + ".Free()");
   }
 }
