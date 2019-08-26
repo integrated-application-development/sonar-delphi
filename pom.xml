@@ -213,6 +213,17 @@
         <groupId>org.antlr</groupId>
         <artifactId>antlr3-maven-plugin</artifactId>
         <version>${antlr3-plugin.version}</version>
+        <configuration>
+          <printGrammar>false</printGrammar>
+          <verbose>true</verbose>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>antlr</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -247,7 +258,7 @@
           <compilerArgs>
             <arg>-XDcompilePolicy=simple</arg>
             <arg>-Xlint:all,-serial,-path,-processing,-rawtypes,-cast,-classfile</arg>
-            <arg>-Xplugin:ErrorProne -XepDisableWarningsInGeneratedCode -XepExcludedPaths:.*/antlr/generated/.*</arg>
+            <arg>-Xplugin:ErrorProne -XepDisableWarningsInGeneratedCode -XepExcludedPaths:.*/Delphi(Lexer|Parser).java</arg>
           </compilerArgs>
           <annotationProcessorPaths>
             <path>
@@ -358,6 +369,18 @@
         <artifactId>build-helper-maven-plugin</artifactId>
         <version>${build-helper-plugin.version}</version>
         <executions>
+          <execution>
+            <id>add-antlr3-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>target/generated-sources/</source>
+              </sources>
+            </configuration>
+          </execution>
           <execution>
             <id>add-integration-test-source</id>
             <phase>generate-test-sources</phase>

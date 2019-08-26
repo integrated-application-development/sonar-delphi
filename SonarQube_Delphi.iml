@@ -11,6 +11,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/annotations" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/it/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/antlr3" isTestSource="false" generated="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
