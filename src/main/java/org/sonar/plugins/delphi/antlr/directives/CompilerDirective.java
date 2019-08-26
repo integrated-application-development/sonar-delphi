@@ -32,7 +32,7 @@ import org.sonar.plugins.delphi.antlr.directives.impl.IfDirective;
 import org.sonar.plugins.delphi.antlr.directives.impl.IfEndDirective;
 import org.sonar.plugins.delphi.antlr.directives.impl.IncludeDirective;
 import org.sonar.plugins.delphi.antlr.directives.impl.UndefineDirective;
-import org.sonar.plugins.delphi.antlr.directives.impl.UnusedDirective;
+import org.sonar.plugins.delphi.antlr.directives.impl.UnsupportedDirective;
 
 /** Compiler directive interface */
 public interface CompilerDirective {
@@ -98,8 +98,8 @@ public interface CompilerDirective {
         return new ElseDirective(item, startPos, endPos);
       case INCLUDE:
         return new IncludeDirective(item, startPos, endPos);
-      case UNUSED:
-        return new UnusedDirective(startPos, endPos);
+      case UNSUPPORTED:
+        return new UnsupportedDirective(startPos, endPos);
       default:
         throw new UnsupportedCompilerDirectiveException("Not implemented directive name: " + name);
     }
