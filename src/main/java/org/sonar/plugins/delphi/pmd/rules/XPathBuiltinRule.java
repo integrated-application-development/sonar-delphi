@@ -1,12 +1,13 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
-import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
+import org.apache.commons.lang3.StringUtils;
 
-public class XPathBuiltinRule extends XPathRule {
+public class XPathBuiltinRule extends AbstractXPathRule {
   public static final PropertyDescriptor<String> BUILTIN_XPATH =
-      PropertyFactory.stringProperty(DelphiPmdConstants.BUILTIN_XPATH_EXPRESSION_PARAM)
+      PropertyFactory.stringProperty("builtinXPath")
           .desc("The xpath expression")
           .defaultValue("")
           .build();
@@ -16,12 +17,12 @@ public class XPathBuiltinRule extends XPathRule {
   }
 
   @Override
-  protected String getXPathExpression() {
-    return getProperty(BUILTIN_XPATH);
+  public void start(RuleContext ctx) {
+    this.setXPath(getProperty(BUILTIN_XPATH));
   }
 
   @Override
-  protected String getViolationMessage() {
-    return getMessage();
+  public String dysfunctionReason() {
+    return StringUtils.isBlank(getProperty(BUILTIN_XPATH)) ? "Missing xPath expression" : null;
   }
 }

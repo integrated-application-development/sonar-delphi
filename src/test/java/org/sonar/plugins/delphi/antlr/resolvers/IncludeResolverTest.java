@@ -22,24 +22,21 @@
  */
 package org.sonar.plugins.delphi.antlr.resolvers;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.sonar.plugins.delphi.debug.FileTestsCommon;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-public class IncludeResolverTest extends FileTestsCommon {
+public class IncludeResolverTest {
+  private static final File TEST_FILE =
+      DelphiUtils.getResource("/org/sonar/plugins/delphi/grammar/GrammarTest.pas");
 
-  private static final String FILE_NAME = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
   private IncludeResolver resolver;
-
-  @BeforeClass
-  public static void init() throws IOException {
-    loadFile(FILE_NAME);
-  }
 
   @Before
   public void setup() {
@@ -47,9 +44,10 @@ public class IncludeResolverTest extends FileTestsCommon {
   }
 
   @Test
-  public void testResolveIncludes() {
+  public void testResolveIncludes() throws IOException {
+    String testFileString = DelphiUtils.readFileContent(TEST_FILE, UTF_8.name());
     SourceResolverResults results =
-        new SourceResolverResults(testFile.getAbsolutePath(), testFileString);
+        new SourceResolverResults(TEST_FILE.getAbsolutePath(), new StringBuilder(testFileString));
 
     resolver.resolve(results);
     assertEquals(4, resolver.getIncludedFilesPath().size());

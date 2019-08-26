@@ -27,7 +27,6 @@ import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.pmd.profile.DelphiRuleSets;
 import org.sonar.plugins.delphi.pmd.xml.factory.ActiveRulesRuleSetFactory;
 import org.sonar.plugins.delphi.pmd.xml.factory.RuleSetFactory;
 import org.sonar.plugins.delphi.pmd.xml.factory.RulesProfileRuleSetFactory;
@@ -42,7 +41,7 @@ public class DelphiRuleSetHelper {
   }
 
   /**
-   * @param configReader A character stream containing the data of the {@link DelphiRuleSets}.
+   * @param configReader A character stream containing the data of the {@link DelphiRuleSet}.
    * @param messages SonarQube validation messages - inform the end user about processing problems.
    * @return An instance of DelphiRuleSet. The output may be empty but never null.
    */
@@ -51,7 +50,7 @@ public class DelphiRuleSetHelper {
   }
 
   /**
-   * @param configReader A character stream containing the data of the {@link DelphiRuleSets}.
+   * @param configReader A character stream containing the data of the {@link DelphiRuleSet}.
    * @return An instance of DelphiRuleSet. The output may be empty but never null.
    */
   public static DelphiRuleSet createFrom(Reader configReader) {

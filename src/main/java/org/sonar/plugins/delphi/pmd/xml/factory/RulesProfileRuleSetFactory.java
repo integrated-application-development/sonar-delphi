@@ -117,9 +117,4 @@ public class RulesProfileRuleSetFactory implements RuleSetFactory {
       pmdRule.setExample(exampleMatcher.group(1));
     }
   }
-
-  @Override
-  public void close() {
-    // Unnecessary in this class.
-  }
 }

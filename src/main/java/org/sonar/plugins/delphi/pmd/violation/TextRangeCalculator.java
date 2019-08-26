@@ -17,14 +17,16 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.delphi.pmd;
+package org.sonar.plugins.delphi.pmd.violation;
 
 import net.sourceforge.pmd.RuleViolation;
+import org.jetbrains.annotations.Nullable;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextPointer;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.delphi.pmd.FilePosition;
 
 /**
  * Calculates a {@link org.sonar.api.batch.fs.TextRange} for a given {@link
@@ -37,11 +39,18 @@ class TextRangeCalculator {
     // Static helper class
   }
 
+  @Nullable
   static TextRange calculate(RuleViolation pmdViolation, InputFile inputFile) {
-    TextRange result = calculateAccurateRange(pmdViolation, inputFile);
+    TextRange result = null;
 
-    if (result == null) {
-      result = calculateSafeRange(pmdViolation, inputFile);
+    if (pmdViolation.getBeginLine() != FilePosition.UNDEFINED_LINE) {
+      if (pmdViolation.getBeginColumn() != FilePosition.UNDEFINED_COLUMN) {
+        result = calculateAccurateRange(pmdViolation, inputFile);
+      }
+
+      if (result == null) {
+        result = calculateLineRange(pmdViolation, inputFile);
+      }
     }
 
     return result;
@@ -66,7 +75,7 @@ class TextRangeCalculator {
     return null;
   }
 
-  private static TextRange calculateSafeRange(RuleViolation pmdViolation, InputFile inputFile) {
+  private static TextRange calculateLineRange(RuleViolation pmdViolation, InputFile inputFile) {
     final int startLine = calculateSafeBeginLine(pmdViolation);
     final int endLine = calculateSafeEndLine(pmdViolation);
     final TextPointer startPointer = inputFile.selectLine(startLine).start();
@@ -76,7 +85,7 @@ class TextRangeCalculator {
   }
 
   /**
-   * Calculates the endLIne of a violation report.
+   * Calculates the endLine of a violation report.
    *
    * @param pmdViolation The violation for which the endLine should be calculated.
    * @return The endLine is assumed to be the line with the biggest number.

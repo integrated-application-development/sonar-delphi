@@ -1,4 +1,4 @@
-package org.sonar.plugins.delphi.pmd;
+package org.sonar.plugins.delphi.utils.builders;
 
 public class DelphiTestProgramBuilder extends DelphiTestFileBuilder<DelphiTestProgramBuilder> {
   private String programName = "omTestProgram";

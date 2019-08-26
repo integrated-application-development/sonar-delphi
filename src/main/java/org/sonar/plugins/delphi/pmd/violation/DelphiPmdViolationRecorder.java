@@ -17,7 +17,9 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.delphi.pmd;
+package org.sonar.plugins.delphi.pmd.violation;
+
+import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.SCOPE;
 
 import net.sourceforge.pmd.RuleViolation;
 import org.sonar.api.batch.fs.InputFile;
@@ -31,7 +33,7 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.RuleScope;
 import org.sonar.api.scanner.ScannerSide;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
-import org.sonar.plugins.delphi.pmd.rules.DelphiRule;
+import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 
 @ScannerSide
 public class DelphiPmdViolationRecorder {
@@ -70,12 +72,17 @@ public class DelphiPmdViolationRecorder {
 
     final NewIssue issue = context.newIssue().forRule(activeRule.ruleKey());
 
-    final TextRange issueTextRange = TextRangeCalculator.calculate(pmdViolation, inputFile);
-
     final NewIssueLocation issueLocation =
-        issue.newLocation().on(inputFile).message(pmdViolation.getDescription()).at(issueTextRange);
+        issue.newLocation().on(inputFile).message(pmdViolation.getDescription());
 
-    issue.at(issueLocation).save();
+    TextRange textRange = TextRangeCalculator.calculate(pmdViolation, inputFile);
+    if (textRange != null) {
+      issueLocation.at(textRange);
+    }
+
+    issue.at(issueLocation);
+
+    issue.save();
   }
 
   private InputFile findResourceFor(RuleViolation violation) {
@@ -90,7 +97,7 @@ public class DelphiPmdViolationRecorder {
   }
 
   private boolean isOutOfScope(RuleViolation violation) {
-    String scopeProperty = violation.getRule().getProperty(DelphiRule.SCOPE);
+    String scopeProperty = violation.getRule().getProperty(SCOPE);
     RuleScope scope = RuleScope.valueOf(scopeProperty);
 
     switch (scope) {

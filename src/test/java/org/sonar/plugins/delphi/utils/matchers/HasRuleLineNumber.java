@@ -16,37 +16,45 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi;
+package org.sonar.plugins.delphi.utils.matchers;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.sensor.issue.Issue;
+import org.sonar.plugins.delphi.pmd.FilePosition;
 
-public class HasRuleKey<T extends Issue> extends TypeSafeMatcher<T> {
+public class HasRuleLineNumber<T extends Issue> extends TypeSafeMatcher<T> {
 
-  private final String key;
+  private final int line;
 
-  private HasRuleKey(String key) {
-    this.key = key;
+  private HasRuleLineNumber(int line) {
+    this.line = line;
   }
 
   @Override
   protected boolean matchesSafely(T item) {
-    return key.equals(item.ruleKey().rule());
+    return line == getLine(item);
   }
 
   @Override
   public void describeTo(Description description) {
-    description.appendText("ruleKey ").appendValue(key);
+    description.appendText("rule line ").appendValue(line);
   }
 
   @Override
   protected void describeMismatchSafely(T item, Description mismatchDescription) {
-    mismatchDescription.appendText("was ").appendValue(item.ruleKey().rule());
+    mismatchDescription.appendText("was ").appendValue(getLine(item));
   }
 
-  public static <T extends Issue> Matcher<T> hasRuleKey(String key) {
-    return new HasRuleKey<>(key);
+  public static <T extends Issue> Matcher<T> hasRuleLine(int line) {
+    return new HasRuleLineNumber<>(line);
+  }
+
+  private static <T extends Issue> int getLine(T item) {
+    TextRange textRange = item.primaryLocation().textRange();
+
+    return (textRange == null) ? FilePosition.UNDEFINED_LINE : textRange.start().line();
   }
 }

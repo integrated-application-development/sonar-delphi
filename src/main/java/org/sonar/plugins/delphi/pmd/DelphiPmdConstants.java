@@ -22,6 +22,15 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
+import net.sourceforge.pmd.lang.rule.XPathRule;
+import net.sourceforge.pmd.properties.PropertyDescriptor;
+import net.sourceforge.pmd.properties.PropertyFactory;
+import net.sourceforge.pmd.properties.constraints.NumericConstraints;
+import org.sonar.api.rule.RuleScope;
+import org.sonar.api.rules.RuleType;
+import org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule;
+import org.sonar.plugins.delphi.pmd.rules.XPathTemplateRule;
+
 /** Constants for Delphi pmd */
 public final class DelphiPmdConstants {
 
@@ -30,18 +39,42 @@ public final class DelphiPmdConstants {
 
   public static final String RULES_XML = "/org/sonar/plugins/delphi/pmd/rules.xml";
 
-  public static final String TEMPLATE_XPATH_CLASS =
-      "org.sonar.plugins.delphi.pmd.rules.XPathTemplateRule";
-  public static final String BUILTIN_XPATH_CLASS =
-      "org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule";
+  public static final String TEMPLATE_XPATH_CLASS = XPathTemplateRule.class.getName();
+  public static final String TEMPLATE_XPATH_EXPRESSION_PARAM = XPathRule.XPATH_DESCRIPTOR.name();
+  public static final String BUILTIN_XPATH_EXPRESSION_PARAM = XPathBuiltinRule.BUILTIN_XPATH.name();
 
-  public static final String TEMPLATE_XPATH_EXPRESSION_PARAM = "xPath";
-  public static final String BUILTIN_XPATH_EXPRESSION_PARAM = "builtinXPath";
+  public static final String SUPPRESSION_TAG = "NOSONAR";
 
-  public static final String BASE_EFFORT = "baseEffort";
-  public static final String SCOPE = "scope";
-  public static final String TEMPLATE = "template";
-  public static final String TYPE = "type";
+  public static final PropertyDescriptor<Integer> LIMIT =
+      PropertyFactory.intProperty("limit")
+          .desc("The max limit.")
+          .require(NumericConstraints.positive())
+          .defaultValue(1)
+          .build();
+
+  public static final PropertyDescriptor<String> BASE_EFFORT =
+      PropertyFactory.stringProperty("baseEffort")
+          .desc("The base effort to correct")
+          .defaultValue("")
+          .build();
+
+  public static final PropertyDescriptor<String> SCOPE =
+      PropertyFactory.stringProperty("scope")
+          .desc("The type of code this rule should apply to")
+          .defaultValue(RuleScope.ALL.name())
+          .build();
+
+  public static final PropertyDescriptor<Boolean> TEMPLATE =
+      PropertyFactory.booleanProperty("template")
+          .desc("Whether the rule is a template")
+          .defaultValue(false)
+          .build();
+
+  public static final PropertyDescriptor<String> TYPE =
+      PropertyFactory.stringProperty("type")
+          .desc("Rule type: Options are 'CODE_SMELL', 'BUG', 'VULNERABILITY' or 'SECURITY_HOTSPOT'")
+          .defaultValue(RuleType.CODE_SMELL.name())
+          .build();
 
   private DelphiPmdConstants() {}
 }

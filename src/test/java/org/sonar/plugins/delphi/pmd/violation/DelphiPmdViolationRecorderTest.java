@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.delphi.pmd;
+package org.sonar.plugins.delphi.pmd.violation;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -25,6 +25,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
+import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.SCOPE;
 
 import java.io.File;
 import java.util.Optional;
@@ -47,7 +48,7 @@ import org.sonar.api.rule.RuleScope;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
-import org.sonar.plugins.delphi.pmd.rules.DelphiRule;
+import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 
 public class DelphiPmdViolationRecorderTest {
   private final File baseDir = new File("").getAbsoluteFile();
@@ -91,7 +92,7 @@ public class DelphiPmdViolationRecorderTest {
     final RuleViolation pmdViolation = mockPmdViolation(file, "RULE");
 
     when(pmdViolation.getClassName()).thenReturn("Test_Method");
-    when(pmdViolation.getRule().getProperty(DelphiRule.SCOPE)).thenReturn(RuleScope.MAIN.name());
+    when(pmdViolation.getRule().getProperty(SCOPE)).thenReturn(RuleScope.MAIN.name());
     when(configuration.get(DelphiPlugin.TEST_TYPE_REGEX_KEY)).thenReturn(Optional.of("Test_.*"));
 
     violationRecorder.saveViolation(pmdViolation, mockContext);
@@ -108,7 +109,7 @@ public class DelphiPmdViolationRecorderTest {
     final RuleViolation pmdViolation = mockPmdViolation(file, "RULE");
 
     when(pmdViolation.getClassName()).thenReturn("MainMethod");
-    when(pmdViolation.getRule().getProperty(DelphiRule.SCOPE)).thenReturn(RuleScope.TEST.name());
+    when(pmdViolation.getRule().getProperty(SCOPE)).thenReturn(RuleScope.TEST.name());
     when(configuration.get(DelphiPlugin.TEST_TYPE_REGEX_KEY)).thenReturn(Optional.of("Test_.*"));
 
     violationRecorder.saveViolation(pmdViolation, mockContext);
@@ -169,7 +170,7 @@ public class DelphiPmdViolationRecorderTest {
     final RuleViolation pmdViolation = mock(RuleViolation.class);
 
     when(rule.getName()).thenReturn(ruleName);
-    when(rule.getProperty(DelphiRule.SCOPE)).thenReturn(RuleScope.ALL.name());
+    when(rule.getProperty(SCOPE)).thenReturn(RuleScope.ALL.name());
     when(pmdViolation.getFilename()).thenReturn(file.getAbsolutePath());
     when(pmdViolation.getBeginLine()).thenReturn(2);
     when(pmdViolation.getDescription()).thenReturn("Description");

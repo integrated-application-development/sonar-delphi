@@ -20,56 +20,48 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.pmd.profile;
+package org.sonar.plugins.delphi.pmd.rules;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.RuleSet;
-import net.sourceforge.pmd.RuleSets;
-import net.sourceforge.pmd.lang.Language;
+import net.sourceforge.pmd.lang.LanguageRegistry;
 import net.sourceforge.pmd.lang.ast.Node;
-import org.sonar.plugins.delphi.pmd.DelphiRuleChain;
+import net.sourceforge.pmd.lang.rule.AbstractRule;
+import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
+import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.delphi.pmd.DelphiLanguageModule;
 
-/** Class representing Delphi rule set */
-public class DelphiRuleSets extends RuleSets {
+/** Basic rule class, extend this class to make your own rules. Do NOT extend from AbstractRule. */
+public class AbstractDelphiRule extends AbstractRule implements DelphiRule {
+  private Set<Integer> suppressions;
 
-  private final DelphiRuleChain delphiRuleChain = new DelphiRuleChain();
-  private final Collection<RuleSet> ruleSets = new ArrayList<>();
+  public AbstractDelphiRule() {
+    setLanguage(LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME));
+    defineBaseProperties();
+  }
 
   @Override
-  public void apply(List<Node> acuList, RuleContext ctx, Language language) {
-    for (RuleSet ruleSet : ruleSets) {
-      if (ruleSet.applies(ctx.getSourceCodeFile())) {
-        ruleSet.apply(acuList, ctx);
-      }
+  public RuleContext visit(DelphiNode node, RuleContext data) {
+    node.childrenAccept(this, data);
+    return data;
+  }
+
+  @Override
+  public void apply(List<? extends Node> acus, RuleContext ctx) {
+    for (Node acu : acus) {
+      DelphiAST ast = (DelphiAST) acu;
+      updateSuppressions(ast);
+      visit(ast, ctx);
     }
   }
 
-  @Override
-  public void addRuleSet(RuleSet ruleSet) {
-    ruleSets.add(ruleSet);
-    delphiRuleChain.add(ruleSet);
+  private void updateSuppressions(DelphiAST ast) {
+    suppressions = ast.getSuppressions();
   }
 
   @Override
-  public void start(RuleContext ctx) {
-    for (RuleSet ruleSet : ruleSets) {
-      ruleSet.start(ctx);
-    }
-  }
-
-  @Override
-  public void end(RuleContext ctx) {
-    for (RuleSet ruleSet : ruleSets) {
-      ruleSet.end(ctx);
-    }
-  }
-
-  @Override
-  public boolean applies(File file) {
-    return true;
+  public Set<Integer> getSuppressions() {
+    return suppressions;
   }
 }

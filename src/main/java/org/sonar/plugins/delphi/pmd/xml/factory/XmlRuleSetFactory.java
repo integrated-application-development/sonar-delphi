@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.delphi.pmd.xml.factory;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
@@ -38,7 +39,7 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 
 /** Factory class to create {@link DelphiRuleSet} out of XML. */
-public class XmlRuleSetFactory implements RuleSetFactory {
+public class XmlRuleSetFactory implements RuleSetFactory, Closeable {
 
   private static final Logger LOG = Loggers.get(XmlRuleSetFactory.class);
   private static final String INVALID_INPUT = "The PMD configuration file is not valid";

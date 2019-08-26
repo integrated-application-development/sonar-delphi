@@ -16,23 +16,37 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi;
+package org.sonar.plugins.delphi.utils.matchers;
 
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
+import org.hamcrest.TypeSafeMatcher;
 import org.sonar.api.batch.sensor.issue.Issue;
 
-public class IssueMatchers {
+public class HasRuleKey<T extends Issue> extends TypeSafeMatcher<T> {
+
+  private final String key;
+
+  private HasRuleKey(String key) {
+    this.key = key;
+  }
+
+  @Override
+  protected boolean matchesSafely(T item) {
+    return key.equals(item.ruleKey().rule());
+  }
+
+  @Override
+  public void describeTo(Description description) {
+    description.appendText("ruleKey ").appendValue(key);
+  }
+
+  @Override
+  protected void describeMismatchSafely(T item, Description mismatchDescription) {
+    mismatchDescription.appendText("was ").appendValue(item.ruleKey().rule());
+  }
 
   public static <T extends Issue> Matcher<T> hasRuleKey(String key) {
-    return HasRuleKey.hasRuleKey(key);
-  }
-
-  public static <T extends Issue> Matcher<T> hasRuleLine(int line) {
-    return HasRuleLineNumber.hasRuleLine(line);
-  }
-
-  public static <T extends Issue> Matcher<T> hasRuleKeyAtLine(String key, int line) {
-    return Matchers.allOf(hasRuleKey(key), hasRuleLine(line));
+    return new HasRuleKey<>(key);
   }
 }

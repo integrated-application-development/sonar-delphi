@@ -1,4 +1,6 @@
-package org.sonar.plugins.delphi.pmd;
+package org.sonar.plugins.delphi.utils.builders;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,9 +9,16 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UncheckedIOException;
-import java.nio.charset.StandardCharsets;
+import org.apache.commons.io.FileUtils;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.InputFile.Type;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.delphi.DelphiFile;
+import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
+import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
+import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonarqube.ws.FilenameUtils;
 
@@ -18,6 +27,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
   private final StringBuilder declaration = new StringBuilder();
   private final StringBuilder implementation = new StringBuilder();
 
+  private File baseDir = FileUtils.getTempDirectory();
   private int declCount;
 
   public T appendDecl(String value) {
@@ -39,38 +49,56 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
     return implementation.toString();
   }
 
-  public File buildFile(File baseDir) {
+  public void setBaseDir(File baseDir) {
+    this.baseDir = baseDir;
+  }
+
+  public DelphiAST parse() {
+    DelphiFile file = DelphiFile.from(inputFile(), new DelphiFileStreamConfig(UTF_8.name()));
+    return file.getAst();
+  }
+
+  public InputFile inputFile() {
     StringBuilder source = getSourceCode();
 
+    InputFile inputFile;
     try {
       File file = File.createTempFile(getFilenamePrefix(), "." + getFileExtension(), baseDir);
       file.deleteOnExit();
 
-      try (FileWriter fileWriter = new FileWriter(file, StandardCharsets.UTF_8)) {
+      try (FileWriter fileWriter = new FileWriter(file, UTF_8)) {
         fileWriter.write(source.toString());
         fileWriter.flush();
       }
-      return file;
+
+      inputFile =
+          TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, file)
+              .setModuleBaseDir(baseDir.toPath())
+              .setContents(DelphiUtils.readFileContent(file, UTF_8.name()))
+              .setLanguage(DelphiLanguage.KEY)
+              .setType(Type.MAIN)
+              .build();
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new UncheckedIOException(e);
     }
+
+    return inputFile;
+  }
+
+  public DelphiFile delphiFile() {
+    return DelphiFile.from(inputFile(), new DelphiFileStreamConfig(UTF_8.name()));
+  }
+
+  public DelphiFile delphiFile(DelphiFileStreamConfig fileStreamConfig) {
+    return DelphiFile.from(inputFile(), fileStreamConfig);
   }
 
   public StringBuilder getSourceCode() {
-    return getSourceCode(false);
+    return generateSourceCode();
   }
 
-  public StringBuilder getSourceCode(boolean print) {
-    StringBuilder source = generateSourceCode();
-
-    if (print) {
-      printSourceCode(source);
-    }
-
-    return source;
-  }
-
-  private void printSourceCode(StringBuilder source) {
+  public void printSourceCode() {
+    StringBuilder source = getSourceCode();
     Reader reader = new StringReader(source.toString());
     BufferedReader lineReader = new BufferedReader(reader);
     String line;
@@ -104,10 +132,10 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
     return new ResourceBuilder(DelphiUtils.getResource(path));
   }
 
-  private static class ResourceBuilder extends DelphiTestFileBuilder<ResourceBuilder> {
+  public static class ResourceBuilder extends DelphiTestFileBuilder<ResourceBuilder> {
     private File resource;
 
-    ResourceBuilder(File resource) {
+    private ResourceBuilder(File resource) {
       this.resource = resource;
     }
 
@@ -139,8 +167,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
     @Override
     protected StringBuilder generateSourceCode() {
       try {
-        return new StringBuilder(
-            DelphiUtils.readFileContent(resource, StandardCharsets.UTF_8.name()));
+        return new StringBuilder(DelphiUtils.readFileContent(resource, UTF_8.name()));
       } catch (IOException e) {
         throw new UncheckedIOException(e);
       }

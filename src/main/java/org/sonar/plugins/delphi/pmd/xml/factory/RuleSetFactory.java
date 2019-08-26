@@ -19,11 +19,10 @@
  */
 package org.sonar.plugins.delphi.pmd.xml.factory;
 
-import java.io.Closeable;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 
 /** Interface for all RuleSetFactories. */
-public interface RuleSetFactory extends Closeable {
+public interface RuleSetFactory {
 
   /** @return A DelphiRuleset. */
   DelphiRuleSet create();

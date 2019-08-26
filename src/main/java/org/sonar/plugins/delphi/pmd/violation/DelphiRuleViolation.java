@@ -20,11 +20,12 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.pmd;
+package org.sonar.plugins.delphi.pmd.violation;
 
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.RuleViolation;
+import org.sonar.plugins.delphi.pmd.FilePosition;
 import org.sonar.plugins.delphi.pmd.rules.DelphiRule;
 
 /** Delphi pmd rule violation */
@@ -38,10 +39,11 @@ public class DelphiRuleViolation implements RuleViolation {
   private String methodName = "";
   private String packageName = "";
 
-  private int beginLine;
-  private int endLine;
-  private int beginColumn;
-  private int endColumn;
+  private int beginLine = FilePosition.UNDEFINED_LINE;
+  private int endLine = FilePosition.UNDEFINED_COLUMN;
+  private int beginColumn = FilePosition.UNDEFINED_LINE;
+  private int endColumn = FilePosition.UNDEFINED_COLUMN;
+
   private boolean suppressed;
 
   /**
@@ -56,73 +58,61 @@ public class DelphiRuleViolation implements RuleViolation {
     this.description = rule.getMessage();
   }
 
-  /** {@inheritDoc} */
   @Override
   public String getFilename() {
     return filename;
   }
 
-  /** {@inheritDoc} */
   @Override
   public int getBeginLine() {
     return beginLine;
   }
 
-  /** {@inheritDoc} */
   @Override
   public int getBeginColumn() {
     return beginColumn;
   }
 
-  /** {@inheritDoc} */
   @Override
   public int getEndLine() {
     return endLine;
   }
 
-  /** {@inheritDoc} */
   @Override
   public int getEndColumn() {
     return endColumn;
   }
 
-  /** {@inheritDoc} */
   @Override
   public Rule getRule() {
     return rule;
   }
 
-  /** {@inheritDoc} */
   @Override
   public String getDescription() {
     return description;
   }
 
-  /** {@inheritDoc} */
   @Override
   public String getPackageName() {
     return packageName;
   }
 
-  /** {@inheritDoc} */
   @Override
   public String getMethodName() {
     return methodName;
   }
 
-  /** {@inheritDoc} */
   @Override
   public String getClassName() {
     return className;
   }
 
-  /** {@inheritDoc} */
   @Override
   public boolean isSuppressed() {
     return suppressed;
   }
 
-  /** {@inheritDoc} */
   @Override
   public String getVariableName() {
     return "";
