@@ -9,7 +9,7 @@ import com.sonar.orchestrator.Orchestrator;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-public class DelphiCpdHandlerIT {
+public class DelphiCpdExecutorIT {
   private static final String SIMPLE_PROJECT_KEY = "delphi-cpd-simple-test";
   private static final String LITERALS_PROJECT_KEY = "delphi-cpd-literals-test";
   private static final String WHITESPACE_PROJECT_KEY = "delphi-cpd-whitespace-test";

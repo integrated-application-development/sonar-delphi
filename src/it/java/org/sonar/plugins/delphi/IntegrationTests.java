@@ -18,7 +18,7 @@ import org.sonarqube.ws.client.WsClientFactories;
 import org.sonarqube.ws.client.measures.ComponentRequest;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({DelphiCpdHandlerIT.class})
+@Suite.SuiteClasses({DelphiCpdExecutorIT.class})
 public class IntegrationTests {
 
   private static final String PROJECTS_PATH = "src/it/projects/";
