@@ -17,21 +17,16 @@ public class DelphiFileStreamConfig {
   private final Set<String> definitions;
   private final boolean extendIncludes;
 
-  /** Constructor with default values */
-  public DelphiFileStreamConfig() {
-    this.encoding = null;
-    this.includedDirs = new ArrayList<>();
-    this.definitions = new HashSet<>();
-    this.extendIncludes = true;
-  }
-
   /**
    * Constructor which only sets encoding
    *
    * @param encoding The expected file encoding
    */
   public DelphiFileStreamConfig(String encoding) {
-    this();
+    this.encoding = null;
+    this.includedDirs = new ArrayList<>();
+    this.definitions = new HashSet<>();
+    this.extendIncludes = true;
     this.encoding = encoding;
   }
 

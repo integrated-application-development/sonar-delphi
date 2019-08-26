@@ -3,13 +3,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
-import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
+import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class StringLiteralRegexRuleTest extends BasePmdRuleTest {
   private static final String IDREF_PATTERN = ".*ID(\\d|[A-Z]){8}.*";
@@ -62,6 +62,37 @@ public class StringLiteralRegexRuleTest extends BasePmdRuleTest {
         new DelphiTestUnitBuilder()
             .appendDecl("const")
             .appendDecl("  C_HardcodedIDRef = 'ID12345678';");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testMatchingStringInTestMethodShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure TTestSuite_Test.TestWithHardcodedIDRef;")
+            .appendImpl("const")
+            .appendImpl("  C_HardcodedIDRef = 'ID1234X6U8';")
+            .appendImpl("begin")
+            .appendImpl("  Assert(C_HardcodedIDRef <> nil);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testMatchingStringInTestClassDeclarationShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("type")
+            .appendImpl("  TTestSuite_Test = class(TTestSuite)")
+            .appendImpl("  private const")
+            .appendImpl("    C_HardcodedIDRef = 'ID1234X6U8';")
+            .appendImpl("  end;");
 
     execute(builder);
 

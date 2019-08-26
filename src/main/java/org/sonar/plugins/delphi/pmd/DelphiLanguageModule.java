@@ -30,6 +30,6 @@ public class DelphiLanguageModule extends BaseLanguageModule {
   public DelphiLanguageModule() {
     super(LANGUAGE_NAME, null, TERSE_NAME, DelphiRuleChainVisitor.class, "pas", "dpr", "dpk");
     // Delphi 10.2
-    addVersion("32", null, true);
+    addVersion("32", new DelphiLanguageHandler(), true);
   }
 }

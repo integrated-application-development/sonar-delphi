@@ -27,18 +27,37 @@ import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.rule.AbstractRuleChainVisitor;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
+import net.sourceforge.pmd.lang.rule.XPathRule;
+import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
+import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.pmd.rules.DelphiRule;
 
 /** Delphi pmd rule chain visitor */
 public class DelphiRuleChainVisitor extends AbstractRuleChainVisitor {
 
   @Override
   protected void visit(Rule rule, Node node, RuleContext ctx) {
-    ((DelphiNode) node).jjtAccept((DelphiParserVisitor) rule, ctx);
+    if (rule instanceof XPathRule) {
+      ((XPathRule) rule).evaluate(node, ctx);
+    } else {
+      ((DelphiNode) node).accept((DelphiRule) rule, ctx);
+    }
   }
 
   @Override
-  protected void indexNodes(List<Node> astCompilationUnits, RuleContext ctx) {
-    // Unused but necessary override
+  protected void indexNodes(List<Node> nodes, RuleContext ctx) {
+    var delphiParserVisitor =
+        new DelphiParserVisitor<RuleContext>() {
+          @Override
+          public RuleContext visit(DelphiNode node, RuleContext data) {
+            indexNode(node);
+            return DelphiParserVisitor.super.visit(node, data);
+          }
+        };
+
+    for (final Node node : nodes) {
+      delphiParserVisitor.visit((DelphiAST) node, ctx);
+    }
   }
 }

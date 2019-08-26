@@ -22,10 +22,10 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
-import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
-import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
+import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class FieldNameRuleTest extends BasePmdRuleTest {
 
@@ -83,7 +83,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     assertIssues(not(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 3))));
     assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
     assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7)));
-    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 9)));
+    assertIssues(not(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 9))));
   }
 
   @Test
@@ -116,12 +116,12 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     assertIssues(not(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 3))));
     assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
     assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7)));
-    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 9)));
+    assertIssues(not(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 9))));
 
     assertIssues(not(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 13))));
     assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 15)));
     assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 17)));
-    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 19)));
+    assertIssues(not(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 19))));
   }
 
   @Test

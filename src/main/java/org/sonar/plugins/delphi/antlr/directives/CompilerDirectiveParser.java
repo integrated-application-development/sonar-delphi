@@ -133,6 +133,10 @@ public class CompilerDirectiveParser {
     String name = directiveName.toString().trim();
     String item = directiveItem.toString().trim();
 
+    if (directiveBracketType == DirectiveBracketType.PAREN) {
+      ++position;
+    }
+
     try {
       directives.add(CompilerDirective.create(name, item, directiveStartPos, position));
     } catch (UnsupportedCompilerDirectiveException e) {
@@ -181,7 +185,6 @@ public class CompilerDirectiveParser {
 
     if (directiveBracketType == DirectiveBracketType.PAREN) {
       result = (character == '*' && peekChar() == ')');
-      ++position;
     }
 
     return result;

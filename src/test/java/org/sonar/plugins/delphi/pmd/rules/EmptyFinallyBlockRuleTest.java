@@ -21,17 +21,17 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
-import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
-import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
+import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class EmptyFinallyBlockRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testValidRule() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure Test();");
+    builder.appendImpl("procedure Test;");
     builder.appendImpl("begin");
     builder.appendImpl("  try");
     builder.appendImpl("    writeln('try block');");
@@ -48,7 +48,7 @@ public class EmptyFinallyBlockRuleTest extends BasePmdRuleTest {
   @Test
   public void testEmptyFinallyBlock() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure Test();");
+    builder.appendImpl("procedure Test;");
     builder.appendImpl("begin");
     builder.appendImpl("  try");
     builder.appendImpl("    writeln('try block');");

@@ -4,7 +4,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathTemplateRule" message="This is my own xpath rule." name="MyXpathRule" language="delph">
     <priority>3</priority>
     <properties>
-      <property name="xPath">
+      <property name="xpath">
         <value><![CDATA[//FieldDeclaration]]></value>
       </property>
     </properties>

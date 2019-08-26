@@ -3,10 +3,10 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
-import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
-import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
+import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   @Test
@@ -102,7 +102,6 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(1));
     assertIssues(hasItem(hasRuleKeyAtLine("SwallowedExceptionsRule", builder.getOffSet() + 6)));
   }
 

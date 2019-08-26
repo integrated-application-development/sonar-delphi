@@ -1,35 +1,24 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.node.ArgumentListNode;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodParametersNode;
 
-public class EmptyBracketsRule extends DelphiRule {
+public class EmptyBracketsRule extends AbstractDelphiRule {
 
-  /**
-   * This rule searches for any calls to methods which include brackets () but do not pass any
-   * parameters. This is not necessary in Delphi so warnings are raised.
-   *
-   * @param node the current node
-   * @param ctx the ruleContext to store the violations
-   */
   @Override
-  public void visit(DelphiNode node, RuleContext ctx) {
-
-    // Look for any method call nodes under a begin block ('TkIdentifier'), check if the next two
-    // are parentheses
-    if (node.getType() == DelphiLexer.BEGIN) {
-
-      for (int i = 0; i < node.getChildCount() - 1; i++) {
-
-        DelphiNode childNode = (DelphiNode) node.getChild(i);
-        if (childNode.getType() == DelphiLexer.TkIdentifier
-            && node.getChild(i + 1).getType() == DelphiLexer.LPAREN
-            && node.getChild(i + 2).getType() == DelphiLexer.RPAREN) {
-          // The next node and the subsequent nodes were parentheses, no arguments passed
-          addViolation(ctx, childNode);
-        }
-      }
+  public RuleContext visit(MethodParametersNode parameters, RuleContext data) {
+    if (parameters.isEmpty()) {
+      addViolation(data, parameters);
     }
+    return super.visit(parameters, data);
+  }
+
+  @Override
+  public RuleContext visit(ArgumentListNode arguments, RuleContext data) {
+    if (arguments.isEmpty()) {
+      addViolation(data, arguments);
+    }
+    return super.visit(arguments, data);
   }
 }

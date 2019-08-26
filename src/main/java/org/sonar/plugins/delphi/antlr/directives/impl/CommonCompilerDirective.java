@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.directives.impl;
 
+import com.google.common.base.Preconditions;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirective;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
 
@@ -44,7 +45,9 @@ public class CommonCompilerDirective implements CompilerDirective {
    *     lastCharPos
    */
   public CommonCompilerDirective(String name, String item, int firstCharPos, int lastCharPos) {
-    assertValues(name, firstCharPos, lastCharPos);
+    Preconditions.checkNotNull(name);
+    Preconditions.checkArgument(firstCharPos >= 0 && lastCharPos >= 0);
+    Preconditions.checkArgument(lastCharPos >= firstCharPos);
     this.name = name;
     this.item = item;
     this.firstCharPos = firstCharPos;
@@ -74,25 +77,6 @@ public class CommonCompilerDirective implements CompilerDirective {
   @Override
   public CompilerDirectiveType getType() {
     return CompilerDirectiveType.UNKNOWN;
-  }
-
-  private void assertValues(String name, int beginPos, int endPos) {
-    if (name == null) {
-      throw new IllegalArgumentException("Compiler directive name cannot be null!");
-    }
-    if (beginPos < 0 || endPos < 0) {
-      throw new IllegalArgumentException(
-          "Compiler directive first/last character occurrence must be >= 0");
-    }
-    if (beginPos > endPos) {
-      throw new IllegalArgumentException(
-          "Compiler directive first character must be <= last character");
-    }
-  }
-
-  @Override
-  public String toString() {
-    return name + " " + item;
   }
 
   @Override

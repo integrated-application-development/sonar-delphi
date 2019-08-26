@@ -21,9 +21,8 @@ package org.sonar.plugins.delphi.pmd.rules;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import net.sourceforge.pmd.RuleContext;
-import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 
 public class ConstructorWithoutInheritedStatementRule extends NoInheritedStatementRule {
 
@@ -35,51 +34,24 @@ public class ConstructorWithoutInheritedStatementRule extends NoInheritedStateme
   }
 
   @Override
-  public void visit(DelphiNode node, RuleContext ctx) {
-    handleNewTypes(node);
-
-    if (node.getType() == DelphiLexer.CONSTRUCTOR) {
-      if (isRecordConstructor(node) || isClassMethod(node)) {
-        return;
-      }
-
-      checkViolation(ctx, node);
+  public RuleContext visit(TypeDeclarationNode type, RuleContext data) {
+    if (type.isRecord()) {
+      recordTypes.add(type.getQualifiedName());
     }
-  }
-
-  private void handleNewTypes(DelphiNode node) {
-    if (node.getType() == DelphiLexer.TkNewType && isRecordType(node)) {
-      recordTypes.add(getTypeName(node));
-    }
-  }
-
-  private boolean isRecordConstructor(DelphiNode node) {
-    if (node.getChild(0).getType() == DelphiLexer.TkFunctionName) {
-      String typeName = node.getChild(0).getChild(0).getText();
-      return recordTypes.contains(typeName);
-    }
-    return false;
-  }
-
-  private boolean isRecordType(DelphiNode newTypeNode) {
-    Tree typeDeclNode = newTypeNode.getFirstChildWithType(DelphiLexer.TkNewTypeDecl);
-    int type = typeDeclNode.getChild(0).getType();
-
-    return type == DelphiLexer.TkRecord;
-  }
-
-  private String getTypeName(DelphiNode newTypeNode) {
-    Tree typeNameNode = newTypeNode.getFirstChildWithType(DelphiLexer.TkNewTypeName);
-    return typeNameNode.getChild(0).getText();
+    return super.visit(type, data);
   }
 
   @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
+  public RuleContext visit(MethodImplementationNode method, RuleContext data) {
+    if (shouldCheck(method)) {
+      checkViolation(method, data);
+    }
+    return super.visit(method, data);
   }
 
-  @Override
-  public int hashCode() {
-    return super.hashCode();
+  private boolean shouldCheck(MethodImplementationNode method) {
+    return method.isConstructor()
+        && !method.isClassMethod()
+        && !recordTypes.contains(method.getTypeName());
   }
 }

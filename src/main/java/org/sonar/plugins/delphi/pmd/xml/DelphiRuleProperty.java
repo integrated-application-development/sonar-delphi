@@ -19,10 +19,10 @@
  */
 package org.sonar.plugins.delphi.pmd.xml;
 
-import static org.sonar.plugins.delphi.pmd.rules.DelphiRule.BASE_EFFORT;
-import static org.sonar.plugins.delphi.pmd.rules.DelphiRule.SCOPE;
-import static org.sonar.plugins.delphi.pmd.rules.DelphiRule.TEMPLATE;
-import static org.sonar.plugins.delphi.pmd.rules.DelphiRule.TYPE;
+import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.BASE_EFFORT;
+import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.SCOPE;
+import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TEMPLATE;
+import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TYPE;
 import static org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule.BUILTIN_XPATH;
 
 import java.util.Set;

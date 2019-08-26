@@ -22,54 +22,38 @@
  */
 package org.sonar.plugins.delphi.antlr.directives;
 
+import com.google.common.collect.ImmutableSet;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Enum type for compiler directive Put every directive you don't use into UNUSED name string - it
- * will automatically suppress warnings
- */
 public enum CompilerDirectiveType {
-  UNKNOWN(0, "unknown_directive"),
-  DEFINE(1, "define"),
-  UNDEFINE(2, "undef"),
-  IF(3, "if"),
-  ELSE(4, "else,elseif"),
-  ENDIF(5, "endif"),
-  IFDEF(6, "ifdef,ifndef"),
-  IFEND(7, "ifend"),
-  INCLUDE(8, "include,i"),
-  UNUSED(100, "warn,r,h+,h-,i+,i-,m+,m-");
+  UNKNOWN("unknown_directive"),
+  DEFINE("define"),
+  UNDEFINE("undef"),
+  IF("if"),
+  ELSE("else", "elseif"),
+  ENDIF("endif"),
+  IFDEF("ifdef", "ifndef"),
+  IFEND("ifend"),
+  INCLUDE("include", "i"),
+  UNSUPPORTED("warn", "r", "h+", "h-", "i+", "i-", "m+", "m-");
 
-  private final int number;
-  private final String name;
+  private final ImmutableSet<String> names;
   private static final Map<String, CompilerDirectiveType> mappedValues;
-
-  CompilerDirectiveType(int number, String name) {
-    this.number = number;
-    this.name = name;
-  }
 
   // create a hash map for faster values lookup
   static {
     mappedValues = new HashMap<>();
     CompilerDirectiveType[] values = CompilerDirectiveType.values();
     for (CompilerDirectiveType type : values) {
-      String[] names = type.getName().split(",");
-      for (String name : names) {
+      for (String name : type.names) {
         mappedValues.put(name, type);
       }
     }
   }
 
-  /** @return directive name */
-  public String getName() {
-    return name;
-  }
-
-  /** @return directive number */
-  public int getNumber() {
-    return number;
+  CompilerDirectiveType(String... names) {
+    this.names = ImmutableSet.copyOf(names);
   }
 
   /**

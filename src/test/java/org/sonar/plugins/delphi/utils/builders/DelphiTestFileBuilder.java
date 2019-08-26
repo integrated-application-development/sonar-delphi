@@ -1,0 +1,186 @@
+package org.sonar.plugins.delphi.utils.builders;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.UncheckedIOException;
+import org.apache.commons.io.FileUtils;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.InputFile.Type;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.delphi.DelphiFile;
+import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
+import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
+import org.sonar.plugins.delphi.core.DelphiLanguage;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.sonarqube.ws.FilenameUtils;
+
+public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> {
+  private static final Logger LOG = Loggers.get(DelphiTestFileBuilder.class);
+  private final StringBuilder declaration = new StringBuilder();
+  private final StringBuilder implementation = new StringBuilder();
+
+  private File baseDir = FileUtils.getTempDirectory();
+  private int declCount;
+
+  public T appendDecl(String value) {
+    declaration.append(value).append("\n");
+    declCount++;
+    return getThis();
+  }
+
+  public T appendImpl(String value) {
+    implementation.append(value).append("\n");
+    return getThis();
+  }
+
+  public String getDeclaration() {
+    return declaration.toString();
+  }
+
+  public String getImplementation() {
+    return implementation.toString();
+  }
+
+  public void setBaseDir(File baseDir) {
+    this.baseDir = baseDir;
+  }
+
+  public DelphiAST parse() {
+    DelphiFile file = DelphiFile.from(inputFile(), new DelphiFileStreamConfig(UTF_8.name()));
+    return file.getAst();
+  }
+
+  public InputFile inputFile() {
+    StringBuilder source = getSourceCode();
+
+    InputFile inputFile;
+    try {
+      File file = File.createTempFile(getFilenamePrefix(), "." + getFileExtension(), baseDir);
+      file.deleteOnExit();
+
+      try (FileWriter fileWriter = new FileWriter(file, UTF_8)) {
+        fileWriter.write(source.toString());
+        fileWriter.flush();
+      }
+
+      inputFile =
+          TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, file)
+              .setModuleBaseDir(baseDir.toPath())
+              .setContents(DelphiUtils.readFileContent(file, UTF_8.name()))
+              .setLanguage(DelphiLanguage.KEY)
+              .setType(Type.MAIN)
+              .build();
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+
+    return inputFile;
+  }
+
+  public DelphiFile delphiFile() {
+    return DelphiFile.from(inputFile(), new DelphiFileStreamConfig(UTF_8.name()));
+  }
+
+  public DelphiFile delphiFile(DelphiFileStreamConfig fileStreamConfig) {
+    return DelphiFile.from(inputFile(), fileStreamConfig);
+  }
+
+  public StringBuilder getSourceCode() {
+    return generateSourceCode();
+  }
+
+  public void printSourceCode() {
+    StringBuilder source = getSourceCode();
+    Reader reader = new StringReader(source.toString());
+    BufferedReader lineReader = new BufferedReader(reader);
+    String line;
+    int lineNumber = 0;
+    try {
+      while ((line = lineReader.readLine()) != null) {
+        LOG.info(String.format("%03d %s", ++lineNumber, line));
+      }
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to print source code.", e);
+    }
+  }
+
+  protected int getDeclCount() {
+    return declCount;
+  }
+
+  public abstract int getOffsetDecl();
+
+  public abstract int getOffSet();
+
+  protected abstract T getThis();
+
+  protected abstract StringBuilder generateSourceCode();
+
+  protected abstract String getFilenamePrefix();
+
+  protected abstract String getFileExtension();
+
+  public static DelphiTestFileBuilder.ResourceBuilder fromResource(String path) {
+    return new ResourceBuilder(DelphiUtils.getResource(path));
+  }
+
+  public static class ResourceBuilder extends DelphiTestFileBuilder<ResourceBuilder> {
+    private File resource;
+
+    private ResourceBuilder(File resource) {
+      this.resource = resource;
+    }
+
+    @Override
+    public int getOffsetDecl() {
+      return 0;
+    }
+
+    @Override
+    public int getOffSet() {
+      return 0;
+    }
+
+    @Override
+    protected ResourceBuilder getThis() {
+      return this;
+    }
+
+    @Override
+    public ResourceBuilder appendDecl(String value) {
+      throw new UnsupportedOperationException("Appending not supported for ResourceBuilder");
+    }
+
+    @Override
+    public ResourceBuilder appendImpl(String value) {
+      throw new UnsupportedOperationException("Appending not supported for ResourceBuilder");
+    }
+
+    @Override
+    protected StringBuilder generateSourceCode() {
+      try {
+        return new StringBuilder(DelphiUtils.readFileContent(resource, UTF_8.name()));
+      } catch (IOException e) {
+        throw new UncheckedIOException(e);
+      }
+    }
+
+    @Override
+    protected String getFilenamePrefix() {
+      return "resource";
+    }
+
+    @Override
+    protected String getFileExtension() {
+      return FilenameUtils.getExtension(resource.getName());
+    }
+  }
+}

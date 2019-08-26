@@ -3,10 +3,10 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.hasSize;
-import static org.sonar.plugins.delphi.HasRuleKey.hasRuleKey;
+import static org.sonar.plugins.delphi.utils.matchers.HasRuleKey.hasRuleKey;
 
 import org.junit.Test;
-import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
+import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class NoSemiAfterMethodDeclarationRuleTest extends BasePmdRuleTest {
 

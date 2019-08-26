@@ -20,7 +20,12 @@
 package org.sonar.plugins.delphi.pmd.profile;
 
 import static org.apache.commons.lang3.StringUtils.isNumeric;
+import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.BASE_EFFORT;
+import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.SCOPE;
+import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TEMPLATE;
+import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TYPE;
 
+import com.google.common.base.Preconditions;
 import java.util.Objects;
 import org.sonar.api.rule.RuleScope;
 import org.sonar.api.rule.Severity;
@@ -88,31 +93,31 @@ public class DelphiPmdRulesDefinition implements RulesDefinition {
   }
 
   private void extractDebtRemediationFunction(DelphiRule pmdRule, NewRule sonarRule) {
-    DelphiRuleProperty baseEffortProperty = pmdRule.getProperty(DelphiPmdConstants.BASE_EFFORT);
-    if (baseEffortProperty == null) {
-      throw new IllegalArgumentException(String.format(UNDEFINED_BASE_EFFORT, pmdRule.getName()));
-    }
+    DelphiRuleProperty baseEffortProperty = pmdRule.getProperty(BASE_EFFORT.name());
+
+    String error = String.format(UNDEFINED_BASE_EFFORT, pmdRule.getName());
+    Preconditions.checkArgument(baseEffortProperty != null, error);
 
     sonarRule.setDebtRemediationFunction(
         sonarRule.debtRemediationFunctions().constantPerIssue(baseEffortProperty.getValue()));
   }
 
   private void extractScope(DelphiRule pmdRule, NewRule sonarRule) {
-    DelphiRuleProperty scopeProperty = pmdRule.getProperty(DelphiPmdConstants.SCOPE);
+    DelphiRuleProperty scopeProperty = pmdRule.getProperty(SCOPE.name());
     if (scopeProperty != null) {
       sonarRule.setScope(RuleScope.valueOf(scopeProperty.getValue()));
     }
   }
 
   private void extractTemplate(DelphiRule pmdRule, NewRule sonarRule) {
-    DelphiRuleProperty templateProperty = pmdRule.getProperty(DelphiPmdConstants.TEMPLATE);
+    DelphiRuleProperty templateProperty = pmdRule.getProperty(TEMPLATE.name());
     if (templateProperty != null) {
       sonarRule.setTemplate(Boolean.parseBoolean(templateProperty.getValue()));
     }
   }
 
   private void extractType(DelphiRule pmdRule, NewRule sonarRule) {
-    DelphiRuleProperty typeProperty = pmdRule.getProperty(DelphiPmdConstants.TYPE);
+    DelphiRuleProperty typeProperty = pmdRule.getProperty(TYPE.name());
     if (typeProperty != null) {
       sonarRule.setType(RuleType.valueOf(typeProperty.getValue()));
     }

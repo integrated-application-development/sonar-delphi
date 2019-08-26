@@ -1,57 +1,35 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import org.antlr.runtime.tree.CommonTree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import net.sourceforge.pmd.RuleContext;
+import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
+import org.sonar.plugins.delphi.antlr.ast.node.VarDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.VarSectionNode;
 
 /**
  * This rule looks at all variable names to ensure they follow basic Pascal Case. At the moment it
  * only checks if the first character is uppercase
  */
-public class VariableNameRule extends NameConventionRule {
+public class VariableNameRule extends AbstractDelphiRule {
 
   @Override
-  public List<DelphiNode> findNodes(DelphiNode node) {
-    // Within a var block, look for variable identifiers
-    if (shouldVisit(node)) {
-      List<DelphiNode> nameNodes = new ArrayList<>();
+  public RuleContext visit(VarDeclarationNode varDecl, RuleContext data) {
+    if (isAutoCreateFormVar(varDecl)) {
+      return data;
+    }
 
-      for (Object child : node.getChildren()) {
-        CommonTree childNode = (CommonTree) child;
-
-        if (childNode.getType() == DelphiLexer.TkVariableIdents) {
-          List<?> children = childNode.getChildren();
-
-          nameNodes.addAll(
-              children.stream().map(varName -> (DelphiNode) varName).collect(Collectors.toList()));
-        }
-      }
-
-      if (isNotAutoCreateFormVar(node, nameNodes)) {
-        return Collections.unmodifiableList(nameNodes);
+    for (IdentifierNode identifier : varDecl.getIdentifierList().getIdentifiers()) {
+      if (!Character.isUpperCase(identifier.getImage().charAt(0))) {
+        addViolation(data, identifier);
       }
     }
 
-    return Collections.emptyList();
+    return data;
   }
 
-  @Override
-  protected boolean isViolation(DelphiNode nameNode) {
-    String name = nameNode.getText();
-    return !Character.isUpperCase(name.charAt(0));
-  }
-
-  private boolean shouldVisit(DelphiNode node) {
-    return node.getType() == DelphiLexer.VAR && node.getChildCount() != 0;
-  }
-
-  private boolean isNotAutoCreateFormVar(DelphiNode node, List<DelphiNode> nameNodes) {
-    return !(isInterfaceSection()
-        && nameNodes.size() == 1
-        && node.getChildIndex() == node.getParent().getChildCount() - 1);
+  private boolean isAutoCreateFormVar(VarDeclarationNode varDecl) {
+    VarSectionNode varSection = varDecl.getVarSection();
+    return varSection.isInterfaceSection()
+        && varSection.getDeclarations().size() == 1
+        && varSection.jjtGetChildIndex() == varSection.jjtGetParent().jjtGetNumChildren() - 1;
   }
 }

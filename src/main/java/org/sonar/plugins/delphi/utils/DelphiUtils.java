@@ -23,15 +23,12 @@
 package org.sonar.plugins.delphi.utils;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 
 /** Some utilities */
@@ -56,25 +53,8 @@ public final class DelphiUtils {
    */
   public static File getResource(String fileName) {
     URL url = DelphiUtils.class.getResource(fileName);
-    if (url == null) {
-      throw new IllegalStateException("Resource file not found: " + fileName);
-    }
-    String fName = url.getPath();
-    File file = new File(fName);
-    if (!file.exists()) {
-      fName = fName.replace("%20", " ");
-      file = new File(fName);
-    }
-    return file;
-  }
-
-  /**
-   * Gets FileFilter associated with DelphiLanguage source files (*.pas, *.dpr, *.dpk)
-   *
-   * @return FileFilter
-   */
-  public static FileFilter getFileFilter() {
-    return pathname -> pathname.isFile() && acceptFile(pathname.getAbsolutePath());
+    File file = FileUtils.toFile(url);
+    return Objects.requireNonNull(file, "Resource not found: " + fileName);
   }
 
   /**
@@ -91,15 +71,6 @@ public final class DelphiUtils {
       }
     }
     return false;
-  }
-
-  /**
-   * Gets FileFilter associated with directories
-   *
-   * @return FileFilter
-   */
-  public static FileFilter getDirectoryFilter() {
-    return File::isDirectory;
   }
 
   /**
@@ -170,43 +141,15 @@ public final class DelphiUtils {
    * @throws IllegalArgumentException When file is null
    * @throws IOException When file does not exist
    */
-  public static String readFileContent(File file, String encoding) throws IOException {
-    if (file == null) {
-      throw new IllegalArgumentException("Passed a null file to readFileContent");
-    }
-
+  public static String readFileContent(@NotNull File file, String encoding) throws IOException {
     return FileUtils.readFileToString(file, encoding).replace("\uFEFF", "");
-  }
-
-  public static String getRelativePath(File file, List<File> dirs) {
-    List<String> stack = new ArrayList<>();
-    String path = FilenameUtils.normalize(file.getAbsolutePath());
-    File cursor = new File(path);
-    while (cursor != null) {
-      if (containsFile(dirs, cursor)) {
-        return StringUtils.join(stack, "/");
-      }
-      stack.add(0, cursor.getName());
-      cursor = cursor.getParentFile();
-    }
-    return null;
-  }
-
-  private static boolean containsFile(List<File> dirs, File cursor) {
-    for (File dir : dirs) {
-      if (FilenameUtils.equalsNormalizedOnSystem(dir.getAbsolutePath(), cursor.getAbsolutePath())) {
-        return true;
-      }
-    }
-    return false;
   }
 
   public static String uriToAbsolutePath(URI uri) {
     String path = uri.getPath();
     if (":".equals(path.substring(2, 3))) {
-      return path.substring(1);
-    } else {
-      return path;
+      path = path.substring(1);
     }
+    return path;
   }
 }

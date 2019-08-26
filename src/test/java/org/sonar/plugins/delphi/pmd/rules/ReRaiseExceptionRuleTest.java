@@ -4,10 +4,10 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
-import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
-import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
+import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
 
@@ -38,7 +38,7 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
             .appendImpl("  try")
             .appendImpl("    ThrowException;")
             .appendImpl("  except")
-            .appendImpl("    on E: Exception do begin")
+            .appendImpl("    on E: MyException do begin")
             .appendImpl("      raise;")
             .appendImpl("    end;")
             .appendImpl("  end;")
@@ -90,7 +90,7 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
             .appendImpl("  try")
             .appendImpl("    ThrowException;")
             .appendImpl("  except")
-            .appendImpl("    on E: Exception do begin")
+            .appendImpl("    on E: MyException do begin")
             .appendImpl("      raise E;")
             .appendImpl("    end;")
             .appendImpl("  end;")
@@ -129,7 +129,7 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
             .appendImpl("  try")
             .appendImpl("    ThrowException;")
             .appendImpl("  except")
-            .appendImpl("    on E: Exception do begin")
+            .appendImpl("    on E: MyException do begin")
             .appendImpl("      if SomeCondition then begin")
             .appendImpl("        raise E;")
             .appendImpl("      end;")
@@ -143,5 +143,45 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
     assertIssues(hasSize(2));
     assertIssues(hasItem(hasRuleKeyAtLine("ReRaiseExceptionRule", builder.getOffSet() + 8)));
     assertIssues(hasItem(hasRuleKeyAtLine("ReRaiseExceptionRule", builder.getOffSet() + 10)));
+  }
+
+  @Test
+  public void testRaiseDifferentExceptionShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Foo;")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    ThrowException;")
+            .appendImpl("  except")
+            .appendImpl("    on E: MyException do begin")
+            .appendImpl("      raise SomeOtherException.Create;")
+            .appendImpl("    end;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testRaiseDifferentExceptionWithoutIdentifierShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Foo;")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    ThrowException;")
+            .appendImpl("  except")
+            .appendImpl("    on Exception do begin")
+            .appendImpl("      raise Exception.Create;")
+            .appendImpl("    end;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(not(hasItem(hasRuleKeyAtLine("ReRaiseExceptionRule", builder.getOffSet() + 7))));
   }
 }

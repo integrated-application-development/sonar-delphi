@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.delphi.antlr.directives.impl;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -62,5 +64,11 @@ public class CommonCompilerDirectiveTest {
   public void testGetType() {
     directive = new CommonCompilerDirective("name", "item", 0, 0);
     assertEquals(CompilerDirectiveType.UNKNOWN, directive.getType());
+  }
+
+  @Test
+  public void testGetLength() {
+    directive = new CommonCompilerDirective("name", "item", 0, 30);
+    assertThat(directive.getLength(), is(30));
   }
 }

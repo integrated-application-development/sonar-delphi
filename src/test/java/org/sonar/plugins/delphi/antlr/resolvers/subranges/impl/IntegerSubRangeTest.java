@@ -27,13 +27,17 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRange;
 
 public class IntegerSubRangeTest {
 
   private SubRange range;
   private SubRange range2;
+
+  @Rule public ExpectedException exceptionCatcher = ExpectedException.none();
 
   @Before
   public void setup() {
@@ -95,13 +99,9 @@ public class IntegerSubRangeTest {
     assertFalse(range.inRange(new IntegerSubRange(-1, 5)));
   }
 
-  // @Test
-  // FIXME currently broken
-  // public void equalsTest() {
-  //   assertTrue(new IntegerSubRange(0, 1).equals(new IntegerSubRange(0, 1)));
-  //    assertTrue(new IntegerSubRange(0, 10).equals(new IntegerSubRange(0, 10)));
-  //   assertTrue(new IntegerSubRange(0, 1).equals(new StringSubRange(0, 1, null)));
-  //  assertFalse(new IntegerSubRange(0, 1).equals(new IntegerSubRange(1, 1)));
-  // }
-
+  @Test
+  public void testInvalidStartEndShouldThrow() {
+    exceptionCatcher.expect(IllegalArgumentException.class);
+    new IntegerSubRange(1, 0);
+  }
 }

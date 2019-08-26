@@ -27,17 +27,19 @@ import org.sonar.api.Properties;
 import org.sonar.api.Property;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
+import org.sonar.plugins.delphi.executor.DelphiCpdExecutor;
+import org.sonar.plugins.delphi.executor.DelphiHighlightExecutor;
+import org.sonar.plugins.delphi.executor.DelphiMasterExecutor;
+import org.sonar.plugins.delphi.executor.DelphiMetricsExecutor;
+import org.sonar.plugins.delphi.executor.DelphiPmdExecutor;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConfiguration;
-import org.sonar.plugins.delphi.pmd.DelphiPmdExecutor;
-import org.sonar.plugins.delphi.pmd.DelphiPmdSensor;
-import org.sonar.plugins.delphi.pmd.DelphiPmdViolationRecorder;
 import org.sonar.plugins.delphi.pmd.profile.DefaultDelphiProfile;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileExporter;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileImporter;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRulesDefinition;
+import org.sonar.plugins.delphi.pmd.violation.DelphiPmdViolationRecorder;
 import org.sonar.plugins.delphi.surefire.SurefireSensor;
-import org.sonar.plugins.delphi.token.DelphiTokenSensor;
 
 /** Main Sonar DelphiLanguage plugin class */
 @Properties({
@@ -133,28 +135,28 @@ public class DelphiPlugin implements Plugin {
   public static final String GENERATE_PMD_REPORT_XML_KEY = "sonar.delphi.pmd.generateXml";
   public static final String TEST_TYPE_REGEX_KEY = "sonar.delphi.pmd.testTypeRegex";
 
-  /** {@inheritDoc} */
   @Override
   public String toString() {
     return getClass().getSimpleName();
   }
 
-  /** {@inheritDoc} */
   @Override
   public void define(Context context) {
     context.addExtensions(
         // Sensors
         DelphiSensor.class,
-        DelphiPmdSensor.class,
-        DelphiTokenSensor.class,
+        SurefireSensor.class,
+        // Executors
+        DelphiMasterExecutor.class,
+        DelphiPmdExecutor.class,
+        DelphiMetricsExecutor.class,
+        DelphiCpdExecutor.class,
+        DelphiHighlightExecutor.class,
         // Core
         DelphiLanguage.class,
         // Core helpers
         DelphiProjectHelper.class,
-        // Surefire
-        SurefireSensor.class,
         // PMD
-        DelphiPmdExecutor.class,
         DelphiPmdConfiguration.class,
         DelphiPmdRulesDefinition.class,
         DelphiPmdRuleSetDefinitionProvider.class,

@@ -18,27 +18,19 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import net.sourceforge.pmd.RuleContext;
+import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
+import org.sonar.plugins.delphi.utils.NameConventionUtils;
 
-/**
- * This rule looks for the interface name and if it doesn't start with "I" it raises a violation.
- */
-public class InterfaceNameRule extends NameConventionRule {
-  private static final String INTERFACE_PREFIX = "I";
+public class InterfaceNameRule extends AbstractDelphiRule {
+  private static final String PREFIX = "I";
 
   @Override
-  public DelphiNode findNode(DelphiNode node) {
-    if (node.getType() != DelphiLexer.TkNewTypeName
-        || node.nextNode().getChildType(0) != DelphiLexer.TkInterface) {
-      return null;
+  public RuleContext visit(TypeDeclarationNode type, RuleContext data) {
+    if (type.isInterface()
+        && !NameConventionUtils.compliesWithPrefix(type.getSimpleName(), PREFIX)) {
+      addViolation(data, type.getTypeName());
     }
-
-    return (DelphiNode) node.getChild(0);
-  }
-
-  @Override
-  protected boolean isViolation(DelphiNode nameNode) {
-    return !compliesWithPrefixNamingConvention(nameNode.getText(), INTERFACE_PREFIX);
+    return super.visit(type, data);
   }
 }

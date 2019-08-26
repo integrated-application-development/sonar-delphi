@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.containsString;
 import java.util.HashSet;
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
+import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class DefineResolverTest {
 

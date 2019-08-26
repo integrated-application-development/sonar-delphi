@@ -26,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import net.sourceforge.pmd.PMDConfiguration;
 import net.sourceforge.pmd.Report;
 import net.sourceforge.pmd.renderers.Renderer;
 import net.sourceforge.pmd.renderers.XMLRenderer;
@@ -37,10 +38,9 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
-import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 
 @ScannerSide
-public class DelphiPmdConfiguration {
+public class DelphiPmdConfiguration extends PMDConfiguration {
 
   private static final Logger LOG = Loggers.get(DelphiPmdConfiguration.class);
   private static final String PMD_RESULT_XML = "pmd-result.xml";
@@ -60,10 +60,6 @@ public class DelphiPmdConfiguration {
     this.fileSystem = fileSystem;
     this.settings = settings;
     this.ruleSetDefinitionProvider = ruleSetDefinitionProvider;
-  }
-
-  public DelphiRuleSet getRuleSetDefinition() {
-    return ruleSetDefinitionProvider.getDefinition();
   }
 
   public DelphiRule getRuleDefinition(DelphiRule rule) {
@@ -114,7 +110,7 @@ public class DelphiPmdConfiguration {
    * @param report The report which shall be written into an XML file.
    * @return Path to the report
    */
-  Path dumpXmlReport(Report report) {
+  public Path dumpXmlReport(Report report) {
     if (!settings.getBoolean(DelphiPlugin.GENERATE_PMD_REPORT_XML_KEY).orElse(false)) {
       return null;
     }

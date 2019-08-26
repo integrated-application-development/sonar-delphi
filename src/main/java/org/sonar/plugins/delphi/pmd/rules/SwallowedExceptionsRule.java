@@ -1,39 +1,40 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.node.CompoundStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ExceptBlockNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ExceptItemNode;
+import org.sonar.plugins.delphi.antlr.ast.node.StatementListNode;
+import org.sonar.plugins.delphi.antlr.ast.node.StatementNode;
 
 /**
  * Any case where an except block or an exception handler is empty means that any raised exception
  * is silently swallowed.
  */
-public class SwallowedExceptionsRule extends DelphiRule {
+public class SwallowedExceptionsRule extends AbstractDelphiRule {
 
   @Override
-  public void visit(DelphiNode node, RuleContext ctx) {
-    if (node.getType() == DelphiLexer.EXCEPT && isEmptyExceptBlock(node)) {
-      addViolation(ctx, node);
+  public RuleContext visit(ExceptBlockNode exceptBlock, RuleContext data) {
+    StatementListNode statementList = exceptBlock.getStatementList();
+    if (statementList != null && statementList.isEmpty()) {
+      addViolation(data, exceptBlock);
     }
 
-    if (node.getType() == DelphiLexer.TkExceptionHandler && isEmptyExceptionHandler(node)) {
-      addViolation(ctx, node.prevNode().prevNode());
-    }
+    return super.visit(exceptBlock, data);
   }
 
-  private boolean isEmptyExceptBlock(DelphiNode node) {
-    DelphiNode nextNode = node.nextNode();
-
-    return nextNode != null && nextNode.getType() == DelphiLexer.END;
-  }
-
-  private boolean isEmptyExceptionHandler(DelphiNode node) {
-    if (node.getChildCount() == 0) {
-      return true;
+  @Override
+  public RuleContext visit(ExceptItemNode handler, RuleContext data) {
+    StatementNode statement = handler.getStatement();
+    if (statement == null || isEmptyCompoundStatement(statement)) {
+      addViolation(data, handler);
     }
 
-    Tree statementNode = node.getChild(0);
-    return statementNode.getType() == DelphiLexer.BEGIN && statementNode.getChildCount() == 1;
+    return super.visit(handler, data);
+  }
+
+  private static boolean isEmptyCompoundStatement(StatementNode statement) {
+    return statement instanceof CompoundStatementNode
+        && ((CompoundStatementNode) statement).isEmpty();
   }
 }

@@ -22,72 +22,40 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.List;
+import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.LIMIT;
+
 import net.sourceforge.pmd.RuleContext;
-import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
+import org.sonar.plugins.delphi.pmd.FilePosition;
 
-/**
- * It counts how many classes there are in one file.
- *
- * @author "Fabricio Colombo"
- * @since 0.3
- */
-public class ClassPerFileRule extends CountRule {
+public class ClassPerFileRule extends AbstractDelphiRule {
 
-  /** Store the visited inner classes to to ignore the count. */
-  private Deque<Tree> visitedInnerClasses;
+  private static final String VIOLATION_MESSAGE =
+      "File has %d classes, maximum number of classes is %d.";
+
+  private int count;
 
   @Override
   public void start(RuleContext ctx) {
-    super.start(ctx);
-    reset = false;
-    setTypeToSearch(DelphiLexer.TkClass);
-    visitedInnerClasses = new ArrayDeque<>();
+    count = 0;
   }
 
   @Override
-  public String getMessage() {
-    return String.format(
-        "File has too many classes, maximum number of classes is %d.", definedLimit);
-  }
-
-  @Override
-  public void visit(DelphiNode node, RuleContext ctx) {
-    if (!shouldCount(node)) {
-      return;
-    }
-
-    if (visitedInnerClasses.contains(node)) {
-      return;
-    }
-
-    visitedInnerClasses.addAll(findInnerClasses(node));
-
-    increaseCounter(strength);
-
-    if (exceedsLimit()) {
-      addViolation(ctx, node, getMessage());
-      if (reset) {
-        count = 0;
-      }
+  public void end(RuleContext ctx) {
+    int limit = getProperty(LIMIT);
+    if (count > limit) {
+      newViolation(ctx)
+          .atPosition(FilePosition.atFileLevel())
+          .message(String.format(VIOLATION_MESSAGE, count, limit))
+          .save();
     }
   }
 
-  private List<Tree> findInnerClasses(DelphiNode node) {
-    return node.findAllChildren(DelphiLexer.TkClass);
-  }
-
   @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
-  }
-
-  @Override
-  public int hashCode() {
-    return super.hashCode();
+  public RuleContext visit(TypeDeclarationNode type, RuleContext data) {
+    if (type.isClass() && !type.isSubType()) {
+      ++count;
+    }
+    return super.visit(type, data);
   }
 }

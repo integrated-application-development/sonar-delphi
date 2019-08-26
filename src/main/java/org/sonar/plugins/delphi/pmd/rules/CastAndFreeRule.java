@@ -23,77 +23,68 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.analyzer.LexerMetrics;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
+import net.sourceforge.pmd.lang.ast.Node;
+import org.sonar.plugins.delphi.antlr.ast.node.ArgumentListNode;
+import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode.BinaryOp;
+import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
+import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 
-/**
- * Cast And Free rule - don't cast, just to free something, example: TMyObject(sth).free; (sth as
- * TMyObject).free;
- */
-public class CastAndFreeRule extends DelphiRule {
-
-  private int sequenceHardCastIndex;
-  private int sequenceSoftCastIndex;
-  private final LexerMetrics[] hardCastSequence = {
-    LexerMetrics.IDENT,
-    LexerMetrics.LPAREN,
-    LexerMetrics.IDENT,
-    LexerMetrics.RPAREN,
-    LexerMetrics.DOT,
-    LexerMetrics.IDENT
-  };
-  private final LexerMetrics[] softCastSequence = {
-    LexerMetrics.LPAREN,
-    LexerMetrics.IDENT,
-    LexerMetrics.AS,
-    LexerMetrics.IDENT,
-    LexerMetrics.RPAREN,
-    LexerMetrics.DOT,
-    LexerMetrics.IDENT
-  };
+/** Don't cast an object only to free it. */
+public class CastAndFreeRule extends AbstractDelphiRule {
 
   @Override
-  public void start(RuleContext ctx) {
-    sequenceHardCastIndex = 0;
-    sequenceSoftCastIndex = 0;
+  public RuleContext visit(ExpressionNode expr, RuleContext data) {
+    if (isCastExpression(expr) && isFreed(expr)) {
+      addViolation(data, expr);
+    }
+    return super.visit(expr, data);
   }
 
-  @Override
-  public void visit(DelphiNode node, RuleContext ctx) {
-    sequenceHardCastIndex = processSequence(hardCastSequence, sequenceHardCastIndex, node, ctx);
-    sequenceSoftCastIndex = processSequence(softCastSequence, sequenceSoftCastIndex, node, ctx);
+  private static boolean isCastExpression(ExpressionNode expr) {
+    return isSoftCast(expr) || isHardCast(expr);
   }
 
-  private int processSequence(
-      LexerMetrics[] sequence, int sequenceIndex, DelphiNode node, RuleContext ctx) {
-    int resultIndex = sequenceIndex;
-    if (resultIndex >= sequence.length) {
-      resultIndex = 0;
-    } else if (sequence[resultIndex].toMetrics() == node.getType()) {
-      ++resultIndex;
-      if (isCorrectSequence(sequence, resultIndex, node)) {
-        resultIndex = 0;
-        addViolation(ctx, node);
+  private static boolean isSoftCast(ExpressionNode expr) {
+    return expr instanceof BinaryExpressionNode
+        && ((BinaryExpressionNode) expr).getOperator() == BinaryOp.AS;
+  }
+
+  private static boolean isHardCast(ExpressionNode expr) {
+    return expr instanceof PrimaryExpressionNode
+        && expr.jjtGetChild(0) instanceof IdentifierNode
+        && expr.jjtGetChild(1) instanceof ArgumentListNode
+        && expr.jjtGetNumChildren() < 6;
+  }
+
+  private static boolean isFreed(ExpressionNode expr) {
+    return isFree(expr) || isFreeAndNil(expr);
+  }
+
+  private static boolean isFree(ExpressionNode node) {
+    boolean result =
+        (node instanceof PrimaryExpressionNode
+            && node.jjtGetChild(node.jjtGetNumChildren() - 1).hasImageEqualTo("Free"));
+
+    if (!result) {
+      ExpressionNode parenthesized = node.findParentheses();
+
+      if (node != parenthesized) {
+        Node parent = parenthesized.jjtGetParent();
+        result = parent instanceof ExpressionNode && isFree((ExpressionNode) parent);
       }
-    } else {
-      resultIndex = 0;
     }
 
-    return resultIndex;
+    return result;
   }
 
-  private boolean isCorrectSequence(LexerMetrics[] sequence, int index, Tree lastNode) {
-    return index >= sequence.length && "free".equalsIgnoreCase(lastNode.getText());
-  }
+  private static boolean isFreeAndNil(ExpressionNode expr) {
+    Node argList = expr.findParentheses().jjtGetParent();
+    Node freeAndNil = argList.jjtGetParent().jjtGetChild(argList.jjtGetChildIndex() - 1);
 
-  @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
-  }
-
-  @Override
-  public int hashCode() {
-    return super.hashCode();
+    return argList instanceof ArgumentListNode
+        && freeAndNil instanceof IdentifierNode
+        && freeAndNil.hasImageEqualTo("FreeAndNil");
   }
 }

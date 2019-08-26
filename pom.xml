@@ -2,13 +2,13 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>sonar-delphi-plugin</artifactId>
-  <version>0.7</version>
+  <version>0.8</version>
   <groupId>org.delphi.plugin</groupId>
   <name>Sonar Delphi Plugin</name>
   <description>Enables analysis of Delphi projects in SonarQube 7.9+.
-    Originally developed by Sabre Airline solutions and numerous open source developers.
-    Modified for use for IntegraDev (IAD) with custom rules and functions by
-    Monash University students.</description>
+  Originally developed by Sabre Airline solutions and numerous open source developers.
+  Modified for use for IntegraDev (IAD) with custom rules and functions by
+  Monash University students.</description>
   <inceptionYear>2011</inceptionYear>
   <developers>
     <developer>
@@ -62,33 +62,6 @@
     </site>
   </distributionManagement>
   <properties>
-    <!--Version Fields-->
-    <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
-    <sonar.version>7.9</sonar.version>
-    <sonarqube-smell-api.version>4.0.0</sonarqube-smell-api.version>
-    <sonar-orchestrator.version>3.26.0.2111</sonar-orchestrator.version>
-    <antlr-runtime.version>3.4</antlr-runtime.version>
-    <pmd.version>6.15.0</pmd.version>
-    <hamcrest-all.version>1.3</hamcrest-all.version>
-    <junit.version>4.12</junit.version>
-    <org.mockit.version>3.0.0</org.mockit.version>
-    <java-surefire.version>5.13.0.18197</java-surefire.version>
-    <guava.version>27.1-jre</guava.version>
-    <jdom.version>1.0</jdom.version>
-    <errorprone.version>2.3.4</errorprone.version>
-    <!--Maven plugins-->
-    <antlr3-plugin.version>3.5.2</antlr3-plugin.version>
-    <jacoco-plugin.version>0.8.5</jacoco-plugin.version>
-    <surefire-plugin.version>2.22.0</surefire-plugin.version>
-    <sonar-packaging-plugin.version>1.16</sonar-packaging-plugin.version>
-    <license-plugin.version>1.9.0</license-plugin.version>
-    <javadoc-plugin>3.1.0</javadoc-plugin>
-    <dependency-plugin.version>2.10</dependency-plugin.version>
-    <dependency-check-plugin.version>5.0.0</dependency-check-plugin.version>
-    <compiler-plugin.version>3.5.1</compiler-plugin.version>
-    <build-helper-plugin.version>3.0.0</build-helper-plugin.version>
-    <fmt-maven-plugin.version>2.9</fmt-maven-plugin.version>
-    <!--Version Fields end here-->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <sonar.pluginName>Delphi</sonar.pluginName>
     <sonar.pluginClass>org.sonar.plugins.delphi.DelphiPlugin</sonar.pluginClass>
@@ -102,6 +75,33 @@
     <jacoco.outputDirectory>${basedir}/target/jacoco/report/</jacoco.outputDirectory>
     <jacoco.dataFile.it>${basedir}/target/jacoco/jacoco-it.exec</jacoco.dataFile.it>
     <jacoco.outputDirectory.it>${basedir}/target/jacoco/report-it/</jacoco.outputDirectory.it>
+    <!--Version Fields-->
+    <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
+    <sonar.version>7.9.1</sonar.version>
+    <sonarqube-smell-api.version>4.0.0</sonarqube-smell-api.version>
+    <sonar-orchestrator.version>3.27.0.2172</sonar-orchestrator.version>
+    <antlr-runtime.version>3.4</antlr-runtime.version>
+    <pmd.version>6.18.0</pmd.version>
+    <hamcrest-all.version>1.3</hamcrest-all.version>
+    <junit.version>4.12</junit.version>
+    <mockito.version>3.0.0</mockito.version>
+    <reflections.version>0.9.11</reflections.version>
+    <java-surefire.version>5.13.0.18197</java-surefire.version>
+    <guava.version>28.1-jre</guava.version>
+    <jdom.version>1.0</jdom.version>
+    <errorprone.version>2.3.4</errorprone.version>
+    <!--Maven plugins-->
+    <antlr3-plugin.version>3.5.2</antlr3-plugin.version>
+    <jacoco-plugin.version>0.8.4</jacoco-plugin.version>
+    <surefire-plugin.version>2.22.0</surefire-plugin.version>
+    <sonar-packaging-plugin.version>1.16</sonar-packaging-plugin.version>
+    <license-plugin.version>1.9.0</license-plugin.version>
+    <javadoc-plugin>3.1.0</javadoc-plugin>
+    <dependency-plugin.version>2.10</dependency-plugin.version>
+    <dependency-check-plugin.version>5.2.1</dependency-check-plugin.version>
+    <compiler-plugin.version>3.5.1</compiler-plugin.version>
+    <build-helper-plugin.version>3.0.0</build-helper-plugin.version>
+    <fmt-maven-plugin.version>2.9</fmt-maven-plugin.version>
   </properties>
   <!-- this is important for sonar-packaging-maven-plugin -->
   <packaging>sonar-plugin</packaging>
@@ -152,11 +152,31 @@
       <groupId>org.antlr</groupId>
       <artifactId>antlr-runtime</artifactId>
       <version>${antlr-runtime.version}</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>net.sourceforge.pmd</groupId>
       <artifactId>pmd-core</artifactId>
       <version>${pmd.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${guava.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>jdom</groupId>
+      <artifactId>jdom</artifactId>
+      <version>${jdom.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jetbrains</groupId>
+      <artifactId>annotations</artifactId>
+      <version>17.0.0</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -173,19 +193,14 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>${org.mockit.version}</version>
+      <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>${guava.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>jdom</groupId>
-      <artifactId>jdom</artifactId>
-      <version>${jdom.version}</version>
+      <groupId>org.reflections</groupId>
+      <artifactId>reflections</artifactId>
+      <version>${reflections.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>
@@ -213,6 +228,17 @@
         <groupId>org.antlr</groupId>
         <artifactId>antlr3-maven-plugin</artifactId>
         <version>${antlr3-plugin.version}</version>
+        <configuration>
+          <printGrammar>false</printGrammar>
+          <verbose>true</verbose>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>antlr</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -247,7 +273,7 @@
           <compilerArgs>
             <arg>-XDcompilePolicy=simple</arg>
             <arg>-Xlint:all,-serial,-path,-processing,-rawtypes,-cast,-classfile</arg>
-            <arg>-Xplugin:ErrorProne -XepDisableWarningsInGeneratedCode -XepExcludedPaths:.*/antlr/generated/.*</arg>
+            <arg>-Xplugin:ErrorProne -XepDisableWarningsInGeneratedCode -XepExcludedPaths:.*/Delphi(Lexer|Parser).java</arg>
           </compilerArgs>
           <annotationProcessorPaths>
             <path>
@@ -358,6 +384,18 @@
         <artifactId>build-helper-maven-plugin</artifactId>
         <version>${build-helper-plugin.version}</version>
         <executions>
+          <execution>
+            <id>add-antlr3-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>target/generated-sources/</source>
+              </sources>
+            </configuration>
+          </execution>
           <execution>
             <id>add-integration-test-source</id>
             <phase>generate-test-sources</phase>

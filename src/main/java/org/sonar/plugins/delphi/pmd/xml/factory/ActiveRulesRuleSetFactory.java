@@ -72,9 +72,4 @@ public class ActiveRulesRuleSetFactory implements RuleSetFactory {
       pmdRule.addProperty(property);
     }
   }
-
-  @Override
-  public void close() {
-    // Do nothing
-  }
 }

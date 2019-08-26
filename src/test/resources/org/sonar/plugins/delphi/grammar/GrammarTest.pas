@@ -1,4 +1,4 @@
-unit GrammarTest;
+﻿unit GrammarTest;
 
 {This is a sample Delphi file.}
 
@@ -80,11 +80,7 @@ type
       kwMisc: (Misc: TXPMisc);
     end;
     
-    procedure freecomparepointer				//problem with external
-    (
-    	var pointertofree : pointerr
-    ); 
-    external 'ftsyscpi.dll';
+    procedure freecomparepointe(var pointertofree : pointerr);
 
 
 

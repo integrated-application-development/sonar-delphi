@@ -18,38 +18,26 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import org.antlr.runtime.tree.Tree;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import net.sourceforge.pmd.RuleContext;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 
-public class MethodNameRule extends NameConventionRule {
+public class MethodNameRule extends AbstractDelphiRule {
 
   @Override
-  public List<DelphiNode> findNodes(DelphiNode node) {
-    if (node.getType() != DelphiLexer.TkNewType || (!isInterface(node) && isPublished())) {
-      return Collections.emptyList();
+  public RuleContext visit(MethodDeclarationNode method, RuleContext data) {
+    if (isViolation(method)) {
+      addViolation(data, method);
+    }
+    return super.visit(method, data);
+  }
+
+  private boolean isViolation(MethodDeclarationNode method) {
+    TypeDeclarationNode type = method.getFirstParentOfType(TypeDeclarationNode.class);
+    if (method.isPublished() && (type == null || !type.isInterface())) {
+      return false;
     }
 
-    List<Tree> nameParentNodes = node.findAllChildren(DelphiLexer.TkFunctionName);
-
-    return nameParentNodes.stream()
-        .map(parent -> (DelphiNode) parent.getChild(0))
-        .collect(Collectors.toList());
-  }
-
-  @Override
-  protected boolean isViolation(DelphiNode method) {
-    String name = method.getText();
-    return Character.isLowerCase(name.charAt(0));
-  }
-
-  private boolean isInterface(DelphiNode typeNode) {
-    Tree typeDeclNode = typeNode.getFirstChildWithType(DelphiLexer.TkNewTypeDecl);
-    int type = typeDeclNode.getChild(0).getType();
-
-    return type == DelphiLexer.TkInterface;
+    return Character.isLowerCase(method.getSimpleName().charAt(0));
   }
 }

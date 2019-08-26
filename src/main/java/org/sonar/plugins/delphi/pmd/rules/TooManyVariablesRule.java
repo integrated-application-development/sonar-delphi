@@ -1,36 +1,37 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import org.sonar.plugins.delphi.antlr.ast.DelphiNode;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.LIMIT;
 
-public class TooManyVariablesRule extends VariableCounterRule {
+import java.util.List;
+import net.sourceforge.pmd.RuleContext;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.VarSectionNode;
+
+public class TooManyVariablesRule extends AbstractDelphiRule {
   private static final String VIOLATION_MESSAGE = "Too many variables: %d (max %d)";
 
   @Override
-  public List<DelphiNode> findNodes(DelphiNode node) {
-    if (node.getType() == DelphiLexer.TkFunctionName) {
-      DelphiNode method = (DelphiNode) node.getParent();
-      DelphiNode nextNode = method.nextNode();
-
-      if (nextNode != null && nextNode.getType() == DelphiLexer.TkBlockDeclSection) {
-        List<?> children = nextNode.getChildren();
-        if (children != null) {
-          return children.stream()
-              .map(child -> (DelphiNode) child)
-              .filter(child -> child.getType() == DelphiLexer.VAR)
-              .collect(Collectors.toList());
-        }
-      }
+  public RuleContext visit(MethodImplementationNode method, RuleContext data) {
+    int count = countVariableDeclarations(method);
+    int limit = getProperty(LIMIT);
+    if (count > limit) {
+      addViolationWithMessage(
+          data,
+          method.getMethodHeading().getMethodName(),
+          String.format(VIOLATION_MESSAGE, count, limit));
     }
-
-    return Collections.emptyList();
+    return super.visit(method, data);
   }
 
-  @Override
-  protected String getViolationMessage(int variableCount, int limit) {
-    return String.format(VIOLATION_MESSAGE, variableCount, limit);
+  private static int countVariableDeclarations(MethodImplementationNode method) {
+    int count = 0;
+    if (method.hasMethodBody() && method.getMethodBody().hasDeclarationSection()) {
+      List<VarSectionNode> varSections =
+          method.getMethodBody().getDeclarationSection().findChildrenOfType(VarSectionNode.class);
+      for (VarSectionNode varSection : varSections) {
+        count += varSection.getDeclarations().size();
+      }
+    }
+    return count;
   }
 }

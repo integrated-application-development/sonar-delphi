@@ -4,11 +4,11 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
-import static org.sonar.plugins.delphi.HasRuleKey.hasRuleKey;
-import static org.sonar.plugins.delphi.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.matchers.HasRuleKey.hasRuleKey;
+import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
 
 import org.junit.Test;
-import org.sonar.plugins.delphi.pmd.DelphiTestUnitBuilder;
+import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class EmptyMethodRuleTest extends BasePmdRuleTest {
 
@@ -193,6 +193,17 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
             .appendImpl("begin")
             .appendImpl("  // do nothing")
             .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(not(hasItem(hasRuleKey("EmptyMethodRule"))));
+  }
+
+  @Test
+  public void testForwardDeclarationShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure ForwardProc(FirstName: String; LastName: String); forward;");
 
     execute(builder);
 
