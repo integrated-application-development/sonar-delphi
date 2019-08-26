@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.project;
 
+import com.google.common.base.Preconditions;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,10 +43,7 @@ public class DelphiWorkgroup {
    * @throws IOException If XML file not found
    */
   public DelphiWorkgroup(File xmlFile) throws IOException {
-    if (xmlFile == null) {
-      throw new IllegalArgumentException("No .groupproj file provided.");
-    }
-
+    Preconditions.checkNotNull(xmlFile);
     parseFile(xmlFile);
   }
 

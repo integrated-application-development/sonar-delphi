@@ -55,6 +55,8 @@ public class DelphiProjectHelper {
   private final FileSystem fs;
   private final List<File> excludedDirectories;
 
+  private List<DelphiProject> projects;
+
   /**
    * ctor used by Sonar
    *
@@ -64,7 +66,6 @@ public class DelphiProjectHelper {
   public DelphiProjectHelper(Configuration settings, FileSystem fs) {
     this.settings = settings;
     this.fs = fs;
-    LOG.info("Delphi Project Helper creation!!!");
     this.excludedDirectories = detectExcludedDirectories();
   }
 
@@ -161,20 +162,18 @@ public class DelphiProjectHelper {
     return result;
   }
 
-  /**
-   * Create list of DelphiLanguage projects in a current workspace
-   *
-   * @return List of DelphiLanguage projects
-   */
+  /** @return List of DelphiLanguage projects */
   public List<DelphiProject> getProjects() {
-    List<DelphiProject> projects = getProjectsFromSettings();
+    if (projects == null) {
+      projects = getProjectsFromSettings();
 
-    if (projects.isEmpty()) {
-      projects = getDefaultProject();
-    }
+      if (projects.isEmpty()) {
+        projects = getDefaultProject();
+      }
 
-    for (DelphiProject delphiProject : projects) {
-      delphiProject.addDefinitions(getConditionalDefines());
+      for (DelphiProject delphiProject : projects) {
+        delphiProject.addDefinitions(getConditionalDefines());
+      }
     }
 
     return projects;
