@@ -22,8 +22,6 @@
  */
 package org.sonar.plugins.delphi.antlr.resolvers.subranges.impl;
 
-import java.util.Objects;
-
 /** Used to replace a specific range with a specific string */
 public class ReplacementSubRange extends IntegerSubRange {
 
@@ -44,26 +42,5 @@ public class ReplacementSubRange extends IntegerSubRange {
   @Override
   public String toString() {
     return replacementString;
-  }
-
-  @SuppressWarnings("EqualsGetClass")
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    if (!super.equals(o)) {
-      return false;
-    }
-    ReplacementSubRange that = (ReplacementSubRange) o;
-    return Objects.equals(replacementString, that.replacementString);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(super.hashCode(), replacementString);
   }
 }

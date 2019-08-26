@@ -17,9 +17,4 @@ public class LowercaseFileStream extends ANTLRFileStream {
 
     return Character.toLowerCase(la);
   }
-
-  @Override
-  public String getSourceName() {
-    return this.fileName;
-  }
 }

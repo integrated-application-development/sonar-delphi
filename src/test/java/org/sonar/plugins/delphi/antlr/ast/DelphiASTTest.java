@@ -24,28 +24,25 @@ package org.sonar.plugins.delphi.antlr.ast;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
-import java.io.File;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.antlr.runtime.tree.Tree;
+import net.sourceforge.pmd.lang.ast.Node;
 import org.junit.Test;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 
 public class DelphiASTTest {
 
   private static final String TEST_FILE = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
-  private ASTTree ast = new DelphiAST(DelphiUtils.getResource(TEST_FILE));
+  private DelphiAST ast = DelphiTestFileBuilder.fromResource(TEST_FILE).parse();
 
   @Test
-  public void testGenerateXML() throws Exception {
-    File xml = File.createTempFile("DelphiAST", ".xml");
-    ast.generateXML(xml.getAbsolutePath());
-
-    DocumentBuilder parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-    parser.parse(xml);
-
-    xml.deleteOnExit();
+  public void testAcceptImplemented() {
+    DelphiParserVisitor<?> visitor = spy(new DelphiParserVisitor() {});
+    ast.accept(visitor, null);
+    verify(visitor).visit(ast, null);
   }
 
   @Test
@@ -53,9 +50,9 @@ public class DelphiASTTest {
     checkTypes(ast);
   }
 
-  private void checkTypes(Tree node) {
-    for (int i = 0; i < node.getChildCount(); ++i) {
-      Tree child = node.getChild(i);
+  private static void checkTypes(Node node) {
+    for (int i = 0; i < node.jjtGetNumChildren(); ++i) {
+      Node child = node.jjtGetChild(i);
       assertThat(child, instanceOf(DelphiNode.class));
       checkTypes(child);
     }

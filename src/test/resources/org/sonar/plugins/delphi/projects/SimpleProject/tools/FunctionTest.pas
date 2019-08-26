@@ -23,6 +23,8 @@ var
 
 implementation
 
+procedure MyForwardProc; forward;
+
 procedure TFunctionTest.setField(x: integer);
 var
 placeHolder, z: real;
@@ -57,6 +59,11 @@ var
 placeHolder, x: real;
 begin
 	classField := 0;
+end;
+
+procedure MyForwardProc;
+begin
+  // Do nothing
 end;
 
 end.

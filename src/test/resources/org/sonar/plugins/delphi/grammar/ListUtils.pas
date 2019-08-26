@@ -46,7 +46,7 @@ var
   vList: TStringList;
   vItem: String;
 begin
-  Assert(Assigned(AConverter), 'Converter n�o definido');
+  Assert(Assigned(AConverter), 'Converter definido');
 
   vList := TStringList.Create;
   try

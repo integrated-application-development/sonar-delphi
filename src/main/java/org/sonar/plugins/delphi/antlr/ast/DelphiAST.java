@@ -22,181 +22,99 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
-import com.qualinsight.plugins.sonarqube.smell.api.annotation.Smell;
-import com.qualinsight.plugins.sonarqube.smell.api.model.SmellType;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
-import javax.annotation.Nullable;
-import org.antlr.runtime.BufferedTokenStream;
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.Token;
-import org.antlr.runtime.TokenRewriteStream;
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
-import org.antlr.runtime.tree.TreeAdaptor;
-import org.apache.commons.io.FileUtils;
-import org.sonar.plugins.delphi.antlr.ast.xml.DelphiAstSerializer;
-import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStream;
-import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
-import org.sonar.plugins.delphi.antlr.generated.DelphiParser;
-import org.w3c.dom.Document;
+import net.sourceforge.pmd.lang.ast.RootNode;
+import org.sonar.plugins.delphi.DelphiFile;
+import org.sonar.plugins.delphi.antlr.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.delphi.antlr.ast.node.FileHeaderNode;
+import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.pmd.FilePosition;
 
 /** DelphiLanguage AST tree. */
-public class DelphiAST extends CommonTree implements ASTTree {
-  private String fileName;
-  private boolean isError;
-  private DelphiFileStream fileStream;
-  private List<Token> comments;
-  private List<String> codeLines;
-  private Document document;
-
-  private static class FileReadFailException extends RuntimeException {
-
-    FileReadFailException(String s, IOException e) {
-      super(s, e);
-    }
-  }
-
-  private static class FileParseFailException extends RuntimeException {
-
-    FileParseFailException(String s, RecognitionException e) {
-      super(s, e);
-    }
-  }
-
-  /**
-   * Constructor with default values for fileStreamConfig. Used for tests
-   *
-   * @param file Input file from which to read data for AST tree
-   */
-  public DelphiAST(File file) {
-    this(file, new DelphiFileStreamConfig());
-  }
+public class DelphiAST extends DelphiNode implements RootNode {
+  private DelphiFile delphiFile;
 
   /**
    * Constructor.
    *
-   * @param file Input file from which to read data for AST tree
-   * @param fileStreamConfig Configures the DelphiFileStream which is fed to the lexer
+   * @param delphiFile The DelphiFile that this AST represents
+   * @param root The root node of the AST
    */
-  public DelphiAST(File file, DelphiFileStreamConfig fileStreamConfig) {
-    try {
-      fileStream = new DelphiFileStream(file.getAbsolutePath(), fileStreamConfig);
-      codeLines = FileUtils.readLines(file, fileStreamConfig.getEncoding());
-    } catch (IOException e) {
-      throw new FileReadFailException("Failed to read file " + file.getAbsolutePath(), e);
+  public DelphiAST(DelphiFile delphiFile, DelphiNode root) {
+    super(DelphiLexer.TkRootNode);
+    this.delphiFile = delphiFile;
+
+    if (root != null) {
+      for (int i = 0; i < root.jjtGetNumChildren(); ++i) {
+        jjtAddChild(root.jjtGetChild(i));
+      }
     }
-
-    TokenRewriteStream tokenStream = new TokenRewriteStream(new DelphiLexer(fileStream));
-    comments = extractComments(tokenStream);
-
-    DelphiParser parser = new DelphiParser(tokenStream);
-    TreeAdaptor adaptor = new DelphiTreeAdaptor(this);
-    parser.setTreeAdaptor(adaptor);
-
-    try {
-      children = ((CommonTree) parser.file().getTree()).getChildren();
-    } catch (RecognitionException e) {
-      throw new FileParseFailException("Failed to parse the file " + file.getAbsolutePath(), e);
-    }
-
-    fileName = file.getAbsolutePath();
-    isError = parser.getNumberOfSyntaxErrors() != 0;
   }
 
-  @Smell(
-      minutes = 120,
-      reason =
-          "This constructor only exists for tests, and doesn't make much sense."
-              + " The contract of DelphiAST appears to be that you feed it a file,"
-              + " and it populates itself with nodes."
-              + " Using this empty constructor and then trying to actually use the object "
-              + " would only yield NPEs.",
-      type = SmellType.BAD_DESIGN)
-  public DelphiAST() {}
-
-  private List<Token> extractComments(BufferedTokenStream tokenStream) {
-    tokenStream.fill();
-    List<?> tokens = tokenStream.getTokens();
-    return tokens.stream()
-        .map(token -> (Token) token)
-        .filter(token -> token.getType() == DelphiLexer.COMMENT)
-        .collect(Collectors.toList());
-  }
-
-  /** {@inheritDoc} */
   @Override
-  public String getFileName() {
-    return fileName;
+  public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
+    return visitor.visit(this, data);
   }
 
-  /** {@inheritDoc} */
   @Override
-  public boolean isError() {
-    return isError;
+  public int getBeginLine() {
+    return FilePosition.UNDEFINED_LINE;
   }
 
-  /** {@inheritDoc} */
   @Override
-  public void generateXML(String fileName) {
-    DelphiAstSerializer serializer = new DelphiAstSerializer(this);
-    serializer.dumpXml(fileName, generateDocument());
+  public int getBeginColumn() {
+    return FilePosition.UNDEFINED_COLUMN;
   }
 
-  /** {@inheritDoc} */
   @Override
-  @Nullable
-  public Document generateDocument() {
-    if (document == null) {
-      DelphiAstSerializer serializer = new DelphiAstSerializer(this);
-      document = serializer.generateDocument();
-    }
-
-    return document;
+  public int getEndLine() {
+    return FilePosition.UNDEFINED_LINE;
   }
 
-  /** {@inheritDoc} */
   @Override
-  public String getFileSource() {
-    return fileStream.toString();
+  public int getEndColumn() {
+    return FilePosition.UNDEFINED_COLUMN;
   }
 
-  /** {@inheritDoc} */
   @Override
-  public String getFileSourceLine(int line) {
-    if (line < 1) {
-      throw new IllegalArgumentException(toString() + " Source code line cannot be less than 1");
-    }
-    if (line > codeLines.size()) {
-      throw new IllegalArgumentException(
-          toString() + "Source code line number too high: " + line + " / " + codeLines.size());
-    }
-    return codeLines.get(line - 1);
+  public List<DelphiToken> getComments() {
+    return delphiFile.getComments();
   }
 
-  public List<Token> getComments() {
-    return comments;
+  public List<DelphiToken> getCommentsInsideNode(DelphiNode node) {
+    return getCommentsBetweenTokens(node.jjtGetFirstToken(), node.jjtGetLastToken());
   }
 
-  private List<Token> getCommentsBetweenTokenIndices(int startIndex, int endIndex) {
-    return comments.stream()
+  private List<DelphiToken> getCommentsBetweenTokens(DelphiToken first, DelphiToken last) {
+    return getComments().stream()
         .filter(
             token -> {
-              int index = token.getTokenIndex();
-              return index > startIndex && index < endIndex;
+              int index = token.getIndex();
+              return index > first.getIndex() && index < last.getIndex();
             })
         .collect(Collectors.toList());
   }
 
-  public List<Token> getCommentsInsideNode(Tree node) {
-    return getCommentsBetweenTokenIndices(node.getTokenStartIndex(), node.getTokenStopIndex());
+  public List<DelphiToken> getTokens() {
+    return delphiFile.getTokens();
   }
 
-  @Override
-  public String toString() {
-    return "DelphiAST{" + "fileName='" + fileName + '\'' + '}';
+  public DelphiFile getDelphiFile() {
+    return delphiFile;
+  }
+
+  public String getFileName() {
+    return delphiFile.getSourceCodeFile().getAbsolutePath();
+  }
+
+  public Set<Integer> getSuppressions() {
+    return delphiFile.getSuppressions();
+  }
+
+  public FileHeaderNode getFileHeader() {
+    return (FileHeaderNode) jjtGetChild(0);
   }
 }

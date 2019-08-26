@@ -22,8 +22,6 @@
  */
 package org.sonar.plugins.delphi.antlr.resolvers.subranges.impl;
 
-import java.util.Objects;
-
 /** Sub range class that contains a string */
 public class StringSubRange extends IntegerSubRange {
 
@@ -47,12 +45,12 @@ public class StringSubRange extends IntegerSubRange {
 
   @Override
   public String toString() {
-    if (subString == null) {
-      return super.toString();
-    } else {
+    String result = super.toString();
+    if (subString != null) {
       refreshString();
-      return super.toString() + " " + subString;
+      result += " " + subString;
     }
+    return result;
   }
 
   @Override
@@ -72,26 +70,5 @@ public class StringSubRange extends IntegerSubRange {
       subString = fullString.substring(getBegin(), getEnd());
       dirty = false;
     }
-  }
-
-  @SuppressWarnings("EqualsGetClass")
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    if (!super.equals(o)) {
-      return false;
-    }
-    StringSubRange that = (StringSubRange) o;
-    return Objects.equals(fullString, that.fullString) && Objects.equals(subString, that.subString);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(super.hashCode(), fullString, subString);
   }
 }

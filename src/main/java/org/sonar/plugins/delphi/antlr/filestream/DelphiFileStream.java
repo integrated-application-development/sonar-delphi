@@ -37,7 +37,6 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiFileStream extends ANTLRStringStream {
 
-  private final String fileName;
   private final DelphiFileStreamConfig config;
 
   /**
@@ -48,7 +47,7 @@ public class DelphiFileStream extends ANTLRStringStream {
    * @throws IOException If file not found
    */
   public DelphiFileStream(String fileName, DelphiFileStreamConfig config) throws IOException {
-    this.fileName = fileName;
+    this.name = fileName;
     this.config = config;
     load();
   }
@@ -66,11 +65,11 @@ public class DelphiFileStream extends ANTLRStringStream {
     boolean extendIncludes = config.getExtendIncludes();
     List<File> includeDirectories = config.getIncludedDirs();
 
-    File file = new File(fileName);
+    File file = new File(name);
     String encoding = config.getEncoding();
     StringBuilder fileData = new StringBuilder(DelphiUtils.readFileContent(file, encoding));
 
-    SourceResolverResults resolverResult = new SourceResolverResults(fileName, fileData);
+    SourceResolverResults resolverResult = new SourceResolverResults(name, fileData);
 
     SourceResolver resolver =
         new IncludeResolver(extendIncludes, includeDirectories).chain(new DefineResolver(defs));
@@ -79,11 +78,6 @@ public class DelphiFileStream extends ANTLRStringStream {
     data = resolverResult.getFileData().toString().toCharArray();
 
     super.n = data.length;
-  }
-
-  @Override
-  public String getSourceName() {
-    return this.fileName;
   }
 
   /**

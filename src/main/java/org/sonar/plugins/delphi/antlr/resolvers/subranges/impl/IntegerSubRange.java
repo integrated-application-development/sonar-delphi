@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.resolvers.subranges.impl;
 
+import com.google.common.base.Preconditions;
 import org.sonar.plugins.delphi.antlr.resolvers.subranges.SubRange;
 
 /**
@@ -40,11 +41,9 @@ public class IntegerSubRange implements SubRange {
    * @param rangeEnd Range end
    */
   public IntegerSubRange(int rangeStart, int rangeEnd) {
+    Preconditions.checkArgument(rangeStart <= rangeEnd);
     begin = rangeStart;
     end = rangeEnd;
-    if (begin > end) {
-      throw new IllegalArgumentException("begin (" + begin + ") > end (" + end + ")");
-    }
   }
 
   /**
@@ -96,38 +95,13 @@ public class IntegerSubRange implements SubRange {
 
   @Override
   public void setEnd(int value) {
-    if (value < begin) {
-      throw new IllegalArgumentException("Cannot set range end value less than begin value.");
-    }
+    Preconditions.checkArgument(value >= begin);
     end = value;
   }
 
   @Override
   public void setBegin(int value) {
-    if (value > end) {
-      throw new IllegalArgumentException("Cannot set range begin value grater than end value");
-    }
+    Preconditions.checkArgument(value <= end);
     begin = value;
-  }
-
-  @SuppressWarnings("EqualsGetClass")
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
-    }
-    if (this == obj) {
-      return true;
-    }
-    if (this.getClass() == obj.getClass()) {
-      SubRange range = (SubRange) obj;
-      return range.getBegin() == this.begin && range.getEnd() == this.end;
-    }
-    return false;
-  }
-
-  @Override
-  public int hashCode() {
-    return super.hashCode();
   }
 }

@@ -23,7 +23,7 @@
 package org.sonar.plugins.delphi.core;
 
 import java.util.Set;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.DelphiLexer;
 
 /** DelphiLanguage keywords used for code colorization. */
 public final class DelphiKeywords {
@@ -158,9 +158,9 @@ public final class DelphiKeywords {
           DelphiLexer.BREAK,
           DelphiLexer.CONTINUE,
           DelphiLexer.EXIT,
-          DelphiLexer.FALSE,
           DelphiLexer.GOTO,
-          DelphiLexer.TRUE);
+          DelphiLexer.STRING,
+          DelphiLexer.VARIANT);
 
   private DelphiKeywords() {
     // const class

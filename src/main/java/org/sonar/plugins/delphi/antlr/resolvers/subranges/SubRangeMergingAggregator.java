@@ -27,7 +27,6 @@ import java.util.Iterator;
 /** Aggregates sub ranges, merges them if necessary to reduce workload */
 public class SubRangeMergingAggregator extends SubRangeAggregator {
 
-  /** {@inheritDoc} */
   @Override
   public void add(SubRange newRange) {
     if (newRange == null) {
