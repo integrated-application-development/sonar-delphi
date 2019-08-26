@@ -1,18 +1,19 @@
-package org.sonar.plugins.delphi.token;
+package org.sonar.plugins.delphi.executor;
 
-import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
-import org.sonar.plugins.delphi.antlr.generated.DelphiLexer;
+import org.sonar.plugins.delphi.DelphiFile;
+import org.sonar.plugins.delphi.antlr.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
 
-public class DelphiHighlightHandler implements DelphiTokenHandler {
+public class DelphiHighlightExecutor extends DelphiTokenExecutor {
   private NewHighlighting highlighter;
   private boolean insideAsmBlock;
 
   @Override
-  public void onFile(SensorContext context, InputFile inputFile) {
-    highlighter = context.newHighlighting().onFile(inputFile);
+  public void onFile(SensorContext context, DelphiFile delphiFile) {
+    highlighter = context.newHighlighting().onFile(delphiFile.getInputFile());
     insideAsmBlock = false;
   }
 
@@ -28,20 +29,15 @@ public class DelphiHighlightHandler implements DelphiTokenHandler {
     }
 
     highlighter.highlight(
-        token.getStartLine(),
-        token.getStartColumn(),
+        token.getBeginLine(),
+        token.getBeginColumn(),
         token.getEndLine(),
         token.getEndColumn(),
         highlightType);
   }
 
-  @Override
-  public void saveResults() {
-    highlighter.save();
-  }
-
   private boolean shouldSkip(DelphiToken token) {
-    int type = token.getToken().getType();
+    int type = token.getType();
 
     if (type == DelphiLexer.ASM) {
       // We still want to highlight the asm keyword
@@ -54,5 +50,10 @@ public class DelphiHighlightHandler implements DelphiTokenHandler {
     }
 
     return insideAsmBlock && !token.isComment();
+  }
+
+  @Override
+  public void save() {
+    highlighter.save();
   }
 }
