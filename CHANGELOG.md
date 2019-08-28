@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Various parsing bugs.
+- Typo in `ClassNameRule` issue message.
 
 ## [0.8.0] - 2019-08-26
 

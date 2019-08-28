@@ -299,7 +299,7 @@
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.ClassNameRule"
-    message="Class and names should comply with a naming convention"
+    message="Class names should comply with a naming convention"
     name="ClassNameRule">
     <priority>4</priority>
     <description>
