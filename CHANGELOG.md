@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Overload resolution
 - Symbol information is now provided to the Sonar API for use in the web interface.
 
+### Changed
+
+- Enhance `MixedNamesRule` with symbol table information.
+
 ### Fixed
 
 - Various parsing bugs.
