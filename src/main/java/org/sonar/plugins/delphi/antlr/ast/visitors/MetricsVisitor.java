@@ -17,8 +17,8 @@ public class MetricsVisitor implements DelphiParserVisitor<Data> {
     private int methods;
     private int complexity;
     private int cognitiveComplexity;
-    private Set<Integer> codeLines = new HashSet<>();
-    private Set<Integer> commentLines = new HashSet<>();
+    private final Set<Integer> codeLines = new HashSet<>();
+    private final Set<Integer> commentLines = new HashSet<>();
     private int statements;
 
     public int getClasses() {
@@ -81,9 +81,7 @@ public class MetricsVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(MethodImplementationNode method, Data data) {
-    if (method.hasMethodBody()) {
-      ++data.methods;
-    }
+    ++data.methods;
     return DelphiParserVisitor.super.visit(method, data);
   }
 

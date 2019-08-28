@@ -3,8 +3,12 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Typed;
 
-public abstract class ExpressionNode extends DelphiNode {
+public abstract class ExpressionNode extends DelphiNode implements Typed {
+  private Type type;
+
   public ExpressionNode(Token token) {
     super(token);
   }
@@ -14,7 +18,19 @@ public abstract class ExpressionNode extends DelphiNode {
   }
 
   @Override
+  @NotNull
+  public Type getType() {
+    if (type == null) {
+      type = createType();
+    }
+    return type;
+  }
+
+  @Override
   public abstract String getImage();
+
+  @NotNull
+  protected abstract Type createType();
 
   public boolean isIntegerLiteral() {
     LiteralNode literal = extractLiteral();
@@ -23,12 +39,12 @@ public abstract class ExpressionNode extends DelphiNode {
 
   public boolean isStringLiteral() {
     LiteralNode literal = extractLiteral();
-    return literal != null && literal.isStringLiteral();
+    return literal != null && literal.isTextLiteral();
   }
 
   public boolean isRealLiteral() {
     LiteralNode literal = extractLiteral();
-    return literal != null && literal.isRealLiteral();
+    return literal != null && literal.isDecimalLiteral();
   }
 
   public boolean isHexadecimalLiteral() {

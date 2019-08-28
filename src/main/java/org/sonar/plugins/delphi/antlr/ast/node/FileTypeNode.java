@@ -1,7 +1,11 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
+import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.type.DelphiFileType;
+import org.sonar.plugins.delphi.type.Type;
 
 public final class FileTypeNode extends TypeNode {
   public FileTypeNode(Token token) {
@@ -13,8 +17,15 @@ public final class FileTypeNode extends TypeNode {
     return visitor.visit(this, data);
   }
 
+  @Nullable
+  private TypeNode getTypeNode() {
+    return (TypeNode) jjtGetChild(1);
+  }
+
   @Override
-  public String getImage() {
-    return "File" + (jjtGetNumChildren() > 0 ? (" of " + jjtGetChild(0).getImage()) : "");
+  @NotNull
+  public Type createType() {
+    TypeNode type = getTypeNode();
+    return type == null ? DelphiFileType.untypedFile() : DelphiFileType.fileOf(type.getType());
   }
 }

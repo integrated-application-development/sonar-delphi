@@ -35,10 +35,10 @@ public abstract class FilePosition {
 
   private static class PrecisePosition extends FilePosition {
 
-    private int beginLine;
-    private int beginColumn;
-    private int endLine;
-    private int endColumn;
+    private final int beginLine;
+    private final int beginColumn;
+    private final int endLine;
+    private final int endColumn;
 
     PrecisePosition(int beginLine, int beginColumn, int endLine, int endColumn) {
       Preconditions.checkArgument(beginLine != UNDEFINED_LINE, "Imaginary token!");

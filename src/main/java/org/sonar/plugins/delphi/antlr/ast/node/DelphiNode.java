@@ -23,6 +23,7 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
 import static org.apache.commons.lang3.ArrayUtils.isArrayIndexValid;
+import static org.sonar.plugins.delphi.symbol.UnknownScope.unknownScope;
 
 import com.google.common.base.Preconditions;
 import java.util.Arrays;
@@ -30,7 +31,6 @@ import java.util.List;
 import net.sourceforge.pmd.lang.ast.AbstractNode;
 import net.sourceforge.pmd.lang.ast.GenericToken;
 import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.symboltable.Scope;
 import net.sourceforge.pmd.lang.symboltable.ScopedNode;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
@@ -40,12 +40,13 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
 import org.sonar.plugins.delphi.antlr.ast.DelphiTreeAdaptor;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.symbol.DelphiScope;
 
 /** AST node extended with PMD interfaces for PMD analysis */
 public abstract class DelphiNode extends AbstractNode implements ScopedNode {
 
-  private DelphiToken token;
-  private Scope scope;
+  private final DelphiToken token;
+  private DelphiScope scope;
 
   /**
    * All nodes must implement this constructor. Used to create a node with a concrete token. Also
@@ -124,12 +125,19 @@ public abstract class DelphiNode extends AbstractNode implements ScopedNode {
     return this.getImage().equalsIgnoreCase(image);
   }
 
-  public void setScope(Scope scope) {
+  public void setScope(DelphiScope scope) {
     this.scope = scope;
   }
 
   @Override
-  public Scope getScope() {
+  @NotNull
+  public DelphiScope getScope() {
+    if (scope == null) {
+      if (parent != null) {
+        return ((DelphiNode) parent).getScope();
+      }
+      return unknownScope();
+    }
     return scope;
   }
 
@@ -212,14 +220,6 @@ public abstract class DelphiNode extends AbstractNode implements ScopedNode {
       }
     }
     return result;
-  }
-
-  public Node prevNode() {
-    if (parent == null || childIndex == 0) {
-      return null;
-    }
-
-    return parent.jjtGetChild(childIndex - 1);
   }
 
   public Node nextNode() {

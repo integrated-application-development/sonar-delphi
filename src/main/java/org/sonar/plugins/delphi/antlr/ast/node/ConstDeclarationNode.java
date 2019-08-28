@@ -1,9 +1,13 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import net.sourceforge.pmd.lang.ast.Node;
 import org.antlr.runtime.Token;
+import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Typed;
 
-public final class ConstDeclarationNode extends DelphiNode {
+public final class ConstDeclarationNode extends DelphiNode implements Typed {
   public ConstDeclarationNode(Token token) {
     super(token);
   }
@@ -17,8 +21,8 @@ public final class ConstDeclarationNode extends DelphiNode {
     return visitor.visit(this, data);
   }
 
-  public IdentifierNode getIdentifier() {
-    return (IdentifierNode) jjtGetChild(0);
+  public VarNameDeclarationNode getIdentifier() {
+    return (VarNameDeclarationNode) jjtGetChild(0);
   }
 
   public ExpressionNode getExpression() {
@@ -26,6 +30,17 @@ public final class ConstDeclarationNode extends DelphiNode {
   }
 
   public TypeNode getTypeNode() {
-    return (TypeNode) jjtGetChild(2);
+    Node typeNode = jjtGetChild(2);
+    return (typeNode instanceof TypeNode) ? (TypeNode) typeNode : null;
+  }
+
+  @Override
+  @NotNull
+  public Type getType() {
+    TypeNode typeNode = getTypeNode();
+    if (typeNode != null) {
+      return typeNode.getType();
+    }
+    return getExpression().getType();
   }
 }

@@ -58,6 +58,6 @@ public class DelphiPluginTest {
     Plugin.Context context = new Plugin.Context(runtime);
     plugin.define(context);
 
-    assertThat(context.getExtensions().size(), is(16));
+    assertThat(context.getExtensions().size(), is(17));
   }
 }

@@ -37,7 +37,7 @@ public class MethodNameRule extends AbstractDelphiRule {
     if (method.isPublished() && (type == null || !type.isInterface())) {
       return false;
     }
-
-    return Character.isLowerCase(method.getSimpleName().charAt(0));
+    String name = method.simpleName();
+    return Character.isLowerCase(name.charAt(0));
   }
 }

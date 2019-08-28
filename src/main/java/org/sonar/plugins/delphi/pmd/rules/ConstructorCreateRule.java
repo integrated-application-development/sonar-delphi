@@ -20,7 +20,7 @@ public class ConstructorCreateRule extends AbstractDelphiRule {
       return false;
     }
 
-    return !PREFIX.equals(method.getSimpleName())
-        && !NameConventionUtils.compliesWithPrefix(method.getSimpleName(), PREFIX);
+    return !PREFIX.equals(method.simpleName())
+        && !NameConventionUtils.compliesWithPrefix(method.simpleName(), PREFIX);
   }
 }

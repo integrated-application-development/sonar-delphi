@@ -35,7 +35,7 @@ import org.sonar.plugins.delphi.pmd.FilePosition;
 
 /** DelphiLanguage AST tree. */
 public class DelphiAST extends DelphiNode implements RootNode {
-  private DelphiFile delphiFile;
+  private final DelphiFile delphiFile;
 
   /**
    * Constructor.

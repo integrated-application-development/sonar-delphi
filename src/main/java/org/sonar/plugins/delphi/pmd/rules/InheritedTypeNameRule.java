@@ -57,17 +57,17 @@ public class InheritedTypeNameRule extends AbstractDelphiRule {
   @Override
   public RuleContext visit(TypeDeclarationNode type, RuleContext data) {
     if (parentPattern != null && namePattern != null) {
-      TypeNode typeDecl = type.getTypeDeclaration();
-      if (inheritsFromType(typeDecl) && !namePattern.matcher(type.getSimpleName()).matches()) {
-        addViolation(data, type.getTypeName());
+      TypeNode typeDecl = type.getTypeNode();
+      if (inheritsFromType(typeDecl) && !namePattern.matcher(type.simpleName()).matches()) {
+        addViolation(data, type.getTypeNameNode());
       }
     }
     return super.visit(type, data);
   }
 
   private boolean inheritsFromType(TypeNode typeDecl) {
-    return typeDecl.getParentTypeNames().stream()
-        .anyMatch(qName -> parentPattern.matcher(qName.getQualifiedName()).matches());
+    return typeDecl.getParentTypeNodes().stream()
+        .anyMatch(typeRef -> parentPattern.matcher(typeRef.fullyQualifiedName()).matches());
   }
 
   @Override

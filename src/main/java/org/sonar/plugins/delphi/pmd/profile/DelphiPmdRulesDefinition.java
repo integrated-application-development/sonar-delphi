@@ -46,7 +46,7 @@ public class DelphiPmdRulesDefinition implements RulesDefinition {
   public static final String UNDEFINED_BASE_EFFORT =
       "Builtin property 'baseEffort' must be defined for rule: %s";
 
-  private DelphiPmdRuleSetDefinitionProvider ruleSetDefinitionProvider;
+  private final DelphiPmdRuleSetDefinitionProvider ruleSetDefinitionProvider;
 
   public DelphiPmdRulesDefinition(DelphiPmdRuleSetDefinitionProvider ruleSetDefinitionProvider) {
     this.ruleSetDefinitionProvider = ruleSetDefinitionProvider;

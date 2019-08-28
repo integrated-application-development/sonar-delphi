@@ -36,7 +36,7 @@ public class ConstructorWithoutInheritedStatementRule extends NoInheritedStateme
   @Override
   public RuleContext visit(TypeDeclarationNode type, RuleContext data) {
     if (type.isRecord()) {
-      recordTypes.add(type.getQualifiedName());
+      recordTypes.add(type.fullyQualifiedName());
     }
     return super.visit(type, data);
   }

@@ -310,7 +310,7 @@
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.ClassNameRule"
-    message="Class and names should comply with a naming convention"
+    message="Class names should comply with a naming convention"
     name="ClassNameRule">
     <priority>4</priority>
     <description>
@@ -581,10 +581,10 @@ FreeAndNil(Foo); // Compliant
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.MixedNamesRule"
-        message="Method/variable name casing should be kept consistent"
+        message="Name casing should be kept consistent"
         name="MixedNamesRule">
     <priority>3</priority>
-    <description>Delphi is case-insensitive, but casing of method and variable names should be kept consistent.</description>
+    <description>Delphi is case-insensitive, but casing of name declarations and references should be kept consistent.</description>
     <properties>
       <property name="baseEffort" value="5min" />
     </properties>

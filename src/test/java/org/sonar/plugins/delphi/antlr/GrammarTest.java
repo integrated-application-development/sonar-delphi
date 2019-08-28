@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.delphi.antlr;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.File;
 import javax.xml.XMLConstants;
 import javax.xml.transform.OutputKeys;
@@ -46,7 +48,7 @@ public class GrammarTest {
 
   @Before
   public void setup() {
-    fileStreamConfig = new DelphiFileStreamConfig("UTF-8");
+    fileStreamConfig = new DelphiFileStreamConfig(UTF_8.name());
   }
 
   private void parseFile(String fileName) {

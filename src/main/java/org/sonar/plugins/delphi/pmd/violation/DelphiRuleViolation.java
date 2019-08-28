@@ -33,7 +33,7 @@ public class DelphiRuleViolation implements RuleViolation {
 
   private final Rule rule;
   private String description;
-  private String filename;
+  private final String filename;
 
   private String className = "";
   private String methodName = "";

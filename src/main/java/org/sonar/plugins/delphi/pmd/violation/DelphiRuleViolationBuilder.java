@@ -10,9 +10,9 @@ import org.sonar.plugins.delphi.pmd.FilePosition;
 import org.sonar.plugins.delphi.pmd.rules.DelphiRule;
 
 public class DelphiRuleViolationBuilder {
-  private DelphiRule rule;
-  private RuleContext ctx;
-  private DelphiRuleViolation ruleViolation;
+  private final DelphiRule rule;
+  private final RuleContext ctx;
+  private final DelphiRuleViolation ruleViolation;
 
   private DelphiRuleViolationBuilder(DelphiRule rule, RuleContext ctx) {
     this.rule = rule;
@@ -62,13 +62,13 @@ public class DelphiRuleViolationBuilder {
 
     TypeDeclarationNode typeNode = node.getFirstParentOfType(TypeDeclarationNode.class);
     if (typeNode != null) {
-      ruleViolation.setClassName(typeNode.getQualifiedName());
+      ruleViolation.setClassName(typeNode.fullyQualifiedName());
     }
 
     MethodImplementationNode methodNode = node.getFirstParentOfType(MethodImplementationNode.class);
     if (methodNode != null) {
       ruleViolation.setClassName(methodNode.getTypeName());
-      ruleViolation.setMethodName(methodNode.getSimpleName());
+      ruleViolation.setMethodName(methodNode.simpleName());
     }
   }
 }

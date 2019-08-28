@@ -4,10 +4,11 @@ import net.sourceforge.pmd.lang.ast.Node;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Typed;
 
-public final class ExceptItemNode extends DelphiNode {
+public final class ExceptItemNode extends DelphiNode implements Typed {
 
   public ExceptItemNode(Token token) {
     super(token);
@@ -18,14 +19,20 @@ public final class ExceptItemNode extends DelphiNode {
     return visitor.visit(this, data);
   }
 
+  @NotNull
+  @Override
+  public Type getType() {
+    return getExceptionType().getType();
+  }
+
   @Nullable
-  public IdentifierNode getExceptionIdentifier() {
-    return hasExceptionIdentifier() ? (IdentifierNode) jjtGetChild(0) : null;
+  public VarNameDeclarationNode getExceptionName() {
+    return hasExceptionIdentifier() ? (VarNameDeclarationNode) jjtGetChild(0) : null;
   }
 
   @NotNull
-  public QualifiedIdentifierNode getExceptionTypeIdentifier() {
-    return (QualifiedIdentifierNode) jjtGetChild(hasExceptionIdentifier() ? 1 : 0);
+  public TypeReferenceNode getExceptionType() {
+    return (TypeReferenceNode) jjtGetChild(hasExceptionIdentifier() ? 1 : 0);
   }
 
   @Nullable
@@ -35,6 +42,6 @@ public final class ExceptItemNode extends DelphiNode {
   }
 
   private boolean hasExceptionIdentifier() {
-    return jjtGetChild(0).jjtGetId() == DelphiLexer.TkIdentifier;
+    return jjtGetChild(0) instanceof VarNameDeclarationNode;
   }
 }

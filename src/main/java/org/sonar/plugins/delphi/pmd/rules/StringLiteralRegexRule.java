@@ -6,7 +6,7 @@ import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.antlr.ast.node.LiteralNode;
+import org.sonar.plugins.delphi.antlr.ast.node.TextLiteralNode;
 
 public class StringLiteralRegexRule extends AbstractDelphiRule {
   private static final Logger LOG = Loggers.get(StringLiteralRegexRule.class);
@@ -39,16 +39,12 @@ public class StringLiteralRegexRule extends AbstractDelphiRule {
   }
 
   @Override
-  public RuleContext visit(LiteralNode literal, RuleContext data) {
-    if (literal.isStringLiteral()) {
-      String string = literal.getImage().substring(1, literal.getImage().length() - 1);
-
-      if (pattern != null && pattern.matcher(string).matches()) {
-        addViolationWithMessage(data, literal, getProperty(MESSAGE));
-      }
+  public RuleContext visit(TextLiteralNode string, RuleContext data) {
+    if (pattern != null && pattern.matcher(string.getImage()).matches()) {
+      addViolationWithMessage(data, string, getProperty(MESSAGE));
     }
 
-    return super.visit(literal, data);
+    return super.visit(string, data);
   }
 
   @Override

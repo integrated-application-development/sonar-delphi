@@ -107,21 +107,21 @@ file                         : program | library | unit | package_
 
 program                      : (programHead)? (usesFileClause)? block '.'
                              ;
-programHead                  : 'program'<ProgramDeclarationNode>^ qualifiedIdent (programParmSeq)? ';'!
+programHead                  : 'program'<ProgramDeclarationNode>^ nameDeclaration (programParmSeq)? ';'!
                              ;
 programParmSeq               : '(' (ident (',' ident)* )? ')'
                              ;
 library                      : libraryHead (usesFileClause)? block '.'
                              ;
-libraryHead                  : 'library'<LibraryDeclarationNode>^ qualifiedIdent (portabilityDirective!)* ';'!
+libraryHead                  : 'library'<LibraryDeclarationNode>^ nameDeclaration (portabilityDirective!)* ';'!
                              ;
 package_                     : packageHead requiresClause (containsClause)? 'end' '.'
                              ;
-packageHead                  : 'package'<PackageDeclarationNode>^ qualifiedIdent ';'!
+packageHead                  : 'package'<PackageDeclarationNode>^ nameDeclaration ';'!
                              ;
 unit                         : unitHead unitInterface unitImplementation unitBlock '.'
                              ;
-unitHead                     : 'unit'<UnitDeclarationNode>^ qualifiedIdent portabilityDirective* ';'!
+unitHead                     : 'unit'<UnitDeclarationNode>^ nameDeclaration portabilityDirective* ';'!
                              ;
 unitInterface                : 'interface'<InterfaceSectionNode>^ usesClause? interfaceDecl*
                              ;
@@ -139,19 +139,23 @@ unitFinalization             : 'finalization'<FinalizationSectionNode>^ statemen
 //----------------------------------------------------------------------------
 // File usage
 //----------------------------------------------------------------------------
-containsClause               : 'contains'<ContainsClauseNode>^ namespaceFileNameList
+containsClause               : 'contains'<ContainsClauseNode>^ unitInFileImportList
                              ;
-requiresClause               : 'requires'<RequiresClauseNode>^ namespaceNameList
+requiresClause               : 'requires'<RequiresClauseNode>^ unitImportList
                              ;
-usesClause                   : 'uses'<UsesClauseNode>^ namespaceNameList
+usesClause                   : 'uses'<UsesClauseNode>^ unitImportList
                              ;
-usesFileClause               : 'uses'<UsesClauseNode>^ namespaceFileNameList
+usesFileClause               : 'uses'<UsesClauseNode>^ unitInFileImportList
                              ;
-namespaceFileNameList        : namespaceFileName (',' namespaceFileName)* ';' -> namespaceFileName (namespaceFileName)*
+unitInFileImportList         : unitInFileImport (','! unitInFileImport)* ';'!
                              ;
-namespaceFileName            : qualifiedIdent ('in' stringLiteral)? -> ^(qualifiedIdent (stringLiteral)?)
+unitImportList               : unitImport (','! unitImport)* ';'!
                              ;
-namespaceNameList            : qualifiedIdent (',' qualifiedIdent)* ';' -> qualifiedIdent (qualifiedIdent)*
+unitImport                   : nameDeclaration
+                             -> ^(TkUnitImport<UnitImportNode> nameDeclaration)
+                             ;
+unitInFileImport             : nameDeclaration ('in' textLiteral)?
+                             -> ^(TkUnitImport<UnitImportNode> nameDeclaration ('in' textLiteral)?)
                              ;
 
 //----------------------------------------------------------------------------
@@ -169,13 +173,14 @@ declSection                  : labelDeclSection
                              | typeSection
                              | varSection
                              | methodImplementation
+                             | methodDeclaration
                              | exportsSection
                              ;
 interfaceDecl                : constSection
                              | typeSection
                              | varSection
                              | exportsSection
-                             | methodImplementation
+                             | methodDeclaration
                              ;
 labelDeclSection             : 'label' (label (','!)?)+ ';'
                              ;
@@ -184,20 +189,20 @@ constSection                 : ('const'<ConstSectionNode>^ | 'resourcestring'<Co
                              // example: "const {$include versioninfo.inc}"
                              // Is this really the appropriate solution?
                              ;
-constDeclaration             : customAttribute? ident (':' varType)? '=' constExpression portabilityDirective* ';'
-                             -> ^(TkConstDeclaration<ConstDeclarationNode> ident constExpression varType? portabilityDirective*)
+constDeclaration             : customAttribute? varNameDeclaration (':' varType)? '=' constExpression portabilityDirective* ';'
+                             -> ^(TkConstDeclaration<ConstDeclarationNode> varNameDeclaration constExpression varType? portabilityDirective*)
                              ;
-typeSection                  : 'type' typeDeclaration+ -> ^('type' typeDeclaration+)
+typeSection                  : 'type'^ typeDeclaration+
                              ;
-innerTypeSection             : 'type' typeDeclaration* -> ^('type' typeDeclaration*)
+innerTypeSection             : 'type'^ typeDeclaration*
                              ;
-typeDeclaration              : customAttribute? genericTypeIdent '=' typeDecl portabilityDirective* ';'
-                             -> ^(TkNewType<TypeDeclarationNode> genericTypeIdent typeDecl customAttribute? portabilityDirective*)
+typeDeclaration              : customAttribute? genericNameDeclaration '=' typeDecl portabilityDirective* ';'
+                             -> ^(TkNewType<TypeDeclarationNode> genericNameDeclaration typeDecl customAttribute? portabilityDirective*)
                              ;
 varSection                   : ('var'<VarSectionNode>^ | 'threadvar'<VarSectionNode>^) varDeclaration varDeclaration*
                              ;
-varDeclaration               : customAttribute? identList ':' varType varValueSpec? portabilityDirective* ';'
-                             -> ^(TkVarDeclaration<VarDeclarationNode> identList varType customAttribute?)
+varDeclaration               : customAttribute? varNameDeclarationList ':' varType varValueSpec? portabilityDirective* ';'
+                             -> ^(TkVarDeclaration<VarDeclarationNode> varNameDeclarationList varType customAttribute?)
                              ;
 varValueSpec                 : 'absolute' ident
                              | 'absolute' constExpression
@@ -251,23 +256,22 @@ parameterType                : stringType
                              | typeReference
                              | 'packed' parameterType^
                              ;
-arrayType                    :  'array' ('[' (arrayIndex)? (',' (arrayIndex)?)* ']')? 'of' arraySubType
-                             -> ^('array'<ArrayTypeNode> arraySubType ('[' (arrayIndex)? (',' (arrayIndex)?)* ']')? )
+arrayType                    :  'array' arrayIndices? 'of' arraySubType
+                             -> ^('array'<ArrayTypeNode> 'of' arraySubType arrayIndices? )
                              ;
-arrayIndex                   : expression '..' expression
-                             | genericQualifiedIdent
+arrayIndices                 : '['<ArrayIndicesNode>^ (varType (','!)?)+ ']'!
                              ;
 arraySubType                 : 'const'<ConstArraySubTypeNode>
                              | varType
                              ;
-setType                      : 'set'<SetTypeNode>^ 'of'! varType
+setType                      : 'set'<SetTypeNode>^ 'of' varType
                              ;
-fileType                     : 'file'<FileTypeNode>^ ('of'! varType)?
+fileType                     : 'file'<FileTypeNode>^ ('of' varType)?
                              ;
 pointerType                  : '^'<PointerTypeNode>^ varType
                              ;
 stringType                   : 'string'<StringTypeNode>^ ('[' expression ']')?
-                             | ANSISTRING<StringTypeNode>^ (codePageNumber)?
+                             | ANSISTRING<AnsiStringTypeNode>^ (codePageNumber)?
                              ;
 codePageNumber               : '(' intNum ')'
                              ;
@@ -286,19 +290,19 @@ procedureTypeHeading         : 'function'<ProcedureTypeHeadingNode>^ methodParam
                              ;
 variantType                  : 'variant'<VariantTypeNode>^
                              ;
-typeOfType                   : 'type'<TypeOfTypeNode>^ 'of' genericQualifiedIdent
+typeOfType                   : 'type'<TypeOfTypeNode>^ 'of' typeReference
                              ;
-typeType                     : 'type'<TypeTypeNode>^ genericQualifiedIdent
+typeType                     : 'type'<TypeTypeNode>^ typeReference
                              ;
-typeAlias                    : genericQualifiedIdent -> ^(TkTypeAlias<TypeAliasNode> genericQualifiedIdent)
+typeAlias                    : typeReference -> ^(TkTypeAlias<TypeAliasNode> typeReference)
                              ;
-subRangeType                 : expression '..' expression -> ^(TkSubRangeType<SubRangeTypeNode> expression '..' expression)
+subRangeType                 : expression '..'<SubRangeTypeNode>^ expression
                              ;
 enumType                     : '('<EnumTypeNode>^ (enumTypeElement (',')?)* ')'!
                              ;
-enumTypeElement              : ident ('=' expression)? -> ^(TkEnumElement<EnumTypeElementNode> ident expression?)
+enumTypeElement              : nameDeclaration ('=' expression)? -> ^(TkEnumElement<EnumElementNode> nameDeclaration expression?)
                              ;
-typeReference                : genericQualifiedIdent -> ^(TkTypeReference<TypeReferenceNode> genericQualifiedIdent)
+typeReference                : nameReference -> ^(TkTypeReference<TypeReferenceNode> nameReference)
                              ;
 
 //----------------------------------------------------------------------------
@@ -312,8 +316,8 @@ classType                    : 'class' classState? classParent? (visibilitySecti
 classState                   : 'sealed'
                              | 'abstract'
                              ;
-classParent                  : '(' genericTypeIdent (',' genericTypeIdent)* ')'
-                             -> ^(TkClassParents<ClassParentsNode> genericTypeIdent (genericTypeIdent)*)
+classParent                  : '(' typeReference (',' typeReference)* ')'
+                             -> ^(TkClassParents<AncestorListNode> typeReference typeReference*)
                              ;
 visibilitySection            : visibilitySection_ -> ^(TkVisibilitySection<VisibilitySectionNode> visibilitySection_)
                              ;
@@ -329,14 +333,14 @@ visibilitySectionItem        : fieldSection
 fieldSection                 : 'class'? 'var' fieldDecl* -> ^(TkFieldSection<FieldSectionNode> 'class'? 'var' fieldDecl*)
                              | fieldDecl+ -> ^(TkFieldSection<FieldSectionNode> fieldDecl+)
                              ;
-fieldDecl                    : customAttribute? identList ':' varType portabilityDirective* ';'?
-                             -> ^(TkFieldDeclaration<FieldDeclarationNode> identList varType portabilityDirective* ';'?)
+fieldDecl                    : customAttribute? varNameDeclarationList ':' varType portabilityDirective* ';'?
+                             -> ^(TkFieldDeclaration<FieldDeclarationNode> varNameDeclarationList varType portabilityDirective* ';'?)
                              ;
-classHelperType              : 'class'<ClassHelperTypeNode>^ 'helper' classParent? 'for' genericQualifiedIdent visibilitySection* 'end'
+classHelperType              : 'class'<ClassHelperTypeNode>^ 'helper' classParent? 'for' typeReference visibilitySection* 'end'
                              ;
 interfaceType                : ('interface'<InterfaceTypeNode>^ | 'dispinterface'<InterfaceTypeNode>^) classParent? (interfaceGuid? interfaceItems? 'end')?
                              ;
-interfaceGuid                : '[' stringLiteral ']' -> ^(TkGuid<InterfaceGuidNode> stringLiteral)
+interfaceGuid                : '[' textLiteral ']' -> ^(TkGuid<InterfaceGuidNode> textLiteral)
                              ;
 interfaceItems               : interfaceItem+ -> ^(TkVisibilitySection<VisibilitySectionNode> interfaceItem+)
                              ;
@@ -347,15 +351,15 @@ objectType                   : 'object'<ObjectTypeNode>^ classParent? visibility
                              ;                                                                 // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re192.html
 recordType                   : 'record'<RecordTypeNode>^ visibilitySection* recordVariantSection? 'end'
                              ;
-recordVariantSection         : 'case'<RecordVariantSectionNode>^ (ident ':')? qualifiedIdent 'of' recordVariant+
+recordVariantSection         : 'case'<RecordVariantSectionNode>^ (ident ':')? typeReference 'of' recordVariant+
                              ;
 recordVariant                : expressionList ':' '(' fieldDecl* recordVariantSection? ')' ';'?
                              -> ^(TkRecordVariantItem<RecordVariantItemNode> expressionList fieldDecl* recordVariantSection? ';'?)
                              ;
-recordHelperType             : 'record'<RecordHelperTypeNode>^ 'helper' 'for' genericQualifiedIdent visibilitySection* 'end'
+recordHelperType             : 'record'<RecordHelperTypeNode>^ 'helper' 'for' typeReference visibilitySection* 'end'
                              ;
-property                     : customAttribute? 'class'? 'property' ident propertyArray? (':' varType)? (propertyDirective)* ';'
-                             -> ^('property'<PropertyNode> ident propertyArray? varType? customAttribute? 'class'? propertyDirective*)
+property                     : customAttribute? 'class'? 'property' nameDeclaration propertyArray? (':' varType)? (propertyDirective)* ';'
+                             -> ^('property'<PropertyNode> nameDeclaration propertyArray? varType? 'class'? customAttribute? propertyDirective*)
                              ;
 propertyArray                : '['! formalParameterList ']'!
                              ;
@@ -363,15 +367,12 @@ propertyDirective            : ';' 'default'
                              | 'default' expression
                              | propertyReadWrite
                              | propertyDispInterface
-                             | IMPLEMENTS genericQualifiedIdent (',' genericQualifiedIdent)*
+                             | IMPLEMENTS typeReference (',' typeReference)*
                              | 'index' expression
                              | 'nodefault'
                              | STORED expression
                              ;
-propertyReadWrite            : 'read' qualifiedIdent ('[' expression ']')?
-                             -> ^('read' qualifiedIdent)
-                             | 'write' qualifiedIdent ('[' expression ']')?
-                             -> ^('write' qualifiedIdent)
+propertyReadWrite            : ('read'<PropertyReadSpecifierNode>^ | 'write'<PropertyWriteSpecifierNode>^) primaryExpression
                              ;
 propertyDispInterface        : 'readonly'
                              | 'writeonly'
@@ -387,22 +388,19 @@ visibility                   : STRICT? 'protected'<VisibilityNode>^
 //----------------------------------------------------------------------------
 // Generics
 //----------------------------------------------------------------------------
-genericTypeIdent             : ident ('.' extendedIdent)* genericDefinition?
-                             -> ^(TkQualifiedIdent<QualifiedIdentifierNode> ident extendedIdent* genericDefinition?)
-                             ;
 genericDefinition            : simpleGenericDefinition -> ^(TkGenericDefinition<GenericDefinitionNode> simpleGenericDefinition)
                              | complexGenericDefinition  -> ^(TkGenericDefinition<GenericDefinitionNode> complexGenericDefinition)
                              | constrainedGenericDefinition  -> ^(TkGenericDefinition<GenericDefinitionNode> constrainedGenericDefinition)
                              ;
 simpleGenericDefinition      : '<' ident (',' ident)* '>'
                              ;
-complexGenericDefinition     : '<' qualifiedIdent (simpleGenericDefinition)? (',' qualifiedIdent (simpleGenericDefinition)?)* '>'
+complexGenericDefinition     : '<' nameReference (simpleGenericDefinition)? (',' nameReference (simpleGenericDefinition)?)* '>'
                              ;
 constrainedGenericDefinition : '<' constrainedGeneric (';' constrainedGeneric)* '>'
                              ;
 constrainedGeneric           : ident (':' genericConstraint (',' genericConstraint)*)?
                              ;
-genericConstraint            : ident
+genericConstraint            : nameReference
                              | 'record'
                              | 'class'
                              | 'constructor'
@@ -411,27 +409,42 @@ genericConstraint            : ident
 //----------------------------------------------------------------------------
 // Methods
 //----------------------------------------------------------------------------
-methodDeclaration            : methodHeading
+methodDeclaration            : methodDeclarationHeading
                              -> ^(TkMethodDeclaration<MethodDeclarationNode>
-                                    methodHeading
+                                    methodDeclarationHeading
                                  )
                              ;
-methodImplementation         : methodHeading methodBody?
+methodImplementation         : methodImplementationHeading methodBody
                              -> ^(TkMethodImplementation<MethodImplementationNode>
-                                    methodHeading
-                                    methodBody?
+                                    methodImplementationHeading
+                                    methodBody
                                  )
                              ;
-methodHeading                : customAttribute? 'class'? methodKey methodName methodParameters? methodReturnType? methodDirectiveSection
+methodDeclarationHeading     : customAttribute? 'class'? methodKey methodDeclarationName methodParameters? methodReturnType? methodDeclDirectiveSection
                              -> ^(TkMethodHeading<MethodHeadingNode>
                                     methodKey
-                                    methodName
+                                    methodDeclarationName
                                     methodParameters?
                                     methodReturnType?
                                     customAttribute?
                                     'class'?
-                                    methodDirectiveSection
+                                    methodDeclDirectiveSection
                                  )
+                             ;
+methodImplementationHeading  : customAttribute? 'class'? methodKey methodImplementationName methodParameters? methodReturnType? methodImplDirectiveSection
+                             -> ^(TkMethodHeading<MethodHeadingNode>
+                                    methodKey
+                                    methodImplementationName
+                                    methodParameters?
+                                    methodReturnType?
+                                    customAttribute?
+                                    'class'?
+                                    methodImplDirectiveSection
+                                 )
+                             ;
+methodDeclarationName        : genericNameDeclaration -> ^(TkMethodName<MethodNameNode> genericNameDeclaration)
+                             ;
+methodImplementationName     : nameReference -> ^(TkMethodName<MethodNameNode> nameReference)
                              ;
 methodKey                    : 'procedure'
                              | 'constructor'
@@ -439,19 +452,17 @@ methodKey                    : 'procedure'
                              | 'function'
                              | 'operator'
                              ;
-methodName                   : genericQualifiedIdent -> ^(TkFunctionName<MethodNameNode> genericQualifiedIdent)
-                             ;
-methodReturnType             : ':' customAttribute? returnType -> ^(TkFunctionReturn<MethodReturnTypeNode> returnType customAttribute?)
+methodReturnType             : ':' customAttribute? returnType -> ^(TkMethodReturn<MethodReturnTypeNode> returnType customAttribute?)
                              ;
 returnType                   : stringType
                              | typeReference
                              ;
-methodParameters             : '(' formalParameterList? ')' -> ^(TkFunctionArgs<MethodParametersNode> '(' formalParameterList? ')')
+methodParameters             : '(' formalParameterList? ')' -> ^(TkMethodParameters<MethodParametersNode> '(' formalParameterList? ')')
                              ;
 formalParameterList          : formalParameter (';' formalParameter)* -> ^(TkFormalParameterList<FormalParameterListNode> formalParameter formalParameter*)
                              ;
-formalParameter              : customAttribute? paramSpecifier? identList (':' parameterType)? ('=' expression)?
-                             -> ^(TkFormalParameter<FormalParameterNode> identList parameterType? paramSpecifier? expression? customAttribute?)
+formalParameter              : customAttribute? paramSpecifier? varNameDeclarationList (':' parameterType)? ('=' expression)?
+                             -> ^(TkFormalParameter<FormalParameterNode> varNameDeclarationList parameterType? paramSpecifier? expression? customAttribute?)
                              ;
 paramSpecifier               : 'const'
                              | 'var'
@@ -467,8 +478,8 @@ customAttribute              : customAttributeList -> ^(TkCustomAttributeList<Cu
                              ;
 customAttributeList          : customAttributeDecl+
                              ;
-customAttributeDecl          : '[' qualifiedIdent ('(' (expressionList)? ')')? ']'
-                             -> ^(TkCustomAttribute<CustomAttributeNode> '[' qualifiedIdent ('(' (expressionList)? ')')? ']')
+customAttributeDecl          : '[' nameReference argumentList? ']'
+                             -> ^(TkCustomAttribute<CustomAttributeNode> '[' nameReference argumentList? ']')
                              ;
 
 //----------------------------------------------------------------------------
@@ -495,9 +506,9 @@ atom                         : particle particleItem*
                              ;
 particle                     : intNum
                              | realNum
-                             | stringLiteral
+                             | textLiteral
                              | nilLiteral
-                             | ident
+                             | nameReference
                              | setLiteral
                              | 'string'
                              | 'file'
@@ -505,21 +516,19 @@ particle                     : intNum
                              ; // parenthesizedExpressions are a special case.
                                // If they are followed by particleItems then we want to consider them as particles so a PrimaryExpressionNode is created to wrap it.
                                // Otherwise, we flatten it to a ParenthesizedExpressionNode.
-particleItem                 : ('.' | '@') extendedIdent
-                             | ('<' genericTypeIdent (',' genericTypeIdent)* '>')
-                             | '[' expressionList ']'
-                             | '^'
+particleItem                 : '.' extendedNameReference
                              | argumentList
+                             | arrayAccessor
+                             | '^'
                              ;
-extendedIdent                : ident
-                             | keywords -> ^({changeTokenType(TkIdentifier)})
+arrayAccessor                : '['<ArrayAccessorNode>^ expressionList ']'!
                              ;
 argumentList                 : '('<ArgumentListNode>^ expressionOrAnonymousList? ')'
                              ;
 anonymousMethod              : 'procedure'<AnonymousMethodNode>^ methodParameters? block
                              | 'function'<AnonymousMethodNode>^ methodParameters? methodReturnType block
                              ;
-expressionOrRange            : expression ('..'<RangeNode>^ expression)?
+expressionOrRange            : expression ('..'<RangeExpressionNode>^ expression)?
                              ;
 expressionOrAnonymousMethod  : anonymousMethod
                              | expression
@@ -530,12 +539,12 @@ expressionOrRangeList        : (expressionOrRange (','!)?)+
                              ;
 expressionOrAnonymousList    : (expressionOrAnonymousMethod (','!)?)+
                              ;
-stringLiteral                : stringLiteral_ -> ^(TkStringLiteral<LiteralNode> stringLiteral_)
+textLiteral                  : textLiteral_ -> ^(TkTextLiteral<TextLiteralNode> textLiteral_)
                              ;
-stringLiteral_               : ControlString (QuotedString ControlString)* (QuotedString)?
-                             | QuotedString (ControlString QuotedString)* (ControlString)?
+textLiteral_                 : QuotedString (EscapedCharacter+ QuotedString)* EscapedCharacter*
+                             | EscapedCharacter+ (QuotedString EscapedCharacter+)* QuotedString?
                              ;
-nilLiteral                   : 'nil'<LiteralNode>
+nilLiteral                   : 'nil'<NilLiteralNode>
                              ;
 setLiteral                   : '['<SetLiteralNode>^ (expressionOrRangeList)? ']'
                              ;
@@ -597,7 +606,7 @@ statement                    : ifStatement
                              | expressionStatement
                              | gotoStatement
                              ;
-ifStatement                  : 'if'<IfStatementNode>^ expression 'then' statement ('else' statement)?
+ifStatement                  : 'if'<IfStatementNode>^ expression 'then' (statement ('else' statement)?)?
                              ;
 caseStatement                : 'case'<CaseStatementNode>^ expression 'of' caseItem* ('else' statementList)? 'end'
                              ;
@@ -639,7 +648,7 @@ finallyBlock                 : 'finally'<FinallyBlockNode>^ statementList
 handlerList                  : handler+ ('else' statementList)?
                              | statementList
                              ;
-handler                      : 'on'<ExceptItemNode>^ (ident ':'!)? genericQualifiedIdent 'do' statement? (';')?
+handler                      : 'on'<ExceptItemNode>^ (varNameDeclaration ':'!)? typeReference 'do' statement? (';')?
                              ;
 raiseStatement               : 'raise'<RaiseStatementNode>^ expression? (AT! expression)?
                              ;
@@ -651,13 +660,15 @@ assemblerInstructions        : ~('end')* // Skip asm statements
 //----------------------------------------------------------------------------
 // Directives
 //----------------------------------------------------------------------------
-methodDirectiveSection       : ((';')? methodDirective)* ';'
+methodImplDirectiveSection   : ((';')? methodDirective)* ';'
+                             | standaloneOverloadDirective
+                             ;
+methodDeclDirectiveSection   : ((';')? (methodDirective | 'forward'))* ';'
                              | standaloneOverloadDirective
                              ;
 standaloneOverloadDirective  : ';' 'overload' (';')?
                              ;
-methodDirective              : 'forward'
-                             | 'overload'
+methodDirective              : 'overload'
                              | 'reintroduce'
                              | bindingDirective
                              | abstractDirective // virtual;
@@ -692,7 +703,7 @@ oldCallConventionDirective   : 'far'      // deprecated
                              | 'local'    // niet in windows maakt functie niet exporteerbaar
                              | 'near'     // deprecated
                              ;
-portabilityDirective         : 'deprecated'^ stringLiteral?
+portabilityDirective         : 'deprecated'^ textLiteral?
                              | 'experimental'
                              | 'platform'
                              | 'library'
@@ -732,27 +743,37 @@ keywords                     : (ABSOLUTE | ABSTRACT | ADD | AND | ANSISTRING | A
                              | (STRICT | STRING | THEN | THREADVAR | TO | TRY | TYPE | UNIT | UNSAFE | UNTIL | USES | VAR)
                              | (VARARGS | VARIANT | VIRTUAL | WHILE | WITH | WRITE | WRITEONLY | XOR)
                              ;
-identList                    : ident (',' ident)* -> ^(TkIdentifierList<IdentifierListNode> ident ident*)
+varNameDeclarationList       : varNameDeclaration (',' varNameDeclaration)* -> ^(TkVarNameDeclList<VarNameDeclarationListNode> varNameDeclaration varNameDeclaration*)
+                             ;
+varNameDeclaration           : ident -> ^(TkVarNameDeclaration<VarNameDeclarationNode> ident)
                              ;
 label                        : ident
                              | intNum
                              ;
-qualifiedIdent               : ident ('.' extendedIdent)*
-                             -> ^(TkQualifiedIdent<QualifiedIdentifierNode> ident extendedIdent*)
+nameDeclaration              : ident ('.' extendedIdent)*
+                             -> ^(TkNameDeclaration<QualifiedNameDeclarationNode> ident ('.' extendedIdent)*)
                              ;
-genericQualifiedIdent        : ident g1=genericDefinition? ('.' extendedIdent g2=genericDefinition?)*
-                             -> ^(TkQualifiedIdent<QualifiedIdentifierNode> ident $g1? (extendedIdent $g2?)*)
+genericNameDeclaration       : ident ('.' extendedIdent)* genericDefinition?
+                             -> ^(TkNameDeclaration<QualifiedNameDeclarationNode> ident ('.' extendedIdent)* genericDefinition?)
                              ;
-
+nameReference                : ident genericDefinition? ('.' extendedNameReference)?
+                             -> ^(TkNameReference<NameReferenceNode> ident genericDefinition? ('.' extendedNameReference)?)
+                             ;
+extendedNameReference        : extendedIdent genericDefinition? ('.' extendedNameReference)?
+                             -> ^(TkNameReference<NameReferenceNode> extendedIdent genericDefinition? ('.' extendedNameReference)?)
+                             ;
+extendedIdent                : ident
+                             | keywords -> ^({changeTokenType(TkIdentifier)})
+                             ;
 //----------------------------------------------------------------------------
 // Literals
 //----------------------------------------------------------------------------
-intNum                       : TkIntNum<LiteralNode>
-                             | TkHexNum<LiteralNode>
+intNum                       : TkIntNum<IntegerLiteralNode>
+                             | TkHexNum<HexLiteralNode>
                              ;
-realNum                      : TkRealNum<LiteralNode>
+realNum                      : TkRealNum<DecimalLiteralNode>
                              ;
-asmHexNum                    : TkAsmHexNum<LiteralNode>
+asmHexNum                    : TkAsmHexNum<HexLiteralNode>
                              ;
 
 //----------------------------------------------------------------------------
@@ -924,13 +945,9 @@ AMPERSAND         : '&'   ;
 //****************************
 TkRootNode              : 'ROOT_NODE'
                         ;
-TkFunctionName          : 'FUNCTION_NAME'
+TkMethodParameters      : 'METHOD_PARAMETERS'
                         ;
-TkFunctionArgs          : 'FUNCTION_ARGS'
-                        ;
-TkFunctionBody          : 'FUNCTION_BODY'
-                        ;
-TkFunctionReturn        : 'FUNCTION_RETURN'
+TkMethodReturn          : 'METHOD_RETURN'
                         ;
 TkCustomAttributeList   : 'CUSTOM_ATTRIBUTE_LIST'
                         ;
@@ -982,6 +999,8 @@ TkLabelStatement        : 'LABEL_STATEMENT'
                         ;
 TkStatementList         : 'STATEMENT_LIST'
                         ;
+TkMethodName            : 'METHOD_NAME'
+                        ;
 TkMethodHeading         : 'METHOD_HEADING'
                         ;
 TkMethodDeclaration     : 'METHOD_DECLARATION'
@@ -990,11 +1009,7 @@ TkMethodImplementation  : 'METHOD_IMPLEMENTATION'
                         ;
 TkMethodBody            : 'METHOD_BODY'
                         ;
-TkQualifiedIdent        : 'QUALIFIED_IDENTIFIER'
-                        ;
 TkGenericDefinition     : 'GENERIC_DEFINITION'
-                        ;
-TkSubRangeType          : 'SUB_RANGE_TYPE'
                         ;
 TkTypeAlias             : 'TYPE_ALIAS'
                         ;
@@ -1020,13 +1035,23 @@ TkIdentifierList        : 'IDENTIFIER_LIST'
                         ;
 TkVarDeclaration        : 'VAR_DECLARATION'
                         ;
+TkVarNameDeclaration    : 'VAR_NAME_DECLARATION'
+                        ;
+TkVarNameDeclList       : 'VAR_NAME_DECLARATION_LIST'
+                        ;
 TkConstDeclaration      : 'CONST_DECLARATION'
                         ;
 TkPrimaryExpression     : 'PRIMARY_EXPRESSION'
                         ;
 TkNestedExpression      : 'NESTED_EXPRESSION'
                         ;
-TkStringLiteral         : 'STRING_LITERAL'
+TkTextLiteral           : 'TEXT_LITERAL'
+                        ;
+TkNameDeclaration       : 'NAME_DECLARATION'
+                        ;
+TkNameReference         : 'NAME_REFERENCE'
+                        ;
+TkUnitImport            : 'UNIT_IMPORT'
                         ;
 
 //****************************
@@ -1047,17 +1072,13 @@ TkAsmHexLabel           : { asmMode }? => Hexdigitseq ':'
                         ;
 QuotedString            : '\'' ('\'\'' | ~('\''))* '\''
                         ;
-ControlString           : Controlchar (Controlchar)*
+EscapedCharacter        : '#' Digitseq
+                        | '#' '$' Hexdigitseq
                         ;
 
 //----------------------------------------------------------------------------
 // Fragments
 //----------------------------------------------------------------------------
-                       
-fragment
-Controlchar             : '#' Digitseq
-                        | '#' '$' Hexdigitseq
-                        ;
 fragment
 Alpha                   : 'a'..'z'
                         | 'A'..'Z'

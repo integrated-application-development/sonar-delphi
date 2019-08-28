@@ -3,7 +3,7 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 
-public final class RequiresClauseNode extends DelphiNode {
+public final class RequiresClauseNode extends ImportClauseNode {
   public RequiresClauseNode(Token token) {
     super(token);
   }

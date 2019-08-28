@@ -1,14 +1,10 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
 import java.math.BigInteger;
-import java.util.Locale;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.delphi.antlr.DelphiLexer;
-import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.type.Typed;
 
-public final class LiteralNode extends DelphiNode {
-  private String image;
-
+public abstract class LiteralNode extends DelphiNode implements Typed {
   public LiteralNode(Token token) {
     super(token);
   }
@@ -17,29 +13,24 @@ public final class LiteralNode extends DelphiNode {
     super(tokenType);
   }
 
-  @Override
-  public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
-    return visitor.visit(this, data);
-  }
-
-  public boolean isStringLiteral() {
-    return jjtGetId() == DelphiLexer.TkStringLiteral;
+  public boolean isTextLiteral() {
+    return this instanceof TextLiteralNode;
   }
 
   public boolean isNilLiteral() {
-    return jjtGetId() == DelphiLexer.NIL;
+    return this instanceof NilLiteralNode;
   }
 
   public boolean isIntegerLiteral() {
-    return jjtGetId() == DelphiLexer.TkIntNum;
+    return this instanceof IntegerLiteralNode;
   }
 
   public boolean isHexadecimalLiteral() {
-    return jjtGetId() == DelphiLexer.TkHexNum || jjtGetId() == DelphiLexer.TkAsmHexNum;
+    return this instanceof HexLiteralNode;
   }
 
-  public boolean isRealLiteral() {
-    return jjtGetId() == DelphiLexer.TkRealNum;
+  public boolean isDecimalLiteral() {
+    return this instanceof DecimalLiteralNode;
   }
 
   public String getValueAsString() {
@@ -47,50 +38,19 @@ public final class LiteralNode extends DelphiNode {
   }
 
   public int getValueAsInt() {
-    if (isIntegerLiteral()) {
-      return (int) getValueAsLong();
-    }
-    return 0;
-  }
-
-  private int getIntBase() {
-    return isHexadecimalLiteral() ? 16 : 10;
+    return (int) getValueAsLong();
   }
 
   public long getValueAsLong() {
-    if (isIntegerLiteral()) {
-      BigInteger bigInt = new BigInteger(getImage(), getIntBase());
-      return bigInt.longValue();
-    }
     return 0L;
   }
 
   public double getValueAsDouble() {
-    if (isRealLiteral()) {
-      return Double.parseDouble(getImage());
-    }
     return Double.NaN;
   }
 
-  @Override
-  public String getImage() {
-    if (image == null) {
-      if (isStringLiteral()) {
-        StringBuilder imageBuilder = new StringBuilder();
-        for (int i = 0; i < jjtGetNumChildren(); ++i) {
-          imageBuilder.append(jjtGetChild(i).getImage());
-        }
-        image = imageBuilder.toString();
-      } else {
-        image = super.getImage().toLowerCase(Locale.ROOT);
-        if (image.startsWith("$")) {
-          image = image.substring(1);
-        }
-        if (image.endsWith("h")) {
-          image = image.substring(0, image.length() - 1);
-        }
-      }
-    }
-    return image;
+  protected static long parseImage(String image, int base) {
+    BigInteger bigInt = new BigInteger(image, base);
+    return bigInt.longValue();
   }
 }

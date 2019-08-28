@@ -30,10 +30,10 @@ public class LowerCaseReservedWordsRuleTest extends BasePmdRuleTest {
   public void testAsmBlockShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendDecl("procedure Bar;")
-            .appendDecl("asm")
-            .appendDecl("  SHR   eax, 16")
-            .appendDecl("end;");
+            .appendImpl("procedure Bar;")
+            .appendImpl("asm")
+            .appendImpl("  SHR   eax, 16")
+            .appendImpl("end;");
 
     execute(builder);
 

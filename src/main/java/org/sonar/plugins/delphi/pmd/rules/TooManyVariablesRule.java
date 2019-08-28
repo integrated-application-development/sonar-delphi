@@ -4,6 +4,7 @@ import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.LIMIT;
 
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodBodyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarSectionNode;
 
@@ -16,18 +17,17 @@ public class TooManyVariablesRule extends AbstractDelphiRule {
     int limit = getProperty(LIMIT);
     if (count > limit) {
       addViolationWithMessage(
-          data,
-          method.getMethodHeading().getMethodName(),
-          String.format(VIOLATION_MESSAGE, count, limit));
+          data, method.getMethodName(), String.format(VIOLATION_MESSAGE, count, limit));
     }
     return super.visit(method, data);
   }
 
   private static int countVariableDeclarations(MethodImplementationNode method) {
     int count = 0;
-    if (method.hasMethodBody() && method.getMethodBody().hasDeclarationSection()) {
+    MethodBodyNode body = method.getMethodBody();
+    if (body.hasDeclarationSection()) {
       List<VarSectionNode> varSections =
-          method.getMethodBody().getDeclarationSection().findChildrenOfType(VarSectionNode.class);
+          body.getDeclarationSection().findChildrenOfType(VarSectionNode.class);
       for (VarSectionNode varSection : varSections) {
         count += varSection.getDeclarations().size();
       }

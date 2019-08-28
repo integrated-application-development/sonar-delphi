@@ -20,9 +20,7 @@ public class TooManySubProceduresRule extends AbstractDelphiRule {
 
     if (count > limit) {
       addViolationWithMessage(
-          data,
-          method.getMethodHeading().getMethodName(),
-          String.format(VIOLATION_MESSAGE, count, limit));
+          data, method.getMethodName(), String.format(VIOLATION_MESSAGE, count, limit));
     }
 
     return data;

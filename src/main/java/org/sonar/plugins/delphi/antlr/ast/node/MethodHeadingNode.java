@@ -6,6 +6,7 @@ import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.type.Type;
 
 public final class MethodHeadingNode extends DelphiNode {
   private String image;
@@ -29,7 +30,7 @@ public final class MethodHeadingNode extends DelphiNode {
   @Override
   public String getImage() {
     if (image == null) {
-      image = (getQualifiedName() + getParameterSignature()).toLowerCase();
+      image = fullyQualifiedName() + getParameterSignature();
     }
     return image;
   }
@@ -39,7 +40,7 @@ public final class MethodHeadingNode extends DelphiNode {
     return parameters != null ? getMethodParametersNode().getImage() : "";
   }
 
-  public MethodNameNode getMethodName() {
+  public MethodNameNode getMethodNameNode() {
     return (MethodNameNode) jjtGetChild(1);
   }
 
@@ -50,6 +51,11 @@ public final class MethodHeadingNode extends DelphiNode {
   public List<FormalParameter> getParameters() {
     MethodParametersNode parameters = getMethodParametersNode();
     return parameters != null ? parameters.getParameters() : Collections.emptyList();
+  }
+
+  public List<Type> getParameterTypes() {
+    MethodParametersNode parameters = getMethodParametersNode();
+    return parameters != null ? parameters.getParameterTypes() : Collections.emptyList();
   }
 
   public MethodReturnTypeNode getMethodReturnType() {
@@ -63,17 +69,31 @@ public final class MethodHeadingNode extends DelphiNode {
     return isClassMethod;
   }
 
-  public String getSimpleName() {
-    return getMethodName().getFirstChildOfType(QualifiedIdentifierNode.class).getSimpleName();
+  public String simpleName() {
+    return getMethodNameNode().simpleName();
   }
 
-  public String getQualifiedName() {
+  public String fullyQualifiedName() {
     if (qualifiedName == null) {
-      if (isMethodImplementation()) {
-        qualifiedName = getQualifiedNameForMethodImplementation();
-      } else if (isMethodDeclaration()) {
-        qualifiedName = getQualifiedNameForMethodDeclaration();
+      MethodHeadingNode node = this;
+      StringBuilder name = new StringBuilder();
+
+      while (node != null) {
+        String methodName = node.simpleName();
+
+        if (name.length() != 0) {
+          name.insert(0, ".");
+        }
+
+        name.insert(0, methodName);
+        node = findParentMethodHeading(node);
       }
+
+      if (!getTypeName().isEmpty()) {
+        name.insert(0, getTypeName() + ".");
+      }
+
+      qualifiedName = name.toString();
     }
 
     return qualifiedName;
@@ -90,35 +110,10 @@ public final class MethodHeadingNode extends DelphiNode {
     return typeName;
   }
 
-  private String getQualifiedNameForMethodImplementation() {
-    MethodHeadingNode node = this;
-    StringBuilder name = new StringBuilder();
-
-    while (node != null) {
-      String methodName =
-          node.getMethodName()
-              .getFirstChildOfType(QualifiedIdentifierNode.class)
-              .getQualifiedName();
-
-      if (name.length() != 0) {
-        name.insert(0, ".");
-      }
-
-      name.insert(0, methodName);
-      node = findParentMethodHeading(node);
-    }
-
-    return name.toString();
-  }
-
-  private String getQualifiedNameForMethodDeclaration() {
-    return getTypeName() + "." + getSimpleName();
-  }
-
   private String getTypeNameForMethodImplementation() {
     MethodHeadingNode heading = findParentMethodHeading(this);
     if (heading == null) {
-      String methodName = getQualifiedName();
+      String methodName = getMethodNameNode().fullyQualifiedName();
       int dotIndex = methodName.lastIndexOf('.');
       return (dotIndex > 0) ? methodName.substring(0, dotIndex) : "";
     }
@@ -128,7 +123,7 @@ public final class MethodHeadingNode extends DelphiNode {
   private String getTypeNameForMethodDeclaration() {
     TypeDeclarationNode type = getFirstParentOfType(TypeDeclarationNode.class);
     if (type != null) {
-      return type.getQualifiedName();
+      return type.fullyQualifiedName();
     }
     return "";
   }

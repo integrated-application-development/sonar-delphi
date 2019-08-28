@@ -39,8 +39,9 @@ public class DelphiPmdExecutor implements Executor {
   private final DelphiPmdConfiguration pmdConfiguration;
   private final DelphiPmdViolationRecorder violationRecorder;
 
-  private Language language = LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME);
-  private RuleContext ctx = new RuleContext();
+  private final Language language =
+      LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME);
+  private final RuleContext ctx = new RuleContext();
   private RuleSets ruleSets;
 
   /**

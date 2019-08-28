@@ -1,8 +1,11 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import java.util.Objects;
+import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.symbol.TypeNameDeclaration;
 
 public final class MethodDeclarationNode extends MethodNode implements Visibility {
   private Boolean isOverride;
@@ -55,5 +58,20 @@ public final class MethodDeclarationNode extends MethodNode implements Visibilit
       }
     }
     return visibility;
+  }
+
+  @Override
+  public NameDeclarationNode getMethodName() {
+    return Objects.requireNonNull(getMethodHeading().getMethodNameNode().getNameDeclarationNode());
+  }
+
+  @Override
+  @Nullable
+  public TypeNameDeclaration getTypeDeclaration() {
+    TypeDeclarationNode typeDeclaration = getFirstParentOfType(TypeDeclarationNode.class);
+    if (typeDeclaration != null) {
+      return typeDeclaration.getTypeNameDeclaration();
+    }
+    return null;
   }
 }

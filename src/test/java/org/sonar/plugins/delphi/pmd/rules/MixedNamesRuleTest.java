@@ -113,7 +113,7 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMismatchedVarNameInAsmBlockShouldAddIssue() {
+  public void testMismatchedVarNameInAsmBlockShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure; forward;")
@@ -129,16 +129,15 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("MixedNamesRule", builder.getOffSet() + 7)));
+    assertIssues(empty());
   }
 
   @Test
-  public void testMismatchedVarNameInAsmProcShouldAddIssue() {
+  public void testMismatchedVarNameInAsmProcShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure(MyArg: Integer); forward;")
-            .appendImpl("procedure MyProcedure(MyArg: Integer);")
+            .appendImpl("procedure MyProcedure; forward;")
+            .appendImpl("procedure MyProcedure;")
             .appendImpl("var")
             .appendImpl("  MyArg: Integer;")
             .appendImpl("asm")
@@ -148,7 +147,42 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("MixedNamesRule", builder.getOffSet() + 6)));
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testSelfShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TFoo = class")
+            .appendDecl("    procedure Bar;")
+            .appendDecl("  end;")
+            .appendImpl("procedure TFoo.Bar;")
+            .appendImpl("begin")
+            .appendImpl("  Self.Bar;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
+  }
+
+  @Test
+  public void testPrimaryExpressionNameResolverBugShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TType = class(TObject)")
+            .appendDecl("    class procedure Finalise;")
+            .appendDecl("  end;")
+            .appendImpl("class procedure TType.Finalise;")
+            .appendImpl("begin")
+            .appendImpl("  TType(UnknownObject).Finalise;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues(empty());
   }
 }

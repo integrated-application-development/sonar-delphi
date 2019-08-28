@@ -7,6 +7,9 @@ import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.type.DelphiIntrinsicType.BooleanType;
+import org.sonar.plugins.delphi.type.DelphiPointerType;
+import org.sonar.plugins.delphi.type.Type;
 
 public final class UnaryExpressionNode extends ExpressionNode {
   private UnaryOp operator;
@@ -38,6 +41,20 @@ public final class UnaryExpressionNode extends ExpressionNode {
       image = getToken().getImage() + " " + getExpression().getImage();
     }
     return image;
+  }
+
+  @Override
+  @NotNull
+  public Type createType() {
+    Type expressionType = getExpression().getType();
+    switch (getOperator()) {
+      case NOT:
+        return BooleanType.BOOLEAN.type;
+      case ADDRESS:
+        return DelphiPointerType.pointerTo(expressionType);
+      default:
+        return expressionType;
+    }
   }
 
   public enum UnaryOp {

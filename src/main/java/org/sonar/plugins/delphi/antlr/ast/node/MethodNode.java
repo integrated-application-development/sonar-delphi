@@ -1,8 +1,12 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
 import java.util.List;
+import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
+import org.sonar.plugins.delphi.symbol.TypeNameDeclaration;
+import org.sonar.plugins.delphi.type.DelphiType;
+import org.sonar.plugins.delphi.type.Type;
 
 public abstract class MethodNode extends DelphiNode {
   public MethodNode(Token token) {
@@ -22,16 +26,29 @@ public abstract class MethodNode extends DelphiNode {
     return (MethodHeadingNode) jjtGetChild(0);
   }
 
-  public String getSimpleName() {
-    return getMethodHeading().getSimpleName();
+  public String simpleName() {
+    return getMethodHeading().simpleName();
   }
 
-  public String getQualifiedName() {
-    return getMethodHeading().getQualifiedName();
+  public String fullyQualifiedName() {
+    return getMethodHeading().fullyQualifiedName();
   }
 
   public List<FormalParameter> getParameters() {
     return getMethodHeading().getParameters();
+  }
+
+  public List<Type> getParameterTypes() {
+    return getMethodHeading().getParameterTypes();
+  }
+
+  public Type getReturnType() {
+    MethodReturnTypeNode returnTypeNode = getMethodHeading().getMethodReturnType();
+    if (returnTypeNode != null) {
+      return returnTypeNode.getTypeNode().getType();
+    }
+
+    return DelphiType.unknownType();
   }
 
   public FormalParameter getParameter(String image) {
@@ -70,4 +87,9 @@ public abstract class MethodNode extends DelphiNode {
   public String getTypeName() {
     return getMethodHeading().getTypeName();
   }
+
+  public abstract DelphiNode getMethodName();
+
+  @Nullable
+  public abstract TypeNameDeclaration getTypeDeclaration();
 }

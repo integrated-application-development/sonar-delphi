@@ -17,8 +17,6 @@ import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 
 public class DelphiNodeTest {
   private static final String MISSING_MODIFIERS = "Expected abstract or final modifier in %s";
-  private static final String CONCRETE_ACCEPT_NOT_IMPLEMENTED =
-      "Expected accept to be implemented in concrete nodes %s";
   private static final String ABSTRACT_ACCEPT_IMPLEMENTED =
       "Expected accept not to be implemented in abstract nodes %s";
 
@@ -31,18 +29,6 @@ public class DelphiNodeTest {
             .collect(Collectors.toSet());
 
     assertThat(String.format(MISSING_MODIFIERS, failed), failed, is(empty()));
-  }
-
-  @Test
-  public void testAllConcreteNodesShouldImplementAccept() {
-    Set<String> failed =
-        DelphiNodeUtils.getNodeTypes().stream()
-            .filter(DelphiNodeUtils::shouldImplementAccept)
-            .filter(not(DelphiNodeUtils::implementsAccept))
-            .map(Class::getSimpleName)
-            .collect(Collectors.toSet());
-
-    assertThat(String.format(CONCRETE_ACCEPT_NOT_IMPLEMENTED, failed), failed, is(empty()));
   }
 
   @Test

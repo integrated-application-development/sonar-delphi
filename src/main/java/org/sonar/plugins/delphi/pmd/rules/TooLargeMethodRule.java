@@ -44,26 +44,24 @@ public class TooLargeMethodRule extends AbstractDelphiRule {
     if (statements > limit) {
       addViolationWithMessage(
           data,
-          method.getMethodHeading().getMethodName(),
-          String.format(VIOLATION_MESSAGE, method.getSimpleName(), statements, limit));
+          method.getMethodName(),
+          String.format(VIOLATION_MESSAGE, method.simpleName(), statements, limit));
     }
 
     return super.visit(method, data);
   }
 
   private long countStatements(MethodImplementationNode method) {
-    if (method.hasMethodBody()) {
-      MethodBodyNode body = method.getMethodBody();
-      if (body.hasStatementBlock()) {
-        int handlers = body.getStatementBlock().findDescendantsOfType(ExceptItemNode.class).size();
-        long statements =
-            body.getStatementBlock()
-                .statementStream()
-                .filter(Predicate.not(CompoundStatementNode.class::isInstance))
-                .count();
+    MethodBodyNode body = method.getMethodBody();
+    if (body.hasStatementBlock()) {
+      int handlers = body.getStatementBlock().findDescendantsOfType(ExceptItemNode.class).size();
+      long statements =
+          body.getStatementBlock()
+              .statementStream()
+              .filter(Predicate.not(CompoundStatementNode.class::isInstance))
+              .count();
 
-        return handlers + statements;
-      }
+      return handlers + statements;
     }
     return 0;
   }

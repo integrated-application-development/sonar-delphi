@@ -13,16 +13,16 @@ public class AvoidWithRuleTest extends BasePmdRuleTest {
   public void testWithStatementShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendDecl("procedure MyProcedure;")
-            .appendDecl("begin")
-            .appendDecl("  with FMyField do begin")
-            .appendDecl("    Value := True;")
-            .appendDecl("  end;")
-            .appendDecl("end;");
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("begin")
+            .appendImpl("  with FMyField do begin")
+            .appendImpl("    Value := True;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
 
     execute(builder);
 
     assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("AvoidWithRule", builder.getOffsetDecl() + 3)));
+    assertIssues(hasItem(hasRuleKeyAtLine("AvoidWithRule", builder.getOffSet() + 3)));
   }
 }

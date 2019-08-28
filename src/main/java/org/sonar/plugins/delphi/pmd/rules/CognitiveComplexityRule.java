@@ -28,8 +28,8 @@ public class CognitiveComplexityRule extends AbstractDelphiRule {
     int limit = getProperty(LIMIT);
 
     if (complexity > limit) {
-      String message = String.format(VIOLATION_MESSAGE, method.getSimpleName(), complexity, limit);
-      addViolationWithMessage(data, method.getMethodHeading().getMethodName(), message);
+      String message = String.format(VIOLATION_MESSAGE, method.simpleName(), complexity, limit);
+      addViolationWithMessage(data, method.getMethodName(), message);
     }
     return super.visit(method, data);
   }

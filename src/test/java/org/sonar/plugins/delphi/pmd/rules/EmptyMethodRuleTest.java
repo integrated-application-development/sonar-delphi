@@ -164,7 +164,7 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
-            .appendDecl("  TEmptyProcs = class(TObject); // forward declaration")
+            .appendDecl("  TEmptyProcs = class; // forward declaration")
             .appendDecl("  TEmptyProcs = class(TObject)")
             .appendDecl("  public")
             .appendDecl("    procedure VirtualProc; virtual;")

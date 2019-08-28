@@ -29,8 +29,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
-import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.node.AssignmentStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
@@ -40,7 +38,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodBodyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
-import org.sonar.plugins.delphi.antlr.ast.node.QualifiedIdentifierNode;
+import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 
 /** Rule violation for unused function/procedure/method arguments */
@@ -62,7 +60,7 @@ public class UnusedArgumentsRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(TypeDeclarationNode type, RuleContext data) {
-    currentTypeName = type.getQualifiedName().toLowerCase();
+    currentTypeName = type.fullyQualifiedName().toLowerCase();
     type.findDescendantsOfType(MethodDeclarationNode.class).forEach(this::handleMethodDeclaration);
 
     return super.visit(type, data);
@@ -70,7 +68,7 @@ public class UnusedArgumentsRule extends AbstractDelphiRule {
 
   private void handleMethodDeclaration(MethodDeclarationNode method) {
     if (method.isPublished() || method.isOverride() || method.isVirtual() || method.isMessage()) {
-      excludedMethods.add(currentTypeName + "." + method.getSimpleName().toLowerCase());
+      excludedMethods.add(currentTypeName + "." + method.simpleName().toLowerCase());
     }
   }
 
@@ -86,12 +84,9 @@ public class UnusedArgumentsRule extends AbstractDelphiRule {
     ExpressionNode assignedValue = node.getValue();
     DelphiNode nameNode = (DelphiNode) assignedValue.jjtGetChild(0);
 
-    if (nameNode instanceof IdentifierNode) {
-      Node nextNode = nameNode.nextNode();
-      if (nextNode == null || nextNode.jjtGetId() != DelphiLexer.DOT) {
-        String methodName = nameNode.getImage().toLowerCase();
-        excludedMethods.add(currentTypeName + "." + methodName);
-      }
+    if (nameNode instanceof NameReferenceNode
+        && ((NameReferenceNode) nameNode).nextName() == null) {
+      excludedMethods.add(currentTypeName + "." + nameNode.getImage().toLowerCase());
     }
     return super.visit(node, data);
   }
@@ -105,7 +100,7 @@ public class UnusedArgumentsRule extends AbstractDelphiRule {
       return super.visit(method, data);
     }
 
-    String methodName = method.getQualifiedName().toLowerCase();
+    String methodName = method.fullyQualifiedName().toLowerCase();
     if (isExcluded(methodName)) {
       // If we already know the method is excluded, we might as well skip all this work.
       return super.visit(method, data);
@@ -127,7 +122,6 @@ public class UnusedArgumentsRule extends AbstractDelphiRule {
 
   private void processMethodBody(MethodBodyNode body, Map<String, Integer> args) {
     body.getBlock().findDescendantsOfType(IdentifierNode.class).stream()
-        .filter(node -> !(node.jjtGetParent() instanceof QualifiedIdentifierNode))
         .filter(node -> args.containsKey(node.getImage()))
         .forEach(
             node -> {
@@ -188,11 +182,11 @@ class PossibleUnusedArgument {
 
   /** Creates a violation for this unused argument (unless the method is excluded) */
   void processViolation(UnusedArgumentsRule rule, Object data) {
-    if (rule.isExcluded(method.getQualifiedName().toLowerCase())) {
+    if (rule.isExcluded(method.fullyQualifiedName().toLowerCase())) {
       return;
     }
 
-    String message = String.format(MESSAGE, argument.getImage(), method.getQualifiedName());
+    String message = String.format(MESSAGE, argument.getImage(), method.fullyQualifiedName());
     rule.addViolationWithMessage(data, argument.getNode(), message);
   }
 }
