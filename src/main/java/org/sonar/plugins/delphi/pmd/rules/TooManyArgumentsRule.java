@@ -15,9 +15,7 @@ public class TooManyArgumentsRule extends AbstractDelphiRule {
     int limit = getProperty(LIMIT);
     if (count > limit) {
       addViolationWithMessage(
-          data,
-          method.getMethodHeading().getMethodName(),
-          String.format(VIOLATION_MESSAGE, count, limit));
+          data, method.getMethodName(), String.format(VIOLATION_MESSAGE, count, limit));
     }
     return super.visit(method, data);
   }

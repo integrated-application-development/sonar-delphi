@@ -4,14 +4,14 @@ import java.util.List;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 
-public final class IdentifierListNode extends DelphiNode {
-  private List<IdentifierNode> identifiers;
+public final class VarNameDeclarationListNode extends DelphiNode {
+  private List<VarNameDeclarationNode> identifiers;
 
-  public IdentifierListNode(Token token) {
+  public VarNameDeclarationListNode(Token token) {
     super(token);
   }
 
-  public IdentifierListNode(int tokenType) {
+  public VarNameDeclarationListNode(int tokenType) {
     super(tokenType);
   }
 
@@ -20,9 +20,9 @@ public final class IdentifierListNode extends DelphiNode {
     return visitor.visit(this, data);
   }
 
-  public List<IdentifierNode> getIdentifiers() {
+  public List<VarNameDeclarationNode> getIdentifiers() {
     if (identifiers == null) {
-      identifiers = findChildrenOfType(IdentifierNode.class);
+      identifiers = findChildrenOfType(VarNameDeclarationNode.class);
     }
     return identifiers;
   }

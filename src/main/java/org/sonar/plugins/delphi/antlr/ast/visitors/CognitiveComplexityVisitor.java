@@ -23,7 +23,7 @@ public class CognitiveComplexityVisitor implements DelphiParserVisitor<Data> {
   public static class Data {
     private int complexity;
     private int nesting = 1;
-    private Set<DelphiNode> ignored = new HashSet<>();
+    private final Set<DelphiNode> ignored = new HashSet<>();
 
     private void increaseComplexityByNesting() {
       updateComplexity(nesting);
@@ -48,7 +48,10 @@ public class CognitiveComplexityVisitor implements DelphiParserVisitor<Data> {
     statement.getGuardExpression().accept(this, data);
 
     ++data.nesting;
-    statement.getThenBranch().accept(this, data);
+    StatementNode thenBranch = statement.getThenBranch();
+    if (thenBranch != null) {
+      thenBranch.accept(this, data);
+    }
     --data.nesting;
 
     StatementNode elseBranch = statement.getElseBranch();

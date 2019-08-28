@@ -9,7 +9,7 @@ import org.sonar.plugins.delphi.antlr.ast.visitors.MetricsVisitor;
 import org.sonar.plugins.delphi.antlr.ast.visitors.MetricsVisitor.Data;
 
 public class DelphiMetricsExecutor implements Executor {
-
+  private static final MetricsVisitor VISITOR = new MetricsVisitor();
   private SensorContext context;
   private DelphiFile file;
 
@@ -18,10 +18,7 @@ public class DelphiMetricsExecutor implements Executor {
     this.context = context;
     this.file = file;
 
-    Data metrics = new Data();
-    MetricsVisitor visitor = new MetricsVisitor();
-
-    visitor.visit(file.getAst(), metrics);
+    Data metrics = VISITOR.visit(file.getAst(), new Data());
 
     saveMetricOnFile(CoreMetrics.CLASSES, metrics.getClasses());
     saveMetricOnFile(CoreMetrics.FUNCTIONS, metrics.getMethods());

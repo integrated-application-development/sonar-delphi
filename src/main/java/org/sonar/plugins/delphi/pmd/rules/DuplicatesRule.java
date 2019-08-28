@@ -27,10 +27,6 @@ public class DuplicatesRule extends AbstractDelphiRule {
   }
 
   private static boolean isDuplicatesStatement(AssignmentStatementNode duplicates) {
-    if (duplicates.getAssignee().jjtGetNumChildren() < 3) {
-      return false;
-    }
-
     String valueImage = duplicates.getValue().getImage();
     if (valueImage.equalsIgnoreCase("dupAccept")) {
       return false;

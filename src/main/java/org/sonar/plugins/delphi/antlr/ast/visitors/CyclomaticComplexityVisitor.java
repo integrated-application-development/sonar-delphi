@@ -22,9 +22,7 @@ public class CyclomaticComplexityVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(MethodImplementationNode method, Data data) {
-    if (method.hasMethodBody()) {
-      ++data.complexity;
-    }
+    ++data.complexity;
     return DelphiParserVisitor.super.visit(method, data);
   }
 

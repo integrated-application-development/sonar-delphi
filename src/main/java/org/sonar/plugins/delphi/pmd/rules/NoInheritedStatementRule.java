@@ -29,14 +29,13 @@ import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 public abstract class NoInheritedStatementRule extends AbstractDelphiRule {
 
   protected final void checkViolation(MethodImplementationNode method, Object data) {
-    if (!method.hasMethodBody()
-        || !method.getMethodBody().hasStatementBlock()
+    if (!method.getMethodBody().hasStatementBlock()
         || method.isClassMethod()
         || hasInheritedStatement(method)) {
       return;
     }
 
-    addViolation(data, method.getMethodHeading().getMethodName());
+    addViolation(data, method.getMethodName());
   }
 
   private boolean hasInheritedStatement(MethodImplementationNode method) {

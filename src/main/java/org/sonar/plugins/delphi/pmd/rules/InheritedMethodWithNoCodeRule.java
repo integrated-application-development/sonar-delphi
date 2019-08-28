@@ -11,10 +11,9 @@ import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
-import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
-import org.sonar.plugins.delphi.antlr.ast.node.MethodBodyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
+import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.StatementNode;
 
@@ -31,12 +30,7 @@ public class InheritedMethodWithNoCodeRule extends AbstractDelphiRule {
   }
 
   private static DelphiNode findViolation(MethodImplementationNode method) {
-    MethodBodyNode body = method.getMethodBody();
-    if (body == null) {
-      return null;
-    }
-
-    CompoundStatementNode block = body.getStatementBlock();
+    CompoundStatementNode block = method.getMethodBody().getStatementBlock();
     if (block == null) {
       return null;
     }
@@ -79,9 +73,9 @@ public class InheritedMethodWithNoCodeRule extends AbstractDelphiRule {
       return false;
     }
 
-    Node identifier = expression.jjtGetChild(1);
-    String methodName = method.getSimpleName();
-    if (!(identifier instanceof IdentifierNode && identifier.hasImageEqualTo(methodName))) {
+    Node reference = expression.jjtGetChild(1);
+    String methodName = method.simpleName();
+    if (!(reference instanceof NameReferenceNode && reference.hasImageEqualTo(methodName))) {
       return false;
     }
 

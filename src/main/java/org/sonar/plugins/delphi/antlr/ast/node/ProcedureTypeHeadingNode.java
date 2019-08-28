@@ -1,5 +1,7 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import javax.annotation.Nullable;
+import net.sourceforge.pmd.lang.ast.Node;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 
@@ -19,14 +21,23 @@ public final class ProcedureTypeHeadingNode extends DelphiNode {
   }
 
   private String getParameterSignature() {
-    return hasMethodParametersNode() ? getMethodParametersNode().getImage() : "";
+    MethodParametersNode parameters = getMethodParametersNode();
+    return parameters != null ? parameters.getImage() : "";
   }
 
-  private MethodParametersNode getMethodParametersNode() {
-    return getFirstChildOfType(MethodParametersNode.class);
+  @Nullable
+  public MethodParametersNode getMethodParametersNode() {
+    Node node = jjtGetChild(0);
+    return (node instanceof MethodParametersNode) ? (MethodParametersNode) node : null;
   }
 
-  private boolean hasMethodParametersNode() {
+  @Nullable
+  public MethodReturnTypeNode getMethodReturnTypeNode() {
+    Node node = jjtGetChild(hasMethodParametersNode() ? 1 : 0);
+    return (node instanceof MethodReturnTypeNode) ? (MethodReturnTypeNode) node : null;
+  }
+
+  public boolean hasMethodParametersNode() {
     return getMethodParametersNode() != null;
   }
 }

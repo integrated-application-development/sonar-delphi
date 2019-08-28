@@ -1,8 +1,8 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.VarNameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarSectionNode;
 
 /**
@@ -17,7 +17,7 @@ public class VariableNameRule extends AbstractDelphiRule {
       return data;
     }
 
-    for (IdentifierNode identifier : varDecl.getIdentifierList().getIdentifiers()) {
+    for (VarNameDeclarationNode identifier : varDecl.getIdentifierList().getIdentifiers()) {
       if (!Character.isUpperCase(identifier.getImage().charAt(0))) {
         addViolation(data, identifier);
       }

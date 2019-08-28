@@ -52,7 +52,9 @@ import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.executor.DelphiCpdExecutor;
 import org.sonar.plugins.delphi.executor.DelphiHighlightExecutor;
 import org.sonar.plugins.delphi.executor.DelphiMasterExecutor;
+import org.sonar.plugins.delphi.executor.DelphiMetricsExecutor;
 import org.sonar.plugins.delphi.executor.DelphiPmdExecutor;
+import org.sonar.plugins.delphi.executor.DelphiSymbolTableExecutor;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConfiguration;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.pmd.FilePosition;
@@ -124,7 +126,12 @@ public abstract class BasePmdRuleTest {
     var executor = new DelphiPmdExecutor(sensorContext, rulesProfile, pmdConfig, violationRecorder);
 
     DelphiMasterExecutor masterExecutor =
-        new DelphiMasterExecutor(executor, new DelphiHighlightExecutor(), new DelphiCpdExecutor());
+        new DelphiMasterExecutor(
+            new DelphiHighlightExecutor(),
+            new DelphiCpdExecutor(),
+            new DelphiMetricsExecutor(),
+            new DelphiSymbolTableExecutor(),
+            executor);
 
     sensor = new DelphiSensor(delphiProjectHelper, masterExecutor);
   }

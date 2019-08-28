@@ -28,7 +28,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.ArgumentListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode.BinaryOp;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
-import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
+import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 
 /** Don't cast an object only to free it. */
@@ -53,7 +53,7 @@ public class CastAndFreeRule extends AbstractDelphiRule {
 
   private static boolean isHardCast(ExpressionNode expr) {
     return expr instanceof PrimaryExpressionNode
-        && expr.jjtGetChild(0) instanceof IdentifierNode
+        && expr.jjtGetChild(0) instanceof NameReferenceNode
         && expr.jjtGetChild(1) instanceof ArgumentListNode
         && expr.jjtGetNumChildren() < 6;
   }
@@ -84,7 +84,7 @@ public class CastAndFreeRule extends AbstractDelphiRule {
     Node freeAndNil = argList.jjtGetParent().jjtGetChild(argList.jjtGetChildIndex() - 1);
 
     return argList instanceof ArgumentListNode
-        && freeAndNil instanceof IdentifierNode
+        && freeAndNil instanceof NameReferenceNode
         && freeAndNil.hasImageEqualTo("FreeAndNil");
   }
 }

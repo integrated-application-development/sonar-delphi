@@ -1,11 +1,15 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import java.util.regex.Pattern;
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RaiseStatementNode;
 
 public class RaisingGeneralExceptionRule extends AbstractDelphiRule {
+
+  private static final Pattern EXCEPTION_CREATE = Pattern.compile("(?i)Exception.Create\\b.*");
+
   @Override
   public RuleContext visit(RaiseStatementNode raise, RuleContext data) {
     if (isRaisingGeneralException(raise)) {
@@ -25,9 +29,6 @@ public class RaisingGeneralExceptionRule extends AbstractDelphiRule {
       return false;
     }
 
-    return (primary.jjtGetNumChildren() >= 3
-        && primary.jjtGetChild(0).hasImageEqualTo("Exception")
-        && primary.jjtGetChild(1).hasImageEqualTo(".")
-        && primary.jjtGetChild(2).hasImageEqualTo("Create"));
+    return EXCEPTION_CREATE.matcher(primary.getImage()).matches();
   }
 }

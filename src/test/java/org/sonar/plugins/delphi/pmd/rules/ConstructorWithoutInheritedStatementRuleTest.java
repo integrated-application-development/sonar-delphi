@@ -30,19 +30,18 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
 
   @Test
   public void testValidRule() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-
-    builder.appendDecl("type");
-    builder.appendDecl("  TTestConstructor = class");
-    builder.appendDecl("  public");
-    builder.appendDecl("    constructor Create;");
-    builder.appendDecl("  end;");
-
-    builder.appendImpl("constructor TTestConstructor.Create;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  inherited;");
-    builder.appendImpl("  Writeln('do something');");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TTestConstructor = class")
+            .appendDecl("  public")
+            .appendDecl("    constructor Create;")
+            .appendDecl("  end;")
+            .appendImpl("constructor TTestConstructor.Create;")
+            .appendImpl("begin")
+            .appendImpl("  inherited;")
+            .appendImpl("  Writeln('do something');")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -51,18 +50,17 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
 
   @Test
   public void testConstructorMissingInheritedShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-
-    builder.appendDecl("type");
-    builder.appendDecl("  TTestConstructor = class");
-    builder.appendDecl("  public");
-    builder.appendDecl("    constructor Create;");
-    builder.appendDecl("  end;");
-
-    builder.appendImpl("constructor TTestConstructor.Create;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  Writeln('do something');");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TTestConstructor = class")
+            .appendDecl("  public")
+            .appendDecl("    constructor Create;")
+            .appendDecl("  end;")
+            .appendImpl("constructor TTestConstructor.Create;")
+            .appendImpl("begin")
+            .appendImpl("  Writeln('do something');")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -74,18 +72,17 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
 
   @Test
   public void testClassConstructorShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-
-    builder.appendDecl("type");
-    builder.appendDecl("  TTestConstructor = class");
-    builder.appendDecl("  public");
-    builder.appendDecl("    class constructor Create;");
-    builder.appendDecl("  end;");
-
-    builder.appendImpl("class constructor TTestConstructor.Create;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  Writeln('do something');");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TTestConstructor = class")
+            .appendDecl("  public")
+            .appendDecl("    class constructor Create;")
+            .appendDecl("  end;")
+            .appendImpl("class constructor TTestConstructor.Create;")
+            .appendImpl("begin")
+            .appendImpl("  Writeln('do something');")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -94,21 +91,37 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
 
   @Test
   public void testRecordConstructorShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-
-    builder.appendDecl("type");
-    builder.appendDecl("  TTestRecord = record");
-    builder.appendDecl("    FData : Integer;");
-    builder.appendDecl("    constructor Create(aData : Integer);");
-    builder.appendDecl("  end;");
-
-    builder.appendImpl("constructor TTestRecord.Create(aData : Integer);");
-    builder.appendImpl("begin");
-    builder.appendImpl("  FData := aData;");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TTestRecord = record")
+            .appendDecl("    FData : Integer;")
+            .appendDecl("    constructor Create(Data : Integer);")
+            .appendDecl("  end;")
+            .appendImpl("constructor TTestRecord.Create(Data : Integer);")
+            .appendImpl("begin")
+            .appendImpl("  FData := Data;")
+            .appendImpl("end;");
 
     execute(builder);
 
     assertIssues(empty());
+  }
+
+  @Test
+  public void testConstructorWithMissingTypeDeclarationShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("constructor TTestConstructor.Create;")
+            .appendImpl("begin")
+            .appendImpl("  Writeln('do something');")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .hasSize(1)
+        .areExactly(
+            1, ruleKeyAtLine("ConstructorWithoutInheritedStatementRule", builder.getOffset() + 1));
   }
 }

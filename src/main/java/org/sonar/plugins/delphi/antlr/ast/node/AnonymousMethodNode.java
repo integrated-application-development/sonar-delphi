@@ -1,7 +1,12 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import java.util.Collections;
 import org.antlr.runtime.Token;
+import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.type.DelphiProceduralType;
+import org.sonar.plugins.delphi.type.DelphiType;
+import org.sonar.plugins.delphi.type.Type;
 
 public final class AnonymousMethodNode extends ExpressionNode {
   private String image;
@@ -15,11 +20,11 @@ public final class AnonymousMethodNode extends ExpressionNode {
     return visitor.visit(this, data);
   }
 
-  private MethodParametersNode getMethodParametersNode() {
+  public MethodParametersNode getMethodParametersNode() {
     return getFirstChildOfType(MethodParametersNode.class);
   }
 
-  private MethodReturnTypeNode getReturnTypeNode() {
+  public MethodReturnTypeNode getReturnTypeNode() {
     return getFirstChildOfType(MethodReturnTypeNode.class);
   }
 
@@ -39,5 +44,16 @@ public final class AnonymousMethodNode extends ExpressionNode {
       image = getToken().getImage() + getParameterSignature() + getReturnTypeSignature();
     }
     return image;
+  }
+
+  @Override
+  @NotNull
+  public Type createType() {
+    MethodParametersNode parameters = getMethodParametersNode();
+    MethodReturnTypeNode returnTypeNode = getReturnTypeNode();
+
+    return DelphiProceduralType.anonymous(
+        parameters == null ? Collections.emptyList() : parameters.getParameterTypes(),
+        returnTypeNode == null ? DelphiType.voidType() : returnTypeNode.getTypeNode().getType());
   }
 }

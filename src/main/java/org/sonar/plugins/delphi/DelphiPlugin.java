@@ -32,6 +32,7 @@ import org.sonar.plugins.delphi.executor.DelphiHighlightExecutor;
 import org.sonar.plugins.delphi.executor.DelphiMasterExecutor;
 import org.sonar.plugins.delphi.executor.DelphiMetricsExecutor;
 import org.sonar.plugins.delphi.executor.DelphiPmdExecutor;
+import org.sonar.plugins.delphi.executor.DelphiSymbolTableExecutor;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConfiguration;
 import org.sonar.plugins.delphi.pmd.profile.DefaultDelphiProfile;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileExporter;
@@ -148,10 +149,11 @@ public class DelphiPlugin implements Plugin {
         SurefireSensor.class,
         // Executors
         DelphiMasterExecutor.class,
-        DelphiPmdExecutor.class,
-        DelphiMetricsExecutor.class,
         DelphiCpdExecutor.class,
         DelphiHighlightExecutor.class,
+        DelphiMetricsExecutor.class,
+        DelphiSymbolTableExecutor.class,
+        DelphiPmdExecutor.class,
         // Core
         DelphiLanguage.class,
         // Core helpers

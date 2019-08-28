@@ -7,7 +7,7 @@ public class CatchingGeneralExceptionRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(ExceptItemNode exceptItem, RuleContext data) {
-    if (exceptItem.getExceptionTypeIdentifier().hasImageEqualTo("Exception")) {
+    if (exceptItem.getExceptionType().hasImageEqualTo("Exception")) {
       addViolation(data, exceptItem);
     }
     return super.visit(exceptItem, data);

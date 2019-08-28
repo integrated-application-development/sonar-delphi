@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Semantic analysis:
+  - Symbol table
+  - Type resolution
+  - Overload resolution
+- Symbol information is now provided to the Sonar API for use in the web interface.
+
+### Fixed
+
+- Various parsing bugs.
+
 ## [0.8.0] - 2019-08-26
 
 ### Added

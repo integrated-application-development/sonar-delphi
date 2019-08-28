@@ -1,9 +1,12 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
 import org.antlr.runtime.Token;
+import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Typed;
 
-public final class VarDeclarationNode extends DelphiNode {
+public final class VarDeclarationNode extends DelphiNode implements Typed {
   public VarDeclarationNode(Token token) {
     super(token);
   }
@@ -17,11 +20,21 @@ public final class VarDeclarationNode extends DelphiNode {
     return visitor.visit(this, data);
   }
 
-  public IdentifierListNode getIdentifierList() {
-    return (IdentifierListNode) jjtGetChild(0);
+  public VarNameDeclarationListNode getIdentifierList() {
+    return (VarNameDeclarationListNode) jjtGetChild(0);
   }
 
   public VarSectionNode getVarSection() {
     return (VarSectionNode) jjtGetParent();
+  }
+
+  public TypeNode getTypeNode() {
+    return (TypeNode) jjtGetChild(1);
+  }
+
+  @NotNull
+  @Override
+  public Type getType() {
+    return getTypeNode().getType();
   }
 }

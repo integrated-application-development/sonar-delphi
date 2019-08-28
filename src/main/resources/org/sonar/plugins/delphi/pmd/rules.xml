@@ -121,20 +121,13 @@
     </example>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyInterfaceRule"
         message="Interface declarations should not be empty"
         name="EmptyInterfaceRule">
     <priority>3</priority>
     <description>Empty interface declarations are useless.</description>
     <properties>
       <property name="baseEffort" value="20min" />
-      <property name="builtinXPath">
-        <value>
-          <![CDATA[
-            //InterfaceTypeNode[count(child::*) = 1 + count(child::ClassParentsNode) + count(child::InterfaceGuidNode)]
-            ]]>
-        </value>
-      </property>
     </properties>
   </rule>
 
@@ -712,7 +705,7 @@ FreeAndNil(MyVar); // Compliant
       <property name="baseEffort" value="5min" />
     </properties>
   </rule>
-  
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.TooLongLineRule"
         message="Lines should not be too long"
         name="TooLongLineRule">

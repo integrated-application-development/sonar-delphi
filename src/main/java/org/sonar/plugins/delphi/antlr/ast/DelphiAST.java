@@ -30,12 +30,14 @@ import org.sonar.plugins.delphi.DelphiFile;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FileHeaderNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ProgramDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.UnitDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.pmd.FilePosition;
 
 /** DelphiLanguage AST tree. */
 public class DelphiAST extends DelphiNode implements RootNode {
-  private DelphiFile delphiFile;
+  private final DelphiFile delphiFile;
 
   /**
    * Constructor.
@@ -116,5 +118,13 @@ public class DelphiAST extends DelphiNode implements RootNode {
 
   public FileHeaderNode getFileHeader() {
     return (FileHeaderNode) jjtGetChild(0);
+  }
+
+  public boolean isProgram() {
+    return jjtGetNumChildren() > 0 && getFileHeader() instanceof ProgramDeclarationNode;
+  }
+
+  public boolean isUnit() {
+    return jjtGetNumChildren() > 0 && getFileHeader() instanceof UnitDeclarationNode;
   }
 }

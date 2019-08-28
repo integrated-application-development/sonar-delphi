@@ -27,9 +27,8 @@ public class InterfaceNameRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(TypeDeclarationNode type, RuleContext data) {
-    if (type.isInterface()
-        && !NameConventionUtils.compliesWithPrefix(type.getSimpleName(), PREFIX)) {
-      addViolation(data, type.getTypeName());
+    if (type.isInterface() && !NameConventionUtils.compliesWithPrefix(type.simpleName(), PREFIX)) {
+      addViolation(data, type.getTypeNameNode());
     }
     return super.visit(type, data);
   }

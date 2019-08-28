@@ -24,6 +24,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.ast.Node;
+import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.antlr.ast.node.ArgumentListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode.BinaryOp;
@@ -99,7 +100,8 @@ public class AssignedAndFreeRule extends AbstractDelphiRule {
     return null;
   }
 
-  private static DelphiNode findFreeStatement(StatementNode statement, String variableName) {
+  private static DelphiNode findFreeStatement(
+      @Nullable StatementNode statement, String variableName) {
     if (statement instanceof CompoundStatementNode) {
       CompoundStatementNode beginStatement = (CompoundStatementNode) statement;
       if (!beginStatement.isEmpty()) {

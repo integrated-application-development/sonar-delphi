@@ -24,9 +24,13 @@ package org.sonar.plugins.delphi.antlr.ast.visitors;
 
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
+import org.sonar.plugins.delphi.antlr.ast.node.AncestorListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.AnonymousMethodNode;
+import org.sonar.plugins.delphi.antlr.ast.node.AnsiStringTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ArgumentListNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ArrayAccessorNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ArrayExpressionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ArrayIndicesNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ArrayTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.AsmStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.AssignmentStatementNode;
@@ -36,7 +40,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.BreakStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.CaseItemStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.CaseStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ClassHelperTypeNode;
-import org.sonar.plugins.delphi.antlr.ast.node.ClassParentsNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ClassReferenceTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ClassTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.CommonDelphiNode;
@@ -48,8 +51,10 @@ import org.sonar.plugins.delphi.antlr.ast.node.ContainsClauseNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ContinueStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.CustomAttributeListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.CustomAttributeNode;
+import org.sonar.plugins.delphi.antlr.ast.node.DecimalLiteralNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
-import org.sonar.plugins.delphi.antlr.ast.node.EnumTypeElementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ElseBlockNode;
+import org.sonar.plugins.delphi.antlr.ast.node.EnumElementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.EnumTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExceptBlockNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExceptItemNode;
@@ -67,11 +72,14 @@ import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode;
 import org.sonar.plugins.delphi.antlr.ast.node.GenericDefinitionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.GotoStatementNode;
-import org.sonar.plugins.delphi.antlr.ast.node.IdentifierListNode;
+import org.sonar.plugins.delphi.antlr.ast.node.HelperTypeNode;
+import org.sonar.plugins.delphi.antlr.ast.node.HexLiteralNode;
 import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.IfStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ImplementationSectionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ImportClauseNode;
 import org.sonar.plugins.delphi.antlr.ast.node.InitializationSectionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.IntegerLiteralNode;
 import org.sonar.plugins.delphi.antlr.ast.node.InterfaceGuidNode;
 import org.sonar.plugins.delphi.antlr.ast.node.InterfaceSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.InterfaceTypeNode;
@@ -87,19 +95,25 @@ import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodParametersNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodReturnTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodTypeNode;
+import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
+import org.sonar.plugins.delphi.antlr.ast.node.NilLiteralNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ObjectTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PackageDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ParenthesizedExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PointerTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ProceduralTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ProcedureReferenceTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ProcedureTypeHeadingNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ProcedureTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ProgramDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyNode;
-import org.sonar.plugins.delphi.antlr.ast.node.QualifiedIdentifierNode;
+import org.sonar.plugins.delphi.antlr.ast.node.PropertyReadSpecifierNode;
+import org.sonar.plugins.delphi.antlr.ast.node.PropertyWriteSpecifierNode;
+import org.sonar.plugins.delphi.antlr.ast.node.QualifiedNameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RaiseStatementNode;
-import org.sonar.plugins.delphi.antlr.ast.node.RangeNode;
+import org.sonar.plugins.delphi.antlr.ast.node.RangeExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RecordExpressionItemNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RecordExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RecordHelperTypeNode;
@@ -113,7 +127,9 @@ import org.sonar.plugins.delphi.antlr.ast.node.SetTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.StatementListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.StatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.StringTypeNode;
+import org.sonar.plugins.delphi.antlr.ast.node.StructTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.SubRangeTypeNode;
+import org.sonar.plugins.delphi.antlr.ast.node.TextLiteralNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TryStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeAliasNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
@@ -123,8 +139,11 @@ import org.sonar.plugins.delphi.antlr.ast.node.TypeReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnitDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.UnitImportNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UsesClauseNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.VarNameDeclarationListNode;
+import org.sonar.plugins.delphi.antlr.ast.node.VarNameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VariantTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VisibilityNode;
@@ -158,11 +177,19 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
+  default T visit(ArrayAccessorNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(ArrayIndicesNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
   default T visit(BlockDeclarationSectionNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(ClassParentsNode node, T data) {
+  default T visit(AncestorListNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
@@ -178,10 +205,6 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(ContainsClauseNode node, T data) {
-    return visit((DelphiNode) node, data);
-  }
-
   default T visit(CustomAttributeNode node, T data) {
     return visit((DelphiNode) node, data);
   }
@@ -190,7 +213,11 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(EnumTypeElementNode node, T data) {
+  default T visit(ElseBlockNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(EnumElementNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
@@ -230,7 +257,7 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(IdentifierListNode node, T data) {
+  default T visit(VarNameDeclarationListNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
@@ -262,11 +289,11 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(MethodNameNode node, T data) {
+  default T visit(MethodParametersNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(MethodParametersNode node, T data) {
+  default T visit(NameReferenceNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
@@ -282,7 +309,11 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(QualifiedIdentifierNode node, T data) {
+  default T visit(PropertyReadSpecifierNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(PropertyWriteSpecifierNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
@@ -298,10 +329,6 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(RequiresClauseNode node, T data) {
-    return visit((DelphiNode) node, data);
-  }
-
   default T visit(StatementListNode node, T data) {
     return visit((DelphiNode) node, data);
   }
@@ -310,7 +337,7 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(UsesClauseNode node, T data) {
+  default T visit(UnitImportNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
@@ -328,6 +355,40 @@ public interface DelphiParserVisitor<T> {
 
   default T visit(VisibilitySectionNode node, T data) {
     return visit((DelphiNode) node, data);
+  }
+
+  /* Import clauses */
+  default T visit(ImportClauseNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(ContainsClauseNode node, T data) {
+    return visit((ImportClauseNode) node, data);
+  }
+
+  default T visit(RequiresClauseNode node, T data) {
+    return visit((ImportClauseNode) node, data);
+  }
+
+  default T visit(UsesClauseNode node, T data) {
+    return visit((ImportClauseNode) node, data);
+  }
+
+  /* Name declarations */
+  default T visit(NameDeclarationNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(QualifiedNameDeclarationNode node, T data) {
+    return visit((NameDeclarationNode) node, data);
+  }
+
+  default T visit(VarNameDeclarationNode node, T data) {
+    return visit((NameDeclarationNode) node, data);
+  }
+
+  default T visit(MethodNameNode node, T data) {
+    return visit((NameDeclarationNode) node, data);
   }
 
   /* Methods */
@@ -369,19 +430,15 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
+  default T visit(AnsiStringTypeNode node, T data) {
+    return visit((TypeNode) node, data);
+  }
+
   default T visit(ArrayTypeNode node, T data) {
     return visit((TypeNode) node, data);
   }
 
-  default T visit(ClassHelperTypeNode node, T data) {
-    return visit((TypeNode) node, data);
-  }
-
   default T visit(ClassReferenceTypeNode node, T data) {
-    return visit((TypeNode) node, data);
-  }
-
-  default T visit(ClassTypeNode node, T data) {
     return visit((TypeNode) node, data);
   }
 
@@ -393,48 +450,8 @@ public interface DelphiParserVisitor<T> {
     return visit((TypeNode) node, data);
   }
 
-  default T visit(InterfaceTypeNode node, T data) {
-    return visit((TypeNode) node, data);
-  }
-
-  default T visit(LiteralNode node, T data) {
-    return visit((DelphiNode) node, data);
-  }
-
-  default T visit(MethodTypeNode node, T data) {
-    return visit((TypeNode) node, data);
-  }
-
-  default T visit(ObjectTypeNode node, T data) {
-    return visit((TypeNode) node, data);
-  }
-
   default T visit(PointerTypeNode node, T data) {
     return visit((TypeNode) node, data);
-  }
-
-  default T visit(ProcedureReferenceTypeNode node, T data) {
-    return visit((TypeNode) node, data);
-  }
-
-  default T visit(ProcedureTypeNode node, T data) {
-    return visit((DelphiNode) node, data);
-  }
-
-  default T visit(RangeNode node, T data) {
-    return visit((DelphiNode) node, data);
-  }
-
-  default T visit(RecordHelperTypeNode node, T data) {
-    return visit((TypeNode) node, data);
-  }
-
-  default T visit(RecordTypeNode node, T data) {
-    return visit((TypeNode) node, data);
-  }
-
-  default T visit(SetLiteralNode node, T data) {
-    return visit((DelphiNode) node, data);
   }
 
   default T visit(SetTypeNode node, T data) {
@@ -469,6 +486,57 @@ public interface DelphiParserVisitor<T> {
     return visit((TypeNode) node, data);
   }
 
+  /* Procedural types */
+  default T visit(ProceduralTypeNode node, T data) {
+    return visit((TypeNode) node, data);
+  }
+
+  default T visit(MethodTypeNode node, T data) {
+    return visit((ProceduralTypeNode) node, data);
+  }
+
+  default T visit(ProcedureReferenceTypeNode node, T data) {
+    return visit((ProceduralTypeNode) node, data);
+  }
+
+  default T visit(ProcedureTypeNode node, T data) {
+    return visit((ProceduralTypeNode) node, data);
+  }
+
+  /* Struct types */
+  default T visit(StructTypeNode node, T data) {
+    return visit((TypeNode) node, data);
+  }
+
+  default T visit(ClassTypeNode node, T data) {
+    return visit((StructTypeNode) node, data);
+  }
+
+  default T visit(InterfaceTypeNode node, T data) {
+    return visit((StructTypeNode) node, data);
+  }
+
+  default T visit(ObjectTypeNode node, T data) {
+    return visit((StructTypeNode) node, data);
+  }
+
+  default T visit(RecordTypeNode node, T data) {
+    return visit((StructTypeNode) node, data);
+  }
+
+  /* Helper types */
+  default T visit(HelperTypeNode node, T data) {
+    return visit((StructTypeNode) node, data);
+  }
+
+  default T visit(ClassHelperTypeNode node, T data) {
+    return visit((HelperTypeNode) node, data);
+  }
+
+  default T visit(RecordHelperTypeNode node, T data) {
+    return visit((HelperTypeNode) node, data);
+  }
+
   /* Expressions */
   default T visit(ExpressionNode node, T data) {
     return visit((DelphiNode) node, data);
@@ -500,6 +568,39 @@ public interface DelphiParserVisitor<T> {
 
   default T visit(UnaryExpressionNode node, T data) {
     return visit((ExpressionNode) node, data);
+  }
+
+  default T visit(RangeExpressionNode node, T data) {
+    return visit((ExpressionNode) node, data);
+  }
+
+  /* Literals */
+  default T visit(LiteralNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(DecimalLiteralNode node, T data) {
+    return visit((LiteralNode) node, data);
+  }
+
+  default T visit(HexLiteralNode node, T data) {
+    return visit((LiteralNode) node, data);
+  }
+
+  default T visit(IntegerLiteralNode node, T data) {
+    return visit((LiteralNode) node, data);
+  }
+
+  default T visit(NilLiteralNode node, T data) {
+    return visit((LiteralNode) node, data);
+  }
+
+  default T visit(SetLiteralNode node, T data) {
+    return visit((LiteralNode) node, data);
+  }
+
+  default T visit(TextLiteralNode node, T data) {
+    return visit((LiteralNode) node, data);
   }
 
   /* Statements */

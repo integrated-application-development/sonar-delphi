@@ -3,12 +3,12 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 
-public final class EnumTypeElementNode extends DelphiNode {
-  public EnumTypeElementNode(Token token) {
+public final class UnitImportNode extends DelphiNode {
+  public UnitImportNode(Token token) {
     super(token);
   }
 
-  public EnumTypeElementNode(int tokenType) {
+  public UnitImportNode(int tokenType) {
     super(tokenType);
   }
 
@@ -17,12 +17,7 @@ public final class EnumTypeElementNode extends DelphiNode {
     return visitor.visit(this, data);
   }
 
-  public IdentifierNode getIdentifier() {
-    return (IdentifierNode) jjtGetChild(0);
-  }
-
-  @Override
-  public String getImage() {
-    return getIdentifier().getImage();
+  public NameDeclarationNode getNameDeclaration() {
+    return (NameDeclarationNode) jjtGetChild(0);
   }
 }

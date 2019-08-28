@@ -75,7 +75,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("    protected");
     builder.appendDecl("     Name: String;");
     builder.appendDecl("    public");
-    builder.appendDecl("     Name: String;");
+    builder.appendDecl("     PublicName: String;");
     builder.appendDecl("  end;");
 
     execute(builder);
@@ -97,7 +97,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("    protected");
     builder.appendDecl("     Name: String;");
     builder.appendDecl("    public");
-    builder.appendDecl("     Name: String;");
+    builder.appendDecl("     PublicName: String;");
     builder.appendDecl("  end;");
 
     builder.appendDecl("type");
@@ -108,7 +108,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("    protected");
     builder.appendDecl("     Name: String;");
     builder.appendDecl("    public");
-    builder.appendDecl("     Name: String;");
+    builder.appendDecl("     PublicName: String;");
     builder.appendDecl("  end;");
 
     execute(builder);

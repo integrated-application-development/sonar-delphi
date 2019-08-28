@@ -5,6 +5,7 @@ import java.util.List;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.type.Type;
 
 public final class MethodParametersNode extends DelphiNode {
   private String image;
@@ -27,6 +28,10 @@ public final class MethodParametersNode extends DelphiNode {
     return isEmpty() ? Collections.emptyList() : getFormalParametersList().getParameters();
   }
 
+  public List<Type> getParameterTypes() {
+    return isEmpty() ? Collections.emptyList() : getFormalParametersList().getParameterTypes();
+  }
+
   @Override
   public String getImage() {
     if (image == null) {
@@ -35,7 +40,7 @@ public final class MethodParametersNode extends DelphiNode {
     return image;
   }
 
-  private FormalParameterListNode getFormalParametersList() {
+  public FormalParameterListNode getFormalParametersList() {
     if (parameterList == null && !isEmpty()) {
       parameterList = (FormalParameterListNode) jjtGetChild(1);
     }

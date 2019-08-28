@@ -18,40 +18,22 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
-import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
+import org.sonar.plugins.delphi.symbol.TypeNameDeclaration;
 
 public class ConstructorWithoutInheritedStatementRule extends NoInheritedStatementRule {
 
-  private final Deque<String> recordTypes = new ArrayDeque<>();
-
-  @Override
-  public void start(RuleContext ctx) {
-    recordTypes.clear();
-  }
-
-  @Override
-  public RuleContext visit(TypeDeclarationNode type, RuleContext data) {
-    if (type.isRecord()) {
-      recordTypes.add(type.getQualifiedName());
-    }
-    return super.visit(type, data);
-  }
-
   @Override
   public RuleContext visit(MethodImplementationNode method, RuleContext data) {
-    if (shouldCheck(method)) {
+    if (method.isConstructor() && !isExcluded(method)) {
       checkViolation(method, data);
     }
     return super.visit(method, data);
   }
 
-  private boolean shouldCheck(MethodImplementationNode method) {
-    return method.isConstructor()
-        && !method.isClassMethod()
-        && !recordTypes.contains(method.getTypeName());
+  private static boolean isExcluded(MethodImplementationNode method) {
+    TypeNameDeclaration declaration = method.getTypeDeclaration();
+    return method.isClassMethod() || (declaration != null && declaration.getType().isRecord());
   }
 }

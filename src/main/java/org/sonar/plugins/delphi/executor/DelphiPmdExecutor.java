@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.executor;
 
+import static java.lang.Boolean.TRUE;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.REPOSITORY_KEY;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TEMPLATE;
 
@@ -39,8 +40,9 @@ public class DelphiPmdExecutor implements Executor {
   private final DelphiPmdConfiguration pmdConfiguration;
   private final DelphiPmdViolationRecorder violationRecorder;
 
-  private Language language = LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME);
-  private RuleContext ctx = new RuleContext();
+  private final Language language =
+      LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME);
+  private final RuleContext ctx = new RuleContext();
   private RuleSets ruleSets;
 
   /**
@@ -141,7 +143,7 @@ public class DelphiPmdExecutor implements Executor {
   }
 
   private static void removeTemplateRules(final RuleSet ruleSet) {
-    ruleSet.getRules().removeIf(rule -> rule.getProperty(TEMPLATE));
+    ruleSet.getRules().removeIf(rule -> TRUE.equals(rule.getProperty(TEMPLATE)));
   }
 
   private static void removeDysfunctionRules(final RuleSet ruleSet) {

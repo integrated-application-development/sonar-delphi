@@ -51,7 +51,7 @@ public class DelphiPmdConfiguration extends PMDConfiguration {
 
   private final FileSystem fileSystem;
   private final Configuration settings;
-  private DelphiPmdRuleSetDefinitionProvider ruleSetDefinitionProvider;
+  private final DelphiPmdRuleSetDefinitionProvider ruleSetDefinitionProvider;
 
   public DelphiPmdConfiguration(
       FileSystem fileSystem,

@@ -71,13 +71,14 @@ public class CognitiveComplexityVisitorTest {
             .appendImpl("      if SpookyError then begin") // <26> 3 [+2 for nesting]
             .appendImpl("        raise SpookyErrorException.Create('A spooky error has occurred');")
             .appendImpl("      end;")
+            .appendImpl("      if Nevermind then;") // <29> 3 [+2 for nesting]
             .appendImpl("    end;")
             .appendImpl("  end;")
             .appendImpl("  Result := 42;")
             .appendImpl("end;")
             .parse();
 
-    assertThat(getComplexity(ast), is(26));
+    assertThat(getComplexity(ast), is(29));
   }
 
   @Test

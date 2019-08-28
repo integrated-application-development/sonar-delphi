@@ -1,7 +1,10 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
 import org.antlr.runtime.Token;
+import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.type.DelphiCollectionType;
+import org.sonar.plugins.delphi.type.Type;
 
 public final class SetTypeNode extends TypeNode {
   public SetTypeNode(Token token) {
@@ -13,8 +16,13 @@ public final class SetTypeNode extends TypeNode {
     return visitor.visit(this, data);
   }
 
+  private TypeNode getElementTypeNode() {
+    return (TypeNode) jjtGetChild(1);
+  }
+
+  @NotNull
   @Override
-  public String getImage() {
-    return "set of " + jjtGetChild(0).getImage();
+  public Type createType() {
+    return DelphiCollectionType.set(getElementTypeNode().getType());
   }
 }

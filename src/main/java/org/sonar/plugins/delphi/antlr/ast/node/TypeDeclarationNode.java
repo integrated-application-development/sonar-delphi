@@ -1,11 +1,20 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import org.antlr.runtime.Token;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.symbol.Qualifiable;
+import org.sonar.plugins.delphi.symbol.QualifiedName;
+import org.sonar.plugins.delphi.symbol.TypeNameDeclaration;
+import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Typed;
 
-public final class TypeDeclarationNode extends DelphiNode {
-  private String qualifiedName;
+public final class TypeDeclarationNode extends DelphiNode implements Typed, Qualifiable {
   private Boolean isSubType;
+  private QualifiedName qualifiedName;
 
   public TypeDeclarationNode(Token token) {
     super(token);
@@ -20,67 +29,75 @@ public final class TypeDeclarationNode extends DelphiNode {
     return visitor.visit(this, data);
   }
 
-  public String getSimpleName() {
-    return getFirstChildOfType(QualifiedIdentifierNode.class).getSimpleName();
+  @Override
+  public String getImage() {
+    return fullyQualifiedName();
   }
 
-  public String getQualifiedName() {
+  public QualifiedNameDeclarationNode getTypeNameNode() {
+    return (QualifiedNameDeclarationNode) jjtGetChild(0);
+  }
+
+  public TypeNode getTypeNode() {
+    return (TypeNode) jjtGetChild(1);
+  }
+
+  @Nullable
+  public TypeNameDeclaration getTypeNameDeclaration() {
+    return (TypeNameDeclaration) getTypeNameNode().getNameDeclaration();
+  }
+
+  @Override
+  public String simpleName() {
+    return getTypeNameNode().simpleName();
+  }
+
+  @Override
+  public QualifiedName getQualifiedName() {
     if (qualifiedName == null) {
       TypeDeclarationNode node = this;
-      StringBuilder name = new StringBuilder();
+      Deque<String> names = new ArrayDeque<>();
 
       while (node != null) {
-        var newTypeName = node.getFirstChildOfType(QualifiedIdentifierNode.class);
-        if (name.length() != 0) {
-          name.insert(0, ".");
-        }
-        name.insert(0, newTypeName.getQualifiedName());
+        names.push(node.getTypeNameNode().simpleName());
         node = node.getFirstParentOfType(TypeDeclarationNode.class);
       }
-      qualifiedName = name.toString();
+      qualifiedName = new QualifiedName(names);
     }
 
     return qualifiedName;
   }
 
-  public TypeNode getTypeDeclaration() {
-    return (TypeNode) jjtGetChild(1);
-  }
-
-  public QualifiedIdentifierNode getTypeName() {
-    return (QualifiedIdentifierNode) jjtGetChild(0);
-  }
-
   public boolean isClass() {
-    return getTypeDeclaration() instanceof ClassTypeNode;
+    return getTypeNode() instanceof ClassTypeNode;
   }
 
   public boolean isClassHelper() {
-    return getTypeDeclaration() instanceof ClassHelperTypeNode;
+    return getTypeNode() instanceof ClassHelperTypeNode;
   }
 
   public boolean isEnum() {
-    return getTypeDeclaration() instanceof EnumTypeNode;
+    return getTypeNode() instanceof EnumTypeNode;
   }
 
   public boolean isInterface() {
-    return getTypeDeclaration() instanceof InterfaceTypeNode;
+    return getTypeNode() instanceof InterfaceTypeNode;
   }
 
   public boolean isObject() {
-    return getTypeDeclaration() instanceof ObjectTypeNode;
+    return getTypeNode() instanceof ObjectTypeNode;
   }
 
   public boolean isRecord() {
-    return getTypeDeclaration() instanceof RecordTypeNode;
+    return getTypeNode() instanceof RecordTypeNode;
   }
 
   public boolean isRecordHelper() {
-    return getTypeDeclaration() instanceof RecordHelperTypeNode;
+    return getTypeNode() instanceof RecordHelperTypeNode;
   }
 
   public boolean isPointer() {
-    return getTypeDeclaration() instanceof PointerTypeNode;
+    return getTypeNode() instanceof PointerTypeNode;
   }
 
   public boolean isSubType() {
@@ -91,10 +108,16 @@ public final class TypeDeclarationNode extends DelphiNode {
   }
 
   public boolean isTypeAlias() {
-    return getTypeDeclaration() instanceof TypeAliasNode;
+    return getTypeNode() instanceof TypeAliasNode;
   }
 
   public boolean isTypeType() {
-    return getTypeDeclaration() instanceof TypeTypeNode;
+    return getTypeNode() instanceof TypeTypeNode;
+  }
+
+  @Override
+  @NotNull
+  public Type getType() {
+    return getTypeNode().getType();
   }
 }

@@ -2,7 +2,11 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 
 import java.util.List;
 import org.antlr.runtime.Token;
+import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.type.DelphiCollectionType;
+import org.sonar.plugins.delphi.type.DelphiType;
+import org.sonar.plugins.delphi.type.Type;
 
 public final class ArrayExpressionNode extends ExpressionNode {
   private String image;
@@ -32,5 +36,16 @@ public final class ArrayExpressionNode extends ExpressionNode {
       image = imageBuilder.toString();
     }
     return image;
+  }
+
+  @Override
+  @NotNull
+  public Type createType() {
+    Type elementType = DelphiType.unknownType();
+    List<ExpressionNode> elements = getElements();
+    if (!elements.isEmpty()) {
+      elementType = elements.get(0).getType();
+    }
+    return DelphiCollectionType.fixedArray(null, elementType);
   }
 }

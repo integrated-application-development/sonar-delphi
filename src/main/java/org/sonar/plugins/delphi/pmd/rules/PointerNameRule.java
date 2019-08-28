@@ -27,8 +27,8 @@ public class PointerNameRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(TypeDeclarationNode type, RuleContext data) {
-    if (type.isPointer() && !NameConventionUtils.compliesWithPrefix(type.getSimpleName(), PREFIX)) {
-      addViolation(data, type.getTypeName());
+    if (type.isPointer() && !NameConventionUtils.compliesWithPrefix(type.simpleName(), PREFIX)) {
+      addViolation(data, type.getTypeNameNode());
     }
     return super.visit(type, data);
   }

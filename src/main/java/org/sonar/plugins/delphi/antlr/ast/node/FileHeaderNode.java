@@ -7,11 +7,11 @@ public abstract class FileHeaderNode extends DelphiNode {
     super(token);
   }
 
-  public QualifiedIdentifierNode getQualifiedIdentifier() {
-    return (QualifiedIdentifierNode) jjtGetChild(0);
+  public QualifiedNameDeclarationNode getNameDeclaration() {
+    return (QualifiedNameDeclarationNode) jjtGetChild(0);
   }
 
   public String getName() {
-    return getQualifiedIdentifier().getQualifiedName();
+    return getNameDeclaration().fullyQualifiedName();
   }
 }

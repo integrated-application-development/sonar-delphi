@@ -21,18 +21,15 @@ public class EmptyMethodRule extends AbstractDelphiRule {
   @Override
   public RuleContext visit(MethodImplementationNode method, RuleContext data) {
     if (isEmptyMethod(method) && shouldAddViolation(method)) {
-      addViolation(data, method.getMethodHeading().getMethodName());
+      addViolation(data, method.getMethodName());
     }
     return super.visit(method, data);
   }
 
   private static boolean isEmptyMethod(MethodImplementationNode method) {
-    if (method.hasMethodBody()) {
-      MethodBodyNode body = method.getMethodBody();
-      return (body.hasAsmBlock() && body.getAsmBlock().isEmpty())
-          || (body.hasStatementBlock() && body.getStatementBlock().isEmpty());
-    }
-    return false;
+    MethodBodyNode body = method.getMethodBody();
+    return (body.hasAsmBlock() && body.getAsmBlock().isEmpty())
+        || (body.hasStatementBlock() && body.getStatementBlock().isEmpty());
   }
 
   @Override

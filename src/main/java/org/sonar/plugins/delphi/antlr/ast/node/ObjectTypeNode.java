@@ -3,7 +3,7 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 
-public final class ObjectTypeNode extends TypeNode {
+public final class ObjectTypeNode extends StructTypeNode {
   public ObjectTypeNode(Token token) {
     super(token);
   }
@@ -11,10 +11,5 @@ public final class ObjectTypeNode extends TypeNode {
   @Override
   public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
     return visitor.visit(this, data);
-  }
-
-  @Override
-  public String getImage() {
-    return jjtGetParent().getImage();
   }
 }

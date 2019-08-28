@@ -9,8 +9,8 @@ public class ClassNameRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(TypeDeclarationNode type, RuleContext data) {
-    if (type.isClass() && !NameConventionUtils.compliesWithPrefix(type.getSimpleName(), PREFIXES)) {
-      addViolation(data, type.getTypeName());
+    if (type.isClass() && !NameConventionUtils.compliesWithPrefix(type.simpleName(), PREFIXES)) {
+      addViolation(data, type.getTypeNameNode());
     }
     return super.visit(type, data);
   }
