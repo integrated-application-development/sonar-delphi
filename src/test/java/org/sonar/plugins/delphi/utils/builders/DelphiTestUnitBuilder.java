@@ -37,7 +37,7 @@ public class DelphiTestUnitBuilder extends DelphiTestFileBuilder<DelphiTestUnitB
   }
 
   @Override
-  public int getOffSet() {
+  public int getOffset() {
     int offset = getDeclCount() + getOffsetDecl() + 2;
     if (!getDeclaration().isEmpty()) {
       ++offset;

@@ -23,13 +23,7 @@
 package org.sonar.plugins.delphi.pmd.xml;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,8 +33,6 @@ import java.net.URL;
 import net.sourceforge.pmd.RuleSet;
 import net.sourceforge.pmd.RuleSetFactory;
 import org.apache.commons.io.FileUtils;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -55,27 +47,26 @@ public class DelphiRuleSetTest {
 
   @Test
   public void testName() {
-    assertThat(ruleset.getName(), is(nullValue()));
+    assertThat(ruleset.getName()).isNull();
     ruleset.setName("name");
-    assertThat(ruleset.getName(), is("name"));
+    assertThat(ruleset.getName()).isEqualTo("name");
   }
 
   @Test
   public void testDescription() {
-    assertThat(ruleset.getDescription(), is(nullValue()));
+    assertThat(ruleset.getDescription()).isNull();
     ruleset.setDescription("desc");
-    assertThat(ruleset.getDescription(), is("desc"));
+    assertThat(ruleset.getDescription()).isEqualTo("desc");
   }
 
   @Test
   public void testRules() {
-    assertThat(ruleset.getRules(), is(empty()));
+    assertThat(ruleset.getRules()).isEmpty();
 
     DelphiRule pmdRule = new DelphiRule("testRule");
     ruleset.addRule(pmdRule);
 
-    assertThat(ruleset.getRules(), hasItems(pmdRule));
-    assertThat(ruleset.getRules(), IsCollectionWithSize.hasSize(1));
+    assertThat(ruleset.getRules()).contains(pmdRule).hasSize(1);
   }
 
   @Test
@@ -83,7 +74,7 @@ public class DelphiRuleSetTest {
     StringWriter writer = new StringWriter();
     String rulesXmlPath = "org/sonar/plugins/delphi/pmd/rules.xml";
     URL url = getClass().getClassLoader().getResource(rulesXmlPath);
-    MatcherAssert.assertThat(url, is(not(nullValue())));
+    assertThat(url).isNotNull();
     InputStreamReader stream = new InputStreamReader(new FileInputStream(url.getPath()), UTF_8);
 
     DelphiRuleSet ruleSet = DelphiRuleSetHelper.createFrom(stream);
@@ -96,6 +87,6 @@ public class DelphiRuleSetTest {
     RuleSetFactory ruleSetFactory = new RuleSetFactory();
     RuleSet parsedRuleSet = ruleSetFactory.createRuleSet(ruleSetFile.getAbsolutePath());
 
-    MatcherAssert.assertThat(parsedRuleSet.getRules(), hasSize(ruleSet.getRules().size()));
+    assertThat(parsedRuleSet.getRules()).hasSize(ruleSet.getRules().size());
   }
 }

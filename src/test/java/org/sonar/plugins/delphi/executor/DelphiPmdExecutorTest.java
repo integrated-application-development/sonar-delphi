@@ -1,10 +1,6 @@
 package org.sonar.plugins.delphi.executor;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -87,10 +83,10 @@ public class DelphiPmdExecutorTest {
 
     executor.addBuiltinProperties(ruleSet);
 
-    assertThat(rule.getProperties(), hasSize(3));
-    assertThat(rule.getProperty(BASE_EFFORT.name()), is(not(nullValue())));
-    assertThat(rule.getProperty(SCOPE.name()), is(not(nullValue())));
-    assertThat(rule.getProperty(TYPE.name()), is(not(nullValue())));
+    assertThat(rule.getProperties()).hasSize(3);
+    assertThat(rule.getProperty(BASE_EFFORT.name())).isNotNull();
+    assertThat(rule.getProperty(SCOPE.name())).isNotNull();
+    assertThat(rule.getProperty(TYPE.name())).isNotNull();
   }
 
   @Test
@@ -109,8 +105,8 @@ public class DelphiPmdExecutorTest {
 
     executor.addBuiltinProperties(ruleSet);
 
-    assertThat(rule.getProperties(), hasSize(1));
-    assertThat(rule.getProperty(BASE_EFFORT.name()), is(not(nullValue())));
+    assertThat(rule.getProperties()).hasSize(1);
+    assertThat(rule.getProperty(BASE_EFFORT.name())).isNotNull();
   }
 
   @Test

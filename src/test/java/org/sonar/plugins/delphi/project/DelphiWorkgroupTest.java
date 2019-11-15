@@ -22,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.project;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import org.junit.Before;
@@ -42,15 +42,15 @@ public class DelphiWorkgroupTest {
 
   @Test
   public void testDimpleWorkgroup() {
-    assertEquals(0, workGroup.getProjects().size());
+    assertThat(workGroup.getProjects().size()).isEqualTo(0);
     workGroup.addProject(new DelphiProject("Sample"));
-    assertEquals(1, workGroup.getProjects().size());
+    assertThat(workGroup.getProjects().size()).isEqualTo(1);
   }
 
   @Test
   public void testXmlWorkgroup() throws IOException {
     DelphiWorkgroup workGroup = new DelphiWorkgroup(DelphiUtils.getResource(XML_FILE));
-    assertEquals(1, workGroup.getProjects().size());
-    assertEquals("Simple Delphi Project", workGroup.getProjects().get(0).getName());
+    assertThat(workGroup.getProjects().size()).isEqualTo(1);
+    assertThat(workGroup.getProjects().get(0).getName()).isEqualTo("Simple Delphi Project");
   }
 }

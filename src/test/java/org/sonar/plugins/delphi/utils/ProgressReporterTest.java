@@ -22,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.utils;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
@@ -51,6 +51,6 @@ public class ProgressReporterTest {
     for (int i = 0; i < reporter.getTargetProgress(); i++) {
       numReports += reporter.progress();
     }
-    assertEquals(expectedReports, numReports);
+    assertThat(numReports).isEqualTo(expectedReports);
   }
 }

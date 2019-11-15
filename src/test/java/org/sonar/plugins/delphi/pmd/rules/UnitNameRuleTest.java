@@ -18,11 +18,7 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.everyItem;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
-import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
@@ -33,37 +29,34 @@ public class UnitNameRuleTest extends BasePmdRuleTest {
   public void testValidRule() {
     execute(new DelphiTestUnitBuilder().unitName("TestUnits"));
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
   public void testValidUnitUsingNameSpace() {
     execute(new DelphiTestUnitBuilder().unitName("Namespaces.TestUnits"));
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
   public void testInvalidUnit() {
     execute(new DelphiTestUnitBuilder().unitName("myUnit"));
 
-    assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("UnitNameRule", 1)));
+    assertIssues().hasSize(1).areExactly(1, ruleKeyAtLine("UnitNameRule", 1));
   }
 
   @Test
   public void testInvalidNamespace() {
     execute(new DelphiTestUnitBuilder().unitName("bad_Namespace.GoodUnit"));
 
-    assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("UnitNameRule", 1)));
+    assertIssues().hasSize(1).areExactly(1, ruleKeyAtLine("UnitNameRule", 1));
   }
 
   @Test
   public void testInvalidUnitAndNameSpace() {
     execute(new DelphiTestUnitBuilder().unitName("bad_Namespace.SUPER_bad_UNIT"));
 
-    assertIssues(hasSize(1));
-    assertIssues(everyItem(hasRuleKeyAtLine("UnitNameRule", 1)));
+    assertIssues().hasSize(1).areExactly(1, ruleKeyAtLine("UnitNameRule", 1));
   }
 }

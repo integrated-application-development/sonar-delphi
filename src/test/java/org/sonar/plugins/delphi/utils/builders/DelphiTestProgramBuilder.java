@@ -14,7 +14,7 @@ public class DelphiTestProgramBuilder extends DelphiTestFileBuilder<DelphiTestPr
   }
 
   @Override
-  public int getOffSet() {
+  public int getOffset() {
     int offset = getDeclCount() + getOffsetDecl() + 1;
     if (!getDeclaration().isEmpty()) {
       ++offset;

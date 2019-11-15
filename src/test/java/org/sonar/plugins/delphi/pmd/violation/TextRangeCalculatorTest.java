@@ -19,10 +19,7 @@
  */
 package org.sonar.plugins.delphi.pmd.violation;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -87,25 +84,25 @@ public class TextRangeCalculatorTest {
 
   private void assertTextRangeValues(
       TextRange range, int beginLine, int beginCol, int endLine, int endCol) {
-    assertThat(range, is(not(nullValue())));
+    assertThat(range).isNotNull();
 
-    assertThat(range.start(), is(not(nullValue())));
-    assertThat(range.start().line(), is(beginLine));
-    assertThat(range.start().lineOffset(), is(beginCol));
+    assertThat(range.start()).isNotNull();
+    assertThat(range.start().line()).isEqualTo(beginLine);
+    assertThat(range.start().lineOffset()).isEqualTo(beginCol);
 
-    assertThat(range.end(), is(not(nullValue())));
-    assertThat(range.end().line(), is(endLine));
-    assertThat(range.end().lineOffset(), is(endCol));
+    assertThat(range.end()).isNotNull();
+    assertThat(range.end().line()).isEqualTo(endLine);
+    assertThat(range.end().lineOffset()).isEqualTo(endCol);
   }
 
   private void assertTextRangeLines(TextRange range, int beginLine, int endLine) {
-    assertThat(range, is(not(nullValue())));
+    assertThat(range).isNotNull();
 
-    assertThat(range.start(), is(not(nullValue())));
-    assertThat(range.start().line(), is(beginLine));
+    assertThat(range.start()).isNotNull();
+    assertThat(range.start().line()).isEqualTo(beginLine);
 
-    assertThat(range.end(), is(not(nullValue())));
-    assertThat(range.end().line(), is(endLine));
+    assertThat(range.end()).isNotNull();
+    assertThat(range.end().line()).isEqualTo(endLine);
   }
 
   private RuleViolation createRuleViolation(int beginLine, int beginCol, int endLine, int endCol) {

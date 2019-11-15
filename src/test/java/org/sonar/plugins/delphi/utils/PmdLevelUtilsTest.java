@@ -19,10 +19,7 @@
  */
 package org.sonar.plugins.delphi.utils;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertFalse;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.reflect.Constructor;
 import org.junit.Test;
@@ -34,28 +31,28 @@ public class PmdLevelUtilsTest {
   @Test
   @SuppressWarnings("deprecation")
   public void testShouldGetPriorityFromLevel() {
-    assertThat(PmdLevelUtils.fromLevel(1), is(RulePriority.BLOCKER));
-    assertThat(PmdLevelUtils.fromLevel(2), is(RulePriority.CRITICAL));
-    assertThat(PmdLevelUtils.fromLevel(3), is(RulePriority.MAJOR));
-    assertThat(PmdLevelUtils.fromLevel(4), is(RulePriority.MINOR));
-    assertThat(PmdLevelUtils.fromLevel(5), is(RulePriority.INFO));
-    assertThat(PmdLevelUtils.fromLevel(-1), is(nullValue()));
-    assertThat(PmdLevelUtils.fromLevel(null), is(nullValue()));
+    assertThat(PmdLevelUtils.fromLevel(1)).isEqualTo(RulePriority.BLOCKER);
+    assertThat(PmdLevelUtils.fromLevel(2)).isEqualTo(RulePriority.CRITICAL);
+    assertThat(PmdLevelUtils.fromLevel(3)).isEqualTo(RulePriority.MAJOR);
+    assertThat(PmdLevelUtils.fromLevel(4)).isEqualTo(RulePriority.MINOR);
+    assertThat(PmdLevelUtils.fromLevel(5)).isEqualTo(RulePriority.INFO);
+    assertThat(PmdLevelUtils.fromLevel(-1)).isNull();
+    assertThat(PmdLevelUtils.fromLevel(null)).isNull();
   }
 
   @Test
   public void testShouldGetLevelFromSeverity() {
-    assertThat(PmdLevelUtils.toLevel(Severity.BLOCKER), is(1));
-    assertThat(PmdLevelUtils.toLevel(Severity.CRITICAL), is(2));
-    assertThat(PmdLevelUtils.toLevel(Severity.MAJOR), is(3));
-    assertThat(PmdLevelUtils.toLevel(Severity.MINOR), is(4));
-    assertThat(PmdLevelUtils.toLevel(Severity.INFO), is(5));
+    assertThat(PmdLevelUtils.toLevel(Severity.BLOCKER)).isEqualTo(1);
+    assertThat(PmdLevelUtils.toLevel(Severity.CRITICAL)).isEqualTo(2);
+    assertThat(PmdLevelUtils.toLevel(Severity.MAJOR)).isEqualTo(3);
+    assertThat(PmdLevelUtils.toLevel(Severity.MINOR)).isEqualTo(4);
+    assertThat(PmdLevelUtils.toLevel(Severity.INFO)).isEqualTo(5);
   }
 
   @Test
   public void testHasPrivateConstructor() throws Exception {
     Constructor constructor = PmdLevelUtils.class.getDeclaredConstructor();
-    assertFalse(constructor.canAccess(null));
+    assertThat(constructor.canAccess(null)).isFalse();
     constructor.setAccessible(true);
     constructor.newInstance();
   }

@@ -22,11 +22,7 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.not;
-import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
@@ -55,8 +51,9 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 1)));
+    assertIssues()
+        .hasSize(1)
+        .areExactly(1, ruleKeyAtLine("UnusedArgumentsRule", builder.getOffset() + 1));
   }
 
   @Test
@@ -86,7 +83,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -105,7 +102,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -127,7 +124,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -146,7 +143,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -165,7 +162,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -188,7 +185,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -221,7 +218,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -252,7 +249,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -275,7 +272,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -306,11 +303,12 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(4));
-    assertIssues(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 1)));
-    assertIssues(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 6)));
-    assertIssues(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 7)));
-    assertIssues(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 8)));
+    assertIssues()
+        .hasSize(4)
+        .areExactly(1, ruleKeyAtLine("UnusedArgumentsRule", builder.getOffset() + 1))
+        .areExactly(1, ruleKeyAtLine("UnusedArgumentsRule", builder.getOffset() + 6))
+        .areExactly(1, ruleKeyAtLine("UnusedArgumentsRule", builder.getOffset() + 7))
+        .areExactly(1, ruleKeyAtLine("UnusedArgumentsRule", builder.getOffset() + 8));
   }
 
   @Test
@@ -322,7 +320,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -364,8 +362,9 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(not(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 9))));
-    assertIssues(not(hasItem(hasRuleKeyAtLine("UnusedArgumentsRule", builder.getOffSet() + 13))));
+    assertIssues()
+        .areNot(ruleKeyAtLine("UnusedArgumentsRule", builder.getOffset() + 9))
+        .areNot(ruleKeyAtLine("UnusedArgumentsRule", builder.getOffset() + 13));
   }
 
   @Test
@@ -380,7 +379,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -398,7 +397,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -414,6 +413,6 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 }

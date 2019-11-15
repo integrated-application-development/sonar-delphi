@@ -1,10 +1,7 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
-import static org.sonar.plugins.delphi.utils.matchers.HasRuleKey.hasRuleKey;
-import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
@@ -22,7 +19,7 @@ public class EmptyInterfaceRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -36,7 +33,7 @@ public class EmptyInterfaceRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(not(hasItem(hasRuleKey("EmptyInterfaceRule"))));
+    assertIssues().areNot(ruleKey("EmptyInterfaceRule"));
   }
 
   @Test
@@ -50,7 +47,7 @@ public class EmptyInterfaceRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasItem(hasRuleKeyAtLine("EmptyInterfaceRule", builder.getOffsetDecl() + 2)));
+    assertIssues().areExactly(1, ruleKeyAtLine("EmptyInterfaceRule", builder.getOffsetDecl() + 2));
   }
 
   @Test
@@ -81,6 +78,6 @@ public class EmptyInterfaceRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 }

@@ -1,9 +1,7 @@
 package org.sonar.plugins.delphi.antlr.ast;
 
 import static java.util.function.Predicate.not;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.spy;
@@ -29,7 +27,7 @@ public class DelphiNodeTest {
             .map(Class::getSimpleName)
             .collect(Collectors.toSet());
 
-    assertThat(String.format(MISSING_MODIFIERS, failed), failed, is(empty()));
+    assertThat(failed).as(String.format(MISSING_MODIFIERS, failed)).isEmpty();
   }
 
   @Test
@@ -41,7 +39,7 @@ public class DelphiNodeTest {
             .map(Class::getSimpleName)
             .collect(Collectors.toSet());
 
-    assertThat(String.format(ABSTRACT_ACCEPT_IMPLEMENTED, failed), failed, is(empty()));
+    assertThat(failed).as(String.format(ABSTRACT_ACCEPT_IMPLEMENTED, failed)).isEmpty();
   }
 
   @Test

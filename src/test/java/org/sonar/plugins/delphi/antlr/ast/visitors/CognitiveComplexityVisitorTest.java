@@ -1,7 +1,6 @@
 package org.sonar.plugins.delphi.antlr.ast.visitors;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +26,7 @@ public class CognitiveComplexityVisitorTest {
             .appendImpl("end;")
             .parse();
 
-    assertThat(getComplexity(ast), is(1));
+    assertThat(getComplexity(ast)).isEqualTo(1);
   }
 
   @Test
@@ -78,7 +77,7 @@ public class CognitiveComplexityVisitorTest {
             .appendImpl("end;")
             .parse();
 
-    assertThat(getComplexity(ast), is(29));
+    assertThat(getComplexity(ast)).isEqualTo(29);
   }
 
   @Test
@@ -91,7 +90,7 @@ public class CognitiveComplexityVisitorTest {
             .appendImpl("end;")
             .parse();
 
-    assertThat(getComplexity(ast), is(1));
+    assertThat(getComplexity(ast)).isEqualTo(1);
   }
 
   @Test
@@ -107,7 +106,7 @@ public class CognitiveComplexityVisitorTest {
             .appendImpl("end;")
             .parse();
 
-    assertThat(getComplexity(ast), is(4));
+    assertThat(getComplexity(ast)).isEqualTo(4);
   }
 
   private int getComplexity(DelphiAST ast) {

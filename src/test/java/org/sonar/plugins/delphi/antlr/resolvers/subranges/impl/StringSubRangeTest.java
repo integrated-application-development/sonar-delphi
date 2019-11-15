@@ -22,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.resolvers.subranges.impl;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,14 +40,14 @@ public class StringSubRangeTest {
 
   @Test
   public void testToString() {
-    assertEquals("[0, 23] !This is a test string!", range.toString());
+    assertThat(range.toString()).isEqualTo("[0, 23] !This is a test string!");
 
     range.setBegin(0);
     range.setEnd(10);
-    assertEquals("[0, 10] !This is a", range.toString());
+    assertThat(range.toString()).isEqualTo("[0, 10] !This is a");
 
     range.setEnd(15);
     range.setBegin(11);
-    assertEquals("[11, 15] test", range.toString());
+    assertThat(range.toString()).isEqualTo("[11, 15] test");
   }
 }

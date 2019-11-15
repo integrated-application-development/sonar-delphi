@@ -19,10 +19,7 @@
  */
 package org.sonar.plugins.delphi.pmd.profile;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -71,7 +68,7 @@ public class DelphiPmdProfileExporterTest {
     definition.define(context);
 
     RulesDefinition.Repository repository = context.repository(DelphiPmdConstants.REPOSITORY_KEY);
-    assertThat(repository, is(not(nullValue())));
+    assertThat(repository).isNotNull();
 
     RuleFinder ruleFinder = createRuleFinder(repository.rules());
     DelphiPmdProfileImporter importer = new DelphiPmdProfileImporter(ruleFinder);
@@ -132,7 +129,7 @@ public class DelphiPmdProfileExporterTest {
     StringWriter stringWriter = new StringWriter();
     exporter.exportProfile(importProfile(importedXml), stringWriter);
 
-    assertThat(stringWriter.toString(), is(expected));
+    assertThat(stringWriter.toString()).isEqualTo(expected);
   }
 
   @Test
@@ -163,7 +160,7 @@ public class DelphiPmdProfileExporterTest {
             + "  <description>Sonar Profile: delph</description>\n"
             + "</ruleset>\n\n";
 
-    assertThat(writer.toString(), is(expected));
+    assertThat(writer.toString()).isEqualTo(expected);
   }
 
   @Test
@@ -194,6 +191,6 @@ public class DelphiPmdProfileExporterTest {
     final StringWriter writer = new StringWriter();
     exporter.exportProfile(profile, writer);
 
-    assertThat(writer.toString(), is(getRuleSetXml("/xpath_rules.xml")));
+    assertThat(writer.toString()).isEqualTo(getRuleSetXml("/xpath_rules.xml"));
   }
 }

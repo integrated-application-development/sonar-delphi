@@ -1,10 +1,6 @@
 package org.sonar.plugins.delphi.pmd.profile;
 
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -49,12 +45,12 @@ public class DefaultDelphiProfileTest {
         context.profile(DelphiLanguage.KEY, DefaultDelphiProfile.DEFAULT_PROFILE_NAME);
 
     List<BuiltInActiveRule> activeRules = profile.rules();
-    assertThat(activeRules, hasSize(47));
-    assertThat(profile.name(), is(DefaultDelphiProfile.DEFAULT_PROFILE_NAME));
+    assertThat(activeRules).hasSize(47);
+    assertThat(profile.name()).isEqualTo(DefaultDelphiProfile.DEFAULT_PROFILE_NAME);
 
     // Check that we use severity from the read rule and not default one.
     for (BuiltInActiveRule rule : activeRules) {
-      assertThat(rule.overriddenSeverity(), is(not(nullValue())));
+      assertThat(rule.overriddenSeverity()).isNotNull();
     }
   }
 }

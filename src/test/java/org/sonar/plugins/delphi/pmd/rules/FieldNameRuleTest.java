@@ -18,11 +18,7 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.not;
-import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
@@ -42,7 +38,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -59,9 +55,10 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4)));
-    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
-    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7)));
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4))
+        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5))
+        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7));
   }
 
   @Test
@@ -80,10 +77,11 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(not(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 3))));
-    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
-    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7)));
-    assertIssues(not(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 9))));
+    assertIssues()
+        .areNot(ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 3))
+        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5))
+        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7))
+        .areNot(ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 9));
   }
 
   @Test
@@ -113,15 +111,15 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(not(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 3))));
-    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
-    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7)));
-    assertIssues(not(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 9))));
-
-    assertIssues(not(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 13))));
-    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 15)));
-    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 17)));
-    assertIssues(not(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 19))));
+    assertIssues()
+        .areNot(ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 3))
+        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5))
+        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7))
+        .areNot(ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 9))
+        .areNot(ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 13))
+        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 15))
+        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 17))
+        .areNot(ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 19));
   }
 
   @Test
@@ -138,10 +136,11 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(3));
-    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4)));
-    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
-    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7)));
+    assertIssues()
+        .hasSize(3)
+        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4))
+        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5))
+        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7));
   }
 
   @Test
@@ -150,15 +149,15 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
     builder.appendDecl("    private");
-    builder.appendDecl("     x: Integer;");
+    builder.appendDecl("     X: Integer;");
     builder.appendDecl("     F: Integer;");
     builder.appendDecl("  end;");
 
     execute(builder);
 
-    assertIssues(hasSize(2));
-    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4)));
-    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5)));
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4))
+        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5));
   }
 
   @Test
@@ -167,12 +166,11 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
     builder.appendDecl("    private");
-    builder.appendDecl("     x, y: Integer;");
+    builder.appendDecl("     X, Y: Integer;");
     builder.appendDecl("  end;");
 
     execute(builder);
 
-    assertIssues(hasSize(2));
-    assertIssues(hasItem(hasRuleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4)));
+    assertIssues().hasSize(2).are(ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4));
   }
 }

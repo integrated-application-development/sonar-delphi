@@ -22,10 +22,7 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
@@ -43,8 +40,9 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 3)));
+    assertIssues()
+        .hasSize(1)
+        .areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 3));
   }
 
   @Test
@@ -61,7 +59,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasItem(hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 6)));
+    assertIssues().areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 6));
   }
 
   @Test
@@ -78,7 +76,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasItem(hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 6)));
+    assertIssues().areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 6));
   }
 
   @Test
@@ -96,8 +94,9 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 6)));
+    assertIssues()
+        .hasSize(1)
+        .areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 6));
   }
 
   @Test
@@ -117,9 +116,10 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(2));
-    assertIssues(hasItem(hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 6)));
-    assertIssues(hasItem(hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 8)));
+    assertIssues()
+        .hasSize(2)
+        .areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 6))
+        .areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 8));
   }
 
   @Test
@@ -139,7 +139,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasItem(hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 9)));
+    assertIssues().areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 9));
   }
 
   @Test
@@ -159,9 +159,10 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(2));
-    assertIssues(hasItem(hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 6)));
-    assertIssues(hasItem(hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 8)));
+    assertIssues()
+        .hasSize(2)
+        .areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 6))
+        .areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 8));
   }
 
   @Test
@@ -180,8 +181,9 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 8)));
+    assertIssues()
+        .hasSize(1)
+        .areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 8));
   }
 
   @Test
@@ -199,7 +201,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasItem(hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 6)));
+    assertIssues().areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 6));
   }
 
   @Test
@@ -220,7 +222,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -241,7 +243,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -262,7 +264,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -277,7 +279,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -292,7 +294,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -312,7 +314,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -332,7 +334,8 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("NoSemicolonRule", builder.getOffSet() + 9)));
+    assertIssues()
+        .hasSize(1)
+        .areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 9));
   }
 }

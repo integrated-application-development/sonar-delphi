@@ -23,10 +23,7 @@
 package org.sonar.plugins.delphi.antlr.directives;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,48 +54,48 @@ public class CompilerDirectiveParserTest {
   public void testCreateIncludeDirective()
       throws CompilerDirectiveSyntaxException, UnsupportedCompilerDirectiveException {
     CompilerDirective directive = parseOne("{$include file.inc}");
-    assertEquals(CompilerDirectiveType.INCLUDE, directive.getType());
-    assertEquals("file.inc", directive.getItem());
-    assertEquals(0, directive.getFirstCharPosition());
-    assertEquals(18, directive.getLastCharPosition());
+    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.INCLUDE);
+    assertThat(directive.getItem()).isEqualTo("file.inc");
+    assertThat(directive.getFirstCharPosition()).isEqualTo(0);
+    assertThat(directive.getLastCharPosition()).isEqualTo(18);
 
     directive = parseOne("{$I file.inc}");
-    assertEquals(CompilerDirectiveType.INCLUDE, directive.getType());
-    assertEquals("file.inc", directive.getItem());
-    assertEquals(0, directive.getFirstCharPosition());
-    assertEquals(12, directive.getLastCharPosition());
+    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.INCLUDE);
+    assertThat(directive.getItem()).isEqualTo("file.inc");
+    assertThat(directive.getFirstCharPosition()).isEqualTo(0);
+    assertThat(directive.getLastCharPosition()).isEqualTo(12);
   }
 
   @Test
   public void testCreateUnusedDirective()
       throws CompilerDirectiveSyntaxException, UnsupportedCompilerDirectiveException {
     CompilerDirective directive = parseOne("{$i+}");
-    assertEquals(CompilerDirectiveType.UNSUPPORTED, directive.getType());
-    assertEquals("", directive.getItem());
-    assertEquals(0, directive.getFirstCharPosition());
-    assertEquals(4, directive.getLastCharPosition());
+    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.UNSUPPORTED);
+    assertThat(directive.getItem()).isEqualTo("");
+    assertThat(directive.getFirstCharPosition()).isEqualTo(0);
+    assertThat(directive.getLastCharPosition()).isEqualTo(4);
 
     directive = parseOne("{$warn}");
-    assertEquals(CompilerDirectiveType.UNSUPPORTED, directive.getType());
-    assertEquals("", directive.getItem());
-    assertEquals(0, directive.getFirstCharPosition());
-    assertEquals(6, directive.getLastCharPosition());
+    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.UNSUPPORTED);
+    assertThat(directive.getItem()).isEqualTo("");
+    assertThat(directive.getFirstCharPosition()).isEqualTo(0);
+    assertThat(directive.getLastCharPosition()).isEqualTo(6);
 
     directive = parseOne("{$R}");
-    assertEquals(CompilerDirectiveType.UNSUPPORTED, directive.getType());
-    assertEquals("", directive.getItem());
-    assertEquals(0, directive.getFirstCharPosition());
-    assertEquals(3, directive.getLastCharPosition());
+    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.UNSUPPORTED);
+    assertThat(directive.getItem()).isEqualTo("");
+    assertThat(directive.getFirstCharPosition()).isEqualTo(0);
+    assertThat(directive.getLastCharPosition()).isEqualTo(3);
   }
 
   @Test
   public void testCreateIfDirective()
       throws CompilerDirectiveSyntaxException, UnsupportedCompilerDirectiveException {
     CompilerDirective directive = parseOne("{$if file.inc}");
-    assertEquals(CompilerDirectiveType.IF, directive.getType());
-    assertEquals("file.inc", directive.getItem());
-    assertEquals(0, directive.getFirstCharPosition());
-    assertEquals(13, directive.getLastCharPosition());
+    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.IF);
+    assertThat(directive.getItem()).isEqualTo("file.inc");
+    assertThat(directive.getFirstCharPosition()).isEqualTo(0);
+    assertThat(directive.getLastCharPosition()).isEqualTo(13);
   }
 
   @Test
@@ -116,65 +113,65 @@ public class CompilerDirectiveParserTest {
   @Test
   public void testUnknownNameShouldNotCreateDirective() {
     List<CompilerDirective> directives = parser.parse("{$not_a_real_compiler_directive}");
-    assertThat(directives, empty());
+    assertThat(directives).isEmpty();
   }
 
   @Test
   public void testCreateUndefineDirective()
       throws CompilerDirectiveSyntaxException, UnsupportedCompilerDirectiveException {
     CompilerDirective directive = parseOne("{$undef _DEBUG}");
-    assertEquals(CompilerDirectiveType.UNDEFINE, directive.getType());
-    assertEquals("_DEBUG", directive.getItem());
-    assertEquals(0, directive.getFirstCharPosition());
-    assertEquals(14, directive.getLastCharPosition());
+    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.UNDEFINE);
+    assertThat(directive.getItem()).isEqualTo("_DEBUG");
+    assertThat(directive.getFirstCharPosition()).isEqualTo(0);
+    assertThat(directive.getLastCharPosition()).isEqualTo(14);
   }
 
   @Test
   public void testCreateElseDirective()
       throws CompilerDirectiveSyntaxException, UnsupportedCompilerDirectiveException {
     CompilerDirective directive = parseOne("{$else}");
-    assertEquals(CompilerDirectiveType.ELSE, directive.getType());
-    assertEquals("", directive.getItem());
-    assertEquals(0, directive.getFirstCharPosition());
-    assertEquals(6, directive.getLastCharPosition());
+    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.ELSE);
+    assertThat(directive.getItem()).isEqualTo("");
+    assertThat(directive.getFirstCharPosition()).isEqualTo(0);
+    assertThat(directive.getLastCharPosition()).isEqualTo(6);
 
     directive = parseOne("(*$else*)");
-    assertEquals(CompilerDirectiveType.ELSE, directive.getType());
-    assertEquals("", directive.getItem());
-    assertEquals(0, directive.getFirstCharPosition());
-    assertEquals(8, directive.getLastCharPosition());
+    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.ELSE);
+    assertThat(directive.getItem()).isEqualTo("");
+    assertThat(directive.getFirstCharPosition()).isEqualTo(0);
+    assertThat(directive.getLastCharPosition()).isEqualTo(8);
 
     directive = parseOne("\t{$else}\t\n");
-    assertEquals(CompilerDirectiveType.ELSE, directive.getType());
-    assertEquals("", directive.getItem());
-    assertEquals(1, directive.getFirstCharPosition());
-    assertEquals(7, directive.getLastCharPosition());
+    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.ELSE);
+    assertThat(directive.getItem()).isEqualTo("");
+    assertThat(directive.getFirstCharPosition()).isEqualTo(1);
+    assertThat(directive.getLastCharPosition()).isEqualTo(7);
 
     directive = parseOne("{$elseif}");
-    assertEquals(CompilerDirectiveType.ELSE, directive.getType());
-    assertEquals("", directive.getItem());
-    assertEquals(0, directive.getFirstCharPosition());
-    assertEquals(8, directive.getLastCharPosition());
+    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.ELSE);
+    assertThat(directive.getItem()).isEqualTo("");
+    assertThat(directive.getFirstCharPosition()).isEqualTo(0);
+    assertThat(directive.getLastCharPosition()).isEqualTo(8);
   }
 
   @Test
   public void testCreateIfEndDirective()
       throws CompilerDirectiveSyntaxException, UnsupportedCompilerDirectiveException {
     CompilerDirective directive = parseOne("{$ifend}");
-    assertEquals(CompilerDirectiveType.IFEND, directive.getType());
-    assertEquals("", directive.getItem());
-    assertEquals(0, directive.getFirstCharPosition());
-    assertEquals(7, directive.getLastCharPosition());
+    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.IFEND);
+    assertThat(directive.getItem()).isEqualTo("");
+    assertThat(directive.getFirstCharPosition()).isEqualTo(0);
+    assertThat(directive.getLastCharPosition()).isEqualTo(7);
   }
 
   @Test
   public void testCreateDefineDirective()
       throws CompilerDirectiveSyntaxException, UnsupportedCompilerDirectiveException {
     CompilerDirective directive = parseOne("{$define _DEBUG}");
-    assertEquals(CompilerDirectiveType.DEFINE, directive.getType());
-    assertEquals("_DEBUG", directive.getItem());
-    assertEquals(0, directive.getFirstCharPosition());
-    assertEquals(15, directive.getLastCharPosition());
+    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.DEFINE);
+    assertThat(directive.getItem()).isEqualTo("_DEBUG");
+    assertThat(directive.getFirstCharPosition()).isEqualTo(0);
+    assertThat(directive.getLastCharPosition()).isEqualTo(15);
   }
 
   @Test
@@ -237,17 +234,17 @@ public class CompilerDirectiveParserTest {
 
     List<CompilerDirective> allDirectives = parser.parse(testFileString);
 
-    assertEquals(TEST_FILE_DIRECTIVES_COUNT, allDirectives.size());
+    assertThat(allDirectives.size()).isEqualTo(TEST_FILE_DIRECTIVES_COUNT);
     for (int i = 0; i < TEST_FILE_DIRECTIVES_COUNT; ++i) {
-      assertEquals(String.valueOf(i), types[i], allDirectives.get(i).getType());
-      assertEquals(names[i], allDirectives.get(i).getName());
-      assertEquals(items[i], allDirectives.get(i).getItem());
+      assertThat(allDirectives.get(i).getType()).as(String.valueOf(i)).isEqualTo(types[i]);
+      assertThat(allDirectives.get(i).getName()).isEqualTo(names[i]);
+      assertThat(allDirectives.get(i).getItem()).isEqualTo(items[i]);
     }
   }
 
   private CompilerDirective parseOne(String data) {
     List<CompilerDirective> directives = parser.parse(data);
-    assertThat(directives, hasSize(1));
+    assertThat(directives).hasSize(1);
 
     return directives.get(0);
   }

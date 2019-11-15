@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.resolvers.subranges.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -47,56 +45,56 @@ public class IntegerSubRangeTest {
 
   @Test
   public void testGetBegin() {
-    assertEquals(0, range.getBegin());
-    assertEquals(-1, range2.getBegin());
+    assertThat(range.getBegin()).isEqualTo(0);
+    assertThat(range2.getBegin()).isEqualTo(-1);
 
     range.setBegin(2);
-    assertEquals(2, range.getBegin());
+    assertThat(range.getBegin()).isEqualTo(2);
 
     range2.setBegin(-2);
-    assertEquals(-2, range2.getBegin());
+    assertThat(range2.getBegin()).isEqualTo(-2);
   }
 
   @Test
   public void testGetEnd() {
-    assertEquals(5, range.getEnd());
-    assertEquals(-1, range2.getEnd());
+    assertThat(range.getEnd()).isEqualTo(5);
+    assertThat(range2.getEnd()).isEqualTo(-1);
 
     range.setEnd(2);
-    assertEquals(2, range.getEnd());
+    assertThat(range.getEnd()).isEqualTo(2);
 
     range2.setEnd(0);
-    assertEquals(0, range2.getEnd());
+    assertThat(range2.getEnd()).isEqualTo(0);
   }
 
   @Test
   public void testValueInRange() {
-    assertTrue(range.inRange(0));
-    assertTrue(range.inRange(3));
-    assertTrue(range.inRange(5));
-    assertFalse(range.inRange(-1));
-    assertFalse(range.inRange(6));
+    assertThat(range.inRange(0)).isTrue();
+    assertThat(range.inRange(3)).isTrue();
+    assertThat(range.inRange(5)).isTrue();
+    assertThat(range.inRange(-1)).isFalse();
+    assertThat(range.inRange(6)).isFalse();
 
-    assertTrue(range2.inRange(-1));
-    assertFalse(range2.inRange(-2));
-    assertFalse(range2.inRange(0));
+    assertThat(range2.inRange(-1)).isTrue();
+    assertThat(range2.inRange(-2)).isFalse();
+    assertThat(range2.inRange(0)).isFalse();
   }
 
   @Test
   public void testRangeInRange() {
-    assertTrue(range.inRange(range));
-    assertTrue(range.inRange(new IntegerSubRange(2, 4)));
-    assertTrue(range.inRange(new IntegerSubRange(0, 0)));
-    assertTrue(range.inRange(new IntegerSubRange(5, 5)));
-    assertTrue(range.inRange(new IntegerSubRange(1, 5)));
-    assertTrue(range.inRange(new IntegerSubRange(4, 5)));
-    assertTrue(range.inRange(new IntegerSubRange(5, 5)));
+    assertThat(range.inRange(range)).isTrue();
+    assertThat(range.inRange(new IntegerSubRange(2, 4))).isTrue();
+    assertThat(range.inRange(new IntegerSubRange(0, 0))).isTrue();
+    assertThat(range.inRange(new IntegerSubRange(5, 5))).isTrue();
+    assertThat(range.inRange(new IntegerSubRange(1, 5))).isTrue();
+    assertThat(range.inRange(new IntegerSubRange(4, 5))).isTrue();
+    assertThat(range.inRange(new IntegerSubRange(5, 5))).isTrue();
 
-    assertFalse(range.inRange(new IntegerSubRange(-5, 10)));
-    assertFalse(range.inRange(new IntegerSubRange(0, 6)));
-    assertFalse(range.inRange(new IntegerSubRange(-1, 0)));
-    assertFalse(range.inRange(new IntegerSubRange(5, 6)));
-    assertFalse(range.inRange(new IntegerSubRange(-1, 5)));
+    assertThat(range.inRange(new IntegerSubRange(-5, 10))).isFalse();
+    assertThat(range.inRange(new IntegerSubRange(0, 6))).isFalse();
+    assertThat(range.inRange(new IntegerSubRange(-1, 0))).isFalse();
+    assertThat(range.inRange(new IntegerSubRange(5, 6))).isFalse();
+    assertThat(range.inRange(new IntegerSubRange(-1, 5))).isFalse();
   }
 
   @Test

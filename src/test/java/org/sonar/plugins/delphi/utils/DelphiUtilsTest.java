@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.utils;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,22 +41,22 @@ public class DelphiUtilsTest {
     String str2 = DelphiUtils.resolveAbsolutePath(rootPath, "tempDir").getAbsolutePath();
     String str3 = DelphiUtils.resolveAbsolutePath(rootPath, rootPath).getAbsolutePath();
 
-    assertEquals(rootPath + File.separatorChar + tempFile.getName(), str1);
-    assertEquals(rootPath + File.separatorChar + "tempDir", str2);
-    assertEquals(rootPath, str3);
+    assertThat(str1).isEqualTo(rootPath + File.separatorChar + tempFile.getName());
+    assertThat(str2).isEqualTo(rootPath + File.separatorChar + "tempDir");
+    assertThat(str3).isEqualTo(rootPath);
   }
 
   @Test
   public void testAcceptFile() {
-    assertThat(DelphiUtils.acceptFile("Unit.pas"), is(true));
-    assertThat(DelphiUtils.acceptFile("Project.dpr"), is(true));
-    assertThat(DelphiUtils.acceptFile("Package.dpk"), is(true));
+    assertThat(DelphiUtils.acceptFile("Unit.pas")).isTrue();
+    assertThat(DelphiUtils.acceptFile("Project.dpr")).isTrue();
+    assertThat(DelphiUtils.acceptFile("Package.dpk")).isTrue();
   }
 
   @Test
   public void testAcceptFileCaseInsensitive() {
-    assertThat(DelphiUtils.acceptFile("Unit.Pas"), is(true));
-    assertThat(DelphiUtils.acceptFile("Project.dPr"), is(true));
-    assertThat(DelphiUtils.acceptFile("Package.DPK"), is(true));
+    assertThat(DelphiUtils.acceptFile("Unit.Pas")).isTrue();
+    assertThat(DelphiUtils.acceptFile("Project.dPr")).isTrue();
+    assertThat(DelphiUtils.acceptFile("Package.DPK")).isTrue();
   }
 }

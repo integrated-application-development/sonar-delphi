@@ -82,8 +82,8 @@
     <sonar-orchestrator.version>3.27.0.2172</sonar-orchestrator.version>
     <antlr-runtime.version>3.4</antlr-runtime.version>
     <pmd.version>6.18.0</pmd.version>
-    <hamcrest-all.version>1.3</hamcrest-all.version>
     <junit.version>4.12</junit.version>
+    <assertj.version>3.14.0</assertj.version>
     <mockito.version>3.0.0</mockito.version>
     <reflections.version>0.9.11</reflections.version>
     <java-surefire.version>5.13.0.18197</java-surefire.version>
@@ -92,7 +92,7 @@
     <errorprone.version>2.3.4</errorprone.version>
     <!--Maven plugins-->
     <antlr3-plugin.version>3.5.2</antlr3-plugin.version>
-    <jacoco-plugin.version>0.8.4</jacoco-plugin.version>
+    <jacoco-plugin.version>0.8.5</jacoco-plugin.version>
     <surefire-plugin.version>2.22.0</surefire-plugin.version>
     <sonar-packaging-plugin.version>1.16</sonar-packaging-plugin.version>
     <license-plugin.version>1.9.0</license-plugin.version>
@@ -185,10 +185,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-all</artifactId>
-      <version>${hamcrest-all.version}</version>
-      <scope>test</scope>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>${assertj.version}</version>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>

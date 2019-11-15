@@ -22,8 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.ast;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -53,7 +52,7 @@ public class DelphiASTTest {
   private static void checkTypes(Node node) {
     for (int i = 0; i < node.jjtGetNumChildren(); ++i) {
       Node child = node.jjtGetChild(i);
-      assertThat(child, instanceOf(DelphiNode.class));
+      assertThat(child).isInstanceOf(DelphiNode.class);
       checkTypes(child);
     }
   }

@@ -118,7 +118,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
 
   public abstract int getOffsetDecl();
 
-  public abstract int getOffSet();
+  public abstract int getOffset();
 
   protected abstract T getThis();
 
@@ -145,7 +145,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
     }
 
     @Override
-    public int getOffSet() {
+    public int getOffset() {
       return 0;
     }
 

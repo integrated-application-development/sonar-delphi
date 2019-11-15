@@ -22,14 +22,10 @@
  */
 package org.sonar.plugins.delphi.pmd.xml;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -48,14 +44,14 @@ public class DelphiRuleTest {
 
   @Test
   public void testName() {
-    assertThat(rule.getName(), is(nullValue()));
+    assertThat(rule.getName()).isNull();
     rule.setName("test");
-    assertThat(rule.getName(), is("test"));
+    assertThat(rule.getName()).isEqualTo("test");
   }
 
   @Test
   public void testClazz() {
-    assertThat(rule.getClazz(), is("class"));
+    assertThat(rule.getClazz()).isEqualTo("class");
   }
 
   @Test
@@ -64,38 +60,37 @@ public class DelphiRuleTest {
     properties.add(new DelphiRuleProperty("a", "b"));
     rule.setProperties(properties);
 
-    assertThat(rule.getProperties(), is(properties));
-    assertThat(rule.getProperties(), IsCollectionWithSize.hasSize(1));
+    assertThat(rule.getProperties()).isEqualTo(properties).hasSize(1);
 
     rule.addProperty(new DelphiRuleProperty("c", "d"));
-    assertThat(rule.getProperties(), IsCollectionWithSize.hasSize(2));
+    assertThat(rule.getProperties()).hasSize(2);
 
     rule.removeProperty("c");
-    assertThat(rule.getProperties(), IsCollectionWithSize.hasSize(1));
+    assertThat(rule.getProperties()).hasSize(1);
 
-    assertThat(rule.getProperties().get(0).getName(), is("a"));
+    assertThat(rule.getProperties().get(0).getName()).isEqualTo("a");
   }
 
   @Test
   public void testPriority() {
-    assertThat(rule.getPriority(), is(1));
-    assertThat(new DelphiRule("class").getPriority(), is(nullValue()));
+    assertThat(rule.getPriority()).isEqualTo(1);
+    assertThat(new DelphiRule("class").getPriority()).isNull();
   }
 
   @Test
   public void testMessage() {
     rule.setMessage("my message");
-    assertThat(rule.getMessage(), is("my message"));
+    assertThat(rule.getMessage()).isEqualTo("my message");
   }
 
   @Test
   public void testDescription() {
-    assertThat(rule.getHtmlDescription(), isEmptyString());
+    assertThat(rule.getHtmlDescription()).isEmpty();
     rule.setDescription("abc");
-    assertThat(rule.getDescription(), is("abc"));
-    assertThat(rule.getHtmlDescription(), is("<p>abc</p>"));
+    assertThat(rule.getDescription()).isEqualTo("abc");
+    assertThat(rule.getHtmlDescription()).isEqualTo("<p>abc</p>");
     rule.setExample("123");
-    assertThat(rule.getExample(), is("123"));
-    assertThat(rule.getHtmlDescription(), is("<p>abc</p><pre>123</pre>"));
+    assertThat(rule.getExample()).isEqualTo("123");
+    assertThat(rule.getHtmlDescription()).isEqualTo("<p>abc</p><pre>123</pre>");
   }
 }

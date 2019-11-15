@@ -1,10 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.not;
-import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestProgramBuilder;
@@ -17,7 +13,7 @@ public class DprVariableRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -32,13 +28,11 @@ public class DprVariableRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(3));
-    assertIssues(
-        hasItem(hasRuleKeyAtLine("ProjectFileNoVariablesRule", builder.getOffsetDecl() + 2)));
-    assertIssues(
-        hasItem(hasRuleKeyAtLine("ProjectFileNoVariablesRule", builder.getOffsetDecl() + 3)));
-    assertIssues(
-        hasItem(hasRuleKeyAtLine("ProjectFileNoVariablesRule", builder.getOffsetDecl() + 4)));
+    assertIssues()
+        .hasSize(3)
+        .areExactly(1, ruleKeyAtLine("ProjectFileNoVariablesRule", builder.getOffsetDecl() + 2))
+        .areExactly(1, ruleKeyAtLine("ProjectFileNoVariablesRule", builder.getOffsetDecl() + 3))
+        .areExactly(1, ruleKeyAtLine("ProjectFileNoVariablesRule", builder.getOffsetDecl() + 4));
   }
 
   @Test
@@ -66,10 +60,8 @@ public class DprVariableRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(
-        not(hasItem(hasRuleKeyAtLine("ProjectFileNoVariablesRule", builder.getOffsetDecl() + 2))));
-
-    assertIssues(
-        not(hasItem(hasRuleKeyAtLine("ProjectFileNoVariablesRule", builder.getOffsetDecl() + 6))));
+    assertIssues()
+        .areNot(ruleKeyAtLine("ProjectFileNoVariablesRule", builder.getOffsetDecl() + 2))
+        .areNot(ruleKeyAtLine("ProjectFileNoVariablesRule", builder.getOffsetDecl() + 6));
   }
 }

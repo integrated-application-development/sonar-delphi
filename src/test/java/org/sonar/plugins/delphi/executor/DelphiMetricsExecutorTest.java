@@ -1,7 +1,6 @@
 package org.sonar.plugins.delphi.executor;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.Serializable;
@@ -88,6 +87,8 @@ public class DelphiMetricsExecutorTest {
   }
 
   private <T extends Serializable> void checkMetric(Metric<T> metric, T value) {
-    assertThat(metric.getDescription(), context.measure(componentKey, metric).value(), is(value));
+    assertThat(context.measure(componentKey, metric).value())
+        .as(metric.getDescription())
+        .isEqualTo(value);
   }
 }
