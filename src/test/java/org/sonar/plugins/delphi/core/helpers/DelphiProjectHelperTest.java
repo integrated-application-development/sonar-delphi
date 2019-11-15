@@ -22,13 +22,7 @@
  */
 package org.sonar.plugins.delphi.core.helpers;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -52,7 +46,7 @@ public class DelphiProjectHelperTest {
   private DelphiProject getProject() {
     DelphiProjectHelper delphiProjectHelper = new DelphiProjectHelper(settings, fs);
     List<DelphiProject> projects = delphiProjectHelper.getProjects();
-    assertThat(projects, hasSize(1));
+    assertThat(projects).hasSize(1);
 
     return projects.get(0);
   }
@@ -73,10 +67,9 @@ public class DelphiProjectHelperTest {
   public void testDefaultProject() {
     DelphiProject project = getProject();
 
-    assertThat(project.getName(), is(DelphiProjectHelper.DEFAULT_PROJECT_NAME));
-    assertThat(project.getIncludeDirectories(), hasSize(1));
-    assertThat(project.getDefinitions(), hasSize(1));
-    assertThat(project.getDefinitions(), hasItem("DefineFromSettings"));
+    assertThat(project.getName()).isEqualTo(DelphiProjectHelper.DEFAULT_PROJECT_NAME);
+    assertThat(project.getIncludeDirectories()).hasSize(1);
+    assertThat(project.getDefinitions()).hasSize(1).contains("DefineFromSettings");
   }
 
   @Test
@@ -85,7 +78,7 @@ public class DelphiProjectHelperTest {
 
     DelphiProject project = getProject();
 
-    assertThat(project.getIncludeDirectories(), is(empty()));
+    assertThat(project.getIncludeDirectories()).isEmpty();
   }
 
   @Test
@@ -95,7 +88,7 @@ public class DelphiProjectHelperTest {
 
     DelphiProject project = getProject();
 
-    assertThat(project.getIncludeDirectories(), hasSize(1));
+    assertThat(project.getIncludeDirectories()).hasSize(1);
   }
 
   @Test
@@ -108,9 +101,9 @@ public class DelphiProjectHelperTest {
     File excluded1 = DelphiUtils.getResource(PROJECTS_PATH + "/BadSyntaxProject/BadSyntax.Pas");
     File excluded2 = DelphiUtils.getResource(PROJECTS_PATH + "/BadSyntaxProject/GoodSyntax.Pas");
 
-    assertThat(delphiProjectHelper.getExcludedDirectories(), hasSize(1));
-    assertTrue(delphiProjectHelper.isExcluded(excluded1));
-    assertTrue(delphiProjectHelper.isExcluded(excluded2));
+    assertThat(delphiProjectHelper.getExcludedDirectories()).hasSize(1);
+    assertThat(delphiProjectHelper.isExcluded(excluded1)).isTrue();
+    assertThat(delphiProjectHelper.isExcluded(excluded2)).isTrue();
   }
 
   @Test
@@ -120,13 +113,12 @@ public class DelphiProjectHelperTest {
 
     DelphiProject project = getProject();
 
-    assertThat(project.getName(), is("Simple Delphi Project"));
-    assertThat(project.getIncludeDirectories(), hasSize(2));
-    assertThat(project.getSourceFiles(), hasSize(8));
-    assertThat(project.getDefinitions(), hasSize(5));
-    assertThat(
-        project.getDefinitions(),
-        hasItems("GGMSGDEBUGx", "LOGTOFILEx", "FullDebugMode", "RELEASE", "DefineFromSettings"));
+    assertThat(project.getName()).isEqualTo("Simple Delphi Project");
+    assertThat(project.getIncludeDirectories()).hasSize(2);
+    assertThat(project.getSourceFiles()).hasSize(8);
+    assertThat(project.getDefinitions())
+        .hasSize(5)
+        .contains("GGMSGDEBUGx", "LOGTOFILEx", "FullDebugMode", "RELEASE", "DefineFromSettings");
   }
 
   @Test
@@ -136,12 +128,11 @@ public class DelphiProjectHelperTest {
 
     DelphiProject project = getProject();
 
-    assertThat(project.getName(), is("Simple Delphi Project"));
-    assertThat(project.getIncludeDirectories(), hasSize(2));
-    assertThat(project.getSourceFiles(), hasSize(8));
-    assertThat(project.getDefinitions(), hasSize(5));
-    assertThat(
-        project.getDefinitions(),
-        hasItems("GGMSGDEBUGx", "LOGTOFILEx", "FullDebugMode", "RELEASE", "DefineFromSettings"));
+    assertThat(project.getName()).isEqualTo("Simple Delphi Project");
+    assertThat(project.getIncludeDirectories()).hasSize(2);
+    assertThat(project.getSourceFiles()).hasSize(8);
+    assertThat(project.getDefinitions())
+        .hasSize(5)
+        .contains("GGMSGDEBUGx", "LOGTOFILEx", "FullDebugMode", "RELEASE", "DefineFromSettings");
   }
 }

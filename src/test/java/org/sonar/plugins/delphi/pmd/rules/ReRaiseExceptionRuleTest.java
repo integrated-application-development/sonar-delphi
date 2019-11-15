@@ -1,10 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.not;
-import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
@@ -26,7 +22,7 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -46,7 +42,7 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -60,7 +56,7 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(not(hasItem(hasRuleKeyAtLine("ReRaiseExceptionRule", builder.getOffSet() + 3))));
+    assertIssues().areNot(ruleKeyAtLine("ReRaiseExceptionRule", builder.getOffset() + 3));
   }
 
   @Test
@@ -78,7 +74,7 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(not(hasItem(hasRuleKeyAtLine("ReRaiseExceptionRule", builder.getOffSet() + 6))));
+    assertIssues().areNot(ruleKeyAtLine("ReRaiseExceptionRule", builder.getOffset() + 6));
   }
 
   @Test
@@ -98,8 +94,9 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(1));
-    assertIssues(hasItem(hasRuleKeyAtLine("ReRaiseExceptionRule", builder.getOffSet() + 7)));
+    assertIssues()
+        .hasSize(1)
+        .areExactly(1, ruleKeyAtLine("ReRaiseExceptionRule", builder.getOffset() + 7));
   }
 
   @Test
@@ -117,7 +114,7 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasItem(hasRuleKeyAtLine("ReRaiseExceptionRule", builder.getOffSet() + 6)));
+    assertIssues().areExactly(1, ruleKeyAtLine("ReRaiseExceptionRule", builder.getOffset() + 6));
   }
 
   @Test
@@ -140,9 +137,10 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(2));
-    assertIssues(hasItem(hasRuleKeyAtLine("ReRaiseExceptionRule", builder.getOffSet() + 8)));
-    assertIssues(hasItem(hasRuleKeyAtLine("ReRaiseExceptionRule", builder.getOffSet() + 10)));
+    assertIssues()
+        .hasSize(2)
+        .areExactly(1, ruleKeyAtLine("ReRaiseExceptionRule", builder.getOffset() + 8))
+        .areExactly(1, ruleKeyAtLine("ReRaiseExceptionRule", builder.getOffset() + 10));
   }
 
   @Test
@@ -162,7 +160,7 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -182,6 +180,6 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(not(hasItem(hasRuleKeyAtLine("ReRaiseExceptionRule", builder.getOffSet() + 7))));
+    assertIssues().areNot(ruleKeyAtLine("ReRaiseExceptionRule", builder.getOffset() + 7));
   }
 }

@@ -1,7 +1,6 @@
 package org.sonar.plugins.delphi.antlr.ast;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.antlr.runtime.CommonToken;
 import org.junit.Before;
@@ -22,22 +21,22 @@ public class DelphiTokenTest {
 
   @Test
   public void testGetBeginLine() {
-    assertThat(commentToken.getBeginLine(), is(5));
+    assertThat(commentToken.getBeginLine()).isEqualTo(5);
   }
 
   @Test
   public void testGetBeginColumn() {
-    assertThat(commentToken.getBeginColumn(), is(12));
+    assertThat(commentToken.getBeginColumn()).isEqualTo(12);
   }
 
   @Test
   public void testGetEndLine() {
-    assertThat(commentToken.getEndLine(), is(7));
+    assertThat(commentToken.getEndLine()).isEqualTo(7);
   }
 
   @Test
   public void testGetEndColumn() {
-    assertThat(commentToken.getEndColumn(), is(1));
+    assertThat(commentToken.getEndColumn()).isEqualTo(1);
   }
 
   @Test(expected = UnsupportedOperationException.class)

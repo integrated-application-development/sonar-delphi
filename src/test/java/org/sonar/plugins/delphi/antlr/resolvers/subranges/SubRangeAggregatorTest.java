@@ -22,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.resolvers.subranges;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 import org.junit.Before;
@@ -57,27 +57,27 @@ public class SubRangeAggregatorTest {
 
     int index = 0;
     for (SubRange sortedRange : aggregator.getRanges()) {
-      assertEquals(data[index++], sortedRange);
+      assertThat(sortedRange).isEqualTo(data[index++]);
     }
   }
 
   @Test
   public void testAddTest() {
-    assertEquals(0, aggregator.getRanges().size());
+    assertThat(aggregator.getRanges().size()).isEqualTo(0);
 
     aggregator.add(new IntegerSubRange(0, 5)); // should add
-    assertEquals(1, aggregator.getRanges().size());
+    assertThat(aggregator.getRanges().size()).isEqualTo(1);
 
     aggregator.add(new IntegerSubRange(6, 7)); // should add
-    assertEquals(2, aggregator.getRanges().size());
+    assertThat(aggregator.getRanges().size()).isEqualTo(2);
 
     aggregator.add(new IntegerSubRange(5, 10)); // should add
-    assertEquals(3, aggregator.getRanges().size());
+    assertThat(aggregator.getRanges().size()).isEqualTo(3);
 
     aggregator.add(new IntegerSubRange(0, 10)); // should add
-    assertEquals(4, aggregator.getRanges().size());
+    assertThat(aggregator.getRanges().size()).isEqualTo(4);
 
     aggregator.add(new IntegerSubRange(2, 3)); // should not add
-    assertEquals(4, aggregator.getRanges().size());
+    assertThat(aggregator.getRanges().size()).isEqualTo(4);
   }
 }

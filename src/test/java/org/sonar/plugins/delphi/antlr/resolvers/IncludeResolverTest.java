@@ -23,7 +23,7 @@
 package org.sonar.plugins.delphi.antlr.resolvers;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,6 +50,6 @@ public class IncludeResolverTest {
         new SourceResolverResults(TEST_FILE.getAbsolutePath(), new StringBuilder(testFileString));
 
     resolver.resolve(results);
-    assertEquals(4, resolver.getIncludedFilesPath().size());
+    assertThat(resolver.getIncludedFilesPath().size()).isEqualTo(4);
   }
 }

@@ -22,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.surefire;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.util.Objects;
@@ -76,8 +76,8 @@ public class SurefireSensorTest {
     SurefireSensor sensor = new SurefireSensor(settings.asConfig(), delphiProjectHelper);
     sensor.execute(sensorContext);
 
-    assertEquals(6, sensorContext.measures(":MyTest1.pas").size());
-    assertEquals(6, sensorContext.measures(":MyTest2.pas").size());
+    assertThat(sensorContext.measures(":MyTest1.pas").size()).isEqualTo(6);
+    assertThat(sensorContext.measures(":MyTest2.pas").size()).isEqualTo(6);
   }
 
   @Test
@@ -85,7 +85,7 @@ public class SurefireSensorTest {
     SurefireSensor sensor = new SurefireSensor(settings.asConfig(), delphiProjectHelper);
     sensor.execute(sensorContext);
 
-    assertEquals(0, sensorContext.measures(":MyTest1.pas").size());
-    assertEquals(0, sensorContext.measures(":MyTest2.pas").size());
+    assertThat(sensorContext.measures(":MyTest1.pas").size()).isEqualTo(0);
+    assertThat(sensorContext.measures(":MyTest2.pas").size()).isEqualTo(0);
   }
 }

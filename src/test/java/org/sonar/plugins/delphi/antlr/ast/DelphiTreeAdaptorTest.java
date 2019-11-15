@@ -1,10 +1,6 @@
 package org.sonar.plugins.delphi.antlr.ast;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
@@ -23,7 +19,7 @@ public class DelphiTreeAdaptorTest {
 
   @Test
   public void testNullDupTree() {
-    assertThat(adaptor.dupTree(null), is(nullValue()));
+    assertThat(adaptor.dupTree(null)).isNull();
   }
 
   @Test
@@ -36,30 +32,29 @@ public class DelphiTreeAdaptorTest {
     adaptor.setParent(node, parent);
 
     Object newTree = adaptor.dupTree(node, parent);
-    assertThat(adaptor.getParent(newTree), is(parent));
-    assertThat(adaptor.getChildCount(newTree), is(1));
+    assertThat(adaptor.getParent(newTree)).isEqualTo(parent);
+    assertThat(adaptor.getChildCount(newTree)).isEqualTo(1);
   }
 
   @Test
   public void testDupNode() {
     MethodDeclarationNode methodNode = new MethodDeclarationNode(DelphiLexer.TkMethodDeclaration);
     Object dupNode = adaptor.dupNode(methodNode);
-    assertThat(methodNode, is(not(dupNode)));
-    assertThat(methodNode, instanceOf(dupNode.getClass()));
+    assertThat(methodNode).isNotEqualTo(dupNode).isInstanceOf(dupNode.getClass());
   }
 
   @Test
   public void testBecomeRoot() {
     Object oldRoot = adaptor.create(Token.INVALID_TOKEN);
     Object newRoot = adaptor.create(Token.INVALID_TOKEN);
-    assertThat(adaptor.becomeRoot(newRoot, oldRoot), is(newRoot));
-    assertThat(adaptor.getParent(oldRoot), is(newRoot));
+    assertThat(adaptor.becomeRoot(newRoot, oldRoot)).isEqualTo(newRoot);
+    assertThat(adaptor.getParent(oldRoot)).isEqualTo(newRoot);
   }
 
   @Test
   public void testBecomeRootWithNullOldRoot() {
     Object newRoot = adaptor.create(Token.INVALID_TOKEN);
-    assertThat(adaptor.becomeRoot(newRoot, null), is(newRoot));
+    assertThat(adaptor.becomeRoot(newRoot, null)).isEqualTo(newRoot);
   }
 
   @Test
@@ -68,7 +63,7 @@ public class DelphiTreeAdaptorTest {
     Object newRoot = adaptor.nil();
     Object child = adaptor.create(Token.INVALID_TOKEN);
     adaptor.addChild(newRoot, child);
-    assertThat(adaptor.becomeRoot(newRoot, oldRoot), is(child));
+    assertThat(adaptor.becomeRoot(newRoot, oldRoot)).isEqualTo(child);
   }
 
   @Test
@@ -90,7 +85,7 @@ public class DelphiTreeAdaptorTest {
   @Test
   public void testRulePostProcessing() {
     Object root = adaptor.create(Token.INVALID_TOKEN);
-    assertThat(adaptor.rulePostProcessing(root), is(root));
+    assertThat(adaptor.rulePostProcessing(root)).isEqualTo(root);
   }
 
   @Test
@@ -98,19 +93,19 @@ public class DelphiTreeAdaptorTest {
     Object root = adaptor.nil();
     Object child = adaptor.create(Token.INVALID_TOKEN);
     adaptor.addChild(root, child);
-    assertThat(adaptor.rulePostProcessing(root), is(child));
+    assertThat(adaptor.rulePostProcessing(root)).isEqualTo(child);
   }
 
   @Test
   public void testRulePostProcessingNilWithoutChildren() {
     Object root = adaptor.nil();
-    assertThat(adaptor.rulePostProcessing(root), is(nullValue()));
+    assertThat(adaptor.rulePostProcessing(root)).isNull();
   }
 
   @Test
   public void testGetType() {
     Object node = adaptor.create(Token.INVALID_TOKEN);
-    assertThat(adaptor.getType(node), is(Token.INVALID_TOKEN_TYPE));
+    assertThat(adaptor.getType(node)).isEqualTo(Token.INVALID_TOKEN_TYPE);
   }
 
   @Test
@@ -118,29 +113,29 @@ public class DelphiTreeAdaptorTest {
     Object parent = adaptor.create(Token.INVALID_TOKEN);
     Object child = adaptor.create(Token.INVALID_TOKEN);
     adaptor.addChild(parent, child);
-    assertThat(adaptor.getParent(child), is(parent));
+    assertThat(adaptor.getParent(child)).isEqualTo(parent);
   }
 
   @Test
   public void testErrorNode() {
-    assertThat(adaptor.errorNode(null, null, null, null), is(nullValue()));
+    assertThat(adaptor.errorNode(null, null, null, null)).isNull();
   }
 
   @Test
   public void testCreateToken() {
-    assertThat(adaptor.createToken(Token.INVALID_TOKEN_TYPE, ""), instanceOf(CommonToken.class));
+    assertThat(adaptor.createToken(Token.INVALID_TOKEN_TYPE, "")).isInstanceOf(CommonToken.class);
   }
 
   @Test
   public void testCreateTokenFromToken() {
     CommonToken token = new CommonToken(DelphiLexer.TkRootNode);
-    assertThat(adaptor.createToken(token).toString(), is(token.toString()));
+    assertThat(adaptor.createToken(token).toString()).isEqualTo(token.toString());
   }
 
   @Test
   public void testCreateDelphiNode() {
     Object node = adaptor.create(Token.INVALID_TOKEN_TYPE, "");
-    assertThat(node, instanceOf(DelphiNode.class));
+    assertThat(node).isInstanceOf(DelphiNode.class);
   }
 
   @Test(expected = UnsupportedOperationException.class)

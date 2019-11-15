@@ -1,9 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.everyItem;
-import static org.hamcrest.Matchers.hasSize;
-import static org.sonar.plugins.delphi.utils.matchers.HasRuleKey.hasRuleKey;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
@@ -25,7 +22,7 @@ public class NoSemiAfterMethodDeclarationRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -43,7 +40,6 @@ public class NoSemiAfterMethodDeclarationRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(4));
-    assertIssues(everyItem(hasRuleKey("NoSemiAfterMethodDeclarationRule")));
+    assertIssues().hasSize(4).are(ruleKey("NoSemiAfterMethodDeclarationRule"));
   }
 }

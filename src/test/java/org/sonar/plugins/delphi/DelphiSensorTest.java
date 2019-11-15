@@ -19,9 +19,8 @@
  */
 package org.sonar.plugins.delphi;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.core.Is.is;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.willThrow;
@@ -33,9 +32,7 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.util.Collections;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -60,8 +57,6 @@ public class DelphiSensorTest {
 
   private DelphiSensor sensor;
 
-  @Rule public ExpectedException exceptionCatcher = ExpectedException.none();
-
   @Before
   public void setupSensor() {
     sensor = new DelphiSensor(delphiProjectHelper, executor);
@@ -71,7 +66,7 @@ public class DelphiSensorTest {
   @Test
   public void testToString() {
     final String toString = sensor.toString();
-    assertThat(toString, is("DelphiSensor"));
+    assertThat(toString).isEqualTo("DelphiSensor");
   }
 
   @Test
@@ -94,9 +89,7 @@ public class DelphiSensorTest {
         .given(executor)
         .execute(any(SensorContext.class), any(DelphiFile.class));
 
-    exceptionCatcher.expect(is(expectedException));
-
-    sensor.execute(context);
+    assertThatThrownBy(() -> sensor.execute(context)).isEqualTo(expectedException);
   }
 
   @Test
@@ -105,7 +98,7 @@ public class DelphiSensorTest {
 
     sensor.execute(context);
 
-    assertThat(sensor.getErrors(), hasSize(1));
+    assertThat(sensor.getErrors()).hasSize(1);
   }
 
   @Test

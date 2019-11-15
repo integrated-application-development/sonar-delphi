@@ -22,8 +22,7 @@
  */
 package org.sonar.plugins.delphi;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +45,7 @@ public class DelphiPluginTest {
 
   @Test
   public void testToString() {
-    assertThat(plugin.toString(), is("DelphiPlugin"));
+    assertThat(plugin.toString()).isEqualTo("DelphiPlugin");
   }
 
   @Test
@@ -58,6 +57,6 @@ public class DelphiPluginTest {
     Plugin.Context context = new Plugin.Context(runtime);
     plugin.define(context);
 
-    assertThat(context.getExtensions().size(), is(17));
+    assertThat(context.getExtensions().size()).isEqualTo(17);
   }
 }

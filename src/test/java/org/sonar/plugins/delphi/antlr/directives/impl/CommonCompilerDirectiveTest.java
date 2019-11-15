@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.directives.impl;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.directives.CompilerDirectiveType;
@@ -36,39 +34,39 @@ public class CommonCompilerDirectiveTest {
   @Test
   public void testGetName() {
     directive = new CommonCompilerDirective("name", "item", 0, 0);
-    assertEquals("name", directive.getName());
+    assertThat(directive.getName()).isEqualTo("name");
 
     directive = new CommonCompilerDirective("NewName", "item", 0, 0);
-    assertEquals("NewName", directive.getName());
+    assertThat(directive.getName()).isEqualTo("NewName");
   }
 
   @Test
   public void testGetItem() {
     directive = new CommonCompilerDirective("name", "item", 0, 0);
-    assertEquals("item", directive.getItem());
+    assertThat(directive.getItem()).isEqualTo("item");
 
     directive = new CommonCompilerDirective("name", "NewItem", 0, 0);
-    assertEquals("NewItem", directive.getItem());
+    assertThat(directive.getItem()).isEqualTo("NewItem");
   }
 
   @Test
   public void testGetFirstCharPosition() {
     directive = new CommonCompilerDirective("name", "item", 0, 0);
-    assertEquals(0, directive.getFirstCharPosition());
+    assertThat(directive.getFirstCharPosition()).isEqualTo(0);
 
     directive = new CommonCompilerDirective("name", "item", 256, 256);
-    assertEquals(256, directive.getFirstCharPosition());
+    assertThat(directive.getFirstCharPosition()).isEqualTo(256);
   }
 
   @Test
   public void testGetType() {
     directive = new CommonCompilerDirective("name", "item", 0, 0);
-    assertEquals(CompilerDirectiveType.UNKNOWN, directive.getType());
+    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.UNKNOWN);
   }
 
   @Test
   public void testGetLength() {
     directive = new CommonCompilerDirective("name", "item", 0, 30);
-    assertThat(directive.getLength(), is(30));
+    assertThat(directive.getLength()).isEqualTo(30);
   }
 }

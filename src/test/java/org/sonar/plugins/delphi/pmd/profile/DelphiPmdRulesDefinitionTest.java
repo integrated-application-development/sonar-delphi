@@ -1,10 +1,6 @@
 package org.sonar.plugins.delphi.pmd.profile;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -36,11 +32,11 @@ public class DelphiPmdRulesDefinitionTest {
     definition.define(context);
     RulesDefinition.Repository repository = context.repository(DelphiPmdConstants.REPOSITORY_KEY);
 
-    assertThat(repository, is(not(nullValue())));
-    assertThat(repository.rules(), hasSize(3));
-    assertThat(repository.rule("InterfaceNameRule"), is(not(nullValue())));
-    assertThat(repository.rule("TooManyArgumentsRule"), is(not(nullValue())));
-    assertThat(repository.rule("TooManyVariablesRule"), is(not(nullValue())));
+    assertThat(repository).isNotNull();
+    assertThat(repository.rules()).hasSize(3);
+    assertThat(repository.rule("InterfaceNameRule")).isNotNull();
+    assertThat(repository.rule("TooManyArgumentsRule")).isNotNull();
+    assertThat(repository.rule("TooManyVariablesRule")).isNotNull();
   }
 
   @Test

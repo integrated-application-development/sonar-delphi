@@ -1,8 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.Matchers.empty;
-import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
@@ -19,7 +17,7 @@ public class TooManyArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -41,6 +39,6 @@ public class TooManyArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasItem(hasRuleKeyAtLine("TooManyArgumentsRule", builder.getOffSet() + 1)));
+    assertIssues().areExactly(1, ruleKeyAtLine("TooManyArgumentsRule", builder.getOffset() + 1));
   }
 }

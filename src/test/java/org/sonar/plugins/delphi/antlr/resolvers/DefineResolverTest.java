@@ -22,8 +22,7 @@
  */
 package org.sonar.plugins.delphi.antlr.resolvers;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashSet;
 import org.junit.Before;
@@ -112,10 +111,11 @@ public class DefineResolverTest {
     resolver.resolve(results);
 
     String resultSourceCode = results.getFileData().toString();
-    assertThat(resultSourceCode, containsString("(*{$IFDEF"));
-    assertThat(resultSourceCode, containsString("$ENDIF}*)"));
-    assertThat(resultSourceCode, containsString("(*{$if"));
-    assertThat(resultSourceCode, containsString("(*{$ifend}*)"));
+    assertThat(resultSourceCode)
+        .contains("(*{$IFDEF")
+        .contains("$ENDIF}*)")
+        .contains("(*{$if")
+        .contains("(*{$ifend}*)");
   }
 
   @Test
@@ -145,9 +145,7 @@ public class DefineResolverTest {
     resolver.resolve(results);
 
     String resultSourceCode = results.getFileData().toString();
-    assertThat(resultSourceCode, containsString("(*{$if"));
-    assertThat(resultSourceCode, containsString("$else}*)"));
-    assertThat(resultSourceCode, containsString("(*{$ifend}*)"));
+    assertThat(resultSourceCode).contains("(*{$if").contains("$else}*)").contains("(*{$ifend}*)");
   }
 
   @Test
@@ -172,9 +170,10 @@ public class DefineResolverTest {
     resolver.resolve(results);
 
     String resultSourceCode = results.getFileData().toString();
-    assertThat(resultSourceCode, containsString("(*{$IFDEF"));
-    assertThat(resultSourceCode, containsString("$ELSE}*)"));
-    assertThat(resultSourceCode, containsString("(*{$ENDIF}*)"));
+    assertThat(resultSourceCode)
+        .contains("(*{$IFDEF")
+        .contains("$ELSE}*)")
+        .contains("(*{$ENDIF}*)");
   }
 
   @Test
@@ -192,9 +191,10 @@ public class DefineResolverTest {
     resolver.resolve(results);
 
     String resultSourceCode = results.getFileData().toString();
-    assertThat(resultSourceCode, containsString("(*{$IFDEF FPC}*)"));
-    assertThat(resultSourceCode, containsString("(*{$ENDIF}*)"));
-    assertThat(resultSourceCode, containsString("SOString = UnicodeString;"));
+    assertThat(resultSourceCode)
+        .contains("(*{$IFDEF FPC}*)")
+        .contains("(*{$ENDIF}*)")
+        .contains("SOString = UnicodeString;");
   }
 
   @Test
@@ -211,8 +211,7 @@ public class DefineResolverTest {
     resolver.resolve(results);
 
     String resultSourceCode = results.getFileData().toString();
-    assertThat(resultSourceCode, containsString("(*{$IFDEF FPC}"));
-    assertThat(resultSourceCode, containsString("{$ENDIF}*)"));
+    assertThat(resultSourceCode).contains("(*{$IFDEF FPC}").contains("{$ENDIF}*)");
   }
 
   @Test
@@ -229,10 +228,11 @@ public class DefineResolverTest {
     resolver.resolve(results);
 
     String resultSourceCode = results.getFileData().toString();
-    assertThat(resultSourceCode, containsString("(*{$IFDEF FPC}"));
-    assertThat(resultSourceCode, containsString("(*{$ELSE"));
-    assertThat(resultSourceCode, containsString("$ENDIF}*)"));
-    assertThat(resultSourceCode, containsString("SOString = UnicodeString;"));
+    assertThat(resultSourceCode)
+        .contains("(*{$IFDEF FPC}")
+        .contains("(*{$ELSE")
+        .contains("$ENDIF}*)")
+        .contains("SOString = UnicodeString;");
   }
 
   @Test
@@ -258,12 +258,13 @@ public class DefineResolverTest {
     resolver.resolve(results);
 
     String resultSourceCode = results.getFileData().toString();
-    assertThat(resultSourceCode, containsString("(*{$IFDEF FPC}"));
-    assertThat(resultSourceCode, containsString("$ENDIF}*)"));
-    assertThat(resultSourceCode, containsString("(* unicode  )"));
-    assertThat(resultSourceCode, containsString("(*{$if TEST}"));
-    assertThat(resultSourceCode, containsString("{$ifend}*)"));
-    assertThat(resultSourceCode, containsString("(* comment  )"));
+    assertThat(resultSourceCode)
+        .contains("(*{$IFDEF FPC}")
+        .contains("$ENDIF}*)")
+        .contains("(* unicode  )")
+        .contains("(*{$if TEST}")
+        .contains("{$ifend}*)")
+        .contains("(* comment  )");
   }
 
   @Test
@@ -282,8 +283,9 @@ public class DefineResolverTest {
     resolver.resolve(results);
 
     String resultSourceCode = results.getFileData().toString();
-    assertThat(resultSourceCode, containsString("(*{$IFDEF FPC}"));
-    assertThat(resultSourceCode, containsString("{$ELSE}*)"));
-    assertThat(resultSourceCode, containsString("(*{$IFNDEF FPC}*)"));
+    assertThat(resultSourceCode)
+        .contains("(*{$IFDEF FPC}")
+        .contains("{$ELSE}*)")
+        .contains("(*{$IFNDEF FPC}*)");
   }
 }

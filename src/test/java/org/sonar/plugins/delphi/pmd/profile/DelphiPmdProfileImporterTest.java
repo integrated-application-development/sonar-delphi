@@ -19,13 +19,7 @@
  */
 package org.sonar.plugins.delphi.pmd.profile;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertFalse;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -110,11 +104,11 @@ public class DelphiPmdProfileImporterTest {
 
     RulesProfile profile = importer.importProfile(reader, messages);
 
-    assertThat(profile.getActiveRules(), hasSize(3));
-    assertThat(getRule(profile, "InterfaceNameRule"), is(not(nullValue())));
-    assertThat(getRule(profile, "TooManyArgumentsRule"), is(not(nullValue())));
-    assertThat(getRule(profile, "TooManyVariablesRule"), is(not(nullValue())));
-    assertFalse(messages.hasErrors());
+    assertThat(profile.getActiveRules()).hasSize(3);
+    assertThat(getRule(profile, "InterfaceNameRule")).isNotNull();
+    assertThat(getRule(profile, "TooManyArgumentsRule")).isNotNull();
+    assertThat(getRule(profile, "TooManyVariablesRule")).isNotNull();
+    assertThat(messages.hasErrors()).isFalse();
   }
 
   @Test
@@ -122,7 +116,7 @@ public class DelphiPmdProfileImporterTest {
     Reader reader = read("xpath_rules.xml");
 
     RulesProfile profile = importer.importProfile(reader, messages);
-    assertThat(profile.getActiveRules(), empty());
+    assertThat(profile.getActiveRules()).isEmpty();
   }
 
   @Test
@@ -132,10 +126,9 @@ public class DelphiPmdProfileImporterTest {
     RulesProfile profile = importer.importProfile(reader, messages);
     ActiveRule rule = getRule(profile, "MyBuiltinXpathRule");
 
-    assertThat(profile.getActiveRules(), hasSize(1));
-    assertThat(rule, is(not(nullValue())));
-    assertThat(
-        rule.getParameter(DelphiPmdConstants.BUILTIN_XPATH_EXPRESSION_PARAM), is(nullValue()));
+    assertThat(profile.getActiveRules()).hasSize(1);
+    assertThat(rule).isNotNull();
+    assertThat(rule.getParameter(DelphiPmdConstants.BUILTIN_XPATH_EXPRESSION_PARAM)).isNull();
   }
 
   @Test
@@ -145,7 +138,7 @@ public class DelphiPmdProfileImporterTest {
     RulesProfile profile = importer.importProfile(reader, messages);
     ActiveRule activeRule = getRule(profile, "TooManyArgumentsRule");
 
-    assertThat(activeRule.getParameter("limit"), is("6"));
+    assertThat(activeRule.getParameter("limit")).isEqualTo("6");
   }
 
   @Test
@@ -155,7 +148,7 @@ public class DelphiPmdProfileImporterTest {
     RulesProfile profile = importer.importProfile(reader, messages);
     ActiveRule interfaceNameRule = getRule(profile, "InterfaceNameRule");
 
-    assertThat(toLevel(interfaceNameRule.getSeverity().name()), is(DEFAULT_LEVEL));
+    assertThat(toLevel(interfaceNameRule.getSeverity().name())).isEqualTo(DEFAULT_LEVEL);
   }
 
   @Test
@@ -167,8 +160,8 @@ public class DelphiPmdProfileImporterTest {
     ActiveRule tooManyArgumentsRule = getRule(profile, "TooManyArgumentsRule");
     ActiveRule tooManyVariablesRule = getRule(profile, "TooManyVariablesRule");
 
-    assertThat(toLevel(tooManyArgumentsRule.getSeverity().name()), is(2));
-    assertThat(toLevel(tooManyVariablesRule.getSeverity().name()), is(3));
+    assertThat(toLevel(tooManyArgumentsRule.getSeverity().name())).isEqualTo(2);
+    assertThat(toLevel(tooManyVariablesRule.getSeverity().name())).isEqualTo(3);
   }
 
   @Test
@@ -177,11 +170,11 @@ public class DelphiPmdProfileImporterTest {
 
     RulesProfile profile = importer.importProfile(reader, messages);
 
-    assertThat(profile.getActiveRules(), hasSize(3));
-    assertThat(getRule(profile, "InterfaceNameRule"), is(not(nullValue())));
-    assertThat(getRule(profile, "TooManyArgumentsRule"), is(not(nullValue())));
-    assertThat(getRule(profile, "TooManyVariablesRule"), is(not(nullValue())));
-    assertFalse(messages.hasErrors());
+    assertThat(profile.getActiveRules()).hasSize(3);
+    assertThat(getRule(profile, "InterfaceNameRule")).isNotNull();
+    assertThat(getRule(profile, "TooManyArgumentsRule")).isNotNull();
+    assertThat(getRule(profile, "TooManyVariablesRule")).isNotNull();
+    assertThat(messages.hasErrors()).isFalse();
   }
 
   @Test
@@ -191,8 +184,8 @@ public class DelphiPmdProfileImporterTest {
     RulesProfile profile = importer.importProfile(reader, messages);
     ActiveRule tooManyVariablesRule = getRule(profile, "TooManyVariablesRule");
 
-    assertThat(tooManyVariablesRule.getParameter("limit"), is(nullValue()));
-    assertThat(messages.getWarnings(), hasSize(1));
+    assertThat(tooManyVariablesRule.getParameter("limit")).isNull();
+    assertThat(messages.getWarnings()).hasSize(1);
   }
 
   @Test
@@ -201,7 +194,7 @@ public class DelphiPmdProfileImporterTest {
 
     importer.importProfile(reader, messages);
 
-    assertThat(messages.getErrors(), hasSize(1));
+    assertThat(messages.getErrors()).hasSize(1);
   }
 
   @Test
@@ -211,8 +204,8 @@ public class DelphiPmdProfileImporterTest {
     importer = new DelphiPmdProfileImporter(mock(RuleFinder.class));
     RulesProfile profile = importer.importProfile(reader, messages);
 
-    assertThat(profile.getActiveRules(), is(empty()));
-    assertThat(messages.getWarnings(), hasSize(3));
+    assertThat(profile.getActiveRules()).isEmpty();
+    assertThat(messages.getWarnings()).hasSize(3);
   }
 
   @Test
@@ -221,8 +214,8 @@ public class DelphiPmdProfileImporterTest {
 
     RulesProfile profile = importer.importProfile(reader, messages);
 
-    assertThat(profile.getActiveRules(), is(empty()));
-    assertThat(messages.getWarnings(), hasSize(1));
+    assertThat(profile.getActiveRules()).isEmpty();
+    assertThat(messages.getWarnings()).hasSize(1);
   }
 
   @Test
@@ -231,6 +224,6 @@ public class DelphiPmdProfileImporterTest {
 
     RulesProfile profile = importer.importProfile(reader, null);
 
-    assertThat(profile.getActiveRules(), is(empty()));
+    assertThat(profile.getActiveRules()).isEmpty();
   }
 }

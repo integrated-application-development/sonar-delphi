@@ -22,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.utils;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.resolvers.subranges.impl.StringSubRange;
@@ -32,6 +32,6 @@ public class StringSubRangeTest {
   @Test
   public void testToString() {
     StringSubRange subRange = new StringSubRange(3, 6, "my sub range");
-    assertEquals("[3, 6] sub", subRange.toString());
+    assertThat(subRange.toString()).isEqualTo("[3, 6] sub");
   }
 }

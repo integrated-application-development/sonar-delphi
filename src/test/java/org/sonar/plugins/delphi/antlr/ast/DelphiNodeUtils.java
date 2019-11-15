@@ -1,6 +1,6 @@
 package org.sonar.plugins.delphi.antlr.ast;
 
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -43,7 +43,9 @@ public final class DelphiNodeUtils {
     try {
       Constructor<?> constructor = nodeType.getConstructor(Token.class);
       instance = constructor.newInstance(Token.INVALID_TOKEN);
-      assertNotNull(String.format(NODE_INSTANTIATION_ERROR, nodeType.getSimpleName()), instance);
+      assertThat(instance)
+          .as(String.format(NODE_INSTANTIATION_ERROR, nodeType.getSimpleName()))
+          .isNotNull();
     } catch (Exception e) {
       throw new AssertionError(e);
     }

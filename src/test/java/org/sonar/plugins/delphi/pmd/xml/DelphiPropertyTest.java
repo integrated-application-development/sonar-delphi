@@ -22,9 +22,7 @@
  */
 package org.sonar.plugins.delphi.pmd.xml;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
@@ -34,23 +32,23 @@ public class DelphiPropertyTest {
   @Test
   public void testConstructors() {
     DelphiRuleProperty property = new DelphiRuleProperty("name");
-    assertThat(property.getName(), is("name"));
-    assertThat(property.getValue(), is(nullValue()));
+    assertThat(property.getName()).isEqualTo("name");
+    assertThat(property.getValue()).isNull();
 
     property = new DelphiRuleProperty("name", "value");
-    assertThat(property.getName(), is("name"));
-    assertThat(property.getValue(), is("value"));
+    assertThat(property.getName()).isEqualTo("name");
+    assertThat(property.getValue()).isEqualTo("value");
   }
 
   @Test
   public void testIsCdataValue() {
     DelphiRuleProperty property = new DelphiRuleProperty("name", "value");
-    assertThat(property.isCdataValue(), is(false));
+    assertThat(property.isCdataValue()).isFalse();
 
     property = new DelphiRuleProperty(DelphiPmdConstants.TEMPLATE_XPATH_EXPRESSION_PARAM);
-    assertThat(property.isCdataValue(), is(true));
+    assertThat(property.isCdataValue()).isTrue();
 
     property = new DelphiRuleProperty(DelphiPmdConstants.BUILTIN_XPATH_EXPRESSION_PARAM);
-    assertThat(property.isCdataValue(), is(true));
+    assertThat(property.isCdataValue()).isTrue();
   }
 }

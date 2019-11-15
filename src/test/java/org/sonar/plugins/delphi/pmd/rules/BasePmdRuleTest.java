@@ -22,8 +22,7 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -31,10 +30,12 @@ import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import org.hamcrest.Matcher;
+import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.ListAssert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
@@ -74,10 +75,15 @@ public abstract class BasePmdRuleTest {
 
   protected DelphiSensor sensor;
   private SensorContextTester sensorContext;
-  private Collection<Issue> issues = new ArrayList<>();
+  private IssueContainer issues = new IssueContainer();
   private DelphiRuleSet ruleSet;
   private DelphiPmdRuleSetDefinitionProvider ruleProvider =
       new DelphiPmdRuleSetDefinitionProvider();
+
+  @BeforeClass
+  public static void setupIssueContainerFormatting() {
+    Assertions.registerFormatterForType(IssueContainer.class, IssueContainer::toString);
+  }
 
   @Before
   public void setupRuleSet() {
@@ -88,9 +94,11 @@ public abstract class BasePmdRuleTest {
     configureTest(builder);
 
     sensor.execute(sensorContext);
-    issues = sensorContext.allIssues();
 
-    assertThat("Errors: " + sensor.getErrors(), sensor.getErrors(), empty());
+    issues.clear();
+    issues.addAll(sensorContext.allIssues());
+
+    assertThat(sensor.getErrors()).as("Errors: " + sensor.getErrors()).isEmpty();
   }
 
   private void configureTest(DelphiTestFileBuilder builder) {
@@ -167,27 +175,27 @@ public abstract class BasePmdRuleTest {
     ruleSet.addRule(rule);
   }
 
-  private String stringifyIssues() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("[");
-    for (Issue issue : issues) {
-      builder.append(stringifyIssue(issue)).append(", ");
+  protected ListAssert<Issue> assertIssues() {
+    return assertThat(issues).as(issues.toString());
+  }
+
+  private static class IssueContainer extends ArrayList<Issue> {
+    @Override
+    public String toString() {
+      if (isEmpty()) {
+        return "<No issues>";
+      }
+      return "["
+          + stream().map(IssueContainer::stringifyIssue).collect(Collectors.joining(", "))
+          + "]";
     }
-    builder.append("]");
-    return builder.toString();
-  }
 
-  private String stringifyIssue(Issue issue) {
-    IssueLocation primaryLocation = issue.primaryLocation();
-    TextRange textRange = primaryLocation.textRange();
-    int line = textRange == null ? FilePosition.UNDEFINED_LINE : textRange.start().line();
-    String message = issue.primaryLocation().message();
+    private static String stringifyIssue(Issue issue) {
+      IssueLocation primaryLocation = issue.primaryLocation();
+      TextRange textRange = primaryLocation.textRange();
+      int line = textRange == null ? FilePosition.UNDEFINED_LINE : textRange.start().line();
 
-    return String.format("Issue [ruleKey=%s, message=%s, line=%d]", issue.ruleKey(), message, line);
-  }
-
-  @SuppressWarnings("unchecked")
-  protected void assertIssues(Matcher matcher) {
-    assertThat(stringifyIssues(), issues, matcher);
+      return String.format("%s<Line %d>", issue.ruleKey(), line);
+    }
   }
 }

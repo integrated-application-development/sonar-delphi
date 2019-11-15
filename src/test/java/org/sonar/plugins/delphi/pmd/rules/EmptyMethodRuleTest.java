@@ -1,11 +1,7 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.not;
-import static org.sonar.plugins.delphi.utils.matchers.HasRuleKey.hasRuleKey;
-import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
@@ -46,7 +42,7 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -85,12 +81,13 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(5));
-    assertIssues(hasItem(hasRuleKeyAtLine("EmptyMethodRule", builder.getOffSet() + 1)));
-    assertIssues(hasItem(hasRuleKeyAtLine("EmptyMethodRule", builder.getOffSet() + 5)));
-    assertIssues(hasItem(hasRuleKeyAtLine("EmptyMethodRule", builder.getOffSet() + 9)));
-    assertIssues(hasItem(hasRuleKeyAtLine("EmptyMethodRule", builder.getOffSet() + 13)));
-    assertIssues(hasItem(hasRuleKeyAtLine("EmptyMethodRule", builder.getOffSet() + 17)));
+    assertIssues()
+        .hasSize(5)
+        .areExactly(1, ruleKeyAtLine("EmptyMethodRule", builder.getOffset() + 1))
+        .areExactly(1, ruleKeyAtLine("EmptyMethodRule", builder.getOffset() + 5))
+        .areExactly(1, ruleKeyAtLine("EmptyMethodRule", builder.getOffset() + 9))
+        .areExactly(1, ruleKeyAtLine("EmptyMethodRule", builder.getOffset() + 13))
+        .areExactly(1, ruleKeyAtLine("EmptyMethodRule", builder.getOffset() + 17));
   }
 
   @Test
@@ -120,10 +117,11 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(3));
-    assertIssues(hasItem(hasRuleKeyAtLine("EmptyMethodRule", builder.getOffSet() + 1)));
-    assertIssues(hasItem(hasRuleKeyAtLine("EmptyMethodRule", builder.getOffSet() + 4)));
-    assertIssues(hasItem(hasRuleKeyAtLine("EmptyMethodRule", builder.getOffSet() + 7)));
+    assertIssues()
+        .hasSize(3)
+        .areExactly(1, ruleKeyAtLine("EmptyMethodRule", builder.getOffset() + 1))
+        .areExactly(1, ruleKeyAtLine("EmptyMethodRule", builder.getOffset() + 4))
+        .areExactly(1, ruleKeyAtLine("EmptyMethodRule", builder.getOffset() + 7));
   }
 
   @Test
@@ -156,7 +154,7 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -176,7 +174,7 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(not(hasItem(hasRuleKey("EmptyMethodRule"))));
+    assertIssues().areNot(ruleKey("EmptyMethodRule"));
   }
 
   @Test
@@ -196,7 +194,7 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(not(hasItem(hasRuleKey("EmptyMethodRule"))));
+    assertIssues().areNot(ruleKey("EmptyMethodRule"));
   }
 
   @Test
@@ -207,6 +205,6 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(not(hasItem(hasRuleKey("EmptyMethodRule"))));
+    assertIssues().areNot(ruleKey("EmptyMethodRule"));
   }
 }

@@ -1,10 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.not;
-import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
@@ -22,9 +18,9 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasSize(1));
-    assertIssues(
-        hasItem(hasRuleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffSet() + 3)));
+    assertIssues()
+        .hasSize(1)
+        .areExactly(1, ruleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffset() + 3));
   }
 
   @Test
@@ -38,8 +34,8 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(
-        hasItem(hasRuleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffSet() + 3)));
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffset() + 3));
   }
 
   @Test
@@ -54,7 +50,7 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -69,7 +65,7 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -86,7 +82,7 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -100,8 +96,8 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(
-        hasItem(hasRuleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffSet() + 3)));
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffset() + 3));
   }
 
   @Test
@@ -115,8 +111,8 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(
-        hasItem(hasRuleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffSet() + 3)));
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffset() + 3));
   }
 
   @Test
@@ -130,8 +126,7 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(
-        not(hasItem(hasRuleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffSet() + 3))));
+    assertIssues().areNot(ruleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffset() + 3));
   }
 
   @Test
@@ -145,8 +140,7 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(
-        not(hasItem(hasRuleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffSet() + 3))));
+    assertIssues().areNot(ruleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffset() + 3));
   }
 
   @Test
@@ -160,8 +154,8 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(
-        hasItem(hasRuleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffSet() + 3)));
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffset() + 3));
   }
 
   @Test
@@ -175,7 +169,7 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -189,8 +183,8 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(
-        hasItem(hasRuleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffSet() + 3)));
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffset() + 3));
   }
 
   @Test
@@ -199,11 +193,11 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
         new DelphiTestUnitBuilder()
             .appendImpl("function MyFunction: Integer;")
             .appendImpl("begin")
-            .appendImpl("  Result := inherited MyFunction.GetValue;")
+            .appendImpl("  Result := inherited MyFunction[0].GetValue;")
             .appendImpl("end;");
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 }

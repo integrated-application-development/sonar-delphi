@@ -1,8 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.core.IsNot.not;
-import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
@@ -20,8 +18,7 @@ public class CyclomaticComplexityRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(
-        not(hasItem(hasRuleKeyAtLine("MethodCyclomaticComplexityRule", builder.getOffSet() + 1))));
+    assertIssues().areNot(ruleKeyAtLine("MethodCyclomaticComplexityRule", builder.getOffset() + 1));
   }
 
   @Test
@@ -39,8 +36,7 @@ public class CyclomaticComplexityRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(
-        not(hasItem(hasRuleKeyAtLine("MethodCyclomaticComplexityRule", builder.getOffSet() + 1))));
+    assertIssues().areNot(ruleKeyAtLine("MethodCyclomaticComplexityRule", builder.getOffset() + 1));
   }
 
   @Test
@@ -58,8 +54,8 @@ public class CyclomaticComplexityRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(
-        hasItem(hasRuleKeyAtLine("MethodCyclomaticComplexityRule", builder.getOffSet() + 1)));
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("MethodCyclomaticComplexityRule", builder.getOffset() + 1));
   }
 
   @Test
@@ -82,9 +78,8 @@ public class CyclomaticComplexityRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(
-        not(hasItem(hasRuleKeyAtLine("MethodCyclomaticComplexityRule", builder.getOffSet() + 1))));
-    assertIssues(
-        hasItem(hasRuleKeyAtLine("MethodCyclomaticComplexityRule", builder.getOffSet() + 2)));
+    assertIssues()
+        .areNot(ruleKeyAtLine("MethodCyclomaticComplexityRule", builder.getOffset() + 1))
+        .areExactly(1, ruleKeyAtLine("MethodCyclomaticComplexityRule", builder.getOffset() + 2));
   }
 }

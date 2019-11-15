@@ -1,11 +1,6 @@
 package org.sonar.plugins.delphi.executor;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -245,14 +240,13 @@ public class DelphiSymbolTableExecutorTest {
   private void verifyUsages(int line, int offset, TextPointer... pointers) {
     Collection<TextRange> textRanges = context.referencesForSymbolAt(componentKey, line, offset);
 
-    assertThat("Expected symbol to be created", textRanges, is(not(nullValue())));
+    assertThat(textRanges).as("Expected symbol to be created").isNotNull();
 
     if (pointers.length == 0) {
-      assertThat("Expected no symbol references to exist", textRanges, is(empty()));
+      assertThat(textRanges).as("Expected no symbol references to exist").isEmpty();
     } else {
       var usages = textRanges.stream().map(TextRange::start).collect(Collectors.toList());
-      assertThat("Expected symbol references to exist", usages, not(empty()));
-      assertThat(usages, containsInAnyOrder(pointers));
+      assertThat(usages).as("Expected symbol references to exist").isNotEmpty().contains(pointers);
     }
   }
 

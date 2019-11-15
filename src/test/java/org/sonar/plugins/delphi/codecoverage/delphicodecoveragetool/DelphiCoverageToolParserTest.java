@@ -22,7 +22,7 @@
  */
 package org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,15 +76,15 @@ public class DelphiCoverageToolParserTest {
         new DelphiCodeCoverageToolParser(reportFile, delphiProjectHelper);
     parser.parse(context);
 
-    assertEquals((Integer) 1, context.lineHits(":Globals.pas", 16));
-    assertEquals((Integer) 1, context.lineHits(":Globals.pas", 17));
-    assertEquals((Integer) 0, context.lineHits(":Globals.pas", 23));
+    assertThat(context.lineHits(":Globals.pas", 16)).isEqualTo((Integer) 1);
+    assertThat(context.lineHits(":Globals.pas", 17)).isEqualTo((Integer) 1);
+    assertThat(context.lineHits(":Globals.pas", 23)).isEqualTo((Integer) 0);
 
-    assertEquals((Integer) 1, context.lineHits(":MainWindow.pas", 31));
-    assertEquals((Integer) 1, context.lineHits(":MainWindow.pas", 36));
-    assertEquals((Integer) 1, context.lineHits(":MainWindow.pas", 37));
-    assertEquals((Integer) 1, context.lineHits(":MainWindow.pas", 38));
-    assertEquals((Integer) 1, context.lineHits(":MainWindow.pas", 39));
-    assertEquals((Integer) 1, context.lineHits(":MainWindow.pas", 40));
+    assertThat(context.lineHits(":MainWindow.pas", 31)).isEqualTo((Integer) 1);
+    assertThat(context.lineHits(":MainWindow.pas", 36)).isEqualTo((Integer) 1);
+    assertThat(context.lineHits(":MainWindow.pas", 37)).isEqualTo((Integer) 1);
+    assertThat(context.lineHits(":MainWindow.pas", 38)).isEqualTo((Integer) 1);
+    assertThat(context.lineHits(":MainWindow.pas", 39)).isEqualTo((Integer) 1);
+    assertThat(context.lineHits(":MainWindow.pas", 40)).isEqualTo((Integer) 1);
   }
 }

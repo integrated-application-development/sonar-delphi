@@ -18,10 +18,7 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
-import static org.sonar.plugins.delphi.utils.matchers.IssueMatchers.hasRuleKeyAtLine;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
@@ -39,7 +36,7 @@ public class TooLargeMethodRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -56,7 +53,7 @@ public class TooLargeMethodRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -74,7 +71,7 @@ public class TooLargeMethodRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(empty());
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -86,7 +83,7 @@ public class TooLargeMethodRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(not(hasItem(hasRuleKeyAtLine("TooLargeMethodRule", builder.getOffSet() + 1))));
+    assertIssues().areNot(ruleKeyAtLine("TooLargeMethodRule", builder.getOffset() + 1));
   }
 
   @Test
@@ -103,7 +100,7 @@ public class TooLargeMethodRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues(hasItem(hasRuleKeyAtLine("TooLargeMethodRule", builder.getOffSet() + 1)));
+    assertIssues().areExactly(1, ruleKeyAtLine("TooLargeMethodRule", builder.getOffset() + 1));
   }
 
   @Test
@@ -163,6 +160,6 @@ public class TooLargeMethodRuleTest extends BasePmdRuleTest {
     builder.appendImpl("end;");
 
     execute(builder);
-    assertIssues(hasItem(hasRuleKeyAtLine("TooLargeMethodRule", builder.getOffSet() + 1)));
+    assertIssues().areExactly(1, ruleKeyAtLine("TooLargeMethodRule", builder.getOffset() + 1));
   }
 }
