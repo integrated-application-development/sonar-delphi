@@ -846,6 +846,38 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ShortIdentifiersRule"
+    message="Identifiers should not be too short"
+    name="ShortIdentifiersRule">
+    <priority>3</priority>
+    <description>
+      When an identifier is too short, it isn't immediately obvious what it's for. Identifiers should be given meaningful names.
+      &lt;br&gt;
+      &lt;br&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min" />
+      <property name="limit" value="3" />
+      <property name="whitelist" value="E|X|Y" />
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.MemoryManagementRule"
+    message="Memory management should be used"
+    name="MemoryManagementRule">
+    <priority>3</priority>
+    <description>
+      Memory management methods should be used to manage object lifecycles.
+      &lt;br&gt;
+      &lt;br&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="10min" />
+      <property name="memoryFunctions" value="Local|Managed|ManagedBy|ManagedInterface|Unmanaged" />
+      <property name="whitelist" value="CreateNew" />
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathTemplateRule"
     message="Track breaches of an XPath rule"
     name="XPathRule">
