@@ -7,30 +7,13 @@ import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class VariableNameRuleTest extends BasePmdRuleTest {
   @Test
-  public void testValidNamesShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-
-    builder.appendDecl("var");
-    builder.appendDecl("  MyChar: Char;");
-    builder.appendDecl("  AnotherChar: Char;");
-    builder.appendDecl("  ThirdChar: Char;");
-
-    execute(builder);
-
-    assertIssues().isEmpty();
-  }
-
-  @Test
-  public void testValidNameInMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure MyProcedure;");
-    builder.appendImpl("var");
-    builder.appendImpl("  SomeVar: Integer;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  if SomeVar <> 0 then begin");
-    builder.appendImpl("    WriteLn('test');");
-    builder.appendImpl("  end;");
-    builder.appendImpl("end;");
+  public void testValidGlobalNamesShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("var")
+            .appendDecl("  GMyChar: Char;")
+            .appendDecl("  GAnotherChar: Char;")
+            .appendDecl("  GThirdChar: Char;");
 
     execute(builder);
 
@@ -38,32 +21,53 @@ public class VariableNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBadPascalCaseShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-
-    builder.appendDecl("var");
-    builder.appendDecl("  MyChar: Char;");
-    builder.appendDecl("  AnotherChar: Char;");
-    builder.appendDecl("  thirdChar: Char;");
+  public void testInvalidGlobalNamesShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("var")
+            .appendDecl("  G_My_Char: Char;")
+            .appendDecl("  gAnotherChar: Char;")
+            .appendDecl("  GlobalChar: Char;");
 
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
+        .hasSize(3)
+        .areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 2))
+        .areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 3))
         .areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 4));
   }
 
   @Test
+  public void testValidNameInMethodShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("var")
+            .appendImpl("  SomeVar: Integer;")
+            .appendImpl("begin")
+            .appendImpl("  if SomeVar <> 0 then begin")
+            .appendImpl("    WriteLn('test');")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
+  }
+
+  @Test
   public void testBadPascalCaseInMethodShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure MyProcedure;");
-    builder.appendImpl("var");
-    builder.appendImpl("  someVar: Integer;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  if someVar <> 0 then begin");
-    builder.appendImpl("    WriteLn('test');");
-    builder.appendImpl("  end;");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("var")
+            .appendImpl("  someVar: Integer;")
+            .appendImpl("begin")
+            .appendImpl("  if someVar <> 0 then begin")
+            .appendImpl("    WriteLn('test');")
+            .appendImpl("  end;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -74,15 +78,14 @@ public class VariableNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testAutoCreateFormVariableShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-
-    builder.appendDecl("var");
-    builder.appendDecl("  MyChar: Char;");
-    builder.appendDecl("  AnotherChar: Char;");
-    builder.appendDecl("  thirdChar: Char;");
-
-    builder.appendDecl("var");
-    builder.appendDecl("  omForm: TForm;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("var")
+            .appendDecl("  GMyChar: Char;")
+            .appendDecl("  GAnotherChar: Char;")
+            .appendDecl("  GlobalChar: Char;")
+            .appendDecl("var")
+            .appendDecl("  omForm: TForm;");
 
     execute(builder);
 
@@ -90,5 +93,35 @@ public class VariableNameRuleTest extends BasePmdRuleTest {
         .hasSize(1)
         .areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 4))
         .areNot(ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 6));
+  }
+
+  @Test
+  public void testValidArgumentNameShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure(Arg: Integer);")
+            .appendImpl("begin")
+            .appendImpl("  DoSomething(Arg);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
+  }
+
+  @Test
+  public void testBadPascalCaseInArgumentNameShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure(arg: Integer);")
+            .appendImpl("begin")
+            .appendImpl("  DoSomething(arg);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .hasSize(1)
+        .areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffset() + 1));
   }
 }

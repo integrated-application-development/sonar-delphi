@@ -345,7 +345,7 @@
     name="VariableNameRule">
     <priority>4</priority>
     <description>
-      Variable names should follow Pascal case.
+      Variable names should follow Pascal case. Global variables should begin with 'G' and not contain underscores.
       &lt;br&gt;
       &lt;br&gt;
     </description>
