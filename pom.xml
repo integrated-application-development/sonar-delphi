@@ -78,7 +78,7 @@
     <errorprone.version>2.3.4</errorprone.version>
     <!--Maven plugins-->
     <antlr3-plugin.version>3.5.2</antlr3-plugin.version>
-    <jacoco-plugin.version>0.8.4</jacoco-plugin.version>
+    <jacoco-plugin.version>0.8.5</jacoco-plugin.version>
     <surefire-plugin.version>2.22.0</surefire-plugin.version>
     <sonar-packaging-plugin.version>1.16</sonar-packaging-plugin.version>
     <license-plugin.version>1.9.0</license-plugin.version>
