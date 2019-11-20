@@ -65,7 +65,7 @@
     <!--Version Fields-->
     <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
     <sonar.version>7.9</sonar.version>
-    <sonarqube-smell-plugin.version>4.0.0</sonarqube-smell-plugin.version>
+    <sonarqube-smell-api.version>4.0.0</sonarqube-smell-api.version>
     <sonar-orchestrator.version>3.26.0.2111</sonar-orchestrator.version>
     <antlr-runtime.version>3.4</antlr-runtime.version>
     <pmd.version>6.15.0</pmd.version>
@@ -138,8 +138,8 @@
     </dependency>
     <dependency>
       <groupId>com.qualinsight.plugins.sonarqube</groupId>
-      <artifactId>qualinsight-plugins-sonarqube-smell-plugin</artifactId>
-      <version>${sonarqube-smell-plugin.version}</version>
+      <artifactId>qualinsight-plugins-sonarqube-smell-api</artifactId>
+      <version>${sonarqube-smell-api.version}</version>
     </dependency>
     <dependency>
       <groupId>org.sonarsource.orchestrator</groupId>
