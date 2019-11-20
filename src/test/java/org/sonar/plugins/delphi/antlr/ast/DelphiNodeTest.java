@@ -7,6 +7,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
+import java.lang.reflect.Modifier;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.Test;
@@ -33,7 +34,7 @@ public class DelphiNodeTest {
   public void testAbstractNodesShouldNotImplementAccept() {
     Set<String> failed =
         DelphiNodeUtils.getNodeTypes().stream()
-            .filter(not(DelphiNodeUtils::shouldImplementAccept))
+            .filter(type -> Modifier.isAbstract(type.getModifiers()))
             .filter(DelphiNodeUtils::implementsAccept)
             .map(Class::getSimpleName)
             .collect(Collectors.toSet());

@@ -31,11 +31,12 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testRule() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure SemicolonTest;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  SomeVar := 5");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure SemicolonTest;")
+            .appendImpl("begin")
+            .appendImpl("  SomeVar := 5")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -46,14 +47,15 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testInsideWhile() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure SemicolonTest;");
-    builder.appendImpl("var");
-    builder.appendImpl("  SomeNumber: Integer;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  while SomeNumber <> 0 do");
-    builder.appendImpl("    WriteLn('test')");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure SemicolonTest;")
+            .appendImpl("var")
+            .appendImpl("  SomeNumber: Integer;")
+            .appendImpl("begin")
+            .appendImpl("  while SomeNumber <> 0 do")
+            .appendImpl("    WriteLn('test')")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -62,14 +64,15 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testInsideFor() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure SemicolonTest;");
-    builder.appendImpl("var");
-    builder.appendImpl("  SomeNumber: Integer;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  for SomeNumber := 0 to 3 do");
-    builder.appendImpl("    WriteLn('test')");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure SemicolonTest;")
+            .appendImpl("var")
+            .appendImpl("  SomeNumber: Integer;")
+            .appendImpl("begin")
+            .appendImpl("  for SomeNumber := 0 to 3 do")
+            .appendImpl("    WriteLn('test')")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -78,15 +81,16 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testInsideRepeat() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure SemicolonTest;");
-    builder.appendImpl("var");
-    builder.appendImpl("  SomeNumber: Integer;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  repeat");
-    builder.appendImpl("    WriteLn('test')");
-    builder.appendImpl("  until SomeNumber <> 0;");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure SemicolonTest;")
+            .appendImpl("var")
+            .appendImpl("  SomeNumber: Integer;")
+            .appendImpl("begin")
+            .appendImpl("  repeat")
+            .appendImpl("    WriteLn('test')")
+            .appendImpl("  until SomeNumber <> 0;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -98,15 +102,17 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
   @Test
   public void testInsideTryExcept() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure SemicolonTest;");
-    builder.appendImpl("var");
-    builder.appendImpl("  SomeNumber: Integer;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  try");
-    builder.appendImpl("    WriteLn('test')");
-    builder.appendImpl("  except");
-    builder.appendImpl("    WriteLn('test')");
-    builder.appendImpl("end;");
+    builder
+        .appendImpl("procedure SemicolonTest;")
+        .appendImpl("var")
+        .appendImpl("  SomeNumber: Integer;")
+        .appendImpl("begin")
+        .appendImpl("  try")
+        .appendImpl("    WriteLn('test')")
+        .appendImpl("  except")
+        .appendImpl("    WriteLn('test')")
+        .appendImpl("  end;")
+        .appendImpl("end;");
 
     execute(builder);
 
@@ -118,17 +124,18 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testInsideExceptionHandler() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure SemicolonTest;");
-    builder.appendImpl("var");
-    builder.appendImpl("  SomeNumber: Integer;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  try");
-    builder.appendImpl("    WriteLn('test');");
-    builder.appendImpl("  except");
-    builder.appendImpl("    on E: Exception do");
-    builder.appendImpl("      WriteLn('test')");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure SemicolonTest;")
+            .appendImpl("var")
+            .appendImpl("  SomeNumber: Integer;")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    WriteLn('test');")
+            .appendImpl("  except")
+            .appendImpl("    on E: Exception do")
+            .appendImpl("      WriteLn('test')")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -137,16 +144,18 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testInsideTryFinally() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure SemicolonTest;");
-    builder.appendImpl("var");
-    builder.appendImpl("  SomeNumber: Integer;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  try");
-    builder.appendImpl("    WriteLn('test')");
-    builder.appendImpl("  finally");
-    builder.appendImpl("    WriteLn('test')");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure SemicolonTest;")
+            .appendImpl("var")
+            .appendImpl("  SomeNumber: Integer;")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    WriteLn('test')")
+            .appendImpl("  finally")
+            .appendImpl("    WriteLn('test')")
+            .appendImpl("  end;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -158,16 +167,17 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testOnEndOfWhile() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure SemicolonTest;");
-    builder.appendImpl("var");
-    builder.appendImpl("  SomeVar: integer;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  while SomeVar <> 0 do");
-    builder.appendImpl("  begin");
-    builder.appendImpl("    WriteLn('test');");
-    builder.appendImpl("  end");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure SemicolonTest;")
+            .appendImpl("var")
+            .appendImpl("  SomeVar: Integer;")
+            .appendImpl("begin")
+            .appendImpl("  while SomeVar <> 0 do")
+            .appendImpl("  begin")
+            .appendImpl("    WriteLn('test');")
+            .appendImpl("  end")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -178,15 +188,16 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testOnCaseItem() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure SemicolonTest;");
-    builder.appendImpl("var");
-    builder.appendImpl("  SomeVar: integer;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  case SomeVar of");
-    builder.appendImpl("    1: WriteLn('test')");
-    builder.appendImpl("  end;");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure SemicolonTest;")
+            .appendImpl("var")
+            .appendImpl("  SomeVar: Integer;")
+            .appendImpl("begin")
+            .appendImpl("  case SomeVar of")
+            .appendImpl("    1: WriteLn('test')")
+            .appendImpl("  end;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -195,18 +206,19 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testShouldSkipEndFollowedByElse() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure SemicolonTest(val: Boolean);");
-    builder.appendImpl("begin");
-    builder.appendImpl("  if val then");
-    builder.appendImpl("  begin");
-    builder.appendImpl("    writeln('test');");
-    builder.appendImpl("  end");
-    builder.appendImpl("  else");
-    builder.appendImpl("  begin");
-    builder.appendImpl("    writeln('test');");
-    builder.appendImpl("  end;");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure SemicolonTest(Val: Boolean);")
+            .appendImpl("begin")
+            .appendImpl("  if Val then")
+            .appendImpl("  begin")
+            .appendImpl("    writeln('test');")
+            .appendImpl("  end")
+            .appendImpl("  else")
+            .appendImpl("  begin")
+            .appendImpl("    writeln('test');")
+            .appendImpl("  end;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -215,18 +227,19 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testShouldSkipRecordDeclarationOnImplementationSection() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("type");
-    builder.appendImpl("  TDummyRec = record");
-    builder.appendImpl("    FData : Integer;");
-    builder.appendImpl("    constructor Create(Data: Integer);");
-    builder.appendImpl("  end;");
-    builder.appendImpl("  ");
-    builder.appendImpl("constructor TDummyRec.Create(Data: Integer);");
-    builder.appendImpl("begin");
-    builder.appendImpl("  inherited;");
-    builder.appendImpl("  FData := Data;");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("type")
+            .appendImpl("  TDummyRec = record")
+            .appendImpl("    FData : Integer;")
+            .appendImpl("    constructor Create(Data: Integer);")
+            .appendImpl("  end;")
+            .appendImpl("  ")
+            .appendImpl("constructor TDummyRec.Create(Data: Integer);")
+            .appendImpl("begin")
+            .appendImpl("  inherited;")
+            .appendImpl("  FData := Data;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -235,18 +248,19 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testShouldSkipClassDeclarationOnImplementationSection() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("type");
-    builder.appendImpl("  TDummyClass = class");
-    builder.appendImpl("    FData : Integer;");
-    builder.appendImpl("    constructor Create(aData : Integer);");
-    builder.appendImpl("  end;");
-    builder.appendImpl("  ");
-    builder.appendImpl("constructor TDummyClass.Create(aData : Integer);");
-    builder.appendImpl("begin");
-    builder.appendImpl("  inherited;");
-    builder.appendImpl("  FData := aData;");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("type")
+            .appendImpl("  TDummyClass = class")
+            .appendImpl("    FData : Integer;")
+            .appendImpl("    constructor Create(Data : Integer);")
+            .appendImpl("  end;")
+            .appendImpl("  ")
+            .appendImpl("constructor TDummyClass.Create(Data : Integer);")
+            .appendImpl("begin")
+            .appendImpl("  inherited;")
+            .appendImpl("  FData := Data;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -255,12 +269,13 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testShouldSkipInterfaceDeclarationOnImplementationSection() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("type");
-    builder.appendImpl("  IDummyInterface = interface");
-    builder.appendImpl("  ['{FBDFC204-9986-48D5-BBBC-ED5A99834A9F}']");
-    builder.appendImpl("    procedure Dummy;");
-    builder.appendImpl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("type")
+            .appendImpl("  IDummyInterface = interface")
+            .appendImpl("  ['{FBDFC204-9986-48D5-BBBC-ED5A99834A9F}']")
+            .appendImpl("    procedure Dummy;")
+            .appendImpl("  end;");
 
     execute(builder);
 
@@ -269,12 +284,13 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testShouldSkipAsmProcedure() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure Test; assembler; register;");
-    builder.appendImpl("asm");
-    builder.appendImpl("   MOV EAX, 1");
-    builder.appendImpl("   ADD EAX, 2");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test; assembler; register;")
+            .appendImpl("asm")
+            .appendImpl("   MOV EAX, 1")
+            .appendImpl("   ADD EAX, 2")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -283,17 +299,18 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testShouldSkipInlineAsm() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure Test; assembler; register;");
-    builder.appendImpl("var");
-    builder.appendImpl("  MyVar: Boolean;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  MyVar := True;");
-    builder.appendImpl("  asm");
-    builder.appendImpl("    MOV EAX, 1");
-    builder.appendImpl("    ADD EAX, 2");
-    builder.appendImpl("  end;");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test; assembler; register;")
+            .appendImpl("var")
+            .appendImpl("  MyVar: Boolean;")
+            .appendImpl("begin")
+            .appendImpl("  MyVar := True;")
+            .appendImpl("  asm")
+            .appendImpl("    MOV EAX, 1")
+            .appendImpl("    ADD EAX, 2")
+            .appendImpl("  end;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -302,17 +319,18 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testInlineAsmWithoutSemicolonAfterEndShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure Test; assembler; register;");
-    builder.appendImpl("var");
-    builder.appendImpl("  MyVar: Boolean;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  MyVar := True;");
-    builder.appendImpl("  asm");
-    builder.appendImpl("    MOV EAX, 1");
-    builder.appendImpl("    ADD EAX, 2");
-    builder.appendImpl("  end");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test; assembler; register;")
+            .appendImpl("var")
+            .appendImpl("  MyVar: Boolean;")
+            .appendImpl("begin")
+            .appendImpl("  MyVar := True;")
+            .appendImpl("  asm")
+            .appendImpl("    MOV EAX, 1")
+            .appendImpl("    ADD EAX, 2")
+            .appendImpl("  end")
+            .appendImpl("end;");
 
     execute(builder);
 

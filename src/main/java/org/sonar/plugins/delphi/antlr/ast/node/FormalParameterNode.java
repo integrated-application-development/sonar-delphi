@@ -97,7 +97,7 @@ public final class FormalParameterNode extends DelphiNode implements Typed {
       this.isConst = isConst;
     }
 
-    public DelphiNode getNode() {
+    public VarNameDeclarationNode getNode() {
       return node;
     }
 

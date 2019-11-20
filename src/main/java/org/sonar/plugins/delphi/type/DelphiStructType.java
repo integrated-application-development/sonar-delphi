@@ -7,7 +7,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import net.sourceforge.pmd.lang.ast.Node;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.sonar.plugins.delphi.antlr.ast.node.ClassHelperTypeNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ClassTypeNode;
+import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.InterfaceTypeNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ObjectTypeNode;
+import org.sonar.plugins.delphi.antlr.ast.node.RecordHelperTypeNode;
+import org.sonar.plugins.delphi.antlr.ast.node.RecordTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
 import org.sonar.plugins.delphi.symbol.DelphiScope;
@@ -17,15 +23,15 @@ public class DelphiStructType extends DelphiType implements ScopedType {
   private static final AtomicLong anonymousTypeCounter = new AtomicLong();
   private final DelphiScope scope;
   private final Set<Type> parents;
+  private final StructKind kind;
   private final Type superType;
-  private final boolean isInterface;
 
   protected DelphiStructType(
-      String image, DelphiScope scope, Set<Type> parents, boolean isInterface) {
+      String image, DelphiScope scope, Set<Type> parents, StructKind kind) {
     super(image);
     this.scope = scope;
     this.parents = parents;
-    this.isInterface = isInterface;
+    this.kind = kind;
     this.superType =
         this.parents.stream()
             .filter(DelphiStructType.class::isInstance)
@@ -44,12 +50,12 @@ public class DelphiStructType extends DelphiType implements ScopedType {
       image = "<anonymous_type_" + anonymousTypeCounter.incrementAndGet() + ">";
     }
 
-    return from(image, node.getScope(), node.getParentTypes(), node instanceof InterfaceTypeNode);
+    return from(image, node.getScope(), node.getParentTypes(), StructKind.fromNode(node));
   }
 
   public static ScopedType from(
-      @Nullable String image, DelphiScope scope, Set<Type> parents, boolean isInterface) {
-    return new DelphiStructType(image, scope, parents, isInterface);
+      @Nullable String image, DelphiScope scope, Set<Type> parents, StructKind kind) {
+    return new DelphiStructType(image, scope, parents, kind);
   }
 
   @Override
@@ -79,7 +85,12 @@ public class DelphiStructType extends DelphiType implements ScopedType {
 
   @Override
   public boolean isInterface() {
-    return isInterface;
+    return kind == StructKind.INTERFACE;
+  }
+
+  @Override
+  public boolean isRecord() {
+    return kind == StructKind.RECORD;
   }
 
   @Override

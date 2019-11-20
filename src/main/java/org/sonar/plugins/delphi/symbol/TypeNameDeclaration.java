@@ -8,12 +8,14 @@ import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Typed;
 
 public final class TypeNameDeclaration extends DelphiNameDeclaration implements Typed {
-  private TypeDeclarationNode type;
+  private final String image;
   private boolean isForwardDeclaration;
+  private Type type;
 
-  public TypeNameDeclaration(TypeDeclarationNode type) {
-    super(type.getTypeNameNode(), type.getScope());
-    this.type = type;
+  public TypeNameDeclaration(TypeDeclarationNode typeNode) {
+    super(typeNode.getTypeNameNode(), typeNode.getScope());
+    this.image = typeNode.simpleName();
+    this.type = typeNode.getType();
   }
 
   @Override
@@ -24,7 +26,7 @@ public final class TypeNameDeclaration extends DelphiNameDeclaration implements 
   @Override
   @NotNull
   public Type getType() {
-    return type.getTypeNode().getType();
+    return type;
   }
 
   @Override
@@ -32,9 +34,9 @@ public final class TypeNameDeclaration extends DelphiNameDeclaration implements 
     return "type " + getType().getImage();
   }
 
-  void setIsForwardDeclaration(TypeNameDeclaration fullDeclaration) {
+  void setIsForwardDeclaration(Type fullType) {
     isForwardDeclaration = true;
-    this.type = fullDeclaration.type;
+    this.type = fullType;
   }
 
   public boolean isForwardDeclaration() {
@@ -43,7 +45,7 @@ public final class TypeNameDeclaration extends DelphiNameDeclaration implements 
 
   @Override
   public String getImage() {
-    return type.simpleName();
+    return image;
   }
 
   @Override

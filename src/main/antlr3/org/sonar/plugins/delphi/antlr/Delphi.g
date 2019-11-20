@@ -608,7 +608,9 @@ statement                    : ifStatement
                              ;
 ifStatement                  : 'if'<IfStatementNode>^ expression 'then' (statement ('else' statement)?)?
                              ;
-caseStatement                : 'case'<CaseStatementNode>^ expression 'of' caseItem* ('else' statementList)? 'end'
+caseStatement                : 'case'<CaseStatementNode>^ expression 'of' caseItem* elseBlock? 'end'
+                             ;
+elseBlock                    : 'else'<ElseBlockNode>^ statementList
                              ;
 caseItem                     : expressionOrRangeList ':' (statement)? (';')? -> ^(TkCaseItem<CaseItemStatementNode> expressionOrRangeList (statement)? (';')? )
                              ;
@@ -645,7 +647,7 @@ exceptBlock                  : 'except'<ExceptBlockNode>^ handlerList
                              ;
 finallyBlock                 : 'finally'<FinallyBlockNode>^ statementList
                              ;
-handlerList                  : handler+ ('else' statementList)?
+handlerList                  : handler+ elseBlock?
                              | statementList
                              ;
 handler                      : 'on'<ExceptItemNode>^ (varNameDeclaration ':'!)? typeReference 'do' statement? (';')?

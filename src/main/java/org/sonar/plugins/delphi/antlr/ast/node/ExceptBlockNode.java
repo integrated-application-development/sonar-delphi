@@ -32,6 +32,11 @@ public final class ExceptBlockNode extends DelphiNode {
     return handlers;
   }
 
+  @Nullable
+  public ElseBlockNode getElseBlock() {
+    return getFirstChildOfType(ElseBlockNode.class);
+  }
+
   public boolean isBareExcept() {
     return jjtGetChild(0) instanceof StatementListNode;
   }

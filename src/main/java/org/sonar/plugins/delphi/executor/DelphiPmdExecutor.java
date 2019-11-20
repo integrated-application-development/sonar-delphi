@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.executor;
 
+import static java.lang.Boolean.TRUE;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.REPOSITORY_KEY;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TEMPLATE;
 
@@ -142,7 +143,7 @@ public class DelphiPmdExecutor implements Executor {
   }
 
   private static void removeTemplateRules(final RuleSet ruleSet) {
-    ruleSet.getRules().removeIf(rule -> rule.getProperty(TEMPLATE));
+    ruleSet.getRules().removeIf(rule -> TRUE.equals(rule.getProperty(TEMPLATE)));
   }
 
   private static void removeDysfunctionRules(final RuleSet ruleSet) {

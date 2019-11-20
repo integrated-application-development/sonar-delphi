@@ -62,4 +62,17 @@ public class ConstructorCreateRuleTest extends BasePmdRuleTest {
         .hasSize(1)
         .areExactly(1, ruleKeyAtLine("ConstructorCreateRule", builder.getOffsetDecl() + 3));
   }
+
+  @Test
+  public void testClassConstructorShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+    builder.appendDecl("type");
+    builder.appendDecl("  TMyForm = class(TForm)");
+    builder.appendDecl("    class constructor NotCreate;");
+    builder.appendDecl("  end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
+  }
 }

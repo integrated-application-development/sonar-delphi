@@ -21,9 +21,9 @@ public class DprVariableRuleTest extends BasePmdRuleTest {
     DelphiTestProgramBuilder builder =
         new DelphiTestProgramBuilder()
             .appendDecl("var")
-            .appendDecl("  MyString: String;")
-            .appendDecl("  MyBool: Boolean;")
-            .appendDecl("  MyInt: Integer;")
+            .appendDecl("  GMyString: String;")
+            .appendDecl("  GMyBool: Boolean;")
+            .appendDecl("  GMyInt: Integer;")
             .appendImpl("Exit;");
 
     execute(builder);

@@ -35,6 +35,7 @@ import static org.sonar.plugins.delphi.type.DelphiPointerType.untypedPointer;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 import static org.sonar.plugins.delphi.type.DelphiType.untypedType;
 import static org.sonar.plugins.delphi.type.DelphiVariantType.variant;
+import static org.sonar.plugins.delphi.type.StructKind.CLASS;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -45,6 +46,7 @@ import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
 import org.sonar.plugins.delphi.symbol.ParameterDeclaration;
 import org.sonar.plugins.delphi.type.DelphiStructType;
+import org.sonar.plugins.delphi.type.StructKind;
 import org.sonar.plugins.delphi.type.Type;
 
 public class InvocationResolverTest {
@@ -128,9 +130,9 @@ public class InvocationResolverTest {
 
   @Test
   public void testInheritedTypes() {
-    Type grandparent = DelphiStructType.from("Grandparent", unknownScope(), emptySet(), false);
-    Type parent = DelphiStructType.from("Parent", unknownScope(), singleton(grandparent), false);
-    Type child = DelphiStructType.from("Child", unknownScope(), singleton(parent), false);
+    Type grandparent = DelphiStructType.from("Grandparent", unknownScope(), emptySet(), CLASS);
+    Type parent = DelphiStructType.from("Parent", unknownScope(), singleton(grandparent), CLASS);
+    Type child = DelphiStructType.from("Child", unknownScope(), singleton(parent), CLASS);
 
     assertResolved(child, parent, grandparent);
     assertResolved(parent, grandparent, child);

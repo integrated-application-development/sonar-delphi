@@ -45,6 +45,100 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  public void testEmptyElseShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    ThrowException;")
+            .appendImpl("  except")
+            .appendImpl("    on E: MyException do begin")
+            .appendImpl("      Log.Debug('exception handler');")
+            .appendImpl("    end;")
+            .appendImpl("    else begin")
+            .appendImpl("      // Do nothing")
+            .appendImpl("    end;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .hasSize(1)
+        .areExactly(1, ruleKeyAtLine("SwallowedExceptionsRule", builder.getOffset() + 9));
+  }
+
+  @Test
+  public void testBareElseShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    ThrowException;")
+            .appendImpl("  except")
+            .appendImpl("    on E: MyException do begin")
+            .appendImpl("      Log.Debug('exception handler');")
+            .appendImpl("    end;")
+            .appendImpl("    else")
+            .appendImpl("      // Do nothing")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .hasSize(1)
+        .areExactly(1, ruleKeyAtLine("SwallowedExceptionsRule", builder.getOffset() + 9));
+  }
+
+  @Test
+  public void testElseWithSingleStatementShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    ThrowException;")
+            .appendImpl("  except")
+            .appendImpl("    on E: MyException do begin")
+            .appendImpl("      Log.Debug('exception handler');")
+            .appendImpl("    end;")
+            .appendImpl("    else")
+            .appendImpl("      Log.Debug('Unexpected exception!');")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
+  }
+
+  @Test
+  public void testElseWithMultipleStatementsShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    ThrowException;")
+            .appendImpl("  except")
+            .appendImpl("    on E: MyException do begin")
+            .appendImpl("      Log.Debug('exception handler');")
+            .appendImpl("    end;")
+            .appendImpl("    else")
+            .appendImpl("      Log.Debug('Unexpected exception!');")
+            .appendImpl("      Cleanup;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
+  }
+
+  @Test
   public void testEmptyExceptBlockShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()

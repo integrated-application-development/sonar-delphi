@@ -169,6 +169,11 @@ public abstract class DelphiType implements Type {
   }
 
   @Override
+  public boolean isRecord() {
+    return false;
+  }
+
+  @Override
   public boolean isEnum() {
     return false;
   }

@@ -48,6 +48,8 @@ import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 import static org.sonar.plugins.delphi.type.DelphiType.untypedType;
 import static org.sonar.plugins.delphi.type.DelphiVariantType.oleVariant;
 import static org.sonar.plugins.delphi.type.DelphiVariantType.variant;
+import static org.sonar.plugins.delphi.type.StructKind.CLASS;
+import static org.sonar.plugins.delphi.type.StructKind.INTERFACE;
 
 import java.util.Collections;
 import java.util.List;
@@ -247,8 +249,8 @@ public class TypeComparerTest {
 
   @Test
   public void testToObject() {
-    Type toObject = DelphiStructType.from("To", unknownScope(), Collections.emptySet(), false);
-    Type fromObject = DelphiStructType.from("From", unknownScope(), singleton(toObject), false);
+    Type toObject = DelphiStructType.from("To", unknownScope(), Collections.emptySet(), CLASS);
+    Type fromObject = DelphiStructType.from("From", unknownScope(), singleton(toObject), CLASS);
 
     compare(fromObject, toObject, CONVERT_LEVEL_3);
     compare(untypedPointer(), toObject, CONVERT_LEVEL_2);
@@ -259,9 +261,9 @@ public class TypeComparerTest {
 
   @Test
   public void testToClassReference() {
-    var toObject = DelphiStructType.from("Foo", unknownScope(), Collections.emptySet(), false);
-    var fromObject = DelphiStructType.from("Bar", unknownScope(), singleton(toObject), false);
-    var otherObject = DelphiStructType.from("Baz", unknownScope(), Collections.emptySet(), false);
+    var toObject = DelphiStructType.from("Foo", unknownScope(), Collections.emptySet(), CLASS);
+    var fromObject = DelphiStructType.from("Bar", unknownScope(), singleton(toObject), CLASS);
+    var otherObject = DelphiStructType.from("Baz", unknownScope(), Collections.emptySet(), CLASS);
 
     Type fromReference = DelphiClassReferenceType.classOf(fromObject);
     Type toReference = DelphiClassReferenceType.classOf(toObject);
@@ -308,7 +310,7 @@ public class TypeComparerTest {
   @Test
   public void testToVariant() {
     Type interfaceType =
-        DelphiStructType.from("Test", unknownScope(), Collections.emptySet(), true);
+        DelphiStructType.from("Test", unknownScope(), Collections.emptySet(), INTERFACE);
 
     compare(enumeration("Enum", unknownScope()), variant(), CONVERT_LEVEL_1);
     compare(dynamicArray("MyArray", unknownType()), variant(), CONVERT_LEVEL_1);

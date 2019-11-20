@@ -121,20 +121,13 @@
     </example>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyInterfaceRule"
         message="Interface declarations should not be empty"
         name="EmptyInterfaceRule">
     <priority>3</priority>
     <description>Empty interface declarations are useless.</description>
     <properties>
       <property name="baseEffort" value="20min" />
-      <property name="builtinXPath">
-        <value>
-          <![CDATA[
-            //InterfaceTypeNode[count(child::*) = 1 + count(child::ClassParentsNode) + count(child::InterfaceGuidNode)]
-            ]]>
-        </value>
-      </property>
     </properties>
   </rule>
 
@@ -356,7 +349,7 @@
     name="VariableNameRule">
     <priority>4</priority>
     <description>
-      Variable names should follow Pascal case.
+      Variable names should follow Pascal case. Global variables should begin with 'G' and not contain underscores.
       &lt;br&gt;
       &lt;br&gt;
     </description>
@@ -725,7 +718,7 @@ FreeAndNil(MyVar); // Compliant
       <property name="baseEffort" value="5min" />
     </properties>
   </rule>
-  
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.TooLongLineRule"
         message="Lines should not be too long"
         name="TooLongLineRule">
@@ -862,6 +855,22 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       <property name="baseEffort" value="5min" />
       <property name="template" value="true" />
       <property name="xpath" />
+      <property name="message" />
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenIdentifiersRule"
+    message="Forbidden identifiers should not be used"
+    name="ForbiddenIdentifiersRule">
+    <priority>3</priority>
+    <description>
+      This rule template can be used to create rules which will be triggered when a name is declared
+      that matches an item in the blacklist.
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min" />
+      <property name="template" value="true" />
+      <property name="blacklist" />
       <property name="message" />
     </properties>
   </rule>

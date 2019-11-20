@@ -53,6 +53,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.CustomAttributeListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.CustomAttributeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DecimalLiteralNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ElseBlockNode;
 import org.sonar.plugins.delphi.antlr.ast.node.EnumElementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.EnumTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExceptBlockNode;
@@ -209,6 +210,10 @@ public interface DelphiParserVisitor<T> {
   }
 
   default T visit(CustomAttributeListNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(ElseBlockNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 

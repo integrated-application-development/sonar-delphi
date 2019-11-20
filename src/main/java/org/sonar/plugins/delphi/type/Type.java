@@ -92,6 +92,13 @@ public interface Type {
   boolean isInterface();
 
   /**
+   * Check if this type is a record type
+   *
+   * @return true if the type is a record type
+   */
+  boolean isRecord();
+
+  /**
    * Check if this type is an enumeration type
    *
    * @return true if the type is an enumeration type

@@ -51,6 +51,19 @@ public class EmptyInterfaceRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  public void testInterfaceThatLooksLikeForwardDeclarationShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  // Looks like a forward declaration, but isn't.")
+            .appendDecl("  IPublisher = interface;");
+
+    execute(builder);
+
+    assertIssues().areExactly(1, ruleKeyAtLine("EmptyInterfaceRule", builder.getOffsetDecl() + 3));
+  }
+
+  @Test
   public void testInterfaceForwardDeclarationShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()

@@ -57,10 +57,6 @@ public final class DelphiNodeUtils {
     return Modifier.isAbstract(clazz.getModifiers()) || Modifier.isFinal(clazz.getModifiers());
   }
 
-  public static boolean shouldImplementAccept(Class<? extends DelphiNode> clazz) {
-    return Modifier.isFinal(clazz.getModifiers());
-  }
-
   public static boolean implementsAccept(Class<? extends DelphiNode> clazz) {
     return Arrays.stream(clazz.getMethods())
         .filter(method -> !Modifier.isAbstract(method.getModifiers()))
