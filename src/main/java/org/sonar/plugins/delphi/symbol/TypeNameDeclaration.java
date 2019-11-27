@@ -2,25 +2,17 @@ package org.sonar.plugins.delphi.symbol;
 
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
-import org.sonar.plugins.delphi.antlr.ast.node.QualifiedNameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Typed;
 
 public final class TypeNameDeclaration extends DelphiNameDeclaration implements Typed {
-  private final String image;
   private boolean isForwardDeclaration;
   private Type type;
 
-  public TypeNameDeclaration(TypeDeclarationNode typeNode) {
-    super(typeNode.getTypeNameNode(), typeNode.getScope());
-    this.image = typeNode.simpleName();
-    this.type = typeNode.getType();
-  }
-
-  @Override
-  public QualifiedNameDeclarationNode getNode() {
-    return (QualifiedNameDeclarationNode) super.getNode();
+  public TypeNameDeclaration(TypeDeclarationNode node) {
+    super(node.getTypeNameNode(), node.getScope());
+    type = node.getType();
   }
 
   @Override
@@ -41,11 +33,6 @@ public final class TypeNameDeclaration extends DelphiNameDeclaration implements 
 
   public boolean isForwardDeclaration() {
     return isForwardDeclaration;
-  }
-
-  @Override
-  public String getImage() {
-    return image;
   }
 
   @Override

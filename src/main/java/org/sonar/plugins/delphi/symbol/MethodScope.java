@@ -4,11 +4,11 @@ import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 
 public class MethodScope extends AbstractDelphiScope {
 
-  private final MethodImplementationNode node;
+  private final String name;
   private final DelphiScope typeScope;
 
   public MethodScope(MethodImplementationNode node) {
-    this.node = node;
+    name = node.fullyQualifiedName();
     this.typeScope = node.getTypeScope();
   }
 
@@ -16,12 +16,8 @@ public class MethodScope extends AbstractDelphiScope {
     return typeScope;
   }
 
-  public String getName() {
-    return node.getMethodName().fullyQualifiedName();
-  }
-
   @Override
   public String toString() {
-    return getName() + " <MethodScope>:" + glomNames(getVariableDeclarations().keySet());
+    return name + " <MethodScope>:" + glomNames(getVariableDeclarations().keySet());
   }
 }

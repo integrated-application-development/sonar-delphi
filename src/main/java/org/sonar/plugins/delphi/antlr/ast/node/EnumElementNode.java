@@ -6,7 +6,7 @@ import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Typed;
 
-public final class EnumElementNode extends NameDeclarationNode implements Typed {
+public final class EnumElementNode extends DelphiNode implements Typed {
   public EnumElementNode(Token token) {
     super(token);
   }

@@ -232,9 +232,4 @@ public abstract class DelphiType implements Type {
   public boolean isVariant() {
     return false;
   }
-
-  @Override
-  public boolean inheritsFrom(Type other) {
-    return false;
-  }
 }

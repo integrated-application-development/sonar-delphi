@@ -5,27 +5,33 @@ import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 
 public class DelphiNameOccurrence implements NameOccurrence {
 
-  private final DelphiNode location;
-  private final String image;
+  private final SymbolicNode location;
   private DelphiNameDeclaration declaration;
   private DelphiNameOccurrence qualifiedName;
+  private String image;
   private boolean isExplicitInvocation;
-  private boolean isInherited;
 
   private static final String SELF = "Self";
 
-  public DelphiNameOccurrence(DelphiNode location, String image) {
-    this.location = location;
-    this.image = image;
+  public DelphiNameOccurrence(DelphiNode concreteNode, String imageOverride) {
+    this(concreteNode);
+    this.image = imageOverride;
+  }
+
+  public DelphiNameOccurrence(DelphiNode concreteNode) {
+    this.location = new SymbolicNode(concreteNode, concreteNode.getScope());
   }
 
   @Override
-  public DelphiNode getLocation() {
+  public SymbolicNode getLocation() {
     return location;
   }
 
   @Override
   public String getImage() {
+    if (image == null) {
+      return location.getImage();
+    }
     return image;
   }
 
@@ -66,14 +72,6 @@ public class DelphiNameOccurrence implements NameOccurrence {
     return SELF.equals(image);
   }
 
-  public void setIsInherited() {
-    isInherited = true;
-  }
-
-  public boolean isInherited() {
-    return isInherited;
-  }
-
   @Override
   public final boolean equals(Object o) {
     if (o instanceof DelphiNameOccurrence) {
@@ -97,7 +95,7 @@ public class DelphiNameOccurrence implements NameOccurrence {
         + location.getBeginColumn()
         + "] "
         + "<"
-        + location.getClass()
+        + location.getUnitName()
         + "> ";
   }
 }

@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
-import org.sonar.plugins.delphi.symbol.ParameterDeclaration;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
@@ -31,10 +30,10 @@ class InvocationArgument implements Typed {
     }
   }
 
-  public void resolve(ParameterDeclaration parameter) {
+  public void resolve(Type parameterType) {
     if (resolver != null) {
-      if (isMethodReference(parameter)) {
-        disambiguateMethodReference(resolver, parameter);
+      if (isMethodReference(parameterType)) {
+        disambiguateMethodReference(resolver, parameterType);
       } else if (!resolver.isExplicitInvocation()) {
         resolver.disambiguateImplicitEmptyArgumentList();
       }
@@ -46,25 +45,24 @@ class InvocationArgument implements Typed {
     return resolver != null && !resolver.isExplicitInvocation() && type.isProcedural();
   }
 
-  public boolean isMethodReference(Typed parameter) {
+  public boolean isMethodReference(Type parameterType) {
     return resolver != null
         && !resolver.isExplicitInvocation()
         && type.isMethod()
-        && parameter.getType().isProcedural();
+        && parameterType.isProcedural();
   }
 
-  public Type findMethodReferenceType(ParameterDeclaration parameter) {
-    Preconditions.checkArgument(parameter.getType() instanceof ProceduralType);
+  public Type findMethodReferenceType(Type parameterType) {
+    Preconditions.checkArgument(parameterType instanceof ProceduralType);
     Preconditions.checkNotNull(resolver);
 
     NameResolver clone = new NameResolver(resolver);
-    disambiguateMethodReference(clone, parameter);
+    disambiguateMethodReference(clone, parameterType);
     return resolver.getApproximateType();
   }
 
-  private static void disambiguateMethodReference(
-      NameResolver resolver, ParameterDeclaration parameter) {
-    resolver.disambiguateMethodReference((ProceduralType) parameter.getType());
+  private static void disambiguateMethodReference(NameResolver resolver, Type parameterType) {
+    resolver.disambiguateMethodReference((ProceduralType) parameterType);
     resolver.checkAmbiguity();
   }
 

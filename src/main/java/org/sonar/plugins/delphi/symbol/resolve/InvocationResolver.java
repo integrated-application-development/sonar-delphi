@@ -105,8 +105,8 @@ public class InvocationResolver {
 
     // If the parameter expects a procedural type then we need to find the overload that the
     // argument is referring to.
-    if (argument.isMethodReference(parameter)) {
-      argumentType = Objects.requireNonNull(argument.findMethodReferenceType(parameter));
+    if (argument.isMethodReference(parameterType)) {
+      argumentType = Objects.requireNonNull(argument.findMethodReferenceType(parameterType));
     }
 
     EqualityType equality;
@@ -147,7 +147,7 @@ public class InvocationResolver {
     } else if (!equalTypeRequired(parameter)
         && argumentType.isObject()
         && parameterType.isObject()
-        && argumentType.inheritsFrom(parameterType)) {
+        && argumentType.isSubTypeOf(parameterType)) {
       equality = CONVERT_LEVEL_1;
       Type comparisonType = argumentType;
       while ((comparisonType = comparisonType.superType()) != DelphiType.unknownType()) {

@@ -23,7 +23,7 @@ import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.DelphiFile;
+import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.pmd.DelphiLanguageModule;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConfiguration;
 import org.sonar.plugins.delphi.pmd.violation.DelphiPmdViolationRecorder;
@@ -35,7 +35,7 @@ public class DelphiPmdExecutor implements Executor {
   private static final Logger LOG = Loggers.get(DelphiPmdExecutor.class);
   private static final String DYSFUNCTIONAL_RULE = "Removed misconfigured rule: %s  cause: %s";
 
-  private final SensorContext context;
+  private final SensorContext sensorContext;
   private final ActiveRules rulesProfile;
   private final DelphiPmdConfiguration pmdConfiguration;
   private final DelphiPmdViolationRecorder violationRecorder;
@@ -58,7 +58,7 @@ public class DelphiPmdExecutor implements Executor {
       ActiveRules rulesProfile,
       DelphiPmdConfiguration pmdConfiguration,
       DelphiPmdViolationRecorder violationRecorder) {
-    this.context = context;
+    this.sensorContext = context;
     this.rulesProfile = rulesProfile;
     this.pmdConfiguration = pmdConfiguration;
     this.violationRecorder = violationRecorder;
@@ -70,7 +70,7 @@ public class DelphiPmdExecutor implements Executor {
   }
 
   @Override
-  public void execute(SensorContext context, DelphiFile delphiFile) {
+  public void execute(Context context, DelphiInputFile delphiFile) {
     ctx.setSourceCodeFile(delphiFile.getSourceCodeFile());
     ctx.setLanguageVersion(language.getDefaultVersion());
 
@@ -89,7 +89,7 @@ public class DelphiPmdExecutor implements Executor {
     pmdConfiguration.dumpXmlReport(ctx.getReport());
 
     for (RuleViolation violation : ctx.getReport()) {
-      violationRecorder.saveViolation(violation, context);
+      violationRecorder.saveViolation(violation, sensorContext);
     }
   }
 

@@ -6,34 +6,22 @@ import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Typed;
 
 public class VariableNameDeclaration extends DelphiNameDeclaration implements Typed {
-  private final String image;
   private final Type type;
+  private int hashCode;
 
   public VariableNameDeclaration(VarNameDeclarationNode node) {
     super(node);
-    this.image = node.getImage();
     this.type = node.getTypedDeclaration().getType();
   }
 
   private VariableNameDeclaration(String image, Type type, DelphiScope scope) {
-    super(null, scope);
-    this.image = image;
+    super(SymbolicNode.imaginary(image, scope));
     this.type = type;
   }
 
   public static VariableNameDeclaration compilerVariable(
       String image, Type type, DelphiScope scope) {
     return new VariableNameDeclaration(image, type, scope);
-  }
-
-  @Override
-  public String getImage() {
-    return image;
-  }
-
-  @Override
-  public VarNameDeclarationNode getNode() {
-    return (VarNameDeclarationNode) super.getNode();
   }
 
   @Override
@@ -48,16 +36,19 @@ public class VariableNameDeclaration extends DelphiNameDeclaration implements Ty
       return false;
     }
     VariableNameDeclaration that = (VariableNameDeclaration) other;
-    return that.image.equalsIgnoreCase(image);
+    return that.getImage().equalsIgnoreCase(that.getImage());
   }
 
   @Override
   public int hashCode() {
-    return image.toLowerCase().hashCode();
+    if (hashCode == 0) {
+      hashCode = getImage().toLowerCase().hashCode();
+    }
+    return hashCode;
   }
 
   @Override
   public String toString() {
-    return "Variable: image = '" + image;
+    return "Variable: image = '" + getImage();
   }
 }

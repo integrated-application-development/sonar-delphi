@@ -6,8 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
-import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.plugins.delphi.DelphiFile;
+import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 
 public class DelphiMasterExecutorTest {
@@ -16,8 +15,8 @@ public class DelphiMasterExecutorTest {
 
   @Test
   public void testExceptionsShouldNotAbortExecution() {
-    SensorContext context = mock(SensorContext.class);
-    DelphiFile file = DelphiTestFileBuilder.fromResource(TEST_FILE).delphiFile();
+    ExecutorContext context = mock(ExecutorContext.class);
+    DelphiInputFile file = DelphiTestFileBuilder.fromResource(TEST_FILE).delphiFile();
 
     Executor brokenExecutor = mock(Executor.class);
     Executor workingExecutor = mock(Executor.class);

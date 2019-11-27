@@ -26,13 +26,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import net.sourceforge.pmd.lang.ast.RootNode;
-import org.sonar.plugins.delphi.DelphiFile;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FileHeaderNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ProgramDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnitDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.file.DelphiFile;
 import org.sonar.plugins.delphi.pmd.FilePosition;
 
 /** DelphiLanguage AST tree. */

@@ -7,13 +7,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import net.sourceforge.pmd.lang.ast.Node;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.sonar.plugins.delphi.antlr.ast.node.ClassHelperTypeNode;
-import org.sonar.plugins.delphi.antlr.ast.node.ClassTypeNode;
-import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
-import org.sonar.plugins.delphi.antlr.ast.node.InterfaceTypeNode;
-import org.sonar.plugins.delphi.antlr.ast.node.ObjectTypeNode;
-import org.sonar.plugins.delphi.antlr.ast.node.RecordHelperTypeNode;
-import org.sonar.plugins.delphi.antlr.ast.node.RecordTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
 import org.sonar.plugins.delphi.symbol.DelphiScope;
@@ -26,8 +19,7 @@ public class DelphiStructType extends DelphiType implements ScopedType {
   private final StructKind kind;
   private final Type superType;
 
-  protected DelphiStructType(
-      String image, DelphiScope scope, Set<Type> parents, StructKind kind) {
+  protected DelphiStructType(String image, DelphiScope scope, Set<Type> parents, StructKind kind) {
     super(image);
     this.scope = scope;
     this.parents = parents;
@@ -65,22 +57,17 @@ public class DelphiStructType extends DelphiType implements ScopedType {
 
   @Override
   public boolean isSubTypeOf(String image) {
-    return parents.stream().anyMatch(parent -> parent.getImage().equalsIgnoreCase(image));
+    for (Type parent : parents) {
+      if (parent.is(image) || parent.isSubTypeOf(image)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override
   public Type superType() {
     return superType;
-  }
-
-  @Override
-  public boolean inheritsFrom(Type other) {
-    for (Type parent : parents) {
-      if (parent.is(other) || parent.inheritsFrom(other)) {
-        return true;
-      }
-    }
-    return false;
   }
 
   @Override

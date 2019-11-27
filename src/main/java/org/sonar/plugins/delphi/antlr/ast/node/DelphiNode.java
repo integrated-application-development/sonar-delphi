@@ -43,7 +43,7 @@ import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.symbol.DelphiScope;
 
 /** AST node extended with PMD interfaces for PMD analysis */
-public abstract class DelphiNode extends AbstractNode implements ScopedNode {
+public abstract class DelphiNode extends AbstractNode implements ScopedNode, IndexedNode {
 
   private final DelphiToken token;
   private DelphiScope scope;
@@ -255,6 +255,11 @@ public abstract class DelphiNode extends AbstractNode implements ScopedNode {
     return token;
   }
 
+  @Override
+  public int getTokenIndex() {
+    return jjtGetFirstToken().getIndex();
+  }
+
   /**
    * Gets the AST Tree associated with this node
    *
@@ -269,6 +274,15 @@ public abstract class DelphiNode extends AbstractNode implements ScopedNode {
   }
 
   /**
+   * Return the name of the unit where this node is located
+   *
+   * @return Unit name
+   */
+  public String getUnitName() {
+    return getASTTree().getFileHeader().getName();
+  }
+
+  /**
    * Gets any comments nested inside of this node
    *
    * @return List of comment tokens
@@ -277,12 +291,20 @@ public abstract class DelphiNode extends AbstractNode implements ScopedNode {
     return getASTTree().getCommentsInsideNode(this);
   }
 
-  /** @return Whether the node is within the interface section of the file */
+  /**
+   * Returns whether the node is within the interface section of the file
+   *
+   * @return true if the node is in the interface section
+   */
   public boolean isInterfaceSection() {
     return getFirstParentOfType(InterfaceSectionNode.class) != null;
   }
 
-  /** @return Whether the node is within the implementation section of the file */
+  /**
+   * Returns whether the node is within the implementation section of the file
+   *
+   * @return true if the node is in the implementation section
+   */
   public boolean isImplementationSection() {
     return getFirstParentOfType(ImplementationSectionNode.class) != null;
   }

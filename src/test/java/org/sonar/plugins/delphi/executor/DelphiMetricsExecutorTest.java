@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.executor;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import java.io.File;
 import java.io.Serializable;
@@ -9,7 +10,8 @@ import org.junit.Test;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
-import org.sonar.plugins.delphi.DelphiFile;
+import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
+import org.sonar.plugins.delphi.symbol.SymbolTable;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 
@@ -23,13 +25,15 @@ public class DelphiMetricsExecutorTest {
   private static final File ROOT_DIR = DelphiUtils.getResource(ROOT_PATH);
 
   private DelphiMetricsExecutor executor;
-  private SensorContextTester context;
+  private SensorContextTester sensorContext;
+  private ExecutorContext context;
   private String componentKey;
 
   @Before
   public void setup() {
     executor = new DelphiMetricsExecutor();
-    context = SensorContextTester.create(ROOT_DIR);
+    sensorContext = SensorContextTester.create(ROOT_DIR);
+    context = new ExecutorContext(sensorContext, mock(SymbolTable.class));
   }
 
   @Test
@@ -81,13 +85,13 @@ public class DelphiMetricsExecutorTest {
   }
 
   private void execute(String filename) {
-    DelphiFile file = DelphiTestFileBuilder.fromResource(ROOT_PATH + filename).delphiFile();
+    DelphiInputFile file = DelphiTestFileBuilder.fromResource(ROOT_PATH + filename).delphiFile();
     componentKey = file.getInputFile().key();
     executor.execute(context, file);
   }
 
   private <T extends Serializable> void checkMetric(Metric<T> metric, T value) {
-    assertThat(context.measure(componentKey, metric).value())
+    assertThat(sensorContext.measure(componentKey, metric).value())
         .as(metric.getDescription())
         .isEqualTo(value);
   }

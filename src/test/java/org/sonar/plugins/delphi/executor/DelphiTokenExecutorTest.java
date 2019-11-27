@@ -28,10 +28,11 @@ import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
-import org.sonar.plugins.delphi.DelphiFile;
 import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
 import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
+import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
+import org.sonar.plugins.delphi.symbol.SymbolTable;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiTokenExecutorTest {
@@ -47,7 +48,7 @@ public class DelphiTokenExecutorTest {
   private DelphiHighlightExecutor highlightExecutor;
   private DelphiCpdExecutor cpdExecutor;
 
-  private SensorContext context;
+  private ExecutorContext context;
   private NewCpdTokens cpdTokens;
   private NewHighlighting highlighting;
 
@@ -59,9 +60,11 @@ public class DelphiTokenExecutorTest {
     highlighting = mock(NewHighlighting.class);
     when(highlighting.onFile(any())).thenReturn(highlighting);
 
-    context = mock(SensorContext.class);
-    when(context.newCpdTokens()).thenReturn(cpdTokens);
-    when(context.newHighlighting()).thenReturn(highlighting);
+    SensorContext sensorContext = mock(SensorContext.class);
+    when(sensorContext.newCpdTokens()).thenReturn(cpdTokens);
+    when(sensorContext.newHighlighting()).thenReturn(highlighting);
+
+    context = new ExecutorContext(sensorContext, mock(SymbolTable.class));
 
     highlightExecutor = new DelphiHighlightExecutor();
     cpdExecutor = new DelphiCpdExecutor();
@@ -186,7 +189,7 @@ public class DelphiTokenExecutorTest {
         || tokenString.startsWith("(*");
   }
 
-  private DelphiFile makeDelphiFile(String filePath) {
+  private DelphiInputFile makeDelphiFile(String filePath) {
     try {
       File srcFile = DelphiUtils.getResource(filePath);
 
@@ -198,13 +201,13 @@ public class DelphiTokenExecutorTest {
               .setType(Type.MAIN)
               .build();
 
-      return DelphiFile.from(inputFile, new DelphiFileStreamConfig(UTF_8.name()));
+      return DelphiInputFile.from(inputFile, new DelphiFileStreamConfig(UTF_8.name()));
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
   }
 
-  private void execute(DelphiFile delphiFile) {
+  private void execute(DelphiInputFile delphiFile) {
     executor.execute(context, delphiFile);
     cpdExecutor.complete();
     highlightExecutor.complete();

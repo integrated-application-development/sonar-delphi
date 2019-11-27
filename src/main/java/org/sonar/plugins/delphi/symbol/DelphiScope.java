@@ -12,6 +12,10 @@ public interface DelphiScope extends Scope {
     return getDeclarations(UnitNameDeclaration.class);
   }
 
+  default Map<UnitImportNameDeclaration, List<NameOccurrence>> getImportDeclarations() {
+    return getDeclarations(UnitImportNameDeclaration.class);
+  }
+
   default Map<TypeNameDeclaration, List<NameOccurrence>> getTypeDeclarations() {
     return getDeclarations(TypeNameDeclaration.class);
   }
@@ -28,10 +32,10 @@ public interface DelphiScope extends Scope {
     return getDeclarations(VariableNameDeclaration.class);
   }
 
-  @Override
-  DelphiScope getParent();
-
   Set<NameDeclaration> findDeclaration(DelphiNameOccurrence occurrence);
 
   void findMethodOverloads(DelphiNameOccurrence occurrence, Set<NameDeclaration> result);
+
+  @Override
+  DelphiScope getParent();
 }

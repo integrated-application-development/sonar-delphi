@@ -4,18 +4,18 @@ import java.io.Serializable;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
-import org.sonar.plugins.delphi.DelphiFile;
 import org.sonar.plugins.delphi.antlr.ast.visitors.MetricsVisitor;
 import org.sonar.plugins.delphi.antlr.ast.visitors.MetricsVisitor.Data;
+import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 
 public class DelphiMetricsExecutor implements Executor {
   private static final MetricsVisitor VISITOR = new MetricsVisitor();
   private SensorContext context;
-  private DelphiFile file;
+  private DelphiInputFile file;
 
   @Override
-  public void execute(SensorContext context, DelphiFile file) {
-    this.context = context;
+  public void execute(Context context, DelphiInputFile file) {
+    this.context = context.sensorContext();
     this.file = file;
 
     Data metrics = VISITOR.visit(file.getAst(), new Data());

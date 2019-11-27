@@ -37,8 +37,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.DelphiFile;
 import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
+import org.sonar.plugins.delphi.file.DelphiFile;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 
 public class GrammarTest {

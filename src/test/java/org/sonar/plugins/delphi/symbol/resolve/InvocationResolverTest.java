@@ -46,7 +46,6 @@ import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
 import org.sonar.plugins.delphi.symbol.ParameterDeclaration;
 import org.sonar.plugins.delphi.type.DelphiStructType;
-import org.sonar.plugins.delphi.type.StructKind;
 import org.sonar.plugins.delphi.type.Type;
 
 public class InvocationResolverTest {

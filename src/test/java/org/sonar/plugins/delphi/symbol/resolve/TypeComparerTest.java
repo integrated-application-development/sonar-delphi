@@ -78,6 +78,7 @@ public class TypeComparerTest {
     compare(SMALLINT.type, INTEGER.type, CONVERT_LEVEL_1);
     compare(INTEGER.type, SMALLINT.type, CONVERT_LEVEL_3);
     compare(CURRENCY.type, INTEGER.type, CONVERT_LEVEL_2);
+    compare(variant(), INTEGER.type, CONVERT_LEVEL_6);
     compare(STRING.type, INTEGER.type, INCOMPATIBLE_TYPES);
   }
 
@@ -256,6 +257,7 @@ public class TypeComparerTest {
     compare(untypedPointer(), toObject, CONVERT_LEVEL_2);
     compare(nilPointer(), toObject, CONVERT_LEVEL_1);
     compare(pointerTo(toObject), toObject, INCOMPATIBLE_TYPES);
+    compare(variant(), toObject, CONVERT_OPERATOR);
     compare(unknownType(), toObject, INCOMPATIBLE_TYPES);
   }
 

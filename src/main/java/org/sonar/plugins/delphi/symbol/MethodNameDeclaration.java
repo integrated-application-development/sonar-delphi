@@ -6,15 +6,15 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodHeadingNode;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodHeadingNode.MethodKind;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
-import org.sonar.plugins.delphi.antlr.ast.node.MethodReturnTypeNode;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.DelphiMethodType;
-import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Typed;
@@ -26,18 +26,23 @@ public final class MethodNameDeclaration extends DelphiNameDeclaration implement
   private final Set<MethodDirective> directives;
   private final boolean isClassInvocable;
   private final boolean isCallable;
+  private final MethodKind methodKind;
   private final ProceduralType type;
+  private final TypeNameDeclaration typeDeclaration;
+
   private int hashCode;
 
   public MethodNameDeclaration(MethodNode method) {
     super(method.getMethodName());
     this.qualifiedName = method.fullyQualifiedName();
     this.parameterDeclarations = extractParameterDeclarations(method);
-    this.returnType = extractReturnType(method);
+    this.returnType = method.getReturnType();
     this.directives = extractDirectives(method);
     this.isClassInvocable = method.isClassMethod();
     this.isCallable = !((method.isDestructor() || method.isConstructor()) && isClassInvocable);
+    this.methodKind = method.getMethodKind();
     this.type = DelphiMethodType.method(extractParameterTypes(method), returnType);
+    this.typeDeclaration = method.getTypeDeclaration();
   }
 
   private static List<ParameterDeclaration> extractParameterDeclarations(MethodNode method) {
@@ -50,18 +55,6 @@ public final class MethodNameDeclaration extends DelphiNameDeclaration implement
     return method.getParameters().stream()
         .map(FormalParameter::getType)
         .collect(Collectors.toUnmodifiableList());
-  }
-
-  private static Type extractReturnType(MethodNode method) {
-    MethodReturnTypeNode returnType = method.getMethodHeading().getMethodReturnType();
-    if (returnType != null) {
-      return returnType.getTypeNode().getType();
-    } else if (method.isConstructor()) {
-      TypeNameDeclaration declaration = method.getTypeDeclaration();
-      return (declaration == null) ? DelphiType.unknownType() : declaration.getType();
-    } else {
-      return DelphiType.voidType();
-    }
   }
 
   private static Set<MethodDirective> extractDirectives(MethodNode method) {
@@ -97,6 +90,10 @@ public final class MethodNameDeclaration extends DelphiNameDeclaration implement
     return isClassInvocable;
   }
 
+  public MethodKind getMethodKind() {
+    return methodKind;
+  }
+
   @Override
   @NotNull
   public Type getType() {
@@ -111,6 +108,11 @@ public final class MethodNameDeclaration extends DelphiNameDeclaration implement
     return directives;
   }
 
+  @Nullable
+  public TypeNameDeclaration getTypeDeclaration() {
+    return typeDeclaration;
+  }
+
   @Override
   public String toString() {
     return "Method "
@@ -118,7 +120,10 @@ public final class MethodNameDeclaration extends DelphiNameDeclaration implement
         + ", line "
         + node.getBeginLine()
         + ", params = "
-        + parameterDeclarations.size();
+        + parameterDeclarations.size()
+        + " <"
+        + getNode().getUnitName()
+        + ">";
   }
 
   @Override

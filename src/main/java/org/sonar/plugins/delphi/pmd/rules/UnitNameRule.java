@@ -26,7 +26,7 @@ import org.sonar.plugins.delphi.utils.NameConventionUtils;
 public class UnitNameRule extends AbstractDelphiRule {
   @Override
   public RuleContext visit(UnitDeclarationNode unit, RuleContext data) {
-    unit.getNameDeclaration().findChildrenOfType(IdentifierNode.class).stream()
+    unit.getNameNode().findChildrenOfType(IdentifierNode.class).stream()
         .filter(ident -> !NameConventionUtils.compliesWithPascalCase(ident.getImage()))
         .forEach(ident -> addViolation(data, ident));
 

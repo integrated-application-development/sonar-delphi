@@ -3,10 +3,9 @@ package org.sonar.plugins.delphi.executor;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.DelphiFile;
+import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 
 public class DelphiMasterExecutor implements Executor {
   private static final Logger LOG = Loggers.get(DelphiMasterExecutor.class);
@@ -36,7 +35,7 @@ public class DelphiMasterExecutor implements Executor {
   }
 
   @Override
-  public void execute(SensorContext context, DelphiFile file) {
+  public void execute(Context context, DelphiInputFile file) {
     for (Executor executor : executors) {
       try {
         executor.execute(context, file);
