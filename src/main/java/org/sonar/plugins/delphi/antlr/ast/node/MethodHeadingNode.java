@@ -4,15 +4,42 @@ import java.util.Collections;
 import java.util.List;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.DelphiParser;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class MethodHeadingNode extends DelphiNode {
+  public enum MethodKind {
+    CONSTRUCTOR(DelphiLexer.CONSTRUCTOR),
+    DESTRUCTOR(DelphiLexer.DESTRUCTOR),
+    FUNCTION(DelphiLexer.FUNCTION),
+    OPERATOR(DelphiLexer.OPERATOR),
+    PROCEDURE(DelphiLexer.PROCEDURE);
+
+    private final int tokenType;
+
+    MethodKind(int tokenType) {
+      this.tokenType = tokenType;
+    }
+
+    private static MethodKind fromTokenType(int tokenType) {
+      for (MethodKind kind : MethodKind.values()) {
+        if (kind.tokenType == tokenType) {
+          return kind;
+        }
+      }
+
+      throw new AssertionError(
+          "Unhandled MethodKind token type: " + DelphiParser.tokenNames[tokenType]);
+    }
+  }
+
   private String image;
   private Boolean isClassMethod;
   private String typeName;
   private String qualifiedName;
+  private MethodKind methodKind;
 
   public MethodHeadingNode(Token token) {
     super(token);
@@ -136,24 +163,11 @@ public final class MethodHeadingNode extends DelphiNode {
     return jjtGetParent() instanceof MethodDeclarationNode;
   }
 
-  public boolean isConstructor() {
-    return jjtGetChildId(0) == DelphiLexer.CONSTRUCTOR;
-  }
-
-  public boolean isDestructor() {
-    return jjtGetChildId(0) == DelphiLexer.DESTRUCTOR;
-  }
-
-  public boolean isFunction() {
-    return jjtGetChildId(0) == DelphiLexer.FUNCTION;
-  }
-
-  public boolean isOperator() {
-    return jjtGetChildId(0) == DelphiLexer.OPERATOR;
-  }
-
-  public boolean isProcedure() {
-    return jjtGetChildId(0) == DelphiLexer.PROCEDURE;
+  public MethodKind getMethodKind() {
+    if (methodKind == null) {
+      methodKind = MethodKind.fromTokenType(jjtGetChildId(0));
+    }
+    return methodKind;
   }
 
   private static MethodHeadingNode findParentMethodHeading(MethodHeadingNode headingNode) {

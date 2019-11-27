@@ -10,6 +10,7 @@ import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_OPERA
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.EQUAL;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.EXACT;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantEqualityType.INCOMPATIBLE_VARIANT;
 
 import java.util.List;
 import org.assertj.core.util.VisibleForTesting;
@@ -78,7 +79,11 @@ public class TypeComparer {
     }
 
     if (result == INCOMPATIBLE_TYPES && (from.isVariant() || to.isVariant())) {
-      result = CONVERT_OPERATOR;
+      if (from.isVariant() && VariantEqualityType.fromType(to) != INCOMPATIBLE_VARIANT) {
+        result = CONVERT_LEVEL_6;
+      } else {
+        result = CONVERT_OPERATOR;
+      }
     }
 
     return result;
@@ -392,9 +397,13 @@ public class TypeComparer {
   }
 
   private static EqualityType compareParameters(List<Type> from, List<Type> to) {
+    if (from.size() != to.size()) {
+      return INCOMPATIBLE_TYPES;
+    }
+
     EqualityType lowestEquality = EXACT;
 
-    for (int i = 0; i < Math.min(from.size(), to.size()); ++i) {
+    for (int i = 0; i < to.size(); ++i) {
       EqualityType equality = compare(from.get(i), to.get(i));
       if (equality.ordinal() < lowestEquality.ordinal()) {
         lowestEquality = equality;
@@ -405,7 +414,7 @@ public class TypeComparer {
   }
 
   private static EqualityType compareObject(Type from, Type to) {
-    if (from.isObject() && from.inheritsFrom(to)) {
+    if (from.isObject() && from.isSubTypeOf(to)) {
       return CONVERT_LEVEL_3;
     } else if (from.isPointer()) {
       PointerType fromPointer = (PointerType) from;
@@ -422,7 +431,7 @@ public class TypeComparer {
     if (from.isClassReference()) {
       Type fromReference = ((ClassReferenceType) from).classType();
       Type toReference = ((ClassReferenceType) to).classType();
-      if (fromReference.inheritsFrom(toReference)) {
+      if (fromReference.isSubTypeOf(toReference)) {
         return CONVERT_LEVEL_1;
       }
     } else if (from.isPointer()) {

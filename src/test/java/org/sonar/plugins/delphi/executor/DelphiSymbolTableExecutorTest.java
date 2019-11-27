@@ -1,16 +1,26 @@
 package org.sonar.plugins.delphi.executor;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.sonar.plugins.delphi.utils.DelphiUtils.uriToAbsolutePath;
 
+import java.io.File;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextPointer;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultTextPointer;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.plugins.delphi.DelphiFile;
+import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
+import org.sonar.plugins.delphi.project.DelphiProject;
+import org.sonar.plugins.delphi.symbol.SymbolTable;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 
@@ -231,10 +241,47 @@ public class DelphiSymbolTableExecutorTest {
     verifyUsages(25, 2, reference(28, 2), reference(31, 2));
   }
 
-  private void execute(String filename) {
-    DelphiFile file = DelphiTestFileBuilder.fromResource(ROOT_PATH + filename).delphiFile();
-    componentKey = file.getInputFile().key();
-    executor.execute(context, file);
+  @Test
+  public void testImports() {
+    execute("imports/Unit1.pas", "imports/Unit2.pas", "imports/Unit3.pas");
+    verifyUsages(1, 5, reference(25, 2), reference(28, 18));
+    verifyUsages(8, 2, reference(28, 2));
+    verifyUsages(11, 2, reference(28, 24), reference(29, 12));
+    verifyUsages(16, 2, reference(25, 18));
+    verifyUsages(18, 10, reference(25, 8), reference(26, 2));
+  }
+
+  private void execute(String filename, String... include) {
+    var mainFile = DelphiTestFileBuilder.fromResource(ROOT_PATH + filename).delphiFile();
+    Map<String, InputFile> inputFiles = new HashMap<>();
+
+    inputFiles.put(uriToAbsolutePath(mainFile.getInputFile().uri()), mainFile.getInputFile());
+
+    for (String name : include) {
+      String path = ROOT_PATH + name;
+      InputFile inputFile = DelphiTestFileBuilder.fromResource(path).delphiFile().getInputFile();
+      inputFiles.put(uriToAbsolutePath(inputFile.uri()), inputFile);
+    }
+
+    DelphiProject delphiProject = new DelphiProject("Default Project");
+    delphiProject.setSourceFiles(
+        inputFiles.values().stream()
+            .map(inputFile -> new File(uriToAbsolutePath(inputFile.uri())))
+            .collect(Collectors.toList()));
+
+    DelphiProjectHelper delphiProjectHelper = mock(DelphiProjectHelper.class);
+    when(delphiProjectHelper.getFile(anyString()))
+        .thenAnswer(
+            invocation -> {
+              String path = invocation.getArgument(0);
+              return inputFiles.get(path);
+            });
+
+    SymbolTable symbolTable = SymbolTable.buildSymbolTable(delphiProject, delphiProjectHelper);
+    ExecutorContext executorContext = new ExecutorContext(context, symbolTable);
+
+    componentKey = mainFile.getInputFile().key();
+    executor.execute(executorContext, mainFile);
   }
 
   private void verifyUsages(int line, int offset, TextPointer... pointers) {

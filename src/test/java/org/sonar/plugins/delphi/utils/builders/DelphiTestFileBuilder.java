@@ -15,12 +15,12 @@ import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.DelphiFile;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
+import org.sonar.plugins.delphi.file.DelphiFile;
+import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-import org.sonarqube.ws.FilenameUtils;
 
 public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> {
   private static final Logger LOG = Loggers.get(DelphiTestFileBuilder.class);
@@ -54,7 +54,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
   }
 
   public DelphiAST parse() {
-    DelphiFile file = DelphiFile.from(inputFile(), new DelphiFileStreamConfig(UTF_8.name()));
+    DelphiFile file = DelphiInputFile.from(inputFile(), new DelphiFileStreamConfig(UTF_8.name()));
     return file.getAst();
   }
 
@@ -85,12 +85,12 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
     return inputFile;
   }
 
-  public DelphiFile delphiFile() {
-    return DelphiFile.from(inputFile(), new DelphiFileStreamConfig(UTF_8.name()));
+  public DelphiInputFile delphiFile() {
+    return DelphiInputFile.from(inputFile(), new DelphiFileStreamConfig(UTF_8.name()));
   }
 
-  public DelphiFile delphiFile(DelphiFileStreamConfig fileStreamConfig) {
-    return DelphiFile.from(inputFile(), fileStreamConfig);
+  public DelphiInputFile delphiFile(DelphiFileStreamConfig fileStreamConfig) {
+    return DelphiInputFile.from(inputFile(), fileStreamConfig);
   }
 
   public StringBuilder getSourceCode() {
@@ -155,13 +155,22 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
     }
 
     @Override
-    public ResourceBuilder appendDecl(String value) {
-      throw new UnsupportedOperationException("Appending not supported for ResourceBuilder");
-    }
+    public InputFile inputFile() {
+      InputFile inputFile;
+      try {
+        File baseDir = resource.getParentFile();
+        inputFile =
+            TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, resource)
+                .setModuleBaseDir(baseDir.toPath())
+                .setContents(DelphiUtils.readFileContent(resource, UTF_8.name()))
+                .setLanguage(DelphiLanguage.KEY)
+                .setType(Type.MAIN)
+                .build();
+      } catch (IOException e) {
+        throw new UncheckedIOException(e);
+      }
 
-    @Override
-    public ResourceBuilder appendImpl(String value) {
-      throw new UnsupportedOperationException("Appending not supported for ResourceBuilder");
+      return inputFile;
     }
 
     @Override
@@ -174,13 +183,23 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
     }
 
     @Override
+    public ResourceBuilder appendDecl(String value) {
+      throw new UnsupportedOperationException("Not supported for ResourceBuilder");
+    }
+
+    @Override
+    public ResourceBuilder appendImpl(String value) {
+      throw new UnsupportedOperationException("Not supported for ResourceBuilder");
+    }
+
+    @Override
     protected String getFilenamePrefix() {
-      return "resource";
+      throw new UnsupportedOperationException("Not supported for ResourceBuilder");
     }
 
     @Override
     protected String getFileExtension() {
-      return FilenameUtils.getExtension(resource.getName());
+      throw new UnsupportedOperationException("Not supported for ResourceBuilder");
     }
   }
 }

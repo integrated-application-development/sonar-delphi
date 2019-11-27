@@ -1,6 +1,5 @@
 package org.sonar.plugins.delphi.symbol;
 
-import com.google.common.base.Preconditions;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -9,12 +8,12 @@ import java.util.Set;
 import net.sourceforge.pmd.lang.symboltable.AbstractScope;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
+import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.DelphiEnumerationType;
 import org.sonar.plugins.delphi.type.Type;
 
 public abstract class AbstractDelphiScope extends AbstractScope implements DelphiScope {
-
   @Override
   public void addDeclaration(NameDeclaration declaration) {
     checkForwardTypeDeclarations(declaration);
@@ -32,7 +31,7 @@ public abstract class AbstractDelphiScope extends AbstractScope implements Delph
     if (typeDeclaration instanceof TypeNameDeclaration) {
       for (TypeNameDeclaration declaration : getTypeDeclarations().keySet()) {
         if (declaration.getImage().equalsIgnoreCase(typeDeclaration.getImage())) {
-          declaration.setIsForwardDeclaration((TypeNameDeclaration) typeDeclaration);
+          declaration.setIsForwardDeclaration(((TypeNameDeclaration) typeDeclaration).getType());
           break;
         }
       }
@@ -40,14 +39,9 @@ public abstract class AbstractDelphiScope extends AbstractScope implements Delph
   }
 
   @Override
-  public final Set<NameDeclaration> addNameOccurrence(NameOccurrence occurrence) {
-    DelphiNameOccurrence delphiOccurrence = (DelphiNameOccurrence) occurrence;
-    DelphiNameDeclaration declaration = delphiOccurrence.getNameDeclaration();
-
-    List<NameOccurrence> nameOccurrences =
-        Preconditions.checkNotNull(getDeclarations().get(declaration));
-    nameOccurrences.add(delphiOccurrence);
-
+  public final Set<NameDeclaration> addNameOccurrence(@NotNull NameOccurrence occurrence) {
+    DelphiNameDeclaration declaration = ((DelphiNameOccurrence) occurrence).getNameDeclaration();
+    getDeclarations().get(declaration).add(occurrence);
     return Collections.singleton(declaration);
   }
 
@@ -78,23 +72,33 @@ public abstract class AbstractDelphiScope extends AbstractScope implements Delph
       return false;
     }
 
-    boolean foundOverride =
-        matchedMethods.stream()
-            .map(MethodNameDeclaration.class::cast)
-            .anyMatch(method -> method.getParameters().equals(declaration.getParameters()));
+    return matchedMethods.stream()
+        .map(MethodNameDeclaration.class::cast)
+        .noneMatch(matched -> overridesMethodSignature(matched, declaration));
+  }
 
-    return !foundOverride;
+  private static boolean overridesMethodSignature(
+      MethodNameDeclaration declaration, MethodNameDeclaration overridden) {
+    if (declaration.getRequiredParametersCount() != overridden.getRequiredParametersCount()) {
+      return false;
+    }
+
+    for (int i = 0; i < declaration.getRequiredParametersCount(); ++i) {
+      ParameterDeclaration declarationParam = declaration.getParameter(i);
+      ParameterDeclaration matchedParam = overridden.getParameter(i);
+      if (!declarationParam.getType().is(matchedParam.getType())) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   @Override
   public Set<NameDeclaration> findDeclaration(DelphiNameOccurrence occurrence) {
     Set<NameDeclaration> result = new HashSet<>();
 
-    searchDeclarations(occurrence, getUnitDeclarations(), result);
-
-    if (result.isEmpty()) {
-      searchDeclarations(occurrence, getVariableDeclarations(), result);
-    }
+    searchDeclarations(occurrence, getVariableDeclarations(), result);
 
     if (result.isEmpty()) {
       searchDeclarations(occurrence, getMethodDeclarations(), result);
@@ -109,10 +113,18 @@ public abstract class AbstractDelphiScope extends AbstractScope implements Delph
       searchTypeDeclarations(occurrence, result);
     }
 
+    if (result.isEmpty()) {
+      searchDeclarations(occurrence, getUnitDeclarations(), result);
+    }
+
+    if (result.isEmpty()) {
+      searchDeclarations(occurrence, getImportDeclarations(), result);
+    }
+
     return result;
   }
 
-  protected void searchDeclarations(
+  private void searchDeclarations(
       DelphiNameOccurrence occurrence,
       Map<? extends NameDeclaration, List<NameOccurrence>> declarations,
       Set<NameDeclaration> result) {

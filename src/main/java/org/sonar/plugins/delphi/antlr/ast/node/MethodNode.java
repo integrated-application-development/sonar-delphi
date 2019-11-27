@@ -4,6 +4,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodHeadingNode.MethodKind;
 import org.sonar.plugins.delphi.symbol.TypeNameDeclaration;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
@@ -43,6 +44,17 @@ public abstract class MethodNode extends DelphiNode {
   }
 
   public Type getReturnType() {
+    if (isProcedure()) {
+      return DelphiType.voidType();
+    }
+
+    if (isConstructor()) {
+      TypeNameDeclaration declaration = getTypeDeclaration();
+      if (declaration != null) {
+        return declaration.getType();
+      }
+    }
+
     MethodReturnTypeNode returnTypeNode = getMethodHeading().getMethodReturnType();
     if (returnTypeNode != null) {
       return returnTypeNode.getTypeNode().getType();
@@ -60,24 +72,28 @@ public abstract class MethodNode extends DelphiNode {
     return null;
   }
 
+  public MethodKind getMethodKind() {
+    return getMethodHeading().getMethodKind();
+  }
+
   public boolean isConstructor() {
-    return getMethodHeading().isConstructor();
+    return getMethodKind() == MethodKind.CONSTRUCTOR;
   }
 
   public boolean isDestructor() {
-    return getMethodHeading().isDestructor();
+    return getMethodKind() == MethodKind.DESTRUCTOR;
   }
 
   public boolean isFunction() {
-    return getMethodHeading().isFunction();
+    return getMethodKind() == MethodKind.FUNCTION;
   }
 
   public boolean isOperator() {
-    return getMethodHeading().isOperator();
+    return getMethodKind() == MethodKind.OPERATOR;
   }
 
   public boolean isProcedure() {
-    return getMethodHeading().isProcedure();
+    return getMethodKind() == MethodKind.PROCEDURE;
   }
 
   public boolean isClassMethod() {

@@ -52,22 +52,22 @@ public final class UnknownScope implements DelphiScope {
   }
 
   @Override
-  public DelphiScope getParent() {
-    return null;
-  }
-
-  @Override
-  public void setParent(Scope scope) {
-    // Do nothing
-  }
-
-  @Override
   public void addDeclaration(NameDeclaration nameDeclaration) {
     // Do nothing
   }
 
   @Override
   public void findMethodOverloads(DelphiNameOccurrence occurrence, Set<NameDeclaration> result) {
+    // Do nothing
+  }
+
+  @Override
+  public DelphiScope getParent() {
+    return null;
+  }
+
+  @Override
+  public void setParent(Scope scope) {
     // Do nothing
   }
 }

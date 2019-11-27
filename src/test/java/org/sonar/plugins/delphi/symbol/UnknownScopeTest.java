@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.delphi.symbol.UnknownScope.unknownScope;
+import static org.sonar.plugins.delphi.symbol.VariableNameDeclaration.compilerVariable;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 
 import java.lang.reflect.Constructor;
@@ -37,8 +38,7 @@ public class UnknownScopeTest {
 
   @Test
   public void testGetDeclarationsByClass() {
-    var declaration =
-        VariableNameDeclaration.compilerVariable("Image", unknownType(), unknownScope());
+    var declaration = compilerVariable("Image", unknownType(), unknownScope());
     unknownScope.addDeclaration(declaration);
     assertThat(unknownScope.getDeclarations(VariableNameDeclaration.class)).isNull();
   }
@@ -71,16 +71,16 @@ public class UnknownScopeTest {
   }
 
   @Test
-  public void testGetParent() {
-    unknownScope.setParent(unknownScope());
-    assertThat(unknownScope.getParent()).isNull();
-  }
-
-  @Test
   public void testFindMethodOverloads() {
     DelphiNameOccurrence occurrence = new DelphiNameOccurrence(mock(DelphiNode.class), "Image");
     Set<NameDeclaration> result = new HashSet<>();
     unknownScope.findMethodOverloads(occurrence, result);
     assertThat(result).isEmpty();
+  }
+
+  @Test
+  public void testGetParent() {
+    unknownScope.setParent(unknownScope());
+    assertThat(unknownScope.getParent()).isNull();
   }
 }

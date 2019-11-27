@@ -35,12 +35,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
-import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.executor.DelphiMasterExecutor;
+import org.sonar.plugins.delphi.executor.ExecutorContext;
+import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
@@ -87,7 +88,7 @@ public class DelphiSensorTest {
     final RuntimeException expectedException = new RuntimeException();
     willThrow(expectedException)
         .given(executor)
-        .execute(any(SensorContext.class), any(DelphiFile.class));
+        .execute(any(ExecutorContext.class), any(DelphiInputFile.class));
 
     assertThatThrownBy(() -> sensor.execute(context)).isEqualTo(expectedException);
   }

@@ -13,7 +13,7 @@ type
 
   TFoo = class(TObject)
   private
-    FBar: TBar
+    FBar: TBar;
     procedure Test;
     function GetBar: TBar;
   end;

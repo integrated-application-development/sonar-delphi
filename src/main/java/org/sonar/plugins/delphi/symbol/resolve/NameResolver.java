@@ -26,6 +26,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode;
+import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
@@ -47,7 +48,9 @@ import org.sonar.plugins.delphi.symbol.PropertyNameDeclaration;
 import org.sonar.plugins.delphi.symbol.Search;
 import org.sonar.plugins.delphi.symbol.TypeNameDeclaration;
 import org.sonar.plugins.delphi.symbol.TypeScope;
+import org.sonar.plugins.delphi.symbol.UnitImportNameDeclaration;
 import org.sonar.plugins.delphi.symbol.UnitNameDeclaration;
+import org.sonar.plugins.delphi.symbol.UnitScope;
 import org.sonar.plugins.delphi.symbol.VariableNameDeclaration;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
@@ -70,7 +73,7 @@ public class NameResolver {
   }
 
   private Set<NameDeclaration> declarations = new HashSet<>();
-  private DelphiScope currentScope = unknownScope();
+  private DelphiScope currentScope;
   private Type currentType = unknownType();
 
   private final List<DelphiNameOccurrence> names = new ArrayList<>();
@@ -129,12 +132,18 @@ public class NameResolver {
     DelphiScope newScope = unknownScope();
     if (declarations.size() == 1) {
       NameDeclaration declaration = getLast(declarations);
+
       if (declaration instanceof Typed) {
         Typed typed = (Typed) declaration;
         currentType = typed.getType();
         ScopedType scopedType = extractScopedType(currentType);
         if (scopedType != null) {
           newScope = scopedType.typeScope();
+        }
+      } else if (declaration instanceof UnitImportNameDeclaration) {
+        UnitScope unitScope = ((UnitImportNameDeclaration) declaration).getUnitScope();
+        if (unitScope != null) {
+          newScope = unitScope;
         }
       } else if (declaration instanceof UnitNameDeclaration) {
         newScope = ((UnitNameDeclaration) declaration).getUnitScope();
@@ -143,14 +152,31 @@ public class NameResolver {
     currentScope = newScope;
   }
 
+  private void moveToInheritedScope(PrimaryExpressionNode node) {
+    MethodImplementationNode method = node.getFirstParentOfType(MethodImplementationNode.class);
+    Preconditions.checkNotNull(method);
+
+    TypeNameDeclaration typeDeclaration = method.getTypeDeclaration();
+    if (typeDeclaration != null) {
+      Type superType = method.getTypeDeclaration().getType().superType();
+      if (superType instanceof ScopedType) {
+        currentScope = ((ScopedType) superType).typeScope();
+      } else {
+        // Until we do full symbol resolution, this will only work if the supertype is declared in
+        // the same file.
+        currentScope = unknownScope();
+      }
+    }
+  }
+
   void readPrimaryExpression(PrimaryExpressionNode node) {
     if (node.isBareInherited()) {
       MethodImplementationNode method = node.getFirstParentOfType(MethodImplementationNode.class);
       DelphiNode inheritedNode = (DelphiNode) node.jjtGetChild(0);
       var occurrence = new DelphiNameOccurrence(inheritedNode, method.simpleName());
-      occurrence.setIsInherited();
       occurrence.setIsExplicitInvocation(true);
       addName(occurrence);
+      moveToInheritedScope(node);
       searchForDeclaration(occurrence);
       disambiguateParameters(method.getParameterTypes());
       addResolvedDeclaration();
@@ -160,13 +186,10 @@ public class NameResolver {
       return;
     }
 
-    boolean inherited = false;
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       DelphiNode child = (DelphiNode) node.jjtGetChild(i);
       if (child instanceof NameReferenceNode) {
-        NameReferenceNode reference = (NameReferenceNode) child;
-        readNameReference(reference, inherited);
-        inherited = false;
+        readNameReference((NameReferenceNode) child);
       } else if (child instanceof ArgumentListNode) {
         disambiguateArguments(((ArgumentListNode) child).getArguments());
       } else if (child instanceof ArrayAccessorNode) {
@@ -174,7 +197,7 @@ public class NameResolver {
       } else if (child.jjtGetId() == DelphiLexer.POINTER) {
         addResolvedDeclaration();
       } else if (child.jjtGetId() == DelphiLexer.INHERITED) {
-        inherited = true;
+        moveToInheritedScope(node);
       }
 
       if (names.size() > resolvedDeclarations.size() + Math.min(1, declarations.size())) {
@@ -184,18 +207,9 @@ public class NameResolver {
   }
 
   private void readNameReference(NameReferenceNode node) {
-    readNameReference(node, false);
-  }
-
-  private void readNameReference(NameReferenceNode node, boolean inherited) {
     for (NameReferenceNode reference : node.flatten()) {
-      String image = reference.getIdentifier().getImage();
-      DelphiNameOccurrence occurrence = new DelphiNameOccurrence(reference, image);
-
-      if (inherited) {
-        occurrence.setIsInherited();
-        inherited = false;
-      }
+      IdentifierNode identifier = reference.getIdentifier();
+      DelphiNameOccurrence occurrence = new DelphiNameOccurrence(identifier);
 
       addName(occurrence);
       searchForDeclaration(occurrence);
@@ -203,13 +217,12 @@ public class NameResolver {
       boolean foundDeclaration = !declarations.isEmpty();
 
       if (reference.nextName() != null) {
+        disambiguateImplicitEmptyArgumentList();
         addResolvedDeclaration();
       }
 
       if (!foundDeclaration) {
         // we can't find it, so just give up
-        // when we decide to do full symbol resolution force this to either find a symbol or
-        // throw a SymbolNotFoundException
         return;
       }
 
@@ -287,20 +300,74 @@ public class NameResolver {
     disambiguateArguments(argumentExpressions, true);
   }
 
-  private void disambiguateArguments(List<ExpressionNode> argumentExpressions, boolean explicit) {
+  private boolean handleHardTypeCast(List<ExpressionNode> argumentExpressions) {
+    if (declarations.size() != 1 || argumentExpressions.size() != 1) {
+      return false;
+    }
+
+    if (!(getLast(declarations) instanceof TypeNameDeclaration)) {
+      return false;
+    }
+
+    addResolvedDeclaration();
+
+    ExpressionNode argument = argumentExpressions.get(0);
+    if (argument instanceof PrimaryExpressionNode) {
+      resolve((PrimaryExpressionNode) argument);
+    } else {
+      resolveArgumentSubExpressions(argument);
+    }
+
+    return true;
+  }
+
+  private boolean handleProcVarInvocation(List<ExpressionNode> argumentExpressions) {
+    if (declarations.size() > 1) {
+      return false;
+    }
+
+    ProceduralType proceduralType;
+
     if (declarations.isEmpty()) {
+      if (!currentType.isProcedural()) {
+        return false;
+      }
+      proceduralType = (ProceduralType) currentType;
+    } else {
+      NameDeclaration declaration = getLast(declarations);
+      if (!(declaration instanceof VariableNameDeclaration)) {
+        return false;
+      }
+
+      Type variableType = ((VariableNameDeclaration) getLast(declarations)).getType();
+      if (!variableType.isProcedural()) {
+        return false;
+      }
+
+      proceduralType = (ProceduralType) variableType;
+      addResolvedDeclaration();
+    }
+
+    List<Type> parameterTypes = proceduralType.parameterTypes();
+    int count = Math.min(argumentExpressions.size(), parameterTypes.size());
+
+    for (int i = 0; i < count; ++i) {
+      ExpressionNode argument = argumentExpressions.get(i);
+      resolveArgumentSubExpressions(argument);
+      InvocationArgument invocationArgument = new InvocationArgument(argument);
+      invocationArgument.resolve(parameterTypes.get(i));
+    }
+
+    currentType = proceduralType.returnType();
+    return true;
+  }
+
+  private void disambiguateArguments(List<ExpressionNode> argumentExpressions, boolean explicit) {
+    if (handleHardTypeCast(argumentExpressions) || handleProcVarInvocation(argumentExpressions)) {
       return;
     }
 
-    if (declarations.size() == 1 && getLast(declarations) instanceof TypeNameDeclaration) {
-      // This only looks like an invocation. It's actually a hard type cast.
-      addResolvedDeclaration();
-      return;
-    }
-
-    if (declarations.size() == 1 && getLast(declarations) instanceof VariableNameDeclaration) {
-      // Invocation of a procedural variable
-      addResolvedDeclaration();
+    if (declarations.isEmpty()) {
       return;
     }
 
@@ -333,8 +400,6 @@ public class NameResolver {
 
     if (resolved == null) {
       // we can't find it, so just give up
-      // when we decide to do full symbol resolution force this to either find a symbol or
-      // throw a SymbolNotFoundException
       return;
     }
 
@@ -343,7 +408,7 @@ public class NameResolver {
     for (int i = 0; i < resolver.getArguments().size(); ++i) {
       InvocationArgument argument = resolver.getArguments().get(i);
       ParameterDeclaration parameter = invocable.getParameter(i);
-      argument.resolve(parameter);
+      argument.resolve(parameter.getType());
     }
 
     currentType = invocable.getReturnType();
@@ -432,34 +497,12 @@ public class NameResolver {
   private void searchForDeclaration(DelphiNameOccurrence occurrence) {
     Search search = new Search(occurrence);
 
-    if (resolvedDeclarations.isEmpty()) {
-      currentScope = findStartingScope(occurrence);
+    if (currentScope == null) {
+      currentScope = occurrence.getLocation().getScope();
     }
 
     search.execute(currentScope);
     declarations = search.getResult();
-  }
-
-  private static DelphiScope findStartingScope(DelphiNameOccurrence occurrence) {
-    DelphiScope startingScope = occurrence.getLocation().getScope();
-    if (occurrence.isInherited()) {
-      var method = occurrence.getLocation().getFirstParentOfType(MethodImplementationNode.class);
-      Preconditions.checkNotNull(method);
-
-      TypeNameDeclaration typeDeclaration = method.getTypeDeclaration();
-      if (typeDeclaration != null) {
-        Type superType = method.getTypeDeclaration().getType().superType();
-        if (superType instanceof ScopedType) {
-          startingScope = ((ScopedType) superType).typeScope();
-        } else {
-          // Until we do full symbol resolution, this will only work if the supertype is declared in
-          // the same file.
-          startingScope = unknownScope();
-        }
-      }
-    }
-
-    return startingScope;
   }
 
   @Nullable
@@ -486,7 +529,12 @@ public class NameResolver {
       DelphiNameOccurrence name = names.get(i);
       DelphiNameDeclaration declaration = (DelphiNameDeclaration) resolvedDeclarations.get(i);
       name.setNameDeclaration(declaration);
+
       declaration.getScope().addNameOccurrence(name);
+      name.getLocation()
+          .getScope()
+          .getEnclosingScope(UnitScope.class)
+          .registerOccurrence(name.getLocation(), name);
     }
   }
 
@@ -494,7 +542,7 @@ public class NameResolver {
     resolveMethod(method);
   }
 
-  public static void resolve(MethodImplementationNode method) {
+  public static boolean resolve(MethodImplementationNode method) {
     resolveMethod(method);
 
     NameResolver resolver = new NameResolver();
@@ -503,17 +551,12 @@ public class NameResolver {
     resolver.disambiguateIsClassInvocable(method.isClassMethod());
     resolver.disambiguateQualifiedMethodName(method.fullyQualifiedName());
 
-    boolean isImplementationScopedMethod =
-        method.getMethodName().nextName() == null && resolver.declarations.isEmpty();
-
-    if (isImplementationScopedMethod) {
-      MethodNameDeclaration declaration = new MethodNameDeclaration(method);
-      method.getMethodHeading().getMethodNameNode().setNameDeclaration(declaration);
-      method.getScope().addDeclaration(declaration);
-      return;
+    if (!resolver.declarations.isEmpty()) {
+      resolver.addToSymbolTable();
+      return true;
     }
 
-    resolver.addToSymbolTable();
+    return false;
   }
 
   public static void resolve(TypeDeclarationNode typeDeclaration) {

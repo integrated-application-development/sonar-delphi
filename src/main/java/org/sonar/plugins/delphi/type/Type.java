@@ -245,14 +245,6 @@ public interface Type {
    */
   boolean isVariant();
 
-  /**
-   * Check if this type inherits from another type
-   *
-   * @param other Other type
-   * @return true if this type inherits from the other type
-   */
-  boolean inheritsFrom(Type other);
-
   interface CollectionType extends Type {
     /**
      * The type that is is a collection of

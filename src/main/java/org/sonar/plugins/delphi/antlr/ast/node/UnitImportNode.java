@@ -17,7 +17,7 @@ public final class UnitImportNode extends DelphiNode {
     return visitor.visit(this, data);
   }
 
-  public NameDeclarationNode getNameDeclaration() {
+  public NameDeclarationNode getNameNode() {
     return (NameDeclarationNode) jjtGetChild(0);
   }
 }

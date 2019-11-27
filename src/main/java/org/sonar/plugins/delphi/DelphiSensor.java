@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.delphi;
 
+import static org.sonar.plugins.delphi.antlr.filestream.DelphiFileStream.createConfig;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,14 +40,17 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.DelphiFile.DelphiFileConstructionException;
-import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStream;
+import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 import org.sonar.plugins.delphi.codecoverage.DelphiCodeCoverageParser;
 import org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.executor.DelphiMasterExecutor;
+import org.sonar.plugins.delphi.executor.ExecutorContext;
+import org.sonar.plugins.delphi.file.DelphiFile.DelphiFileConstructionException;
+import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.project.DelphiProject;
+import org.sonar.plugins.delphi.symbol.SymbolTable;
 import org.sonar.plugins.delphi.utils.ProgressReporter;
 import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
 
@@ -88,22 +93,24 @@ public class DelphiSensor implements Sensor {
     }
   }
 
-  private void executeOnProject(DelphiProject delphiProject, SensorContext context) {
-    LOG.info("Parsing project: {}", delphiProject.getName());
+  private void executeOnProject(DelphiProject delphiProject, SensorContext sensorContext) {
+    SymbolTable symbolTable = SymbolTable.buildSymbolTable(delphiProject, delphiProjectHelper);
+    ExecutorContext executorContext = new ExecutorContext(sensorContext, symbolTable);
+    DelphiFileStreamConfig config = createConfig(delphiProject, delphiProjectHelper);
+
+    LOG.info("Analyzing project: {}", delphiProject.getName());
 
     ProgressReporter progressReporter =
         new ProgressReporter(
             delphiProject.getSourceFiles().size(), 10, new ProgressReporterLogger(LOG));
 
-    var fileStreamConfig = DelphiFileStream.createConfig(delphiProject, delphiProjectHelper);
-
     for (File sourceFile : delphiProject.getSourceFiles()) {
       try {
         InputFile inputFile = delphiProjectHelper.getFile(sourceFile.getAbsolutePath());
-        DelphiFile delphiFile = DelphiFile.from(inputFile, fileStreamConfig);
-        executor.execute(context, delphiFile);
+        DelphiInputFile delphiFile = DelphiInputFile.from(inputFile, config);
+        executor.execute(executorContext, delphiFile);
       } catch (DelphiFileConstructionException e) {
-        String error = String.format("Error while parsing %s", sourceFile.getAbsolutePath());
+        String error = String.format("Error while analyzing %s", sourceFile.getAbsolutePath());
         LOG.error(error, e);
         errors.add(error);
       }

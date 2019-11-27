@@ -3,16 +3,16 @@ package org.sonar.plugins.delphi.executor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
-import org.sonar.plugins.delphi.DelphiFile;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
+import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 
 public class DelphiHighlightExecutor extends DelphiTokenExecutor {
   private NewHighlighting highlighter;
   private boolean insideAsmBlock;
 
   @Override
-  public void onFile(SensorContext context, DelphiFile delphiFile) {
+  public void onFile(SensorContext context, DelphiInputFile delphiFile) {
     highlighter = context.newHighlighting().onFile(delphiFile.getInputFile());
     insideAsmBlock = false;
   }
