@@ -833,6 +833,22 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ShortIdentifiersRule"
+    message="Identifiers should not be too short"
+    name="ShortIdentifiersRule">
+    <priority>3</priority>
+    <description>
+      When an identifier is too short, it isn't immediately obvious what it's for. Identifiers should be given meaningful names.
+      &lt;br&gt;
+      &lt;br&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min" />
+      <property name="limit" value="3" />
+      <property name="whitelist" value="E|X|Y|ID|Id" />
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.MemoryManagementRule"
     message="Memory management should be used"
     name="MemoryManagementRule">

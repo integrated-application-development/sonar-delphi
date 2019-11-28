@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Overload resolution
 - Symbol information is now provided to the Sonar API for use in the web interface.
 - `MemoryManagementRule` analysis rule, which flags object allocations without memory management.
+- `ShortIdentifiersRule` analysis rule, which flags identifiers below a certain length.
 
 ### Changed
 
