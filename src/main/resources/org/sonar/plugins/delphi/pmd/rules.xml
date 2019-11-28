@@ -878,6 +878,22 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenIdentifierRule"
+    message="Track uses of disallowed identifiers"
+    name="ForbiddenIdentifierRule">
+    <priority>3</priority>
+    <description>
+      This rule template can be used to create rules which will be triggered when a name is declared
+      that matches an item in the blacklist.
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min" />
+      <property name="template" value="true" />
+      <property name="blacklist" />
+      <property name="message" />
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.CommentRegexRule"
     message="Track comments matching a regular expression"
     name="CommentRegexRule">
