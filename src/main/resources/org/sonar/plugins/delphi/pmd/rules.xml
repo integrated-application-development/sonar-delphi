@@ -833,6 +833,22 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.MemoryManagementRule"
+    message="Memory management should be used"
+    name="MemoryManagementRule">
+    <priority>2</priority>
+    <description>
+      Memory management methods should be used to manage object lifecycles.
+      &lt;br&gt;
+      &lt;br&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="10min" />
+      <property name="memoryFunctions" value="Local|Managed|ManagedBy|ManagedInterface|Unmanaged" />
+      <property name="whitelist" value="CreateNew" />
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathTemplateRule"
     message="Track breaches of an XPath rule"
     name="XPathRule">

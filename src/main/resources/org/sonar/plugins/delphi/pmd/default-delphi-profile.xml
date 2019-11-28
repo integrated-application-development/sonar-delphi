@@ -195,4 +195,8 @@
     name="VariableNameRule">
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.MemoryManagementRule"
+    name="MemoryManagementRule">
+  </rule>
+
 </ruleset>
