@@ -55,11 +55,11 @@ public final class BinaryExpressionNode extends ExpressionNode {
       return BooleanType.BOOLEAN.type;
     }
 
-    Type type = getLeft().getType();
-
-    if (type.isUnknown()) {
-      type = getRight().getType();
+    if (getOperator() == BinaryOp.AS) {
+      return getRight().getType();
     }
+
+    Type type = getLeft().getType();
 
     if (type.is(TextType.CHAR.type)) {
       // Assume this expression is a string concatenation.

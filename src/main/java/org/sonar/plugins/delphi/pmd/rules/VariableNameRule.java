@@ -6,7 +6,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParamet
 import org.sonar.plugins.delphi.antlr.ast.node.VarDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarNameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarSectionNode;
-import org.sonar.plugins.delphi.symbol.UnitScope;
+import org.sonar.plugins.delphi.symbol.scope.UnitScope;
 import org.sonar.plugins.delphi.utils.NameConventionUtils;
 
 /**

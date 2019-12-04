@@ -46,6 +46,7 @@ import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiSensorTest {
+  private static final String STANDARD_LIBRARY = "/org/sonar/plugins/delphi/standardLibrary";
   private static final String BASE_PATH = "/org/sonar/plugins/delphi/projects/";
   private static final File BASE_DIR = DelphiUtils.getResource(BASE_PATH);
   private static final String BAD_SYNTAX = BASE_PATH + "BadSyntaxProject/BadSyntax.Pas";
@@ -112,15 +113,17 @@ public class DelphiSensorTest {
   }
 
   private void setupProject(String path) {
-    File srcFile = DelphiUtils.getResource(path);
+    File sourceFile = DelphiUtils.getResource(path);
 
     DelphiProject project = new DelphiProject("Test");
-    project.addFile(srcFile.getPath());
+    project.addSourceFile(sourceFile);
 
     InputFile inputFile = mock(InputFile.class);
-    when(inputFile.uri()).thenReturn(srcFile.toURI());
+    when(inputFile.uri()).thenReturn(sourceFile.toURI());
 
     when(delphiProjectHelper.getProjects()).thenReturn(Collections.singletonList(project));
     when(delphiProjectHelper.getFile(anyString())).thenReturn(inputFile);
+    when(delphiProjectHelper.standardLibraryPath())
+        .thenReturn(DelphiUtils.getResource(STANDARD_LIBRARY).toPath());
   }
 }

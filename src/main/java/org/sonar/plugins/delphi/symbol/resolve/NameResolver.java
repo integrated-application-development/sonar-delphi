@@ -1,14 +1,18 @@
 package org.sonar.plugins.delphi.symbol.resolve;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.getLast;
 import static java.util.function.Predicate.not;
-import static org.sonar.plugins.delphi.symbol.UnknownScope.unknownScope;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
+import static org.sonar.plugins.delphi.symbol.scope.UnknownScope.unknownScope;
+import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType.ANSICHAR;
+import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType.WIDECHAR;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,30 +32,36 @@ import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode;
 import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodHeadingNode.MethodKind;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodParametersNode;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodResolutionClauseNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodReturnTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ParenthesizedExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyReadSpecifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyWriteSpecifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
-import org.sonar.plugins.delphi.symbol.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
-import org.sonar.plugins.delphi.symbol.DelphiScope;
-import org.sonar.plugins.delphi.symbol.MethodNameDeclaration;
-import org.sonar.plugins.delphi.symbol.ParameterDeclaration;
-import org.sonar.plugins.delphi.symbol.PropertyNameDeclaration;
 import org.sonar.plugins.delphi.symbol.Search;
-import org.sonar.plugins.delphi.symbol.TypeNameDeclaration;
-import org.sonar.plugins.delphi.symbol.TypeScope;
-import org.sonar.plugins.delphi.symbol.UnitImportNameDeclaration;
-import org.sonar.plugins.delphi.symbol.UnitNameDeclaration;
-import org.sonar.plugins.delphi.symbol.UnitScope;
-import org.sonar.plugins.delphi.symbol.VariableNameDeclaration;
+import org.sonar.plugins.delphi.symbol.SymbolicNode;
+import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.PropertyNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.QualifiedDelphiNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration;
+import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
+import org.sonar.plugins.delphi.symbol.scope.FileScope;
+import org.sonar.plugins.delphi.symbol.scope.TypeScope;
+import org.sonar.plugins.delphi.symbol.scope.UnknownScope;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.CollectionType;
@@ -62,7 +72,7 @@ import org.sonar.plugins.delphi.type.Typed;
 
 public class NameResolver {
 
-  public static class DisambiguationException extends RuntimeException {
+  private static class DisambiguationException extends RuntimeException {
     DisambiguationException(Set<NameDeclaration> declarations, DelphiNameOccurrence occurrence) {
       super(
           "Ambiguous declarations could not be resolved\n[Occurrence]  "
@@ -98,7 +108,9 @@ public class NameResolver {
   Type getApproximateType() {
     if (!declarations.isEmpty()) {
       NameDeclaration declaration = getLast(declarations);
-      if (declaration instanceof Typed) {
+      if (isConstructor(declaration)) {
+        return currentType;
+      } else if (declaration instanceof Typed) {
         return ((Typed) declaration).getType();
       } else {
         return DelphiType.unknownType();
@@ -132,8 +144,9 @@ public class NameResolver {
     DelphiScope newScope = unknownScope();
     if (declarations.size() == 1) {
       NameDeclaration declaration = getLast(declarations);
-
-      if (declaration instanceof Typed) {
+      if (isConstructor(declaration)) {
+        return;
+      } else if (declaration instanceof Typed) {
         Typed typed = (Typed) declaration;
         currentType = typed.getType();
         ScopedType scopedType = extractScopedType(currentType);
@@ -141,7 +154,7 @@ public class NameResolver {
           newScope = scopedType.typeScope();
         }
       } else if (declaration instanceof UnitImportNameDeclaration) {
-        UnitScope unitScope = ((UnitImportNameDeclaration) declaration).getUnitScope();
+        FileScope unitScope = ((UnitImportNameDeclaration) declaration).getUnitScope();
         if (unitScope != null) {
           newScope = unitScope;
         }
@@ -152,9 +165,14 @@ public class NameResolver {
     currentScope = newScope;
   }
 
+  private boolean isConstructor(NameDeclaration declaration) {
+    return declaration instanceof MethodNameDeclaration
+        && ((MethodNameDeclaration) declaration).getMethodKind() == MethodKind.CONSTRUCTOR;
+  }
+
   private void moveToInheritedScope(PrimaryExpressionNode node) {
     MethodImplementationNode method = node.getFirstParentOfType(MethodImplementationNode.class);
-    Preconditions.checkNotNull(method);
+    checkNotNull(method);
 
     TypeNameDeclaration typeDeclaration = method.getTypeDeclaration();
     if (typeDeclaration != null) {
@@ -162,27 +180,13 @@ public class NameResolver {
       if (superType instanceof ScopedType) {
         currentScope = ((ScopedType) superType).typeScope();
       } else {
-        // Until we do full symbol resolution, this will only work if the supertype is declared in
-        // the same file.
         currentScope = unknownScope();
       }
     }
   }
 
   void readPrimaryExpression(PrimaryExpressionNode node) {
-    if (node.isBareInherited()) {
-      MethodImplementationNode method = node.getFirstParentOfType(MethodImplementationNode.class);
-      DelphiNode inheritedNode = (DelphiNode) node.jjtGetChild(0);
-      var occurrence = new DelphiNameOccurrence(inheritedNode, method.simpleName());
-      occurrence.setIsExplicitInvocation(true);
-      addName(occurrence);
-      moveToInheritedScope(node);
-      searchForDeclaration(occurrence);
-      disambiguateParameters(method.getParameterTypes());
-      addResolvedDeclaration();
-      if (currentType instanceof ProceduralType) {
-        currentType = ((ProceduralType) currentType).returnType();
-      }
+    if (handleBareInherited(node)) {
       return;
     }
 
@@ -194,6 +198,8 @@ public class NameResolver {
         disambiguateArguments(((ArgumentListNode) child).getArguments());
       } else if (child instanceof ArrayAccessorNode) {
         handleArrayAccessor(((ArrayAccessorNode) child).getExpressions());
+      } else if (child instanceof ParenthesizedExpressionNode) {
+        handleParenthesizedExpression((ParenthesizedExpressionNode) child);
       } else if (child.jjtGetId() == DelphiLexer.POINTER) {
         addResolvedDeclaration();
       } else if (child.jjtGetId() == DelphiLexer.INHERITED) {
@@ -204,6 +210,30 @@ public class NameResolver {
         break;
       }
     }
+  }
+
+  private boolean handleBareInherited(PrimaryExpressionNode node) {
+    if (!node.isBareInherited()) {
+      return false;
+    }
+
+    MethodImplementationNode method = node.getFirstParentOfType(MethodImplementationNode.class);
+    DelphiNode inheritedNode = (DelphiNode) node.jjtGetChild(0);
+
+    DelphiNameOccurrence occurrence = new DelphiNameOccurrence(inheritedNode, method.simpleName());
+    occurrence.setIsExplicitInvocation(true);
+    addName(occurrence);
+
+    moveToInheritedScope(node);
+    searchForDeclaration(occurrence);
+    disambiguateParameters(method.getParameterTypes());
+    addResolvedDeclaration();
+
+    if (currentType instanceof ProceduralType) {
+      currentType = ((ProceduralType) currentType).returnType();
+    }
+
+    return true;
   }
 
   private void readNameReference(NameReferenceNode node) {
@@ -222,12 +252,80 @@ public class NameResolver {
       }
 
       if (!foundDeclaration) {
-        // we can't find it, so just give up
+        readPossibleUnitNameReference(node);
         return;
       }
 
       reference.setNameOccurrence(occurrence);
     }
+  }
+
+  private void readPossibleUnitNameReference(NameReferenceNode node) {
+    if (names.size() > 1) {
+      // Drat. Looks like we were in the middle of a name already. This can't be a unit name.
+      return;
+    }
+
+    Preconditions.checkNotNull(currentScope);
+    if (currentScope instanceof UnknownScope) {
+      return;
+    }
+
+    names.clear();
+
+    FileScope fileScope = currentScope.getEnclosingScope(FileScope.class);
+    List<QualifiedDelphiNameDeclaration> unitDeclarations = new ArrayList<>();
+    unitDeclarations.addAll(fileScope.getUnitDeclarations().keySet());
+    unitDeclarations.addAll(fileScope.getImportDeclarations().keySet());
+    unitDeclarations.sort(Comparator.comparing(DelphiNameDeclaration::getImage).reversed());
+
+    for (QualifiedDelphiNameDeclaration declaration : unitDeclarations) {
+      if (matchReferenceToUnitNameDeclaration(node, declaration)) {
+        break;
+      }
+    }
+  }
+
+  private boolean matchReferenceToUnitNameDeclaration(
+      NameReferenceNode node, QualifiedDelphiNameDeclaration declaration) {
+    List<String> declarationParts = declaration.getQualifiedNameParts();
+    List<NameReferenceNode> references = node.flatten();
+
+    if (declarationParts.size() > references.size()) {
+      return false;
+    }
+
+    for (int i = 0; i < declarationParts.size(); ++i) {
+      if (!references.get(i).getIdentifier().hasImageEqualTo(declarationParts.get(i))) {
+        return false;
+      }
+    }
+
+    StringBuilder referenceImage = new StringBuilder();
+    for (int i = 0; i < declarationParts.size(); ++i) {
+      if (i > 0) {
+        referenceImage.append('.');
+      }
+      referenceImage.append(references.get(i).getIdentifier().getImage());
+    }
+
+    SymbolicNode symbolicNode =
+        SymbolicNode.fromRange(
+            referenceImage.toString(),
+            node,
+            references.get(declarationParts.size() - 1).getIdentifier());
+
+    DelphiNameOccurrence occurrence = new DelphiNameOccurrence(symbolicNode);
+    node.setNameOccurrence(occurrence);
+    addName(occurrence);
+    declarations.add(declaration);
+    addResolvedDeclaration();
+
+    if (references.size() > declarationParts.size()) {
+      readNameReference(references.get(declarationParts.size()));
+    }
+
+    return true;
   }
 
   private void handleArrayAccessor(List<ExpressionNode> arguments) {
@@ -241,6 +339,24 @@ public class NameResolver {
     addResolvedDeclaration();
     if (currentType instanceof CollectionType) {
       currentType = ((CollectionType) currentType).elementType();
+    } else if (currentType.isNarrowString()) {
+      currentType = ANSICHAR.type;
+    } else if (currentType.isWideString()) {
+      currentType = WIDECHAR.type;
+    }
+  }
+
+  private void handleParenthesizedExpression(ParenthesizedExpressionNode parenthesized) {
+    ExpressionNode expression = parenthesized.getExpression();
+    resolveSubExpressions(expression);
+
+    currentType = expression.getType();
+
+    ScopedType type = extractScopedType(currentType);
+    if (type != null) {
+      currentScope = type.typeScope();
+    } else {
+      currentScope = unknownScope();
     }
   }
 
@@ -310,14 +426,7 @@ public class NameResolver {
     }
 
     addResolvedDeclaration();
-
-    ExpressionNode argument = argumentExpressions.get(0);
-    if (argument instanceof PrimaryExpressionNode) {
-      resolve((PrimaryExpressionNode) argument);
-    } else {
-      resolveArgumentSubExpressions(argument);
-    }
-
+    resolveSubExpressions(argumentExpressions.get(0));
     return true;
   }
 
@@ -353,7 +462,7 @@ public class NameResolver {
 
     for (int i = 0; i < count; ++i) {
       ExpressionNode argument = argumentExpressions.get(i);
-      resolveArgumentSubExpressions(argument);
+      resolveSubExpressions(argument);
       InvocationArgument invocationArgument = new InvocationArgument(argument);
       invocationArgument.resolve(parameterTypes.get(i));
     }
@@ -375,7 +484,7 @@ public class NameResolver {
     disambiguateIsCallable();
     disambiguateArity(argumentExpressions.size());
 
-    argumentExpressions.forEach(NameResolver::resolveArgumentSubExpressions);
+    argumentExpressions.forEach(NameResolver::resolveSubExpressions);
 
     InvocationResolver resolver = new InvocationResolver();
     argumentExpressions.stream().map(InvocationArgument::new).forEach(resolver::addArgument);
@@ -411,27 +520,36 @@ public class NameResolver {
       argument.resolve(parameter.getType());
     }
 
-    currentType = invocable.getReturnType();
+    if (!isConstructor(resolved)) {
+      currentType = invocable.getReturnType();
+    }
   }
 
   void disambiguateMethodReference(ProceduralType procedure) {
     disambiguateInvocable();
     disambiguateIsCallable();
 
-    var iterator = declarations.iterator();
     EqualityType bestEquality = INCOMPATIBLE_TYPES;
+    NameDeclaration bestDeclaration = null;
 
-    while (iterator.hasNext()) {
-      NameDeclaration declaration = iterator.next();
+    for (NameDeclaration declaration : declarations) {
       if (declaration instanceof Typed) {
         EqualityType equality = TypeComparer.compare(((Typed) declaration).getType(), procedure);
         if (equality != INCOMPATIBLE_TYPES && equality.ordinal() >= bestEquality.ordinal()) {
           bestEquality = equality;
-          continue;
+          bestDeclaration = declaration;
         }
       }
-      iterator.remove();
     }
+
+    declarations.clear();
+
+    if (bestDeclaration != null) {
+      declarations.add(bestDeclaration);
+    }
+
+    DelphiNameOccurrence name = getLast(names);
+    name.setIsMethodReference();
   }
 
   private void disambiguateParameters(List<Type> parameterTypes) {
@@ -533,7 +651,7 @@ public class NameResolver {
       declaration.getScope().addNameOccurrence(name);
       name.getLocation()
           .getScope()
-          .getEnclosingScope(UnitScope.class)
+          .getEnclosingScope(FileScope.class)
           .registerOccurrence(name.getLocation(), name);
     }
   }
@@ -546,7 +664,7 @@ public class NameResolver {
     resolveMethod(method);
 
     NameResolver resolver = new NameResolver();
-    resolver.readNameReference(method.getMethodName());
+    resolver.readNameReference(method.getNameReferenceNode());
     resolver.disambiguateParameters(method.getParameterTypes());
     resolver.disambiguateIsClassInvocable(method.isClassMethod());
     resolver.disambiguateQualifiedMethodName(method.fullyQualifiedName());
@@ -592,6 +710,62 @@ public class NameResolver {
     }
 
     resolver.addToSymbolTable();
+  }
+
+  public static void resolve(MethodResolutionClauseNode resolutionClause) {
+    NameResolver interfaceMethodResolver = new NameResolver();
+    interfaceMethodResolver.readNameReference(resolutionClause.getInterfaceMethodNameNode());
+    List<MethodNameDeclaration> interfaceMethods =
+        interfaceMethodResolver.declarations.stream()
+            .filter(MethodNameDeclaration.class::isInstance)
+            .map(MethodNameDeclaration.class::cast)
+            .filter(method -> method.getTypeDeclaration() != null)
+            .sorted(
+                (left, right) -> {
+                  Type leftType = left.getTypeDeclaration().getType();
+                  TypeNameDeclaration typeDecl = right.getTypeDeclaration();
+                  Type rightType = (typeDecl == null) ? unknownType() : typeDecl.getType();
+
+                  if (leftType.is(rightType)) {
+                    return left.getNode().getBeginLine() - right.getNode().getBeginLine();
+                  } else if (leftType.isSubTypeOf(rightType)) {
+                    return 1;
+                  } else {
+                    return -1;
+                  }
+                })
+            .collect(Collectors.toList());
+
+    NameResolver concreteMethodResolver = new NameResolver();
+    concreteMethodResolver.readNameReference(resolutionClause.getImplementationMethodNameNode());
+    List<MethodNameDeclaration> implementationMethods =
+        concreteMethodResolver.declarations.stream()
+            .filter(MethodNameDeclaration.class::isInstance)
+            .map(MethodNameDeclaration.class::cast)
+            .collect(Collectors.toList());
+
+    interfaceMethodResolver.declarations.clear();
+    concreteMethodResolver.declarations.clear();
+
+    for (MethodNameDeclaration interfaceCandidate : interfaceMethods) {
+      boolean matched = false;
+
+      for (MethodNameDeclaration concreteCandidate : implementationMethods) {
+        if (interfaceCandidate.getParameters().equals(concreteCandidate.getParameters())) {
+          interfaceMethodResolver.declarations.add(interfaceCandidate);
+          concreteMethodResolver.declarations.add(concreteCandidate);
+          matched = true;
+          break;
+        }
+      }
+
+      if (matched) {
+        break;
+      }
+    }
+
+    interfaceMethodResolver.addToSymbolTable();
+    concreteMethodResolver.addToSymbolTable();
   }
 
   private static boolean resolvePotentialMethodReference(
@@ -673,8 +847,13 @@ public class NameResolver {
     }
   }
 
-  private static void resolveArgumentSubExpressions(ExpressionNode argument) {
-    if (argument instanceof PrimaryExpressionNode || argument instanceof AnonymousMethodNode) {
+  private static void resolveSubExpressions(ExpressionNode argument) {
+    if (argument instanceof PrimaryExpressionNode) {
+      resolve((PrimaryExpressionNode) argument);
+      return;
+    }
+
+    if (argument instanceof AnonymousMethodNode) {
       return;
     }
 

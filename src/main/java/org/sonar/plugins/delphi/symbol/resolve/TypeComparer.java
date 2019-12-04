@@ -25,6 +25,7 @@ import org.sonar.plugins.delphi.type.Type.EnumType;
 import org.sonar.plugins.delphi.type.Type.FileType;
 import org.sonar.plugins.delphi.type.Type.PointerType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
+import org.sonar.plugins.delphi.type.Type.TypeType;
 import org.sonar.plugins.delphi.type.Type.VariantType;
 import org.sonar.plugins.delphi.type.Type.VariantType.VariantKind;
 
@@ -44,6 +45,14 @@ public class TypeComparer {
   static EqualityType compare(Type from, Type to) {
     if (from.is(to) && !from.isUntyped()) {
       return EXACT;
+    }
+
+    if (from.isTypeType()) {
+      from = ((TypeType) from).originalType();
+    }
+
+    if (to.isTypeType()) {
+      to = ((TypeType) to).originalType();
     }
 
     EqualityType result = INCOMPATIBLE_TYPES;
@@ -298,7 +307,7 @@ public class TypeComparer {
         return compareDynamicArray(fromArray, toArray);
       } else if (to.isOpenArray()) {
         return compareOpenArray(fromArray, toArray);
-      } else if (to.isFixedArray()) {
+      } else {
         return compareFixedArray(fromArray, toArray);
       }
     } else if (from.isPointer()) {

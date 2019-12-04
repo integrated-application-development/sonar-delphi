@@ -5,6 +5,8 @@ import java.util.Set;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
+import org.sonar.plugins.delphi.symbol.scope.MethodScope;
 
 public class Search {
   private static final Logger LOG = Loggers.get(Search.class);

@@ -3,7 +3,7 @@ package org.sonar.plugins.delphi.type;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.sonar.plugins.delphi.symbol.DelphiScope;
+import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 
 public interface Type {
 
@@ -134,6 +134,20 @@ public interface Type {
   boolean isString();
 
   /**
+   * Check if this type is a narrow string type (AnsiString, etc...)
+   *
+   * @return true if the type is a narrow string type
+   */
+  boolean isNarrowString();
+
+  /**
+   * Check if this type is a wide string type (String, WideString, UnicodeString, etc...)
+   *
+   * @return true if the type is a wide string type
+   */
+  boolean isWideString();
+
+  /**
    * Check if this type is a char type (Char, WideChar, etc...)
    *
    * @return true if the type is a char type
@@ -245,6 +259,13 @@ public interface Type {
    */
   boolean isVariant();
 
+  /**
+   * Check if this type is a 'type type'
+   *
+   * @return true if the type is a 'type type'
+   */
+  boolean isTypeType();
+
   interface CollectionType extends Type {
     /**
      * The type that is is a collection of
@@ -349,6 +370,20 @@ public interface Type {
       NORMAL_VARIANT
     }
 
+    /**
+     * The kind of variant that this type is
+     *
+     * @return Variant kind
+     */
     VariantKind kind();
+  }
+
+  interface TypeType extends Type {
+    /**
+     * The type that this type is based off of
+     *
+     * @return Original type
+     */
+    Type originalType();
   }
 }

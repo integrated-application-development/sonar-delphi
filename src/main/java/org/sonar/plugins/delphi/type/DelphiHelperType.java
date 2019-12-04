@@ -7,7 +7,7 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.node.ClassHelperTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.HelperTypeNode;
-import org.sonar.plugins.delphi.symbol.DelphiScope;
+import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.Type.HelperType;
 
 public class DelphiHelperType extends DelphiStructType implements HelperType {

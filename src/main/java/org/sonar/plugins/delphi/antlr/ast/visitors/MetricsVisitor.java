@@ -74,7 +74,7 @@ public class MetricsVisitor implements DelphiParserVisitor<Data> {
         }
         ++line;
       }
-    } else if (!token.isImaginary() && !token.isWhitespace()) {
+    } else if (!token.isImaginary() && !token.isWhitespace() && !token.isCompilerDirective()) {
       data.codeLines.add(token.getBeginLine());
     }
   }

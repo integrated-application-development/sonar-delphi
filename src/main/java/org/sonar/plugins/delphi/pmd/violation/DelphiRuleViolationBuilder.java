@@ -62,7 +62,7 @@ public class DelphiRuleViolationBuilder {
 
     TypeDeclarationNode typeNode = node.getFirstParentOfType(TypeDeclarationNode.class);
     if (typeNode != null) {
-      ruleViolation.setClassName(typeNode.fullyQualifiedName());
+      ruleViolation.setClassName(typeNode.qualifiedNameExcludingUnit());
     }
 
     MethodImplementationNode methodNode = node.getFirstParentOfType(MethodImplementationNode.class);

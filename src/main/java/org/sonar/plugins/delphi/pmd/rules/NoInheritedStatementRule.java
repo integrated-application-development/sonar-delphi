@@ -35,7 +35,7 @@ public abstract class NoInheritedStatementRule extends AbstractDelphiRule {
       return;
     }
 
-    addViolation(data, method.getMethodName());
+    addViolation(data, method.getMethodNameNode());
   }
 
   private boolean hasInheritedStatement(MethodImplementationNode method) {

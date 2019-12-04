@@ -1,12 +1,12 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
-import java.util.Objects;
 import javax.annotation.Nullable;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.antlr.runtime.Token;
+import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.symbol.DelphiScope;
-import org.sonar.plugins.delphi.symbol.TypeNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
 
@@ -35,15 +35,10 @@ public final class MethodImplementationNode extends MethodNode {
   }
 
   @Override
-  public NameReferenceNode getMethodName() {
-    return Objects.requireNonNull(getMethodHeading().getMethodNameNode().getNameReferenceNode());
-  }
-
-  @Override
   @Nullable
   public TypeNameDeclaration getTypeDeclaration() {
     if (typeDeclaration == null) {
-      NameReferenceNode name = getMethodName();
+      NameReferenceNode name = getMethodNameNode().getNameReferenceNode();
       while (name != null) {
         NameDeclaration nameDecl = name.getNameDeclaration();
         if (nameDecl instanceof TypeNameDeclaration) {
@@ -64,5 +59,15 @@ public final class MethodImplementationNode extends MethodNode {
       }
     }
     return null;
+  }
+
+  @NotNull
+  public NameReferenceNode getNameReferenceNode() {
+    return getMethodNameNode().getNameReferenceNode();
+  }
+
+  @Override
+  public VisibilityType createVisibility() {
+    return VisibilityType.PUBLIC;
   }
 }

@@ -23,8 +23,11 @@
 package org.sonar.plugins.delphi.antlr;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.Set;
 import javax.xml.XMLConstants;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
@@ -37,25 +40,26 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 import org.sonar.plugins.delphi.file.DelphiFile;
+import org.sonar.plugins.delphi.file.DelphiFile.DelphiFileConstructionException;
+import org.sonar.plugins.delphi.file.DelphiFileConfig;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 
 public class GrammarTest {
   private static final Logger LOG = Loggers.get(GrammarTest.class);
   private static final String BASE_DIR = "/org/sonar/plugins/delphi/grammar/";
-  private DelphiFileStreamConfig fileStreamConfig;
+  private DelphiFileConfig fileConfig;
 
   @Before
   public void setup() {
-    fileStreamConfig = new DelphiFileStreamConfig(UTF_8.name());
+    fileConfig = DelphiFile.createConfig(UTF_8.name());
   }
 
   private void parseFile(String fileName) {
     try {
       String path = BASE_DIR + fileName;
       LOG.info("Parsing file: " + path);
-      DelphiFile delphiFile = DelphiTestFileBuilder.fromResource(path).delphiFile(fileStreamConfig);
+      DelphiFile delphiFile = DelphiTestFileBuilder.fromResource(path).delphiFile(fileConfig);
 
       Source source = new DOMSource(delphiFile.getAst().getAsDocument());
       String prefix = "AST_" + StringUtils.removeEnd(fileName, ".pas");
@@ -198,18 +202,20 @@ public class GrammarTest {
     parseFile("QualifiedKeywordIdentifier.pas");
   }
 
-  /*
-   * A bizarre corner-case in which an undefined ifdef nested inside of a defined ifdef would cause parsing errors...
-   * But only if the nested ifdef was commented out or inside a string.
-   */
   @Test
   public void testUndefinedInaccessibleNestedIfDef() {
-    fileStreamConfig.getDefinitions().add("Defined");
+    fileConfig = DelphiFile.createConfig(UTF_8.name(), Collections.emptyList(), Set.of("Defined"));
     parseFile("UndefinedInaccessibleNestedIfDef.pas");
   }
 
   @Test
   public void testSuperfluousSemicolons() {
     parseFile("SuperfluousSemicolons.pas");
+  }
+
+  @Test
+  public void testEmptyFileShouldThrow() {
+    assertThatThrownBy(() -> DelphiTestFileBuilder.fromResource(BASE_DIR + "Emptyfile.pas").parse())
+        .isInstanceOf(DelphiFileConstructionException.class);
   }
 }

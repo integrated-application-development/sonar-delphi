@@ -1,7 +1,5 @@
 package org.sonar.plugins.delphi;
 
-import static org.sonar.plugins.delphi.antlr.filestream.DelphiFileStream.createConfig;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,15 +16,16 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 import org.sonar.plugins.delphi.codecoverage.DelphiCodeCoverageParser;
 import org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.executor.DelphiMasterExecutor;
 import org.sonar.plugins.delphi.executor.ExecutorContext;
+import org.sonar.plugins.delphi.file.DelphiFile;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiFileConstructionException;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
+import org.sonar.plugins.delphi.file.DelphiFileConfig;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.symbol.SymbolTable;
 import org.sonar.plugins.delphi.utils.ProgressReporter;
@@ -72,12 +71,22 @@ public class DelphiSensor implements Sensor {
   }
 
   private void executeOnProject(DelphiProject delphiProject, SensorContext sensorContext) {
-    SymbolTable symbolTable = SymbolTable.buildSymbolTable(delphiProject, delphiProjectHelper);
-    ExecutorContext executorContext = new ExecutorContext(sensorContext, symbolTable);
-    DelphiFileStreamConfig config = createConfig(delphiProject, delphiProjectHelper);
+    DelphiFileConfig config =
+        DelphiFile.createConfig(
+            delphiProjectHelper.encoding(),
+            delphiProject.getSearchPath(),
+            delphiProject.getDefinitions());
+
+    SymbolTable symbolTable =
+        SymbolTable.builder()
+            .project(delphiProject)
+            .fileConfig(config)
+            .standardLibraryPath(delphiProjectHelper.standardLibraryPath())
+            .build();
 
     LOG.info("Analyzing project: {}", delphiProject.getName());
 
+    ExecutorContext executorContext = new ExecutorContext(sensorContext, symbolTable);
     ProgressReporter progressReporter =
         new ProgressReporter(
             delphiProject.getSourceFiles().size(), 10, new ProgressReporterLogger(LOG));

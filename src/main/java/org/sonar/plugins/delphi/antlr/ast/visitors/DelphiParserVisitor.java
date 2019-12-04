@@ -93,6 +93,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNameNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodParametersNode;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodResolutionClauseNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodReturnTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
@@ -136,6 +137,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeOfTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeReferenceNode;
+import org.sonar.plugins.delphi.antlr.ast.node.TypeSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnitDeclarationNode;
@@ -289,11 +291,19 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
+  default T visit(MethodNameNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
   default T visit(MethodParametersNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
   default T visit(NameReferenceNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(MethodResolutionClauseNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
@@ -334,6 +344,10 @@ public interface DelphiParserVisitor<T> {
   }
 
   default T visit(TypeDeclarationNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(TypeSectionNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
@@ -384,10 +398,6 @@ public interface DelphiParserVisitor<T> {
   }
 
   default T visit(VarNameDeclarationNode node, T data) {
-    return visit((NameDeclarationNode) node, data);
-  }
-
-  default T visit(MethodNameNode node, T data) {
     return visit((NameDeclarationNode) node, data);
   }
 

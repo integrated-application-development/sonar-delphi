@@ -4,12 +4,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodNameNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.visitors.SymbolAssociationVisitor.Data;
 import org.sonar.plugins.delphi.symbol.SymbolTable;
-import org.sonar.plugins.delphi.symbol.UnitNameDeclaration;
-import org.sonar.plugins.delphi.symbol.UnitScope;
+import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
+import org.sonar.plugins.delphi.symbol.scope.FileScope;
 
 /**
  * Visitor for symbol association.
@@ -28,7 +29,7 @@ public class SymbolAssociationVisitor implements DelphiParserVisitor<Data> {
 
   public static class Data {
     private final SymbolTable symbolTable;
-    private UnitScope unitScope;
+    private FileScope unitScope;
 
     public Data(SymbolTable symbolTable) {
       this.symbolTable = symbolTable;
@@ -37,10 +38,6 @@ public class SymbolAssociationVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(DelphiAST node, Data data) {
-    if (node.jjtGetNumChildren() == 0) {
-      return data;
-    }
-
     String filePath = node.getDelphiFile().getSourceCodeFile().getAbsolutePath();
 
     UnitNameDeclaration declaration = data.symbolTable.getUnitByPath(filePath);
@@ -68,6 +65,12 @@ public class SymbolAssociationVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(NameReferenceNode node, Data data) {
+    data.unitScope.attach(node);
+    return DelphiParserVisitor.super.visit(node, data);
+  }
+
+  @Override
+  public Data visit(MethodNameNode node, Data data) {
     data.unitScope.attach(node);
     return DelphiParserVisitor.super.visit(node, data);
   }

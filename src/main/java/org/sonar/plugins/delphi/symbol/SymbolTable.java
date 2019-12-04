@@ -2,8 +2,7 @@ package org.sonar.plugins.delphi.symbol;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
-import org.sonar.plugins.delphi.project.DelphiProject;
+import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 
 public class SymbolTable {
   private Map<String, UnitNameDeclaration> unitsByFilePath = new HashMap<>();
@@ -16,8 +15,7 @@ public class SymbolTable {
     return unitsByFilePath.get(path);
   }
 
-  public static SymbolTable buildSymbolTable(DelphiProject project, DelphiProjectHelper helper) {
-    SymbolTableBuilder builder = new SymbolTableBuilder(project, helper);
-    return builder.build();
+  public static SymbolTableBuilder builder() {
+    return new SymbolTableBuilder();
   }
 }

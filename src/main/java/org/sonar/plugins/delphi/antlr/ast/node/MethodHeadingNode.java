@@ -1,5 +1,7 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import static org.apache.commons.lang3.StringUtils.substringAfter;
+
 import java.util.Collections;
 import java.util.List;
 import org.antlr.runtime.Token;
@@ -120,6 +122,8 @@ public final class MethodHeadingNode extends DelphiNode {
         name.insert(0, getTypeName() + ".");
       }
 
+      name.insert(0, findUnitName() + ".");
+
       qualifiedName = name.toString();
     }
 
@@ -150,7 +154,7 @@ public final class MethodHeadingNode extends DelphiNode {
   private String getTypeNameForMethodDeclaration() {
     TypeDeclarationNode type = getFirstParentOfType(TypeDeclarationNode.class);
     if (type != null) {
-      return type.fullyQualifiedName();
+      return type.qualifiedNameExcludingUnit();
     }
     return "";
   }

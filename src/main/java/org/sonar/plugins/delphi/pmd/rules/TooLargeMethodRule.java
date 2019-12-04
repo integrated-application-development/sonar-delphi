@@ -44,7 +44,7 @@ public class TooLargeMethodRule extends AbstractDelphiRule {
     if (statements > limit) {
       addViolationWithMessage(
           data,
-          method.getMethodName(),
+          method.getMethodNameNode(),
           String.format(VIOLATION_MESSAGE, method.simpleName(), statements, limit));
     }
 

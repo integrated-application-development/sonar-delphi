@@ -1,10 +1,10 @@
 package org.sonar.plugins.delphi.type;
 
-import static org.sonar.plugins.delphi.symbol.UnknownScope.unknownScope;
+import static org.sonar.plugins.delphi.symbol.scope.UnknownScope.unknownScope;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.sonar.plugins.delphi.symbol.DelphiScope;
+import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.Type.EnumType;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
 

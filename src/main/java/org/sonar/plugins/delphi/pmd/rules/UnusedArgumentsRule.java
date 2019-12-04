@@ -22,171 +22,87 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import static java.lang.String.format;
+import static java.util.Collections.disjoint;
+
+import java.util.EnumSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
+import java.util.stream.Collectors;
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
-import org.sonar.plugins.delphi.antlr.ast.node.AssignmentStatementNode;
-import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
-import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
+import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
+import org.sonar.plugins.delphi.antlr.ast.node.AsmStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
 import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
-import org.sonar.plugins.delphi.antlr.ast.node.MethodBodyNode;
-import org.sonar.plugins.delphi.antlr.ast.node.MethodDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
-import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
-import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
+import org.sonar.plugins.delphi.antlr.ast.node.VarNameDeclarationNode;
+import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
+import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
+import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 
 /** Rule violation for unused function/procedure/method arguments */
 public class UnusedArgumentsRule extends AbstractDelphiRule {
-  private String currentTypeName;
-  private Set<String> excludedMethods;
-  private List<PossibleUnusedArgument> possibleUnusedArguments;
-
-  @Override
-  public RuleContext visit(DelphiAST node, RuleContext data) {
-    super.visit(node, data);
-
-    for (PossibleUnusedArgument arg : possibleUnusedArguments) {
-      arg.processViolation(this, data);
-    }
-
-    return data;
-  }
-
-  @Override
-  public RuleContext visit(TypeDeclarationNode type, RuleContext data) {
-    currentTypeName = type.fullyQualifiedName().toLowerCase();
-    type.findDescendantsOfType(MethodDeclarationNode.class).forEach(this::handleMethodDeclaration);
-
-    return super.visit(type, data);
-  }
-
-  private void handleMethodDeclaration(MethodDeclarationNode method) {
-    if (method.isPublished() || method.isOverride() || method.isVirtual() || method.isMessage()) {
-      excludedMethods.add(currentTypeName + "." + method.simpleName().toLowerCase());
-    }
-  }
-
-  /**
-   * Exclude methods from this rule if they have been assigned to a variable. This indicates that
-   * the method may have to satisfy some callback method signature
-   *
-   * @param node AssignmentStatementNode which could have a method assigned to it
-   * @param data Rule context
-   */
-  @Override
-  public RuleContext visit(AssignmentStatementNode node, RuleContext data) {
-    ExpressionNode assignedValue = node.getValue();
-    DelphiNode nameNode = (DelphiNode) assignedValue.jjtGetChild(0);
-
-    if (nameNode instanceof NameReferenceNode
-        && ((NameReferenceNode) nameNode).nextName() == null) {
-      excludedMethods.add(currentTypeName + "." + nameNode.getImage().toLowerCase());
-    }
-    return super.visit(node, data);
-  }
+  private static final String MESSAGE = "Unused argument: '%s' at %s";
+  private static final Set<MethodDirective> EXCLUDED_DIRECTIVES =
+      EnumSet.of(MethodDirective.OVERRIDE, MethodDirective.VIRTUAL, MethodDirective.MESSAGE);
 
   @Override
   public RuleContext visit(MethodImplementationNode method, RuleContext data) {
-    currentTypeName = method.getTypeName().toLowerCase();
+    List<FormalParameter> unusedArguments =
+        method.getParameters().stream()
+            .filter(argument -> isUnusedArgument(method, argument.getNode()))
+            .collect(Collectors.toList());
 
-    List<FormalParameter> parameters = method.getParameters();
-    if (parameters.isEmpty()) {
-      return super.visit(method, data);
+    if (!unusedArguments.isEmpty() && isExcludedMethod(method)) {
+      unusedArguments.clear();
     }
 
-    String methodName = method.fullyQualifiedName().toLowerCase();
-    if (isExcluded(methodName)) {
-      // If we already know the method is excluded, we might as well skip all this work.
-      return super.visit(method, data);
+    for (FormalParameter unusedArgument : unusedArguments) {
+      String message = format(MESSAGE, unusedArgument.getImage(), method.fullyQualifiedName());
+      addViolationWithMessage(data, unusedArgument.getNode(), message);
     }
 
-    // This will pick up sub-procedures as well
-    List<MethodBodyNode> bodyNodes = method.findDescendantsOfType(MethodBodyNode.class);
-    Map<String, Integer> args = makeArgumentUsageMap(parameters);
-
-    if (!bodyNodes.isEmpty()) {
-      for (MethodBodyNode body : bodyNodes) {
-        processMethodBody(body, args);
-      }
-
-      addViolationsForUnusedArguments(args, method);
-    }
     return super.visit(method, data);
   }
 
-  private void processMethodBody(MethodBodyNode body, Map<String, Integer> args) {
-    body.getBlock().findDescendantsOfType(IdentifierNode.class).stream()
-        .filter(node -> args.containsKey(node.getImage()))
-        .forEach(
-            node -> {
-              String key = node.getImage();
-              Integer newValue = args.get(key) + 1;
-              args.put(key, newValue);
-            });
+  private static boolean isUnusedArgument(MethodNode method, VarNameDeclarationNode argument) {
+    if (!argument.getUsages().isEmpty()) {
+      return false;
+    }
+
+    // Since we don't actually parse assembler statements, we have to do a bit of guesswork here.
+    // Ideally we would eventually expand the grammar to include inline assembler statements.
+    // Then we could resolve name references within them.
+    for (AsmStatementNode asmStatement : method.findDescendantsOfType(AsmStatementNode.class)) {
+      for (IdentifierNode identifier : asmStatement.findDescendantsOfType(IdentifierNode.class)) {
+        if (identifier.hasImageEqualTo(argument.getImage())) {
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 
-  private void addViolationsForUnusedArguments(
-      Map<String, Integer> args, MethodImplementationNode method) {
-    for (Map.Entry<String, Integer> entry : args.entrySet()) {
-      if (entry.getValue() > 0) {
-        continue;
+  private static boolean isExcludedMethod(MethodImplementationNode method) {
+    MethodNameDeclaration declaration = method.getMethodNameDeclaration();
+    if (declaration != null) {
+      if (declaration.isPublished()) {
+        return true;
       }
 
-      var unusedArg = new PossibleUnusedArgument(method, method.getParameter(entry.getKey()));
-      possibleUnusedArguments.add(unusedArg);
-    }
-  }
+      if (!disjoint(declaration.getDirectives(), EXCLUDED_DIRECTIVES)) {
+        return true;
+      }
 
-  boolean isExcluded(String methodName) {
-    return excludedMethods.contains(methodName.toLowerCase());
-  }
-
-  private static Map<String, Integer> makeArgumentUsageMap(List<FormalParameter> parameters) {
-    Map<String, Integer> args = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-
-    for (FormalParameter parameter : parameters) {
-      args.put(parameter.getImage(), 0);
+      for (NameOccurrence occurrence : method.getMethodNameNode().getUsages()) {
+        if (((DelphiNameOccurrence) occurrence).isMethodReference()) {
+          return true;
+        }
+      }
     }
 
-    return args;
-  }
-
-  @Override
-  public void start(RuleContext ctx) {
-    currentTypeName = "";
-    excludedMethods = new HashSet<>();
-    possibleUnusedArguments = new ArrayList<>();
-  }
-}
-
-/**
- * Stores information about a potential unused argument violation. When the end of the file is
- * reached, violations are created from these objects.
- */
-class PossibleUnusedArgument {
-  private static final String MESSAGE = "Unused argument: '%s' at %s";
-
-  private final MethodImplementationNode method;
-  private final FormalParameter argument;
-
-  PossibleUnusedArgument(MethodImplementationNode method, FormalParameter argument) {
-    this.method = method;
-    this.argument = argument;
-  }
-
-  /** Creates a violation for this unused argument (unless the method is excluded) */
-  void processViolation(UnusedArgumentsRule rule, Object data) {
-    if (rule.isExcluded(method.fullyQualifiedName().toLowerCase())) {
-      return;
-    }
-
-    String message = String.format(MESSAGE, argument.getImage(), method.fullyQualifiedName());
-    rule.addViolationWithMessage(data, argument.getNode(), message);
+    return false;
   }
 }

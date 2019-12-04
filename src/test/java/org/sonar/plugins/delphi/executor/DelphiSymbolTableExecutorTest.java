@@ -9,6 +9,7 @@ import static org.sonar.plugins.delphi.utils.DelphiUtils.uriToAbsolutePath;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.junit.Before;
@@ -19,6 +20,8 @@ import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultTextPointer;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
+import org.sonar.plugins.delphi.file.DelphiFile;
+import org.sonar.plugins.delphi.file.DelphiFileConfig;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.symbol.SymbolTable;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -26,15 +29,18 @@ import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 
 public class DelphiSymbolTableExecutorTest {
   private static final String ROOT_PATH = "/org/sonar/plugins/delphi/symbol/";
+  private static final String STANDARD_LIBRARY = "/org/sonar/plugins/delphi/standardLibrary";
 
   private DelphiSymbolTableExecutor executor;
   private SensorContextTester context;
+  private DelphiProject delphiProject;
   private String componentKey;
 
   @Before
   public void setup() {
     executor = new DelphiSymbolTableExecutor();
     context = SensorContextTester.create(DelphiUtils.getResource(ROOT_PATH));
+    delphiProject = new DelphiProject("Default Project");
   }
 
   @Test
@@ -95,8 +101,8 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
-  public void testBasicTypeResolution() {
-    execute("BasicTypeResolution.pas");
+  public void testSimpleTypeResolution() {
+    execute("typeResolution/Simple.pas");
     verifyUsages(8, 2, reference(16, 10), reference(18, 21), reference(27, 2), reference(31, 22));
     verifyUsages(10, 16, reference(27, 7), reference(28, 9));
     verifyUsages(11, 14, reference(25, 7), reference(26, 9), reference(27, 14), reference(28, 16));
@@ -104,6 +110,26 @@ public class DelphiSymbolTableExecutorTest {
     verifyUsages(16, 4, reference(25, 2), reference(33, 12));
     verifyUsages(17, 14, reference(23, 15));
     verifyUsages(18, 13, reference(26, 2), reference(28, 2), reference(31, 14));
+  }
+
+  @Test
+  public void testCharTypeResolution() {
+    execute("typeResolution/Chars.pas");
+    verifyUsages(9, 9, reference(24, 2));
+    verifyUsages(14, 9, reference(25, 2));
+  }
+
+  @Test
+  public void testCastTypeResolution() {
+    execute("typeResolution/Casts.pas");
+    verifyUsages(10, 14, reference(17, 12), reference(18, 16));
+  }
+
+  @Test
+  public void testConstructorTypeResolution() {
+    execute("typeResolution/Constructors.pas");
+    verifyUsages(10, 14, reference(25, 14));
+    verifyUsages(15, 14, reference(26, 14));
   }
 
   @Test
@@ -206,11 +232,27 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testInitializationFinalization() {
+    execute("InitializationFinalization.pas");
+    verifyUsages(8, 2, reference(16, 7), reference(19, 9));
+    verifyUsages(10, 14, reference(20, 6));
+    verifyUsages(16, 2, reference(22, 2));
+  }
+
+  @Test
   public void testSimpleOverloads() {
     execute("overloads/Simple.pas");
     verifyUsages(10, 10, reference(16, 10), reference(37, 2));
     verifyUsages(11, 10, reference(21, 10), reference(38, 2));
     verifyUsages(12, 10, reference(26, 10), reference(39, 2), reference(40, 2));
+  }
+
+  @Test
+  public void testTypeTypeOverloads() {
+    execute("overloads/TypeType.pas");
+    verifyUsages(8, 2, reference(17, 19), reference(25, 10));
+    verifyUsages(12, 10, reference(27, 2));
+    verifyUsages(17, 10, reference(28, 2));
   }
 
   @Test
@@ -242,6 +284,29 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testSimpleMethodResolutionClause() {
+    execute("methodResolutionClause/Simple.pas");
+    verifyUsages(9, 14, reference(14, 26));
+    verifyUsages(13, 14, reference(14, 42));
+  }
+
+  @Test
+  public void testMethodResolutionClauseWithOverloadedImplementation() {
+    execute("methodResolutionClause/OverloadedImplementation.pas");
+    verifyUsages(9, 14, reference(15, 26));
+    verifyUsages(13, 14, reference(15, 42));
+    verifyUsages(14, 14);
+  }
+
+  @Test
+  public void testMethodResolutionClauseWithOverloadedInterfaceAndImplementation() {
+    execute("methodResolutionClause/OverloadedInterfaceAndImplementation.pas");
+    verifyUsages(9, 14, reference(16, 26));
+    verifyUsages(14, 14, reference(16, 42));
+    verifyUsages(15, 14);
+  }
+
+  @Test
   public void testImports() {
     execute("imports/Unit1.pas", "imports/Unit2.pas", "imports/Unit3.pas");
     verifyUsages(1, 5, reference(25, 2), reference(28, 18));
@@ -249,6 +314,42 @@ public class DelphiSymbolTableExecutorTest {
     verifyUsages(11, 2, reference(28, 24), reference(29, 12));
     verifyUsages(16, 2, reference(25, 18));
     verifyUsages(18, 10, reference(25, 8), reference(26, 2));
+  }
+
+  @Test
+  public void testNamespaces() {
+    execute(
+        "namespaces/Namespaced.Unit1.pas",
+        "namespaces/Namespaced.Unit2.pas",
+        "namespaces/Unit3.pas",
+        "namespaces/UnitScopeName.Unit2.pas",
+        "namespaces/UnitScopeName.ScopedUnit3.pas");
+
+    verifyUsages(1, 5, reference(25, 2), reference(28, 18));
+    verifyUsages(8, 2, reference(28, 2));
+    verifyUsages(11, 2, reference(28, 35), reference(29, 12));
+    verifyUsages(16, 2, reference(25, 29));
+    verifyUsages(18, 10, reference(25, 19), reference(26, 2));
+  }
+
+  @Test
+  public void testUnitScopeNames() {
+    delphiProject.addUnitScopeNames(
+        List.of("NonexistentUnitScope", "UnitScopeName", "ABCUnitScopeXYZ"));
+
+    execute(
+        "namespaces/UnitScopeNameTest.pas",
+        "namespaces/UnitScopeName.Unit2.pas",
+        "namespaces/UnitScopeName.ScopedUnit3.pas",
+        "namespaces/Namespaced.Unit1.pas",
+        "namespaces/Namespaced.Unit2.pas",
+        "namespaces/Unit3.pas");
+
+    verifyUsages(1, 5, reference(25, 2), reference(28, 30));
+    verifyUsages(8, 2, reference(28, 2));
+    verifyUsages(11, 2, reference(28, 48), reference(29, 18));
+    verifyUsages(16, 2, reference(25, 30));
+    verifyUsages(18, 10, reference(25, 20), reference(26, 2));
   }
 
   private void execute(String filename, String... include) {
@@ -263,7 +364,6 @@ public class DelphiSymbolTableExecutorTest {
       inputFiles.put(uriToAbsolutePath(inputFile.uri()), inputFile);
     }
 
-    DelphiProject delphiProject = new DelphiProject("Default Project");
     delphiProject.setSourceFiles(
         inputFiles.values().stream()
             .map(inputFile -> new File(uriToAbsolutePath(inputFile.uri())))
@@ -277,7 +377,19 @@ public class DelphiSymbolTableExecutorTest {
               return inputFiles.get(path);
             });
 
-    SymbolTable symbolTable = SymbolTable.buildSymbolTable(delphiProject, delphiProjectHelper);
+    DelphiFileConfig fileConfig =
+        DelphiFile.createConfig(
+            delphiProjectHelper.encoding(),
+            delphiProject.getSearchPath(),
+            delphiProject.getDefinitions());
+
+    SymbolTable symbolTable =
+        SymbolTable.builder()
+            .project(delphiProject)
+            .standardLibraryPath(DelphiUtils.getResource(STANDARD_LIBRARY).toPath())
+            .fileConfig(fileConfig)
+            .build();
+
     ExecutorContext executorContext = new ExecutorContext(context, symbolTable);
 
     componentKey = mainFile.getInputFile().key();

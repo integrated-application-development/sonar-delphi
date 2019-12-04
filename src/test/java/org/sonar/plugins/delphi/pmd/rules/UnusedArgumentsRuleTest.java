@@ -78,7 +78,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
             .appendImpl("end;")
             .appendImpl("procedure TCustomComponent.OnEventC(Sender: TObject);")
             .appendImpl("begin")
-            .appendImpl("  DoSomethingWithSender(Sender);")
+            .appendImpl("  Sender.Free;")
             .appendImpl("end;");
 
     execute(builder);
@@ -329,15 +329,15 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
         new DelphiTestUnitBuilder()
             .appendDecl("type")
             .appendDecl("  TCustomComponent = class(TComponent)")
+            .appendDecl("  private")
+            .appendDecl("   FDummyHandler: procedure(Arg: Integer) of object;")
+            .appendDecl("   FOtherHandler: procedure(Arg: Integer) of object;")
             .appendDecl("  protected")
             .appendDecl("    procedure DummyHandler(Arg: Integer);")
             .appendDecl("  public")
             .appendDecl("    procedure OtherHandler(Arg: Integer);")
-            .appendDecl("  end;")
-            .appendDecl("type")
-            .appendDecl("  TOtherComponent = class(TComponent)")
-            .appendDecl("  protected")
-            .appendDecl("    procedure NotImplemented;")
+            .appendDecl("    procedure SetDummyHandler;")
+            .appendDecl("    procedure SetOtherHandler;")
             .appendDecl("  end;")
             .appendImpl("procedure TCustomComponent.SetDummyHandler;")
             .appendImpl("  procedure NestedProcedure;")
@@ -414,5 +414,20 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues().isEmpty();
+  }
+
+  @Test
+  public void testUnusedArgumentInAsmProcShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure(MyArg: Integer);")
+            .appendImpl("asm")
+            .appendImpl("  MOV EAX, 12")
+            .appendImpl("  ADD EAX, 2")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areExactly(1, ruleKeyAtLine("UnusedArgumentsRule", builder.getOffset() + 1));
   }
 }

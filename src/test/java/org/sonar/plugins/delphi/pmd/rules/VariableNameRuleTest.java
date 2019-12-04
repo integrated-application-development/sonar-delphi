@@ -101,7 +101,7 @@ public class VariableNameRuleTest extends BasePmdRuleTest {
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure(Arg: Integer);")
             .appendImpl("begin")
-            .appendImpl("  DoSomething(Arg);")
+            .appendImpl("  Arg := 0;")
             .appendImpl("end;");
 
     execute(builder);
@@ -115,7 +115,7 @@ public class VariableNameRuleTest extends BasePmdRuleTest {
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure(arg: Integer);")
             .appendImpl("begin")
-            .appendImpl("  DoSomething(arg);")
+            .appendImpl("  arg := 0;")
             .appendImpl("end;");
 
     execute(builder);

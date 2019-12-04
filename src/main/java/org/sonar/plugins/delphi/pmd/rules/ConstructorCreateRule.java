@@ -10,7 +10,7 @@ public class ConstructorCreateRule extends AbstractDelphiRule {
   @Override
   public RuleContext visit(MethodDeclarationNode method, RuleContext data) {
     if (isViolation(method)) {
-      addViolation(data, method.getMethodName());
+      addViolation(data, method.getMethodNameNode());
     }
     return super.visit(method, data);
   }

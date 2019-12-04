@@ -24,6 +24,7 @@ package org.sonar.plugins.delphi;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.Plugin;
@@ -45,7 +46,7 @@ public class DelphiPluginTest {
 
   @Test
   public void testToString() {
-    assertThat(plugin.toString()).isEqualTo("DelphiPlugin");
+    assertThat(plugin).hasToString("DelphiPlugin");
   }
 
   @Test
@@ -57,6 +58,6 @@ public class DelphiPluginTest {
     Plugin.Context context = new Plugin.Context(runtime);
     plugin.define(context);
 
-    assertThat(context.getExtensions().size()).isEqualTo(17);
+    assertThat((List<?>) context.getExtensions()).hasSize(29);
   }
 }

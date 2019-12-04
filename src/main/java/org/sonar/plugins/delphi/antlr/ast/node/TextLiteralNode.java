@@ -41,15 +41,19 @@ public final class TextLiteralNode extends LiteralNode {
       for (int i = 0; i < jjtGetNumChildren(); ++i) {
         Node child = jjtGetChild(i);
         switch (child.jjtGetId()) {
-          case DelphiLexer.QuotedString:
+          case DelphiLexer.TkQuotedString:
             imageBuilder.append(processString(child.getImage()));
             break;
 
-          case DelphiLexer.EscapedCharacter:
+          case DelphiLexer.TkCharacterEscapeCode:
             String escapeImage = child.getImage();
             boolean isHex = escapeImage.startsWith("#$");
             escapeImage = escapeImage.substring(isHex ? 2 : 1);
             imageBuilder.append((char) parseImage(escapeImage, isHex ? 16 : 10));
+            break;
+
+          case DelphiLexer.TkEscapedCharacter:
+            imageBuilder.append(child.getImage());
             break;
 
           default:

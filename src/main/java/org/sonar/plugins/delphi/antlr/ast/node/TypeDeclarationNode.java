@@ -1,20 +1,23 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import static org.apache.commons.lang3.StringUtils.substringAfter;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.symbol.Qualifiable;
 import org.sonar.plugins.delphi.symbol.QualifiedName;
-import org.sonar.plugins.delphi.symbol.TypeNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Typed;
 
 public final class TypeDeclarationNode extends DelphiNode implements Typed, Qualifiable {
   private Boolean isSubType;
   private QualifiedName qualifiedName;
+  private String qualifiedNameExcludingUnit;
 
   public TypeDeclarationNode(Token token) {
     super(token);
@@ -31,7 +34,7 @@ public final class TypeDeclarationNode extends DelphiNode implements Typed, Qual
 
   @Override
   public String getImage() {
-    return fullyQualifiedName();
+    return simpleName();
   }
 
   public QualifiedNameDeclarationNode getTypeNameNode() {
@@ -56,16 +59,28 @@ public final class TypeDeclarationNode extends DelphiNode implements Typed, Qual
   public QualifiedName getQualifiedName() {
     if (qualifiedName == null) {
       TypeDeclarationNode node = this;
-      Deque<String> names = new ArrayDeque<>();
+      ArrayList<String> names = new ArrayList<>();
 
       while (node != null) {
-        names.push(node.getTypeNameNode().simpleName());
+        names.add(node.getTypeNameNode().simpleName());
         node = node.getFirstParentOfType(TypeDeclarationNode.class);
       }
+
+      names.add(findUnitName());
+
+      Collections.reverse(names);
+
       qualifiedName = new QualifiedName(names);
     }
 
     return qualifiedName;
+  }
+
+  public String qualifiedNameExcludingUnit() {
+    if (qualifiedNameExcludingUnit == null) {
+      qualifiedNameExcludingUnit = substringAfter(fullyQualifiedName(), ".");
+    }
+    return qualifiedNameExcludingUnit;
   }
 
   public boolean isClass() {

@@ -60,6 +60,16 @@ public final class DelphiUtils {
   /**
    * Accept file based on file extension.
    *
+   * @param file The file
+   * @return True if the file has a valid extension
+   */
+  public static boolean acceptFile(File file) {
+    return acceptFile(file.getName());
+  }
+
+  /**
+   * Accept file based on file extension.
+   *
    * @param fileName The file name
    * @return True if the file has a valid extension
    */

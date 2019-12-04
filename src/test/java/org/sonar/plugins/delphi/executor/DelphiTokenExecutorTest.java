@@ -29,8 +29,8 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
-import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
+import org.sonar.plugins.delphi.file.DelphiFile;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.symbol.SymbolTable;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -89,7 +89,7 @@ public class DelphiTokenExecutorTest {
   public void testSimpleFile() {
     execute(makeDelphiFile(SIMPLE_FILE));
 
-    cpdTokenCount(204);
+    cpdTokenCount(205);
     cpdTokenCount(0, DelphiTokenExecutorTest::isWhitespaceOrComment);
     highlightCount(41);
   }
@@ -109,7 +109,7 @@ public class DelphiTokenExecutorTest {
   public void testMixedCaseFile() {
     execute(makeDelphiFile(MIXED_CASE_FILE));
 
-    cpdTokenCount(183);
+    cpdTokenCount(184);
     cpdTokenCount(0, DelphiTokenExecutorTest::isWhitespaceOrComment);
     cpdTokenCount(9, "over1");
     cpdTokenCount(2, "notover");
@@ -185,8 +185,8 @@ public class DelphiTokenExecutorTest {
   private static boolean isWhitespaceOrComment(String tokenString) {
     return tokenString.isBlank()
         || tokenString.startsWith("//")
-        || tokenString.startsWith("{")
-        || tokenString.startsWith("(*");
+        || tokenString.matches("(?s)\\{[^$].*")
+        || tokenString.matches("(?s)\\(\\*[^$].*");
   }
 
   private DelphiInputFile makeDelphiFile(String filePath) {
@@ -201,7 +201,7 @@ public class DelphiTokenExecutorTest {
               .setType(Type.MAIN)
               .build();
 
-      return DelphiInputFile.from(inputFile, new DelphiFileStreamConfig(UTF_8.name()));
+      return DelphiInputFile.from(inputFile, DelphiFile.createConfig(UTF_8.name()));
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }

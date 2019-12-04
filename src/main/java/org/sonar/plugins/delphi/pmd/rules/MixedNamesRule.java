@@ -2,8 +2,8 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
-import org.sonar.plugins.delphi.symbol.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
+import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 
 public class MixedNamesRule extends AbstractDelphiRule {
   private static final String MESSAGE = "Avoid mixing names (found: '%s' expected: '%s').";

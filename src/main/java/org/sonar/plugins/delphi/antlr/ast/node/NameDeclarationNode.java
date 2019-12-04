@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.delphi.symbol.DelphiNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 
 public abstract class NameDeclarationNode extends DelphiNode {
   private DelphiNameDeclaration declaration;

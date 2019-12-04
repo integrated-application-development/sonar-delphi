@@ -1,9 +1,9 @@
 package org.sonar.plugins.delphi.symbol.resolve;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.sonar.plugins.delphi.symbol.UnknownScope.unknownScope;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_1;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_2;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_3;
@@ -14,6 +14,7 @@ import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_OPERA
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.EQUAL;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.EXACT;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
+import static org.sonar.plugins.delphi.symbol.scope.UnknownScope.unknownScope;
 import static org.sonar.plugins.delphi.type.DelphiCollectionType.dynamicArray;
 import static org.sonar.plugins.delphi.type.DelphiCollectionType.emptySet;
 import static org.sonar.plugins.delphi.type.DelphiCollectionType.fixedArray;
@@ -234,12 +235,14 @@ public class TypeComparerTest {
 
     ProceduralType fromProcedure = procedure(parameters, returnType);
     ProceduralType similarFromProcedure = procedure(similarParameters, returnType);
-    ProceduralType incompatibleProcedure = procedure(parameters, INTEGER.type);
+    ProceduralType incompatibleReturnTypeProcedure = procedure(parameters, INTEGER.type);
+    ProceduralType incompatibleParametersProcedure = procedure(emptyList(), returnType);
     ProceduralType toProcedure = anonymous(parameters, returnType);
 
     compare(fromProcedure, toProcedure, EQUAL);
     compare(similarFromProcedure, toProcedure, CONVERT_LEVEL_1);
-    compare(incompatibleProcedure, toProcedure, INCOMPATIBLE_TYPES);
+    compare(incompatibleReturnTypeProcedure, toProcedure, INCOMPATIBLE_TYPES);
+    compare(incompatibleParametersProcedure, toProcedure, INCOMPATIBLE_TYPES);
 
     compare(nilPointer(), toProcedure, CONVERT_LEVEL_1);
     compare(untypedPointer(), toProcedure, CONVERT_LEVEL_1);

@@ -55,7 +55,7 @@ public class AssignedAndFreeRule extends AbstractDelphiRule {
       return null;
     }
 
-    return findFreeStatement(ifStatement.getThenBranch(), variableName);
+    return findFreeStatement(ifStatement.getThenStatement(), variableName);
   }
 
   private static String findVariableName(ExpressionNode guard) {

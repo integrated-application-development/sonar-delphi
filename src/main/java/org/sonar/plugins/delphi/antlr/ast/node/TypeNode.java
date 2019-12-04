@@ -42,7 +42,9 @@ public abstract class TypeNode extends DelphiNode implements Typed {
   public final Set<Type> getParentTypes() {
     if (parentTypes == null) {
       parentTypes =
-          getParentTypeNodes().stream().map(TypeReferenceNode::getType).collect(Collectors.toSet());
+          getParentTypeNodes().stream()
+              .map(TypeReferenceNode::getType)
+              .collect(Collectors.toUnmodifiableSet());
     }
     return parentTypes;
   }

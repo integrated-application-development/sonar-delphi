@@ -129,7 +129,7 @@ public class BeginEndRequiredRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("procedure foo;");
     builder.appendImpl("var");
-    builder.appendImpl("  SomeVar: integer;");
+    builder.appendImpl("  SomeVar: Integer;");
     builder.appendImpl("begin");
     builder.appendImpl("  case SomeVar of");
     builder.appendImpl("    1: WriteLn('test');");

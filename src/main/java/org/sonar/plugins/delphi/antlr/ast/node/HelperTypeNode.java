@@ -11,8 +11,8 @@ public abstract class HelperTypeNode extends StructTypeNode {
   }
 
   @NotNull
-  public final TypeReferenceNode getFor() {
-    return getFirstChildOfType(TypeReferenceNode.class);
+  public final TypeNode getFor() {
+    return getFirstChildOfType(TypeNode.class);
   }
 
   @NotNull

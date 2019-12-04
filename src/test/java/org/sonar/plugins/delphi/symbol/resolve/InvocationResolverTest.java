@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.delphi.symbol.UnknownScope.unknownScope;
+import static org.sonar.plugins.delphi.symbol.scope.UnknownScope.unknownScope;
 import static org.sonar.plugins.delphi.type.DelphiCollectionType.dynamicArray;
 import static org.sonar.plugins.delphi.type.DelphiCollectionType.openArray;
 import static org.sonar.plugins.delphi.type.DelphiFileType.fileOf;
@@ -31,6 +31,7 @@ import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType.CHAR;
 import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType.SHORTSTRING;
 import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType.UNICODESTRING;
 import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType.WIDESTRING;
+import static org.sonar.plugins.delphi.type.DelphiPointerType.pointerTo;
 import static org.sonar.plugins.delphi.type.DelphiPointerType.untypedPointer;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 import static org.sonar.plugins.delphi.type.DelphiType.untypedType;
@@ -44,7 +45,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
-import org.sonar.plugins.delphi.symbol.ParameterDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
 import org.sonar.plugins.delphi.type.DelphiStructType;
 import org.sonar.plugins.delphi.type.Type;
 
@@ -146,6 +147,7 @@ public class InvocationResolverTest {
     assertResolvedVar(dynamicArray, openArray);
     assertResolvedVar(INTEGER.type, openArray);
     assertResolvedVar(untypedPointer(), untypedPointer());
+    assertResolvedVar(pointerTo(INTEGER.type), pointerTo(SHORTINT.type));
     assertResolvedVar(fileOf(INTEGER.type), untypedFile());
   }
 

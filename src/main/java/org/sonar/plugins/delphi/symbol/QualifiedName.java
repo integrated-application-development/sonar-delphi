@@ -2,43 +2,41 @@ package org.sonar.plugins.delphi.symbol;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
-public class QualifiedName implements Iterable<String> {
-  private final Collection<String> names;
+public class QualifiedName {
+  private final List<String> parts;
   private String simpleName;
   private String fullyQualifiedName;
 
-  public QualifiedName(Collection<String> names) {
-    Preconditions.checkArgument(!names.isEmpty());
-    this.names = names;
+  public QualifiedName(List<String> parts) {
+    Preconditions.checkArgument(!parts.isEmpty());
+    this.parts = Collections.unmodifiableList(parts);
+  }
+
+  public static QualifiedName of(String... parts) {
+    Preconditions.checkArgument(parts.length > 0);
+    return new QualifiedName(Arrays.asList(parts));
   }
 
   public String simpleName() {
     if (simpleName == null) {
-      simpleName = Iterables.getLast(names);
+      simpleName = Iterables.getLast(parts);
     }
     return simpleName;
   }
 
   public String fullyQualifiedName() {
     if (fullyQualifiedName == null) {
-      fullyQualifiedName = StringUtils.join(names, ".");
+      fullyQualifiedName = StringUtils.join(parts, ".");
     }
     return fullyQualifiedName;
   }
 
-  @NotNull
-  @Override
-  public Iterator<String> iterator() {
-    return names.iterator();
-  }
-
-  @Override
-  public String toString() {
-    return fullyQualifiedName();
+  public List<String> parts() {
+    return parts;
   }
 }

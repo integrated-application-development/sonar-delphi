@@ -7,7 +7,6 @@ import java.math.RoundingMode;
 import java.util.Arrays;
 
 @Immutable
-@SuppressWarnings("Immutable")
 public class DelphiIntrinsicType extends DelphiType {
   public static final Type TVARREC = new DelphiIntrinsicType("TVarRec");
 
@@ -27,13 +26,24 @@ public class DelphiIntrinsicType extends DelphiType {
     NATIVEUINT("NativeUInt", 4, false),
     NATIVEINT("NativeInt", 4, true);
 
+    private static class IntegerIntrinsicType extends DelphiIntrinsicType {
+      IntegerIntrinsicType(String image) {
+        super(image);
+      }
+
+      @Override
+      public boolean isInteger() {
+        return true;
+      }
+    }
+
     public final DelphiIntrinsicType type;
     private final BigInteger min;
     private final BigInteger max;
     private final int size;
 
     IntegerType(String image, int size, boolean signed) {
-      this.type = new DelphiIntrinsicType(image);
+      this.type = new IntegerIntrinsicType(image);
       this.size = size;
       BigInteger capacity = BigInteger.valueOf(256).pow(size).subtract(BigInteger.ONE);
       if (signed) {
@@ -90,11 +100,22 @@ public class DelphiIntrinsicType extends DelphiType {
     COMP("Comp", 8),
     CURRENCY("Currency", 8);
 
+    private static class DecimalIntrinsicType extends DelphiIntrinsicType {
+      DecimalIntrinsicType(String image) {
+        super(image);
+      }
+
+      @Override
+      public boolean isDecimal() {
+        return true;
+      }
+    }
+
     public final DelphiIntrinsicType type;
     public final int size;
 
     DecimalType(String image, int size) {
-      this.type = new DelphiIntrinsicType(image);
+      this.type = new DecimalIntrinsicType(image);
       this.size = size;
     }
 
@@ -112,11 +133,22 @@ public class DelphiIntrinsicType extends DelphiType {
     WORDBOOL("WordBool", 2),
     LONGBOOL("LongBool", 4);
 
+    private static class BooleanIntrinsicType extends DelphiIntrinsicType {
+      BooleanIntrinsicType(String image) {
+        super(image);
+      }
+
+      @Override
+      public boolean isBoolean() {
+        return true;
+      }
+    }
+
     public final DelphiIntrinsicType type;
     public final int size;
 
     BooleanType(String image, int size) {
-      this.type = new DelphiIntrinsicType(image);
+      this.type = new BooleanIntrinsicType(image);
       this.size = size;
     }
 
@@ -133,16 +165,26 @@ public class DelphiIntrinsicType extends DelphiType {
     CHAR("Char"),
     WIDECHAR("WideChar"),
     ANSISTRING("AnsiString"),
-    RAWBYTESTRING("RawByteString"),
     UNICODESTRING("UnicodeString"),
     STRING("String"),
     SHORTSTRING("ShortString"),
     WIDESTRING("WideString");
 
+    private static class TextIntrinsicType extends DelphiIntrinsicType {
+      TextIntrinsicType(String image) {
+        super(image);
+      }
+
+      @Override
+      public boolean isText() {
+        return true;
+      }
+    }
+
     public final DelphiIntrinsicType type;
 
     TextType(String image) {
-      this.type = new DelphiIntrinsicType(image);
+      this.type = new TextIntrinsicType(image);
     }
   }
 

@@ -13,11 +13,11 @@ import org.sonar.plugins.delphi.antlr.ast.node.AssignmentStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RaiseStatementNode;
-import org.sonar.plugins.delphi.symbol.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
-import org.sonar.plugins.delphi.symbol.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.Qualifiable;
-import org.sonar.plugins.delphi.symbol.TypeNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.delphi.type.Type;
 
 public class MemoryManagementRule extends AbstractDelphiRule {

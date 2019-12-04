@@ -1,9 +1,5 @@
 package org.sonar.plugins.delphi.type;
 
-import java.util.Arrays;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.BooleanType;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.DecimalType;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.IntegerType;
 import org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType;
 
 public abstract class DelphiType implements Type {
@@ -32,11 +28,6 @@ public abstract class DelphiType implements Type {
       };
 
   private final String image;
-
-  private Boolean isInteger;
-  private Boolean isDecimal;
-  private Boolean isText;
-  private Boolean isBoolean;
 
   public DelphiType(String image) {
     this.image = image;
@@ -105,42 +96,41 @@ public abstract class DelphiType implements Type {
   }
 
   @Override
-  public final boolean isInteger() {
-    if (isInteger == null) {
-      isInteger = IntegerType.fromType(this) != null;
-    }
-    return isInteger;
+  public boolean isInteger() {
+    return false;
   }
 
   @Override
-  public final boolean isDecimal() {
-    if (isDecimal == null) {
-      isDecimal =
-          Arrays.stream(DecimalType.values()).map(intrinsic -> intrinsic.type).anyMatch(this::is);
-    }
-    return isDecimal;
+  public boolean isDecimal() {
+    return false;
   }
 
   @Override
-  public final boolean isText() {
-    if (isText == null) {
-      isText = Arrays.stream(TextType.values()).map(intrinsic -> intrinsic.type).anyMatch(this::is);
-    }
-    return isText;
+  public boolean isText() {
+    return false;
   }
 
   @Override
-  public final boolean isBoolean() {
-    if (isBoolean == null) {
-      isBoolean =
-          Arrays.stream(BooleanType.values()).map(intrinsic -> intrinsic.type).anyMatch(this::is);
-    }
-    return isBoolean;
+  public boolean isBoolean() {
+    return false;
   }
 
   @Override
   public final boolean isString() {
     return isText() && !isChar();
+  }
+
+  @Override
+  public final boolean isNarrowString() {
+    return isText() && (is(TextType.ANSISTRING.type) || is(TextType.SHORTSTRING.type));
+  }
+
+  @Override
+  public final boolean isWideString() {
+    return isText()
+        && (is(TextType.STRING.type)
+            || is(TextType.WIDESTRING.type)
+            || is(TextType.UNICODESTRING.type));
   }
 
   @Override
@@ -230,6 +220,11 @@ public abstract class DelphiType implements Type {
 
   @Override
   public boolean isVariant() {
+    return false;
+  }
+
+  @Override
+  public boolean isTypeType() {
     return false;
   }
 }

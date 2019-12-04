@@ -18,6 +18,6 @@ public final class TypeOfTypeNode extends TypeNode {
   @Override
   @NotNull
   public Type createType() {
-    return ((TypeReferenceNode) jjtGetChild(0)).getType();
+    return ((TypeNode) jjtGetChild(0)).getType();
   }
 }

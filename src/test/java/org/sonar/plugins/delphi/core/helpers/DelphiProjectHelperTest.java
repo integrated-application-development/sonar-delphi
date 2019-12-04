@@ -23,19 +23,24 @@
 package org.sonar.plugins.delphi.core.helpers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.config.Configuration;
 import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class DelphiProjectHelperTest {
   private static final String PROJECTS_PATH = "/org/sonar/plugins/delphi/projects";
@@ -57,7 +62,7 @@ public class DelphiProjectHelperTest {
     settings = mock(Configuration.class);
 
     String[] includes = {"BadSyntaxProject"};
-    when(settings.getStringArray(DelphiPlugin.INCLUDED_DIRECTORIES_KEY)).thenReturn(includes);
+    when(settings.getStringArray(DelphiPlugin.SEARCH_PATH_KEY)).thenReturn(includes);
 
     String[] defines = {"DefineFromSettings"};
     when(settings.getStringArray(DelphiPlugin.CONDITIONAL_DEFINES_KEY)).thenReturn(defines);
@@ -68,7 +73,7 @@ public class DelphiProjectHelperTest {
     DelphiProject project = getProject();
 
     assertThat(project.getName()).isEqualTo(DelphiProjectHelper.DEFAULT_PROJECT_NAME);
-    assertThat(project.getIncludeDirectories()).hasSize(1);
+    assertThat(project.getSearchPath()).hasSize(1);
     assertThat(project.getDefinitions()).hasSize(1).contains("DefineFromSettings");
   }
 
@@ -78,17 +83,17 @@ public class DelphiProjectHelperTest {
 
     DelphiProject project = getProject();
 
-    assertThat(project.getIncludeDirectories()).isEmpty();
+    assertThat(project.getSearchPath()).isEmpty();
   }
 
   @Test
   public void testInvalidIncludesShouldBeSkipped() {
     String[] includes = {"EmptyProject/empty", "BadSyntaxProject", "BadPath/Spooky"};
-    when(settings.getStringArray(DelphiPlugin.INCLUDED_DIRECTORIES_KEY)).thenReturn(includes);
+    when(settings.getStringArray(DelphiPlugin.SEARCH_PATH_KEY)).thenReturn(includes);
 
     DelphiProject project = getProject();
 
-    assertThat(project.getIncludeDirectories()).hasSize(1);
+    assertThat(project.getSearchPath()).hasSize(1);
   }
 
   @Test
@@ -114,11 +119,18 @@ public class DelphiProjectHelperTest {
     DelphiProject project = getProject();
 
     assertThat(project.getName()).isEqualTo("Simple Delphi Project");
-    assertThat(project.getIncludeDirectories()).hasSize(2);
+    assertThat(project.getSearchPath()).hasSize(2);
     assertThat(project.getSourceFiles()).hasSize(8);
     assertThat(project.getDefinitions())
-        .hasSize(5)
-        .contains("GGMSGDEBUGx", "LOGTOFILEx", "FullDebugMode", "RELEASE", "DefineFromSettings");
+        .hasSize(7)
+        .contains(
+            "MSWINDOWS",
+            "CPUX86",
+            "GGMSGDEBUGx",
+            "LOGTOFILEx",
+            "FullDebugMode",
+            "RELEASE",
+            "DefineFromSettings");
   }
 
   @Test
@@ -129,10 +141,51 @@ public class DelphiProjectHelperTest {
     DelphiProject project = getProject();
 
     assertThat(project.getName()).isEqualTo("Simple Delphi Project");
-    assertThat(project.getIncludeDirectories()).hasSize(2);
+    assertThat(project.getSearchPath()).hasSize(2);
     assertThat(project.getSourceFiles()).hasSize(8);
     assertThat(project.getDefinitions())
-        .hasSize(5)
-        .contains("GGMSGDEBUGx", "LOGTOFILEx", "FullDebugMode", "RELEASE", "DefineFromSettings");
+        .hasSize(7)
+        .contains(
+            "MSWINDOWS",
+            "CPUX86",
+            "GGMSGDEBUGx",
+            "LOGTOFILEx",
+            "FullDebugMode",
+            "RELEASE",
+            "DefineFromSettings");
+  }
+
+  @Test
+  public void testStandardLibraryPath() {
+    DelphiProjectHelper delphiProjectHelper = new DelphiProjectHelper(settings, fs);
+
+    assertThatThrownBy(delphiProjectHelper::standardLibraryPath)
+        .isInstanceOf(RuntimeException.class);
+
+    Path standardLibraryPath =
+        DelphiUtils.getResource("/org/sonar/plugins/delphi/standardLibrary").toPath();
+    when(settings.get(DelphiPlugin.STANDARD_LIBRARY_KEY))
+        .thenReturn(Optional.of(standardLibraryPath.toAbsolutePath().toString()));
+
+    assertThat(delphiProjectHelper.standardLibraryPath()).isEqualTo(standardLibraryPath);
+  }
+
+  @Test
+  public void testSearchPathShouldSkipBlankPaths() {
+    DelphiProjectHelper delphiProjectHelper = new DelphiProjectHelper(settings, fs);
+    when(settings.getStringArray(DelphiPlugin.SEARCH_PATH_KEY))
+        .thenReturn(new String[] {"", "\n", "\t\t\n"});
+
+    assertThat(delphiProjectHelper.getSearchPath()).isEmpty();
+  }
+
+  @Test
+  public void testInputFilesToFiles() {
+    DelphiProjectHelper delphiProjectHelper = new DelphiProjectHelper(settings, fs);
+    DelphiInputFile delphiFile = new DelphiTestUnitBuilder().delphiFile();
+    File sourceFile = delphiFile.getSourceCodeFile();
+    InputFile inputFile = delphiFile.getInputFile();
+
+    assertThat(delphiProjectHelper.inputFilesToFiles(List.of(inputFile))).containsOnly(sourceFile);
   }
 }

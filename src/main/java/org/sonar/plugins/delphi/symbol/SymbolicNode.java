@@ -5,9 +5,11 @@ import net.sourceforge.pmd.lang.ast.AbstractNode;
 import net.sourceforge.pmd.lang.symboltable.ScopedNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.IndexedNode;
+import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
+import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 
 public final class SymbolicNode extends AbstractNode implements ScopedNode, IndexedNode {
-  private static AtomicInteger imaginaryTokenIndex = new AtomicInteger(-100);
+  private static AtomicInteger imaginaryTokenIndex = new AtomicInteger(Integer.MIN_VALUE);
   private final String unitName;
   private final DelphiScope scope;
   private final int tokenIndex;
@@ -19,7 +21,7 @@ public final class SymbolicNode extends AbstractNode implements ScopedNode, Inde
         node.getEndLine(),
         node.getBeginColumn(),
         node.getEndColumn(),
-        node.getUnitName(),
+        node.findUnitName(),
         node.getImage(),
         scope,
         node.getTokenIndex());
@@ -52,7 +54,20 @@ public final class SymbolicNode extends AbstractNode implements ScopedNode, Inde
         UnitNameDeclaration.UNKNOWN_UNIT,
         image,
         scope,
-        imaginaryTokenIndex.decrementAndGet());
+        imaginaryTokenIndex.incrementAndGet());
+  }
+
+  public static SymbolicNode fromRange(String image, DelphiNode begin, DelphiNode end) {
+    return new SymbolicNode(
+        begin.jjtGetId(),
+        begin.getBeginLine(),
+        end.getEndLine(),
+        begin.getBeginColumn(),
+        end.getEndColumn(),
+        begin.findUnitName(),
+        image,
+        begin.getScope(),
+        begin.getTokenIndex());
   }
 
   @Override

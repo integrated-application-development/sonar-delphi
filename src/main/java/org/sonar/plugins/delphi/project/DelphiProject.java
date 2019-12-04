@@ -22,12 +22,16 @@
  */
 package org.sonar.plugins.delphi.project;
 
-import com.google.common.base.Preconditions;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -37,10 +41,10 @@ public class DelphiProject {
   private static final Logger LOG = Loggers.get(DelphiProject.class);
 
   private String name = "";
-  private List<String> definitions = new ArrayList<>();
-  private List<File> files = new ArrayList<>();
-  private List<File> includeDirectories = new ArrayList<>();
-  private File file;
+  private Set<String> definitions = new HashSet<>();
+  private Set<String> unitScopeNames = new HashSet<>();
+  private List<File> sourceFiles = new ArrayList<>();
+  private List<Path> searchPath = new ArrayList<>();
 
   /**
    * C-tor, initializes project with name and empty files and definitions
@@ -54,28 +58,36 @@ public class DelphiProject {
   /**
    * C-tor, initializes project with data loaded from xml file
    *
-   * @param xml XML file to parse
-   * @throws IllegalArgumentException If xml is null
+   * @param xmlFile XML file to parse
    * @throws IOException If file not found
    */
-  public DelphiProject(File xml) throws IOException {
-    Preconditions.checkNotNull(xml);
-    parseFile(xml);
+  public DelphiProject(@NotNull File xmlFile) throws IOException {
+    parseFile(xmlFile);
+  }
+
+  /**
+   * Parses xml file to gather data
+   *
+   * @param xmlFile File to parse
+   * @throws IOException If file is not found
+   */
+  private void parseFile(File xmlFile) throws IOException {
+    DelphiProjectXmlParser parser = new DelphiProjectXmlParser(xmlFile, this);
+    parser.parse();
   }
 
   /**
    * Adds a source file to project
    *
-   * @param path File path
+   * @param file Source file to add
    */
-  public void addFile(String path) {
-    File newFile = new File(path);
-    if (!newFile.exists()) {
-      LOG.warn("Could not add file to project: {}", newFile.getAbsolutePath());
+  public void addSourceFile(File file) {
+    if (!file.exists()) {
+      LOG.warn("Could not add file to project: {}", file.getAbsolutePath());
     }
 
-    if (DelphiUtils.acceptFile(newFile.getAbsolutePath())) {
-      files.add(newFile);
+    if (DelphiUtils.acceptFile(file.getAbsolutePath())) {
+      sourceFiles.add(file);
     }
   }
 
@@ -103,70 +115,56 @@ public class DelphiProject {
    * adds directory where to search for include files
    *
    * @param directory directory with includes
-   * @throws RuntimeException if directory is invalid
    */
-  public void addIncludeDirectory(String directory) {
-    if (!StringUtils.isEmpty(directory)) {
-      File dir = new File(directory);
-
-      if (!dir.exists() || !dir.isDirectory()) {
-        throw new RuntimeException("Invalid include directory: " + dir.getAbsolutePath());
-      }
-
-      includeDirectories.add(dir);
+  public void addSearchPathDirectory(Path directory) {
+    if (!Files.exists(directory) || !Files.isDirectory(directory)) {
+      LOG.warn("Invalid search path directory: " + directory);
+      return;
     }
-  }
-
-  /**
-   * Parses xml file to gather data
-   *
-   * @param xml File to parse
-   * @throws IllegalArgumentException If file == null
-   * @throws IOException If file is not found
-   */
-  private void parseFile(File xml) throws IOException {
-    file = xml;
-    ProjectXmlParser parser = new ProjectXmlParser(file, this);
-    parser.parse();
+    searchPath.add(directory);
   }
 
   public String getName() {
     return name;
   }
 
-  public List<String> getDefinitions() {
+  public Set<String> getDefinitions() {
     return definitions;
   }
 
+  public Set<String> getUnitScopeNames() {
+    return unitScopeNames;
+  }
+
   public List<File> getSourceFiles() {
-    return files;
+    return sourceFiles;
   }
 
-  public List<File> getIncludeDirectories() {
-    return includeDirectories;
-  }
-
-  public File getXmlFile() {
-    return file;
+  public List<Path> getSearchPath() {
+    return searchPath;
   }
 
   public void setName(String value) {
     name = value;
   }
 
-  public void setDefinitions(List<String> defs) {
+  public void setDefinitions(Set<String> defs) {
     this.definitions = defs;
   }
 
-  public void setIncludeDirectories(List<File> includes) {
-    this.includeDirectories = includes;
+  public void addUnitScopeName(String unitScopeName) {
+    this.unitScopeNames.add(unitScopeName);
   }
 
-  public void setFile(File file) {
-    this.file = file;
+  public void addUnitScopeNames(List<String> unitScopeNames) {
+    this.unitScopeNames.addAll(unitScopeNames);
   }
 
-  public void setSourceFiles(List<File> list) {
-    this.files = list;
+  public void setSearchPath(List<Path> searchPath) {
+    this.searchPath = searchPath;
+  }
+
+  public void setSourceFiles(List<File> sourceFiles) {
+    this.sourceFiles = sourceFiles;
   }
 }

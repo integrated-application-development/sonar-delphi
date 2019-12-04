@@ -32,7 +32,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKeyAtLine("CastAndFreeRule", builder.getOffset() + 3));
   }
 
   @Test
@@ -57,7 +57,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Bar: Baz);")
             .appendImpl("begin")
-            .appendImpl("  Xyzzy(Bar).Free;")
+            .appendImpl("  TObject(Bar).Free;")
             .appendImpl("end;");
 
     execute(builder);
@@ -73,13 +73,12 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Bar: Baz);")
             .appendImpl("begin")
-            .appendImpl("  FreeAndNil(Bar as Xyzzy);")
+            .appendImpl("  FreeAndNil(Bar as TObject);")
             .appendImpl("end;");
 
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
         .areExactly(1, ruleKeyAtLine("CastAndFreeRule", builder.getOffset() + 3));
   }
 
@@ -89,13 +88,12 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Bar: Baz);")
             .appendImpl("begin")
-            .appendImpl("  FreeAndNil(Xyzzy(Bar));")
+            .appendImpl("  FreeAndNil(TObject(Bar));")
             .appendImpl("end;");
 
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
         .areExactly(1, ruleKeyAtLine("CastAndFreeRule", builder.getOffset() + 3));
   }
 
@@ -105,7 +103,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Bar: Baz);")
             .appendImpl("begin")
-            .appendImpl("  (((Bar as Xyzzy))).Free;")
+            .appendImpl("  (((Bar as TObject))).Free;")
             .appendImpl("end;");
 
     execute(builder);

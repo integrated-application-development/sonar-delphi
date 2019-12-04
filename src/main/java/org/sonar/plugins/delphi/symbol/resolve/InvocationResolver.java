@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.sonar.plugins.delphi.symbol.ParameterDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
 import org.sonar.plugins.delphi.type.DelphiIntrinsicType.DecimalType;
 import org.sonar.plugins.delphi.type.DelphiIntrinsicType.IntegerType;
 import org.sonar.plugins.delphi.type.DelphiType;
@@ -247,8 +247,8 @@ public class InvocationResolver {
 
     if (paramType.isFile()
         && argType.isFile()
-        && !((FileType) paramType).fileType().isUntyped()
-        && ((FileType) argType).fileType().isUntyped()) {
+        && !((FileType) argType).fileType().isUntyped()
+        && ((FileType) paramType).fileType().isUntyped()) {
       // An implicit file conversion is allowed from a typed file to an untyped one
       return CONVERT_LEVEL_1;
     }

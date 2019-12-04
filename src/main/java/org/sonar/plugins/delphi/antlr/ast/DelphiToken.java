@@ -99,7 +99,7 @@ public class DelphiToken implements GenericToken {
   }
 
   private boolean isStringLiteral() {
-    return token.getType() == DelphiLexer.QuotedString;
+    return token.getType() == DelphiLexer.TkQuotedString;
   }
 
   private boolean isNumericLiteral() {
@@ -114,6 +114,10 @@ public class DelphiToken implements GenericToken {
 
   public boolean isComment() {
     return token.getType() == DelphiLexer.COMMENT;
+  }
+
+  public boolean isCompilerDirective() {
+    return token.getType() == DelphiLexer.TkCompilerDirective;
   }
 
   private boolean isKeyword() {
@@ -162,6 +166,8 @@ public class DelphiToken implements GenericToken {
       type = TypeOfText.CONSTANT;
     } else if (isComment()) {
       type = TypeOfText.COMMENT;
+    } else if (isCompilerDirective()) {
+      type = TypeOfText.PREPROCESS_DIRECTIVE;
     } else if (isKeyword()) {
       type = TypeOfText.KEYWORD;
     } else if (isSpecialKeyword()) {

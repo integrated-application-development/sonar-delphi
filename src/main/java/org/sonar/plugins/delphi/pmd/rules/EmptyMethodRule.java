@@ -21,7 +21,7 @@ public class EmptyMethodRule extends AbstractDelphiRule {
   @Override
   public RuleContext visit(MethodImplementationNode method, RuleContext data) {
     if (isEmptyMethod(method) && shouldAddViolation(method)) {
-      addViolation(data, method.getMethodName());
+      addViolation(data, method.getMethodNameNode());
     }
     return super.visit(method, data);
   }

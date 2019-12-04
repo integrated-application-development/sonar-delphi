@@ -48,13 +48,13 @@ public class CognitiveComplexityVisitor implements DelphiParserVisitor<Data> {
     statement.getGuardExpression().accept(this, data);
 
     ++data.nesting;
-    StatementNode thenBranch = statement.getThenBranch();
+    StatementNode thenBranch = statement.getThenStatement();
     if (thenBranch != null) {
       thenBranch.accept(this, data);
     }
     --data.nesting;
 
-    StatementNode elseBranch = statement.getElseBranch();
+    StatementNode elseBranch = statement.getElseStatement();
     if (elseBranch != null) {
       boolean bareElse = !(elseBranch instanceof IfStatementNode);
       if (bareElse) {

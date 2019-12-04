@@ -6,9 +6,10 @@ import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.api.batch.sensor.symbol.NewSymbol;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodNameNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
-import org.sonar.plugins.delphi.symbol.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
+import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 
 public class SonarSymbolTableVisitor implements DelphiParserVisitor<NewSymbolTable> {
 
@@ -47,6 +48,12 @@ public class SonarSymbolTableVisitor implements DelphiParserVisitor<NewSymbolTab
   @Override
   public NewSymbolTable visit(NameDeclarationNode name, NewSymbolTable data) {
     createSymbol(name.getNameDeclaration(), name.getUsages(), data);
+    return DelphiParserVisitor.super.visit(name, data);
+  }
+
+  @Override
+  public NewSymbolTable visit(MethodNameNode name, NewSymbolTable data) {
+    createSymbol(name.getMethodNameDeclaration(), name.getUsages(), data);
     return DelphiParserVisitor.super.visit(name, data);
   }
 }

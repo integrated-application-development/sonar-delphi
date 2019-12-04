@@ -4,7 +4,10 @@ import net.sourceforge.pmd.lang.ast.Node;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodHeadingNode.MethodKind;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.CollectionType;
@@ -53,6 +56,10 @@ public final class PrimaryExpressionNode extends ExpressionNode {
     Type type = DelphiType.unknownType();
     for (int i = 0; i < jjtGetNumChildren(); ++i) {
       Node child = jjtGetChild(i);
+      if (isConstructor(child)) {
+        continue;
+      }
+
       if (child instanceof Typed) {
         type = ((Typed) child).getType();
       } else if (child instanceof ArrayAccessorNode) {
@@ -62,6 +69,15 @@ public final class PrimaryExpressionNode extends ExpressionNode {
       }
     }
     return type;
+  }
+
+  private static boolean isConstructor(Node node) {
+    if (node instanceof NameReferenceNode) {
+      DelphiNameDeclaration declaration = ((NameReferenceNode) node).getNameDeclaration();
+      return declaration instanceof MethodNameDeclaration
+          && ((MethodNameDeclaration) declaration).getMethodKind() == MethodKind.CONSTRUCTOR;
+    }
+    return false;
   }
 
   private static Type handleArrayAccessor(Type type, ArrayAccessorNode accessor) {

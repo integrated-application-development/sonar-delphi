@@ -10,8 +10,7 @@ import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 
 public class DelphiMasterExecutorTest {
-  private static final String TEST_FILE =
-      "/org/sonar/plugins/delphi/grammar/SuperfluousSemicolons.pas";
+  private static final String TEST_FILE = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
 
   @Test
   public void testExceptionsShouldNotAbortExecution() {
