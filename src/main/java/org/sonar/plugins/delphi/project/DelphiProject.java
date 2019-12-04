@@ -22,60 +22,62 @@
  */
 package org.sonar.plugins.delphi.project;
 
-import com.google.common.base.Preconditions;
-import java.io.File;
-import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-/** DelphiLanguage project class, it holds values parsed from *.dproj file. */
+/** DelphiLanguage project class, it holds data parsed from a *.dproj file. */
 public class DelphiProject {
   private static final Logger LOG = Loggers.get(DelphiProject.class);
 
   private String name = "";
-  private List<String> definitions = new ArrayList<>();
-  private List<File> files = new ArrayList<>();
-  private List<File> includeDirectories = new ArrayList<>();
-  private File file;
+  private Set<String> definitions = new HashSet<>();
+  private Set<String> unitScopeNames = new HashSet<>();
+  private List<Path> sourceFiles = new ArrayList<>();
+  private List<Path> searchDirectories = new ArrayList<>();
 
-  /**
-   * C-tor, initializes project with name and empty files and definitions
-   *
-   * @param projName Project name
-   */
-  public DelphiProject(String projName) {
-    name = projName;
+  private DelphiProject() {
+    // Hide default constructor
   }
 
   /**
-   * C-tor, initializes project with data loaded from xml file
+   * Parses xml file to gather data
    *
-   * @param xml XML file to parse
-   * @throws IllegalArgumentException If xml is null
-   * @throws IOException If file not found
+   * @param xmlFile File to parse
+   * @return DelphiProject object
    */
-  public DelphiProject(File xml) throws IOException {
-    Preconditions.checkNotNull(xml);
-    parseFile(xml);
+  public static DelphiProject parse(Path xmlFile) {
+    DelphiProject project = new DelphiProject();
+    DelphiProjectXmlParser parser = new DelphiProjectXmlParser(xmlFile, project);
+    parser.parse();
+    return project;
+  }
+
+  public static DelphiProject create(String name) {
+    DelphiProject project = new DelphiProject();
+    project.setName(name);
+    return project;
   }
 
   /**
    * Adds a source file to project
    *
-   * @param path File path
+   * @param sourceFile Source file to add
    */
-  public void addFile(String path) {
-    File newFile = new File(path);
-    if (!newFile.exists()) {
-      LOG.warn("Could not add file to project: {}", newFile.getAbsolutePath());
-    }
-
-    if (DelphiUtils.acceptFile(newFile.getAbsolutePath())) {
-      files.add(newFile);
+  public void addSourceFile(Path sourceFile) {
+    if (DelphiUtils.acceptFile(sourceFile)) {
+      if (!Files.exists(sourceFile) || !Files.isRegularFile(sourceFile)) {
+        LOG.warn("Could not add file to project: {}", sourceFile.toAbsolutePath().toString());
+        return;
+      }
+      sourceFiles.add(sourceFile);
     }
   }
 
@@ -91,82 +93,47 @@ public class DelphiProject {
   }
 
   /**
-   * Adds a list of project preprocessor definitions
-   *
-   * @param definitions List of preprocessor definitions
-   */
-  public void addDefinitions(List<String> definitions) {
-    this.definitions.addAll(definitions);
-  }
-
-  /**
    * adds directory where to search for include files
    *
    * @param directory directory with includes
-   * @throws RuntimeException if directory is invalid
    */
-  public void addIncludeDirectory(String directory) {
-    if (!StringUtils.isEmpty(directory)) {
-      File dir = new File(directory);
-
-      if (!dir.exists() || !dir.isDirectory()) {
-        throw new RuntimeException("Invalid include directory: " + dir.getAbsolutePath());
-      }
-
-      includeDirectories.add(dir);
+  public void addSearchDirectory(Path directory) {
+    if (!Files.exists(directory) || !Files.isDirectory(directory)) {
+      LOG.warn("Invalid search path directory: " + directory);
+      return;
     }
-  }
-
-  /**
-   * Parses xml file to gather data
-   *
-   * @param xml File to parse
-   * @throws IllegalArgumentException If file == null
-   * @throws IOException If file is not found
-   */
-  private void parseFile(File xml) throws IOException {
-    file = xml;
-    ProjectXmlParser parser = new ProjectXmlParser(file, this);
-    parser.parse();
+    searchDirectories.add(directory);
   }
 
   public String getName() {
     return name;
   }
 
-  public List<String> getDefinitions() {
+  public Set<String> getConditionalDefines() {
     return definitions;
   }
 
-  public List<File> getSourceFiles() {
-    return files;
+  public Set<String> getUnitScopeNames() {
+    return unitScopeNames;
   }
 
-  public List<File> getIncludeDirectories() {
-    return includeDirectories;
+  public List<Path> getSourceFiles() {
+    return sourceFiles;
   }
 
-  public File getXmlFile() {
-    return file;
+  public List<Path> getSearchDirectories() {
+    return searchDirectories;
   }
 
   public void setName(String value) {
     name = value;
   }
 
-  public void setDefinitions(List<String> defs) {
+  public void setDefinitions(Set<String> defs) {
     this.definitions = defs;
   }
 
-  public void setIncludeDirectories(List<File> includes) {
-    this.includeDirectories = includes;
-  }
-
-  public void setFile(File file) {
-    this.file = file;
-  }
-
-  public void setSourceFiles(List<File> list) {
-    this.files = list;
+  public void addUnitScopeName(String unitScopeName) {
+    this.unitScopeNames.add(unitScopeName);
   }
 }

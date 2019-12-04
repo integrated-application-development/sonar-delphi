@@ -29,7 +29,7 @@ public class DprFunctionRule extends DprRule {
 
   @Override
   public RuleContext visit(MethodImplementationNode node, RuleContext data) {
-    addViolation(data, node.getMethodName());
+    addViolation(data, node.getMethodNameNode());
     return super.visit(node, data);
   }
 }

@@ -35,14 +35,14 @@ public abstract class NoInheritedStatementRule extends AbstractDelphiRule {
       return;
     }
 
-    addViolation(data, method.getMethodName());
+    addViolation(data, method.getMethodNameNode());
   }
 
   private boolean hasInheritedStatement(MethodImplementationNode method) {
     return method
         .getMethodBody()
         .getStatementBlock()
-        .statementStream()
+        .descendantStatementStream()
         .filter(ExpressionStatementNode.class::isInstance)
         .map(ExpressionStatementNode.class::cast)
         .map(ExpressionStatementNode::getExpression)

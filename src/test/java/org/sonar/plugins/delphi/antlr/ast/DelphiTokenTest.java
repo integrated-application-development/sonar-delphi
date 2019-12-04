@@ -6,6 +6,7 @@ import org.antlr.runtime.CommonToken;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
+import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 
 public class DelphiTokenTest {
   private DelphiToken commentToken;

@@ -1,15 +1,18 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import net.sourceforge.pmd.lang.ast.Node;
+import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
+import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.symbol.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
 import org.sonar.plugins.delphi.symbol.Qualifiable;
 import org.sonar.plugins.delphi.symbol.QualifiedName;
+import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Typed;
@@ -19,6 +22,7 @@ public final class NameReferenceNode extends DelphiNode implements Qualifiable, 
   private DelphiNameOccurrence occurrence;
   private List<NameReferenceNode> names;
   private QualifiedName qualifiedName;
+  private List<NameOccurrence> usages;
 
   public NameReferenceNode(Token token) {
     super(token);
@@ -105,8 +109,9 @@ public final class NameReferenceNode extends DelphiNode implements Qualifiable, 
   @Override
   @NotNull
   public Type getType() {
-    if (getNameDeclaration() instanceof Typed) {
-      return ((Typed) getNameDeclaration()).getType();
+    NameDeclaration lastDeclaration = getLastName().getNameDeclaration();
+    if (lastDeclaration instanceof Typed) {
+      return ((Typed) lastDeclaration).getType();
     } else {
       return DelphiType.unknownType();
     }
@@ -115,5 +120,22 @@ public final class NameReferenceNode extends DelphiNode implements Qualifiable, 
   public NameReferenceNode getLastName() {
     List<NameReferenceNode> flatNames = flatten();
     return flatNames.get(flatNames.size() - 1);
+  }
+
+  public List<NameOccurrence> getUsages() {
+    if (usages == null) {
+      NameDeclaration nameDeclaration = getNameDeclaration();
+      if (nameDeclaration != null) {
+        usages =
+            nameDeclaration
+                .getScope()
+                .getDeclarations(nameDeclaration.getClass())
+                .get(nameDeclaration);
+      }
+      if (usages == null) {
+        usages = Collections.emptyList();
+      }
+    }
+    return usages;
   }
 }

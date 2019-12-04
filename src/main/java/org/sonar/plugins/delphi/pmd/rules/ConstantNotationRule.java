@@ -10,8 +10,9 @@ public class ConstantNotationRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(ConstDeclarationNode declaration, RuleContext data) {
-    if (!NameConventionUtils.compliesWithPrefix(declaration.getIdentifier().getImage(), PREFIX)) {
-      addViolation(data, declaration.getIdentifier());
+    if (!NameConventionUtils.compliesWithPrefix(
+        declaration.getNameDeclarationNode().getImage(), PREFIX)) {
+      addViolation(data, declaration.getNameDeclarationNode());
     }
     return super.visit(declaration, data);
   }

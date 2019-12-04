@@ -27,10 +27,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.sonar.plugins.delphi.utils.DelphiUtils.inputFileToPath;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ListAssert;
@@ -49,7 +50,6 @@ import org.sonar.api.config.Configuration;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.delphi.DelphiSensor;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.executor.DelphiCpdExecutor;
 import org.sonar.plugins.delphi.executor.DelphiHighlightExecutor;
 import org.sonar.plugins.delphi.executor.DelphiMasterExecutor;
@@ -65,6 +65,7 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 import org.sonar.plugins.delphi.project.DelphiProject;
+import org.sonar.plugins.delphi.project.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.PmdLevelUtils;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
@@ -72,12 +73,13 @@ import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 public abstract class BasePmdRuleTest {
   private static final String ROOT_DIR_NAME = "/org/sonar/plugins/delphi/pmd";
   private static final File ROOT_DIR = DelphiUtils.getResource(ROOT_DIR_NAME);
+  private static final String STANDARD_LIBRARY = "/org/sonar/plugins/delphi/standardLibrary";
 
   protected DelphiSensor sensor;
   private SensorContextTester sensorContext;
-  private IssueContainer issues = new IssueContainer();
+  private final IssueContainer issues = new IssueContainer();
   private DelphiRuleSet ruleSet;
-  private DelphiPmdRuleSetDefinitionProvider ruleProvider =
+  private final DelphiPmdRuleSetDefinitionProvider ruleProvider =
       new DelphiPmdRuleSetDefinitionProvider();
 
   @BeforeClass
@@ -109,7 +111,6 @@ public abstract class BasePmdRuleTest {
     builder.setBaseDir(ROOT_DIR);
 
     InputFile inputFile = builder.inputFile();
-    File srcFile = new File(inputFile.uri());
     DefaultFileSystem fs = sensorContext.fileSystem();
     fs.setWorkDir(ROOT_DIR.toPath());
     fs.add(inputFile);
@@ -119,12 +120,14 @@ public abstract class BasePmdRuleTest {
     when(delphiProjectHelper.workDir()).thenReturn(new File("target"));
     when(delphiProjectHelper.testTypeRegex()).thenReturn("(?i)TTestSuite_.*");
     when(delphiProjectHelper.getFile(any(File.class))).thenReturn(inputFile);
+    when(delphiProjectHelper.standardLibraryPath())
+        .thenReturn(DelphiUtils.getResource(STANDARD_LIBRARY).toPath());
 
-    DelphiProject delphiProject = new DelphiProject("Default Project");
-    delphiProject.setSourceFiles(Collections.singletonList(srcFile));
+    DelphiProject delphiProject = DelphiProject.create("Default Project");
+    delphiProject.addSourceFile(inputFileToPath(inputFile));
 
-    when(delphiProjectHelper.getProjects()).thenReturn(Collections.singletonList(delphiProject));
     when(delphiProjectHelper.getFile(anyString())).thenReturn(inputFile);
+    when(delphiProjectHelper.mainFiles()).thenReturn(List.of(inputFile));
 
     ActiveRules rulesProfile = makeActiveRules();
     Configuration config = sensorContext.config();

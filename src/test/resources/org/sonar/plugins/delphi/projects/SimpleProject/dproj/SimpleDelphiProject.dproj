@@ -26,7 +26,8 @@
 			<DCC_IMPLICIT_STRING_CAST>false</DCC_IMPLICIT_STRING_CAST>
 			<DCC_DependencyCheckOutputName>..\Bin\CMBatch.exe</DCC_DependencyCheckOutputName>
 			<DCC_UnitSearchPath>..\includes1;..\includes2;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
-			<DCC_Define>GGMSGDEBUGx;LOGTOFILEx;FullDebugMode;$(DCC_Define)</DCC_Define>
+    	<DCC_Namespace>Vcl;System;$(DCC_Namespace)</DCC_Namespace>
+			<DCC_Define>MSWINDOWS;CPUX86;GGMSGDEBUGx;LOGTOFILEx;FullDebugMode;$(DCC_Define)</DCC_Define>
 			<DCC_ImageBase>00400000</DCC_ImageBase>
 			<DCC_WriteableConstants>true</DCC_WriteableConstants>
 			<DCC_UsePackage>vcl;rtl;dbrtl;adortl;vcldb;vclx;bdertl;ibxpress;dsnap;cds;bdecds;qrpt;teeui;teedb;tee;vcldbx;dss;teeqr;dsnapcrba;dsnapcon;VclSmp;vclshlctrls;inetdb;inet;nmfast;vclie;dbexpress;dbxcds;indy;DRBLib;xmlrtl;inetdbbde;inetdbxpress;webdsnap;websnap;soaprtl;dclOffice2k</DCC_UsePackage>

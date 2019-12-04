@@ -1,6 +1,8 @@
 package org.sonar.plugins.delphi.symbol.resolve;
 
-import com.google.common.base.Preconditions;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import javax.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
@@ -11,22 +13,23 @@ import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Typed;
 
 class InvocationArgument implements Typed {
-
+  private final ExpressionNode expression;
   private Type type = DelphiType.unknownType();
 
   // Null if the expression was not a PrimaryExpression.
   // This is important because method references can only be bare PrimaryExpressions.
   @Nullable private NameResolver resolver;
 
-  public InvocationArgument(ExpressionNode argument) {
-    if (argument instanceof PrimaryExpressionNode) {
+  public InvocationArgument(ExpressionNode expression) {
+    this.expression = expression;
+    if (expression instanceof PrimaryExpressionNode) {
       resolver = new NameResolver();
-      resolver.readPrimaryExpression((PrimaryExpressionNode) argument);
+      resolver.readPrimaryExpression((PrimaryExpressionNode) expression);
       type = resolver.getApproximateType();
     }
 
     if (type == DelphiType.unknownType()) {
-      type = argument.getType();
+      type = expression.getType();
     }
   }
 
@@ -53,8 +56,8 @@ class InvocationArgument implements Typed {
   }
 
   public Type findMethodReferenceType(Type parameterType) {
-    Preconditions.checkArgument(parameterType instanceof ProceduralType);
-    Preconditions.checkNotNull(resolver);
+    checkArgument(parameterType instanceof ProceduralType);
+    checkNotNull(resolver);
 
     NameResolver clone = new NameResolver(resolver);
     disambiguateMethodReference(clone, parameterType);
@@ -70,5 +73,9 @@ class InvocationArgument implements Typed {
   @NotNull
   public Type getType() {
     return type;
+  }
+
+  public ExpressionNode getExpression() {
+    return expression;
   }
 }

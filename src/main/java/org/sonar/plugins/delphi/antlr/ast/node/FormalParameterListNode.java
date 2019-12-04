@@ -52,8 +52,10 @@ public final class FormalParameterListNode extends DelphiNode {
     if (image == null) {
       StringBuilder imageBuilder = new StringBuilder();
       for (FormalParameter parameter : getParameters()) {
+        if (imageBuilder.length() != 0) {
+          imageBuilder.append(';');
+        }
         imageBuilder.append(parameter.getType().getImage());
-        imageBuilder.append(';');
       }
       image = imageBuilder.toString();
     }

@@ -4,11 +4,11 @@ import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
-import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
 import org.sonar.plugins.delphi.antlr.ast.node.ClassTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodBodyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.StatementNode;
+import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 import org.sonar.plugins.delphi.antlr.ast.visitors.MetricsVisitor.Data;
 
 public class MetricsVisitor implements DelphiParserVisitor<Data> {
@@ -74,7 +74,7 @@ public class MetricsVisitor implements DelphiParserVisitor<Data> {
         }
         ++line;
       }
-    } else if (!token.isImaginary() && !token.isWhitespace()) {
+    } else if (!token.isImaginary() && !token.isWhitespace() && !token.isCompilerDirective()) {
       data.codeLines.add(token.getBeginLine());
     }
   }

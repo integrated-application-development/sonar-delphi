@@ -3,18 +3,20 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import org.antlr.runtime.Token;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.symbol.Qualifiable;
 import org.sonar.plugins.delphi.symbol.QualifiedName;
-import org.sonar.plugins.delphi.symbol.TypeNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Typed;
 
 public final class TypeDeclarationNode extends DelphiNode implements Typed, Qualifiable {
   private Boolean isSubType;
   private QualifiedName qualifiedName;
+  private String qualifiedNameExcludingUnit;
 
   public TypeDeclarationNode(Token token) {
     super(token);
@@ -31,7 +33,7 @@ public final class TypeDeclarationNode extends DelphiNode implements Typed, Qual
 
   @Override
   public String getImage() {
-    return fullyQualifiedName();
+    return simpleName();
   }
 
   public QualifiedNameDeclarationNode getTypeNameNode() {
@@ -55,17 +57,32 @@ public final class TypeDeclarationNode extends DelphiNode implements Typed, Qual
   @Override
   public QualifiedName getQualifiedName() {
     if (qualifiedName == null) {
-      TypeDeclarationNode node = this;
-      Deque<String> names = new ArrayDeque<>();
-
-      while (node != null) {
-        names.push(node.getTypeNameNode().simpleName());
-        node = node.getFirstParentOfType(TypeDeclarationNode.class);
-      }
-      qualifiedName = new QualifiedName(names);
+      buildQualifiedNames();
     }
 
     return qualifiedName;
+  }
+
+  public String qualifiedNameExcludingUnit() {
+    if (qualifiedNameExcludingUnit == null) {
+      buildQualifiedNames();
+    }
+    return qualifiedNameExcludingUnit;
+  }
+
+  private void buildQualifiedNames() {
+    TypeDeclarationNode node = this;
+    Deque<String> names = new ArrayDeque<>();
+
+    while (node != null) {
+      names.addFirst(node.getTypeNameNode().simpleName());
+      node = node.getFirstParentOfType(TypeDeclarationNode.class);
+    }
+
+    this.qualifiedNameExcludingUnit = StringUtils.join(names, ".");
+    names.addFirst(findUnitName());
+
+    qualifiedName = new QualifiedName(names);
   }
 
   public boolean isClass() {
@@ -100,7 +117,7 @@ public final class TypeDeclarationNode extends DelphiNode implements Typed, Qual
     return getTypeNode() instanceof PointerTypeNode;
   }
 
-  public boolean isSubType() {
+  public boolean isNestedType() {
     if (isSubType == null) {
       isSubType = getFirstParentOfType(TypeDeclarationNode.class) != null;
     }
@@ -113,6 +130,11 @@ public final class TypeDeclarationNode extends DelphiNode implements Typed, Qual
 
   public boolean isTypeType() {
     return getTypeNode() instanceof TypeTypeNode;
+  }
+
+  public boolean isForwardDeclaration() {
+    TypeNameDeclaration declaration = getTypeNameDeclaration();
+    return declaration != null && declaration.isForwardDeclaration();
   }
 
   @Override

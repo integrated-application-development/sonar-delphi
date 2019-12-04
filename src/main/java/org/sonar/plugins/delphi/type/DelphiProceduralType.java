@@ -1,45 +1,48 @@
 package org.sonar.plugins.delphi.type;
 
+import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 
 public class DelphiProceduralType extends DelphiType implements ProceduralType {
-  private final List<Type> parameterTypes;
+  private final ProceduralKind kind;
+  private final ImmutableList<Type> parameterTypes;
   private final Type returnType;
 
-  protected DelphiProceduralType(String name, List<Type> parameterTypes, Type returnType) {
-    super(name + makeSignature(parameterTypes, returnType));
-    this.parameterTypes = parameterTypes;
+  private DelphiProceduralType(
+      ProceduralKind kind, List<? extends Type> parameterTypes, Type returnType) {
+    super(kind.name() + makeSignature(parameterTypes, returnType));
+    this.kind = kind;
+    this.parameterTypes = ImmutableList.copyOf(parameterTypes);
     this.returnType = returnType;
   }
 
-  public static ProceduralType anonymous(List<Type> parameterTypes, Type returnType) {
-    return new DelphiProceduralType("anonymous", parameterTypes, returnType);
+  public static ProceduralType procedure(List<? extends Type> parameterTypes, Type returnType) {
+    return new DelphiProceduralType(ProceduralKind.PROCEDURE, parameterTypes, returnType);
   }
 
-  public static ProceduralType procedure(List<Type> parameterTypes, Type returnType) {
-    return new DelphiProceduralType("procedure", parameterTypes, returnType);
+  public static ProceduralType ofObject(List<? extends Type> parameterTypes, Type returnType) {
+    return new DelphiProceduralType(ProceduralKind.PROCEDURE_OF_OBJECT, parameterTypes, returnType);
   }
 
-  public static ProceduralType reference(List<Type> parameterTypes, Type returnType) {
-    return new DelphiProceduralType("reference", parameterTypes, returnType);
+  public static ProceduralType reference(List<? extends Type> parameterTypes, Type returnType) {
+    return new DelphiProceduralType(ProceduralKind.REFERENCE, parameterTypes, returnType);
   }
 
-  public static ProceduralType ofObject(List<Type> parameterTypes, Type returnType) {
-    return new DelphiProceduralType("procedure of object", parameterTypes, returnType);
+  public static ProceduralType anonymous(List<? extends Type> parameterTypes, Type returnType) {
+    return new DelphiProceduralType(ProceduralKind.ANONYMOUS, parameterTypes, returnType);
   }
 
-  private static String makeSignature(List<Type> parameterTypes, Type returnType) {
+  public static ProceduralType method(List<? extends Type> parameterTypes, Type returnType) {
+    return new DelphiProceduralType(ProceduralKind.METHOD, parameterTypes, returnType);
+  }
+
+  private static String makeSignature(List<? extends Type> parameterTypes, Type returnType) {
     return "("
         + parameterTypes.stream().map(Type::getImage).collect(Collectors.joining(", "))
         + "): "
         + returnType.getImage();
-  }
-
-  @Override
-  public boolean isProcedural() {
-    return true;
   }
 
   @Override
@@ -50,5 +53,20 @@ public class DelphiProceduralType extends DelphiType implements ProceduralType {
   @Override
   public Type returnType() {
     return returnType;
+  }
+
+  @Override
+  public ProceduralKind kind() {
+    return kind;
+  }
+
+  @Override
+  public boolean isProcedural() {
+    return true;
+  }
+
+  @Override
+  public boolean isMethod() {
+    return kind == ProceduralKind.METHOD;
   }
 }

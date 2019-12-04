@@ -481,7 +481,7 @@ DoSomething(True); // Compliant
     </properties>
     <example>
       <![CDATA[
-<b>if</b> <b>Assigned</b>(Foo) <b>then begin</b> // Noncompliant
+<b>if</b> Assigned(Foo) <b>then begin</b> // Noncompliant
   Foo.Free;
 <b>end;</b>
 
@@ -489,7 +489,7 @@ DoSomething(True); // Compliant
   Foo.Free;
 <b>end;</b>
 
-<b>if</b> <b>Assigned</b>(Foo) <b>then begin</b> // Noncompliant
+<b>if</b> Assigned(Foo) <b>then begin</b> // Noncompliant
   FreeAndNil(Foo);
 <b>end;</b>
 

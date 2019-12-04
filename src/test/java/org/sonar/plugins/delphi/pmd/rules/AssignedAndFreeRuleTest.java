@@ -21,9 +21,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
+    assertIssues().areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
   }
 
   @Test
@@ -39,9 +37,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
+    assertIssues().areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
   }
 
   @Test
@@ -57,9 +53,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
+    assertIssues().areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
   }
 
   @Test
@@ -75,9 +69,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
+    assertIssues().areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
   }
 
   @Test
@@ -185,9 +177,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
+    assertIssues().areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
   }
 
   @Test
@@ -203,9 +193,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
+    assertIssues().areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
   }
 
   @Test
@@ -221,9 +209,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
+    assertIssues().areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
   }
 
   @Test

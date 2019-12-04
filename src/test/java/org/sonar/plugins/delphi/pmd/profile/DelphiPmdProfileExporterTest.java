@@ -20,6 +20,7 @@
 package org.sonar.plugins.delphi.pmd.profile;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -36,7 +37,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.mockito.stubbing.Answer;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
@@ -54,8 +54,6 @@ import org.sonar.plugins.delphi.utils.DelphiUtils;
 public class DelphiPmdProfileExporterTest {
 
   private final DelphiPmdProfileExporter exporter = new DelphiPmdProfileExporter();
-
-  @org.junit.Rule public ExpectedException exceptionCatcher = ExpectedException.none();
 
   private static RulesProfile importProfile(String configuration) {
     var definitionProvider = mock(DelphiPmdRuleSetDefinitionProvider.class);
@@ -129,7 +127,7 @@ public class DelphiPmdProfileExporterTest {
     StringWriter stringWriter = new StringWriter();
     exporter.exportProfile(importProfile(importedXml), stringWriter);
 
-    assertThat(stringWriter.toString()).isEqualTo(expected);
+    assertThat(stringWriter).hasToString(expected);
   }
 
   @Test
@@ -160,7 +158,7 @@ public class DelphiPmdProfileExporterTest {
             + "  <description>Sonar Profile: delph</description>\n"
             + "</ruleset>\n\n";
 
-    assertThat(writer.toString()).isEqualTo(expected);
+    assertThat(writer).hasToString(expected);
   }
 
   @Test
@@ -169,11 +167,9 @@ public class DelphiPmdProfileExporterTest {
     final Writer writer = mock(Writer.class);
     doThrow(new IOException("test")).when(writer).write(anyString());
 
-    exceptionCatcher.expect(IllegalStateException.class);
-    exceptionCatcher.expectMessage(
-        String.format(DelphiPmdProfileExporter.PROFILE_EXPORT_ERROR, "null"));
-
-    exporter.exportProfile(importProfile(importedXml), writer);
+    assertThatThrownBy(() -> exporter.exportProfile(importProfile(importedXml), writer))
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage(String.format(DelphiPmdProfileExporter.PROFILE_EXPORT_ERROR, "null"));
   }
 
   @Test
@@ -191,6 +187,6 @@ public class DelphiPmdProfileExporterTest {
     final StringWriter writer = new StringWriter();
     exporter.exportProfile(profile, writer);
 
-    assertThat(writer.toString()).isEqualTo(getRuleSetXml("/xpath_rules.xml"));
+    assertThat(writer).hasToString(getRuleSetXml("/xpath_rules.xml"));
   }
 }

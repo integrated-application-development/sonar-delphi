@@ -1,7 +1,7 @@
 package org.sonar.plugins.delphi.type;
 
 import org.jetbrains.annotations.NotNull;
-import org.sonar.plugins.delphi.symbol.DelphiScope;
+import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.Type.ClassReferenceType;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
 
@@ -9,7 +9,7 @@ public class DelphiClassReferenceType extends DelphiType implements ClassReferen
   private final ScopedType classType;
 
   private DelphiClassReferenceType(ScopedType classType) {
-    super(classType.getImage());
+    super("class of " + classType.getImage());
     this.classType = classType;
   }
 

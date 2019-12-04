@@ -44,7 +44,7 @@ public class TooLargeMethodRule extends AbstractDelphiRule {
     if (statements > limit) {
       addViolationWithMessage(
           data,
-          method.getMethodName(),
+          method.getMethodNameNode(),
           String.format(VIOLATION_MESSAGE, method.simpleName(), statements, limit));
     }
 
@@ -57,7 +57,7 @@ public class TooLargeMethodRule extends AbstractDelphiRule {
       int handlers = body.getStatementBlock().findDescendantsOfType(ExceptItemNode.class).size();
       long statements =
           body.getStatementBlock()
-              .statementStream()
+              .descendantStatementStream()
               .filter(Predicate.not(CompoundStatementNode.class::isInstance))
               .count();
 

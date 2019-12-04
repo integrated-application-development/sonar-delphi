@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.executor;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -16,9 +17,7 @@ import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TYPE;
 
 import java.io.File;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -43,8 +42,6 @@ public class DelphiPmdExecutorTest {
   private DelphiPmdConfiguration pmdConfiguration;
   private DelphiPmdViolationRecorder violationRecorder;
 
-  @Rule public ExpectedException exceptionCatcher = ExpectedException.none();
-
   @Before
   public void setup() {
     DefaultFileSystem fileSystem = new DefaultFileSystem(ROOT_DIR).setWorkDir(ROOT_DIR.toPath());
@@ -66,8 +63,7 @@ public class DelphiPmdExecutorTest {
     when(badFile.getAbsolutePath()).thenReturn("does/not/exist.xml");
     when(pmdConfiguration.dumpXmlRuleSet(anyString(), anyString())).thenReturn(badFile);
 
-    exceptionCatcher.expect(IllegalStateException.class);
-    executor.setup();
+    assertThatThrownBy(executor::setup).isInstanceOf(IllegalStateException.class);
   }
 
   @Test
@@ -111,8 +107,6 @@ public class DelphiPmdExecutorTest {
 
   @Test
   public void testAddBuiltinPropertiesToNonexistentRule() {
-    exceptionCatcher.expect(IllegalStateException.class);
-
     // An undefined rule in ActiveRules should be impossible
     // Undefined -> The rule is not specified in rules.xml, either concretely or as a template
     DelphiRule rule = new DelphiRule();
@@ -123,7 +117,8 @@ public class DelphiPmdExecutorTest {
     DelphiRuleSet ruleSet = new DelphiRuleSet();
     ruleSet.addRule(rule);
 
-    executor.addBuiltinProperties(ruleSet);
+    assertThatThrownBy(() -> executor.addBuiltinProperties(ruleSet))
+        .isInstanceOf(IllegalStateException.class);
   }
 
   @Test

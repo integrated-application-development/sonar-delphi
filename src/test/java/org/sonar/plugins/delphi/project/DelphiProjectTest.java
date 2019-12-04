@@ -26,8 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -43,7 +43,7 @@ public class DelphiProjectTest {
 
   @Before
   public void init() {
-    project = new DelphiProject("simple project");
+    project = DelphiProject.create("simple project");
   }
 
   @Test
@@ -52,43 +52,36 @@ public class DelphiProjectTest {
     sourceFile.deleteOnExit();
 
     assertThat(project.getName()).isEqualTo("simple project");
-    assertThat(project.getDefinitions().size()).isEqualTo(0);
-    assertThat(project.getIncludeDirectories().size()).isEqualTo(0);
-    assertThat(project.getSourceFiles().size()).isEqualTo(0);
-    assertThat(project.getXmlFile()).isNull();
+    assertThat(project.getConditionalDefines()).isEmpty();
+    assertThat(project.getSearchDirectories()).isEmpty();
+    assertThat(project.getSourceFiles()).isEmpty();
 
     project.addDefinition("DEF");
-    assertThat(project.getDefinitions().size()).isEqualTo(1);
-    project.addFile(DelphiUtils.getResource(XML_FILE).getAbsolutePath());
-    assertThat(project.getSourceFiles().size()).isEqualTo(0);
-    project.addFile(sourceFile.getAbsolutePath());
-    assertThat(project.getSourceFiles().size()).isEqualTo(1);
-    project.addIncludeDirectory(DelphiUtils.getResource(INC_DIR).getAbsolutePath());
-    assertThat(project.getIncludeDirectories().size()).isEqualTo(1);
+    assertThat(project.getConditionalDefines()).hasSize(1);
+    project.addUnitScopeName("System");
+    assertThat(project.getUnitScopeNames()).hasSize(1);
+    project.addSourceFile(DelphiUtils.getResource(XML_FILE).toPath());
+    assertThat(project.getSourceFiles()).isEmpty();
+    project.addSourceFile(sourceFile.toPath());
+    assertThat(project.getSourceFiles()).hasSize(1);
+    project.addSearchDirectory(DelphiUtils.getResource(INC_DIR).toPath());
+    assertThat(project.getSearchDirectories()).hasSize(1);
   }
 
   @Test
   public void testSetDefinitions() {
-    List<String> defs = new ArrayList<>();
+    Set<String> defs = new HashSet<>();
     project.setDefinitions(defs);
-    assertThat(project.getDefinitions()).isEqualTo(defs);
+    assertThat(project.getConditionalDefines()).isEqualTo(defs);
   }
 
   @Test
-  public void testSetFile() {
-    File file = DelphiUtils.getResource(XML_FILE);
-    project.setFile(file);
-    assertThat(project.getXmlFile()).isEqualTo(file);
-  }
-
-  @Test
-  public void testParseFile() throws Exception {
-    project = new DelphiProject(DelphiUtils.getResource(XML_FILE));
+  public void testParseFile() {
+    project = DelphiProject.parse(DelphiUtils.getResource(XML_FILE).toPath());
 
     assertThat(project.getName()).isEqualTo("Simple Delphi Project");
+    assertThat(project.getSourceFiles()).hasSize(8);
 
-    assertThat(project.getSourceFiles().size()).isEqualTo(8); // checking source
-    // files
     String[] fileNames = {
       "Globals.pas",
       "MainWindow.pas",
@@ -99,22 +92,22 @@ public class DelphiProjectTest {
       "FunctionTest.pas",
       "GlobalsTest.pas"
     };
+
     for (int i = 0; i < fileNames.length; ++i) {
-      assertThat(project.getSourceFiles().get(i).getName()).isEqualTo(fileNames[i]);
+      assertThat(project.getSourceFiles().get(i)).hasFileName(fileNames[i]);
     }
 
-    assertThat(project.getIncludeDirectories().size()).isEqualTo(2); // checking
-    // include
-    // directories
+    assertThat(project.getSearchDirectories()).hasSize(2);
+
     String[] includeNames = {"includes1", "includes2"};
     for (int i = 0; i < includeNames.length; ++i) {
-      assertThat(project.getIncludeDirectories().get(i).getName()).isEqualTo(includeNames[i]);
+      assertThat(project.getSearchDirectories().get(i).getFileName()).hasToString(includeNames[i]);
     }
 
-    assertThat(project.getDefinitions().size()).isEqualTo(4);
-    String[] definitionNames = {"GGMSGDEBUGx", "LOGTOFILEx", "FullDebugMode", "RELEASE"};
-    for (int i = 0; i < definitionNames.length; ++i) {
-      assertThat(project.getDefinitions().get(i)).isEqualTo(definitionNames[i]);
-    }
+    assertThat(project.getConditionalDefines())
+        .containsOnly(
+            "MSWINDOWS", "CPUX86", "GGMSGDEBUGx", "LOGTOFILEx", "FullDebugMode", "RELEASE");
+
+    assertThat(project.getUnitScopeNames()).containsOnly("Vcl", "System");
   }
 }

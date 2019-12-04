@@ -1,57 +1,34 @@
 package org.sonar.plugins.delphi.type;
 
-import java.util.Arrays;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.BooleanType;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.DecimalType;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.IntegerType;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSICHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSISTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.SHORTSTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.STRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDECHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDESTRING;
+
+import java.util.Collections;
+import java.util.Set;
 
 public abstract class DelphiType implements Type {
-  private static final DelphiType UNTYPED =
-      new DelphiType("<Untyped>") {
-        @Override
-        public boolean isUntyped() {
-          return true;
-        }
-      };
-
-  private static final DelphiType UNKNOWN =
-      new DelphiType("<Unknown>") {
-        @Override
-        public boolean isUnknown() {
-          return true;
-        }
-      };
-
-  private static final DelphiType VOID =
-      new DelphiType("<Void>") {
-        @Override
-        public boolean isVoid() {
-          return true;
-        }
-      };
-
   private final String image;
 
-  private Boolean isInteger;
-  private Boolean isDecimal;
-  private Boolean isText;
-  private Boolean isBoolean;
-
-  public DelphiType(String image) {
+  protected DelphiType(String image) {
     this.image = image;
   }
 
-  public static Type unknownType() {
-    return UNKNOWN;
+  public static ImmutableType unknownType() {
+    return UnknownType.instance();
   }
 
-  public static Type untypedType() {
-    return UNTYPED;
+  public static ImmutableType untypedType() {
+    return UntypedType.instance();
   }
 
-  public static Type voidType() {
-    return VOID;
+  public static ImmutableType voidType() {
+    return VoidType.instance();
   }
 
   @Override
@@ -62,6 +39,11 @@ public abstract class DelphiType implements Type {
   @Override
   public Type superType() {
     return unknownType();
+  }
+
+  @Override
+  public Set<Type> parents() {
+    return Collections.emptySet();
   }
 
   @Override
@@ -105,42 +87,38 @@ public abstract class DelphiType implements Type {
   }
 
   @Override
-  public final boolean isInteger() {
-    if (isInteger == null) {
-      isInteger = IntegerType.fromType(this) != null;
-    }
-    return isInteger;
+  public boolean isInteger() {
+    return false;
   }
 
   @Override
-  public final boolean isDecimal() {
-    if (isDecimal == null) {
-      isDecimal =
-          Arrays.stream(DecimalType.values()).map(intrinsic -> intrinsic.type).anyMatch(this::is);
-    }
-    return isDecimal;
+  public boolean isDecimal() {
+    return false;
   }
 
   @Override
-  public final boolean isText() {
-    if (isText == null) {
-      isText = Arrays.stream(TextType.values()).map(intrinsic -> intrinsic.type).anyMatch(this::is);
-    }
-    return isText;
+  public boolean isText() {
+    return false;
   }
 
   @Override
-  public final boolean isBoolean() {
-    if (isBoolean == null) {
-      isBoolean =
-          Arrays.stream(BooleanType.values()).map(intrinsic -> intrinsic.type).anyMatch(this::is);
-    }
-    return isBoolean;
+  public boolean isBoolean() {
+    return false;
   }
 
   @Override
   public final boolean isString() {
     return isText() && !isChar();
+  }
+
+  @Override
+  public final boolean isNarrowString() {
+    return isText() && (is(ANSISTRING.type) || is(SHORTSTRING.type));
+  }
+
+  @Override
+  public final boolean isWideString() {
+    return isText() && (is(STRING.type) || is(WIDESTRING.type) || is(UNICODESTRING.type));
   }
 
   @Override
@@ -150,16 +128,16 @@ public abstract class DelphiType implements Type {
 
   @Override
   public final boolean isNarrowChar() {
-    return is(TextType.ANSICHAR.type);
+    return is(ANSICHAR.type);
   }
 
   @Override
   public final boolean isWideChar() {
-    return is(TextType.CHAR.type) || is(TextType.WIDECHAR.type);
+    return is(CHAR.type) || is(WIDECHAR.type);
   }
 
   @Override
-  public boolean isObject() {
+  public boolean isStruct() {
     return false;
   }
 
@@ -230,6 +208,21 @@ public abstract class DelphiType implements Type {
 
   @Override
   public boolean isVariant() {
+    return false;
+  }
+
+  @Override
+  public boolean isTypeType() {
+    return false;
+  }
+
+  @Override
+  public boolean isArrayConstructor() {
+    return false;
+  }
+
+  @Override
+  public boolean isArrayOfConst() {
     return false;
   }
 }

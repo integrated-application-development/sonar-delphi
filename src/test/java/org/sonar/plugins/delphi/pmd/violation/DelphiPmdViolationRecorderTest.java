@@ -47,8 +47,8 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.RuleScope;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
+import org.sonar.plugins.delphi.project.DelphiProjectHelper;
 
 public class DelphiPmdViolationRecorderTest {
   private final File baseDir = new File("").getAbsoluteFile();

@@ -38,23 +38,23 @@ public class EmptyBeginStatementRuleTest extends BasePmdRuleTest {
 
     builder.appendImpl("procedure TEmptyProcs.One;");
     builder.appendImpl("begin");
-    builder.appendImpl("  Writeln('OK');");
+    builder.appendImpl("  WriteLn('OK');");
     builder.appendImpl("end;");
     builder.appendImpl("procedure TEmptyProcs.Two;");
     builder.appendImpl("begin");
-    builder.appendImpl("  Writeln('OK');");
+    builder.appendImpl("  WriteLn('OK');");
     builder.appendImpl("end;");
     builder.appendImpl("procedure TEmptyProcs.Three;");
     builder.appendImpl("begin");
-    builder.appendImpl("  Writeln('OK');");
+    builder.appendImpl("  WriteLn('OK');");
     builder.appendImpl("end;");
     builder.appendImpl("procedure GlobalProcedureFour;");
     builder.appendImpl("begin");
-    builder.appendImpl("  Writeln('OK');");
+    builder.appendImpl("  WriteLn('OK');");
     builder.appendImpl("end;");
     builder.appendImpl("procedure GlobalProcedureFive;");
     builder.appendImpl("begin");
-    builder.appendImpl("  Writeln('OK');");
+    builder.appendImpl("  WriteLn('OK');");
     builder.appendImpl("end;");
 
     execute(builder);
@@ -76,7 +76,7 @@ public class EmptyBeginStatementRuleTest extends BasePmdRuleTest {
 
     builder.appendImpl("procedure TEmptyProcs.One;");
     builder.appendImpl("begin");
-    builder.appendImpl("  Writeln('OK');");
+    builder.appendImpl("  WriteLn('OK');");
     builder.appendImpl("end;");
     builder.appendImpl("procedure TEmptyProcs.Two;");
     builder.appendImpl("begin");
@@ -92,7 +92,7 @@ public class EmptyBeginStatementRuleTest extends BasePmdRuleTest {
     builder.appendImpl("end;");
     builder.appendImpl("procedure GlobalProcedureFour;");
     builder.appendImpl("begin");
-    builder.appendImpl("  Writeln('OK');");
+    builder.appendImpl("  WriteLn('OK');");
     builder.appendImpl("end;");
     builder.appendImpl("procedure GlobalProcedureFive;");
     builder.appendImpl("begin");

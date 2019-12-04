@@ -31,7 +31,7 @@ public class BeginEndRequiredRule extends AbstractDelphiRule {
     Node parent = statement.jjtGetParent();
 
     if (statement instanceof IfStatementNode && parent instanceof IfStatementNode) {
-      return ((IfStatementNode) parent).getElseBranch() != statement;
+      return ((IfStatementNode) parent).getElseStatement() != statement;
     }
 
     return !(parent instanceof StatementListNode);

@@ -1,9 +1,9 @@
 package org.sonar.plugins.delphi.symbol.resolve;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.sonar.plugins.delphi.symbol.UnknownScope.unknownScope;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_1;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_2;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_3;
@@ -14,54 +14,74 @@ import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_OPERA
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.EQUAL;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.EXACT;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
-import static org.sonar.plugins.delphi.type.DelphiCollectionType.dynamicArray;
-import static org.sonar.plugins.delphi.type.DelphiCollectionType.emptySet;
-import static org.sonar.plugins.delphi.type.DelphiCollectionType.fixedArray;
-import static org.sonar.plugins.delphi.type.DelphiCollectionType.openArray;
+import static org.sonar.plugins.delphi.symbol.scope.UnknownScope.unknownScope;
+import static org.sonar.plugins.delphi.type.DelphiArrayConstructorType.arrayConstructor;
+import static org.sonar.plugins.delphi.type.DelphiArrayType.ArrayOption.ARRAY_OF_CONST;
+import static org.sonar.plugins.delphi.type.DelphiArrayType.ArrayOption.OPEN;
+import static org.sonar.plugins.delphi.type.DelphiArrayType.array;
+import static org.sonar.plugins.delphi.type.DelphiArrayType.dynamicArray;
+import static org.sonar.plugins.delphi.type.DelphiArrayType.fixedArray;
+import static org.sonar.plugins.delphi.type.DelphiArrayType.openArray;
 import static org.sonar.plugins.delphi.type.DelphiEnumerationType.enumeration;
 import static org.sonar.plugins.delphi.type.DelphiEnumerationType.subRange;
 import static org.sonar.plugins.delphi.type.DelphiFileType.untypedFile;
-import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.BooleanType.BOOLEAN;
-import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.BooleanType.BYTEBOOL;
-import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.BooleanType.WORDBOOL;
-import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.DecimalType.CURRENCY;
-import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.DecimalType.DOUBLE;
-import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.DecimalType.REAL;
-import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.DecimalType.SINGLE;
-import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.IntegerType.INTEGER;
-import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.IntegerType.LONGINT;
-import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.IntegerType.SMALLINT;
-import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType.ANSICHAR;
-import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType.ANSISTRING;
-import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType.CHAR;
-import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType.SHORTSTRING;
-import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType.STRING;
-import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType.UNICODESTRING;
-import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType.WIDECHAR;
-import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType.WIDESTRING;
 import static org.sonar.plugins.delphi.type.DelphiPointerType.nilPointer;
 import static org.sonar.plugins.delphi.type.DelphiPointerType.pointerTo;
 import static org.sonar.plugins.delphi.type.DelphiPointerType.untypedPointer;
 import static org.sonar.plugins.delphi.type.DelphiProceduralType.anonymous;
 import static org.sonar.plugins.delphi.type.DelphiProceduralType.procedure;
+import static org.sonar.plugins.delphi.type.DelphiSetType.emptySet;
+import static org.sonar.plugins.delphi.type.DelphiSetType.set;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 import static org.sonar.plugins.delphi.type.DelphiType.untypedType;
-import static org.sonar.plugins.delphi.type.DelphiVariantType.oleVariant;
-import static org.sonar.plugins.delphi.type.DelphiVariantType.variant;
+import static org.sonar.plugins.delphi.type.DelphiType.voidType;
 import static org.sonar.plugins.delphi.type.StructKind.CLASS;
 import static org.sonar.plugins.delphi.type.StructKind.INTERFACE;
+import static org.sonar.plugins.delphi.type.StructKind.OBJECT;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ARRAY;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_DYNAMIC_ARRAY;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_OBJECT;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_SET;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.BOOLEAN;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.BYTEBOOL;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.WORDBOOL;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.CURRENCY;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.DOUBLE;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.REAL;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.SINGLE;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.BYTE;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.INTEGER;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.LONGINT;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.SMALLINT;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSICHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSISTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.SHORTSTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.STRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDECHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDESTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicVariant.OLE_VARIANT;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicVariant.VARIANT;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import org.junit.Test;
+import org.sonar.plugins.delphi.type.DelphiArrayType;
 import org.sonar.plugins.delphi.type.DelphiClassReferenceType;
-import org.sonar.plugins.delphi.type.DelphiCollectionType;
+import org.sonar.plugins.delphi.type.DelphiEnumerationType;
 import org.sonar.plugins.delphi.type.DelphiFileType;
+import org.sonar.plugins.delphi.type.DelphiSetType;
 import org.sonar.plugins.delphi.type.DelphiStructType;
+import org.sonar.plugins.delphi.type.DelphiTypeType;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Type.ArrayConstructorType;
 import org.sonar.plugins.delphi.type.Type.CollectionType;
 import org.sonar.plugins.delphi.type.Type.EnumType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
+import org.sonar.plugins.delphi.type.Type.StructType;
 
 public class TypeComparerTest {
   private static void compare(Type from, Type to, EqualityType equality) {
@@ -78,7 +98,7 @@ public class TypeComparerTest {
     compare(SMALLINT.type, INTEGER.type, CONVERT_LEVEL_1);
     compare(INTEGER.type, SMALLINT.type, CONVERT_LEVEL_3);
     compare(CURRENCY.type, INTEGER.type, CONVERT_LEVEL_2);
-    compare(variant(), INTEGER.type, CONVERT_LEVEL_6);
+    compare(VARIANT.type, INTEGER.type, CONVERT_LEVEL_6);
     compare(STRING.type, INTEGER.type, INCOMPATIBLE_TYPES);
   }
 
@@ -118,24 +138,29 @@ public class TypeComparerTest {
     compare(ANSISTRING.type, CHAR.type, CONVERT_LEVEL_1);
     compare(ANSISTRING.type, unknownType(), INCOMPATIBLE_TYPES);
 
-    assertThatThrownBy(() -> TypeComparer.compareStringToText(unknownType(), unknownType()))
+    compare(DelphiTypeType.create("Test", STRING.type), STRING.type, EQUAL);
+
+    assertThatThrownBy(() -> TypeComparer.compareStringToText(unknownType(), STRING.type))
         .isInstanceOf(AssertionError.class);
   }
 
   @Test
   public void testCharToText() {
-    compare(ANSICHAR.type, SHORTSTRING.type, CONVERT_LEVEL_1);
-    compare(ANSICHAR.type, ANSISTRING.type, CONVERT_LEVEL_2);
-    compare(ANSICHAR.type, STRING.type, CONVERT_LEVEL_3);
-    compare(ANSICHAR.type, UNICODESTRING.type, CONVERT_LEVEL_3);
-    compare(ANSICHAR.type, WIDESTRING.type, CONVERT_LEVEL_4);
+    compare(ANSICHAR.type, DelphiTypeType.create("_AnsiChar", ANSICHAR.type), CONVERT_LEVEL_1);
+    compare(ANSICHAR.type, SHORTSTRING.type, CONVERT_LEVEL_2);
+    compare(ANSICHAR.type, ANSISTRING.type, CONVERT_LEVEL_3);
+    compare(ANSICHAR.type, STRING.type, CONVERT_LEVEL_4);
+    compare(ANSICHAR.type, UNICODESTRING.type, CONVERT_LEVEL_4);
+    compare(ANSICHAR.type, WIDESTRING.type, CONVERT_LEVEL_5);
     assertThat(TypeComparer.compareAnsiCharToText(unknownType())).isEqualTo(INCOMPATIBLE_TYPES);
 
-    compare(CHAR.type, STRING.type, CONVERT_LEVEL_1);
-    compare(CHAR.type, UNICODESTRING.type, CONVERT_LEVEL_1);
-    compare(CHAR.type, WIDESTRING.type, CONVERT_LEVEL_2);
-    compare(CHAR.type, ANSISTRING.type, CONVERT_LEVEL_3);
-    compare(CHAR.type, SHORTSTRING.type, CONVERT_LEVEL_4);
+    compare(CHAR.type, DelphiTypeType.create("_WideChar", WIDECHAR.type), CONVERT_LEVEL_1);
+    compare(CHAR.type, STRING.type, CONVERT_LEVEL_2);
+    compare(CHAR.type, UNICODESTRING.type, CONVERT_LEVEL_2);
+    compare(CHAR.type, WIDESTRING.type, CONVERT_LEVEL_3);
+    compare(CHAR.type, ANSICHAR.type, CONVERT_LEVEL_3);
+    compare(CHAR.type, ANSISTRING.type, CONVERT_LEVEL_4);
+    compare(CHAR.type, SHORTSTRING.type, CONVERT_LEVEL_5);
     assertThat(TypeComparer.compareWideCharToText(unknownType())).isEqualTo(INCOMPATIBLE_TYPES);
 
     assertThatThrownBy(() -> TypeComparer.compareCharToText(unknownType(), unknownType()))
@@ -161,7 +186,7 @@ public class TypeComparerTest {
     compare(enumType, enumType2, INCOMPATIBLE_TYPES);
     compare(subRange1, subRange2, CONVERT_LEVEL_1);
     compare(subRange1, subRange3, INCOMPATIBLE_TYPES);
-    compare(variant(), enumType, CONVERT_LEVEL_1);
+    compare(VARIANT.type, enumType, CONVERT_LEVEL_1);
     compare(INTEGER.type, enumType, INCOMPATIBLE_TYPES);
   }
 
@@ -203,8 +228,8 @@ public class TypeComparerTest {
     compare(ANSICHAR.type, dynamicArray(null, ANSICHAR.type), CONVERT_LEVEL_1);
     compare(ANSICHAR.type, toDynamicArray, INCOMPATIBLE_TYPES);
 
-    compare(variant(), toDynamicArray, CONVERT_LEVEL_1);
-    compare(variant(), toOpenArray, CONVERT_OPERATOR);
+    compare(VARIANT.type, toDynamicArray, CONVERT_LEVEL_1);
+    compare(VARIANT.type, toOpenArray, CONVERT_OPERATOR);
 
     compare(unknownType(), toOpenArray, INCOMPATIBLE_TYPES);
     compare(unknownType(), toDynamicArray, INCOMPATIBLE_TYPES);
@@ -212,12 +237,72 @@ public class TypeComparerTest {
   }
 
   @Test
+  public void testArrayConstructorToArray() {
+    CollectionType toDynamicArray = dynamicArray(null, INTEGER.type);
+    CollectionType toIncompatibleDynamicArray =
+        dynamicArray(
+            null, DelphiStructType.from("Test", unknownScope(), Collections.emptySet(), CLASS));
+    CollectionType toFixedArray = fixedArray(null, INTEGER.type);
+    CollectionType toOpenArray = openArray(null, INTEGER.type);
+    CollectionType toArrayOfConst = array(null, voidType(), Set.of(OPEN, ARRAY_OF_CONST));
+
+    ArrayConstructorType emptyConstructor = arrayConstructor(emptyList());
+    ArrayConstructorType byteConstructor = arrayConstructor(List.of(BYTE.type));
+    ArrayConstructorType integerConstructor = arrayConstructor(List.of(INTEGER.type));
+    ArrayConstructorType stringConstructor = arrayConstructor(List.of(STRING.type));
+    ArrayConstructorType variantConstructor = arrayConstructor(List.of(VARIANT.type));
+    ArrayConstructorType heterogeneousConstructor =
+        arrayConstructor(List.of(INTEGER.type, STRING.type, BOOLEAN.type));
+
+    compare(emptyConstructor, toDynamicArray, CONVERT_LEVEL_2);
+    compare(emptyConstructor, toOpenArray, CONVERT_LEVEL_1);
+    compare(emptyConstructor, toFixedArray, INCOMPATIBLE_TYPES);
+
+    compare(byteConstructor, toDynamicArray, CONVERT_LEVEL_3);
+    compare(byteConstructor, toOpenArray, CONVERT_LEVEL_2);
+
+    compare(integerConstructor, toDynamicArray, CONVERT_LEVEL_2);
+    compare(integerConstructor, toOpenArray, CONVERT_LEVEL_1);
+
+    compare(stringConstructor, toDynamicArray, INCOMPATIBLE_TYPES);
+    compare(stringConstructor, toOpenArray, INCOMPATIBLE_TYPES);
+
+    compare(variantConstructor, toDynamicArray, CONVERT_LEVEL_5);
+    compare(variantConstructor, toIncompatibleDynamicArray, CONVERT_LEVEL_6);
+    compare(variantConstructor, toOpenArray, CONVERT_LEVEL_6);
+
+    compare(byteConstructor, toArrayOfConst, EQUAL);
+    compare(integerConstructor, toArrayOfConst, EQUAL);
+    compare(heterogeneousConstructor, toArrayOfConst, EQUAL);
+  }
+
+  @Test
+  public void testArrayConstructorToSet() {
+    CollectionType toSet = set(INTEGER.type);
+
+    ArrayConstructorType emptyConstructor = arrayConstructor(emptyList());
+    ArrayConstructorType byteConstructor = arrayConstructor(List.of(BYTE.type));
+    ArrayConstructorType integerConstructor = arrayConstructor(List.of(INTEGER.type));
+    ArrayConstructorType stringConstructor = arrayConstructor(List.of(STRING.type));
+    ArrayConstructorType variantConstructor = arrayConstructor(List.of(VARIANT.type));
+    ArrayConstructorType heterogeneousConstructor =
+        arrayConstructor(List.of(INTEGER.type, STRING.type, BOOLEAN.type));
+
+    compare(emptyConstructor, toSet, CONVERT_LEVEL_1);
+    compare(byteConstructor, toSet, CONVERT_LEVEL_1);
+    compare(integerConstructor, toSet, CONVERT_LEVEL_1);
+    compare(stringConstructor, toSet, CONVERT_LEVEL_1);
+    compare(variantConstructor, toSet, CONVERT_LEVEL_1);
+    compare(heterogeneousConstructor, toSet, CONVERT_LEVEL_1);
+  }
+
+  @Test
   public void testToSet() {
     // NOTE: Sets can't actually have such large ordinal element types (and certainly not strings)
     // This is just for testing convenience.
-    CollectionType integerSet = DelphiCollectionType.set(INTEGER.type);
-    CollectionType longIntSet = DelphiCollectionType.set(LONGINT.type);
-    CollectionType stringSet = DelphiCollectionType.set(STRING.type);
+    CollectionType integerSet = DelphiSetType.set(INTEGER.type);
+    CollectionType longIntSet = DelphiSetType.set(LONGINT.type);
+    CollectionType stringSet = DelphiSetType.set(STRING.type);
 
     compare(emptySet(), integerSet, CONVERT_LEVEL_1);
     compare(integerSet, emptySet(), CONVERT_LEVEL_1);
@@ -234,12 +319,14 @@ public class TypeComparerTest {
 
     ProceduralType fromProcedure = procedure(parameters, returnType);
     ProceduralType similarFromProcedure = procedure(similarParameters, returnType);
-    ProceduralType incompatibleProcedure = procedure(parameters, INTEGER.type);
+    ProceduralType incompatibleReturnTypeProcedure = procedure(parameters, INTEGER.type);
+    ProceduralType incompatibleParametersProcedure = procedure(emptyList(), returnType);
     ProceduralType toProcedure = anonymous(parameters, returnType);
 
     compare(fromProcedure, toProcedure, EQUAL);
     compare(similarFromProcedure, toProcedure, CONVERT_LEVEL_1);
-    compare(incompatibleProcedure, toProcedure, INCOMPATIBLE_TYPES);
+    compare(incompatibleReturnTypeProcedure, toProcedure, INCOMPATIBLE_TYPES);
+    compare(incompatibleParametersProcedure, toProcedure, INCOMPATIBLE_TYPES);
 
     compare(nilPointer(), toProcedure, CONVERT_LEVEL_1);
     compare(untypedPointer(), toProcedure, CONVERT_LEVEL_1);
@@ -257,7 +344,7 @@ public class TypeComparerTest {
     compare(untypedPointer(), toObject, CONVERT_LEVEL_2);
     compare(nilPointer(), toObject, CONVERT_LEVEL_1);
     compare(pointerTo(toObject), toObject, INCOMPATIBLE_TYPES);
-    compare(variant(), toObject, CONVERT_OPERATOR);
+    compare(VARIANT.type, toObject, CONVERT_OPERATOR);
     compare(unknownType(), toObject, INCOMPATIBLE_TYPES);
   }
 
@@ -293,6 +380,11 @@ public class TypeComparerTest {
 
   @Test
   public void testToPointer() {
+    var parentType = DelphiStructType.from("Foo", unknownScope(), Collections.emptySet(), CLASS);
+    var subType = DelphiStructType.from("Bar", unknownScope(), singleton(parentType), CLASS);
+
+    compare(pointerTo(LONGINT.type), pointerTo(INTEGER.type), EQUAL);
+    compare(pointerTo(subType), pointerTo(parentType), CONVERT_LEVEL_1);
     compare(SHORTSTRING.type, pointerTo(CHAR.type), CONVERT_LEVEL_2);
     compare(SHORTSTRING.type, pointerTo(ANSICHAR.type), CONVERT_LEVEL_3);
     compare(WIDECHAR.type, pointerTo(CHAR.type), CONVERT_LEVEL_1);
@@ -300,6 +392,12 @@ public class TypeComparerTest {
     compare(WIDECHAR.type, pointerTo(ANSICHAR.type), CONVERT_LEVEL_2);
     compare(ANSICHAR.type, pointerTo(ANSICHAR.type), CONVERT_LEVEL_2);
     compare(INTEGER.type, pointerTo(STRING.type), CONVERT_LEVEL_5);
+    compare(untypedPointer(), pointerTo(CHAR.type), CONVERT_LEVEL_2);
+    compare(untypedPointer(), pointerTo(INTEGER.type), CONVERT_LEVEL_1);
+    compare(pointerTo(CHAR.type), untypedPointer(), CONVERT_LEVEL_2);
+    compare(pointerTo(INTEGER.type), untypedPointer(), CONVERT_LEVEL_1);
+    compare(pointerTo(INTEGER.type), pointerTo(STRING.type), INCOMPATIBLE_TYPES);
+    compare(STRING.type, pointerTo(INTEGER.type), INCOMPATIBLE_TYPES);
     compare(unknownType(), untypedPointer(), INCOMPATIBLE_TYPES);
   }
 
@@ -314,10 +412,39 @@ public class TypeComparerTest {
     Type interfaceType =
         DelphiStructType.from("Test", unknownScope(), Collections.emptySet(), INTERFACE);
 
-    compare(enumeration("Enum", unknownScope()), variant(), CONVERT_LEVEL_1);
-    compare(dynamicArray("MyArray", unknownType()), variant(), CONVERT_LEVEL_1);
-    compare(interfaceType, variant(), CONVERT_LEVEL_1);
-    compare(oleVariant(), variant(), CONVERT_LEVEL_1);
-    compare(unknownType(), variant(), CONVERT_OPERATOR);
+    compare(enumeration("Enum", unknownScope()), VARIANT.type, CONVERT_LEVEL_1);
+    compare(dynamicArray("MyArray", unknownType()), VARIANT.type, CONVERT_LEVEL_1);
+    compare(interfaceType, VARIANT.type, CONVERT_LEVEL_1);
+    compare(OLE_VARIANT.type, VARIANT.type, CONVERT_LEVEL_1);
+    compare(unknownType(), VARIANT.type, CONVERT_OPERATOR);
+  }
+
+  @Test
+  public void testToIntrinsicTypeArgument() {
+    CollectionType fixedArray = DelphiArrayType.fixedArray(null, INTEGER.type);
+    CollectionType dynamicArray = DelphiArrayType.dynamicArray(null, INTEGER.type);
+    CollectionType openArray = DelphiArrayType.openArray(null, INTEGER.type);
+    CollectionType set = DelphiSetType.set(BYTE.type);
+    StructType object =
+        DelphiStructType.from("MyObject", unknownScope(), Collections.emptySet(), OBJECT);
+    EnumType enumeration = DelphiEnumerationType.enumeration("MyEnum", unknownScope());
+
+    compare(fixedArray, ANY_ARRAY, EQUAL);
+    compare(dynamicArray, ANY_ARRAY, EQUAL);
+    compare(openArray, ANY_ARRAY, EQUAL);
+
+    compare(fixedArray, ANY_DYNAMIC_ARRAY, INCOMPATIBLE_TYPES);
+    compare(dynamicArray, ANY_DYNAMIC_ARRAY, EQUAL);
+    compare(openArray, ANY_DYNAMIC_ARRAY, INCOMPATIBLE_TYPES);
+
+    compare(set, ANY_SET, EQUAL);
+
+    compare(object, ANY_OBJECT, EQUAL);
+
+    compare(INTEGER.type, ANY_ORDINAL, EQUAL);
+    compare(BOOLEAN.type, ANY_ORDINAL, EQUAL);
+    compare(enumeration, ANY_ORDINAL, EQUAL);
+    compare(CHAR.type, ANY_ORDINAL, EQUAL);
+    compare(DOUBLE.type, ANY_ORDINAL, INCOMPATIBLE_TYPES);
   }
 }

@@ -22,6 +22,7 @@ import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
  */
 public final class StatementListNode extends DelphiNode {
   private List<StatementNode> statements;
+  private List<StatementNode> descendantStatements;
 
   public StatementListNode(Token token) {
     super(token);
@@ -42,13 +43,24 @@ public final class StatementListNode extends DelphiNode {
 
   public List<StatementNode> getStatements() {
     if (statements == null) {
-      statements = findDescendantsOfType(StatementNode.class);
+      statements = findChildrenOfType(StatementNode.class);
     }
     return statements;
   }
 
+  public List<StatementNode> getDescendantStatements() {
+    if (descendantStatements == null) {
+      descendantStatements = findDescendantsOfType(StatementNode.class);
+    }
+    return descendantStatements;
+  }
+
   public Stream<StatementNode> statementStream() {
     return getStatements().stream();
+  }
+
+  public Stream<StatementNode> descendantStatementStream() {
+    return getDescendantStatements().stream();
   }
 
   @Override

@@ -22,7 +22,7 @@ public final class ParenthesizedExpressionNode extends ExpressionNode {
   }
 
   public ExpressionNode getExpression() {
-    return (ExpressionNode) jjtGetChild(0);
+    return (ExpressionNode) jjtGetChild(1);
   }
 
   @Override

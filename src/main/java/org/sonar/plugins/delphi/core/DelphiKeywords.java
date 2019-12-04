@@ -32,12 +32,12 @@ public final class DelphiKeywords {
       Set.of(
           DelphiLexer.ABSTRACT,
           DelphiLexer.ADD,
+          DelphiLexer.ALIGN,
           DelphiLexer.AND,
           DelphiLexer.ARRAY,
           DelphiLexer.AS,
           DelphiLexer.ASM,
           DelphiLexer.ASSEMBLER,
-          DelphiLexer.ASSEMBLY,
           DelphiLexer.AT,
           DelphiLexer.AUTOMATED,
           DelphiLexer.BEGIN,
@@ -48,6 +48,7 @@ public final class DelphiKeywords {
           DelphiLexer.CONSTRUCTOR,
           DelphiLexer.CONTAINS,
           DelphiLexer.DEFAULT,
+          DelphiLexer.DELAYED,
           DelphiLexer.DEPRECATED,
           DelphiLexer.DESTRUCTOR,
           DelphiLexer.DISPID,
@@ -55,8 +56,6 @@ public final class DelphiKeywords {
           DelphiLexer.DIV,
           DelphiLexer.DO,
           DelphiLexer.DOWNTO,
-          DelphiLexer.DQ,
-          DelphiLexer.DW,
           DelphiLexer.DYNAMIC,
           DelphiLexer.ELSE,
           DelphiLexer.END,
@@ -154,13 +153,7 @@ public final class DelphiKeywords {
           DelphiLexer.WHILE);
 
   public static final Set<Integer> SPECIAL_KEYWORDS =
-      Set.of(
-          DelphiLexer.BREAK,
-          DelphiLexer.CONTINUE,
-          DelphiLexer.EXIT,
-          DelphiLexer.GOTO,
-          DelphiLexer.STRING,
-          DelphiLexer.VARIANT);
+      Set.of(DelphiLexer.BREAK, DelphiLexer.CONTINUE, DelphiLexer.EXIT, DelphiLexer.GOTO);
 
   private DelphiKeywords() {
     // const class

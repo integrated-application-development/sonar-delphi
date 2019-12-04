@@ -212,11 +212,11 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
             .appendImpl("begin")
             .appendImpl("  if Val then")
             .appendImpl("  begin")
-            .appendImpl("    writeln('test');")
+            .appendImpl("    WriteLn('test');")
             .appendImpl("  end")
             .appendImpl("  else")
             .appendImpl("  begin")
-            .appendImpl("    writeln('test');")
+            .appendImpl("    WriteLn('test');")
             .appendImpl("  end;")
             .appendImpl("end;");
 

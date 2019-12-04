@@ -8,7 +8,7 @@ public class NoFunctionReturnTypeRule extends AbstractDelphiRule {
   @Override
   public RuleContext visit(MethodImplementationNode method, RuleContext data) {
     if (method.isFunction() && method.getMethodHeading().getMethodReturnType() == null) {
-      addViolation(data, method);
+      addViolation(data, method.getMethodNameNode());
     }
     return super.visit(method, data);
   }

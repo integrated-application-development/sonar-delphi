@@ -2,14 +2,15 @@ package org.sonar.plugins.delphi.symbol;
 
 import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 
 public class DelphiNameOccurrence implements NameOccurrence {
-
   private final SymbolicNode location;
   private DelphiNameDeclaration declaration;
   private DelphiNameOccurrence qualifiedName;
   private String image;
   private boolean isExplicitInvocation;
+  private boolean isMethodReference;
 
   private static final String SELF = "Self";
 
@@ -19,7 +20,11 @@ public class DelphiNameOccurrence implements NameOccurrence {
   }
 
   public DelphiNameOccurrence(DelphiNode concreteNode) {
-    this.location = new SymbolicNode(concreteNode, concreteNode.getScope());
+    this(new SymbolicNode(concreteNode, concreteNode.getScope()));
+  }
+
+  public DelphiNameOccurrence(SymbolicNode symbolicNode) {
+    this.location = symbolicNode;
   }
 
   @Override
@@ -61,6 +66,14 @@ public class DelphiNameOccurrence implements NameOccurrence {
 
   public boolean isExplicitInvocation() {
     return isExplicitInvocation;
+  }
+
+  public void setIsMethodReference() {
+    this.isMethodReference = true;
+  }
+
+  public boolean isMethodReference() {
+    return isMethodReference;
   }
 
   /**

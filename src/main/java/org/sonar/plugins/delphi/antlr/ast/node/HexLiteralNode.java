@@ -4,8 +4,8 @@ import org.antlr.runtime.Token;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.IntegerType;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger;
 
 public final class HexLiteralNode extends LiteralNode {
   private String image;
@@ -39,7 +39,7 @@ public final class HexLiteralNode extends LiteralNode {
   @NotNull
   public Type getType() {
     if (type == null) {
-      type = IntegerType.fromLiteralValue(this.getValueAsLong()).type;
+      type = IntrinsicInteger.fromLiteralValue(this.getValueAsLong());
     }
     return type;
   }

@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.delphi.symbol.DelphiNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 
 public abstract class NameDeclarationNode extends DelphiNode {
   private DelphiNameDeclaration declaration;
@@ -29,9 +29,8 @@ public abstract class NameDeclarationNode extends DelphiNode {
   public List<NameOccurrence> getUsages() {
     if (usages == null) {
       if (declaration != null) {
-        usages = declaration.getScope().getDeclarations(declaration.getClass()).get(declaration);
-      }
-      if (usages == null) {
+        usages = declaration.getScope().getOccurrencesFor(declaration);
+      } else {
         usages = Collections.emptyList();
       }
     }

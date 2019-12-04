@@ -13,13 +13,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Symbol table
   - Type resolution
   - Overload resolution
+- Search path indexation.
 - Symbol information is now provided to the Sonar API for use in the web interface.
 - `MemoryManagementRule` analysis rule, which flags object allocations without memory management.
 - `ShortIdentifiersRule` analysis rule, which flags identifiers below a certain length.
 - `ForbiddenIdentifierRule` analysis rule template, which flags identifiers with a specified name.
+- `sonar.delphi.sources.searchPath` property to specify directories to search for include files and
+  unit imports.
+- `sonar.delphi.unitScopeNames` property to specify unit scope names, which are used for unit import
+  resolution.
+- `sonar.delphi.sources.standardLibrarySource` property to specify a path to the standard library
+  source code. This is a required property.
 
 ### Changed
 
+- Rewrite preprocessor from scratch:
+  - Support for complex branching conditionals
+  - Support for constant expressions in conditional directives
+  - Support for `SCOPEDENUMS` switch
+  - Preservation of the original token file positions
 - Enhance `MixedNamesRule` with symbol table information.
 - Exclude class constructors in `ConstructorCreateRule`.
 - Handle `else` exception handler in `SwallowedExceptionsRule`.

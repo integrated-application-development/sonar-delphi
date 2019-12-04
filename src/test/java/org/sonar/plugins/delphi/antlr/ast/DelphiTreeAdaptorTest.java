@@ -1,21 +1,18 @@
 package org.sonar.plugins.delphi.antlr.ast;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.Tree;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodDeclarationNode;
 
 public class DelphiTreeAdaptorTest {
   private final DelphiTreeAdaptor adaptor = new DelphiTreeAdaptor();
-
-  @Rule public ExpectedException exceptionCatcher = ExpectedException.none();
 
   @Test
   public void testNullDupTree() {
@@ -68,18 +65,17 @@ public class DelphiTreeAdaptorTest {
 
   @Test
   public void testBecomeRootWithNilNewRootWithMultipleChildren() {
-    exceptionCatcher.expect(IllegalStateException.class);
     Object oldRoot = adaptor.create(Token.INVALID_TOKEN);
     Object newRoot = adaptor.nil();
     adaptor.addChild(newRoot, adaptor.create(Token.INVALID_TOKEN));
     adaptor.addChild(newRoot, adaptor.create(Token.INVALID_TOKEN));
-    adaptor.becomeRoot(newRoot, oldRoot);
+    assertThatThrownBy(() -> adaptor.becomeRoot(newRoot, oldRoot))
+        .isInstanceOf(IllegalStateException.class);
   }
 
   @Test
   public void testDupNodeInstantiationError() {
-    exceptionCatcher.expect(AssertionError.class);
-    adaptor.dupNode(Tree.INVALID_NODE);
+    assertThatThrownBy(() -> adaptor.dupNode(Tree.INVALID_NODE)).isInstanceOf(AssertionError.class);
   }
 
   @Test

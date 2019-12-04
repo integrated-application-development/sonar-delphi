@@ -60,7 +60,13 @@ package org.sonar.plugins.delphi.antlr;
 }
 
 @lexer::members {
-  boolean asmMode = false;
+  private boolean shouldSkipImplementation;
+  private boolean asmMode = false;
+
+  public DelphiLexer(CharStream input, boolean shouldSkipImplementation) {
+    this(input);
+    this.shouldSkipImplementation = shouldSkipImplementation;
+  }
 
   @Override
   public void reportError(RecognitionException e) {
@@ -100,6 +106,8 @@ package org.sonar.plugins.delphi.antlr;
 //----------------------------------------------------------------------------
 file                         : program | library | unit | package_
                              ;
+fileWithoutImplementation    : program | library | unitWithoutImplementation | package_
+                             ;
 
 //----------------------------------------------------------------------------
 // File head
@@ -115,11 +123,13 @@ library                      : libraryHead (usesFileClause)? block '.'
                              ;
 libraryHead                  : 'library'<LibraryDeclarationNode>^ nameDeclaration (portabilityDirective!)* ';'!
                              ;
-package_                     : packageHead requiresClause (containsClause)? 'end' '.'
+package_                     : packageHead requiresClause? containsClause 'end' '.'
                              ;
 packageHead                  : 'package'<PackageDeclarationNode>^ nameDeclaration ';'!
                              ;
 unit                         : unitHead unitInterface unitImplementation unitBlock '.'
+                             ;
+unitWithoutImplementation    : unitHead unitInterface
                              ;
 unitHead                     : 'unit'<UnitDeclarationNode>^ nameDeclaration portabilityDirective* ';'!
                              ;
@@ -127,13 +137,14 @@ unitInterface                : 'interface'<InterfaceSectionNode>^ usesClause? in
                              ;
 unitImplementation           : 'implementation'<ImplementationSectionNode>^ usesClause? declSection*
                              ;
-unitBlock                    : unitInitialization 'end'
+unitBlock                    : initializationFinalization? 'end'
                              | compoundStatement
-                             | 'end'
                              ;
-unitInitialization           : 'initialization'<InitializationSectionNode>^ statementList unitFinalization?
+initializationFinalization   : initializationSection finalizationSection?
                              ;
-unitFinalization             : 'finalization'<FinalizationSectionNode>^ statementList
+initializationSection        : 'initialization'<InitializationSectionNode>^ statementList
+                             ;
+finalizationSection          : 'finalization'<FinalizationSectionNode>^ statementList
                              ;
 
 //----------------------------------------------------------------------------
@@ -192,20 +203,19 @@ constSection                 : ('const'<ConstSectionNode>^ | 'resourcestring'<Co
 constDeclaration             : customAttribute? varNameDeclaration (':' varType)? '=' constExpression portabilityDirective* ';'
                              -> ^(TkConstDeclaration<ConstDeclarationNode> varNameDeclaration constExpression varType? portabilityDirective*)
                              ;
-typeSection                  : 'type'^ typeDeclaration+
+typeSection                  : 'type'<TypeSectionNode>^ typeDeclaration+
                              ;
-innerTypeSection             : 'type'^ typeDeclaration*
+innerTypeSection             : 'type'<TypeSectionNode>^ typeDeclaration*
                              ;
 typeDeclaration              : customAttribute? genericNameDeclaration '=' typeDecl portabilityDirective* ';'
                              -> ^(TkNewType<TypeDeclarationNode> genericNameDeclaration typeDecl customAttribute? portabilityDirective*)
                              ;
 varSection                   : ('var'<VarSectionNode>^ | 'threadvar'<VarSectionNode>^) varDeclaration varDeclaration*
                              ;
-varDeclaration               : customAttribute? varNameDeclarationList ':' varType varValueSpec? portabilityDirective* ';'
+varDeclaration               : customAttribute? varNameDeclarationList ':' varType portabilityDirective* varValueSpec? portabilityDirective* ';'
                              -> ^(TkVarDeclaration<VarDeclarationNode> varNameDeclarationList varType customAttribute?)
                              ;
-varValueSpec                 : 'absolute' ident
-                             | 'absolute' constExpression
+varValueSpec                 : 'absolute' constExpression
                              | '=' constExpression
                              ;
 exportsSection               : 'exports' ident exportItem (',' ident exportItem)* ';'
@@ -229,7 +239,6 @@ typeDecl                     : arrayType
                              | pointerType
                              | stringType
                              | procedureType
-                             | variantType
                              | subRangeType
                              | typeOfType
                              | typeType
@@ -242,9 +251,7 @@ varType                      : arrayType
                              | fileType
                              | recordType
                              | pointerType
-                             | stringType
                              | procedureType
-                             | variantType
                              | subRangeType
                              | typeReference
                              | enumType
@@ -279,20 +286,18 @@ procedureType                : methodType
                              | procedureReference
                              | simpleProcedureType
                              ;
-methodType                   : procedureTypeHeading 'of' 'object'<MethodTypeNode>^ ((';')? methodDirective)*
+methodType                   : procedureTypeHeading 'of' 'object'<MethodTypeNode>^ ((';')? methodDeclDirective)*
                              ;
 procedureReference           : 'reference'<ProcedureReferenceTypeNode>^ 'to'! procedureTypeHeading
                              ;
 simpleProcedureType          : procedureTypeHeading -> ^(TkProcedureType<ProcedureTypeNode> procedureTypeHeading)
                              ;
-procedureTypeHeading         : 'function'<ProcedureTypeHeadingNode>^ methodParameters? methodReturnType? ((';')? methodDirective)*
-                             | 'procedure'<ProcedureTypeHeadingNode>^ methodParameters? ((';')? methodDirective)*
+procedureTypeHeading         : 'function'<ProcedureTypeHeadingNode>^ methodParameters? methodReturnType? ((';')? methodDeclDirective)*
+                             | 'procedure'<ProcedureTypeHeadingNode>^ methodParameters? ((';')? methodDeclDirective)*
                              ;
-variantType                  : 'variant'<VariantTypeNode>^
+typeOfType                   : 'type'<TypeOfTypeNode>^ 'of' typeDecl
                              ;
-typeOfType                   : 'type'<TypeOfTypeNode>^ 'of' typeReference
-                             ;
-typeType                     : 'type'<TypeTypeNode>^ typeReference
+typeType                     : 'type'<TypeTypeNode>^ typeDecl
                              ;
 typeAlias                    : typeReference -> ^(TkTypeAlias<TypeAliasNode> typeReference)
                              ;
@@ -302,7 +307,8 @@ enumType                     : '('<EnumTypeNode>^ (enumTypeElement (',')?)* ')'!
                              ;
 enumTypeElement              : nameDeclaration ('=' expression)? -> ^(TkEnumElement<EnumElementNode> nameDeclaration expression?)
                              ;
-typeReference                : nameReference -> ^(TkTypeReference<TypeReferenceNode> nameReference)
+typeReference                : stringType
+                             | nameReference -> ^(TkTypeReference<TypeReferenceNode> nameReference)
                              ;
 
 //----------------------------------------------------------------------------
@@ -326,11 +332,15 @@ visibilitySection_           : visibility visibilitySectionItem*
                              ;
 visibilitySectionItem        : fieldSection
                              | methodDeclaration
+                             | methodResolutionClause
                              | property
                              | constSection
                              | innerTypeSection
                              ;
-fieldSection                 : 'class'? 'var' fieldDecl* -> ^(TkFieldSection<FieldSectionNode> 'class'? 'var' fieldDecl*)
+fieldSectionKey              : 'var'
+                             | 'threadvar'
+                             ;
+fieldSection                 : 'class'? fieldSectionKey fieldDecl* -> ^(TkFieldSection<FieldSectionNode> 'class'? fieldSectionKey fieldDecl*)
                              | fieldDecl+ -> ^(TkFieldSection<FieldSectionNode> fieldDecl+)
                              ;
 fieldDecl                    : customAttribute? varNameDeclarationList ':' varType portabilityDirective* ';'?
@@ -340,7 +350,7 @@ classHelperType              : 'class'<ClassHelperTypeNode>^ 'helper' classParen
                              ;
 interfaceType                : ('interface'<InterfaceTypeNode>^ | 'dispinterface'<InterfaceTypeNode>^) classParent? (interfaceGuid? interfaceItems? 'end')?
                              ;
-interfaceGuid                : '[' textLiteral ']' -> ^(TkGuid<InterfaceGuidNode> textLiteral)
+interfaceGuid                : '[' expression ']' -> ^(TkGuid<InterfaceGuidNode> expression)
                              ;
 interfaceItems               : interfaceItem+ -> ^(TkVisibilitySection<VisibilitySectionNode> interfaceItem+)
                              ;
@@ -349,7 +359,7 @@ interfaceItem                : methodDeclaration
                              ;
 objectType                   : 'object'<ObjectTypeNode>^ classParent? visibilitySection* 'end' // Obselete, kept for backwards compatibility with Turbo Pascal
                              ;                                                                 // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re192.html
-recordType                   : 'record'<RecordTypeNode>^ visibilitySection* recordVariantSection? 'end'
+recordType                   : 'record'<RecordTypeNode>^ visibilitySection* recordVariantSection? 'end' ('align' intNum)?
                              ;
 recordVariantSection         : 'case'<RecordVariantSectionNode>^ (ident ':')? typeReference 'of' recordVariant+
                              ;
@@ -358,8 +368,8 @@ recordVariant                : expressionList ':' '(' fieldDecl* recordVariantSe
                              ;
 recordHelperType             : 'record'<RecordHelperTypeNode>^ 'helper' 'for' typeReference visibilitySection* 'end'
                              ;
-property                     : customAttribute? 'class'? 'property' nameDeclaration propertyArray? (':' varType)? (propertyDirective)* ';'
-                             -> ^('property'<PropertyNode> nameDeclaration propertyArray? varType? 'class'? customAttribute? propertyDirective*)
+property                     : customAttribute? 'class'? 'property' propertyNameDeclaration propertyArray? (':' varType)? (propertyDirective)* ';'
+                             -> ^('property'<PropertyNode> propertyNameDeclaration propertyArray? varType? 'class'? customAttribute? propertyDirective*)
                              ;
 propertyArray                : '['! formalParameterList ']'!
                              ;
@@ -392,15 +402,15 @@ genericDefinition            : simpleGenericDefinition -> ^(TkGenericDefinition<
                              | complexGenericDefinition  -> ^(TkGenericDefinition<GenericDefinitionNode> complexGenericDefinition)
                              | constrainedGenericDefinition  -> ^(TkGenericDefinition<GenericDefinitionNode> constrainedGenericDefinition)
                              ;
-simpleGenericDefinition      : '<' ident (',' ident)* '>'
+simpleGenericDefinition      : '<' typeReference (',' typeReference)* '>'
                              ;
-complexGenericDefinition     : '<' nameReference (simpleGenericDefinition)? (',' nameReference (simpleGenericDefinition)?)* '>'
+complexGenericDefinition     : '<' typeReference (simpleGenericDefinition)? (',' typeReference (simpleGenericDefinition)?)* '>'
                              ;
 constrainedGenericDefinition : '<' constrainedGeneric (';' constrainedGeneric)* '>'
                              ;
-constrainedGeneric           : ident (':' genericConstraint (',' genericConstraint)*)?
+constrainedGeneric           : typeReference (':' genericConstraint (',' genericConstraint)*)?
                              ;
-genericConstraint            : nameReference
+genericConstraint            : typeReference
                              | 'record'
                              | 'class'
                              | 'constructor'
@@ -409,6 +419,11 @@ genericConstraint            : nameReference
 //----------------------------------------------------------------------------
 // Methods
 //----------------------------------------------------------------------------
+methodResolutionClause       : key=('function' | 'procedure') interfaceMethod=nameReference '=' implemented=nameReference ';'
+                             -> ^(TkMethodResolveClause<MethodResolutionClauseNode>
+                                    $key $interfaceMethod $implemented
+                                 )
+                             ;
 methodDeclaration            : methodDeclarationHeading
                              -> ^(TkMethodDeclaration<MethodDeclarationNode>
                                     methodDeclarationHeading
@@ -478,8 +493,8 @@ customAttribute              : customAttributeList -> ^(TkCustomAttributeList<Cu
                              ;
 customAttributeList          : customAttributeDecl+
                              ;
-customAttributeDecl          : '[' nameReference argumentList? ']'
-                             -> ^(TkCustomAttribute<CustomAttributeNode> '[' nameReference argumentList? ']')
+customAttributeDecl          : '[' (nameReference argumentList? ','?)+ ']'
+                             -> ^(TkCustomAttribute<CustomAttributeNode> '[' (nameReference argumentList?)+ ']')
                              ;
 
 //----------------------------------------------------------------------------
@@ -500,7 +515,7 @@ primaryExpression            : atom -> ^(TkPrimaryExpression<PrimaryExpressionNo
                              | parenthesizedExpression
                              | 'inherited' atom? -> ^(TkPrimaryExpression<PrimaryExpressionNode> 'inherited' atom?)
                              ;
-parenthesizedExpression      : '(' expression ')' -> ^(TkNestedExpression<ParenthesizedExpressionNode> expression)
+parenthesizedExpression      : '(' expression ')' -> ^(TkNestedExpression<ParenthesizedExpressionNode> '(' expression ')')
                              ;
 atom                         : particle particleItem*
                              ;
@@ -509,7 +524,7 @@ particle                     : intNum
                              | textLiteral
                              | nilLiteral
                              | nameReference
-                             | setLiteral
+                             | arrayConstructor
                              | 'string'
                              | 'file'
                              | parenthesizedExpression particleItem+
@@ -523,8 +538,13 @@ particleItem                 : '.' extendedNameReference
                              ;
 arrayAccessor                : '['<ArrayAccessorNode>^ expressionList ']'!
                              ;
-argumentList                 : '('<ArgumentListNode>^ expressionOrAnonymousList? ')'
+argumentList                 : '('<ArgumentListNode>^ (argument (','!)?)* ')'
                              ;
+argument                     : anonymousMethod
+                             | expression (':' expression! (':' expression!)?)? // This strange colon construct at the end is the result
+                             ;                                                  // of compiler hackery for intrinsic procedures like Str and WriteLn
+                                                                                // See: http://www.delphibasics.co.uk/RTL.asp?Name=str
+                                                                                // See: https://stackoverflow.com/questions/617654/how-does-writeln-really-work
 anonymousMethod              : 'procedure'<AnonymousMethodNode>^ methodParameters? block
                              | 'function'<AnonymousMethodNode>^ methodParameters? methodReturnType block
                              ;
@@ -537,16 +557,17 @@ expressionList               : (expression (','!)?)+
                              ;
 expressionOrRangeList        : (expressionOrRange (','!)?)+
                              ;
-expressionOrAnonymousList    : (expressionOrAnonymousMethod (','!)?)+
-                             ;
 textLiteral                  : textLiteral_ -> ^(TkTextLiteral<TextLiteralNode> textLiteral_)
                              ;
-textLiteral_                 : QuotedString (EscapedCharacter+ QuotedString)* EscapedCharacter*
-                             | EscapedCharacter+ (QuotedString EscapedCharacter+)* QuotedString?
+textLiteral_                 : TkQuotedString (escapedCharacter+ TkQuotedString)* escapedCharacter*
+                             | escapedCharacter+ (TkQuotedString escapedCharacter+)* TkQuotedString?
+                             ;
+escapedCharacter             : TkCharacterEscapeCode
+                             | '^' (TkIdentifier | TkIntNum | TkAnyChar) -> ^({changeTokenType(TkEscapedCharacter)})
                              ;
 nilLiteral                   : 'nil'<NilLiteralNode>
                              ;
-setLiteral                   : '['<SetLiteralNode>^ (expressionOrRangeList)? ']'
+arrayConstructor             : '['<ArrayConstructorNode>^ (expressionOrRangeList)? ']'
                              ;
 addOperator                  : '+'<BinaryExpressionNode>
                              | '-'<BinaryExpressionNode>
@@ -606,7 +627,7 @@ statement                    : ifStatement
                              | expressionStatement
                              | gotoStatement
                              ;
-ifStatement                  : 'if'<IfStatementNode>^ expression 'then' (statement ('else' statement)?)?
+ifStatement                  : 'if'<IfStatementNode>^ expression 'then' statement? ('else' statement?)?
                              ;
 caseStatement                : 'case'<CaseStatementNode>^ expression 'of' caseItem* elseBlock? 'end'
                              ;
@@ -616,11 +637,11 @@ caseItem                     : expressionOrRangeList ':' (statement)? (';')? -> 
                              ;
 repeatStatement              : 'repeat'<RepeatStatementNode>^ statementList 'until' expression
                              ;
-whileStatement               : 'while'<WhileStatementNode>^ expression 'do' statement
+whileStatement               : 'while'<WhileStatementNode>^ expression 'do' statement?
                              ;
-forStatement                 : 'for'<ForStatementNode>^ ident ':=' expression 'to' expression 'do' statement
-                             | 'for'<ForStatementNode>^ ident ':=' expression 'downto' expression 'do' statement
-                             | 'for'<ForStatementNode>^ ident 'in' expression 'do' statement
+forStatement                 : 'for'<ForStatementNode>^ ident ':=' expression 'to' expression 'do' statement?
+                             | 'for'<ForStatementNode>^ ident ':=' expression 'downto' expression 'do' statement?
+                             | 'for'<ForStatementNode>^ ident 'in' expression 'do' statement?
                              ;
 withStatement                : 'with'<WithStatementNode>^ expressionList 'do' statement
                              ;
@@ -662,15 +683,13 @@ assemblerInstructions        : ~('end')* // Skip asm statements
 //----------------------------------------------------------------------------
 // Directives
 //----------------------------------------------------------------------------
-methodImplDirectiveSection   : ((';')? methodDirective)* ';'
-                             | standaloneOverloadDirective
+methodImplDirectiveSection   : ((';')? methodImplDirective)* ';'
+                             | (';' methodImplDirective)+
                              ;
-methodDeclDirectiveSection   : ((';')? (methodDirective | 'forward'))* ';'
-                             | standaloneOverloadDirective
+methodDeclDirectiveSection   : ((';')? methodDeclDirective)* ';'
+                             | (';' methodDeclDirective)+
                              ;
-standaloneOverloadDirective  : ';' 'overload' (';')?
-                             ;
-methodDirective              : 'overload'
+methodImplDirective          : 'overload'
                              | 'reintroduce'
                              | bindingDirective
                              | abstractDirective // virtual;
@@ -679,8 +698,12 @@ methodDirective              : 'overload'
                              | portabilityDirective  // (niet abstract)
                              | oldCallConventionDirective
                              | dispIDDirective
-                             | externalDirective
+                             | 'varargs'  // Only permitted for cdecl calling convention
                              | 'unsafe'  // .net?
+                             ;
+methodDeclDirective          : 'forward'
+                             | externalDirective
+                             | methodImplDirective
                              ;
 bindingDirective             : 'message' expression
                              | 'static'
@@ -702,7 +725,7 @@ callConvention               : 'cdecl'    //
                              | 'export'   // deprecated
                              ;
 oldCallConventionDirective   : 'far'      // deprecated
-                             | 'local'    // niet in windows maakt functie niet exporteerbaar
+                             | 'local'    // deprecated. Introduced in the Kylix Linux compiler, makes function non-exportable. (No effect in Windows)
                              | 'near'     // deprecated
                              ;
 portabilityDirective         : 'deprecated'^ textLiteral?
@@ -710,8 +733,10 @@ portabilityDirective         : 'deprecated'^ textLiteral?
                              | 'platform'
                              | 'library'
                              ;
-externalDirective            : 'varargs'   // alleen bij external cdecl
-                             | 'external'^ (expression)? (externalSpecifier)* // expression = dll name
+externalDirective            : 'external'^ dllName? (externalSpecifier)*
+                             | 'delayed' // Use delayed loading (See: http://docwiki.embarcadero.com/RADStudio/Rio/en/Libraries_and_Packages_(Delphi))
+                             ;
+dllName                      : {!input.LT(1).getText().equals("name")}? expression
                              ;
 externalSpecifier            : 'name'^ constExpression
                              | 'index'^ constExpression   // specific to a platform
@@ -723,18 +748,24 @@ dispIDDirective              : 'dispid' expression
 // General
 //----------------------------------------------------------------------------
 ident                        : TkIdentifier
-                             | '&'! TkIdentifier
+                             | '&'! identifierOrKeyword
                              | keywordsUsedAsNames -> ^({changeTokenType(TkIdentifier)})
                              ;
-keywordsUsedAsNames          : (NAME | READONLY | ADD | AT | MESSAGE | POINTER | INDEX | DEFAULT | STRING | CONTINUE)
-                             | (READ | WRITE | REGISTER | VARIANT | OPERATOR | REMOVE | LOCAL | REFERENCE | CONTAINS | FINAL)
-                             | (BREAK | EXIT | STRICT | OUT | OBJECT | EXPORT | ANSISTRING | IMPLEMENTS | STORED | HELPER )
-                             | (PACKAGE | DEPRECATED)
+identifierOrKeyword          : TkIdentifier
+                             | keywords -> ^({changeTokenType(TkIdentifier)})
                              ;
-keywords                     : (ABSOLUTE | ABSTRACT | ADD | AND | ANSISTRING | ARRAY | AS | ASM | ASSEMBLER | ASSEMBLY)
+keywordsUsedAsNames          : (ABSOLUTE | ABSTRACT | ADD | ALIGN | ANSISTRING | ASSEMBLER | AT | AUTOMATED | BREAK | CDECL)
+                             | (CONTAINS | CONTINUE | DEFAULT | DELAYED | DEPRECATED | DISPID | DYNAMIC | EXIT | EXPERIMENTAL)
+                             | (EXPORT | EXTERNAL | FAR | FINAL | FORWARD | HELPER | IMPLEMENTS | INDEX | LOCAL | MESSAGE | NAME)
+                             | (NEAR | NODEFAULT | ON | OPERATOR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PASCAL | PLATFORM | PRIVATE)
+                             | (PROTECTED | PUBLIC | PUBLISHED | READ | READONLY | REFERENCE | REGISTER | REINTRODUCE | REMOVE)
+                             | (REQUIRES | RESIDENT | SAFECALL | SEALED | STATIC | STDCALL | STORED | STRICT | UNSAFE | VARARGS)
+                             | (VARIANT | VIRTUAL | WRITE | WRITEONLY)
+                             ;
+keywords                     : (ABSOLUTE | ABSTRACT | ADD | AND | ALIGN |ANSISTRING | ARRAY | AS | ASM | ASSEMBLER)
                              | (AT | AUTOMATED | BEGIN | BREAK | CASE | CDECL | CLASS | CONST | CONSTRUCTOR | CONTAINS)
-                             | (CONTINUE | DEFAULT | DEPRECATED | DESTRUCTOR | DISPID | DISPINTERFACE | DIV | DO | DOWNTO)
-                             | (DQ | DW | DYNAMIC | ELSE | END | EXCEPT | EXIT | EXPERIMENTAL | EXPORT | EXPORTS | EXTERNAL)
+                             | (CONTINUE | DEFAULT | DELAYED | DEPRECATED | DESTRUCTOR | DISPID | DISPINTERFACE | DIV | DO)
+                             | (DOWNTO | DYNAMIC | ELSE | END | EXCEPT | EXIT | EXPERIMENTAL | EXPORT | EXPORTS | EXTERNAL)
                              | (FAR | FILE | FINAL | FINALIZATION | FINALLY | FOR | FORWARD | FUNCTION | GOTO | HELPER | IF)
                              | (IMPLEMENTATION | IMPLEMENTS | IN | INDEX | INHERITED | INITIALIZATION | INLINE | INTERFACE)
                              | (IS | LABEL | LIBRARY | LOCAL | MESSAGE | MOD | NAME | NEAR | NIL | NODEFAULT | NOT | OBJECT)
@@ -749,14 +780,16 @@ varNameDeclarationList       : varNameDeclaration (',' varNameDeclaration)* -> ^
                              ;
 varNameDeclaration           : ident -> ^(TkVarNameDeclaration<VarNameDeclarationNode> ident)
                              ;
+propertyNameDeclaration      : ident -> ^(TkPropNameDeclaration<PropertyNameDeclarationNode> ident)
+                             ;
 label                        : ident
                              | intNum
                              ;
 nameDeclaration              : ident ('.' extendedIdent)*
-                             -> ^(TkNameDeclaration<QualifiedNameDeclarationNode> ident ('.' extendedIdent)*)
+                             -> ^(TkNameDeclaration<QualifiedNameDeclarationNode> ident extendedIdent*)
                              ;
 genericNameDeclaration       : ident ('.' extendedIdent)* genericDefinition?
-                             -> ^(TkNameDeclaration<QualifiedNameDeclarationNode> ident ('.' extendedIdent)* genericDefinition?)
+                             -> ^(TkNameDeclaration<QualifiedNameDeclarationNode> ident extendedIdent* genericDefinition?)
                              ;
 nameReference                : ident genericDefinition? ('.' extendedNameReference)?
                              -> ^(TkNameReference<NameReferenceNode> ident genericDefinition? ('.' extendedNameReference)?)
@@ -784,13 +817,13 @@ asmHexNum                    : TkAsmHexNum<HexLiteralNode>
 ABSOLUTE          : 'absolute'       	         ;
 ABSTRACT          : 'abstract'       	         ;
 ADD               : 'add'            	         ;
+ALIGN             : 'align'                    ;
 AND               : 'and'           	         ;
 ANSISTRING        : 'ansistring'     	         ;
 ARRAY             : 'array'          	         ;
 AS                : 'as'             	         ;
 ASM               : 'asm' { asmMode = true; }  ;
 ASSEMBLER         : 'assembler'       	       ;
-ASSEMBLY          : 'assembly'       	         ;
 AT                : 'at'             	         ;
 AUTOMATED         : 'automated'      	         ;
 BEGIN             : 'begin'          	         ;
@@ -803,6 +836,7 @@ CONSTRUCTOR       : 'constructor'              ;
 CONTAINS          : 'contains'                 ;
 CONTINUE          : 'continue'                 ;
 DEFAULT           : 'default'                  ;
+DELAYED           : 'delayed'                  ;
 DEPRECATED        : 'deprecated'               ;
 DESTRUCTOR        : 'destructor'               ;
 DISPID            : 'dispid'                   ;
@@ -810,8 +844,6 @@ DISPINTERFACE     : 'dispinterface'            ;
 DIV               : 'div'                      ;
 DO                : 'do'                       ;
 DOWNTO            : 'downto'                   ;
-DQ                : 'dq'                       ;
-DW                : 'dw'                       ;
 DYNAMIC           : 'dynamic'        	         ;
 ELSE              : 'else'           	         ;
 END               : 'end' { asmMode = false; } ;
@@ -832,7 +864,14 @@ FUNCTION          : 'function'                 ;
 GOTO              : 'goto'                     ;
 HELPER            : 'helper'                   ;
 IF                : 'if'                       ;
-IMPLEMENTATION    : 'implementation'           ;
+IMPLEMENTATION    : 'implementation' {
+                     if (shouldSkipImplementation) {
+                       skip();
+                       while (input.LA(1) != EOF) {
+                         input.consume();
+                       }
+                     }
+                  };
 IMPLEMENTS        : 'implements'               ;
 IN                : 'in'                       ;
 INDEX             : 'index'                    ;
@@ -1041,6 +1080,8 @@ TkVarNameDeclaration    : 'VAR_NAME_DECLARATION'
                         ;
 TkVarNameDeclList       : 'VAR_NAME_DECLARATION_LIST'
                         ;
+TkPropNameDeclaration   : 'PROPERTY_NAME_DECLARATION'
+                        ;
 TkConstDeclaration      : 'CONST_DECLARATION'
                         ;
 TkPrimaryExpression     : 'PRIMARY_EXPRESSION'
@@ -1055,6 +1096,12 @@ TkNameReference         : 'NAME_REFERENCE'
                         ;
 TkUnitImport            : 'UNIT_IMPORT'
                         ;
+TkMethodResolveClause   : 'METHOD_RESOLUTION_CLAUSE'
+                        ;
+TkEscapedCharacter      : 'ESCAPED_CHARACTER'
+                        ;
+TkCompilerDirective     : 'COMPILER_DIRECTIVE'
+                        ;
 
 //****************************
 // Tokens
@@ -1068,23 +1115,24 @@ TkRealNum               : Digitseq ({ input.LA(2) != '.' }? => '.' Digitseq)? ((
                         ;
 TkHexNum                : '$' Hexdigitseq
                         ;
+TkAsmId                 : { asmMode }? => '@' '@'? (Alpha | '_' | Digit)+
+                        ;
 TkAsmHexNum             : { asmMode }? => Hexdigitseq ('h'|'H')
                         ;
-TkAsmHexLabel           : { asmMode }? => Hexdigitseq ':'
+TkQuotedString          : '\'' ('\'\'' | ~('\''))* '\''
                         ;
-QuotedString            : '\'' ('\'\'' | ~('\''))* '\''
+TkAsmDoubleQuotedString : { asmMode }? => '"' (~('\"'))* '"'
                         ;
-EscapedCharacter        : '#' Digitseq
+TkCharacterEscapeCode   : '#' Digitseq
                         | '#' '$' Hexdigitseq
                         ;
-
 //----------------------------------------------------------------------------
 // Fragments
 //----------------------------------------------------------------------------
 fragment
 Alpha                   : 'a'..'z'
                         | 'A'..'Z'
-                        | '\u0080'..'\uFFFE' ~('\uFEFF') // unicode support
+                        | ('\ud800'..'\udbff') ('\udc00'..'\udfff')  // unicode support
                         ;
 fragment
 Digit                   : '0'..'9'
@@ -1101,13 +1149,18 @@ Hexdigitseq		          : Hexdigit (Hexdigit)*
 
 //----------------------------------------------------------------------------
 // Hidden channel
-//----------------------------------------------------------------------------		
+//----------------------------------------------------------------------------
 COMMENT                 :  '//' ~('\n'|'\r')*                          {$channel=HIDDEN;}
-                        |  '(*' ( options {greedy=false;} : . )* '*)'  {$channel=HIDDEN;}
-                        |  '{' ( options {greedy=false;} : . )* '}'    {$channel=HIDDEN;}
+                        |  '(*' ( options {greedy=false;} : . )* '*)'  {$channel=HIDDEN; if ($text.startsWith("(*$")) $type = TkCompilerDirective;}
+                        |  '{' ( options {greedy=false;} : . )* '}'    {$channel=HIDDEN; if ($text.startsWith("{$")) $type = TkCompilerDirective;}
                         ;
 WS                      : (' '|'\t'|'\r'|'\n'|'\f')+ {$channel=HIDDEN;}
                         ;
 UnicodeBOM              : '\uFEFF' {$channel=HIDDEN;}
+                        ;
+//----------------------------------------------------------------------------
+// Any character
+//----------------------------------------------------------------------------
+TkAnyChar               : .
                         ;
 

@@ -28,12 +28,12 @@ type
   
   TDUnitXEnumerable = class(TInterfacedObject, IEnumerable)
   protected
-    //function IEnumerable.GetEnumerator = GetNonGenEnumerator;
+    function IEnumerable.GetEnumerator = GetNonGenEnumerator;
     function GetNonGenEnumerator : IEnumerator; virtual; abstract;
   end;
 
   TDUnitXTestFixture = class(TWeakReferencedObject, ITestFixture,ITestFixtureInfo)
-    //function ITestFixtureInfo.GetTests = ITestFixtureInfo_GetTests;
+    function ITestFixtureInfo.GetTests = ITestFixtureInfo_GetTests;
   end;
 
 implementation

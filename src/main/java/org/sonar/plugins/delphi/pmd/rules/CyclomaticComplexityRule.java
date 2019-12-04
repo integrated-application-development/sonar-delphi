@@ -29,7 +29,7 @@ public class CyclomaticComplexityRule extends AbstractDelphiRule {
 
     if (complexity > limit) {
       String message = String.format(VIOLATION_MESSAGE, method.simpleName(), complexity, limit);
-      addViolationWithMessage(data, method.getMethodName(), message);
+      addViolationWithMessage(data, method.getMethodNameNode(), message);
     }
     return super.visit(method, data);
   }

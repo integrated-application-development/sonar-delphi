@@ -22,11 +22,11 @@
  */
 package org.sonar.plugins.delphi;
 
+import com.google.common.collect.ImmutableList;
 import org.sonar.api.Plugin;
-import org.sonar.api.Properties;
-import org.sonar.api.Property;
+import org.sonar.api.config.PropertyDefinition;
+import org.sonar.api.resources.Qualifiers;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.executor.DelphiCpdExecutor;
 import org.sonar.plugins.delphi.executor.DelphiHighlightExecutor;
 import org.sonar.plugins.delphi.executor.DelphiMasterExecutor;
@@ -40,97 +40,19 @@ import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileImporter;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRulesDefinition;
 import org.sonar.plugins.delphi.pmd.violation.DelphiPmdViolationRecorder;
+import org.sonar.plugins.delphi.project.DelphiProjectHelper;
 import org.sonar.plugins.delphi.surefire.SurefireSensor;
 
 /** Main Sonar DelphiLanguage plugin class */
-@Properties({
-  @Property(
-      key = DelphiPlugin.EXCLUDED_DIRECTORIES_KEY,
-      name = "Excluded sources",
-      description = "List of excluded directories or files, that will not be parsed.",
-      project = true,
-      multiValues = true),
-  @Property(
-      key = DelphiPlugin.CC_EXCLUDED_KEY,
-      name = "Code coverage excluded directories",
-      description =
-          "Code coverage excluded directories list. Files in those "
-              + "directories will not be checked for code coverage.",
-      project = true),
-  @Property(
-      key = DelphiPlugin.INCLUDED_DIRECTORIES_KEY,
-      name = "Include directories",
-      description =
-          "Include directories that will be looked for include files for "
-              + "preprocessor directive {$include}",
-      project = true,
-      multiValues = true),
-  @Property(
-      key = DelphiPlugin.INCLUDE_EXTEND_KEY,
-      defaultValue = "true",
-      name = "Include extend option",
-      description =
-          "Include extend options, can be: 'true' (include files will be processed) "
-              + "or 'false' (turn the feature off)",
-      project = true),
-  @Property(
-      key = DelphiPlugin.PROJECT_FILE_KEY,
-      name = "Project file",
-      description =
-          "Project file. If provided, will be parsed for include lookup path, "
-              + "project source files and preprocessor definitions.",
-      project = true),
-  @Property(
-      key = DelphiPlugin.WORKGROUP_FILE_KEY,
-      name = "Workgroup file",
-      description =
-          "Workgroup file. If provided, will be parsed, then all "
-              + "*.dproj files found in workgroup file will be parsed.",
-      project = true),
-  @Property(
-      key = DelphiPlugin.CONDITIONAL_DEFINES_KEY,
-      name = "Conditional Defines",
-      description = "List of conditional defines to define while parsing the project",
-      project = true,
-      multiValues = true),
-  @Property(
-      key = DelphiPlugin.CODECOVERAGE_TOOL_KEY,
-      defaultValue = "delphi code coverage",
-      name = "Code coverage tool",
-      description = "Used code coverage tool (AQTime or Delphi Code Coverage)",
-      project = true,
-      global = false),
-  @Property(
-      key = DelphiPlugin.CODECOVERAGE_REPORT_KEY,
-      defaultValue = "delphi code coverage report",
-      name = "Code coverage report file",
-      description = "Code coverage report to be parsed by Delphi Code Coverage",
-      project = true,
-      global = false),
-  @Property(
-      key = DelphiPlugin.GENERATE_PMD_REPORT_XML_KEY,
-      defaultValue = "false",
-      name = "Generate XML Report",
-      description = "Whether a PMD Report XML file should be generated",
-      project = true,
-      global = false),
-  @Property(
-      key = DelphiPlugin.TEST_TYPE_REGEX_KEY,
-      defaultValue = "(?!)",
-      name = "Test-Harness type regex",
-      description =
-          "Rules can be configured not to apply to test code. "
-              + "A type name that matches this regex will have its methods considered as test code",
-      project = true),
-})
 public class DelphiPlugin implements Plugin {
   public static final String EXCLUDED_DIRECTORIES_KEY = "sonar.delphi.sources.excluded";
   public static final String CC_EXCLUDED_KEY = "sonar.delphi.codecoverage.excluded";
-  public static final String INCLUDED_DIRECTORIES_KEY = "sonar.delphi.sources.include";
-  public static final String INCLUDE_EXTEND_KEY = "sonar.delphi.sources.include.extend";
+  public static final String SEARCH_PATH_KEY = "sonar.delphi.sources.searchPath";
   public static final String PROJECT_FILE_KEY = "sonar.delphi.sources.project";
   public static final String WORKGROUP_FILE_KEY = "sonar.delphi.sources.workgroup";
+  public static final String STANDARD_LIBRARY_KEY = "sonar.delphi.sources.standardLibrarySource";
   public static final String CONDITIONAL_DEFINES_KEY = "sonar.delphi.conditionalDefines";
+  public static final String UNIT_SCOPE_NAMES_KEY = "sonar.delphi.unitScopeNames";
   public static final String CODECOVERAGE_TOOL_KEY = "sonar.delphi.codecoverage.tool";
   public static final String CODECOVERAGE_REPORT_KEY = "sonar.delphi.codecoverage.report";
   public static final String GENERATE_PMD_REPORT_XML_KEY = "sonar.delphi.pmd.generateXml";
@@ -143,7 +65,84 @@ public class DelphiPlugin implements Plugin {
 
   @Override
   public void define(Context context) {
-    context.addExtensions(
+    ImmutableList.Builder<Object> builder = ImmutableList.builder();
+
+    builder.add(
+        PropertyDefinition.builder(DelphiPlugin.EXCLUDED_DIRECTORIES_KEY)
+            .name("Excluded sources")
+            .description("List of excluded directories or files, that will not be parsed.")
+            .multiValues(true)
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(DelphiPlugin.CC_EXCLUDED_KEY)
+            .name("Code coverage excluded directories")
+            .description("List of directories which will not have code coverage calculated.")
+            .multiValues(true)
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(DelphiPlugin.SEARCH_PATH_KEY)
+            .name("Search path")
+            .description("Directories to search in for include files and unit imports.")
+            .multiValues(true)
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(DelphiPlugin.PROJECT_FILE_KEY)
+            .name("Project file")
+            .description(
+                "Project file. If provided, will be parsed for search paths, project source files "
+                    + "and preprocessor definitions.")
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(DelphiPlugin.WORKGROUP_FILE_KEY)
+            .name("Workgroup file")
+            .description(
+                "Workgroup file. If provided, will be parsed, then all *.dproj files found in "
+                    + "workgroup file will be parsed.")
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(DelphiPlugin.STANDARD_LIBRARY_KEY)
+            .name("Standard library path")
+            .description("Path to the Delphi RAD Studio 'source' folder.")
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(DelphiPlugin.CONDITIONAL_DEFINES_KEY)
+            .name("Conditional Defines")
+            .description("List of conditional defines to define while parsing the project")
+            .multiValues(true)
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(DelphiPlugin.UNIT_SCOPE_NAMES_KEY)
+            .name("Unit Scope Names")
+            .description("List of Unit scope names, used for unit import resolution.")
+            .multiValues(true)
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(DelphiPlugin.CODECOVERAGE_TOOL_KEY)
+            .name("Code coverage tool")
+            .description("Used code coverage tool (AQTime or Delphi Code Coverage)")
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(DelphiPlugin.CODECOVERAGE_REPORT_KEY)
+            .name("Delphi Code Coverage report path")
+            .description("Path to code coverage report to be parsed by Delphi Code Coverage")
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(DelphiPlugin.GENERATE_PMD_REPORT_XML_KEY)
+            .name("Generate XML Report")
+            .defaultValue("false")
+            .description("Whether a PMD Report XML file should be generated")
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(DelphiPlugin.TEST_TYPE_REGEX_KEY)
+            .name("Generate XML Report")
+            .defaultValue("(?!)")
+            .description(
+                "Rules can be configured not to apply to test code. A type name that matches this "
+                    + "regex will have its methods considered as test code")
+            .onQualifiers(Qualifiers.PROJECT)
+            .build());
+
+    builder.add(
         // Sensors
         DelphiSensor.class,
         SurefireSensor.class,
@@ -166,5 +165,7 @@ public class DelphiPlugin implements Plugin {
         DelphiPmdProfileExporter.class,
         DelphiPmdProfileImporter.class,
         DelphiPmdViolationRecorder.class);
+
+    context.addExtensions(builder.build());
   }
 }

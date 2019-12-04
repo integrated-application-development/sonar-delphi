@@ -31,6 +31,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FileHeaderNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ProgramDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnitDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.file.DelphiFile;
 import org.sonar.plugins.delphi.pmd.FilePosition;

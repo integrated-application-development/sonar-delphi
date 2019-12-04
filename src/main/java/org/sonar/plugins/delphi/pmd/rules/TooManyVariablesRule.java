@@ -17,7 +17,7 @@ public class TooManyVariablesRule extends AbstractDelphiRule {
     int limit = getProperty(LIMIT);
     if (count > limit) {
       addViolationWithMessage(
-          data, method.getMethodName(), String.format(VIOLATION_MESSAGE, count, limit));
+          data, method.getMethodNameNode(), String.format(VIOLATION_MESSAGE, count, limit));
     }
     return super.visit(method, data);
   }

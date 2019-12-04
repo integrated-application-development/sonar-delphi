@@ -23,7 +23,7 @@ procedure Test;
 begin
   Proc(C_Foo);
   Proc(UsesDeclarations.C_Foo);
-  Unit1; // NOTE: Not valid Delphi code, we're only checking to see if the import are recognized.
+  Unit1; // NOTE: Not valid Delphi code, we're only checking to see if the imports are recognized.
   Unit2;
 end;
 

@@ -16,10 +16,10 @@ import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
-import org.sonar.plugins.delphi.antlr.filestream.DelphiFileStreamConfig;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.file.DelphiFile;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
+import org.sonar.plugins.delphi.file.DelphiFileConfig;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> {
@@ -54,7 +54,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
   }
 
   public DelphiAST parse() {
-    DelphiFile file = DelphiInputFile.from(inputFile(), new DelphiFileStreamConfig(UTF_8.name()));
+    DelphiFile file = DelphiInputFile.from(inputFile(), DelphiFile.createConfig(UTF_8.name()));
     return file.getAst();
   }
 
@@ -86,11 +86,11 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
   }
 
   public DelphiInputFile delphiFile() {
-    return DelphiInputFile.from(inputFile(), new DelphiFileStreamConfig(UTF_8.name()));
+    return DelphiInputFile.from(inputFile(), DelphiFile.createConfig(UTF_8.name()));
   }
 
-  public DelphiInputFile delphiFile(DelphiFileStreamConfig fileStreamConfig) {
-    return DelphiInputFile.from(inputFile(), fileStreamConfig);
+  public DelphiInputFile delphiFile(DelphiFileConfig fileConfig) {
+    return DelphiInputFile.from(inputFile(), fileConfig);
   }
 
   public StringBuilder getSourceCode() {
@@ -133,7 +133,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
   }
 
   public static class ResourceBuilder extends DelphiTestFileBuilder<ResourceBuilder> {
-    private File resource;
+    private final File resource;
 
     private ResourceBuilder(File resource) {
       this.resource = resource;

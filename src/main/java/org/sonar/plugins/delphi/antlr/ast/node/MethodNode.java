@@ -5,11 +5,12 @@ import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodHeadingNode.MethodKind;
-import org.sonar.plugins.delphi.symbol.TypeNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
 
-public abstract class MethodNode extends DelphiNode {
+public abstract class MethodNode extends DelphiNode implements Visibility {
   public MethodNode(Token token) {
     super(token);
   }
@@ -25,6 +26,10 @@ public abstract class MethodNode extends DelphiNode {
 
   public MethodHeadingNode getMethodHeading() {
     return (MethodHeadingNode) jjtGetChild(0);
+  }
+
+  public MethodNameNode getMethodNameNode() {
+    return getMethodHeading().getMethodNameNode();
   }
 
   public String simpleName() {
@@ -44,15 +49,8 @@ public abstract class MethodNode extends DelphiNode {
   }
 
   public Type getReturnType() {
-    if (isProcedure()) {
+    if (isProcedure() || isConstructor()) {
       return DelphiType.voidType();
-    }
-
-    if (isConstructor()) {
-      TypeNameDeclaration declaration = getTypeDeclaration();
-      if (declaration != null) {
-        return declaration.getType();
-      }
     }
 
     MethodReturnTypeNode returnTypeNode = getMethodHeading().getMethodReturnType();
@@ -61,15 +59,6 @@ public abstract class MethodNode extends DelphiNode {
     }
 
     return DelphiType.unknownType();
-  }
-
-  public FormalParameter getParameter(String image) {
-    for (FormalParameter parameter : getParameters()) {
-      if (parameter.getImage().equals(image)) {
-        return parameter;
-      }
-    }
-    return null;
   }
 
   public MethodKind getMethodKind() {
@@ -104,8 +93,23 @@ public abstract class MethodNode extends DelphiNode {
     return getMethodHeading().getTypeName();
   }
 
-  public abstract DelphiNode getMethodName();
+  @Override
+  public final VisibilityType getVisibility() {
+    MethodNameDeclaration declaration = getMethodNameDeclaration();
+    if (declaration != null) {
+      return declaration.getVisibility();
+    } else {
+      return createVisibility();
+    }
+  }
+
+  @Nullable
+  public MethodNameDeclaration getMethodNameDeclaration() {
+    return getMethodHeading().getMethodNameNode().getMethodNameDeclaration();
+  }
 
   @Nullable
   public abstract TypeNameDeclaration getTypeDeclaration();
+
+  protected abstract VisibilityType createVisibility();
 }

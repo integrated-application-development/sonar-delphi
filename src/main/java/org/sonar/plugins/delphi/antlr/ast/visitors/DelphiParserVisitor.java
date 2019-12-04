@@ -23,12 +23,12 @@
 package org.sonar.plugins.delphi.antlr.ast.visitors;
 
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
-import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
 import org.sonar.plugins.delphi.antlr.ast.node.AncestorListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.AnonymousMethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.AnsiStringTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ArgumentListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ArrayAccessorNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ArrayConstructorNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ArrayExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ArrayIndicesNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ArrayTypeNode;
@@ -93,6 +93,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNameNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodParametersNode;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodResolutionClauseNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodReturnTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
@@ -108,6 +109,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.ProcedureReferenceTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ProcedureTypeHeadingNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ProcedureTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ProgramDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.PropertyNameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyReadSpecifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyWriteSpecifierNode;
@@ -122,7 +124,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.RecordVariantItemNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RecordVariantSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RepeatStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RequiresClauseNode;
-import org.sonar.plugins.delphi.antlr.ast.node.SetLiteralNode;
 import org.sonar.plugins.delphi.antlr.ast.node.SetTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.StatementListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.StatementNode;
@@ -136,6 +137,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeOfTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeReferenceNode;
+import org.sonar.plugins.delphi.antlr.ast.node.TypeSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnitDeclarationNode;
@@ -145,11 +147,11 @@ import org.sonar.plugins.delphi.antlr.ast.node.VarDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarNameDeclarationListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarNameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarSectionNode;
-import org.sonar.plugins.delphi.antlr.ast.node.VariantTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VisibilityNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VisibilitySectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.WhileStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.WithStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 
 public interface DelphiParserVisitor<T> {
 
@@ -289,11 +291,19 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
+  default T visit(MethodNameNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
   default T visit(MethodParametersNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
   default T visit(NameReferenceNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(MethodResolutionClauseNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
@@ -334,6 +344,10 @@ public interface DelphiParserVisitor<T> {
   }
 
   default T visit(TypeDeclarationNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(TypeSectionNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
@@ -379,15 +393,15 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
+  default T visit(PropertyNameDeclarationNode node, T data) {
+    return visit((NameDeclarationNode) node, data);
+  }
+
   default T visit(QualifiedNameDeclarationNode node, T data) {
     return visit((NameDeclarationNode) node, data);
   }
 
   default T visit(VarNameDeclarationNode node, T data) {
-    return visit((NameDeclarationNode) node, data);
-  }
-
-  default T visit(MethodNameNode node, T data) {
     return visit((NameDeclarationNode) node, data);
   }
 
@@ -482,10 +496,6 @@ public interface DelphiParserVisitor<T> {
     return visit((TypeNode) node, data);
   }
 
-  default T visit(VariantTypeNode node, T data) {
-    return visit((TypeNode) node, data);
-  }
-
   /* Procedural types */
   default T visit(ProceduralTypeNode node, T data) {
     return visit((TypeNode) node, data);
@@ -546,6 +556,10 @@ public interface DelphiParserVisitor<T> {
     return visit((ExpressionNode) node, data);
   }
 
+  default T visit(ArrayConstructorNode node, T data) {
+    return visit((ExpressionNode) node, data);
+  }
+
   default T visit(ArrayExpressionNode node, T data) {
     return visit((ExpressionNode) node, data);
   }
@@ -592,10 +606,6 @@ public interface DelphiParserVisitor<T> {
   }
 
   default T visit(NilLiteralNode node, T data) {
-    return visit((LiteralNode) node, data);
-  }
-
-  default T visit(SetLiteralNode node, T data) {
     return visit((LiteralNode) node, data);
   }
 

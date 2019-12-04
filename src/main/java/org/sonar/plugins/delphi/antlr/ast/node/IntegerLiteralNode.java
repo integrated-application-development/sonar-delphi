@@ -3,8 +3,8 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.IntegerType;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger;
 
 public final class IntegerLiteralNode extends LiteralNode {
   private Type type;
@@ -27,7 +27,7 @@ public final class IntegerLiteralNode extends LiteralNode {
   @NotNull
   public Type getType() {
     if (type == null) {
-      type = IntegerType.fromLiteralValue(this.getValueAsLong()).type;
+      type = IntrinsicInteger.fromLiteralValue(this.getValueAsLong());
     }
     return type;
   }

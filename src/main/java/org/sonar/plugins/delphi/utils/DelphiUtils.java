@@ -26,9 +26,17 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.InputPath;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 
 /** Some utilities */
@@ -60,33 +68,24 @@ public final class DelphiUtils {
   /**
    * Accept file based on file extension.
    *
+   * @param file The file
+   * @return True if the file has a valid extension
+   */
+  public static boolean acceptFile(Path file) {
+    return acceptFile(file.toString());
+  }
+
+  /**
+   * Accept file based on file extension.
+   *
    * @param fileName The file name
    * @return True if the file has a valid extension
    */
   public static boolean acceptFile(String fileName) {
-    String[] endings = DelphiLanguage.instance.getFileSuffixes();
-    for (String ending : endings) {
-      if (fileName.toLowerCase().endsWith("." + ending)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Counts the number of substring in a string
-   *
-   * @param string String in which to look for substrings
-   * @param sub Substring to look for in a string
-   * @return The count of substrings in a string
-   */
-  public static int countSubstrings(String string, String sub) {
-    int count = 0;
-    int index = -1;
-    while ((index = string.indexOf(sub, index + 1)) != -1) {
-      ++count;
-    }
-    return count;
+    String extension = FilenameUtils.getExtension(fileName);
+    String[] acceptableExtensions = DelphiLanguage.instance.getFileSuffixes();
+    return Arrays.stream(acceptableExtensions)
+        .anyMatch(acceptable -> acceptable.equalsIgnoreCase(extension));
   }
 
   /**
@@ -111,28 +110,6 @@ public final class DelphiUtils {
   }
 
   /**
-   * Resolves ..\ in a path to a file, backtraces the currentDir the number of '..' in a path.
-   * Example: currentDir = 'C:\my\dir' fileName = '..\file.txt'; return = 'C:/my/file.txt'
-   *
-   * @param currentDir Current directory of a file
-   * @param fileName File name
-   * @return Resolved file name
-   */
-  public static String resolveBacktracePath(String currentDir, String fileName) {
-    String result = normalizeFileName(fileName);
-    // number of '..' in file name
-    int dotdotCount = DelphiUtils.countSubstrings(result, "..");
-    // get rid of '../'
-    result = result.replace("../", "");
-
-    for (int i = 0; i < dotdotCount; ++i) {
-      currentDir = currentDir.substring(0, currentDir.lastIndexOf('/'));
-    }
-
-    return currentDir + "/" + result;
-  }
-
-  /**
    * Reads file contents to string, transform it to lowercase
    *
    * @param file File to be read
@@ -151,5 +128,24 @@ public final class DelphiUtils {
       path = path.substring(1);
     }
     return path;
+  }
+
+  public static List<Path> inputFilesToPaths(Iterable<InputFile> inputFiles) {
+    List<Path> result = new ArrayList<>();
+    for (InputFile inputFile : inputFiles) {
+      result.add(inputFileToPath(inputFile));
+    }
+    return result;
+  }
+
+  public static Path inputFileToPath(InputPath inputFile) {
+    return Paths.get(inputFile.uri());
+  }
+
+  public static Path resolvePathFromBaseDir(Path baseDir, Path path) {
+    if (!path.isAbsolute()) {
+      path = Path.of(baseDir.toAbsolutePath().toString(), path.toString());
+    }
+    return path.toAbsolutePath().normalize();
   }
 }

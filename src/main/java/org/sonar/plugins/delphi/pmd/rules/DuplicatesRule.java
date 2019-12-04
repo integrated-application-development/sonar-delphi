@@ -5,7 +5,7 @@ import static java.util.function.Predicate.not;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.ast.Node;
 import org.sonar.plugins.delphi.antlr.ast.node.AssignmentStatementNode;
-import org.sonar.plugins.delphi.antlr.ast.node.StatementListNode;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodBodyNode;
 
 /**
  * This rule adds violations when the Duplicates method, (foo.Duplicates := dupError) is called on a
@@ -14,16 +14,19 @@ import org.sonar.plugins.delphi.antlr.ast.node.StatementListNode;
 public class DuplicatesRule extends AbstractDelphiRule {
 
   @Override
-  public RuleContext visit(StatementListNode statements, RuleContext data) {
-    statements
-        .statementStream()
-        .filter(AssignmentStatementNode.class::isInstance)
-        .map(AssignmentStatementNode.class::cast)
-        .filter(DuplicatesRule::isDuplicatesStatement)
-        .filter(not(DuplicatesRule::isSortedByPreviousStatement))
-        .filter(not(DuplicatesRule::isSortedByNextStatement))
-        .forEach(statement -> addViolation(data, statement));
-    return super.visit(statements, data);
+  public RuleContext visit(MethodBodyNode methodBody, RuleContext data) {
+    if (methodBody.hasStatementBlock()) {
+      methodBody
+          .getStatementBlock()
+          .descendantStatementStream()
+          .filter(AssignmentStatementNode.class::isInstance)
+          .map(AssignmentStatementNode.class::cast)
+          .filter(DuplicatesRule::isDuplicatesStatement)
+          .filter(not(DuplicatesRule::isSortedByPreviousStatement))
+          .filter(not(DuplicatesRule::isSortedByNextStatement))
+          .forEach(statement -> addViolation(data, statement));
+    }
+    return super.visit(methodBody, data);
   }
 
   private static boolean isDuplicatesStatement(AssignmentStatementNode duplicates) {

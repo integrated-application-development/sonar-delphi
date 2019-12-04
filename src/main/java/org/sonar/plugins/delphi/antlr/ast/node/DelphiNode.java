@@ -23,7 +23,7 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
 import static org.apache.commons.lang3.ArrayUtils.isArrayIndexValid;
-import static org.sonar.plugins.delphi.symbol.UnknownScope.unknownScope;
+import static org.sonar.plugins.delphi.symbol.scope.UnknownScope.unknownScope;
 
 import com.google.common.base.Preconditions;
 import java.util.Arrays;
@@ -37,10 +37,10 @@ import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.DelphiParser;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
-import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
 import org.sonar.plugins.delphi.antlr.ast.DelphiTreeAdaptor;
+import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.symbol.DelphiScope;
+import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 
 /** AST node extended with PMD interfaces for PMD analysis */
 public abstract class DelphiNode extends AbstractNode implements ScopedNode, IndexedNode {
@@ -278,7 +278,7 @@ public abstract class DelphiNode extends AbstractNode implements ScopedNode, Ind
    *
    * @return Unit name
    */
-  public String getUnitName() {
+  public String findUnitName() {
     return getASTTree().getFileHeader().getName();
   }
 

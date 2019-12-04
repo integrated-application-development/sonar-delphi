@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonarqube.ws.Measures.ComponentWsResponse;
 import org.sonarqube.ws.Measures.Measure;
 import org.sonarqube.ws.client.HttpConnector;
@@ -22,6 +23,8 @@ import org.sonarqube.ws.client.measures.ComponentRequest;
 public class IntegrationTests {
 
   private static final String PROJECTS_PATH = "src/it/projects/";
+  private static final String STANDARD_LIBRARY_PATH =
+      DelphiUtils.getResource("/org/sonar/plugins/delphi/standardLibrary").getAbsolutePath();
 
   private static final FileLocation PLUGIN_LOCATION =
       FileLocation.byWildcardMavenFilename(new File("target"), "sonar-delphi-plugin-*.jar");
@@ -71,6 +74,7 @@ public class IntegrationTests {
         .setProjectDir(projectDir)
         .setProjectKey(projectKey)
         .setProjectName(projectKey)
+        .setProperty(DelphiPlugin.STANDARD_LIBRARY_KEY, STANDARD_LIBRARY_PATH)
         .setProjectVersion("1.0")
         .setSourceDirs("src");
   }

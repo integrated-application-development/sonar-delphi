@@ -3,6 +3,7 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.type.DelphiTypeType;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class TypeTypeNode extends TypeNode {
@@ -15,13 +16,15 @@ public final class TypeTypeNode extends TypeNode {
     return visitor.visit(this, data);
   }
 
-  private TypeReferenceNode getOriginalTypeNode() {
-    return (TypeReferenceNode) jjtGetChild(0);
+  private TypeNode getOriginalTypeNode() {
+    return (TypeNode) jjtGetChild(0);
   }
 
   @Override
   @NotNull
   public Type createType() {
-    return getOriginalTypeNode().getType();
+    TypeDeclarationNode typeDeclaration = (TypeDeclarationNode) jjtGetParent();
+    String typeName = typeDeclaration.fullyQualifiedName();
+    return DelphiTypeType.create(typeName, getOriginalTypeNode().getType());
   }
 }

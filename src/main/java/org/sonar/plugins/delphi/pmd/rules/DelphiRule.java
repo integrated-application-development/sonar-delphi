@@ -10,7 +10,7 @@ import java.util.Set;
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.rule.ImmutableLanguage;
-import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
+import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.pmd.FilePosition;
 import org.sonar.plugins.delphi.pmd.violation.DelphiRuleViolationBuilder;
