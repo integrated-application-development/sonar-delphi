@@ -1030,6 +1030,25 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+    message="Empty field sections should be removed"
+    name="EmptyFieldSectionRule">
+    <priority>4</priority>
+    <description>
+      Empty field sections are superfluous and can be safely removed.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+      <property name="builtinXPath">
+        <value>
+          <![CDATA[
+            //FieldSectionNode[count(FieldDeclarationNode) = 0]
+          ]]>
+        </value>
+      </property>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathTemplateRule"
     message="Track breaches of an XPath rule"
     name="XPathRule">
