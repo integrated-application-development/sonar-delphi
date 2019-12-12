@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Symbol information is now provided to the Sonar API for use in the web interface.
 - `MemoryManagementRule` analysis rule, which flags object allocations without memory management.
 - `ShortIdentifiersRule` analysis rule, which flags identifiers below a certain length.
+- `AssignedNilCheckRule` analysis rule, which flags comparisons to `nil` where `Assigned` should be
+  used instead.
 - `ForbiddenIdentifierRule` analysis rule template, which flags identifiers with a specified name.
 - `sonar.delphi.sources.searchPath` property to specify directories to search for include files and
   unit imports.

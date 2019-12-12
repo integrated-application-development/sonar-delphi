@@ -865,6 +865,24 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.AssignedNilCheckRule"
+    message="Nil checks should be performed with Assigned"
+    name="AssignedNilCheckRule">
+    <priority>4</priority>
+    <description>
+      Use 'Assigned' instead of comparing to nil.
+      &lt;br&gt;
+      &lt;br&gt;
+      For more information, see the Delphi wiki page for
+      &lt;a href='http://docwiki.embarcadero.com/Libraries/Rio/en/System.Assigned'&gt;
+      System.Assigned
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathTemplateRule"
     message="Track breaches of an XPath rule"
     name="XPathRule">
