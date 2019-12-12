@@ -225,7 +225,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
             .appendImpl("  MyVar: TClass;")
             .appendImpl("begin")
             .appendImpl("  try")
-            .appendImpl("    ThrowException;;")
+            .appendImpl("    ThrowException;")
             .appendImpl("  except")
             .appendImpl("    on E:ESpookyError do begin")
             .appendImpl("      // Do nothing")

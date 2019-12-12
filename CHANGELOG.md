@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `EmptyVisibilitySectionRule` analysis rule, which flags empty visibility sections.
 - `EmptyFieldSectionRule` analysis rule, which flags empty field sections.
 - `RedundantParenthesesRule` analysis rule, which flags redundant parentheses in expressions.
+- `SuperfluousSemicolonsRule` analysis rule, which flags stray semicolons.
 - `ForbiddenIdentifierRule` analysis rule template, which flags identifiers with a specified name.
 - `ForbiddenMethodRule` analysis rule template, which flags methods with a specified fully-qualified
   name.

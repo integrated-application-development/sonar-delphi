@@ -1015,6 +1015,29 @@ Result := ((X + 1)); // Noncompliant
     </example>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.SuperfluousSemicolonsRule"
+    message="Stray semicolons should be removed"
+    name="SuperfluousSemicolonsRule">
+    <priority>4</priority>
+    <description>
+      Stray semicolons are usually introduced by mistake, for example because:
+      &lt;br&gt;
+      - It was meant to be replaced by an actual statement, but this was forgotten.
+      &lt;br&gt;
+      - There was a typo which lead the semicolon to be doubled, i.e ;;.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+    </properties>
+    <example>
+      <![CDATA[
+Result := 123; // Compliant
+
+Result := 123;; // Noncompliant
+        ]]>
+    </example>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="Empty type sections should be removed"
     name="EmptyTypeSectionRule">
