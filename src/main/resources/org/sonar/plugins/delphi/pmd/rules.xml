@@ -1038,6 +1038,21 @@ Result := 123;; // Noncompliant
     </example>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.CommentedOutCodeRule"
+    message="Sections of code should not be commented out"
+    name="CommentedOutCodeRule">
+    <priority>4</priority>
+    <description>
+      Programmers should not comment out code as it bloats programs and reduces readability.
+      &lt;br&gt;
+      &lt;br&gt;
+      Unused code should be deleted and can be retrieved from source control history if required.
+    </description>
+    <properties>
+      <property name="baseEffort" value="3min" />
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="Empty type sections should be removed"
     name="EmptyTypeSectionRule">
