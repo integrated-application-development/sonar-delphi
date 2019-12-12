@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- FPs around forward declarations in `ClassPerFileRule`.
 - Various parsing bugs.
 - Typo in `ClassNameRule` issue message.
 
