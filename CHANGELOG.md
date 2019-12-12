@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `RedundantParenthesesRule` analysis rule, which flags redundant parentheses in expressions.
 - `SuperfluousSemicolonsRule` analysis rule, which flags stray semicolons.
 - `CommentedOutCodeRule` analysis rule, which flags comments containing source code.
+- `ObjectTypeRule` analysis rule, which flags `object` type declarations.
 - `ForbiddenIdentifierRule` analysis rule template, which flags identifiers with a specified name.
 - `ForbiddenMethodRule` analysis rule template, which flags methods with a specified fully-qualified
   name.

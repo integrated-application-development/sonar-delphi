@@ -1110,6 +1110,31 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+    message="Object types should not be used"
+    name="ObjectTypeRule">
+    <priority>4</priority>
+    <description>
+      Object types are supported for backward compatibility only. Their use is not recommended.
+      &lt;br&gt;
+      &lt;br&gt;
+      For more information on Object types, see the Delphi wiki page for
+      &lt;a href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Classes_and_Objects_(Delphi)#Object_Types'&gt;
+      Classes and Objects
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+      <property name="builtinXPath">
+        <value>
+          <![CDATA[
+            //TypeDeclarationNode[@Object = 'true']/QualifiedNameDeclarationNode
+          ]]>
+        </value>
+      </property>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathTemplateRule"
     message="Track breaches of an XPath rule"
     name="XPathRule">
