@@ -56,9 +56,7 @@ public class RedundantBooleanRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("RedundantBooleanRule", builder.getOffset() + 3));
+    assertIssues().areExactly(1, ruleKeyAtLine("RedundantBooleanRule", builder.getOffset() + 3));
   }
 
   @Test

@@ -992,6 +992,29 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.RedundantParenthesesRule"
+    message="Redundant pairs of parentheses should be removed"
+    name="RedundantParenthesesRule">
+    <priority>4</priority>
+    <description>
+      The use of parentheses, even those not required to enforce a desired order of operations,
+      can clarify the intent behind a piece of code. But redundant pairs of parentheses could be
+      misleading, and should be removed.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+    </properties>
+    <example>
+      <![CDATA[
+Result := X + 1; // Compliant
+
+Result := (X + 1); // Compliant
+
+Result := ((X + 1)); // Noncompliant
+        ]]>
+    </example>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="Empty type sections should be removed"
     name="EmptyTypeSectionRule">
