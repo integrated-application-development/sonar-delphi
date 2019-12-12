@@ -958,6 +958,22 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.TabulationCharactersRule"
+    message="Tabulation characters should not be used"
+    name="TabulationCharactersRule">
+    <priority>5</priority>
+    <description>
+      Developers should not need to configure the tab width of their text editors in order to be able to read source code.
+      &lt;br&gt;
+      So the use of the tabulation character must be banned.
+      &lt;br&gt;
+      &lt;br&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.AssignedNilCheckRule"
     message="Nil checks should be performed with Assigned"
     name="AssignedNilCheckRule">

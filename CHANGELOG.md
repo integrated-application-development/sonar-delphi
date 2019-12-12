@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   capitalized.
 - `MultipleVariableDeclarationRule` analysis rule, which flags places where multiple variables are
   declared in a single declaration list.
+- `TabulationCharactersRule` analysis rule, which flags files containing tabs.
 - `ForbiddenIdentifierRule` analysis rule template, which flags identifiers with a specified name.
 - `ForbiddenMethodRule` analysis rule template, which flags methods with a specified fully-qualified
   name.
