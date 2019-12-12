@@ -18,6 +18,7 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.Test;
@@ -26,36 +27,35 @@ import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 public class EmptyBeginStatementRuleTest extends BasePmdRuleTest {
   @Test
   public void testValidRule() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-
-    builder.appendDecl("type");
-    builder.appendDecl("  TEmptyProcs = class");
-    builder.appendDecl("  public");
-    builder.appendDecl("    procedure One;");
-    builder.appendDecl("    procedure Two;");
-    builder.appendDecl("    procedure Three;");
-    builder.appendDecl("  end;");
-
-    builder.appendImpl("procedure TEmptyProcs.One;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  WriteLn('OK');");
-    builder.appendImpl("end;");
-    builder.appendImpl("procedure TEmptyProcs.Two;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  WriteLn('OK');");
-    builder.appendImpl("end;");
-    builder.appendImpl("procedure TEmptyProcs.Three;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  WriteLn('OK');");
-    builder.appendImpl("end;");
-    builder.appendImpl("procedure GlobalProcedureFour;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  WriteLn('OK');");
-    builder.appendImpl("end;");
-    builder.appendImpl("procedure GlobalProcedureFive;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  WriteLn('OK');");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TEmptyProcs = class(TObject)")
+            .appendDecl("  public")
+            .appendDecl("    procedure One;")
+            .appendDecl("    procedure Two;")
+            .appendDecl("    procedure Three;")
+            .appendDecl("  end;")
+            .appendImpl("procedure TEmptyProcs.One;")
+            .appendImpl("begin")
+            .appendImpl("  WriteLn('OK');")
+            .appendImpl("end;")
+            .appendImpl("procedure TEmptyProcs.Two;")
+            .appendImpl("begin")
+            .appendImpl("  WriteLn('OK');")
+            .appendImpl("end;")
+            .appendImpl("procedure TEmptyProcs.Three;")
+            .appendImpl("begin")
+            .appendImpl("  WriteLn('OK');")
+            .appendImpl("end;")
+            .appendImpl("procedure GlobalProcedureFour;")
+            .appendImpl("begin")
+            .appendImpl("  WriteLn('OK');")
+            .appendImpl("end;")
+            .appendImpl("procedure GlobalProcedureFive;")
+            .appendImpl("begin")
+            .appendImpl("  WriteLn('OK');")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -64,42 +64,41 @@ public class EmptyBeginStatementRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testEmptyBeginStatements() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-
-    builder.appendDecl("type");
-    builder.appendDecl("  TEmptyProcs = class");
-    builder.appendDecl("  public");
-    builder.appendDecl("    procedure One;");
-    builder.appendDecl("    procedure Two;");
-    builder.appendDecl("    procedure Three;");
-    builder.appendDecl("  end;");
-
-    builder.appendImpl("procedure TEmptyProcs.One;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  WriteLn('OK');");
-    builder.appendImpl("end;");
-    builder.appendImpl("procedure TEmptyProcs.Two;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  if Foo then begin");
-    builder.appendImpl("    Bar;");
-    builder.appendImpl("  end;");
-    builder.appendImpl("end;");
-    builder.appendImpl("procedure TEmptyProcs.Three;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  if Foo then begin");
-    builder.appendImpl("    // Do nothing");
-    builder.appendImpl("  end;");
-    builder.appendImpl("end;");
-    builder.appendImpl("procedure GlobalProcedureFour;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  WriteLn('OK');");
-    builder.appendImpl("end;");
-    builder.appendImpl("procedure GlobalProcedureFive;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  if Foo then begin");
-    builder.appendImpl("    // Do nothing");
-    builder.appendImpl("  end;");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TEmptyProcs = class(TObject)")
+            .appendDecl("  public")
+            .appendDecl("    procedure One;")
+            .appendDecl("    procedure Two;")
+            .appendDecl("    procedure Three;")
+            .appendDecl("  end;")
+            .appendImpl("procedure TEmptyProcs.One;")
+            .appendImpl("begin")
+            .appendImpl("  WriteLn('OK');")
+            .appendImpl("end;")
+            .appendImpl("procedure TEmptyProcs.Two;")
+            .appendImpl("begin")
+            .appendImpl("  if Foo then begin")
+            .appendImpl("    Bar;")
+            .appendImpl("  end;")
+            .appendImpl("end;")
+            .appendImpl("procedure TEmptyProcs.Three;")
+            .appendImpl("begin")
+            .appendImpl("  if Foo then begin")
+            .appendImpl("    // Do nothing")
+            .appendImpl("  end;")
+            .appendImpl("end;")
+            .appendImpl("procedure GlobalProcedureFour;")
+            .appendImpl("begin")
+            .appendImpl("  WriteLn('OK');")
+            .appendImpl("end;")
+            .appendImpl("procedure GlobalProcedureFive;")
+            .appendImpl("begin")
+            .appendImpl("  if Foo then begin")
+            .appendImpl("    // Do nothing")
+            .appendImpl("  end;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -110,18 +109,59 @@ public class EmptyBeginStatementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  public void testEmptyBlocksInCaseStatementShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test(Arg: Integer);")
+            .appendImpl("begin")
+            .appendImpl("  case Arg of")
+            .appendImpl("    0: begin")
+            .appendImpl("    end;")
+            .appendImpl("  else begin")
+            .appendImpl("  end;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("EmptyBeginStatementRule", builder.getOffset() + 4))
+        .areExactly(1, ruleKeyAtLine("EmptyBeginStatementRule", builder.getOffset() + 6));
+  }
+
+  @Test
+  public void testEmptyBlocksInCaseStatementShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test(Arg: Integer);")
+            .appendImpl("begin")
+            .appendImpl("  case Arg of")
+            .appendImpl("    0: begin")
+            .appendImpl("      // Do nothing")
+            .appendImpl("    end;")
+            .appendImpl("  else begin")
+            .appendImpl("    // Do nothing")
+            .appendImpl("  end;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("EmptyBeginStatementRule"));
+  }
+
+  @Test
   public void testEmptyMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-
-    builder.appendDecl("type");
-    builder.appendDecl("  TEmptyProcs = class");
-    builder.appendDecl("  public");
-    builder.appendDecl("    procedure One;");
-    builder.appendDecl("  end;");
-
-    builder.appendImpl("procedure TEmptyProcs.One;");
-    builder.appendImpl("begin");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TEmptyProcs = class")
+            .appendDecl("  public")
+            .appendDecl("    procedure One;")
+            .appendDecl("  end;")
+            .appendImpl("procedure TEmptyProcs.One;")
+            .appendImpl("begin")
+            .appendImpl("end;");
 
     execute(builder);
 

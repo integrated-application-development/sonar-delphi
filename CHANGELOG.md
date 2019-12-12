@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Exclude class constructors in `ConstructorCreateRule`.
 - Handle `else` exception handler in `SwallowedExceptionsRule`.
 - Handle global variables separately in `VariableNameRule`.
+- Allow empty case branches in `EmptyBeginStatementRule` if they have comments.
 
 ### Fixed
 
