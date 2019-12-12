@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   declared in a single declaration list.
 - `TabulationCharactersRule` analysis rule, which flags files containing tabs.
 - `EmptyTypeSectionRule` analysis rule, which flags empty `type` sections.
+- `EmptyVisibilitySectionRule` analysis rule, which flags empty visibility sections.
 - `ForbiddenIdentifierRule` analysis rule template, which flags identifiers with a specified name.
 - `ForbiddenMethodRule` analysis rule template, which flags methods with a specified fully-qualified
   name.

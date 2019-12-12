@@ -1011,6 +1011,25 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+    message="Empty visibility sections should be removed"
+    name="EmptyVisibilitySectionRule">
+    <priority>4</priority>
+    <description>
+      Empty visibility sections are superfluous and can be safely removed.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+      <property name="builtinXPath">
+        <value>
+          <![CDATA[
+            //VisibilitySectionNode[@Visibility != 'IMPLICIT_PUBLISHED' and count(*) = 1]
+          ]]>
+        </value>
+      </property>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathTemplateRule"
     message="Track breaches of an XPath rule"
     name="XPathRule">
