@@ -58,7 +58,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class");
+    builder.appendDecl("  TMyClass = class(TObject)");
     builder.appendDecl("  end;");
     builder.appendDecl("  TMetaClass = class of TMyClass;");
 
@@ -85,7 +85,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class");
+    builder.appendDecl("  TMyClass = class(TObject)");
     builder.appendDecl("  end;");
 
     execute(builder);

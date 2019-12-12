@@ -865,6 +865,25 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ExplicitTObjectRule"
+    message="Top-level classes should explicitly inherit from TObject"
+    name="ExplicitTObjectRule">
+    <priority>4</priority>
+    <description>
+      A class without a parent will implicitly inherit from TObject.
+      The explicit form is recommended by Embarcadero for readability.
+      &lt;br&gt;
+      &lt;br&gt;
+      For more information, see the Delphi wiki page for
+      &lt;a href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Classes_and_Objects_(Delphi)#TObject_and_TClass'&gt;
+      TObject and TClass
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.DestructorDestroyRule"
     message="Destructors should override TObject.Destroy"
     name="DestructorDestroyRule">

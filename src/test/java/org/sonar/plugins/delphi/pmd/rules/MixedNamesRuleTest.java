@@ -61,7 +61,7 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   public void testMatchingFunctionNamesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendDecl("type TClass = class")
+            .appendDecl("type TClass = class(TObject)")
             .appendDecl("  procedure DoThing(SomeArg: ArgType);")
             .appendDecl("end;")
             .appendImpl("procedure TClass.DoThing(SomeArg: ArgType);")
@@ -78,7 +78,7 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   public void testMismatchedTypeNameShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendDecl("type TClass = class")
+            .appendDecl("type TClass = class(TObject)")
             .appendDecl("  procedure DoThing(SomeArg: ArgType);")
             .appendDecl("end;")
             .appendImpl("procedure Tclass.DoThing(SomeArg: ArgType);")
@@ -97,7 +97,7 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   public void testMismatchedFunctionNameShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendDecl("type TClass = class")
+            .appendDecl("type TClass = class(TObject)")
             .appendDecl("  procedure DoThing(SomeArg: ArgType);")
             .appendDecl("end;")
             .appendImpl("procedure TClass.doThing(SomeArg: ArgType);")
@@ -155,7 +155,7 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
-            .appendDecl("  TFoo = class")
+            .appendDecl("  TFoo = class(TObject)")
             .appendDecl("    procedure Bar;")
             .appendDecl("  end;")
             .appendImpl("procedure TFoo.Bar;")

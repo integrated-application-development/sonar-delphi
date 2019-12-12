@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   used instead.
 - `CaseStatementSizeRule` analysis rule, which flags case statements with less than 2 cases.
 - `DestructorDestroyRule` analysis rule, which flags destructors that aren't named `Destroy`.
+- `ExplicitTObjectRule` analysis rule, which flags `class` declarations that don't explicitly
+  declare their parent type.
 - `ForbiddenIdentifierRule` analysis rule template, which flags identifiers with a specified name.
 - `sonar.delphi.sources.searchPath` property to specify directories to search for include files and
   unit imports.

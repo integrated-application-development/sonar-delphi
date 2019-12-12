@@ -55,12 +55,12 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
   public void testNestedType() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
-    builder.appendDecl("  TOuterClass = class");
+    builder.appendDecl("  TOuterClass = class(TObject)");
     builder.appendDecl("  strict private");
     builder.appendDecl("    type");
-    builder.appendDecl("      TInnerClass1 = class");
+    builder.appendDecl("      TInnerClass1 = class(TObject)");
     builder.appendDecl("      end;");
-    builder.appendDecl("      TInnerClass2 = class");
+    builder.appendDecl("      TInnerClass2 = class(TObject)");
     builder.appendDecl("      end;");
     builder.appendDecl("  end;");
 
