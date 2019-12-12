@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ExplicitTObjectRule` analysis rule, which flags `class` declarations that don't explicitly
   declare their parent type.
 - `ForbiddenIdentifierRule` analysis rule template, which flags identifiers with a specified name.
+- `ForbiddenMethodRule` analysis rule template, which flags methods with a specified fully-qualified
+  name.
 - `sonar.delphi.sources.searchPath` property to specify directories to search for include files and
   unit imports.
 - `sonar.delphi.unitScopeNames` property to specify unit scope names, which are used for unit import

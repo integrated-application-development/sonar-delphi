@@ -960,6 +960,29 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenMethodRule"
+    message="Track uses of disallowed methods"
+    name="ForbiddenMethodRule">
+    <priority>3</priority>
+    <description>
+      This rule allows banning certain methods.
+      It will flag any direct reference to a method from the blacklist.
+      &lt;br&gt;
+      &lt;br&gt;
+      Please note:
+      &lt;br&gt;
+      - A fully qualified method name is required. (E.g. "Unit.Type.Method")
+      &lt;br&gt;
+      - All overloads will be tracked. Parameter signatures cannot be specified.
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min" />
+      <property name="template" value="true" />
+      <property name="blacklist" />
+      <property name="message" />
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.CommentRegexRule"
     message="Track comments matching a regular expression"
     name="CommentRegexRule">
