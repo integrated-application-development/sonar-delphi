@@ -11,7 +11,7 @@ public class PublicFieldsRuleTest extends BasePmdRuleTest {
   public void testValidRule() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class");
+    builder.appendDecl("  TMyClass = class(TObject)");
     builder.appendDecl("     FPublishedField: Integer;");
     builder.appendDecl("    private");
     builder.appendDecl("     FPrivateField: Integer;");
@@ -28,7 +28,7 @@ public class PublicFieldsRuleTest extends BasePmdRuleTest {
   public void testInvalidRule() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class");
+    builder.appendDecl("  TMyClass = class(TObject)");
     builder.appendDecl("     FPublishedField: Integer;");
     builder.appendDecl("    private");
     builder.appendDecl("     FPrivateField: Integer;");

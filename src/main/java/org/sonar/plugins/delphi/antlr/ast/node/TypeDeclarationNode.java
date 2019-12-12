@@ -115,7 +115,7 @@ public final class TypeDeclarationNode extends DelphiNode implements Typed, Qual
     return getTypeNode() instanceof PointerTypeNode;
   }
 
-  public boolean isSubType() {
+  public boolean isNestedType() {
     if (isSubType == null) {
       isSubType = getFirstParentOfType(TypeDeclarationNode.class) != null;
     }
@@ -128,6 +128,11 @@ public final class TypeDeclarationNode extends DelphiNode implements Typed, Qual
 
   public boolean isTypeType() {
     return getTypeNode() instanceof TypeTypeNode;
+  }
+
+  public boolean isForwardDeclaration() {
+    TypeNameDeclaration declaration = getTypeNameDeclaration();
+    return declaration != null && declaration.isForwardDeclaration();
   }
 
   @Override

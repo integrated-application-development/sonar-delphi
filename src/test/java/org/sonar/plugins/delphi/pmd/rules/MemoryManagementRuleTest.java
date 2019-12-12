@@ -112,7 +112,7 @@ public class MemoryManagementRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
-            .appendDecl("  TFoo = class")
+            .appendDecl("  TFoo = class(TObject)")
             .appendDecl("    constructor CreateNew;")
             .appendDecl("  end;")
             .appendImpl("procedure Foo;")

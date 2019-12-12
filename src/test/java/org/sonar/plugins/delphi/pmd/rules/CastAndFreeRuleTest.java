@@ -78,8 +78,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("CastAndFreeRule", builder.getOffset() + 3));
+    assertIssues().areExactly(1, ruleKeyAtLine("CastAndFreeRule", builder.getOffset() + 3));
   }
 
   @Test
@@ -93,8 +92,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("CastAndFreeRule", builder.getOffset() + 3));
+    assertIssues().areExactly(1, ruleKeyAtLine("CastAndFreeRule", builder.getOffset() + 3));
   }
 
   @Test

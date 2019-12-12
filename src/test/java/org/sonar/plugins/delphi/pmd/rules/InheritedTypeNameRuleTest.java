@@ -84,7 +84,7 @@ public class InheritedTypeNameRuleTest extends BasePmdRuleTest {
   public void testDoesNotInheritFromAnyTypeShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
-    builder.appendDecl("  TType = class");
+    builder.appendDecl("  TType = class(TObject)");
     builder.appendDecl("  end;");
 
     execute(builder);

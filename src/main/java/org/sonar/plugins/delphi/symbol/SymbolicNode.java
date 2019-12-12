@@ -2,6 +2,7 @@ package org.sonar.plugins.delphi.symbol;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import net.sourceforge.pmd.lang.ast.AbstractNode;
+import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.symboltable.ScopedNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.IndexedNode;
@@ -57,7 +58,7 @@ public final class SymbolicNode extends AbstractNode implements ScopedNode, Inde
         imaginaryTokenIndex.incrementAndGet());
   }
 
-  public static SymbolicNode fromRange(String image, DelphiNode begin, DelphiNode end) {
+  public static SymbolicNode fromRange(String image, DelphiNode begin, Node end) {
     return new SymbolicNode(
         begin.jjtGetId(),
         begin.getBeginLine(),

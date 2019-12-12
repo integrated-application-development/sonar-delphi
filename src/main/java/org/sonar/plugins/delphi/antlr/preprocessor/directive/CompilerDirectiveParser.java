@@ -159,12 +159,10 @@ class CompilerDirectiveParser {
         continue;
       }
 
-      if (!insideQuote) {
-        if (Character.isWhitespace(character)) {
-          foundWhitespace = true;
-        } else if (isEndOfDirective(character)) {
-          return;
-        }
+      if (!insideQuote && Character.isWhitespace(character)) {
+        foundWhitespace = true;
+      } else if (isEndOfDirective(character)) {
+        return;
       }
 
       directiveItem.append(character);

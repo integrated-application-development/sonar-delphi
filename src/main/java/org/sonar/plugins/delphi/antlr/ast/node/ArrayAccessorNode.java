@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 
@@ -16,5 +17,12 @@ public final class ArrayAccessorNode extends DelphiNode {
 
   public List<ExpressionNode> getExpressions() {
     return findChildrenOfType(ExpressionNode.class);
+  }
+
+  @Override
+  public String getImage() {
+    return "["
+        + getExpressions().stream().map(ExpressionNode::getImage).collect(Collectors.joining(", "))
+        + "]";
   }
 }

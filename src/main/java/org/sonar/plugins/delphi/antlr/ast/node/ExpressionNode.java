@@ -32,6 +32,10 @@ public abstract class ExpressionNode extends DelphiNode implements Typed {
   @NotNull
   protected abstract Type createType();
 
+  public boolean isLiteral() {
+    return extractLiteral() != null;
+  }
+
   public boolean isIntegerLiteral() {
     LiteralNode literal = extractLiteral();
     return literal != null && literal.isIntegerLiteral();

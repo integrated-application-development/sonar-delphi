@@ -102,7 +102,7 @@ public class DelphiTokenExecutorTest {
     cpdTokenCount(0, DelphiTokenExecutorTest::isWhitespaceOrComment);
     cpdTokenCount(3, DelphiToken.STRING_LITERAL);
     cpdTokenCount(5, DelphiToken.NUMERIC_LITERAL);
-    highlightCount(21);
+    highlightCount(20);
   }
 
   @Test

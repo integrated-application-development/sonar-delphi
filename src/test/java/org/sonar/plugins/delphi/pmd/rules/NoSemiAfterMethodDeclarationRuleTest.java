@@ -12,10 +12,10 @@ public class NoSemiAfterMethodDeclarationRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
-            .appendDecl("  TType = class")
+            .appendDecl("  TType = class(TObject)")
             .appendDecl("  public")
-            .appendDecl("    constructor Create; overload;")
-            .appendDecl("    destructor Destroy; overload;")
+            .appendDecl("    constructor Create; override;")
+            .appendDecl("    destructor Destroy; override;")
             .appendDecl("    procedure MyProcedure; overload;")
             .appendDecl("    function MyFunction: String; overload;")
             .appendDecl("  end;");
@@ -30,10 +30,10 @@ public class NoSemiAfterMethodDeclarationRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
-            .appendDecl("  TType = class")
+            .appendDecl("  TType = class(TObject)")
             .appendDecl("  public")
-            .appendDecl("    constructor Create; overload")
-            .appendDecl("    destructor Destroy; overload")
+            .appendDecl("    constructor Create; override")
+            .appendDecl("    destructor Destroy; override")
             .appendDecl("    procedure MyProcedure; overload")
             .appendDecl("    function MyFunction: String; overload")
             .appendDecl("  end;");

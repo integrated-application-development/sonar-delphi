@@ -160,15 +160,17 @@ public class SymbolTableBuilder {
     if (data != null) {
       process(data, ResolutionLevel.INTERFACE);
       unitDeclaration = data.unitDeclaration;
+    } else {
+      LOG.debug("Failed to resolve unit import: {}", node.getNameNode().fullyQualifiedName());
     }
 
     return new UnitImportNameDeclaration(node, unitDeclaration);
   }
 
   private void process(UnitData unit, ResolutionLevel resolutionLevel) {
-    LOG.debug("\t\t-" + unit.sourceFile.getName());
     try {
       if (unit.resolved.ordinal() < resolutionLevel.ordinal()) {
+        LOG.debug("\t>> " + unit.sourceFile.getName());
         DelphiFile delphiFile = DelphiFile.from(unit.sourceFile, fileConfig);
         Data data =
             new Data(

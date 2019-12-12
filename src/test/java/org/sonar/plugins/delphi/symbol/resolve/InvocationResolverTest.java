@@ -118,6 +118,7 @@ public class InvocationResolverTest {
     assertResolved(INTEGER.type, INT64.type, UINT64.type);
     assertResolved(INTEGER.type, WORD.type, SHORTINT.type);
     assertResolved(INTEGER.type, WORD.type, BYTE.type);
+    assertResolved(BYTE.type, INTEGER.type, DOUBLE.type);
   }
 
   @Test

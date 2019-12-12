@@ -30,7 +30,7 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
-            .appendDecl("  TTestConstructor = class")
+            .appendDecl("  TTestConstructor = class(TObject)")
             .appendDecl("  public")
             .appendDecl("    constructor Create;")
             .appendDecl("  end;")
@@ -50,7 +50,7 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
-            .appendDecl("  TTestConstructor = class")
+            .appendDecl("  TTestConstructor = class(TObject)")
             .appendDecl("  public")
             .appendDecl("    constructor Create;")
             .appendDecl("  end;")
@@ -72,7 +72,7 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
-            .appendDecl("  TTestConstructor = class")
+            .appendDecl("  TTestConstructor = class(TObject)")
             .appendDecl("  public")
             .appendDecl("    class constructor Create;")
             .appendDecl("  end;")

@@ -57,7 +57,7 @@ public interface DelphiFile {
 
   class DelphiFileConstructionException extends RuntimeException {
     DelphiFileConstructionException(Throwable cause) {
-      super("Failed to construct DelphiFile", cause);
+      super("Failed to construct DelphiFile (" + cause.getMessage() + ")", cause);
     }
   }
 

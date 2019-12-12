@@ -322,6 +322,20 @@ public interface Type {
 
   interface ProceduralType extends Type {
     /**
+     * NOTE: The order of this enum matters. The ordinal value is used to determine which kind gets
+     * preference during overload resolution.
+     *
+     * @see org.sonar.plugins.delphi.symbol.resolve.InvocationResolver
+     */
+    enum ProceduralKind {
+      PROCEDURE,
+      PROCEDURE_OF_OBJECT,
+      REFERENCE,
+      ANONYMOUS,
+      METHOD
+    }
+
+    /**
      * The type that this method returns
      *
      * @return Return type
@@ -334,6 +348,13 @@ public interface Type {
      * @return Expected types of parameters
      */
     List<Type> parameterTypes();
+
+    /**
+     * The kind of procedural type that this type is
+     *
+     * @return Procedural kind
+     */
+    ProceduralKind kind();
   }
 
   interface FileType extends Type {

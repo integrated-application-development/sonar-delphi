@@ -251,7 +251,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("type")
-            .appendImpl("  TDummyClass = class")
+            .appendImpl("  TDummyClass = class(TObject)")
             .appendImpl("    FData : Integer;")
             .appendImpl("    constructor Create(Data : Integer);")
             .appendImpl("  end;")

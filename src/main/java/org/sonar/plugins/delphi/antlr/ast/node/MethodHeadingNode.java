@@ -1,7 +1,5 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
-import static org.apache.commons.lang3.StringUtils.substringAfter;
-
 import java.util.Collections;
 import java.util.List;
 import org.antlr.runtime.Token;

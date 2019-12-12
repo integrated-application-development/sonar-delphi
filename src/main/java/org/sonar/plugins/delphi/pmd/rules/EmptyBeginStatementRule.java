@@ -2,6 +2,8 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.ast.Node;
+import org.sonar.plugins.delphi.antlr.ast.node.CaseItemStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.CaseStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.CompoundStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ElseBlockNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExceptBlockNode;
@@ -33,14 +35,28 @@ public class EmptyBeginStatementRule extends AbstractDelphiRule {
       return false;
     }
 
+    if (parent instanceof CaseItemStatementNode) {
+      // Handling all cases in a case statement is a reasonable thing to do.
+      // With that being said, a comment is required.
+      return block.getComments().isEmpty();
+    }
+
     if (parent instanceof StatementListNode) {
       StatementListNode statementList = (StatementListNode) parent;
-      parent = parent.jjtGetParent();
+      Node grandparent = parent.jjtGetParent();
 
-      // Handled by SwallowedExceptionsRule
-      return !(statementList.getStatements().size() == 1
-          && parent instanceof ElseBlockNode
-          && parent.jjtGetParent() instanceof ExceptBlockNode);
+      if (statementList.getStatements().size() == 1) {
+        if (grandparent instanceof ElseBlockNode
+            && grandparent.jjtGetParent() instanceof CaseStatementNode) {
+          // Handling all cases in a case statement is a reasonable thing to do.
+          // With that being said, a comment is required.
+          return block.getComments().isEmpty();
+        }
+
+        // Handled by SwallowedExceptionsRule
+        return !(grandparent instanceof ElseBlockNode)
+            || !(grandparent.jjtGetParent() instanceof ExceptBlockNode);
+      }
     }
 
     return true;

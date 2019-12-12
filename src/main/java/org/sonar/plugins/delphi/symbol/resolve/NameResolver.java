@@ -9,7 +9,6 @@ import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType.ANSICHA
 import static org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType.WIDECHAR;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 
-import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -261,19 +260,14 @@ public class NameResolver {
   }
 
   private void readPossibleUnitNameReference(NameReferenceNode node) {
-    if (names.size() > 1) {
-      // Drat. Looks like we were in the middle of a name already. This can't be a unit name.
+    if (currentScope instanceof UnknownScope || node.getScope() != currentScope) {
+      // If our node's scope doesn't match the current scope, we're likely in an ancestor type's
+      // scope searching for a super method.
       return;
     }
-
-    Preconditions.checkNotNull(currentScope);
-    if (currentScope instanceof UnknownScope) {
-      return;
-    }
-
-    names.clear();
 
     FileScope fileScope = currentScope.getEnclosingScope(FileScope.class);
+
     List<QualifiedDelphiNameDeclaration> unitDeclarations = new ArrayList<>();
     unitDeclarations.addAll(fileScope.getUnitDeclarations().keySet());
     unitDeclarations.addAll(fileScope.getImportDeclarations().keySet());
@@ -300,6 +294,8 @@ public class NameResolver {
         return false;
       }
     }
+
+    names.clear();
 
     StringBuilder referenceImage = new StringBuilder();
     for (int i = 0; i < declarationParts.size(); ++i) {
@@ -502,8 +498,9 @@ public class NameResolver {
             .map(NameDeclaration.class::cast)
             .collect(Collectors.toSet());
 
-    DelphiNameOccurrence name = getLast(names);
-    name.setIsExplicitInvocation(explicit);
+    if (!names.isEmpty()) {
+      getLast(names).setIsExplicitInvocation(explicit);
+    }
 
     NameDeclaration resolved = addResolvedDeclaration();
 
@@ -546,10 +543,8 @@ public class NameResolver {
 
     if (bestDeclaration != null) {
       declarations.add(bestDeclaration);
+      getLast(names).setIsMethodReference();
     }
-
-    DelphiNameOccurrence name = getLast(names);
-    name.setIsMethodReference();
   }
 
   private void disambiguateParameters(List<Type> parameterTypes) {

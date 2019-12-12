@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.antlr.preprocessor;
 
 import static com.google.common.base.Preconditions.checkState;
+import static org.apache.commons.io.FilenameUtils.getBaseName;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,9 +38,13 @@ public class DelphiPreprocessor {
   private List<Token> tokens;
 
   public DelphiPreprocessor(DelphiLexer lexer, DelphiFileConfig config) {
+    this(lexer, config, new HashSet<>(config.getDefinitions()));
+  }
+
+  private DelphiPreprocessor(DelphiLexer lexer, DelphiFileConfig config, Set<String> definitions) {
     this.lexer = lexer;
     this.config = config;
-    this.definitions = new HashSet<>(config.getDefinitions());
+    this.definitions = definitions;
     this.directives = new ArrayList<>();
     this.parentDirective = new ArrayDeque<>();
   }
@@ -91,6 +96,8 @@ public class DelphiPreprocessor {
   }
 
   public void resolveInclude(Token insertionToken, String includeFilePath) {
+    includeFilePath = includeFilePath.replace("*", getBaseName(lexer.getSourceName()));
+
     Path currentPath = Path.of(lexer.getSourceName()).getParent();
     Path includeFile = Path.of(currentPath.toString(), includeFilePath);
 
@@ -115,7 +122,7 @@ public class DelphiPreprocessor {
         String path = includeFile.getCanonicalPath();
         LowercaseFileStream fileStream = new LowercaseFileStream(path, config.getEncoding());
         DelphiLexer includeLexer = new DelphiLexer(fileStream);
-        DelphiPreprocessor preprocessor = new DelphiPreprocessor(includeLexer, config);
+        DelphiPreprocessor preprocessor = new DelphiPreprocessor(includeLexer, config, definitions);
         TokenRewriteStream tokenStream = preprocessor.process();
         List<Token> result = extractTokens(tokenStream);
         // Remove EOF

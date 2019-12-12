@@ -15,7 +15,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.MethodHeadingNode.MethodKind;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.Visibility;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
-import org.sonar.plugins.delphi.type.DelphiMethodType;
+import org.sonar.plugins.delphi.type.DelphiProceduralType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Typed;
@@ -44,7 +44,7 @@ public final class MethodNameDeclaration extends DelphiNameDeclaration
     this.isClassInvocable = method.isClassMethod();
     this.isCallable = !((method.isDestructor() || method.isConstructor()) && isClassInvocable);
     this.methodKind = method.getMethodKind();
-    this.type = DelphiMethodType.method(extractParameterTypes(method), returnType);
+    this.type = DelphiProceduralType.method(extractParameterTypes(method), returnType);
     this.typeDeclaration = method.getTypeDeclaration();
     this.visibility = method.getVisibility();
   }

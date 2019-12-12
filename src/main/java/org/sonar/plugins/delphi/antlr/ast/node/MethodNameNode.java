@@ -3,7 +3,6 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
-import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;

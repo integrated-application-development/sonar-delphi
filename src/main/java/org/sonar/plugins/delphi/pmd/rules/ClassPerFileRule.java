@@ -53,7 +53,7 @@ public class ClassPerFileRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(TypeDeclarationNode type, RuleContext data) {
-    if (type.isClass() && !type.isSubType()) {
+    if (type.isClass() && !type.isNestedType() && !type.isForwardDeclaration()) {
       ++count;
     }
     return super.visit(type, data);

@@ -124,7 +124,7 @@ public class DelphiToken implements GenericToken {
     return DelphiKeywords.KEYWORDS.contains(token.getType());
   }
 
-  private boolean isSpecialKeyword() {
+  public boolean isSpecialKeyword() {
     return DelphiKeywords.SPECIAL_KEYWORDS.contains(token.getType());
   }
 

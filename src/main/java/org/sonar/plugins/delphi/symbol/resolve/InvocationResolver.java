@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.symbol.resolve;
 
 import static java.lang.Double.POSITIVE_INFINITY;
+import static java.lang.Math.abs;
 import static java.lang.Math.nextAfter;
 import static java.util.function.Predicate.not;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_1;
@@ -28,7 +29,6 @@ import static org.sonar.plugins.delphi.symbol.resolve.VariantEqualityType.WORD;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
@@ -39,6 +39,7 @@ import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.CollectionType;
 import org.sonar.plugins.delphi.type.Type.FileType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
+import org.sonar.plugins.delphi.type.Type.ProceduralType.ProceduralKind;
 
 /**
  * Resolves an invocation to the correct declaration. Based directly off of the tcallcandidates
@@ -106,12 +107,12 @@ public class InvocationResolver {
     // If the parameter expects a procedural type then we need to find the overload that the
     // argument is referring to.
     if (argument.isMethodReference(parameterType)) {
-      argumentType = Objects.requireNonNull(argument.findMethodReferenceType(parameterType));
+      argumentType = argument.findMethodReferenceType(parameterType);
     }
 
     EqualityType equality;
 
-    if (Objects.requireNonNull(argumentType).is(Objects.requireNonNull(parameterType))) {
+    if (argumentType.is(parameterType)) {
       equality = EXACT;
     } else if (!equalTypeRequired(parameter)
         && isRealOrExtended(argumentType)
@@ -164,6 +165,14 @@ public class InvocationResolver {
         // Parameter requires an equal type so the previous match was not good enough
         equality = varParameterAllowed(argumentType, parameter);
       }
+    }
+
+    if (argumentType.isProcedural() && parameterType.isProcedural()) {
+      ProceduralKind argKind = ((ProceduralType) argumentType).kind();
+      ProceduralKind paramKind = ((ProceduralType) parameterType).kind();
+      int kindDistance = abs(argKind.ordinal() - paramKind.ordinal());
+
+      candidate.increaseOrdinalDistance(kindDistance * Double.MIN_VALUE);
     }
 
     if (!equalTypeRequired(parameter) && argumentType.isInteger() && parameterType.isInteger()) {
@@ -347,7 +356,7 @@ public class InvocationResolver {
       result = bestCandidate.getConvertOperatorCount() - candidate.getConvertOperatorCount();
     }
 
-    for (int i = 1; i <= InvocationCandidate.CONVERT_LEVELS; ++i) {
+    for (int i = InvocationCandidate.CONVERT_LEVELS; i > 0; --i) {
       if (result == 0) {
         // Less castLevel[6..1] parameters?
         result = bestCandidate.getConvertLevelCount(i) - candidate.getConvertLevelCount(i);

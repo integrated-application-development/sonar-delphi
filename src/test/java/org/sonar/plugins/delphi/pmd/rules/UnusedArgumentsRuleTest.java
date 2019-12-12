@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.Test;
@@ -249,7 +250,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("UnusedArgumentsRule"));
   }
 
   @Test
@@ -304,7 +305,6 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(4)
         .areExactly(1, ruleKeyAtLine("UnusedArgumentsRule", builder.getOffset() + 1))
         .areExactly(1, ruleKeyAtLine("UnusedArgumentsRule", builder.getOffset() + 6))
         .areExactly(1, ruleKeyAtLine("UnusedArgumentsRule", builder.getOffset() + 7))
@@ -315,8 +315,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   public void testForwardedMethodShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendDecl(
-                "function InsertDetour(const TargetProc, Trampoline, DetourProc: Pointer): Boolean; forward;");
+            .appendDecl("function Foo(const Bar: String): Boolean; forward;");
 
     execute(builder);
 

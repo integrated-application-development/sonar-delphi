@@ -153,13 +153,7 @@ public final class DelphiKeywords {
           DelphiLexer.WHILE);
 
   public static final Set<Integer> SPECIAL_KEYWORDS =
-      Set.of(
-          DelphiLexer.BREAK,
-          DelphiLexer.CONTINUE,
-          DelphiLexer.EXIT,
-          DelphiLexer.GOTO,
-          DelphiLexer.STRING,
-          DelphiLexer.VARIANT);
+      Set.of(DelphiLexer.BREAK, DelphiLexer.CONTINUE, DelphiLexer.EXIT, DelphiLexer.GOTO);
 
   private DelphiKeywords() {
     // const class

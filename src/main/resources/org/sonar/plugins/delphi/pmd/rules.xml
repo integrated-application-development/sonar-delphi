@@ -865,16 +865,200 @@ List5.Duplicates := <i>dupError</i>; // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.MemoryManagementRule"
     message="Memory management should be used"
     name="MemoryManagementRule">
-    <priority>3</priority>
+    <priority>2</priority>
     <description>
       Memory management methods should be used to manage object lifecycles.
       &lt;br&gt;
-      &lt;br&gt;
+      &lt;br&gt;.
     </description>
     <properties>
       <property name="baseEffort" value="10min" />
       <property name="memoryFunctions" value="Local|Managed|ManagedBy|ManagedInterface|Unmanaged" />
       <property name="whitelist" value="CreateNew" />
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.MethodNestingDepthRule"
+    message="Methods should not be nested too deeply"
+    name="MethodNestingDepthRule">
+    <priority>3</priority>
+    <description>
+      Deeply nested methods make the code difficult to navigate/read.
+      &lt;br&gt;
+      &lt;br&gt;.
+    </description>
+    <properties>
+      <property name="baseEffort" value="10min" />
+      <property name="depth" value="1" />
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.SpecialKeywordCapitalizationRule"
+    message="Special keywords should be capitalized"
+    name="SpecialKeywordCapitalizationRule">
+    <priority>4</priority>
+    <description>
+      Special keywords should be capitalized. We treat them like functions in this regard.
+      &lt;br&gt;
+      &lt;br&gt;.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ExplicitTObjectRule"
+    message="Top-level classes should explicitly inherit from TOBject"
+    name="ExplicitTObjectRule">
+    <priority>4</priority>
+    <description>
+      A class without a parent will implicitly inherit from TObject.
+      The explicit form is recommended by Embarcadero for readability.
+      &lt;br&gt;
+      &lt;br&gt;
+      For more information, see the Delphi wiki page for
+      &lt;a href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Classes_and_Objects_(Delphi)#TObject_and_TClass'&gt;
+      TObject and TClass
+      &lt;/a&gt;.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.DestructorDestroyRule"
+    message="Destructors should override TObject.Destroy"
+    name="DestructorDestroyRule">
+    <priority>3</priority>
+    <description>
+      Destroy is a virtual destructor of TObject.
+      &lt;br&gt;
+      When an object is destroyed, TObject.Free calls the Destroy virtual destructor of the specific class.
+      &lt;br&gt;
+      With this behavior in mind, destructors should always override TObject.Destroy.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+      <property name="type" value="BUG" />
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.CaseStatementSizeRule"
+    message="Case statements should have at least 3 branches"
+    name="CaseStatementSizeRule">
+    <priority>4</priority>
+    <description>
+      A case statement with less than 3 branches would be better expressed as an if-else statement.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.MultipleVariableDeclarationRule"
+    message="Variables should be declared individually"
+    name="MultipleVariableDeclarationRule">
+    <priority>4</priority>
+    <description>
+      Variables and fields should be defined one per line of code.
+      &lt;br&gt;
+      Individual parameters should have their types explicitly declared.
+      &lt;br&gt;
+      &lt;br&gt;.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.TabulationCharactersRule"
+    message="Tabulation characters should not be used"
+    name="TabulationCharactersRule">
+    <priority>5</priority>
+    <description>
+      Developers should not need to configure the tab width of their text editors in order to be able to read source code.
+      &lt;br&gt;
+      So the use of the tabulation character must be banned.
+      &lt;br&gt;
+      &lt;br&gt;.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.AssignedNilCheckRule"
+    message="Nil checks should be performed with Assigned instead"
+    name="AssignedNilCheckRule">
+    <priority>4</priority>
+    <description>
+      Use 'Assigned' instead of comparing to nil.
+      &lt;br&gt;
+      &lt;br&gt;
+      For more information, see the Delphi wiki page for
+      &lt;a href='http://docwiki.embarcadero.com/Libraries/Rio/en/System.Assigned'&gt;
+      System.Assigned
+      &lt;/a&gt;.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+    message="Empty type sections should be removed"
+    name="EmptyTypeSectionRule">
+    <priority>4</priority>
+    <description>
+      Empty type sections are superfluous and can be safely removed.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+      <property name="builtinXPath">
+        <value>
+         <![CDATA[
+            //TypeSectionNode[count(*) = 0]
+          ]]>
+        </value>
+      </property>
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+    message="Empty visibility sections should be removed"
+    name="EmptyVisibilitySectionRule">
+    <priority>4</priority>
+    <description>
+      Empty visibility sections are superfluous and can be safely removed.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+      <property name="builtinXPath">
+        <value>
+          <![CDATA[
+            //VisibilitySectionNode[@Visibility != 'IMPLICIT_PUBLISHED' and count(*) = 1]
+          ]]>
+        </value>
+      </property>
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+    message="Empty field sections should be removed"
+    name="EmptyFieldSectionRule">
+    <priority>4</priority>
+    <description>
+      Empty field sections are superfluous and can be safely removed.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+      <property name="builtinXPath">
+        <value>
+          <![CDATA[
+            //FieldSectionNode[count(FieldDeclarationNode) = 0]
+          ]]>
+        </value>
+      </property>
     </properties>
   </rule>
 
@@ -891,13 +1075,49 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenIdentifiersRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenIdentifierRule"
     message="Forbidden identifiers should not be used"
-    name="ForbiddenIdentifiersRule">
+    name="ForbiddenIdentifierRule">
     <priority>3</priority>
     <description>
       This rule template can be used to create rules which will be triggered when a name is declared
       that matches an item in the blacklist.
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min" />
+      <property name="template" value="true" />
+      <property name="blacklist" />
+      <property name="message" />
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenMethodRule"
+    message="Forbidden methods should not be used"
+    name="ForbiddenMethodRule">
+    <priority>3</priority>
+    <description>
+      This rule template can be used to forbid a particular method from being used.
+      It will flag any direct reference to a method from the blacklist.
+      &lt;br&gt;
+      Please note that a fully qualified method name is required. (E.g. "Unit.Type.Method")
+    </description>
+    <properties>
+      <property name="baseEffort" value="3min" />
+      <property name="template" value="true" />
+      <property name="blacklist" />
+      <property name="message" />
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenTypeRule"
+    message="Forbidden types should not be used"
+    name="ForbiddenTypeRule">
+    <priority>3</priority>
+    <description>
+      This rule template can be used to forbid a particular method from being used.
+      It will flag any direct reference to a type from the blacklist.
+      &lt;br&gt;
+      Please note that a fully qualified type name is required. (E.g. "Unit.Type.InnerType")
     </description>
     <properties>
       <property name="baseEffort" value="5min" />

@@ -193,9 +193,9 @@ constSection                 : ('const'<ConstSectionNode>^ | 'resourcestring'<Co
 constDeclaration             : customAttribute? varNameDeclaration (':' varType)? '=' constExpression portabilityDirective* ';'
                              -> ^(TkConstDeclaration<ConstDeclarationNode> varNameDeclaration constExpression varType? portabilityDirective*)
                              ;
-typeSection                  : 'type'^ typeDeclaration+
+typeSection                  : 'type'<TypeSectionNode>^ typeDeclaration+
                              ;
-innerTypeSection             : 'type'^ typeDeclaration*
+innerTypeSection             : 'type'<TypeSectionNode>^ typeDeclaration*
                              ;
 typeDeclaration              : customAttribute? genericNameDeclaration '=' typeDecl portabilityDirective* ';'
                              -> ^(TkNewType<TypeDeclarationNode> genericNameDeclaration typeDecl customAttribute? portabilityDirective*)
@@ -1098,7 +1098,7 @@ TkRealNum               : Digitseq ({ input.LA(2) != '.' }? => '.' Digitseq)? ((
                         ;
 TkHexNum                : '$' Hexdigitseq
                         ;
-TkAsmLabel              : { asmMode }? => '@' '@' (Alpha | '_' | Digit)+
+TkAsmId                 : { asmMode }? => '@' '@'? (Alpha | '_' | Digit)+
                         ;
 TkAsmHexNum             : { asmMode }? => Hexdigitseq ('h'|'H')
                         ;

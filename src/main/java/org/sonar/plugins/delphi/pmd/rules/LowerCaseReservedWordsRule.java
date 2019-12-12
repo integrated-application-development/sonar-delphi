@@ -27,6 +27,11 @@ public class LowerCaseReservedWordsRule extends AbstractDelphiRule {
       return false;
     }
 
+    if (DelphiKeywords.SPECIAL_KEYWORDS.contains(node.jjtGetId())) {
+      // Let SpecialKeywordCapitalizationRule handle these
+      return false;
+    }
+
     return !StringUtils.isAllLowerCase(node.getToken().getImage());
   }
 }

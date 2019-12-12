@@ -30,7 +30,7 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     builder.appendDecl("type");
-    builder.appendDecl("  TTestDestructor = class");
+    builder.appendDecl("  TTestDestructor = class(TObject)");
     builder.appendDecl("  public");
     builder.appendDecl("    destructor Destroy; override;");
     builder.appendDecl("  end;");
@@ -51,7 +51,7 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     builder.appendDecl("type");
-    builder.appendDecl("  TTestDestructor = class");
+    builder.appendDecl("  TTestDestructor = class(TObject)");
     builder.appendDecl("  public");
     builder.appendDecl("    destructor Destroy; override;");
     builder.appendDecl("  end;");
@@ -74,7 +74,7 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     builder.appendDecl("type");
-    builder.appendDecl("  TTestDestructor = class");
+    builder.appendDecl("  TTestDestructor = class(TObject)");
     builder.appendDecl("  public");
     builder.appendDecl("    class destructor Destroy; override;");
     builder.appendDecl("  end;");

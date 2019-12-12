@@ -9,17 +9,21 @@ import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 
-public class ForbiddenIdentifiersRule extends AbstractDelphiRule {
+public class ForbiddenIdentifierRule extends AbstractDelphiRule {
   public static final PropertyDescriptor<List<String>> BLACKLISTED_NAMES =
       PropertyFactory.stringListProperty("blacklist")
           .desc("The list of forbidden identifiers. (case-insensitive)")
           .defaultValue(Collections.emptyList())
           .build();
 
+  private static final PropertyDescriptor<String> MESSAGE =
+      PropertyFactory.stringProperty("message").desc("The issue message").defaultValue("").build();
+
   private Set<String> blacklist;
 
-  public ForbiddenIdentifiersRule() {
+  public ForbiddenIdentifierRule() {
     definePropertyDescriptor(BLACKLISTED_NAMES);
+    definePropertyDescriptor(MESSAGE);
   }
 
   @Override
@@ -31,7 +35,7 @@ public class ForbiddenIdentifiersRule extends AbstractDelphiRule {
   @Override
   public RuleContext visit(NameDeclarationNode node, RuleContext data) {
     if (blacklist.contains(node.getImage())) {
-      addViolation(data, node);
+      addViolationWithMessage(data, node, getProperty(MESSAGE));
     }
     return super.visit(node, data);
   }

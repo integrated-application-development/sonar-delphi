@@ -1,6 +1,5 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
-import java.util.Objects;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;

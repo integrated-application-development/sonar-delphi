@@ -29,7 +29,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
   public void testValidRule() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class");
+    builder.appendDecl("  TMyClass = class(TObject)");
     builder.appendDecl("  private");
     builder.appendDecl("   FFoo: Integer;");
     builder.appendDecl("  protected");
@@ -126,7 +126,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
   public void testBadPascalCaseShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class");
+    builder.appendDecl("  TMyClass = class(TObject)");
     builder.appendDecl("    private");
     builder.appendDecl("     Ffoo: Integer;");
     builder.appendDecl("     Foo: Integer;");
@@ -164,13 +164,13 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
   public void testIdentListField() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class");
+    builder.appendDecl("  TMyClass = class(TObject)");
     builder.appendDecl("    private");
     builder.appendDecl("     X, Y: Integer;");
     builder.appendDecl("  end;");
 
     execute(builder);
 
-    assertIssues().hasSize(2).are(ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4));
+    assertIssues().areExactly(2, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4));
   }
 }
