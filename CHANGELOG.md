@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ForbiddenIdentifierRule` analysis rule template, which flags identifiers with a specified name.
 - `ForbiddenMethodRule` analysis rule template, which flags methods with a specified fully-qualified
   name.
+- `ForbiddenTypeRule` analysis rule template, which flags types with a specified fully-qualified
+  name.
 - `sonar.delphi.sources.searchPath` property to specify directories to search for include files and
   unit imports.
 - `sonar.delphi.unitScopeNames` property to specify unit scope names, which are used for unit import

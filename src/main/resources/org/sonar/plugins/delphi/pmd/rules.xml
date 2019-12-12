@@ -983,6 +983,24 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenTypeRule"
+    message="Track uses of disallowed types"
+    name="ForbiddenTypeRule">
+    <priority>3</priority>
+    <description>
+      This rule allows banning certain types.
+      It will flag any direct reference to a type from the blacklist.
+      &lt;br&gt;
+      Please note that a fully qualified type name is required. (E.g. "Unit.Type.InnerType")
+    </description>
+    <properties>
+      <property name="baseEffort" value="10min" />
+      <property name="template" value="true" />
+      <property name="blacklist" />
+      <property name="message" />
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.CommentRegexRule"
     message="Track comments matching a regular expression"
     name="CommentRegexRule">
