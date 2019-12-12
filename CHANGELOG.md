@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `DestructorDestroyRule` analysis rule, which flags destructors that aren't named `Destroy`.
 - `ExplicitTObjectRule` analysis rule, which flags `class` declarations that don't explicitly
   declare their parent type.
+- `MethodNestingDepthRule` analysis rule, which flags subroutines that are nested too deeply.
 - `ForbiddenIdentifierRule` analysis rule template, which flags identifiers with a specified name.
 - `ForbiddenMethodRule` analysis rule template, which flags methods with a specified fully-qualified
   name.

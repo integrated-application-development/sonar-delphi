@@ -865,6 +865,21 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.MethodNestingDepthRule"
+    message="Methods should not be nested too deeply"
+    name="MethodNestingDepthRule">
+    <priority>3</priority>
+    <description>
+      Deeply nested methods make the code difficult to navigate/read.
+      &lt;br&gt;
+      &lt;br&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="10min" />
+      <property name="depth" value="1" />
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.ExplicitTObjectRule"
     message="Top-level classes should explicitly inherit from TObject"
     name="ExplicitTObjectRule">

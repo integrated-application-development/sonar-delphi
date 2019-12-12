@@ -159,7 +159,6 @@ public class TooManySubProceduresRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
         .areExactly(1, ruleKeyAtLine("TooManySubProceduresRule", builder.getOffset() + 1));
   }
 }
