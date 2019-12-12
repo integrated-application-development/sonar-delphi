@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ShortIdentifiersRule` analysis rule, which flags identifiers below a certain length.
 - `AssignedNilCheckRule` analysis rule, which flags comparisons to `nil` where `Assigned` should be
   used instead.
+- `CaseStatementSizeRule` analysis rule, which flags case statements with less than 2 cases.
 - `ForbiddenIdentifierRule` analysis rule template, which flags identifiers with a specified name.
 - `sonar.delphi.sources.searchPath` property to specify directories to search for include files and
   unit imports.

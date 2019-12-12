@@ -865,6 +865,18 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.CaseStatementSizeRule"
+    message="Case statements should have at least 2 case items"
+    name="CaseStatementSizeRule">
+    <priority>4</priority>
+    <description>
+      A case statement with less than 2 case items would be better expressed as an if-statement.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.AssignedNilCheckRule"
     message="Nil checks should be performed with Assigned"
     name="AssignedNilCheckRule">

@@ -138,8 +138,6 @@ public class BeginEndRequiredRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("BeginEndRequiredRule", builder.getOffset() + 6));
+    assertIssues().areExactly(1, ruleKeyAtLine("BeginEndRequiredRule", builder.getOffset() + 6));
   }
 }
