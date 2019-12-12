@@ -942,6 +942,22 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.MultipleVariableDeclarationRule"
+    message="Variables should be declared individually"
+    name="MultipleVariableDeclarationRule">
+    <priority>4</priority>
+    <description>
+      Variables and fields should be defined one per line of code.
+      &lt;br&gt;
+      Individual parameters should have their types explicitly declared.
+      &lt;br&gt;
+      &lt;br&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.AssignedNilCheckRule"
     message="Nil checks should be performed with Assigned"
     name="AssignedNilCheckRule">

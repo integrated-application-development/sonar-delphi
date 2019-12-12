@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `MethodNestingDepthRule` analysis rule, which flags subroutines that are nested too deeply.
 - `SpecialKeywordCapitalizationRule` analysis rule, which flags special keywords that are not
   capitalized.
+- `MultipleVariableDeclarationRule` analysis rule, which flags places where multiple variables are
+  declared in a single declaration list.
 - `ForbiddenIdentifierRule` analysis rule template, which flags identifiers with a specified name.
 - `ForbiddenMethodRule` analysis rule template, which flags methods with a specified fully-qualified
   name.
