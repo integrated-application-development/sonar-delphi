@@ -22,6 +22,79 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  public void testPointerToObjectCastShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("uses")
+            .appendDecl("  System.SysUtils;")
+            .appendImpl("procedure Foo(Bar: Pointer);")
+            .appendImpl("begin")
+            .appendImpl("  (TObject(Bar)).Free;")
+            .appendImpl("  FreeAndNil(TObject(Bar));")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
+  }
+
+  @Test
+  public void testUntypedToObjectCastShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("uses")
+            .appendDecl("  System.SysUtils;")
+            .appendImpl("procedure Foo(Bar);")
+            .appendImpl("begin")
+            .appendImpl("  (TObject(Bar)).Free;")
+            .appendImpl("  FreeAndNil(TObject(Bar));")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
+  }
+
+  @Test
+  public void testWeirdPointerToObjectCastShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("uses")
+            .appendDecl("  System.SysUtils;")
+            .appendDecl("type")
+            .appendDecl("  TList = class(TObject)")
+            .appendDecl("  property Default[Index: Integer]: Pointer; default;")
+            .appendDecl("end;")
+            .appendImpl("procedure Foo(List: TList);")
+            .appendImpl("begin")
+            .appendImpl("  (TObject(List[0])).Free;")
+            .appendImpl("  FreeAndNil(TObject(List[0]));")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
+  }
+
+  @Test
+  public void testWeirdSoftCastFreeShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TXyzz = class(TObject) end;")
+            .appendImpl("procedure Foo(Bar: Baz);")
+            .appendImpl("begin")
+            .appendImpl("  (Bar as TXyzz).Free;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .hasSize(1)
+        .areExactly(1, ruleKeyAtLine("CastAndFreeRule", builder.getOffset() + 3));
+  }
+
+  @Test
   public void testRegularFreeAndNilShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
@@ -106,9 +179,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("CastAndFreeRule", builder.getOffset() + 3));
+    assertIssues().areExactly(1, ruleKeyAtLine("CastAndFreeRule", builder.getOffset() + 3));
   }
 
   @Test
@@ -122,9 +193,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("CastAndFreeRule", builder.getOffset() + 3));
+    assertIssues().areExactly(1, ruleKeyAtLine("CastAndFreeRule", builder.getOffset() + 3));
   }
 
   @Test
