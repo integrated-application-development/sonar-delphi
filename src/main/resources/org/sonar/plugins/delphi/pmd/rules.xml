@@ -865,6 +865,23 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.DestructorDestroyRule"
+    message="Destructors should override TObject.Destroy"
+    name="DestructorDestroyRule">
+    <priority>3</priority>
+    <description>
+      Destroy is a virtual destructor of TObject.
+      &lt;br&gt;
+      When an object is destroyed, TObject.Free calls the Destroy virtual destructor of the specific class.
+      &lt;br&gt;
+      With this behavior in mind, destructors should always override TObject.Destroy.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+      <property name="type" value="BUG" />
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.CaseStatementSizeRule"
     message="Case statements should have at least 2 case items"
     name="CaseStatementSizeRule">
