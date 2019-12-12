@@ -992,6 +992,25 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+    message="Empty type sections should be removed"
+    name="EmptyTypeSectionRule">
+    <priority>4</priority>
+    <description>
+      Empty type sections are superfluous and can be safely removed.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+      <property name="builtinXPath">
+        <value>
+         <![CDATA[
+            //TypeSectionNode[count(*) = 0]
+          ]]>
+        </value>
+      </property>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathTemplateRule"
     message="Track breaches of an XPath rule"
     name="XPathRule">
