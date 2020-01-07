@@ -9,11 +9,11 @@ import static org.apache.commons.io.FilenameUtils.getBaseName;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,7 +32,6 @@ import org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor.Resolution
 import org.sonar.plugins.delphi.file.DelphiFile;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiFileConstructionException;
 import org.sonar.plugins.delphi.file.DelphiFileConfig;
-import org.sonar.plugins.delphi.project.DelphiProject;
 import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.symbol.scope.SystemScope;
@@ -58,10 +57,9 @@ public class SymbolTableBuilder {
   private final SymbolTable symbolTable = new SymbolTable();
   private final Set<UnitData> sourceFileUnits = new HashSet<>();
   private final Multimap<String, UnitData> allUnitsByName = HashMultimap.create();
-  private final Set<String> unitPaths = new HashSet<>();
+  private final Set<Path> unitPaths = new HashSet<>();
 
-  private String projectName;
-  private Set<String> unitScopeNames;
+  private Set<String> unitScopeNames = Collections.emptySet();
   private DelphiFileConfig fileConfig;
   private SystemScope systemScope;
   private int nestingLevel;
@@ -70,11 +68,18 @@ public class SymbolTableBuilder {
     // package-private constructor
   }
 
-  public SymbolTableBuilder project(@NotNull DelphiProject project) {
-    this.projectName = project.getName();
-    this.unitScopeNames = project.getUnitScopeNames();
-    project.getSourceFiles().forEach(file -> this.createUnitData(file, true));
-    project.getSearchPath().forEach(this::processSearchPath);
+  public SymbolTableBuilder unitScopeNames(@NotNull Set<String> unitScopeNames) {
+    this.unitScopeNames = unitScopeNames;
+    return this;
+  }
+
+  public SymbolTableBuilder sourceFiles(@NotNull Iterable<Path> sourceFiles) {
+    sourceFiles.forEach(file -> this.createUnitData(file, true));
+    return this;
+  }
+
+  public SymbolTableBuilder searchDirectories(@NotNull Iterable<Path> searchDirectories) {
+    searchDirectories.forEach(this::processSearchPath);
     return this;
   }
 
@@ -97,29 +102,26 @@ public class SymbolTableBuilder {
     findDelphiFilesRecursively(path).forEach(file -> createUnitData(file, false));
   }
 
-  private static List<File> findDelphiFilesRecursively(Path path) {
+  private static List<Path> findDelphiFilesRecursively(Path path) {
     try (Stream<Path> fileStream =
         Files.find(path, Integer.MAX_VALUE, (filePath, attributes) -> attributes.isRegularFile())) {
-      return fileStream
-          .map(Path::toFile)
-          .filter(DelphiUtils::acceptFile)
-          .collect(Collectors.toList());
+      return fileStream.filter(DelphiUtils::acceptFile).collect(Collectors.toList());
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
   }
 
-  private void createUnitData(File file, boolean isSourceFile) {
-    if (!unitPaths.contains(file.getAbsolutePath())) {
-      String unitName = getBaseName(file.getName());
-      UnitData unitData = new UnitData(file);
+  private void createUnitData(Path unitPath, boolean isSourceFile) {
+    if (!unitPaths.contains(unitPath)) {
+      String unitName = getBaseName(unitPath.toString());
+      UnitData unitData = new UnitData(unitPath);
 
       if (isSourceFile) {
         sourceFileUnits.add(unitData);
       }
 
       allUnitsByName.put(unitName.toLowerCase(), unitData);
-      unitPaths.add(file.getAbsolutePath());
+      unitPaths.add(unitPath);
     }
   }
 
@@ -178,11 +180,11 @@ public class SymbolTableBuilder {
     }
 
     try {
-      LOG.debug(StringUtils.repeat('\t', ++nestingLevel) + "> " + unit.sourceFile.getName());
+      LOG.debug(StringUtils.repeat('\t', ++nestingLevel) + "> " + unit.unitFile.getFileName());
 
       fileConfig.setShouldSkipImplementation(resolutionLevel != ResolutionLevel.COMPLETE);
 
-      DelphiFile delphiFile = DelphiFile.from(unit.sourceFile, fileConfig);
+      DelphiFile delphiFile = DelphiFile.from(unit.unitFile.toFile(), fileConfig);
       Data data =
           new Data(
               unit.resolved,
@@ -195,14 +197,14 @@ public class SymbolTableBuilder {
       visitor.visit(delphiFile.getAst(), data);
 
       if (data.getUnitDeclaration() != null) {
-        String filePath = unit.sourceFile.getAbsolutePath();
+        String filePath = unit.unitFile.toAbsolutePath().toString();
         unit.unitDeclaration = data.getUnitDeclaration();
         symbolTable.addUnit(filePath, unit.unitDeclaration);
       }
 
       unit.resolved = resolutionLevel;
     } catch (DelphiFileConstructionException e) {
-      String error = format("Error while processing %s", unit.sourceFile.getAbsolutePath());
+      String error = format("Error while processing %s", unit.unitFile.toAbsolutePath());
       LOG.error(error, e);
     } finally {
       --nestingLevel;
@@ -210,7 +212,7 @@ public class SymbolTableBuilder {
   }
 
   private void indexUnit(UnitData unit, ResolutionLevel resolutionLevel) {
-    LOG.debug("Indexing file [{}]: {}", resolutionLevel, unit.sourceFile.getAbsolutePath());
+    LOG.debug("Indexing file [{}]: {}", resolutionLevel, unit.unitFile.toAbsolutePath());
     process(unit, resolutionLevel);
   }
 
@@ -240,10 +242,9 @@ public class SymbolTableBuilder {
   }
 
   public SymbolTable build() {
-    checkNotNull(projectName, "project must be supplied to SymbolTableBuilder");
     checkNotNull(fileConfig, "fileConfig must be supplied to SymbolTableBuilder");
 
-    LOG.info("Indexing project: {}", projectName);
+    LOG.info("Indexing project...");
 
     ProgressReporter progressReporter =
         new ProgressReporter((sourceFileUnits.size() * 2) + 1, 10, new ProgressReporterLogger(LOG));
@@ -265,12 +266,12 @@ public class SymbolTableBuilder {
   }
 
   private static class UnitData {
-    private final File sourceFile;
+    private final Path unitFile;
     private ResolutionLevel resolved;
     private UnitNameDeclaration unitDeclaration;
 
-    private UnitData(File sourceFile) {
-      this.sourceFile = sourceFile;
+    private UnitData(Path unitFile) {
+      this.unitFile = unitFile;
       this.resolved = ResolutionLevel.NONE;
     }
   }

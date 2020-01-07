@@ -515,7 +515,7 @@ primaryExpression            : atom -> ^(TkPrimaryExpression<PrimaryExpressionNo
                              | parenthesizedExpression
                              | 'inherited' atom? -> ^(TkPrimaryExpression<PrimaryExpressionNode> 'inherited' atom?)
                              ;
-parenthesizedExpression      : '(' expression ')' -> ^(TkNestedExpression<ParenthesizedExpressionNode> expression)
+parenthesizedExpression      : '(' expression ')' -> ^(TkNestedExpression<ParenthesizedExpressionNode> '(' expression ')')
                              ;
 atom                         : particle particleItem*
                              ;

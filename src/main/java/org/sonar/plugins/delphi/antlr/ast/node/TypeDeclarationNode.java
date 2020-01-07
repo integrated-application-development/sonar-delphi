@@ -1,10 +1,9 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
-import static org.apache.commons.lang3.StringUtils.substringAfter;
-
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import org.antlr.runtime.Token;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
@@ -58,19 +57,7 @@ public final class TypeDeclarationNode extends DelphiNode implements Typed, Qual
   @Override
   public QualifiedName getQualifiedName() {
     if (qualifiedName == null) {
-      TypeDeclarationNode node = this;
-      ArrayList<String> names = new ArrayList<>();
-
-      while (node != null) {
-        names.add(node.getTypeNameNode().simpleName());
-        node = node.getFirstParentOfType(TypeDeclarationNode.class);
-      }
-
-      names.add(findUnitName());
-
-      Collections.reverse(names);
-
-      qualifiedName = new QualifiedName(names);
+      buildQualifiedNames();
     }
 
     return qualifiedName;
@@ -78,9 +65,24 @@ public final class TypeDeclarationNode extends DelphiNode implements Typed, Qual
 
   public String qualifiedNameExcludingUnit() {
     if (qualifiedNameExcludingUnit == null) {
-      qualifiedNameExcludingUnit = substringAfter(fullyQualifiedName(), ".");
+      buildQualifiedNames();
     }
     return qualifiedNameExcludingUnit;
+  }
+
+  private void buildQualifiedNames() {
+    TypeDeclarationNode node = this;
+    Deque<String> names = new ArrayDeque<>();
+
+    while (node != null) {
+      names.addFirst(node.getTypeNameNode().simpleName());
+      node = node.getFirstParentOfType(TypeDeclarationNode.class);
+    }
+
+    this.qualifiedNameExcludingUnit = StringUtils.join(names, ".");
+    names.addFirst(findUnitName());
+
+    qualifiedName = new QualifiedName(names);
   }
 
   public boolean isClass() {

@@ -3,7 +3,7 @@ package org.sonar.plugins.delphi.antlr.ast.visitors;
 import static org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor.ResolutionLevel.COMPLETE;
 import static org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor.ResolutionLevel.INTERFACE;
 import static org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor.ResolutionLevel.NONE;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.CompilerDirectiveType.SCOPED_ENUMS;
+import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveType.SCOPED_ENUMS;
 import static org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration.compilerVariable;
 import static org.sonar.plugins.delphi.symbol.resolve.NameResolver.findTypeScope;
 import static org.sonar.plugins.delphi.symbol.resolve.NameResolver.resolve;
@@ -47,7 +47,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.VarDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarNameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.WithStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor.Data;
-import org.sonar.plugins.delphi.antlr.preprocessor.CompilerSwitchRegistry;
+import org.sonar.plugins.delphi.preprocessor.CompilerSwitchRegistry;
 import org.sonar.plugins.delphi.symbol.ImportResolutionHandler;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.EnumElementNameDeclaration;
@@ -424,7 +424,14 @@ public class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     if (typeNode != null) {
       resolve(node.getTypeNode());
     }
-    return DelphiParserVisitor.super.visit(node, data);
+
+    // Visit the expression before we visit the name declaration node and create a name declaration
+    // We need the type before we can create the name declaration,
+    // and we have to infer the type from the expression for true constants.
+    node.getExpression().accept(this, data);
+    node.getNameDeclarationNode().accept(this, data);
+
+    return data;
   }
 
   @Override

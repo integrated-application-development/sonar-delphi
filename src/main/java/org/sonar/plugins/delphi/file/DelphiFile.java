@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.file;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Collections.emptySet;
 import static java.util.function.Predicate.not;
 import static org.antlr.runtime.Token.EOF;
 import static org.antlr.runtime.Token.HIDDEN_CHANNEL;
@@ -9,7 +10,6 @@ import static org.apache.commons.io.FileUtils.readLines;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,12 +23,13 @@ import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.DelphiParser;
 import org.sonar.plugins.delphi.antlr.LowercaseFileStream;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
-import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
 import org.sonar.plugins.delphi.antlr.ast.DelphiTreeAdaptor;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
-import org.sonar.plugins.delphi.antlr.preprocessor.CompilerSwitchRegistry;
-import org.sonar.plugins.delphi.antlr.preprocessor.DelphiPreprocessor;
+import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
+import org.sonar.plugins.delphi.preprocessor.CompilerSwitchRegistry;
+import org.sonar.plugins.delphi.preprocessor.DelphiPreprocessor;
+import org.sonar.plugins.delphi.preprocessor.search.SearchPath;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public interface DelphiFile {
@@ -65,12 +66,12 @@ public interface DelphiFile {
   }
 
   static DelphiFileConfig createConfig(String encoding) {
-    return new DefaultDelphiFileConfig(encoding, Collections.emptyList(), Collections.emptySet());
+    return new DefaultDelphiFileConfig(encoding, SearchPath.create(emptySet()), emptySet());
   }
 
   static DelphiFileConfig createConfig(
       String encoding, List<Path> searchPath, Set<String> definitions) {
-    return new DefaultDelphiFileConfig(encoding, searchPath, definitions);
+    return new DefaultDelphiFileConfig(encoding, SearchPath.create(searchPath), definitions);
   }
 
   static DelphiFile from(File sourceFile, DelphiFileConfig config) {

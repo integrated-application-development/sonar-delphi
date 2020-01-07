@@ -43,7 +43,7 @@ public class DelphiProjectTest {
 
   @Before
   public void init() {
-    project = new DelphiProject("simple project");
+    project = DelphiProject.create("simple project");
   }
 
   @Test
@@ -52,32 +52,32 @@ public class DelphiProjectTest {
     sourceFile.deleteOnExit();
 
     assertThat(project.getName()).isEqualTo("simple project");
-    assertThat(project.getDefinitions()).isEmpty();
-    assertThat(project.getSearchPath()).isEmpty();
+    assertThat(project.getConditionalDefines()).isEmpty();
+    assertThat(project.getSearchDirectories()).isEmpty();
     assertThat(project.getSourceFiles()).isEmpty();
 
     project.addDefinition("DEF");
-    assertThat(project.getDefinitions()).hasSize(1);
+    assertThat(project.getConditionalDefines()).hasSize(1);
     project.addUnitScopeName("System");
     assertThat(project.getUnitScopeNames()).hasSize(1);
-    project.addSourceFile(DelphiUtils.getResource(XML_FILE));
+    project.addSourceFile(DelphiUtils.getResource(XML_FILE).toPath());
     assertThat(project.getSourceFiles()).isEmpty();
-    project.addSourceFile(sourceFile);
+    project.addSourceFile(sourceFile.toPath());
     assertThat(project.getSourceFiles()).hasSize(1);
-    project.addSearchPathDirectory(DelphiUtils.getResource(INC_DIR).toPath());
-    assertThat(project.getSearchPath()).hasSize(1);
+    project.addSearchDirectory(DelphiUtils.getResource(INC_DIR).toPath());
+    assertThat(project.getSearchDirectories()).hasSize(1);
   }
 
   @Test
   public void testSetDefinitions() {
     Set<String> defs = new HashSet<>();
     project.setDefinitions(defs);
-    assertThat(project.getDefinitions()).isEqualTo(defs);
+    assertThat(project.getConditionalDefines()).isEqualTo(defs);
   }
 
   @Test
-  public void testParseFile() throws Exception {
-    project = new DelphiProject(DelphiUtils.getResource(XML_FILE));
+  public void testParseFile() {
+    project = DelphiProject.parse(DelphiUtils.getResource(XML_FILE).toPath());
 
     assertThat(project.getName()).isEqualTo("Simple Delphi Project");
     assertThat(project.getSourceFiles()).hasSize(8);
@@ -94,17 +94,17 @@ public class DelphiProjectTest {
     };
 
     for (int i = 0; i < fileNames.length; ++i) {
-      assertThat(project.getSourceFiles().get(i)).hasName(fileNames[i]);
+      assertThat(project.getSourceFiles().get(i)).hasFileName(fileNames[i]);
     }
 
-    assertThat(project.getSearchPath()).hasSize(2);
+    assertThat(project.getSearchDirectories()).hasSize(2);
 
     String[] includeNames = {"includes1", "includes2"};
     for (int i = 0; i < includeNames.length; ++i) {
-      assertThat(project.getSearchPath().get(i).getFileName()).hasToString(includeNames[i]);
+      assertThat(project.getSearchDirectories().get(i).getFileName()).hasToString(includeNames[i]);
     }
 
-    assertThat(project.getDefinitions())
+    assertThat(project.getConditionalDefines())
         .containsOnly(
             "MSWINDOWS", "CPUX86", "GGMSGDEBUGx", "LOGTOFILEx", "FullDebugMode", "RELEASE");
 

@@ -23,7 +23,6 @@
 package org.sonar.plugins.delphi.antlr.ast.visitors;
 
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
-import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
 import org.sonar.plugins.delphi.antlr.ast.node.AncestorListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.AnonymousMethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.AnsiStringTypeNode;
@@ -152,6 +151,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.VisibilityNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VisibilitySectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.WhileStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.WithStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 
 public interface DelphiParserVisitor<T> {
 

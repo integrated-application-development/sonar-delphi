@@ -27,7 +27,7 @@ public class TooLongLineRuleTest extends BasePmdRuleTest {
             .appendImpl("procedure TClass.Test;")
             .appendImpl("begin")
             .appendImpl(
-                "  FMessage := 'This line is too long. Look, it''s running right off the screen! Who would do such a thing?';")
+                "  FMessage := 'This line is too long. Look, it''s running right off the screen! Who would do such a thing? I am horrified by the audacity of this line!';")
             .appendImpl("end;");
 
     execute(builder);

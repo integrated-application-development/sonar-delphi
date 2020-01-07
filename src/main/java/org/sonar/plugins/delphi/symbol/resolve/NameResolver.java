@@ -71,6 +71,7 @@ import org.sonar.plugins.delphi.type.Type.CollectionType;
 import org.sonar.plugins.delphi.type.Type.PointerType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
+import org.sonar.plugins.delphi.type.Type.StructType;
 import org.sonar.plugins.delphi.type.Typed;
 
 public class NameResolver {
@@ -109,6 +110,10 @@ public class NameResolver {
   }
 
   Type getApproximateType() {
+    if (declarations.size() + resolvedDeclarations.size() < names.size()) {
+      return unknownType();
+    }
+
     if (!declarations.isEmpty()) {
       NameDeclaration declaration = getLast(declarations);
       if (isConstructor(declaration)) {
@@ -119,6 +124,7 @@ public class NameResolver {
         return DelphiType.unknownType();
       }
     }
+
     return currentType;
   }
 
@@ -202,7 +208,7 @@ public class NameResolver {
       } else if (child instanceof ArgumentListNode) {
         disambiguateArguments(((ArgumentListNode) child).getArguments());
       } else if (child instanceof ArrayAccessorNode) {
-        handleArrayAccessor(((ArrayAccessorNode) child).getExpressions());
+        handleArrayAccessor(((ArrayAccessorNode) child));
       } else if (child instanceof ParenthesizedExpressionNode) {
         handleParenthesizedExpression((ParenthesizedExpressionNode) child);
       } else if (child.jjtGetId() == DelphiLexer.POINTER) {
@@ -243,6 +249,10 @@ public class NameResolver {
   }
 
   private void readNameReference(NameReferenceNode node) {
+    boolean couldBeUnitNameReference =
+        currentScope == null
+            || (!(currentScope instanceof UnknownScope) && currentScope.equals(node.getScope()));
+
     for (NameReferenceNode reference : node.flatten()) {
       IdentifierNode identifier = reference.getIdentifier();
       DelphiNameOccurrence occurrence = new DelphiNameOccurrence(identifier);
@@ -257,7 +267,7 @@ public class NameResolver {
         addResolvedDeclaration();
       }
 
-      if (!foundDeclaration) {
+      if (!foundDeclaration && couldBeUnitNameReference) {
         readPossibleUnitNameReference(node);
         return;
       }
@@ -267,13 +277,21 @@ public class NameResolver {
   }
 
   private void readPossibleUnitNameReference(NameReferenceNode node) {
-    if (currentScope instanceof UnknownScope || node.getScope() != currentScope) {
-      // If our node's scope doesn't match the current scope, we're likely in an ancestor type's
-      // scope searching for a super method.
-      return;
-    }
+    NameResolver unitNameResolver = new NameResolver();
+    if (unitNameResolver.readUnitNameReference(node)) {
+      this.currentType = unknownType();
+      this.names.clear();
+      this.resolvedDeclarations.clear();
 
-    FileScope fileScope = currentScope.getEnclosingScope(FileScope.class);
+      this.currentScope = unitNameResolver.currentScope;
+      this.declarations = unitNameResolver.declarations;
+      this.names.addAll(unitNameResolver.names);
+      this.resolvedDeclarations.addAll(unitNameResolver.resolvedDeclarations);
+    }
+  }
+
+  private boolean readUnitNameReference(NameReferenceNode node) {
+    FileScope fileScope = node.getScope().getEnclosingScope(FileScope.class);
 
     List<QualifiedDelphiNameDeclaration> unitDeclarations = new ArrayList<>();
     unitDeclarations.addAll(fileScope.getUnitDeclarations());
@@ -282,9 +300,10 @@ public class NameResolver {
 
     for (QualifiedDelphiNameDeclaration declaration : unitDeclarations) {
       if (matchReferenceToUnitNameDeclaration(node, declaration)) {
-        break;
+        return true;
       }
     }
+    return false;
   }
 
   private boolean matchReferenceToUnitNameDeclaration(
@@ -301,8 +320,6 @@ public class NameResolver {
         return false;
       }
     }
-
-    names.clear();
 
     StringBuilder referenceImage = new StringBuilder();
     for (int i = 0; i < declarationParts.size(); ++i) {
@@ -331,16 +348,19 @@ public class NameResolver {
     return true;
   }
 
-  private void handleArrayAccessor(List<ExpressionNode> arguments) {
-    if (!handleDefaultArrayProperties(arguments)
-        && declarations.stream().anyMatch(NameResolver::isArrayProperty)) {
-      disambiguateArguments(arguments);
+  private void handleArrayAccessor(ArrayAccessorNode accessor) {
+    if (handleDefaultArrayProperties(accessor)) {
+      return;
+    }
+
+    if (declarations.stream().anyMatch(NameResolver::isArrayProperty)) {
+      disambiguateArguments(accessor.getExpressions());
       addResolvedDeclaration();
       return;
     }
 
     addResolvedDeclaration();
-    arguments.forEach(NameResolver::resolve);
+    accessor.getExpressions().forEach(NameResolver::resolve);
 
     if (currentType instanceof CollectionType) {
       currentType = ((CollectionType) currentType).elementType();
@@ -363,7 +383,7 @@ public class NameResolver {
     }
   }
 
-  private boolean handleDefaultArrayProperties(List<ExpressionNode> arguments) {
+  private boolean handleDefaultArrayProperties(ArrayAccessorNode accessor) {
     if (!declarations.isEmpty() && isArrayProperty(getLast(declarations))) {
       // An explicit array property access can be handled by argument disambiguation.
       return false;
@@ -371,42 +391,37 @@ public class NameResolver {
 
     addResolvedDeclaration();
 
-    if (currentScope instanceof TypeScope) {
-      Set<NameDeclaration> defaultArrayProperties = findDefaultArrayProperties(currentScope);
+    Type type = currentType;
+    if (type.isClassReference()) {
+      type = ((ClassReferenceType) type).classType();
+    } else if (type.isProcedural()) {
+      type = ((ProceduralType) type).returnType();
+    }
+
+    if (type.isStruct()) {
+      StructType structType = (StructType) type;
+      Set<NameDeclaration> defaultArrayProperties = structType.findDefaultArrayProperties();
       if (!defaultArrayProperties.isEmpty()) {
         NameResolver propertyResolver = new NameResolver(this);
         propertyResolver.declarations = defaultArrayProperties;
-        propertyResolver.disambiguateArguments(arguments);
+        propertyResolver.disambiguateArguments(accessor.getExpressions());
+
+        NameDeclaration propertyDeclaration = getLast(propertyResolver.resolvedDeclarations);
+        if (propertyDeclaration instanceof PropertyNameDeclaration) {
+          DelphiNameOccurrence implicitOccurrence = new DelphiNameOccurrence(accessor);
+          implicitOccurrence.setNameDeclaration((PropertyNameDeclaration) propertyDeclaration);
+          accessor.setImplicitNameOccurrence(implicitOccurrence);
+          registerOccurrence(implicitOccurrence);
+        }
+
         currentScope = propertyResolver.currentScope;
         currentType = propertyResolver.currentType;
+
         return true;
       }
     }
 
     return false;
-  }
-
-  private static Set<NameDeclaration> findDefaultArrayProperties(DelphiScope scope) {
-    Set<NameDeclaration> result = new HashSet<>();
-    findDefaultArrayProperties(scope, result);
-    return result;
-  }
-
-  private static void findDefaultArrayProperties(DelphiScope scope, Set<NameDeclaration> result) {
-    scope.getPropertyDeclarations().stream()
-        .filter(PropertyNameDeclaration::isArrayProperty)
-        .filter(PropertyNameDeclaration::isDefaultProperty)
-        .filter(
-            declaration ->
-                result.stream()
-                    .map(PropertyNameDeclaration.class::cast)
-                    .noneMatch(
-                        property -> declaration.getParameters().equals(property.getParameters())))
-        .forEach(result::add);
-
-    if (scope.getParent() != null) {
-      findDefaultArrayProperties(scope.getParent(), result);
-    }
   }
 
   private static boolean isArrayProperty(NameDeclaration declaration) {
@@ -719,11 +734,16 @@ public class NameResolver {
       name.setNameDeclaration(declaration);
 
       declaration.getScope().addNameOccurrence(name);
-      name.getLocation()
-          .getScope()
-          .getEnclosingScope(FileScope.class)
-          .registerOccurrence(name.getLocation(), name);
+      registerOccurrence(name);
     }
+  }
+
+  private static void registerOccurrence(DelphiNameOccurrence occurrence) {
+    occurrence
+        .getLocation()
+        .getScope()
+        .getEnclosingScope(FileScope.class)
+        .registerOccurrence(occurrence.getLocation(), occurrence);
   }
 
   public static void resolve(MethodDeclarationNode method) {

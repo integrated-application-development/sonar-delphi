@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Set;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
+import org.sonar.plugins.delphi.antlr.ast.node.ArrayAccessorNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.IndexedNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNameNode;
@@ -16,7 +17,7 @@ import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
 
-public abstract class AbstractFileScope extends AbstractDelphiScope implements FileScope {
+abstract class AbstractFileScope extends AbstractDelphiScope implements FileScope {
   private final String name;
   private final Deque<FileScope> imports = new ArrayDeque<>();
   private final HashMap<Integer, DelphiScope> registeredScopes = new HashMap<>();
@@ -99,5 +100,10 @@ public abstract class AbstractFileScope extends AbstractDelphiScope implements F
   @Override
   public void attach(NameReferenceNode node) {
     node.setNameOccurrence(registeredOccurrences.get(node.getTokenIndex()));
+  }
+
+  @Override
+  public void attach(ArrayAccessorNode node) {
+    node.setImplicitNameOccurrence(registeredOccurrences.get(node.getTokenIndex()));
   }
 }

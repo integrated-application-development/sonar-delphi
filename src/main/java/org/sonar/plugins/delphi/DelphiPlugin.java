@@ -27,7 +27,6 @@ import org.sonar.api.Plugin;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.executor.DelphiCpdExecutor;
 import org.sonar.plugins.delphi.executor.DelphiHighlightExecutor;
 import org.sonar.plugins.delphi.executor.DelphiMasterExecutor;
@@ -41,11 +40,11 @@ import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileImporter;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRulesDefinition;
 import org.sonar.plugins.delphi.pmd.violation.DelphiPmdViolationRecorder;
+import org.sonar.plugins.delphi.project.DelphiProjectHelper;
 import org.sonar.plugins.delphi.surefire.SurefireSensor;
 
 /** Main Sonar DelphiLanguage plugin class */
 public class DelphiPlugin implements Plugin {
-  public static final String EXCLUDED_DIRECTORIES_KEY = "sonar.delphi.sources.excluded";
   public static final String CC_EXCLUDED_KEY = "sonar.delphi.codecoverage.excluded";
   public static final String SEARCH_PATH_KEY = "sonar.delphi.sources.searchPath";
   public static final String PROJECT_FILE_KEY = "sonar.delphi.sources.project";
@@ -68,12 +67,6 @@ public class DelphiPlugin implements Plugin {
     ImmutableList.Builder<Object> builder = ImmutableList.builder();
 
     builder.add(
-        PropertyDefinition.builder(DelphiPlugin.EXCLUDED_DIRECTORIES_KEY)
-            .name("Excluded sources")
-            .description("List of excluded directories or files, that will not be parsed.")
-            .multiValues(true)
-            .onQualifiers(Qualifiers.PROJECT)
-            .build(),
         PropertyDefinition.builder(DelphiPlugin.CC_EXCLUDED_KEY)
             .name("Code coverage excluded directories")
             .description("List of directories which will not have code coverage calculated.")

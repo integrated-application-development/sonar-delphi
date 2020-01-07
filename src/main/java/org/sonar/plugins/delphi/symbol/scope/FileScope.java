@@ -3,6 +3,7 @@ package org.sonar.plugins.delphi.symbol.scope;
 import java.util.Set;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
+import org.sonar.plugins.delphi.antlr.ast.node.ArrayAccessorNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.IndexedNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNameNode;
@@ -66,11 +67,18 @@ public interface FileScope extends DelphiScope {
   void attach(MethodNameNode node);
 
   /**
-   * Attaches symbol occurrence information to a particular node
+   * Attaches symbol occurrence information to a name reference node
    *
    * @param node The node which we want to attach symbol information to
    */
   void attach(NameReferenceNode node);
+
+  /**
+   * Attaches symbol occurrence information to an array accessor node
+   *
+   * @param node The node which we want to attach symbol information to
+   */
+  void attach(ArrayAccessorNode node);
 
   /**
    * Returns the system scope

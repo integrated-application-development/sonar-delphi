@@ -4,7 +4,7 @@ import static org.apache.commons.lang3.StringUtils.countMatches;
 
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
-import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
+import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 import org.sonar.plugins.delphi.pmd.FilePosition;
 
 public class TabulationCharactersRule extends AbstractDelphiRule {

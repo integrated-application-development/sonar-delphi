@@ -6,7 +6,7 @@ import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
+import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 
 public class CommentRegexRule extends AbstractDelphiRule {
   private static final Logger LOG = Loggers.get(CommentRegexRule.class);

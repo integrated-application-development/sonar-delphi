@@ -6,7 +6,7 @@ import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 
-public final class MethodDeclarationNode extends MethodNode implements Visibility {
+public final class MethodDeclarationNode extends MethodNode {
   private Boolean isOverride;
   private Boolean isVirtual;
   private Boolean isMessage;

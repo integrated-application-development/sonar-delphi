@@ -11,13 +11,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodHeadingNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodHeadingNode.MethodKind;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.Visibility;
+import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.DelphiProceduralType;
@@ -195,12 +195,10 @@ public final class MethodNameDeclaration extends DelphiNameDeclaration
     }
 
     throw new IndexOutOfBoundsException(
-        "Invalid parameter index access (Size:"
+        "Invalid parameter declaration access (Size:"
             + parameters.size()
             + " Index:"
             + index
-            + " variadic:"
-            + isVariadic
             + ")");
   }
 

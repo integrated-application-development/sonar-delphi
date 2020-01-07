@@ -22,8 +22,6 @@
  */
 package org.sonar.plugins.delphi.project;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -31,63 +29,55 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-/** DelphiLanguage project class, it holds values parsed from *.dproj file. */
+/** DelphiLanguage project class, it holds data parsed from a *.dproj file. */
 public class DelphiProject {
   private static final Logger LOG = Loggers.get(DelphiProject.class);
 
   private String name = "";
   private Set<String> definitions = new HashSet<>();
   private Set<String> unitScopeNames = new HashSet<>();
-  private List<File> sourceFiles = new ArrayList<>();
-  private List<Path> searchPath = new ArrayList<>();
+  private List<Path> sourceFiles = new ArrayList<>();
+  private List<Path> searchDirectories = new ArrayList<>();
 
-  /**
-   * C-tor, initializes project with name and empty files and definitions
-   *
-   * @param projName Project name
-   */
-  public DelphiProject(String projName) {
-    name = projName;
-  }
-
-  /**
-   * C-tor, initializes project with data loaded from xml file
-   *
-   * @param xmlFile XML file to parse
-   * @throws IOException If file not found
-   */
-  public DelphiProject(@NotNull File xmlFile) throws IOException {
-    parseFile(xmlFile);
+  private DelphiProject() {
+    // Hide default constructor
   }
 
   /**
    * Parses xml file to gather data
    *
    * @param xmlFile File to parse
-   * @throws IOException If file is not found
+   * @return DelphiProject object
    */
-  private void parseFile(File xmlFile) throws IOException {
-    DelphiProjectXmlParser parser = new DelphiProjectXmlParser(xmlFile, this);
+  public static DelphiProject parse(Path xmlFile) {
+    DelphiProject project = new DelphiProject();
+    DelphiProjectXmlParser parser = new DelphiProjectXmlParser(xmlFile, project);
     parser.parse();
+    return project;
+  }
+
+  public static DelphiProject create(String name) {
+    DelphiProject project = new DelphiProject();
+    project.setName(name);
+    return project;
   }
 
   /**
    * Adds a source file to project
    *
-   * @param file Source file to add
+   * @param sourceFile Source file to add
    */
-  public void addSourceFile(File file) {
-    if (!file.exists()) {
-      LOG.warn("Could not add file to project: {}", file.getAbsolutePath());
-    }
-
-    if (DelphiUtils.acceptFile(file.getAbsolutePath())) {
-      sourceFiles.add(file);
+  public void addSourceFile(Path sourceFile) {
+    if (DelphiUtils.acceptFile(sourceFile)) {
+      if (!Files.exists(sourceFile) || !Files.isRegularFile(sourceFile)) {
+        LOG.warn("Could not add file to project: {}", sourceFile.toAbsolutePath().toString());
+        return;
+      }
+      sourceFiles.add(sourceFile);
     }
   }
 
@@ -103,32 +93,23 @@ public class DelphiProject {
   }
 
   /**
-   * Adds a list of project preprocessor definitions
-   *
-   * @param definitions List of preprocessor definitions
-   */
-  public void addDefinitions(List<String> definitions) {
-    this.definitions.addAll(definitions);
-  }
-
-  /**
    * adds directory where to search for include files
    *
    * @param directory directory with includes
    */
-  public void addSearchPathDirectory(Path directory) {
+  public void addSearchDirectory(Path directory) {
     if (!Files.exists(directory) || !Files.isDirectory(directory)) {
       LOG.warn("Invalid search path directory: " + directory);
       return;
     }
-    searchPath.add(directory);
+    searchDirectories.add(directory);
   }
 
   public String getName() {
     return name;
   }
 
-  public Set<String> getDefinitions() {
+  public Set<String> getConditionalDefines() {
     return definitions;
   }
 
@@ -136,12 +117,12 @@ public class DelphiProject {
     return unitScopeNames;
   }
 
-  public List<File> getSourceFiles() {
+  public List<Path> getSourceFiles() {
     return sourceFiles;
   }
 
-  public List<Path> getSearchPath() {
-    return searchPath;
+  public List<Path> getSearchDirectories() {
+    return searchDirectories;
   }
 
   public void setName(String value) {
@@ -154,17 +135,5 @@ public class DelphiProject {
 
   public void addUnitScopeName(String unitScopeName) {
     this.unitScopeNames.add(unitScopeName);
-  }
-
-  public void addUnitScopeNames(List<String> unitScopeNames) {
-    this.unitScopeNames.addAll(unitScopeNames);
-  }
-
-  public void setSearchPath(List<Path> searchPath) {
-    this.searchPath = searchPath;
-  }
-
-  public void setSourceFiles(List<File> sourceFiles) {
-    this.sourceFiles = sourceFiles;
   }
 }

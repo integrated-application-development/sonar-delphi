@@ -55,7 +55,7 @@ public final class FormalParameterNode extends DelphiNode implements Typed {
   @NotNull
   public Type getType() {
     TypeNode typeNode = getTypeNode();
-    return (typeNode == null) ? DelphiType.unknownType() : typeNode.getType();
+    return (typeNode == null) ? DelphiType.untypedType() : typeNode.getType();
   }
 
   private ExpressionNode getDefaultValue() {

@@ -4,6 +4,7 @@ import com.google.errorprone.annotations.Immutable;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
+import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
@@ -351,6 +352,13 @@ public interface Type {
      * @param fullType Type representing the full type declaration
      */
     void setFullType(StructType fullType);
+
+    /**
+     * Returns a set of all default array properties that can be called on this type.
+     *
+     * @return Set of default array property declarations
+     */
+    Set<NameDeclaration> findDefaultArrayProperties();
   }
 
   interface HelperType extends StructType {

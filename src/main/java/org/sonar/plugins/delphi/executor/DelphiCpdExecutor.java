@@ -2,7 +2,7 @@ package org.sonar.plugins.delphi.executor;
 
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
-import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
+import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 
 public class DelphiCpdExecutor extends DelphiTokenExecutor {

@@ -34,6 +34,7 @@ import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.node.CommonDelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
+import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 
 public class DelphiTreeAdaptor extends BaseTreeAdaptor {
   private static final String NODE_CONSTRUCTOR_ERROR = "%s must have a public constructor(Token)";

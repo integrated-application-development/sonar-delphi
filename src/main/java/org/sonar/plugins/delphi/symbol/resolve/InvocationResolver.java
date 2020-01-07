@@ -51,8 +51,8 @@ import org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal;
  *     tcallcandidates</a>
  */
 public class InvocationResolver {
-  private List<InvocationCandidate> candidates = new ArrayList<>();
-  private List<InvocationArgument> arguments = new ArrayList<>();
+  private final List<InvocationCandidate> candidates = new ArrayList<>();
+  private final List<InvocationArgument> arguments = new ArrayList<>();
 
   public void addCandidate(InvocationCandidate candidate) {
     candidates.add(candidate);

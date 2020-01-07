@@ -5,7 +5,7 @@ import java.util.Map;
 import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 
 public class SymbolTable {
-  private Map<String, UnitNameDeclaration> unitsByFilePath = new HashMap<>();
+  private final Map<String, UnitNameDeclaration> unitsByFilePath = new HashMap<>();
 
   public void addUnit(String path, UnitNameDeclaration declaration) {
     unitsByFilePath.put(path, declaration);

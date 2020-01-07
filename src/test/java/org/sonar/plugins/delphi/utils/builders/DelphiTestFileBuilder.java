@@ -133,7 +133,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
   }
 
   public static class ResourceBuilder extends DelphiTestFileBuilder<ResourceBuilder> {
-    private File resource;
+    private final File resource;
 
     private ResourceBuilder(File resource) {
       this.resource = resource;

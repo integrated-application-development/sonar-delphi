@@ -41,7 +41,6 @@ public final class RecordExpressionNode extends ExpressionNode {
     return image;
   }
 
-  // TODO
   @Override
   @NotNull
   public Type createType() {

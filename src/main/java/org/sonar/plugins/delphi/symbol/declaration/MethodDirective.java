@@ -3,7 +3,7 @@ package org.sonar.plugins.delphi.symbol.declaration;
 import java.util.HashMap;
 import java.util.Map;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
-import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
+import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 
 public enum MethodDirective {
   OVERLOAD(DelphiLexer.OVERLOAD),

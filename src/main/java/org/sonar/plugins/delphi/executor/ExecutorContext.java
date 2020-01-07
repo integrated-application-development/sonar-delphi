@@ -5,8 +5,8 @@ import org.sonar.plugins.delphi.symbol.SymbolTable;
 
 public class ExecutorContext implements Executor.Context {
 
-  private SensorContext sensorContext;
-  private SymbolTable symbolTable;
+  private final SensorContext sensorContext;
+  private final SymbolTable symbolTable;
 
   public ExecutorContext(SensorContext sensorContext, SymbolTable symbolTable) {
     this.sensorContext = sensorContext;

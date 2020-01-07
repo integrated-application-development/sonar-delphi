@@ -3,6 +3,7 @@ package org.sonar.plugins.delphi.antlr.ast.visitors;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
+import org.sonar.plugins.delphi.antlr.ast.node.ArrayAccessorNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNameNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
@@ -65,6 +66,12 @@ public class SymbolAssociationVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(NameReferenceNode node, Data data) {
+    data.unitScope.attach(node);
+    return DelphiParserVisitor.super.visit(node, data);
+  }
+
+  @Override
+  public Data visit(ArrayAccessorNode node, Data data) {
     data.unitScope.attach(node);
     return DelphiParserVisitor.super.visit(node, data);
   }

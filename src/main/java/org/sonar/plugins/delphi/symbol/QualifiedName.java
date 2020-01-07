@@ -3,7 +3,7 @@ package org.sonar.plugins.delphi.symbol;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
@@ -12,9 +12,9 @@ public class QualifiedName {
   private String simpleName;
   private String fullyQualifiedName;
 
-  public QualifiedName(List<String> parts) {
+  public QualifiedName(Collection<String> parts) {
     Preconditions.checkArgument(!parts.isEmpty());
-    this.parts = Collections.unmodifiableList(parts);
+    this.parts = List.copyOf(parts);
   }
 
   public static QualifiedName of(String... parts) {

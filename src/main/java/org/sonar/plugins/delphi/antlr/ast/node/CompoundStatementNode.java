@@ -23,11 +23,19 @@ public final class CompoundStatementNode extends StatementNode {
     return getStatementList().getStatements();
   }
 
-  public boolean isEmpty() {
-    return getStatementList().isEmpty();
+  public List<StatementNode> getDescendantStatements() {
+    return getStatementList().getDescendantStatements();
   }
 
   public Stream<StatementNode> statementStream() {
     return getStatementList().statementStream();
+  }
+
+  public Stream<StatementNode> descendantStatementStream() {
+    return getStatementList().descendantStatementStream();
+  }
+
+  public boolean isEmpty() {
+    return getStatementList().isEmpty();
   }
 }

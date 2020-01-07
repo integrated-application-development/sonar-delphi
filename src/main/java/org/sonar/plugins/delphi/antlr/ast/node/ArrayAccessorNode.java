@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
 
 public final class ArrayAccessorNode extends DelphiNode {
+  private DelphiNameOccurrence implicitNameOccurrence;
+
   public ArrayAccessorNode(Token token) {
     super(token);
   }
@@ -17,6 +20,14 @@ public final class ArrayAccessorNode extends DelphiNode {
 
   public List<ExpressionNode> getExpressions() {
     return findChildrenOfType(ExpressionNode.class);
+  }
+
+  public void setImplicitNameOccurrence(DelphiNameOccurrence implicitNameOccurrence) {
+    this.implicitNameOccurrence = implicitNameOccurrence;
+  }
+
+  public DelphiNameOccurrence getImplicitNameOccurrence() {
+    return implicitNameOccurrence;
   }
 
   @Override

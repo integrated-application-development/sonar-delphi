@@ -29,12 +29,12 @@ import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.EnumType;
 import org.sonar.plugins.delphi.type.Type.StructType;
 
-public class AbstractDelphiScope implements DelphiScope {
+class AbstractDelphiScope implements DelphiScope {
   private final Set<NameDeclaration> declarationSet;
   private final ListMultimap<NameDeclaration, NameOccurrence> occurrencesByDeclaration;
   private final SetMultimap<Class<?>, DelphiNameDeclaration> declarationsByClass;
   private final TreeMultimap<String, DelphiNameDeclaration> declarationsByName;
-  private Set<TypeNameDeclaration> enumDeclarations;
+  private final Set<TypeNameDeclaration> enumDeclarations;
 
   private DelphiScope parent;
 
@@ -194,11 +194,6 @@ public class AbstractDelphiScope implements DelphiScope {
   private static boolean hasOverloadMethodDirective(NameDeclaration declaration) {
     return declaration instanceof MethodNameDeclaration
         && ((MethodNameDeclaration) declaration).getDirectives().contains(MethodDirective.OVERLOAD);
-  }
-
-  @Override
-  public boolean contains(NameOccurrence occurrence) {
-    return !findDeclaration((DelphiNameOccurrence) occurrence).isEmpty();
   }
 
   @Override

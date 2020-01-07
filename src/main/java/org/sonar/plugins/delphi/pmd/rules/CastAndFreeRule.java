@@ -30,13 +30,15 @@ import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode.BinaryOp;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
+import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Type.PointerType;
 
 /** Don't cast an object only to free it. */
 public class CastAndFreeRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(ExpressionNode expr, RuleContext data) {
-    if (isCastExpression(expr) && isFreed(expr)) {
+    if (isCastExpression(expr) && isFreed(expr) && !isAcceptableCast(expr)) {
       addViolation(data, expr);
     }
     return super.visit(expr, data);
@@ -56,6 +58,19 @@ public class CastAndFreeRule extends AbstractDelphiRule {
         && expr.jjtGetChild(0) instanceof NameReferenceNode
         && expr.jjtGetChild(1) instanceof ArgumentListNode
         && expr.jjtGetNumChildren() < 6;
+  }
+
+  private static boolean isAcceptableCast(ExpressionNode expr) {
+    if (!isHardCast(expr)) {
+      return false;
+    }
+
+    Type type = ((ArgumentListNode) expr.jjtGetChild(1)).getArguments().get(0).getType();
+    if (type.isPointer()) {
+      type = ((PointerType) type).dereferencedType();
+    }
+
+    return type.isUntyped();
   }
 
   private static boolean isFreed(ExpressionNode expr) {

@@ -42,7 +42,7 @@ public abstract class NoInheritedStatementRule extends AbstractDelphiRule {
     return method
         .getMethodBody()
         .getStatementBlock()
-        .statementStream()
+        .descendantStatementStream()
         .filter(ExpressionStatementNode.class::isInstance)
         .map(ExpressionStatementNode.class::cast)
         .map(ExpressionStatementNode::getExpression)

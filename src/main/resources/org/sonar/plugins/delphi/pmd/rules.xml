@@ -485,7 +485,7 @@ DoSomething(True); // Compliant
     </properties>
     <example>
       <![CDATA[
-<b>if</b> <b>Assigned</b>(Foo) <b>then begin</b> // Noncompliant
+<b>if</b> Assigned(Foo) <b>then begin</b> // Noncompliant
   Foo.Free;
 <b>end;</b>
 
@@ -493,7 +493,7 @@ DoSomething(True); // Compliant
   Foo.Free;
 <b>end;</b>
 
-<b>if</b> <b>Assigned</b>(Foo) <b>then begin</b> // Noncompliant
+<b>if</b> Assigned(Foo) <b>then begin</b> // Noncompliant
   FreeAndNil(Foo);
 <b>end;</b>
 
@@ -598,7 +598,10 @@ FreeAndNil(Foo); // Compliant
         message="Destructors should contain an 'inherited' statement"
         name="DestructorWithoutInheritedStatementRule">
     <priority>2</priority>
-    <description>Destructors should contain an 'inherited' statement.</description>
+    <description>
+      Destructors should contain an 'inherited' statement. This also includes common
+      destructor-like methods like Deinit and Teardown.
+    </description>
     <properties>
       <property name="baseEffort" value="30min" />
       <property name="type" value="BUG" />
@@ -730,7 +733,7 @@ FreeAndNil(MyVar); // Compliant
     </description>
     <properties>
       <property name="baseEffort" value="2min" />
-      <property name="limit" value="100" />
+      <property name="limit" value="120" />
       <property name="scope" value="MAIN" />
     </properties>
   </rule>
@@ -858,7 +861,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     <properties>
       <property name="baseEffort" value="5min" />
       <property name="limit" value="3" />
-      <property name="whitelist" value="E|X|Y" />
+      <property name="whitelist" value="E|X|Y|ID|Id" />
     </properties>
   </rule>
 
@@ -869,7 +872,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     <description>
       Memory management methods should be used to manage object lifecycles.
       &lt;br&gt;
-      &lt;br&gt;.
+      &lt;br&gt;
     </description>
     <properties>
       <property name="baseEffort" value="10min" />
@@ -885,7 +888,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     <description>
       Deeply nested methods make the code difficult to navigate/read.
       &lt;br&gt;
-      &lt;br&gt;.
+      &lt;br&gt;
     </description>
     <properties>
       <property name="baseEffort" value="10min" />
@@ -900,7 +903,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     <description>
       Special keywords should be capitalized. We treat them like functions in this regard.
       &lt;br&gt;
-      &lt;br&gt;.
+      &lt;br&gt;
     </description>
     <properties>
       <property name="baseEffort" value="1min" />
@@ -908,7 +911,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.ExplicitTObjectRule"
-    message="Top-level classes should explicitly inherit from TOBject"
+    message="Top-level classes should explicitly inherit from TObject"
     name="ExplicitTObjectRule">
     <priority>4</priority>
     <description>
@@ -919,7 +922,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       For more information, see the Delphi wiki page for
       &lt;a href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Classes_and_Objects_(Delphi)#TObject_and_TClass'&gt;
       TObject and TClass
-      &lt;/a&gt;.
+      &lt;/a&gt;
     </description>
     <properties>
       <property name="baseEffort" value="1min" />
@@ -944,11 +947,11 @@ List5.Duplicates := <i>dupError</i>; // Compliant
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.CaseStatementSizeRule"
-    message="Case statements should have at least 3 branches"
+    message="Case statements should have at least 2 case items"
     name="CaseStatementSizeRule">
     <priority>4</priority>
     <description>
-      A case statement with less than 3 branches would be better expressed as an if-else statement.
+      A case statement with less than 2 case items would be better expressed as an if-statement.
     </description>
     <properties>
       <property name="baseEffort" value="1min" />
@@ -964,7 +967,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       &lt;br&gt;
       Individual parameters should have their types explicitly declared.
       &lt;br&gt;
-      &lt;br&gt;.
+      &lt;br&gt;
     </description>
     <properties>
       <property name="baseEffort" value="1min" />
@@ -980,7 +983,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       &lt;br&gt;
       So the use of the tabulation character must be banned.
       &lt;br&gt;
-      &lt;br&gt;.
+      &lt;br&gt;
     </description>
     <properties>
       <property name="baseEffort" value="1min" />
@@ -988,7 +991,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.AssignedNilCheckRule"
-    message="Nil checks should be performed with Assigned instead"
+    message="Nil checks should be performed with Assigned"
     name="AssignedNilCheckRule">
     <priority>4</priority>
     <description>
@@ -998,10 +1001,71 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       For more information, see the Delphi wiki page for
       &lt;a href='http://docwiki.embarcadero.com/Libraries/Rio/en/System.Assigned'&gt;
       System.Assigned
-      &lt;/a&gt;.
+      &lt;/a&gt;
     </description>
     <properties>
       <property name="baseEffort" value="1min" />
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.RedundantParenthesesRule"
+    message="Redundant pairs of parentheses should be removed"
+    name="RedundantParenthesesRule">
+    <priority>4</priority>
+    <description>
+      The use of parentheses, even those not required to enforce a desired order of operations,
+      can clarify the intent behind a piece of code. But redundant pairs of parentheses could be
+      misleading, and should be removed.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+    </properties>
+    <example>
+      <![CDATA[
+Result := X + 1; // Compliant
+
+Result := (X + 1); // Compliant
+
+Result := ((X + 1)); // Noncompliant
+        ]]>
+    </example>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.SuperfluousSemicolonsRule"
+    message="Stray semicolons should be removed"
+    name="SuperfluousSemicolonsRule">
+    <priority>4</priority>
+    <description>
+      Stray semicolons are usually introduced by mistake, for example because:
+      &lt;br&gt;
+      - It was meant to be replaced by an actual statement, but this was forgotten.
+      &lt;br&gt;
+      - There was a typo which lead the semicolon to be doubled, i.e ;;.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+    </properties>
+    <example>
+      <![CDATA[
+Result := 123; // Compliant
+
+Result := 123;; // Noncompliant
+        ]]>
+    </example>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.CommentedOutCodeRule"
+    message="Sections of code should not be commented out"
+    name="CommentedOutCodeRule">
+    <priority>4</priority>
+    <description>
+      Programmers should not comment out code as it bloats programs and reduces readability.
+      &lt;br&gt;
+      &lt;br&gt;
+      Unused code should be deleted and can be retrieved from source control history if required.
+    </description>
+    <properties>
+      <property name="baseEffort" value="3min" />
     </properties>
   </rule>
 
@@ -1062,6 +1126,31 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+    message="Object types should not be used"
+    name="ObjectTypeRule">
+    <priority>4</priority>
+    <description>
+      Object types are supported for backward compatibility only. Their use is not recommended.
+      &lt;br&gt;
+      &lt;br&gt;
+      For more information on Object types, see the Delphi wiki page for
+      &lt;a href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Classes_and_Objects_(Delphi)#Object_Types'&gt;
+      Classes and Objects
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+      <property name="builtinXPath">
+        <value>
+          <![CDATA[
+            //TypeDeclarationNode[@Object = 'true']/QualifiedNameDeclarationNode
+          ]]>
+        </value>
+      </property>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathTemplateRule"
     message="Track breaches of an XPath rule"
     name="XPathRule">
@@ -1076,7 +1165,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenIdentifierRule"
-    message="Forbidden identifiers should not be used"
+    message="Track uses of disallowed identifiers"
     name="ForbiddenIdentifierRule">
     <priority>3</priority>
     <description>
@@ -1092,17 +1181,22 @@ List5.Duplicates := <i>dupError</i>; // Compliant
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenMethodRule"
-    message="Forbidden methods should not be used"
+    message="Track uses of disallowed methods"
     name="ForbiddenMethodRule">
     <priority>3</priority>
     <description>
-      This rule template can be used to forbid a particular method from being used.
+      This rule allows banning certain methods.
       It will flag any direct reference to a method from the blacklist.
       &lt;br&gt;
-      Please note that a fully qualified method name is required. (E.g. "Unit.Type.Method")
+      &lt;br&gt;
+      Please note:
+      &lt;br&gt;
+      - A fully qualified method name is required. (E.g. "Unit.Type.Method")
+      &lt;br&gt;
+      - All overloads will be tracked. Parameter signatures cannot be specified.
     </description>
     <properties>
-      <property name="baseEffort" value="3min" />
+      <property name="baseEffort" value="5min" />
       <property name="template" value="true" />
       <property name="blacklist" />
       <property name="message" />
@@ -1110,17 +1204,17 @@ List5.Duplicates := <i>dupError</i>; // Compliant
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenTypeRule"
-    message="Forbidden types should not be used"
+    message="Track uses of disallowed types"
     name="ForbiddenTypeRule">
     <priority>3</priority>
     <description>
-      This rule template can be used to forbid a particular method from being used.
+      This rule allows banning certain types.
       It will flag any direct reference to a type from the blacklist.
       &lt;br&gt;
       Please note that a fully qualified type name is required. (E.g. "Unit.Type.InnerType")
     </description>
     <properties>
-      <property name="baseEffort" value="5min" />
+      <property name="baseEffort" value="10min" />
       <property name="template" value="true" />
       <property name="blacklist" />
       <property name="message" />

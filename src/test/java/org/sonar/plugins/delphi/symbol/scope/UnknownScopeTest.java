@@ -2,7 +2,6 @@ package org.sonar.plugins.delphi.symbol.scope;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration.compilerVariable;
 import static org.sonar.plugins.delphi.symbol.scope.UnknownScope.unknownScope;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
@@ -18,7 +17,7 @@ import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
 import org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration;
 
 public class UnknownScopeTest {
-  private UnknownScope unknownScope = unknownScope();
+  private final UnknownScope unknownScope = unknownScope();
 
   @Test
   public void testConstructorIsPrivate() throws Exception {
@@ -47,8 +46,7 @@ public class UnknownScopeTest {
 
   @Test
   public void testContains() {
-    VariableNameDeclaration declaration = mock(VariableNameDeclaration.class);
-    when(declaration.getImage()).thenReturn("Image");
+    VariableNameDeclaration declaration = compilerVariable("Image", unknownType(), unknownScope);
     unknownScope.addDeclaration(declaration);
     NameOccurrence occurrence = new DelphiNameOccurrence(mock(DelphiNode.class), "Image");
     assertThat(unknownScope.contains(occurrence)).isFalse();
@@ -56,8 +54,7 @@ public class UnknownScopeTest {
 
   @Test
   public void testAddNameOccurrence() {
-    VariableNameDeclaration declaration = mock(VariableNameDeclaration.class);
-    when(declaration.getImage()).thenReturn("Image");
+    VariableNameDeclaration declaration = compilerVariable("Image", unknownType(), unknownScope);
     unknownScope.addDeclaration(declaration);
     DelphiNameOccurrence occurrence = new DelphiNameOccurrence(mock(DelphiNode.class), "Image");
     assertThat(unknownScope.addNameOccurrence(occurrence)).isEmpty();
@@ -65,8 +62,7 @@ public class UnknownScopeTest {
 
   @Test
   public void testFindDeclaration() {
-    VariableNameDeclaration declaration = mock(VariableNameDeclaration.class);
-    when(declaration.getImage()).thenReturn("Image");
+    VariableNameDeclaration declaration = compilerVariable("Image", unknownType(), unknownScope);
     unknownScope.addDeclaration(declaration);
     DelphiNameOccurrence occurrence = new DelphiNameOccurrence(mock(DelphiNode.class), "Image");
     assertThat(unknownScope.findDeclaration(occurrence)).isEmpty();
@@ -74,8 +70,7 @@ public class UnknownScopeTest {
 
   @Test
   public void testGetOccurrencesFor() {
-    VariableNameDeclaration declaration = mock(VariableNameDeclaration.class);
-    when(declaration.getImage()).thenReturn("Image");
+    VariableNameDeclaration declaration = compilerVariable("Image", unknownType(), unknownScope);
     unknownScope.addDeclaration(declaration);
     DelphiNameOccurrence occurrence = new DelphiNameOccurrence(mock(DelphiNode.class), "Image");
     assertThat(unknownScope.addNameOccurrence(occurrence)).isEmpty();

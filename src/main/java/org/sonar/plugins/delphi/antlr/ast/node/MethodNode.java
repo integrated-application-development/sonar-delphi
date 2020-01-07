@@ -61,15 +61,6 @@ public abstract class MethodNode extends DelphiNode implements Visibility {
     return DelphiType.unknownType();
   }
 
-  public FormalParameter getParameter(String image) {
-    for (FormalParameter parameter : getParameters()) {
-      if (parameter.getImage().equals(image)) {
-        return parameter;
-      }
-    }
-    return null;
-  }
-
   public MethodKind getMethodKind() {
     return getMethodHeading().getMethodKind();
   }

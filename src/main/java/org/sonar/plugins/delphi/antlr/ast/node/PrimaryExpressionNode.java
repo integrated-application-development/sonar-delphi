@@ -1,14 +1,19 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSICHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDECHAR;
+
 import net.sourceforge.pmd.lang.ast.Node;
+import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodHeadingNode.MethodKind;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
-import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.CollectionType;
 import org.sonar.plugins.delphi.type.Type.PointerType;
@@ -53,7 +58,7 @@ public final class PrimaryExpressionNode extends ExpressionNode {
   @Override
   @NotNull
   public Type createType() {
-    Type type = DelphiType.unknownType();
+    Type type = unknownType();
     for (int i = 0; i < jjtGetNumChildren(); ++i) {
       Node child = jjtGetChild(i);
       if (isConstructor(child)) {
@@ -83,13 +88,27 @@ public final class PrimaryExpressionNode extends ExpressionNode {
   private static Type handleArrayAccessor(Type type, ArrayAccessorNode accessor) {
     int accesses = accessor.getExpressions().size();
     for (int i = 0; i < accesses; ++i) {
-      if (type instanceof CollectionType) {
+      if (accessor.getImplicitNameOccurrence() != null) {
+        type = handleNameOccurrence(accessor.getImplicitNameOccurrence());
+      } else if (type instanceof CollectionType) {
         type = ((CollectionType) type).elementType();
+      } else if (type.isNarrowString()) {
+        type = ANSICHAR.type;
+      } else if (type.isWideString()) {
+        type = WIDECHAR.type;
       } else {
-        type = DelphiType.unknownType();
+        type = unknownType();
       }
     }
     return type;
+  }
+
+  private static Type handleNameOccurrence(DelphiNameOccurrence occurrence) {
+    NameDeclaration declaration = occurrence.getNameDeclaration();
+    if (declaration instanceof Typed) {
+      return ((Typed) declaration).getType();
+    }
+    return unknownType();
   }
 
   private static Type handleSyntaxToken(Type type, int id) {
@@ -111,6 +130,6 @@ public final class PrimaryExpressionNode extends ExpressionNode {
       default:
         // Do nothing
     }
-    return DelphiType.unknownType();
+    return unknownType();
   }
 }

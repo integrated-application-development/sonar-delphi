@@ -12,7 +12,7 @@ import org.sonar.plugins.delphi.symbol.scope.TypeScope;
 
 public class Search {
   private static final Logger LOG = Loggers.get(Search.class);
-  private static final boolean TRACE = true;
+  private static final boolean TRACE = false;
 
   private final DelphiNameOccurrence occurrence;
   private final Set<NameDeclaration> declarations = new HashSet<>();

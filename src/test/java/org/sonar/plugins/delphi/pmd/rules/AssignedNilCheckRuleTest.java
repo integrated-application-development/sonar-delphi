@@ -1,7 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.sonar.plugins.delphi.utils.conditions.AtLine.atLine;
-import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
@@ -73,11 +72,9 @@ public class AssignedNilCheckRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(4)
-        .are(ruleKey("AssignedNilCheckRule"))
-        .areExactly(1, atLine(builder.getOffset() + 5))
-        .areExactly(1, atLine(builder.getOffset() + 8))
-        .areExactly(1, atLine(builder.getOffset() + 11))
-        .areExactly(1, atLine(builder.getOffset() + 14));
+        .areExactly(1, ruleKeyAtLine("AssignedNilCheckRule", builder.getOffset() + 5))
+        .areExactly(1, ruleKeyAtLine("AssignedNilCheckRule", builder.getOffset() + 8))
+        .areExactly(1, ruleKeyAtLine("AssignedNilCheckRule", builder.getOffset() + 11))
+        .areExactly(1, ruleKeyAtLine("AssignedNilCheckRule", builder.getOffset() + 14));
   }
 }

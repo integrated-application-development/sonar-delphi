@@ -15,7 +15,7 @@ import java.util.Set;
 public abstract class DelphiType implements Type {
   private final String image;
 
-  public DelphiType(String image) {
+  protected DelphiType(String image) {
     this.image = image;
   }
 

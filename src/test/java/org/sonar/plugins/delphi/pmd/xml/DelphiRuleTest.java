@@ -27,15 +27,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 public class DelphiRuleTest {
 
   private DelphiRule rule;
-
-  @Rule public ExpectedException exceptionCatcher = ExpectedException.none();
 
   @Before
   public void init() {

@@ -35,7 +35,7 @@ import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 public class DelphiASTTest {
 
   private static final String TEST_FILE = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
-  private DelphiAST ast = DelphiTestFileBuilder.fromResource(TEST_FILE).parse();
+  private final DelphiAST ast = DelphiTestFileBuilder.fromResource(TEST_FILE).parse();
 
   @Test
   public void testAcceptImplemented() {
@@ -50,9 +50,9 @@ public class DelphiASTTest {
   }
 
   private static void checkTypes(Node node) {
+    assertThat(node).isInstanceOf(DelphiNode.class);
     for (int i = 0; i < node.jjtGetNumChildren(); ++i) {
       Node child = node.jjtGetChild(i);
-      assertThat(child).isInstanceOf(DelphiNode.class);
       checkTypes(child);
     }
   }

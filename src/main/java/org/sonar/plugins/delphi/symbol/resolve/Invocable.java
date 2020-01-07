@@ -30,4 +30,18 @@ public interface Invocable {
   default ParameterDeclaration getParameter(int index) {
     return getParameters().get(index);
   }
+
+  default boolean hasSameParameterTypes(Invocable other) {
+    if (getParametersCount() != other.getParametersCount()) {
+      return false;
+    }
+
+    for (int i = 0; i < getParametersCount(); ++i) {
+      if (!getParameter(i).getType().is(other.getParameter(i).getType())) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 }

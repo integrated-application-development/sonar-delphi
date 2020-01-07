@@ -12,8 +12,8 @@ import org.sonar.plugins.delphi.type.Typed;
 
 public final class TypeNameDeclaration extends DelphiNameDeclaration implements Typed, Qualifiable {
   private final QualifiedName qualifiedName;
+  private final Type type;
   private boolean isScopedEnum;
-  private Type type;
 
   public TypeNameDeclaration(TypeDeclarationNode node) {
     this(

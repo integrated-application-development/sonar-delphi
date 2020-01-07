@@ -38,7 +38,7 @@ import org.sonar.plugins.delphi.type.Type.VariantType;
 import org.sonar.plugins.delphi.type.Type.VariantType.VariantKind;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher;
 
-public class TypeComparer {
+class TypeComparer {
   private TypeComparer() {
     // Utility class
   }

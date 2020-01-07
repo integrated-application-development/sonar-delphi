@@ -18,6 +18,8 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.AtLine.atLine;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.Test;
@@ -27,19 +29,18 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
 
   @Test
   public void testValidRule() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-
-    builder.appendDecl("type");
-    builder.appendDecl("  TTestDestructor = class(TObject)");
-    builder.appendDecl("  public");
-    builder.appendDecl("    destructor Destroy; override;");
-    builder.appendDecl("  end;");
-
-    builder.appendImpl("destructor TTestConstructor.Destroy;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  inherited;");
-    builder.appendImpl("  WriteLn('do something');");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TTestDestructor = class(TObject)")
+            .appendDecl("  public")
+            .appendDecl("    destructor Destroy; override;")
+            .appendDecl("  end;")
+            .appendImpl("destructor TTestDestructor.Destroy;")
+            .appendImpl("begin")
+            .appendImpl("  inherited;")
+            .appendImpl("  WriteLn('do something');")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -48,18 +49,17 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
 
   @Test
   public void testDestructorMissingInheritedShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-
-    builder.appendDecl("type");
-    builder.appendDecl("  TTestDestructor = class(TObject)");
-    builder.appendDecl("  public");
-    builder.appendDecl("    destructor Destroy; override;");
-    builder.appendDecl("  end;");
-
-    builder.appendImpl("destructor TTestConstructor.Destroy;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  WriteLn('do something');");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TTestDestructor = class(TObject)")
+            .appendDecl("  public")
+            .appendDecl("    destructor Destroy; override;")
+            .appendDecl("  end;")
+            .appendImpl("destructor TTestDestructor.Destroy;")
+            .appendImpl("begin")
+            .appendImpl("  WriteLn('do something');")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -70,19 +70,88 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
   }
 
   @Test
+  public void testDestructorLikeMethodShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TTestDestructor = class(TObject)")
+            .appendDecl("  public")
+            .appendDecl("    procedure Deinit; override;")
+            .appendDecl("    procedure Teardown; override;")
+            .appendDecl("  end;")
+            .appendImpl("procedure TTestDestructor.Deinit;")
+            .appendImpl("begin")
+            .appendImpl("  WriteLn('do something');")
+            .appendImpl("end;")
+            .appendImpl("procedure TTestDestructor.Teardown;")
+            .appendImpl("begin")
+            .appendImpl("  WriteLn('do something');")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .hasSize(2)
+        .are(ruleKey("DestructorWithoutInheritedStatementRule"))
+        .areExactly(1, atLine(builder.getOffset() + 1))
+        .areExactly(1, atLine(builder.getOffset() + 5));
+  }
+
+  @Test
+  public void testDestructorLikeMethodWithoutOverrideShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TTestDestructor = class(TObject)")
+            .appendDecl("  public")
+            .appendDecl("    procedure Deinit;")
+            .appendDecl("    procedure Teardown;")
+            .appendDecl("  end;")
+            .appendImpl("procedure TTestDestructor.Deinit;")
+            .appendImpl("begin")
+            .appendImpl("  WriteLn('do something');")
+            .appendImpl("end;")
+            .appendImpl("procedure TTestDestructor.Teardown;")
+            .appendImpl("begin")
+            .appendImpl("  WriteLn('do something');")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
+  }
+
+  @Test
+  public void testDestructorLikeMethodWithoutDeclarationsShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure TTestDestructor.Deinit;")
+            .appendImpl("begin")
+            .appendImpl("  WriteLn('do something');")
+            .appendImpl("end;")
+            .appendImpl("procedure TTestDestructor.Teardown;")
+            .appendImpl("begin")
+            .appendImpl("  WriteLn('do something');")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
+  }
+
+  @Test
   public void testClassDestructorShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-
-    builder.appendDecl("type");
-    builder.appendDecl("  TTestDestructor = class(TObject)");
-    builder.appendDecl("  public");
-    builder.appendDecl("    class destructor Destroy; override;");
-    builder.appendDecl("  end;");
-
-    builder.appendImpl("class destructor TTestConstructor.Destroy;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  WriteLn('do something');");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TTestDestructor = class(TObject)")
+            .appendDecl("  public")
+            .appendDecl("    class destructor Destroy; override;")
+            .appendDecl("  end;")
+            .appendImpl("class destructor TTestDestructor.Destroy;")
+            .appendImpl("begin")
+            .appendImpl("  WriteLn('do something');")
+            .appendImpl("end;");
 
     execute(builder);
 

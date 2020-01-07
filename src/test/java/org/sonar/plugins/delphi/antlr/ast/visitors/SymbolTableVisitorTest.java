@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor.Data;
 import org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor.ResolutionLevel;
-import org.sonar.plugins.delphi.antlr.preprocessor.CompilerSwitchRegistry;
+import org.sonar.plugins.delphi.preprocessor.CompilerSwitchRegistry;
 import org.sonar.plugins.delphi.symbol.ImportResolutionHandler;
 import org.sonar.plugins.delphi.symbol.scope.SystemScope;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestProgramBuilder;

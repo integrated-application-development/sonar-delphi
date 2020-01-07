@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.sonar.plugins.delphi.type.Type.ArrayConstructorType;
 
 public class DelphiArrayConstructorType extends DelphiType implements ArrayConstructorType {
-  private ImmutableList<Type> elementTypes;
+  private final ImmutableList<Type> elementTypes;
 
   private DelphiArrayConstructorType(List<Type> elementTypes) {
     super(createImage(elementTypes));

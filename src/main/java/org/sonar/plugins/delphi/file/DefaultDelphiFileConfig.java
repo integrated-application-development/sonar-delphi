@@ -1,16 +1,15 @@
 package org.sonar.plugins.delphi.file;
 
-import java.nio.file.Path;
-import java.util.List;
 import java.util.Set;
+import org.sonar.plugins.delphi.preprocessor.search.SearchPath;
 
 public class DefaultDelphiFileConfig implements DelphiFileConfig {
-  private String encoding;
-  private List<Path> searchPath;
-  private Set<String> definitions;
+  private final String encoding;
+  private final SearchPath searchPath;
+  private final Set<String> definitions;
   private boolean skipImplementation;
 
-  DefaultDelphiFileConfig(String encoding, List<Path> searchPath, Set<String> definitions) {
+  DefaultDelphiFileConfig(String encoding, SearchPath searchPath, Set<String> definitions) {
     this.encoding = encoding;
     this.searchPath = searchPath;
     this.definitions = definitions;
@@ -22,7 +21,7 @@ public class DefaultDelphiFileConfig implements DelphiFileConfig {
   }
 
   @Override
-  public List<Path> getSearchPath() {
+  public SearchPath getSearchPath() {
     return searchPath;
   }
 

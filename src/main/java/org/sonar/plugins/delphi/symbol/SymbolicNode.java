@@ -10,7 +10,7 @@ import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 
 public final class SymbolicNode extends AbstractNode implements ScopedNode, IndexedNode {
-  private static AtomicInteger imaginaryTokenIndex = new AtomicInteger(Integer.MIN_VALUE);
+  private static final AtomicInteger IMAGINARY_TOKEN_INDEX = new AtomicInteger(Integer.MIN_VALUE);
   private final String unitName;
   private final DelphiScope scope;
   private final int tokenIndex;
@@ -55,7 +55,7 @@ public final class SymbolicNode extends AbstractNode implements ScopedNode, Inde
         UnitNameDeclaration.UNKNOWN_UNIT,
         image,
         scope,
-        imaginaryTokenIndex.incrementAndGet());
+        IMAGINARY_TOKEN_INDEX.incrementAndGet());
   }
 
   public static SymbolicNode fromRange(String image, DelphiNode begin, Node end) {

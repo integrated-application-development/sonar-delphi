@@ -9,7 +9,7 @@ import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 public class CaseStatementSizeRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testThreeCaseItemsShouldNotAddIssue() {
+  public void testTwoCaseItemsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -17,7 +17,6 @@ public class CaseStatementSizeRuleTest extends BasePmdRuleTest {
             .appendImpl("  case MyNumber of")
             .appendImpl("    1: Break;")
             .appendImpl("    2: Break;")
-            .appendImpl("    3: Break;")
             .appendImpl("  end;")
             .appendImpl("end;");
 
@@ -47,14 +46,13 @@ public class CaseStatementSizeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTwoCaseItemsShouldAddIssue() {
+  public void testOneCaseItemsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
             .appendImpl("begin")
             .appendImpl("  case MyNumber of")
             .appendImpl("    1: Break;")
-            .appendImpl("    2: Break;")
             .appendImpl("  end;")
             .appendImpl("end;");
 

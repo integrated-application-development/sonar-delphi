@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.pmd.profile;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -9,9 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
@@ -19,8 +18,6 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSetHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiPmdRulesDefinitionTest {
-
-  @Rule public ExpectedException exceptionCatcher = ExpectedException.none();
 
   @Test
   public void testShouldDefineRules() {
@@ -41,17 +38,17 @@ public class DelphiPmdRulesDefinitionTest {
 
   @Test
   public void testShouldAbortExportOnWriterException() {
-    exceptionCatcher.expect(IllegalArgumentException.class);
-    exceptionCatcher.expectMessage(
-        String.format(DelphiPmdRulesDefinition.UNDEFINED_BASE_EFFORT, "InterfaceNameRule"));
-
     var provider = mock(DelphiPmdRuleSetDefinitionProvider.class);
     when(provider.getDefinition())
         .thenReturn(getRuleSet("definition_missing_required_property.xml"));
 
     DelphiPmdRulesDefinition definition = new DelphiPmdRulesDefinition(provider);
     RulesDefinition.Context context = new RulesDefinition.Context();
-    definition.define(context);
+
+    assertThatThrownBy(() -> definition.define(context))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage(
+            String.format(DelphiPmdRulesDefinition.UNDEFINED_BASE_EFFORT, "InterfaceNameRule"));
   }
 
   private static DelphiRuleSet getRuleSet(String fileName) {

@@ -109,8 +109,9 @@ public final class NameReferenceNode extends DelphiNode implements Qualifiable, 
   @Override
   @NotNull
   public Type getType() {
-    if (getNameDeclaration() instanceof Typed) {
-      return ((Typed) getNameDeclaration()).getType();
+    NameDeclaration lastDeclaration = getLastName().getNameDeclaration();
+    if (lastDeclaration instanceof Typed) {
+      return ((Typed) lastDeclaration).getType();
     } else {
       return DelphiType.unknownType();
     }

@@ -4,13 +4,16 @@ import static java.util.function.Predicate.not;
 
 import com.google.common.collect.ImmutableSet;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import net.sourceforge.pmd.lang.ast.Node;
+import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
+import org.sonar.plugins.delphi.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.symbol.scope.FileScope;
 import org.sonar.plugins.delphi.symbol.scope.SystemScope;
@@ -170,5 +173,29 @@ public class DelphiStructType extends DelphiType implements StructType {
     this.kind = fullType.kind();
     this.superType = fullType.superType();
     this.isForwardType = true;
+  }
+
+  @Override
+  public Set<NameDeclaration> findDefaultArrayProperties() {
+    Set<NameDeclaration> result = new HashSet<>();
+    findDefaultArrayProperties(this, result);
+    return result;
+  }
+
+  private static void findDefaultArrayProperties(StructType type, Set<NameDeclaration> result) {
+    type.typeScope().getPropertyDeclarations().stream()
+        .filter(PropertyNameDeclaration::isArrayProperty)
+        .filter(PropertyNameDeclaration::isDefaultProperty)
+        .filter(
+            declaration ->
+                result.stream()
+                    .map(PropertyNameDeclaration.class::cast)
+                    .noneMatch(property -> property.hasSameParameterTypes(declaration)))
+        .forEach(result::add);
+
+    Type superType = type.superType();
+    if (superType.isStruct()) {
+      findDefaultArrayProperties((StructType) superType, result);
+    }
   }
 }

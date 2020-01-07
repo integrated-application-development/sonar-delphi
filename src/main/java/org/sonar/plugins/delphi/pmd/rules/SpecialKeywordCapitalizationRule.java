@@ -5,10 +5,10 @@ import static org.apache.commons.lang3.StringUtils.capitalize;
 
 import java.util.regex.Pattern;
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
+import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 
 public class SpecialKeywordCapitalizationRule extends AbstractDelphiRule {
-  private static final Pattern PATTERN = Pattern.compile("[A-Z]{1}[a-z]+");
+  private static final Pattern PATTERN = Pattern.compile("[A-Z][a-z]+");
   private static final String MESSAGE = "Incorrect special keyword casing (did you mean '%s'?)";
 
   @Override

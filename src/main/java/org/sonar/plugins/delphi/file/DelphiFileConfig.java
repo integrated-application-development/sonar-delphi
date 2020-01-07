@@ -1,8 +1,7 @@
 package org.sonar.plugins.delphi.file;
 
-import java.nio.file.Path;
-import java.util.List;
 import java.util.Set;
+import org.sonar.plugins.delphi.preprocessor.search.SearchPath;
 
 public interface DelphiFileConfig {
   /**
@@ -13,11 +12,11 @@ public interface DelphiFileConfig {
   String getEncoding();
 
   /**
-   * Returns a list of paths where include files can be found and imports can be resolved
+   * Returns the search path where include files can be found and imports can be resolved
    *
    * @return Search path
    */
-  List<Path> getSearchPath();
+  SearchPath getSearchPath();
 
   /**
    * Returns a list of symbol definitions used in conditional compiler directives

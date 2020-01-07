@@ -6,11 +6,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.delphi.utils.DelphiUtils.uriToAbsolutePath;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,10 +21,9 @@ import org.sonar.api.batch.fs.TextPointer;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultTextPointer;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.file.DelphiFile;
 import org.sonar.plugins.delphi.file.DelphiFileConfig;
-import org.sonar.plugins.delphi.project.DelphiProject;
+import org.sonar.plugins.delphi.project.DelphiProjectHelper;
 import org.sonar.plugins.delphi.symbol.SymbolTable;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
@@ -33,14 +34,14 @@ public class DelphiSymbolTableExecutorTest {
 
   private DelphiSymbolTableExecutor executor;
   private SensorContextTester context;
-  private DelphiProject delphiProject;
+  private Set<String> unitScopeNames;
   private String componentKey;
 
   @Before
   public void setup() {
     executor = new DelphiSymbolTableExecutor();
     context = SensorContextTester.create(DelphiUtils.getResource(ROOT_PATH));
-    delphiProject = new DelphiProject("Default Project");
+    unitScopeNames = new HashSet<>();
   }
 
   @Test
@@ -310,6 +311,12 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testHiddenDefaultProperties() {
+    execute("properties/HiddenDefaultProperties.pas");
+    verifyUsages(13, 14, reference(29, 25));
+  }
+
+  @Test
   public void testSimpleOverloads() {
     execute("overloads/Simple.pas");
     verifyUsages(10, 10, reference(16, 10), reference(37, 2));
@@ -412,8 +419,7 @@ public class DelphiSymbolTableExecutorTest {
 
   @Test
   public void testUnitScopeNames() {
-    delphiProject.addUnitScopeNames(
-        List.of("NonexistentUnitScope", "UnitScopeName", "ABCUnitScopeXYZ"));
+    unitScopeNames = Set.of("NonexistentUnitScope", "UnitScopeName", "ABCUnitScopeXYZ");
 
     execute(
         "namespaces/UnitScopeNameTest.pas",
@@ -456,11 +462,6 @@ public class DelphiSymbolTableExecutorTest {
       inputFiles.put(uriToAbsolutePath(inputFile.uri()), inputFile);
     }
 
-    delphiProject.setSourceFiles(
-        inputFiles.values().stream()
-            .map(inputFile -> new File(uriToAbsolutePath(inputFile.uri())))
-            .collect(Collectors.toList()));
-
     DelphiProjectHelper delphiProjectHelper = mock(DelphiProjectHelper.class);
     when(delphiProjectHelper.getFile(anyString()))
         .thenAnswer(
@@ -471,14 +472,17 @@ public class DelphiSymbolTableExecutorTest {
 
     DelphiFileConfig fileConfig =
         DelphiFile.createConfig(
-            delphiProjectHelper.encoding(),
-            delphiProject.getSearchPath(),
-            delphiProject.getDefinitions());
+            delphiProjectHelper.encoding(), Collections.emptyList(), Collections.emptySet());
 
     SymbolTable symbolTable =
         SymbolTable.builder()
-            .project(delphiProject)
+            .sourceFiles(
+                inputFiles.values().stream()
+                    .map(InputFile::uri)
+                    .map(Path::of)
+                    .collect(Collectors.toList()))
             .standardLibraryPath(DelphiUtils.getResource(STANDARD_LIBRARY).toPath())
+            .unitScopeNames(unitScopeNames)
             .fileConfig(fileConfig)
             .build();
 

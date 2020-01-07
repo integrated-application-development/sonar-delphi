@@ -7,12 +7,7 @@ public class CaseStatementSizeRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(CaseStatementNode caseStatement, RuleContext data) {
-    int branchCount = caseStatement.getCaseItems().size();
-    if (caseStatement.getElseBlockNode() != null) {
-      ++branchCount;
-    }
-
-    if (branchCount < 3) {
+    if (caseStatement.getCaseItems().size() < 2) {
       addViolation(data, caseStatement.jjtGetChild(0));
     }
 

@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.symbol.declaration;
 
+import java.util.Objects;
 import org.sonar.plugins.delphi.antlr.ast.node.QualifiedNameDeclarationNode;
 import org.sonar.plugins.delphi.symbol.Qualifiable;
 import org.sonar.plugins.delphi.symbol.QualifiedName;
@@ -22,5 +23,17 @@ public abstract class QualifiedDelphiNameDeclaration extends DelphiNameDeclarati
   @Override
   public QualifiedName getQualifiedName() {
     return qualifiedName;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o)
+        && getQualifiedNameParts()
+            .equals(((QualifiedDelphiNameDeclaration) o).getQualifiedNameParts());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), qualifiedName.parts());
   }
 }

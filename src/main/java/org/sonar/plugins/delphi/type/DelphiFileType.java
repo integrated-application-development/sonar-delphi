@@ -22,7 +22,7 @@ public abstract class DelphiFileType extends DelphiType implements FileType {
   }
 
   private static class MutableDelphiFileType extends DelphiFileType {
-    private Type fileType;
+    private final Type fileType;
 
     MutableDelphiFileType(Type fileType) {
       super(fileType.getImage());

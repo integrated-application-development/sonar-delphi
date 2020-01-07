@@ -7,7 +7,7 @@ import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Typed;
 
-public class VariableNameDeclaration extends DelphiNameDeclaration implements Typed {
+public final class VariableNameDeclaration extends DelphiNameDeclaration implements Typed {
   private final Type type;
   private int hashCode;
 
@@ -33,7 +33,7 @@ public class VariableNameDeclaration extends DelphiNameDeclaration implements Ty
   }
 
   @Override
-  public final boolean equals(Object other) {
+  public boolean equals(Object other) {
     if (!(other instanceof VariableNameDeclaration)) {
       return false;
     }

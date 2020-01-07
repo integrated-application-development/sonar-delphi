@@ -22,19 +22,17 @@
  */
 package org.sonar.plugins.delphi.project;
 
-import static org.sonar.plugins.delphi.utils.DelphiUtils.resolveBacktracePath;
+import static org.sonar.plugins.delphi.utils.DelphiUtils.resolvePathFromBaseDir;
 
-import java.io.File;
+import com.google.common.base.Splitter;
 import java.io.IOException;
 import java.nio.file.Path;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import org.sonar.api.internal.google.common.base.Splitter;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -44,7 +42,7 @@ public class DelphiProjectXmlParser extends DefaultHandler {
   private static final Logger LOG = Loggers.get(DelphiProjectXmlParser.class);
 
   private final String fileName;
-  private final String currentDir;
+  private final Path baseDir;
   private final DelphiProject project;
   private boolean isReading;
   private String readData;
@@ -55,24 +53,21 @@ public class DelphiProjectXmlParser extends DefaultHandler {
    * @param xml Xml file to parse
    * @param delphiProject DelphiProject class to modify
    */
-  public DelphiProjectXmlParser(File xml, DelphiProject delphiProject) {
-    fileName = DelphiUtils.normalizeFileName(xml.getAbsolutePath());
-    currentDir = fileName.substring(0, fileName.lastIndexOf('/'));
+  DelphiProjectXmlParser(Path xml, DelphiProject delphiProject) {
+    fileName = xml.toAbsolutePath().toString();
+    baseDir = xml.getParent();
     project = delphiProject;
   }
 
-  /**
-   * Parses the document
-   *
-   * @throws IOException If the SAXParser indicates a problem with the character stream
-   */
-  public void parse() throws IOException {
+  /** Parses the document */
+  void parse() {
+    LOG.debug("Indexing project file: {}", fileName);
     try {
       SAXParserFactory factory = SAXParserFactory.newInstance();
       factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       SAXParser parser = factory.newSAXParser();
       parser.parse(fileName, this);
-    } catch (ParserConfigurationException | SAXException | RuntimeException e) {
+    } catch (ParserConfigurationException | SAXException | IOException e) {
       LOG.error("{}: Error while parsing project file: ", fileName, e);
     }
   }
@@ -129,7 +124,7 @@ public class DelphiProjectXmlParser extends DefaultHandler {
   }
 
   private void handleDCCReferenceStart(Attributes attributes) {
-    File sourceFile = new File(resolveBacktracePath(currentDir, attributes.getValue("Include")));
+    Path sourceFile = resolvePathFromBaseDir(baseDir, Path.of(attributes.getValue("Include")));
     project.addSourceFile(sourceFile);
   }
 
@@ -150,8 +145,8 @@ public class DelphiProjectXmlParser extends DefaultHandler {
       if (path.startsWith("$")) {
         continue;
       }
-      path = resolveBacktracePath(currentDir, path);
-      project.addSearchPathDirectory(Path.of(path));
+      Path searchPathDirectory = resolvePathFromBaseDir(baseDir, Path.of(path));
+      project.addSearchDirectory(searchPathDirectory);
     }
   }
 

@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi;
 
-import java.io.File;
+import static org.sonar.plugins.delphi.utils.DelphiUtils.inputFilesToPaths;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,14 +20,13 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.codecoverage.DelphiCodeCoverageParser;
 import org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
-import org.sonar.plugins.delphi.core.helpers.DelphiProjectHelper;
 import org.sonar.plugins.delphi.executor.DelphiMasterExecutor;
 import org.sonar.plugins.delphi.executor.ExecutorContext;
 import org.sonar.plugins.delphi.file.DelphiFile;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiFileConstructionException;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.file.DelphiFileConfig;
-import org.sonar.plugins.delphi.project.DelphiProject;
+import org.sonar.plugins.delphi.project.DelphiProjectHelper;
 import org.sonar.plugins.delphi.symbol.SymbolTable;
 import org.sonar.plugins.delphi.utils.ProgressReporter;
 import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
@@ -62,42 +62,46 @@ public class DelphiSensor implements Sensor {
   public void execute(@NonNull SensorContext context) {
     if (shouldExecuteOnProject()) {
       executor.setup();
-      for (DelphiProject delphiProject : delphiProjectHelper.getProjects()) {
-        executeOnProject(delphiProject, context);
-      }
+      executeOnFiles(context);
       executor.complete();
       addCoverage(context);
     }
   }
 
-  private void executeOnProject(DelphiProject delphiProject, SensorContext sensorContext) {
+  private void executeOnFiles(SensorContext sensorContext) {
+    Iterable<InputFile> inputFiles = delphiProjectHelper.mainFiles();
+    List<Path> sourceFiles = inputFilesToPaths(inputFiles);
+
     DelphiFileConfig config =
         DelphiFile.createConfig(
             delphiProjectHelper.encoding(),
-            delphiProject.getSearchPath(),
-            delphiProject.getDefinitions());
+            delphiProjectHelper.getSearchDirectories(),
+            delphiProjectHelper.getConditionalDefines());
 
     SymbolTable symbolTable =
         SymbolTable.builder()
-            .project(delphiProject)
-            .fileConfig(config)
+            .sourceFiles(sourceFiles)
+            .searchDirectories(delphiProjectHelper.getSearchDirectories())
+            .unitScopeNames(delphiProjectHelper.getUnitScopeNames())
             .standardLibraryPath(delphiProjectHelper.standardLibraryPath())
+            .fileConfig(config)
             .build();
 
-    LOG.info("Analyzing project: {}", delphiProject.getName());
+    LOG.info("Analyzing {} files...", sourceFiles.size());
 
     ExecutorContext executorContext = new ExecutorContext(sensorContext, symbolTable);
     ProgressReporter progressReporter =
-        new ProgressReporter(
-            delphiProject.getSourceFiles().size(), 10, new ProgressReporterLogger(LOG));
+        new ProgressReporter(sourceFiles.size(), 10, new ProgressReporterLogger(LOG));
 
-    for (File sourceFile : delphiProject.getSourceFiles()) {
+    for (Path sourceFile : sourceFiles) {
+      String absolutePath = sourceFile.toAbsolutePath().toString();
+
       try {
-        InputFile inputFile = delphiProjectHelper.getFile(sourceFile.getAbsolutePath());
+        InputFile inputFile = delphiProjectHelper.getFile(absolutePath);
         DelphiInputFile delphiFile = DelphiInputFile.from(inputFile, config);
         executor.execute(executorContext, delphiFile);
       } catch (DelphiFileConstructionException e) {
-        String error = String.format("Error while analyzing %s", sourceFile.getAbsolutePath());
+        String error = String.format("Error while analyzing %s", absolutePath);
         LOG.error(error, e);
         errors.add(error);
       }

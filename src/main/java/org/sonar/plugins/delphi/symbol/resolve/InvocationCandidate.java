@@ -16,14 +16,14 @@ import java.util.List;
 public class InvocationCandidate {
   public static final int CONVERT_LEVELS = 6;
 
-  private Invocable data;
+  private final Invocable data;
   private int exactCount;
   private int equalCount;
-  private int[] convertLevelCount;
+  private final int[] convertLevelCount;
   private int convertOperatorCount;
   private double ordinalDistance;
   private int proceduralDistance;
-  private List<VariantConversionType> variantConversions;
+  private final List<VariantConversionType> variantConversions;
   private boolean invalid;
 
   public InvocationCandidate(Invocable invocable) {

@@ -5,8 +5,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Set;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
-import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
-import org.sonar.plugins.delphi.antlr.preprocessor.CompilerSwitchRegistry;
+import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
+import org.sonar.plugins.delphi.preprocessor.CompilerSwitchRegistry;
 
 class DefaultDelphiFile implements DelphiFile {
   private File sourceCodeFile;
