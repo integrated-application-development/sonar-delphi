@@ -54,6 +54,13 @@
         <role>developer</role>
       </roles>
     </developer>
+    <developer>
+      <id>jej</id>
+      <name>Jonah Jeleniewski</name>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
   </developers>
   <distributionManagement>
     <site>
@@ -67,9 +74,6 @@
     <sonar.pluginClass>org.sonar.plugins.delphi.DelphiPlugin</sonar.pluginClass>
     <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
     <sonar.issuesReport.html.enable>true</sonar.issuesReport.html.enable>
-    <maven.test.skip>false</maven.test.skip>
-    <maven.showDeprecation.showWarnings>true</maven.showDeprecation.showWarnings>
-    <maven.compiler.showWarnings>true</maven.compiler.showWarnings>
     <!--Jacoco properties-->
     <jacoco.dataFile>${basedir}/target/jacoco/jacoco.exec</jacoco.dataFile>
     <jacoco.outputDirectory>${basedir}/target/jacoco/report/</jacoco.outputDirectory>
@@ -77,7 +81,7 @@
     <jacoco.outputDirectory.it>${basedir}/target/jacoco/report-it/</jacoco.outputDirectory.it>
     <!--Version Fields-->
     <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
-    <sonar.version>7.9.1</sonar.version>
+    <sonar.version>7.9</sonar.version>
     <sonarqube-smell-api.version>4.0.0</sonarqube-smell-api.version>
     <sonar-orchestrator.version>3.27.0.2172</sonar-orchestrator.version>
     <antlr-runtime.version>3.4</antlr-runtime.version>
@@ -112,18 +116,6 @@
       <artifactId>sonar-plugin-api</artifactId>
       <version>${sonar.version}</version>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.sonarsource.sonarqube</groupId>
-      <artifactId>sonar-testing-harness</artifactId>
-      <version>${sonar.version}</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>hamcrest-all</artifactId>
-          <groupId>org.hamcrest</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
@@ -269,6 +261,8 @@
         <configuration>
           <source>11</source>
           <target>11</target>
+          <showWarnings>true</showWarnings>
+          <showDeprecation>true</showDeprecation>
           <compilerArgs>
             <arg>-XDcompilePolicy=simple</arg>
             <arg>-Xlint:all,-serial,-path,-processing,-rawtypes,-cast,-classfile</arg>
