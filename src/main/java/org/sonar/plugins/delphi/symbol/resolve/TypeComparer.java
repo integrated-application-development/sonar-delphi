@@ -10,24 +10,33 @@ import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_OPERA
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.EQUAL;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.EXACT;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
-import static org.sonar.plugins.delphi.symbol.resolve.VariantEqualityType.INCOMPATIBLE_VARIANT;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.INCOMPATIBLE_VARIANT;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.CURRENCY;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.SINGLE;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSISTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.SHORTSTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.STRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDESTRING;
 
 import java.util.List;
 import org.assertj.core.util.VisibleForTesting;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.BooleanType;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.DecimalType;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.IntegerType;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Type.ArrayConstructorType;
+import org.sonar.plugins.delphi.type.Type.BooleanType;
 import org.sonar.plugins.delphi.type.Type.ClassReferenceType;
 import org.sonar.plugins.delphi.type.Type.CollectionType;
+import org.sonar.plugins.delphi.type.Type.DecimalType;
 import org.sonar.plugins.delphi.type.Type.EnumType;
 import org.sonar.plugins.delphi.type.Type.FileType;
+import org.sonar.plugins.delphi.type.Type.IntegerType;
 import org.sonar.plugins.delphi.type.Type.PointerType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
+import org.sonar.plugins.delphi.type.Type.TextType;
 import org.sonar.plugins.delphi.type.Type.TypeType;
 import org.sonar.plugins.delphi.type.Type.VariantType;
 import org.sonar.plugins.delphi.type.Type.VariantType.VariantKind;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher;
 
 public class TypeComparer {
   private TypeComparer() {
@@ -55,7 +64,7 @@ public class TypeComparer {
       to = ((TypeType) to).originalType();
     }
 
-    EqualityType result = INCOMPATIBLE_TYPES;
+    EqualityType result;
 
     if (to.isInteger()) {
       result = compareInteger(from, to);
@@ -73,7 +82,7 @@ public class TypeComparer {
       result = compareSet(from, to);
     } else if (to.isProcedural()) {
       result = compareProceduralType(from, to);
-    } else if (to.isObject()) {
+    } else if (to.isStruct()) {
       result = compareObject(from, to);
     } else if (to.isClassReference()) {
       result = compareClassReference(from, to);
@@ -85,10 +94,12 @@ public class TypeComparer {
       result = compareUntyped(from);
     } else if (to.isVariant()) {
       result = compareVariant(from);
+    } else {
+      result = tryIntrinsicArgumentTypes(from, to);
     }
 
     if (result == INCOMPATIBLE_TYPES && (from.isVariant() || to.isVariant())) {
-      if (from.isVariant() && VariantEqualityType.fromType(to) != INCOMPATIBLE_VARIANT) {
+      if (from.isVariant() && VariantConversionType.fromType(to) != INCOMPATIBLE_VARIANT) {
         result = CONVERT_LEVEL_6;
       } else {
         result = CONVERT_OPERATOR;
@@ -100,17 +111,17 @@ public class TypeComparer {
 
   private static EqualityType compareInteger(Type from, Type to) {
     if (from.isInteger()) {
-      IntegerType fromData = IntegerType.fromType(from);
-      IntegerType toData = IntegerType.fromType(to);
-      if (fromData.isSameRange(toData)) {
+      IntegerType fromInteger = (IntegerType) from;
+      IntegerType toInteger = (IntegerType) to;
+      if (fromInteger.isSameRange(toInteger)) {
         return EQUAL;
-      } else if (fromData.isWithinLimit(toData)) {
+      } else if (fromInteger.isWithinLimit(toInteger)) {
         return CONVERT_LEVEL_1;
       } else {
         // Penalty for bad type conversion
         return CONVERT_LEVEL_3;
       }
-    } else if (from.is(DecimalType.CURRENCY.type)) {
+    } else if (from.is(CURRENCY.type)) {
       return CONVERT_LEVEL_2;
     }
     return INCOMPATIBLE_TYPES;
@@ -118,18 +129,18 @@ public class TypeComparer {
 
   private static EqualityType compareDecimal(Type from, Type to) {
     if (from.isInteger()) {
-      if (to.is(DecimalType.SINGLE.type)) {
+      if (to.is(SINGLE.type)) {
         // prefer single over others
         return CONVERT_LEVEL_3;
       } else {
         return CONVERT_LEVEL_4;
       }
     } else if (from.isDecimal()) {
-      DecimalType fromData = DecimalType.fromType(from);
-      DecimalType toData = DecimalType.fromType(to);
-      if (fromData.size == toData.size) {
+      DecimalType fromDecimal = (DecimalType) from;
+      DecimalType toDecimal = (DecimalType) to;
+      if (fromDecimal.size() == toDecimal.size()) {
         return EQUAL;
-      } else if (toData.size < fromData.size) {
+      } else if (toDecimal.size() < fromDecimal.size()) {
         // Penalty for lost precision
         return CONVERT_LEVEL_2;
       } else {
@@ -150,15 +161,17 @@ public class TypeComparer {
 
   @VisibleForTesting
   static EqualityType compareStringToText(Type from, Type to) {
-    if (from.is(TextType.STRING.type)) {
+    if (from.is(to)) {
+      return EQUAL;
+    } else if (from.is(STRING.type)) {
       return compareNormalStringToText(to);
-    } else if (from.is(TextType.WIDESTRING.type)) {
+    } else if (from.is(WIDESTRING.type)) {
       return compareWideStringToText(to);
-    } else if (from.is(TextType.UNICODESTRING.type)) {
+    } else if (from.is(UNICODESTRING.type)) {
       return compareUnicodeStringToText(to);
-    } else if (from.is(TextType.SHORTSTRING.type)) {
+    } else if (from.is(SHORTSTRING.type)) {
       return compareShortStringToText(to);
-    } else if (from.is(TextType.ANSISTRING.type)) {
+    } else if (from.is(ANSISTRING.type)) {
       return CONVERT_LEVEL_1;
     }
 
@@ -166,11 +179,11 @@ public class TypeComparer {
   }
 
   private static EqualityType compareNormalStringToText(Type to) {
-    if (to.is(TextType.UNICODESTRING.type)) {
+    if (to.is(UNICODESTRING.type)) {
       return CONVERT_LEVEL_1;
-    } else if (to.is(TextType.WIDESTRING.type)) {
+    } else if (to.is(WIDESTRING.type)) {
       return CONVERT_LEVEL_2;
-    } else if (to.is(TextType.ANSISTRING.type)) {
+    } else if (to.is(ANSISTRING.type)) {
       return CONVERT_LEVEL_3;
     } else {
       return CONVERT_LEVEL_4;
@@ -178,9 +191,9 @@ public class TypeComparer {
   }
 
   private static EqualityType compareWideStringToText(Type to) {
-    if (to.is(TextType.UNICODESTRING.type)) {
+    if (to.is(UNICODESTRING.type)) {
       return CONVERT_LEVEL_1;
-    } else if (to.is(TextType.ANSISTRING.type)) {
+    } else if (to.is(ANSISTRING.type)) {
       return CONVERT_LEVEL_2;
     } else {
       return CONVERT_LEVEL_3;
@@ -188,9 +201,9 @@ public class TypeComparer {
   }
 
   private static EqualityType compareUnicodeStringToText(Type to) {
-    if (to.is(TextType.WIDESTRING.type)) {
+    if (to.is(WIDESTRING.type)) {
       return CONVERT_LEVEL_1;
-    } else if (to.is(TextType.ANSISTRING.type)) {
+    } else if (to.is(ANSISTRING.type)) {
       return CONVERT_LEVEL_2;
     } else {
       return CONVERT_LEVEL_3;
@@ -198,9 +211,9 @@ public class TypeComparer {
   }
 
   private static EqualityType compareShortStringToText(Type to) {
-    if (to.is(TextType.ANSISTRING.type)) {
+    if (to.is(ANSISTRING.type)) {
       return CONVERT_LEVEL_1;
-    } else if (to.is(TextType.UNICODESTRING.type)) {
+    } else if (to.is(UNICODESTRING.type)) {
       return CONVERT_LEVEL_2;
     } else {
       return CONVERT_LEVEL_3;
@@ -222,37 +235,41 @@ public class TypeComparer {
 
   @VisibleForTesting
   static EqualityType compareAnsiCharToText(Type to) {
-    if (to.is(TextType.SHORTSTRING.type)) {
+    if (to.isChar()) {
       return CONVERT_LEVEL_1;
-    } else if (to.is(TextType.ANSISTRING.type)) {
+    } else if (to.is(SHORTSTRING.type)) {
       return CONVERT_LEVEL_2;
-    } else if (to.is(TextType.STRING.type) || to.is(TextType.UNICODESTRING.type)) {
+    } else if (to.is(ANSISTRING.type)) {
       return CONVERT_LEVEL_3;
-    } else if (to.is(TextType.WIDESTRING.type)) {
+    } else if (to.is(STRING.type) || to.is(UNICODESTRING.type)) {
       return CONVERT_LEVEL_4;
+    } else if (to.is(WIDESTRING.type)) {
+      return CONVERT_LEVEL_5;
     }
     return INCOMPATIBLE_TYPES;
   }
 
   @VisibleForTesting
   static EqualityType compareWideCharToText(Type to) {
-    if (to.is(TextType.STRING.type) || to.is(TextType.UNICODESTRING.type)) {
+    if (to.isWideChar()) {
       return CONVERT_LEVEL_1;
-    } else if (to.is(TextType.WIDESTRING.type)) {
+    } else if (to.is(STRING.type) || to.is(UNICODESTRING.type)) {
       return CONVERT_LEVEL_2;
-    } else if (to.is(TextType.ANSISTRING.type)) {
+    } else if (to.is(WIDESTRING.type) || to.isNarrowChar()) {
       return CONVERT_LEVEL_3;
-    } else if (to.is(TextType.SHORTSTRING.type)) {
+    } else if (to.is(ANSISTRING.type)) {
       return CONVERT_LEVEL_4;
+    } else if (to.is(SHORTSTRING.type)) {
+      return CONVERT_LEVEL_5;
     }
     return INCOMPATIBLE_TYPES;
   }
 
   private static EqualityType compareBoolean(Type from, Type to) {
     if (from.isBoolean()) {
-      BooleanType fromData = BooleanType.fromType(from);
-      BooleanType toData = BooleanType.fromType(to);
-      if (fromData.size > toData.size) {
+      BooleanType fromBoolean = (BooleanType) from;
+      BooleanType toBoolean = (BooleanType) to;
+      if (fromBoolean.size() > toBoolean.size()) {
         // Penalty for bad type conversion
         return CONVERT_LEVEL_3;
       }
@@ -310,6 +327,8 @@ public class TypeComparer {
       } else {
         return compareFixedArray(fromArray, toArray);
       }
+    } else if (from.isArrayConstructor()) {
+      return compareArrayConstructorToArray((ArrayConstructorType) from, toArray);
     } else if (from.isPointer()) {
       return comparePointerToArray((PointerType) from, toArray);
     } else if (from.isNarrowChar()) {
@@ -319,6 +338,61 @@ public class TypeComparer {
     }
 
     return INCOMPATIBLE_TYPES;
+  }
+
+  private static EqualityType compareArrayConstructorToArray(
+      ArrayConstructorType from, CollectionType to) {
+    if (to.isArrayOfConst()) {
+      return EQUAL;
+    } else if (to.isDynamicArray()) {
+      return compareArrayConstructorToDynamicArray(from, to);
+    } else if (to.isOpenArray()) {
+      return compareArrayConstructorToOpenArray(from, to);
+    }
+    return INCOMPATIBLE_TYPES;
+  }
+
+  private static EqualityType compareArrayConstructorToDynamicArray(
+      ArrayConstructorType from, CollectionType to) {
+    if (from.isEmpty()) {
+      // Only needs to lose to [] -> open array
+      return CONVERT_LEVEL_2;
+    }
+
+    // this should lose to the array constructor -> open array conversions,
+    // but it might happen that the end of the convert levels is reached
+    var subEquality = compare(from.elementTypes().get(0), to.elementType());
+    if (subEquality.ordinal() >= EQUAL.ordinal()) {
+      return CONVERT_LEVEL_2;
+    } else if (subEquality.ordinal() > CONVERT_LEVEL_5.ordinal()) {
+      // an array constructor is not a dynamic array, so use a lower level of compatibility
+      // than that one of the elements
+      return EqualityType.values()[subEquality.ordinal() - 2];
+    } else if (subEquality == CONVERT_LEVEL_6) {
+      return CONVERT_LEVEL_5;
+    } else if (subEquality == CONVERT_OPERATOR) {
+      return CONVERT_LEVEL_6;
+    } else {
+      return subEquality;
+    }
+  }
+
+  private static EqualityType compareArrayConstructorToOpenArray(
+      ArrayConstructorType from, CollectionType to) {
+    if (from.isEmpty()) {
+      return CONVERT_LEVEL_1;
+    } else {
+      var subEquality = compare(from.elementTypes().get(0), to.elementType());
+      if (subEquality.ordinal() >= EQUAL.ordinal()) {
+        return CONVERT_LEVEL_1;
+      } else if (subEquality.ordinal() > CONVERT_LEVEL_6.ordinal()) {
+        // an array constructor is not an open array, so use a lower level of compatibility
+        // than that one of the elements
+        return EqualityType.values()[subEquality.ordinal() - 1];
+      } else {
+        return subEquality;
+      }
+    }
   }
 
   private static EqualityType compareDynamicArray(CollectionType from, CollectionType to) {
@@ -376,6 +450,9 @@ public class TypeComparer {
       } else if (equals(fromSet.elementType(), toSet.elementType())) {
         return EQUAL;
       }
+    } else if (from.isArrayConstructor()) {
+      // Automatic array constructor -> set conversion
+      return CONVERT_LEVEL_1;
     }
 
     return INCOMPATIBLE_TYPES;
@@ -423,7 +500,7 @@ public class TypeComparer {
   }
 
   private static EqualityType compareObject(Type from, Type to) {
-    if (from.isObject() && from.isSubTypeOf(to)) {
+    if (from.isStruct() && from.isSubTypeOf(to)) {
       return CONVERT_LEVEL_3;
     } else if (from.isPointer()) {
       PointerType fromPointer = (PointerType) from;
@@ -469,23 +546,51 @@ public class TypeComparer {
   }
 
   private static EqualityType comparePointer(Type from, Type to) {
-    Type pointerTo = ((PointerType) to).dereferencedType();
-    if (from.isText()) {
-      if (from.is(TextType.SHORTSTRING.type)) {
-        if (pointerTo.isWideChar()) {
-          return CONVERT_LEVEL_2;
-        } else {
-          return CONVERT_LEVEL_3;
-        }
-      } else if (from.isChar()) {
-        if (pointerTo.isWideChar()) {
-          return CONVERT_LEVEL_1;
-        } else {
-          return CONVERT_LEVEL_2;
-        }
-      }
+    PointerType pointerTo = (PointerType) to;
+    if (from.isPointer()) {
+      return comparePointerToPointer((PointerType) from, pointerTo);
+    } else if (from.isText()) {
+      return compareTextToPointer((TextType) from, pointerTo);
     } else if (from.isInteger()) {
       return CONVERT_LEVEL_5;
+    }
+    return INCOMPATIBLE_TYPES;
+  }
+
+  private static EqualityType comparePointerToPointer(PointerType from, PointerType to) {
+    if (equals(from.dereferencedType(), to.dereferencedType())) {
+      return EQUAL;
+    } else if (from.dereferencedType().isSubTypeOf(to.dereferencedType())) {
+      return CONVERT_LEVEL_1;
+    } else if (to.isUntypedPointer()) {
+      // All pointers can be assigned to untyped pointer
+      if (from.dereferencedType().isChar()) {
+        return CONVERT_LEVEL_2;
+      }
+      return CONVERT_LEVEL_1;
+    } else if (from.isUntypedPointer()) {
+      // All pointers can be assigned from untyped pointer
+      if (to.dereferencedType().isWideChar()) {
+        return CONVERT_LEVEL_2;
+      }
+      return CONVERT_LEVEL_1;
+    }
+    return INCOMPATIBLE_TYPES;
+  }
+
+  private static EqualityType compareTextToPointer(TextType from, PointerType to) {
+    if (from.is(SHORTSTRING.type) && to.dereferencedType().isChar()) {
+      if (to.dereferencedType().isWideChar()) {
+        return CONVERT_LEVEL_2;
+      } else {
+        return CONVERT_LEVEL_3;
+      }
+    } else if (from.isChar() && to.dereferencedType().isChar()) {
+      if (to.dereferencedType().isWideChar()) {
+        return CONVERT_LEVEL_1;
+      } else {
+        return CONVERT_LEVEL_2;
+      }
     }
     return INCOMPATIBLE_TYPES;
   }
@@ -499,6 +604,14 @@ public class TypeComparer {
 
     if (oleVariant || from.isEnum() || from.isDynamicArray() || from.isInterface()) {
       return CONVERT_LEVEL_1;
+    }
+
+    return INCOMPATIBLE_TYPES;
+  }
+
+  private static EqualityType tryIntrinsicArgumentTypes(Type from, Type to) {
+    if (to instanceof IntrinsicArgumentMatcher && ((IntrinsicArgumentMatcher) to).matches(from)) {
+      return EQUAL;
     }
 
     return INCOMPATIBLE_TYPES;

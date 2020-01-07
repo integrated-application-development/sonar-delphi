@@ -6,9 +6,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.Type.EnumType;
-import org.sonar.plugins.delphi.type.Type.ScopedType;
 
-public class DelphiEnumerationType extends DelphiType implements EnumType, ScopedType {
+public class DelphiEnumerationType extends DelphiType implements EnumType {
   private final DelphiScope scope;
   @Nullable private final Type baseType;
 

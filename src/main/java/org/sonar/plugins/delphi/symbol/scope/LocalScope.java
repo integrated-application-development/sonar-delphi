@@ -20,6 +20,6 @@ public class LocalScope extends AbstractDelphiScope {
 
   @Override
   public String toString() {
-    return "LocalScope:" + glomNames(getVariableDeclarations().keySet());
+    return "LocalScope:" + glomNames(getVariableDeclarations());
   }
 }

@@ -7,6 +7,9 @@ import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
 import org.sonar.plugins.delphi.type.Type;
 
 public interface Invocable {
+
+  String getName();
+
   List<ParameterDeclaration> getParameters();
 
   Type getReturnType();

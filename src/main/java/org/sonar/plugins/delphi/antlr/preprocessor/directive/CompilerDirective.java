@@ -1,6 +1,8 @@
 package org.sonar.plugins.delphi.antlr.preprocessor.directive;
 
 import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.preprocessor.DelphiPreprocessor;
 
@@ -30,6 +32,10 @@ public interface CompilerDirective {
     }
 
     interface ExpressionValue {
+      interface BinaryEvaluator
+          extends BiFunction<ExpressionValue, ExpressionValue, ExpressionValue> {}
+
+      interface UnaryEvaluator extends Function<ExpressionValue, ExpressionValue> {}
 
       Expression.ConstExpressionType type();
 

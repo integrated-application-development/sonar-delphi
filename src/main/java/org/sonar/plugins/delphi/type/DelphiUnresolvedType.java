@@ -1,13 +1,16 @@
 package org.sonar.plugins.delphi.type;
 
+import com.google.errorprone.annotations.Immutable;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
+import org.sonar.plugins.delphi.type.Type.ImmutableType;
 
-public class DelphiUnresolvedType extends DelphiType {
+@Immutable
+public class DelphiUnresolvedType extends DelphiType implements ImmutableType {
   private DelphiUnresolvedType(NameReferenceNode reference) {
     super(reference.getImage());
   }
 
-  public static Type referenceTo(NameReferenceNode reference) {
+  public static ImmutableType referenceTo(NameReferenceNode reference) {
     return new DelphiUnresolvedType(reference);
   }
 

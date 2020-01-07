@@ -29,6 +29,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.AnonymousMethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.AnsiStringTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ArgumentListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ArrayAccessorNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ArrayConstructorNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ArrayExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ArrayIndicesNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ArrayTypeNode;
@@ -109,6 +110,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.ProcedureReferenceTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ProcedureTypeHeadingNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ProcedureTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ProgramDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.PropertyNameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyReadSpecifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyWriteSpecifierNode;
@@ -123,7 +125,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.RecordVariantItemNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RecordVariantSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RepeatStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RequiresClauseNode;
-import org.sonar.plugins.delphi.antlr.ast.node.SetLiteralNode;
 import org.sonar.plugins.delphi.antlr.ast.node.SetTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.StatementListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.StatementNode;
@@ -147,7 +148,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.VarDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarNameDeclarationListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarNameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarSectionNode;
-import org.sonar.plugins.delphi.antlr.ast.node.VariantTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VisibilityNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VisibilitySectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.WhileStatementNode;
@@ -393,6 +393,10 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
+  default T visit(PropertyNameDeclarationNode node, T data) {
+    return visit((NameDeclarationNode) node, data);
+  }
+
   default T visit(QualifiedNameDeclarationNode node, T data) {
     return visit((NameDeclarationNode) node, data);
   }
@@ -492,10 +496,6 @@ public interface DelphiParserVisitor<T> {
     return visit((TypeNode) node, data);
   }
 
-  default T visit(VariantTypeNode node, T data) {
-    return visit((TypeNode) node, data);
-  }
-
   /* Procedural types */
   default T visit(ProceduralTypeNode node, T data) {
     return visit((TypeNode) node, data);
@@ -556,6 +556,10 @@ public interface DelphiParserVisitor<T> {
     return visit((ExpressionNode) node, data);
   }
 
+  default T visit(ArrayConstructorNode node, T data) {
+    return visit((ExpressionNode) node, data);
+  }
+
   default T visit(ArrayExpressionNode node, T data) {
     return visit((ExpressionNode) node, data);
   }
@@ -602,10 +606,6 @@ public interface DelphiParserVisitor<T> {
   }
 
   default T visit(NilLiteralNode node, T data) {
-    return visit((LiteralNode) node, data);
-  }
-
-  default T visit(SetLiteralNode node, T data) {
     return visit((LiteralNode) node, data);
   }
 

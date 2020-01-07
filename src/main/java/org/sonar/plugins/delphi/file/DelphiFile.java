@@ -14,10 +14,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import net.sourceforge.pmd.lang.ast.GenericToken;
+import org.antlr.runtime.BufferedTokenStream;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.TokenRewriteStream;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.DelphiParser;
@@ -26,6 +26,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.DelphiToken;
 import org.sonar.plugins.delphi.antlr.ast.DelphiTreeAdaptor;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.delphi.antlr.preprocessor.CompilerSwitchRegistry;
 import org.sonar.plugins.delphi.antlr.preprocessor.DelphiPreprocessor;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -42,6 +43,8 @@ public interface DelphiFile {
   List<DelphiToken> getComments();
 
   Set<Integer> getSuppressions();
+
+  CompilerSwitchRegistry getCompilerSwitchRegistry();
 
   interface DelphiInputFile extends DelphiFile {
     InputFile getInputFile();
@@ -79,8 +82,10 @@ public interface DelphiFile {
   static void setupFile(DefaultDelphiFile delphiFile, File sourceFile, DelphiFileConfig config) {
     try {
       delphiFile.setSourceCodeFile(sourceFile);
+      DelphiPreprocessor preprocessor = preprocess(delphiFile, config);
+      delphiFile.setAst(createAST(delphiFile, preprocessor.getTokenStream(), config));
+      delphiFile.setCompilerSwitchRegistry(preprocessor.getCompilerSwitchRegistry());
       delphiFile.setSourceCodeLines(readLines(sourceFile, config.getEncoding()));
-      delphiFile.setAst(createAST(delphiFile, config));
       delphiFile.setTokens(createTokenList(delphiFile));
       delphiFile.setComments(extractComments(delphiFile.getTokens()));
       delphiFile.setSuppressions(findSuppressionLines(delphiFile.getComments()));
@@ -89,15 +94,20 @@ public interface DelphiFile {
     }
   }
 
-  private static DelphiAST createAST(DelphiFile delphiFile, DelphiFileConfig config)
-      throws IOException, RecognitionException {
+  private static DelphiPreprocessor preprocess(DelphiFile delphiFile, DelphiFileConfig config)
+      throws IOException {
     String filePath = delphiFile.getSourceCodeFile().getAbsolutePath();
     LowercaseFileStream fileStream = new LowercaseFileStream(filePath, config.getEncoding());
 
-    DelphiLexer lexer = new DelphiLexer(fileStream);
+    DelphiLexer lexer = new DelphiLexer(fileStream, config.shouldSkipImplementation());
     DelphiPreprocessor preprocessor = new DelphiPreprocessor(lexer, config);
-    TokenRewriteStream tokenStream = preprocessor.process();
+    preprocessor.process();
+    return preprocessor;
+  }
 
+  private static DelphiAST createAST(
+      DelphiFile delphiFile, BufferedTokenStream tokenStream, DelphiFileConfig config)
+      throws RecognitionException {
     List<?> tokens = tokenStream.getTokens();
     boolean isEmptyFile =
         tokens.stream()
@@ -110,7 +120,13 @@ public interface DelphiFile {
 
     DelphiParser parser = new DelphiParser(tokenStream);
     parser.setTreeAdaptor(new DelphiTreeAdaptor());
-    DelphiNode root = (DelphiNode) parser.file().getTree();
+    DelphiNode root;
+
+    if (config.shouldSkipImplementation()) {
+      root = (DelphiNode) parser.fileWithoutImplementation().getTree();
+    } else {
+      root = (DelphiNode) parser.file().getTree();
+    }
 
     return new DelphiAST(delphiFile, root);
   }

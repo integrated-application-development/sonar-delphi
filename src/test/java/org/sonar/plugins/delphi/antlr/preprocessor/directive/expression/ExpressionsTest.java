@@ -173,13 +173,15 @@ public class ExpressionsTest {
   @Test
   public void testBinaryExpressionWithUnhandledOperatorShouldThrow() {
     Expression expression = binary(literal(INTEGER, "1"), UNKNOWN, literal(INTEGER, "1"));
-    assertThatThrownBy(() -> expression.evaluate(preprocessor)).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(() -> expression.evaluate(preprocessor))
+        .isInstanceOf(NullPointerException.class);
   }
 
   @Test
   public void testUnaryExpressionWithUnhandledOperatorShouldThrow() {
     Expression expression = unary(UNKNOWN, literal(INTEGER, "1"));
-    assertThatThrownBy(() -> expression.evaluate(preprocessor)).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(() -> expression.evaluate(preprocessor))
+        .isInstanceOf(NullPointerException.class);
   }
 
   @Test

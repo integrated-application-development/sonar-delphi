@@ -14,8 +14,7 @@ public enum StructKind {
   INTERFACE(InterfaceTypeNode.class),
   OBJECT(ObjectTypeNode.class),
   RECORD(RecordTypeNode.class),
-  RECORD_HELPER(RecordHelperTypeNode.class),
-  UNKNOWN(null);
+  RECORD_HELPER(RecordHelperTypeNode.class);
 
   private final Class<? extends DelphiNode> nodeType;
 
@@ -29,6 +28,6 @@ public enum StructKind {
         return kind;
       }
     }
-    return UNKNOWN;
+    throw new AssertionError("Unknown StructKind. TypeNode: " + node.getClass().getSimpleName());
   }
 }

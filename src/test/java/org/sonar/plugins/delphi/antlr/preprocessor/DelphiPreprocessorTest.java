@@ -3,6 +3,7 @@ package org.sonar.plugins.delphi.antlr.preprocessor;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -10,7 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.antlr.runtime.TokenRewriteStream;
+import org.antlr.runtime.BufferedTokenStream;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.DelphiParser;
@@ -49,13 +50,42 @@ public class DelphiPreprocessorTest {
   }
 
   @Test
-  public void testIncludeDirectives() {
+  public void testNestedIncludeDirectives() {
     executeWithSearchPath("includeTest/NestedSearchPath.pas", "includes", "nestedIncludes");
   }
 
   @Test
-  public void testResolveErrorShouldNotThrowException() {
-    execute("includeTest/ResolveError.pas");
+  public void testSameNameBacktrackIncludeDirectives() {
+    execute("includeTest/SameNameBacktrack.pas");
+  }
+
+  @Test
+  public void testBadIncludeTokenShouldNotThrowException() {
+    execute("includeTest/BadIncludeToken.pas");
+  }
+
+  @Test
+  public void testNonexistentIncludeShouldNotThrowException() {
+    executeWithSearchPath("includeTest/IncludeDoesNotExist.pas", "includes");
+  }
+
+  @Test
+  public void testSelfReferencingIncludeShouldNotThrowException() {
+    executeWithSearchPath("includeTest/SelfReferencingInclude.pas");
+  }
+
+  @Test
+  public void testCallingProcessTwiceShouldThrowException() throws Exception {
+    String filePath =
+        DelphiUtils.getResource(BASE_DIR + "includeTest/SameNameBacktrack.pas").getAbsolutePath();
+    DelphiFileConfig config = DelphiFile.createConfig(UTF_8.name(), emptyList(), emptySet());
+    LowercaseFileStream fileStream = new LowercaseFileStream(filePath, config.getEncoding());
+
+    DelphiLexer lexer = new DelphiLexer(fileStream);
+    DelphiPreprocessor preprocessor = new DelphiPreprocessor(lexer, config);
+    preprocessor.process();
+
+    assertThatThrownBy(preprocessor::process).isInstanceOf(IllegalStateException.class);
   }
 
   private static void executeWithDefines(String filename, String... defines) {
@@ -83,7 +113,8 @@ public class DelphiPreprocessorTest {
 
       DelphiLexer lexer = new DelphiLexer(fileStream);
       DelphiPreprocessor preprocessor = new DelphiPreprocessor(lexer, config);
-      TokenRewriteStream tokenStream = preprocessor.process();
+      preprocessor.process();
+      BufferedTokenStream tokenStream = preprocessor.getTokenStream();
 
       DelphiParser parser = new DelphiParser(tokenStream);
       parser.setTreeAdaptor(new DelphiTreeAdaptor());

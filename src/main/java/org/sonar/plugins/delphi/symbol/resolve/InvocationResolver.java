@@ -1,8 +1,7 @@
 package org.sonar.plugins.delphi.symbol.resolve;
 
-import static java.lang.Double.POSITIVE_INFINITY;
+import static com.google.common.base.Preconditions.checkState;
 import static java.lang.Math.abs;
-import static java.lang.Math.nextAfter;
 import static java.util.function.Predicate.not;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_1;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_2;
@@ -11,20 +10,22 @@ import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.EQUAL;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.EXACT;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
-import static org.sonar.plugins.delphi.symbol.resolve.VariantEqualityType.ANSISTRING;
-import static org.sonar.plugins.delphi.symbol.resolve.VariantEqualityType.BYTE;
-import static org.sonar.plugins.delphi.symbol.resolve.VariantEqualityType.CARDINAL;
-import static org.sonar.plugins.delphi.symbol.resolve.VariantEqualityType.DOUBLE_CURRENCY;
-import static org.sonar.plugins.delphi.symbol.resolve.VariantEqualityType.EXTENDED;
-import static org.sonar.plugins.delphi.symbol.resolve.VariantEqualityType.FORMAL_BOOLEAN;
-import static org.sonar.plugins.delphi.symbol.resolve.VariantEqualityType.INCOMPATIBLE_VARIANT;
-import static org.sonar.plugins.delphi.symbol.resolve.VariantEqualityType.LONGINT;
-import static org.sonar.plugins.delphi.symbol.resolve.VariantEqualityType.SHORTINT;
-import static org.sonar.plugins.delphi.symbol.resolve.VariantEqualityType.SINGLE;
-import static org.sonar.plugins.delphi.symbol.resolve.VariantEqualityType.SMALLINT;
-import static org.sonar.plugins.delphi.symbol.resolve.VariantEqualityType.UNICODESTRING;
-import static org.sonar.plugins.delphi.symbol.resolve.VariantEqualityType.WIDESTRING;
-import static org.sonar.plugins.delphi.symbol.resolve.VariantEqualityType.WORD;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.ANSISTRING;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.BYTE;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.CARDINAL;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.DOUBLE_CURRENCY;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.EXTENDED;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.FORMAL_BOOLEAN;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.INCOMPATIBLE_VARIANT;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.LONGINT;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.NO_CONVERSION_REQUIRED;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.SHORTINT;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.SHORTSTRING;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.SINGLE;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.SMALLINT;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.UNICODESTRING;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.WIDESTRING;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.WORD;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,14 +33,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.DecimalType;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.IntegerType;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.CollectionType;
 import org.sonar.plugins.delphi.type.Type.FileType;
+import org.sonar.plugins.delphi.type.Type.IntegerType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType.ProceduralKind;
+import org.sonar.plugins.delphi.type.Type.TypeType;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal;
 
 /**
  * Resolves an invocation to the correct declaration. Based directly off of the tcallcandidates
@@ -50,7 +52,6 @@ import org.sonar.plugins.delphi.type.Type.ProceduralType.ProceduralKind;
  */
 public class InvocationResolver {
   private List<InvocationCandidate> candidates = new ArrayList<>();
-
   private List<InvocationArgument> arguments = new ArrayList<>();
 
   public void addCandidate(InvocationCandidate candidate) {
@@ -121,7 +122,7 @@ public class InvocationResolver {
       int rth;
       int rfh;
 
-      if (parameterType.is(DecimalType.EXTENDED.type)) {
+      if (parameterType.is(IntrinsicDecimal.EXTENDED.type)) {
         rth = 4;
       } else if (isReal(parameterType)) {
         rth = 2;
@@ -129,7 +130,7 @@ public class InvocationResolver {
         rth = 1;
       }
 
-      if (argumentType.is(DecimalType.EXTENDED.type)) {
+      if (argumentType.is(IntrinsicDecimal.EXTENDED.type)) {
         rfh = 4;
       } else if (isReal(argumentType)) {
         rfh = 2;
@@ -146,8 +147,8 @@ public class InvocationResolver {
 
       candidate.increaseOrdinalDistance(rfh);
     } else if (!equalTypeRequired(parameter)
-        && argumentType.isObject()
-        && parameterType.isObject()
+        && argumentType.isStruct()
+        && parameterType.isStruct()
         && argumentType.isSubTypeOf(parameterType)) {
       equality = CONVERT_LEVEL_1;
       Type comparisonType = argumentType;
@@ -167,28 +168,50 @@ public class InvocationResolver {
       }
     }
 
+    if (argumentType.isTypeType()) {
+      argumentType = ((TypeType) argumentType).originalType();
+    }
+
+    if (parameterType.isTypeType()) {
+      parameterType = ((TypeType) parameterType).originalType();
+    }
+
     if (argumentType.isProcedural() && parameterType.isProcedural()) {
       ProceduralKind argKind = ((ProceduralType) argumentType).kind();
       ProceduralKind paramKind = ((ProceduralType) parameterType).kind();
       int kindDistance = abs(argKind.ordinal() - paramKind.ordinal());
 
-      candidate.increaseOrdinalDistance(kindDistance * Double.MIN_VALUE);
+      candidate.increaseProceduralDistance(kindDistance);
     }
 
     if (!equalTypeRequired(parameter) && argumentType.isInteger() && parameterType.isInteger()) {
-      var argData = IntegerType.fromType(argumentType);
-      var paramData = IntegerType.fromType(parameterType);
+      IntegerType argInteger = (IntegerType) argumentType;
+      IntegerType paramInteger = (IntegerType) parameterType;
 
-      candidate.increaseOrdinalDistance(argData.ordinalDistance(paramData));
+      candidate.increaseOrdinalDistance(argInteger.ordinalDistance(paramInteger));
 
-      if (argData.isSigned() != paramData.isSigned()) {
-        candidate.setOrdinalDistance(nextAfter(candidate.getOrdinalDistance(), POSITIVE_INFINITY));
+      if (argInteger.isSigned() != paramInteger.isSigned()) {
+        candidate.bumpOrdinalDistance();
       }
     }
 
+    // Keep track of implicit variant conversions
+    // Also invalidate candidates that would produce invalid variant conversions
+    VariantConversionType variantConversionType = NO_CONVERSION_REQUIRED;
+    if (argumentType.isVariant()) {
+      variantConversionType = VariantConversionType.fromType(parameterType);
+    } else if (parameterType.isVariant()) {
+      variantConversionType = VariantConversionType.fromType(argumentType);
+    }
+
+    if (variantConversionType == INCOMPATIBLE_VARIANT) {
+      candidate.setInvalid();
+    }
+    candidate.addVariantConversion(variantConversionType);
+
     // When an ambiguous procedural type was changed to an invocation, an exact match is
     // downgraded to equal.
-    // Ordinal distance is also bumped.
+    // Ordinal distance is also increased.
     // This way an overload call with the procedural type is always chosen instead.
     if (equality == EXACT && ambiguousMethodReference) {
       equality = EQUAL;
@@ -270,11 +293,11 @@ public class InvocationResolver {
   }
 
   private static boolean isRealOrExtended(Type type) {
-    return isReal(type) || DecimalType.EXTENDED.type.is(type);
+    return isReal(type) || IntrinsicDecimal.EXTENDED.type.is(type);
   }
 
   private static boolean isReal(Type type) {
-    return DecimalType.DOUBLE.type.is(type) || DecimalType.REAL.type.is(type);
+    return IntrinsicDecimal.DOUBLE.type.is(type) || IntrinsicDecimal.REAL.type.is(type);
   }
 
   /**
@@ -289,15 +312,17 @@ public class InvocationResolver {
     if (candidates.isEmpty()) {
       return Collections.emptySet();
     }
-    InvocationCandidate bestCandidate = candidates.get(0);
-    boolean singleVariant = arguments.size() == 1 && arguments.get(0).getType().isVariant();
 
-    for (int i = 0; i < candidates.size(); ++i) {
+    InvocationCandidate bestCandidate = candidates.get(0);
+
+    for (int i = 1; i < candidates.size(); ++i) {
       InvocationCandidate candidate = candidates.get(i);
-      int result =
-          singleVariant
-              ? isBetterCandidateSingleVariant(candidate, bestCandidate)
-              : isBetterCandidate(candidate, bestCandidate);
+      if (candidate.isInvalid()) {
+        // If it's invalid then it can't possibly be a better candidate.
+        continue;
+      }
+
+      int result = isBetterCandidate(candidate, bestCandidate);
 
       if (result > 0) {
         // Current candidate is better, flag all previous candidates as incompatible
@@ -341,14 +366,11 @@ public class InvocationResolver {
    * @see <a href="https://github.com/graemeg/freepascal/blob/master/compiler/htypechk.pas#L3230" />
    */
   private int isBetterCandidate(InvocationCandidate candidate, InvocationCandidate bestCandidate) {
+    checkState(!candidate.isInvalid());
     int result = 0;
 
-    if (bestCandidate.isInvalid() && !candidate.isInvalid()) {
+    if (bestCandidate.isInvalid()) {
       result = 1;
-    }
-
-    if (candidate.isInvalid() && !bestCandidate.isInvalid()) {
-      result = -1;
     }
 
     if (result == 0) {
@@ -375,19 +397,37 @@ public class InvocationResolver {
 
     if (result == 0) {
       // Smaller ordinal distance?
-      if (candidate.getOrdinalDistance() < bestCandidate.getOrdinalDistance()) {
-        result = 1;
-      } else if (candidate.getOrdinalDistance() > bestCandidate.getOrdinalDistance()) {
-        result = -1;
-      }
+      result = Double.compare(bestCandidate.getOrdinalDistance(), candidate.getOrdinalDistance());
+    }
+
+    if (result == 0) {
+      // Smaller procedural distance?
+      result =
+          Integer.compare(bestCandidate.getProceduralDistance(), candidate.getProceduralDistance());
+    }
+
+    if (result == 0) {
+      result = getVariantDistance(candidate, bestCandidate);
     }
 
     return result;
   }
 
+  private int getVariantDistance(InvocationCandidate candidate, InvocationCandidate bestCandidate) {
+    int variantDistance = 0;
+    for (int i = 0; i < arguments.size(); ++i) {
+      VariantConversionType currentVcl = candidate.getVariantConversionType(i);
+      VariantConversionType bestVcl = bestCandidate.getVariantConversionType(i);
+      variantDistance += isBetterVariantConversion(currentVcl, bestVcl);
+    }
+    return variantDistance;
+  }
+
   /**
-   * Delphi precedence rules extracted from test programs. Only valid if passing a variant argument
-   * to overloaded procedures expecting exactly one parameter.
+   * Determines which variant conversion type takes precedence when converting a variant type
+   * argument to a parameter type.
+   *
+   * <p>Delphi precedence rules extracted from test programs:
    *
    * <ul>
    *   <li>single > (char, currency, int64, shortstring, ansistring, widestring, unicodestring,
@@ -414,42 +454,31 @@ public class InvocationResolver {
    *
    * Relations not mentioned mean that they conflict: no decision possible
    *
-   * @param candidate Candidate we're checking
-   * @param bestCandidate The current best candidate
+   * @param currentVcl The conversion type we're checking
+   * @param bestVcl The best conversion type so far
    * @return
    *     <ul>
-   *       <li>> 0 when candidate is better than bestCandidate
-   *       <li>< 0 when bestCandidate is better than candidate
+   *       <li>> 0 when currentVcl is better than bestVcl
+   *       <li>< 0 when bestVcl is better than currentVcl
    *       <li>= 0 when both are equal
    *     </ul>
    *
    * @see <a href="https://github.com/graemeg/freepascal/blob/master/compiler/htypechk.pas#L3339">
    *     is_better_candidate_single_variant</a>
    */
-  private int isBetterCandidateSingleVariant(
-      InvocationCandidate candidate, InvocationCandidate bestCandidate) {
-    Type current = candidate.getData().getParameter(0).getType();
-    Type best = bestCandidate.getData().getParameter(0).getType();
-
-    // If one of the parameters is a regular variant, fall back to the default algorithm
-    if (current.isVariant() || best.isVariant()) {
-      return isBetterCandidate(candidate, bestCandidate);
-    }
-
-    VariantEqualityType currentVcl = VariantEqualityType.fromType(current);
-    VariantEqualityType bestVcl = VariantEqualityType.fromType(best);
-
-    if (currentVcl == INCOMPATIBLE_VARIANT) {
-      return -1;
-    } else if (bestVcl == INCOMPATIBLE_VARIANT) {
-      return 1;
-    } else if (currentVcl == bestVcl) {
+  private int isBetterVariantConversion(
+      VariantConversionType currentVcl, VariantConversionType bestVcl) {
+    if (currentVcl == bestVcl) {
       return 0;
+    } else if (currentVcl == INCOMPATIBLE_VARIANT || bestVcl == NO_CONVERSION_REQUIRED) {
+      return -1;
+    } else if (bestVcl == INCOMPATIBLE_VARIANT || currentVcl == NO_CONVERSION_REQUIRED) {
+      return 1;
     } else if (currentVcl == FORMAL_BOOLEAN || bestVcl == FORMAL_BOOLEAN) {
       if (currentVcl == FORMAL_BOOLEAN) {
-        return VariantEqualityType.isChari64Str(bestVcl) ? 1 : 0;
+        return VariantConversionType.isChari64Str(bestVcl) ? 1 : 0;
       } else {
-        return VariantEqualityType.isChari64Str(currentVcl) ? -1 : 0;
+        return VariantConversionType.isChari64Str(currentVcl) ? -1 : 0;
       }
     } else if (currentVcl == BYTE || bestVcl == BYTE) {
       return calculateRelation(currentVcl, bestVcl, BYTE, Set.of(SHORTINT));
@@ -475,17 +504,19 @@ public class InvocationResolver {
       return (bestVcl == UNICODESTRING) ? -1 : 1;
     } else if (currentVcl == ANSISTRING || bestVcl == ANSISTRING) {
       return (bestVcl == ANSISTRING) ? -1 : 1;
+    } else if (currentVcl == SHORTSTRING || bestVcl == SHORTSTRING) {
+      return (bestVcl == SHORTSTRING) ? -1 : 1;
     }
 
     // All possibilities should have been checked now.
-    throw new AssertionError("Unhandled VariantEqualityType!");
+    throw new AssertionError("Unhandled VariantConversionType!");
   }
 
   private int calculateRelation(
-      VariantEqualityType currentVcl,
-      VariantEqualityType bestVcl,
-      VariantEqualityType testVcl,
-      Set<VariantEqualityType> conflictTypes) {
+      VariantConversionType currentVcl,
+      VariantConversionType bestVcl,
+      VariantConversionType testVcl,
+      Set<VariantConversionType> conflictTypes) {
     if (conflictTypes.contains(bestVcl) || conflictTypes.contains(currentVcl)) {
       return 0;
     } else if (bestVcl == testVcl) {

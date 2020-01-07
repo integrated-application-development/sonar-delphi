@@ -1,5 +1,9 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.BOOLEAN;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.STRING;
+
 import com.google.common.base.Preconditions;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -8,8 +12,6 @@ import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.BooleanType;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class BinaryExpressionNode extends ExpressionNode {
@@ -52,7 +54,7 @@ public final class BinaryExpressionNode extends ExpressionNode {
   @NotNull
   public Type createType() {
     if (getOperator().isLogicalOperator) {
-      return BooleanType.BOOLEAN.type;
+      return BOOLEAN.type;
     }
 
     if (getOperator() == BinaryOp.AS) {
@@ -61,9 +63,9 @@ public final class BinaryExpressionNode extends ExpressionNode {
 
     Type type = getLeft().getType();
 
-    if (type.is(TextType.CHAR.type)) {
+    if (type.is(CHAR.type)) {
       // Assume this expression is a string concatenation.
-      type = TextType.STRING.type;
+      type = STRING.type;
     }
 
     return type;

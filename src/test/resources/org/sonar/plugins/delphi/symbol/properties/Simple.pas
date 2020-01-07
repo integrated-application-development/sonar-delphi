@@ -1,4 +1,4 @@
-unit Properties;
+unit Simple;
 
 {This is a sample Delphi file.}
 

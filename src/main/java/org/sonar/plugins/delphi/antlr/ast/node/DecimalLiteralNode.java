@@ -1,9 +1,10 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.EXTENDED;
+
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.DecimalType;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class DecimalLiteralNode extends LiteralNode {
@@ -24,8 +25,6 @@ public final class DecimalLiteralNode extends LiteralNode {
   @Override
   @NotNull
   public Type getType() {
-    // Technically should be Extended, but in most cases a parameter will probably be Double.
-    // This avoids unnecessary work on narrowing the type when trying to match method signatures.
-    return DecimalType.DOUBLE.type;
+    return EXTENDED.type;
   }
 }

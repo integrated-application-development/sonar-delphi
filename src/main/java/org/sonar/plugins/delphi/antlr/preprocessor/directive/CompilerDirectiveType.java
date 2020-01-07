@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Map;
 import java.util.TreeMap;
 
-enum CompilerDirectiveType {
+public enum CompilerDirectiveType {
   DEFINE("define"),
   UNDEFINE("undef"),
   IFDEF("ifdef"),
@@ -16,6 +16,7 @@ enum CompilerDirectiveType {
   ENDIF("endif"),
   IFEND("ifend"),
   INCLUDE("include", "i"),
+  SCOPED_ENUMS("scopedenums"),
   UNSUPPORTED;
 
   private final ImmutableSet<String> names;

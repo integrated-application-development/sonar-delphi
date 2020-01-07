@@ -111,6 +111,9 @@ class CompilerDirectiveParser {
       case INCLUDE:
         return new IncludeDirective(token, type, trimmedItem);
 
+      case SCOPED_ENUMS:
+        return new ScopedEnumsDirective(token, type, trimmedItem);
+
       default:
         return new DefaultCompilerDirective(token, type);
     }

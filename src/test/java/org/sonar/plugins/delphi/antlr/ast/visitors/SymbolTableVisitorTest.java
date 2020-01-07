@@ -1,11 +1,14 @@
 package org.sonar.plugins.delphi.antlr.ast.visitors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor.Data;
 import org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor.ResolutionLevel;
+import org.sonar.plugins.delphi.antlr.preprocessor.CompilerSwitchRegistry;
+import org.sonar.plugins.delphi.symbol.ImportResolutionHandler;
 import org.sonar.plugins.delphi.symbol.scope.SystemScope;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestProgramBuilder;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
@@ -37,6 +40,12 @@ public class SymbolTableVisitorTest {
   }
 
   private static Data createData(ResolutionLevel resolutionLevel) {
-    return new Data(ResolutionLevel.NONE, resolutionLevel, null, new SystemScope(), null);
+    return new Data(
+        ResolutionLevel.NONE,
+        resolutionLevel,
+        mock(ImportResolutionHandler.class),
+        mock(CompilerSwitchRegistry.class),
+        new SystemScope(),
+        null);
   }
 }

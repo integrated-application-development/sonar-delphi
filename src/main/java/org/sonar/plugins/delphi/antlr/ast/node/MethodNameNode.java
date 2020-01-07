@@ -62,13 +62,8 @@ public final class MethodNameNode extends DelphiNode implements Qualifiable {
   public List<NameOccurrence> getUsages() {
     if (usages == null) {
       if (methodNameDeclaration != null) {
-        usages =
-            methodNameDeclaration
-                .getScope()
-                .getDeclarations(MethodNameDeclaration.class)
-                .get(methodNameDeclaration);
-      }
-      if (usages == null) {
+        usages = methodNameDeclaration.getScope().getOccurrencesFor(methodNameDeclaration);
+      } else {
         usages = Collections.emptyList();
       }
     }

@@ -1,22 +1,27 @@
 package org.sonar.plugins.delphi.antlr.preprocessor;
 
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Iterables.getLast;
 import static org.apache.commons.io.FilenameUtils.getBaseName;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Deque;
+import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
-import org.antlr.runtime.TokenRewriteStream;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
@@ -24,6 +29,7 @@ import org.sonar.plugins.delphi.antlr.LowercaseFileStream;
 import org.sonar.plugins.delphi.antlr.preprocessor.directive.BranchDirective;
 import org.sonar.plugins.delphi.antlr.preprocessor.directive.BranchingDirective;
 import org.sonar.plugins.delphi.antlr.preprocessor.directive.CompilerDirective;
+import org.sonar.plugins.delphi.antlr.preprocessor.directive.CompilerDirectiveType;
 import org.sonar.plugins.delphi.antlr.preprocessor.directive.EndIfDirective;
 import org.sonar.plugins.delphi.file.DelphiFileConfig;
 
@@ -34,41 +40,68 @@ public class DelphiPreprocessor {
   private final Set<String> definitions;
   private final List<CompilerDirective> directives;
   private final Deque<BranchingDirective> parentDirective;
+  private final Map<CompilerDirectiveType, Integer> currentSwitches;
+  private final CompilerSwitchRegistry switchRegistry;
+  private final boolean processingIncludeFile;
 
-  private List<Token> tokens;
+  private DelphiTokenStream tokenStream;
+  private Set<Token> tokens;
+  private int tokenIndex;
 
   public DelphiPreprocessor(DelphiLexer lexer, DelphiFileConfig config) {
-    this(lexer, config, new HashSet<>(config.getDefinitions()));
+    this(
+        lexer,
+        config,
+        new HashSet<>(config.getDefinitions()),
+        new EnumMap<>(CompilerDirectiveType.class),
+        new CompilerSwitchRegistry(),
+        0,
+        false);
   }
 
-  private DelphiPreprocessor(DelphiLexer lexer, DelphiFileConfig config, Set<String> definitions) {
+  private DelphiPreprocessor(
+      DelphiLexer lexer,
+      DelphiFileConfig config,
+      Set<String> definitions,
+      Map<CompilerDirectiveType, Integer> currentSwitches,
+      CompilerSwitchRegistry switchRegistry,
+      int tokenIndexStart,
+      boolean processingIncludeFile) {
     this.lexer = lexer;
     this.config = config;
+    this.switchRegistry = switchRegistry;
     this.definitions = definitions;
     this.directives = new ArrayList<>();
     this.parentDirective = new ArrayDeque<>();
+    this.currentSwitches = currentSwitches;
+    this.processingIncludeFile = processingIncludeFile;
+    this.tokenIndex = tokenIndexStart;
   }
 
-  public TokenRewriteStream process() {
-    TokenRewriteStream tokenStream = new TokenRewriteStream(this.lexer);
+  public void process() {
+    checkState(tokenStream == null, "DelphiPreprocessor.process cannot be called twice.");
+    tokenStream = new DelphiTokenStream(this.lexer);
 
     tokenStream.fill();
     tokens = extractTokens(tokenStream);
     tokens.forEach(this::processToken);
     directives.forEach(directive -> directive.execute(this));
+    tokenStream.setTokens(new ArrayList<>(tokens));
     tokenStream.reset();
 
-    return tokenStream;
+    if (!processingIncludeFile) {
+      registerCurrentCompilerSwitches();
+    }
   }
 
-  @SuppressWarnings("unchecked")
-  private static List<Token> extractTokens(TokenRewriteStream tokenStream) {
-    // NOTE: antlr likes to return raw lists, even though we know the list contains Token objects.
-    // Trying to return a new list instead of casting will break the preprocessor.
-    return (List<Token>) tokenStream.getTokens();
+  private static Set<Token> extractTokens(DelphiTokenStream tokenStream) {
+    Set<Token> result = new TreeSet<>(Comparator.comparingInt(Token::getTokenIndex));
+    result.addAll(tokenStream.getTokens());
+    return result;
   }
 
   private void processToken(Token token) {
+    token.setTokenIndex(tokenIndex++);
     if (token.getType() == DelphiLexer.TkCompilerDirective) {
       CompilerDirective directive = CompilerDirective.fromToken(token);
       processDirective(directive);
@@ -104,27 +137,49 @@ public class DelphiPreprocessor {
     String includeFileName = includeFile.getFileName().toString();
     Path includePath = includeFile.getParent();
 
-    List<Token> includeTokens = processIncludeFile(includeFileName, includePath);
-    int insertIndex = this.tokens.indexOf(insertionToken);
+    int insertionIndex = insertionToken.getTokenIndex();
+    List<Token> includeTokens = processIncludeFile(includeFileName, includePath, insertionIndex);
 
-    this.tokens.addAll(insertIndex, includeTokens);
+    this.offsetTokenIndex(insertionIndex, includeTokens.size());
     this.deleteToken(insertionToken);
+    this.tokens.addAll(includeTokens);
   }
 
-  private List<Token> processIncludeFile(String includeFileName, Path includePath) {
+  private void offsetTokenIndex(int startIndex, int offset) {
+    tokens.stream()
+        .filter(token -> token.getTokenIndex() > startIndex)
+        .forEach(token -> token.setTokenIndex(token.getTokenIndex() + offset));
+  }
+
+  private List<Token> processIncludeFile(String filename, Path includePath, int insertionIndex) {
     try {
-      File includeFile = findIncludeFile(includeFileName, includePath);
+      File includeFile = findIncludeFile(filename, includePath);
       if (includeFile == null) {
-        includeFile = findIncludeFileInSearchPath(includeFileName);
+        includeFile = findIncludeFileInSearchPath(filename);
       }
 
       if (includeFile != null) {
         String path = includeFile.getCanonicalPath();
+
+        if (path.equals(lexer.getSourceName())) {
+          throw new RuntimeException(
+              "Self-referencing include file <" + includeFile.getAbsolutePath() + ">");
+        }
+
         LowercaseFileStream fileStream = new LowercaseFileStream(path, config.getEncoding());
         DelphiLexer includeLexer = new DelphiLexer(fileStream);
-        DelphiPreprocessor preprocessor = new DelphiPreprocessor(includeLexer, config, definitions);
-        TokenRewriteStream tokenStream = preprocessor.process();
-        List<Token> result = extractTokens(tokenStream);
+        DelphiPreprocessor preprocessor =
+            new DelphiPreprocessor(
+                includeLexer,
+                config,
+                definitions,
+                currentSwitches,
+                switchRegistry,
+                insertionIndex,
+                true);
+        preprocessor.process();
+        DelphiTokenStream includeTokenStream = preprocessor.getTokenStream();
+        List<Token> result = includeTokenStream.getTokens();
         // Remove EOF
         result.remove(result.size() - 1);
         return result;
@@ -133,20 +188,32 @@ public class DelphiPreprocessor {
       LOG.debug("Error occurred while resolving includes: ", e);
     }
 
-    LOG.warn("Failed to resolve include '" + includeFileName + "'.");
+    LOG.warn("Failed to resolve include '" + filename + "'.");
     return Collections.emptyList();
   }
 
   @Nullable
   private File findIncludeFile(String includeFileName, Path path) throws IOException {
-    try (var stream =
-        Files.find(path, Integer.MAX_VALUE, (filePath, attributes) -> attributes.isRegularFile())) {
-      return stream
-          .filter(file -> file.getFileName().toString().equalsIgnoreCase(includeFileName))
-          .map(Path::toFile)
-          .findFirst()
-          .orElse(null);
+    Set<Path> directories = new HashSet<>();
+
+    try (DirectoryStream<Path> stream = Files.newDirectoryStream(path)) {
+      for (Path item : stream) {
+        if (Files.isDirectory(item)) {
+          directories.add(item);
+        } else if (includeFileName.equalsIgnoreCase(item.getFileName().toString())) {
+          return item.toFile();
+        }
+      }
     }
+
+    for (Path directory : directories) {
+      File result = findIncludeFile(includeFileName, directory);
+      if (result != null) {
+        return result;
+      }
+    }
+
+    return null;
   }
 
   @Nullable
@@ -191,5 +258,32 @@ public class DelphiPreprocessor {
 
   public void undefine(String define) {
     definitions.remove(define);
+  }
+
+  public void handleSwitch(CompilerDirectiveType type, int tokenIndex, boolean value) {
+    if (value) {
+      currentSwitches.put(type, tokenIndex);
+      return;
+    }
+
+    Integer startIndex = currentSwitches.remove(type);
+    if (startIndex != null) {
+      switchRegistry.addSwitch(type, startIndex, tokenIndex);
+    }
+  }
+
+  private void registerCurrentCompilerSwitches() {
+    if (!tokens.isEmpty()) {
+      int lastTokenIndex = getLast(tokens).getTokenIndex();
+      currentSwitches.forEach((type, index) -> handleSwitch(type, lastTokenIndex, false));
+    }
+  }
+
+  public DelphiTokenStream getTokenStream() {
+    return tokenStream;
+  }
+
+  public CompilerSwitchRegistry getCompilerSwitchRegistry() {
+    return switchRegistry;
   }
 }

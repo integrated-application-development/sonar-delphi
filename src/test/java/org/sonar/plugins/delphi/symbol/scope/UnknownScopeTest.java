@@ -73,6 +73,16 @@ public class UnknownScopeTest {
   }
 
   @Test
+  public void testGetOccurrencesFor() {
+    VariableNameDeclaration declaration = mock(VariableNameDeclaration.class);
+    when(declaration.getImage()).thenReturn("Image");
+    unknownScope.addDeclaration(declaration);
+    DelphiNameOccurrence occurrence = new DelphiNameOccurrence(mock(DelphiNode.class), "Image");
+    assertThat(unknownScope.addNameOccurrence(occurrence)).isEmpty();
+    assertThat(unknownScope.getOccurrencesFor(declaration)).isEmpty();
+  }
+
+  @Test
   public void testFindMethodOverloads() {
     DelphiNameOccurrence occurrence = new DelphiNameOccurrence(mock(DelphiNode.class), "Image");
     Set<NameDeclaration> result = new HashSet<>();
@@ -84,5 +94,35 @@ public class UnknownScopeTest {
   public void testGetParent() {
     unknownScope.setParent(unknownScope());
     assertThat(unknownScope.getParent()).isNull();
+  }
+
+  @Test
+  public void testGetUnitDeclarations() {
+    assertThat(unknownScope.getUnitDeclarations()).isEmpty();
+  }
+
+  @Test
+  public void testGetImportDeclarations() {
+    assertThat(unknownScope.getImportDeclarations()).isEmpty();
+  }
+
+  @Test
+  public void testGetTypeDeclarations() {
+    assertThat(unknownScope.getTypeDeclarations()).isEmpty();
+  }
+
+  @Test
+  public void testGetPropertyDeclarations() {
+    assertThat(unknownScope.getPropertyDeclarations()).isEmpty();
+  }
+
+  @Test
+  public void testGetMethodDeclarations() {
+    assertThat(unknownScope.getMethodDeclarations()).isEmpty();
+  }
+
+  @Test
+  public void testGetVariableDeclarations() {
+    assertThat(unknownScope.getVariableDeclarations()).isEmpty();
   }
 }

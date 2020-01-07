@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.api.utils.log.Logger;
@@ -62,8 +63,8 @@ public class SymbolTableBuilder {
   private String projectName;
   private Set<String> unitScopeNames;
   private DelphiFileConfig fileConfig;
-
   private SystemScope systemScope;
+  private int nestingLevel;
 
   SymbolTableBuilder() {
     // package-private constructor
@@ -161,38 +162,50 @@ public class SymbolTableBuilder {
       process(data, ResolutionLevel.INTERFACE);
       unitDeclaration = data.unitDeclaration;
     } else {
-      LOG.debug("Failed to resolve unit import: {}", node.getNameNode().fullyQualifiedName());
+      LOG.debug(
+          StringUtils.repeat('\t', nestingLevel + 1)
+              + "X "
+              + node.getNameNode().fullyQualifiedName()
+              + " **Failed to locate unit**");
     }
 
     return new UnitImportNameDeclaration(node, unitDeclaration);
   }
 
   private void process(UnitData unit, ResolutionLevel resolutionLevel) {
+    if (unit.resolved.ordinal() >= resolutionLevel.ordinal()) {
+      return;
+    }
+
     try {
-      if (unit.resolved.ordinal() < resolutionLevel.ordinal()) {
-        LOG.debug("\t>> " + unit.sourceFile.getName());
-        DelphiFile delphiFile = DelphiFile.from(unit.sourceFile, fileConfig);
-        Data data =
-            new Data(
-                unit.resolved,
-                resolutionLevel,
-                this::createImportDeclaration,
-                this.systemScope,
-                unit.unitDeclaration);
+      LOG.debug(StringUtils.repeat('\t', ++nestingLevel) + "> " + unit.sourceFile.getName());
 
-        visitor.visit(delphiFile.getAst(), data);
+      fileConfig.setShouldSkipImplementation(resolutionLevel != ResolutionLevel.COMPLETE);
 
-        if (data.getUnitDeclaration() != null) {
-          String filePath = unit.sourceFile.getAbsolutePath();
-          unit.unitDeclaration = data.getUnitDeclaration();
-          symbolTable.addUnit(filePath, unit.unitDeclaration);
-        }
+      DelphiFile delphiFile = DelphiFile.from(unit.sourceFile, fileConfig);
+      Data data =
+          new Data(
+              unit.resolved,
+              resolutionLevel,
+              this::createImportDeclaration,
+              delphiFile.getCompilerSwitchRegistry(),
+              this.systemScope,
+              unit.unitDeclaration);
 
-        unit.resolved = resolutionLevel;
+      visitor.visit(delphiFile.getAst(), data);
+
+      if (data.getUnitDeclaration() != null) {
+        String filePath = unit.sourceFile.getAbsolutePath();
+        unit.unitDeclaration = data.getUnitDeclaration();
+        symbolTable.addUnit(filePath, unit.unitDeclaration);
       }
+
+      unit.resolved = resolutionLevel;
     } catch (DelphiFileConstructionException e) {
-      String error = format("Error while indexing %s", unit.sourceFile.getAbsolutePath());
+      String error = format("Error while processing %s", unit.sourceFile.getAbsolutePath());
       LOG.error(error, e);
+    } finally {
+      --nestingLevel;
     }
   }
 
@@ -220,6 +233,9 @@ public class SymbolTableBuilder {
     }
     if (systemScope.getIInterfaceDeclaration() == null) {
       throw new SymbolTableConstructionException(format(REQUIRED_DEF_NOT_FOUND, "IInterface"));
+    }
+    if (systemScope.getTVarRecDeclaration() == null) {
+      throw new SymbolTableConstructionException(format(REQUIRED_DEF_NOT_FOUND, "TVarRec"));
     }
   }
 

@@ -106,6 +106,34 @@ type
     function Equals(Value: T): Boolean;
   end;
 
+  PVarRec = ^TVarRec;
+  TVarRec = record
+    case Integer of
+      0: (case Byte of
+            vtInteger:       (VInteger: Integer);
+            vtBoolean:       (VBoolean: Boolean);
+            vtChar:          (VChar: _AnsiChr);
+            vtExtended:      (VExtended: PExtended);
+            vtString:        (VString: _PShortStr);
+            vtPointer:       (VPointer: Pointer);
+            vtPChar:         (VPChar: _PAnsiChr);
+            vtObject:        (VObject: TObject);
+            vtClass:         (VClass: TClass);
+            vtWideChar:      (VWideChar: WideChar);
+            vtPWideChar:     (VPWideChar: PWideChar);
+            vtAnsiString:    (VAnsiString: Pointer);
+            vtCurrency:      (VCurrency: PCurrency);
+            vtVariant:       (VVariant: PVariant);
+            vtInterface:     (VInterface: Pointer);
+            vtWideString:    (VWideString: Pointer);
+            vtInt64:         (VInt64: PInt64);
+            vtUnicodeString: (VUnicodeString: Pointer);
+         );
+      1: (_Reserved1: NativeInt;
+          VType:      Byte;
+         );
+  end;
+
 implementation
 
 end.

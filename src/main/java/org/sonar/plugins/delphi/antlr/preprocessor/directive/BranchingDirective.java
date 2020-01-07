@@ -47,7 +47,9 @@ public class BranchingDirective extends AbstractCompilerDirective {
   }
 
   private static void deleteBranch(BranchDirective branch, DelphiPreprocessor preprocessor) {
-    branch.getTokens().forEach(preprocessor::deleteToken);
+    for (Token token : branch.getTokens()) {
+      preprocessor.deleteToken(token);
+    }
 
     List<BranchingDirective> nestedDirectives =
         branch.getDirectives().stream()

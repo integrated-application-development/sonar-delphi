@@ -38,7 +38,7 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
     builder.appendImpl("destructor TTestConstructor.Destroy;");
     builder.appendImpl("begin");
     builder.appendImpl("  inherited;");
-    builder.appendImpl("  Writeln('do something');");
+    builder.appendImpl("  WriteLn('do something');");
     builder.appendImpl("end;");
 
     execute(builder);
@@ -58,7 +58,7 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
 
     builder.appendImpl("destructor TTestConstructor.Destroy;");
     builder.appendImpl("begin");
-    builder.appendImpl("  Writeln('do something');");
+    builder.appendImpl("  WriteLn('do something');");
     builder.appendImpl("end;");
 
     execute(builder);
@@ -81,7 +81,7 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
 
     builder.appendImpl("class destructor TTestConstructor.Destroy;");
     builder.appendImpl("begin");
-    builder.appendImpl("  Writeln('do something');");
+    builder.appendImpl("  WriteLn('do something');");
     builder.appendImpl("end;");
 
     execute(builder);

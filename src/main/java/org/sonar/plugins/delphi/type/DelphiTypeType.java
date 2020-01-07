@@ -3,7 +3,7 @@ package org.sonar.plugins.delphi.type;
 import org.sonar.plugins.delphi.type.Type.TypeType;
 
 public class DelphiTypeType extends DelphiType implements TypeType {
-  private Type originalType;
+  private final Type originalType;
 
   private DelphiTypeType(String image, Type originalType) {
     super(image);

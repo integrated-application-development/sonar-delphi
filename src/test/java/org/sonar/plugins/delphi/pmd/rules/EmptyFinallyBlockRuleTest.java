@@ -31,9 +31,9 @@ public class EmptyFinallyBlockRuleTest extends BasePmdRuleTest {
     builder.appendImpl("procedure Test;");
     builder.appendImpl("begin");
     builder.appendImpl("  try");
-    builder.appendImpl("    writeln('try block');");
+    builder.appendImpl("    WriteLn('try block');");
     builder.appendImpl("  finally");
-    builder.appendImpl("    writeln('finally block');");
+    builder.appendImpl("    WriteLn('finally block');");
     builder.appendImpl("  end;");
     builder.appendImpl("end;");
 
@@ -48,7 +48,7 @@ public class EmptyFinallyBlockRuleTest extends BasePmdRuleTest {
     builder.appendImpl("procedure Test;");
     builder.appendImpl("begin");
     builder.appendImpl("  try");
-    builder.appendImpl("    writeln('try block');");
+    builder.appendImpl("    WriteLn('try block');");
     builder.appendImpl("  finally");
     builder.appendImpl("  end;");
     builder.appendImpl("end;");

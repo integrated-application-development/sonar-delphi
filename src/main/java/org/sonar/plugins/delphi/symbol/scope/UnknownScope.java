@@ -1,7 +1,9 @@
 package org.sonar.plugins.delphi.symbol.scope;
 
+import static java.util.Collections.emptyList;
+import static java.util.Collections.emptySet;
+
 import com.google.errorprone.annotations.Immutable;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,12 +46,12 @@ public final class UnknownScope implements DelphiScope {
 
   @Override
   public Set<NameDeclaration> addNameOccurrence(NameOccurrence nameOccurrence) {
-    return Collections.emptySet();
+    return emptySet();
   }
 
   @Override
   public Set<NameDeclaration> findDeclaration(DelphiNameOccurrence occurrence) {
-    return Collections.emptySet();
+    return emptySet();
   }
 
   @Override
@@ -70,5 +72,15 @@ public final class UnknownScope implements DelphiScope {
   @Override
   public void setParent(Scope scope) {
     // Do nothing
+  }
+
+  @Override
+  public <T extends NameDeclaration> Set<T> getDeclarationSet(Class<T> clazz) {
+    return emptySet();
+  }
+
+  @Override
+  public List<NameOccurrence> getOccurrencesFor(NameDeclaration declaration) {
+    return emptyList();
   }
 }

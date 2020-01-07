@@ -29,9 +29,8 @@ public abstract class NameDeclarationNode extends DelphiNode {
   public List<NameOccurrence> getUsages() {
     if (usages == null) {
       if (declaration != null) {
-        usages = declaration.getScope().getDeclarations(declaration.getClass()).get(declaration);
-      }
-      if (usages == null) {
+        usages = declaration.getScope().getOccurrencesFor(declaration);
+      } else {
         usages = Collections.emptyList();
       }
     }

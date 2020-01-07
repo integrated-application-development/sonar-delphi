@@ -1,38 +1,23 @@
 package org.sonar.plugins.delphi.antlr.preprocessor.directive.expression;
 
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.CompilerDirective.Expression.ConstExpressionType.DECIMAL;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.CompilerDirective.Expression.ConstExpressionType.INTEGER;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.add;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.and;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.createBoolean;
 import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.createDecimal;
 import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.createInteger;
 import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.createSet;
 import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.createString;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.div;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.divide;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.greaterThan;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.greaterThanEqual;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.in;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.isEqual;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.lessThan;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.lessThanEqual;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.mod;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.multiply;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.notEqual;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.or;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.shl;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.shr;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.subtract;
 import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.unknownValue;
-import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.ExpressionValues.xor;
 
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.sonar.plugins.delphi.antlr.preprocessor.DelphiPreprocessor;
 import org.sonar.plugins.delphi.antlr.preprocessor.directive.CompilerDirective.Expression;
+import org.sonar.plugins.delphi.antlr.preprocessor.directive.CompilerDirective.Expression.ExpressionValue.BinaryEvaluator;
+import org.sonar.plugins.delphi.antlr.preprocessor.directive.CompilerDirective.Expression.ExpressionValue.UnaryEvaluator;
 import org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.Token.TokenType;
 
 public class Expressions {
@@ -69,6 +54,30 @@ public class Expressions {
   }
 
   static class BinaryExpression implements Expression {
+    private static final Map<TokenType, BinaryEvaluator> EVALUATORS;
+
+    static {
+      EVALUATORS = new EnumMap<>(TokenType.class);
+      EVALUATORS.put(TokenType.PLUS, ExpressionValues::add);
+      EVALUATORS.put(TokenType.MINUS, ExpressionValues::subtract);
+      EVALUATORS.put(TokenType.MULTIPLY, ExpressionValues::multiply);
+      EVALUATORS.put(TokenType.DIVIDE, ExpressionValues::divide);
+      EVALUATORS.put(TokenType.DIV, ExpressionValues::div);
+      EVALUATORS.put(TokenType.MOD, ExpressionValues::mod);
+      EVALUATORS.put(TokenType.SHL, ExpressionValues::shl);
+      EVALUATORS.put(TokenType.SHR, ExpressionValues::shr);
+      EVALUATORS.put(TokenType.EQUALS, ExpressionValues::isEqual);
+      EVALUATORS.put(TokenType.GREATER_THAN, ExpressionValues::greaterThan);
+      EVALUATORS.put(TokenType.LESS_THAN, ExpressionValues::lessThan);
+      EVALUATORS.put(TokenType.GREATER_THAN_EQUAL, ExpressionValues::greaterThanEqual);
+      EVALUATORS.put(TokenType.LESS_THAN_EQUAL, ExpressionValues::lessThanEqual);
+      EVALUATORS.put(TokenType.NOT_EQUALS, ExpressionValues::notEqual);
+      EVALUATORS.put(TokenType.IN, ExpressionValues::in);
+      EVALUATORS.put(TokenType.AND, ExpressionValues::and);
+      EVALUATORS.put(TokenType.OR, ExpressionValues::or);
+      EVALUATORS.put(TokenType.XOR, ExpressionValues::xor);
+    }
+
     private final Expression leftExpression;
     private final TokenType operator;
     private final Expression rightExpression;
@@ -81,53 +90,22 @@ public class Expressions {
 
     @Override
     public ExpressionValue evaluate(DelphiPreprocessor preprocessor) {
+      BinaryEvaluator evaluator = checkNotNull(EVALUATORS.get(operator));
+      checkNotNull(evaluator, "Unhandled binary operator '" + operator.name() + "'");
       ExpressionValue left = leftExpression.evaluate(preprocessor);
       ExpressionValue right = rightExpression.evaluate(preprocessor);
 
-      switch (operator) {
-        case PLUS:
-          return add(left, right);
-        case MINUS:
-          return subtract(left, right);
-        case MULTIPLY:
-          return multiply(left, right);
-        case DIVIDE:
-          return divide(left, right);
-        case DIV:
-          return div(left, right);
-        case MOD:
-          return mod(left, right);
-        case SHL:
-          return shl(left, right);
-        case SHR:
-          return shr(left, right);
-        case EQUALS:
-          return isEqual(left, right);
-        case GREATER_THAN:
-          return greaterThan(left, right);
-        case LESS_THAN:
-          return lessThan(left, right);
-        case GREATER_THAN_EQUAL:
-          return greaterThanEqual(left, right);
-        case LESS_THAN_EQUAL:
-          return lessThanEqual(left, right);
-        case NOT_EQUALS:
-          return notEqual(left, right);
-        case IN:
-          return in(left, right);
-        case AND:
-          return and(left, right);
-        case OR:
-          return or(left, right);
-        case XOR:
-          return xor(left, right);
-        default:
-          throw new AssertionError("Unhandled binary expression operator: " + operator.name());
-      }
+      return evaluator.apply(left, right);
     }
   }
 
   static class UnaryExpression implements Expression {
+    private static final Map<TokenType, UnaryEvaluator> EVALUATORS =
+        Map.of(
+            TokenType.PLUS, ExpressionValues::plus,
+            TokenType.MINUS, ExpressionValues::negate,
+            TokenType.NOT, ExpressionValues::not);
+
     private final TokenType operator;
     private final Expression expression;
 
@@ -138,25 +116,11 @@ public class Expressions {
 
     @Override
     public ExpressionValue evaluate(DelphiPreprocessor preprocessor) {
+      UnaryEvaluator evaluator = EVALUATORS.get(operator);
+      checkNotNull(evaluator, "Unhandled unary operator '" + operator.name() + "'");
       ExpressionValue value = expression.evaluate(preprocessor);
 
-      switch (operator) {
-        case PLUS:
-          if (value.type() == INTEGER || value.type() == DECIMAL) {
-            return value;
-          } else {
-            return unknownValue();
-          }
-
-        case MINUS:
-          return ExpressionValues.negate(value);
-
-        case NOT:
-          return ExpressionValues.not(value);
-
-        default:
-          throw new AssertionError("Unhandled unary expression operator: " + operator.name());
-      }
+      return evaluator.apply(value);
     }
   }
 

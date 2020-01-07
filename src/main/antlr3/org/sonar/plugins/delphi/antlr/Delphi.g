@@ -60,7 +60,13 @@ package org.sonar.plugins.delphi.antlr;
 }
 
 @lexer::members {
-  boolean asmMode = false;
+  private boolean shouldSkipImplementation;
+  private boolean asmMode = false;
+
+  public DelphiLexer(CharStream input, boolean shouldSkipImplementation) {
+    this(input);
+    this.shouldSkipImplementation = shouldSkipImplementation;
+  }
 
   @Override
   public void reportError(RecognitionException e) {
@@ -100,6 +106,8 @@ package org.sonar.plugins.delphi.antlr;
 //----------------------------------------------------------------------------
 file                         : program | library | unit | package_
                              ;
+fileWithoutImplementation    : program | library | unitWithoutImplementation | package_
+                             ;
 
 //----------------------------------------------------------------------------
 // File head
@@ -120,6 +128,8 @@ package_                     : packageHead requiresClause? containsClause 'end' 
 packageHead                  : 'package'<PackageDeclarationNode>^ nameDeclaration ';'!
                              ;
 unit                         : unitHead unitInterface unitImplementation unitBlock '.'
+                             ;
+unitWithoutImplementation    : unitHead unitInterface
                              ;
 unitHead                     : 'unit'<UnitDeclarationNode>^ nameDeclaration portabilityDirective* ';'!
                              ;
@@ -229,7 +239,6 @@ typeDecl                     : arrayType
                              | pointerType
                              | stringType
                              | procedureType
-                             | variantType
                              | subRangeType
                              | typeOfType
                              | typeType
@@ -286,8 +295,6 @@ simpleProcedureType          : procedureTypeHeading -> ^(TkProcedureType<Procedu
 procedureTypeHeading         : 'function'<ProcedureTypeHeadingNode>^ methodParameters? methodReturnType? ((';')? methodDeclDirective)*
                              | 'procedure'<ProcedureTypeHeadingNode>^ methodParameters? ((';')? methodDeclDirective)*
                              ;
-variantType                  : 'variant'<VariantTypeNode>^
-                             ;
 typeOfType                   : 'type'<TypeOfTypeNode>^ 'of' typeDecl
                              ;
 typeType                     : 'type'<TypeTypeNode>^ typeDecl
@@ -301,7 +308,6 @@ enumType                     : '('<EnumTypeNode>^ (enumTypeElement (',')?)* ')'!
 enumTypeElement              : nameDeclaration ('=' expression)? -> ^(TkEnumElement<EnumElementNode> nameDeclaration expression?)
                              ;
 typeReference                : stringType
-                             | variantType
                              | nameReference -> ^(TkTypeReference<TypeReferenceNode> nameReference)
                              ;
 
@@ -362,8 +368,8 @@ recordVariant                : expressionList ':' '(' fieldDecl* recordVariantSe
                              ;
 recordHelperType             : 'record'<RecordHelperTypeNode>^ 'helper' 'for' typeReference visibilitySection* 'end'
                              ;
-property                     : customAttribute? 'class'? 'property' nameDeclaration propertyArray? (':' varType)? (propertyDirective)* ';'
-                             -> ^('property'<PropertyNode> nameDeclaration propertyArray? varType? 'class'? customAttribute? propertyDirective*)
+property                     : customAttribute? 'class'? 'property' propertyNameDeclaration propertyArray? (':' varType)? (propertyDirective)* ';'
+                             -> ^('property'<PropertyNode> propertyNameDeclaration propertyArray? varType? 'class'? customAttribute? propertyDirective*)
                              ;
 propertyArray                : '['! formalParameterList ']'!
                              ;
@@ -518,7 +524,7 @@ particle                     : intNum
                              | textLiteral
                              | nilLiteral
                              | nameReference
-                             | setLiteral
+                             | arrayConstructor
                              | 'string'
                              | 'file'
                              | parenthesizedExpression particleItem+
@@ -561,7 +567,7 @@ escapedCharacter             : TkCharacterEscapeCode
                              ;
 nilLiteral                   : 'nil'<NilLiteralNode>
                              ;
-setLiteral                   : '['<SetLiteralNode>^ (expressionOrRangeList)? ']'
+arrayConstructor             : '['<ArrayConstructorNode>^ (expressionOrRangeList)? ']'
                              ;
 addOperator                  : '+'<BinaryExpressionNode>
                              | '-'<BinaryExpressionNode>
@@ -774,6 +780,8 @@ varNameDeclarationList       : varNameDeclaration (',' varNameDeclaration)* -> ^
                              ;
 varNameDeclaration           : ident -> ^(TkVarNameDeclaration<VarNameDeclarationNode> ident)
                              ;
+propertyNameDeclaration      : ident -> ^(TkPropNameDeclaration<PropertyNameDeclarationNode> ident)
+                             ;
 label                        : ident
                              | intNum
                              ;
@@ -856,7 +864,14 @@ FUNCTION          : 'function'                 ;
 GOTO              : 'goto'                     ;
 HELPER            : 'helper'                   ;
 IF                : 'if'                       ;
-IMPLEMENTATION    : 'implementation'           ;
+IMPLEMENTATION    : 'implementation' {
+                     if (shouldSkipImplementation) {
+                       skip();
+                       while (input.LA(1) != EOF) {
+                         input.consume();
+                       }
+                     }
+                  };
 IMPLEMENTS        : 'implements'               ;
 IN                : 'in'                       ;
 INDEX             : 'index'                    ;
@@ -1064,6 +1079,8 @@ TkVarDeclaration        : 'VAR_DECLARATION'
 TkVarNameDeclaration    : 'VAR_NAME_DECLARATION'
                         ;
 TkVarNameDeclList       : 'VAR_NAME_DECLARATION_LIST'
+                        ;
+TkPropNameDeclaration   : 'PROPERTY_NAME_DECLARATION'
                         ;
 TkConstDeclaration      : 'CONST_DECLARATION'
                         ;

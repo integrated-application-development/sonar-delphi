@@ -187,6 +187,14 @@ class ExpressionValues {
     return unknownValue();
   }
 
+  static ExpressionValue plus(ExpressionValue value) {
+    if (value.type() == INTEGER || value.type() == DECIMAL) {
+      return value;
+    } else {
+      return unknownValue();
+    }
+  }
+
   static ExpressionValue negate(ExpressionValue value) {
     switch (value.type()) {
       case INTEGER:

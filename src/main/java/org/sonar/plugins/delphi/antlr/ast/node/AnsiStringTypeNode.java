@@ -1,9 +1,10 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSISTRING;
+
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class AnsiStringTypeNode extends TypeNode {
@@ -19,6 +20,6 @@ public final class AnsiStringTypeNode extends TypeNode {
   @Override
   @NotNull
   public Type createType() {
-    return TextType.ANSISTRING.type;
+    return ANSISTRING.type;
   }
 }

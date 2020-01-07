@@ -1,35 +1,28 @@
 package org.sonar.plugins.delphi.type;
 
+import com.google.errorprone.annotations.Immutable;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.type.Type.PointerType;
 
-public class DelphiPointerType extends DelphiType implements PointerType {
-  private static final PointerType UNTYPED = new DelphiPointerType(DelphiType.untypedType());
-  private static final PointerType NIL = new DelphiPointerType(DelphiType.voidType());
-
-  private final Type dereferencedType;
-
-  private DelphiPointerType(Type dereferencedType) {
-    super("^" + dereferencedType.getImage());
-    this.dereferencedType = dereferencedType;
+public abstract class DelphiPointerType extends DelphiType implements PointerType {
+  private DelphiPointerType(String typeImage) {
+    super("^" + typeImage);
   }
 
   public static PointerType pointerTo(Type type) {
-    return new DelphiPointerType(type);
+    return new MutableDelphiPointerType(type);
   }
 
-  public static PointerType untypedPointer() {
-    return UNTYPED;
+  public static ImmutablePointerType pointerTo(ImmutableType type) {
+    return new ImmutableDelphiPointerType(type);
   }
 
-  public static PointerType nilPointer() {
-    return NIL;
+  public static ImmutablePointerType untypedPointer() {
+    return ImmutableDelphiPointerType.UNTYPED;
   }
 
-  @Override
-  @NotNull
-  public Type dereferencedType() {
-    return dereferencedType;
+  public static ImmutablePointerType nilPointer() {
+    return ImmutableDelphiPointerType.NIL;
   }
 
   @Override
@@ -39,11 +32,49 @@ public class DelphiPointerType extends DelphiType implements PointerType {
 
   @Override
   public boolean isNilPointer() {
-    return this == NIL;
+    return this == ImmutableDelphiPointerType.NIL;
   }
 
   @Override
   public boolean isUntypedPointer() {
-    return dereferencedType.isUntyped();
+    return dereferencedType().isUntyped();
+  }
+
+  private static class MutableDelphiPointerType extends DelphiPointerType {
+    private final Type dereferencedType;
+
+    MutableDelphiPointerType(Type dereferencedType) {
+      super(dereferencedType.getImage());
+      this.dereferencedType = dereferencedType;
+    }
+
+    @Override
+    @NotNull
+    public Type dereferencedType() {
+      return dereferencedType;
+    }
+  }
+
+  @Immutable
+  private static class ImmutableDelphiPointerType extends DelphiPointerType
+      implements ImmutablePointerType {
+    private static final ImmutablePointerType UNTYPED =
+        new ImmutableDelphiPointerType(DelphiType.untypedType());
+
+    private static final ImmutablePointerType NIL =
+        new ImmutableDelphiPointerType(DelphiType.voidType());
+
+    private final ImmutableType dereferencedType;
+
+    ImmutableDelphiPointerType(ImmutableType dereferencedType) {
+      super(dereferencedType.getImage());
+      this.dereferencedType = dereferencedType;
+    }
+
+    @Override
+    @NotNull
+    public ImmutableType dereferencedType() {
+      return dereferencedType;
+    }
   }
 }

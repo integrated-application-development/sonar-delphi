@@ -6,9 +6,6 @@ import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
-import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
-import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.Type.ScopedType;
 
 public final class MethodImplementationNode extends MethodNode {
   private MethodBodyNode methodBody;
@@ -48,17 +45,6 @@ public final class MethodImplementationNode extends MethodNode {
       }
     }
     return typeDeclaration;
-  }
-
-  @Nullable
-  public DelphiScope getTypeScope() {
-    if (getTypeDeclaration() != null) {
-      Type type = getTypeDeclaration().getType();
-      if (type instanceof ScopedType) {
-        return ((ScopedType) type).typeScope();
-      }
-    }
-    return null;
   }
 
   @NotNull

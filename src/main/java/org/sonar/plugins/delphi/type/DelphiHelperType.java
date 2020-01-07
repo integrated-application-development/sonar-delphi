@@ -35,4 +35,9 @@ public class DelphiHelperType extends DelphiStructType implements HelperType {
   public Type helperType() {
     return helperType;
   }
+
+  @Override
+  public boolean isForwardType() {
+    return false;
+  }
 }

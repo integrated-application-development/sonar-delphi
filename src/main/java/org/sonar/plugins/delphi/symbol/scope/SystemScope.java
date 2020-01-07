@@ -1,49 +1,89 @@
 package org.sonar.plugins.delphi.symbol.scope;
 
+import static org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration.compilerVariable;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.BOOLEAN;
+
 import java.util.Arrays;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.sonar.plugins.delphi.symbol.QualifiedName;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
+import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.BooleanType;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.DecimalType;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.IntegerType;
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicMethod;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicMethodData;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicPointer;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicText;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicVariant;
 
 public class SystemScope extends AbstractFileScope {
   private TypeNameDeclaration objectDeclaration;
   private TypeNameDeclaration interfaceDeclaration;
+  private TypeNameDeclaration varRecDeclaration;
 
   public SystemScope() {
     super("System");
     this.injectIntrinsicTypes();
+    this.injectConstants();
   }
 
   private void injectIntrinsicTypes() {
-    Arrays.stream(IntegerType.values())
+    Arrays.stream(IntrinsicInteger.values())
         .map(typeEnum -> typeEnum.type)
         .forEach(this::injectIntrinsicType);
 
-    Arrays.stream(DecimalType.values())
+    Arrays.stream(IntrinsicDecimal.values())
         .map(typeEnum -> typeEnum.type)
         .forEach(this::injectIntrinsicType);
 
-    Arrays.stream(BooleanType.values())
+    Arrays.stream(IntrinsicBoolean.values())
         .map(typeEnum -> typeEnum.type)
         .forEach(this::injectIntrinsicType);
 
-    Arrays.stream(TextType.values())
+    Arrays.stream(IntrinsicVariant.values())
         .map(typeEnum -> typeEnum.type)
         .forEach(this::injectIntrinsicType);
+
+    Arrays.stream(IntrinsicMethod.values())
+        .map(typeEnum -> typeEnum.data)
+        .forEach(this::injectIntrinsicMethodType);
+
+    Arrays.stream(IntrinsicText.values())
+        .forEach(text -> injectIntrinsicType(text.image, text.type));
+
+    Arrays.stream(IntrinsicPointer.values())
+        .forEach(pointer -> injectIntrinsicType(pointer.image, pointer.type));
+  }
+
+  private void injectConstants() {
+    injectConstant("True", BOOLEAN.type);
+    injectConstant("False", BOOLEAN.type);
   }
 
   private void injectIntrinsicType(Type type) {
-    SymbolicNode node = SymbolicNode.imaginary(type.getImage(), this);
-    QualifiedName qualifiedName = QualifiedName.of("System", type.getImage());
+    injectIntrinsicType(type.getImage(), type);
+  }
+
+  private void injectIntrinsicType(String image, Type type) {
+    SymbolicNode node = SymbolicNode.imaginary(image, this);
+    QualifiedName qualifiedName = QualifiedName.of("System", image);
     TypeNameDeclaration declaration = new TypeNameDeclaration(node, type, qualifiedName);
 
     this.addDeclaration(declaration);
+  }
+
+  private void injectIntrinsicMethodType(IntrinsicMethodData data) {
+    SymbolicNode node = SymbolicNode.imaginary(data.getMethodName(), this);
+    MethodNameDeclaration declaration = MethodNameDeclaration.create(node, data);
+
+    this.addDeclaration(declaration);
+  }
+
+  private void injectConstant(String image, Type type) {
+    this.addDeclaration(compilerVariable(image, type, this));
   }
 
   @Override
@@ -57,6 +97,10 @@ public class SystemScope extends AbstractFileScope {
 
         case "IInterface":
           this.interfaceDeclaration = typeDeclaration;
+          break;
+
+        case "TVarRec":
+          this.varRecDeclaration = typeDeclaration;
           break;
 
         default:
@@ -73,6 +117,10 @@ public class SystemScope extends AbstractFileScope {
 
   public TypeNameDeclaration getIInterfaceDeclaration() {
     return interfaceDeclaration;
+  }
+
+  public TypeNameDeclaration getTVarRecDeclaration() {
+    return varRecDeclaration;
   }
 
   @Override

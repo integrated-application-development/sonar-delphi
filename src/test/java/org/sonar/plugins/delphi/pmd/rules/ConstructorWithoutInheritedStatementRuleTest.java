@@ -37,7 +37,7 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
             .appendImpl("constructor TTestConstructor.Create;")
             .appendImpl("begin")
             .appendImpl("  inherited;")
-            .appendImpl("  Writeln('do something');")
+            .appendImpl("  WriteLn('do something');")
             .appendImpl("end;");
 
     execute(builder);
@@ -56,7 +56,7 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
             .appendDecl("  end;")
             .appendImpl("constructor TTestConstructor.Create;")
             .appendImpl("begin")
-            .appendImpl("  Writeln('do something');")
+            .appendImpl("  WriteLn('do something');")
             .appendImpl("end;");
 
     execute(builder);
@@ -78,7 +78,7 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
             .appendDecl("  end;")
             .appendImpl("class constructor TTestConstructor.Create;")
             .appendImpl("begin")
-            .appendImpl("  Writeln('do something');")
+            .appendImpl("  WriteLn('do something');")
             .appendImpl("end;");
 
     execute(builder);
@@ -111,7 +111,7 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
         new DelphiTestUnitBuilder()
             .appendImpl("constructor TTestConstructor.Create;")
             .appendImpl("begin")
-            .appendImpl("  Writeln('do something');")
+            .appendImpl("  WriteLn('do something');")
             .appendImpl("end;");
 
     execute(builder);

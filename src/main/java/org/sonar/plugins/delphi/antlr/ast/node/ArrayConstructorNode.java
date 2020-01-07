@@ -1,17 +1,17 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.type.DelphiCollectionType;
+import org.sonar.plugins.delphi.type.DelphiArrayConstructorType;
 import org.sonar.plugins.delphi.type.Type;
 
-public final class SetLiteralNode extends LiteralNode {
+public final class ArrayConstructorNode extends ExpressionNode {
   private String image;
-  private Type type;
 
-  public SetLiteralNode(Token token) {
+  public ArrayConstructorNode(Token token) {
     super(token);
   }
 
@@ -20,7 +20,7 @@ public final class SetLiteralNode extends LiteralNode {
     return visitor.visit(this, data);
   }
 
-  private List<ExpressionNode> getElements() {
+  public List<ExpressionNode> getElements() {
     return findChildrenOfType(ExpressionNode.class);
   }
 
@@ -43,15 +43,10 @@ public final class SetLiteralNode extends LiteralNode {
 
   @Override
   @NotNull
-  public Type getType() {
-    if (type == null) {
-      List<ExpressionNode> elements = getElements();
-      if (!getElements().isEmpty()) {
-        type = DelphiCollectionType.set(elements.get(0).getType());
-      } else {
-        type = DelphiCollectionType.emptySet();
-      }
-    }
-    return type;
+  public Type createType() {
+    return DelphiArrayConstructorType.arrayConstructor(
+        getElements().stream()
+            .map(ExpressionNode::getType)
+            .collect(Collectors.toUnmodifiableList()));
   }
 }

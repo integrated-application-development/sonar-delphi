@@ -1,13 +1,15 @@
 package org.sonar.plugins.delphi.symbol.declaration;
 
+import com.google.common.collect.ComparisonChain;
 import java.util.Objects;
 import org.assertj.core.util.VisibleForTesting;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Typed;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicMethodData.IntrinsicMethodParameterData;
 
-public final class ParameterDeclaration implements Typed {
+public final class ParameterDeclaration implements Typed, Comparable<ParameterDeclaration> {
   private final String image;
   private final Type type;
   private final boolean hasDefaultValue;
@@ -16,13 +18,34 @@ public final class ParameterDeclaration implements Typed {
   private final boolean isConst;
 
   @VisibleForTesting
-  public ParameterDeclaration(FormalParameter parameter) {
-    image = parameter.getImage();
-    type = parameter.getType();
-    hasDefaultValue = parameter.hasDefaultValue();
-    isOut = parameter.isOut();
-    isVar = parameter.isVar();
-    isConst = parameter.isConst();
+  private ParameterDeclaration(
+      String image,
+      Type type,
+      boolean hasDefaultValue,
+      boolean isOut,
+      boolean isVar,
+      boolean isConst) {
+    this.image = image;
+    this.type = type;
+    this.hasDefaultValue = hasDefaultValue;
+    this.isOut = isOut;
+    this.isVar = isVar;
+    this.isConst = isConst;
+  }
+
+  public static ParameterDeclaration create(FormalParameter parameter) {
+    return new ParameterDeclaration(
+        parameter.getImage(),
+        parameter.getType(),
+        parameter.hasDefaultValue(),
+        parameter.isOut(),
+        parameter.isVar(),
+        parameter.isConst());
+  }
+
+  public static ParameterDeclaration create(IntrinsicMethodParameterData data) {
+    return new ParameterDeclaration(
+        "_", data.getType(), data.hasDefaultValue(), false, false, false);
   }
 
   public String getImage() {
@@ -65,6 +88,14 @@ public final class ParameterDeclaration implements Typed {
 
   @Override
   public int hashCode() {
-    return Objects.hash(image.toLowerCase(), type.getImage().toLowerCase());
+    return Objects.hash(image.toLowerCase(), type.getImage());
+  }
+
+  @Override
+  public int compareTo(@NotNull ParameterDeclaration other) {
+    return ComparisonChain.start()
+        .compare(image, other.image, String.CASE_INSENSITIVE_ORDER)
+        .compare(type.getImage(), other.type.getImage())
+        .result();
   }
 }

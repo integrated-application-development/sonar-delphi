@@ -38,7 +38,7 @@ public class VariableNameDeclaration extends DelphiNameDeclaration implements Ty
       return false;
     }
     VariableNameDeclaration that = (VariableNameDeclaration) other;
-    return that.getImage().equalsIgnoreCase(that.getImage());
+    return getImage().equalsIgnoreCase(that.getImage());
   }
 
   @Override

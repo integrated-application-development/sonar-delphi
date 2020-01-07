@@ -25,4 +25,18 @@ public interface DelphiFileConfig {
    * @return Symbol definitions
    */
   Set<String> getDefinitions();
+
+  /**
+   * Returns whether the implementation section should be skipped when parsing the file.
+   *
+   * @return true if the implementation should be skipped when parsing the file
+   */
+  boolean shouldSkipImplementation();
+
+  /**
+   * Sets whether the implementation section should be skipped when parsing the file
+   *
+   * @param skipImplementation whether the implementation should be skipped when parsing the file
+   */
+  void setShouldSkipImplementation(boolean skipImplementation);
 }

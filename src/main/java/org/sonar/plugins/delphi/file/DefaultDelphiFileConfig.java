@@ -8,6 +8,7 @@ public class DefaultDelphiFileConfig implements DelphiFileConfig {
   private String encoding;
   private List<Path> searchPath;
   private Set<String> definitions;
+  private boolean skipImplementation;
 
   DefaultDelphiFileConfig(String encoding, List<Path> searchPath, Set<String> definitions) {
     this.encoding = encoding;
@@ -28,5 +29,15 @@ public class DefaultDelphiFileConfig implements DelphiFileConfig {
   @Override
   public Set<String> getDefinitions() {
     return definitions;
+  }
+
+  @Override
+  public boolean shouldSkipImplementation() {
+    return skipImplementation;
+  }
+
+  @Override
+  public void setShouldSkipImplementation(boolean skipImplementation) {
+    this.skipImplementation = skipImplementation;
   }
 }

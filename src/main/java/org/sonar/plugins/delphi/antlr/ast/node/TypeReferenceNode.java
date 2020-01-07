@@ -2,6 +2,7 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.symbol.Qualifiable;
 import org.sonar.plugins.delphi.symbol.QualifiedName;
@@ -24,6 +25,11 @@ public final class TypeReferenceNode extends TypeNode implements Qualifiable {
     return visitor.visit(this, data);
   }
 
+  @Nullable
+  public DelphiNameDeclaration getTypeDeclaration() {
+    return getNameNode().getLastName().getNameDeclaration();
+  }
+
   private NameReferenceNode getNameNode() {
     return ((NameReferenceNode) jjtGetChild(0));
   }
@@ -31,7 +37,7 @@ public final class TypeReferenceNode extends TypeNode implements Qualifiable {
   @Override
   @NotNull
   public Type createType() {
-    DelphiNameDeclaration declaration = getNameNode().getLastName().getNameDeclaration();
+    DelphiNameDeclaration declaration = getTypeDeclaration();
     if (declaration instanceof Typed) {
       return ((Typed) declaration).getType();
     }

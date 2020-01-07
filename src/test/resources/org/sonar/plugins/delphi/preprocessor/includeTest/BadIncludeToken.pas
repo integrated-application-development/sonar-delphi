@@ -1,4 +1,4 @@
-unit ResolveError;
+unit BadIncludeToken;
 
 {This is a sample Delphi file.}
 

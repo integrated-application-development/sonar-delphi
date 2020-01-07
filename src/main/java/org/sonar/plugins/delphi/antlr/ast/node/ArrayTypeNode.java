@@ -1,11 +1,14 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import java.util.EnumSet;
+import java.util.Set;
 import net.sourceforge.pmd.lang.ast.Node;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.type.DelphiCollectionType;
+import org.sonar.plugins.delphi.type.DelphiArrayType;
+import org.sonar.plugins.delphi.type.DelphiArrayType.ArrayOption;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class ArrayTypeNode extends TypeNode {
@@ -37,21 +40,28 @@ public final class ArrayTypeNode extends TypeNode {
     if (parent instanceof TypeDeclarationNode) {
       image = ((TypeDeclarationNode) parent).getTypeNameNode().simpleName();
     }
-    Type elementType = getElementTypeNode().getType();
 
+    Type elementType = getElementTypeNode().getType();
     ArrayIndicesNode indices = getArrayIndices();
     int indicesSize = (indices == null) ? 0 : indices.getTypeNodes().size();
 
-    if (indicesSize > 1) {
-      return DelphiCollectionType.multiDimensionalArray(image, elementType, indicesSize);
+    Set<ArrayOption> options = EnumSet.noneOf(ArrayOption.class);
+    if (indicesSize > 0) {
+      options.add(ArrayOption.FIXED);
+    } else if (parent instanceof FormalParameterNode) {
+      options.add(ArrayOption.OPEN);
+    } else {
+      options.add(ArrayOption.DYNAMIC);
+    }
+
+    if (getElementTypeNode() instanceof ConstArraySubTypeNode) {
+      options.add(ArrayOption.ARRAY_OF_CONST);
     }
 
     if (indicesSize > 0) {
-      return DelphiCollectionType.fixedArray(image, elementType);
-    } else if (parent instanceof FormalParameterNode) {
-      return DelphiCollectionType.openArray(image, elementType);
-    } else {
-      return DelphiCollectionType.dynamicArray(image, elementType);
+      return DelphiArrayType.multiDimensionalArray(image, elementType, indicesSize, options);
     }
+
+    return DelphiArrayType.array(image, elementType, options);
   }
 }

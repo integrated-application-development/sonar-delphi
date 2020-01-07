@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.antlr.preprocessor.directive.expression;
 
 import static com.google.common.collect.Sets.immutableEnumSet;
+import static java.util.Objects.requireNonNullElse;
 import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.Token.TokenType.AND;
 import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.Token.TokenType.DIV;
 import static org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.Token.TokenType.DIVIDE;
@@ -33,7 +34,7 @@ import org.sonar.plugins.delphi.antlr.preprocessor.directive.expression.Token.To
 public class ExpressionParser {
   public static class ExpressionParserError extends RuntimeException {
     ExpressionParserError(String message, @Nullable Token got) {
-      super(message + " Got '" + (got == null ? END_OF_INPUT : got).getText() + "'");
+      super(message + " Got '" + requireNonNullElse(got, END_OF_INPUT).getText() + "'");
     }
   }
 

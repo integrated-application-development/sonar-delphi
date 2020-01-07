@@ -1,48 +1,34 @@
 package org.sonar.plugins.delphi.type;
 
-import org.sonar.plugins.delphi.type.DelphiIntrinsicType.TextType;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSICHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSISTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.SHORTSTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.STRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDECHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDESTRING;
+
+import java.util.Collections;
+import java.util.Set;
 
 public abstract class DelphiType implements Type {
-  private static final DelphiType UNTYPED =
-      new DelphiType("<Untyped>") {
-        @Override
-        public boolean isUntyped() {
-          return true;
-        }
-      };
-
-  private static final DelphiType UNKNOWN =
-      new DelphiType("<Unknown>") {
-        @Override
-        public boolean isUnknown() {
-          return true;
-        }
-      };
-
-  private static final DelphiType VOID =
-      new DelphiType("<Void>") {
-        @Override
-        public boolean isVoid() {
-          return true;
-        }
-      };
-
   private final String image;
 
   public DelphiType(String image) {
     this.image = image;
   }
 
-  public static Type unknownType() {
-    return UNKNOWN;
+  public static ImmutableType unknownType() {
+    return UnknownType.instance();
   }
 
-  public static Type untypedType() {
-    return UNTYPED;
+  public static ImmutableType untypedType() {
+    return UntypedType.instance();
   }
 
-  public static Type voidType() {
-    return VOID;
+  public static ImmutableType voidType() {
+    return VoidType.instance();
   }
 
   @Override
@@ -53,6 +39,11 @@ public abstract class DelphiType implements Type {
   @Override
   public Type superType() {
     return unknownType();
+  }
+
+  @Override
+  public Set<Type> parents() {
+    return Collections.emptySet();
   }
 
   @Override
@@ -122,15 +113,12 @@ public abstract class DelphiType implements Type {
 
   @Override
   public final boolean isNarrowString() {
-    return isText() && (is(TextType.ANSISTRING.type) || is(TextType.SHORTSTRING.type));
+    return isText() && (is(ANSISTRING.type) || is(SHORTSTRING.type));
   }
 
   @Override
   public final boolean isWideString() {
-    return isText()
-        && (is(TextType.STRING.type)
-            || is(TextType.WIDESTRING.type)
-            || is(TextType.UNICODESTRING.type));
+    return isText() && (is(STRING.type) || is(WIDESTRING.type) || is(UNICODESTRING.type));
   }
 
   @Override
@@ -140,16 +128,16 @@ public abstract class DelphiType implements Type {
 
   @Override
   public final boolean isNarrowChar() {
-    return is(TextType.ANSICHAR.type);
+    return is(ANSICHAR.type);
   }
 
   @Override
   public final boolean isWideChar() {
-    return is(TextType.CHAR.type) || is(TextType.WIDECHAR.type);
+    return is(CHAR.type) || is(WIDECHAR.type);
   }
 
   @Override
-  public boolean isObject() {
+  public boolean isStruct() {
     return false;
   }
 
@@ -225,6 +213,16 @@ public abstract class DelphiType implements Type {
 
   @Override
   public boolean isTypeType() {
+    return false;
+  }
+
+  @Override
+  public boolean isArrayConstructor() {
+    return false;
+  }
+
+  @Override
+  public boolean isArrayOfConst() {
     return false;
   }
 }

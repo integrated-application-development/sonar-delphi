@@ -1,6 +1,9 @@
 package org.sonar.plugins.delphi.type;
 
+import com.google.errorprone.annotations.Immutable;
+import java.math.BigInteger;
 import java.util.List;
+import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
@@ -15,11 +18,19 @@ public interface Type {
   String getImage();
 
   /**
-   * Returns the type that this inherits from. Note that this will never return an interface.
+   * Returns the concrete type that this inherits from. Note that this will never return an
+   * interface.
    *
-   * @return The type this inherits from
+   * @return The type this inherits from. UnknownType if this does not inherit from a concrete type.
    */
   Type superType();
+
+  /**
+   * Returns all types from the ancestor list. (This will also return interfaces.)
+   *
+   * @return The types that this inherits from.
+   */
+  Set<Type> parents();
 
   /**
    * Check whether a type is the one designated by the qualified name.
@@ -176,11 +187,11 @@ public interface Type {
   boolean isBoolean();
 
   /**
-   * Check if this type is an object type (object, class, record, etc...)
+   * Check if this type is a struct type (object, class, record, etc...)
    *
-   * @return true if the type is an object type
+   * @return true if the type is a struct type
    */
-  boolean isObject();
+  boolean isStruct();
 
   /**
    * Check if this type is a file type
@@ -216,6 +227,13 @@ public interface Type {
    * @return true if the type is an open array
    */
   boolean isOpenArray();
+
+  /**
+   * Check if this type is an array of const
+   *
+   * @return true if the type is an array of const
+   */
+  boolean isArrayOfConst();
 
   /**
    * Check if this type is a pointer
@@ -266,6 +284,13 @@ public interface Type {
    */
   boolean isTypeType();
 
+  /**
+   * Check if this type is an array constructor
+   *
+   * @return true if the type is an array constructor
+   */
+  boolean isArrayConstructor();
+
   interface CollectionType extends Type {
     /**
      * The type that is is a collection of
@@ -274,6 +299,24 @@ public interface Type {
      */
     @NotNull
     Type elementType();
+  }
+
+  interface ArrayConstructorType extends Type {
+    /**
+     * The types of the elements passed in to this array constructor
+     *
+     * @return Element types
+     */
+    List<Type> elementTypes();
+
+    /**
+     * Returns whether the array constructor is empty
+     *
+     * @return true if the array constructor has no elements
+     */
+    default boolean isEmpty() {
+      return elementTypes().isEmpty();
+    }
   }
 
   interface ScopedType extends Type {
@@ -286,7 +329,31 @@ public interface Type {
     DelphiScope typeScope();
   }
 
-  interface HelperType extends Type {
+  interface StructType extends ScopedType {
+    /**
+     * The kind of struct that this type is
+     *
+     * @return Struct kind
+     */
+    StructKind kind();
+
+    /**
+     * Whether this is a forward type
+     *
+     * @return true if this is a forward type
+     */
+    boolean isForwardType();
+
+    /**
+     * Adds the full type declaration's information. Also marks this StructType instance as a
+     * forward type.
+     *
+     * @param fullType Type representing the full type declaration
+     */
+    void setFullType(StructType fullType);
+  }
+
+  interface HelperType extends StructType {
     /**
      * The type that this is a helper for.
      *
@@ -366,7 +433,7 @@ public interface Type {
     Type fileType();
   }
 
-  interface EnumType extends Type {
+  interface EnumType extends ScopedType {
     /**
      * The base type that this is an enumeration of
      *
@@ -385,7 +452,114 @@ public interface Type {
     ScopedType classType();
   }
 
-  interface VariantType extends Type {
+  interface TypeType extends Type {
+    /**
+     * The type that this type is based off of
+     *
+     * @return Original type
+     */
+    Type originalType();
+  }
+
+  /**
+   * Most Type objects are immutable in the sense that application code cannot modify them once they
+   * are created.
+   *
+   * <p>This interface is used to tag Type objects which are provably and deeply immutable. <br>
+   * This is helpful if you want to store Type objects in enums, which should only contain immutable
+   * members.
+   */
+  @Immutable
+  interface ImmutableType extends Type {}
+
+  @Immutable
+  interface ImmutableFileType extends FileType, ImmutableType {}
+
+  @Immutable
+  interface ImmutablePointerType extends PointerType, ImmutableType {}
+
+  @Immutable
+  interface IntegerType extends ImmutableType {
+    /**
+     * The size of this integer type
+     *
+     * @return Size
+     */
+    int size();
+
+    /**
+     * Minimum value that this type can hold
+     *
+     * @return minimum value
+     */
+    BigInteger min();
+
+    /**
+     * Maximum value that this type can hold
+     *
+     * @return maximum value
+     */
+    BigInteger max();
+
+    /**
+     * Returns whether the type is signed
+     *
+     * @return true if the type is signed
+     */
+    boolean isSigned();
+
+    /**
+     * Returns whether another integer type is capable of holding this type's value without losing
+     * data. (Disregards signing.)
+     *
+     * @param other Other type
+     * @return true if the other integer type has a larger size than this
+     */
+    boolean isWithinLimit(IntegerType other);
+
+    /**
+     * Returns whether another integer type has the same value range as this
+     *
+     * @param other Other type
+     * @return true if the other integer type has the same size and signing as this
+     */
+    boolean isSameRange(IntegerType other);
+
+    /**
+     * The difference in size between another integer type and this, expressed as the distance
+     * between their value ranges.
+     *
+     * @param other Other type
+     * @return Ordinal distance between another type and this
+     */
+    double ordinalDistance(IntegerType other);
+  }
+
+  @Immutable
+  interface DecimalType extends ImmutableType {
+    /**
+     * The size of this floating point type
+     *
+     * @return Size
+     */
+    int size();
+  }
+
+  @Immutable
+  interface BooleanType extends ImmutableType {
+    /**
+     * The size of this boolean type
+     *
+     * @return Size
+     */
+    int size();
+  }
+
+  @Immutable
+  interface TextType extends ImmutableType {}
+
+  @Immutable
+  interface VariantType extends ImmutableType {
     enum VariantKind {
       OLE_VARIANT,
       NORMAL_VARIANT
@@ -397,14 +571,5 @@ public interface Type {
      * @return Variant kind
      */
     VariantKind kind();
-  }
-
-  interface TypeType extends Type {
-    /**
-     * The type that this type is based off of
-     *
-     * @return Original type
-     */
-    Type originalType();
   }
 }

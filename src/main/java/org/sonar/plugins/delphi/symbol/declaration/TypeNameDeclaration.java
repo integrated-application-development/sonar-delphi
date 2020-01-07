@@ -7,11 +7,12 @@ import org.sonar.plugins.delphi.symbol.Qualifiable;
 import org.sonar.plugins.delphi.symbol.QualifiedName;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Type.StructType;
 import org.sonar.plugins.delphi.type.Typed;
 
 public final class TypeNameDeclaration extends DelphiNameDeclaration implements Typed, Qualifiable {
   private final QualifiedName qualifiedName;
-  private boolean isForwardDeclaration;
+  private boolean isScopedEnum;
   private Type type;
 
   public TypeNameDeclaration(TypeDeclarationNode node) {
@@ -38,13 +39,16 @@ public final class TypeNameDeclaration extends DelphiNameDeclaration implements 
     return qualifiedName;
   }
 
-  public void setIsForwardDeclaration(Type fullType) {
-    isForwardDeclaration = true;
-    this.type = fullType;
+  public boolean isForwardDeclaration() {
+    return type instanceof StructType && ((StructType) type).isForwardType();
   }
 
-  public boolean isForwardDeclaration() {
-    return isForwardDeclaration;
+  public void setIsScopedEnum() {
+    isScopedEnum = true;
+  }
+
+  public boolean isScopedEnum() {
+    return isScopedEnum;
   }
 
   @Override
@@ -57,12 +61,22 @@ public final class TypeNameDeclaration extends DelphiNameDeclaration implements 
     }
     TypeNameDeclaration that = (TypeNameDeclaration) other;
     return getImage().equalsIgnoreCase(that.getImage())
-        && isForwardDeclaration == that.isForwardDeclaration;
+        && isForwardDeclaration() == that.isForwardDeclaration();
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getImage().toLowerCase(), isForwardDeclaration);
+    return Objects.hash(getImage().toLowerCase(), isForwardDeclaration());
+  }
+
+  @Override
+  public int compareTo(@NotNull DelphiNameDeclaration other) {
+    int result = super.compareTo(other);
+    if (result == 0) {
+      TypeNameDeclaration that = (TypeNameDeclaration) other;
+      result = Boolean.compare(isForwardDeclaration(), that.isForwardDeclaration());
+    }
+    return result;
   }
 
   @Override
