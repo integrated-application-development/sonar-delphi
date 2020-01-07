@@ -62,6 +62,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Handle global variables separately in `VariableNameRule`.
 - Allow empty case branches in `EmptyBeginStatementRule` if they have comments.
 
+### Removed
+
+- `sonar.delphi.sources.excluded` property.
+
 ### Fixed
 
 - FPs around forward declarations in `ClassPerFileRule`.
