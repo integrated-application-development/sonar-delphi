@@ -19,7 +19,7 @@ import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Express
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Expression.ExpressionValue;
 
 class ExpressionValues {
-  private static final ExpressionValue UNKNOWN_VALUE = new UnknownValue();
+  private static final ExpressionValue UNKNOWN_VALUE = () -> UNKNOWN;
 
   private ExpressionValues() {
     // Utility class
@@ -215,38 +215,6 @@ class ExpressionValues {
     return unknownValue();
   }
 
-  private static final class UnknownValue implements ExpressionValue {
-    @Override
-    public ConstExpressionType type() {
-      return ConstExpressionType.UNKNOWN;
-    }
-
-    @Override
-    public String asString() {
-      return "";
-    }
-
-    @Override
-    public Integer asInteger() {
-      return 0;
-    }
-
-    @Override
-    public Double asDecimal() {
-      return 0.0;
-    }
-
-    @Override
-    public Boolean asBoolean() {
-      return false;
-    }
-
-    @Override
-    public Set<ExpressionValue> asSet() {
-      return Collections.emptySet();
-    }
-  }
-
   private static final class PrimitiveExpressionValue implements ExpressionValue {
     private final ConstExpressionType type;
     private final Object value;
@@ -330,26 +298,6 @@ class ExpressionValues {
     @Override
     public ConstExpressionType type() {
       return ConstExpressionType.SET;
-    }
-
-    @Override
-    public String asString() {
-      return "";
-    }
-
-    @Override
-    public Integer asInteger() {
-      return 0;
-    }
-
-    @Override
-    public Double asDecimal() {
-      return 0.0;
-    }
-
-    @Override
-    public Boolean asBoolean() {
-      return false;
     }
 
     @Override
