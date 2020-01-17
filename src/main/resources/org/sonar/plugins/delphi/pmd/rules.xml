@@ -529,7 +529,10 @@ FreeAndNil(Foo); // Compliant
     message="Code blocks should not be empty"
     name="EmptyBeginStatementRule">
     <priority>4</priority>
-    <description>Empty code blocks are not allowed.</description>
+    <description>
+      Most of the time a block of code is empty when a piece of code is really missing. An empty
+      block must be either filled or removed.
+    </description>
     <properties>
       <property name="baseEffort" value="5min"/>
     </properties>
