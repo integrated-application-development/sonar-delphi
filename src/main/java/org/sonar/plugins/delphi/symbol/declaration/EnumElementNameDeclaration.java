@@ -4,9 +4,8 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.node.EnumElementNode;
 import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.Typed;
 
-public class EnumElementNameDeclaration extends DelphiNameDeclaration implements Typed {
+public class EnumElementNameDeclaration extends DelphiNameDeclaration implements TypedDeclaration {
   private final Type type;
 
   public EnumElementNameDeclaration(EnumElementNode node) {

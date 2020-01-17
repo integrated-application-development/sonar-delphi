@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.preprocessor.directive;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -39,15 +40,25 @@ public interface CompilerDirective {
 
       Expression.ConstExpressionType type();
 
-      String asString();
+      default String asString() {
+        return "";
+      }
 
-      Integer asInteger();
+      default Integer asInteger() {
+        return 0;
+      }
 
-      Double asDecimal();
+      default Double asDecimal() {
+        return 0.0;
+      }
 
-      Boolean asBoolean();
+      default Boolean asBoolean() {
+        return false;
+      }
 
-      Set<ExpressionValue> asSet();
+      default Set<ExpressionValue> asSet() {
+        return Collections.emptySet();
+      }
     }
   }
 }

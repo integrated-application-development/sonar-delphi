@@ -134,7 +134,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     builder.appendDecl("type");
-    builder.appendDecl("  PClassPointer = ^TClass;");
+    builder.appendDecl("  PClass = ^TClass;");
 
     execute(builder);
 

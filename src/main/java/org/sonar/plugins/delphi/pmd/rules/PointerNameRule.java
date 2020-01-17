@@ -19,17 +19,36 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
+import org.sonar.plugins.delphi.antlr.ast.node.PointerTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
-import org.sonar.plugins.delphi.utils.NameConventionUtils;
+import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
+import org.sonar.plugins.delphi.antlr.ast.node.TypeReferenceNode;
 
 public class PointerNameRule extends AbstractDelphiRule {
-  private static final String PREFIX = "P";
 
   @Override
   public RuleContext visit(TypeDeclarationNode type, RuleContext data) {
-    if (type.isPointer() && !NameConventionUtils.compliesWithPrefix(type.simpleName(), PREFIX)) {
+    if (isViolation(type)) {
       addViolation(data, type.getTypeNameNode());
     }
+
     return super.visit(type, data);
+  }
+
+  private static boolean isViolation(TypeDeclarationNode type) {
+    if (type.isPointer()) {
+      TypeNode typeNode = ((PointerTypeNode) type.getTypeNode()).getDereferencedTypeNode();
+      if (typeNode instanceof TypeReferenceNode) {
+        TypeReferenceNode referenceNode = (TypeReferenceNode) typeNode;
+        String dereferencedName = referenceNode.simpleName();
+        String expected = expectedPointerName(dereferencedName);
+        return !type.simpleName().equals(expected);
+      }
+    }
+    return false;
+  }
+
+  private static String expectedPointerName(String dereferencedName) {
+    return "P" + dereferencedName.substring(dereferencedName.startsWith("T") ? 1 : 0);
   }
 }

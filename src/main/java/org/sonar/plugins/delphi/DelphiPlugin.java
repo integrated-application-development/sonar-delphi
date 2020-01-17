@@ -47,8 +47,6 @@ import org.sonar.plugins.delphi.surefire.SurefireSensor;
 public class DelphiPlugin implements Plugin {
   public static final String CC_EXCLUDED_KEY = "sonar.delphi.codecoverage.excluded";
   public static final String SEARCH_PATH_KEY = "sonar.delphi.sources.searchPath";
-  public static final String PROJECT_FILE_KEY = "sonar.delphi.sources.project";
-  public static final String WORKGROUP_FILE_KEY = "sonar.delphi.sources.workgroup";
   public static final String STANDARD_LIBRARY_KEY = "sonar.delphi.sources.standardLibrarySource";
   public static final String CONDITIONAL_DEFINES_KEY = "sonar.delphi.conditionalDefines";
   public static final String UNIT_SCOPE_NAMES_KEY = "sonar.delphi.unitScopeNames";
@@ -77,20 +75,6 @@ public class DelphiPlugin implements Plugin {
             .name("Search path")
             .description("Directories to search in for include files and unit imports.")
             .multiValues(true)
-            .onQualifiers(Qualifiers.PROJECT)
-            .build(),
-        PropertyDefinition.builder(DelphiPlugin.PROJECT_FILE_KEY)
-            .name("Project file")
-            .description(
-                "Project file. If provided, will be parsed for search paths, project source files "
-                    + "and preprocessor definitions.")
-            .onQualifiers(Qualifiers.PROJECT)
-            .build(),
-        PropertyDefinition.builder(DelphiPlugin.WORKGROUP_FILE_KEY)
-            .name("Workgroup file")
-            .description(
-                "Workgroup file. If provided, will be parsed, then all *.dproj files found in "
-                    + "workgroup file will be parsed.")
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
         PropertyDefinition.builder(DelphiPlugin.STANDARD_LIBRARY_KEY)

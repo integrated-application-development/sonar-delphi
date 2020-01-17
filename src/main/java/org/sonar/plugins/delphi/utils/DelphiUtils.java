@@ -38,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputPath;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
+import org.sonarsource.analyzer.commons.ProgressReport;
 
 /** Some utilities */
 public final class DelphiUtils {
@@ -147,5 +148,13 @@ public final class DelphiUtils {
       path = Path.of(baseDir.toAbsolutePath().toString(), path.toString());
     }
     return path.toAbsolutePath().normalize();
+  }
+
+  public static void stopProgressReport(ProgressReport progressReport, boolean success) {
+    if (success) {
+      progressReport.stop();
+    } else {
+      progressReport.cancel();
+    }
   }
 }

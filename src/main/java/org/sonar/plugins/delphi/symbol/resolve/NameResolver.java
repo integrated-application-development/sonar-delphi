@@ -6,6 +6,7 @@ import static com.google.common.collect.Iterables.getLast;
 import static java.util.function.Predicate.not;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
 import static org.sonar.plugins.delphi.symbol.scope.UnknownScope.unknownScope;
+import static org.sonar.plugins.delphi.type.DelphiClassReferenceType.classOf;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSICHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDECHAR;
@@ -56,6 +57,7 @@ import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.QualifiedDelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration;
@@ -116,10 +118,10 @@ public class NameResolver {
 
     if (!declarations.isEmpty()) {
       NameDeclaration declaration = getLast(declarations);
-      if (isConstructor(declaration)) {
-        return currentType;
-      } else if (declaration instanceof Typed) {
-        return ((Typed) declaration).getType();
+      if (currentType.isClassReference() && isConstructor(declaration)) {
+        return ((ClassReferenceType) currentType).classType();
+      } else if (declaration instanceof TypedDeclaration) {
+        return findTypeForTypedDeclaration((TypedDeclaration) declaration);
       } else {
         return DelphiType.unknownType();
       }
@@ -153,11 +155,8 @@ public class NameResolver {
     DelphiScope newScope = unknownScope();
     if (declarations.size() == 1) {
       NameDeclaration declaration = getLast(declarations);
-      if (isConstructor(declaration)) {
-        return;
-      } else if (declaration instanceof Typed) {
-        Typed typed = (Typed) declaration;
-        currentType = typed.getType();
+      if (declaration instanceof TypedDeclaration) {
+        currentType = findTypeForTypedDeclaration((TypedDeclaration) declaration);
         ScopedType scopedType = extractScopedType(currentType);
         if (scopedType != null) {
           newScope = scopedType.typeScope();
@@ -172,6 +171,23 @@ public class NameResolver {
       }
     }
     currentScope = newScope;
+  }
+
+  private Type findTypeForTypedDeclaration(TypedDeclaration declaration) {
+    Type result;
+    if (isConstructor(declaration)) {
+      result = currentType;
+      if (result.isClassReference()) {
+        result = ((ClassReferenceType) result).classType();
+      }
+    } else {
+      result = declaration.getType();
+      if (declaration instanceof TypeNameDeclaration && result instanceof ScopedType) {
+        result = classOf(result);
+      }
+    }
+
+    return result;
   }
 
   private boolean isConstructor(NameDeclaration declaration) {
@@ -545,11 +561,7 @@ public class NameResolver {
       argument.resolve(parameter.getType());
     }
 
-    if (isConstructor(resolved)) {
-      if (currentType.isClassReference()) {
-        currentType = ((ClassReferenceType) currentType).classType();
-      }
-    } else {
+    if (!isConstructor(resolved)) {
       currentType = invocable.getReturnType();
     }
   }
@@ -637,7 +649,6 @@ public class NameResolver {
         return isMethodVisibleFrom(method, fromScope, sameUnit);
       }
     }
-
     return true;
   }
 
@@ -773,6 +784,7 @@ public class NameResolver {
   }
 
   public static void resolve(TypeNode type) {
+    type.clearCachedType();
     List<TypeNode> types = new ArrayList<>();
     types.add(type);
     types.addAll(type.findDescendantsOfType(TypeNode.class));

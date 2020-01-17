@@ -8,9 +8,9 @@ import org.sonar.plugins.delphi.symbol.QualifiedName;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.StructType;
-import org.sonar.plugins.delphi.type.Typed;
 
-public final class TypeNameDeclaration extends DelphiNameDeclaration implements Typed, Qualifiable {
+public final class TypeNameDeclaration extends DelphiNameDeclaration
+    implements TypedDeclaration, Qualifiable {
   private final QualifiedName qualifiedName;
   private final Type type;
   private boolean isScopedEnum;

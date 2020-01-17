@@ -39,9 +39,9 @@ public class DelphiProject {
 
   private String name = "";
   private Set<String> definitions = new HashSet<>();
-  private Set<String> unitScopeNames = new HashSet<>();
-  private List<Path> sourceFiles = new ArrayList<>();
-  private List<Path> searchDirectories = new ArrayList<>();
+  private final Set<String> unitScopeNames = new HashSet<>();
+  private final List<Path> sourceFiles = new ArrayList<>();
+  private final List<Path> searchDirectories = new ArrayList<>();
 
   private DelphiProject() {
     // Hide default constructor

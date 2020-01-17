@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi;
 
 import static org.sonar.plugins.delphi.utils.DelphiUtils.inputFilesToPaths;
+import static org.sonar.plugins.delphi.utils.DelphiUtils.stopProgressReport;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,6 +10,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.sonar.api.batch.fs.InputFile;
@@ -28,8 +31,7 @@ import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.file.DelphiFileConfig;
 import org.sonar.plugins.delphi.project.DelphiProjectHelper;
 import org.sonar.plugins.delphi.symbol.SymbolTable;
-import org.sonar.plugins.delphi.utils.ProgressReporter;
-import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
+import org.sonarsource.analyzer.commons.ProgressReport;
 
 /** PMD sensor */
 public class DelphiSensor implements Sensor {
@@ -87,26 +89,32 @@ public class DelphiSensor implements Sensor {
             .fileConfig(config)
             .build();
 
-    LOG.info("Analyzing {} files...", sourceFiles.size());
+    ProgressReport progressReport =
+        new ProgressReport(
+            "Report about progress of DelphiSensor analysis", TimeUnit.SECONDS.toMillis(10));
+
+    progressReport.start(sourceFiles.stream().map(Path::toString).collect(Collectors.toList()));
 
     ExecutorContext executorContext = new ExecutorContext(sensorContext, symbolTable);
-    ProgressReporter progressReporter =
-        new ProgressReporter(sourceFiles.size(), 10, new ProgressReporterLogger(LOG));
+    boolean success = false;
 
-    for (Path sourceFile : sourceFiles) {
-      String absolutePath = sourceFile.toAbsolutePath().toString();
-
-      try {
-        InputFile inputFile = delphiProjectHelper.getFile(absolutePath);
-        DelphiInputFile delphiFile = DelphiInputFile.from(inputFile, config);
-        executor.execute(executorContext, delphiFile);
-      } catch (DelphiFileConstructionException e) {
-        String error = String.format("Error while analyzing %s", absolutePath);
-        LOG.error(error, e);
-        errors.add(error);
+    try {
+      for (Path sourceFile : sourceFiles) {
+        String absolutePath = sourceFile.toAbsolutePath().toString();
+        try {
+          InputFile inputFile = delphiProjectHelper.getFile(absolutePath);
+          DelphiInputFile delphiFile = DelphiInputFile.from(inputFile, config);
+          executor.execute(executorContext, delphiFile);
+          progressReport.nextFile();
+        } catch (DelphiFileConstructionException e) {
+          String error = String.format("Error while analyzing %s", absolutePath);
+          LOG.error(error, e);
+          errors.add(error);
+        }
       }
-
-      progressReporter.progress();
+      success = true;
+    } finally {
+      stopProgressReport(progressReport, success);
     }
   }
 

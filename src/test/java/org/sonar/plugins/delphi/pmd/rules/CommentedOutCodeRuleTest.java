@@ -18,7 +18,10 @@ public class CommentedOutCodeRuleTest extends BasePmdRuleTest {
             .appendImpl("(*if the precondition is met, then we do this;*)")
             .appendImpl("//for every row in our dataset, donate one dollar to charity")
             .appendImpl("//ButtonTriggerFunction() is triggered by a button,")
-            .appendImpl("// Copyright;       © 1999-2019 Foo Bar");
+            .appendImpl("// Copyright;       © 1999-2019 Foo Bar")
+            .appendImpl("// if do some thing then return false and exit;")
+            .appendImpl("// if we couldn't find X, then we assume it's Y and")
+            .appendImpl("// if current record is spooky, just exit;");
 
     execute(builder);
 

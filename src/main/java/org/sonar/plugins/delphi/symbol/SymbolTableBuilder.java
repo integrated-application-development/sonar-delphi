@@ -5,9 +5,11 @@ import static com.google.common.collect.Iterables.getFirst;
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
 import static org.apache.commons.io.FilenameUtils.getBaseName;
+import static org.sonar.plugins.delphi.utils.DelphiUtils.stopProgressReport;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -17,6 +19,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
@@ -36,8 +39,7 @@ import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.symbol.scope.SystemScope;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
-import org.sonar.plugins.delphi.utils.ProgressReporter;
-import org.sonar.plugins.delphi.utils.ProgressReporterLogger;
+import org.sonarsource.analyzer.commons.ProgressReport;
 
 public class SymbolTableBuilder {
   private static final Logger LOG = Loggers.get(SymbolTableBuilder.class);
@@ -216,17 +218,20 @@ public class SymbolTableBuilder {
     process(unit, resolutionLevel);
   }
 
-  private void indexSystemUnit() {
+  @NotNull
+  private UnitData getSystemUnit() {
     UnitData systemData = getFirst(allUnitsByName.get("system"), null);
     if (systemData != null) {
-      indexUnit(systemData, ResolutionLevel.INTERFACE);
-      if (systemData.unitDeclaration != null) {
-        this.systemScope = (SystemScope) systemData.unitDeclaration.getUnitScope();
-        validateSystemScope();
-        return;
-      }
+      return systemData;
     }
     throw new SymbolTableConstructionException(SYSTEM_UNIT_NOT_FOUND);
+  }
+
+  private void indexSystemUnit() {
+    UnitData systemData = getSystemUnit();
+    indexUnit(systemData, ResolutionLevel.INTERFACE);
+    this.systemScope = (SystemScope) systemData.unitDeclaration.getUnitScope();
+    validateSystemScope();
   }
 
   private void validateSystemScope() {
@@ -243,26 +248,66 @@ public class SymbolTableBuilder {
 
   public SymbolTable build() {
     checkNotNull(fileConfig, "fileConfig must be supplied to SymbolTableBuilder");
+    doPartialIndex();
+    doFullIndex();
+    return symbolTable;
+  }
 
-    LOG.info("Indexing project...");
+  private void doPartialIndex() {
+    ProgressReport progressReport =
+        new ProgressReport(
+            "Report about progress of Symbol Table construction (Pass 1)",
+            TimeUnit.SECONDS.toMillis(10),
+            "partially indexed");
 
-    ProgressReporter progressReporter =
-        new ProgressReporter((sourceFileUnits.size() * 2) + 1, 10, new ProgressReporterLogger(LOG));
+    progressReport.start(
+        new ImmutableList.Builder<String>()
+            .add(getSystemUnit().unitFile.toString())
+            .addAll(getSourceFileNames())
+            .build());
 
     indexSystemUnit();
-    progressReporter.progress();
+    progressReport.nextFile();
 
-    for (UnitData unit : sourceFileUnits) {
-      indexUnit(unit, ResolutionLevel.INTERFACE);
-      progressReporter.progress();
+    boolean success = false;
+
+    try {
+      for (UnitData unit : sourceFileUnits) {
+        indexUnit(unit, ResolutionLevel.INTERFACE);
+        progressReport.nextFile();
+      }
+      success = true;
+    } finally {
+      stopProgressReport(progressReport, success);
     }
+  }
 
-    for (UnitData unit : sourceFileUnits) {
-      indexUnit(unit, ResolutionLevel.COMPLETE);
-      progressReporter.progress();
+  private void doFullIndex() {
+    ProgressReport progressReport =
+        new ProgressReport(
+            "Report about progress of Symbol Table construction (Pass 2)",
+            TimeUnit.SECONDS.toMillis(10),
+            "fully indexed");
+
+    progressReport.start(getSourceFileNames());
+    boolean success = false;
+
+    try {
+      for (UnitData unit : sourceFileUnits) {
+        indexUnit(unit, ResolutionLevel.COMPLETE);
+        progressReport.nextFile();
+      }
+      success = true;
+    } finally {
+      stopProgressReport(progressReport, success);
     }
+  }
 
-    return symbolTable;
+  private Iterable<String> getSourceFileNames() {
+    return sourceFileUnits.stream()
+        .map(data -> data.unitFile)
+        .map(Path::toString)
+        .collect(Collectors.toList());
   }
 
   private static class UnitData {

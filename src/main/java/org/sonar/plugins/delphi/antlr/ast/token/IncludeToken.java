@@ -5,7 +5,7 @@ import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.pmd.FilePosition;
 
 public class IncludeToken extends CommonToken {
-  private FilePosition insertionPosition;
+  private final FilePosition insertionPosition;
 
   public IncludeToken(Token token, DelphiToken insertionToken) {
     super(token);

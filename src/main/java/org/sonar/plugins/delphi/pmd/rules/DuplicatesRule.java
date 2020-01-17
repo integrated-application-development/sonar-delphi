@@ -40,7 +40,7 @@ public class DuplicatesRule extends AbstractDelphiRule {
       return false;
     }
 
-    return assigneeImage.regionMatches(true, assigneeImage.length() - 10, "Duplicates", 0, 10);
+    return assigneeImage.regionMatches(true, assigneeImage.length() - 11, ".Duplicates", 0, 11);
   }
 
   private static boolean isSortedByPreviousStatement(AssignmentStatementNode duplicates) {
