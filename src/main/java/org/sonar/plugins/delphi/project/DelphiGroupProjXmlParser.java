@@ -42,7 +42,7 @@ public class DelphiGroupProjXmlParser extends DefaultHandler {
   private static final Logger LOG = Loggers.get(DelphiGroupProjXmlParser.class);
   private final String filename;
   private final DelphiGroupProj workGroup;
-  private Path baseDir;
+  private final Path baseDir;
 
   /**
    * C-tor
