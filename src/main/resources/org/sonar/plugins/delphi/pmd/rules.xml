@@ -4,16 +4,17 @@
   <!-- PRIORITY: 1 - blocker, 2 - critical, 3 - major, 4 - minor, 5 - info -->
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.NoFunctionReturnTypeRule"
-        message="Function return types should always be specified"
-        name="NoFunctionReturnTypeRule">
+    message="Function return types should always be specified"
+    name="NoFunctionReturnTypeRule">
     <priority>3</priority>
     <description>
-      Delphi allows Function return types to be omitted in the implementation section. We have no desire to use this "feature".
+      Delphi allows Function return types to be omitted in the implementation section. We have no
+      desire to use this "feature".
       &lt;br&gt;
       Function return types should always be specified.
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
     <example>
       <![CDATA[
@@ -21,36 +22,36 @@
 
 <b>function</b> TClass.Foo(Bar: Byte): Integer;	// Compliant
         ]]>
-     </example>
+    </example>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.ClassPerFileRule"
-        message="Files should not contain too many classes"
-        name="ClassPerFileRule">
+    message="Files should not contain too many classes"
+    name="ClassPerFileRule">
     <priority>3</priority>
     <description>A file should not include too many classes.</description>
     <properties>
-      <property name="baseEffort" value="1h" />
-      <property name="limit" value="1" />
+      <property name="baseEffort" value="1h"/>
+      <property name="limit" value="1"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.InheritedMethodWithNoCodeRule"
-        message="Overriding methods should do more than simply call the same method in the super class"
-        name="InheritedMethodWithNoCodeRule">
+    message="Overriding methods should do more than simply call the same method in the super class"
+    name="InheritedMethodWithNoCodeRule">
     <priority>3</priority>
     <description>
       Overriding a method just to call the same method from the super class without
       performing any other actions is useless and misleading.
     </description>
     <properties>
-      <property name="baseEffort" value="10min" />
+      <property name="baseEffort" value="10min"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.SwallowedExceptionsRule"
-        message="Exceptions should not be swallowed"
-        name="SwallowedExceptionsRule">
+    message="Exceptions should not be swallowed"
+    name="SwallowedExceptionsRule">
     <priority>2</priority>
     <description>
       Exceptions should not be swallowed.
@@ -58,9 +59,9 @@
       Exception handlers should contain logic to handle the caught exception.
     </description>
     <properties>
-      <property name="baseEffort" value="10min" />
-      <property name="scope" value="MAIN" />
-      <property name="type" value="BUG" />
+      <property name="baseEffort" value="10min"/>
+      <property name="scope" value="MAIN"/>
+      <property name="type" value="BUG"/>
     </properties>
     <example>
       <![CDATA[
@@ -90,12 +91,12 @@
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
-        message="'finally' blocks should not be empty"
-        name="EmptyFinallyBlockRule">
+    message="'finally' blocks should not be empty"
+    name="EmptyFinallyBlockRule">
     <priority>2</priority>
     <description>Empty finally blocks are superfluous.</description>
     <properties>
-      <property name="baseEffort" value="5min" />
+      <property name="baseEffort" value="5min"/>
       <property name="builtinXPath">
         <value>
           <![CDATA[
@@ -122,55 +123,57 @@
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyInterfaceRule"
-        message="Interface declarations should not be empty"
-        name="EmptyInterfaceRule">
+    message="Interface declarations should not be empty"
+    name="EmptyInterfaceRule">
     <priority>3</priority>
     <description>Empty interface declarations are useless.</description>
     <properties>
-      <property name="baseEffort" value="20min" />
+      <property name="baseEffort" value="20min"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.TooLargeMethodRule"
-        message="Methods should not be too large"
-        name="TooLargeMethodRule">
+    message="Methods should not be too large"
+    name="TooLargeMethodRule">
     <priority>2</priority>
     <description>A method that grow too large tends to aggregate too many responsibilities.
       Such methods inevitably become harder to understand and therefore harder to maintain.
       &lt;br&gt;
       &lt;br&gt;
-      Above a specific threshold, it is strongly advised to refactor into smaller methods which focus on well-defined tasks.
+      Above a specific threshold, it is strongly advised to refactor into smaller methods which
+      focus on well-defined tasks.
       Those smaller methods will not only be easier to understand, but also easier to test.
     </description>
     <properties>
-      <property name="baseEffort" value="30min" />
-      <property name="limit" value="100" />
+      <property name="baseEffort" value="30min"/>
+      <property name="limit" value="100"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.TooManyArgumentsRule"
-        message="Methods should not have too many arguments"
-        name="TooManyArgumentsRule">
+    message="Methods should not have too many arguments"
+    name="TooManyArgumentsRule">
     <priority>3</priority>
     <description>
       A long parameter list can indicate that a new structure should be created to wrap
       the numerous parameters or that the method is doing too many things.
     </description>
     <properties>
-      <property name="baseEffort" value="1h" />
-      <property name="limit" value="6" />
+      <property name="baseEffort" value="1h"/>
+      <property name="limit" value="6"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.TooManyVariablesRule"
-        message="Methods should not have too many variables"
-        name="TooManyVariablesRule">
+    message="Methods should not have too many variables"
+    name="TooManyVariablesRule">
     <priority>3</priority>
     <description>
-      Too many variables can indicate that a method is doing too many things.</description>
+      Too many variables can indicate that a method is doing too many things.
+    </description>
     <properties>
-      <property name="baseEffort" value="30min" />
-      <property name="limit" value="10" />
+      <property name="baseEffort" value="30min"/>
+      <property name="limit" value="10"/>
     </properties>
   </rule>
 
@@ -179,14 +182,15 @@
     name="NoSemiAfterMethodDeclarationRule">
     <priority>3</priority>
     <description>
-      Delphi syntax has corner cases which sometimes allow the semicolon to be omitted from the end of a method declaration.
+      Delphi syntax has corner cases which sometimes allow the semicolon to be omitted from the end
+      of a method declaration.
       &lt;br&gt;
       Regardless, there should always be a semicolon ';' at the end of method declarations.
       &lt;br&gt;
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="5min" />
+      <property name="baseEffort" value="5min"/>
       <property name="builtinXPath">
         <value>
           <![CDATA[
@@ -205,8 +209,8 @@
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.InterfaceNameRule"
-        message="Interface names should comply with a naming convention"
-        name="InterfaceNameRule">
+    message="Interface names should comply with a naming convention"
+    name="InterfaceNameRule">
     <priority>4</priority>
     <description>
       Interface names should begin with 'I' and follow Pascal case.
@@ -214,13 +218,13 @@
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.RecordNameRule"
-        message="Record names should comply with a naming convention"
-        name="RecordNameRule">
+    message="Record names should comply with a naming convention"
+    name="RecordNameRule">
     <priority>4</priority>
     <description>
       Record names should begin with 'T' and follow Pascal case.
@@ -228,13 +232,13 @@
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="30min" />
+      <property name="baseEffort" value="30min"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.PointerNameRule"
-        message="Pointer names should comply with a naming convention"
-        name="PointerNameRule">
+    message="Pointer names should comply with a naming convention"
+    name="PointerNameRule">
     <priority>4</priority>
     <description>
       Pointer names should be the same as the dereferenced type name, but with a 'P' replacing the
@@ -248,13 +252,13 @@
       - ^TType should be named PType
     </description>
     <properties>
-      <property name="baseEffort" value="30min" />
+      <property name="baseEffort" value="30min"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.MethodNameRule"
-        message="Method names should comply with a naming convention"
-        name="MethodNameRule">
+    message="Method names should comply with a naming convention"
+    name="MethodNameRule">
     <priority>4</priority>
     <description>
       Method names should follow Pascal case.
@@ -262,13 +266,13 @@
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="30min" />
+      <property name="baseEffort" value="30min"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.FieldNameRule"
-        message="Field names should comply with a naming convention"
-        name="FieldNameRule">
+    message="Field names should comply with a naming convention"
+    name="FieldNameRule">
     <priority>4</priority>
     <description>
       Field names should begin with 'F' and follow Pascal case.
@@ -276,17 +280,17 @@
       Published fields are excluded from this check due to Delphi's generated form fields.
     </description>
     <properties>
-      <property name="baseEffort" value="5min" />
+      <property name="baseEffort" value="5min"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.UnitNameRule"
-        message="Unit names should comply with a naming convention"
-        name="UnitNameRule">
+    message="Unit names should comply with a naming convention"
+    name="UnitNameRule">
     <priority>4</priority>
     <description>Unit name should follow Pascal Case.</description>
     <properties>
-      <property name="baseEffort" value="30min" />
+      <property name="baseEffort" value="30min"/>
     </properties>
   </rule>
 
@@ -300,7 +304,7 @@
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
   </rule>
 
@@ -314,7 +318,7 @@
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
   </rule>
 
@@ -328,7 +332,7 @@
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
   </rule>
 
@@ -342,7 +346,7 @@
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
   </rule>
 
@@ -351,22 +355,24 @@
     name="VariableNameRule">
     <priority>4</priority>
     <description>
-      Variable names should follow Pascal case. Global variables should begin with 'G' and not contain underscores.
+      Variable names should follow Pascal case. Global variables should begin with 'G' and not
+      contain underscores.
       &lt;br&gt;
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.CatchingGeneralExceptionRule"
-        message="General exceptions should not be caught"
-        name="CatchingGeneralExceptionRule">
+    message="General exceptions should not be caught"
+    name="CatchingGeneralExceptionRule">
     <priority>2</priority>
-    <description>General exceptions should not be caught. Catch specific exception types instead.</description>
+    <description>General exceptions should not be caught. Catch specific exception types instead.
+    </description>
     <properties>
-      <property name="baseEffort" value="15min" />
+      <property name="baseEffort" value="15min"/>
     </properties>
     <example>
       <![CDATA[
@@ -390,12 +396,14 @@
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.RaisingGeneralExceptionRule"
-        message="General exceptions should not be raised"
-        name="RaisingGeneralExceptionRule">
+    message="General exceptions should not be raised"
+    name="RaisingGeneralExceptionRule">
     <priority>2</priority>
-    <description>General exceptions should not be raised. Instead, raise a specific exception type.</description>
+    <description>General exceptions should not be raised. Instead, raise a specific exception
+      type.
+    </description>
     <properties>
-      <property name="baseEffort" value="15min" />
+      <property name="baseEffort" value="15min"/>
     </properties>
     <example>
       <![CDATA[
@@ -407,12 +415,14 @@
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.RedundantBooleanRule"
-        message="Boolean literals should not be redundant"
-        name="RedundantBooleanRule">
-    <priority>3</priority>
-    <description>Redundant Boolean literals should be removed from expressions to improve readability.</description>
+    message="Boolean literals should not be redundant"
+    name="RedundantBooleanRule">
+    <priority>4</priority>
+    <description>Redundant Boolean literals should be removed from expressions to improve
+      readability.
+    </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
     <example>
       <![CDATA[
@@ -440,33 +450,36 @@ DoSomething(True); // Compliant
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.PublicFieldsRule"
-        message="Fields should not have public visibility"
-        name="PublicFieldsRule">
+    message="Fields should not have public visibility"
+    name="PublicFieldsRule">
     <priority>3</priority>
-    <description>Public fields do not respect the encapsulation principle. Use properties instead.</description>
+    <description>Public fields do not respect the encapsulation principle. Use properties instead.
+    </description>
     <properties>
-      <property name="baseEffort" value="3min" />
+      <property name="baseEffort" value="3min"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedArgumentsRule"
-        message="Unused method parameters should be removed"
-        name="UnusedArgumentsRule">
+    message="Unused method parameters should be removed"
+    name="UnusedArgumentsRule">
     <priority>1</priority>
-    <description>Unused parameters are misleading. Whatever the values passed to such parameters, the behavior will be the same.</description>
+    <description>Unused parameters are misleading. Whatever the values passed to such parameters,
+      the behavior will be the same.
+    </description>
     <properties>
-      <property name="baseEffort" value="5min" />
+      <property name="baseEffort" value="5min"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
-        message="Interfaces should have unique GUIDs"
-        name="NoGuidRule">
+    message="Interfaces should have unique GUIDs"
+    name="NoGuidRule">
     <priority>3</priority>
     <description>Every interface should have a unique GUID.</description>
     <properties>
-      <property name="baseEffort" value="5min" />
-      <property name="type" value="BUG" />
+      <property name="baseEffort" value="5min"/>
+      <property name="type" value="BUG"/>
       <property name="builtinXPath">
         <value>
           <![CDATA[
@@ -478,12 +491,14 @@ DoSomething(True); // Compliant
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.AssignedAndFreeRule"
-        message="Objects should not be checked for assignment before being freed"
-        name="AssignedAndFreeRule">
+    message="Objects should not be checked for assignment before being freed"
+    name="AssignedAndFreeRule">
     <priority>3</priority>
-    <description>The TObject.Free method already checks for assignment before freeing. Additional checks are redundant.</description>
+    <description>The TObject.Free method already checks for assignment before freeing. Additional
+      checks are redundant.
+    </description>
     <properties>
-      <property name="baseEffort" value="5min" />
+      <property name="baseEffort" value="5min"/>
     </properties>
     <example>
       <![CDATA[
@@ -511,12 +526,12 @@ FreeAndNil(Foo); // Compliant
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyBeginStatementRule"
-        message="Code blocks should not be empty"
-        name="EmptyBeginStatementRule">
+    message="Code blocks should not be empty"
+    name="EmptyBeginStatementRule">
     <priority>4</priority>
     <description>Empty code blocks are not allowed.</description>
     <properties>
-      <property name="baseEffort" value="5min" />
+      <property name="baseEffort" value="5min"/>
     </properties>
   </rule>
 
@@ -532,91 +547,95 @@ FreeAndNil(Foo); // Compliant
       - It is an intentionally-blank override or virtual method. In this case, a nested comment should explain the reason for the blank method.
     </description>
     <properties>
-      <property name="baseEffort" value="5min" />
+      <property name="baseEffort" value="5min"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.DprFunctionRule"
-        message="Project files should not have methods"
-        name="ProjectFileNoFunctionsRule">
+    message="Project files should not have methods"
+    name="ProjectFileNoFunctionsRule">
     <priority>3</priority>
     <description>Project files should not have methods.</description>
     <properties>
-      <property name="baseEffort" value="15min" />
+      <property name="baseEffort" value="15min"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.DprVariableRule"
-        message="Project files should not have variables"
-        name="ProjectFileNoVariablesRule">
+    message="Project files should not have variables"
+    name="ProjectFileNoVariablesRule">
     <priority>3</priority>
     <description>Project files should not have variables.</description>
     <properties>
-      <property name="baseEffort" value="15min" />
+      <property name="baseEffort" value="15min"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.TypeAliasRule"
-        message="Track uses of type aliases"
-        name="TypeAliasRule">
+    message="Track uses of type aliases"
+    name="TypeAliasRule">
     <priority>5</priority>
     <description>Track uses of type aliases.</description>
     <properties>
-      <property name="baseEffort" value="10min" />
+      <property name="baseEffort" value="10min"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.MixedNamesRule"
-        message="Name casing should be kept consistent"
-        name="MixedNamesRule">
+    message="Name casing should be kept consistent"
+    name="MixedNamesRule">
     <priority>3</priority>
-    <description>Delphi is case-insensitive, but casing of name declarations and references should be kept consistent.</description>
+    <description>Delphi is case-insensitive, but casing of name declarations and references should
+      be kept consistent.
+    </description>
     <properties>
-      <property name="baseEffort" value="5min" />
+      <property name="baseEffort" value="5min"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.ConstructorWithoutInheritedStatementRule"
-        message="Constructors should contain an 'inherited' statement"
-        name="ConstructorWithoutInheritedStatementRule">
+    message="Constructors should contain an 'inherited' statement"
+    name="ConstructorWithoutInheritedStatementRule">
     <priority>2</priority>
     <description>Constructors should contain an 'inherited' statement.</description>
     <properties>
-      <property name="baseEffort" value="5min" />
-      <property name="type" value="BUG" />
+      <property name="baseEffort" value="5min"/>
+      <property name="type" value="BUG"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.DestructorWithoutInheritedStatementRule"
-        message="Destructors should contain an 'inherited' statement"
-        name="DestructorWithoutInheritedStatementRule">
+    message="Destructors should contain an 'inherited' statement"
+    name="DestructorWithoutInheritedStatementRule">
     <priority>2</priority>
     <description>Destructors should contain an 'inherited' statement.</description>
     <properties>
-      <property name="baseEffort" value="30min" />
-      <property name="type" value="BUG" />
+      <property name="baseEffort" value="30min"/>
+      <property name="type" value="BUG"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.BeginEndRequiredRule"
-        message="'begin'..'end' should always be used"
-        name="BeginEndRequiredRule">
+    message="'begin'..'end' should always be used"
+    name="BeginEndRequiredRule">
     <priority>4</priority>
     <description>
       All compound statements should use 'begin'..'end', except for repeat statements.
       &lt;br&gt;
-      &lt;br&gt;</description>
+      &lt;br&gt;
+    </description>
     <properties>
-      <property name="baseEffort" value="10min" />
+      <property name="baseEffort" value="10min"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.NoSemicolonRule"
-        message="Statements should end in a semicolon"
-        name="NoSemicolonRule">
+    message="Statements should end in a semicolon"
+    name="NoSemicolonRule">
     <priority>4</priority>
     <description>
-      Semicolons are used as statement separators rather than statement terminators in Delphi's syntax.
+      Semicolons are used as statement separators rather than statement terminators in Delphi's
+      syntax.
       &lt;br&gt;
       As a result, the last semicolon in a code block is optional.
       &lt;br&gt;
@@ -625,17 +644,17 @@ FreeAndNil(Foo); // Compliant
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.CastAndFreeRule"
-        message="Objects should not be casted only to be freed"
-        name="CastAndFreeRule">
+    message="Objects should not be casted only to be freed"
+    name="CastAndFreeRule">
     <priority>3</priority>
     <description>Casting an object only to free it is superfluous.</description>
     <properties>
-      <property name="baseEffort" value="5min" />
+      <property name="baseEffort" value="5min"/>
     </properties>
     <example>
       <![CDATA[
@@ -651,16 +670,17 @@ FreeAndNil(MyVar); // Compliant
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.CyclomaticComplexityRule"
-        message="Cyclomatic complexity of methods should not be too high"
-        name="MethodCyclomaticComplexityRule">
+    message="Cyclomatic complexity of methods should not be too high"
+    name="MethodCyclomaticComplexityRule">
     <priority>2</priority>
     <description>
       The cyclomatic complexity of methods should not exceed a defined threshold.
-      Complex code can perform poorly and will in any case be difficult to understand and therefore to maintain.
+      Complex code can perform poorly and will in any case be difficult to understand and therefore
+      to maintain.
     </description>
     <properties>
-      <property name="baseEffort" value="30min" />
-      <property name="limit" value="20" />
+      <property name="baseEffort" value="30min"/>
+      <property name="limit" value="20"/>
     </properties>
   </rule>
 
@@ -673,86 +693,94 @@ FreeAndNil(MyVar); // Compliant
       Methods with high Cognitive Complexity will be difficult to maintain.
       &lt;br&gt;
       &lt;br&gt;
-      &lt;b&gt;See:&lt;/b&gt;
+      &lt;b&gt;
+      See:
+      &lt;/b&gt;
       &lt;br&gt;
       - &lt;a href='https://www.sonarsource.com/docs/CognitiveComplexity.pdf'&gt;
       Cognitive Complexity
       &lt;/a&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="30min" />
-      <property name="limit" value="15" />
+      <property name="baseEffort" value="30min"/>
+      <property name="limit" value="15"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.TooManySubProceduresRule"
-        message="Methods should not contain too many sub-procedures"
-        name="TooManySubProceduresRule">
+    message="Methods should not contain too many sub-procedures"
+    name="TooManySubProceduresRule">
     <priority>2</priority>
-      <description>Methods should not contain too many sub-procedures. The limit is 3.</description>
-      <properties>
-        <property name="baseEffort" value="30min" />
-        <property name="limit" value="3" />
-      </properties>
+    <description>Methods should not contain too many sub-procedures. The limit is 3.</description>
+    <properties>
+      <property name="baseEffort" value="30min"/>
+      <property name="limit" value="3"/>
+    </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.AvoidWithRule"
-        message="'with' statements should not be used"
-        name="AvoidWithRule">
+    message="'with' statements should not be used"
+    name="AvoidWithRule">
     <priority>2</priority>
     <description>
       'with' statements should not be used.
       &lt;br&gt;
-      They are difficult to debug, and make it easy to write ambiguous statements which may unexpectedly change meaning.
+      They are difficult to debug, and make it easy to write ambiguous statements which may
+      unexpectedly change meaning.
       &lt;br&gt;
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="5min" />
+      <property name="baseEffort" value="5min"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.TooLongLineRule"
-        message="Lines should not be too long"
-        name="TooLongLineRule">
+    message="Lines should not be too long"
+    name="TooLongLineRule">
     <priority>3</priority>
     <description>
-      Having to scroll horizontally makes it harder to get a quick overview and understanding of any piece of code.
+      Having to scroll horizontally makes it harder to get a quick overview and understanding of any
+      piece of code.
       &lt;br&gt;
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="2min" />
-      <property name="limit" value="100" />
-      <property name="scope" value="MAIN" />
+      <property name="baseEffort" value="2min"/>
+      <property name="limit" value="100"/>
+      <property name="scope" value="MAIN"/>
     </properties>
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.ReRaiseExceptionRule"
-        message="Caught exceptions should not be explicitly re-raised"
-        name="ReRaiseExceptionRule">
+    message="Caught exceptions should not be explicitly re-raised"
+    name="ReRaiseExceptionRule">
     <priority>1</priority>
     <description>
       You should never explicitly re-raise a caught exception.
       &lt;br&gt;
-      The exception will still be freed at the end of the exception handler, causing tricky access violations.
+      The exception will still be freed at the end of the exception handler, causing tricky access
+      violations.
       &lt;br&gt;
       Use 'raise;' instead of 'raise E;'.
       &lt;br&gt;
       &lt;br&gt;
-      &lt;b&gt;See:&lt;/b&gt;
+      &lt;b&gt;
+      See:
+      &lt;/b&gt;
       &lt;br&gt;
-      - &lt;a href='http://zerolith.com/delphi/on-delphi-exception-raising-re-raising-and-try-except-blocks.html'&gt;
-        On Delphi Exception raising, re-raising and try-except blocks
+      - &lt;a
+      href='http://zerolith.com/delphi/on-delphi-exception-raising-re-raising-and-try-except-blocks.html'&gt;
+      On Delphi Exception raising, re-raising and try-except blocks
       &lt;/a&gt;
       &lt;br&gt;
       - &lt;a href='http://delphi.org/2017/06/really-bad-exception-abuse/'&gt;
-        Exceptionally Bad Exception Abuse
+      Exceptionally Bad Exception Abuse
       &lt;/a&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="5min" />
-      <property name="type" value="BUG" />
+      <property name="baseEffort" value="5min"/>
+      <property name="type" value="BUG"/>
     </properties>
     <example>
       <![CDATA[
@@ -770,16 +798,17 @@ FreeAndNil(MyVar); // Compliant
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyBracketsRule"
-        message="Methods should not be followed by empty brackets"
-        name="EmptyBracketsRule">
+    message="Methods should not be followed by empty brackets"
+    name="EmptyBracketsRule">
     <priority>4</priority>
     <description>
-      When calling or declaring a method, an empty argument or parameter list is superfluous and can be omitted.
+      When calling or declaring a method, an empty argument or parameter list is superfluous and can
+      be omitted.
       &lt;br&gt;
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
     <example>
       <![CDATA[
@@ -791,8 +820,8 @@ FunctionWithoutArguments;	// Compliant
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.DuplicatesRule"
-        message="TStringLists should be sorted when setting Duplicates"
-        name="DuplicatesRule">
+    message="TStringLists should be sorted when setting Duplicates"
+    name="DuplicatesRule">
     <priority>2</priority>
     <description>
       TStringLists must be sorted if setting the Duplicates property.
@@ -800,13 +829,18 @@ FunctionWithoutArguments;	// Compliant
       For the purposes of this rule, the list must be sorted on the next or previous line.
       &lt;br&gt;
       &lt;br&gt;
-      &lt;b&gt;See:&lt;/b&gt;
+      &lt;b&gt;
+      See:
+      &lt;/b&gt;
       &lt;br&gt;
-      - &lt;a href='http://docwiki.embarcadero.com/Libraries/XE3/en/System.Classes.TStringList.Duplicates'&gt;API Documentation&lt;/a&gt;
+      - &lt;a
+      href='http://docwiki.embarcadero.com/Libraries/XE3/en/System.Classes.TStringList.Duplicates'&gt;
+      API Documentation
+      &lt;/a&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="2min" />
-      <property name="type" value="BUG" />
+      <property name="baseEffort" value="2min"/>
+      <property name="type" value="BUG"/>
     </properties>
     <example>
       <![CDATA[
@@ -826,8 +860,8 @@ List5.Duplicates := <i>dupError</i>; // Compliant
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.LowerCaseReservedWordsRule"
-        message="Keywords should be lowercase"
-        name="LowerCaseReservedWordsRule">
+    message="Keywords should be lowercase"
+    name="LowerCaseReservedWordsRule">
     <priority>3</priority>
     <description>
       Reserved keywords should always be lowercase.
@@ -835,7 +869,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
   </rule>
 
@@ -844,14 +878,15 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     name="ShortIdentifiersRule">
     <priority>3</priority>
     <description>
-      When an identifier is too short, it isn't immediately obvious what it's for. Identifiers should be given meaningful names.
+      When an identifier is too short, it isn't immediately obvious what it's for. Identifiers
+      should be given meaningful names.
       &lt;br&gt;
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="5min" />
-      <property name="limit" value="3" />
-      <property name="whitelist" value="E|X|Y|ID|Id" />
+      <property name="baseEffort" value="5min"/>
+      <property name="limit" value="3"/>
+      <property name="whitelist" value="E|X|Y|ID|Id"/>
     </properties>
   </rule>
 
@@ -865,9 +900,9 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="10min" />
-      <property name="memoryFunctions" value="Local|Managed|ManagedBy|ManagedInterface|Unmanaged" />
-      <property name="whitelist" value="CreateNew" />
+      <property name="baseEffort" value="10min"/>
+      <property name="memoryFunctions" value="Local|Managed|ManagedBy|ManagedInterface|Unmanaged"/>
+      <property name="whitelist" value="CreateNew"/>
     </properties>
   </rule>
 
@@ -881,8 +916,8 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="10min" />
-      <property name="depth" value="1" />
+      <property name="baseEffort" value="10min"/>
+      <property name="depth" value="1"/>
     </properties>
   </rule>
 
@@ -896,7 +931,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
   </rule>
 
@@ -910,12 +945,13 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       &lt;br&gt;
       &lt;br&gt;
       For more information, see the Delphi wiki page for
-      &lt;a href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Classes_and_Objects_(Delphi)#TObject_and_TClass'&gt;
+      &lt;a
+      href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Classes_and_Objects_(Delphi)#TObject_and_TClass'&gt;
       TObject and TClass
       &lt;/a&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
   </rule>
 
@@ -926,13 +962,14 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     <description>
       Destroy is a virtual destructor of TObject.
       &lt;br&gt;
-      When an object is destroyed, TObject.Free calls the Destroy virtual destructor of the specific class.
+      When an object is destroyed, TObject.Free calls the Destroy virtual destructor of the specific
+      class.
       &lt;br&gt;
       With this behavior in mind, destructors should always override TObject.Destroy.
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
-      <property name="type" value="BUG" />
+      <property name="baseEffort" value="1min"/>
+      <property name="type" value="BUG"/>
     </properties>
   </rule>
 
@@ -944,7 +981,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       A case statement with less than 2 case items would be better expressed as an if-statement.
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
   </rule>
 
@@ -960,7 +997,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
   </rule>
 
@@ -969,14 +1006,15 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     name="TabulationCharactersRule">
     <priority>5</priority>
     <description>
-      Developers should not need to configure the tab width of their text editors in order to be able to read source code.
+      Developers should not need to configure the tab width of their text editors in order to be
+      able to read source code.
       &lt;br&gt;
       So the use of the tabulation character must be banned.
       &lt;br&gt;
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
   </rule>
 
@@ -994,7 +1032,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       &lt;/a&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
   </rule>
 
@@ -1008,7 +1046,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       misleading, and should be removed.
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
     <example>
       <![CDATA[
@@ -1033,7 +1071,7 @@ Result := ((X + 1)); // Noncompliant
       - There was a typo which lead the semicolon to be doubled, i.e ;;.
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
     </properties>
     <example>
       <![CDATA[
@@ -1055,7 +1093,7 @@ Result := 123;; // Noncompliant
       Unused code should be deleted and can be retrieved from source control history if required.
     </description>
     <properties>
-      <property name="baseEffort" value="3min" />
+      <property name="baseEffort" value="3min"/>
     </properties>
   </rule>
 
@@ -1067,10 +1105,10 @@ Result := 123;; // Noncompliant
       Empty type sections are superfluous and can be safely removed.
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
       <property name="builtinXPath">
         <value>
-         <![CDATA[
+          <![CDATA[
             //TypeSectionNode[count(*) = 0]
           ]]>
         </value>
@@ -1086,7 +1124,7 @@ Result := 123;; // Noncompliant
       Empty visibility sections are superfluous and can be safely removed.
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
       <property name="builtinXPath">
         <value>
           <![CDATA[
@@ -1105,7 +1143,7 @@ Result := 123;; // Noncompliant
       Empty field sections are superfluous and can be safely removed.
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
       <property name="builtinXPath">
         <value>
           <![CDATA[
@@ -1125,12 +1163,13 @@ Result := 123;; // Noncompliant
       &lt;br&gt;
       &lt;br&gt;
       For more information on Object types, see the Delphi wiki page for
-      &lt;a href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Classes_and_Objects_(Delphi)#Object_Types'&gt;
+      &lt;a
+      href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Classes_and_Objects_(Delphi)#Object_Types'&gt;
       Classes and Objects
       &lt;/a&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
+      <property name="baseEffort" value="1min"/>
       <property name="builtinXPath">
         <value>
           <![CDATA[
@@ -1147,10 +1186,10 @@ Result := 123;; // Noncompliant
     <priority>3</priority>
     <description>Track breaches of an XPath rule</description>
     <properties>
-      <property name="baseEffort" value="5min" />
-      <property name="template" value="true" />
-      <property name="xpath" />
-      <property name="message" />
+      <property name="baseEffort" value="5min"/>
+      <property name="template" value="true"/>
+      <property name="xpath"/>
+      <property name="message"/>
     </properties>
   </rule>
 
@@ -1163,10 +1202,10 @@ Result := 123;; // Noncompliant
       that matches an item in the blacklist.
     </description>
     <properties>
-      <property name="baseEffort" value="5min" />
-      <property name="template" value="true" />
-      <property name="blacklist" />
-      <property name="message" />
+      <property name="baseEffort" value="5min"/>
+      <property name="template" value="true"/>
+      <property name="blacklist"/>
+      <property name="message"/>
     </properties>
   </rule>
 
@@ -1186,10 +1225,10 @@ Result := 123;; // Noncompliant
       - All overloads will be tracked. Parameter signatures cannot be specified.
     </description>
     <properties>
-      <property name="baseEffort" value="5min" />
-      <property name="template" value="true" />
-      <property name="blacklist" />
-      <property name="message" />
+      <property name="baseEffort" value="5min"/>
+      <property name="template" value="true"/>
+      <property name="blacklist"/>
+      <property name="message"/>
     </properties>
   </rule>
 
@@ -1204,10 +1243,10 @@ Result := 123;; // Noncompliant
       Please note that a fully qualified type name is required. (E.g. "Unit.Type.InnerType")
     </description>
     <properties>
-      <property name="baseEffort" value="10min" />
-      <property name="template" value="true" />
-      <property name="blacklist" />
-      <property name="message" />
+      <property name="baseEffort" value="10min"/>
+      <property name="template" value="true"/>
+      <property name="blacklist"/>
+      <property name="message"/>
     </properties>
   </rule>
 
@@ -1222,18 +1261,19 @@ Result := 123;; // Noncompliant
       (where the &lt;code&gt;.&lt;/code&gt; character matches any character).
       &lt;br&gt;
       &lt;br&gt;
-      For example, one can create a rule with the regular expression &lt;code&gt;.*REVIEW.*&lt;/code&gt; to match all
-      comments containing "REVIEW".
+      For example, one can create a rule with the regular expression &lt;code&gt;.*REVIEW.*&lt;/code&gt;
+      to match all comments containing "REVIEW".
       &lt;br&gt;
       &lt;br&gt;
-      Note that, in order to match REVIEW regardless of the case, the &lt;code&gt;(?i)&lt;/code&gt; modifier should be
+      Note that, in order to match REVIEW regardless of the case, the &lt;code&gt;(?i)&lt;/code&gt;
+      modifier should be
       prepended to the expression, as in &lt;code&gt;(?i).*REVIEW.*&lt;/code&gt;.
     </description>
     <properties>
-      <property name="baseEffort" value="20min" />
-      <property name="template" value="true" />
-      <property name="regex" />
-      <property name="message" />
+      <property name="baseEffort" value="20min"/>
+      <property name="template" value="true"/>
+      <property name="regex"/>
+      <property name="message"/>
     </properties>
   </rule>
 
@@ -1248,19 +1288,20 @@ Result := 123;; // Noncompliant
       (where the &lt;code&gt;.&lt;/code&gt; character matches any character).
       &lt;br&gt;
       &lt;br&gt;
-      For example, one can create a rule with the regular expression &lt;code&gt;.*REVIEW.*&lt;/code&gt; to match all
-      strings containing "REVIEW".
+      For example, one can create a rule with the regular expression &lt;code&gt;.*REVIEW.*&lt;/code&gt;
+      to match all strings containing "REVIEW".
       &lt;br&gt;
       &lt;br&gt;
-      Note that, in order to match REVIEW regardless of the case, the &lt;code&gt;(?i)&lt;/code&gt; modifier should be
+      Note that, in order to match REVIEW regardless of the case, the &lt;code&gt;(?i)&lt;/code&gt;
+      modifier should be
       prepended to the expression, as in &lt;code&gt;(?i).*REVIEW.*&lt;/code&gt;.
     </description>
     <properties>
-      <property name="baseEffort" value="20min" />
-      <property name="template" value="true" />
-      <property name="scope" value="MAIN" />
-      <property name="regex" />
-      <property name="message" />
+      <property name="baseEffort" value="20min"/>
+      <property name="template" value="true"/>
+      <property name="scope" value="MAIN"/>
+      <property name="regex"/>
+      <property name="message"/>
     </properties>
   </rule>
 
@@ -1269,16 +1310,18 @@ Result := 123;; // Noncompliant
     name="InheritedTypeNameRule">
     <priority>3</priority>
     <description>
-      This rule template can be used to enforce naming convention on a type which inherits from some other type.
+      This rule template can be used to enforce naming convention on a type which inherits from some
+      other type.
       &lt;br&gt;
-      Please note that this only supports direct inheritance and does not traverse the inheritance tree.
+      Please note that this only supports direct inheritance and does not traverse the inheritance
+      tree.
     </description>
     <properties>
-      <property name="baseEffort" value="1min" />
-      <property name="template" value="true" />
-      <property name="nameRegex" />
-      <property name="parentNameRegex" />
-      <property name="message" />
+      <property name="baseEffort" value="1min"/>
+      <property name="template" value="true"/>
+      <property name="nameRegex"/>
+      <property name="parentNameRegex"/>
+      <property name="message"/>
     </properties>
   </rule>
 </ruleset>
