@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `sonar.delphi.sources.project` property.
 - `sonar.delphi.sources.workgroup` property.
 
+### Fixed
+
+- FPs around names ending with the word `Duplicates` in `DuplicatesRule`.
+
 ## [0.9.0] - 2020-01-07
 
 ### Added
