@@ -65,4 +65,8 @@ public abstract class TypeNode extends DelphiNode implements Typed {
 
   @NotNull
   protected abstract Type createType();
+
+  public void clearCachedType() {
+    this.type = null;
+  }
 }

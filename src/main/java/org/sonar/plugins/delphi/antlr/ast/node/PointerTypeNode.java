@@ -16,13 +16,13 @@ public final class PointerTypeNode extends TypeNode {
     return visitor.visit(this, data);
   }
 
-  private TypeNode getTypeNode() {
+  public TypeNode getDereferencedTypeNode() {
     return (TypeNode) jjtGetChild(0);
   }
 
   @NotNull
   @Override
   public Type createType() {
-    return DelphiPointerType.pointerTo(getTypeNode().getType());
+    return DelphiPointerType.pointerTo(getDereferencedTypeNode().getType());
   }
 }

@@ -393,6 +393,13 @@ public interface Type {
      * @return true if this pointer is untyped
      */
     boolean isUntypedPointer();
+
+    /**
+     * Sets the dereferenced type. Used for type completion at the end of a type section.
+     *
+     * @param type The dereferenced type
+     */
+    void setDereferencedType(Type type);
   }
 
   interface ProceduralType extends Type {
@@ -457,7 +464,14 @@ public interface Type {
      *
      * @return Class type
      */
-    ScopedType classType();
+    Type classType();
+
+    /**
+     * Sets the classOf type. Used for type completion at the end of a type section.
+     *
+     * @param type The classOf type
+     */
+    void setClassType(Type type);
   }
 
   interface TypeType extends Type {

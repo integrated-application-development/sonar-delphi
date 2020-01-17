@@ -226,6 +226,12 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testImplicitForwardDeclarations() {
+    execute("forwardDeclarations/ImplicitForwarding.pas");
+    verifyUsages(11, 2, reference(8, 17), reference(9, 22));
+  }
+
+  @Test
   public void testSimpleTypeResolution() {
     execute("typeResolution/Simple.pas");
     verifyUsages(8, 2, reference(16, 10), reference(18, 21), reference(27, 2), reference(31, 22));

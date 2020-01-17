@@ -41,7 +41,7 @@ public abstract class DelphiPointerType extends DelphiType implements PointerTyp
   }
 
   private static class MutableDelphiPointerType extends DelphiPointerType {
-    private final Type dereferencedType;
+    private Type dereferencedType;
 
     MutableDelphiPointerType(Type dereferencedType) {
       super(dereferencedType.getImage());
@@ -52,6 +52,11 @@ public abstract class DelphiPointerType extends DelphiType implements PointerTyp
     @NotNull
     public Type dereferencedType() {
       return dereferencedType;
+    }
+
+    @Override
+    public void setDereferencedType(Type type) {
+      this.dereferencedType = type;
     }
   }
 
@@ -75,6 +80,11 @@ public abstract class DelphiPointerType extends DelphiType implements PointerTyp
     @NotNull
     public ImmutableType dereferencedType() {
       return dereferencedType;
+    }
+
+    @Override
+    public void setDereferencedType(Type type) {
+      throw new UnsupportedOperationException("Not allowed on immutable type!");
     }
   }
 }

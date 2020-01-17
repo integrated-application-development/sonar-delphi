@@ -17,6 +17,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.node.AnonymousMethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ArrayConstructorNode;
 import org.sonar.plugins.delphi.antlr.ast.node.CaseStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ClassReferenceTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.CompoundStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ConstDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
@@ -33,6 +34,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNameNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodResolutionClauseNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.PointerTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ProcedureTypeHeadingNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyNode;
@@ -41,6 +43,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.RepeatStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TryStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
+import org.sonar.plugins.delphi.antlr.ast.node.TypeSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnitDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnitImportNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarDeclarationNode;
@@ -66,6 +69,8 @@ import org.sonar.plugins.delphi.symbol.scope.SystemScope;
 import org.sonar.plugins.delphi.symbol.scope.TypeScope;
 import org.sonar.plugins.delphi.symbol.scope.UnitScope;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Type.ClassReferenceType;
+import org.sonar.plugins.delphi.type.Type.PointerType;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
 
 /**
@@ -450,6 +455,34 @@ public class SymbolTableVisitor implements DelphiParserVisitor<Data> {
             arrayConstructor ->
                 arrayConstructor.getElements().forEach(element -> element.accept(this, data)));
     resolve(node);
+    return data;
+  }
+
+  @Override
+  public Data visit(TypeSectionNode node, Data data) {
+    DelphiParserVisitor.super.visit(node, data);
+
+    for (int i = 0; i < node.jjtGetNumChildren(); ++i) {
+      TypeDeclarationNode typeDeclaration = (TypeDeclarationNode) node.jjtGetChild(i);
+      if (typeDeclaration.isClassReference()) {
+        var classReference = (ClassReferenceTypeNode) typeDeclaration.getTypeNode();
+        TypeNode classOf = classReference.getClassOfTypeNode();
+
+        if (classOf.getType().isUnresolved()) {
+          resolve(classOf);
+          ((ClassReferenceType) classReference.getType()).setClassType(classOf.getType());
+        }
+      } else if (typeDeclaration.isPointer()) {
+        var pointer = (PointerTypeNode) typeDeclaration.getTypeNode();
+        TypeNode dereferenced = pointer.getDereferencedTypeNode();
+
+        if (dereferenced.getType().isUnresolved()) {
+          resolve(dereferenced);
+          ((PointerType) pointer.getType()).setDereferencedType(dereferenced.getType());
+        }
+      }
+    }
+
     return data;
   }
 }

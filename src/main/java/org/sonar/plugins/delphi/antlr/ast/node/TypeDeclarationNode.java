@@ -93,6 +93,10 @@ public final class TypeDeclarationNode extends DelphiNode implements Typed, Qual
     return getTypeNode() instanceof ClassHelperTypeNode;
   }
 
+  public boolean isClassReference() {
+    return getTypeNode() instanceof ClassReferenceTypeNode;
+  }
+
   public boolean isEnum() {
     return getTypeNode() instanceof EnumTypeNode;
   }
