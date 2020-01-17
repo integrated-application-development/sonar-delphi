@@ -18,6 +18,8 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.AtLine.atLine;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.Test;
@@ -27,9 +29,11 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testValidRule() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  PMyPointer = ^Integer;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  PInteger = ^Integer;")
+            .appendDecl("  PFooInteger = ^TFooInteger;");
 
     execute(builder);
 
@@ -38,22 +42,26 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testInvalidRule() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  pMyPointer = ^Integer;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  pMyPointer = ^Integer;")
+            .appendDecl("  PInteger = ^TFooInteger;");
 
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("PointerNameRule", builder.getOffsetDecl() + 2));
+        .hasSize(2)
+        .are(ruleKey("PointerNameRule"))
+        .areExactly(1, atLine(builder.getOffsetDecl() + 2))
+        .areExactly(1, atLine(builder.getOffsetDecl() + 3));
   }
 
   @Test
-  public void testBadPascalCase() {
+  public void testBadCase() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
-    builder.appendDecl("  Pointer = ^Integer;");
+    builder.appendDecl("  Pinteger = ^Integer;");
 
     execute(builder);
 

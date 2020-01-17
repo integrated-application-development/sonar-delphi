@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Improve progress reporting.
+- Pointer names are now expected to take the dereferenced type name and replace a leading `T` with a
+  `P` in `PointerNameRule`.
 
 ### Removed
 

@@ -237,9 +237,15 @@
         name="PointerNameRule">
     <priority>4</priority>
     <description>
-      Pointer names should begin with 'P' and follow Pascal case.
+      Pointer names should be the same as the dereferenced type name, but with a 'P' replacing the
+      'T'
       &lt;br&gt;
       &lt;br&gt;
+      For example:
+      &lt;br&gt;
+      - ^TObject should be named PObject
+      &lt;br&gt;
+      - ^TType should be named PType
     </description>
     <properties>
       <property name="baseEffort" value="30min" />
