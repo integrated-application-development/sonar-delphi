@@ -72,8 +72,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <sonar.pluginName>Delphi</sonar.pluginName>
     <sonar.pluginClass>org.sonar.plugins.delphi.DelphiPlugin</sonar.pluginClass>
-    <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
-    <sonar.issuesReport.html.enable>true</sonar.issuesReport.html.enable>
     <!--Jacoco properties-->
     <jacoco.dataFile>${basedir}/target/jacoco/jacoco.exec</jacoco.dataFile>
     <jacoco.outputDirectory>${basedir}/target/jacoco/report/</jacoco.outputDirectory>
@@ -329,6 +327,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${surefire-plugin.version}</version>
         <configuration>
+          <redirectTestOutputToFile>true</redirectTestOutputToFile>
           <excludes>
             <exclude>**/IntegrationTests.java</exclude>
           </excludes>
@@ -339,6 +338,7 @@
         <artifactId>maven-failsafe-plugin</artifactId>
         <version>3.0.0-M3</version>
         <configuration>
+          <redirectTestOutputToFile>true</redirectTestOutputToFile>
           <includes>
             <include>**/IntegrationTests.java</include>
           </includes>
