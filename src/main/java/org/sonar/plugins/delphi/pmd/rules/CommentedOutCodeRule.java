@@ -72,8 +72,11 @@ public class CommentedOutCodeRule extends AbstractDelphiRule {
       "(?i)^\\s*" + PRIMARY_EXPRESSION + "\\s*:=.*;$";
 
   private static final String IF_STATEMENT_REGEX =
-      "^\\s*(else)?\\s*if(?!\\s*(the|this|our|a|in)\\s)"
-          + "\\s*.*\\b((then\\s*(begin|(.*(else.*)?;))?)|and|or)\\s*$";
+      "(?i)^\\s*(else)?\\s*if"
+          + "(?!\\s+"
+          + IDENTIFIER
+          + "\\s(?!(and|or|not|in|is|as|\\+|-|\\*|/|<|>|<>|<=|>=|\\(|@|xor|div|mod|shl|shr)\\b))"
+          + "\\s+.*\\b((then\\s*(begin|(.*(else.*)?;))?)|and|or)\\s*$";
 
   private static final String ELSE_STATEMENT_REGEX = "(?i)^\\s*else(\\s*begin)?\\s*$";
 

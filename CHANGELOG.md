@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - FPs around names ending with the word `Duplicates` in `DuplicatesRule`.
+- FPs around things that look like `if` statements in `CommentedOutCodeRule`.
 
 ## [0.9.0] - 2020-01-07
 
