@@ -1094,6 +1094,10 @@ Result := 123;; // Noncompliant
       &lt;br&gt;
       &lt;br&gt;
       Unused code should be deleted and can be retrieved from source control history if required.
+      &lt;br&gt;
+      &lt;br&gt;
+      NOTE: Certain comments, such as a single word followed by a semicolon, are indistinguishable
+      from Delphi code and will be flagged.
     </description>
     <properties>
       <property name="baseEffort" value="3min"/>
