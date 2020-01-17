@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- `sonar.delphi.sources.project` property.
+- `sonar.delphi.sources.workgroup` property.
+
 ## [0.9.0] - 2020-01-07
 
 ### Added
