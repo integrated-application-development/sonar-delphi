@@ -5,9 +5,9 @@ import org.sonar.plugins.delphi.antlr.ast.node.VarNameDeclarationNode;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.Typed;
 
-public final class VariableNameDeclaration extends DelphiNameDeclaration implements Typed {
+public final class VariableNameDeclaration extends DelphiNameDeclaration
+    implements TypedDeclaration {
   private final Type type;
   private int hashCode;
 

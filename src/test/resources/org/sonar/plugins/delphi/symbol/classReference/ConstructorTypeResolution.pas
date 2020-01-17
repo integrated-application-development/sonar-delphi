@@ -1,4 +1,4 @@
-unit ClassReferenceConstructor;
+unit ConstructorTypeResolution;
 
 {This is a sample Delphi file.}
 

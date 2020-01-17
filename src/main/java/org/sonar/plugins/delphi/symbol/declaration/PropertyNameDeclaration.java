@@ -8,10 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyNode;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.Typed;
 
 public final class PropertyNameDeclaration extends DelphiNameDeclaration
-    implements Typed, Invocable {
+    implements TypedDeclaration, Invocable {
 
   private final List<ParameterDeclaration> parameters;
   private final boolean isClassInvocable;

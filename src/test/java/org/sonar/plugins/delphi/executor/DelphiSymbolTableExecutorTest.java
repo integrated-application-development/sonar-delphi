@@ -185,12 +185,6 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
-  public void testClassReference() {
-    execute("ClassReference.pas");
-    verifyUsages(11, 14, reference(20, 6));
-  }
-
-  @Test
   public void testHardTypeCast() {
     execute("HardTypeCast.pas");
     verifyUsages(10, 4, reference(19, 12));
@@ -205,8 +199,20 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
-  public void testClassReferenceConstructor() {
-    execute("ClassReferenceConstructor.pas");
+  public void testClassReferenceMethodResolution() {
+    execute("classReference/MethodResolution.pas");
+    verifyUsages(11, 14, reference(20, 6));
+  }
+
+  @Test
+  public void testClassReferenceArgumentResolution() {
+    execute("classReference/ArgumentResolution.pas");
+    verifyUsages(20, 10, reference(27, 2), reference(28, 2));
+  }
+
+  @Test
+  public void testClassReferenceConstructorTypeResolution() {
+    execute("classReference/ConstructorTypeResolution.pas");
     verifyUsages(17, 10, reference(24, 2));
     verifyUsages(10, 16, reference(24, 11));
   }

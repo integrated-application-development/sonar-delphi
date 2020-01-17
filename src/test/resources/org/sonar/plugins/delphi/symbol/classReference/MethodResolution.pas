@@ -1,4 +1,4 @@
-unit ClassReference;
+unit MethodResolution;
 
 {This is a sample Delphi file.}
 

@@ -23,11 +23,10 @@ import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.DelphiProceduralType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
-import org.sonar.plugins.delphi.type.Typed;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicMethodData;
 
 public final class MethodNameDeclaration extends DelphiNameDeclaration
-    implements Typed, Invocable, Visibility {
+    implements TypedDeclaration, Invocable, Visibility {
   private final String qualifiedName;
   private final List<ParameterDeclaration> parameters;
   private final Type returnType;
