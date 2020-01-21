@@ -14,12 +14,12 @@ public class DelphiTokenStream extends TokenRewriteStream {
    * Returns the underlying token list. This overrides the ANTLR getTokens function which normally
    * returns a raw list.
    *
-   * <p>NOTE: This refuses to compile without an unchecked conversion suppression. It's redundant
-   * and patently unnecessary, but it makes javac happy.
+   * <p>This requires a suppression because a generic specialization is not a covariant return type
+   * in the traditional sense.
    *
    * @return Token list
    */
-  @SuppressWarnings({"unchecked", "RedundantSuppression"})
+  @SuppressWarnings("unchecked")
   @Override
   public List<Token> getTokens() {
     return tokens;

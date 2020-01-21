@@ -32,8 +32,8 @@ import org.sonar.plugins.delphi.type.Type.StructType;
 class AbstractDelphiScope implements DelphiScope {
   private final Set<NameDeclaration> declarationSet;
   private final ListMultimap<NameDeclaration, NameOccurrence> occurrencesByDeclaration;
-  private final SetMultimap<Class<?>, DelphiNameDeclaration> declarationsByClass;
-  private final TreeMultimap<String, DelphiNameDeclaration> declarationsByName;
+  private final SetMultimap<Class<? extends NameDeclaration>, NameDeclaration> declarationsByClass;
+  private final SetMultimap<String, DelphiNameDeclaration> declarationsByName;
   private final Set<TypeNameDeclaration> enumDeclarations;
 
   private DelphiScope parent;
