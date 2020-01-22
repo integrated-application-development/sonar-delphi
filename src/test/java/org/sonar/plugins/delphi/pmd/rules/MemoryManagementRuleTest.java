@@ -177,14 +177,38 @@ public class MemoryManagementRuleTest extends BasePmdRuleTest {
             .appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']")
             .appendDecl("    procedure Foo;")
             .appendDecl("  end;")
-            .appendDecl("  TFoo = class(IBar)")
+            .appendDecl("  TFoo = class(TObject, IBar)")
             .appendDecl("    procedure Foo;")
             .appendDecl("  end;")
             .appendImpl("procedure Test;")
             .appendImpl("var")
             .appendImpl("  Foo: IBar;")
             .appendImpl("begin")
-            .appendImpl("  Foo := 'MyString';")
+            .appendImpl("  Foo := TFoo.Create;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
+  }
+
+  @Test
+  public void testInterfaceArgumentShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  IBar = interface")
+            .appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']")
+            .appendDecl("    procedure Foo;")
+            .appendDecl("  end;")
+            .appendDecl("  TFoo = class(TObject, IBar)")
+            .appendDecl("    procedure Baz(Bar: IBar);")
+            .appendDecl("  end;")
+            .appendImpl("procedure Test;")
+            .appendImpl("var")
+            .appendImpl("  Foo: TFoo;")
+            .appendImpl("begin")
+            .appendImpl("  Foo.Baz(TFoo.Create);")
             .appendImpl("end;");
 
     execute(builder);
