@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.ast.Node;
+import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
 import org.sonar.plugins.delphi.antlr.ast.node.ArgumentListNode;
@@ -18,6 +19,7 @@ import org.sonar.plugins.delphi.symbol.Qualifiable;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.Type;
 
 public class MemoryManagementRule extends AbstractDelphiRule {
@@ -74,6 +76,10 @@ public class MemoryManagementRule extends AbstractDelphiRule {
       return false;
     }
 
+    if (isInterfaceParameter(expression)) {
+      return false;
+    }
+
     if (isExceptionRaise(expression)) {
       return false;
     }
@@ -91,6 +97,33 @@ public class MemoryManagementRule extends AbstractDelphiRule {
       Type assignedType = ((AssignmentStatementNode) assignStatement).getAssignee().getType();
       return assignedType.isInterface();
     }
+    return false;
+  }
+
+  private static boolean isInterfaceParameter(PrimaryExpressionNode expression) {
+    Node parent = expression.findParentheses().jjtGetParent();
+    if (!(parent instanceof ArgumentListNode)) {
+      return false;
+    }
+
+    Node previous = parent.jjtGetParent().jjtGetChild(parent.jjtGetChildIndex() - 1);
+    if (!(previous instanceof NameReferenceNode)) {
+      return false;
+    }
+
+    NameReferenceNode invocationName = ((NameReferenceNode) previous).getLastName();
+    NameDeclaration declaration = invocationName.getNameDeclaration();
+    if (!(declaration instanceof Invocable)) {
+      return false;
+    }
+
+    int argumentIndex = expression.jjtGetChildIndex();
+    Invocable invocable = (Invocable) declaration;
+    if (invocable.getParametersCount() > argumentIndex) {
+      Type parameterType = ((Invocable) declaration).getParameter(argumentIndex).getType();
+      return parameterType.isInterface();
+    }
+
     return false;
   }
 

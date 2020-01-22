@@ -918,6 +918,9 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     <description>
       Memory management methods should be used to manage object lifecycles.
       &lt;br&gt;
+      Because interface types are already reference-counted, this rule will exclude assignments to
+      interface variables or arguments supplied to a method expecting an interface instance.
+      &lt;br&gt;
       &lt;br&gt;
     </description>
     <properties>
