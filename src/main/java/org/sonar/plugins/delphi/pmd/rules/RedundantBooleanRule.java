@@ -7,6 +7,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode.BinaryOp;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnaryExpressionNode.UnaryOp;
+import org.sonar.plugins.delphi.type.Type;
 
 public class RedundantBooleanRule extends AbstractDelphiRule {
 
@@ -23,8 +24,15 @@ public class RedundantBooleanRule extends AbstractDelphiRule {
     Node parent = bool.findParentheses().jjtGetParent();
 
     if (parent instanceof BinaryExpressionNode) {
-      BinaryOp op = ((BinaryExpressionNode) parent).getOperator();
-      return op == BinaryOp.EQUAL || op == BinaryOp.NOT_EQUAL;
+      BinaryExpressionNode expression = (BinaryExpressionNode) parent;
+
+      Type leftType = expression.getLeft().getType();
+      Type rightType = expression.getRight().getType();
+      BinaryOp op = expression.getOperator();
+
+      return leftType.isBoolean()
+          && rightType.isBoolean()
+          && (op == BinaryOp.EQUAL || op == BinaryOp.NOT_EQUAL);
     }
 
     return false;

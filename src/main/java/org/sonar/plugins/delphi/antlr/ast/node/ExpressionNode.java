@@ -1,5 +1,7 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import net.sourceforge.pmd.lang.ast.Node;
+import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -66,18 +68,28 @@ public abstract class ExpressionNode extends DelphiNode implements Typed {
   }
 
   public boolean isTrue() {
-    ExpressionNode expr = skipParentheses();
-    return expr.hasImageEqualTo("True") || expr.hasImageEqualTo("System.True");
+    return isReferenceTo("True");
   }
 
   public boolean isFalse() {
-    ExpressionNode expr = skipParentheses();
-    return expr.hasImageEqualTo("False") || expr.hasImageEqualTo("System.False");
+    return isReferenceTo("False");
   }
 
   public boolean isResult() {
+    return isReferenceTo("Result");
+  }
+
+  private boolean isReferenceTo(String image) {
     ExpressionNode expr = skipParentheses();
-    return expr.hasImageEqualTo("Result");
+    if (expr.jjtGetNumChildren() == 1 && expr instanceof PrimaryExpressionNode) {
+      Node child = expr.jjtGetChild(0);
+      if (child instanceof NameReferenceNode) {
+        NameReferenceNode reference = (NameReferenceNode) child;
+        NameDeclaration declaration = reference.getLastName().getNameDeclaration();
+        return declaration != null && declaration.getImage().equals(image);
+      }
+    }
+    return false;
   }
 
   @Nullable

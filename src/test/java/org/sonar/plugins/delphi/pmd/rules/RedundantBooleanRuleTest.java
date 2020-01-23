@@ -12,6 +12,8 @@ public class RedundantBooleanRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
+            .appendImpl("var")
+            .appendImpl("  X: Boolean;")
             .appendImpl("begin")
             .appendImpl("  if X = True then begin")
             .appendImpl("    DoSomething;")
@@ -22,7 +24,25 @@ public class RedundantBooleanRuleTest extends BasePmdRuleTest {
 
     assertIssues()
         .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("RedundantBooleanRule", builder.getOffset() + 3));
+        .areExactly(1, ruleKeyAtLine("RedundantBooleanRule", builder.getOffset() + 5));
+  }
+
+  @Test
+  public void testBooleanComparisonImplicitConversionShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure MyProcedure;")
+            .appendImpl("var")
+            .appendImpl("  X: Variant;")
+            .appendImpl("begin")
+            .appendImpl("  if X = True then begin")
+            .appendImpl("    DoSomething;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
   }
 
   @Test
@@ -30,6 +50,8 @@ public class RedundantBooleanRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
+            .appendImpl("var")
+            .appendImpl("  X: Boolean;")
             .appendImpl("begin")
             .appendImpl("  if X <> False then begin")
             .appendImpl("    DoSomething;")
@@ -40,7 +62,7 @@ public class RedundantBooleanRuleTest extends BasePmdRuleTest {
 
     assertIssues()
         .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("RedundantBooleanRule", builder.getOffset() + 3));
+        .areExactly(1, ruleKeyAtLine("RedundantBooleanRule", builder.getOffset() + 5));
   }
 
   @Test
@@ -48,6 +70,8 @@ public class RedundantBooleanRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
+            .appendImpl("var")
+            .appendImpl("  X: Boolean;")
             .appendImpl("begin")
             .appendImpl("  if ((((X))) = (((True)))) then begin")
             .appendImpl("    DoSomething;")
@@ -56,16 +80,17 @@ public class RedundantBooleanRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().areExactly(1, ruleKeyAtLine("RedundantBooleanRule", builder.getOffset() + 3));
+    assertIssues().areExactly(1, ruleKeyAtLine("RedundantBooleanRule", builder.getOffset() + 5));
   }
 
   @Test
   public void testNeedlesslyInvertedBooleanShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
+            .appendDecl("procedure Foo(Bar: Boolean);")
+            .appendImpl("procedure Baz;")
             .appendImpl("begin")
-            .appendImpl("  DoSomething(not True);")
+            .appendImpl("  Foo(not True);")
             .appendImpl("end;");
 
     execute(builder);
