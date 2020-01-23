@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Exclude interface parameters in `MemoryManagementRule`.
 
+### Fixed
+
+- FPs around variant conversions in `RedundantBooleanRule`.
+
 ## [0.10.0] - 2020-01-17
 
 ### Changed
