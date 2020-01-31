@@ -34,7 +34,7 @@ public class DelphiRuleProperty {
   private final String name;
   private String value;
 
-  private static final Set<PropertyDescriptor> BUILTIN_PROPERTIES =
+  private static final Set<PropertyDescriptor<?>> BUILTIN_PROPERTIES =
       Set.of(BASE_EFFORT, SCOPE, TEMPLATE, TYPE, BUILTIN_XPATH);
 
   public DelphiRuleProperty(String name) {

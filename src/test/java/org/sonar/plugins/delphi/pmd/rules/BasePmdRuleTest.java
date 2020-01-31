@@ -92,7 +92,7 @@ public abstract class BasePmdRuleTest {
     ruleSet = ruleProvider.getDefinition();
   }
 
-  public void execute(DelphiTestFileBuilder builder) {
+  public void execute(DelphiTestFileBuilder<?> builder) {
     configureTest(builder);
 
     sensor.execute(sensorContext);
@@ -103,7 +103,7 @@ public abstract class BasePmdRuleTest {
     assertThat(sensor.getErrors()).as("Errors: " + sensor.getErrors()).isEmpty();
   }
 
-  private void configureTest(DelphiTestFileBuilder builder) {
+  private void configureTest(DelphiTestFileBuilder<?> builder) {
     sensorContext = SensorContextTester.create(ROOT_DIR);
     builder.setBaseDir(ROOT_DIR);
 

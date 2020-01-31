@@ -34,7 +34,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.StatementNode;
 
 public class NoSemicolonRule extends AbstractDelphiRule {
 
-  private static final Set<Class> VALID_PARENTS =
+  private static final Set<Class<?>> VALID_PARENTS =
       Set.of(CaseItemStatementNode.class, ExceptItemNode.class, StatementListNode.class);
 
   @Override

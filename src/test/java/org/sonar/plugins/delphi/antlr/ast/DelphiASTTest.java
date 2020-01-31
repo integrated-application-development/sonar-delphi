@@ -39,7 +39,7 @@ public class DelphiASTTest {
 
   @Test
   public void testAcceptImplemented() {
-    DelphiParserVisitor<?> visitor = spy(new DelphiParserVisitor() {});
+    DelphiParserVisitor<?> visitor = spy(new DelphiParserVisitor<>() {});
     ast.accept(visitor, null);
     verify(visitor).visit(ast, null);
   }

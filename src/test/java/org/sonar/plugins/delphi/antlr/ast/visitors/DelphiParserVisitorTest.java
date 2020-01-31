@@ -24,7 +24,7 @@ public class DelphiParserVisitorTest {
   @Test
   @SuppressWarnings("unchecked")
   public void testAllNodeHandlersCallDelphiNodeHandlerByDefault() throws Exception {
-    DelphiParserVisitor visitor = spy(new DelphiParserVisitor() {});
+    DelphiParserVisitor<?> visitor = spy(new DelphiParserVisitor<>() {});
     int expectedNumberOfVisits = 0;
 
     for (Method method : DelphiParserVisitor.class.getMethods()) {
@@ -46,7 +46,7 @@ public class DelphiParserVisitorTest {
   @Test
   public void testAllASTNodesAreHandled() {
     Set<Class<? extends DelphiNode>> nodeTypes = DelphiNodeUtils.getNodeTypes();
-    Set<Class> handledTypes = getTypesHandledByParserVisitor();
+    Set<Class<?>> handledTypes = getTypesHandledByParserVisitor();
 
     Set<String> unhandledTypes =
         nodeTypes.stream()
@@ -59,7 +59,7 @@ public class DelphiParserVisitorTest {
     }
   }
 
-  private static Set<Class> getTypesHandledByParserVisitor() {
+  private static Set<Class<?>> getTypesHandledByParserVisitor() {
     Method[] methods = DelphiParserVisitor.class.getDeclaredMethods();
 
     return Arrays.stream(methods)

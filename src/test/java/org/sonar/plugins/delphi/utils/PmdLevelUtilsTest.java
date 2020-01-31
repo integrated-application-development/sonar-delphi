@@ -51,7 +51,7 @@ public class PmdLevelUtilsTest {
 
   @Test
   public void testHasPrivateConstructor() throws Exception {
-    Constructor constructor = PmdLevelUtils.class.getDeclaredConstructor();
+    Constructor<?> constructor = PmdLevelUtils.class.getDeclaredConstructor();
     assertThat(constructor.canAccess(null)).isFalse();
     constructor.setAccessible(true);
     constructor.newInstance();
