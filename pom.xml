@@ -100,7 +100,7 @@
     <junit.version>4.12</junit.version>
     <assertj.version>3.14.0</assertj.version>
     <mockito.version>3.0.0</mockito.version>
-    <reflections.version>0.9.11</reflections.version>
+    <archunit.version>0.13.0</archunit.version>
     <java-surefire.version>5.13.0.18197</java-surefire.version>
     <guava.version>28.1-jre</guava.version>
     <jdom.version>1.0</jdom.version>
@@ -199,9 +199,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.reflections</groupId>
-      <artifactId>reflections</artifactId>
-      <version>${reflections.version}</version>
+      <groupId>com.tngtech.archunit</groupId>
+      <artifactId>archunit-junit4</artifactId>
+      <version>${archunit.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
