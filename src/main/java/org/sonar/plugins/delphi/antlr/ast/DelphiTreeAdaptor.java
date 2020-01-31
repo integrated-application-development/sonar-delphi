@@ -129,9 +129,7 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
 
   @Override
   public Object becomeRoot(Object newRoot, Object oldRoot) {
-    if (oldRoot == null) {
-      return newRoot;
-    } else {
+    if (oldRoot != null) {
       if (isNil(newRoot)) {
         int count = getChildCount(newRoot);
 
@@ -143,8 +141,8 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
       }
 
       addChild(newRoot, oldRoot);
-      return newRoot;
     }
+    return newRoot;
   }
 
   @Override
