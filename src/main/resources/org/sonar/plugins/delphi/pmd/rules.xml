@@ -945,20 +945,6 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.SpecialKeywordCapitalizationRule"
-    message="Special keywords should be capitalized"
-    name="SpecialKeywordCapitalizationRule">
-    <priority>4</priority>
-    <description>
-      Special keywords should be capitalized. We treat them like functions in this regard.
-      &lt;br&gt;
-      &lt;br&gt;
-    </description>
-    <properties>
-      <property name="baseEffort" value="1min"/>
-    </properties>
-  </rule>
-
   <rule class="org.sonar.plugins.delphi.pmd.rules.ExplicitTObjectRule"
     message="Top-level classes should explicitly inherit from TObject"
     name="ExplicitTObjectRule">
