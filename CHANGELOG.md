@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `ExtraneousArgumentListCommasRule` analysis rule, which flags trailing commas in argument lists.
+
 ### Changed
 
 - Exclude interface parameters in `MemoryManagementRule`.
