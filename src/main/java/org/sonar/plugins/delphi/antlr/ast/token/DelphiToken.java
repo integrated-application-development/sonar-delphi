@@ -130,10 +130,6 @@ public class DelphiToken implements GenericToken {
     return DelphiKeywords.KEYWORDS.contains(token.getType());
   }
 
-  public boolean isSpecialKeyword() {
-    return DelphiKeywords.SPECIAL_KEYWORDS.contains(token.getType());
-  }
-
   private boolean isIncludeToken() {
     return token instanceof IncludeToken;
   }
@@ -180,8 +176,6 @@ public class DelphiToken implements GenericToken {
       type = TypeOfText.PREPROCESS_DIRECTIVE;
     } else if (isKeyword()) {
       type = TypeOfText.KEYWORD;
-    } else if (isSpecialKeyword()) {
-      type = TypeOfText.KEYWORD_LIGHT;
     }
 
     return type;

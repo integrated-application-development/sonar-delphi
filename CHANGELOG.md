@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Exclude interface parameters in `MemoryManagementRule`.
+- Reclassify `Break`, `Continue`, and `Exit` as compiler intrinsics.
+
+### Removed
+
+- `SpecialKeywordCapitalizationRule` analysis rule.
 
 ### Fixed
 

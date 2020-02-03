@@ -76,6 +76,7 @@ public enum IntrinsicMethod {
           .parameters(untypedFile(), untypedType(), INTEGER.type, INTEGER.type)
           .required(3)
           .returns(INTEGER.type)),
+  BREAK(method("Break")),
   BUILTIN_ARCTAN(method("BuiltInArcTan").parameters(REAL.type).returns(EXTENDED.type)),
   BUILTIN_ARCTAN2(method("BuiltInArcTan2").parameters(REAL.type, REAL.type).returns(EXTENDED.type)),
   BUILTIN_COS(method("BuiltInCos").parameters(REAL.type).returns(EXTENDED.type)),
@@ -99,6 +100,7 @@ public enum IntrinsicMethod {
           .parameters(ANY_DYNAMIC_ARRAY, ANY_DYNAMIC_ARRAY)
           .variadic(ANY_DYNAMIC_ARRAY)
           .returns(ANY_DYNAMIC_ARRAY)),
+  CONTINUE(method("Continue")),
   COPY_STRING(
       method("Copy").parameters(STRING.type, INTEGER.type, INTEGER.type).returns(STRING.type)),
   COPY_ARRAY(
@@ -113,6 +115,7 @@ public enum IntrinsicMethod {
   EOLN(method("Eoln").parameters(untypedFile()).required(0).returns(BOOLEAN.type)),
   ERASE(method("Erase").parameters(untypedFile())),
   EXCLUDE(method("Exclude").parameters(ANY_SET, ANY_ORDINAL)),
+  EXIT(method("Exit").parameters(untypedType())),
   FAIL(method("Fail")),
   FILEPOS(method("FilePos").parameters(untypedFile()).returns(INTEGER.type)),
   FILESIZE(method("FileSize").parameters(untypedFile()).returns(INTEGER.type)),

@@ -36,7 +36,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.AsmStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.AssignmentStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.BlockDeclarationSectionNode;
-import org.sonar.plugins.delphi.antlr.ast.node.BreakStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.CaseItemStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.CaseStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ClassHelperTypeNode;
@@ -48,7 +47,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.ConstArraySubTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ConstDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ConstSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ContainsClauseNode;
-import org.sonar.plugins.delphi.antlr.ast.node.ContinueStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.CustomAttributeListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.CustomAttributeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DecimalLiteralNode;
@@ -58,7 +56,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.EnumElementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.EnumTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExceptBlockNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExceptItemNode;
-import org.sonar.plugins.delphi.antlr.ast.node.ExitStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FieldDeclarationNode;
@@ -626,10 +623,6 @@ public interface DelphiParserVisitor<T> {
     return visit((StatementNode) node, data);
   }
 
-  default T visit(BreakStatementNode node, T data) {
-    return visit((StatementNode) node, data);
-  }
-
   default T visit(CaseItemStatementNode node, T data) {
     return visit((StatementNode) node, data);
   }
@@ -639,14 +632,6 @@ public interface DelphiParserVisitor<T> {
   }
 
   default T visit(CompoundStatementNode node, T data) {
-    return visit((StatementNode) node, data);
-  }
-
-  default T visit(ContinueStatementNode node, T data) {
-    return visit((StatementNode) node, data);
-  }
-
-  default T visit(ExitStatementNode node, T data) {
     return visit((StatementNode) node, data);
   }
 
