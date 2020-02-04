@@ -36,7 +36,6 @@ public final class ArgumentListNode extends DelphiNode {
       for (int i = 0; i < jjtGetNumChildren(); ++i) {
         imageBuilder.append(jjtGetChild(i).getImage());
       }
-      imageBuilder.append(")");
       image = imageBuilder.toString();
     }
     return image;

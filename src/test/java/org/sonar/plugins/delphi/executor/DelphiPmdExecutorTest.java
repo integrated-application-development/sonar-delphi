@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
@@ -16,6 +18,7 @@ import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.SCOPE;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TYPE;
 
 import java.io.File;
+import net.sourceforge.pmd.Report;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
@@ -128,5 +131,20 @@ public class DelphiPmdExecutorTest {
 
     verify(violationRecorder, never()).saveViolation(any(DelphiRuleViolation.class), eq(context));
     verifyZeroInteractions(context);
+  }
+
+  @Test
+  public void testViolationRecorderExceptionShouldThrowFatalError() {
+    doAnswer(
+            invocation -> {
+              ((Report) invocation.getArgument(0))
+                  .addRuleViolation(mock(DelphiRuleViolation.class));
+              return null;
+            })
+        .when(pmdConfiguration)
+        .dumpXmlReport(any(Report.class));
+
+    doThrow(new RuntimeException()).when(violationRecorder).saveViolation(any(), any());
+    assertThatThrownBy(() -> executor.complete()).isInstanceOf(FatalExecutorError.class);
   }
 }

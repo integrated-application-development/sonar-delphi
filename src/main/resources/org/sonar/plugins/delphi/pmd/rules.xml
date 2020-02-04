@@ -224,7 +224,7 @@
       <property name="builtinXPath">
         <value>
           <![CDATA[
-              //ArgumentListNode/*[last()][name() = "CommonDelphiNode" and @Image = ","]
+              //ArgumentListNode/*[last() - 1][name() = "CommonDelphiNode" and @Image = ","]
             ]]>
         </value>
       </property>
@@ -623,7 +623,11 @@ FreeAndNil(Foo); // Compliant
     message="Track uses of type aliases"
     name="TypeAliasRule">
     <priority>5</priority>
-    <description>Track uses of type aliases.</description>
+    <description>
+      Type aliases simply provide another name for a type.
+      &lt;br&gt;
+      When misused they can be misleading, confusing, and provide little value.
+    </description>
     <properties>
       <property name="baseEffort" value="10min"/>
     </properties>

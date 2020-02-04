@@ -538,7 +538,7 @@ particleItem                 : '.' extendedNameReference
                              ;
 arrayAccessor                : '['<ArrayAccessorNode>^ expressionList ']'!
                              ;
-argumentList                 : '('<ArgumentListNode>^ (argument ','?)* ')'!
+argumentList                 : '('<ArgumentListNode>^ (argument ','?)* ')'
                              ;
 argument                     : anonymousMethod
                              | expression (':' expression! (':' expression!)?)? // This strange colon construct at the end is the result

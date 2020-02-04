@@ -19,8 +19,10 @@
  */
 package org.sonar.plugins.delphi.pmd.violation;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -33,6 +35,7 @@ import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleViolation;
 import org.junit.Test;
 import org.sonar.api.batch.fs.FilePredicate;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
@@ -51,30 +54,65 @@ import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.project.DelphiProjectHelper;
 
 public class DelphiPmdViolationRecorderTest {
+  private static final String RULE_KEY = "RULE";
+
   private final File baseDir = new File("").getAbsoluteFile();
   private final DefaultFileSystem spiedFs = spy(new DefaultFileSystem(baseDir));
   private final Configuration configuration = mock(Configuration.class);
   private final DelphiProjectHelper projectHelper = new DelphiProjectHelper(configuration, spiedFs);
   private final ActiveRules mockActiveRules = mock(ActiveRules.class);
+  private final ActiveRule activeRule = mock(ActiveRule.class);
   private final SensorContext mockContext = mock(SensorContext.class);
 
   private final DelphiPmdViolationRecorder violationRecorder =
       new DelphiPmdViolationRecorder(projectHelper, mockActiveRules);
 
+  public DelphiPmdViolationRecorderTest() {
+    RuleKey ruleKey = RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, RULE_KEY);
+    when(mockActiveRules.find(ruleKey)).thenReturn(activeRule);
+    when(activeRule.ruleKey()).thenReturn(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, RULE_KEY));
+  }
+
   @Test
   public void testShouldConvertPmdViolationToSonarViolation() {
-    final ActiveRule rule = createRuleInActiveRules();
     final File file = new File(baseDir, "FileWithViolation.java");
-    final DefaultInputFile inputFile1 = addToFileSystem(file);
-    final RuleViolation pmdViolation = mockPmdViolation(file, "RULE");
+    final DefaultInputFile inputFile = addToFileSystem(file);
+    final RuleViolation pmdViolation = mockPmdViolation(file);
     final NewIssue newIssue = mock(NewIssue.class);
     final NewIssueLocation issueLocation = mock(NewIssueLocation.class);
 
     when(mockContext.newIssue()).thenReturn(newIssue);
-    when(newIssue.forRule(rule.ruleKey())).thenReturn(newIssue);
+    when(newIssue.forRule(activeRule.ruleKey())).thenReturn(newIssue);
     when(newIssue.newLocation()).thenReturn(issueLocation);
     when(newIssue.at(issueLocation)).thenReturn(newIssue);
-    when(issueLocation.on(inputFile1)).thenReturn(issueLocation);
+    when(issueLocation.on(inputFile)).thenReturn(issueLocation);
+    when(issueLocation.message("Description")).thenReturn(issueLocation);
+    when(issueLocation.at(any(TextRange.class))).thenReturn(issueLocation);
+
+    violationRecorder.saveViolation(pmdViolation, mockContext);
+
+    verify(mockContext).newIssue();
+    verify(newIssue).save();
+  }
+
+  @Test
+  public void testShouldRecordViolationInTestCodeWhenScopeIsTest() {
+    final File file = new File(baseDir, "FileWithViolation.java");
+    InputFile inputFile = addToFileSystem(file);
+    final RuleViolation pmdViolation = mockPmdViolation(file);
+
+    when(pmdViolation.getClassName()).thenReturn("Test_Method");
+    when(pmdViolation.getRule().getProperty(SCOPE)).thenReturn(RuleScope.TEST.name());
+    when(configuration.get(DelphiPlugin.TEST_TYPE_REGEX_KEY)).thenReturn(Optional.of("Test_.*"));
+
+    final NewIssue newIssue = mock(NewIssue.class);
+    final NewIssueLocation issueLocation = mock(NewIssueLocation.class);
+
+    when(mockContext.newIssue()).thenReturn(newIssue);
+    when(newIssue.forRule(activeRule.ruleKey())).thenReturn(newIssue);
+    when(newIssue.newLocation()).thenReturn(issueLocation);
+    when(newIssue.at(issueLocation)).thenReturn(newIssue);
+    when(issueLocation.on(inputFile)).thenReturn(issueLocation);
     when(issueLocation.message("Description")).thenReturn(issueLocation);
     when(issueLocation.at(any(TextRange.class))).thenReturn(issueLocation);
 
@@ -86,10 +124,9 @@ public class DelphiPmdViolationRecorderTest {
 
   @Test
   public void testShouldIgnoreViolationInTestCodeWhenScopeIsMain() {
-    createRuleInActiveRules();
     final File file = new File(baseDir, "FileWithViolation.java");
     addToFileSystem(file);
-    final RuleViolation pmdViolation = mockPmdViolation(file, "RULE");
+    final RuleViolation pmdViolation = mockPmdViolation(file);
 
     when(pmdViolation.getClassName()).thenReturn("Test_Method");
     when(pmdViolation.getRule().getProperty(SCOPE)).thenReturn(RuleScope.MAIN.name());
@@ -103,10 +140,9 @@ public class DelphiPmdViolationRecorderTest {
 
   @Test
   public void testShouldIgnoreViolationInMainCodeWhenScopeIsTest() {
-    createRuleInActiveRules();
     final File file = new File(baseDir, "FileWithViolation.java");
     addToFileSystem(file);
-    final RuleViolation pmdViolation = mockPmdViolation(file, "RULE");
+    final RuleViolation pmdViolation = mockPmdViolation(file);
 
     when(pmdViolation.getClassName()).thenReturn("MainMethod");
     when(pmdViolation.getRule().getProperty(SCOPE)).thenReturn(RuleScope.TEST.name());
@@ -119,31 +155,47 @@ public class DelphiPmdViolationRecorderTest {
   }
 
   @Test
-  public void testShouldIgnoreViolationOnUnknownResource() {
-    final File unknownFile = new File(baseDir, "UNKNOWN.pas");
-    final RuleViolation pmdViolation = mockPmdViolation(unknownFile, "RULE");
+  public void testShouldIgnoreViolationWhenSuppressed() {
+    final File file = new File(baseDir, "FileWithViolation.java");
+    addToFileSystem(file);
+    final RuleViolation pmdViolation = mockPmdViolation(file);
 
+    when(pmdViolation.isSuppressed()).thenReturn(true);
     violationRecorder.saveViolation(pmdViolation, mockContext);
 
     verifyZeroInteractions(mockActiveRules);
     verifyZeroInteractions(mockContext);
-    verify(spiedFs).inputFile(any(FilePredicate.class));
+  }
+
+  @Test
+  public void testShouldThrowOnUnknownResource() {
+    final File unknownFile = new File(baseDir, "UNKNOWN.pas");
+    final RuleViolation pmdViolation = mockPmdViolation(unknownFile);
+
+    assertThatThrownBy(() -> violationRecorder.saveViolation(pmdViolation, mockContext))
+        .isInstanceOf(RuntimeException.class);
   }
 
   @Test
   public void testShouldIgnoreViolationOnUnknownRule() {
     final File file = new File("src/FileWithUnknownViolations.Pas");
     addToFileSystem(file);
+
     final String ruleName = "UNKNOWN";
-    final RuleViolation pmdViolation = mockPmdViolation(file, ruleName);
+    final Rule unknown = mock(Rule.class);
+    when(unknown.getName()).thenReturn(ruleName);
+    when(unknown.getProperty(SCOPE)).thenReturn(RuleScope.ALL.name());
+
+    final RuleViolation pmdViolation = mockPmdViolation(file);
+    when(pmdViolation.getRule()).thenReturn(unknown);
     final RuleKey expectedRuleKey1 = RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, ruleName);
     final RuleKey expectedRuleKey2 = RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, ruleName);
 
     violationRecorder.saveViolation(pmdViolation, mockContext);
 
-    verify(spiedFs).inputFile(any(FilePredicate.class));
     verify(mockActiveRules).find(expectedRuleKey1);
     verify(mockActiveRules).find(expectedRuleKey2);
+    verify(spiedFs, never()).inputFile(any(FilePredicate.class));
     verifyZeroInteractions(mockContext);
   }
 
@@ -157,24 +209,17 @@ public class DelphiPmdViolationRecorderTest {
     return inputFile;
   }
 
-  private ActiveRule createRuleInActiveRules() {
-    ActiveRule sonarRule = mock(ActiveRule.class);
-    RuleKey ruleKey = RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, "RULE");
-    when(mockActiveRules.find(ruleKey)).thenReturn(sonarRule);
-    when(sonarRule.ruleKey()).thenReturn(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, "RULE"));
-    return sonarRule;
-  }
-
-  private RuleViolation mockPmdViolation(File file, String ruleName) {
+  private RuleViolation mockPmdViolation(File file) {
     final Rule rule = mock(Rule.class);
     final RuleViolation pmdViolation = mock(RuleViolation.class);
 
-    when(rule.getName()).thenReturn(ruleName);
+    when(rule.getName()).thenReturn(RULE_KEY);
     when(rule.getProperty(SCOPE)).thenReturn(RuleScope.ALL.name());
     when(pmdViolation.getFilename()).thenReturn(file.getAbsolutePath());
     when(pmdViolation.getBeginLine()).thenReturn(2);
     when(pmdViolation.getDescription()).thenReturn("Description");
     when(pmdViolation.getRule()).thenReturn(rule);
+    when(pmdViolation.isSuppressed()).thenReturn(false);
 
     return pmdViolation;
   }
