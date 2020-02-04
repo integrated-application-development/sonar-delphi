@@ -785,11 +785,14 @@ public class NameResolver {
 
   public static void resolve(TypeNode type) {
     type.clearCachedType();
-    List<TypeNode> types = new ArrayList<>();
-    types.add(type);
-    types.addAll(type.findDescendantsOfType(TypeNode.class));
-    for (TypeNode typeNode : types) {
-      typeNode.findChildrenOfType(NameReferenceNode.class).forEach(NameResolver::resolve);
+
+    List<Node> nodes = new ArrayList<>();
+    nodes.add(type);
+    nodes.addAll(type.findDescendantsOfType(TypeNode.class));
+    nodes.addAll(type.findChildrenOfType(PrimaryExpressionNode.class));
+
+    for (Node node : nodes) {
+      node.findChildrenOfType(NameReferenceNode.class).forEach(NameResolver::resolve);
     }
   }
 

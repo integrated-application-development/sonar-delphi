@@ -270,6 +270,12 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testEnumsTypeResolution() {
+    execute("typeResolution/Enums.pas");
+    verifyUsages(20, 9, reference(30, 2), reference(31, 2), reference(32, 2));
+  }
+
+  @Test
   public void testSimpleProperties() {
     execute("properties/Simple.pas");
     verifyUsages(

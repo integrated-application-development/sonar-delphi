@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - FPs around variant conversions in `RedundantBooleanRule`.
+- Bug where the base type of an enum subrange would not be resolved.
 
 ## [0.10.0] - 2020-01-17
 
