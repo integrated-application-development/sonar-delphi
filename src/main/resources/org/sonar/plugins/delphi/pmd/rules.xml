@@ -52,7 +52,7 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.SwallowedExceptionsRule"
     message="Exceptions should not be swallowed"
     name="SwallowedExceptionsRule">
-    <priority>2</priority>
+    <priority>3</priority>
     <description>
       Exceptions should not be swallowed.
       &lt;br&gt;
@@ -83,7 +83,7 @@
   ThrowException;
 <b>except</b>	// Compliant
   <b>on</b> E: Exception <b>do begin</b>
-    Log.Error(<i>'He''s dead, Jim!'</i>);
+    Log.Audit(<i>'He''s dead, Jim!'</i>);
   <b>end;</b>
 <b>end;</b>
         ]]>
@@ -644,7 +644,7 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.ConstructorWithoutInheritedStatementRule"
     message="Constructors should contain an 'inherited' statement"
     name="ConstructorWithoutInheritedStatementRule">
-    <priority>2</priority>
+    <priority>3</priority>
     <description>Constructors should contain an 'inherited' statement.</description>
     <properties>
       <property name="baseEffort" value="5min"/>
@@ -655,7 +655,7 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.DestructorWithoutInheritedStatementRule"
     message="Destructors should contain an 'inherited' statement"
     name="DestructorWithoutInheritedStatementRule">
-    <priority>2</priority>
+    <priority>3</priority>
     <description>
       Destructors should contain an 'inherited' statement. This also includes common
       destructor-like methods like Deinit and Teardown.
@@ -873,7 +873,7 @@ FunctionWithoutArguments;	// Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.DuplicatesRule"
     message="TStringLists should be sorted when setting Duplicates"
     name="DuplicatesRule">
-    <priority>2</priority>
+    <priority>1</priority>
     <description>
       TStringLists must be sorted if setting the Duplicates property.
       &lt;br&gt;
