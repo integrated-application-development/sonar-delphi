@@ -231,9 +231,9 @@
     </properties>
     <example>
       <![CDATA[
-Foo(1, 2, 3,) // Noncompliant
+Foo(1, 2, 3,); // Noncompliant
 
-Foo(1, 2, 3) // Compliant
+Foo(1, 2, 3); // Compliant
         ]]>
     </example>
   </rule>
