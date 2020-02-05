@@ -226,7 +226,7 @@
       <property name="builtinXPath">
         <value>
           <![CDATA[
-              //ArgumentListNode/*[last()][name() = "CommonDelphiNode" and @Image = ","]
+              //ArgumentListNode/*[last() - 1][name() = "CommonDelphiNode" and @Image = ","]
             ]]>
         </value>
       </property>
