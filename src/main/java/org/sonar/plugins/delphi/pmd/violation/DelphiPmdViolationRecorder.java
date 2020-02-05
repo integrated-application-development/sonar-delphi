@@ -37,7 +37,6 @@ import org.sonar.plugins.delphi.project.DelphiProjectHelper;
 
 @ScannerSide
 public class DelphiPmdViolationRecorder {
-
   private final DelphiProjectHelper delphiProjectHelper;
   private final ActiveRules activeRules;
 
@@ -47,12 +46,6 @@ public class DelphiPmdViolationRecorder {
   }
 
   public void saveViolation(RuleViolation pmdViolation, SensorContext context) {
-    final InputFile inputFile = findResourceFor(pmdViolation);
-    if (inputFile == null) {
-      // Save violations only for existing resources
-      return;
-    }
-
     if (pmdViolation.isSuppressed()) {
       // Suppressed violations shouldn't be saved
       return;
@@ -71,7 +64,7 @@ public class DelphiPmdViolationRecorder {
     }
 
     final NewIssue issue = context.newIssue().forRule(activeRule.ruleKey());
-
+    final InputFile inputFile = findResourceFor(pmdViolation);
     final NewIssueLocation issueLocation =
         issue.newLocation().on(inputFile).message(pmdViolation.getDescription());
 
@@ -86,7 +79,12 @@ public class DelphiPmdViolationRecorder {
   }
 
   private InputFile findResourceFor(RuleViolation violation) {
-    return delphiProjectHelper.getFile(violation.getFilename());
+    InputFile inputFile = delphiProjectHelper.getFile(violation.getFilename());
+    if (inputFile == null) {
+      throw new RuntimeException(
+          String.format("Input file could not be found: '%s'", violation.getFilename()));
+    }
+    return inputFile;
   }
 
   private ActiveRule findActiveRuleFor(RuleViolation violation) {

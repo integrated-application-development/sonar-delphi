@@ -10,6 +10,7 @@ import java.io.StringWriter;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import net.sourceforge.pmd.Report;
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.RuleSet;
@@ -86,10 +87,16 @@ public class DelphiPmdExecutor implements Executor {
 
   @Override
   public void complete() {
-    pmdConfiguration.dumpXmlReport(ctx.getReport());
+    Report report = ctx.getReport();
+    pmdConfiguration.dumpXmlReport(report);
 
-    for (RuleViolation violation : ctx.getReport()) {
-      violationRecorder.saveViolation(violation, sensorContext);
+    try {
+      LOG.info("{} violations found.", report.size());
+      for (RuleViolation violation : report) {
+        violationRecorder.saveViolation(violation, sensorContext);
+      }
+    } catch (Exception e) {
+      throw new FatalExecutorError("Failed to record violations", e);
     }
   }
 

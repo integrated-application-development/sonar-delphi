@@ -39,6 +39,8 @@ public class DelphiMasterExecutor implements Executor {
     for (Executor executor : executors) {
       try {
         executor.execute(context, file);
+      } catch (FatalExecutorError e) {
+        throw e;
       } catch (Exception e) {
         String executorName = executor.getClass().getSimpleName();
         String fileName = file.getSourceCodeFile().getName();
