@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.1] - 2020-02-05
+
 ### Changed
 
 - Improve description of `TypeAliasRule`.
@@ -263,7 +265,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.11.0...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.11.1...HEAD
+[0.11.1]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.8.0...v0.9.0
