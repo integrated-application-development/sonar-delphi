@@ -1,13 +1,10 @@
 package org.sonar.plugins.delphi.symbol;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.getFirst;
 import static java.lang.String.format;
-import static java.util.Objects.isNull;
 import static org.apache.commons.io.FilenameUtils.getBaseName;
 import static org.sonar.plugins.delphi.utils.DelphiUtils.stopProgressReport;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
@@ -61,7 +58,11 @@ public class SymbolTableBuilder {
   private final Multimap<String, UnitData> allUnitsByName = HashMultimap.create();
   private final Set<Path> unitPaths = new HashSet<>();
 
+  private String encoding;
+  private List<Path> searchDirectories = Collections.emptyList();
+  private Set<String> conditionalDefines = Collections.emptySet();
   private Set<String> unitScopeNames = Collections.emptySet();
+
   private DelphiFileConfig fileConfig;
   private SystemScope systemScope;
   private int nestingLevel;
@@ -80,8 +81,19 @@ public class SymbolTableBuilder {
     return this;
   }
 
-  public SymbolTableBuilder searchDirectories(@NotNull Iterable<Path> searchDirectories) {
+  public SymbolTableBuilder encoding(String encoding) {
+    this.encoding = encoding;
+    return this;
+  }
+
+  public SymbolTableBuilder searchDirectories(@NotNull List<Path> searchDirectories) {
+    this.searchDirectories = searchDirectories;
     searchDirectories.forEach(this::processSearchPath);
+    return this;
+  }
+
+  public SymbolTableBuilder conditionalDefines(@NotNull Set<String> conditionalDefines) {
+    this.conditionalDefines = conditionalDefines;
     return this;
   }
 
@@ -91,12 +103,6 @@ public class SymbolTableBuilder {
       throw new SymbolTableConstructionException(message);
     }
     this.processSearchPath(standardLibraryPath);
-    return this;
-  }
-
-  public SymbolTableBuilder fileConfig(@NotNull DelphiFileConfig fileConfig) {
-    Preconditions.checkState(isNull(this.fileConfig));
-    this.fileConfig = fileConfig;
     return this;
   }
 
@@ -247,7 +253,7 @@ public class SymbolTableBuilder {
   }
 
   public SymbolTable build() {
-    checkNotNull(fileConfig, "fileConfig must be supplied to SymbolTableBuilder");
+    fileConfig = DelphiFile.createConfig(encoding, searchDirectories, conditionalDefines);
     doPartialIndex();
     doFullIndex();
     return symbolTable;
