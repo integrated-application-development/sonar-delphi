@@ -74,19 +74,14 @@ public class DelphiSensor implements Sensor {
     Iterable<InputFile> inputFiles = delphiProjectHelper.mainFiles();
     List<Path> sourceFiles = inputFilesToPaths(inputFiles);
 
-    DelphiFileConfig config =
-        DelphiFile.createConfig(
-            delphiProjectHelper.encoding(),
-            delphiProjectHelper.getSearchDirectories(),
-            delphiProjectHelper.getConditionalDefines());
-
     SymbolTable symbolTable =
         SymbolTable.builder()
             .sourceFiles(sourceFiles)
+            .encoding(delphiProjectHelper.encoding())
             .searchDirectories(delphiProjectHelper.getSearchDirectories())
+            .conditionalDefines(delphiProjectHelper.getConditionalDefines())
             .unitScopeNames(delphiProjectHelper.getUnitScopeNames())
             .standardLibraryPath(delphiProjectHelper.standardLibraryPath())
-            .fileConfig(config)
             .build();
 
     ProgressReport progressReport =
@@ -96,6 +91,12 @@ public class DelphiSensor implements Sensor {
     progressReport.start(sourceFiles.stream().map(Path::toString).collect(Collectors.toList()));
 
     ExecutorContext executorContext = new ExecutorContext(sensorContext, symbolTable);
+    DelphiFileConfig config =
+        DelphiFile.createConfig(
+            delphiProjectHelper.encoding(),
+            delphiProjectHelper.getSearchDirectories(),
+            delphiProjectHelper.getConditionalDefines());
+
     boolean success = false;
 
     try {

@@ -8,7 +8,6 @@ import static org.sonar.plugins.delphi.utils.DelphiUtils.uriToAbsolutePath;
 
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -21,8 +20,6 @@ import org.sonar.api.batch.fs.TextPointer;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultTextPointer;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.plugins.delphi.file.DelphiFile;
-import org.sonar.plugins.delphi.file.DelphiFileConfig;
 import org.sonar.plugins.delphi.project.DelphiProjectHelper;
 import org.sonar.plugins.delphi.symbol.SymbolTable;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -488,10 +485,6 @@ public class DelphiSymbolTableExecutorTest {
               return inputFiles.get(path);
             });
 
-    DelphiFileConfig fileConfig =
-        DelphiFile.createConfig(
-            delphiProjectHelper.encoding(), Collections.emptyList(), Collections.emptySet());
-
     SymbolTable symbolTable =
         SymbolTable.builder()
             .sourceFiles(
@@ -501,7 +494,6 @@ public class DelphiSymbolTableExecutorTest {
                     .collect(Collectors.toList()))
             .standardLibraryPath(DelphiUtils.getResource(STANDARD_LIBRARY).toPath())
             .unitScopeNames(unitScopeNames)
-            .fileConfig(fileConfig)
             .build();
 
     ExecutorContext executorContext = new ExecutorContext(context, symbolTable);
