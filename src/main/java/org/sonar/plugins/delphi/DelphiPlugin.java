@@ -111,7 +111,7 @@ public class DelphiPlugin implements Plugin {
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
         PropertyDefinition.builder(DelphiPlugin.TEST_TYPE_REGEX_KEY)
-            .name("Generate XML Report")
+            .name("Test Type Regex")
             .defaultValue("(?!)")
             .description(
                 "Rules can be configured not to apply to test code. A type name that matches this "
