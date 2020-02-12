@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `sonar.delphi.pmd.testSuiteType` property to specify an ancestor type for types that will be
+  treated as test code.
+- `typeIs` XPath function.
+- `typeIsExactly` XPath function.
+- `typeInheritsFrom` XPath function.
+
+### Removed
+
+- `sonar.delphi.pmd.testTypeRegex` property.
+
 ### Fixed
 
 - The name of the `Test Type Regex` property was displaying as `Generate XML Report`.

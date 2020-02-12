@@ -34,6 +34,7 @@ import org.sonar.api.rule.RuleScope;
 import org.sonar.api.scanner.ScannerSide;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.project.DelphiProjectHelper;
+import org.sonar.plugins.delphi.type.Type;
 
 @ScannerSide
 public class DelphiPmdViolationRecorder {
@@ -45,7 +46,7 @@ public class DelphiPmdViolationRecorder {
     this.activeRules = activeRules;
   }
 
-  public void saveViolation(RuleViolation pmdViolation, SensorContext context) {
+  public void saveViolation(DelphiRuleViolation pmdViolation, SensorContext context) {
     if (pmdViolation.isSuppressed()) {
       // Suppressed violations shouldn't be saved
       return;
@@ -94,7 +95,7 @@ public class DelphiPmdViolationRecorder {
     return activeRules.find(ruleKey);
   }
 
-  private boolean isOutOfScope(RuleViolation violation) {
+  private boolean isOutOfScope(DelphiRuleViolation violation) {
     String scopeProperty = violation.getRule().getProperty(SCOPE);
     RuleScope scope = RuleScope.valueOf(scopeProperty);
 
@@ -108,7 +109,9 @@ public class DelphiPmdViolationRecorder {
     }
   }
 
-  private boolean isInsideTestMethod(RuleViolation violation) {
-    return violation.getClassName().matches(delphiProjectHelper.testTypeRegex());
+  private boolean isInsideTestMethod(DelphiRuleViolation violation) {
+    Type type = violation.getClassType();
+    String testSuiteTypeImage = delphiProjectHelper.testSuiteType();
+    return type.is(testSuiteTypeImage) || type.isSubTypeOf(testSuiteTypeImage);
   }
 }

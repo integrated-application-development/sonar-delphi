@@ -78,9 +78,10 @@ public abstract class BasePmdRuleTest {
   protected DelphiSensor sensor;
   private SensorContextTester sensorContext;
   private final IssueContainer issues = new IssueContainer();
-  private DelphiRuleSet ruleSet;
   private final DelphiPmdRuleSetDefinitionProvider ruleProvider =
       new DelphiPmdRuleSetDefinitionProvider();
+  private DelphiRuleSet ruleSet = ruleProvider.getDefinition();
+  private List<DelphiRule> baseRules = List.copyOf(ruleSet.getRules());
 
   @BeforeClass
   public static void setupIssueContainerFormatting() {
@@ -89,7 +90,8 @@ public abstract class BasePmdRuleTest {
 
   @Before
   public void setupRuleSet() {
-    ruleSet = ruleProvider.getDefinition();
+    ruleSet.getRules().clear();
+    ruleSet.getRules().addAll(baseRules);
   }
 
   public void execute(DelphiTestFileBuilder<?> builder) {
@@ -118,7 +120,7 @@ public abstract class BasePmdRuleTest {
     DelphiProjectHelper delphiProjectHelper = mock(DelphiProjectHelper.class);
     when(delphiProjectHelper.shouldExecuteOnProject()).thenReturn(true);
     when(delphiProjectHelper.workDir()).thenReturn(new File("target"));
-    when(delphiProjectHelper.testTypeRegex()).thenReturn("(?i)TTestSuite_.*");
+    when(delphiProjectHelper.testSuiteType()).thenReturn("Tests.TTestSuite");
     when(delphiProjectHelper.getFile(any(File.class))).thenReturn(inputFile);
     when(delphiProjectHelper.standardLibraryPath())
         .thenReturn(DelphiUtils.getResource(STANDARD_LIBRARY).toPath());
@@ -150,7 +152,7 @@ public abstract class BasePmdRuleTest {
   private ActiveRules makeActiveRules() {
     ActiveRulesBuilder activeRulesBuilder = new ActiveRulesBuilder();
 
-    for (DelphiRule rule : ruleProvider.getDefinition().getRules()) {
+    for (DelphiRule rule : ruleSet.getRules()) {
       NewActiveRule.Builder ruleBuilder =
           new NewActiveRule.Builder()
               .setRuleKey(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, rule.getName()))

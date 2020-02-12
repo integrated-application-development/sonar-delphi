@@ -53,7 +53,7 @@ public interface Type {
    * Check whether a type is a subtype of another.
    *
    * @param image Type image of a potential superType
-   * @return true if types are equivalent or if the one passed in parameter is in the hierarchy.
+   * @return true if the specified type image is a superType of this type
    */
   boolean isSubTypeOf(String image);
 
@@ -61,7 +61,7 @@ public interface Type {
    * Check whether a type is a subtype of another.
    *
    * @param superType instance of a potential superType.
-   * @return true if types are equivalent or if the one passed in parameter is in the hierarchy.
+   * @return true if the specified type type is a superType of this type
    */
   boolean isSubTypeOf(Type superType);
 

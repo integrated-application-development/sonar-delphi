@@ -22,11 +22,14 @@
  */
 package org.sonar.plugins.delphi.pmd.violation;
 
+import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
+
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.RuleViolation;
 import org.sonar.plugins.delphi.pmd.FilePosition;
 import org.sonar.plugins.delphi.pmd.rules.DelphiRule;
+import org.sonar.plugins.delphi.type.Type;
 
 /** Delphi pmd rule violation */
 public class DelphiRuleViolation implements RuleViolation {
@@ -45,6 +48,8 @@ public class DelphiRuleViolation implements RuleViolation {
   private int endColumn = FilePosition.UNDEFINED_COLUMN;
 
   private boolean suppressed;
+
+  private Type classType = unknownType();
 
   /**
    * C-tor used by DelphiRuleViolationBuilder
@@ -118,39 +123,47 @@ public class DelphiRuleViolation implements RuleViolation {
     return "";
   }
 
-  public void setDescription(String description) {
+  public Type getClassType() {
+    return classType;
+  }
+
+  void setDescription(String description) {
     this.description = description;
   }
 
-  public void setClassName(String className) {
+  void setClassName(String className) {
     this.className = className;
   }
 
-  public void setMethodName(String methodName) {
+  void setMethodName(String methodName) {
     this.methodName = methodName;
   }
 
-  public void setPackageName(String packageName) {
+  void setPackageName(String packageName) {
     this.packageName = packageName;
   }
 
-  public void setBeginLine(int beginLine) {
+  void setBeginLine(int beginLine) {
     this.beginLine = beginLine;
   }
 
-  public void setEndLine(int endLine) {
+  void setEndLine(int endLine) {
     this.endLine = endLine;
   }
 
-  public void setBeginColumn(int beginColumn) {
+  void setBeginColumn(int beginColumn) {
     this.beginColumn = beginColumn;
   }
 
-  public void setEndColumn(int endColumn) {
+  void setEndColumn(int endColumn) {
     this.endColumn = endColumn;
   }
 
-  public void setSuppressed(boolean suppressed) {
+  void setSuppressed(boolean suppressed) {
     this.suppressed = suppressed;
+  }
+
+  void setClassType(Type classType) {
+    this.classType = classType;
   }
 }

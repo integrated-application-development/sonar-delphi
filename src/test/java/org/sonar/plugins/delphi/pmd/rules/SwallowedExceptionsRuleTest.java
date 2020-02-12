@@ -202,7 +202,12 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   public void testEmptyHandlerInTestCodeShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure TTestSuite_SwallowedExceptions.Test;")
+            .unitName("Tests")
+            .appendDecl("type")
+            .appendDecl("  TTestSuite = class(TObject)")
+            .appendDecl("    procedure Test;")
+            .appendDecl("  end;")
+            .appendImpl("procedure TTestSuite.Test;")
             .appendImpl("begin")
             .appendImpl("  try")
             .appendImpl("    ThrowException;")
@@ -220,7 +225,12 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   public void testNestedEmptyHandlerInTestCodeShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure TTestSuite_SwallowedExceptions.Test;")
+            .unitName("Tests")
+            .appendDecl("type")
+            .appendDecl("  TTestSuite = class(TObject)")
+            .appendDecl("    procedure Test;")
+            .appendDecl("  end;")
+            .appendImpl("procedure TTestSuite.Test;")
             .appendImpl("var")
             .appendImpl("  MyVar: TClass;")
             .appendImpl("begin")

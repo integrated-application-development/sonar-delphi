@@ -63,7 +63,7 @@ public abstract class DelphiType implements Type {
 
   @Override
   public boolean isSubTypeOf(Type type) {
-    return false;
+    return isSubTypeOf(type.getImage());
   }
 
   @Override

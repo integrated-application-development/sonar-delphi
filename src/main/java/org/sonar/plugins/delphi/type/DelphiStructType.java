@@ -111,11 +111,6 @@ public class DelphiStructType extends DelphiType implements StructType {
   }
 
   @Override
-  public boolean isSubTypeOf(Type type) {
-    return isSubTypeOf(type.getImage());
-  }
-
-  @Override
   public boolean isSubTypeOf(String image) {
     for (Type parent : parents) {
       if (parent.is(image) || parent.isSubTypeOf(image)) {
