@@ -8,6 +8,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.pmd.FilePosition;
 import org.sonar.plugins.delphi.pmd.rules.DelphiRule;
+import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 
 public class DelphiRuleViolationBuilder {
   private final DelphiRule rule;
@@ -63,12 +64,17 @@ public class DelphiRuleViolationBuilder {
     TypeDeclarationNode typeNode = node.getFirstParentOfType(TypeDeclarationNode.class);
     if (typeNode != null) {
       ruleViolation.setClassName(typeNode.qualifiedNameExcludingUnit());
+      ruleViolation.setClassType(typeNode.getType());
     }
 
     MethodImplementationNode methodNode = node.getFirstParentOfType(MethodImplementationNode.class);
     if (methodNode != null) {
       ruleViolation.setClassName(methodNode.getTypeName());
       ruleViolation.setMethodName(methodNode.simpleName());
+      TypeNameDeclaration typeDeclaration = methodNode.getTypeDeclaration();
+      if (typeDeclaration != null) {
+        ruleViolation.setClassType(typeDeclaration.getType());
+      }
     }
   }
 }

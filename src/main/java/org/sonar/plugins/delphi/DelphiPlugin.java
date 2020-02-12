@@ -53,7 +53,7 @@ public class DelphiPlugin implements Plugin {
   public static final String CODECOVERAGE_TOOL_KEY = "sonar.delphi.codecoverage.tool";
   public static final String CODECOVERAGE_REPORT_KEY = "sonar.delphi.codecoverage.report";
   public static final String GENERATE_PMD_REPORT_XML_KEY = "sonar.delphi.pmd.generateXml";
-  public static final String TEST_TYPE_REGEX_KEY = "sonar.delphi.pmd.testTypeRegex";
+  public static final String TEST_SUITE_TYPE_KEY = "sonar.delphi.pmd.testSuiteType";
 
   @Override
   public String toString() {
@@ -110,12 +110,13 @@ public class DelphiPlugin implements Plugin {
             .description("Whether a PMD Report XML file should be generated")
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
-        PropertyDefinition.builder(DelphiPlugin.TEST_TYPE_REGEX_KEY)
-            .name("Test Type Regex")
-            .defaultValue("(?!)")
+        PropertyDefinition.builder(DelphiPlugin.TEST_SUITE_TYPE_KEY)
+            .name("Test Suite Type)")
+            .defaultValue("")
             .description(
-                "Rules can be configured not to apply to test code. A type name that matches this "
-                    + "regex will have its methods considered as test code")
+                "Rules can be configured not to apply to test code. Any type that inherits from the"
+                    + " Test Suite type will have its methods considered as test code."
+                    + "\nNOTE: A fully qualified type name is expected.")
             .onQualifiers(Qualifiers.PROJECT)
             .build());
 

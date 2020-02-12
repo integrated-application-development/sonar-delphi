@@ -226,8 +226,8 @@ public class DelphiProjectHelper {
     return fs != null ? fs.encoding().name() : Charset.defaultCharset().name();
   }
 
-  public String testTypeRegex() {
-    return settings.get(DelphiPlugin.TEST_TYPE_REGEX_KEY).orElse("(?!)");
+  public String testSuiteType() {
+    return settings.get(DelphiPlugin.TEST_SUITE_TYPE_KEY).orElse("");
   }
 
   /**

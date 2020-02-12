@@ -20,6 +20,7 @@ import net.sourceforge.pmd.RuleSets;
 import net.sourceforge.pmd.RuleViolation;
 import net.sourceforge.pmd.lang.Language;
 import net.sourceforge.pmd.lang.LanguageRegistry;
+import net.sourceforge.pmd.lang.LanguageVersion;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
@@ -28,6 +29,7 @@ import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.pmd.DelphiLanguageModule;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConfiguration;
 import org.sonar.plugins.delphi.pmd.violation.DelphiPmdViolationRecorder;
+import org.sonar.plugins.delphi.pmd.violation.DelphiRuleViolation;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSetHelper;
@@ -68,6 +70,9 @@ public class DelphiPmdExecutor implements Executor {
   @Override
   public void setup() {
     ruleSets = createRuleSets();
+    for (LanguageVersion version : language.getVersions()) {
+      version.getLanguageVersionHandler().getXPathHandler().initialize();
+    }
   }
 
   @Override
@@ -93,7 +98,7 @@ public class DelphiPmdExecutor implements Executor {
     try {
       LOG.info("{} violations found.", report.size());
       for (RuleViolation violation : report) {
-        violationRecorder.saveViolation(violation, sensorContext);
+        violationRecorder.saveViolation((DelphiRuleViolation) violation, sensorContext);
       }
     } catch (Exception e) {
       throw new FatalExecutorError("Failed to record violations", e);
