@@ -1,5 +1,7 @@
 package org.sonar.plugins.delphi.executor;
 
+import java.util.Collections;
+import java.util.Set;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.scanner.ScannerSide;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
@@ -12,6 +14,10 @@ public interface Executor {
   void execute(Context context, DelphiInputFile delphiFile);
 
   default void complete() {}
+
+  default Set<Class<? extends Executor>> dependencies() {
+    return Collections.emptySet();
+  }
 
   interface Context {
     /**

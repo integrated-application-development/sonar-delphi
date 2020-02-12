@@ -100,6 +100,11 @@ public class DelphiPmdExecutor implements Executor {
     }
   }
 
+  @Override
+  public Set<Class<? extends Executor>> dependencies() {
+    return Set.of(DelphiSymbolTableExecutor.class);
+  }
+
   private RuleSets createRuleSets() {
     RuleSets rulesets = new RuleSets();
     String rulesXml = dumpXml(rulesProfile);
