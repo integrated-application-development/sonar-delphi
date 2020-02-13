@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `typeIs` XPath function.
 - `typeIsExactly` XPath function.
 - `typeInheritsFrom` XPath function.
+- Log the conditional defines used for analyzing the project.
 
 ### Removed
 

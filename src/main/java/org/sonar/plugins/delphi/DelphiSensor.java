@@ -93,6 +93,8 @@ public class DelphiSensor implements Sensor {
   }
 
   private void executeOnFiles(SensorContext sensorContext) {
+    LOG.info("Conditional defines: {}", delphiProjectHelper.getConditionalDefines());
+
     Iterable<InputFile> inputFiles = delphiProjectHelper.mainFiles();
     List<Path> sourceFiles = inputFilesToPaths(inputFiles);
 
