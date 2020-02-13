@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `sonar.delphi.pmd.testSuiteType` property to specify an ancestor type for types that will be
   treated as test code.
+- `sonar.delphi.conditionalUndefines` property to exclude specified defines that were aggregated
+  from the project files.
 - `typeIs` XPath function.
 - `typeIsExactly` XPath function.
 - `typeInheritsFrom` XPath function.
