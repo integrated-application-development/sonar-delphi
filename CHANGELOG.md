@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.0] - 2020-02-13
+
 ### Added
 
 - `sonar.delphi.pmd.testSuiteType` property to specify an ancestor type for types that will be
@@ -291,7 +293,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.11.2...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.11.2...v0.12.0
 [0.11.2]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.11.1...v0.11.2
 [0.11.1]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.10.0...v0.11.0
