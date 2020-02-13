@@ -68,15 +68,15 @@ public class DelphiProjectHelper {
     this.fs = fs;
     this.projects = new ArrayList<>();
 
-    String[] searchDirectoriesSetting =
-        nullToEmpty(settings.getStringArray(DelphiPlugin.SEARCH_PATH_KEY));
-    searchDirectories = new ArrayList<>();
-
     String[] defineSetting = settings.getStringArray(DelphiPlugin.CONDITIONAL_DEFINES_KEY);
     conditionalDefines = Arrays.stream(nullToEmpty(defineSetting)).collect(Collectors.toSet());
 
     String[] scopeNamesSettings = settings.getStringArray(DelphiPlugin.UNIT_SCOPE_NAMES_KEY);
     unitScopeNames = Arrays.stream(nullToEmpty(scopeNamesSettings)).collect(Collectors.toSet());
+
+    String[] searchDirectoriesSetting =
+        nullToEmpty(settings.getStringArray(DelphiPlugin.SEARCH_PATH_KEY));
+    searchDirectories = new ArrayList<>();
 
     for (String path : searchDirectoriesSetting) {
       if (StringUtils.isBlank(path)) {
@@ -100,6 +100,12 @@ public class DelphiProjectHelper {
       conditionalDefines.addAll(project.getConditionalDefines());
       unitScopeNames.addAll(project.getUnitScopeNames());
     }
+
+    String[] undefineSetting = settings.getStringArray(DelphiPlugin.CONDITIONAL_UNDEFINES_KEY);
+    Set<String> conditionalUndefines =
+        Arrays.stream(nullToEmpty(undefineSetting)).collect(Collectors.toSet());
+
+    conditionalDefines.removeAll(conditionalUndefines);
   }
 
   private void indexProjects() {

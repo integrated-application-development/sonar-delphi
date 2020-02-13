@@ -49,6 +49,7 @@ public class DelphiPlugin implements Plugin {
   public static final String SEARCH_PATH_KEY = "sonar.delphi.sources.searchPath";
   public static final String STANDARD_LIBRARY_KEY = "sonar.delphi.sources.standardLibrarySource";
   public static final String CONDITIONAL_DEFINES_KEY = "sonar.delphi.conditionalDefines";
+  public static final String CONDITIONAL_UNDEFINES_KEY = "sonar.delphi.conditionalUndefines";
   public static final String UNIT_SCOPE_NAMES_KEY = "sonar.delphi.unitScopeNames";
   public static final String CODECOVERAGE_TOOL_KEY = "sonar.delphi.codecoverage.tool";
   public static final String CODECOVERAGE_REPORT_KEY = "sonar.delphi.codecoverage.report";
@@ -85,6 +86,15 @@ public class DelphiPlugin implements Plugin {
         PropertyDefinition.builder(DelphiPlugin.CONDITIONAL_DEFINES_KEY)
             .name("Conditional Defines")
             .description("List of conditional defines to define while parsing the project")
+            .multiValues(true)
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(DelphiPlugin.CONDITIONAL_UNDEFINES_KEY)
+            .name("Conditional Defines")
+            .description(
+                "List of conditional defines to undefine before parsing the project. This is useful"
+                    + " if you aggregate the defines from your project files, but still want to"
+                    + " exclude certain ones.")
             .multiValues(true)
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
