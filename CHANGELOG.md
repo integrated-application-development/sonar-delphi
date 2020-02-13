@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - The name of the `Test Type Regex` property was displaying as `Generate XML Report`.
+- Imports could be traversed transitively during name resolution.
 
 ## [0.11.2] - 2020-02-10
 

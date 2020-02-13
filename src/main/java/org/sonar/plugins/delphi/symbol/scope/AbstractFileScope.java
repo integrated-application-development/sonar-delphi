@@ -30,7 +30,7 @@ abstract class AbstractFileScope extends AbstractDelphiScope implements FileScop
 
   @Override
   public Set<NameDeclaration> findDeclaration(DelphiNameOccurrence occurrence) {
-    Set<NameDeclaration> result = shallowFindDeclaration(occurrence);
+    Set<NameDeclaration> result = super.findDeclaration(occurrence);
     if (result.isEmpty()) {
       for (FileScope importScope : imports) {
         result = importScope.shallowFindDeclaration(occurrence);
@@ -44,7 +44,9 @@ abstract class AbstractFileScope extends AbstractDelphiScope implements FileScop
 
   @Override
   public Set<NameDeclaration> shallowFindDeclaration(DelphiNameOccurrence occurrence) {
-    return super.findDeclaration(occurrence);
+    Set<NameDeclaration> result = super.findDeclaration(occurrence);
+    result.removeIf(UnitImportNameDeclaration.class::isInstance);
+    return result;
   }
 
   @Override
