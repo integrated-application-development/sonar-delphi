@@ -35,7 +35,7 @@ public final class MethodImplementationNode extends MethodNode {
   @Nullable
   public TypeNameDeclaration getTypeDeclaration() {
     if (typeDeclaration == null) {
-      NameReferenceNode name = getMethodNameNode().getNameReferenceNode();
+      NameReferenceNode name = findTopLevelMethod().getMethodNameNode().getNameReferenceNode();
       while (name != null) {
         NameDeclaration nameDecl = name.getNameDeclaration();
         if (nameDecl instanceof TypeNameDeclaration) {
@@ -45,6 +45,15 @@ public final class MethodImplementationNode extends MethodNode {
       }
     }
     return typeDeclaration;
+  }
+
+  private MethodImplementationNode findTopLevelMethod() {
+    MethodImplementationNode result = this;
+    MethodImplementationNode nextMethod;
+    while ((nextMethod = result.getFirstParentOfType(MethodImplementationNode.class)) != null) {
+      result = nextMethod;
+    }
+    return result;
   }
 
   @NotNull
