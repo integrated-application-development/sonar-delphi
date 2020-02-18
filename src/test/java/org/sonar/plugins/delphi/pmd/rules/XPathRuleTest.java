@@ -26,7 +26,7 @@ public class XPathRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTypeIsFunctionShouldAddIssue() {
+  public void testTypeIsFunctionShouldAddIssueForExactMatch() {
     xPathProperty.setValue("//TypeDeclarationNode[typeIs('TestUnits.TFoo')]");
 
     DelphiTestUnitBuilder builder =
@@ -41,6 +41,40 @@ public class XPathRuleTest extends BasePmdRuleTest {
     assertIssues()
         .hasSize(1)
         .areExactly(1, ruleKeyAtLine("XPathTestRule", builder.getOffsetDecl() + 2));
+  }
+
+  @Test
+  public void testTypeIsFunctionShouldAddIssueForSubTypeExactMatch() {
+    xPathProperty.setValue("//TypeDeclarationNode[typeIs('System.TObject')]");
+
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .unitName("TestUnits")
+            .appendDecl("type")
+            .appendDecl("  TFoo = class(TObject)")
+            .appendDecl("  end;");
+
+    execute(builder);
+
+    assertIssues()
+        .hasSize(1)
+        .areExactly(1, ruleKeyAtLine("XPathTestRule", builder.getOffsetDecl() + 2));
+  }
+
+  @Test
+  public void testTypeIsFunctionShouldNotAddIssueForUnrelatedType() {
+    xPathProperty.setValue("//TypeDeclarationNode[typeIs('Bars.TBar')]");
+
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .unitName("TestUnits")
+            .appendDecl("type")
+            .appendDecl("  TFoo = class(TObject)")
+            .appendDecl("  end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
   }
 
   @Test

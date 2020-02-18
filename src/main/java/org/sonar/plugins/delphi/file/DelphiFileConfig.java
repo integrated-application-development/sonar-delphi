@@ -26,16 +26,24 @@ public interface DelphiFileConfig {
   Set<String> getDefinitions();
 
   /**
-   * Returns whether the implementation section should be skipped when parsing the file.
+   * Returns whether the implementation section can be skipped when lexing the file.
+   *
+   * <p>NOTE: In some circumstances, this will not be logically possible. For example, if the
+   * implementation section is nested inside of a branching conditional directive then the
+   * implementation section will not be skipped.
    *
    * @return true if the implementation should be skipped when parsing the file
    */
   boolean shouldSkipImplementation();
 
   /**
-   * Sets whether the implementation section should be skipped when parsing the file
+   * Sets whether the implementation section can be skipped when lexing the file.
    *
-   * @param skipImplementation whether the implementation should be skipped when parsing the file
+   * <p>NOTE: In some circumstances, this will not be logically possible. For example, if the
+   * implementation section is nested inside of a branching conditional directive then the
+   * implementation section will not be skipped.
+   *
+   * @param skipImplementation whether the implementation should be skipped when lexing the file
    */
   void setShouldSkipImplementation(boolean skipImplementation);
 }

@@ -61,6 +61,7 @@ package org.sonar.plugins.delphi.antlr;
 
 @lexer::members {
   private boolean shouldSkipImplementation;
+  private int directiveNesting = 0;
   private boolean asmMode = false;
 
   public DelphiLexer(CharStream input, boolean shouldSkipImplementation) {
@@ -859,7 +860,7 @@ GOTO              : 'goto'                     ;
 HELPER            : 'helper'                   ;
 IF                : 'if'                       ;
 IMPLEMENTATION    : 'implementation' {
-                     if (shouldSkipImplementation) {
+                     if (shouldSkipImplementation && directiveNesting == 0) {
                        skip();
                        while (input.LA(1) != EOF) {
                          input.consume();
@@ -1145,8 +1146,30 @@ Hexdigitseq		          : Hexdigit (Hexdigit)*
 // Hidden channel
 //----------------------------------------------------------------------------
 COMMENT                 :  '//' ~('\n'|'\r')*                          {$channel=HIDDEN;}
-                        |  '(*' ( options {greedy=false;} : . )* '*)'  {$channel=HIDDEN; if ($text.startsWith("(*$")) $type = TkCompilerDirective;}
-                        |  '{' ( options {greedy=false;} : . )* '}'    {$channel=HIDDEN; if ($text.startsWith("{$")) $type = TkCompilerDirective;}
+                        |  '(*' ( options {greedy=false;} : . )* '*)'
+                        {
+                          $channel=HIDDEN;
+                          if ($text.startsWith("(*\$")) {
+                            $type = TkCompilerDirective;
+                            if ($text.startsWith("(*\$endif") || $text.startsWith("(*\$ifend")) {
+                              --directiveNesting;
+                            } else if ($text.startsWith("(*\$if")) {
+                              ++directiveNesting;
+                            }
+                          }
+                        }
+                        |  '{' ( options {greedy=false;} : . )* '}'
+                        {
+                          $channel=HIDDEN;
+                          if ($text.startsWith("{\$")) {
+                            $type = TkCompilerDirective;
+                            if ($text.startsWith("{\$endif") || $text.startsWith("{\$ifend")) {
+                              --directiveNesting;
+                            } else if ($text.startsWith("{\$if")) {
+                              ++directiveNesting;
+                            }
+                          }
+                        }
                         ;
 WS                      : (' '|'\t'|'\r'|'\n'|'\f')+ {$channel=HIDDEN;}
                         ;

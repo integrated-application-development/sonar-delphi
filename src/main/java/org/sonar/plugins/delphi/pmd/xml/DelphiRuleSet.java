@@ -24,14 +24,6 @@ public class DelphiRuleSet {
   private String description;
   private final List<DelphiRule> rules = new ArrayList<>();
 
-  public DelphiRuleSet() {}
-
-  public DelphiRuleSet(DelphiRuleSet ruleSet) {
-    this.name = ruleSet.name;
-    this.description = ruleSet.description;
-    this.rules.addAll(ruleSet.getRules());
-  }
-
   public List<DelphiRule> getRules() {
     return rules;
   }
