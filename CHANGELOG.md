@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - The current type could not be resolved from within a subroutine.
+- Files with multiple implementation sections (due to conditional compilation) would be preprocessed
+  in unexpected ways.
 
 ## [0.12.0] - 2020-02-13
 
