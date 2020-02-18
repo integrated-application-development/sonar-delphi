@@ -1,7 +1,6 @@
 package org.sonar.plugins.delphi.antlr.ast.visitors;
 
 import static org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor.ResolutionLevel.COMPLETE;
-import static org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor.ResolutionLevel.INTERFACE;
 import static org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor.ResolutionLevel.NONE;
 import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveType.SCOPED_ENUMS;
 import static org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration.compilerVariable;
@@ -26,7 +25,10 @@ import org.sonar.plugins.delphi.antlr.ast.node.EnumTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExceptItemNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FieldDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FileHeaderNode;
+import org.sonar.plugins.delphi.antlr.ast.node.FinalizationSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ForStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ImplementationSectionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.InitializationSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.InterfaceSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodBodyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodDeclarationNode;
@@ -258,7 +260,31 @@ public class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(InterfaceSectionNode node, Data data) {
-    if (data.resolved == INTERFACE) {
+    if (data.resolved != NONE) {
+      return data;
+    }
+    return DelphiParserVisitor.super.visit(node, data);
+  }
+
+  @Override
+  public Data visit(ImplementationSectionNode node, Data data) {
+    if (data.resolved == COMPLETE || data.resolutionLevel != COMPLETE) {
+      return data;
+    }
+    return DelphiParserVisitor.super.visit(node, data);
+  }
+
+  @Override
+  public Data visit(InitializationSectionNode node, Data data) {
+    if (data.resolved == COMPLETE || data.resolutionLevel != COMPLETE) {
+      return data;
+    }
+    return DelphiParserVisitor.super.visit(node, data);
+  }
+
+  @Override
+  public Data visit(FinalizationSectionNode node, Data data) {
+    if (data.resolved == COMPLETE || data.resolutionLevel != COMPLETE) {
       return data;
     }
     return DelphiParserVisitor.super.visit(node, data);
