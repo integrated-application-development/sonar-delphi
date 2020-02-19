@@ -32,9 +32,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
@@ -55,6 +57,7 @@ public class DelphiProjectHelper {
   private final List<Path> searchDirectories;
   private final Set<String> conditionalDefines;
   private final Set<String> unitScopeNames;
+  private final Map<String, String> unitAliases;
   private final List<DelphiProject> projects;
 
   /**
@@ -68,15 +71,32 @@ public class DelphiProjectHelper {
     this.fs = fs;
     this.projects = new ArrayList<>();
 
-    String[] defineSetting = settings.getStringArray(DelphiPlugin.CONDITIONAL_DEFINES_KEY);
-    conditionalDefines = Arrays.stream(nullToEmpty(defineSetting)).collect(Collectors.toSet());
+    conditionalDefines = getSetFromSettings(DelphiPlugin.CONDITIONAL_DEFINES_KEY);
+    unitScopeNames = getSetFromSettings(DelphiPlugin.UNIT_SCOPE_NAMES_KEY);
+    searchDirectories = getSearchDirectoriesFromSettings();
+    unitAliases = getUnitAliasesFromSettings();
 
-    String[] scopeNamesSettings = settings.getStringArray(DelphiPlugin.UNIT_SCOPE_NAMES_KEY);
-    unitScopeNames = Arrays.stream(nullToEmpty(scopeNamesSettings)).collect(Collectors.toSet());
+    this.indexProjects();
 
+    for (DelphiProject project : projects) {
+      searchDirectories.addAll(project.getSearchDirectories());
+      conditionalDefines.addAll(project.getConditionalDefines());
+      unitScopeNames.addAll(project.getUnitScopeNames());
+      unitAliases.putAll(project.getUnitAliases());
+    }
+
+    Set<String> conditionalUndefines = getSetFromSettings(DelphiPlugin.CONDITIONAL_UNDEFINES_KEY);
+    conditionalDefines.removeAll(conditionalUndefines);
+  }
+
+  private Set<String> getSetFromSettings(String key) {
+    return Arrays.stream(nullToEmpty(settings.getStringArray(key))).collect(Collectors.toSet());
+  }
+
+  private List<Path> getSearchDirectoriesFromSettings() {
     String[] searchDirectoriesSetting =
         nullToEmpty(settings.getStringArray(DelphiPlugin.SEARCH_PATH_KEY));
-    searchDirectories = new ArrayList<>();
+    List<Path> result = new ArrayList<>();
 
     for (String path : searchDirectoriesSetting) {
       if (StringUtils.isBlank(path)) {
@@ -89,23 +109,29 @@ public class DelphiProjectHelper {
       } else if (!included.isDirectory()) {
         LOG.warn("{} {}", "Search path item is not a directory: ", included.getAbsolutePath());
       } else {
-        searchDirectories.add(included.toPath());
+        result.add(included.toPath());
       }
     }
+    return result;
+  }
 
-    this.indexProjects();
+  private Map<String, String> getUnitAliasesFromSettings() {
+    String[] aliases = nullToEmpty(settings.getStringArray(DelphiPlugin.UNIT_ALIASES_KEY));
+    Map<String, String> result = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    Arrays.stream(aliases)
+        .forEach(
+            item -> {
+              if (StringUtils.countMatches(item, '=') != 1) {
+                LOG.warn("Invalid unit alias syntax: '{}'", item);
+                return;
+              }
+              int equalIndex = item.indexOf('=');
+              String unitAlias = item.substring(0, equalIndex).trim();
+              String unitName = item.substring(equalIndex + 1).trim();
+              result.put(unitAlias, unitName);
+            });
 
-    for (DelphiProject project : projects) {
-      searchDirectories.addAll(project.getSearchDirectories());
-      conditionalDefines.addAll(project.getConditionalDefines());
-      unitScopeNames.addAll(project.getUnitScopeNames());
-    }
-
-    String[] undefineSetting = settings.getStringArray(DelphiPlugin.CONDITIONAL_UNDEFINES_KEY);
-    Set<String> conditionalUndefines =
-        Arrays.stream(nullToEmpty(undefineSetting)).collect(Collectors.toSet());
-
-    conditionalDefines.removeAll(conditionalUndefines);
+    return result;
   }
 
   private void indexProjects() {
@@ -133,7 +159,7 @@ public class DelphiProjectHelper {
   }
 
   /**
-   * Returns a path to the Delphi standard library
+   * Returns a path to the Delphi standard library, as specified in settings
    *
    * @return Path to standard library
    */
@@ -150,7 +176,7 @@ public class DelphiProjectHelper {
   }
 
   /**
-   * Gets the directories specified in the search path
+   * Gets the search directories specified in settings and project files
    *
    * @return List of search path directories
    */
@@ -159,7 +185,7 @@ public class DelphiProjectHelper {
   }
 
   /*
-   * Gets the set of conditional defines specified in settings
+   * Gets the set of conditional defines specified in settings and project files
    *
    * @returns set of conditional defines
    */
@@ -168,12 +194,21 @@ public class DelphiProjectHelper {
   }
 
   /*
-   * Gets the set of unit scope names specified in settings
+   * Gets the set of unit scope names specified in settings and project files
    *
    * @returns set of unit scope names
    */
   public Set<String> getUnitScopeNames() {
     return unitScopeNames;
+  }
+
+  /**
+   * Gets the map of unit aliases specified in settings and project files
+   *
+   * @return map of unit aliases
+   */
+  public Map<String, String> getUnitAliases() {
+    return unitAliases;
   }
 
   public Iterable<InputFile> mainFiles() {

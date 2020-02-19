@@ -29,7 +29,9 @@ import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.Optional;
+import org.assertj.core.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
@@ -83,10 +85,11 @@ public class DelphiProjectHelperTest {
 
     assertThat(delphiProjectHelper.getSearchDirectories()).hasSize(3);
     assertThat(delphiProjectHelper.getConditionalDefines())
-        .hasSize(7)
+        .hasSize(8)
         .contains(
             "MSWINDOWS",
             "CPUX86",
+            "DEBUG",
             "GGMSGDEBUGx",
             "LOGTOFILEx",
             "FullDebugMode",
@@ -108,10 +111,11 @@ public class DelphiProjectHelperTest {
 
     assertThat(delphiProjectHelper.getSearchDirectories()).hasSize(3);
     assertThat(delphiProjectHelper.getConditionalDefines())
-        .hasSize(7)
+        .hasSize(8)
         .contains(
             "MSWINDOWS",
             "CPUX86",
+            "DEBUG",
             "GGMSGDEBUGx",
             "LOGTOFILEx",
             "FullDebugMode",
@@ -141,5 +145,26 @@ public class DelphiProjectHelperTest {
         .thenReturn(new String[] {"", "\n", "\t\t\n"});
 
     assertThat(delphiProjectHelper.getSearchDirectories()).hasSize(1);
+  }
+
+  @Test
+  public void testUnitAliases() {
+    when(settings.getStringArray(DelphiPlugin.UNIT_ALIASES_KEY))
+        .thenReturn(Arrays.array("Foo=Bar", "Blue=Red", "X=Y"));
+
+    DelphiProjectHelper delphiProjectHelper = new DelphiProjectHelper(settings, fs);
+
+    assertThat(delphiProjectHelper.getUnitAliases())
+        .containsExactlyInAnyOrderEntriesOf(Map.of("Foo", "Bar", "Blue", "Red", "X", "Y"));
+  }
+
+  @Test
+  public void testUnitAliasesShouldSkipBadSyntax() {
+    when(settings.getStringArray(DelphiPlugin.UNIT_ALIASES_KEY))
+        .thenReturn(Arrays.array("Foo=Bar", "BlueRed", "X==Y"));
+
+    DelphiProjectHelper delphiProjectHelper = new DelphiProjectHelper(settings, fs);
+
+    assertThat(delphiProjectHelper.getUnitAliases()).containsExactlyEntriesOf(Map.of("Foo", "Bar"));
   }
 }

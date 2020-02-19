@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +33,7 @@ public class DelphiSymbolTableExecutorTest {
   private DelphiSymbolTableExecutor executor;
   private SensorContextTester context;
   private Set<String> unitScopeNames;
+  private Map<String, String> unitAliases;
   private String componentKey;
 
   @Before
@@ -39,6 +41,7 @@ public class DelphiSymbolTableExecutorTest {
     executor = new DelphiSymbolTableExecutor();
     context = SensorContextTester.create(DelphiUtils.getResource(ROOT_PATH));
     unitScopeNames = new HashSet<>();
+    unitAliases = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
   }
 
   @Test
@@ -452,6 +455,20 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testUnitAliases() {
+    unitAliases.put("UnitX", "Unit2");
+    unitAliases.put("UnitY", "Unit3");
+
+    execute("unitAliases/Unit1.pas", "unitAliases/Unit2.pas", "unitAliases/Unit3.pas");
+
+    verifyUsages(1, 5, reference(25, 2), reference(28, 18));
+    verifyUsages(8, 2, reference(28, 2));
+    verifyUsages(11, 2, reference(28, 24), reference(29, 12));
+    verifyUsages(16, 2, reference(25, 18));
+    verifyUsages(18, 10, reference(25, 8), reference(26, 2));
+  }
+
+  @Test
   public void testUnscopedEnums() {
     execute("enums/UnscopedEnum.pas");
     verifyUsages(8, 2, reference(12, 19));
@@ -494,6 +511,7 @@ public class DelphiSymbolTableExecutorTest {
                     .collect(Collectors.toList()))
             .standardLibraryPath(DelphiUtils.getResource(STANDARD_LIBRARY).toPath())
             .unitScopeNames(unitScopeNames)
+            .unitAliases(unitAliases)
             .build();
 
     ExecutorContext executorContext = new ExecutorContext(context, symbolTable);
