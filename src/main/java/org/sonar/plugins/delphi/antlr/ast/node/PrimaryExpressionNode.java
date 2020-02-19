@@ -1,8 +1,11 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import static org.sonar.plugins.delphi.type.DelphiClassReferenceType.classOf;
+import static org.sonar.plugins.delphi.type.DelphiFileType.untypedFile;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSICHAR;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDECHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
 
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
@@ -95,7 +98,7 @@ public final class PrimaryExpressionNode extends ExpressionNode {
       } else if (type.isNarrowString()) {
         type = ANSICHAR.type;
       } else if (type.isWideString()) {
-        type = WIDECHAR.type;
+        type = CHAR.type;
       } else {
         type = unknownType();
       }
@@ -115,7 +118,7 @@ public final class PrimaryExpressionNode extends ExpressionNode {
     switch (id) {
       case DelphiLexer.DOT:
         if (type instanceof PointerType) {
-          // This caters to Delphi Extended syntax.
+          // Delphi Extended syntax is assumed.
           // See: http://docwiki.embarcadero.com/RADStudio/Rio/en/Extended_syntax_(Delphi)
           return ((PointerType) type).dereferencedType();
         }
@@ -126,6 +129,12 @@ public final class PrimaryExpressionNode extends ExpressionNode {
           return ((PointerType) type).dereferencedType();
         }
         break;
+
+      case DelphiLexer.STRING:
+        return classOf(UNICODESTRING.type);
+
+      case DelphiLexer.FILE:
+        return classOf(untypedFile());
 
       default:
         // Do nothing

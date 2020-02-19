@@ -64,7 +64,6 @@ enum VariantConversionType {
     add(IntrinsicText.WIDECHAR, CHARI64);
     add(IntrinsicText.CHAR, CHARI64);
     add(IntrinsicText.SHORTSTRING, SHORTSTRING);
-    add(IntrinsicText.STRING, UNICODESTRING);
     add(IntrinsicText.ANSISTRING, ANSISTRING);
     add(IntrinsicText.WIDESTRING, WIDESTRING);
     add(IntrinsicText.UNICODESTRING, UNICODESTRING);

@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.STRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.SHORTSTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
 
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +18,13 @@ public final class StringTypeNode extends TypeNode {
     return visitor.visit(this, data);
   }
 
+  private boolean isFixedString() {
+    return jjtGetChild(0) instanceof ExpressionNode;
+  }
+
   @Override
   @NotNull
   public Type createType() {
-    return STRING.type;
+    return isFixedString() ? SHORTSTRING.type : UNICODESTRING.type;
   }
 }

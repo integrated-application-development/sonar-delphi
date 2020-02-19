@@ -2,7 +2,7 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.BOOLEAN;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.STRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
 
 import com.google.common.base.Preconditions;
 import java.util.Arrays;
@@ -65,7 +65,7 @@ public final class BinaryExpressionNode extends ExpressionNode {
 
     if (type.is(CHAR.type)) {
       // Assume this expression is a string concatenation.
-      type = STRING.type;
+      type = UNICODESTRING.type;
     }
 
     return type;

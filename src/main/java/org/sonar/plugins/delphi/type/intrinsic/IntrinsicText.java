@@ -6,7 +6,7 @@ public enum IntrinsicText {
   ANSISTRING("AnsiString"),
   WIDESTRING("WideString"),
   UNICODESTRING("UnicodeString"),
-  STRING("String"),
+  STRING("String", UNICODESTRING.type),
   SHORTSTRING("ShortString"),
   CHAR("Char"),
   WIDECHAR("WideChar"),

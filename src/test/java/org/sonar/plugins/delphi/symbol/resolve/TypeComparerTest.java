@@ -58,7 +58,6 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSICHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSISTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.SHORTSTRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.STRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDECHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDESTRING;
@@ -90,7 +89,7 @@ public class TypeComparerTest {
 
   @Test
   public void testExactTypes() {
-    compare(STRING.type, STRING.type, EXACT);
+    compare(UNICODESTRING.type, UNICODESTRING.type, EXACT);
   }
 
   @Test
@@ -99,7 +98,7 @@ public class TypeComparerTest {
     compare(INTEGER.type, SMALLINT.type, CONVERT_LEVEL_3);
     compare(CURRENCY.type, INTEGER.type, CONVERT_LEVEL_2);
     compare(VARIANT.type, INTEGER.type, CONVERT_LEVEL_6);
-    compare(STRING.type, INTEGER.type, INCOMPATIBLE_TYPES);
+    compare(UNICODESTRING.type, INTEGER.type, INCOMPATIBLE_TYPES);
   }
 
   @Test
@@ -109,17 +108,11 @@ public class TypeComparerTest {
     compare(DOUBLE.type, SINGLE.type, CONVERT_LEVEL_2);
     compare(SINGLE.type, DOUBLE.type, CONVERT_LEVEL_1);
     compare(DOUBLE.type, REAL.type, EQUAL);
-    compare(STRING.type, DOUBLE.type, INCOMPATIBLE_TYPES);
+    compare(UNICODESTRING.type, DOUBLE.type, INCOMPATIBLE_TYPES);
   }
 
   @Test
   public void testStringToText() {
-    compare(STRING.type, UNICODESTRING.type, CONVERT_LEVEL_1);
-    compare(STRING.type, WIDESTRING.type, CONVERT_LEVEL_2);
-    compare(STRING.type, ANSISTRING.type, CONVERT_LEVEL_3);
-    compare(STRING.type, CHAR.type, CONVERT_LEVEL_4);
-    compare(STRING.type, unknownType(), INCOMPATIBLE_TYPES);
-
     compare(WIDESTRING.type, UNICODESTRING.type, CONVERT_LEVEL_1);
     compare(WIDESTRING.type, ANSISTRING.type, CONVERT_LEVEL_2);
     compare(WIDESTRING.type, CHAR.type, CONVERT_LEVEL_3);
@@ -138,9 +131,9 @@ public class TypeComparerTest {
     compare(ANSISTRING.type, CHAR.type, CONVERT_LEVEL_1);
     compare(ANSISTRING.type, unknownType(), INCOMPATIBLE_TYPES);
 
-    compare(DelphiTypeType.create("Test", STRING.type), STRING.type, EQUAL);
+    compare(DelphiTypeType.create("Test", UNICODESTRING.type), UNICODESTRING.type, EQUAL);
 
-    assertThatThrownBy(() -> TypeComparer.compareStringToText(unknownType(), STRING.type))
+    assertThatThrownBy(() -> TypeComparer.compareStringToText(unknownType(), UNICODESTRING.type))
         .isInstanceOf(AssertionError.class);
   }
 
@@ -149,13 +142,13 @@ public class TypeComparerTest {
     compare(ANSICHAR.type, DelphiTypeType.create("_AnsiChar", ANSICHAR.type), CONVERT_LEVEL_1);
     compare(ANSICHAR.type, SHORTSTRING.type, CONVERT_LEVEL_2);
     compare(ANSICHAR.type, ANSISTRING.type, CONVERT_LEVEL_3);
-    compare(ANSICHAR.type, STRING.type, CONVERT_LEVEL_4);
+    compare(ANSICHAR.type, UNICODESTRING.type, CONVERT_LEVEL_4);
     compare(ANSICHAR.type, UNICODESTRING.type, CONVERT_LEVEL_4);
     compare(ANSICHAR.type, WIDESTRING.type, CONVERT_LEVEL_5);
     assertThat(TypeComparer.compareAnsiCharToText(unknownType())).isEqualTo(INCOMPATIBLE_TYPES);
 
     compare(CHAR.type, DelphiTypeType.create("_WideChar", WIDECHAR.type), CONVERT_LEVEL_1);
-    compare(CHAR.type, STRING.type, CONVERT_LEVEL_2);
+    compare(CHAR.type, UNICODESTRING.type, CONVERT_LEVEL_2);
     compare(CHAR.type, UNICODESTRING.type, CONVERT_LEVEL_2);
     compare(CHAR.type, WIDESTRING.type, CONVERT_LEVEL_3);
     compare(CHAR.type, ANSICHAR.type, CONVERT_LEVEL_3);
@@ -172,7 +165,7 @@ public class TypeComparerTest {
     compare(BOOLEAN.type, BYTEBOOL.type, CONVERT_LEVEL_1);
     compare(BOOLEAN.type, WORDBOOL.type, CONVERT_LEVEL_1);
     compare(WORDBOOL.type, BOOLEAN.type, CONVERT_LEVEL_3);
-    compare(STRING.type, BOOLEAN.type, INCOMPATIBLE_TYPES);
+    compare(UNICODESTRING.type, BOOLEAN.type, INCOMPATIBLE_TYPES);
   }
 
   @Test
@@ -195,9 +188,9 @@ public class TypeComparerTest {
     CollectionType fromOpenArray = openArray("Open", INTEGER.type);
     CollectionType fromDynamicArray = dynamicArray("Dynamic", INTEGER.type);
     CollectionType fromFixedArray = fixedArray("Fixed", INTEGER.type);
-    CollectionType fromIncompatibleOpenArray = openArray("OpenString", STRING.type);
-    CollectionType fromIncompatibleDynamicArray = dynamicArray("DynamicString", STRING.type);
-    CollectionType fromIncompatibleFixedArray = fixedArray("FixedString", STRING.type);
+    CollectionType fromIncompatibleOpenArray = openArray("OpenString", UNICODESTRING.type);
+    CollectionType fromIncompatibleDynamicArray = dynamicArray("DynamicString", UNICODESTRING.type);
+    CollectionType fromIncompatibleFixedArray = fixedArray("FixedString", UNICODESTRING.type);
     CollectionType toDynamicArray = dynamicArray(null, INTEGER.type);
     CollectionType toFixedArray = fixedArray(null, INTEGER.type);
     CollectionType toOpenArray = openArray(null, INTEGER.type);
@@ -205,7 +198,7 @@ public class TypeComparerTest {
     compare(INTEGER.type, toOpenArray, CONVERT_LEVEL_3);
     compare(fromDynamicArray, toDynamicArray, EQUAL);
     compare(fromFixedArray, toDynamicArray, CONVERT_LEVEL_2);
-    compare(dynamicArray(null, STRING.type), toDynamicArray, INCOMPATIBLE_TYPES);
+    compare(dynamicArray(null, UNICODESTRING.type), toDynamicArray, INCOMPATIBLE_TYPES);
 
     compare(fromDynamicArray, toOpenArray, CONVERT_LEVEL_2);
     compare(fromIncompatibleDynamicArray, toOpenArray, INCOMPATIBLE_TYPES);
@@ -222,7 +215,7 @@ public class TypeComparerTest {
     compare(pointerTo(INTEGER.type), toOpenArray, CONVERT_LEVEL_1);
     compare(nilPointer(), toDynamicArray, CONVERT_LEVEL_1);
     compare(untypedPointer(), toDynamicArray, CONVERT_LEVEL_1);
-    compare(pointerTo(STRING.type), toOpenArray, INCOMPATIBLE_TYPES);
+    compare(pointerTo(UNICODESTRING.type), toOpenArray, INCOMPATIBLE_TYPES);
     compare(pointerTo(unknownType()), toDynamicArray, INCOMPATIBLE_TYPES);
 
     compare(ANSICHAR.type, dynamicArray(null, ANSICHAR.type), CONVERT_LEVEL_1);
@@ -249,10 +242,10 @@ public class TypeComparerTest {
     ArrayConstructorType emptyConstructor = arrayConstructor(emptyList());
     ArrayConstructorType byteConstructor = arrayConstructor(List.of(BYTE.type));
     ArrayConstructorType integerConstructor = arrayConstructor(List.of(INTEGER.type));
-    ArrayConstructorType stringConstructor = arrayConstructor(List.of(STRING.type));
+    ArrayConstructorType stringConstructor = arrayConstructor(List.of(UNICODESTRING.type));
     ArrayConstructorType variantConstructor = arrayConstructor(List.of(VARIANT.type));
     ArrayConstructorType heterogeneousConstructor =
-        arrayConstructor(List.of(INTEGER.type, STRING.type, BOOLEAN.type));
+        arrayConstructor(List.of(INTEGER.type, UNICODESTRING.type, BOOLEAN.type));
 
     compare(emptyConstructor, toDynamicArray, CONVERT_LEVEL_2);
     compare(emptyConstructor, toOpenArray, CONVERT_LEVEL_1);
@@ -283,10 +276,10 @@ public class TypeComparerTest {
     ArrayConstructorType emptyConstructor = arrayConstructor(emptyList());
     ArrayConstructorType byteConstructor = arrayConstructor(List.of(BYTE.type));
     ArrayConstructorType integerConstructor = arrayConstructor(List.of(INTEGER.type));
-    ArrayConstructorType stringConstructor = arrayConstructor(List.of(STRING.type));
+    ArrayConstructorType stringConstructor = arrayConstructor(List.of(UNICODESTRING.type));
     ArrayConstructorType variantConstructor = arrayConstructor(List.of(VARIANT.type));
     ArrayConstructorType heterogeneousConstructor =
-        arrayConstructor(List.of(INTEGER.type, STRING.type, BOOLEAN.type));
+        arrayConstructor(List.of(INTEGER.type, UNICODESTRING.type, BOOLEAN.type));
 
     compare(emptyConstructor, toSet, CONVERT_LEVEL_1);
     compare(byteConstructor, toSet, CONVERT_LEVEL_1);
@@ -302,7 +295,7 @@ public class TypeComparerTest {
     // This is just for testing convenience.
     CollectionType integerSet = DelphiSetType.set(INTEGER.type);
     CollectionType longIntSet = DelphiSetType.set(LONGINT.type);
-    CollectionType stringSet = DelphiSetType.set(STRING.type);
+    CollectionType stringSet = DelphiSetType.set(UNICODESTRING.type);
 
     compare(emptySet(), integerSet, CONVERT_LEVEL_1);
     compare(integerSet, emptySet(), CONVERT_LEVEL_1);
@@ -315,7 +308,7 @@ public class TypeComparerTest {
   public void testToProceduralType() {
     List<Type> parameters = Collections.singletonList(INTEGER.type);
     List<Type> similarParameters = Collections.singletonList(LONGINT.type);
-    Type returnType = STRING.type;
+    Type returnType = UNICODESTRING.type;
 
     ProceduralType fromProcedure = procedure(parameters, returnType);
     ProceduralType similarFromProcedure = procedure(similarParameters, returnType);
@@ -375,7 +368,7 @@ public class TypeComparerTest {
     compare(untypedFile(), toFile, CONVERT_LEVEL_1);
     compare(fromFile, untypedFile(), CONVERT_LEVEL_1);
     compare(LONGINT.type, toFile, INCOMPATIBLE_TYPES);
-    compare(DelphiFileType.fileOf(STRING.type), toFile, INCOMPATIBLE_TYPES);
+    compare(DelphiFileType.fileOf(UNICODESTRING.type), toFile, INCOMPATIBLE_TYPES);
   }
 
   @Test
@@ -391,20 +384,20 @@ public class TypeComparerTest {
     compare(ANSICHAR.type, pointerTo(CHAR.type), CONVERT_LEVEL_1);
     compare(WIDECHAR.type, pointerTo(ANSICHAR.type), CONVERT_LEVEL_2);
     compare(ANSICHAR.type, pointerTo(ANSICHAR.type), CONVERT_LEVEL_2);
-    compare(INTEGER.type, pointerTo(STRING.type), CONVERT_LEVEL_5);
+    compare(INTEGER.type, pointerTo(UNICODESTRING.type), CONVERT_LEVEL_5);
     compare(untypedPointer(), pointerTo(CHAR.type), CONVERT_LEVEL_2);
     compare(untypedPointer(), pointerTo(INTEGER.type), CONVERT_LEVEL_1);
     compare(pointerTo(CHAR.type), untypedPointer(), CONVERT_LEVEL_2);
     compare(pointerTo(INTEGER.type), untypedPointer(), CONVERT_LEVEL_1);
-    compare(pointerTo(INTEGER.type), pointerTo(STRING.type), INCOMPATIBLE_TYPES);
-    compare(STRING.type, pointerTo(INTEGER.type), INCOMPATIBLE_TYPES);
+    compare(pointerTo(INTEGER.type), pointerTo(UNICODESTRING.type), INCOMPATIBLE_TYPES);
+    compare(UNICODESTRING.type, pointerTo(INTEGER.type), INCOMPATIBLE_TYPES);
     compare(unknownType(), untypedPointer(), INCOMPATIBLE_TYPES);
   }
 
   @Test
   public void testToUntyped() {
     compare(untypedType(), untypedType(), EQUAL);
-    compare(STRING.type, untypedType(), CONVERT_LEVEL_6);
+    compare(UNICODESTRING.type, untypedType(), CONVERT_LEVEL_6);
   }
 
   @Test
