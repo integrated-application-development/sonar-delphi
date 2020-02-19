@@ -7,8 +7,10 @@ import static java.util.function.Predicate.not;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
 import static org.sonar.plugins.delphi.symbol.scope.UnknownScope.unknownScope;
 import static org.sonar.plugins.delphi.type.DelphiClassReferenceType.classOf;
+import static org.sonar.plugins.delphi.type.DelphiFileType.untypedFile;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSICHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDECHAR;
 
 import java.util.ArrayList;
@@ -195,7 +197,7 @@ public class NameResolver {
         && ((MethodNameDeclaration) declaration).getMethodKind() == MethodKind.CONSTRUCTOR;
   }
 
-  private void moveToInheritedScope(PrimaryExpressionNode node) {
+  private void moveToInheritedScope(DelphiNode node) {
     MethodImplementationNode method = node.getFirstParentOfType(MethodImplementationNode.class);
     checkNotNull(method);
 
@@ -227,15 +229,36 @@ public class NameResolver {
         handleArrayAccessor(((ArrayAccessorNode) child));
       } else if (child instanceof ParenthesizedExpressionNode) {
         handleParenthesizedExpression((ParenthesizedExpressionNode) child);
-      } else if (child.jjtGetId() == DelphiLexer.POINTER) {
-        addResolvedDeclaration();
-      } else if (child.jjtGetId() == DelphiLexer.INHERITED) {
-        moveToInheritedScope(node);
+      } else {
+        handlePrimaryExpressionToken(child);
       }
 
       if (names.size() > resolvedDeclarations.size() + Math.min(1, declarations.size())) {
         break;
       }
+    }
+  }
+
+  private void handlePrimaryExpressionToken(DelphiNode node) {
+    switch (node.jjtGetId()) {
+      case DelphiLexer.POINTER:
+        addResolvedDeclaration();
+        break;
+
+      case DelphiLexer.INHERITED:
+        moveToInheritedScope(node);
+        break;
+
+      case DelphiLexer.STRING:
+        currentType = classOf(UNICODESTRING.type);
+        break;
+
+      case DelphiLexer.FILE:
+        currentType = classOf(untypedFile());
+        break;
+
+      default:
+        // Do nothing
     }
   }
 

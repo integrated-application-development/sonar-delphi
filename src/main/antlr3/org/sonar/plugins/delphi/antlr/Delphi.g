@@ -278,7 +278,7 @@ fileType                     : 'file'<FileTypeNode>^ ('of' varType)?
                              ;
 pointerType                  : '^'<PointerTypeNode>^ varType
                              ;
-stringType                   : 'string'<StringTypeNode>^ ('[' expression ']')?
+stringType                   : 'string'<StringTypeNode>^ ('['! expression ']'!)?
                              | ANSISTRING<AnsiStringTypeNode>^ (codePageNumber)?
                              ;
 codePageNumber               : '(' intNum ')'

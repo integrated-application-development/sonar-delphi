@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `sonar.delphi.unitAliases` property to specify unit aliases, which are used for unit import
   resolution.
 
+### Changed
+
+- General improvements around analysis of types represented by keywords (`string`, `file`).
+
 ## [0.12.1] - 2020-02-18
 
 ### Fixed

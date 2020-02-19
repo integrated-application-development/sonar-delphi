@@ -15,7 +15,6 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.CURRENCY;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.SINGLE;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSISTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.SHORTSTRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.STRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDESTRING;
 
@@ -163,8 +162,6 @@ class TypeComparer {
   static EqualityType compareStringToText(Type from, Type to) {
     if (from.is(to)) {
       return EQUAL;
-    } else if (from.is(STRING.type)) {
-      return compareNormalStringToText(to);
     } else if (from.is(WIDESTRING.type)) {
       return compareWideStringToText(to);
     } else if (from.is(UNICODESTRING.type)) {
@@ -176,18 +173,6 @@ class TypeComparer {
     }
 
     throw new AssertionError("Unhandled string type!");
-  }
-
-  private static EqualityType compareNormalStringToText(Type to) {
-    if (to.is(UNICODESTRING.type)) {
-      return CONVERT_LEVEL_1;
-    } else if (to.is(WIDESTRING.type)) {
-      return CONVERT_LEVEL_2;
-    } else if (to.is(ANSISTRING.type)) {
-      return CONVERT_LEVEL_3;
-    } else {
-      return CONVERT_LEVEL_4;
-    }
   }
 
   private static EqualityType compareWideStringToText(Type to) {
@@ -241,7 +226,7 @@ class TypeComparer {
       return CONVERT_LEVEL_2;
     } else if (to.is(ANSISTRING.type)) {
       return CONVERT_LEVEL_3;
-    } else if (to.is(STRING.type) || to.is(UNICODESTRING.type)) {
+    } else if (to.is(UNICODESTRING.type)) {
       return CONVERT_LEVEL_4;
     } else if (to.is(WIDESTRING.type)) {
       return CONVERT_LEVEL_5;
@@ -253,7 +238,7 @@ class TypeComparer {
   static EqualityType compareWideCharToText(Type to) {
     if (to.isWideChar()) {
       return CONVERT_LEVEL_1;
-    } else if (to.is(STRING.type) || to.is(UNICODESTRING.type)) {
+    } else if (to.is(UNICODESTRING.type)) {
       return CONVERT_LEVEL_2;
     } else if (to.is(WIDESTRING.type) || to.isNarrowChar()) {
       return CONVERT_LEVEL_3;

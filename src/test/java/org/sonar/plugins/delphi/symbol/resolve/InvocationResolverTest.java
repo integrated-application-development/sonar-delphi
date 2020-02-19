@@ -38,7 +38,6 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.WORD;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSISTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.SHORTSTRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.STRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDESTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicVariant.VARIANT;
@@ -163,8 +162,14 @@ public class InvocationResolverTest {
 
   @Test
   public void testTextTypes() {
-    assertResolved(DelphiTypeType.create("MyString", STRING.type), STRING.type, SHORTSTRING.type);
-    assertResolved(STRING.type, DelphiTypeType.create("MyString", STRING.type), SHORTSTRING.type);
+    assertResolved(
+        DelphiTypeType.create("MyString", UNICODESTRING.type),
+        UNICODESTRING.type,
+        SHORTSTRING.type);
+    assertResolved(
+        UNICODESTRING.type,
+        DelphiTypeType.create("MyString", UNICODESTRING.type),
+        SHORTSTRING.type);
   }
 
   @Test
@@ -172,12 +177,12 @@ public class InvocationResolverTest {
     Type variantIncompatibleType =
         DelphiStructType.from("MyRecord", unknownScope(), emptySet(), RECORD);
     assertResolved(
-        List.of(STRING.type, variantIncompatibleType, BOOLEAN.type),
-        List.of(STRING.type, variantIncompatibleType, VARIANT.type, BOOLEAN.type),
-        List.of(STRING.type, VARIANT.type, BOOLEAN.type));
+        List.of(UNICODESTRING.type, variantIncompatibleType, BOOLEAN.type),
+        List.of(UNICODESTRING.type, variantIncompatibleType, VARIANT.type, BOOLEAN.type),
+        List.of(UNICODESTRING.type, VARIANT.type, BOOLEAN.type));
     assertResolved(
         List.of(VARIANT.type, BYTE.type),
-        List.of(STRING.type, INTEGER.type),
+        List.of(UNICODESTRING.type, INTEGER.type),
         List.of(ANSISTRING.type, INTEGER.type));
     assertResolved(VARIANT.type, INTEGER.type, INT64.type);
     assertResolved(VARIANT.type, SINGLE.type, DOUBLE.type);

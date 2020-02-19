@@ -1,7 +1,7 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.STRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
 
 import net.sourceforge.pmd.lang.ast.Node;
 import org.antlr.runtime.Token;
@@ -33,7 +33,7 @@ public final class TextLiteralNode extends LiteralNode {
       return CHAR.type;
     }
 
-    return STRING.type;
+    return UNICODESTRING.type;
   }
 
   @Override

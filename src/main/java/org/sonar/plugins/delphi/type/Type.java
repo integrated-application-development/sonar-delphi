@@ -139,21 +139,21 @@ public interface Type {
   boolean isText();
 
   /**
-   * Check if this type is a string type (ShortString, String, etc...)
+   * Check if this type is a string type (ShortString, WideString, UnicodeString, etc...)
    *
    * @return true if the type is a string type
    */
   boolean isString();
 
   /**
-   * Check if this type is a narrow string type (AnsiString, etc...)
+   * Check if this type is a narrow string type (AnsiString, ShortString, etc...)
    *
    * @return true if the type is a narrow string type
    */
   boolean isNarrowString();
 
   /**
-   * Check if this type is a wide string type (String, WideString, UnicodeString, etc...)
+   * Check if this type is a wide string type (WideString, UnicodeString, etc...)
    *
    * @return true if the type is a wide string type
    */

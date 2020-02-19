@@ -4,7 +4,6 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSICHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSISTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.SHORTSTRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.STRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDECHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDESTRING;
@@ -118,7 +117,7 @@ public abstract class DelphiType implements Type {
 
   @Override
   public final boolean isWideString() {
-    return isText() && (is(STRING.type) || is(WIDESTRING.type) || is(UNICODESTRING.type));
+    return isText() && (is(WIDESTRING.type) || is(UNICODESTRING.type));
   }
 
   @Override
