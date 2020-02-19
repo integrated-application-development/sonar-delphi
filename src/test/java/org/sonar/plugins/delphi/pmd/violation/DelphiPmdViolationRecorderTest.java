@@ -177,9 +177,14 @@ public class DelphiPmdViolationRecorderTest {
   public void testShouldThrowOnUnknownResource() {
     final File unknownFile = new File(baseDir, "UNKNOWN.pas");
     final DelphiRuleViolation pmdViolation = mockViolation(unknownFile);
+    final NewIssue newIssue = mock(NewIssue.class);
+
+    when(mockContext.newIssue()).thenReturn(newIssue);
+    when(newIssue.forRule(activeRule.ruleKey())).thenReturn(newIssue);
 
     assertThatThrownBy(() -> violationRecorder.saveViolation(pmdViolation, mockContext))
-        .isInstanceOf(RuntimeException.class);
+        .isInstanceOf(RuntimeException.class)
+        .hasMessageMatching("Input file could not be found: '.*UNKNOWN.pas'");
   }
 
   @Test
