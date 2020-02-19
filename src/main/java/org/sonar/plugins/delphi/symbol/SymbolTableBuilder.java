@@ -15,7 +15,9 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -62,6 +64,7 @@ public class SymbolTableBuilder {
   private List<Path> searchDirectories = Collections.emptyList();
   private Set<String> conditionalDefines = Collections.emptySet();
   private Set<String> unitScopeNames = Collections.emptySet();
+  private Map<String, String> unitAliases = Collections.emptyMap();
 
   private DelphiFileConfig fileConfig;
   private SystemScope systemScope;
@@ -94,6 +97,12 @@ public class SymbolTableBuilder {
 
   public SymbolTableBuilder conditionalDefines(@NotNull Set<String> conditionalDefines) {
     this.conditionalDefines = conditionalDefines;
+    return this;
+  }
+
+  public SymbolTableBuilder unitAliases(@NotNull Map<String, String> unitAliases) {
+    this.unitAliases = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    this.unitAliases.putAll(unitAliases);
     return this;
   }
 
@@ -145,6 +154,13 @@ public class SymbolTableBuilder {
 
     if (!importName.isQualified() && !namespace.isEmpty()) {
       data = findUnitByName(namespace + "." + unitName);
+    }
+
+    if (data == null) {
+      String aliasedUnitName = unitAliases.get(unitName);
+      if (aliasedUnitName != null) {
+        unitName = aliasedUnitName;
+      }
     }
 
     if (data == null) {

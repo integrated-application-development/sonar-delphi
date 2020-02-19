@@ -105,6 +105,7 @@ public class DelphiSensor implements Sensor {
             .searchDirectories(delphiProjectHelper.getSearchDirectories())
             .conditionalDefines(delphiProjectHelper.getConditionalDefines())
             .unitScopeNames(delphiProjectHelper.getUnitScopeNames())
+            .unitAliases(delphiProjectHelper.getUnitAliases())
             .standardLibraryPath(delphiProjectHelper.standardLibraryPath())
             .build();
 

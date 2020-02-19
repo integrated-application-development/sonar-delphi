@@ -51,6 +51,7 @@ public class DelphiPlugin implements Plugin {
   public static final String CONDITIONAL_DEFINES_KEY = "sonar.delphi.conditionalDefines";
   public static final String CONDITIONAL_UNDEFINES_KEY = "sonar.delphi.conditionalUndefines";
   public static final String UNIT_SCOPE_NAMES_KEY = "sonar.delphi.unitScopeNames";
+  public static final String UNIT_ALIASES_KEY = "sonar.delphi.unitAliases";
   public static final String CODECOVERAGE_TOOL_KEY = "sonar.delphi.codecoverage.tool";
   public static final String CODECOVERAGE_REPORT_KEY = "sonar.delphi.codecoverage.report";
   public static final String GENERATE_PMD_REPORT_XML_KEY = "sonar.delphi.pmd.generateXml";
@@ -101,6 +102,14 @@ public class DelphiPlugin implements Plugin {
         PropertyDefinition.builder(DelphiPlugin.UNIT_SCOPE_NAMES_KEY)
             .name("Unit Scope Names")
             .description("List of Unit scope names, used for unit import resolution.")
+            .multiValues(true)
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(DelphiPlugin.UNIT_ALIASES_KEY)
+            .name("Unit Aliases")
+            .description(
+                "List of Unit Aliases, used for unit import resolution."
+                    + "\nNOTE: Each Unit Alias should follow ths format: 'AliasName=UnitName'")
             .multiValues(true)
             .onQualifiers(Qualifiers.PROJECT)
             .build(),

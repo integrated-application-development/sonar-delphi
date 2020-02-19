@@ -26,16 +26,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiProjectTest {
 
-  private static final String XML_FILE =
+  private static final String SIMPLE_PROJECT =
       "/org/sonar/plugins/delphi/projects/SimpleProject/dproj/SimpleDelphiProject.dproj";
+  private static final String BAD_UNIT_ALIAS_PROJECT =
+      "/org/sonar/plugins/delphi/dproj/BadUnitAlias.dproj";
   private static final String INC_DIR =
       "/org/sonar/plugins/delphi/projects/SimpleProject/includes1";
 
@@ -60,24 +61,19 @@ public class DelphiProjectTest {
     assertThat(project.getConditionalDefines()).hasSize(1);
     project.addUnitScopeName("System");
     assertThat(project.getUnitScopeNames()).hasSize(1);
-    project.addSourceFile(DelphiUtils.getResource(XML_FILE).toPath());
+    project.addSourceFile(DelphiUtils.getResource(SIMPLE_PROJECT).toPath());
     assertThat(project.getSourceFiles()).isEmpty();
     project.addSourceFile(sourceFile.toPath());
     assertThat(project.getSourceFiles()).hasSize(1);
     project.addSearchDirectory(DelphiUtils.getResource(INC_DIR).toPath());
     assertThat(project.getSearchDirectories()).hasSize(1);
+    project.addUnitAlias("MyAlias", "MyUnit");
+    assertThat(project.getUnitAliases()).containsExactlyEntriesOf(Map.of("MyAlias", "MyUnit"));
   }
 
   @Test
-  public void testSetDefinitions() {
-    Set<String> defs = new HashSet<>();
-    project.setDefinitions(defs);
-    assertThat(project.getConditionalDefines()).isEqualTo(defs);
-  }
-
-  @Test
-  public void testParseFile() {
-    project = DelphiProject.parse(DelphiUtils.getResource(XML_FILE).toPath());
+  public void testSimpleProjectFile() {
+    project = DelphiProject.parse(DelphiUtils.getResource(SIMPLE_PROJECT).toPath());
 
     assertThat(project.getName()).isEqualTo("Simple Delphi Project");
     assertThat(project.getSourceFiles()).hasSize(8);
@@ -106,8 +102,36 @@ public class DelphiProjectTest {
 
     assertThat(project.getConditionalDefines())
         .containsOnly(
-            "MSWINDOWS", "CPUX86", "GGMSGDEBUGx", "LOGTOFILEx", "FullDebugMode", "RELEASE");
+            "MSWINDOWS",
+            "CPUX86",
+            "DEBUG",
+            "GGMSGDEBUGx",
+            "LOGTOFILEx",
+            "FullDebugMode",
+            "RELEASE");
 
     assertThat(project.getUnitScopeNames()).containsOnly("Vcl", "System");
+
+    assertThat(project.getUnitAliases())
+        .containsExactlyInAnyOrderEntriesOf(
+            Map.of(
+                "DbiErrs",
+                "BDE",
+                "DbiProcs",
+                "BDE",
+                "DbiTypes",
+                "BDE",
+                "WinProcs",
+                "Windows",
+                "WinTypes",
+                "Windows"));
+  }
+
+  @Test
+  public void testBadUnitAliasFileShouldContainValidAliases() {
+    project = DelphiProject.parse(DelphiUtils.getResource(BAD_UNIT_ALIAS_PROJECT).toPath());
+
+    assertThat(project.getUnitAliases())
+        .containsExactlyInAnyOrderEntriesOf(Map.of("ValidAlias", "ValidUnit"));
   }
 }

@@ -27,10 +27,13 @@ import static org.sonar.plugins.delphi.utils.DelphiUtils.resolvePathFromBaseDir;
 import com.google.common.base.Splitter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.util.Lists;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.xml.sax.Attributes;
@@ -90,6 +93,7 @@ public class DelphiProjectXmlParser extends DefaultHandler {
         handleVersionInfoKeysStart(attributes);
         break;
       case "DCC_UnitSearchPath":
+      case "DCC_UnitAlias":
       case "DCC_Namespace":
       case "DCC_Define":
         isReading = true;
@@ -108,6 +112,9 @@ public class DelphiProjectXmlParser extends DefaultHandler {
     switch (rawName) {
       case "VersionInfoKeys":
         handleVersionInfoKeysEnd();
+        break;
+      case "DCC_UnitAlias":
+        handleUnitAliasEnd();
         break;
       case "DCC_UnitSearchPath":
         handleUnitSearchPathEnd();
@@ -139,34 +146,41 @@ public class DelphiProjectXmlParser extends DefaultHandler {
     project.setName(readData);
   }
 
+  private void handleUnitAliasEnd() {
+    parseListData(readData)
+        .forEach(
+            item -> {
+              if (StringUtils.countMatches(item, '=') != 1) {
+                LOG.warn("Invalid unit alias syntax: '{}'", item);
+                return;
+              }
+              int equalIndex = item.indexOf('=');
+              String unitAlias = item.substring(0, equalIndex);
+              String unitName = item.substring(equalIndex + 1);
+              project.addUnitAlias(unitAlias, unitName);
+            });
+  }
+
   private void handleUnitSearchPathEnd() {
-    Iterable<String> paths = Splitter.on(';').split(readData);
-    for (String path : paths) {
-      if (path.startsWith("$")) {
-        continue;
-      }
-      Path searchPathDirectory = resolvePathFromBaseDir(baseDir, Path.of(path));
-      project.addSearchDirectory(searchPathDirectory);
-    }
+    parseListData(readData)
+        .forEach(
+            path -> {
+              Path searchPathDirectory = resolvePathFromBaseDir(baseDir, Path.of(path));
+              project.addSearchDirectory(searchPathDirectory);
+            });
   }
 
   private void handleNamespaceEnd() {
-    Iterable<String> unitScopeNames = Splitter.on(';').split(readData);
-    for (String unitScopeName : unitScopeNames) {
-      if (unitScopeName.startsWith("$")) {
-        continue;
-      }
-      project.addUnitScopeName(unitScopeName);
-    }
+    parseListData(readData).forEach(project::addUnitScopeName);
   }
 
   private void handleDefineEnd() {
-    Iterable<String> defines = Splitter.on(';').split(readData);
-    for (String define : defines) {
-      if (define.startsWith("$") || "DEBUG".equals(define)) {
-        continue;
-      }
-      project.addDefinition(define);
-    }
+    parseListData(readData).forEach(project::addDefinition);
+  }
+
+  private static List<String> parseListData(String data) {
+    List<String> result = Lists.newArrayList(Splitter.on(';').split(data));
+    result.removeIf(item -> item.startsWith("$"));
+    return result;
   }
 }

@@ -27,8 +27,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import org.apache.commons.lang.StringUtils;
+import java.util.TreeMap;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -42,6 +43,7 @@ public class DelphiProject {
   private final Set<String> unitScopeNames = new HashSet<>();
   private final List<Path> sourceFiles = new ArrayList<>();
   private final List<Path> searchDirectories = new ArrayList<>();
+  private final Map<String, String> unitAliases = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
   private DelphiProject() {
     // Hide default constructor
@@ -87,9 +89,11 @@ public class DelphiProject {
    * @param definition Preprocessor definition
    */
   public void addDefinition(String definition) {
-    if (!StringUtils.isEmpty(definition)) {
-      definitions.add(definition);
-    }
+    definitions.add(definition);
+  }
+
+  public void addUnitAlias(String unitAlias, String unitName) {
+    unitAliases.put(unitAlias, unitName);
   }
 
   /**
@@ -99,10 +103,18 @@ public class DelphiProject {
    */
   public void addSearchDirectory(Path directory) {
     if (!Files.exists(directory) || !Files.isDirectory(directory)) {
-      LOG.warn("Invalid search path directory: " + directory);
+      LOG.warn("Invalid search path directory: {}", directory);
       return;
     }
     searchDirectories.add(directory);
+  }
+
+  public void setName(String value) {
+    name = value;
+  }
+
+  public void addUnitScopeName(String unitScopeName) {
+    this.unitScopeNames.add(unitScopeName);
   }
 
   public String getName() {
@@ -125,15 +137,7 @@ public class DelphiProject {
     return searchDirectories;
   }
 
-  public void setName(String value) {
-    name = value;
-  }
-
-  public void setDefinitions(Set<String> defs) {
-    this.definitions = defs;
-  }
-
-  public void addUnitScopeName(String unitScopeName) {
-    this.unitScopeNames.add(unitScopeName);
+  public Map<String, String> getUnitAliases() {
+    return unitAliases;
   }
 }
