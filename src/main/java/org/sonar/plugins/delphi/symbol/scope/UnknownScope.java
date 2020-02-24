@@ -7,10 +7,13 @@ import com.google.errorprone.annotations.Immutable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nullable;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 import net.sourceforge.pmd.lang.symboltable.Scope;
 import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
+import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Type.HelperType;
 
 @Immutable
 public final class UnknownScope implements DelphiScope {
@@ -82,5 +85,11 @@ public final class UnknownScope implements DelphiScope {
   @Override
   public List<NameOccurrence> getOccurrencesFor(NameDeclaration declaration) {
     return emptyList();
+  }
+
+  @Nullable
+  @Override
+  public HelperType getHelperForType(Type type) {
+    return null;
   }
 }

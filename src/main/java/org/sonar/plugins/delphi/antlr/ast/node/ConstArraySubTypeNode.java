@@ -21,7 +21,7 @@ public final class ConstArraySubTypeNode extends TypeNode {
   @Override
   @NotNull
   public Type createType() {
-    FileScope fileScope = getASTTree().getScope().getEnclosingScope(FileScope.class);
+    FileScope fileScope = getScope().getEnclosingScope(FileScope.class);
     if (fileScope != null) {
       TypeNameDeclaration varRec = fileScope.getSystemScope().getTVarRecDeclaration();
       return varRec.getType();

@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.symbol.scope;
 
 import java.util.Set;
+import javax.annotation.Nullable;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 import org.sonar.plugins.delphi.antlr.ast.node.ArrayAccessorNode;
@@ -10,6 +11,8 @@ import org.sonar.plugins.delphi.antlr.ast.node.MethodNameNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
+import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Type.HelperType;
 
 public interface FileScope extends DelphiScope {
 
@@ -20,6 +23,15 @@ public interface FileScope extends DelphiScope {
    * @return Set of name declarations matching the name occurrence
    */
   Set<NameDeclaration> shallowFindDeclaration(DelphiNameOccurrence occurrence);
+
+  /**
+   * Find a helper type in this scope without traversing imports
+   *
+   * @param type The type for which we are trying to find a helper
+   * @return Helper type
+   */
+  @Nullable
+  HelperType shallowGetHelperForType(Type type);
 
   /**
    * Registers a node as being associated with a scope so it can be re-attached later

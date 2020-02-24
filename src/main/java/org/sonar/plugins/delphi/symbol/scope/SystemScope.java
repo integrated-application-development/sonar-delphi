@@ -23,6 +23,7 @@ public class SystemScope extends AbstractFileScope {
   private TypeNameDeclaration objectDeclaration;
   private TypeNameDeclaration interfaceDeclaration;
   private TypeNameDeclaration varRecDeclaration;
+  private TypeNameDeclaration classHelperBase;
 
   public SystemScope() {
     super("System");
@@ -103,6 +104,10 @@ public class SystemScope extends AbstractFileScope {
           this.varRecDeclaration = typeDeclaration;
           break;
 
+        case "TClassHelperBase":
+          this.classHelperBase = typeDeclaration;
+          break;
+
         default:
           // Do nothing
       }
@@ -121,6 +126,10 @@ public class SystemScope extends AbstractFileScope {
 
   public TypeNameDeclaration getTVarRecDeclaration() {
     return varRecDeclaration;
+  }
+
+  public TypeNameDeclaration getTClassHelperBaseDeclaration() {
+    return classHelperBase;
   }
 
   @Override

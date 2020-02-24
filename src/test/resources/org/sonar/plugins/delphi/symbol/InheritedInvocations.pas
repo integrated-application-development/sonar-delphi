@@ -5,51 +5,64 @@ unit InheritedInvocations;
 interface
 
 type
-  TFoo = class(TObject)
-  public
-    procedure Proc(A: Integer; B: String);
+  TBaseFoo = class
     procedure Proc;
+  end;
+
+  TFoo = class(TBaseFoo)
+  public
+    function Func(A: Integer; B: String): TFoo;
+    function Func: TFoo;
   end;
 
   TBar = class(TFoo)
   public
-    procedure Proc(A: Integer; B: String); override; overload;
-    procedure Proc; override; overload;
-    procedure Proc(C: String); overload;
+    function Func(A: Integer; B: String): TFoo; override; overload;
+    function Func: TFoo; override; overload;
+    function Func(C: String): TFoo; overload;
   end;
 
 implementation
 
-  procedure TFoo.Proc(A: Integer; B: String);
+  function TFoo.Func(A: Integer; B: String): TFoo;
   begin
     // Do nothing
   end;
 
-  procedure TFoo.Proc;
+  function TFoo.Func: TFoo;
   begin
     // Do nothing
   end;
 
-  procedure TBar.Proc(A: Integer; B: String);
+  function TBar.Func(A: Integer; B: String): TFoo;
   begin
     inherited;
-    inherited Proc;
-    inherited Proc(A, B);
-    Proc;
+    inherited.Proc;
+    inherited.Func;
+    inherited.Func(1, 'test');
+    inherited.Func.SomeNonexistentFunction;
+    inherited Func;
+    inherited Func(A, B);
+    Func;
   end;
 
-  procedure TBar.Proc;
+  function TBar.Func: TFoo;
   begin
     inherited;
-    inherited Proc;
-    inherited Proc(1, 'test');
-    Proc(1, 'test');
-    Proc('test');
+    inherited.Proc;
+    inherited.Func;
+    inherited.Func(1, 'test');
+    inherited.Func.SomeNonexistentFunction;
+    inherited Func;
+    inherited Func(1, 'test');
+    Func(1, 'test');
+    Func('test');
   end;
 
-  procedure TBar.Proc(C: String);
+  function TBar.Func(C: String): TFoo;
   begin
-    // Do nothing
+    inherited Func.Func(1, 'test');
+    inherited Func(1, 'test').Func;
   end;
 
 end.

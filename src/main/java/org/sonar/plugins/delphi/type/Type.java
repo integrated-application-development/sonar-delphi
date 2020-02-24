@@ -24,6 +24,7 @@ public interface Type {
    *
    * @return The type this inherits from. UnknownType if this does not inherit from a concrete type.
    */
+  @NotNull
   Type superType();
 
   /**
@@ -292,6 +293,13 @@ public interface Type {
    */
   boolean isArrayConstructor();
 
+  /**
+   * Check if this type is a helper type
+   *
+   * @return true if this is a class helper or record helper
+   */
+  boolean isHelper();
+
   interface CollectionType extends Type {
     /**
      * The type that is is a collection of
@@ -368,7 +376,7 @@ public interface Type {
      * @return Helper type
      */
     @NotNull
-    Type helperType();
+    Type extendedType();
   }
 
   interface PointerType extends Type {

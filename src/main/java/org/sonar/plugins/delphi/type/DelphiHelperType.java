@@ -11,12 +11,12 @@ import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.Type.HelperType;
 
 public class DelphiHelperType extends DelphiStructType implements HelperType {
-  private final Type helperType;
+  private final Type extendedType;
 
   private DelphiHelperType(
-      String image, DelphiScope scope, Set<Type> parents, Type helperType, StructKind kind) {
+      String image, DelphiScope scope, Set<Type> parents, Type extendedType, StructKind kind) {
     super(image, scope, parents, kind);
-    this.helperType = helperType;
+    this.extendedType = extendedType;
   }
 
   public static HelperType from(HelperTypeNode node) {
@@ -32,12 +32,17 @@ public class DelphiHelperType extends DelphiStructType implements HelperType {
 
   @Override
   @NotNull
-  public Type helperType() {
-    return helperType;
+  public Type extendedType() {
+    return extendedType;
   }
 
   @Override
   public boolean isForwardType() {
     return false;
+  }
+
+  @Override
+  public boolean isHelper() {
+    return true;
   }
 }

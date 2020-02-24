@@ -62,7 +62,7 @@ type
     procedure BeforeDestruction; virtual;
     procedure Dispatch(var Message); virtual;
     procedure DefaultHandler(var Message); virtual;
-    class function NewInstance: TObject {$IFDEF AUTOREFCOUNT} unsafe {$ENDIF}; virtual;
+    class function NewInstance: TObject; virtual;
     procedure FreeInstance; virtual;
     destructor Destroy; virtual;
   end;
@@ -133,6 +133,29 @@ type
           VType:      Byte;
          );
   end;
+
+  TInterfacedObject = class(TObject, IInterface)
+  protected
+    FRefCount: Integer;
+    function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
+  public
+    procedure AfterConstruction; override;
+    procedure BeforeDestruction; override;
+    class function NewInstance: TObject; override;
+    property RefCount: Integer read FRefCount;
+  end;
+
+  TInterfacedClass = class of TInterfacedObject;
+
+  TClassHelperBase = class(TInterfacedObject, IInterface)
+  protected
+    FInstance: TObject;
+    constructor _Create(Instance: TObject);
+  end;
+
+  TClassHelperBaseClass = class of TClassHelperBase;
 
 implementation
 
