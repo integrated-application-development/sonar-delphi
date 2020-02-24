@@ -80,13 +80,41 @@ public class DelphiSymbolTableExecutorTest {
   @Test
   public void testInheritedInvocations() {
     execute("InheritedInvocations.pas");
-    verifyUsages(8, 2, reference(14, 15), reference(23, 12), reference(28, 12));
-    verifyUsages(10, 14, reference(23, 17), reference(35, 4), reference(37, 14), reference(45, 14));
-    verifyUsages(11, 14, reference(28, 17), reference(36, 14), reference(43, 4), reference(44, 14));
-    verifyUsages(14, 2, reference(33, 12), reference(41, 12), reference(50, 12));
-    verifyUsages(16, 14, reference(33, 17), reference(46, 4));
-    verifyUsages(17, 14, reference(41, 17), reference(38, 4));
-    verifyUsages(18, 14, reference(47, 4), reference(50, 17));
+    verifyUsages(9, 14, reference(40, 14), reference(52, 14));
+    verifyUsages(
+        14,
+        13,
+        reference(27, 16),
+        reference(39, 4),
+        reference(40, 4),
+        reference(41, 4),
+        reference(42, 4),
+        reference(42, 14),
+        reference(43, 4),
+        reference(54, 14),
+        reference(57, 14),
+        reference(64, 19),
+        reference(65, 14));
+    verifyUsages(
+        15,
+        13,
+        reference(32, 16),
+        reference(41, 14),
+        reference(43, 14),
+        reference(44, 14),
+        reference(51, 4),
+        reference(52, 4),
+        reference(53, 4),
+        reference(53, 14),
+        reference(54, 4),
+        reference(55, 4),
+        reference(55, 14),
+        reference(56, 14),
+        reference(64, 14),
+        reference(65, 30));
+    verifyUsages(20, 13, reference(37, 16), reference(58, 4));
+    verifyUsages(21, 13, reference(46, 4), reference(49, 16));
+    verifyUsages(22, 13, reference(59, 4), reference(62, 16));
   }
 
   @Test
@@ -200,19 +228,19 @@ public class DelphiSymbolTableExecutorTest {
 
   @Test
   public void testClassReferenceMethodResolution() {
-    execute("classReference/MethodResolution.pas");
+    execute("classReferences/MethodResolution.pas");
     verifyUsages(11, 14, reference(20, 6));
   }
 
   @Test
   public void testClassReferenceArgumentResolution() {
-    execute("classReference/ArgumentResolution.pas");
+    execute("classReferences/ArgumentResolution.pas");
     verifyUsages(20, 10, reference(27, 2), reference(28, 2));
   }
 
   @Test
   public void testClassReferenceConstructorTypeResolution() {
-    execute("classReference/ConstructorTypeResolution.pas");
+    execute("classReferences/ConstructorTypeResolution.pas");
     verifyUsages(17, 10, reference(24, 2));
     verifyUsages(10, 16, reference(24, 11));
   }
@@ -388,14 +416,14 @@ public class DelphiSymbolTableExecutorTest {
 
   @Test
   public void testSimpleMethodResolutionClause() {
-    execute("methodResolutionClause/Simple.pas");
+    execute("methodResolutionClauses/Simple.pas");
     verifyUsages(9, 14, reference(14, 26));
     verifyUsages(13, 14, reference(14, 42));
   }
 
   @Test
   public void testMethodResolutionClauseWithOverloadedImplementation() {
-    execute("methodResolutionClause/OverloadedImplementation.pas");
+    execute("methodResolutionClauses/OverloadedImplementation.pas");
     verifyUsages(9, 14, reference(15, 26));
     verifyUsages(13, 14, reference(15, 42));
     verifyUsages(14, 14);
@@ -403,7 +431,7 @@ public class DelphiSymbolTableExecutorTest {
 
   @Test
   public void testMethodResolutionClauseWithOverloadedInterfaceAndImplementation() {
-    execute("methodResolutionClause/OverloadedInterfaceAndImplementation.pas");
+    execute("methodResolutionClauses/OverloadedInterfaceAndImplementation.pas");
     verifyUsages(9, 14, reference(16, 26));
     verifyUsages(14, 14, reference(16, 42));
     verifyUsages(15, 14);
@@ -480,6 +508,84 @@ public class DelphiSymbolTableExecutorTest {
     execute("enums/ScopedEnum.pas");
     verifyUsages(10, 2);
     verifyUsages(10, 9);
+  }
+
+  @Test
+  public void testSimpleHelpers() {
+    execute("helpers/Simple.pas");
+    verifyUsages(12, 14, reference(17, 21), reference(24, 6));
+  }
+
+  @Test
+  public void testClassHelperOverrides() {
+    execute("helpers/ClassHelperOverride.pas");
+    verifyUsages(9, 14, reference(18, 15));
+    verifyUsages(13, 14, reference(23, 21), reference(30, 6));
+  }
+
+  @Test
+  public void testClassHelperOverloads() {
+    execute("helpers/ClassHelperOverload.pas");
+    verifyUsages(9, 14, reference(22, 15), reference(39, 6));
+    verifyUsages(13, 14, reference(27, 25));
+    verifyUsages(17, 14, reference(32, 21), reference(40, 6));
+  }
+
+  @Test
+  public void testClassHelperSelfValues() {
+    execute("helpers/ClassHelperSelfValue.pas");
+    verifyUsages(17, 10, reference(24, 2));
+  }
+
+  @Test
+  public void testClassHelperInheritedStatements() {
+    execute("helpers/ClassHelperInheritedStatement.pas");
+    verifyUsages(9, 14, reference(31, 19), reference(68, 2));
+    verifyUsages(10, 14, reference(36, 19), reference(76, 2));
+    verifyUsages(15, 14, reference(46, 15), reference(69, 12), reference(77, 12));
+    verifyUsages(16, 14, reference(51, 15), reference(70, 12), reference(78, 12));
+    verifyUsages(11, 14, reference(41, 19), reference(71, 12), reference(79, 12));
+  }
+
+  @Test
+  public void testClassHelperAccessingExtendedTypes() {
+    execute("helpers/ClassHelperAccessingExtendedType.pas");
+    verifyUsages(10, 14, reference(28, 19));
+    verifyUsages(12, 14, reference(33, 19), reference(54, 2));
+    verifyUsages(17, 14, reference(39, 15));
+    verifyUsages(19, 14, reference(44, 15), reference(55, 2));
+  }
+
+  @Test
+  public void testRecordHelperLiterals() {
+    execute("helpers/RecordHelperLiteral.pas");
+    verifyUsages(9, 14, reference(26, 21), reference(48, 10));
+    verifyUsages(13, 14, reference(31, 24), reference(49, 9));
+    verifyUsages(17, 14, reference(36, 22), reference(50, 6));
+    verifyUsages(21, 14, reference(41, 26), reference(51, 29));
+  }
+
+  @Test
+  public void testRecordHelperConstants() {
+    execute("helpers/RecordHelperConstant.pas");
+    verifyUsages(11, 6, reference(18, 11), reference(19, 16));
+    verifyUsages(16, 10, reference(18, 2), reference(19, 2));
+  }
+
+  @Test
+  public void testRecordHelperSelfValues() {
+    execute("helpers/RecordHelperSelfValue.pas");
+    verifyUsages(14, 10, reference(21, 2));
+  }
+
+  @Test
+  public void testHelperImports() {
+    execute(
+        "helpers/imports/Unit1.pas",
+        "helpers/imports/Unit2.pas",
+        "helpers/imports/Unit3.pas",
+        "helpers/imports/Unit4.pas");
+    verifyUsages(19, 10, reference(26, 2));
   }
 
   private void execute(String filename, String... include) {

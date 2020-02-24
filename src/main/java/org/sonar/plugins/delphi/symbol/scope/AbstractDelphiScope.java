@@ -1,7 +1,6 @@
 package org.sonar.plugins.delphi.symbol.scope;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static java.util.Collections.singleton;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
@@ -18,6 +17,7 @@ import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 import net.sourceforge.pmd.lang.symboltable.Scope;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
@@ -27,6 +27,7 @@ import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.EnumType;
+import org.sonar.plugins.delphi.type.Type.HelperType;
 import org.sonar.plugins.delphi.type.Type.StructType;
 
 class AbstractDelphiScope implements DelphiScope {
@@ -35,6 +36,7 @@ class AbstractDelphiScope implements DelphiScope {
   private final SetMultimap<Class<? extends NameDeclaration>, NameDeclaration> declarationsByClass;
   private final SetMultimap<String, DelphiNameDeclaration> declarationsByName;
   private final Set<TypeNameDeclaration> enumDeclarations;
+  private final Map<Type, HelperType> helpersByType;
 
   private DelphiScope parent;
 
@@ -44,6 +46,7 @@ class AbstractDelphiScope implements DelphiScope {
     declarationsByClass = HashMultimap.create();
     declarationsByName = TreeMultimap.create(String.CASE_INSENSITIVE_ORDER, Ordering.natural());
     enumDeclarations = new HashSet<>();
+    helpersByType = new HashMap<>();
   }
 
   @Override
@@ -54,7 +57,8 @@ class AbstractDelphiScope implements DelphiScope {
     declarationSet.add(declaration);
     declarationsByName.put(declaration.getImage(), delphiDeclaration);
     declarationsByClass.put(declaration.getClass(), delphiDeclaration);
-    addEnumDeclaration(declaration);
+    handleEnumDeclaration(declaration);
+    handleHelperDeclaration(declaration);
   }
 
   private void checkForwardTypeDeclarations(NameDeclaration typeDeclaration) {
@@ -93,11 +97,22 @@ class AbstractDelphiScope implements DelphiScope {
     }
   }
 
-  private void addEnumDeclaration(NameDeclaration declaration) {
+  private void handleEnumDeclaration(NameDeclaration declaration) {
     if (declaration instanceof TypeNameDeclaration) {
       TypeNameDeclaration typeDeclaration = (TypeNameDeclaration) declaration;
       if (typeDeclaration.getType().isEnum()) {
         enumDeclarations.add(typeDeclaration);
+      }
+    }
+  }
+
+  private void handleHelperDeclaration(NameDeclaration declaration) {
+    if (declaration instanceof TypeNameDeclaration) {
+      TypeNameDeclaration typeDeclaration = (TypeNameDeclaration) declaration;
+      Type type = typeDeclaration.getType();
+      if (type.isHelper()) {
+        HelperType helper = (HelperType) type;
+        helpersByType.put(helper.extendedType(), helper);
       }
     }
   }
@@ -112,7 +127,7 @@ class AbstractDelphiScope implements DelphiScope {
   public Set<NameDeclaration> addNameOccurrence(@NotNull NameOccurrence occurrence) {
     DelphiNameDeclaration declaration = ((DelphiNameOccurrence) occurrence).getNameDeclaration();
     occurrencesByDeclaration.put(declaration, occurrence);
-    return singleton(declaration);
+    return Set.of(declaration);
   }
 
   @Override
@@ -133,9 +148,15 @@ class AbstractDelphiScope implements DelphiScope {
       }
     }
 
-    if (parent != null) {
-      parent.findMethodOverloads(occurrence, result);
+    DelphiScope searchScope = overloadSearchScope();
+    if (searchScope != null) {
+      searchScope.findMethodOverloads(occurrence, result);
     }
+  }
+
+  @Nullable
+  protected DelphiScope overloadSearchScope() {
+    return parent;
   }
 
   private static boolean isMethodOverload(
@@ -170,12 +191,15 @@ class AbstractDelphiScope implements DelphiScope {
 
   @Override
   public Set<NameDeclaration> findDeclaration(DelphiNameOccurrence occurrence) {
-    Set<DelphiNameDeclaration> declarations = declarationsByName.get(occurrence.getImage());
-    if (!declarations.isEmpty()) {
-      return new HashSet<>(declarations);
+    Set<NameDeclaration> result = new HashSet<>(declarationsByName.get(occurrence.getImage()));
+
+    findMethodOverloads(occurrence, result);
+
+    if (result.isEmpty()) {
+      result = findDeclarationInsideEnumScopes(occurrence);
     }
 
-    return findDeclarationInsideEnumScopes(occurrence);
+    return result;
   }
 
   private Set<NameDeclaration> findDeclarationInsideEnumScopes(DelphiNameOccurrence occurrence) {
@@ -196,6 +220,7 @@ class AbstractDelphiScope implements DelphiScope {
         && ((MethodNameDeclaration) declaration).getDirectives().contains(MethodDirective.OVERLOAD);
   }
 
+  @Nullable
   @Override
   public DelphiScope getParent() {
     return parent;
@@ -233,6 +258,20 @@ class AbstractDelphiScope implements DelphiScope {
       }
     }
     return null;
+  }
+
+  @Nullable
+  @Override
+  public HelperType getHelperForType(Type type) {
+    HelperType result = findHelper(type);
+    if (result == null && parent != null) {
+      result = parent.getHelperForType(type);
+    }
+    return result;
+  }
+
+  protected HelperType findHelper(Type type) {
+    return helpersByType.get(type);
   }
 
   protected <T> String glomNames(Set<T> s) {

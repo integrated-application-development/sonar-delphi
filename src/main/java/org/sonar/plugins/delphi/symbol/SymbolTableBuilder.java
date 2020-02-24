@@ -1,7 +1,6 @@
 package org.sonar.plugins.delphi.symbol;
 
 import static com.google.common.collect.Iterables.getFirst;
-import static java.lang.String.format;
 import static org.apache.commons.io.FilenameUtils.getBaseName;
 import static org.sonar.plugins.delphi.utils.DelphiUtils.stopProgressReport;
 
@@ -21,6 +20,7 @@ import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -108,7 +108,8 @@ public class SymbolTableBuilder {
 
   public SymbolTableBuilder standardLibraryPath(@NotNull Path standardLibraryPath) {
     if (!Files.exists(standardLibraryPath)) {
-      String message = format(INVALID_STANDARD_LIBRARY_PATH, standardLibraryPath.toAbsolutePath());
+      Path absolutePath = standardLibraryPath.toAbsolutePath();
+      String message = String.format(INVALID_STANDARD_LIBRARY_PATH, absolutePath);
       throw new SymbolTableConstructionException(message);
     }
     this.processSearchPath(standardLibraryPath);
@@ -228,7 +229,7 @@ public class SymbolTableBuilder {
 
       unit.resolved = resolutionLevel;
     } catch (DelphiFileConstructionException e) {
-      String error = format("Error while processing %s", unit.unitFile.toAbsolutePath());
+      String error = String.format("Error while processing %s", unit.unitFile.toAbsolutePath());
       LOG.error(error, e);
     } finally {
       --nestingLevel;
@@ -257,14 +258,15 @@ public class SymbolTableBuilder {
   }
 
   private void validateSystemScope() {
-    if (systemScope.getTObjectDeclaration() == null) {
-      throw new SymbolTableConstructionException(format(REQUIRED_DEF_NOT_FOUND, "TObject"));
-    }
-    if (systemScope.getIInterfaceDeclaration() == null) {
-      throw new SymbolTableConstructionException(format(REQUIRED_DEF_NOT_FOUND, "IInterface"));
-    }
-    if (systemScope.getTVarRecDeclaration() == null) {
-      throw new SymbolTableConstructionException(format(REQUIRED_DEF_NOT_FOUND, "TVarRec"));
+    checkSystemDeclaration(systemScope.getTObjectDeclaration(), "TObject");
+    checkSystemDeclaration(systemScope.getIInterfaceDeclaration(), "IInterface");
+    checkSystemDeclaration(systemScope.getTVarRecDeclaration(), "TVarRec");
+    checkSystemDeclaration(systemScope.getTClassHelperBaseDeclaration(), "TClassHelperBase");
+  }
+
+  private static void checkSystemDeclaration(NameDeclaration declaration, String name) {
+    if (declaration == null) {
+      throw new SymbolTableConstructionException(String.format(REQUIRED_DEF_NOT_FOUND, name));
     }
   }
 

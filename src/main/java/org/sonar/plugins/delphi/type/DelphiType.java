@@ -10,6 +10,7 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDESTRING;
 
 import java.util.Collections;
 import java.util.Set;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class DelphiType implements Type {
   private final String image;
@@ -35,6 +36,7 @@ public abstract class DelphiType implements Type {
     return image;
   }
 
+  @NotNull
   @Override
   public Type superType() {
     return unknownType();
@@ -222,6 +224,11 @@ public abstract class DelphiType implements Type {
 
   @Override
   public boolean isArrayOfConst() {
+    return false;
+  }
+
+  @Override
+  public boolean isHelper() {
     return false;
   }
 }

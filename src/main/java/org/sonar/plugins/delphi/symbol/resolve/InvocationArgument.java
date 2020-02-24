@@ -13,7 +13,6 @@ import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Typed;
 
 class InvocationArgument implements Typed {
-  private final ExpressionNode expression;
   private Type type = DelphiType.unknownType();
 
   // Null if the expression was not a PrimaryExpression.
@@ -21,7 +20,6 @@ class InvocationArgument implements Typed {
   @Nullable private NameResolver resolver;
 
   public InvocationArgument(ExpressionNode expression) {
-    this.expression = expression;
     if (expression instanceof PrimaryExpressionNode) {
       resolver = new NameResolver();
       resolver.readPrimaryExpression((PrimaryExpressionNode) expression);
@@ -73,9 +71,5 @@ class InvocationArgument implements Typed {
   @NotNull
   public Type getType() {
     return type;
-  }
-
-  public ExpressionNode getExpression() {
-    return expression;
   }
 }

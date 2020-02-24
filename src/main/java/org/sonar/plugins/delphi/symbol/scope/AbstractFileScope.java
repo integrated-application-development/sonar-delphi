@@ -16,6 +16,8 @@ import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
+import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Type.HelperType;
 
 abstract class AbstractFileScope extends AbstractDelphiScope implements FileScope {
   private final String name;
@@ -40,6 +42,25 @@ abstract class AbstractFileScope extends AbstractDelphiScope implements FileScop
       }
     }
     return result;
+  }
+
+  @Override
+  public HelperType getHelperForType(Type type) {
+    HelperType result = super.getHelperForType(type);
+    if (result == null) {
+      for (FileScope importScope : imports) {
+        result = importScope.shallowGetHelperForType(type);
+        if (result != null) {
+          break;
+        }
+      }
+    }
+    return result;
+  }
+
+  @Override
+  public HelperType shallowGetHelperForType(Type type) {
+    return findHelper(type);
   }
 
   @Override

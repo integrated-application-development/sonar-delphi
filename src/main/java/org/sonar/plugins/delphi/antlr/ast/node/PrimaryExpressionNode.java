@@ -43,7 +43,8 @@ public final class PrimaryExpressionNode extends ExpressionNode {
   }
 
   public boolean isBareInherited() {
-    return jjtGetNumChildren() == 1 && isInheritedCall();
+    return (jjtGetNumChildren() == 1 || !(jjtGetChild(1) instanceof NameReferenceNode))
+        && isInheritedCall();
   }
 
   @Override

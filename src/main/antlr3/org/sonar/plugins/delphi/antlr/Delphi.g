@@ -514,7 +514,7 @@ unaryExpression              : unaryOperator^ unaryExpression
                              ;
 primaryExpression            : atom -> ^(TkPrimaryExpression<PrimaryExpressionNode> atom)
                              | parenthesizedExpression
-                             | 'inherited' atom? -> ^(TkPrimaryExpression<PrimaryExpressionNode> 'inherited' atom?)
+                             | 'inherited' (nameReference? particleItem*)? -> ^(TkPrimaryExpression<PrimaryExpressionNode> 'inherited' (nameReference? particleItem*)?)
                              ;
 parenthesizedExpression      : '(' expression ')' -> ^(TkNestedExpression<ParenthesizedExpressionNode> '(' expression ')')
                              ;
@@ -1097,16 +1097,27 @@ TkEscapedCharacter      : 'ESCAPED_CHARACTER'
                         ;
 TkCompilerDirective     : 'COMPILER_DIRECTIVE'
                         ;
+TkRealNum               : 'REAL_NUMBER'
+                        ;
 
 //****************************
 // Tokens
 //****************************
 TkIdentifier            : (Alpha | '_') (Alpha | Digit | '_')*
                         ;
-TkIntNum                : Digitseq
-                        ;
                         // We use a lookahead here to avoid lexer failures on range operations like '1..2'
-TkRealNum               : Digitseq ({ input.LA(2) != '.' }? => '.' Digitseq)? (('e'|'E') ('+'|'-')? Digitseq)?
+                        // or record helper invocations on Integer literals
+TkIntNum               : Digitseq (
+                            {input.LA(1) != '.' || Character.isDigit(input.LA(2))}? =>
+                              (
+                                '.' Digitseq
+                                {$type = TkRealNum;}
+                              )?
+                              (
+                                Exponent
+                                {$type = TkRealNum;}
+                              )?
+                          )?
                         ;
 TkHexNum                : '$' Hexdigitseq
                         ;
@@ -1134,6 +1145,9 @@ Digit                   : '0'..'9'
                         ;
 fragment
 Digitseq                : Digit (Digit)*
+                        ;
+fragment
+Exponent                : (('e'|'E') ('+'|'-')? Digitseq)
                         ;
 fragment
 Hexdigit                : Digit | 'a'..'f' | 'A'..'F'

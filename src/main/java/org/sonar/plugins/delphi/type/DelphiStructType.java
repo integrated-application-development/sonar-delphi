@@ -11,9 +11,11 @@ import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
 import org.sonar.plugins.delphi.symbol.declaration.PropertyNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.symbol.scope.FileScope;
 import org.sonar.plugins.delphi.symbol.scope.SystemScope;
@@ -63,47 +65,49 @@ public class DelphiStructType extends DelphiType implements StructType {
 
   private static Set<Type> getAncestors(String image, TypeNode node, StructKind kind) {
     Set<Type> parents = node.getParentTypes();
-    DelphiScope scope = node.getASTTree().getScope();
     if (parents.isEmpty()) {
+      parents = getDefaultAncestors(image, node, kind);
+    }
+    return parents;
+  }
+
+  private static Set<Type> getDefaultAncestors(String image, DelphiNode node, StructKind kind) {
+    SystemScope systemScope = getSystemScope(node);
+    if (systemScope != null) {
+      TypedDeclaration defaultAncestor = null;
+
       switch (kind) {
         case CLASS:
           if (!"System.TObject".equals(image)) {
-            parents = getTObjectAncestor(scope);
+            defaultAncestor = systemScope.getTObjectDeclaration();
           }
           break;
 
         case INTERFACE:
           if (!"System.IInterface".equals(image)) {
-            parents = getIInterfaceAncestor(scope);
+            defaultAncestor = systemScope.getIInterfaceDeclaration();
           }
+          break;
+
+        case CLASS_HELPER:
+          defaultAncestor = systemScope.getTObjectDeclaration();
           break;
 
         default:
           // Do nothing
       }
-    }
-    return parents;
-  }
 
-  private static Set<Type> getTObjectAncestor(DelphiScope scope) {
-    SystemScope systemScope = getSystemScope(scope);
-    if (systemScope != null) {
-      return Collections.singleton(systemScope.getTObjectDeclaration().getType());
+      if (defaultAncestor != null) {
+        return Set.of(defaultAncestor.getType());
+      }
     }
-    return Collections.emptySet();
-  }
 
-  private static Set<Type> getIInterfaceAncestor(DelphiScope scope) {
-    SystemScope systemScope = getSystemScope(scope);
-    if (systemScope != null) {
-      return Collections.singleton(systemScope.getIInterfaceDeclaration().getType());
-    }
     return Collections.emptySet();
   }
 
   @Nullable
-  private static SystemScope getSystemScope(DelphiScope scope) {
-    FileScope unitScope = scope.getEnclosingScope(FileScope.class);
+  private static SystemScope getSystemScope(DelphiNode node) {
+    FileScope unitScope = node.getScope().getEnclosingScope(FileScope.class);
     if (unitScope != null) {
       return unitScope.getSystemScope();
     }
@@ -120,6 +124,7 @@ public class DelphiStructType extends DelphiType implements StructType {
     return false;
   }
 
+  @NotNull
   @Override
   public Type superType() {
     return superType;

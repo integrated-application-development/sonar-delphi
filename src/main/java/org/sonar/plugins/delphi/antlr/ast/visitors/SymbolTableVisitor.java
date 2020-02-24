@@ -72,8 +72,8 @@ import org.sonar.plugins.delphi.symbol.scope.TypeScope;
 import org.sonar.plugins.delphi.symbol.scope.UnitScope;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ClassReferenceType;
+import org.sonar.plugins.delphi.type.Type.HelperType;
 import org.sonar.plugins.delphi.type.Type.PointerType;
-import org.sonar.plugins.delphi.type.Type.ScopedType;
 
 /**
  * Visitor for symbol table creation.
@@ -189,16 +189,14 @@ public class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     resolve(node);
 
     TypeScope typeScope = new TypeScope(node.fullyQualifiedName());
+    typeScope.setParent(data.currentScope());
     node.getTypeNode().setScope(typeScope);
 
     TypeNameDeclaration declaration = new TypeNameDeclaration(node);
     data.addDeclaration(declaration, node.getTypeNameNode());
     data.addScope(typeScope, node.getTypeNode());
 
-    Type superType = declaration.getType().superType();
-    if (superType instanceof ScopedType) {
-      typeScope.setSuperTypeScope(((ScopedType) superType).typeScope());
-    }
+    typeScope.setType(declaration.getType());
 
     if (declaration.getType().isEnum()
         && data.switchRegistry.isActiveSwitch(SCOPED_ENUMS, node.getTokenIndex())) {
@@ -381,12 +379,24 @@ public class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       data.addDeclaration(compilerVariable("Result", node.getReturnType(), methodScope));
     }
 
-    TypeNameDeclaration methodType = node.getTypeDeclaration();
-    if (methodType != null) {
-      data.addDeclaration(compilerVariable("Self", methodType.getType(), methodScope));
+    Type selfType = findSelfType(node);
+    if (selfType != null) {
+      data.addDeclaration(compilerVariable("Self", selfType, methodScope));
     }
 
     return visitScope(node, data);
+  }
+
+  private static Type findSelfType(MethodImplementationNode node) {
+    Type selfType = null;
+    TypeNameDeclaration methodType = node.getTypeDeclaration();
+    if (methodType != null) {
+      selfType = methodType.getType();
+      if (selfType.isHelper()) {
+        selfType = ((HelperType) selfType).extendedType();
+      }
+    }
+    return selfType;
   }
 
   @Override
