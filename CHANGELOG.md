@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Support for `class` and `record` helpers in semantic analysis.
+- Support for explicit array constructor invocations (`TArray<Integer>.Create(1, 2, 3)`).
 - Support for unit aliases.
 - `sonar.delphi.unitAliases` property to specify unit aliases, which are used for unit import
   resolution.

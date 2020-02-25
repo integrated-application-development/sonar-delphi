@@ -166,6 +166,12 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testArrayConstructor() {
+    execute("ArrayConstructor.pas");
+    verifyUsages(12, 10, reference(19, 2));
+  }
+
+  @Test
   public void testArrayOfConst() {
     execute("ArrayOfConst.pas");
     verifyUsages(9, 10, reference(16, 2), reference(17, 2), reference(18, 2));
