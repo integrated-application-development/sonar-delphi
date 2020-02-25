@@ -1,11 +1,9 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
-import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
@@ -24,7 +22,6 @@ public final class NameReferenceNode extends DelphiNode implements Qualifiable, 
   private DelphiNameOccurrence occurrence;
   private List<NameReferenceNode> names;
   private QualifiedName qualifiedName;
-  private List<NameOccurrence> usages;
 
   public NameReferenceNode(Token token) {
     super(token);
