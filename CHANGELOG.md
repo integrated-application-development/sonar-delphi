@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - General improvements around analysis of types represented by keywords (`string`, `file`).
+- Exclude array constructors in `EmptyBracketsRule`.
+- Exclude procedural variables in `EmptyBracketsRule`.
 
 ## [0.12.1] - 2020-02-18
 

@@ -844,6 +844,8 @@ FreeAndNil(MyVar); // Compliant
       When calling or declaring a method, an empty argument or parameter list is superfluous and can
       be omitted.
       &lt;br&gt;
+      This rule does not apply to procedural types or array constructors.
+      &lt;br&gt;
       &lt;br&gt;
     </description>
     <properties>
