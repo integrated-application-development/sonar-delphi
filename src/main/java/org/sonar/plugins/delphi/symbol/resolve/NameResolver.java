@@ -218,7 +218,7 @@ public class NameResolver {
     if (node instanceof NameReferenceNode) {
       readNameReference((NameReferenceNode) node);
     } else if (node instanceof ArgumentListNode) {
-      disambiguateArguments(((ArgumentListNode) node).getArguments());
+      handleArgumentList((ArgumentListNode) node);
     } else if (node instanceof ArrayAccessorNode) {
       handleArrayAccessor(((ArrayAccessorNode) node));
     } else if (node instanceof ParenthesizedExpressionNode) {
@@ -369,9 +369,12 @@ public class NameResolver {
             || (!(currentScope instanceof UnknownScope) && currentScope.equals(node.getScope()));
 
     for (NameReferenceNode reference : node.flatten()) {
+      if (isExplicitArrayConstructorInvocation(reference)) {
+        return;
+      }
+
       IdentifierNode identifier = reference.getIdentifier();
       DelphiNameOccurrence occurrence = new DelphiNameOccurrence(identifier);
-
       addName(occurrence);
       searchForDeclaration(occurrence);
 
@@ -478,7 +481,7 @@ public class NameResolver {
     }
 
     if (declarations.stream().anyMatch(NameResolver::isArrayProperty)) {
-      disambiguateArguments(accessor.getExpressions());
+      disambiguateArguments(accessor.getExpressions(), true);
       addResolvedDeclaration();
       return;
     }
@@ -528,7 +531,7 @@ public class NameResolver {
       if (!defaultArrayProperties.isEmpty()) {
         NameResolver propertyResolver = new NameResolver(this);
         propertyResolver.declarations = defaultArrayProperties;
-        propertyResolver.disambiguateArguments(accessor.getExpressions());
+        propertyResolver.disambiguateArguments(accessor.getExpressions(), true);
 
         NameDeclaration propertyDeclaration = getLast(propertyResolver.resolvedDeclarations);
         if (propertyDeclaration instanceof PropertyNameDeclaration) {

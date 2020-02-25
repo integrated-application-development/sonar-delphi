@@ -13,8 +13,10 @@ import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
 import org.sonar.plugins.delphi.symbol.Qualifiable;
 import org.sonar.plugins.delphi.symbol.QualifiedName;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Type.ClassReferenceType;
 import org.sonar.plugins.delphi.type.Typed;
 
 public final class NameReferenceNode extends DelphiNode implements Qualifiable, Typed {
@@ -109,6 +111,12 @@ public final class NameReferenceNode extends DelphiNode implements Qualifiable, 
   @Override
   @NotNull
   public Type getType() {
+    if (isExplicitArrayConstructorInvocation()) {
+      List<NameReferenceNode> flatNames = flatten();
+      NameDeclaration arrayDeclaration = flatNames.get(flatNames.size() - 2).getNameDeclaration();
+      return ((ClassReferenceType) ((Typed) arrayDeclaration).getType()).classType();
+    }
+
     NameDeclaration lastDeclaration = getLastName().getNameDeclaration();
     if (lastDeclaration instanceof Typed) {
       return ((Typed) lastDeclaration).getType();
@@ -122,20 +130,15 @@ public final class NameReferenceNode extends DelphiNode implements Qualifiable, 
     return flatNames.get(flatNames.size() - 1);
   }
 
-  public List<NameOccurrence> getUsages() {
-    if (usages == null) {
-      NameDeclaration nameDeclaration = getNameDeclaration();
-      if (nameDeclaration != null) {
-        usages =
-            nameDeclaration
-                .getScope()
-                .getDeclarations(nameDeclaration.getClass())
-                .get(nameDeclaration);
-      }
-      if (usages == null) {
-        usages = Collections.emptyList();
+  public boolean isExplicitArrayConstructorInvocation() {
+    List<NameReferenceNode> flatNames = flatten();
+    if (flatNames.size() > 1) {
+      NameDeclaration arrayDeclaration = flatNames.get(flatNames.size() - 2).getNameDeclaration();
+      if (arrayDeclaration instanceof TypeNameDeclaration) {
+        Type type = ((Typed) arrayDeclaration).getType();
+        return type.isArray() && getLastName().hasImageEqualTo("Create");
       }
     }
-    return usages;
+    return false;
   }
 }
