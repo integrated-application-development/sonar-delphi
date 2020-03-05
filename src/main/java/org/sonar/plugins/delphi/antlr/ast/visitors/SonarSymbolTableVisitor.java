@@ -3,6 +3,7 @@ package org.sonar.plugins.delphi.antlr.ast.visitors;
 import java.util.List;
 import javax.annotation.Nullable;
 import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
+import org.assertj.core.util.Lists;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.api.batch.sensor.symbol.NewSymbol;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
@@ -31,6 +32,20 @@ public class SonarSymbolTableVisitor implements DelphiParserVisitor<NewSymbolTab
             location.getBeginColumn(),
             location.getEndLine(),
             location.getEndColumn());
+
+    DelphiNameDeclaration forward = declaration.getForwardDeclaration();
+    if (forward != null) {
+      List<NameOccurrence> forwardUsages = forward.getScope().getOccurrencesFor(forward);
+      occurrences = Lists.newArrayList(occurrences);
+      occurrences.addAll(forwardUsages);
+
+      location = forward.getNode();
+      newSymbol.newReference(
+          location.getBeginLine(),
+          location.getBeginColumn(),
+          location.getEndLine(),
+          location.getEndColumn());
+    }
 
     for (NameOccurrence occurrence : occurrences) {
       location = (SymbolicNode) occurrence.getLocation();

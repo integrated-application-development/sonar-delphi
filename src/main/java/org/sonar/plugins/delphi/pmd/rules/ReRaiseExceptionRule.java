@@ -7,10 +7,10 @@ import java.util.stream.Collectors;
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.node.ExceptItemNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RaiseStatementNode;
-import org.sonar.plugins.delphi.antlr.ast.node.VarNameDeclarationNode;
 
 /**
  * This rule looks for exception blocks where the caught exception is explicitly re-raised. This is
@@ -33,7 +33,7 @@ public class ReRaiseExceptionRule extends AbstractDelphiRule {
   }
 
   private List<NameReferenceNode> findViolations(ExceptItemNode handler) {
-    VarNameDeclarationNode exceptionName = handler.getExceptionName();
+    NameDeclarationNode exceptionName = handler.getExceptionName();
     if (exceptionName != null) {
       return handler.findDescendantsOfType(RaiseStatementNode.class).stream()
           .map(RaiseStatementNode::getRaiseExpression)

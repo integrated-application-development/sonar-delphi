@@ -26,22 +26,22 @@ public final class ExceptItemNode extends DelphiNode implements Typed {
   }
 
   @Nullable
-  public VarNameDeclarationNode getExceptionName() {
-    return hasExceptionIdentifier() ? (VarNameDeclarationNode) jjtGetChild(0) : null;
+  public NameDeclarationNode getExceptionName() {
+    return hasExceptionName() ? (NameDeclarationNode) jjtGetChild(0) : null;
   }
 
   @NotNull
   public TypeReferenceNode getExceptionType() {
-    return (TypeReferenceNode) jjtGetChild(hasExceptionIdentifier() ? 1 : 0);
+    return (TypeReferenceNode) jjtGetChild(hasExceptionName() ? 1 : 0);
   }
 
   @Nullable
   public StatementNode getStatement() {
-    Node statement = jjtGetChild(hasExceptionIdentifier() ? 3 : 2);
+    Node statement = jjtGetChild(hasExceptionName() ? 3 : 2);
     return statement instanceof StatementNode ? (StatementNode) statement : null;
   }
 
-  private boolean hasExceptionIdentifier() {
-    return jjtGetChild(0) instanceof VarNameDeclarationNode;
+  private boolean hasExceptionName() {
+    return jjtGetChild(0) instanceof NameDeclarationNode;
   }
 }

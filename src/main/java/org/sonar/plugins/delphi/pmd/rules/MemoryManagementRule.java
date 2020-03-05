@@ -1,16 +1,20 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
+
+import com.google.common.collect.Iterables;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
 import org.sonar.plugins.delphi.antlr.ast.node.ArgumentListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.AssignmentStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RaiseStatementNode;
@@ -19,8 +23,9 @@ import org.sonar.plugins.delphi.symbol.Qualifiable;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
-import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Type.ProceduralType;
+import org.sonar.plugins.delphi.type.Typed;
 
 public class MemoryManagementRule extends AbstractDelphiRule {
 
@@ -100,31 +105,39 @@ public class MemoryManagementRule extends AbstractDelphiRule {
     return false;
   }
 
-  private static boolean isInterfaceParameter(PrimaryExpressionNode expression) {
-    Node parent = expression.findParentheses().jjtGetParent();
+  private static boolean isInterfaceParameter(ExpressionNode expression) {
+    expression = expression.findParentheses();
+    Node parent = expression.jjtGetParent();
+
     if (!(parent instanceof ArgumentListNode)) {
       return false;
     }
 
     Node previous = parent.jjtGetParent().jjtGetChild(parent.jjtGetChildIndex() - 1);
-    if (!(previous instanceof NameReferenceNode)) {
+    if (!(previous instanceof Typed)) {
       return false;
     }
 
-    NameReferenceNode invocationName = ((NameReferenceNode) previous).getLastName();
-    NameDeclaration declaration = invocationName.getNameDeclaration();
-    if (!(declaration instanceof Invocable)) {
+    Type type = ((Typed) previous).getType();
+    if (!type.isProcedural()) {
       return false;
     }
 
-    int argumentIndex = expression.jjtGetChildIndex();
-    Invocable invocable = (Invocable) declaration;
-    if (invocable.getParametersCount() > argumentIndex) {
-      Type parameterType = ((Invocable) declaration).getParameter(argumentIndex).getType();
-      return parameterType.isInterface();
+    if (previous instanceof NameReferenceNode) {
+      NameReferenceNode nameReference = (NameReferenceNode) previous;
+      if (nameReference.getLastName().getNameDeclaration() instanceof TypeNameDeclaration) {
+        return false;
+      }
     }
 
-    return false;
+    List<ExpressionNode> arguments = ((ArgumentListNode) parent).getArguments();
+    int argumentIndex = arguments.indexOf(expression);
+
+    List<Type> parameters = ((ProceduralType) type).parameterTypes();
+    Type parameterType =
+        Objects.requireNonNull(Iterables.get(parameters, argumentIndex, unknownType()));
+
+    return parameterType.isInterface();
   }
 
   private static boolean isExceptionRaise(PrimaryExpressionNode expression) {

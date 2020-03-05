@@ -4,6 +4,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
 
 import com.google.errorprone.annotations.Immutable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,7 +35,7 @@ public final class UnknownScope implements DelphiScope {
 
   @Override
   public Map<NameDeclaration, List<NameOccurrence>> getDeclarations() {
-    return null;
+    return Collections.emptyMap();
   }
 
   @Override
@@ -75,6 +76,11 @@ public final class UnknownScope implements DelphiScope {
   @Override
   public void setParent(Scope scope) {
     // Do nothing
+  }
+
+  @Override
+  public Set<NameDeclaration> getAllDeclarations() {
+    return emptySet();
   }
 
   @Override

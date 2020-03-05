@@ -9,6 +9,7 @@ import java.util.TreeSet;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
+import org.sonar.plugins.delphi.antlr.ast.node.GenericDefinitionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnitImportNode;
 
@@ -35,6 +36,12 @@ public class ShortIdentifiersRule extends AbstractDelphiRule {
   @Override
   public RuleContext visit(UnitImportNode node, RuleContext data) {
     // If a unit name is too short, we want to flag it in that file instead.
+    return data;
+  }
+
+  @Override
+  public RuleContext visit(GenericDefinitionNode node, RuleContext data) {
+    // We never want to check type parameters.
     return data;
   }
 

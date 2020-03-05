@@ -34,7 +34,13 @@ public class UnknownScopeTest {
   @Test
   public void testGetDeclarations() {
     unknownScope.addDeclaration(mock(NameDeclaration.class));
-    assertThat(unknownScope.getDeclarations()).isNull();
+    assertThat(unknownScope.getDeclarations()).isEmpty();
+  }
+
+  @Test
+  public void testGetAllDeclarations() {
+    unknownScope.addDeclaration(mock(NameDeclaration.class));
+    assertThat(unknownScope.getAllDeclarations()).isEmpty();
   }
 
   @Test
@@ -89,6 +95,11 @@ public class UnknownScopeTest {
   public void testGetParent() {
     unknownScope.setParent(unknownScope());
     assertThat(unknownScope.getParent()).isNull();
+  }
+
+  @Test
+  public void testGetHelperForType() {
+    assertThat(unknownScope.getHelperForType(unknownType())).isNull();
   }
 
   @Test

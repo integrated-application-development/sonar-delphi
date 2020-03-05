@@ -20,8 +20,8 @@ public final class EnumElementNode extends DelphiNode implements Typed {
     return visitor.visit(this, data);
   }
 
-  public QualifiedNameDeclarationNode getNameDeclarationNode() {
-    return (QualifiedNameDeclarationNode) jjtGetChild(0);
+  public SimpleNameDeclarationNode getNameDeclarationNode() {
+    return (SimpleNameDeclarationNode) jjtGetChild(0);
   }
 
   @Override

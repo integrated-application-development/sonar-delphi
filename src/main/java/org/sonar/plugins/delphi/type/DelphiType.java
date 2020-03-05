@@ -48,6 +48,11 @@ public abstract class DelphiType implements Type {
   }
 
   @Override
+  public Type specialize(TypeSpecializationContext context) {
+    return this;
+  }
+
+  @Override
   public boolean is(String image) {
     return getImage().equalsIgnoreCase(image);
   }
@@ -230,5 +235,15 @@ public abstract class DelphiType implements Type {
   @Override
   public boolean isHelper() {
     return false;
+  }
+
+  @Override
+  public boolean isTypeParameter() {
+    return false;
+  }
+
+  @Override
+  public String toString() {
+    return getImage();
   }
 }

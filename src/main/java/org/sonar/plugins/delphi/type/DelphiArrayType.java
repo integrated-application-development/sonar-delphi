@@ -2,9 +2,11 @@ package org.sonar.plugins.delphi.type;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.sonar.plugins.delphi.type.Type.CollectionType;
 
-public class DelphiArrayType extends DelphiCollectionType {
+public class DelphiArrayType extends DelphiGenerifiableType implements CollectionType {
   public enum ArrayOption {
     FIXED,
     DYNAMIC,
@@ -12,10 +14,12 @@ public class DelphiArrayType extends DelphiCollectionType {
     ARRAY_OF_CONST
   }
 
+  private final Type elementType;
   private final Set<ArrayOption> options;
 
   private DelphiArrayType(String image, Type elementType, Set<ArrayOption> options) {
-    super(image, elementType);
+    super(image);
+    this.elementType = elementType;
     this.options = options;
   }
 
@@ -44,6 +48,19 @@ public class DelphiArrayType extends DelphiCollectionType {
     return options.contains(ArrayOption.ARRAY_OF_CONST);
   }
 
+  @Override
+  @NotNull
+  public Type elementType() {
+    return elementType;
+  }
+
+  @Override
+  public DelphiGenerifiableType doSpecialization(TypeSpecializationContext context) {
+    Type specializedElement = elementType.specialize(context);
+    String image = createImage(specializedElement, options);
+    return new DelphiArrayType(image, specializedElement, options);
+  }
+
   public static CollectionType fixedArray(@Nullable String image, Type elementType) {
     return array(image, elementType, Set.of(ArrayOption.FIXED));
   }
@@ -68,13 +85,16 @@ public class DelphiArrayType extends DelphiCollectionType {
   public static CollectionType array(
       @Nullable String image, Type elementType, Set<ArrayOption> options) {
     if (image == null) {
-      image =
-          "array of "
-              + elementType.getImage()
-              + " <"
-              + options.stream().map(ArrayOption::name).collect(Collectors.joining(","))
-              + ">";
+      image = createImage(elementType, options);
     }
     return new DelphiArrayType(image, elementType, options);
+  }
+
+  private static String createImage(Type elementType, Set<ArrayOption> options) {
+    return "array of "
+        + elementType.getImage()
+        + " <"
+        + options.stream().map(ArrayOption::name).collect(Collectors.joining(","))
+        + ">";
   }
 }

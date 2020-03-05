@@ -25,6 +25,9 @@ public class QualifiedName {
   public String simpleName() {
     if (simpleName == null) {
       simpleName = Iterables.getLast(parts);
+      if (simpleName.contains("<")) {
+        simpleName = simpleName.substring(0, simpleName.indexOf('<'));
+      }
     }
     return simpleName;
   }

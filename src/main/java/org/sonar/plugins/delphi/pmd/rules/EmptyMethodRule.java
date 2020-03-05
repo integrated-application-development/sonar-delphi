@@ -7,7 +7,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodBodyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
-import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
 
 public class EmptyMethodRule extends AbstractDelphiRule {
 
@@ -33,8 +32,8 @@ public class EmptyMethodRule extends AbstractDelphiRule {
   }
 
   @Override
-  public RuleContext visit(TypeNode node, RuleContext data) {
-    methodDeclarations.addAll(node.findDescendantsOfType(MethodDeclarationNode.class));
+  public RuleContext visit(MethodDeclarationNode node, RuleContext data) {
+    methodDeclarations.add(node);
     return data;
   }
 

@@ -2,15 +2,15 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.type.Typed;
 
-public final class VarNameDeclarationNode extends NameDeclarationNode {
+public final class SimpleNameDeclarationNode extends NameDeclarationNode {
+  private String image;
 
-  public VarNameDeclarationNode(Token token) {
+  public SimpleNameDeclarationNode(Token token) {
     super(token);
   }
 
-  public VarNameDeclarationNode(int tokenType) {
+  public SimpleNameDeclarationNode(int tokenType) {
     super(tokenType);
   }
 
@@ -21,7 +21,16 @@ public final class VarNameDeclarationNode extends NameDeclarationNode {
 
   @Override
   public String getImage() {
-    return getIdentifier().getImage();
+    if (image == null) {
+      GenericDefinitionNode genericDefinition = getGenericDefinition();
+      StringBuilder builder = new StringBuilder();
+      builder.append(getIdentifier().getImage());
+      if (genericDefinition != null) {
+        builder.append(genericDefinition.getImage());
+      }
+      image = builder.toString();
+    }
+    return image;
   }
 
   public IdentifierNode getIdentifier() {
@@ -36,23 +45,23 @@ public final class VarNameDeclarationNode extends NameDeclarationNode {
     return parent instanceof ExceptItemNode;
   }
 
+  public boolean isPropertyDeclaration() {
+    return parent instanceof PropertyNode;
+  }
+
+  public boolean isTypeParameterDeclaration() {
+    return parent instanceof TypeParameterNode;
+  }
+
   public boolean isVarDeclaration() {
     return getNthParent(2) instanceof VarDeclarationNode;
   }
 
   public boolean isFieldDeclaration() {
-    return getNthParent(2) instanceof FieldSectionNode;
+    return getNthParent(2) instanceof FieldDeclarationNode;
   }
 
   public boolean isFormalParameter() {
     return getNthParent(2) instanceof FormalParameterNode;
-  }
-
-  public Typed getTypedDeclaration() {
-    if (isConstDeclaration() || isExceptItemDeclaration()) {
-      return ((Typed) parent);
-    } else {
-      return ((Typed) getNthParent(2));
-    }
   }
 }

@@ -5,7 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.node.EnumElementNode;
 import org.sonar.plugins.delphi.type.Type;
 
-public class EnumElementNameDeclaration extends DelphiNameDeclaration implements TypedDeclaration {
+public class EnumElementNameDeclaration extends AbstractDelphiNameDeclaration
+    implements TypedDeclaration {
   private final Type type;
 
   public EnumElementNameDeclaration(EnumElementNode node) {

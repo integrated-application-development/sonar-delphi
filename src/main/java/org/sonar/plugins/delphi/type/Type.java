@@ -35,6 +35,15 @@ public interface Type {
   Set<Type> parents();
 
   /**
+   * If this is a generic type, then we can specialize the type with some given type parameters and
+   * arguments.
+   *
+   * @param context a specialization context, contains information to help specialize the type
+   * @return the specialized type, or unknown type if generic specialization fails
+   */
+  Type specialize(TypeSpecializationContext context);
+
+  /**
    * Check whether a type is the one designated by the qualified name.
    *
    * @param image Type image to check
@@ -300,6 +309,16 @@ public interface Type {
    */
   boolean isHelper();
 
+  /**
+   * Check if this type is a type parameter type
+   *
+   * <p>This isn't a "real" type. It's an intermediary type that exists before a generic type/method
+   * has been specialized.
+   *
+   * @return true if this is a type parameter type
+   */
+  boolean isTypeParameter();
+
   interface CollectionType extends Type {
     /**
      * The type that is is a collection of
@@ -489,6 +508,28 @@ public interface Type {
      * @return Original type
      */
     Type originalType();
+  }
+
+  interface TypeParameterType extends Type {
+
+    /**
+     * The set of constraint types for this type parameter.
+     *
+     * <p>For example, if we're constrained by a class type, then a generic specialization will
+     * require the type argument to be assignment-compatible with that class type.
+     *
+     * @return list of constraint types
+     * @see <a href="http://docwiki.embarcadero.com/RADStudio/Rio/en/Constraints_in_Generics">
+     *     Constraints in Generics</a>
+     */
+    List<Type> constraints();
+
+    /**
+     * Adds information from the full type parameter declaration.
+     *
+     * @param fullType Type representing the full type declaration
+     */
+    void setFullType(TypeParameterType fullType);
   }
 
   /**

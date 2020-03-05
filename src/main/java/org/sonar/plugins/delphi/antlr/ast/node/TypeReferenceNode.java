@@ -30,7 +30,7 @@ public final class TypeReferenceNode extends TypeNode implements Qualifiable {
     return getNameNode().getLastName().getNameDeclaration();
   }
 
-  private NameReferenceNode getNameNode() {
+  public NameReferenceNode getNameNode() {
     return ((NameReferenceNode) jjtGetChild(0));
   }
 

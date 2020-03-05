@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 
-public class DelphiProceduralType extends DelphiType implements ProceduralType {
+public class DelphiProceduralType extends DelphiGenerifiableType implements ProceduralType {
   private final ProceduralKind kind;
   private final ImmutableList<Type> parameterTypes;
   private final Type returnType;
@@ -68,5 +68,15 @@ public class DelphiProceduralType extends DelphiType implements ProceduralType {
   @Override
   public boolean isMethod() {
     return kind == ProceduralKind.METHOD;
+  }
+
+  @Override
+  public DelphiGenerifiableType doSpecialization(TypeSpecializationContext context) {
+    return new DelphiProceduralType(
+        kind,
+        parameterTypes.stream()
+            .map(type -> type.specialize(context))
+            .collect(Collectors.toUnmodifiableList()),
+        returnType.specialize(context));
   }
 }

@@ -36,7 +36,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParamet
 import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
-import org.sonar.plugins.delphi.antlr.ast.node.VarNameDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
 import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
@@ -66,7 +66,7 @@ public class UnusedArgumentsRule extends AbstractDelphiRule {
     return super.visit(method, data);
   }
 
-  private static boolean isUnusedArgument(MethodNode method, VarNameDeclarationNode argument) {
+  private static boolean isUnusedArgument(MethodNode method, NameDeclarationNode argument) {
     if (!argument.getUsages().isEmpty()) {
       return false;
     }

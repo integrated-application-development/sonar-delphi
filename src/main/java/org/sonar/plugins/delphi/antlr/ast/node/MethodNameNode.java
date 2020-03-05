@@ -12,6 +12,7 @@ import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 
 public final class MethodNameNode extends DelphiNode implements Qualifiable {
+  private QualifiedName qualifiedName;
   private MethodNameDeclaration methodNameDeclaration;
   private List<NameOccurrence> usages;
 
@@ -32,13 +33,21 @@ public final class MethodNameNode extends DelphiNode implements Qualifiable {
     return getFirstChildOfType(NameReferenceNode.class);
   }
 
-  public QualifiedNameDeclarationNode getNameDeclarationNode() {
-    return getFirstChildOfType(QualifiedNameDeclarationNode.class);
+  public SimpleNameDeclarationNode getNameDeclarationNode() {
+    return getFirstChildOfType(SimpleNameDeclarationNode.class);
   }
 
   @Override
   public QualifiedName getQualifiedName() {
-    return ((Qualifiable) jjtGetChild(0)).getQualifiedName();
+    if (qualifiedName == null) {
+      NameReferenceNode nameReference = getNameReferenceNode();
+      if (nameReference != null) {
+        qualifiedName = nameReference.getQualifiedName();
+      } else {
+        qualifiedName = QualifiedName.of(getNameDeclarationNode().getImage());
+      }
+    }
+    return qualifiedName;
   }
 
   @Nullable
@@ -48,6 +57,26 @@ public final class MethodNameNode extends DelphiNode implements Qualifiable {
     }
 
     return methodNameDeclaration;
+  }
+
+  public String simpleNameWithTypeParameters() {
+    NameDeclarationNode declarationNode = getNameDeclarationNode();
+    NameReferenceNode referenceNode = getNameReferenceNode();
+    String typeParameters = "";
+
+    if (declarationNode != null) {
+      GenericDefinitionNode genericDefinition = declarationNode.getGenericDefinition();
+      if (genericDefinition != null) {
+        typeParameters = genericDefinition.getImage();
+      }
+    } else if (referenceNode != null) {
+      GenericArgumentsNode genericArguments = referenceNode.getLastName().getGenericArguments();
+      if (genericArguments != null) {
+        typeParameters = genericArguments.getImage();
+      }
+    }
+
+    return simpleName() + typeParameters;
   }
 
   @Override

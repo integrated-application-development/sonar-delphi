@@ -50,6 +50,8 @@ public interface DelphiScope extends Scope {
 
   List<NameOccurrence> getOccurrencesFor(NameDeclaration declaration);
 
+  Set<NameDeclaration> getAllDeclarations();
+
   <T extends NameDeclaration> Set<T> getDeclarationSet(Class<T> clazz);
 
   default Set<UnitNameDeclaration> getUnitDeclarations() {

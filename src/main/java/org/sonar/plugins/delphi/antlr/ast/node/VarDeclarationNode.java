@@ -20,8 +20,8 @@ public final class VarDeclarationNode extends DelphiNode implements Typed {
     return visitor.visit(this, data);
   }
 
-  public VarNameDeclarationListNode getIdentifierList() {
-    return (VarNameDeclarationListNode) jjtGetChild(0);
+  public NameDeclarationListNode getNameDeclarationList() {
+    return (NameDeclarationListNode) jjtGetChild(0);
   }
 
   public VarSectionNode getVarSection() {

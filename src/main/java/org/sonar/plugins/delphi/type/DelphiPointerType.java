@@ -40,6 +40,14 @@ public abstract class DelphiPointerType extends DelphiType implements PointerTyp
     return dereferencedType().isUntyped();
   }
 
+  @Override
+  public Type specialize(TypeSpecializationContext context) {
+    if (dereferencedType().isTypeParameter()) {
+      return pointerTo(dereferencedType().specialize(context));
+    }
+    return this;
+  }
+
   private static class MutableDelphiPointerType extends DelphiPointerType {
     private Type dereferencedType;
 

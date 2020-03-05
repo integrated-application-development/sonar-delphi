@@ -14,7 +14,7 @@ type
   end;
 
   MyImplementation = class(TObject, MyInterface)
-      procedure Implementation1(Arg: String); overload;
+    procedure Implementation1(Arg: String); overload;
     procedure Implementation1(Arg: Double); overload;
     procedure MyInterface.Func1 = Implementation1;
 

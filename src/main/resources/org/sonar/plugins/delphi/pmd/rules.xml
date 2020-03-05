@@ -1223,7 +1223,7 @@ Result := 123;; // Noncompliant
       <property name="builtinXPath">
         <value>
           <![CDATA[
-            //TypeDeclarationNode[@Object = 'true']/QualifiedNameDeclarationNode
+            //TypeDeclarationNode[@Object = 'true']/SimpleNameDeclarationNode
           ]]>
         </value>
       </property>

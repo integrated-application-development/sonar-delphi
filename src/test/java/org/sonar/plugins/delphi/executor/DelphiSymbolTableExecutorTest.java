@@ -421,6 +421,96 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testRegularMethodPreferredOverImplicitSpecializations() {
+    execute("generics/RegularMethodPreferredOverImplicitSpecialization.pas");
+    verifyUsages(12, 20, reference(12, 26));
+    verifyUsages(12, 15, reference(22, 2));
+    verifyUsages(13, 15, reference(21, 2));
+  }
+
+  @Test
+  public void testGenericAssignmentCompatibility() {
+    execute("generics/AssignmentCompatibility.pas");
+    verifyUsages(14, 15, reference(27, 2));
+    verifyUsages(15, 15, reference(28, 2));
+    verifyUsages(16, 15, reference(29, 2));
+    verifyUsages(17, 15, reference(30, 2));
+  }
+
+  @Test
+  public void testGenericMethodInterfaceNameResolution() {
+    execute("generics/MethodInterfaceNameResolution.pas");
+    verifyUsages(8, 2, reference(18, 10));
+    verifyUsages(9, 15, reference(18, 18));
+    verifyUsages(12, 2, reference(23, 10));
+    verifyUsages(13, 15, reference(23, 15));
+  }
+
+  @Test
+  public void testGenericSameNameTypes() {
+    execute("generics/SameNameType.pas");
+    verifyUsages(8, 2, reference(20, 15));
+    verifyUsages(9, 2, reference(21, 16));
+    verifyUsages(10, 2, reference(22, 18));
+  }
+
+  @Test
+  public void testGenericParameterizedMethods() {
+    execute("generics/ParameterizedMethod.pas");
+    verifyUsages(
+        13,
+        14,
+        reference(18, 15),
+        reference(31, 2),
+        reference(32, 2),
+        reference(33, 2),
+        reference(34, 2));
+  }
+
+  @Test
+  public void testGenericImplicitSpecializations() {
+    execute("generics/ImplicitSpecialization.pas");
+    verifyUsages(16, 14, reference(21, 20), reference(28, 2), reference(29, 2), reference(30, 2));
+  }
+
+  @Test
+  public void testGenericConstraints() {
+    execute("generics/Constraint.pas");
+    verifyUsages(13, 14, reference(22, 25), reference(55, 8));
+  }
+
+  @Test
+  public void testGenericTypeParameterNameDeclarations() {
+    execute("generics/TypeParameterNameDeclaration.pas");
+    verifyUsages(
+        8,
+        7,
+        reference(10, 22),
+        reference(11, 19),
+        reference(12, 18),
+        reference(15, 49),
+        reference(15, 53),
+        reference(17, 45),
+        reference(19, 31),
+        reference(24, 14),
+        reference(24, 35),
+        reference(24, 39));
+    verifyUsages(14, 13, reference(14, 27));
+    verifyUsages(15, 22, reference(15, 41));
+    verifyUsages(16, 11, reference(17, 31), reference(17, 54), reference(17, 58));
+  }
+
+  @Test
+  public void testGenericTypeParameterConflicts() {
+    execute("generics/TypeParameterNameConflict.pas");
+    verifyUsages(9, 14, reference(27, 8));
+    verifyUsages(13, 14, reference(28, 6), reference(29, 9));
+    verifyUsages(16, 11, reference(17, 11), reference(23, 19));
+    verifyUsages(
+        18, 19, reference(18, 33), reference(23, 27), reference(23, 35), reference(25, 10));
+  }
+
+  @Test
   public void testSimpleMethodResolutionClause() {
     execute("methodResolutionClauses/Simple.pas");
     verifyUsages(9, 14, reference(14, 26));

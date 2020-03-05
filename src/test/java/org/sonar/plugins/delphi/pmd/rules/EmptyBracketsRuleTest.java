@@ -89,4 +89,21 @@ public class EmptyBracketsRuleTest extends BasePmdRuleTest {
 
     assertIssues().isEmpty();
   }
+
+  @Test
+  public void testInvocationOfProcVarArrayShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TProc = procedure;")
+            .appendDecl("  TProcArray = array of TProc;")
+            .appendImpl("procedure Test(ProcArray: TProcArray);")
+            .appendImpl("begin")
+            .appendImpl("  ProcArray[0]();")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
+  }
 }

@@ -20,7 +20,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.node.FieldDeclarationNode;
-import org.sonar.plugins.delphi.antlr.ast.node.VarNameDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 import org.sonar.plugins.delphi.utils.NameConventionUtils;
 
 public class FieldNameRule extends AbstractDelphiRule {
@@ -29,7 +29,7 @@ public class FieldNameRule extends AbstractDelphiRule {
   @Override
   public RuleContext visit(FieldDeclarationNode field, RuleContext data) {
     if (field.isPrivate() || field.isProtected()) {
-      for (VarNameDeclarationNode identifier : field.getIdentifierList().getIdentifiers()) {
+      for (NameDeclarationNode identifier : field.getDeclarationList().getDeclarations()) {
         if (!NameConventionUtils.compliesWithPrefix(identifier.getImage(), FIELD_PREFIX)) {
           addViolation(data, identifier);
         }

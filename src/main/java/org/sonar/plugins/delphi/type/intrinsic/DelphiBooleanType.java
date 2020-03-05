@@ -5,7 +5,7 @@ import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type.BooleanType;
 
 @Immutable
-public class DelphiBooleanType extends DelphiType implements BooleanType {
+class DelphiBooleanType extends DelphiType implements BooleanType {
   private final int size;
 
   public DelphiBooleanType(String image, int size) {

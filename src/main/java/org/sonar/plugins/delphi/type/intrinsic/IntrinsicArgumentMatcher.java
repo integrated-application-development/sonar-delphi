@@ -23,7 +23,7 @@ public class IntrinsicArgumentMatcher extends DelphiType implements ImmutableTyp
 
   public static final ImmutableType ANY_ORDINAL =
       new IntrinsicArgumentMatcher(
-          "<Ordinal>",
+          "<ordinal>",
           type -> type.isInteger() || type.isBoolean() || type.isEnum() || type.isChar());
 
   @Immutable

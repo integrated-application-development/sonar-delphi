@@ -38,7 +38,7 @@ public final class ArrayTypeNode extends TypeNode {
     Node parent = jjtGetParent();
     String image = null;
     if (parent instanceof TypeDeclarationNode) {
-      image = ((TypeDeclarationNode) parent).getTypeNameNode().simpleName();
+      image = ((TypeDeclarationNode) parent).fullyQualifiedName();
     }
 
     Type elementType = getElementTypeNode().getType();
