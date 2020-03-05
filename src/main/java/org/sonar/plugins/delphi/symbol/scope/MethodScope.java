@@ -3,18 +3,20 @@ package org.sonar.plugins.delphi.symbol.scope;
 import javax.annotation.Nullable;
 
 public class MethodScope extends AbstractDelphiScope {
-
   private final String name;
-  private final DelphiScope typeScope;
+  private DelphiScope typeScope;
 
-  public MethodScope(String name, @Nullable DelphiScope typeScope) {
+  public MethodScope(String name) {
     this.name = name;
-    this.typeScope = typeScope;
   }
 
   @Nullable
   public DelphiScope getTypeScope() {
     return typeScope;
+  }
+
+  public void setTypeScope(DelphiScope typeScope) {
+    this.typeScope = typeScope;
   }
 
   @Override

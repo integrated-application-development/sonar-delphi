@@ -21,8 +21,8 @@ public final class ConstDeclarationNode extends DelphiNode implements Typed {
     return visitor.visit(this, data);
   }
 
-  public VarNameDeclarationNode getNameDeclarationNode() {
-    return (VarNameDeclarationNode) jjtGetChild(0);
+  public NameDeclarationNode getNameDeclarationNode() {
+    return (NameDeclarationNode) jjtGetChild(0);
   }
 
   public ExpressionNode getExpression() {

@@ -8,6 +8,7 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.SetMultimap;
 import com.google.common.collect.TreeMultimap;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,7 +20,9 @@ import net.sourceforge.pmd.lang.symboltable.Scope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
+import org.sonar.plugins.delphi.symbol.declaration.AbstractDelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.GenerifiableDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
@@ -51,7 +54,7 @@ class AbstractDelphiScope implements DelphiScope {
 
   @Override
   public void addDeclaration(NameDeclaration declaration) {
-    DelphiNameDeclaration delphiDeclaration = (DelphiNameDeclaration) declaration;
+    DelphiNameDeclaration delphiDeclaration = getDeclaration(declaration);
     checkForwardTypeDeclarations(declaration);
     checkForDuplicatedNameDeclaration(declaration);
     declarationSet.add(declaration);
@@ -66,8 +69,14 @@ class AbstractDelphiScope implements DelphiScope {
       return;
     }
 
-    Type type = ((TypeNameDeclaration) typeDeclaration).getType();
-    if (!type.isStruct()) {
+    TypeNameDeclaration fullTypeDeclaration = (TypeNameDeclaration) typeDeclaration;
+    if (fullTypeDeclaration.isGeneric()) {
+      // Generic types cannot be forward-declared
+      return;
+    }
+
+    Type fullType = fullTypeDeclaration.getType();
+    if (!fullType.isStruct()) {
       return;
     }
 
@@ -77,9 +86,16 @@ class AbstractDelphiScope implements DelphiScope {
             declaration -> {
               if (declaration instanceof TypeNameDeclaration) {
                 TypeNameDeclaration forwardDeclaration = (TypeNameDeclaration) declaration;
+                if (forwardDeclaration.isGeneric()) {
+                  // Generic types cannot be forward-declared
+                  return false;
+                }
+
                 Type forwardType = forwardDeclaration.getType();
                 if (forwardType.isStruct()) {
-                  ((StructType) forwardType).setFullType((StructType) type);
+                  ((StructType) forwardType).setFullType((StructType) fullType);
+                  fullTypeDeclaration.setForwardDeclaration(forwardDeclaration);
+                  forwardDeclaration.setIsForwardDeclaration();
                   return true;
                 }
               }
@@ -88,13 +104,40 @@ class AbstractDelphiScope implements DelphiScope {
   }
 
   private void checkForDuplicatedNameDeclaration(NameDeclaration declaration) {
-    if (declaration instanceof Invocable) {
+    if (!declarationsByName.containsKey(declaration.getName())) {
       return;
     }
 
-    if (declarationsByName.containsKey(declaration.getName())) {
-      throw new RuntimeException(declaration + " is already in the symbol table");
+    if (isAcceptableDuplicate(declaration)) {
+      return;
     }
+
+    throw new RuntimeException(declaration + " is already in the symbol table");
+  }
+
+  private boolean isAcceptableDuplicate(NameDeclaration declaration) {
+    if (declaration instanceof Invocable) {
+      return true;
+    }
+
+    Set<DelphiNameDeclaration> duplicates = declarationsByName.get(declaration.getImage());
+
+    if (declaration instanceof GenerifiableDeclaration) {
+      GenerifiableDeclaration generic = (GenerifiableDeclaration) declaration;
+      if (generic.isGeneric()) {
+        int typeParamSize = generic.getTypeParameters().size();
+        return duplicates.stream()
+            .filter(GenerifiableDeclaration.class::isInstance)
+            .map(GenerifiableDeclaration.class::cast)
+            .allMatch(duplicate -> duplicate.getTypeParameters().size() != typeParamSize);
+      }
+    }
+
+    return duplicates.stream()
+        .allMatch(
+            duplicate ->
+                duplicate instanceof GenerifiableDeclaration
+                    && ((GenerifiableDeclaration) duplicate).isGeneric());
   }
 
   private void handleEnumDeclaration(NameDeclaration declaration) {
@@ -117,6 +160,11 @@ class AbstractDelphiScope implements DelphiScope {
     }
   }
 
+  @Override
+  public Set<NameDeclaration> getAllDeclarations() {
+    return declarationSet;
+  }
+
   @SuppressWarnings("unchecked")
   @Override
   public <T extends NameDeclaration> Set<T> getDeclarationSet(Class<T> clazz) {
@@ -125,14 +173,15 @@ class AbstractDelphiScope implements DelphiScope {
 
   @Override
   public Set<NameDeclaration> addNameOccurrence(@NotNull NameOccurrence occurrence) {
-    DelphiNameDeclaration declaration = ((DelphiNameOccurrence) occurrence).getNameDeclaration();
+    DelphiNameOccurrence delphiOccurrence = (DelphiNameOccurrence) occurrence;
+    DelphiNameDeclaration declaration = getDeclaration(delphiOccurrence.getNameDeclaration());
     occurrencesByDeclaration.put(declaration, occurrence);
     return Set.of(declaration);
   }
 
   @Override
   public List<NameOccurrence> getOccurrencesFor(NameDeclaration declaration) {
-    return occurrencesByDeclaration.get(declaration);
+    return occurrencesByDeclaration.get(getDeclaration(declaration));
   }
 
   @Override
@@ -191,9 +240,13 @@ class AbstractDelphiScope implements DelphiScope {
 
   @Override
   public Set<NameDeclaration> findDeclaration(DelphiNameOccurrence occurrence) {
-    Set<NameDeclaration> result = new HashSet<>(declarationsByName.get(occurrence.getImage()));
+    Set<NameDeclaration> result = Collections.emptySet();
 
-    findMethodOverloads(occurrence, result);
+    Set<DelphiNameDeclaration> found = declarationsByName.get(occurrence.getImage());
+    if (!found.isEmpty()) {
+      result = new HashSet<>(found);
+      findMethodOverloads(occurrence, result);
+    }
 
     if (result.isEmpty()) {
       result = findDeclarationInsideEnumScopes(occurrence);
@@ -242,7 +295,7 @@ class AbstractDelphiScope implements DelphiScope {
 
   @Override
   public <T extends NameDeclaration> Map<T, List<NameOccurrence>> getDeclarations(Class<T> clazz) {
-    checkArgument(DelphiNameDeclaration.class.isAssignableFrom(clazz));
+    checkArgument(AbstractDelphiNameDeclaration.class.isAssignableFrom(clazz));
     Map<T, List<NameOccurrence>> result = new HashMap<>();
     for (T declaration : getDeclarationSet(clazz)) {
       result.put(declaration, occurrencesByDeclaration.get(declaration));
@@ -281,5 +334,13 @@ class AbstractDelphiScope implements DelphiScope {
       result.append(',');
     }
     return result.length() == 0 ? "" : result.toString().substring(0, result.length() - 1);
+  }
+
+  private static DelphiNameDeclaration getDeclaration(NameDeclaration declaration) {
+    DelphiNameDeclaration result = (DelphiNameDeclaration) declaration;
+    while (result.isSpecializedDeclaration()) {
+      result = result.getGenericDeclaration();
+    }
+    return result;
   }
 }

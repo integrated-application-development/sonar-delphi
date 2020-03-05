@@ -217,6 +217,33 @@ public class MemoryManagementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  public void testProceduralHardCastShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  IBar = interface")
+            .appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']")
+            .appendDecl("    procedure Foo;")
+            .appendDecl("  end;")
+            .appendDecl("  TBar = procedure;")
+            .appendDecl("  TFoo = class(TObject, IBar)")
+            .appendDecl("    procedure Baz(Bar: IBar);")
+            .appendDecl("  end;")
+            .appendImpl("procedure Test;")
+            .appendImpl("var")
+            .appendImpl("  Bar: TBar;")
+            .appendImpl("begin")
+            .appendImpl("  Bar := TBar(TFoo.Create);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .hasSize(1)
+        .areExactly(1, ruleKeyAtLine("MemoryManagementRule", builder.getOffset() + 5));
+  }
+
+  @Test
   public void testNonConstructorsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()

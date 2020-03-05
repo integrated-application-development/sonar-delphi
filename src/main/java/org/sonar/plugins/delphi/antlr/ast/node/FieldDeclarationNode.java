@@ -30,8 +30,8 @@ public final class FieldDeclarationNode extends DelphiNode implements Typed, Vis
     return VisibilityType.PUBLIC;
   }
 
-  public VarNameDeclarationListNode getIdentifierList() {
-    return (VarNameDeclarationListNode) jjtGetChild(0);
+  public NameDeclarationListNode getDeclarationList() {
+    return (NameDeclarationListNode) jjtGetChild(0);
   }
 
   public TypeNode getTypeNode() {

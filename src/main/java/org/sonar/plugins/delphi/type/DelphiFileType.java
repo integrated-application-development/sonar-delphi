@@ -21,6 +21,14 @@ public abstract class DelphiFileType extends DelphiType implements FileType {
     return true;
   }
 
+  @Override
+  public Type specialize(TypeSpecializationContext context) {
+    if (fileType().isTypeParameter()) {
+      return fileOf(fileType().specialize(context));
+    }
+    return this;
+  }
+
   private static class MutableDelphiFileType extends DelphiFileType {
     private final Type fileType;
 

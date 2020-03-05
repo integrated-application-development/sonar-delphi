@@ -6,6 +6,7 @@ import org.assertj.core.util.VisibleForTesting;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.TypeSpecializationContext;
 import org.sonar.plugins.delphi.type.Typed;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicMethodData.IntrinsicMethodParameterData;
 
@@ -72,6 +73,16 @@ public final class ParameterDeclaration implements Typed, Comparable<ParameterDe
 
   public boolean isConst() {
     return isConst;
+  }
+
+  public ParameterDeclaration specialize(TypeSpecializationContext context) {
+    ParameterDeclaration specialized =
+        new ParameterDeclaration(
+            image, type.specialize(context), hasDefaultValue, isOut, isVar, isConst);
+    if (this.equals(specialized)) {
+      return this;
+    }
+    return specialized;
   }
 
   @Override

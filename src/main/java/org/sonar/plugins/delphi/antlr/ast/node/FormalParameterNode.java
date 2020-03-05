@@ -30,12 +30,12 @@ public final class FormalParameterNode extends DelphiNode implements Typed {
 
   public List<FormalParameter> getParameters() {
     if (parameters == null) {
-      VarNameDeclarationListNode identifierList = (VarNameDeclarationListNode) jjtGetChild(0);
+      NameDeclarationListNode identifierList = (NameDeclarationListNode) jjtGetChild(0);
       Type type = getType();
       ExpressionNode defaultValue = getDefaultValue();
 
       parameters =
-          identifierList.getIdentifiers().stream()
+          identifierList.getDeclarations().stream()
               .map(
                   identifier ->
                       new FormalParameter(
@@ -75,7 +75,7 @@ public final class FormalParameterNode extends DelphiNode implements Typed {
   }
 
   public static class FormalParameter implements Typed {
-    private final VarNameDeclarationNode node;
+    private final NameDeclarationNode node;
     private final Type type;
     private final ExpressionNode defaultValue;
     private final boolean isOut;
@@ -83,7 +83,7 @@ public final class FormalParameterNode extends DelphiNode implements Typed {
     private final boolean isConst;
 
     private FormalParameter(
-        VarNameDeclarationNode node,
+        NameDeclarationNode node,
         Type type,
         ExpressionNode defaultValue,
         boolean isOut,
@@ -97,7 +97,7 @@ public final class FormalParameterNode extends DelphiNode implements Typed {
       this.isConst = isConst;
     }
 
-    public VarNameDeclarationNode getNode() {
+    public NameDeclarationNode getNode() {
       return node;
     }
 

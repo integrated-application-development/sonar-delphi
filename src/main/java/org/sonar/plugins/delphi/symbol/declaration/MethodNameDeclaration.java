@@ -5,6 +5,7 @@ import static java.util.Collections.emptySet;
 
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -13,20 +14,24 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
+import org.sonar.plugins.delphi.antlr.ast.node.GenericDefinitionNode.TypeParameter;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodHeadingNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodHeadingNode.MethodKind;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodNameNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
+import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.SimpleNameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.Visibility;
 import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.DelphiProceduralType;
 import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.Type.ProceduralType;
+import org.sonar.plugins.delphi.type.TypeSpecializationContext;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicMethodData;
 
-public final class MethodNameDeclaration extends DelphiNameDeclaration
-    implements TypedDeclaration, Invocable, Visibility {
+public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
+    implements GenerifiableDeclaration, TypedDeclaration, Invocable, Visibility {
   private final String qualifiedName;
   private final List<ParameterDeclaration> parameters;
   private final Type returnType;
@@ -35,9 +40,10 @@ public final class MethodNameDeclaration extends DelphiNameDeclaration
   private final boolean isCallable;
   private final boolean isVariadic;
   private final MethodKind methodKind;
-  private final ProceduralType type;
+  private final Type methodType;
   private final TypeNameDeclaration typeDeclaration;
   private final VisibilityType visibility;
+  private final List<TypedDeclaration> typeParameters;
 
   private int hashCode;
 
@@ -51,9 +57,10 @@ public final class MethodNameDeclaration extends DelphiNameDeclaration
       boolean isCallable,
       boolean isVariadic,
       MethodKind methodKind,
-      ProceduralType type,
+      Type methodType,
       @Nullable TypeNameDeclaration typeDeclaration,
-      VisibilityType visibility) {
+      VisibilityType visibility,
+      List<TypedDeclaration> typeParameters) {
     super(location);
     this.qualifiedName = qualifiedName;
     this.parameters = parameters;
@@ -62,10 +69,11 @@ public final class MethodNameDeclaration extends DelphiNameDeclaration
     this.isClassInvocable = isClassInvocable;
     this.isCallable = isCallable;
     this.methodKind = methodKind;
-    this.type = type;
+    this.methodType = methodType;
     this.typeDeclaration = typeDeclaration;
     this.visibility = visibility;
     this.isVariadic = isVariadic;
+    this.typeParameters = typeParameters;
   }
 
   public static MethodNameDeclaration create(SymbolicNode node, IntrinsicMethodData data) {
@@ -83,17 +91,20 @@ public final class MethodNameDeclaration extends DelphiNameDeclaration
         data.getMethodKind(),
         data.createMethodType(),
         null,
-        VisibilityType.PUBLIC);
+        VisibilityType.PUBLIC,
+        Collections.emptyList());
   }
 
   public static MethodNameDeclaration create(MethodNode method) {
-    DelphiNode nameNode = method.getMethodNameNode();
-    SymbolicNode location = new SymbolicNode(nameNode, nameNode.getScope());
+    MethodNameNode nameNode = method.getMethodNameNode();
+    SimpleNameDeclarationNode declarationNode = nameNode.getNameDeclarationNode();
+    DelphiNode location = (declarationNode == null) ? nameNode : declarationNode.getIdentifier();
+
     boolean isCallable =
         !((method.isDestructor() || method.isConstructor()) && method.isClassMethod());
 
     return new MethodNameDeclaration(
-        location,
+        new SymbolicNode(location),
         method.fullyQualifiedName(),
         extractParameterDeclarations(method),
         method.getReturnType(),
@@ -104,7 +115,8 @@ public final class MethodNameDeclaration extends DelphiNameDeclaration
         method.getMethodKind(),
         DelphiProceduralType.method(extractParameterTypes(method), method.getReturnType()),
         method.getTypeDeclaration(),
-        method.getVisibility());
+        method.getVisibility(),
+        extractGenericTypeParameters(method));
   }
 
   private static List<ParameterDeclaration> extractParameterDeclarations(MethodNode method) {
@@ -130,6 +142,19 @@ public final class MethodNameDeclaration extends DelphiNameDeclaration
       }
     }
     return builder.build();
+  }
+
+  private static List<TypedDeclaration> extractGenericTypeParameters(MethodNode method) {
+    MethodNameNode methodName = method.getMethodHeading().getMethodNameNode();
+    NameDeclarationNode declaration = methodName.getNameDeclarationNode();
+    if (declaration != null) {
+      return declaration.getTypeParameters().stream()
+          .map(TypeParameter::getLocation)
+          .map(NameDeclarationNode::getNameDeclaration)
+          .map(TypedDeclaration.class::cast)
+          .collect(Collectors.toUnmodifiableList());
+    }
+    return Collections.emptyList();
   }
 
   @Override
@@ -159,7 +184,7 @@ public final class MethodNameDeclaration extends DelphiNameDeclaration
   @Override
   @NotNull
   public Type getType() {
-    return type;
+    return methodType;
   }
 
   public String fullyQualifiedName() {
@@ -202,6 +227,34 @@ public final class MethodNameDeclaration extends DelphiNameDeclaration
   }
 
   @Override
+  public List<TypedDeclaration> getTypeParameters() {
+    return typeParameters;
+  }
+
+  @Override
+  public MethodNameDeclaration doSpecialization(TypeSpecializationContext context) {
+    return new MethodNameDeclaration(
+        getNode(),
+        qualifiedName,
+        parameters.stream()
+            .map(parameter -> parameter.specialize(context))
+            .collect(Collectors.toUnmodifiableList()),
+        returnType.specialize(context),
+        directives,
+        isClassInvocable,
+        isCallable,
+        isVariadic,
+        methodKind,
+        methodType.specialize(context),
+        typeDeclaration,
+        visibility,
+        typeParameters.stream()
+            .map(parameter -> parameter.specialize(context))
+            .map(TypedDeclaration.class::cast)
+            .collect(Collectors.toUnmodifiableList()));
+  }
+
+  @Override
   public boolean equals(Object other) {
     if (super.equals(other)) {
       MethodNameDeclaration that = (MethodNameDeclaration) other;
@@ -210,7 +263,8 @@ public final class MethodNameDeclaration extends DelphiNameDeclaration
           && returnType.equals(that.returnType)
           && directives.equals(that.directives)
           && isCallable == that.isCallable
-          && isClassInvocable == that.isClassInvocable;
+          && isClassInvocable == that.isClassInvocable
+          && typeParameters.equals(that.typeParameters);
     }
     return false;
   }
@@ -226,7 +280,8 @@ public final class MethodNameDeclaration extends DelphiNameDeclaration
               returnType,
               directives,
               isCallable,
-              isClassInvocable);
+              isClassInvocable,
+              typeParameters);
     }
     return hashCode;
   }
@@ -245,6 +300,7 @@ public final class MethodNameDeclaration extends DelphiNameDeclaration
               .compareTrueFirst(isClassInvocable, that.isClassInvocable)
               .compare(returnType.getImage(), that.returnType.getImage())
               .compare(qualifiedName, that.qualifiedName, String.CASE_INSENSITIVE_ORDER)
+              .compare(typeParameters.size(), that.typeParameters.size())
               .result();
 
       if (result != 0) {

@@ -1,12 +1,12 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
-import org.sonar.plugins.delphi.antlr.ast.node.VarNameDeclarationListNode;
+import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationListNode;
 
 public class MultipleVariableDeclarationRule extends AbstractDelphiRule {
   @Override
-  public RuleContext visit(VarNameDeclarationListNode declarationList, RuleContext data) {
-    if (declarationList.getIdentifiers().size() > 1) {
+  public RuleContext visit(NameDeclarationListNode declarationList, RuleContext data) {
+    if (declarationList.getDeclarations().size() > 1) {
       addViolation(data, declarationList);
     }
     return super.visit(declarationList, data);

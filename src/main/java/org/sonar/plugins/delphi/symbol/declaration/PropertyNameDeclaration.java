@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyNode;
+import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.TypeSpecializationContext;
 
-public final class PropertyNameDeclaration extends DelphiNameDeclaration
+public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
     implements TypedDeclaration, Invocable {
 
   private final List<ParameterDeclaration> parameters;
@@ -18,15 +21,45 @@ public final class PropertyNameDeclaration extends DelphiNameDeclaration
   private final Type type;
   private int hashCode;
 
-  public PropertyNameDeclaration(PropertyNode node, Type type) {
-    super(node.getPropertyName());
-    this.parameters =
-        node.getParameters().stream()
-            .map(ParameterDeclaration::create)
-            .collect(Collectors.toUnmodifiableList());
-    this.isClassInvocable = node.isClassProperty();
-    this.isDefaultProperty = node.isDefaultProperty();
+  public PropertyNameDeclaration(
+      PropertyNode node, @Nullable PropertyNameDeclaration concreteDeclaration) {
+    this(
+        new SymbolicNode(node.getPropertyName()),
+        extractParameters(node, concreteDeclaration),
+        node.isClassProperty(),
+        node.isDefaultProperty(),
+        extractType(node, concreteDeclaration));
+  }
+
+  private PropertyNameDeclaration(
+      SymbolicNode location,
+      List<ParameterDeclaration> parameters,
+      boolean isClassInvocable,
+      boolean isDefaultProperty,
+      Type type) {
+    super(location);
+    this.parameters = parameters;
+    this.isClassInvocable = isClassInvocable;
+    this.isDefaultProperty = isDefaultProperty;
     this.type = type;
+  }
+
+  private static List<ParameterDeclaration> extractParameters(
+      PropertyNode node, @Nullable PropertyNameDeclaration concreteDeclaration) {
+    if (concreteDeclaration != null) {
+      return concreteDeclaration.getParameters();
+    }
+    return node.getParameters().stream()
+        .map(ParameterDeclaration::create)
+        .collect(Collectors.toUnmodifiableList());
+  }
+
+  private static Type extractType(
+      PropertyNode node, @Nullable PropertyNameDeclaration concreteDeclaration) {
+    if (concreteDeclaration != null) {
+      return concreteDeclaration.getType();
+    }
+    return node.getType();
   }
 
   @Override
@@ -61,6 +94,18 @@ public final class PropertyNameDeclaration extends DelphiNameDeclaration
 
   public boolean isDefaultProperty() {
     return isDefaultProperty;
+  }
+
+  @Override
+  protected DelphiNameDeclaration doSpecialization(TypeSpecializationContext context) {
+    return new PropertyNameDeclaration(
+        getNode(),
+        parameters.stream()
+            .map(parameter -> parameter.specialize(context))
+            .collect(Collectors.toUnmodifiableList()),
+        isClassInvocable,
+        isDefaultProperty,
+        type.specialize(context));
   }
 
   @Override

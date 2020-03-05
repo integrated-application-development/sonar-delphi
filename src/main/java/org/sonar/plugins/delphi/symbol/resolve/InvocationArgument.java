@@ -17,11 +17,11 @@ class InvocationArgument implements Typed {
 
   // Null if the expression was not a PrimaryExpression.
   // This is important because method references can only be bare PrimaryExpressions.
-  @Nullable private NameResolver resolver;
+  @Nullable private DefaultNameResolver resolver;
 
   public InvocationArgument(ExpressionNode expression) {
     if (expression instanceof PrimaryExpressionNode) {
-      resolver = new NameResolver();
+      resolver = new DefaultNameResolver();
       resolver.readPrimaryExpression((PrimaryExpressionNode) expression);
       type = resolver.getApproximateType();
     }
@@ -49,7 +49,7 @@ class InvocationArgument implements Typed {
   public boolean isMethodReference(Type parameterType) {
     return resolver != null
         && !resolver.isExplicitInvocation()
-        && type.isMethod()
+        && type.isProcedural()
         && parameterType.isProcedural();
   }
 
@@ -57,12 +57,13 @@ class InvocationArgument implements Typed {
     checkArgument(parameterType instanceof ProceduralType);
     checkNotNull(resolver);
 
-    NameResolver clone = new NameResolver(resolver);
+    DefaultNameResolver clone = new DefaultNameResolver(resolver);
     disambiguateMethodReference(clone, parameterType);
     return resolver.getApproximateType();
   }
 
-  private static void disambiguateMethodReference(NameResolver resolver, Type parameterType) {
+  private static void disambiguateMethodReference(
+      DefaultNameResolver resolver, Type parameterType) {
     resolver.disambiguateMethodReference((ProceduralType) parameterType);
     resolver.checkAmbiguity();
   }

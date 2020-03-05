@@ -6,7 +6,7 @@ import org.sonar.plugins.delphi.symbol.Qualifiable;
 import org.sonar.plugins.delphi.symbol.QualifiedName;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 
-public abstract class QualifiedDelphiNameDeclaration extends DelphiNameDeclaration
+public abstract class QualifiedDelphiNameDeclaration extends AbstractDelphiNameDeclaration
     implements Qualifiable {
   private final QualifiedName qualifiedName;
 

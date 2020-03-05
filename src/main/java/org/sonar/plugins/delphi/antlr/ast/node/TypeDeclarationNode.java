@@ -36,8 +36,8 @@ public final class TypeDeclarationNode extends DelphiNode implements Typed, Qual
     return simpleName();
   }
 
-  public QualifiedNameDeclarationNode getTypeNameNode() {
-    return (QualifiedNameDeclarationNode) jjtGetChild(0);
+  public SimpleNameDeclarationNode getTypeNameNode() {
+    return (SimpleNameDeclarationNode) jjtGetChild(0);
   }
 
   public TypeNode getTypeNode() {
@@ -51,7 +51,7 @@ public final class TypeDeclarationNode extends DelphiNode implements Typed, Qual
 
   @Override
   public String simpleName() {
-    return getTypeNameNode().simpleName();
+    return getTypeNameNode().getImage();
   }
 
   @Override
@@ -75,7 +75,7 @@ public final class TypeDeclarationNode extends DelphiNode implements Typed, Qual
     Deque<String> names = new ArrayDeque<>();
 
     while (node != null) {
-      names.addFirst(node.getTypeNameNode().simpleName());
+      names.addFirst(node.getTypeNameNode().getImage());
       node = node.getFirstParentOfType(TypeDeclarationNode.class);
     }
 

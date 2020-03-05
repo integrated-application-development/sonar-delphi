@@ -40,6 +40,6 @@ public class EmptyBracketsRule extends AbstractDelphiRule {
       Type type = ((Typed) previous).getType();
       return type.isProcedural() && !type.isMethod();
     }
-    return false;
+    return true;
   }
 }

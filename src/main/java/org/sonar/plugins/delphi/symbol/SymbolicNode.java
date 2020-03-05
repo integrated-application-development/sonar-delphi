@@ -15,6 +15,10 @@ public final class SymbolicNode extends AbstractNode implements ScopedNode, Inde
   private final DelphiScope scope;
   private final int tokenIndex;
 
+  public SymbolicNode(DelphiNode node) {
+    this(node, node.getScope());
+  }
+
   public SymbolicNode(DelphiNode node, DelphiScope scope) {
     this(
         node.jjtGetId(),

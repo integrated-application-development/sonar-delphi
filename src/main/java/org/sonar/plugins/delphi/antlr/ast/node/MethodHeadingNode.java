@@ -106,7 +106,7 @@ public final class MethodHeadingNode extends DelphiNode {
       StringBuilder name = new StringBuilder();
 
       while (node != null) {
-        String methodName = node.simpleName();
+        String methodName = getMethodNameNode().simpleNameWithTypeParameters();
 
         if (name.length() != 0) {
           name.insert(0, ".");

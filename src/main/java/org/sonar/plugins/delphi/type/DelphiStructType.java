@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.jetbrains.annotations.NotNull;
@@ -19,9 +20,10 @@ import org.sonar.plugins.delphi.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.symbol.scope.FileScope;
 import org.sonar.plugins.delphi.symbol.scope.SystemScope;
+import org.sonar.plugins.delphi.symbol.scope.TypeScope;
 import org.sonar.plugins.delphi.type.Type.StructType;
 
-public class DelphiStructType extends DelphiType implements StructType {
+public class DelphiStructType extends DelphiGenerifiableType implements StructType {
   private static final AtomicLong ANONYMOUS_TYPE_COUNTER = new AtomicLong();
 
   private DelphiScope scope;
@@ -180,6 +182,22 @@ public class DelphiStructType extends DelphiType implements StructType {
     Set<NameDeclaration> result = new HashSet<>();
     findDefaultArrayProperties(this, result);
     return result;
+  }
+
+  @Override
+  public DelphiGenerifiableType doSpecialization(TypeSpecializationContext context) {
+    return new DelphiStructType(
+        getImage(),
+        scope,
+        parents.stream()
+            .map(parent -> parent.specialize(context))
+            .collect(Collectors.toUnmodifiableSet()),
+        kind);
+  }
+
+  @Override
+  protected final void doAfterSpecialization(TypeSpecializationContext context) {
+    this.scope = TypeScope.specializedScope(scope, this, context);
   }
 
   private static void findDefaultArrayProperties(StructType type, Set<NameDeclaration> result) {

@@ -3,27 +3,22 @@ package org.sonar.plugins.delphi.symbol.scope;
 import static org.sonar.plugins.delphi.symbol.scope.UnknownScope.unknownScope;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 
+import java.util.Set;
+import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
+import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
+import org.sonar.plugins.delphi.type.DelphiGenerifiableType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.HelperType;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
+import org.sonar.plugins.delphi.type.TypeSpecializationContext;
 import org.sonar.plugins.delphi.type.Typed;
 
 public class TypeScope extends AbstractDelphiScope implements Typed {
-  private final String typeName;
-  private Type type;
-  private DelphiScope superTypeScope;
-
-  public TypeScope(String typeName) {
-    this.typeName = typeName;
-    this.type = unknownType();
-    this.superTypeScope = unknownScope();
-  }
-
-  public TypeScope() {
-    this("(anonymous type)");
-  }
+  private Type type = unknownType();
+  private DelphiScope superTypeScope = unknownScope();
 
   public void setType(Type type) {
     this.type = type;
@@ -63,6 +58,41 @@ public class TypeScope extends AbstractDelphiScope implements Typed {
 
   @Override
   public String toString() {
-    return typeName + " <TypeScope>";
+    return type.getImage() + " <TypeScope>";
+  }
+
+  public static TypeScope specializedScope(
+      DelphiScope scope,
+      DelphiGenerifiableType specializedType,
+      TypeSpecializationContext context) {
+    SpecializedTypeScope result = new SpecializedTypeScope(scope, context);
+    result.setType(specializedType);
+    return result;
+  }
+
+  /**
+   * Specialized type scopes just wrap a generic type's "real" scope. Name occurrences of
+   * specialized declarations are forwarded to their generic declarations in the real scope.
+   */
+  private static class SpecializedTypeScope extends TypeScope {
+    private final DelphiScope genericScope;
+
+    private SpecializedTypeScope(DelphiScope scope, TypeSpecializationContext context) {
+      this.genericScope = scope;
+      scope.getAllDeclarations().stream()
+          .map(DelphiNameDeclaration.class::cast)
+          .map(declaration -> declaration.specialize(context))
+          .forEach(super::addDeclaration);
+    }
+
+    @Override
+    public void addDeclaration(NameDeclaration declaration) {
+      throw new UnsupportedOperationException("Can't add declarations to a specialized type scope");
+    }
+
+    @Override
+    public Set<NameDeclaration> addNameOccurrence(@NotNull NameOccurrence occurrence) {
+      return genericScope.addNameOccurrence(occurrence);
+    }
   }
 }

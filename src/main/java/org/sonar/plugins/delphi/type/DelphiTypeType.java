@@ -23,4 +23,12 @@ public class DelphiTypeType extends DelphiType implements TypeType {
   public boolean isTypeType() {
     return true;
   }
+
+  @Override
+  public Type specialize(TypeSpecializationContext context) {
+    if (originalType.isTypeParameter()) {
+      return create(getImage(), originalType.specialize(context));
+    }
+    return this;
+  }
 }

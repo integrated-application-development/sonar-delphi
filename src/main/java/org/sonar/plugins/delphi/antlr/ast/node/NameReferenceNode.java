@@ -12,9 +12,9 @@ import org.sonar.plugins.delphi.symbol.Qualifiable;
 import org.sonar.plugins.delphi.symbol.QualifiedName;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.Type.ClassReferenceType;
 import org.sonar.plugins.delphi.type.Typed;
 
 public final class NameReferenceNode extends DelphiNode implements Qualifiable, Typed {
@@ -61,7 +61,7 @@ public final class NameReferenceNode extends DelphiNode implements Qualifiable, 
       for (NameReferenceNode part : flatten()) {
         builder.append(part.getIdentifier().getImage());
 
-        GenericDefinitionNode generic = part.getGenericDefinition();
+        GenericArgumentsNode generic = part.getGenericArguments();
         if (generic != null) {
           builder.append(generic.getImage());
         }
@@ -75,9 +75,9 @@ public final class NameReferenceNode extends DelphiNode implements Qualifiable, 
     return qualifiedName;
   }
 
-  public GenericDefinitionNode getGenericDefinition() {
+  public GenericArgumentsNode getGenericArguments() {
     Node generic = jjtGetChild(1);
-    return (generic instanceof GenericDefinitionNode) ? (GenericDefinitionNode) generic : null;
+    return (generic instanceof GenericArgumentsNode) ? (GenericArgumentsNode) generic : null;
   }
 
   public NameReferenceNode nextName() {
@@ -108,15 +108,17 @@ public final class NameReferenceNode extends DelphiNode implements Qualifiable, 
   @Override
   @NotNull
   public Type getType() {
+    NameDeclaration typedDeclaration;
+
     if (isExplicitArrayConstructorInvocation()) {
       List<NameReferenceNode> flatNames = flatten();
-      NameDeclaration arrayDeclaration = flatNames.get(flatNames.size() - 2).getNameDeclaration();
-      return ((ClassReferenceType) ((Typed) arrayDeclaration).getType()).classType();
+      typedDeclaration = flatNames.get(flatNames.size() - 2).getNameDeclaration();
+    } else {
+      typedDeclaration = getLastName().getNameDeclaration();
     }
 
-    NameDeclaration lastDeclaration = getLastName().getNameDeclaration();
-    if (lastDeclaration instanceof Typed) {
-      return ((Typed) lastDeclaration).getType();
+    if (typedDeclaration instanceof TypedDeclaration) {
+      return ((Typed) typedDeclaration).getType();
     } else {
       return DelphiType.unknownType();
     }

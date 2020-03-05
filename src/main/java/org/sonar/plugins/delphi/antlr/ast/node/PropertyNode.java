@@ -44,8 +44,8 @@ public final class PropertyNode extends DelphiNode implements Typed, Visibility 
     return type;
   }
 
-  public PropertyNameDeclarationNode getPropertyName() {
-    return (PropertyNameDeclarationNode) jjtGetChild(0);
+  public NameDeclarationNode getPropertyName() {
+    return (NameDeclarationNode) jjtGetChild(0);
   }
 
   public TypeNode getTypeNode() {
