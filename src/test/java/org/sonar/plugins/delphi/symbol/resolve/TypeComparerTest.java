@@ -1,7 +1,6 @@
 package org.sonar.plugins.delphi.symbol.resolve;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singleton;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_1;
@@ -14,7 +13,7 @@ import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_OPERA
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.EQUAL;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.EXACT;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
-import static org.sonar.plugins.delphi.symbol.scope.UnknownScope.unknownScope;
+import static org.sonar.plugins.delphi.symbol.scope.DelphiScope.unknownScope;
 import static org.sonar.plugins.delphi.type.DelphiArrayConstructorType.arrayConstructor;
 import static org.sonar.plugins.delphi.type.DelphiArrayType.ArrayOption.ARRAY_OF_CONST;
 import static org.sonar.plugins.delphi.type.DelphiArrayType.ArrayOption.OPEN;
@@ -73,7 +72,6 @@ import org.sonar.plugins.delphi.type.DelphiClassReferenceType;
 import org.sonar.plugins.delphi.type.DelphiEnumerationType;
 import org.sonar.plugins.delphi.type.DelphiFileType;
 import org.sonar.plugins.delphi.type.DelphiSetType;
-import org.sonar.plugins.delphi.type.DelphiStructType;
 import org.sonar.plugins.delphi.type.DelphiTypeType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ArrayConstructorType;
@@ -81,6 +79,7 @@ import org.sonar.plugins.delphi.type.Type.CollectionType;
 import org.sonar.plugins.delphi.type.Type.EnumType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Type.StructType;
+import org.sonar.plugins.delphi.utils.types.TypeMocker;
 
 public class TypeComparerTest {
   private static void compare(Type from, Type to, EqualityType equality) {
@@ -233,8 +232,7 @@ public class TypeComparerTest {
   public void testArrayConstructorToArray() {
     CollectionType toDynamicArray = dynamicArray(null, INTEGER.type);
     CollectionType toIncompatibleDynamicArray =
-        dynamicArray(
-            null, DelphiStructType.from("Test", unknownScope(), Collections.emptySet(), CLASS));
+        dynamicArray(null, TypeMocker.struct("Test", CLASS));
     CollectionType toFixedArray = fixedArray(null, INTEGER.type);
     CollectionType toOpenArray = openArray(null, INTEGER.type);
     CollectionType toArrayOfConst = array(null, voidType(), Set.of(OPEN, ARRAY_OF_CONST));
@@ -330,8 +328,8 @@ public class TypeComparerTest {
 
   @Test
   public void testToObject() {
-    Type toObject = DelphiStructType.from("To", unknownScope(), Collections.emptySet(), CLASS);
-    Type fromObject = DelphiStructType.from("From", unknownScope(), singleton(toObject), CLASS);
+    Type toObject = TypeMocker.struct("To", CLASS);
+    Type fromObject = TypeMocker.struct("From", CLASS, toObject);
 
     compare(fromObject, toObject, CONVERT_LEVEL_3);
     compare(untypedPointer(), toObject, CONVERT_LEVEL_2);
@@ -343,9 +341,9 @@ public class TypeComparerTest {
 
   @Test
   public void testToClassReference() {
-    var toObject = DelphiStructType.from("Foo", unknownScope(), Collections.emptySet(), CLASS);
-    var fromObject = DelphiStructType.from("Bar", unknownScope(), singleton(toObject), CLASS);
-    var otherObject = DelphiStructType.from("Baz", unknownScope(), Collections.emptySet(), CLASS);
+    var toObject = TypeMocker.struct("Foo", CLASS);
+    var fromObject = TypeMocker.struct("Bar", CLASS, toObject);
+    var otherObject = TypeMocker.struct("Baz", CLASS);
 
     Type fromReference = DelphiClassReferenceType.classOf(fromObject);
     Type toReference = DelphiClassReferenceType.classOf(toObject);
@@ -373,8 +371,8 @@ public class TypeComparerTest {
 
   @Test
   public void testToPointer() {
-    var parentType = DelphiStructType.from("Foo", unknownScope(), Collections.emptySet(), CLASS);
-    var subType = DelphiStructType.from("Bar", unknownScope(), singleton(parentType), CLASS);
+    var parentType = TypeMocker.struct("Foo", CLASS);
+    var subType = TypeMocker.struct("Bar", CLASS, parentType);
 
     compare(pointerTo(LONGINT.type), pointerTo(INTEGER.type), EQUAL);
     compare(pointerTo(subType), pointerTo(parentType), CONVERT_LEVEL_1);
@@ -402,8 +400,7 @@ public class TypeComparerTest {
 
   @Test
   public void testToVariant() {
-    Type interfaceType =
-        DelphiStructType.from("Test", unknownScope(), Collections.emptySet(), INTERFACE);
+    Type interfaceType = TypeMocker.struct("Test", INTERFACE);
 
     compare(enumeration("Enum", unknownScope()), VARIANT.type, CONVERT_LEVEL_1);
     compare(dynamicArray("MyArray", unknownType()), VARIANT.type, CONVERT_LEVEL_1);
@@ -418,8 +415,7 @@ public class TypeComparerTest {
     CollectionType dynamicArray = DelphiArrayType.dynamicArray(null, INTEGER.type);
     CollectionType openArray = DelphiArrayType.openArray(null, INTEGER.type);
     CollectionType set = DelphiSetType.set(BYTE.type);
-    StructType object =
-        DelphiStructType.from("MyObject", unknownScope(), Collections.emptySet(), OBJECT);
+    StructType object = TypeMocker.struct("MyObject", OBJECT);
     EnumType enumeration = DelphiEnumerationType.enumeration("MyEnum", unknownScope());
 
     compare(fixedArray, ANY_ARRAY, EQUAL);

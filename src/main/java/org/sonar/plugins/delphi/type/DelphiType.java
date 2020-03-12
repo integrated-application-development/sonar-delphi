@@ -11,6 +11,7 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDESTRING;
 import java.util.Collections;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public abstract class DelphiType implements Type {
   private final String image;
@@ -45,6 +46,11 @@ public abstract class DelphiType implements Type {
   @Override
   public Set<Type> parents() {
     return Collections.emptySet();
+  }
+
+  @Override
+  public boolean canBeSpecialized(TypeSpecializationContext context) {
+    return false;
   }
 
   @Override

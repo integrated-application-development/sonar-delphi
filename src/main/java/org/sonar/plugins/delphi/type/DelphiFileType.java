@@ -2,6 +2,7 @@ package org.sonar.plugins.delphi.type;
 
 import com.google.errorprone.annotations.Immutable;
 import org.sonar.plugins.delphi.type.Type.FileType;
+import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public abstract class DelphiFileType extends DelphiType implements FileType {
   protected DelphiFileType(String image) {

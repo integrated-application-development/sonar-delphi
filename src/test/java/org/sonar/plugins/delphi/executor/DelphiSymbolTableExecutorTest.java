@@ -429,12 +429,21 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
-  public void testGenericAssignmentCompatibility() {
-    execute("generics/AssignmentCompatibility.pas");
+  public void testGenericArrayAssignmentCompatibility() {
+    execute("generics/ArrayAssignmentCompatibility.pas");
     verifyUsages(14, 15, reference(27, 2));
     verifyUsages(15, 15, reference(28, 2));
     verifyUsages(16, 15, reference(29, 2));
     verifyUsages(17, 15, reference(30, 2));
+  }
+
+  @Test
+  public void testStructAssignmentCompatibility() {
+    execute("generics/StructAssignmentCompatibility.pas");
+    verifyUsages(16, 15, reference(29, 2));
+    verifyUsages(17, 15, reference(30, 2));
+    verifyUsages(18, 15, reference(31, 2));
+    verifyUsages(19, 15, reference(32, 2));
   }
 
   @Test

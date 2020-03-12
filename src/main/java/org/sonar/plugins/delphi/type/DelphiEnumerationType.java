@@ -1,6 +1,6 @@
 package org.sonar.plugins.delphi.type;
 
-import static org.sonar.plugins.delphi.symbol.scope.UnknownScope.unknownScope;
+import static org.sonar.plugins.delphi.symbol.scope.DelphiScope.unknownScope;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

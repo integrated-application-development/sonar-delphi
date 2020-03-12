@@ -7,8 +7,8 @@ import org.sonar.plugins.delphi.antlr.ast.node.SimpleNameDeclarationNode;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.TypeSpecializationContext;
 import org.sonar.plugins.delphi.type.Typed;
+import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
     implements TypedDeclaration {

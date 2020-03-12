@@ -21,6 +21,24 @@
   </licenses>
   <developers>
     <developer>
+      <id>jej</id>
+      <name>Jonah Jeleniewski</name>
+      <email>jjeleniewski@integradev.com.au</email>
+      <organization>IntegraDev</organization>
+      <organizationUrl>https://www.integradev.com.au/</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>agt</id>
+      <name>The Agile Excuse Team - Monash University</name>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
       <id>sandroluck</id>
       <email>sandro.luck@gmx.ch</email>
       <name>Sandro Luck</name>
@@ -55,23 +73,6 @@
         <role>developer</role>
       </roles>
       <timezone>+1</timezone>
-    </developer>
-    <developer>
-      <id>agt</id>
-      <name>The Agile Excuse Team - Monash University</name>
-      <roles>
-        <role>developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>jej</id>
-      <name>Jonah Jeleniewski</name>
-      <email>jjeleniewski@integradev.com.au</email>
-      <organization>IntegraDev</organization>
-      <organizationUrl>https://www.integradev.com.au/</organizationUrl>
-      <roles>
-        <role>developer</role>
-      </roles>
     </developer>
   </developers>
   <distributionManagement>

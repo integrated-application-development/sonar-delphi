@@ -27,7 +27,7 @@ import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.DelphiProceduralType;
 import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.TypeSpecializationContext;
+import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicMethodData;
 
 public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration

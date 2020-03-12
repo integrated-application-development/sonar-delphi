@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for `cwe` and `owasp` security standards in rule metadata.
 
+### Changed
+
+- Improve semantic analysis around generic types.
+
 ## [0.14.0] - 2020-03-05
 
 ### Added

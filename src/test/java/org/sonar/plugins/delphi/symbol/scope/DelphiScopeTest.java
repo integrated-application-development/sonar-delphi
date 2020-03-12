@@ -3,7 +3,7 @@ package org.sonar.plugins.delphi.symbol.scope;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
-import static org.sonar.plugins.delphi.symbol.scope.UnknownScope.unknownScope;
+import static org.sonar.plugins.delphi.symbol.scope.DelphiScope.unknownScope;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 
 import org.junit.Before;

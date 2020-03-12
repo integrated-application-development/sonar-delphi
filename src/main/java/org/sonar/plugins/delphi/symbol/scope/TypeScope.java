@@ -1,6 +1,6 @@
 package org.sonar.plugins.delphi.symbol.scope;
 
-import static org.sonar.plugins.delphi.symbol.scope.UnknownScope.unknownScope;
+import static org.sonar.plugins.delphi.symbol.scope.DelphiScope.unknownScope;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 
 import java.util.Set;
@@ -9,12 +9,12 @@ import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
-import org.sonar.plugins.delphi.type.DelphiGenerifiableType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.HelperType;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
-import org.sonar.plugins.delphi.type.TypeSpecializationContext;
 import org.sonar.plugins.delphi.type.Typed;
+import org.sonar.plugins.delphi.type.generic.DelphiGenerifiableType;
+import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public class TypeScope extends AbstractDelphiScope implements Typed {
   private Type type = unknownType();

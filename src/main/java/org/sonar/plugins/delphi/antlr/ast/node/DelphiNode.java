@@ -23,7 +23,7 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
 import static org.apache.commons.lang3.ArrayUtils.isArrayIndexValid;
-import static org.sonar.plugins.delphi.symbol.scope.UnknownScope.unknownScope;
+import static org.sonar.plugins.delphi.symbol.scope.DelphiScope.unknownScope;
 
 import com.google.common.base.Preconditions;
 import java.util.Arrays;

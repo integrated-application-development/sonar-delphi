@@ -10,7 +10,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.PropertyNode;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.TypeSpecializationContext;
+import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
     implements TypedDeclaration, Invocable {

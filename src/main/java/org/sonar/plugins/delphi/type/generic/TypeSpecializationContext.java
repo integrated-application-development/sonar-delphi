@@ -1,4 +1,4 @@
-package org.sonar.plugins.delphi.type;
+package org.sonar.plugins.delphi.type.generic;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.GenerifiableDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypedDeclaration;
+import org.sonar.plugins.delphi.type.Type;
 
 public final class TypeSpecializationContext {
   private Map<Type, Type> argumentsByParameter;

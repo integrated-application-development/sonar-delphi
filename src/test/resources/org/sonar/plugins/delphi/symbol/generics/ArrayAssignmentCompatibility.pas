@@ -1,4 +1,4 @@
-unit AssignmentCompatibility;
+unit ArrayAssignmentCompatibility;
 
 {This is a sample Delphi file.}
 

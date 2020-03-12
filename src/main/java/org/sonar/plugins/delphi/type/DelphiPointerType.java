@@ -3,6 +3,7 @@ package org.sonar.plugins.delphi.type;
 import com.google.errorprone.annotations.Immutable;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.type.Type.PointerType;
+import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public abstract class DelphiPointerType extends DelphiType implements PointerType {
   private DelphiPointerType(String typeImage) {
