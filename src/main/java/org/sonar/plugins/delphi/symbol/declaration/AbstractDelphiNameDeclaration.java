@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
-import org.sonar.plugins.delphi.type.TypeSpecializationContext;
+import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public abstract class AbstractDelphiNameDeclaration extends AbstractNameDeclaration
     implements DelphiNameDeclaration {

@@ -82,4 +82,8 @@ public interface DelphiScope extends Scope {
   default boolean contains(NameOccurrence occurrence) {
     return !findDeclaration((DelphiNameOccurrence) occurrence).isEmpty();
   }
+
+  static UnknownScope unknownScope() {
+    return UnknownScope.instance();
+  }
 }

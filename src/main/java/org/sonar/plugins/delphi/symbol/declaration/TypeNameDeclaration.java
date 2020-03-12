@@ -13,7 +13,7 @@ import org.sonar.plugins.delphi.symbol.Qualifiable;
 import org.sonar.plugins.delphi.symbol.QualifiedName;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.TypeSpecializationContext;
+import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public final class TypeNameDeclaration extends AbstractDelphiNameDeclaration
     implements GenerifiableDeclaration, TypedDeclaration, Qualifiable {

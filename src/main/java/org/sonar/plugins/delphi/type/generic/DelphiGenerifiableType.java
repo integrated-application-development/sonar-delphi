@@ -1,7 +1,9 @@
-package org.sonar.plugins.delphi.type;
+package org.sonar.plugins.delphi.type.generic;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.sonar.plugins.delphi.type.DelphiType;
+import org.sonar.plugins.delphi.type.Type;
 
 /**
  * Types that can be declared as generics are considered generifiable.
@@ -35,15 +37,19 @@ public abstract class DelphiGenerifiableType extends DelphiType {
    */
   @Override
   public final Type specialize(TypeSpecializationContext context) {
-    if (context.hasSignatureMismatch()) {
+    if (context.hasSignatureMismatch() || !canBeSpecialized(context)) {
       return this;
     }
 
     DelphiGenerifiableType result = cache.get(context);
     if (result == null) {
       result = this.doSpecialization(context);
-      cache.put(context, result);
-      result.doAfterSpecialization(context);
+      if (result.is(this)) {
+        result = this;
+      } else {
+        cache.put(context, result);
+        result.doAfterSpecialization(context);
+      }
     }
 
     return result;

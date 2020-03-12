@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.type.Type.CollectionType;
+import org.sonar.plugins.delphi.type.generic.DelphiGenerifiableType;
+import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public class DelphiArrayType extends DelphiGenerifiableType implements CollectionType {
   public enum ArrayOption {
@@ -52,6 +54,11 @@ public class DelphiArrayType extends DelphiGenerifiableType implements Collectio
   @NotNull
   public Type elementType() {
     return elementType;
+  }
+
+  @Override
+  public boolean canBeSpecialized(TypeSpecializationContext context) {
+    return elementType.canBeSpecialized(context);
   }
 
   @Override

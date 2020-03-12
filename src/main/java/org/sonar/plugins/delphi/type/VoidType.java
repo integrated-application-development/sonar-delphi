@@ -4,7 +4,7 @@ import com.google.errorprone.annotations.Immutable;
 import org.sonar.plugins.delphi.type.Type.ImmutableType;
 
 @Immutable
-public class VoidType extends DelphiType implements ImmutableType {
+class VoidType extends DelphiType implements ImmutableType {
   private static final VoidType INSTANCE = new VoidType();
 
   private VoidType() {

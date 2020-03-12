@@ -54,7 +54,7 @@ class AbstractDelphiScope implements DelphiScope {
 
   @Override
   public void addDeclaration(NameDeclaration declaration) {
-    DelphiNameDeclaration delphiDeclaration = getDeclaration(declaration);
+    DelphiNameDeclaration delphiDeclaration = (DelphiNameDeclaration) declaration;
     checkForwardTypeDeclarations(declaration);
     checkForDuplicatedNameDeclaration(declaration);
     declarationSet.add(declaration);

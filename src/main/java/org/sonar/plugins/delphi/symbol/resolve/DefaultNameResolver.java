@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.getLast;
 import static java.util.function.Predicate.not;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
-import static org.sonar.plugins.delphi.symbol.scope.UnknownScope.unknownScope;
+import static org.sonar.plugins.delphi.symbol.scope.DelphiScope.unknownScope;
 import static org.sonar.plugins.delphi.type.DelphiClassReferenceType.classOf;
 import static org.sonar.plugins.delphi.type.DelphiFileType.untypedFile;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
@@ -71,8 +71,8 @@ import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
 import org.sonar.plugins.delphi.type.Type.StructType;
 import org.sonar.plugins.delphi.type.Type.TypeParameterType;
-import org.sonar.plugins.delphi.type.TypeSpecializationContext;
 import org.sonar.plugins.delphi.type.Typed;
+import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public class DefaultNameResolver implements NameResolver {
   private final List<DelphiNameOccurrence> names = new ArrayList<>();
@@ -198,11 +198,6 @@ public class DefaultNameResolver implements NameResolver {
       }
     } else {
       result = declaration.getType();
-      DelphiNameOccurrence name = getLast(names, null);
-      if (name != null && name.isGeneric()) {
-        var context = new TypeSpecializationContext(declaration, name.getTypeArguments());
-        result = result.specialize(context);
-      }
     }
 
     return result;

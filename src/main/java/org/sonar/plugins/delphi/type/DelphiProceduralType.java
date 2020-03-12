@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
+import org.sonar.plugins.delphi.type.generic.DelphiGenerifiableType;
+import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public class DelphiProceduralType extends DelphiGenerifiableType implements ProceduralType {
   private final ProceduralKind kind;
@@ -68,6 +70,14 @@ public class DelphiProceduralType extends DelphiGenerifiableType implements Proc
   @Override
   public boolean isMethod() {
     return kind == ProceduralKind.METHOD;
+  }
+
+  @Override
+  public boolean canBeSpecialized(TypeSpecializationContext context) {
+    if (returnType.canBeSpecialized(context)) {
+      return true;
+    }
+    return parameterTypes.stream().anyMatch(type -> type.canBeSpecialized(context));
   }
 
   @Override

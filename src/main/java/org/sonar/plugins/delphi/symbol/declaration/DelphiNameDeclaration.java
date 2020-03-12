@@ -4,7 +4,7 @@ import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
-import org.sonar.plugins.delphi.type.TypeSpecializationContext;
+import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public interface DelphiNameDeclaration extends NameDeclaration, Comparable<DelphiNameDeclaration> {
 

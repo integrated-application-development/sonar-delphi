@@ -1,12 +1,9 @@
 package org.sonar.plugins.delphi.symbol.resolve;
 
-import static java.util.Collections.emptySet;
-import static java.util.Collections.singleton;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.delphi.symbol.scope.UnknownScope.unknownScope;
 import static org.sonar.plugins.delphi.type.DelphiArrayType.dynamicArray;
 import static org.sonar.plugins.delphi.type.DelphiArrayType.openArray;
 import static org.sonar.plugins.delphi.type.DelphiFileType.fileOf;
@@ -51,9 +48,9 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
 import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
-import org.sonar.plugins.delphi.type.DelphiStructType;
 import org.sonar.plugins.delphi.type.DelphiTypeType;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.utils.types.TypeMocker;
 
 public class InvocationResolverTest {
   private Set<InvocationCandidate> resolved;
@@ -174,8 +171,7 @@ public class InvocationResolverTest {
 
   @Test
   public void testVariantTypes() {
-    Type variantIncompatibleType =
-        DelphiStructType.from("MyRecord", unknownScope(), emptySet(), RECORD);
+    Type variantIncompatibleType = TypeMocker.struct("MyRecord", RECORD);
     assertResolved(
         List.of(UNICODESTRING.type, variantIncompatibleType, BOOLEAN.type),
         List.of(UNICODESTRING.type, variantIncompatibleType, VARIANT.type, BOOLEAN.type),
@@ -191,9 +187,9 @@ public class InvocationResolverTest {
 
   @Test
   public void testInheritedTypes() {
-    Type grandparent = DelphiStructType.from("Grandparent", unknownScope(), emptySet(), CLASS);
-    Type parent = DelphiStructType.from("Parent", unknownScope(), singleton(grandparent), CLASS);
-    Type child = DelphiStructType.from("Child", unknownScope(), singleton(parent), CLASS);
+    Type grandparent = TypeMocker.struct("Grandparent", CLASS);
+    Type parent = TypeMocker.struct("Parent", CLASS, grandparent);
+    Type child = TypeMocker.struct("Child", CLASS, parent);
 
     assertResolved(child, parent, grandparent);
     assertResolved(parent, grandparent, child);

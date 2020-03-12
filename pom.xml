@@ -2,7 +2,7 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>sonar-delphi-plugin</artifactId>
-  <version>1.8</version>
+  <version>1.9</version>
   <groupId>org.delphi.plugin</groupId>
   <name>Sonar Delphi Plugin</name>
   <description>Code analyzer for Delphi</description>
@@ -20,6 +20,24 @@
     </license>
   </licenses>
   <developers>
+    <developer>
+      <id>jej</id>
+      <name>Jonah Jeleniewski</name>
+      <email>jjeleniewski@integradev.com.au</email>
+      <organization>IntegraDev</organization>
+      <organizationUrl>https://www.integradev.com.au/</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>agt</id>
+      <name>The Agile Excuse Team - Monash University</name>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
     <developer>
       <id>sandroluck</id>
       <email>sandro.luck@gmx.ch</email>
@@ -55,23 +73,6 @@
         <role>developer</role>
       </roles>
       <timezone>+1</timezone>
-    </developer>
-    <developer>
-      <id>agt</id>
-      <name>The Agile Excuse Team - Monash University</name>
-      <roles>
-        <role>developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>jej</id>
-      <name>Jonah Jeleniewski</name>
-      <email>jjeleniewski@integradev.com.au</email>
-      <organization>IntegraDev</organization>
-      <organizationUrl>https://www.integradev.com.au/</organizationUrl>
-      <roles>
-        <role>developer</role>
-      </roles>
     </developer>
   </developers>
   <distributionManagement>

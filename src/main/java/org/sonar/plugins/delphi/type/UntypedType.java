@@ -4,7 +4,7 @@ import com.google.errorprone.annotations.Immutable;
 import org.sonar.plugins.delphi.type.Type.ImmutableType;
 
 @Immutable
-public class UntypedType extends DelphiType implements ImmutableType {
+class UntypedType extends DelphiType implements ImmutableType {
   private static final UntypedType INSTANCE = new UntypedType();
 
   private UntypedType() {

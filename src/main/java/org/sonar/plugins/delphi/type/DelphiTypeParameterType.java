@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import org.sonar.plugins.delphi.type.Type.TypeParameterType;
+import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public class DelphiTypeParameterType extends DelphiType implements TypeParameterType {
   private List<Type> constraints;
@@ -30,6 +31,11 @@ public class DelphiTypeParameterType extends DelphiType implements TypeParameter
   @Override
   public boolean isTypeParameter() {
     return true;
+  }
+
+  @Override
+  public boolean canBeSpecialized(TypeSpecializationContext context) {
+    return context.getArgument(this) != null;
   }
 
   @Override

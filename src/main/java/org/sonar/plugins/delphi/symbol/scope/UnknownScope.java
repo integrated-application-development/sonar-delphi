@@ -24,7 +24,7 @@ public final class UnknownScope implements DelphiScope {
     // Hide constructor
   }
 
-  public static UnknownScope unknownScope() {
+  static UnknownScope instance() {
     return UNKNOWN_SCOPE;
   }
 

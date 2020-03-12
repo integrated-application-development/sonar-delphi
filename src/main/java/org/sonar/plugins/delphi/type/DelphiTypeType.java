@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.type;
 
 import org.sonar.plugins.delphi.type.Type.TypeType;
+import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public class DelphiTypeType extends DelphiType implements TypeType {
   private final Type originalType;

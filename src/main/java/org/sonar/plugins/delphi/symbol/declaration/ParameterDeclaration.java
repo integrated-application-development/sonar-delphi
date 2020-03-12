@@ -6,8 +6,8 @@ import org.assertj.core.util.VisibleForTesting;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
 import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.TypeSpecializationContext;
 import org.sonar.plugins.delphi.type.Typed;
+import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicMethodData.IntrinsicMethodParameterData;
 
 public final class ParameterDeclaration implements Typed, Comparable<ParameterDeclaration> {
