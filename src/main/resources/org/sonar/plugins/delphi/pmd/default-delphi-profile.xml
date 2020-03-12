@@ -5,10 +5,6 @@
   xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
   <description>All default rules</description>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.ThenTryRule"
-    name="ThenTryRule">
-  </rule>
-
   <rule class="org.sonar.plugins.delphi.pmd.rules.ClassPerFileRule"
     name="ClassPerFileRule">
   </rule>
