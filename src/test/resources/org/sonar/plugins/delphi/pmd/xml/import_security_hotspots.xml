@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="delph">
+  <description>Sonar Profile: delph</description>
+  <rule class="org.sonar.plugins.delphi.pmd.rules.DoNotJumpOutTheWindowRule" message="Jumping out of windows is security-sensitive" name="DoNotJumpOutTheWindowRule" language="delph">
+    <priority>1</priority>
+    <description>Jumping through windows is generally considered rude. New windows are expensive.</description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+      <property name="type" value="SECURITY_HOTSPOT" />
+      <property name="cwe" value="1|2|3" />
+      <property name="owasp" value="A1|A2|A3" /> 
+    </properties>
+  </rule>
+</ruleset>
+

@@ -3,7 +3,6 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 
 import com.google.common.collect.Iterables;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -32,13 +31,13 @@ public class MemoryManagementRule extends AbstractDelphiRule {
   private static final PropertyDescriptor<List<String>> MEMORY_FUNCTIONS =
       PropertyFactory.stringListProperty("memoryFunctions")
           .desc("A list of functions used for memory management")
-          .defaultValue(Collections.emptyList())
+          .emptyDefaultValue()
           .build();
 
   private static final PropertyDescriptor<List<String>> WHITELISTED_NAMES =
       PropertyFactory.stringListProperty("whitelist")
           .desc("A list of constructor names which don't require memory management.")
-          .defaultValue(Collections.emptyList())
+          .emptyDefaultValue()
           .build();
 
   private Set<String> memoryFunctions;

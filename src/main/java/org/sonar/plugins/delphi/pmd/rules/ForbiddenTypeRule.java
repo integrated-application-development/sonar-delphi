@@ -1,6 +1,5 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -16,7 +15,7 @@ public class ForbiddenTypeRule extends AbstractDelphiRule {
   public static final PropertyDescriptor<List<String>> BLACKLISTED_TYPES =
       PropertyFactory.stringListProperty("blacklist")
           .desc("The list of forbidden (fully qualified) type names.")
-          .defaultValue(Collections.emptyList())
+          .emptyDefaultValue()
           .build();
 
   private static final PropertyDescriptor<String> MESSAGE =
