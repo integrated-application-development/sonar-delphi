@@ -22,10 +22,13 @@ package org.sonar.plugins.delphi.pmd.profile;
 import static org.apache.commons.lang3.StringUtils.isNumeric;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.BASE_EFFORT;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.SCOPE;
+import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.SECURITY_STANDARD_CWE;
+import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.SECURITY_STANDARD_OWASP;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TEMPLATE;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TYPE;
 
 import com.google.common.base.Preconditions;
+import java.util.Arrays;
 import java.util.Objects;
 import org.sonar.api.rule.RuleScope;
 import org.sonar.api.rule.Severity;
@@ -81,6 +84,7 @@ public class DelphiPmdRulesDefinition implements RulesDefinition {
       extractTemplate(pmdRule, sonarRule);
       extractType(pmdRule, sonarRule);
       extractProperties(pmdRule, sonarRule);
+      extractSecurityStandards(pmdRule, sonarRule);
     }
   }
 
@@ -134,6 +138,22 @@ public class DelphiPmdRulesDefinition implements RulesDefinition {
           .setDefaultValue(property.getValue())
           .setType(isNumeric(property.getValue()) ? RuleParamType.INTEGER : RuleParamType.STRING)
           .setDescription(property.getName());
+    }
+  }
+
+  private void extractSecurityStandards(DelphiRule pmdRule, NewRule sonarRule) {
+    DelphiRuleProperty cweProperty = pmdRule.getProperty(SECURITY_STANDARD_CWE.name());
+    if (cweProperty != null) {
+      Arrays.stream(cweProperty.getValue().split("\\|"))
+          .map(Integer::parseInt)
+          .forEach(sonarRule::addCwe);
+    }
+
+    DelphiRuleProperty owaspProperty = pmdRule.getProperty(SECURITY_STANDARD_OWASP.name());
+    if (owaspProperty != null) {
+      Arrays.stream(owaspProperty.getValue().split("\\|"))
+          .map(OwaspTop10::valueOf)
+          .forEach(sonarRule::addOwaspTop10);
     }
   }
 }

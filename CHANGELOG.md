@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for `cwe` and `owasp` security standards in rule metadata.
+
 ## [0.14.0] - 2020-03-05
 
 ### Added

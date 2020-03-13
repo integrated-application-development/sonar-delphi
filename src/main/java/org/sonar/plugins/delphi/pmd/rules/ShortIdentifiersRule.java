@@ -2,7 +2,6 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.LIMIT;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -18,7 +17,7 @@ public class ShortIdentifiersRule extends AbstractDelphiRule {
   private static final PropertyDescriptor<List<String>> WHITELISTED_NAMES =
       PropertyFactory.stringListProperty("whitelist")
           .desc("The list of short identifiers that we allow. (case-insensitive)")
-          .defaultValue(Collections.emptyList())
+          .emptyDefaultValue()
           .build();
 
   private Set<String> whitelist;

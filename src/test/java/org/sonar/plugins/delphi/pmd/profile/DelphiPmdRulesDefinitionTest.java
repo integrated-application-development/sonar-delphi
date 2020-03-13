@@ -37,6 +37,26 @@ public class DelphiPmdRulesDefinitionTest {
   }
 
   @Test
+  public void testSecurityStandardsShouldBeExtracted() {
+    var provider = mock(DelphiPmdRuleSetDefinitionProvider.class);
+    when(provider.getDefinition()).thenReturn(getRuleSet("import_security_hotspots.xml"));
+
+    DelphiPmdRulesDefinition definition = new DelphiPmdRulesDefinition(provider);
+    RulesDefinition.Context context = new RulesDefinition.Context();
+    definition.define(context);
+    RulesDefinition.Repository repository = context.repository(DelphiPmdConstants.REPOSITORY_KEY);
+
+    assertThat(repository).isNotNull();
+    assertThat(repository.rules()).hasSize(1);
+
+    RulesDefinition.Rule hotspot = repository.rule("DoNotJumpOutTheWindowRule");
+    assertThat(hotspot).isNotNull();
+    assertThat(hotspot.securityStandards())
+        .containsExactlyInAnyOrder(
+            "cwe:1", "cwe:2", "cwe:3", "owaspTop10:a1", "owaspTop10:a2", "owaspTop10:a3");
+  }
+
+  @Test
   public void testShouldAbortExportOnWriterException() {
     var provider = mock(DelphiPmdRuleSetDefinitionProvider.class);
     when(provider.getDefinition())

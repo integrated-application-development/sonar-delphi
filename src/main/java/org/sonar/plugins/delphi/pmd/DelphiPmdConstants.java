@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.pmd;
 
+import java.util.List;
 import net.sourceforge.pmd.lang.rule.XPathRule;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
@@ -76,5 +77,19 @@ public final class DelphiPmdConstants {
           .defaultValue(RuleType.CODE_SMELL.name())
           .build();
 
-  private DelphiPmdConstants() {}
+  public static final PropertyDescriptor<List<Integer>> SECURITY_STANDARD_CWE =
+      PropertyFactory.intListProperty("cwe")
+          .desc("A list of Common Weakness Enumeration (CWE) IDs")
+          .emptyDefaultValue()
+          .build();
+
+  public static final PropertyDescriptor<List<String>> SECURITY_STANDARD_OWASP =
+      PropertyFactory.stringListProperty("owasp")
+          .desc("A list of OWASP Top 10 identifiers ('A1' - 'A10')")
+          .emptyDefaultValue()
+          .build();
+
+  private DelphiPmdConstants() {
+    // Constant class
+  }
 }
