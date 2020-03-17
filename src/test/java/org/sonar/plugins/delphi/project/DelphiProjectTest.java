@@ -37,6 +37,7 @@ public class DelphiProjectTest {
       "/org/sonar/plugins/delphi/projects/SimpleProject/dproj/SimpleDelphiProject.dproj";
   private static final String BAD_UNIT_ALIAS_PROJECT =
       "/org/sonar/plugins/delphi/dproj/BadUnitAlias.dproj";
+  private static final String OPT_SET_PROJECT = "/org/sonar/plugins/delphi/dproj/OptSet.dproj";
   private static final String INC_DIR =
       "/org/sonar/plugins/delphi/projects/SimpleProject/includes1";
 
@@ -125,6 +126,13 @@ public class DelphiProjectTest {
                 "Windows",
                 "WinTypes",
                 "Windows"));
+  }
+
+  @Test
+  public void testProjectWithOptSets() {
+    project = DelphiProject.parse(DelphiUtils.getResource(OPT_SET_PROJECT).toPath());
+    assertThat(project.getUnitAliases())
+        .containsExactlyInAnyOrderEntriesOf(Map.of("WinProcs", "Windows", "WinTypes", "Windows"));
   }
 
   @Test

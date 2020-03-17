@@ -64,7 +64,6 @@ public class DelphiProjectXmlParser extends DefaultHandler {
 
   /** Parses the document */
   void parse() {
-    LOG.debug("Indexing project file: {}", fileName);
     try {
       SAXParserFactory factory = SAXParserFactory.newInstance();
       factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
@@ -91,6 +90,9 @@ public class DelphiProjectXmlParser extends DefaultHandler {
         break;
       case "VersionInfoKeys":
         handleVersionInfoKeysStart(attributes);
+        break;
+      case "Import":
+        handleImport(attributes);
         break;
       case "DCC_UnitSearchPath":
       case "DCC_UnitAlias":
@@ -140,6 +142,17 @@ public class DelphiProjectXmlParser extends DefaultHandler {
     if ("ProductName".equals(name)) {
       isReading = true;
     }
+  }
+
+  private void handleImport(Attributes attributes) {
+    String importPath = attributes.getValue("Project");
+    if (importPath.contains("$(")) {
+      return;
+    }
+
+    Path path = resolvePathFromBaseDir(baseDir, Path.of(importPath));
+    DelphiProjectXmlParser parser = new DelphiProjectXmlParser(path, project);
+    parser.parse();
   }
 
   private void handleVersionInfoKeysEnd() {

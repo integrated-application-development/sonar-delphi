@@ -25,9 +25,12 @@ package org.sonar.plugins.delphi.project;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 
 /** Groupproj class, used to parse .groupproj file and holds list of projects */
 public class DelphiGroupProj {
+  private static Logger LOG = Loggers.get(DelphiGroupProj.class);
 
   private final List<DelphiProject> projects = new ArrayList<>();
 
@@ -42,6 +45,7 @@ public class DelphiGroupProj {
    * @return DelphiGroupProj object
    */
   public static DelphiGroupProj parse(Path xmlFile) {
+    LOG.debug("Indexing workgroup file: {}", xmlFile.toAbsolutePath());
     DelphiGroupProj groupProj = new DelphiGroupProj();
     DelphiGroupProjXmlParser parser = new DelphiGroupProjXmlParser(xmlFile, groupProj);
     parser.parse();
