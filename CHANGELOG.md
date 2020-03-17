@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.16.0] - 2020-03-17
+
 ### Added
 
 - Support Option Set (`.optset`) references in `.dproj` files.
@@ -337,7 +339,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.15.0...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.16.0...HEAD
+[0.16.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.12.1...v0.13.0
