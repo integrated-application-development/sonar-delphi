@@ -1,0 +1,7 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<Import Project="GlobalSettings.optset" />
+		<Import Project="$(SOME_SPOOKY_ENVIRONMENT_VARIABLE).optset" />
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<DCC_UnitAlias>WinTypes=Windows</DCC_UnitAlias>
+		</PropertyGroup>
+	</Project>

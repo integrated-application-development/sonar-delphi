@@ -38,7 +38,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /** Parser for Delphi *.groupproj XML file */
-public class DelphiGroupProjXmlParser extends DefaultHandler {
+class DelphiGroupProjXmlParser extends DefaultHandler {
   private static final Logger LOG = Loggers.get(DelphiGroupProjXmlParser.class);
   private final String filename;
   private final DelphiGroupProj workGroup;
@@ -58,7 +58,6 @@ public class DelphiGroupProjXmlParser extends DefaultHandler {
 
   /** Parse provided .groupproj XML file */
   void parse() {
-    LOG.debug("Indexing workgroup file: {}", filename);
     try {
       SAXParserFactory factory = SAXParserFactory.newInstance();
       factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);

@@ -56,6 +56,7 @@ public class DelphiProject {
    * @return DelphiProject object
    */
   public static DelphiProject parse(Path xmlFile) {
+    LOG.debug("Indexing project file: {}", xmlFile.toAbsolutePath());
     DelphiProject project = new DelphiProject();
     DelphiProjectXmlParser parser = new DelphiProjectXmlParser(xmlFile, project);
     parser.parse();
