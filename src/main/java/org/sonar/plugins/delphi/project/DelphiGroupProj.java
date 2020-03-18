@@ -30,7 +30,7 @@ import org.sonar.api.utils.log.Loggers;
 
 /** Groupproj class, used to parse .groupproj file and holds list of projects */
 public class DelphiGroupProj {
-  private static Logger LOG = Loggers.get(DelphiGroupProj.class);
+  private static final Logger LOG = Loggers.get(DelphiGroupProj.class);
 
   private final List<DelphiProject> projects = new ArrayList<>();
 
