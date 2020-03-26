@@ -45,7 +45,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.ProcedureTypeHeadingNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RecordTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RepeatStatementNode;
-import org.sonar.plugins.delphi.antlr.ast.node.SimpleNameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TryStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
@@ -544,15 +543,25 @@ public class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   }
 
   @Override
-  public Data visit(SimpleNameDeclarationNode node, Data data) {
-    if (node.isVarDeclaration()
-        || node.isConstDeclaration()
-        || node.isFieldDeclaration()
-        || node.isFormalParameter()) {
+  public Data visit(NameDeclarationNode node, Data data) {
+    if (isVariableNameDeclaration(node)) {
       VariableNameDeclaration declaration = new VariableNameDeclaration(node);
       data.addDeclaration(declaration, node);
     }
     return DelphiParserVisitor.super.visit(node, data);
+  }
+
+  private static boolean isVariableNameDeclaration(NameDeclarationNode node) {
+    switch (node.getKind()) {
+      case CONST:
+      case EXCEPT_ITEM:
+      case FIELD:
+      case PARAMETER:
+      case VAR:
+        return true;
+      default:
+        return false;
+    }
   }
 
   @Override

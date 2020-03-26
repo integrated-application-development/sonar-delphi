@@ -51,4 +51,21 @@ public abstract class NameDeclarationNode extends DelphiNode {
     }
     return usages;
   }
+
+  public abstract DeclarationKind getKind();
+
+  public enum DeclarationKind {
+    CONST,
+    ENUM_ELEMENT,
+    EXCEPT_ITEM,
+    FIELD,
+    IMPORT,
+    METHOD,
+    PARAMETER,
+    PROPERTY,
+    TYPE,
+    TYPE_PARAMETER,
+    VAR,
+    UNIT
+  }
 }
