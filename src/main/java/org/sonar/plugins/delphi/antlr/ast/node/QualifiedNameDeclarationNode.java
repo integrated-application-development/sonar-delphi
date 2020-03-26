@@ -3,6 +3,7 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import net.sourceforge.pmd.lang.ast.Node;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
@@ -51,5 +52,16 @@ public final class QualifiedNameDeclarationNode extends NameDeclarationNode impl
   @Override
   public String getImage() {
     return fullyQualifiedName();
+  }
+
+  @Override
+  public DeclarationKind getKind() {
+    DeclarationKind kind = null;
+    if (parent instanceof FileHeaderNode) {
+      kind = DeclarationKind.UNIT;
+    } else if (parent instanceof UnitImportNode) {
+      kind = DeclarationKind.IMPORT;
+    }
+    return Objects.requireNonNull(kind, "Unhandled DeclarationKind");
   }
 }

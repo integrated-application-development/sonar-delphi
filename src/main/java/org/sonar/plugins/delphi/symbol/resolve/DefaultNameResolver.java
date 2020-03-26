@@ -241,7 +241,7 @@ public class DefaultNameResolver implements NameResolver {
       handlePrimaryExpressionToken(node);
     }
 
-    return names.size() == resolvedDeclarations.size() + Math.min(1, declarations.size());
+    return !nameResolutionFailed();
   }
 
   private void handlePrimaryExpressionToken(Node node) {
@@ -468,18 +468,7 @@ public class DefaultNameResolver implements NameResolver {
         return;
       }
 
-      IdentifierNode identifier = reference.getIdentifier();
-      GenericArgumentsNode genericArguments = reference.getGenericArguments();
-
-      DelphiNameOccurrence occurrence = new DelphiNameOccurrence(identifier);
-      if (genericArguments != null) {
-        List<TypeNode> typeArgumentNodes = genericArguments.getTypeArguments();
-        typeArgumentNodes.forEach(NameResolver::resolve);
-        occurrence.setIsGeneric();
-        occurrence.setTypeArguments(
-            typeArgumentNodes.stream().map(TypeNode::getType).collect(Collectors.toList()));
-      }
-
+      DelphiNameOccurrence occurrence = createNameOccurrence(reference);
       addName(occurrence);
       searchForDeclaration(occurrence);
 
@@ -493,20 +482,37 @@ public class DefaultNameResolver implements NameResolver {
       disambiguateIsCallable();
       disambiguateVisibility();
 
-      boolean foundDeclaration = !declarations.isEmpty();
-
       if (reference.nextName() != null) {
         disambiguateImplicitEmptyArgumentList();
         addResolvedDeclaration();
       }
 
-      if (!foundDeclaration && couldBeUnitNameReference) {
-        readPossibleUnitNameReference(node);
+      if (nameResolutionFailed()) {
+        if (couldBeUnitNameReference) {
+          readPossibleUnitNameReference(node);
+        }
         return;
       }
 
       reference.setNameOccurrence(occurrence);
     }
+  }
+
+  private static DelphiNameOccurrence createNameOccurrence(NameReferenceNode reference) {
+    DelphiNameOccurrence occurrence = new DelphiNameOccurrence(reference.getIdentifier());
+    GenericArgumentsNode genericArguments = reference.getGenericArguments();
+    if (genericArguments != null) {
+      List<TypeNode> typeArgumentNodes = genericArguments.getTypeArguments();
+      typeArgumentNodes.forEach(NameResolver::resolve);
+      occurrence.setIsGeneric();
+      occurrence.setTypeArguments(
+          typeArgumentNodes.stream().map(TypeNode::getType).collect(Collectors.toList()));
+    }
+    return occurrence;
+  }
+
+  private boolean nameResolutionFailed() {
+    return names.size() != resolvedDeclarations.size() + Math.min(1, declarations.size());
   }
 
   private void specializeDeclarations(DelphiNameOccurrence occurrence) {

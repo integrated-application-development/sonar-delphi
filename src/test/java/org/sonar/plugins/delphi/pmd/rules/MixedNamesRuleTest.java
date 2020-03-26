@@ -113,6 +113,32 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  public void testMismatchedExceptionNameShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  EException = class (Exception)")
+            .appendDecl("    constructor Create(Message: String);")
+            .appendDecl("    procedure Bar;")
+            .appendDecl("  end;")
+            .appendImpl("procedure Foo;")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    raise EException.Create('Everything is on fire!');")
+            .appendImpl("  except")
+            .appendImpl("  on E: EException do begin")
+            .appendImpl("    e.Bar;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .hasSize(1)
+        .areExactly(1, ruleKeyAtLine("MixedNamesRule", builder.getOffset() + 7));
+  }
+
+  @Test
   public void testMismatchedVarNameInAsmBlockShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()

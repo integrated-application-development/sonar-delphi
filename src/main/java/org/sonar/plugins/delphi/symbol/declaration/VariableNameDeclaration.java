@@ -1,9 +1,7 @@
 package org.sonar.plugins.delphi.symbol.declaration;
 
-import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
-
 import org.jetbrains.annotations.NotNull;
-import org.sonar.plugins.delphi.antlr.ast.node.SimpleNameDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.Type;
@@ -15,7 +13,7 @@ public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
   private final Type type;
   private int hashCode;
 
-  public VariableNameDeclaration(SimpleNameDeclarationNode node) {
+  public VariableNameDeclaration(NameDeclarationNode node) {
     this(new SymbolicNode(node), extractType(node));
   }
 
@@ -34,16 +32,24 @@ public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
     return new VariableNameDeclaration(image, type, scope);
   }
 
-  private static Type extractType(SimpleNameDeclarationNode node) {
-    Typed typed = null;
+  private static Type extractType(NameDeclarationNode node) {
+    Typed typed;
 
-    if (node.isConstDeclaration()) {
-      typed = ((Typed) node.jjtGetParent());
-    } else if (node.isFormalParameter() || node.isFieldDeclaration() || node.isVarDeclaration()) {
-      typed = ((Typed) node.getNthParent(2));
+    switch (node.getKind()) {
+      case CONST:
+      case EXCEPT_ITEM:
+        typed = ((Typed) node.jjtGetParent());
+        break;
+      case PARAMETER:
+      case FIELD:
+      case VAR:
+        typed = ((Typed) node.getNthParent(2));
+        break;
+      default:
+        throw new AssertionError("Unhandled DeclarationKind");
     }
 
-    return (typed == null) ? unknownType() : typed.getType();
+    return typed.getType();
   }
 
   @Override
