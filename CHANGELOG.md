@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Exclude overrides and interface implementations in `MethodNameRule`.
+- Treat class helper types as inheriting from `System.TClassHelperBase`.
 
 ### Fixed
 

@@ -95,7 +95,7 @@ public class DelphiStructType extends DelphiGenerifiableType implements StructTy
     return imageParts.stream().map(ImagePart::toString).collect(Collectors.joining("."));
   }
 
-  private static Set<Type> getAncestors(TypeDeclarationNode typeDeclaration, StructKind kind) {
+  protected static Set<Type> getAncestors(TypeDeclarationNode typeDeclaration, StructKind kind) {
     Set<Type> parents = typeDeclaration.getTypeNode().getParentTypes();
     if (parents.isEmpty()) {
       parents = getDefaultAncestors(typeDeclaration, kind);
@@ -124,7 +124,7 @@ public class DelphiStructType extends DelphiGenerifiableType implements StructTy
           break;
 
         case CLASS_HELPER:
-          defaultAncestor = systemScope.getTObjectDeclaration();
+          defaultAncestor = systemScope.getTClassHelperBaseDeclaration();
           break;
 
         default:
