@@ -556,14 +556,16 @@ public class DelphiSymbolTableExecutorTest {
   public void testNamespaces() {
     execute(
         "namespaces/Namespaced.Unit1.pas",
+        "namespaces/Unit1.pas",
         "namespaces/Namespaced.Unit2.pas",
         "namespaces/Unit3.pas",
         "namespaces/UnitScopeName.Unit2.pas",
         "namespaces/UnitScopeName.ScopedUnit3.pas");
 
     verifyUsages(1, 5, reference(25, 2), reference(28, 18));
-    verifyUsages(8, 2, reference(28, 2));
-    verifyUsages(11, 2, reference(28, 35), reference(29, 12));
+    verifyUsages(8, 2, reference(32, 2));
+    verifyUsages(8, 9, reference(28, 2));
+    verifyUsages(11, 2, reference(28, 35), reference(29, 12), reference(31, 23), reference(32, 29));
     verifyUsages(16, 2, reference(25, 29));
     verifyUsages(18, 10, reference(25, 19), reference(26, 2));
   }

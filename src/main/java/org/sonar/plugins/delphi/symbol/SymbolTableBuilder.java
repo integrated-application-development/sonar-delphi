@@ -143,46 +143,10 @@ public class SymbolTableBuilder {
     }
   }
 
-  @Nullable
-  private UnitData findUnitByName(String unitName) {
-    return getFirst(allUnitsByName.get(unitName.toLowerCase()), null);
-  }
-
-  @Nullable
-  private UnitData searchForUnit(String namespace, Qualifiable importName) {
-    String unitName = importName.fullyQualifiedName();
-    UnitData data = null;
-
-    if (!importName.isQualified() && !namespace.isEmpty()) {
-      data = findUnitByName(namespace + "." + unitName);
-    }
-
-    if (data == null) {
-      String aliasedUnitName = unitAliases.get(unitName);
-      if (aliasedUnitName != null) {
-        unitName = aliasedUnitName;
-      }
-    }
-
-    if (data == null) {
-      data = findUnitByName(unitName);
-    }
-
-    if (data == null) {
-      for (String unitScopeName : unitScopeNames) {
-        data = findUnitByName(unitScopeName + "." + unitName);
-        if (data != null) {
-          break;
-        }
-      }
-    }
-
-    return data;
-  }
-
   @NotNull
-  private UnitImportNameDeclaration createImportDeclaration(String namespace, UnitImportNode node) {
-    UnitData data = searchForUnit(namespace, node.getNameNode());
+  private UnitImportNameDeclaration createImportDeclaration(
+      UnitNameDeclaration unit, UnitImportNode node) {
+    UnitData data = searchForImport(unit, node.getNameNode());
 
     UnitNameDeclaration unitDeclaration = null;
     if (data != null) {
@@ -197,6 +161,49 @@ public class SymbolTableBuilder {
     }
 
     return new UnitImportNameDeclaration(node, unitDeclaration);
+  }
+
+  @Nullable
+  private UnitData searchForImport(UnitNameDeclaration unit, Qualifiable qualifiableImportName) {
+    String importName = qualifiableImportName.fullyQualifiedName();
+    String aliased = unitAliases.get(importName);
+
+    if (aliased != null) {
+      importName = aliased;
+    }
+
+    UnitData data = findImportByName(unit, importName);
+
+    if (data == null) {
+      for (String unitScopeName : unitScopeNames) {
+        data = findImportByName(unit, unitScopeName + "." + importName);
+        if (data != null) {
+          break;
+        }
+      }
+    }
+
+    if (data == null) {
+      String namespace = unit.getNamespace();
+      if (!qualifiableImportName.isQualified() && !namespace.isEmpty()) {
+        data = findImportByName(unit, namespace + "." + importName);
+      }
+    }
+
+    return data;
+  }
+
+  @Nullable
+  private UnitData findImportByName(UnitNameDeclaration unit, String importName) {
+    if (unit.getImage().equalsIgnoreCase(importName)) {
+      return null;
+    }
+    return findUnitByName(importName);
+  }
+
+  @Nullable
+  private UnitData findUnitByName(String importName) {
+    return getFirst(allUnitsByName.get(importName.toLowerCase()), null);
   }
 
   private void process(UnitData unit, ResolutionLevel resolutionLevel) {

@@ -68,7 +68,6 @@ import org.sonar.plugins.delphi.symbol.declaration.TypeParameterNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration;
-import org.sonar.plugins.delphi.symbol.resolve.DefaultNameResolver;
 import org.sonar.plugins.delphi.symbol.resolve.NameResolver;
 import org.sonar.plugins.delphi.symbol.scope.DeclarationScope;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
@@ -95,7 +94,7 @@ import org.sonar.plugins.delphi.type.Type.PointerType;
  * embedding syntactic entity that has a scope.
  *
  * <p>This visitor also finds occurrences of the declarations and creates NameOccurrence objects
- * accordingly. (Delegated to the {@link DefaultNameResolver})
+ * accordingly. (Delegated to the {@link NameResolver})
  */
 public class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   public enum ResolutionLevel {
@@ -112,7 +111,6 @@ public class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     private final SystemScope systemScope;
     private final Deque<DelphiScope> scopes;
     private UnitNameDeclaration unitDeclaration;
-    private String namespace;
 
     public Data(
         ResolutionLevel resolved,
@@ -184,6 +182,10 @@ public class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
     private void addDeclarationToCurrentScope(DelphiNameDeclaration declaration) {
       currentScope().addDeclaration(declaration);
+    }
+
+    private UnitImportNameDeclaration resolveImport(UnitImportNode node) {
+      return importHandler.resolveImport(unitDeclaration, node);
     }
   }
 
@@ -261,8 +263,6 @@ public class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       return data;
     }
 
-    data.namespace = header.getNamespace();
-
     if (!data.scopes.isEmpty()) {
       node.setScope(data.currentScope());
       return visitScope(node, data);
@@ -305,7 +305,7 @@ public class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(UnitImportNode node, Data data) {
-    UnitImportNameDeclaration declaration = data.importHandler.resolveImport(data.namespace, node);
+    UnitImportNameDeclaration declaration = data.resolveImport(node);
     data.addDeclaration(declaration, node.getNameNode());
     return DelphiParserVisitor.super.visit(node, data);
   }

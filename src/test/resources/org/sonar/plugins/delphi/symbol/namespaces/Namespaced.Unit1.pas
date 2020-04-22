@@ -5,7 +5,7 @@ unit Namespaced.Unit1;
 interface
 
 uses
-  Unit3;
+  Unit1, Unit3;
 
 const
   C_Unit1Constant = 'FooS';
@@ -27,6 +27,9 @@ begin
 
   Unit3.Unit3Proc(Namespaced.Unit1.C_Unit1Constant);
   Unit3Proc(C_Unit1Constant);
+
+  UnqualifiedUnit1Proc(C_Unit1Constant);
+  Unit1.UnqualifiedUnit1Proc(C_Unit1Constant);
 end;
 
 end.
