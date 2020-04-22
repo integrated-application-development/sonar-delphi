@@ -20,7 +20,10 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodDeclarationNode;
-import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
+import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Type.ScopedType;
 
 public class MethodNameRule extends AbstractDelphiRule {
 
@@ -33,11 +36,52 @@ public class MethodNameRule extends AbstractDelphiRule {
   }
 
   private boolean isViolation(MethodDeclarationNode method) {
-    TypeDeclarationNode type = method.getFirstParentOfType(TypeDeclarationNode.class);
-    if (method.isPublished() && (type == null || !type.isInterface())) {
+    if (isExcluded(method)) {
       return false;
     }
     String name = method.simpleName();
     return Character.isLowerCase(name.charAt(0));
+  }
+
+  private static boolean isExcluded(MethodDeclarationNode node) {
+    MethodNameDeclaration method = node.getMethodNameDeclaration();
+    TypeNameDeclaration typeDeclaration = node.getTypeDeclaration();
+    if (method == null || typeDeclaration == null) {
+      return false;
+    }
+
+    Type type = typeDeclaration.getType();
+    if (method.isPublished() && !type.isInterface()) {
+      return true;
+    } else {
+      return hasOverriddenMethodDeclarationInAncestor(type, method);
+    }
+  }
+
+  private static boolean hasOverriddenMethodDeclarationInAncestor(
+      Type type, MethodNameDeclaration method) {
+    return type.parents().stream()
+        .anyMatch(
+            parent ->
+                hasOverriddenMethodDeclaration(parent, method)
+                    || hasOverriddenMethodDeclarationInAncestor(parent, method));
+  }
+
+  private static boolean hasOverriddenMethodDeclaration(Type type, MethodNameDeclaration method) {
+    if (!(type instanceof ScopedType)) {
+      return false;
+    }
+
+    return ((ScopedType) type)
+        .typeScope().getMethodDeclarations().stream()
+            .anyMatch(overridden -> isOverriddenMethodDeclaration(overridden, method));
+  }
+
+  private static boolean isOverriddenMethodDeclaration(
+      MethodNameDeclaration overridden, MethodNameDeclaration method) {
+    return overridden.getImage().equals(method.getImage())
+        && overridden.hasSameParameterTypes(method)
+        && overridden.getTypeParameters().equals(method.getTypeParameters())
+        && overridden.isClassInvocable() == method.isClassInvocable();
   }
 }

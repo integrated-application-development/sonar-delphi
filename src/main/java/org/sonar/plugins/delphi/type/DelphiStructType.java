@@ -124,7 +124,7 @@ public class DelphiStructType extends DelphiGenerifiableType implements StructTy
           break;
 
         case CLASS_HELPER:
-          defaultAncestor = systemScope.getTObjectDeclaration();
+          defaultAncestor = systemScope.getTClassHelperBaseDeclaration();
           break;
 
         default:
