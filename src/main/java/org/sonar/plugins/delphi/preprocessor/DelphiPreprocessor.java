@@ -80,7 +80,7 @@ public class DelphiPreprocessor {
 
   public void process() {
     checkState(tokenStream == null, "DelphiPreprocessor.process cannot be called twice.");
-    tokenStream = new DelphiTokenStream(this.lexer);
+    tokenStream = new DelphiTokenStream(lexer);
 
     tokenStream.fill();
     tokens = extractTokens(tokenStream);
@@ -125,7 +125,7 @@ public class DelphiPreprocessor {
   }
 
   public void deleteToken(Token token) {
-    this.tokens.remove(token);
+    tokens.remove(token);
   }
 
   public void resolveInclude(Token insertionToken, String includeFilePath) {
@@ -140,12 +140,19 @@ public class DelphiPreprocessor {
     DelphiToken location = new DelphiToken(insertionToken);
     List<Token> includeTokens = processIncludeFile(includeFileName, includePath, location);
 
-    this.offsetTokenIndex(location.getIndex(), includeTokens.size());
-    this.deleteToken(insertionToken);
-    this.tokens.addAll(includeTokens);
+    offsetTokenIndices(location.getIndex(), getTokenOffset(includeTokens));
+    deleteToken(insertionToken);
+    tokens.addAll(includeTokens);
   }
 
-  private void offsetTokenIndex(int startIndex, int offset) {
+  private static int getTokenOffset(List<Token> tokens) {
+    if (!tokens.isEmpty()) {
+      return getLast(tokens).getTokenIndex() - tokens.get(0).getTokenIndex();
+    }
+    return 0;
+  }
+
+  private void offsetTokenIndices(int startIndex, int offset) {
     tokens.stream()
         .filter(token -> token.getTokenIndex() > startIndex)
         .forEach(token -> token.setTokenIndex(token.getTokenIndex() + offset));

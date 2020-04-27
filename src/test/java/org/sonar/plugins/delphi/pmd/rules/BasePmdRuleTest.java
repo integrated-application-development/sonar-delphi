@@ -107,7 +107,6 @@ public abstract class BasePmdRuleTest {
 
   private void configureTest(DelphiTestFileBuilder<?> builder) {
     sensorContext = SensorContextTester.create(ROOT_DIR);
-    builder.setBaseDir(ROOT_DIR);
 
     builder.printSourceCode();
     builder.setBaseDir(ROOT_DIR);

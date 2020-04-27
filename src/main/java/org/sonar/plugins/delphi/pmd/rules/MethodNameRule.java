@@ -29,16 +29,13 @@ public class MethodNameRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(MethodDeclarationNode method, RuleContext data) {
-    if (isViolation(method)) {
+    if (isViolation(method) && !isExcluded(method)) {
       addViolation(data, method);
     }
     return super.visit(method, data);
   }
 
   private boolean isViolation(MethodDeclarationNode method) {
-    if (isExcluded(method)) {
-      return false;
-    }
     String name = method.simpleName();
     return Character.isLowerCase(name.charAt(0));
   }

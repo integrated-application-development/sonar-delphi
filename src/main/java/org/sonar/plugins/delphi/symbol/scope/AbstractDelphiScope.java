@@ -186,8 +186,7 @@ class AbstractDelphiScope implements DelphiScope {
 
   @Override
   public void findMethodOverloads(DelphiNameOccurrence occurrence, Set<NameDeclaration> result) {
-    if (result.isEmpty()
-        || !result.stream().allMatch(AbstractDelphiScope::hasOverloadMethodDirective)) {
+    if (result.isEmpty() || !result.stream().allMatch(AbstractDelphiScope::canBeOverloaded)) {
       return;
     }
 
@@ -208,6 +207,15 @@ class AbstractDelphiScope implements DelphiScope {
     return parent;
   }
 
+  private static boolean canBeOverloaded(NameDeclaration declaration) {
+    if (declaration instanceof MethodNameDeclaration) {
+      MethodNameDeclaration methodDeclaration = (MethodNameDeclaration) declaration;
+      return methodDeclaration.getDirectives().contains(MethodDirective.OVERLOAD)
+          || !methodDeclaration.isCallable();
+    }
+    return false;
+  }
+
   private static boolean isMethodOverload(
       MethodNameDeclaration declaration,
       DelphiNameOccurrence occurrence,
@@ -223,6 +231,10 @@ class AbstractDelphiScope implements DelphiScope {
 
   private static boolean overridesMethodSignature(
       MethodNameDeclaration declaration, MethodNameDeclaration overridden) {
+    if (!declaration.isCallable() || !overridden.isCallable()) {
+      return false;
+    }
+
     if (declaration.getRequiredParametersCount() != overridden.getRequiredParametersCount()) {
       return false;
     }
@@ -266,11 +278,6 @@ class AbstractDelphiScope implements DelphiScope {
     }
 
     return result;
-  }
-
-  private static boolean hasOverloadMethodDirective(NameDeclaration declaration) {
-    return declaration instanceof MethodNameDeclaration
-        && ((MethodNameDeclaration) declaration).getDirectives().contains(MethodDirective.OVERLOAD);
   }
 
   @Nullable

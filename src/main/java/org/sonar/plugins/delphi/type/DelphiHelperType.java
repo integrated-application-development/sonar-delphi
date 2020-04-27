@@ -32,7 +32,7 @@ public class DelphiHelperType extends DelphiStructType implements HelperType {
     return new DelphiHelperType(
         createImageParts(declaration),
         node.getScope(),
-        node.getParentTypes(),
+        getAncestors(declaration, kind),
         node.getFor().getType(),
         kind);
   }
