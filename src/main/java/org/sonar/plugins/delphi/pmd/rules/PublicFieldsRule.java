@@ -24,14 +24,19 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.node.FieldDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 
 public class PublicFieldsRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(FieldDeclarationNode field, RuleContext data) {
-    if (field.isPublic()) {
+    if (field.isPublic() && !isRecordField(field)) {
       addViolation(data, field);
     }
     return super.visit(field, data);
+  }
+
+  private static boolean isRecordField(FieldDeclarationNode field) {
+    return field.getFirstParentOfType(TypeDeclarationNode.class).isRecord();
   }
 }
