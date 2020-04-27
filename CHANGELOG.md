@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Preprocessor bug where included tokens could be unexpectedly deleted.
+- Name resolution bug where method overload searches would stop prematurely if a class
+  constructor or class destructor was found with the same name.
 
 ## [0.16.2] - 2020-04-22
 
