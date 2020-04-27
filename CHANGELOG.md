@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Exclude records in `PublicFieldsRule`.
 
+### Fixed
+
+- Preprocessor bug where included tokens could be unexpectedly deleted.
+
 ## [0.16.2] - 2020-04-22
 
 ### Changed
