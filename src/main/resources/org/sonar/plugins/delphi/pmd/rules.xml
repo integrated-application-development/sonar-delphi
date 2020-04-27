@@ -1131,6 +1131,26 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedImportsRule"
+    message="Unnecessary imports should be removed"
+    name="UnusedImportsRule">
+    <priority>4</priority>
+    <description>
+      Unused and useless imports should be removed.
+      &lt;br&gt;
+      Leaving them in reduces the code's readability, since their presence can be confusing.
+      &lt;br&gt;
+      &lt;br&gt;
+      WARNING: Take care when removing imports of units with initialization/finalization sections.
+      &lt;br&gt;
+      A unit must be imported at least once for the code in its initialization and finalization sections to execute.
+    </description>
+    <properties>
+      <property name="baseEffort" value="3min"/>
+      <property name="exclusions" value="Winapi.Windows|Winapi.Messages|System.SysUtils|System.Variants|System.Classes|System.Types|Vcl.Graphics|Vcl.Controls|Vcl.Forms|Vcl.Dialogs|FMX.Types|FMX.Controls|FMX.Forms|FMX.Dialogs|QTypes|QGraphics|QControls|QForms|QDialogs|QStdCtrls"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="Empty type sections should be removed"
     name="EmptyTypeSectionRule">

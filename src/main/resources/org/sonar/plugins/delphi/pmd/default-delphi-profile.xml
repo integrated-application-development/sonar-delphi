@@ -199,4 +199,8 @@
     name="MemoryManagementRule">
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedImportsRule"
+    name="UnusedImportsRule">
+  </rule>
+
 </ruleset>
