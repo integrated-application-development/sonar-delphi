@@ -60,6 +60,21 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  public void testStandaloneMethodNameStartWithLowerCaseShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("procedure foo;")
+            .appendDecl("function bar: Integer;");
+
+    execute(builder);
+
+    assertIssues()
+        .hasSize(2)
+        .areExactly(1, ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 1))
+        .areExactly(1, ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 2));
+  }
+
+  @Test
   public void testPublishedMethodsShouldBeSkipped() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
@@ -116,7 +131,7 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMethodsImplementingInterfacesWithMatchingNameShouldAddIssue() {
+  public void testMethodsImplementingInterfacesWithoutMatchingNameShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -154,6 +169,21 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
 
     assertIssues()
         .areExactly(1, ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 4))
-        .areExactly(1, ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 4));
+        .areExactly(1, ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 8));
+  }
+
+  @Test
+  public void testMethodOverridesWithUnknownTypeShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TFoo = class(UNKNOWN_TYPE)")
+            .appendDecl("    public")
+            .appendDecl("      procedure invalidname; override;")
+            .appendDecl("  end;");
+
+    execute(builder);
+
+    assertIssues().areExactly(1, ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 4));
   }
 }
