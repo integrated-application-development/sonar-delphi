@@ -51,11 +51,6 @@ public class DefaultSearchPath implements SearchPath {
     return path;
   }
 
-  @Override
-  public Set<Path> sourceFiles() {
-    return allFiles;
-  }
-
   private Set<Path> indexIncludePath(Path path) {
     try (DirectoryStream<Path> stream = Files.newDirectoryStream(path)) {
       for (Path child : stream) {

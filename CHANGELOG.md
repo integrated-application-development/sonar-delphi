@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Streamline symbol table construction into a single-pass implementation for better performance.
 - Exclude records in `PublicFieldsRule`.
 
 ### Fixed

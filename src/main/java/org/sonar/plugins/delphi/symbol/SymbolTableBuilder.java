@@ -28,9 +28,10 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.antlr.ast.node.UnitImportNode;
+import org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableImplementationVisitor;
+import org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableInterfaceVisitor;
 import org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor;
 import org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor.Data;
-import org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor.ResolutionLevel;
 import org.sonar.plugins.delphi.file.DelphiFile;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiFileConstructionException;
 import org.sonar.plugins.delphi.file.DelphiFileConfig;
@@ -54,7 +55,8 @@ public class SymbolTableBuilder {
   private static final String INVALID_STANDARD_LIBRARY_PATH =
       "Path to Delphi standard library is invalid: %s";
 
-  private final SymbolTableVisitor visitor = new SymbolTableVisitor();
+  private final SymbolTableVisitor interfaceVisitor = new SymbolTableInterfaceVisitor();
+  private final SymbolTableVisitor implementationVisitor = new SymbolTableImplementationVisitor();
   private final SymbolTable symbolTable = new SymbolTable();
   private final Set<UnitData> sourceFileUnits = new HashSet<>();
   private final Multimap<String, UnitData> allUnitsByName = HashMultimap.create();
@@ -217,24 +219,14 @@ public class SymbolTableBuilder {
       fileConfig.setShouldSkipImplementation(resolutionLevel != ResolutionLevel.COMPLETE);
 
       DelphiFile delphiFile = DelphiFile.from(unit.unitFile.toFile(), fileConfig);
-      Data data =
-          new Data(
-              unit.resolved,
-              resolutionLevel,
-              this::createImportDeclaration,
-              delphiFile.getCompilerSwitchRegistry(),
-              this.systemScope,
-              unit.unitDeclaration);
 
-      visitor.visit(delphiFile.getAst(), data);
-
-      if (data.getUnitDeclaration() != null) {
-        String filePath = unit.unitFile.toAbsolutePath().toString();
-        unit.unitDeclaration = data.getUnitDeclaration();
-        symbolTable.addUnit(filePath, unit.unitDeclaration);
+      if (unit.resolved == ResolutionLevel.NONE) {
+        runSymbolTableVisitor(unit, delphiFile, ResolutionLevel.INTERFACE, interfaceVisitor);
       }
 
-      unit.resolved = resolutionLevel;
+      if (resolutionLevel == ResolutionLevel.COMPLETE) {
+        runSymbolTableVisitor(unit, delphiFile, ResolutionLevel.COMPLETE, implementationVisitor);
+      }
     } catch (DelphiFileConstructionException e) {
       String error = String.format("Error while processing %s", unit.unitFile.toAbsolutePath());
       LOG.error(error, e);
@@ -243,8 +235,31 @@ public class SymbolTableBuilder {
     }
   }
 
+  private void runSymbolTableVisitor(
+      UnitData unit,
+      DelphiFile delphiFile,
+      ResolutionLevel resolutionLevel,
+      SymbolTableVisitor visitor) {
+    Data data =
+        new Data(
+            this::createImportDeclaration,
+            delphiFile.getCompilerSwitchRegistry(),
+            this.systemScope,
+            unit.unitDeclaration);
+
+    visitor.visit(delphiFile.getAst(), data);
+
+    if (data.getUnitDeclaration() != null) {
+      String filePath = unit.unitFile.toAbsolutePath().toString();
+      unit.unitDeclaration = data.getUnitDeclaration();
+      symbolTable.addUnit(filePath, unit.unitDeclaration);
+    }
+
+    unit.resolved = resolutionLevel;
+  }
+
   private void indexUnit(UnitData unit, ResolutionLevel resolutionLevel) {
-    LOG.debug("Indexing file [{}]: {}", resolutionLevel, unit.unitFile.toAbsolutePath());
+    LOG.debug("Indexing file: {}", unit.unitFile.toAbsolutePath());
     process(unit, resolutionLevel);
   }
 
@@ -279,17 +294,11 @@ public class SymbolTableBuilder {
 
   public SymbolTable build() {
     fileConfig = DelphiFile.createConfig(encoding, searchDirectories, conditionalDefines);
-    doPartialIndex();
-    doFullIndex();
-    return symbolTable;
-  }
-
-  private void doPartialIndex() {
     ProgressReport progressReport =
         new ProgressReport(
-            "Report about progress of Symbol Table construction (Pass 1)",
+            "Report about progress of Symbol Table construction",
             TimeUnit.SECONDS.toMillis(10),
-            "partially indexed");
+            "indexed");
 
     progressReport.start(
         new ImmutableList.Builder<String>()
@@ -304,27 +313,6 @@ public class SymbolTableBuilder {
 
     try {
       for (UnitData unit : sourceFileUnits) {
-        indexUnit(unit, ResolutionLevel.INTERFACE);
-        progressReport.nextFile();
-      }
-      success = true;
-    } finally {
-      stopProgressReport(progressReport, success);
-    }
-  }
-
-  private void doFullIndex() {
-    ProgressReport progressReport =
-        new ProgressReport(
-            "Report about progress of Symbol Table construction (Pass 2)",
-            TimeUnit.SECONDS.toMillis(10),
-            "fully indexed");
-
-    progressReport.start(getSourceFileNames());
-    boolean success = false;
-
-    try {
-      for (UnitData unit : sourceFileUnits) {
         indexUnit(unit, ResolutionLevel.COMPLETE);
         progressReport.nextFile();
       }
@@ -332,6 +320,8 @@ public class SymbolTableBuilder {
     } finally {
       stopProgressReport(progressReport, success);
     }
+
+    return symbolTable;
   }
 
   private Iterable<String> getSourceFileNames() {
@@ -339,6 +329,12 @@ public class SymbolTableBuilder {
         .map(data -> data.unitFile)
         .map(Path::toString)
         .collect(Collectors.toList());
+  }
+
+  private enum ResolutionLevel {
+    NONE,
+    INTERFACE,
+    COMPLETE
   }
 
   private static class UnitData {
