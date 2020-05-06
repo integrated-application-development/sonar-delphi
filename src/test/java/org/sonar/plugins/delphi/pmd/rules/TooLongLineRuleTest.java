@@ -27,7 +27,8 @@ public class TooLongLineRuleTest extends BasePmdRuleTest {
             .appendImpl("procedure TClass.Test;")
             .appendImpl("begin")
             .appendImpl(
-                "  FMessage := 'This line is too long. Look, it''s running right off the screen! Who would do such a thing? I am horrified by the audacity of this line!';")
+                "  FMessage := 'This line is too long. Look, it''s running right off the screen!"
+                    + " Who would do such a thing? I am horrified by the audacity of this line!';")
             .appendImpl("end;");
 
     execute(builder);
@@ -44,7 +45,8 @@ public class TooLongLineRuleTest extends BasePmdRuleTest {
             .appendImpl("procedure TTestSuite_TooLongLine.Test;")
             .appendImpl("begin")
             .appendImpl(
-                "  Assert(FSomeField.SomeProperty.SomeFunction, 'This assertion message is running a little long...');")
+                "  Assert(FSomeField.SomeProperty.SomeFunction, 'This assertion message is running"
+                    + " a little long...');")
             .appendImpl("end;");
 
     execute(builder);
@@ -59,7 +61,8 @@ public class TooLongLineRuleTest extends BasePmdRuleTest {
             .appendImpl("procedure TClass.Test;")
             .appendImpl("begin")
             .appendImpl(
-                "  FMessage := 'This line is not too long, but there is trailing whitespace...';                             ")
+                "  FMessage := 'This line is not too long, but there is trailing whitespace...';  "
+                    + "                           ")
             .appendImpl("end;");
 
     execute(builder);
