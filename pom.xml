@@ -99,7 +99,7 @@
     <antlr-runtime.version>3.4</antlr-runtime.version>
     <pmd.version>6.18.0</pmd.version>
     <junit.version>4.12</junit.version>
-    <assertj.version>3.14.0</assertj.version>
+    <assertj.version>3.16.1</assertj.version>
     <mockito.version>3.0.0</mockito.version>
     <archunit.version>0.13.0</archunit.version>
     <java-surefire.version>5.13.0.18197</java-surefire.version>
