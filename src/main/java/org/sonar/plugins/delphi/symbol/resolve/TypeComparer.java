@@ -55,11 +55,11 @@ class TypeComparer {
       return EXACT;
     }
 
-    if (from.isTypeType()) {
+    while (from.isTypeType()) {
       from = ((TypeType) from).originalType();
     }
 
-    if (to.isTypeType()) {
+    while (to.isTypeType()) {
       to = ((TypeType) to).originalType();
     }
 

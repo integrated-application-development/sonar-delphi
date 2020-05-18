@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Name resolution bugs around nested unscoped enums.
+- Type comparison bugs around types of the form `type TFoo`.
 
 ## [0.17.0] - 2020-04-27
 
