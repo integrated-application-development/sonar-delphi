@@ -20,7 +20,6 @@ public final class TypeNameDeclaration extends AbstractDelphiNameDeclaration
   private final QualifiedName qualifiedName;
   private final Type type;
   private final List<TypedDeclaration> typeParameters;
-  private boolean isScopedEnum;
 
   public TypeNameDeclaration(TypeDeclarationNode node) {
     this(
@@ -58,14 +57,6 @@ public final class TypeNameDeclaration extends AbstractDelphiNameDeclaration
   @Override
   public QualifiedName getQualifiedName() {
     return qualifiedName;
-  }
-
-  public void setIsScopedEnum() {
-    isScopedEnum = true;
-  }
-
-  public boolean isScopedEnum() {
-    return isScopedEnum;
   }
 
   @Override

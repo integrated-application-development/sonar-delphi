@@ -611,6 +611,14 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testNestedUnscopedEnums() {
+    execute("enums/NestedUnscopedEnum.pas");
+    verifyUsages(10, 12, reference(17, 9));
+    verifyUsages(22, 16, reference(26, 9));
+    verifyUsages(31, 8, reference(33, 9));
+  }
+
+  @Test
   public void testScopedEnums() {
     execute("enums/ScopedEnum.pas");
     verifyUsages(10, 2);

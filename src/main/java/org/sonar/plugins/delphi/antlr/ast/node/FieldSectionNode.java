@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import java.util.List;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 
@@ -20,5 +21,9 @@ public final class FieldSectionNode extends DelphiNode implements Visibility {
   @Override
   public VisibilityType getVisibility() {
     return ((VisibilitySectionNode) jjtGetParent()).getVisibility();
+  }
+
+  public List<FieldDeclarationNode> getFieldDeclarations() {
+    return findChildrenOfType(FieldDeclarationNode.class);
   }
 }
