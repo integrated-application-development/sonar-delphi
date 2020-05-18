@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Exclude most IDE-generated imports from `UnusedImportsRule`.
 
+### Fixed
+
+- Name resolution bugs around nested unscoped enums.
+
 ## [0.17.0] - 2020-04-27
 
 ### Added

@@ -29,7 +29,6 @@ import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.Type.EnumType;
 import org.sonar.plugins.delphi.type.Type.HelperType;
 import org.sonar.plugins.delphi.type.Type.StructType;
 
@@ -258,23 +257,6 @@ class AbstractDelphiScope implements DelphiScope {
     if (!found.isEmpty()) {
       result = new HashSet<>(found);
       findMethodOverloads(occurrence, result);
-    }
-
-    if (result.isEmpty()) {
-      result = findDeclarationInsideEnumScopes(occurrence);
-    }
-
-    return result;
-  }
-
-  private Set<NameDeclaration> findDeclarationInsideEnumScopes(DelphiNameOccurrence occurrence) {
-    Set<NameDeclaration> result = new HashSet<>();
-
-    for (TypeNameDeclaration typeDeclaration : enumDeclarations) {
-      if (!typeDeclaration.isScopedEnum()) {
-        DelphiScope enumScope = ((EnumType) typeDeclaration.getType()).typeScope();
-        result.addAll(enumScope.findDeclaration(occurrence));
-      }
     }
 
     return result;

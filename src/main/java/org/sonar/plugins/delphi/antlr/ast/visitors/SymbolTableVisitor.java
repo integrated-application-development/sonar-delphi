@@ -63,6 +63,7 @@ import org.sonar.plugins.delphi.symbol.scope.DeclarationScope;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.symbol.scope.FileScope;
 import org.sonar.plugins.delphi.symbol.scope.LocalScope;
+import org.sonar.plugins.delphi.symbol.scope.MethodScope;
 import org.sonar.plugins.delphi.symbol.scope.SystemScope;
 import org.sonar.plugins.delphi.symbol.scope.TypeScope;
 import org.sonar.plugins.delphi.symbol.scope.UnitScope;
@@ -190,11 +191,6 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     DelphiScope parent = Preconditions.checkNotNull(data.currentScope().getParent());
     parent.addDeclaration(declaration);
 
-    if (declaration.getType().isEnum()
-        && data.switchRegistry.isActiveSwitch(SCOPED_ENUMS, node.getTokenIndex())) {
-      declaration.setIsScopedEnum();
-    }
-
     return visitScope(node, data);
   }
 
@@ -257,6 +253,20 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   public Data visit(EnumElementNode node, Data data) {
     EnumElementNameDeclaration declaration = new EnumElementNameDeclaration(node);
     data.addDeclaration(declaration, node.getNameDeclarationNode());
+
+    if (!data.switchRegistry.isActiveSwitch(SCOPED_ENUMS, node.getTokenIndex())) {
+      DelphiScope currentScope = data.currentScope();
+
+      DelphiScope scope = currentScope.getEnclosingScope(MethodScope.class);
+      if (scope == null) {
+        scope = currentScope.getEnclosingScope(FileScope.class);
+      }
+
+      if (currentScope != scope) {
+        scope.addDeclaration(declaration);
+      }
+    }
+
     return DelphiParserVisitor.super.visit(node, data);
   }
 
