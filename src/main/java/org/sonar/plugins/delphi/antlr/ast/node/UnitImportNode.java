@@ -1,6 +1,5 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
@@ -24,9 +23,8 @@ public final class UnitImportNode extends DelphiNode {
   }
 
   public boolean isResolvedImport() {
-    NameDeclaration declaration = getNameNode().getNameDeclaration();
-    return declaration != null
-        && ((UnitImportNameDeclaration) declaration).getOriginalDeclaration() != null;
+    UnitImportNameDeclaration declaration = getImportNameDeclaration();
+    return declaration != null && declaration.getOriginalDeclaration() != null;
   }
 
   public UnitImportNameDeclaration getImportNameDeclaration() {

@@ -7,7 +7,7 @@ import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Typed;
 
-public final class ConstDeclarationNode extends DelphiNode implements Typed {
+public final class ConstDeclarationNode extends DelphiNode implements Typed, Visibility {
   public ConstDeclarationNode(Token token) {
     super(token);
   }
@@ -42,5 +42,14 @@ public final class ConstDeclarationNode extends DelphiNode implements Typed {
       return typeNode.getType();
     }
     return getExpression().getType();
+  }
+
+  @Override
+  public VisibilityType getVisibility() {
+    Node parent = jjtGetParent();
+    if (parent instanceof ConstSectionNode) {
+      return ((ConstSectionNode) parent).getVisibility();
+    }
+    return VisibilityType.PUBLIC;
   }
 }

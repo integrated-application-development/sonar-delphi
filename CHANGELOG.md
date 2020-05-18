@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Exclude most IDE-generated imports from `UnusedImportsRule`.
+
 ## [0.17.0] - 2020-04-27
 
 ### Added
