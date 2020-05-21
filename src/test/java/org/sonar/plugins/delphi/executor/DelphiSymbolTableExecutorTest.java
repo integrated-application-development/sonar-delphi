@@ -556,7 +556,12 @@ public class DelphiSymbolTableExecutorTest {
 
   @Test
   public void testImports() {
-    execute("imports/Unit1.pas", "imports/Unit2.pas", "imports/Unit3.pas");
+    execute(
+        "imports/source/Unit1.pas",
+        "imports/Unit2.pas",
+        "imports/source/Unit3.pas",
+        "imports/ignored/Unit2.pas",
+        "imports/ignored/Unit3.pas");
     verifyUsages(1, 5, reference(25, 2), reference(28, 18));
     verifyUsages(8, 2, reference(28, 2));
     verifyUsages(11, 2, reference(28, 24), reference(29, 12));

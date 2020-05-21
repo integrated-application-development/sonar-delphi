@@ -2,11 +2,13 @@ package org.sonar.plugins.delphi.symbol;
 
 import static com.google.common.collect.Iterables.getFirst;
 import static org.apache.commons.io.FilenameUtils.getBaseName;
+import static org.sonar.plugins.delphi.utils.DelphiUtils.commonPath;
 import static org.sonar.plugins.delphi.utils.DelphiUtils.stopProgressReport;
 
+import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.SetMultimap;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
@@ -59,7 +61,7 @@ public class SymbolTableBuilder {
   private final SymbolTableVisitor implementationVisitor = new SymbolTableImplementationVisitor();
   private final SymbolTable symbolTable = new SymbolTable();
   private final Set<UnitData> sourceFileUnits = new HashSet<>();
-  private final Multimap<String, UnitData> allUnitsByName = HashMultimap.create();
+  private final SetMultimap<String, UnitData> allUnitsByName = HashMultimap.create();
   private final Set<Path> unitPaths = new HashSet<>();
 
   private String encoding;
@@ -200,12 +202,26 @@ public class SymbolTableBuilder {
     if (unit.getImage().equalsIgnoreCase(importName)) {
       return null;
     }
-    return findUnitByName(importName);
+
+    return allUnitsByName.get(importName.toLowerCase()).stream()
+        .max(
+            (o1, o2) ->
+                ComparisonChain.start()
+                    .compare(
+                        commonPathNameCount(unit.getPath(), o1.unitFile),
+                        commonPathNameCount(unit.getPath(), o2.unitFile))
+                    .compare(o2.unitFile.getNameCount(), o1.unitFile.getNameCount())
+                    .compare(o1.unitFile, o2.unitFile)
+                    .result())
+        .orElse(null);
   }
 
-  @Nullable
-  private UnitData findUnitByName(String importName) {
-    return getFirst(allUnitsByName.get(importName.toLowerCase()), null);
+  private static int commonPathNameCount(Path pathA, Path pathB) {
+    Path commonPath = commonPath(pathA, pathB);
+    if (commonPath != null) {
+      return commonPath.getNameCount();
+    }
+    return -1;
   }
 
   private void process(UnitData unit, ResolutionLevel resolutionLevel) {

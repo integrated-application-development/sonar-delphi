@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Overload resolution failures around overloads imported from multiple units.
+- Non-deterministic imports when multiple units have the same name.
 
 ## [0.18.0] - 2020-05-19
 
