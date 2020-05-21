@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improve description of `UnusedImportsRule`.
 
+### Fixed
+
+- Overload resolution failures around overloads imported from multiple units.
+
 ## [0.18.0] - 2020-05-19
 
 ### Changed
