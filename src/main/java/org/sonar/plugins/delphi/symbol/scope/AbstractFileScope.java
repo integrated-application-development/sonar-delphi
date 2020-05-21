@@ -3,6 +3,7 @@ package org.sonar.plugins.delphi.symbol.scope;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
@@ -22,9 +23,9 @@ import org.sonar.plugins.delphi.type.Type.HelperType;
 abstract class AbstractFileScope extends AbstractDelphiScope implements FileScope {
   private final String name;
   private final Deque<FileScope> imports = new ArrayDeque<>();
-  private final HashMap<Integer, DelphiScope> registeredScopes = new HashMap<>();
-  private final HashMap<Integer, DelphiNameDeclaration> registeredDeclarations = new HashMap<>();
-  private final HashMap<Integer, DelphiNameOccurrence> registeredOccurrences = new HashMap<>();
+  private final Map<Integer, DelphiScope> registeredScopes = new HashMap<>();
+  private final Map<Integer, DelphiNameDeclaration> registeredDeclarations = new HashMap<>();
+  private final Map<Integer, DelphiNameOccurrence> registeredOccurrences = new HashMap<>();
 
   protected AbstractFileScope(String name) {
     this.name = name;
@@ -33,12 +34,11 @@ abstract class AbstractFileScope extends AbstractDelphiScope implements FileScop
   @Override
   public Set<NameDeclaration> findDeclaration(DelphiNameOccurrence occurrence) {
     Set<NameDeclaration> result = super.findDeclaration(occurrence);
-    if (result.isEmpty()) {
-      for (FileScope importScope : imports) {
+    for (FileScope importScope : imports) {
+      if (result.isEmpty()) {
         result = importScope.shallowFindDeclaration(occurrence);
-        if (!result.isEmpty()) {
-          break;
-        }
+      } else {
+        importScope.findMethodOverloads(occurrence, result);
       }
     }
     return result;

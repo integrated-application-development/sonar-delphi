@@ -37,7 +37,6 @@ class AbstractDelphiScope implements DelphiScope {
   private final ListMultimap<NameDeclaration, NameOccurrence> occurrencesByDeclaration;
   private final SetMultimap<Class<? extends NameDeclaration>, NameDeclaration> declarationsByClass;
   private final SetMultimap<String, DelphiNameDeclaration> declarationsByName;
-  private final Set<TypeNameDeclaration> enumDeclarations;
   private final Map<Type, HelperType> helpersByType;
 
   private DelphiScope parent;
@@ -47,7 +46,6 @@ class AbstractDelphiScope implements DelphiScope {
     occurrencesByDeclaration = ArrayListMultimap.create();
     declarationsByClass = HashMultimap.create();
     declarationsByName = TreeMultimap.create(String.CASE_INSENSITIVE_ORDER, Ordering.natural());
-    enumDeclarations = new HashSet<>();
     helpersByType = new HashMap<>();
   }
 
@@ -59,7 +57,6 @@ class AbstractDelphiScope implements DelphiScope {
     declarationSet.add(declaration);
     declarationsByName.put(declaration.getImage(), delphiDeclaration);
     declarationsByClass.put(declaration.getClass(), delphiDeclaration);
-    handleEnumDeclaration(declaration);
     handleHelperDeclaration(declaration);
   }
 
@@ -137,15 +134,6 @@ class AbstractDelphiScope implements DelphiScope {
             duplicate ->
                 duplicate instanceof GenerifiableDeclaration
                     && ((GenerifiableDeclaration) duplicate).isGeneric());
-  }
-
-  private void handleEnumDeclaration(NameDeclaration declaration) {
-    if (declaration instanceof TypeNameDeclaration) {
-      TypeNameDeclaration typeDeclaration = (TypeNameDeclaration) declaration;
-      if (typeDeclaration.getType().isEnum()) {
-        enumDeclarations.add(typeDeclaration);
-      }
-    }
   }
 
   private void handleHelperDeclaration(NameDeclaration declaration) {
