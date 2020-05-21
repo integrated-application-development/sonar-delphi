@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Improve description of `UnusedImportsRule`.
+
 ## [0.18.0] - 2020-05-19
 
 ### Changed

@@ -1141,9 +1141,9 @@ Result := 123;; // Noncompliant
       Leaving them in reduces the code's readability, since their presence can be confusing.
       &lt;br&gt;
       &lt;br&gt;
-      WARNING: Take care when removing imports of units with initialization/finalization sections.
+      WARNING: Take care when removing imports of units with a Register procedure or initialization/finalization section.
       &lt;br&gt;
-      A unit must be imported at least once for the code in its initialization and finalization sections to execute.
+      A unit must be imported at least once for code in these locations to be executed.
     </description>
     <properties>
       <property name="baseEffort" value="3min"/>
