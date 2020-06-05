@@ -42,7 +42,7 @@ public class DestructorWithoutInheritedStatementRule extends NoInheritedStatemen
     if (declaration != null) {
       String name = declaration.getName();
 
-      return declaration.getDirectives().contains(MethodDirective.OVERRIDE)
+      return declaration.hasDirective(MethodDirective.OVERRIDE)
           && (name.equalsIgnoreCase("Deinit") || name.equalsIgnoreCase("Teardown"));
     }
 

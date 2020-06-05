@@ -178,7 +178,7 @@ class AbstractDelphiScope implements DelphiScope {
     }
 
     for (MethodNameDeclaration declaration : this.getMethodDeclarations()) {
-      if (isMethodOverload(declaration, occurrence, result)) {
+      if (isMethodOverload(declaration, occurrence, result, overloadsRequireOverloadDirective())) {
         result.add(declaration);
       }
     }
@@ -197,7 +197,7 @@ class AbstractDelphiScope implements DelphiScope {
   private static boolean canBeOverloaded(NameDeclaration declaration) {
     if (declaration instanceof MethodNameDeclaration) {
       MethodNameDeclaration methodDeclaration = (MethodNameDeclaration) declaration;
-      return methodDeclaration.getDirectives().contains(MethodDirective.OVERLOAD)
+      return methodDeclaration.hasDirective(MethodDirective.OVERLOAD)
           || !methodDeclaration.isCallable();
     }
     return false;
@@ -206,14 +206,17 @@ class AbstractDelphiScope implements DelphiScope {
   private static boolean isMethodOverload(
       MethodNameDeclaration declaration,
       DelphiNameOccurrence occurrence,
-      Set<NameDeclaration> matchedMethods) {
-    if (!declaration.getImage().equalsIgnoreCase(occurrence.getImage())) {
-      return false;
-    }
+      Set<NameDeclaration> matchedMethods,
+      boolean requireOverloadDirective) {
+    return (!requireOverloadDirective || declaration.hasDirective(MethodDirective.OVERLOAD))
+        && declaration.getImage().equalsIgnoreCase(occurrence.getImage())
+        && matchedMethods.stream()
+            .map(MethodNameDeclaration.class::cast)
+            .noneMatch(matched -> overridesMethodSignature(matched, declaration));
+  }
 
-    return matchedMethods.stream()
-        .map(MethodNameDeclaration.class::cast)
-        .noneMatch(matched -> overridesMethodSignature(matched, declaration));
+  protected boolean overloadsRequireOverloadDirective() {
+    return false;
   }
 
   private static boolean overridesMethodSignature(
@@ -222,11 +225,11 @@ class AbstractDelphiScope implements DelphiScope {
       return false;
     }
 
-    if (declaration.getRequiredParametersCount() != overridden.getRequiredParametersCount()) {
+    if (declaration.getParametersCount() != overridden.getParametersCount()) {
       return false;
     }
 
-    for (int i = 0; i < declaration.getRequiredParametersCount(); ++i) {
+    for (int i = 0; i < declaration.getParametersCount(); ++i) {
       ParameterDeclaration declarationParam = declaration.getParameter(i);
       ParameterDeclaration matchedParam = overridden.getParameter(i);
       if (!declarationParam.getType().is(matchedParam.getType())) {

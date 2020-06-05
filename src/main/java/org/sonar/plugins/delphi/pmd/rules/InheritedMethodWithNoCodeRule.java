@@ -30,7 +30,7 @@ public class InheritedMethodWithNoCodeRule extends AbstractDelphiRule {
   }
 
   private static DelphiNode findViolation(MethodImplementationNode method) {
-    CompoundStatementNode block = method.getMethodBody().getStatementBlock();
+    CompoundStatementNode block = method.getStatementBlock();
     if (block == null) {
       return null;
     }

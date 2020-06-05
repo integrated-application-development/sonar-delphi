@@ -12,17 +12,24 @@ public enum IntrinsicInteger {
   LONGINT("LongInt", 4, true),
   FIXEDINT("FixedInt", 4, true),
   NATIVEINT("NativeInt", 4, true),
-  CARDINAL("Cardinal", 4, false),
   LONGWORD("LongWord", 4, false),
+  CARDINAL("Cardinal", LONGWORD.type),
   FIXEDUINT("FixedUInt", 4, false),
   NATIVEUINT("NativeUInt", 4, false),
   INT64("Int64", 8, true),
   UINT64("UInt64", 8, false);
 
+  public final String image;
   public final IntegerType type;
 
-  IntrinsicInteger(String name, int size, boolean signed) {
-    this.type = new DelphiIntegerType(name, size, signed);
+  IntrinsicInteger(String image, int size, boolean signed) {
+    this.image = image;
+    this.type = new DelphiIntegerType(image, size, signed);
+  }
+
+  IntrinsicInteger(String image, IntegerType type) {
+    this.image = image;
+    this.type = type;
   }
 
   public static IntegerType fromLiteralValue(long value) {

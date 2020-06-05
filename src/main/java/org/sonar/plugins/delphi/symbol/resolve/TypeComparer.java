@@ -150,8 +150,8 @@ class TypeComparer {
   }
 
   private static EqualityType compareText(Type from, Type to) {
-    if (from.isString()) {
-      return compareStringToText(from, to);
+    if (from.isString() && to.isString()) {
+      return compareStringToString(from, to);
     } else if (from.isChar()) {
       return compareCharToText(from, to);
     }
@@ -159,23 +159,23 @@ class TypeComparer {
   }
 
   @VisibleForTesting
-  static EqualityType compareStringToText(Type from, Type to) {
+  static EqualityType compareStringToString(Type from, Type to) {
     if (from.is(to)) {
       return EQUAL;
     } else if (from.is(WIDESTRING.type)) {
-      return compareWideStringToText(to);
+      return compareWideStringToString(to);
     } else if (from.is(UNICODESTRING.type)) {
-      return compareUnicodeStringToText(to);
+      return compareUnicodeStringToString(to);
     } else if (from.is(SHORTSTRING.type)) {
-      return compareShortStringToText(to);
+      return compareShortStringToString(to);
     } else if (from.is(ANSISTRING.type)) {
-      return CONVERT_LEVEL_1;
+      return compareAnsiStringToString(to);
     }
 
     throw new AssertionError("Unhandled string type!");
   }
 
-  private static EqualityType compareWideStringToText(Type to) {
+  private static EqualityType compareWideStringToString(Type to) {
     if (to.is(UNICODESTRING.type)) {
       return CONVERT_LEVEL_1;
     } else if (to.is(ANSISTRING.type)) {
@@ -185,7 +185,7 @@ class TypeComparer {
     }
   }
 
-  private static EqualityType compareUnicodeStringToText(Type to) {
+  private static EqualityType compareUnicodeStringToString(Type to) {
     if (to.is(WIDESTRING.type)) {
       return CONVERT_LEVEL_1;
     } else if (to.is(ANSISTRING.type)) {
@@ -195,10 +195,20 @@ class TypeComparer {
     }
   }
 
-  private static EqualityType compareShortStringToText(Type to) {
+  private static EqualityType compareShortStringToString(Type to) {
     if (to.is(ANSISTRING.type)) {
       return CONVERT_LEVEL_1;
     } else if (to.is(UNICODESTRING.type)) {
+      return CONVERT_LEVEL_2;
+    } else {
+      return CONVERT_LEVEL_3;
+    }
+  }
+
+  private static EqualityType compareAnsiStringToString(Type to) {
+    if (to.is(UNICODESTRING.type)) {
+      return CONVERT_LEVEL_1;
+    } else if (to.is(WIDESTRING.type)) {
       return CONVERT_LEVEL_2;
     } else {
       return CONVERT_LEVEL_3;
@@ -389,6 +399,9 @@ class TypeComparer {
 
   private static EqualityType compareOpenArray(CollectionType from, CollectionType to) {
     if (from.isDynamicArray() && equals(from.elementType(), to.elementType())) {
+      if (from.elementType().is(to.elementType())) {
+        return CONVERT_LEVEL_1;
+      }
       return CONVERT_LEVEL_2;
     } else if (from.isOpenArray() && equals(from.elementType(), to.elementType())) {
       if (from.elementType().is(to.elementType())) {
@@ -411,7 +424,7 @@ class TypeComparer {
   private static EqualityType comparePointerToArray(PointerType from, CollectionType to) {
     if (equals(from.dereferencedType(), to.elementType())
         || (to.isDynamicArray() && (from.isNilPointer() || from.isUntypedPointer()))) {
-      return CONVERT_LEVEL_1;
+      return CONVERT_LEVEL_3;
     }
 
     return INCOMPATIBLE_TYPES;
@@ -536,6 +549,8 @@ class TypeComparer {
       return comparePointerToPointer((PointerType) from, pointerTo);
     } else if (from.isText()) {
       return compareTextToPointer((TextType) from, pointerTo);
+    } else if (from.isStruct() && pointerTo.isUntypedPointer()) {
+      return CONVERT_LEVEL_4;
     } else if (from.isInteger()) {
       return CONVERT_LEVEL_5;
     }

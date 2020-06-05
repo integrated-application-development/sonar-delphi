@@ -79,7 +79,7 @@ public class StringLiteralRegexRuleTest extends BasePmdRuleTest {
             .appendImpl("const")
             .appendImpl("  C_HardcodedIDRef = 'ID1234X6U8';")
             .appendImpl("begin")
-            .appendImpl("  Assert(Assigned(C_HardcodedIDRef));")
+            .appendImpl("  Assert(Assigned(C_HardcodedIDRef), 'The sky is falling!');")
             .appendImpl("end;");
 
     execute(builder);

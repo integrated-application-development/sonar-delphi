@@ -19,13 +19,13 @@ public final class TypeAliasNode extends TypeNode {
     return visitor.visit(this, data);
   }
 
-  private TypeReferenceNode getOriginalTypeNode() {
+  public TypeReferenceNode getAliasedTypeNode() {
     return (TypeReferenceNode) jjtGetChild(0);
   }
 
   @NotNull
   @Override
   public Type createType() {
-    return getOriginalTypeNode().getType();
+    return getAliasedTypeNode().getType();
   }
 }

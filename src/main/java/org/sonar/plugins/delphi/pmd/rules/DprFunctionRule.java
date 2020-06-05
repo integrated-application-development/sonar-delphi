@@ -25,7 +25,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 
-public class DprFunctionRule extends DprRule {
+public class DprFunctionRule extends AbstractDprRule {
 
   @Override
   public RuleContext visit(MethodImplementationNode node, RuleContext data) {

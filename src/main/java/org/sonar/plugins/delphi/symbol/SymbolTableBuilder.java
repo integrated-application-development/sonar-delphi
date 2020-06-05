@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
@@ -30,16 +31,18 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.antlr.ast.node.UnitImportNode;
-import org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableImplementationVisitor;
-import org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableInterfaceVisitor;
+import org.sonar.plugins.delphi.antlr.ast.visitors.DependencyAnalysisVisitor;
 import org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor;
-import org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor.Data;
 import org.sonar.plugins.delphi.file.DelphiFile;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiFileConstructionException;
 import org.sonar.plugins.delphi.file.DelphiFileConfig;
+import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
+import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
+import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.symbol.scope.SystemScope;
+import org.sonar.plugins.delphi.type.Type.ScopedType;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonarsource.analyzer.commons.ProgressReport;
 
@@ -57,8 +60,6 @@ public class SymbolTableBuilder {
   private static final String INVALID_STANDARD_LIBRARY_PATH =
       "Path to Delphi standard library is invalid: %s";
 
-  private final SymbolTableVisitor interfaceVisitor = new SymbolTableInterfaceVisitor();
-  private final SymbolTableVisitor implementationVisitor = new SymbolTableImplementationVisitor();
   private final SymbolTable symbolTable = new SymbolTable();
   private final Set<UnitData> sourceFileUnits = new HashSet<>();
   private final SetMultimap<String, UnitData> allUnitsByName = HashMultimap.create();
@@ -237,11 +238,14 @@ public class SymbolTableBuilder {
       DelphiFile delphiFile = DelphiFile.from(unit.unitFile.toFile(), fileConfig);
 
       if (unit.resolved == ResolutionLevel.NONE) {
-        runSymbolTableVisitor(unit, delphiFile, ResolutionLevel.INTERFACE, interfaceVisitor);
+        runSymbolTableVisitor(unit, delphiFile, ResolutionLevel.INTERFACE);
+        runDependencyAnalysisVisitor(unit, delphiFile, ResolutionLevel.INTERFACE);
       }
 
       if (resolutionLevel == ResolutionLevel.COMPLETE) {
-        runSymbolTableVisitor(unit, delphiFile, ResolutionLevel.COMPLETE, implementationVisitor);
+        runSymbolTableVisitor(unit, delphiFile, ResolutionLevel.COMPLETE);
+        processImportsWithInlineMethods(unit);
+        runDependencyAnalysisVisitor(unit, delphiFile, ResolutionLevel.COMPLETE);
       }
     } catch (DelphiFileConstructionException e) {
       String error = String.format("Error while processing %s", unit.unitFile.toAbsolutePath());
@@ -252,18 +256,15 @@ public class SymbolTableBuilder {
   }
 
   private void runSymbolTableVisitor(
-      UnitData unit,
-      DelphiFile delphiFile,
-      ResolutionLevel resolutionLevel,
-      SymbolTableVisitor visitor) {
-    Data data =
-        new Data(
+      UnitData unit, DelphiFile delphiFile, ResolutionLevel resolutionLevel) {
+    var data =
+        new SymbolTableVisitor.Data(
             this::createImportDeclaration,
             delphiFile.getCompilerSwitchRegistry(),
             this.systemScope,
             unit.unitDeclaration);
 
-    visitor.visit(delphiFile.getAst(), data);
+    symbolTableVisitor(resolutionLevel).visit(delphiFile.getAst(), data);
 
     if (data.getUnitDeclaration() != null) {
       String filePath = unit.unitFile.toAbsolutePath().toString();
@@ -272,6 +273,69 @@ public class SymbolTableBuilder {
     }
 
     unit.resolved = resolutionLevel;
+  }
+
+  private void runDependencyAnalysisVisitor(
+      UnitData unit, DelphiFile delphiFile, ResolutionLevel resolutionLevel) {
+    var data = new DependencyAnalysisVisitor.Data(unit.unitDeclaration);
+    dependencyVisitor(resolutionLevel).visit(delphiFile.getAst(), data);
+  }
+
+  private static SymbolTableVisitor symbolTableVisitor(ResolutionLevel resolutionLevel) {
+    if (resolutionLevel == ResolutionLevel.INTERFACE) {
+      return SymbolTableVisitor.interfaceVisitor();
+    } else {
+      return SymbolTableVisitor.implementationVisitor();
+    }
+  }
+
+  private static DependencyAnalysisVisitor dependencyVisitor(ResolutionLevel resolutionLevel) {
+    if (resolutionLevel == ResolutionLevel.INTERFACE) {
+      return DependencyAnalysisVisitor.interfaceVisitor();
+    } else {
+      return DependencyAnalysisVisitor.implementationVisitor();
+    }
+  }
+
+  private void processImportsWithInlineMethods(UnitData unit) {
+    Set<UnitData> imports =
+        unit.unitDeclaration.getScope().getImportDeclarations().stream()
+            .map(UnitImportNameDeclaration::getOriginalDeclaration)
+            .filter(Objects::nonNull)
+            .filter(SymbolTableBuilder::hasInlineMethods)
+            .map(UnitNameDeclaration::getName)
+            .map(name -> findImportByName(unit.unitDeclaration, name))
+            .filter(Objects::nonNull)
+            .filter(unitData -> unitData.resolved == ResolutionLevel.INTERFACE)
+            .collect(Collectors.toSet());
+
+    if (imports.isEmpty()) {
+      return;
+    }
+
+    LOG.debug(StringUtils.repeat("\t", nestingLevel) + "Processing imports with inline methods");
+
+    for (UnitData imported : imports) {
+      process(imported, ResolutionLevel.COMPLETE);
+    }
+  }
+
+  private static boolean hasInlineMethods(UnitNameDeclaration unit) {
+    return hasInlineMethods(unit.getUnitScope());
+  }
+
+  private static boolean hasInlineMethods(DelphiScope scope) {
+    if (scope.getMethodDeclarations().stream()
+        .anyMatch(method -> method.hasDirective(MethodDirective.INLINE))) {
+      return true;
+    }
+
+    return scope.getTypeDeclarations().stream()
+        .map(TypeNameDeclaration::getType)
+        .filter(ScopedType.class::isInstance)
+        .map(ScopedType.class::cast)
+        .map(ScopedType::typeScope)
+        .anyMatch(SymbolTableBuilder::hasInlineMethods);
   }
 
   private void indexUnit(UnitData unit, ResolutionLevel resolutionLevel) {

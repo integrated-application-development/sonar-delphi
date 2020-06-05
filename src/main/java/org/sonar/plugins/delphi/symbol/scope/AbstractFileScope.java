@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.symbol.scope;
 
+import com.google.common.collect.Iterables;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.HelperType;
 
@@ -81,6 +83,11 @@ abstract class AbstractFileScope extends AbstractDelphiScope implements FileScop
     super.addDeclaration(declaration);
   }
 
+  @Override
+  protected boolean overloadsRequireOverloadDirective() {
+    return true;
+  }
+
   public String getName() {
     return name;
   }
@@ -128,5 +135,10 @@ abstract class AbstractFileScope extends AbstractDelphiScope implements FileScop
   @Override
   public void attach(ArrayAccessorNode node) {
     node.setImplicitNameOccurrence(registeredOccurrences.get(node.getTokenIndex()));
+  }
+
+  @Override
+  public UnitNameDeclaration getUnitDeclaration() {
+    return Iterables.getLast(getUnitDeclarations());
   }
 }

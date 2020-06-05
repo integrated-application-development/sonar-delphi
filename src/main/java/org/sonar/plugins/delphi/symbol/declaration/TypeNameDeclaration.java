@@ -6,9 +6,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.antlr.ast.node.GenericDefinitionNode.TypeParameter;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.TypeAliasNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
+import org.sonar.plugins.delphi.antlr.ast.node.TypeReferenceNode;
 import org.sonar.plugins.delphi.symbol.Qualifiable;
 import org.sonar.plugins.delphi.symbol.QualifiedName;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
@@ -20,21 +24,19 @@ public final class TypeNameDeclaration extends AbstractDelphiNameDeclaration
   private final QualifiedName qualifiedName;
   private final Type type;
   private final List<TypedDeclaration> typeParameters;
+  private final TypeNameDeclaration aliased;
 
   public TypeNameDeclaration(TypeDeclarationNode node) {
     this(
         new SymbolicNode(node.getTypeNameNode().getIdentifier(), node.getScope()),
         node.getType(),
         node.getQualifiedName(),
-        node.getTypeNameNode().getTypeParameters().stream()
-            .map(TypeParameter::getLocation)
-            .map(NameDeclarationNode::getNameDeclaration)
-            .map(TypedDeclaration.class::cast)
-            .collect(Collectors.toUnmodifiableList()));
+        extractTypeParameters(node),
+        extractAliasedTypeDeclaration(node));
   }
 
   public TypeNameDeclaration(SymbolicNode node, Type type, QualifiedName qualifiedName) {
-    this(node, type, qualifiedName, Collections.emptyList());
+    this(node, type, qualifiedName, Collections.emptyList(), null);
   }
 
   public TypeNameDeclaration(
@@ -42,10 +44,40 @@ public final class TypeNameDeclaration extends AbstractDelphiNameDeclaration
       Type type,
       QualifiedName qualifiedName,
       List<TypedDeclaration> typeParameters) {
+    this(node, type, qualifiedName, typeParameters, null);
+  }
+
+  private TypeNameDeclaration(
+      SymbolicNode node,
+      Type type,
+      QualifiedName qualifiedName,
+      List<TypedDeclaration> typeParameters,
+      @Nullable TypeNameDeclaration aliased) {
     super(node);
     this.type = type;
     this.qualifiedName = qualifiedName;
     this.typeParameters = typeParameters;
+    this.aliased = aliased;
+  }
+
+  private static List<TypedDeclaration> extractTypeParameters(TypeDeclarationNode node) {
+    return node.getTypeNameNode().getTypeParameters().stream()
+        .map(TypeParameter::getLocation)
+        .map(NameDeclarationNode::getNameDeclaration)
+        .map(TypedDeclaration.class::cast)
+        .collect(Collectors.toUnmodifiableList());
+  }
+
+  private static TypeNameDeclaration extractAliasedTypeDeclaration(TypeDeclarationNode node) {
+    TypeNode typeNode = node.getTypeNode();
+    if (typeNode instanceof TypeAliasNode) {
+      TypeReferenceNode original = ((TypeAliasNode) typeNode).getAliasedTypeNode();
+      DelphiNameDeclaration originalDeclaration = original.getTypeDeclaration();
+      if (originalDeclaration instanceof TypeNameDeclaration) {
+        return (TypeNameDeclaration) originalDeclaration;
+      }
+    }
+    return null;
   }
 
   @Override
@@ -62,6 +94,11 @@ public final class TypeNameDeclaration extends AbstractDelphiNameDeclaration
   @Override
   public List<TypedDeclaration> getTypeParameters() {
     return typeParameters;
+  }
+
+  @Nullable
+  public TypeNameDeclaration getAliased() {
+    return aliased;
   }
 
   @Override

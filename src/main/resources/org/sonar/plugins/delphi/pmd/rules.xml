@@ -1167,6 +1167,40 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ImportSpecificityRule"
+    message="Imports should be moved to the implementation section where possible"
+    name="ImportSpecificityRule">
+    <priority>4</priority>
+    <description>
+      The interface uses clause should only contain imports that are required for the interface section.
+      &lt;br&gt;
+      Anything else should be moved to the implementation section.
+      &lt;br&gt;
+      &lt;br&gt;
+      This encapsulates implementation details where they belong. It also reduces the chance of
+      circular dependencies and compilation slowdowns.
+    </description>
+    <properties>
+      <property name="baseEffort" value="3min"/>
+      <property name="exclusions" value="Winapi.Windows|Winapi.Messages|System.SysUtils|System.Variants|System.Classes|System.Types|Vcl.Graphics|Vcl.Controls|Vcl.Forms|Vcl.Dialogs|FMX.Types|FMX.Controls|FMX.Forms|FMX.Dialogs|QTypes|QGraphics|QControls|QForms|QDialogs|QStdCtrls"/>
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.AssertMessageRule"
+    message="Assertions in main code should have an error message"
+    name="AssertMessageRule">
+    <priority>3</priority>
+    <description>
+      Assertions in main code should have an error message.
+      &lt;br&gt;
+      An error message will aid in debugging if the assertion fails in production.
+    </description>
+    <properties>
+      <property name="baseEffort" value="3min"/>
+      <property name="scope" value="MAIN"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="Empty type sections should be removed"
     name="EmptyTypeSectionRule">

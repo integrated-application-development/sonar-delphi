@@ -1,10 +1,15 @@
 package org.sonar.plugins.delphi.symbol.resolve;
 
-import static java.lang.Double.POSITIVE_INFINITY;
-import static java.lang.Math.nextAfter;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.TypedDeclaration;
+import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 /**
  * Stores information about an invocation candidate, used for overload resolution. Based directly
@@ -22,6 +27,7 @@ public class InvocationCandidate {
   private final int[] convertLevelCount;
   private int convertOperatorCount;
   private double ordinalDistance;
+  private int signMismatchCount;
   private int proceduralDistance;
   private final List<VariantConversionType> variantConversions;
   private boolean invalid;
@@ -76,8 +82,12 @@ public class InvocationCandidate {
     this.ordinalDistance += ordinalDistance;
   }
 
-  public void bumpOrdinalDistance() {
-    this.ordinalDistance = nextAfter(this.ordinalDistance, POSITIVE_INFINITY);
+  public int getSignMismatchCount() {
+    return signMismatchCount;
+  }
+
+  public void incrementSignMismatchCount() {
+    ++this.signMismatchCount;
   }
 
   public void increaseProceduralDistance(int proceduralDistance) {
@@ -102,5 +112,52 @@ public class InvocationCandidate {
 
   public void setInvalid() {
     this.invalid = true;
+  }
+
+  public static InvocationCandidate implicitSpecialization(
+      NameDeclaration declaration, List<Type> argumentTypes) {
+    if (!(declaration instanceof MethodNameDeclaration)) {
+      return null;
+    }
+
+    MethodNameDeclaration methodDeclaration = (MethodNameDeclaration) declaration;
+    if (!methodDeclaration.isGeneric()) {
+      return null;
+    }
+
+    Map<Type, Type> argumentsByTypeParameters = new HashMap<>();
+    for (int i = 0; i < argumentTypes.size(); ++i) {
+      Type parameterType = methodDeclaration.getParameter(i).getType();
+      if (!parameterType.isTypeParameter()) {
+        continue;
+      }
+
+      Type argumentType = argumentTypes.get(i);
+      Type existingMapping = argumentsByTypeParameters.get(parameterType);
+
+      if (existingMapping != null && !existingMapping.is(argumentType)) {
+        // Can't implicitly specialize the declaration with these arguments
+        return null;
+      }
+
+      argumentsByTypeParameters.put(parameterType, argumentType);
+    }
+
+    if (argumentsByTypeParameters.size() != methodDeclaration.getTypeParameters().size()) {
+      return null;
+    }
+
+    List<Type> typeArguments;
+
+    typeArguments =
+        methodDeclaration.getTypeParameters().stream()
+            .map(TypedDeclaration::getType)
+            .map(argumentsByTypeParameters::get)
+            .collect(Collectors.toUnmodifiableList());
+
+    var context = new TypeSpecializationContext(methodDeclaration, typeArguments);
+    Invocable invocable = (Invocable) methodDeclaration.specialize(context);
+
+    return new InvocationCandidate(invocable);
   }
 }

@@ -6,7 +6,7 @@ interface
 
 type
   TFoo = class
-    procedure Bar(Baz: String);
+    procedure Bar(Baz: String = '');
   end;
 
   TBaseFooHelper = class helper for TFoo

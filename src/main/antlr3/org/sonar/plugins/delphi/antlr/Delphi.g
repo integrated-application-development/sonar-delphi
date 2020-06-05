@@ -185,14 +185,13 @@ declSection                  : labelDeclSection
                              | typeSection
                              | varSection
                              | methodImplementation
-                             | methodDeclaration
                              | exportsSection
                              ;
 interfaceDecl                : constSection
                              | typeSection
                              | varSection
                              | exportsSection
-                             | methodDeclaration
+                             | methodInterface
                              ;
 labelDeclSection             : 'label' (label (','!)?)+ ';'
                              ;
@@ -281,20 +280,20 @@ pointerType                  : '^'<PointerTypeNode>^ varType
 stringType                   : 'string'<StringTypeNode>^ ('['! expression ']'!)?
                              | ANSISTRING<AnsiStringTypeNode>^ (codePageNumber)?
                              ;
-codePageNumber               : '(' intNum ')'
+codePageNumber               : '(' expression ')'
                              ;
 procedureType                : methodType
                              | procedureReference
                              | simpleProcedureType
                              ;
-methodType                   : procedureTypeHeading 'of' 'object'<MethodTypeNode>^ ((';')? methodDeclDirective)*
+methodType                   : procedureTypeHeading 'of' 'object'<MethodTypeNode>^ ((';')? interfaceDirective)*
                              ;
 procedureReference           : 'reference'<ProcedureReferenceTypeNode>^ 'to'! procedureTypeHeading
                              ;
 simpleProcedureType          : procedureTypeHeading -> ^(TkProcedureType<ProcedureTypeNode> procedureTypeHeading)
                              ;
-procedureTypeHeading         : 'function'<ProcedureTypeHeadingNode>^ methodParameters? methodReturnType? ((';')? methodDeclDirective)*
-                             | 'procedure'<ProcedureTypeHeadingNode>^ methodParameters? ((';')? methodDeclDirective)*
+procedureTypeHeading         : 'function'<ProcedureTypeHeadingNode>^ methodParameters? methodReturnType? ((';')? interfaceDirective)*
+                             | 'procedure'<ProcedureTypeHeadingNode>^ methodParameters? ((';')? interfaceDirective)*
                              ;
 typeOfType                   : 'type'<TypeOfTypeNode>^ 'of' typeDecl
                              ;
@@ -332,7 +331,7 @@ visibilitySection_           : visibility visibilitySectionItem*
                              | visibilitySectionItem+
                              ;
 visibilitySectionItem        : fieldSection
-                             | methodDeclaration
+                             | methodInterface
                              | methodResolutionClause
                              | property
                              | constSection
@@ -355,7 +354,7 @@ interfaceGuid                : '[' expression ']' -> ^(TkGuid<InterfaceGuidNode>
                              ;
 interfaceItems               : interfaceItem+ -> ^(TkVisibilitySection<VisibilitySectionNode> interfaceItem+)
                              ;
-interfaceItem                : methodDeclaration
+interfaceItem                : methodInterface
                              | property
                              ;
 objectType                   : 'object'<ObjectTypeNode>^ classParent? visibilitySection* 'end' // Obselete, kept for backwards compatibility with Turbo Pascal
@@ -426,18 +425,32 @@ methodResolutionClause       : key=('function' | 'procedure') interfaceMethod=na
                                     $key $interfaceMethod $implemented
                                  )
                              ;
-methodDeclaration            : methodDeclarationHeading
+methodInterface              : methodInterfaceHeading
                              -> ^(TkMethodDeclaration<MethodDeclarationNode>
-                                    methodDeclarationHeading
+                                    methodInterfaceHeading
                                  )
                              ;
-methodImplementation         : methodImplementationHeading methodBody
+methodImplementation         : fullMethodImplementation
+                             | externalMethod
+                             | forwardMethod
+                             ;
+fullMethodImplementation     : methodImplementationHeading methodBody
                              -> ^(TkMethodImplementation<MethodImplementationNode>
                                     methodImplementationHeading
                                     methodBody
                                  )
                              ;
-methodDeclarationHeading     : customAttribute? 'class'? methodKey methodDeclarationName methodParameters? methodReturnType? methodDeclDirectiveSection
+externalMethod               : externalMethodHeading
+                             -> ^(TkMethodImplementation<MethodImplementationNode>
+                                    externalMethodHeading
+                                 )
+                             ;
+forwardMethod                : forwardMethodHeading
+                             -> ^(TkMethodDeclaration<MethodDeclarationNode>
+                                    forwardMethodHeading
+                                 )
+                             ;
+methodInterfaceHeading       : customAttribute? 'class'? methodKey methodDeclarationName methodParameters? methodReturnType? interfaceDirectiveSection
                              -> ^(TkMethodHeading<MethodHeadingNode>
                                     methodKey
                                     methodDeclarationName
@@ -445,10 +458,10 @@ methodDeclarationHeading     : customAttribute? 'class'? methodKey methodDeclara
                                     methodReturnType?
                                     customAttribute?
                                     'class'?
-                                    methodDeclDirectiveSection
+                                    interfaceDirectiveSection
                                  )
                              ;
-methodImplementationHeading  : customAttribute? 'class'? methodKey methodImplementationName methodParameters? methodReturnType? methodImplDirectiveSection
+methodImplementationHeading  : customAttribute? 'class'? methodKey methodImplementationName methodParameters? methodReturnType? implDirectiveSection
                              -> ^(TkMethodHeading<MethodHeadingNode>
                                     methodKey
                                     methodImplementationName
@@ -456,7 +469,29 @@ methodImplementationHeading  : customAttribute? 'class'? methodKey methodImpleme
                                     methodReturnType?
                                     customAttribute?
                                     'class'?
-                                    methodImplDirectiveSection
+                                    implDirectiveSection
+                                 )
+                             ;
+externalMethodHeading        : customAttribute? 'class'? methodKey methodImplementationName methodParameters? methodReturnType? externalDirectiveSection
+                             -> ^(TkMethodHeading<MethodHeadingNode>
+                                    methodKey
+                                    methodImplementationName
+                                    methodParameters?
+                                    methodReturnType?
+                                    customAttribute?
+                                    'class'?
+                                    externalDirectiveSection
+                                 )
+                             ;
+forwardMethodHeading         : customAttribute? 'class'? methodKey methodDeclarationName methodParameters? methodReturnType? forwardDirectiveSection
+                             -> ^(TkMethodHeading<MethodHeadingNode>
+                                    methodKey
+                                    methodDeclarationName
+                                    methodParameters?
+                                    methodReturnType?
+                                    customAttribute?
+                                    'class'?
+                                    forwardDirectiveSection
                                  )
                              ;
 methodDeclarationName        : genericNameDeclaration -> ^(TkMethodName<MethodNameNode> genericNameDeclaration)
@@ -682,13 +717,19 @@ assemblerInstructions        : ~('end')* // Skip asm statements
 //----------------------------------------------------------------------------
 // Directives
 //----------------------------------------------------------------------------
-methodImplDirectiveSection   : ((';')? methodImplDirective)* ';'
-                             | (';' methodImplDirective)+
+implDirectiveSection         : (';'? implDirective)* ';'
+                             | (';' implDirective)+
                              ;
-methodDeclDirectiveSection   : ((';')? methodDeclDirective)* ';'
-                             | (';' methodDeclDirective)+
+interfaceDirectiveSection    : (';'? interfaceDirective)* ';'
+                             | (';' interfaceDirective)+
                              ;
-methodImplDirective          : 'overload'
+externalDirectiveSection      : (';'? implDirective)* ';'? externalDirective (';'? implDirective)*';'
+                             | (';' implDirective)* ';' externalDirective (';' implDirective)*
+                             ;
+forwardDirectiveSection      : (';'? implDirective)* ';'? 'forward' (';'? implDirective)*';'
+                             | (';' implDirective)* ';' 'forward' (';' implDirective)*
+                             ;
+implDirective                : 'overload'
                              | 'reintroduce'
                              | bindingDirective
                              | abstractDirective // virtual;
@@ -700,9 +741,9 @@ methodImplDirective          : 'overload'
                              | 'varargs'  // Only permitted for cdecl calling convention
                              | 'unsafe'  // .net?
                              ;
-methodDeclDirective          : 'forward'
+interfaceDirective           : 'forward'
                              | externalDirective
-                             | methodImplDirective
+                             | implDirective
                              ;
 bindingDirective             : 'message' expression
                              | 'static'
@@ -732,13 +773,13 @@ portabilityDirective         : 'deprecated'^ textLiteral?
                              | 'platform'
                              | 'library'
                              ;
-externalDirective            : 'external'^ dllName? (externalSpecifier)*
-                             | 'delayed' // Use delayed loading (See: http://docwiki.embarcadero.com/RADStudio/Rio/en/Libraries_and_Packages_(Delphi))
+externalDirective            : 'external'^ dllName? externalSpecifier*
                              ;
 dllName                      : {!input.LT(1).getText().equals("name")}? expression
                              ;
 externalSpecifier            : 'name'^ constExpression
                              | 'index'^ constExpression   // specific to a platform
+                             | 'delayed' // Use delayed loading (See: http://docwiki.embarcadero.com/RADStudio/Rio/en/Libraries_and_Packages_(Delphi))
                              ;
 dispIDDirective              : 'dispid' expression
                              ;

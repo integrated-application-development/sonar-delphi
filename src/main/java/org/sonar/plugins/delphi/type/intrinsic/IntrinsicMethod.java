@@ -31,7 +31,7 @@ public enum IntrinsicMethod {
   ABS_INT64(method("Abs").parameters(INT64.type).returns(INT64.type)),
   ADDR(method("Addr").parameters(untypedType()).returns(untypedPointer())),
   APPEND(method("Append").parameters(TEXT.type).returns(INTEGER.type)),
-  ASSERT(method("Assert").parameters(BOOLEAN.type).required(1).returns(UNICODESTRING.type)),
+  ASSERT(method("Assert").parameters(BOOLEAN.type, UNICODESTRING.type).required(1)),
   ASSIGN(method("Assign").parameters(untypedFile(), UNICODESTRING.type, WORD.type).required(2)),
   ASSIGNED(method("Assigned").parameters(untypedType()).returns(BOOLEAN.type)),
   ASSIGN_FILE(
@@ -46,11 +46,6 @@ public enum IntrinsicMethod {
           .parameters(untypedPointer(), untypedPointer(), BOOLEAN.type)
           .required(2)
           .returns(untypedPointer())),
-  ATOMIC_CMP_EXCHANGE_NATIVEINT(
-      method("AtomicCmpExchange")
-          .parameters(NATIVEINT.type, NATIVEINT.type, BOOLEAN.type)
-          .required(2)
-          .returns(NATIVEINT.type)),
   ATOMIC_DECREMENT(
       method("AtomicDecrement")
           .parameters(untypedType(), untypedType())
@@ -58,10 +53,10 @@ public enum IntrinsicMethod {
           .returns(INTEGER.type)),
   ATOMIC_EXCHANGE_INTEGER(
       method("AtomicExchange").parameters(untypedType(), INTEGER.type).returns(INTEGER.type)),
-  ATOMIC_EXCHANGE_NATIVEINT(
-      method("AtomicExchange").parameters(untypedType(), NATIVEINT.type).returns(INTEGER.type)),
   ATOMIC_EXCHANGE_POINTER(
-      method("AtomicExchange").parameters(untypedType(), untypedPointer()).returns(INTEGER.type)),
+      method("AtomicExchange")
+          .parameters(untypedType(), untypedPointer())
+          .returns(untypedPointer())),
   ATOMIC_INCREMENT(
       method("AtomicIncrement")
           .parameters(untypedType(), untypedType())

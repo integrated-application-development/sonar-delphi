@@ -208,6 +208,7 @@ public interface NameResolver {
     resolveMethod(method);
 
     resolver.disambiguateParameters(method.getParameterTypes());
+    resolver.disambiguateReturnType(method.getReturnType());
     resolver.disambiguateIsClassInvocable(method.isClassMethod());
     resolver.addToSymbolTable();
 
