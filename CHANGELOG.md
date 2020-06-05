@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Dependency analysis step that occurs during Symbol Table construction.
+
 ### Changed
 
+- Use dependency analysis in `UnusedImportsRule`.
 - Improve distance-calculation between floating-point types during overload resolution.
 - Penalize signed vs unsigned type mismatches during overload resolution.
 - Treat `Real` as a type alias to `Double`.

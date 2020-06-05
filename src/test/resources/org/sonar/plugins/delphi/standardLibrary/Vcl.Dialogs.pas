@@ -1,11 +1,3 @@
-{*******************************************************}
-{                                                       }
-{            Delphi Visual Component Library            }
-{                                                       }
-{ Copyright(c) 1995-2012 Embarcadero Technologies, Inc. }
-{                                                       }
-{*******************************************************}
-
 unit Vcl.Dialogs;
 
 interface
@@ -37,7 +29,39 @@ function MessageDlg(const Msg: string; DlgType: TMsgDlgType;
   Buttons: TMsgDlgButtons; HelpCtx: Longint): Integer; overload; inline;
 function MessageDlg(const Msg: string; DlgType: TMsgDlgType;
   Buttons: TMsgDlgButtons; HelpCtx: Longint; DefaultButton: TMsgDlgBtn): Integer; overload; inline;
+function MessageDlgPosHelp(const Msg: string; DlgType: TMsgDlgType;
+  Buttons: TMsgDlgButtons; HelpCtx: Longint; X, Y: Integer;
+  const HelpFileName: string): Integer; overload;
+function MessageDlgPosHelp(const Msg: string; DlgType: TMsgDlgType;
+  Buttons: TMsgDlgButtons; HelpCtx: Longint; X, Y: Integer;
+  const HelpFileName: string; DefaultButton: TMsgDlgBtn): Integer; overload;
 
 implementation
+
+function MessageDlg(const Msg: string; DlgType: TMsgDlgType;
+  Buttons: TMsgDlgButtons; HelpCtx: Longint): Integer;
+begin
+  Result := MessageDlgPosHelp(Msg, DlgType, Buttons, HelpCtx, -1, -1, '');
+end;
+
+function MessageDlg(const Msg: string; DlgType: TMsgDlgType;
+  Buttons: TMsgDlgButtons; HelpCtx: Longint; DefaultButton: TMsgDlgBtn): Integer; overload;
+begin
+  Result := MessageDlgPosHelp(Msg, DlgType, Buttons, HelpCtx, -1, -1, '', DefaultButton);
+end;
+
+function MessageDlgPosHelp(const Msg: string; DlgType: TMsgDlgType;
+  Buttons: TMsgDlgButtons; HelpCtx: Longint; X, Y: Integer;
+  const HelpFileName: string): Integer;
+begin
+
+end;
+
+function MessageDlgPosHelp(const Msg: string; DlgType: TMsgDlgType;
+  Buttons: TMsgDlgButtons; HelpCtx: Longint; X, Y: Integer;
+  const HelpFileName: string; DefaultButton: TMsgDlgBtn): Integer; overload;
+begin
+
+end;
 
 end.

@@ -6,6 +6,7 @@ import static java.util.Collections.emptySet;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableSet;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -45,6 +46,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
   private final VisibilityType visibility;
   private final List<TypedDeclaration> typeParameters;
 
+  private Set<UnitNameDeclaration> dependencies;
   private int hashCode;
 
   private MethodNameDeclaration(
@@ -74,6 +76,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
     this.visibility = visibility;
     this.isVariadic = isVariadic;
     this.typeParameters = typeParameters;
+    this.dependencies = new HashSet<>();
   }
 
   public static MethodNameDeclaration create(SymbolicNode node, IntrinsicMethodData data) {
@@ -195,6 +198,10 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
     return directives;
   }
 
+  public boolean hasDirective(MethodDirective directive) {
+    return getDirectives().contains(directive);
+  }
+
   @Nullable
   public TypeNameDeclaration getTypeDeclaration() {
     return typeDeclaration;
@@ -229,6 +236,14 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
   @Override
   public List<TypedDeclaration> getTypeParameters() {
     return typeParameters;
+  }
+
+  public void addDependency(UnitNameDeclaration dependency) {
+    dependencies.add(dependency);
+  }
+
+  public Set<UnitNameDeclaration> getDependencies() {
+    return dependencies;
   }
 
   @Override

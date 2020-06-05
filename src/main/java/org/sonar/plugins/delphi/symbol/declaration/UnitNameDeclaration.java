@@ -1,7 +1,9 @@
 package org.sonar.plugins.delphi.symbol.declaration;
 
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import org.sonar.plugins.delphi.antlr.ast.node.FileHeaderNode;
 import org.sonar.plugins.delphi.symbol.scope.FileScope;
 
@@ -10,6 +12,9 @@ public final class UnitNameDeclaration extends QualifiedDelphiNameDeclaration {
   private final FileScope unitScope;
   private final String namespace;
   private final Path path;
+
+  private Set<UnitNameDeclaration> interfaceDependencies;
+  private Set<UnitNameDeclaration> implementationDependencies;
   private int hashCode;
 
   public UnitNameDeclaration(FileHeaderNode node, FileScope unitScope) {
@@ -17,6 +22,8 @@ public final class UnitNameDeclaration extends QualifiedDelphiNameDeclaration {
     this.unitScope = unitScope;
     this.namespace = node.getNamespace();
     this.path = Path.of(node.getASTTree().getFileName());
+    this.interfaceDependencies = new HashSet<>();
+    this.implementationDependencies = new HashSet<>();
   }
 
   public FileScope getUnitScope() {
@@ -29,6 +36,27 @@ public final class UnitNameDeclaration extends QualifiedDelphiNameDeclaration {
 
   public Path getPath() {
     return path;
+  }
+
+  public void addInterfaceDependency(UnitNameDeclaration dependency) {
+    interfaceDependencies.add(dependency);
+  }
+
+  public void addImplementationDependency(UnitNameDeclaration dependency) {
+    implementationDependencies.add(dependency);
+  }
+
+  public Set<UnitNameDeclaration> getInterfaceDependencies() {
+    return interfaceDependencies;
+  }
+
+  public Set<UnitNameDeclaration> getImplementationDependencies() {
+    return implementationDependencies;
+  }
+
+  public boolean hasDependency(UnitNameDeclaration dependency) {
+    return interfaceDependencies.contains(dependency)
+        || implementationDependencies.contains(dependency);
   }
 
   @Override

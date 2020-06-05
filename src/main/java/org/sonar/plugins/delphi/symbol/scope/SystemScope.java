@@ -32,14 +32,6 @@ public class SystemScope extends AbstractFileScope {
   }
 
   private void injectIntrinsicTypes() {
-    Arrays.stream(IntrinsicInteger.values())
-        .map(typeEnum -> typeEnum.type)
-        .forEach(this::injectIntrinsicType);
-
-    Arrays.stream(IntrinsicDecimal.values())
-        .map(typeEnum -> typeEnum.type)
-        .forEach(this::injectIntrinsicType);
-
     Arrays.stream(IntrinsicBoolean.values())
         .map(typeEnum -> typeEnum.type)
         .forEach(this::injectIntrinsicType);
@@ -51,6 +43,12 @@ public class SystemScope extends AbstractFileScope {
     Arrays.stream(IntrinsicMethod.values())
         .map(typeEnum -> typeEnum.data)
         .forEach(this::injectIntrinsicMethodType);
+
+    Arrays.stream(IntrinsicInteger.values())
+        .forEach(integer -> injectIntrinsicType(integer.image, integer.type));
+
+    Arrays.stream(IntrinsicDecimal.values())
+        .forEach(decimal -> injectIntrinsicType(decimal.image, decimal.type));
 
     Arrays.stream(IntrinsicText.values())
         .forEach(text -> injectIntrinsicType(text.image, text.type));

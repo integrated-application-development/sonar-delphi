@@ -11,6 +11,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.MethodNameNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
+import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.HelperType;
 
@@ -98,4 +99,11 @@ public interface FileScope extends DelphiScope {
    * @return System scope
    */
   SystemScope getSystemScope();
+
+  /**
+   * Returns the declaration representing this file
+   *
+   * @return Unit name declaration
+   */
+  UnitNameDeclaration getUnitDeclaration();
 }

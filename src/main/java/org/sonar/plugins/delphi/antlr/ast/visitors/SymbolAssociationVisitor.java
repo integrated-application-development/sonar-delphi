@@ -16,7 +16,7 @@ import org.sonar.plugins.delphi.symbol.scope.FileScope;
 /**
  * Visitor for symbol association.
  *
- * <p>When the SymbolTableVisitor does its first pass over the codebase, it throws away ASTs to
+ * <p>When the SymbolTableBuilder does its first pass over the codebase, it throws away ASTs to
  * clear up memory. The only information it retains is the symbol table itself.
  *
  * <p>This is all well and good from a memory management perspective, but it means we throw away the
