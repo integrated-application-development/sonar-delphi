@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Treat `Real` as a type alias to `Double`.
 - Treat `Cardinal` as a type alias to `LongWord`.
 - Treat the result of binary expressions including floating-point types as `Extended`.
+- Improve type comparisons between dynamic arrays.
+- Increase the penalty when converting from pointer to array types.
 
 ### Fixed
 

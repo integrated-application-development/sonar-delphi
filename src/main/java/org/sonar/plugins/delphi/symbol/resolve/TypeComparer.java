@@ -399,6 +399,9 @@ class TypeComparer {
 
   private static EqualityType compareOpenArray(CollectionType from, CollectionType to) {
     if (from.isDynamicArray() && equals(from.elementType(), to.elementType())) {
+      if (from.elementType().is(to.elementType())) {
+        return CONVERT_LEVEL_1;
+      }
       return CONVERT_LEVEL_2;
     } else if (from.isOpenArray() && equals(from.elementType(), to.elementType())) {
       if (from.elementType().is(to.elementType())) {
@@ -421,7 +424,7 @@ class TypeComparer {
   private static EqualityType comparePointerToArray(PointerType from, CollectionType to) {
     if (equals(from.dereferencedType(), to.elementType())
         || (to.isDynamicArray() && (from.isNilPointer() || from.isUntypedPointer()))) {
-      return CONVERT_LEVEL_1;
+      return CONVERT_LEVEL_3;
     }
 
     return INCOMPATIBLE_TYPES;

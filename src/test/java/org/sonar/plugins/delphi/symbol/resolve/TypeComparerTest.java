@@ -52,6 +52,7 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.SINGLE;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.BYTE;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.INTEGER;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.LONGINT;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.NATIVEINT;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.SMALLINT;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSICHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSISTRING;
@@ -195,13 +196,15 @@ public class TypeComparerTest {
     CollectionType toDynamicArray = dynamicArray(null, INTEGER.type);
     CollectionType toFixedArray = fixedArray(null, INTEGER.type);
     CollectionType toOpenArray = openArray(null, INTEGER.type);
+    CollectionType toSimilarOpenArray = openArray(null, NATIVEINT.type);
 
     compare(INTEGER.type, toOpenArray, CONVERT_LEVEL_3);
     compare(fromDynamicArray, toDynamicArray, EQUAL);
     compare(fromFixedArray, toDynamicArray, CONVERT_LEVEL_2);
     compare(dynamicArray(null, UNICODESTRING.type), toDynamicArray, INCOMPATIBLE_TYPES);
 
-    compare(fromDynamicArray, toOpenArray, CONVERT_LEVEL_2);
+    compare(fromDynamicArray, toOpenArray, CONVERT_LEVEL_1);
+    compare(fromDynamicArray, toSimilarOpenArray, CONVERT_LEVEL_2);
     compare(fromIncompatibleDynamicArray, toOpenArray, INCOMPATIBLE_TYPES);
     compare(fromOpenArray, toOpenArray, EXACT);
     compare(openArray(null, LONGINT.type), toOpenArray, EQUAL);
@@ -213,9 +216,9 @@ public class TypeComparerTest {
     compare(fromIncompatibleOpenArray, toFixedArray, INCOMPATIBLE_TYPES);
     compare(fromDynamicArray, toFixedArray, INCOMPATIBLE_TYPES);
 
-    compare(pointerTo(INTEGER.type), toOpenArray, CONVERT_LEVEL_1);
-    compare(nilPointer(), toDynamicArray, CONVERT_LEVEL_1);
-    compare(untypedPointer(), toDynamicArray, CONVERT_LEVEL_1);
+    compare(pointerTo(INTEGER.type), toOpenArray, CONVERT_LEVEL_3);
+    compare(nilPointer(), toDynamicArray, CONVERT_LEVEL_3);
+    compare(untypedPointer(), toDynamicArray, CONVERT_LEVEL_3);
     compare(pointerTo(UNICODESTRING.type), toOpenArray, INCOMPATIBLE_TYPES);
     compare(pointerTo(unknownType()), toDynamicArray, INCOMPATIBLE_TYPES);
 
