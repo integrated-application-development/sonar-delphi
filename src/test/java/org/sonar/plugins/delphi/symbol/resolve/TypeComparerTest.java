@@ -373,22 +373,24 @@ public class TypeComparerTest {
 
   @Test
   public void testToPointer() {
-    var parentType = TypeMocker.struct("Foo", CLASS);
-    var subType = TypeMocker.struct("Bar", CLASS, parentType);
+    var fooType = TypeMocker.struct("Foo", CLASS);
+    var barType = TypeMocker.struct("Bar", CLASS, fooType);
 
     compare(pointerTo(LONGINT.type), pointerTo(INTEGER.type), EQUAL);
-    compare(pointerTo(subType), pointerTo(parentType), CONVERT_LEVEL_1);
+    compare(pointerTo(barType), pointerTo(fooType), CONVERT_LEVEL_1);
     compare(SHORTSTRING.type, pointerTo(CHAR.type), CONVERT_LEVEL_2);
     compare(SHORTSTRING.type, pointerTo(ANSICHAR.type), CONVERT_LEVEL_3);
     compare(WIDECHAR.type, pointerTo(CHAR.type), CONVERT_LEVEL_1);
     compare(ANSICHAR.type, pointerTo(CHAR.type), CONVERT_LEVEL_1);
     compare(WIDECHAR.type, pointerTo(ANSICHAR.type), CONVERT_LEVEL_2);
     compare(ANSICHAR.type, pointerTo(ANSICHAR.type), CONVERT_LEVEL_2);
+    compare(fooType, untypedPointer(), CONVERT_LEVEL_4);
     compare(INTEGER.type, pointerTo(UNICODESTRING.type), CONVERT_LEVEL_5);
     compare(untypedPointer(), pointerTo(CHAR.type), CONVERT_LEVEL_2);
     compare(untypedPointer(), pointerTo(INTEGER.type), CONVERT_LEVEL_1);
     compare(pointerTo(CHAR.type), untypedPointer(), CONVERT_LEVEL_2);
     compare(pointerTo(INTEGER.type), untypedPointer(), CONVERT_LEVEL_1);
+    compare(fooType, pointerTo(fooType), INCOMPATIBLE_TYPES);
     compare(pointerTo(INTEGER.type), pointerTo(UNICODESTRING.type), INCOMPATIBLE_TYPES);
     compare(UNICODESTRING.type, pointerTo(INTEGER.type), INCOMPATIBLE_TYPES);
     compare(unknownType(), untypedPointer(), INCOMPATIBLE_TYPES);

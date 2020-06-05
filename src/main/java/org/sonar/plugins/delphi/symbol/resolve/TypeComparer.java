@@ -546,6 +546,8 @@ class TypeComparer {
       return comparePointerToPointer((PointerType) from, pointerTo);
     } else if (from.isText()) {
       return compareTextToPointer((TextType) from, pointerTo);
+    } else if (from.isStruct() && pointerTo.isUntypedPointer()) {
+      return CONVERT_LEVEL_4;
     } else if (from.isInteger()) {
       return CONVERT_LEVEL_5;
     }

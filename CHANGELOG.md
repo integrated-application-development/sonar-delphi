@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ambiguities in the intrinsic method signatures.
 - Ambiguous type comparisons from `AnsiString` to other string types.
 - String types were implicitly convertible to char types.
+- Objects weren't implicitly convertible to untyped pointers.
 
 ## [0.19.0] - 2020-05-21
 
