@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.0] - 2020-06-05
+
 ### Added
 
 - Dependency analysis step that occurs during Symbol Table construction.
@@ -430,7 +432,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.19.0...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.20.0...HEAD
+[0.20.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.19.0...v0.20.0
 [0.19.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.18.0...v0.19.0
 [0.18.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.17.0...v0.18.0
 [0.17.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.16.2...v0.17.0
