@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Dependency analysis step that occurs during Symbol Table construction.
+- `ImportSpecificityRule` analysis rule, which flags imports that could be moved to the
+  implementation section.
 
 ### Changed
 
