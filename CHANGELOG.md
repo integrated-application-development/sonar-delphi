@@ -22,6 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Objects weren't implicitly convertible to untyped pointers.
 - Methods without the `overload` directive were being collected from imported units as potential
   overloads during name resolution.
+- A constructor/destructor implementation could fail to find its declaration in the interface
+  section if a class constructor/destructor existed in a supertype defined in the same unit with the
+  same name.
 
 ## [0.19.0] - 2020-05-21
 

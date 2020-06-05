@@ -16,7 +16,6 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDECHAR;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -299,10 +298,13 @@ public class DefaultNameResolver implements NameResolver {
       disambiguateVisibility();
 
       NameReferenceNode nextName = methodName.nextName();
-      if (!declarations.isEmpty() && nextName != null) {
-        disambiguateImplicitEmptyArgumentList();
-        addResolvedDeclaration();
-        readNameReference(nextName);
+      if (!declarations.isEmpty()) {
+        methodName.setNameOccurrence(occurrence);
+        if (nextName != null) {
+          disambiguateImplicitEmptyArgumentList();
+          addResolvedDeclaration();
+          readNameReference(nextName);
+        }
       }
     }
 
@@ -361,8 +363,9 @@ public class DefaultNameResolver implements NameResolver {
 
       // Method name interface references should be resolved quite literally.
       // If we allow it to go through the more general name resolution steps and scope traversals,
-      // we could end up inside a class helper or something.
+      // we could end up inside a class helper or parent type or something.
       declarations = currentScope.findDeclaration(occurrence);
+      declarations.removeIf(declaration -> declaration.getScope() != currentScope);
 
       GenericArgumentsNode genericArguments = reference.getGenericArguments();
       if (genericArguments != null) {
@@ -934,6 +937,14 @@ public class DefaultNameResolver implements NameResolver {
 
           return false;
         });
+  }
+
+  void disambiguateReturnType(Type returnType) {
+    if (!returnType.isUnknown()) {
+      disambiguateInvocable();
+      declarations.removeIf(
+          declaration -> !((Invocable) declaration).getReturnType().is(returnType));
+    }
   }
 
   void disambiguateIsClassInvocable(boolean isClassInvocable) {
