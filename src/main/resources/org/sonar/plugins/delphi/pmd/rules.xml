@@ -1170,6 +1170,21 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.AssertMessageRule"
+    message="Assertions in main code should have an error message"
+    name="AssertMessageRule">
+    <priority>3</priority>
+    <description>
+      Assertions in main code should have an error message.
+      &lt;br&gt;
+      An error message will aid in debugging if the assertion fails in production.
+    </description>
+    <properties>
+      <property name="baseEffort" value="3min"/>
+      <property name="scope" value="MAIN"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="Empty type sections should be removed"
     name="EmptyTypeSectionRule">
