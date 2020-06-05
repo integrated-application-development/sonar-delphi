@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
@@ -796,6 +796,7 @@ public class DefaultNameResolver implements NameResolver {
             .map(NameDeclaration.class::cast)
             .collect(Collectors.toSet());
 
+    disambiguateDistanceFromCallSite();
     disambiguateRegularMethodOverImplicitSpecializations();
 
     if (!names.isEmpty()) {
@@ -829,7 +830,10 @@ public class DefaultNameResolver implements NameResolver {
             .collect(Collectors.toList());
 
     for (NameDeclaration declaration : declarations) {
-      createImplicitSpecializationCandidate(declaration, argumentTypes, resolver);
+      var specialized = InvocationCandidate.implicitSpecialization(declaration, argumentTypes);
+      if (specialized != null) {
+        resolver.addCandidate(specialized);
+      }
     }
   }
 
@@ -842,55 +846,6 @@ public class DefaultNameResolver implements NameResolver {
       }
     }
     return type;
-  }
-
-  private void createImplicitSpecializationCandidate(
-      NameDeclaration declaration,
-      List<Type> argumentTypes,
-      InvocationResolver invocationResolver) {
-    if (!(declaration instanceof MethodNameDeclaration)) {
-      return;
-    }
-
-    MethodNameDeclaration methodDeclaration = (MethodNameDeclaration) declaration;
-    if (!methodDeclaration.isGeneric()) {
-      return;
-    }
-
-    Map<Type, Type> argumentsByTypeParameters = new HashMap<>();
-    for (int i = 0; i < argumentTypes.size(); ++i) {
-      Type parameterType = methodDeclaration.getParameter(i).getType();
-      if (!parameterType.isTypeParameter()) {
-        continue;
-      }
-
-      Type argumentType = argumentTypes.get(i);
-      Type existingMapping = argumentsByTypeParameters.get(parameterType);
-
-      if (existingMapping != null && !existingMapping.is(argumentType)) {
-        // Can't implicitly specialize the declaration with these arguments
-        return;
-      }
-
-      argumentsByTypeParameters.put(parameterType, argumentType);
-    }
-
-    if (argumentsByTypeParameters.size() != methodDeclaration.getTypeParameters().size()) {
-      return;
-    }
-
-    List<Type> typeArguments;
-
-    typeArguments =
-        methodDeclaration.getTypeParameters().stream()
-            .map(TypedDeclaration::getType)
-            .map(argumentsByTypeParameters::get)
-            .collect(Collectors.toUnmodifiableList());
-
-    var context = new TypeSpecializationContext(methodDeclaration, typeArguments);
-    var candidate = new InvocationCandidate((Invocable) methodDeclaration.specialize(context));
-
-    invocationResolver.addCandidate(candidate);
   }
 
   void disambiguateMethodReference(ProceduralType procedure) {
@@ -1022,6 +977,80 @@ public class DefaultNameResolver implements NameResolver {
         declarations = nonGenericDeclarations;
       }
     }
+  }
+
+  private void disambiguateDistanceFromCallSite() {
+    if (declarations.size() > 1
+        && declarations.stream().allMatch(MethodNameDeclaration.class::isInstance)) {
+
+      Set<TypeNameDeclaration> methodTypes =
+          declarations.stream()
+              .map(MethodNameDeclaration.class::cast)
+              .map(MethodNameDeclaration::getTypeDeclaration)
+              .collect(Collectors.toSet());
+
+      if (methodTypes.contains(null)) {
+        disambiguateDistanceFromUnit();
+      } else {
+        disambiguateDistanceFromType();
+      }
+    }
+  }
+
+  private void disambiguateDistanceFromUnit() {
+    String currentUnit = getLast(names).getLocation().getUnitName();
+    Set<MethodNameDeclaration> methodDeclarations =
+        declarations.stream().map(MethodNameDeclaration.class::cast).collect(Collectors.toSet());
+
+    if (methodDeclarations.stream()
+        .map(DelphiNameDeclaration::getNode)
+        .map(SymbolicNode::getUnitName)
+        .anyMatch(currentUnit::equals)) {
+      declarations =
+          methodDeclarations.stream()
+              .filter(declaration -> declaration.getNode().getUnitName().equals(currentUnit))
+              .collect(Collectors.toSet());
+    }
+  }
+
+  private void disambiguateDistanceFromType() {
+    Set<MethodNameDeclaration> methodDeclarations =
+        declarations.stream().map(MethodNameDeclaration.class::cast).collect(Collectors.toSet());
+
+    Type closestType =
+        methodDeclarations.stream()
+            .map(MethodNameDeclaration::getTypeDeclaration)
+            .filter(Objects::nonNull)
+            .map(TypeNameDeclaration::getType)
+            .max(DefaultNameResolver::compareTypeSpecificity)
+            .orElseThrow();
+
+    declarations =
+        methodDeclarations.stream()
+            .filter(
+                declaration -> {
+                  TypeNameDeclaration typeDeclaration = declaration.getTypeDeclaration();
+                  return Objects.requireNonNull(typeDeclaration).getType().is(closestType);
+                })
+            .collect(Collectors.toSet());
+  }
+
+  private static int compareTypeSpecificity(Type typeA, Type typeB) {
+    if (typeA.is(typeB)) {
+      return 0;
+    } else if (typeA.isSubTypeOf(typeB) || hasHelperRelationship(typeA, typeB)) {
+      return 1;
+    } else {
+      return -1;
+    }
+  }
+
+  private static boolean hasHelperRelationship(Type typeA, Type typeB) {
+    if (typeA.isHelper()) {
+      Type extended = ((HelperType) typeA).extendedType();
+      return extended.is(typeB) || extended.isSubTypeOf(typeB);
+    }
+    return false;
   }
 
   private void disambiguateWithinUnit(String unitName) {

@@ -26,7 +26,7 @@ class InvocationArgument implements Typed {
       type = resolver.getApproximateType();
     }
 
-    if (type == DelphiType.unknownType()) {
+    if (type.isUnknown()) {
       type = expression.getType();
     }
   }

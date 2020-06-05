@@ -433,6 +433,17 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testDisambiguationOfOverloadsByDistanceFromCallSite() {
+    execute("overloads/Distance.pas", "overloads/imports/DistantFoo.pas");
+    verifyUsages(10, 10, reference(55, 2));
+    verifyUsages(14, 16, reference(58, 14));
+    verifyUsages(15, 14, reference(60, 6), reference(66, 2));
+    verifyUsages(19, 16, reference(57, 14));
+    verifyUsages(20, 14, reference(59, 6), reference(65, 2));
+    verifyUsages(51, 15, reference(56, 6), reference(58, 21), reference(60, 10));
+  }
+
+  @Test
   public void testRegularMethodPreferredOverImplicitSpecializations() {
     execute("generics/RegularMethodPreferredOverImplicitSpecialization.pas");
     verifyUsages(12, 20, reference(12, 26));

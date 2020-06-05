@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A constructor/destructor implementation could fail to find its declaration in the interface
   section if a class constructor/destructor existed in a supertype defined in the same unit with the
   same name.
+- Name resolution ambiguities in cases where comparable method overloads exist in supertypes or
+  other units.
 - Various parsing bugs.
 
 ## [0.19.0] - 2020-05-21
