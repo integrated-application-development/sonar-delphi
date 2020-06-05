@@ -27,7 +27,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.MethodDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarDeclarationNode;
 
 /** Rule class searching for variables in a .dpr file */
-public class DprVariableRule extends DprRule {
+public class DprVariableRule extends AbstractDprRule {
 
   @Override
   public RuleContext visit(VarDeclarationNode varDecl, RuleContext data) {
