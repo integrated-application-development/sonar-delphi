@@ -45,9 +45,9 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.A
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.BOOLEAN;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.BYTEBOOL;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.WORDBOOL;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.COMP;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.CURRENCY;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.DOUBLE;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.REAL;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.SINGLE;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.BYTE;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.INTEGER;
@@ -106,7 +106,7 @@ public class TypeComparerTest {
     compare(INTEGER.type, DOUBLE.type, CONVERT_LEVEL_4);
     compare(DOUBLE.type, SINGLE.type, CONVERT_LEVEL_2);
     compare(SINGLE.type, DOUBLE.type, CONVERT_LEVEL_1);
-    compare(DOUBLE.type, REAL.type, EQUAL);
+    compare(DOUBLE.type, COMP.type, EQUAL);
     compare(UNICODESTRING.type, DOUBLE.type, INCOMPATIBLE_TYPES);
   }
 
