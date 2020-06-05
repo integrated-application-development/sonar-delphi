@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Ambiguities in the intrinsic method signatures.
+- Ambiguous type comparisons from `AnsiString` to other string types.
+- String types were implicitly convertible to char types.
 
 ## [0.19.0] - 2020-05-21
 

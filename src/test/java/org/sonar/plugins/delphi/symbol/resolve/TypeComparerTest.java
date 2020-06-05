@@ -111,28 +111,30 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testStringToText() {
+  public void testStringToString() {
     compare(WIDESTRING.type, UNICODESTRING.type, CONVERT_LEVEL_1);
     compare(WIDESTRING.type, ANSISTRING.type, CONVERT_LEVEL_2);
-    compare(WIDESTRING.type, CHAR.type, CONVERT_LEVEL_3);
-    compare(WIDESTRING.type, unknownType(), INCOMPATIBLE_TYPES);
+    compare(WIDESTRING.type, SHORTSTRING.type, CONVERT_LEVEL_3);
+    compare(WIDESTRING.type, CHAR.type, INCOMPATIBLE_TYPES);
 
     compare(UNICODESTRING.type, WIDESTRING.type, CONVERT_LEVEL_1);
     compare(UNICODESTRING.type, ANSISTRING.type, CONVERT_LEVEL_2);
-    compare(UNICODESTRING.type, CHAR.type, CONVERT_LEVEL_3);
-    compare(UNICODESTRING.type, unknownType(), INCOMPATIBLE_TYPES);
+    compare(UNICODESTRING.type, SHORTSTRING.type, CONVERT_LEVEL_3);
+    compare(UNICODESTRING.type, CHAR.type, INCOMPATIBLE_TYPES);
 
     compare(SHORTSTRING.type, ANSISTRING.type, CONVERT_LEVEL_1);
     compare(SHORTSTRING.type, UNICODESTRING.type, CONVERT_LEVEL_2);
-    compare(SHORTSTRING.type, CHAR.type, CONVERT_LEVEL_3);
-    compare(SHORTSTRING.type, unknownType(), INCOMPATIBLE_TYPES);
+    compare(SHORTSTRING.type, WIDESTRING.type, CONVERT_LEVEL_3);
+    compare(SHORTSTRING.type, CHAR.type, INCOMPATIBLE_TYPES);
 
-    compare(ANSISTRING.type, CHAR.type, CONVERT_LEVEL_1);
-    compare(ANSISTRING.type, unknownType(), INCOMPATIBLE_TYPES);
+    compare(ANSISTRING.type, UNICODESTRING.type, CONVERT_LEVEL_1);
+    compare(ANSISTRING.type, WIDESTRING.type, CONVERT_LEVEL_2);
+    compare(ANSISTRING.type, SHORTSTRING.type, CONVERT_LEVEL_3);
+    compare(ANSISTRING.type, CHAR.type, INCOMPATIBLE_TYPES);
 
     compare(DelphiTypeType.create("Test", UNICODESTRING.type), UNICODESTRING.type, EQUAL);
 
-    assertThatThrownBy(() -> TypeComparer.compareStringToText(unknownType(), UNICODESTRING.type))
+    assertThatThrownBy(() -> TypeComparer.compareStringToString(unknownType(), UNICODESTRING.type))
         .isInstanceOf(AssertionError.class);
   }
 
