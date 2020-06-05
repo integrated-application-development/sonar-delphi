@@ -36,12 +36,12 @@ import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.CollectionType;
+import org.sonar.plugins.delphi.type.Type.DecimalType;
 import org.sonar.plugins.delphi.type.Type.FileType;
 import org.sonar.plugins.delphi.type.Type.IntegerType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType.ProceduralKind;
 import org.sonar.plugins.delphi.type.Type.TypeType;
-import org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal;
 
 /**
  * Resolves an invocation to the correct declaration. Based directly off of the tcallcandidates
@@ -116,36 +116,19 @@ public class InvocationResolver {
     if (argumentType.is(parameterType)) {
       equality = EXACT;
     } else if (!equalTypeRequired(parameter)
-        && isRealOrExtended(argumentType)
-        && isRealOrExtended(parameterType)) {
+        && argumentType.isDecimal()
+        && parameterType.isDecimal()) {
       equality = EQUAL;
-      int rth;
-      int rfh;
-
-      if (parameterType.is(IntrinsicDecimal.EXTENDED.type)) {
-        rth = 4;
-      } else if (isReal(parameterType)) {
-        rth = 2;
+      int argumentSize = ((DecimalType) argumentType).size();
+      int parameterSize = ((DecimalType) parameterType).size();
+      int distance;
+      if (argumentSize > parameterSize) {
+        // Penalty for shrinking of precision
+        distance = (argumentSize - parameterSize) * 16;
       } else {
-        rth = 1;
+        distance = parameterSize - argumentSize;
       }
-
-      if (argumentType.is(IntrinsicDecimal.EXTENDED.type)) {
-        rfh = 4;
-      } else if (isReal(argumentType)) {
-        rfh = 2;
-      } else {
-        rfh = 1;
-      }
-
-      // Penalty for shrinking of precision
-      if (rth < rfh) {
-        rfh = (rfh - rth) * 16;
-      } else {
-        rfh = rth - rfh;
-      }
-
-      candidate.increaseOrdinalDistance(rfh);
+      candidate.increaseOrdinalDistance(distance);
     } else if (!equalTypeRequired(parameter)
         && argumentType.isStruct()
         && parameterType.isStruct()
@@ -290,14 +273,6 @@ public class InvocationResolver {
 
   private static boolean equalTypeRequired(ParameterDeclaration parameter) {
     return parameter.isOut() || parameter.isVar();
-  }
-
-  private static boolean isRealOrExtended(Type type) {
-    return isReal(type) || IntrinsicDecimal.EXTENDED.type.is(type);
-  }
-
-  private static boolean isReal(Type type) {
-    return IntrinsicDecimal.DOUBLE.type.is(type) || IntrinsicDecimal.REAL.type.is(type);
   }
 
   /**

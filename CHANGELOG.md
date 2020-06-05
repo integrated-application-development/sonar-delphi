@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Improve distance-calculation between floating-point types during overload resolution.
+
 ### Fixed
 
 - Ambiguities in the intrinsic method signatures.
