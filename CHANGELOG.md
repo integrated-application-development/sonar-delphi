@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Penalize signed vs unsigned type mismatches during overload resolution.
 - Treat `Real` as a type alias to `Double`.
 - Treat `Cardinal` as a type alias to `LongWord`.
+- Treat the result of binary expressions including floating-point types as `Extended`.
 
 ### Fixed
 

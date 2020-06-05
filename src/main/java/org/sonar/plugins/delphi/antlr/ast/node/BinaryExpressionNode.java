@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.BOOLEAN;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.EXTENDED;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
 
@@ -64,8 +65,13 @@ public final class BinaryExpressionNode extends ExpressionNode {
     Type type = getLeft().getType();
 
     if (type.is(CHAR.type)) {
-      // Assume this expression is a string concatenation.
+      // Assume this expression is a string concatenation
       type = UNICODESTRING.type;
+    }
+
+    if (getLeft().getType().isDecimal() || getRight().getType().isDecimal()) {
+      // Binary expressions including decimal types always produce an intermediary Extended value
+      type = EXTENDED.type;
     }
 
     return type;
