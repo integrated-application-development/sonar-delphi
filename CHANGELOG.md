@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ambiguous type comparisons from `AnsiString` to other string types.
 - String types were implicitly convertible to char types.
 - Objects weren't implicitly convertible to untyped pointers.
+- Methods without the `overload` directive were being collected from imported units as potential
+  overloads during name resolution.
 
 ## [0.19.0] - 2020-05-21
 

@@ -81,6 +81,11 @@ abstract class AbstractFileScope extends AbstractDelphiScope implements FileScop
     super.addDeclaration(declaration);
   }
 
+  @Override
+  protected boolean overloadsRequireOverloadDirective() {
+    return true;
+  }
+
   public String getName() {
     return name;
   }
