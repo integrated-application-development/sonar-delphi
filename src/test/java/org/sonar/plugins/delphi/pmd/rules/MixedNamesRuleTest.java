@@ -126,8 +126,9 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
             .appendImpl("  try")
             .appendImpl("    raise EException.Create('Everything is on fire!');")
             .appendImpl("  except")
-            .appendImpl("  on E: EException do begin")
-            .appendImpl("    e.Bar;")
+            .appendImpl("    on E: EException do begin")
+            .appendImpl("      e.Bar;")
+            .appendImpl("    end;")
             .appendImpl("  end;")
             .appendImpl("end;");
 

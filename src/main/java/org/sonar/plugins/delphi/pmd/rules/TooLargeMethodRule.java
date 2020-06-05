@@ -28,7 +28,6 @@ import java.util.function.Predicate;
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.node.CompoundStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExceptItemNode;
-import org.sonar.plugins.delphi.antlr.ast.node.MethodBodyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 
 /** Class for counting method statements. If too many, creates a violation. */
@@ -52,11 +51,11 @@ public class TooLargeMethodRule extends AbstractDelphiRule {
   }
 
   private long countStatements(MethodImplementationNode method) {
-    MethodBodyNode body = method.getMethodBody();
-    if (body.hasStatementBlock()) {
-      int handlers = body.getStatementBlock().findDescendantsOfType(ExceptItemNode.class).size();
+    CompoundStatementNode block = method.getStatementBlock();
+    if (block != null) {
+      int handlers = block.findDescendantsOfType(ExceptItemNode.class).size();
       long statements =
-          body.getStatementBlock()
+          block
               .descendantStatementStream()
               .filter(Predicate.not(CompoundStatementNode.class::isInstance))
               .count();

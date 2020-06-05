@@ -135,6 +135,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
             .appendImpl("  except")
             .appendImpl("    on E: Exception do")
             .appendImpl("      WriteLn('test')")
+            .appendImpl("  end;")
             .appendImpl("end;");
 
     execute(builder);

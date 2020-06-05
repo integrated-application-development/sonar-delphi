@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import org.sonar.plugins.delphi.antlr.ast.node.CompoundStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
@@ -29,20 +30,16 @@ import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 public abstract class NoInheritedStatementRule extends AbstractDelphiRule {
 
   protected final void checkViolation(MethodImplementationNode method, Object data) {
-    if (!method.getMethodBody().hasStatementBlock()
-        || method.isClassMethod()
-        || hasInheritedStatement(method)) {
+    CompoundStatementNode body = method.getStatementBlock();
+    if (body == null || method.isClassMethod() || hasInheritedStatement(body)) {
       return;
     }
 
     addViolation(data, method.getMethodNameNode());
   }
 
-  private boolean hasInheritedStatement(MethodImplementationNode method) {
-    return method
-        .getMethodBody()
-        .getStatementBlock()
-        .descendantStatementStream()
+  private boolean hasInheritedStatement(CompoundStatementNode body) {
+    return body.descendantStatementStream()
         .filter(ExpressionStatementNode.class::isInstance)
         .map(ExpressionStatementNode.class::cast)
         .map(ExpressionStatementNode::getExpression)

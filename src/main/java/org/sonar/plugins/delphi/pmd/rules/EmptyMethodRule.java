@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
-import org.sonar.plugins.delphi.antlr.ast.node.MethodBodyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 
@@ -19,16 +18,10 @@ public class EmptyMethodRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(MethodImplementationNode method, RuleContext data) {
-    if (isEmptyMethod(method) && shouldAddViolation(method)) {
+    if (method.isEmptyMethod() && shouldAddViolation(method)) {
       addViolation(data, method.getMethodNameNode());
     }
     return super.visit(method, data);
-  }
-
-  private static boolean isEmptyMethod(MethodImplementationNode method) {
-    MethodBodyNode body = method.getMethodBody();
-    return (body.hasAsmBlock() && body.getAsmBlock().isEmpty())
-        || (body.hasStatementBlock() && body.getStatementBlock().isEmpty());
   }
 
   @Override
@@ -38,9 +31,9 @@ public class EmptyMethodRule extends AbstractDelphiRule {
   }
 
   private boolean shouldAddViolation(MethodImplementationNode method) {
-    DelphiNode block = method.getMethodBody().getBlock();
+    DelphiNode block = method.getBlock();
 
-    if (block.getComments().isEmpty()) {
+    if (block != null && block.getComments().isEmpty()) {
       // All exclusions aside, an explanatory comment is mandatory
       return true;
     }

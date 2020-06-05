@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import java.util.function.Function;
 import javax.annotation.Nullable;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.antlr.runtime.Token;
@@ -8,7 +9,6 @@ import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 
 public final class MethodImplementationNode extends MethodNode {
-  private MethodBodyNode methodBody;
   private TypeNameDeclaration typeDeclaration;
 
   public MethodImplementationNode(Token token) {
@@ -24,11 +24,44 @@ public final class MethodImplementationNode extends MethodNode {
     return visitor.visit(this, data);
   }
 
-  public MethodBodyNode getMethodBody() {
-    if (methodBody == null) {
-      methodBody = (MethodBodyNode) jjtGetChild(1);
+  private MethodBodyNode getMethodBody() {
+    return (MethodBodyNode) jjtGetChild(1);
+  }
+
+  @Nullable
+  public BlockDeclarationSectionNode getDeclarationSection() {
+    return fromBody(MethodBodyNode::getDeclarationSection);
+  }
+
+  @Nullable
+  public DelphiNode getBlock() {
+    return fromBody(MethodBodyNode::getBlock);
+  }
+
+  @Nullable
+  public CompoundStatementNode getStatementBlock() {
+    return fromBody(MethodBodyNode::getStatementBlock);
+  }
+
+  @Nullable
+  public AsmStatementNode getAsmBlock() {
+    return fromBody(MethodBodyNode::getAsmBlock);
+  }
+
+  @Nullable
+  private <T> T fromBody(Function<MethodBodyNode, T> getter) {
+    MethodBodyNode body = getMethodBody();
+    if (body != null) {
+      return getter.apply(body);
     }
-    return methodBody;
+    return null;
+  }
+
+  public boolean isEmptyMethod() {
+    AsmStatementNode asmBlock = getAsmBlock();
+    CompoundStatementNode statementBlock = getStatementBlock();
+    return (asmBlock != null && asmBlock.isEmpty())
+        || (statementBlock != null && statementBlock.isEmpty());
   }
 
   @Override

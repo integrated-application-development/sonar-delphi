@@ -207,4 +207,15 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
 
     assertIssues().areNot(ruleKey("EmptyMethodRule"));
   }
+
+  @Test
+  public void testExternalImplementationShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure ExternalProc(FirstName: String; LastName: String); external;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("EmptyMethodRule"));
+  }
 }
