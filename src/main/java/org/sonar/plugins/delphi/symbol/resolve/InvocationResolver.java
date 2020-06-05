@@ -27,6 +27,7 @@ import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.UNIC
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.WIDESTRING;
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.WORD;
 
+import com.google.common.collect.ComparisonChain;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -174,7 +175,7 @@ public class InvocationResolver {
       candidate.increaseOrdinalDistance(argInteger.ordinalDistance(paramInteger));
 
       if (argInteger.isSigned() != paramInteger.isSigned()) {
-        candidate.bumpOrdinalDistance();
+        candidate.incrementSignMismatchCount();
       }
     }
 
@@ -342,44 +343,36 @@ public class InvocationResolver {
    */
   private int isBetterCandidate(InvocationCandidate candidate, InvocationCandidate bestCandidate) {
     checkState(!candidate.isInvalid());
-    int result = 0;
 
     if (bestCandidate.isInvalid()) {
-      result = 1;
+      return 1;
     }
 
-    if (result == 0) {
-      // Less operator parameters?
-      result = bestCandidate.getConvertOperatorCount() - candidate.getConvertOperatorCount();
-    }
+    ComparisonChain comparisonChain =
+        ComparisonChain.start()
+            // Less operator parameters?
+            .compare(bestCandidate.getConvertOperatorCount(), candidate.getConvertOperatorCount());
 
     for (int i = InvocationCandidate.CONVERT_LEVELS; i > 0; --i) {
-      if (result == 0) {
-        // Less castLevel[6..1] parameters?
-        result = bestCandidate.getConvertLevelCount(i) - candidate.getConvertLevelCount(i);
-      }
+      // Less castLevel[6..1] parameters?
+      comparisonChain =
+          comparisonChain.compare(
+              bestCandidate.getConvertLevelCount(i), candidate.getConvertLevelCount(i));
     }
 
-    if (result == 0) {
-      // More exact parameters?
-      result = candidate.getExactCount() - bestCandidate.getExactCount();
-    }
-
-    if (result == 0) {
-      // Less equal parameters?
-      result = bestCandidate.getEqualCount() - candidate.getEqualCount();
-    }
-
-    if (result == 0) {
-      // Smaller ordinal distance?
-      result = Double.compare(bestCandidate.getOrdinalDistance(), candidate.getOrdinalDistance());
-    }
-
-    if (result == 0) {
-      // Smaller procedural distance?
-      result =
-          Integer.compare(bestCandidate.getProceduralDistance(), candidate.getProceduralDistance());
-    }
+    int result =
+        comparisonChain
+            // More exact parameters?
+            .compare(candidate.getExactCount(), bestCandidate.getExactCount())
+            // Less equal parameters?
+            .compare(bestCandidate.getEqualCount(), candidate.getEqualCount())
+            // Smaller ordinal distance?
+            .compare(bestCandidate.getOrdinalDistance(), candidate.getOrdinalDistance())
+            // Less sign mismatches?
+            .compare(bestCandidate.getSignMismatchCount(), candidate.getSignMismatchCount())
+            // Smaller procedural distance?
+            .compare(bestCandidate.getProceduralDistance(), candidate.getProceduralDistance())
+            .result();
 
     if (result == 0) {
       result = getVariantDistance(candidate, bestCandidate);
@@ -487,7 +480,7 @@ public class InvocationResolver {
     throw new AssertionError("Unhandled VariantConversionType!");
   }
 
-  private int calculateRelation(
+  private static int calculateRelation(
       VariantConversionType currentVcl,
       VariantConversionType bestVcl,
       VariantConversionType testVcl,

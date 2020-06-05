@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Improve distance-calculation between floating-point types during overload resolution.
+- Penalize signed vs unsigned type mismatches during overload resolution.
 
 ### Fixed
 

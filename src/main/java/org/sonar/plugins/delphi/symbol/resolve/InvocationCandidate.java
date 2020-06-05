@@ -22,6 +22,7 @@ public class InvocationCandidate {
   private final int[] convertLevelCount;
   private int convertOperatorCount;
   private double ordinalDistance;
+  private int signMismatchCount;
   private int proceduralDistance;
   private final List<VariantConversionType> variantConversions;
   private boolean invalid;
@@ -76,8 +77,12 @@ public class InvocationCandidate {
     this.ordinalDistance += ordinalDistance;
   }
 
-  public void bumpOrdinalDistance() {
-    this.ordinalDistance = nextAfter(this.ordinalDistance, POSITIVE_INFINITY);
+  public int getSignMismatchCount() {
+    return signMismatchCount;
+  }
+
+  public void incrementSignMismatchCount() {
+    ++this.signMismatchCount;
   }
 
   public void increaseProceduralDistance(int proceduralDistance) {
