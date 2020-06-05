@@ -225,11 +225,11 @@ class AbstractDelphiScope implements DelphiScope {
       return false;
     }
 
-    if (declaration.getRequiredParametersCount() != overridden.getRequiredParametersCount()) {
+    if (declaration.getParametersCount() != overridden.getParametersCount()) {
       return false;
     }
 
-    for (int i = 0; i < declaration.getRequiredParametersCount(); ++i) {
+    for (int i = 0; i < declaration.getParametersCount(); ++i) {
       ParameterDeclaration declarationParam = declaration.getParameter(i);
       ParameterDeclaration matchedParam = overridden.getParameter(i);
       if (!declarationParam.getType().is(matchedParam.getType())) {

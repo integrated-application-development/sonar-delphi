@@ -35,6 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   same name.
 - Name resolution ambiguities in cases where comparable method overloads exist in supertypes or
   other units.
+- Name resolution ambiguities when an overridden (and overloaded) method had a different set of
+  default parameters than its overrides.
 - Various parsing bugs.
 
 ## [0.19.0] - 2020-05-21
