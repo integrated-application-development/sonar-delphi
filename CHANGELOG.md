@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve distance-calculation between floating-point types during overload resolution.
 - Penalize signed vs unsigned type mismatches during overload resolution.
 - Treat `Real` as a type alias to `Double`.
+- Treat `Cardinal` as a type alias to `LongWord`.
 
 ### Fixed
 
