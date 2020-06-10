@@ -73,6 +73,7 @@ import org.sonar.plugins.delphi.type.Type.StructType;
 import org.sonar.plugins.delphi.type.Type.TypeParameterType;
 import org.sonar.plugins.delphi.type.Typed;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicReturnType;
 
 public class DefaultNameResolver implements NameResolver {
   private final List<DelphiNameOccurrence> names = new ArrayList<>();
@@ -819,8 +820,20 @@ public class DefaultNameResolver implements NameResolver {
       argument.resolve(parameter.getType());
     }
 
-    if (!isConstructor(resolved)) {
-      currentType = invocable.getReturnType();
+    resolveReturnType(invocable, resolver.getArguments());
+  }
+
+  private void resolveReturnType(Invocable invocable, List<InvocationArgument> arguments) {
+    if (!isConstructor((NameDeclaration) invocable)) {
+      Type returnType = invocable.getReturnType();
+      if (returnType instanceof IntrinsicReturnType) {
+        List<Type> argumentTypes =
+            arguments.stream()
+                .map(InvocationArgument::getType)
+                .collect(Collectors.toUnmodifiableList());
+        returnType = ((IntrinsicReturnType) returnType).getReturnType(argumentTypes);
+      }
+      updateType(returnType);
     }
   }
 

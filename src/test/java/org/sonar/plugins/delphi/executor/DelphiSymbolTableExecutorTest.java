@@ -359,6 +359,24 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testLowHighIntrinsics() {
+    execute("intrinsics/LowHighIntrinsics.pas");
+    verifyUsages(
+        14,
+        10,
+        reference(31, 2),
+        reference(32, 2),
+        reference(33, 2),
+        reference(34, 2),
+        reference(35, 2),
+        reference(36, 2),
+        reference(37, 2),
+        reference(38, 2));
+    verifyUsages(19, 10, reference(39, 2), reference(40, 2));
+    verifyUsages(24, 10, reference(41, 2), reference(42, 2));
+  }
+
+  @Test
   public void testSimpleProperties() {
     execute("properties/Simple.pas");
     verifyUsages(

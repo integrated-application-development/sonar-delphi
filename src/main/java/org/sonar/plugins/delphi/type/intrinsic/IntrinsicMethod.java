@@ -126,7 +126,7 @@ public enum IntrinsicMethod {
   GETMEM(method("GetMem").parameters(untypedPointer(), INTEGER.type)),
   HALT(method("Halt").parameters(INTEGER.type).required(0)),
   HI(method("Hi").parameters(INTEGER.type)),
-  HIGH(method("High").parameters(untypedType())),
+  HIGH(method("High").parameters(untypedType()).returns(IntrinsicReturnType.HIGH_RETURN_TYPE)),
   INC(method("Inc").parameters(ANY_ORDINAL, INTEGER.type).required(1)),
   INCLUDE(method("Include").parameters(ANY_SET, ANY_ORDINAL)),
   INITIALIZE(method("Initialize").parameters(untypedType(), NATIVEINT.type).required(1)),
@@ -135,7 +135,7 @@ public enum IntrinsicMethod {
   LENGTH_STRING(method("Length").parameters(UNICODESTRING.type).returns(INTEGER.type)),
   LENGTH_ARRAY(method("Length").parameters(ANY_DYNAMIC_ARRAY).returns(INTEGER.type)),
   LO(method("Lo").parameters(INTEGER.type).returns(BYTE.type)),
-  LOW(method("Low").parameters(untypedType()).returns(INTEGER.type)),
+  LOW(method("Low").parameters(untypedType()).returns(IntrinsicReturnType.LOW_RETURN_TYPE)),
   MEMORY_BARRIER(method("MemoryBarrier")),
   MULDIVINT64(
       method("MulDivInt64")

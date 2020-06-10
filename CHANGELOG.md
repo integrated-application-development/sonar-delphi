@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve type comparisons between ordinals and subranges with comparable base types.
 - Improve type comparisons between variants and enumerations.
 - Improve type comparisons between variants and dynamic arrays.
+- Improve support for the `High` and `Low` intrinsics.
 - Types nested within the `testSuiteType` will now be treated as test code.
 
 ### Fixed
