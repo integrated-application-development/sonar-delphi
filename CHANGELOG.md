@@ -57,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Many intrinsics wouldn't treat subranges or `type` types as ordinals.
 - In some cases, the current type could not be found during name resolution. This would cause an
   otherwise-correct declaration to be considered inaccessible.
+- `nil` was treated as a valid record value.
 
 ## [0.20.0] - 2020-06-05
 

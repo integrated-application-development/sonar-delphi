@@ -550,7 +550,7 @@ class TypeComparer {
   private static EqualityType compareObject(Type from, Type to) {
     if (from.isStruct() && from.isSubTypeOf(to)) {
       return CONVERT_LEVEL_3;
-    } else if (from.isPointer()) {
+    } else if (from.isPointer() && !to.isRecord()) {
       PointerType fromPointer = (PointerType) from;
       if (fromPointer.isUntypedPointer()) {
         return CONVERT_LEVEL_2;
