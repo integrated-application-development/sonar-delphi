@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve type resolution for array constructors with procedural elements.
 - Improve type comparisons between ordinals and subranges with comparable base types.
 - Improve type comparisons between variants and enumerations.
+- Types nested within the `testSuiteType` will now be treated as test code.
 
 ### Fixed
 

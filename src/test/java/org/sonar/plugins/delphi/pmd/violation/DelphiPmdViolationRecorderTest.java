@@ -51,7 +51,10 @@ import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.project.DelphiProjectHelper;
+import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
+import org.sonar.plugins.delphi.symbol.scope.TypeScope;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Type.ScopedType;
 
 public class DelphiPmdViolationRecorderTest {
   private static final String RULE_KEY = "RULE";
@@ -133,6 +136,31 @@ public class DelphiPmdViolationRecorderTest {
     Type testSuiteType = mock(Type.class);
     when(testSuiteType.isSubTypeOf("TEST")).thenReturn(true);
     when(pmdViolation.getClassType()).thenReturn(testSuiteType);
+    when(pmdViolation.getRule().getProperty(SCOPE)).thenReturn(RuleScope.MAIN.name());
+    when(configuration.get(DelphiPlugin.TEST_SUITE_TYPE_KEY)).thenReturn(Optional.of("TEST"));
+
+    violationRecorder.saveViolation(pmdViolation, mockContext);
+
+    verifyZeroInteractions(mockActiveRules);
+    verifyZeroInteractions(mockContext);
+  }
+
+  @Test
+  public void testShouldIgnoreViolationInNestedTestCodeWhenScopeIsMain() {
+    final File file = new File(baseDir, "FileWithViolation.java");
+    addToFileSystem(file);
+    final DelphiRuleViolation pmdViolation = mockViolation(file);
+
+    Type testSuiteType = mock(Type.class);
+    TypeScope testSuitTypeScope = mock(TypeScope.class);
+    DelphiScope scope = mock(DelphiScope.class);
+    ScopedType nestedType = mock(ScopedType.class);
+
+    when(testSuiteType.isSubTypeOf("TEST")).thenReturn(true);
+    when(testSuitTypeScope.getType()).thenReturn(testSuiteType);
+    when(scope.getParent()).thenReturn(testSuitTypeScope);
+    when(nestedType.typeScope()).thenReturn(scope);
+    when(pmdViolation.getClassType()).thenReturn(nestedType);
     when(pmdViolation.getRule().getProperty(SCOPE)).thenReturn(RuleScope.MAIN.name());
     when(configuration.get(DelphiPlugin.TEST_SUITE_TYPE_KEY)).thenReturn(Optional.of("TEST"));
 
