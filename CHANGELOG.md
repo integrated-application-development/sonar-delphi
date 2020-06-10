@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Incorrect operator precedence for `as`.
+- A caught exception's type was unresolved within the `except` handler.
 
 ## [0.20.0] - 2020-06-05
 
