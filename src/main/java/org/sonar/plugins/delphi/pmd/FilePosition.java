@@ -17,6 +17,10 @@ public abstract class FilePosition implements Serializable {
     return new LineLevelPosition(line, line);
   }
 
+  public static FilePosition atLineLevel(int beginLine, int endLine) {
+    return new LineLevelPosition(beginLine, endLine);
+  }
+
   public static FilePosition from(int beginLine, int beginColumn, int endLine, int endColumn) {
     return new PrecisePosition(beginLine, beginColumn, endLine, endColumn);
   }
