@@ -145,6 +145,32 @@ public class TypeComparerTest {
   }
 
   @Test
+  public void testArrayToString() {
+    Type ansiCharOpenArray = openArray(null, ANSICHAR.type);
+    Type wideCharOpenArray = openArray(null, WIDECHAR.type);
+    Type ansiCharFixedArray = fixedArray(null, ANSICHAR.type);
+    Type wideCharFixedArray = fixedArray(null, WIDECHAR.type);
+
+    compare(ansiCharOpenArray, ANSISTRING.type, CONVERT_LEVEL_2);
+    compare(ansiCharOpenArray, WIDESTRING.type, CONVERT_LEVEL_3);
+    compare(ansiCharOpenArray, UNICODESTRING.type, CONVERT_LEVEL_4);
+    compare(wideCharOpenArray, UNICODESTRING.type, CONVERT_LEVEL_2);
+    compare(wideCharOpenArray, WIDESTRING.type, CONVERT_LEVEL_3);
+    compare(wideCharOpenArray, ANSISTRING.type, CONVERT_LEVEL_4);
+    compare(openArray(null, unknownType()), ANSISTRING.type, INCOMPATIBLE_TYPES);
+
+    compare(ansiCharFixedArray, ANSISTRING.type, CONVERT_LEVEL_2);
+    compare(ansiCharFixedArray, WIDESTRING.type, CONVERT_LEVEL_3);
+    compare(ansiCharFixedArray, UNICODESTRING.type, CONVERT_LEVEL_4);
+    compare(wideCharFixedArray, UNICODESTRING.type, CONVERT_LEVEL_2);
+    compare(wideCharFixedArray, WIDESTRING.type, CONVERT_LEVEL_3);
+    compare(wideCharFixedArray, ANSISTRING.type, CONVERT_LEVEL_4);
+    compare(fixedArray(null, unknownType()), ANSISTRING.type, INCOMPATIBLE_TYPES);
+
+    compare(dynamicArray(null, ANSICHAR.type), ANSISTRING.type, INCOMPATIBLE_TYPES);
+  }
+
+  @Test
   public void testCharToText() {
     compare(ANSICHAR.type, DelphiTypeType.create("_AnsiChar", ANSICHAR.type), CONVERT_LEVEL_1);
     compare(ANSICHAR.type, SHORTSTRING.type, CONVERT_LEVEL_2);

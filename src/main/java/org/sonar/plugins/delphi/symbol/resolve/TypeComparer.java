@@ -165,6 +165,8 @@ class TypeComparer {
       return compareCharToText(from, to);
     } else if (from.isPointer()) {
       return comparePointerToText((PointerType) from, (TextType) to);
+    } else if (from.isArray()) {
+      return compareArrayToText((CollectionType) from, to);
     }
     return INCOMPATIBLE_TYPES;
   }
@@ -280,6 +282,32 @@ class TypeComparer {
         return CONVERT_LEVEL_4;
       }
     }
+    return INCOMPATIBLE_TYPES;
+  }
+
+  private static EqualityType compareArrayToText(CollectionType from, Type to) {
+    if (from.isDynamicArray()) {
+      return INCOMPATIBLE_TYPES;
+    }
+
+    if (from.elementType().is(ANSICHAR.type)) {
+      if (to.is(ANSISTRING.type)) {
+        return CONVERT_LEVEL_2;
+      } else if (to.is(WIDESTRING.type)) {
+        return CONVERT_LEVEL_3;
+      } else if (to.is(UNICODESTRING.type)) {
+        return CONVERT_LEVEL_4;
+      }
+    } else if (from.elementType().is(WIDECHAR.type)) {
+      if (to.is(UNICODESTRING.type)) {
+        return CONVERT_LEVEL_2;
+      } else if (to.is(WIDESTRING.type)) {
+        return CONVERT_LEVEL_3;
+      } else if (to.is(ANSISTRING.type)) {
+        return CONVERT_LEVEL_4;
+      }
+    }
+
     return INCOMPATIBLE_TYPES;
   }
 
