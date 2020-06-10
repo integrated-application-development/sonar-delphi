@@ -2,6 +2,9 @@ package org.sonar.plugins.delphi.symbol.scope;
 
 import static org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration.compilerVariable;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.BOOLEAN;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.EXTENDED;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.INTEGER;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.LONGINT;
 
 import java.util.Arrays;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
@@ -58,6 +61,9 @@ public class SystemScope extends AbstractFileScope {
   }
 
   private void injectConstants() {
+    injectConstant("CompilerVersion", EXTENDED.type);
+    injectConstant("MaxInt", INTEGER.type);
+    injectConstant("MaxLongInt", LONGINT.type);
     injectConstant("True", BOOLEAN.type);
     injectConstant("False", BOOLEAN.type);
   }
