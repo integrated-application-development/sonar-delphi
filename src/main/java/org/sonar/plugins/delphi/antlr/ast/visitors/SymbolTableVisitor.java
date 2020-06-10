@@ -60,6 +60,7 @@ import org.sonar.plugins.delphi.symbol.ImportResolutionHandler;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.EnumElementNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
@@ -343,16 +344,31 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
     NameReferenceNode methodReference = node.getNameReferenceNode();
     NameDeclaration declaration = methodReference.getLastName().getNameDeclaration();
-    boolean foundInterfaceDeclaration = declaration instanceof MethodNameDeclaration;
+
+    MethodNameDeclaration methodDeclaration = null;
+    boolean foundInterfaceDeclaration = false;
     boolean qualifiedMethodName = methodReference.flatten().size() > 1;
 
+    if (declaration instanceof MethodNameDeclaration) {
+      foundInterfaceDeclaration = true;
+      methodDeclaration = (MethodNameDeclaration) declaration;
+    }
+
     if (!foundInterfaceDeclaration && !qualifiedMethodName) {
-      MethodNameDeclaration implementationDeclaration = MethodNameDeclaration.create(node);
+      methodDeclaration = MethodNameDeclaration.create(node);
       MethodNameNode nameNode = node.getMethodHeading().getMethodNameNode();
-      data.addDeclaration(implementationDeclaration, nameNode);
+      data.addDeclaration(methodDeclaration, nameNode);
     }
 
     data.addScope(scope, node);
+
+    if (foundInterfaceDeclaration
+        && node.getMethodHeading().getMethodParametersNode() == null
+        && !node.hasDirective(MethodDirective.EXTERNAL)) {
+      methodDeclaration.getParameters().stream()
+          .map(parameter -> compilerVariable(parameter.getImage(), parameter.getType(), scope))
+          .forEach(data::addDeclarationToCurrentScope);
+    }
 
     if (node.isFunction() || node.isOperator()) {
       DelphiNameDeclaration result = compilerVariable("Result", node.getReturnType(), scope);

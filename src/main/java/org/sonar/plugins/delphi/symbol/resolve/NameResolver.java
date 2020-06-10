@@ -215,12 +215,21 @@ public interface NameResolver {
     methodScope.setTypeScope(findTypeScope(resolver));
     resolveMethod(method);
 
+    if (!isBareInterfaceMethodReference(method, resolver)) {
+      resolver.disambiguateParameters(method.getParameterTypes());
+    }
+
     resolver.disambiguateParameters(method.getParameterTypes());
     resolver.disambiguateReturnType(method.getReturnType());
     resolver.disambiguateIsClassInvocable(method.isClassMethod());
     resolver.addToSymbolTable();
 
     completeTypeParameterReferences(method);
+  }
+
+  private static boolean isBareInterfaceMethodReference(MethodNode method, DefaultNameResolver resolver) {
+    return method.getMethodHeading().getMethodParametersNode() == null
+        && resolver.getDeclarations().size() == 1;
   }
 
   private static void resolveMethod(MethodNode method) {

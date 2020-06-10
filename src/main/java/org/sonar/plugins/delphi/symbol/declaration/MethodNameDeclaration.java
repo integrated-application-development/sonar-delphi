@@ -108,7 +108,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
         method.fullyQualifiedName(),
         extractParameterDeclarations(method),
         method.getReturnType(),
-        extractDirectives(method),
+        method.getDirectives(),
         method.isClassMethod(),
         isCallable,
         false,
@@ -129,19 +129,6 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
     return method.getParameters().stream()
         .map(FormalParameterData::getType)
         .collect(Collectors.toUnmodifiableList());
-  }
-
-  private static Set<MethodDirective> extractDirectives(MethodNode method) {
-    var builder = new ImmutableSet.Builder<MethodDirective>();
-    MethodHeadingNode heading = method.getMethodHeading();
-    for (int i = 0; i < heading.jjtGetNumChildren(); ++i) {
-      DelphiToken token = ((DelphiNode) heading.jjtGetChild(i)).getToken();
-      MethodDirective directive = MethodDirective.fromToken(token);
-      if (directive != null) {
-        builder.add(directive);
-      }
-    }
-    return builder.build();
   }
 
   private static List<TypedDeclaration> extractGenericTypeParameters(MethodNode method) {

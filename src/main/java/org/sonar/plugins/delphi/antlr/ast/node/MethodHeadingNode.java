@@ -1,13 +1,15 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import com.google.common.collect.ImmutableSet;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
-import org.sonar.plugins.delphi.antlr.DelphiParser;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
-import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
+import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
 import org.sonar.plugins.delphi.symbol.declaration.MethodKind;
 import org.sonar.plugins.delphi.type.Type;
 
@@ -17,6 +19,7 @@ public final class MethodHeadingNode extends DelphiNode {
   private String typeName;
   private String qualifiedName;
   private MethodKind methodKind;
+  private Set<MethodDirective> directives;
 
   public MethodHeadingNode(Token token) {
     super(token);
@@ -147,6 +150,21 @@ public final class MethodHeadingNode extends DelphiNode {
       methodKind = MethodKind.fromTokenType(jjtGetChildId(0));
     }
     return methodKind;
+  }
+
+  public Set<MethodDirective> getDirectives() {
+    if (directives == null) {
+      var builder = new ImmutableSet.Builder<MethodDirective>();
+      for (int i = 0; i < jjtGetNumChildren(); ++i) {
+        DelphiToken token = ((DelphiNode) jjtGetChild(i)).getToken();
+        MethodDirective directive = MethodDirective.fromToken(token);
+        if (directive != null) {
+          builder.add(directive);
+        }
+      }
+      directives = builder.build();
+    }
+    return directives;
   }
 
   private static MethodHeadingNode findParentMethodHeading(MethodHeadingNode headingNode) {

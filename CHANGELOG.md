@@ -32,6 +32,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Type signature mismatches arising from forward-declared pointer/class reference types.
 - Anonymous methods were erroneously treated like method references during overload resolution.
 - Nested types could not access declarations in top-level type(s) via unqualified references.
+- A method implementation with no parameter list would not resolve to the interface method if the
+  parameter list was omitted.
+  (The compiler allows this as long as there is only one method declaration with the same name in
+  the interface section)
 
 ## [0.20.0] - 2020-06-05
 
