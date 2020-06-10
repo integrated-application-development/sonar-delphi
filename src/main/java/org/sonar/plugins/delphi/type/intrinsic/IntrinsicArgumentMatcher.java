@@ -1,14 +1,14 @@
 package org.sonar.plugins.delphi.type.intrinsic;
 
 import com.google.errorprone.annotations.Immutable;
-import java.util.function.Function;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.StructKind;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ImmutableType;
+import org.sonar.plugins.delphi.type.TypeUtils;
 
 @Immutable
-public class IntrinsicArgumentMatcher extends DelphiType implements ImmutableType {
+public final class IntrinsicArgumentMatcher extends DelphiType implements ImmutableType {
   public static final ImmutableType ANY_DYNAMIC_ARRAY =
       new IntrinsicArgumentMatcher("<dynamic array>", Type::isDynamicArray);
 
@@ -31,7 +31,10 @@ public class IntrinsicArgumentMatcher extends DelphiType implements ImmutableTyp
       new IntrinsicArgumentMatcher("<class reference>", Type::isClassReference);
 
   @Immutable
-  private interface Matcher extends Function<Type, Boolean> {}
+  @FunctionalInterface
+  private interface Matcher {
+    boolean matches(Type type);
+  }
 
   private final Matcher matcher;
 
@@ -41,6 +44,6 @@ public class IntrinsicArgumentMatcher extends DelphiType implements ImmutableTyp
   }
 
   public boolean matches(Type type) {
-    return matcher.apply(type);
+    return matcher.matches(TypeUtils.findBaseType(type));
   }
 }

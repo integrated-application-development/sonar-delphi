@@ -50,6 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The `Hi` intrinsic's return type was treated as `Integer`, when it should have been `Byte`.
 - The `Length` intrinsic would only accept dynamic arrays, when it should accept any array.
 - The `Include` and `Exclude` intrinsics wouldn't accept array constructors as set literals.
+- Many intrinsics wouldn't treat subranges or `type` types as ordinals.
 
 ## [0.20.0] - 2020-06-05
 
