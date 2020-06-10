@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Support the `Result` variable in anonymous functions.
+- Improve type resolution for array constructors with procedural elements.
 
 ### Fixed
 

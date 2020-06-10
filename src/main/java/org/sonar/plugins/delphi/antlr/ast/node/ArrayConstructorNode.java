@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.type.DelphiArrayConstructorType;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Type.ProceduralType;
 
 public final class ArrayConstructorNode extends ExpressionNode {
   private String image;
@@ -47,6 +48,7 @@ public final class ArrayConstructorNode extends ExpressionNode {
     return DelphiArrayConstructorType.arrayConstructor(
         getElements().stream()
             .map(ExpressionNode::getType)
+            .map(type -> type.isProcedural() ? ((ProceduralType) type).returnType() : type)
             .collect(Collectors.toUnmodifiableList()));
   }
 }
