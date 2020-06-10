@@ -209,9 +209,18 @@ public class DelphiSymbolTableExecutorTest {
   @Test
   public void testResults() {
     execute("Results.pas");
-    verifyUsages(8, 2, reference(15, 10), reference(20, 19), reference(25, 15), reference(27, 12));
-    verifyUsages(10, 14, reference(15, 15), reference(28, 9));
-    verifyUsages(20, 10, reference(29, 2));
+    verifyUsages(
+        8,
+        2,
+        reference(17, 10),
+        reference(22, 19),
+        reference(27, 54),
+        reference(29, 12),
+        reference(36, 12),
+        reference(42, 44),
+        reference(44, 12));
+    verifyUsages(10, 14, reference(17, 15), reference(30, 9), reference(37, 9), reference(45, 9));
+    verifyUsages(22, 10, reference(31, 2), reference(38, 2), reference(46, 2));
   }
 
   @Test
@@ -249,6 +258,14 @@ public class DelphiSymbolTableExecutorTest {
     verifyUsages(14, 4, reference(26, 4));
     verifyUsages(10, 4, reference(27, 4));
     verifyUsages(23, 2, reference(28, 4));
+  }
+
+  @Test
+  public void testBareInterfaceMethodReference() {
+    execute("BareInterfaceMethodReference.pas");
+    verifyUsages(7, 9, reference(17, 9));
+    verifyUsages(8, 9, reference(22, 9));
+    verifyUsages(12, 10, reference(19, 2));
   }
 
   @Test

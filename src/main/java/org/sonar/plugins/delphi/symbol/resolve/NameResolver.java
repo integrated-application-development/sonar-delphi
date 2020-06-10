@@ -219,8 +219,10 @@ public interface NameResolver {
       resolver.disambiguateParameters(method.getParameterTypes());
     }
 
-    resolver.disambiguateParameters(method.getParameterTypes());
-    resolver.disambiguateReturnType(method.getReturnType());
+    if (method.isOperator()) {
+      resolver.disambiguateReturnType(method.getReturnType());
+    }
+
     resolver.disambiguateIsClassInvocable(method.isClassMethod());
     resolver.addToSymbolTable();
 

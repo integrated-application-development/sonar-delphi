@@ -35,6 +35,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.MethodBodyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNameNode;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodResolutionClauseNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
@@ -371,7 +372,8 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     }
 
     if (node.isFunction() || node.isOperator()) {
-      DelphiNameDeclaration result = compilerVariable("Result", node.getReturnType(), scope);
+      Type resultType = findResultType(node, methodDeclaration);
+      DelphiNameDeclaration result = compilerVariable("Result", resultType, scope);
       data.addDeclarationToCurrentScope(result);
     }
 
@@ -382,6 +384,14 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     }
 
     return visitScope(node, data);
+  }
+
+  private static Type findResultType(MethodNode node, @Nullable MethodNameDeclaration declaration) {
+    if (declaration == null) {
+      return node.getReturnType();
+    } else {
+      return declaration.getReturnType();
+    }
   }
 
   private static Type findSelfType(MethodImplementationNode node) {

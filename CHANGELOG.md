@@ -36,6 +36,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   parameter list was omitted.
   (The compiler allows this as long as there is only one method declaration with the same name in
   the interface section)
+- The `Result` variable's type would be unknown if the return type was omitted on the method
+  implementation.
 
 ## [0.20.0] - 2020-06-05
 
