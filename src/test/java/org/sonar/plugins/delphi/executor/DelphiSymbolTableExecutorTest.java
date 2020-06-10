@@ -526,6 +526,14 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testOverriddenOverloads() {
+    execute("overloads/Overrides.pas", "overloads/imports/BaseFoo.pas");
+    verifyUsages(33, 2, reference(37, 10));
+    verifyUsages(34, 2, reference(38, 10));
+    verifyUsages(35, 2, reference(39, 10));
+  }
+
+  @Test
   public void testRegularMethodPreferredOverImplicitSpecializations() {
     execute("generics/RegularMethodPreferredOverImplicitSpecialization.pas");
     verifyUsages(12, 20, reference(12, 26));
