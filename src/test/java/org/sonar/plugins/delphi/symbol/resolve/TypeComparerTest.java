@@ -248,6 +248,7 @@ public class TypeComparerTest {
     compare(fromFixedArray, toOpenArray, EQUAL);
     compare(fromIncompatibleFixedArray, toOpenArray, INCOMPATIBLE_TYPES);
     compare(openArray(null, unknownType()), toOpenArray, INCOMPATIBLE_TYPES);
+    compare(openArray(null, ANSICHAR.type), openArray(null, CHAR.type), CONVERT_LEVEL_5);
 
     compare(fromOpenArray, toFixedArray, EQUAL);
     compare(fromIncompatibleOpenArray, toFixedArray, INCOMPATIBLE_TYPES);

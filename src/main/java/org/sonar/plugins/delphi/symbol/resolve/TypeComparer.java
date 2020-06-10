@@ -439,19 +439,28 @@ class TypeComparer {
   }
 
   private static EqualityType compareOpenArray(CollectionType from, CollectionType to) {
-    if (from.isDynamicArray() && equals(from.elementType(), to.elementType())) {
-      if (from.elementType().is(to.elementType())) {
-        return CONVERT_LEVEL_1;
+    if (equals(from.elementType(), to.elementType())) {
+      if (from.isDynamicArray()) {
+        if (from.elementType().is(to.elementType())) {
+          return CONVERT_LEVEL_1;
+        }
+        return CONVERT_LEVEL_2;
+      } else if (from.isOpenArray()) {
+        if (from.elementType().is(to.elementType())) {
+          return EXACT;
+        }
+        return EQUAL;
+      } else if (from.isFixedArray()) {
+        return EQUAL;
       }
-      return CONVERT_LEVEL_2;
-    } else if (from.isOpenArray() && equals(from.elementType(), to.elementType())) {
-      if (from.elementType().is(to.elementType())) {
-        return EXACT;
-      }
-      return EQUAL;
-    } else if (from.isFixedArray() && equals(from.elementType(), to.elementType())) {
-      return EQUAL;
     }
+
+    if (from.isOpenArray()
+        && from.elementType().is(ANSICHAR.type)
+        && to.elementType().is(WIDECHAR.type)) {
+      return CONVERT_LEVEL_5;
+    }
+
     return INCOMPATIBLE_TYPES;
   }
 
