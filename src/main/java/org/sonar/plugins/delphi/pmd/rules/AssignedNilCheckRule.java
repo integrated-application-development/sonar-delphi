@@ -1,16 +1,15 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode.BinaryOp.EQUAL;
-import static org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode.BinaryOp.NOT_EQUAL;
-
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode;
+import org.sonar.plugins.delphi.operator.BinaryOperator;
 
 public class AssignedNilCheckRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(BinaryExpressionNode expression, RuleContext data) {
-    if ((expression.getOperator() == EQUAL || expression.getOperator() == NOT_EQUAL)
+    BinaryOperator operator = expression.getOperator();
+    if ((operator == BinaryOperator.EQUAL || operator == BinaryOperator.NOT_EQUAL)
         && (expression.getLeft().isNilLiteral() || expression.getRight().isNilLiteral())) {
       addViolation(data, expression);
     }

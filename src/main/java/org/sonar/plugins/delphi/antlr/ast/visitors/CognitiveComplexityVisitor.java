@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.sonar.plugins.delphi.antlr.ast.node.AnonymousMethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode;
-import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode.BinaryOp;
 import org.sonar.plugins.delphi.antlr.ast.node.CaseStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExceptBlockNode;
@@ -18,6 +17,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.RepeatStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.StatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.WhileStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.visitors.CognitiveComplexityVisitor.Data;
+import org.sonar.plugins.delphi.operator.BinaryOperator;
 
 public class CognitiveComplexityVisitor implements DelphiParserVisitor<Data> {
   public static class Data {
@@ -165,8 +165,8 @@ public class CognitiveComplexityVisitor implements DelphiParserVisitor<Data> {
   private static boolean isAndOrExpression(ExpressionNode expression) {
     if (expression instanceof BinaryExpressionNode) {
       BinaryExpressionNode binaryExpression = (BinaryExpressionNode) expression;
-      BinaryOp operator = binaryExpression.getOperator();
-      return operator == BinaryOp.AND || operator == BinaryOp.OR;
+      BinaryOperator operator = binaryExpression.getOperator();
+      return operator == BinaryOperator.AND || operator == BinaryOperator.OR;
     }
     return false;
   }

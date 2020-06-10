@@ -2,18 +2,15 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.BOOLEAN;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
-import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.operator.UnaryOperator;
 import org.sonar.plugins.delphi.type.DelphiPointerType;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class UnaryExpressionNode extends ExpressionNode {
-  private UnaryOp operator;
+  private UnaryOperator operator;
   private String image;
 
   public UnaryExpressionNode(Token token) {
@@ -25,9 +22,9 @@ public final class UnaryExpressionNode extends ExpressionNode {
     return visitor.visit(this, data);
   }
 
-  public UnaryOp getOperator() {
+  public UnaryOperator getOperator() {
     if (operator == null) {
-      operator = UnaryOp.from(jjtGetId());
+      operator = UnaryOperator.from(jjtGetId());
     }
     return operator;
   }
@@ -58,26 +55,4 @@ public final class UnaryExpressionNode extends ExpressionNode {
     }
   }
 
-  public enum UnaryOp {
-    NOT(DelphiLexer.NOT),
-    PLUS(DelphiLexer.PLUS),
-    NEGATE(DelphiLexer.MINUS),
-    ADDRESS(DelphiLexer.AT2);
-
-    public final int tokenType;
-    private static final Map<Integer, UnaryOp> TOKEN_TYPE_MAP = new HashMap<>();
-
-    static {
-      Arrays.asList(UnaryOp.values()).forEach(op -> TOKEN_TYPE_MAP.put(op.tokenType, op));
-    }
-
-    UnaryOp(int tokenType) {
-      this.tokenType = tokenType;
-    }
-
-    @NotNull
-    public static UnaryOp from(int tokenType) {
-      return TOKEN_TYPE_MAP.get(tokenType);
-    }
-  }
 }
