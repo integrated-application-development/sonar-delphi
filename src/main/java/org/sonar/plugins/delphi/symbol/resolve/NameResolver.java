@@ -46,30 +46,17 @@ import org.sonar.plugins.delphi.type.Type.ScopedType;
 import org.sonar.plugins.delphi.type.Type.TypeParameterType;
 import org.sonar.plugins.delphi.type.Typed;
 
-public interface NameResolver {
-  Type getApproximateType();
+public final class NameResolver {
+  private NameResolver() {
+    // utility class
+  }
 
-  Set<NameDeclaration> getDeclarations();
-
-  List<NameDeclaration> getResolvedDeclarations();
-
-  @Nullable
-  NameDeclaration addResolvedDeclaration();
-
-  void checkAmbiguity();
-
-  void updateScopeAndType();
-
-  void addToSymbolTable();
-
-  boolean isExplicitInvocation();
-
-  static void resolve(TypeDeclarationNode typeDeclaration) {
+  public static void resolve(TypeDeclarationNode typeDeclaration) {
     typeDeclaration.getTypeNode().getParentTypeNodes().forEach(NameResolver::resolve);
     resolve(typeDeclaration.getTypeNode());
   }
 
-  static void resolve(TypeNode type) {
+  public static void resolve(TypeNode type) {
     type.clearCachedType();
 
     List<Node> nodes = new ArrayList<>();
@@ -96,13 +83,13 @@ public interface NameResolver {
     }
   }
 
-  static void resolve(NameReferenceNode reference) {
+  public static void resolve(NameReferenceNode reference) {
     DefaultNameResolver resolver = new DefaultNameResolver();
     resolver.readNameReference(reference);
     resolver.addToSymbolTable();
   }
 
-  static void resolve(PrimaryExpressionNode expression) {
+  public static void resolve(PrimaryExpressionNode expression) {
     DefaultNameResolver resolver = new DefaultNameResolver();
     resolver.readPrimaryExpression(expression);
 
@@ -117,7 +104,7 @@ public interface NameResolver {
     resolver.addToSymbolTable();
   }
 
-  static void resolve(MethodResolutionClauseNode resolutionClause) {
+  public static void resolve(MethodResolutionClauseNode resolutionClause) {
     DefaultNameResolver interfaceMethodResolver = new DefaultNameResolver();
     interfaceMethodResolver.readNameReference(resolutionClause.getInterfaceMethodNameNode());
     List<MethodNameDeclaration> interfaceMethods =
@@ -176,7 +163,7 @@ public interface NameResolver {
     concreteMethodResolver.addToSymbolTable();
   }
 
-  static void resolve(PropertyNode property) {
+  public static void resolve(PropertyNode property) {
     resolve(property.getParameterListNode());
 
     TypeNode type = property.getTypeNode();
@@ -203,11 +190,11 @@ public interface NameResolver {
     }
   }
 
-  static void resolve(MethodDeclarationNode method) {
+  public static void resolve(MethodDeclarationNode method) {
     resolveMethod(method);
   }
 
-  static void resolve(MethodImplementationNode method) {
+  public static void resolve(MethodImplementationNode method) {
     DefaultNameResolver resolver = new DefaultNameResolver();
     resolver.readMethodNameInterfaceReference(method.getNameReferenceNode());
 
@@ -239,19 +226,19 @@ public interface NameResolver {
     resolve(method.getMethodHeading().getMethodReturnType());
   }
 
-  static void resolve(@Nullable MethodParametersNode parameters) {
+  public static void resolve(@Nullable MethodParametersNode parameters) {
     if (parameters != null) {
       resolve(parameters.getFormalParametersList());
     }
   }
 
-  static void resolve(@Nullable MethodReturnTypeNode returnType) {
+  public static void resolve(@Nullable MethodReturnTypeNode returnType) {
     if (returnType != null) {
       NameResolver.resolve(returnType.getTypeNode());
     }
   }
 
-  static void resolve(@Nullable FormalParameterListNode parameterList) {
+  public static void resolve(@Nullable FormalParameterListNode parameterList) {
     if (parameterList != null) {
       parameterList
           .findChildrenOfType(FormalParameterNode.class)
@@ -265,7 +252,7 @@ public interface NameResolver {
     }
   }
 
-  static void resolve(ExpressionNode expression) {
+  public static void resolve(ExpressionNode expression) {
     if (expression instanceof PrimaryExpressionNode) {
       resolve((PrimaryExpressionNode) expression);
       return;
@@ -273,7 +260,7 @@ public interface NameResolver {
     resolveSubExpressions(expression);
   }
 
-  static void resolveSubExpressions(ExpressionNode expression) {
+  public static void resolveSubExpressions(ExpressionNode expression) {
     if (expression instanceof AnonymousMethodNode) {
       return;
     }
@@ -284,7 +271,7 @@ public interface NameResolver {
   }
 
   @Nullable
-  private static DelphiScope findTypeScope(NameResolver resolver) {
+  private static DelphiScope findTypeScope(DefaultNameResolver resolver) {
     DelphiScope typeScope = null;
     for (NameDeclaration declaration : resolver.getResolvedDeclarations()) {
       if (declaration instanceof TypeNameDeclaration) {

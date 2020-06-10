@@ -32,8 +32,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.GenericArgumentsNode;
 import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
-import org.sonar.plugins.delphi.antlr.ast.node.LiteralNode;
-import org.sonar.plugins.delphi.antlr.ast.node.MethodHeadingNode.MethodKind;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ParenthesizedExpressionNode;
@@ -62,6 +60,7 @@ import org.sonar.plugins.delphi.symbol.scope.MethodScope;
 import org.sonar.plugins.delphi.symbol.scope.TypeScope;
 import org.sonar.plugins.delphi.symbol.scope.UnknownScope;
 import org.sonar.plugins.delphi.type.DelphiTypeParameterType;
+import org.sonar.plugins.delphi.type.DelphiUnresolvedType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ClassReferenceType;
 import org.sonar.plugins.delphi.type.Type.CollectionType;
@@ -71,11 +70,12 @@ import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
 import org.sonar.plugins.delphi.type.Type.StructType;
 import org.sonar.plugins.delphi.type.Type.TypeParameterType;
+import org.sonar.plugins.delphi.type.TypeUtils;
 import org.sonar.plugins.delphi.type.Typed;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicReturnType;
 
-public class DefaultNameResolver implements NameResolver {
+public class DefaultNameResolver {
   private final List<DelphiNameOccurrence> names = new ArrayList<>();
   private final List<NameDeclaration> resolvedDeclarations = new ArrayList<>();
 
@@ -95,7 +95,6 @@ public class DefaultNameResolver implements NameResolver {
     resolvedDeclarations.addAll(resolver.resolvedDeclarations);
   }
 
-  @Override
   public Type getApproximateType() {
     if (declarations.size() + resolvedDeclarations.size() < names.size()) {
       return unknownType();
@@ -104,11 +103,7 @@ public class DefaultNameResolver implements NameResolver {
     if (!declarations.isEmpty()) {
       NameDeclaration declaration = getLast(declarations);
       if (declaration instanceof TypedDeclaration) {
-        Type result = findTypeForTypedDeclaration((TypedDeclaration) declaration);
-        if (declaration instanceof TypeNameDeclaration) {
-          result = classOf(result);
-        }
-        return result;
+        return findTypeForTypedDeclaration((TypedDeclaration) declaration);
       }
       return unknownType();
     }
@@ -116,67 +111,62 @@ public class DefaultNameResolver implements NameResolver {
     return currentType;
   }
 
-  @Override
   public Set<NameDeclaration> getDeclarations() {
     return declarations;
   }
 
-  @Override
   public List<NameDeclaration> getResolvedDeclarations() {
     return resolvedDeclarations;
   }
 
-  @Override
-  public NameDeclaration addResolvedDeclaration() {
-    NameDeclaration resolved = null;
-
-    if (!declarations.isEmpty()) {
-      resolved = getLast(declarations);
-      checkAmbiguity();
-      updateScopeAndType();
-      resolvedDeclarations.addAll(declarations);
-      declarations.clear();
+  private NameDeclaration addResolvedDeclaration() {
+    if (declarations.isEmpty()) {
+      return null;
     }
 
+    NameDeclaration resolved = getLast(declarations);
+    checkAmbiguity();
+    currentScope = unknownScope();
+
+    if (declarations.size() == 1) {
+      NameDeclaration declaration = getLast(declarations);
+      if (declaration instanceof TypedDeclaration) {
+        updateType(findTypeForTypedDeclaration((TypedDeclaration) declaration));
+      } else if (declaration instanceof UnitImportNameDeclaration) {
+        FileScope unitScope = ((UnitImportNameDeclaration) declaration).getUnitScope();
+        if (unitScope != null) {
+          currentScope = unitScope;
+        }
+      } else if (declaration instanceof UnitNameDeclaration) {
+        currentScope = ((UnitNameDeclaration) declaration).getFileScope();
+      }
+    }
+
+    resolvedDeclarations.addAll(declarations);
+    declarations.clear();
     return resolved;
   }
 
-  @Override
   public void checkAmbiguity() {
     if (declarations.size() > 1) {
       throw new DisambiguationException(declarations, getLast(names));
     }
   }
 
-  @Override
-  public void updateScopeAndType() {
+  private void updateType(Type type) {
+    currentType = type;
+    ScopedType scopedType = extractScopedType(currentType);
     DelphiScope newScope = unknownScope();
-    if (declarations.size() == 1) {
-      NameDeclaration declaration = getLast(declarations);
-      if (declaration instanceof TypedDeclaration) {
-        currentType = findTypeForTypedDeclaration((TypedDeclaration) declaration);
-        ScopedType scopedType = DefaultNameResolver.extractScopedType(currentType);
-        if (scopedType != null) {
-          newScope = scopedType.typeScope();
-        }
-      } else if (declaration instanceof UnitImportNameDeclaration) {
-        FileScope unitScope = ((UnitImportNameDeclaration) declaration).getUnitScope();
-        if (unitScope != null) {
-          newScope = unitScope;
-        }
-      } else if (declaration instanceof UnitNameDeclaration) {
-        newScope = ((UnitNameDeclaration) declaration).getUnitScope();
-      }
+    if (scopedType != null) {
+      newScope = scopedType.typeScope();
     }
     currentScope = newScope;
   }
 
-  @Override
   public boolean isExplicitInvocation() {
     return !names.isEmpty() && getLast(names).isExplicitInvocation();
   }
 
-  @Override
   public void addToSymbolTable() {
     addResolvedDeclaration();
 
@@ -258,8 +248,8 @@ public class DefaultNameResolver implements NameResolver {
       handleArrayAccessor(((ArrayAccessorNode) node));
     } else if (node instanceof ParenthesizedExpressionNode) {
       handleParenthesizedExpression((ParenthesizedExpressionNode) node);
-    } else if (node instanceof LiteralNode) {
-      currentType = ((LiteralNode) node).getType();
+    } else if (node instanceof Typed) {
+      updateType(((Typed) node).getType());
     } else {
       handlePrimaryExpressionToken(node);
     }
@@ -270,15 +260,17 @@ public class DefaultNameResolver implements NameResolver {
   private void handlePrimaryExpressionToken(Node node) {
     switch (node.jjtGetId()) {
       case DelphiLexer.POINTER:
+        Type dereferenced = TypeUtils.dereference(getApproximateType());
         addResolvedDeclaration();
+        updateType(dereferenced);
         break;
 
       case DelphiLexer.STRING:
-        currentType = classOf(UNICODESTRING.type);
+        updateType(classOf(UNICODESTRING.type));
         break;
 
       case DelphiLexer.FILE:
-        currentType = classOf(untypedFile());
+        updateType(classOf(untypedFile()));
         break;
 
       default:
@@ -383,6 +375,23 @@ public class DefaultNameResolver implements NameResolver {
       IdentifierNode identifier = reference.getIdentifier();
       DelphiNameOccurrence occurrence = new DelphiNameOccurrence(identifier);
 
+      GenericArgumentsNode genericArguments = reference.getGenericArguments();
+      List<TypeReferenceNode> typeArguments = Collections.emptyList();
+
+      if (genericArguments != null) {
+        typeArguments = genericArguments.findChildrenOfType(TypeReferenceNode.class);
+        occurrence.setIsGeneric();
+        // Unresolved type arguments are created and added to the name occurrence so we can find
+        // declarations properly based on the number of type arguments.
+        // These temporary type arguments are overwritten with their actual types once the
+        // declaration has been found.
+        occurrence.setTypeArguments(
+            genericArguments.findChildrenOfType(TypeReferenceNode.class).stream()
+                .map(TypeReferenceNode::getNameNode)
+                .map(DelphiUnresolvedType::referenceTo)
+                .collect(Collectors.toUnmodifiableList()));
+      }
+
       addName(occurrence);
 
       // Method name interface references should be resolved quite literally.
@@ -391,18 +400,12 @@ public class DefaultNameResolver implements NameResolver {
       declarations = currentScope.findDeclaration(occurrence);
       declarations.removeIf(declaration -> declaration.getScope() != currentScope);
 
-      GenericArgumentsNode genericArguments = reference.getGenericArguments();
-      if (genericArguments != null) {
-        List<TypeReferenceNode> typeReferences =
-            genericArguments.findChildrenOfType(TypeReferenceNode.class);
-        disambiguateExplicitGeneric(typeReferences.size());
-        occurrence.setIsGeneric();
-
+      if (occurrence.isGeneric()) {
         if (reference.nextName() != null) {
           // If we're in the middle of the name, then we assume that we have already properly
           // disambiguated the reference, and resolve the type parameter references back to their
           // declarations on that type reference
-          handleTypeParameterReferences(typeReferences);
+          handleTypeParameterReferences(typeArguments);
         } else {
           // If we're on the last name, then it's the method reference.
           // It's impossible for us to know which method we're referring to before parameter
@@ -411,16 +414,14 @@ public class DefaultNameResolver implements NameResolver {
           // scope as "forward" declarations. Once parameter resolution has occurred, we can come
           // back and complete the type parameter declaration/type.
           MethodScope methodScope = node.getScope().getEnclosingScope(MethodScope.class);
-          handleTypeParameterForwardReferences(methodScope, typeReferences);
+          handleTypeParameterForwardReferences(methodScope, typeArguments);
         }
 
         occurrence.setTypeArguments(
-            typeReferences.stream()
+            typeArguments.stream()
                 .map(TypeReferenceNode::getType)
                 .collect(Collectors.toUnmodifiableList()));
-      }
-
-      if (!occurrence.isGeneric()) {
+      } else {
         disambiguateNotGeneric();
       }
 
@@ -500,10 +501,7 @@ public class DefaultNameResolver implements NameResolver {
       searchForDeclaration(occurrence);
 
       if (occurrence.isGeneric()) {
-        disambiguateExplicitGeneric(occurrence.getTypeArguments().size());
         specializeDeclarations(occurrence);
-      } else {
-        disambiguateNotGeneric();
       }
 
       disambiguateIsCallable();
@@ -557,8 +555,12 @@ public class DefaultNameResolver implements NameResolver {
 
   private boolean isExplicitArrayConstructorInvocation(NameReferenceNode reference) {
     return getLast(resolvedDeclarations, null) instanceof TypeNameDeclaration
-        && currentType.isDynamicArray()
+        && isDynamicArrayReference(currentType)
         && reference.getLastName().hasImageEqualTo("Create");
+  }
+
+  private static boolean isDynamicArrayReference(Type type) {
+    return type.isClassReference() && ((ClassReferenceType) type).classType().isDynamicArray();
   }
 
   private void readPossibleUnitNameReference(NameReferenceNode node) {
@@ -634,6 +636,13 @@ public class DefaultNameResolver implements NameResolver {
   }
 
   private void handleArrayAccessor(ArrayAccessorNode accessor) {
+    Type type = TypeUtils.findBaseType(getApproximateType());
+    if (type.isPointer()) {
+      Type dereferenced = TypeUtils.dereference(type);
+      addResolvedDeclaration();
+      updateType(dereferenced);
+    }
+
     if (handleDefaultArrayProperties(accessor)) {
       return;
     }
@@ -645,20 +654,26 @@ public class DefaultNameResolver implements NameResolver {
     }
 
     addResolvedDeclaration();
+    if (currentType.isProcedural()) {
+      updateType(TypeUtils.dereference(((ProceduralType) currentType).returnType()));
+    }
+
     accessor.getExpressions().forEach(NameResolver::resolve);
 
-    if (currentType instanceof CollectionType) {
-      currentType = ((CollectionType) currentType).elementType();
-    } else if (currentType.isNarrowString()) {
-      currentType = ANSICHAR.type;
-    } else if (currentType.isWideString()) {
-      currentType = WIDECHAR.type;
+    for (int i = 0; i < accessor.getExpressions().size(); ++i) {
+      if (currentType.isArray()) {
+        updateType(((CollectionType) currentType).elementType());
+      } else if (currentType.isNarrowString()) {
+        updateType(ANSICHAR.type);
+      } else if (currentType.isWideString()) {
+        updateType(WIDECHAR.type);
+      }
     }
   }
 
   private void handleParenthesizedExpression(ParenthesizedExpressionNode parenthesized) {
     NameResolver.resolve(parenthesized);
-    currentType = parenthesized.getType();
+    updateType(parenthesized.getType());
 
     ScopedType type = extractScopedType(currentType);
     if (type != null) {
@@ -725,23 +740,30 @@ public class DefaultNameResolver implements NameResolver {
     Node previous = node.jjtGetParent().jjtGetChild(node.jjtGetChildIndex() - 1);
     if (previous instanceof NameReferenceNode
         && isExplicitArrayConstructorInvocation(((NameReferenceNode) previous))) {
+      updateType(((ClassReferenceType) currentType).classType());
       return;
     }
     disambiguateArguments(node.getArguments(), true);
   }
 
   private boolean handleHardTypeCast(List<ExpressionNode> argumentExpressions) {
-    if (declarations.size() != 1 || argumentExpressions.size() != 1) {
-      return false;
-    }
+    if (declarations.size() <= 1 && argumentExpressions.size() == 1) {
+      if (declarations.size() == 1 && isTypeIdentifier(getLast(declarations))) {
+        addResolvedDeclaration();
+      }
 
-    if (!(getLast(declarations) instanceof TypeNameDeclaration)) {
-      return false;
+      if (declarations.isEmpty() && currentType.isClassReference()) {
+        updateType(((ClassReferenceType) currentType).classType());
+        NameResolver.resolve(argumentExpressions.get(0));
+        return true;
+      }
     }
+    return false;
+  }
 
-    addResolvedDeclaration();
-    NameResolver.resolve(argumentExpressions.get(0));
-    return true;
+  private static boolean isTypeIdentifier(NameDeclaration declaration) {
+    return declaration instanceof TypeNameDeclaration
+        || declaration instanceof TypeParameterNameDeclaration;
   }
 
   private boolean handleProcVarInvocation(List<ExpressionNode> argumentExpressions) {
@@ -782,7 +804,7 @@ public class DefaultNameResolver implements NameResolver {
       invocationArgument.resolve(parameterTypes.get(i));
     }
 
-    currentType = proceduralType.returnType();
+    updateType(proceduralType.returnType());
     return true;
   }
 
@@ -965,30 +987,13 @@ public class DefaultNameResolver implements NameResolver {
     declarations.removeIf(not(this::isVisibleDeclaration));
   }
 
-  private void disambiguateExplicitGeneric(int argumentCount) {
-    declarations.removeIf(
-        declaration -> {
-          if (declaration instanceof GenerifiableDeclaration) {
-            GenerifiableDeclaration generifiable = (GenerifiableDeclaration) declaration;
-            return generifiable.getTypeParameters().size() != argumentCount;
-          }
-          return true;
-        });
-  }
-
   private void disambiguateNotGeneric() {
     declarations.removeIf(
         declaration -> {
-          if (declaration instanceof MethodNameDeclaration) {
-            // Could be an implicit specialization
-            return false;
-          }
-
           if (declaration instanceof GenerifiableDeclaration) {
             GenerifiableDeclaration generifiable = (GenerifiableDeclaration) declaration;
             return generifiable.isGeneric();
           }
-
           return false;
         });
   }
@@ -1101,28 +1106,55 @@ public class DefaultNameResolver implements NameResolver {
       MethodScope fromScope = name.getLocation().getScope().getEnclosingScope(MethodScope.class);
       if (fromScope != null) {
         MethodNameDeclaration method = (MethodNameDeclaration) declaration;
-        FileScope fromFileScope = fromScope.getEnclosingScope(FileScope.class);
-        FileScope toFileScope = method.getScope().getEnclosingScope(FileScope.class);
-        boolean isSameUnit = fromFileScope == toFileScope;
+        Type fromType = extractType(fromScope);
+        Type toType = extractType(method);
+        FileScope currentFile = fromScope.getEnclosingScope(FileScope.class);
+        FileScope methodFile = method.getScope().getEnclosingScope(FileScope.class);
+        FileScope typeFile = extractFileScope(currentType);
+        boolean isSameUnit = currentFile == methodFile || currentFile == typeFile;
 
-        return isMethodVisibleFrom(method, fromScope, isSameUnit);
+        return isMethodVisibleFrom(fromType, toType, method, isSameUnit);
       }
     }
     return true;
   }
 
-  private boolean isMethodVisibleFrom(
-      MethodNameDeclaration method, MethodScope fromMethodScope, boolean isSameUnit) {
-    TypeNameDeclaration methodTypeDeclaration = method.getTypeDeclaration();
-    if (methodTypeDeclaration == null) {
-      return true;
+  private static Type extractType(MethodScope scope) {
+    DelphiScope methodScope = scope;
+    DelphiScope typeScope = scope.getTypeScope();
+
+    while (!(typeScope instanceof TypeScope) && methodScope instanceof MethodScope) {
+      typeScope = ((MethodScope) methodScope).getTypeScope();
+      methodScope = methodScope.getParent();
     }
 
-    DelphiScope fromTypeScope = fromMethodScope.getTypeScope();
-    if (fromTypeScope instanceof TypeScope) {
-      Type fromType = ((TypeScope) fromTypeScope).getType();
-      Type toType = methodTypeDeclaration.getType();
+    if (typeScope instanceof TypeScope) {
+      return ((TypeScope) typeScope).getType();
+    }
 
+    return unknownType();
+  }
+
+  private static Type extractType(MethodNameDeclaration method) {
+    TypeNameDeclaration typeDeclaration = method.getTypeDeclaration();
+    if (typeDeclaration == null) {
+      return unknownType();
+    }
+    return typeDeclaration.getType();
+  }
+
+  @Nullable
+  private static FileScope extractFileScope(Type type) {
+    ScopedType scopedType = extractScopedType(type);
+    if (scopedType != null) {
+      return scopedType.typeScope().getEnclosingScope(FileScope.class);
+    }
+    return null;
+  }
+
+  private static boolean isMethodVisibleFrom(
+      Type fromType, Type toType, MethodNameDeclaration method, boolean isSameUnit) {
+    if (!fromType.isUnknown() && !toType.isUnknown()) {
       if (fromType.is(toType)) {
         return true;
       } else if (fromType.isSubTypeOf(toType)) {
@@ -1131,7 +1163,6 @@ public class DefaultNameResolver implements NameResolver {
         return !method.isPrivate();
       }
     }
-
     return isOtherTypeMethodVisible(method, isSameUnit);
   }
 
@@ -1201,8 +1232,7 @@ public class DefaultNameResolver implements NameResolver {
     TypeParameterType type = (TypeParameterType) currentType;
     for (Type constraint : type.constraints()) {
       if (constraint instanceof ScopedType) {
-        currentType = constraint;
-        currentScope = ((ScopedType) constraint).typeScope();
+        updateType(constraint);
         searchForDeclaration(occurrence);
         if (!declarations.isEmpty()) {
           break;
@@ -1222,9 +1252,14 @@ public class DefaultNameResolver implements NameResolver {
    */
   private void checkForRecordHelperScope(DelphiScope scope) {
     if (!currentType.isUnknown() && !(currentScope instanceof TypeScope)) {
-      HelperType type = scope.getHelperForType(currentType);
-      if (type != null) {
-        currentScope = type.typeScope();
+      Type type = currentType;
+      if (type.isClassReference()) {
+        type = ((ClassReferenceType) type).classType();
+      }
+
+      HelperType helper = scope.getHelperForType(type);
+      if (helper != null) {
+        currentScope = helper.typeScope();
       }
     }
   }
@@ -1234,8 +1269,6 @@ public class DefaultNameResolver implements NameResolver {
     while (!(type instanceof ScopedType)) {
       if (type instanceof ProceduralType) {
         type = ((ProceduralType) type).returnType();
-      } else if (type instanceof CollectionType) {
-        type = ((CollectionType) type).elementType();
       } else if (type instanceof PointerType) {
         type = ((PointerType) type).dereferencedType();
       } else if (type instanceof ClassReferenceType) {

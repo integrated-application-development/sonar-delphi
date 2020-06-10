@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support for operator overloads.
+- Support for pointer math expressions.
 - Support inline methods expanded via property invocations in dependency analysis.
 - Support for `with` statements.
 - Support for `System.MaxInt` compiler constant.
@@ -23,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Rewrite type resolution for binary and unary expressions.
 - Support the `Result` variable in anonymous functions.
 - Improve type resolution for array constructors with procedural elements.
 - Improve type comparisons between ordinals and subranges with comparable base types.
@@ -31,7 +34,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve type comparisons between character pointers and strings.
 - Improve type comparisons between character arrays and strings.
 - Improve type comparisons between open arrays of `AnsiChar` and `WideChar`.
+- Improve type comparisons between text-literal arguments and character pointer parameters.
+- Improve type comparisons involving `nil` literals.
 - Improve support for the `High` and `Low` intrinsics.
+- Improved primary expression type resolution around constructor invocations.
+- Improved primary expression type resolution around hard casts.
+- Improved primary expression type resolution around array properties.
 - Types nested within the `testSuiteType` will now be treated as test code.
 - `Char` is now treated as an alias to `WideChar`.
 
@@ -59,6 +67,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - In some cases, the current type could not be found during name resolution. This would cause an
   otherwise-correct declaration to be considered inaccessible.
 - `nil` was treated as a valid record value.
+- Record helpers would not be resolved properly on array types.
+- Record helpers would not be resolved properly on intrinsic type references.
+- Type resolution failures caused by mixing hard typecasts with types referred to via a keyword
+  (ie. `string` or `file`).
+- Ambiguous conversions from integer types to nil pointer.
+- Valid conversions to variant parameters would not always succeed, or would be given a lower
+  priority than expected during overload resolution.
+- Array arguments could not convert to a pointer parameter with its element type.
+- Generic declarations could be shadowed by non-generic declarations of the same name, erroneously
+  ignoring type arguments.
+- Overload resolution ambiguity issues between types with similar inheritance depths.
+- Various generic specialization issues.
 
 ## [0.20.0] - 2020-06-05
 

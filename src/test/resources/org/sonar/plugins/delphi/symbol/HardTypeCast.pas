@@ -19,4 +19,24 @@ begin
   Result := TFooOption.Option1 = TFooOption(Bar);
 end;
 
+procedure ConsumeFoo(Foo: TFoo);
+begin
+  // Do nothing
+end;
+
+procedure TestFoo(Obj: TObject);
+begin
+  ConsumeFoo(TFoo(Obj));
+end;
+
+procedure ConsumeString(Str: String);
+begin
+  // Do nothing
+end;
+
+procedure TestString(StrPointer: Pointer);
+begin
+  ConsumeString(String(StrPointer));
+end;
+
 end.

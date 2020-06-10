@@ -6,7 +6,8 @@ import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_4;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_5;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_6;
-import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_OPERATOR;
+import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_7;
+import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_8;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.EQUAL;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.EXACT;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
@@ -47,8 +48,8 @@ class TypeComparer {
   /**
    * Based directly off of compare_defs_ext from the FreePascal compiler.
    *
-   * @param from The type we are trying to convert from
-   * @param to The type we are trying to convert to
+   * @param from The type we are comparing from
+   * @param to The type we are comparing to
    * @return equality type
    * @see <a href="http://bit.ly/compare_defs_ext"/>
    */
@@ -103,9 +104,9 @@ class TypeComparer {
 
     if (result == INCOMPATIBLE_TYPES && (from.isVariant() || to.isVariant())) {
       if (from.isVariant() && VariantConversionType.fromType(to) != INCOMPATIBLE_VARIANT) {
-        result = CONVERT_LEVEL_6;
+        result = CONVERT_LEVEL_7;
       } else {
-        result = CONVERT_OPERATOR;
+        result = CONVERT_LEVEL_8;
       }
     }
 
@@ -230,11 +231,11 @@ class TypeComparer {
 
   @VisibleForTesting
   static EqualityType compareCharToText(Type from, Type to) {
-    if (from.isNarrowChar()) {
+    if (from.is(ANSICHAR.type)) {
       return compareAnsiCharToText(to);
     }
 
-    if (from.isWideChar()) {
+    if (from.is(WIDECHAR.type)) {
       return compareWideCharToText(to);
     }
 
@@ -259,11 +260,11 @@ class TypeComparer {
 
   @VisibleForTesting
   static EqualityType compareWideCharToText(Type to) {
-    if (to.isWideChar()) {
+    if (to.is(WIDECHAR.type)) {
       return CONVERT_LEVEL_1;
     } else if (to.is(UNICODESTRING.type)) {
       return CONVERT_LEVEL_2;
-    } else if (to.is(WIDESTRING.type) || to.isNarrowChar()) {
+    } else if (to.is(WIDESTRING.type) || to.is(ANSICHAR.type)) {
       return CONVERT_LEVEL_3;
     } else if (to.is(ANSISTRING.type)) {
       return CONVERT_LEVEL_4;
@@ -367,7 +368,7 @@ class TypeComparer {
       return compareArrayConstructorToArray((ArrayConstructorType) from, toArray);
     } else if (from.isPointer()) {
       return comparePointerToArray((PointerType) from, toArray);
-    } else if (from.isNarrowChar()) {
+    } else if (from.is(ANSICHAR.type)) {
       return compareCharToArray(toArray);
     } else if (from.isVariant()) {
       return compareVariantToArray(toArray);
@@ -400,14 +401,14 @@ class TypeComparer {
     var subEquality = compare(from.elementTypes().get(0), to.elementType());
     if (subEquality.ordinal() >= EQUAL.ordinal()) {
       return CONVERT_LEVEL_2;
-    } else if (subEquality.ordinal() > CONVERT_LEVEL_5.ordinal()) {
+    } else if (subEquality.ordinal() > CONVERT_LEVEL_6.ordinal()) {
       // an array constructor is not a dynamic array, so use a lower level of compatibility
       // than that one of the elements
       return EqualityType.values()[subEquality.ordinal() - 2];
-    } else if (subEquality == CONVERT_LEVEL_6) {
-      return CONVERT_LEVEL_5;
-    } else if (subEquality == CONVERT_OPERATOR) {
+    } else if (subEquality == CONVERT_LEVEL_7) {
       return CONVERT_LEVEL_6;
+    } else if (subEquality == CONVERT_LEVEL_8) {
+      return CONVERT_LEVEL_7;
     } else {
       return subEquality;
     }
@@ -421,7 +422,7 @@ class TypeComparer {
       var subEquality = compare(from.elementTypes().get(0), to.elementType());
       if (subEquality.ordinal() >= EQUAL.ordinal()) {
         return CONVERT_LEVEL_1;
-      } else if (subEquality.ordinal() > CONVERT_LEVEL_6.ordinal()) {
+      } else if (subEquality.ordinal() > CONVERT_LEVEL_7.ordinal()) {
         // an array constructor is not an open array, so use a lower level of compatibility
         // than that one of the elements
         return EqualityType.values()[subEquality.ordinal() - 1];
@@ -481,7 +482,7 @@ class TypeComparer {
   }
 
   private static EqualityType compareCharToArray(CollectionType to) {
-    return to.elementType().isNarrowChar() ? CONVERT_LEVEL_1 : INCOMPATIBLE_TYPES;
+    return to.elementType().is(ANSICHAR.type) ? CONVERT_LEVEL_1 : INCOMPATIBLE_TYPES;
   }
 
   private static EqualityType compareVariantToArray(CollectionType to) {
@@ -511,8 +512,10 @@ class TypeComparer {
       return procToProcVarEqual((ProceduralType) from, (ProceduralType) to);
     } else if (from.isPointer()) {
       PointerType fromPointer = (PointerType) from;
-      if (fromPointer.isNilPointer() || fromPointer.isUntypedPointer()) {
-        return CONVERT_LEVEL_1;
+      if (fromPointer.isUntypedPointer()) {
+        return CONVERT_LEVEL_3;
+      } else if (fromPointer.isNilPointer()) {
+        return CONVERT_LEVEL_2;
       }
     }
     return INCOMPATIBLE_TYPES;
@@ -549,13 +552,13 @@ class TypeComparer {
 
   private static EqualityType compareObject(Type from, Type to) {
     if (from.isStruct() && from.isSubTypeOf(to)) {
-      return CONVERT_LEVEL_3;
+      return CONVERT_LEVEL_1;
     } else if (from.isPointer() && !to.isRecord()) {
       PointerType fromPointer = (PointerType) from;
       if (fromPointer.isUntypedPointer()) {
-        return CONVERT_LEVEL_2;
+        return CONVERT_LEVEL_4;
       } else if (fromPointer.isNilPointer()) {
-        return CONVERT_LEVEL_1;
+        return CONVERT_LEVEL_3;
       }
     } else if (isInterfaceReference(from) && isTGUID(to)) {
       return CONVERT_LEVEL_5;
@@ -581,9 +584,9 @@ class TypeComparer {
     } else if (from.isPointer()) {
       PointerType fromPointer = (PointerType) from;
       if (fromPointer.isUntypedPointer()) {
-        return CONVERT_LEVEL_2;
+        return CONVERT_LEVEL_5;
       } else if (fromPointer.isNilPointer()) {
-        return CONVERT_LEVEL_1;
+        return CONVERT_LEVEL_4;
       }
     }
     return INCOMPATIBLE_TYPES;
@@ -607,12 +610,14 @@ class TypeComparer {
     PointerType pointerTo = (PointerType) to;
     if (from.isPointer()) {
       return comparePointerToPointer((PointerType) from, pointerTo);
+    } else if (from.isArray()) {
+      return compareArrayToPointer((CollectionType) from, pointerTo);
     } else if (from.isText()) {
       return compareTextToPointer((TextType) from, pointerTo);
     } else if (from.isStruct() && pointerTo.isUntypedPointer()) {
-      return CONVERT_LEVEL_4;
-    } else if (from.isInteger()) {
       return CONVERT_LEVEL_5;
+    } else if (from.isInteger()) {
+      return CONVERT_LEVEL_6;
     }
     return INCOMPATIBLE_TYPES;
   }
@@ -628,12 +633,21 @@ class TypeComparer {
         return CONVERT_LEVEL_2;
       }
       return CONVERT_LEVEL_1;
-    } else if (from.isUntypedPointer()) {
-      // All pointers can be assigned from untyped pointer
-      if (to.dereferencedType().isWideChar()) {
+    } else if (from.isNilPointer() || from.isUntypedPointer()) {
+      // All pointers can be assigned from nil or untyped pointers
+      if (to.dereferencedType().is(WIDECHAR.type)) {
         return CONVERT_LEVEL_2;
       }
       return CONVERT_LEVEL_1;
+    }
+    return INCOMPATIBLE_TYPES;
+  }
+
+  private static EqualityType compareArrayToPointer(CollectionType from, PointerType to) {
+    if (equals(from.elementType(), to.dereferencedType())) {
+      return CONVERT_LEVEL_3;
+    } else if (to.isUntypedPointer()) {
+      return CONVERT_LEVEL_4;
     }
     return INCOMPATIBLE_TYPES;
   }
@@ -656,17 +670,24 @@ class TypeComparer {
   }
 
   private static EqualityType compareUntyped(Type from) {
-    return from.isUntyped() ? EQUAL : CONVERT_LEVEL_6;
+    return from.isUntyped() ? EQUAL : CONVERT_LEVEL_7;
   }
 
   private static EqualityType compareVariant(Type from) {
     boolean oleVariant = from.isVariant() && ((VariantType) from).kind() == VariantKind.OLE_VARIANT;
 
-    if (oleVariant || from.isEnum() || from.isDynamicArray() || from.isInterface()) {
+    if (oleVariant || isConvertibleToVariant(from)) {
       return CONVERT_LEVEL_1;
     }
 
     return INCOMPATIBLE_TYPES;
+  }
+
+  private static boolean isConvertibleToVariant(Type type) {
+    return type.isEnum()
+        || type.isDynamicArray()
+        || type.isInterface()
+        || VariantConversionType.fromType(type) != INCOMPATIBLE_VARIANT;
   }
 
   private static EqualityType tryIntrinsicArgumentTypes(Type from, Type to) {

@@ -1,26 +1,11 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
-import static org.sonar.plugins.delphi.type.DelphiClassReferenceType.classOf;
-import static org.sonar.plugins.delphi.type.DelphiFileType.untypedFile;
-import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSICHAR;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
-
-import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
-import org.sonar.plugins.delphi.antlr.ast.node.MethodHeadingNode.MethodKind;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
-import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
-import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.delphi.symbol.resolve.ExpressionTypeUtils;
 import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.Type.CollectionType;
-import org.sonar.plugins.delphi.type.Type.PointerType;
-import org.sonar.plugins.delphi.type.Typed;
 
 public final class PrimaryExpressionNode extends ExpressionNode {
   private String image;
@@ -62,84 +47,6 @@ public final class PrimaryExpressionNode extends ExpressionNode {
   @Override
   @NotNull
   public Type createType() {
-    Type type = unknownType();
-    for (int i = 0; i < jjtGetNumChildren(); ++i) {
-      Node child = jjtGetChild(i);
-      if (isConstructor(child)) {
-        continue;
-      }
-
-      if (child instanceof Typed) {
-        type = ((Typed) child).getType();
-      } else if (child instanceof ArrayAccessorNode) {
-        type = handleArrayAccessor(type, (ArrayAccessorNode) child);
-      } else if (child instanceof CommonDelphiNode) {
-        type = handleSyntaxToken(type, child.jjtGetId());
-      }
-    }
-    return type;
-  }
-
-  private static boolean isConstructor(Node node) {
-    if (node instanceof NameReferenceNode) {
-      DelphiNameDeclaration declaration = ((NameReferenceNode) node).getNameDeclaration();
-      return declaration instanceof MethodNameDeclaration
-          && ((MethodNameDeclaration) declaration).getMethodKind() == MethodKind.CONSTRUCTOR;
-    }
-    return false;
-  }
-
-  private static Type handleArrayAccessor(Type type, ArrayAccessorNode accessor) {
-    int accesses = accessor.getExpressions().size();
-    for (int i = 0; i < accesses; ++i) {
-      if (accessor.getImplicitNameOccurrence() != null) {
-        type = handleNameOccurrence(accessor.getImplicitNameOccurrence());
-      } else if (type instanceof CollectionType) {
-        type = ((CollectionType) type).elementType();
-      } else if (type.isNarrowString()) {
-        type = ANSICHAR.type;
-      } else if (type.isWideString()) {
-        type = CHAR.type;
-      } else {
-        type = unknownType();
-      }
-    }
-    return type;
-  }
-
-  private static Type handleNameOccurrence(DelphiNameOccurrence occurrence) {
-    NameDeclaration declaration = occurrence.getNameDeclaration();
-    if (declaration instanceof Typed) {
-      return ((Typed) declaration).getType();
-    }
-    return unknownType();
-  }
-
-  private static Type handleSyntaxToken(Type type, int id) {
-    switch (id) {
-      case DelphiLexer.DOT:
-        if (type instanceof PointerType) {
-          // Delphi Extended syntax is assumed.
-          // See: http://docwiki.embarcadero.com/RADStudio/Rio/en/Extended_syntax_(Delphi)
-          return ((PointerType) type).dereferencedType();
-        }
-        return type;
-
-      case DelphiLexer.POINTER:
-        if (type instanceof PointerType) {
-          return ((PointerType) type).dereferencedType();
-        }
-        break;
-
-      case DelphiLexer.STRING:
-        return classOf(UNICODESTRING.type);
-
-      case DelphiLexer.FILE:
-        return classOf(untypedFile());
-
-      default:
-        // Do nothing
-    }
-    return unknownType();
+    return ExpressionTypeUtils.resolve(this);
   }
 }

@@ -1,12 +1,10 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.BOOLEAN;
-
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.operator.UnaryOperator;
-import org.sonar.plugins.delphi.type.DelphiPointerType;
+import org.sonar.plugins.delphi.symbol.resolve.ExpressionTypeUtils;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class UnaryExpressionNode extends ExpressionNode {
@@ -29,14 +27,14 @@ public final class UnaryExpressionNode extends ExpressionNode {
     return operator;
   }
 
-  public ExpressionNode getExpression() {
+  public ExpressionNode getOperand() {
     return (ExpressionNode) jjtGetChild(0);
   }
 
   @Override
   public String getImage() {
     if (image == null) {
-      image = getToken().getImage() + " " + getExpression().getImage();
+      image = getToken().getImage() + " " + getOperand().getImage();
     }
     return image;
   }
@@ -44,15 +42,6 @@ public final class UnaryExpressionNode extends ExpressionNode {
   @Override
   @NotNull
   public Type createType() {
-    Type expressionType = getExpression().getType();
-    switch (getOperator()) {
-      case NOT:
-        return BOOLEAN.type;
-      case ADDRESS:
-        return DelphiPointerType.pointerTo(expressionType);
-      default:
-        return expressionType;
-    }
+    return ExpressionTypeUtils.resolve(this);
   }
-
 }

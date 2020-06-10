@@ -139,17 +139,7 @@ public abstract class DelphiType implements Type {
 
   @Override
   public final boolean isChar() {
-    return isNarrowChar() || isWideChar();
-  }
-
-  @Override
-  public final boolean isNarrowChar() {
-    return is(ANSICHAR.type);
-  }
-
-  @Override
-  public final boolean isWideChar() {
-    return is(CHAR.type) || is(WIDECHAR.type);
+    return is(CHAR.type) || is(ANSICHAR.type);
   }
 
   @Override

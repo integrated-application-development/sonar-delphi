@@ -198,20 +198,6 @@ public interface Type {
   boolean isChar();
 
   /**
-   * Check if this type is a narrow char type (AnsiChar)
-   *
-   * @return true if the type is a narrow char type
-   */
-  boolean isNarrowChar();
-
-  /**
-   * Check if this type is a wide char type (Char or WideChar)
-   *
-   * @return true if the type is a wide char type
-   */
-  boolean isWideChar();
-
-  /**
    * Check if this type is a boolean type (Boolean, ByteBool, WordBool, etc...)
    *
    * @return true if the type is a boolean type
@@ -342,7 +328,7 @@ public interface Type {
 
   interface CollectionType extends Type {
     /**
-     * The type that is is a collection of
+     * The type that this is a collection of
      *
      * @return Element type
      */
@@ -400,6 +386,20 @@ public interface Type {
      * @param fullType Type representing the full type declaration
      */
     void setFullType(StructType fullType);
+
+    /**
+     * Returns a set of types that this type defines implicit conversion to
+     *
+     * @return set of types that this type defines implicit conversion to
+     */
+    Set<Type> typesWithImplicitConversionsFromThis();
+
+    /**
+     * Returns a set of types that this type defines implicit conversion from
+     *
+     * @return set of types that this type defines implicit conversion from
+     */
+    Set<Type> typesWithImplicitConversionsToThis();
 
     /**
      * Returns a set of all default array properties that can be called on this type.
@@ -581,6 +581,9 @@ public interface Type {
 
   @Immutable
   interface ImmutablePointerType extends PointerType, ImmutableType {}
+
+  @Immutable
+  interface ImmutableCollectionType extends CollectionType, ImmutableType {}
 
   @Immutable
   interface IntegerType extends ImmutableType {

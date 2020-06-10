@@ -30,6 +30,15 @@ public final class IntrinsicArgumentMatcher extends DelphiType implements Immuta
   public static final ImmutableType ANY_CLASS_REFERENCE =
       new IntrinsicArgumentMatcher("<class reference>", Type::isClassReference);
 
+  public static final ImmutableType POINTER_MATH_OPERAND =
+      new IntrinsicArgumentMatcher(
+          "<pointer math operand>",
+          type ->
+              type.isPointer()
+                  || (type.isArray()
+                      && !type.isDynamicArray()
+                      && ((CollectionType) type).elementType().isChar()));
+
   @Immutable
   @FunctionalInterface
   private interface Matcher {

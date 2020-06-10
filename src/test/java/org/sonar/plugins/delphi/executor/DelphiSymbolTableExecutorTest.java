@@ -359,6 +359,12 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testPointersTypeResolution() {
+    execute("typeResolution/Pointers.pas");
+    verifyUsages(9, 10, reference(18, 2), reference(19, 2), reference(20, 2), reference(21, 2));
+  }
+
+  @Test
   public void testSubRangeHostTypeResolution() {
     execute("typeResolution/SubRangeHostType.pas");
     verifyUsages(14, 10, reference(21, 2), reference(22, 2), reference(23, 2));
@@ -389,6 +395,226 @@ public class DelphiSymbolTableExecutorTest {
     verifyUsages(14, 10, reference(32, 2));
     verifyUsages(19, 10, reference(33, 2));
     verifyUsages(24, 10, reference(34, 2));
+  }
+
+  @Test
+  public void testBinaryOperatorIntrinsics() {
+    execute("operators/BinaryOperatorIntrinsics.pas");
+    verifyUsages(
+        12,
+        10,
+        reference(48, 2),
+        reference(49, 2),
+        reference(50, 2),
+        reference(53, 2),
+        reference(54, 2),
+        reference(55, 2),
+        reference(56, 2),
+        reference(57, 2),
+        reference(58, 2),
+        reference(59, 2),
+        reference(117, 2));
+    verifyUsages(
+        17,
+        10,
+        reference(62, 2),
+        reference(63, 2),
+        reference(64, 2),
+        reference(65, 2),
+        reference(66, 2),
+        reference(79, 2),
+        reference(80, 2),
+        reference(81, 2),
+        reference(82, 2),
+        reference(83, 2));
+    verifyUsages(
+        22,
+        10,
+        reference(67, 2),
+        reference(68, 2),
+        reference(69, 2),
+        reference(70, 2),
+        reference(71, 2),
+        reference(72, 2),
+        reference(73, 2),
+        reference(74, 2),
+        reference(75, 2),
+        reference(76, 2),
+        reference(84, 2),
+        reference(85, 2),
+        reference(86, 2),
+        reference(87, 2),
+        reference(88, 2),
+        reference(89, 2),
+        reference(90, 2),
+        reference(91, 2),
+        reference(92, 2),
+        reference(93, 2));
+    verifyUsages(
+        27,
+        10,
+        reference(94, 2),
+        reference(95, 2),
+        reference(96, 2),
+        reference(97, 2),
+        reference(98, 2),
+        reference(99, 2),
+        reference(100, 2),
+        reference(101, 2),
+        reference(102, 2),
+        reference(103, 2),
+        reference(104, 2),
+        reference(105, 2),
+        reference(106, 2),
+        reference(107, 2),
+        reference(108, 2),
+        reference(109, 2),
+        reference(110, 2));
+    verifyUsages(32, 10, reference(113, 2), reference(114, 2));
+    verifyUsages(37, 10, reference(118, 2), reference(119, 2), reference(120, 2));
+  }
+
+  @Test
+  public void testBinaryOperatorOverloads() {
+    execute("operators/BinaryOperatorOverloads.pas");
+    verifyUsages(66, 10, reference(79, 2), reference(82, 2), reference(85, 2), reference(88, 2));
+    verifyUsages(71, 10, reference(91, 2), reference(94, 2));
+  }
+
+  @Test
+  public void testUnaryOperatorIntrinsics() {
+    execute("operators/UnaryOperatorIntrinsics.pas");
+    verifyUsages(12, 10, reference(42, 2));
+    verifyUsages(17, 10, reference(45, 2), reference(49, 2), reference(50, 2));
+    verifyUsages(22, 10, reference(46, 2), reference(51, 2), reference(52, 2));
+    verifyUsages(27, 10, reference(53, 2), reference(54, 2));
+  }
+
+  @Test
+  public void testUnaryOperatorOverloads() {
+    execute("operators/UnaryOperatorOverloads.pas");
+    verifyUsages(34, 10, reference(51, 2));
+    verifyUsages(39, 10, reference(52, 2));
+    verifyUsages(44, 10, reference(53, 2));
+  }
+
+  @Test
+  public void testImplicitOperator() {
+    execute("operators/ImplicitOperator.pas");
+    verifyUsages(25, 10, reference(37, 2));
+  }
+
+  @Test
+  public void testImplicitOperatorShouldHaveLowestPriority() {
+    execute("operators/ImplicitOperatorLowestPriority.pas");
+    verifyUsages(35, 10, reference(42, 2));
+  }
+
+  @Test
+  public void testOperatorsAreNotCallable() {
+    execute("operators/NotCallable.pas");
+    verifyUsages(9, 20, reference(17, 7));
+  }
+
+  @Test
+  public void testPointerMathOperators() {
+    execute("operators/PointerMath.pas");
+    verifyUsages(
+        17,
+        10,
+        reference(51, 2),
+        reference(62, 2),
+        reference(63, 2),
+        reference(74, 2),
+        reference(75, 2),
+        reference(52, 2),
+        reference(53, 2),
+        reference(64, 2),
+        reference(65, 2),
+        reference(76, 2),
+        reference(77, 2));
+    verifyUsages(
+        22,
+        10,
+        reference(44, 2),
+        reference(45, 2),
+        reference(46, 2),
+        reference(47, 2),
+        reference(48, 2),
+        reference(49, 2),
+        reference(50, 2));
+    verifyUsages(
+        27,
+        10,
+        reference(55, 2),
+        reference(56, 2),
+        reference(57, 2),
+        reference(58, 2),
+        reference(59, 2),
+        reference(60, 2),
+        reference(61, 2));
+    verifyUsages(
+        32,
+        10,
+        reference(67, 2),
+        reference(68, 2),
+        reference(69, 2),
+        reference(70, 2),
+        reference(71, 2),
+        reference(72, 2),
+        reference(73, 2));
+  }
+
+  @Test
+  public void testVariantOperators() {
+    execute("operators/VariantOperators.pas");
+    verifyUsages(
+        10,
+        10,
+        reference(43, 2),
+        reference(44, 2),
+        reference(45, 2),
+        reference(46, 2),
+        reference(47, 2),
+        reference(48, 2),
+        reference(49, 2),
+        reference(50, 2),
+        reference(51, 2),
+        reference(52, 2),
+        reference(53, 2),
+        reference(54, 2),
+        reference(55, 2),
+        reference(56, 2),
+        reference(57, 2),
+        reference(58, 2),
+        reference(59, 2),
+        reference(60, 2),
+        reference(61, 2),
+        reference(62, 2),
+        reference(63, 2),
+        reference(64, 2),
+        reference(65, 2),
+        reference(66, 2),
+        reference(67, 2),
+        reference(68, 2),
+        reference(69, 2),
+        reference(70, 2));
+    verifyUsages(25, 10, reference(72, 2), reference(73, 2));
+    verifyUsages(
+        30,
+        10,
+        reference(75, 2),
+        reference(76, 2),
+        reference(77, 2),
+        reference(78, 2),
+        reference(79, 2),
+        reference(80, 2),
+        reference(81, 2),
+        reference(82, 2),
+        reference(83, 2),
+        reference(84, 2),
+        reference(85, 2),
+        reference(86, 2));
   }
 
   @Test
@@ -802,6 +1028,12 @@ public class DelphiSymbolTableExecutorTest {
     verifyUsages(13, 14, reference(31, 24), reference(49, 9));
     verifyUsages(17, 14, reference(36, 22), reference(50, 6));
     verifyUsages(21, 14, reference(41, 26), reference(51, 29));
+  }
+
+  @Test
+  public void testRecordHelperTypeReference() {
+    execute("helpers/RecordHelperTypeReference.pas");
+    verifyUsages(9, 14, reference(21, 9), reference(22, 16));
   }
 
   @Test

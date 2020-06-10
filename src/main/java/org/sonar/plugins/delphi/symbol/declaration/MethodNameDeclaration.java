@@ -103,7 +103,10 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
     DelphiNode location = (declarationNode == null) ? nameNode : declarationNode.getIdentifier();
 
     boolean isCallable =
-        !((method.isDestructor() || method.isConstructor()) && method.isClassMethod());
+        !((method.isDestructor()
+                || method.isConstructor()
+                || method.getMethodKind() == MethodKind.OPERATOR)
+            && method.isClassMethod());
 
     return new MethodNameDeclaration(
         new SymbolicNode(location),

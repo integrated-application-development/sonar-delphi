@@ -5,6 +5,7 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDECHAR;
 
 import org.sonar.plugins.delphi.type.Type.BooleanType;
 import org.sonar.plugins.delphi.type.Type.IntegerType;
+import org.sonar.plugins.delphi.type.Type.PointerType;
 import org.sonar.plugins.delphi.type.Type.SubrangeType;
 import org.sonar.plugins.delphi.type.Type.TypeType;
 
@@ -42,6 +43,14 @@ public final class TypeUtils {
       type = ((SubrangeType) type).hostType();
     }
 
+    return type;
+  }
+
+  public static Type dereference(Type type) {
+    Type baseType = findBaseType(type);
+    if (baseType instanceof PointerType) {
+      return ((PointerType) baseType).dereferencedType();
+    }
     return type;
   }
 }

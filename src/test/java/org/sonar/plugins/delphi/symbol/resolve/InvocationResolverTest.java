@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.delphi.type.DelphiArrayType.dynamicArray;
 import static org.sonar.plugins.delphi.type.DelphiArrayType.openArray;
+import static org.sonar.plugins.delphi.type.DelphiEnumerationType.enumeration;
 import static org.sonar.plugins.delphi.type.DelphiFileType.fileOf;
 import static org.sonar.plugins.delphi.type.DelphiFileType.untypedFile;
 import static org.sonar.plugins.delphi.type.DelphiPointerType.pointerTo;
@@ -49,6 +50,7 @@ import org.junit.Test;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.delphi.symbol.declaration.parameter.FormalParameter;
 import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
+import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.DelphiTypeType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.utils.types.TypeMocker;
@@ -233,6 +235,11 @@ public class InvocationResolverTest {
     assertResolved(VARIANT.type, WIDESTRING.type, UNICODESTRING.type);
     assertResolved(VARIANT.type, UNICODESTRING.type, ANSISTRING.type);
     assertResolved(VARIANT.type, ANSISTRING.type, SHORTSTRING.type);
+    assertResolved(VARIANT.type, dynamicArray(null, INTEGER.type), SHORTSTRING.type);
+    assertResolved(
+        VARIANT.type,
+        enumeration("MyEnum", DelphiScope.unknownScope()),
+        dynamicArray(null, INTEGER.type));
 
     assertAmbiguous(VARIANT.type, SMALLINT.type, WORD.type);
     assertIncompatible(VARIANT.type, unknownType());

@@ -3,6 +3,7 @@ package org.sonar.plugins.delphi.type;
 import static java.util.function.Predicate.not;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.GenericDefinitionNode.TypeParamet
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
 import org.sonar.plugins.delphi.symbol.declaration.MethodKind;
+import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
@@ -37,6 +39,8 @@ public class DelphiStructType extends DelphiGenerifiableType implements StructTy
   private Set<Type> parents;
   private StructKind kind;
   private Type superType;
+  private Set<Type> typesWithImplicitConversionsToThis;
+  private Set<Type> typesWithImplicitConversionsFromThis;
   private boolean isForwardType;
 
   protected DelphiStructType(
@@ -216,6 +220,45 @@ public class DelphiStructType extends DelphiGenerifiableType implements StructTy
     this.kind = fullType.kind();
     this.superType = fullType.superType();
     this.isForwardType = true;
+  }
+
+  @Override
+  public Set<Type> typesWithImplicitConversionsFromThis() {
+    if (typesWithImplicitConversionsFromThis == null) {
+      indexImplicitConversions();
+    }
+
+    return typesWithImplicitConversionsFromThis;
+  }
+
+  @Override
+  public Set<Type> typesWithImplicitConversionsToThis() {
+    if (typesWithImplicitConversionsToThis == null) {
+      indexImplicitConversions();
+    }
+    return typesWithImplicitConversionsToThis;
+  }
+
+  private void indexImplicitConversions() {
+    ImmutableSet.Builder<Type> fromBuilder = ImmutableSet.builder();
+    ImmutableSet.Builder<Type> toBuilder = ImmutableSet.builder();
+
+    for (MethodNameDeclaration method : scope.getMethodDeclarations()) {
+      if (method.getMethodKind() == MethodKind.OPERATOR
+          && method.getName().equalsIgnoreCase("Implicit")
+          && method.getParametersCount() == 1) {
+        Type returnType = method.getReturnType();
+        Type parameterType = method.getParameter(0).getType();
+        if (returnType.is(this)) {
+          toBuilder.add(parameterType);
+        } else if (parameterType.is(this)) {
+          fromBuilder.add(returnType);
+        }
+      }
+    }
+
+    typesWithImplicitConversionsToThis = toBuilder.build();
+    typesWithImplicitConversionsFromThis = fromBuilder.build();
   }
 
   @Override
