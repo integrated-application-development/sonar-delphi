@@ -14,6 +14,8 @@ import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.ANSI
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.BYTE;
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.CARDINAL;
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.DOUBLE_CURRENCY;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.DYNAMIC_ARRAY;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.ENUM;
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.EXTENDED;
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.FORMAL_BOOLEAN;
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.INCOMPATIBLE_VARIANT;
@@ -477,6 +479,10 @@ public class InvocationResolver {
       return (bestVcl == ANSISTRING) ? -1 : 1;
     } else if (currentVcl == SHORTSTRING || bestVcl == SHORTSTRING) {
       return (bestVcl == SHORTSTRING) ? -1 : 1;
+    } else if (currentVcl == ENUM || bestVcl == ENUM) {
+      return (bestVcl == ENUM) ? -1 : 1;
+    } else if (currentVcl == DYNAMIC_ARRAY || bestVcl == DYNAMIC_ARRAY) {
+      return (bestVcl == DYNAMIC_ARRAY) ? -1 : 1;
     }
 
     // All possibilities should have been checked now.

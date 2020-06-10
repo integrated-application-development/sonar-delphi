@@ -18,6 +18,8 @@ enum VariantConversionType {
   WIDESTRING,
   UNICODESTRING,
   FORMAL_BOOLEAN,
+  ENUM,
+  DYNAMIC_ARRAY,
   EXTENDED,
   DOUBLE_CURRENCY,
   SINGLE,
@@ -92,6 +94,10 @@ enum VariantConversionType {
       result = decimalTypeMap.get(type.getImage());
     } else if (type.isText()) {
       result = textTypeMap.get(type.getImage());
+    } else if (type.isEnum()) {
+      result = ENUM;
+    } else if (type.isDynamicArray()) {
+      result = DYNAMIC_ARRAY;
     } else if (type.isBoolean() || type.isUntyped()) {
       result = FORMAL_BOOLEAN;
     }
