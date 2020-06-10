@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the interface section)
 - The `Result` variable's type would be unknown if the return type was omitted on the method
   implementation.
+- References to `SetString` intrinsic wouldn't resolve properly.
 
 ## [0.20.0] - 2020-06-05
 

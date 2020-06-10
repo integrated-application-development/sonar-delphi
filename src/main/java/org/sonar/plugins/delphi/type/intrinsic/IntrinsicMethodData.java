@@ -73,7 +73,7 @@ public class IntrinsicMethodData {
       this.hasDefaultValue = hasDefaultValue;
     }
 
-    public Type getType() {
+    public ImmutableType getType() {
       return type;
     }
 

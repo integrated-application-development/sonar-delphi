@@ -1,7 +1,6 @@
 package org.sonar.plugins.delphi.type.intrinsic;
 
 import static org.sonar.plugins.delphi.type.DelphiFileType.untypedFile;
-import static org.sonar.plugins.delphi.type.DelphiPointerType.pointerTo;
 import static org.sonar.plugins.delphi.type.DelphiPointerType.untypedPointer;
 import static org.sonar.plugins.delphi.type.DelphiType.untypedType;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ARRAY;
@@ -19,6 +18,7 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.INTEGER;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.NATIVEINT;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.NATIVEUINT;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.WORD;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicPointer.PCHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicVariant.VARIANT;
@@ -160,8 +160,7 @@ public enum IntrinsicMethod {
   SEEK_EOLN(method("SeekEoln").parameters(TEXT.type).required(0).returns(BOOLEAN.type)),
   SET_LENGTH_STRING(method("SetLength").parameters(UNICODESTRING.type, INTEGER.type)),
   SET_LENGTH_ARRAY(method("SetLength").parameters(ANY_DYNAMIC_ARRAY, INTEGER.type)),
-  SET_STRING(
-      method("SetString").parameters(UNICODESTRING.type, pointerTo(CHAR.type), INTEGER.type)),
+  SET_STRING(method("SetString").parameters(UNICODESTRING.type, PCHAR.type, INTEGER.type)),
   SET_TEXT_BUF(method("SetTextBuf").parameters(TEXT.type, untypedType(), INTEGER.type).required(2)),
   SIZEOF(method("SizeOf").parameters(untypedType()).returns(INTEGER.type)),
   SLICE(method("Slice").parameters(ANY_ARRAY, INTEGER.type).returns(untypedPointer())),
