@@ -403,9 +403,14 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(AnonymousMethodNode node, Data data) {
-    data.addScope(new MethodScope("<anonymous method>"), node);
+    MethodScope scope = new MethodScope("<anonymous method>");
+    data.addScope(scope, node);
     resolve(node.getMethodParametersNode());
     resolve(node.getReturnTypeNode());
+    if (node.isFunction()) {
+      DelphiNameDeclaration result = compilerVariable("Result", node.getReturnType(), scope);
+      data.addDeclarationToCurrentScope(result);
+    }
     return visitScope(node, data);
   }
 

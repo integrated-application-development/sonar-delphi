@@ -4,12 +4,14 @@ import java.util.Collections;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.symbol.declaration.MethodKind;
 import org.sonar.plugins.delphi.type.DelphiProceduralType;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class AnonymousMethodNode extends ExpressionNode {
   private String image;
+  private MethodKind methodKind;
 
   public AnonymousMethodNode(Token token) {
     super(token);
@@ -26,6 +28,21 @@ public final class AnonymousMethodNode extends ExpressionNode {
 
   public MethodReturnTypeNode getReturnTypeNode() {
     return getFirstChildOfType(MethodReturnTypeNode.class);
+  }
+
+  public Type getReturnType() {
+    return getReturnTypeNode().getTypeNode().getType();
+  }
+
+  private MethodKind getMethodKind() {
+    if (methodKind == null) {
+      methodKind = MethodKind.fromTokenType(jjtGetId());
+    }
+    return methodKind;
+  }
+
+  public boolean isFunction() {
+    return getMethodKind() == MethodKind.FUNCTION;
   }
 
   private String getParameterSignature() {

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Support the `Result` variable in anonymous functions.
+
 ### Fixed
 
 - Incorrect operator precedence for `as`.
