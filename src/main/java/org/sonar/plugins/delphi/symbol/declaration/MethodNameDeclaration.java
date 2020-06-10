@@ -261,7 +261,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
       MethodNameDeclaration that = (MethodNameDeclaration) other;
       return qualifiedName.equalsIgnoreCase(that.qualifiedName)
           && parameters.equals(that.parameters)
-          && returnType.equals(that.returnType)
+          && returnType.is(that.returnType)
           && directives.equals(that.directives)
           && isCallable == that.isCallable
           && isClassInvocable == that.isClassInvocable
@@ -278,7 +278,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
               super.hashCode(),
               qualifiedName.toLowerCase(),
               parameters,
-              returnType,
+              returnType.getImage().toLowerCase(),
               directives,
               isCallable,
               isClassInvocable,
