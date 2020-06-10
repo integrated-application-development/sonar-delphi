@@ -33,7 +33,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.pmd.DelphiLanguageModule;
 
 /** Basic rule class, extend this class to make your own rules. Do NOT extend from AbstractRule. */
-public class AbstractDelphiRule extends AbstractRule implements DelphiRule {
+public abstract class AbstractDelphiRule extends AbstractRule implements DelphiRule {
   private Set<Integer> suppressions;
 
   public AbstractDelphiRule() {
