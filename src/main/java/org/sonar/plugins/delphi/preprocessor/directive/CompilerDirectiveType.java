@@ -17,6 +17,7 @@ public enum CompilerDirectiveType {
   IFEND("ifend"),
   INCLUDE("include", "i"),
   SCOPEDENUMS("scopedenums"),
+  POINTERMATH("pointermath"),
   UNSUPPORTED;
 
   private final ImmutableSet<String> names;

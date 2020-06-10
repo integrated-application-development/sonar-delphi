@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.antlr.ast.visitors;
 
 import static com.google.common.collect.Iterables.getFirst;
+import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveType.POINTERMATH;
 import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveType.SCOPEDENUMS;
 import static org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration.compilerVariable;
 import static org.sonar.plugins.delphi.symbol.resolve.NameResolver.resolve;
@@ -638,7 +639,15 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     TypeNameDeclaration declaration = new TypeNameDeclaration(node);
     data.registerDeclaration(declaration, typeNameNode);
     typeNameNode.setNameDeclaration(declaration);
-    typeScope.setType(declaration.getType());
+
+    Type type = declaration.getType();
+    typeScope.setType(type);
+
+    if (!node.isTypeAlias()
+        && type.isPointer()
+        && data.switchRegistry.isActiveSwitch(POINTERMATH, node.getTokenIndex())) {
+      ((PointerType) type).setAllowsPointerMath();
+    }
 
     DelphiScope parent = Preconditions.checkNotNull(data.currentScope().getParent());
     parent.addDeclaration(declaration);

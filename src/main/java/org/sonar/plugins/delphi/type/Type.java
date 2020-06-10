@@ -445,6 +445,16 @@ public interface Type {
      * @param type The dereferenced type
      */
     void setDereferencedType(Type type);
+
+    /** Flag this pointer type as allowing */
+    void setAllowsPointerMath();
+
+    /**
+     * Check if this pointer type was declared with {$POINTERMATH ON}
+     *
+     * @return true if this pointer type was declared with {$POINTERMATH ON}
+     */
+    boolean allowsPointerMath();
   }
 
   interface ProceduralType extends Type {

@@ -114,6 +114,9 @@ class CompilerDirectiveParser {
       case SCOPEDENUMS:
         return new ScopedEnumsDirective(token, type, trimmedItem);
 
+      case POINTERMATH:
+        return new PointerMathDirective(token, type, trimmedItem);
+
       default:
         return new DefaultCompilerDirective(token, type);
     }
