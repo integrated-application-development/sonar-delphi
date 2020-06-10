@@ -233,6 +233,15 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testWithStatement() {
+    execute("WithStatement.pas");
+    verifyUsages(9, 4, reference(44, 4));
+    verifyUsages(14, 4, reference(26, 4));
+    verifyUsages(10, 4, reference(27, 4));
+    verifyUsages(23, 2, reference(28, 4));
+  }
+
+  @Test
   public void testClassReferenceMethodResolution() {
     execute("classReferences/MethodResolution.pas");
     verifyUsages(11, 14, reference(20, 6));

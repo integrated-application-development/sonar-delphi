@@ -21,6 +21,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.EnumElementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.EnumTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExceptItemNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FieldDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FileHeaderNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FinalizationSectionNode;
@@ -75,10 +76,14 @@ import org.sonar.plugins.delphi.symbol.scope.MethodScope;
 import org.sonar.plugins.delphi.symbol.scope.SystemScope;
 import org.sonar.plugins.delphi.symbol.scope.TypeScope;
 import org.sonar.plugins.delphi.symbol.scope.UnitScope;
+import org.sonar.plugins.delphi.symbol.scope.WithScope;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ClassReferenceType;
 import org.sonar.plugins.delphi.type.Type.HelperType;
 import org.sonar.plugins.delphi.type.Type.PointerType;
+import org.sonar.plugins.delphi.type.Type.ProceduralType;
+import org.sonar.plugins.delphi.type.Type.ScopedType;
+import org.sonar.plugins.delphi.type.TypeUtils;
 
 /**
  * Visitor for symbol table creation.
@@ -431,7 +436,38 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(WithStatementNode node, Data data) {
-    return createLocalScope(node, data);
+    node.setScope(data.currentScope());
+
+    DelphiScope parent = data.currentScope();
+    for (ExpressionNode target : node.getTargets()) {
+      target.accept(this, data);
+      WithScope withScope = new WithScope(getTargetScope(target));
+      withScope.setParent(parent);
+      node.setScope(withScope);
+      parent = withScope;
+    }
+
+    LocalScope scope = new LocalScope();
+    data.addScope(scope, node);
+    scope.setParent(parent);
+
+    return visitScope(node.getStatement(), data);
+  }
+
+  private static DelphiScope getTargetScope(ExpressionNode target) {
+    Type targetType = target.getType();
+
+    if (targetType.isProcedural()) {
+      targetType = ((ProceduralType) targetType).returnType();
+    }
+
+    targetType = TypeUtils.findBaseType(targetType);
+
+    if (targetType instanceof ScopedType) {
+      return ((ScopedType) targetType).typeScope();
+    }
+
+    return DelphiScope.unknownScope();
   }
 
   @Override
@@ -595,7 +631,9 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   }
 
   private Data visitScope(DelphiNode node, Data data) {
-    DelphiParserVisitor.super.visit(node, data);
+    if (node != null) {
+      DelphiParserVisitor.super.visit(node, data);
+    }
     data.scopes.pop();
     return data;
   }
