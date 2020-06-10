@@ -6,8 +6,12 @@ import org.sonar.plugins.delphi.type.Type.PointerType;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public abstract class DelphiPointerType extends DelphiType implements PointerType {
-  private DelphiPointerType(String typeImage) {
-    super("^" + typeImage);
+  private DelphiPointerType(ImageSupplier<PointerType> imageSupplier) {
+    super(imageSupplier);
+  }
+
+  private DelphiPointerType(String image) {
+    super(image);
   }
 
   public static PointerType pointerTo(Type type) {
@@ -53,7 +57,7 @@ public abstract class DelphiPointerType extends DelphiType implements PointerTyp
     private Type dereferencedType;
 
     MutableDelphiPointerType(Type dereferencedType) {
-      super(dereferencedType.getImage());
+      super((PointerType type) -> "^" + type.dereferencedType().getImage());
       this.dereferencedType = dereferencedType;
     }
 
@@ -81,7 +85,7 @@ public abstract class DelphiPointerType extends DelphiType implements PointerTyp
     private final ImmutableType dereferencedType;
 
     ImmutableDelphiPointerType(ImmutableType dereferencedType) {
-      super(dereferencedType.getImage());
+      super("^" + dereferencedType.getImage());
       this.dereferencedType = dereferencedType;
     }
 

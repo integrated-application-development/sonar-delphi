@@ -281,6 +281,13 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testTypeSignaturesOfForwardDeclaration() {
+    execute("forwardDeclarations/TypeSignature.pas");
+    verifyUsages(21, 12, reference(26, 10), reference(39, 2));
+    verifyUsages(22, 12, reference(31, 10), reference(42, 2));
+  }
+
+  @Test
   public void testSimpleTypeResolution() {
     execute("typeResolution/Simple.pas");
     verifyUsages(8, 2, reference(16, 10), reference(18, 21), reference(27, 2), reference(31, 22));

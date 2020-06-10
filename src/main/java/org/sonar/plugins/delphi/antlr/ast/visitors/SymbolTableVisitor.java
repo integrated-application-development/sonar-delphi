@@ -576,19 +576,13 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       if (typeDeclaration.isClassReference()) {
         var classReference = (ClassReferenceTypeNode) typeDeclaration.getTypeNode();
         TypeNode classOf = classReference.getClassOfTypeNode();
-
-        if (classOf.getType().isUnresolved()) {
-          resolve(classOf);
-          ((ClassReferenceType) classReference.getType()).setClassType(classOf.getType());
-        }
+        resolve(classOf);
+        ((ClassReferenceType) classReference.getType()).setClassType(classOf.getType());
       } else if (typeDeclaration.isPointer()) {
         var pointer = (PointerTypeNode) typeDeclaration.getTypeNode();
         TypeNode dereferenced = pointer.getDereferencedTypeNode();
-
-        if (dereferenced.getType().isUnresolved()) {
-          resolve(dereferenced);
-          ((PointerType) pointer.getType()).setDereferencedType(dereferenced.getType());
-        }
+        resolve(dereferenced);
+        ((PointerType) pointer.getType()).setDereferencedType(dereferenced.getType());
       }
     }
 
@@ -611,7 +605,9 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
     NameDeclarationNode typeNameNode = node.getTypeNameNode();
     createTypeParameterDeclarations(typeNameNode.getGenericDefinition(), data);
-    resolve(node);
+    if (!node.isPointer() && !node.isClassReference()) {
+      resolve(node);
+    }
 
     TypeNameDeclaration declaration = new TypeNameDeclaration(node);
     data.registerDeclaration(declaration, typeNameNode);

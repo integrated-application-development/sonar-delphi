@@ -11,7 +11,7 @@ public class DelphiClassReferenceType extends DelphiType implements ClassReferen
   private Type classType;
 
   private DelphiClassReferenceType(Type classType) {
-    super("class of " + classType.getImage());
+    super((ClassReferenceType type) -> "class of " + type.classType().getImage());
     this.classType = classType;
   }
 

@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Incorrect operator precedence for `as`.
 - A caught exception's type was unresolved within the `except` handler.
 - Exclude implementation symbols during cross-unit name resolution.
+- Type signature mismatches arising from forward-declared pointer/class reference types.
 
 ## [0.20.0] - 2020-06-05
 
