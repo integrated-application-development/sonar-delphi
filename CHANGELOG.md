@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Exclude implementation symbols during cross-unit name resolution.
 - Type signature mismatches arising from forward-declared pointer/class reference types.
 - Anonymous methods were erroneously treated like method references during overload resolution.
+- Nested types could not access declarations in top-level type(s) via unqualified references.
 
 ## [0.20.0] - 2020-06-05
 

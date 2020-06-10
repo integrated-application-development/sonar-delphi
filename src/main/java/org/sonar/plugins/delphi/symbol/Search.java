@@ -3,6 +3,7 @@ package org.sonar.plugins.delphi.symbol;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import javax.annotation.Nullable;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
@@ -74,6 +75,9 @@ public class Search {
       DelphiScope typeScope = ((MethodScope) scope).getTypeScope();
       if (typeScope instanceof TypeScope) {
         result = searchTypeScope((TypeScope) typeScope);
+        if (result.isEmpty()) {
+          result = searchTopLevelTypeScopes(typeScope.getParent());
+        }
       }
     }
     return result;
@@ -115,6 +119,20 @@ public class Search {
       result = searchExtendedType((HelperType) type);
     }
 
+    return result;
+  }
+
+  private Set<NameDeclaration> searchTopLevelTypeScopes(@Nullable DelphiScope scope) {
+    Set<NameDeclaration> result = Collections.emptySet();
+    if (scope != null) {
+      TypeScope nextTypeScope = scope.getEnclosingScope(TypeScope.class);
+      if (nextTypeScope != null) {
+        result = nextTypeScope.findDeclaration(occurrence);
+        if (result.isEmpty()) {
+          result = searchTopLevelTypeScopes(nextTypeScope.getParent());
+        }
+      }
+    }
     return result;
   }
 

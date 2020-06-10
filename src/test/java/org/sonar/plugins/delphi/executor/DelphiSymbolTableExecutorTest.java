@@ -128,6 +128,13 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testNestedTypes() {
+    execute("NestedTypes.pas");
+    verifyUsages(9, 8, reference(22, 10), reference(23, 5));
+    verifyUsages(10, 26, reference(25, 4), reference(26, 4));
+  }
+
+  @Test
   public void testTypeAliasParameter() {
     execute("TypeAliasParameter.pas");
     verifyUsages(8, 2, reference(11, 14), reference(15, 25));
