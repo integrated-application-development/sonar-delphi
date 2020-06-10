@@ -8,9 +8,9 @@ public enum IntrinsicText {
   UNICODESTRING("UnicodeString"),
   STRING("String", UNICODESTRING.type),
   SHORTSTRING("ShortString"),
-  CHAR("Char"),
   WIDECHAR("WideChar"),
-  ANSICHAR("AnsiChar");
+  ANSICHAR("AnsiChar"),
+  CHAR("Char", WIDECHAR.type);
 
   public final String image;
   public final TextType type;

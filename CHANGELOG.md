@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve type comparisons between variants and dynamic arrays.
 - Improve support for the `High` and `Low` intrinsics.
 - Types nested within the `testSuiteType` will now be treated as test code.
+- `Char` is now treated as an alias to `WideChar`.
 
 ### Fixed
 
