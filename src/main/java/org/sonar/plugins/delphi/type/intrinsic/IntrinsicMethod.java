@@ -128,6 +128,7 @@ public enum IntrinsicMethod {
   GETDIR(method("GetDir").parameters(BYTE.type, UNICODESTRING.type)),
   GETMEM(method("GetMem").parameters(untypedPointer(), INTEGER.type)),
   HALT(method("Halt").parameters(INTEGER.type).required(0)),
+  HAS_WEAK_REF(method("HasWeakRef").parameters(ANY_CLASS_REFERENCE).returns(BOOLEAN.type)),
   HI(method("Hi").parameters(INTEGER.type)),
   HIGH(method("High").parameters(untypedType()).returns(IntrinsicReturnType.HIGH_RETURN_TYPE)),
   INC(method("Inc").parameters(ANY_ORDINAL, INTEGER.type).required(1)),
