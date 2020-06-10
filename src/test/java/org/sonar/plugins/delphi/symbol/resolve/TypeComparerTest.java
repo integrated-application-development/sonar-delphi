@@ -22,7 +22,6 @@ import static org.sonar.plugins.delphi.type.DelphiArrayType.dynamicArray;
 import static org.sonar.plugins.delphi.type.DelphiArrayType.fixedArray;
 import static org.sonar.plugins.delphi.type.DelphiArrayType.openArray;
 import static org.sonar.plugins.delphi.type.DelphiEnumerationType.enumeration;
-import static org.sonar.plugins.delphi.type.DelphiEnumerationType.subRange;
 import static org.sonar.plugins.delphi.type.DelphiFileType.untypedFile;
 import static org.sonar.plugins.delphi.type.DelphiPointerType.nilPointer;
 import static org.sonar.plugins.delphi.type.DelphiPointerType.pointerTo;
@@ -31,6 +30,7 @@ import static org.sonar.plugins.delphi.type.DelphiProceduralType.anonymous;
 import static org.sonar.plugins.delphi.type.DelphiProceduralType.procedure;
 import static org.sonar.plugins.delphi.type.DelphiSetType.emptySet;
 import static org.sonar.plugins.delphi.type.DelphiSetType.set;
+import static org.sonar.plugins.delphi.type.DelphiSubrangeType.subRange;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 import static org.sonar.plugins.delphi.type.DelphiType.untypedType;
 import static org.sonar.plugins.delphi.type.DelphiType.voidType;
@@ -80,6 +80,7 @@ import org.sonar.plugins.delphi.type.Type.CollectionType;
 import org.sonar.plugins.delphi.type.Type.EnumType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Type.StructType;
+import org.sonar.plugins.delphi.type.Type.SubrangeType;
 import org.sonar.plugins.delphi.utils.types.TypeMocker;
 
 public class TypeComparerTest {
@@ -97,7 +98,9 @@ public class TypeComparerTest {
     compare(SMALLINT.type, INTEGER.type, CONVERT_LEVEL_1);
     compare(INTEGER.type, SMALLINT.type, CONVERT_LEVEL_3);
     compare(CURRENCY.type, INTEGER.type, CONVERT_LEVEL_2);
-    compare(VARIANT.type, INTEGER.type, CONVERT_LEVEL_6);
+    compare(VARIANT.type, INTEGER.type, CONVERT_LEVEL_7);
+    compare(subRange("0..5", SHORTINT.type), SHORTINT.type, EQUAL);
+    compare(subRange("-100..100", BYTE.type), SHORTINT.type, CONVERT_LEVEL_1);
     compare(UNICODESTRING.type, INTEGER.type, INCOMPATIBLE_TYPES);
   }
 
@@ -174,15 +177,21 @@ public class TypeComparerTest {
   public void testToEnum() {
     EnumType enumType = enumeration("Enum1", unknownScope());
     EnumType enumType2 = enumeration("Enum2", unknownScope());
-    EnumType subRange1 = subRange("1..2", enumType);
-    EnumType subRange2 = subRange("3..4", enumType);
-    EnumType subRange3 = subRange("5..6", enumType2);
 
     compare(enumType, enumType2, INCOMPATIBLE_TYPES);
-    compare(subRange1, subRange2, CONVERT_LEVEL_1);
-    compare(subRange1, subRange3, INCOMPATIBLE_TYPES);
     compare(VARIANT.type, enumType, CONVERT_LEVEL_1);
     compare(INTEGER.type, enumType, INCOMPATIBLE_TYPES);
+  }
+
+  @Test
+  public void testToSubrange() {
+    SubrangeType subrangeOfShortInt = subRange("1..100", SHORTINT.type);
+    SubrangeType subrangeOfInteger = subRange("5..High(Integer)", INTEGER.type);
+    SubrangeType subrangeOfEnum = subRange("5..6", enumeration("Enum", unknownScope()));
+
+    compare(subrangeOfShortInt, subrangeOfInteger, CONVERT_LEVEL_1);
+    compare(subrangeOfInteger, subrangeOfShortInt, CONVERT_LEVEL_3);
+    compare(subrangeOfShortInt, subrangeOfEnum, INCOMPATIBLE_TYPES);
   }
 
   @Test

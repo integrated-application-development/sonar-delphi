@@ -169,6 +169,11 @@ public abstract class DelphiType implements Type {
   }
 
   @Override
+  public boolean isSubrange() {
+    return false;
+  }
+
+  @Override
   public boolean isFile() {
     return false;
   }

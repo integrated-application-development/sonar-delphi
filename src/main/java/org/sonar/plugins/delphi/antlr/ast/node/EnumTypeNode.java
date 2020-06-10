@@ -47,6 +47,6 @@ public final class EnumTypeNode extends TypeNode {
       return "Enumeration";
     }
 
-    return DelphiEnumerationType.makeAnonymousImage(first.getImage(), getLast(elements).getImage());
+    return "Enumeration(" + first.getImage() + ".." + getLast(elements).getImage();
   }
 }

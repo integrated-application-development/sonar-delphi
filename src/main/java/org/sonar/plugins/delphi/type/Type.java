@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
@@ -138,6 +137,13 @@ public interface Type {
    * @return true if the type is an enumeration type
    */
   boolean isEnum();
+
+  /**
+   * Check if this type is a subrange type
+   *
+   * @return true if the type is a subrange type
+   */
+  boolean isSubrange();
 
   /**
    * Check if this type is an integer type
@@ -487,14 +493,16 @@ public interface Type {
     Type fileType();
   }
 
-  interface EnumType extends ScopedType {
+  interface EnumType extends ScopedType {}
+
+  interface SubrangeType extends Type {
     /**
-     * The base type that this is an enumeration of
+     * The base type that this is a subrange of
      *
      * @return Base type
      */
-    @Nullable
-    Type baseType();
+    @NotNull
+    Type hostType();
   }
 
   interface ClassReferenceType extends Type {

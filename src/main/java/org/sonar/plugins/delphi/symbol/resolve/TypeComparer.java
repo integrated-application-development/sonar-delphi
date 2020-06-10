@@ -26,11 +26,11 @@ import org.sonar.plugins.delphi.type.Type.BooleanType;
 import org.sonar.plugins.delphi.type.Type.ClassReferenceType;
 import org.sonar.plugins.delphi.type.Type.CollectionType;
 import org.sonar.plugins.delphi.type.Type.DecimalType;
-import org.sonar.plugins.delphi.type.Type.EnumType;
 import org.sonar.plugins.delphi.type.Type.FileType;
 import org.sonar.plugins.delphi.type.Type.IntegerType;
 import org.sonar.plugins.delphi.type.Type.PointerType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
+import org.sonar.plugins.delphi.type.Type.SubrangeType;
 import org.sonar.plugins.delphi.type.Type.TextType;
 import org.sonar.plugins.delphi.type.Type.TypeType;
 import org.sonar.plugins.delphi.type.Type.VariantType;
@@ -75,6 +75,8 @@ class TypeComparer {
       result = compareBoolean(from, to);
     } else if (to.isEnum()) {
       result = compareEnum(from, to);
+    } else if (to.isSubrange()) {
+      result = compareSubrange(from, to);
     } else if (to.isArray()) {
       result = compareArray(from, to);
     } else if (to.isSet()) {
@@ -109,6 +111,10 @@ class TypeComparer {
   }
 
   private static EqualityType compareInteger(Type from, Type to) {
+    if (from.isSubrange()) {
+      from = ((SubrangeType) from).hostType();
+    }
+
     if (from.isInteger()) {
       IntegerType fromInteger = (IntegerType) from;
       IntegerType toInteger = (IntegerType) to;
@@ -123,6 +129,7 @@ class TypeComparer {
     } else if (from.is(CURRENCY.type)) {
       return CONVERT_LEVEL_2;
     }
+
     return INCOMPATIBLE_TYPES;
   }
 
@@ -274,35 +281,25 @@ class TypeComparer {
   }
 
   private static EqualityType compareEnum(Type from, Type to) {
-    if (from.isEnum()) {
-      Type fromBaseType = from;
-
-      while (fromBaseType instanceof EnumType) {
-        Type base = ((EnumType) fromBaseType).baseType();
-        if (base == null) {
-          break;
-        }
-        fromBaseType = base;
-      }
-
-      Type toBaseType = to;
-
-      while (toBaseType instanceof EnumType) {
-        Type base = ((EnumType) toBaseType).baseType();
-        if (base == null) {
-          break;
-        }
-        toBaseType = base;
-      }
-
-      if (fromBaseType.is(toBaseType)) {
-        // because of packenum they can have different sizes
-        return CONVERT_LEVEL_1;
-      }
-    } else if (from.isVariant()) {
+    if ((from.isEnum() && from.is(to)) || from.isVariant()) {
       return CONVERT_LEVEL_1;
     }
     return INCOMPATIBLE_TYPES;
+  }
+
+  private static EqualityType compareSubrange(Type from, Type to) {
+    to = ((SubrangeType) to).hostType();
+    if (from.isSubrange()) {
+      from = ((SubrangeType) from).hostType();
+    }
+
+    if (from.is(to) || from.isVariant()) {
+      return CONVERT_LEVEL_1;
+    } else if (from.isInteger() && to.isInteger()) {
+      return compareInteger(from, to);
+    } else {
+      return INCOMPATIBLE_TYPES;
+    }
   }
 
   private static EqualityType compareArray(Type from, Type to) {

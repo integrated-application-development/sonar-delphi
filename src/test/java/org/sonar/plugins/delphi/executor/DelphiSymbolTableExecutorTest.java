@@ -310,6 +310,12 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testSubRangeHostTypeResolution() {
+    execute("typeResolution/SubRangeHostType.pas");
+    verifyUsages(14, 10, reference(21, 2), reference(22, 2), reference(23, 2));
+  }
+
+  @Test
   public void testSimpleProperties() {
     execute("properties/Simple.pas");
     verifyUsages(

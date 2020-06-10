@@ -1,5 +1,7 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import static org.sonar.plugins.delphi.type.TypeUtils.ordinalSize;
+
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
@@ -38,10 +40,13 @@ public final class RangeExpressionNode extends ExpressionNode {
   @Override
   @NotNull
   public Type createType() {
-    Type lowType = getLowExpression().getType();
-    if (!lowType.isUnknown()) {
-      return lowType;
+    ExpressionNode low = getLowExpression();
+    ExpressionNode high = getHighExpression();
+
+    if (ordinalSize(low.getType()) > ordinalSize(high.getType())) {
+      return low.getType();
+    } else {
+      return high.getType();
     }
-    return getHighExpression().getType();
   }
 }

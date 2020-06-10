@@ -29,6 +29,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.PropertyReadSpecifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyWriteSpecifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RecordExpressionItemNode;
 import org.sonar.plugins.delphi.antlr.ast.node.StructTypeNode;
+import org.sonar.plugins.delphi.antlr.ast.node.SubRangeTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeReferenceNode;
@@ -73,6 +74,13 @@ public interface NameResolver {
 
     List<Node> nodes = new ArrayList<>();
     nodes.add(type);
+
+    if (type instanceof SubRangeTypeNode) {
+      SubRangeTypeNode subrange = (SubRangeTypeNode) type;
+      resolve(subrange.getLowExpression());
+      resolve(subrange.getHighExpression());
+      return;
+    }
 
     if (!(type instanceof StructTypeNode)) {
       nodes.addAll(type.findDescendantsOfType(TypeNode.class));
