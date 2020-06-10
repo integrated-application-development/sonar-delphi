@@ -47,7 +47,6 @@ import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.GenerifiableDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.MethodKind;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
-import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.QualifiedDelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
@@ -56,6 +55,7 @@ import org.sonar.plugins.delphi.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.symbol.scope.FileScope;
 import org.sonar.plugins.delphi.symbol.scope.MethodScope;
@@ -815,7 +815,7 @@ public class DefaultNameResolver implements NameResolver {
 
     for (int i = 0; i < resolver.getArguments().size(); ++i) {
       InvocationArgument argument = resolver.getArguments().get(i);
-      ParameterDeclaration parameter = invocable.getParameter(i);
+      Parameter parameter = invocable.getParameter(i);
       argument.resolve(parameter.getType());
     }
 
@@ -880,7 +880,7 @@ public class DefaultNameResolver implements NameResolver {
 
     declarations.removeIf(
         declaration -> {
-          List<ParameterDeclaration> parameters = ((Invocable) declaration).getParameters();
+          List<Parameter> parameters = ((Invocable) declaration).getParameters();
           if (parameterTypes.size() != parameters.size()) {
             return true;
           }

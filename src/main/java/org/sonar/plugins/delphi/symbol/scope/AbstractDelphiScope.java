@@ -25,8 +25,8 @@ import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.GenerifiableDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
-import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.HelperType;
@@ -272,8 +272,8 @@ class AbstractDelphiScope implements DelphiScope {
     }
 
     for (int i = 0; i < declaration.getParametersCount(); ++i) {
-      ParameterDeclaration declarationParam = declaration.getParameter(i);
-      ParameterDeclaration matchedParam = overridden.getParameter(i);
+      Parameter declarationParam = declaration.getParameter(i);
+      Parameter matchedParam = overridden.getParameter(i);
       if (!declarationParam.getType().is(matchedParam.getType())) {
         return false;
       }

@@ -20,8 +20,10 @@ import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.SimpleNameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.Visibility;
-import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
+import org.sonar.plugins.delphi.symbol.declaration.parameter.FormalParameter;
+import org.sonar.plugins.delphi.symbol.declaration.parameter.IntrinsicParameter;
+import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.DelphiProceduralType;
 import org.sonar.plugins.delphi.type.Type;
@@ -31,7 +33,7 @@ import org.sonar.plugins.delphi.type.intrinsic.IntrinsicMethodData;
 public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
     implements GenerifiableDeclaration, TypedDeclaration, Invocable, Visibility {
   private final String qualifiedName;
-  private final List<ParameterDeclaration> parameters;
+  private final List<Parameter> parameters;
   private final Type returnType;
   private final Set<MethodDirective> directives;
   private final boolean isClassInvocable;
@@ -49,7 +51,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
   private MethodNameDeclaration(
       SymbolicNode location,
       String qualifiedName,
-      List<ParameterDeclaration> parameters,
+      List<Parameter> parameters,
       Type returnType,
       Set<MethodDirective> directives,
       boolean isClassInvocable,
@@ -81,7 +83,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
         node,
         "System." + data.getMethodName(),
         data.getParameters().stream()
-            .map(ParameterDeclaration::create)
+            .map(IntrinsicParameter::create)
             .collect(Collectors.toUnmodifiableList()),
         data.getReturnType(),
         emptySet(),
@@ -119,9 +121,9 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
         extractGenericTypeParameters(method));
   }
 
-  private static List<ParameterDeclaration> extractParameterDeclarations(MethodNode method) {
+  private static List<Parameter> extractParameterDeclarations(MethodNode method) {
     return method.getParameters().stream()
-        .map(ParameterDeclaration::create)
+        .map(FormalParameter::create)
         .collect(Collectors.toUnmodifiableList());
   }
 
@@ -145,7 +147,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
   }
 
   @Override
-  public List<ParameterDeclaration> getParameters() {
+  public List<Parameter> getParameters() {
     return parameters;
   }
 
@@ -202,7 +204,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
   }
 
   @Override
-  public ParameterDeclaration getParameter(int index) {
+  public Parameter getParameter(int index) {
     if (index < parameters.size()) {
       return parameters.get(index);
     } else if (isVariadic) {

@@ -35,7 +35,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.CollectionType;
@@ -80,7 +80,7 @@ public class InvocationResolver {
     for (InvocationCandidate candidate : candidates) {
       for (int i = 0; i < arguments.size(); ++i) {
         InvocationArgument argument = arguments.get(i);
-        ParameterDeclaration parameter = candidate.getData().getParameter(i);
+        Parameter parameter = candidate.getData().getParameter(i);
         processArgument(candidate, argument, parameter);
 
         if (candidate.isInvalid()) {
@@ -97,7 +97,7 @@ public class InvocationResolver {
    *     tcallcandidates.get_information</a>
    */
   private void processArgument(
-      InvocationCandidate candidate, InvocationArgument argument, ParameterDeclaration parameter) {
+      InvocationCandidate candidate, InvocationArgument argument, Parameter parameter) {
     Type argumentType = argument.getType();
     Type parameterType = parameter.getType();
     boolean ambiguousMethodReference = false;
@@ -243,7 +243,7 @@ public class InvocationResolver {
     }
   }
 
-  private EqualityType varParameterAllowed(Type argType, ParameterDeclaration parameter) {
+  private EqualityType varParameterAllowed(Type argType, Parameter parameter) {
     Type paramType = parameter.getType();
 
     if (paramType.isUntyped() && !parameter.isConst()) {
@@ -277,7 +277,7 @@ public class InvocationResolver {
     return INCOMPATIBLE_TYPES;
   }
 
-  private static boolean equalTypeRequired(ParameterDeclaration parameter) {
+  private static boolean equalTypeRequired(Parameter parameter) {
     return parameter.isOut() || parameter.isVar();
   }
 

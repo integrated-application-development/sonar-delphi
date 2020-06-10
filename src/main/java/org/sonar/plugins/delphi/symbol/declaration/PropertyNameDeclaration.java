@@ -13,6 +13,8 @@ import org.sonar.plugins.delphi.antlr.ast.node.PropertyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyReadSpecifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyWriteSpecifierNode;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
+import org.sonar.plugins.delphi.symbol.declaration.parameter.FormalParameter;
+import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
@@ -20,7 +22,7 @@ import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
     implements TypedDeclaration, Invocable {
 
-  private final List<ParameterDeclaration> parameters;
+  private final List<Parameter> parameters;
   private final boolean isClassInvocable;
   private final boolean isDefaultProperty;
   private final Type type;
@@ -42,7 +44,7 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
 
   private PropertyNameDeclaration(
       SymbolicNode location,
-      List<ParameterDeclaration> parameters,
+      List<Parameter> parameters,
       boolean isClassInvocable,
       boolean isDefaultProperty,
       Type type,
@@ -57,13 +59,13 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
     this.writeDeclaration = writeDeclaration;
   }
 
-  private static List<ParameterDeclaration> extractParameters(
+  private static List<Parameter> extractParameters(
       PropertyNode node, @Nullable PropertyNameDeclaration concreteDeclaration) {
     if (concreteDeclaration != null) {
       return concreteDeclaration.getParameters();
     }
     return node.getParameters().stream()
-        .map(ParameterDeclaration::create)
+        .map(FormalParameter::create)
         .collect(Collectors.toUnmodifiableList());
   }
 
@@ -136,7 +138,7 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
   }
 
   @Override
-  public List<ParameterDeclaration> getParameters() {
+  public List<Parameter> getParameters() {
     return parameters;
   }
 
