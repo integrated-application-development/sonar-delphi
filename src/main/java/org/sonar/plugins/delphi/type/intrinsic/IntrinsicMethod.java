@@ -139,7 +139,7 @@ public enum IntrinsicMethod {
   IS_CONST_VALUE(method("IsConstValue").parameters(untypedType()).returns(BOOLEAN.type)),
   IS_MANAGED_TYPE(method("IsManagedType").parameters(ANY_CLASS_REFERENCE).returns(BOOLEAN.type)),
   LENGTH_STRING(method("Length").parameters(UNICODESTRING.type).returns(INTEGER.type)),
-  LENGTH_ARRAY(method("Length").parameters(ANY_DYNAMIC_ARRAY).returns(INTEGER.type)),
+  LENGTH_ARRAY(method("Length").parameters(ANY_ARRAY).returns(INTEGER.type)),
   LO(method("Lo").parameters(INTEGER.type).returns(BYTE.type)),
   LOW(method("Low").parameters(untypedType()).returns(IntrinsicReturnType.LOW_RETURN_TYPE)),
   MEMORY_BARRIER(method("MemoryBarrier")),
