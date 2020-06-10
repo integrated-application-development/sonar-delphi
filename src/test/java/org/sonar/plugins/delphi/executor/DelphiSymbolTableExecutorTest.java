@@ -543,6 +543,12 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testPropertySpecialization() {
+    execute("generics/PropertySpecialization.pas");
+    verifyUsages(15, 10, reference(22, 2));
+  }
+
+  @Test
   public void testSimpleMethodResolutionClause() {
     execute("methodResolutionClauses/Simple.pas");
     verifyUsages(9, 14, reference(14, 26));

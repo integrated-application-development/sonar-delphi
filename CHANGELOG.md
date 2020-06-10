@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support inline methods expanded via property invocations in dependency analysis.
+
 ### Changed
 
 - Support the `Result` variable in anonymous functions.

@@ -2,6 +2,7 @@ package org.sonar.plugins.delphi.antlr.ast.visitors;
 
 import javax.annotation.Nullable;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
+import org.sonar.plugins.delphi.antlr.ast.node.ArrayAccessorNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FinalizationSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ImplementationSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.InitializationSectionNode;
@@ -11,9 +12,11 @@ import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DependencyAnalysisVisitor.Data;
+import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
@@ -107,24 +110,53 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
       addDependenciesForDeclaration(declaration, data);
     }
 
-    // Explicitly referenced dependencies
+    // Explicit references to an import indicates a dependency on the unit being imported
+    handleExplicitImportReferences(declaration, data);
+
+    // Type alias references indicate a dependency on the aliased type declaration
+    handleTypeAliases(declaration, data);
+
+    // Inline method dependencies should be included in the callsite's dependencies
+    // Inline methods cannot be expanded by the compiler unless these dependencies are present
+    handleInlineMethods(declaration, data);
+
+    return DelphiParserVisitor.super.visit(nameNode, data);
+  }
+
+  private void handleExplicitImportReferences(
+      @Nullable DelphiNameDeclaration declaration, Data data) {
     if (declaration instanceof UnitImportNameDeclaration) {
       addDependenciesForDeclaration(
           ((UnitImportNameDeclaration) declaration).getOriginalDeclaration(), data);
     }
+  }
 
-    // Type alias references indicate a dependency on the aliased type declaration
+  private void handleTypeAliases(@Nullable DelphiNameDeclaration declaration, Data data) {
     if (declaration instanceof TypeNameDeclaration) {
       addDependenciesForDeclaration(((TypeNameDeclaration) declaration).getAliased(), data);
     }
+  }
 
-    // Inline method dependencies should be included in the callsite's dependencies
-    // Inline methods cannot be expanded by the compiler unless these dependencies are present
+  private void handleInlineMethods(@Nullable DelphiNameDeclaration declaration, Data data) {
     if (isInlineMethodReference(declaration)) {
       addDependenciesRequiredByMethod(declaration, data);
     }
 
-    return DelphiParserVisitor.super.visit(nameNode, data);
+    // Inline methods are also expanded via property references
+    if (declaration instanceof PropertyNameDeclaration) {
+      PropertyNameDeclaration property = (PropertyNameDeclaration) declaration;
+      handleInlineMethods(property.getReadDeclaration(), data);
+      handleInlineMethods(property.getWriteDeclaration(), data);
+    }
+  }
+
+  @Override
+  public Data visit(ArrayAccessorNode accessorNode, Data data) {
+    DelphiNameOccurrence implicitOccurrence = accessorNode.getImplicitNameOccurrence();
+    if (implicitOccurrence != null) {
+      handleInlineMethods(implicitOccurrence.getNameDeclaration(), data);
+    }
+    return DelphiParserVisitor.super.visit(accessorNode, data);
   }
 
   private void addDependenciesForDeclaration(@Nullable NameDeclaration declaration, Data data) {
