@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   implementation.
 - References to `SetString` intrinsic wouldn't resolve properly.
 - References to `Copy` intrinsic wouldn't resolve properly if optional parameters were omitted.
+- The `Hi` intrinsic's return type was treated as `Integer`, when it should have been `Byte`.
 
 ## [0.20.0] - 2020-06-05
 
