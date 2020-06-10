@@ -13,9 +13,11 @@ import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.INCOMPATIBLE_VARIANT;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.CURRENCY;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.SINGLE;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSICHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSISTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.SHORTSTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDECHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDESTRING;
 
 import java.util.List;
@@ -161,6 +163,8 @@ class TypeComparer {
       return compareStringToString(from, to);
     } else if (from.isChar()) {
       return compareCharToText(from, to);
+    } else if (from.isPointer()) {
+      return comparePointerToText((PointerType) from, (TextType) to);
     }
     return INCOMPATIBLE_TYPES;
   }
@@ -263,6 +267,18 @@ class TypeComparer {
       return CONVERT_LEVEL_4;
     } else if (to.is(SHORTSTRING.type)) {
       return CONVERT_LEVEL_5;
+    }
+    return INCOMPATIBLE_TYPES;
+  }
+
+  private static EqualityType comparePointerToText(PointerType from, TextType to) {
+    if (from.dereferencedType().isChar() && to.isString()) {
+      if ((from.dereferencedType().is(ANSICHAR.type) && to.isNarrowString())
+          || (from.dereferencedType().is(WIDECHAR.type) && to.isWideString())) {
+        return CONVERT_LEVEL_3;
+      } else {
+        return CONVERT_LEVEL_4;
+      }
     }
     return INCOMPATIBLE_TYPES;
   }
@@ -576,14 +592,14 @@ class TypeComparer {
   }
 
   private static EqualityType compareTextToPointer(TextType from, PointerType to) {
-    if (from.is(SHORTSTRING.type) && to.dereferencedType().isChar()) {
-      if (to.dereferencedType().isWideChar()) {
+    if (from.is(UNICODESTRING.type) && to.dereferencedType().isChar()) {
+      if (to.dereferencedType().is(WIDECHAR.type)) {
         return CONVERT_LEVEL_2;
       } else {
         return CONVERT_LEVEL_3;
       }
     } else if (from.isChar() && to.dereferencedType().isChar()) {
-      if (to.dereferencedType().isWideChar()) {
+      if (to.dereferencedType().is(WIDECHAR.type)) {
         return CONVERT_LEVEL_1;
       } else {
         return CONVERT_LEVEL_2;
