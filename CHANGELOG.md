@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for `Default` intrinsic.
 - Support for `HasWeakRef` intrinsic.
 - Support for `IsConstValue` intrinsic.
+- Support for `IsManagedType` intrinsic.
 - Support for implicit import of the `SysInit` unit
 
 ### Changed
