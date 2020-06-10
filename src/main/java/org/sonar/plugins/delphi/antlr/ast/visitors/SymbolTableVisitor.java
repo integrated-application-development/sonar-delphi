@@ -4,7 +4,7 @@ import static com.google.common.collect.Iterables.getFirst;
 import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveType.POINTERMATH;
 import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveType.SCOPEDENUMS;
 import static org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration.compilerVariable;
-import static org.sonar.plugins.delphi.symbol.resolve.NameResolver.resolve;
+import static org.sonar.plugins.delphi.symbol.resolve.NameResolutionUtils.resolve;
 
 import com.google.common.base.Preconditions;
 import java.util.ArrayDeque;
@@ -70,7 +70,7 @@ import org.sonar.plugins.delphi.symbol.declaration.TypeParameterNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration;
-import org.sonar.plugins.delphi.symbol.resolve.NameResolver;
+import org.sonar.plugins.delphi.symbol.resolve.NameResolutionUtils;
 import org.sonar.plugins.delphi.symbol.scope.DeclarationScope;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.symbol.scope.FileScope;
@@ -101,7 +101,7 @@ import org.sonar.plugins.delphi.type.TypeUtils;
  * embedding syntactic entity that has a scope.
  *
  * <p>Also finds occurrences of the declarations and creates NameOccurrence objects accordingly.
- * (Delegated to the {@link NameResolver})
+ * (Delegated to the {@link NameResolutionUtils})
  */
 public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   public static class Data {
@@ -325,7 +325,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       @Nullable GenericDefinitionNode definition, Data data) {
     if (definition != null) {
       for (TypeParameterNode parameterNode : definition.getTypeParameterNodes()) {
-        parameterNode.getTypeConstraintNodes().forEach(NameResolver::resolve);
+        parameterNode.getTypeConstraintNodes().forEach(NameResolutionUtils::resolve);
       }
 
       for (TypeParameter typeParameter : definition.getTypeParameters()) {
