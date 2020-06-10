@@ -51,6 +51,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The `Length` intrinsic would only accept dynamic arrays, when it should accept any array.
 - The `Include` and `Exclude` intrinsics wouldn't accept array constructors as set literals.
 - Many intrinsics wouldn't treat subranges or `type` types as ordinals.
+- In some cases, the current type could not be found during name resolution. This would cause an
+  otherwise-correct declaration to be considered inaccessible.
 
 ## [0.20.0] - 2020-06-05
 

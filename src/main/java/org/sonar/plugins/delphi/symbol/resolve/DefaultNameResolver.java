@@ -192,19 +192,41 @@ public class DefaultNameResolver implements NameResolver {
 
   private Type findTypeForTypedDeclaration(TypedDeclaration declaration) {
     Type result;
+
     if (isConstructor(declaration)) {
       result = currentType;
       if (result.isClassReference()) {
         result = ((ClassReferenceType) result).classType();
       }
+
+      if (result.isUnknown() && names.size() == 1) {
+        DelphiScope scope = getLast(names).getLocation().getScope();
+        result = findCurrentType(scope);
+      }
     } else {
       result = declaration.getType();
+      if (isTypeIdentifier(declaration)) {
+        result = classOf(result);
+      }
     }
 
     return result;
   }
 
-  private boolean isConstructor(NameDeclaration declaration) {
+  private static Type findCurrentType(DelphiScope scope) {
+    scope = Objects.requireNonNullElse(scope, unknownScope());
+    MethodScope methodScope = scope.getEnclosingScope(MethodScope.class);
+    if (methodScope != null) {
+      DelphiScope typeScope = methodScope.getTypeScope();
+      if (typeScope instanceof TypeScope) {
+        return ((TypeScope) typeScope).getType();
+      }
+      return findCurrentType(methodScope.getParent());
+    }
+    return unknownType();
+  }
+
+  private static boolean isConstructor(NameDeclaration declaration) {
     return declaration instanceof MethodNameDeclaration
         && ((MethodNameDeclaration) declaration).getMethodKind() == MethodKind.CONSTRUCTOR;
   }
