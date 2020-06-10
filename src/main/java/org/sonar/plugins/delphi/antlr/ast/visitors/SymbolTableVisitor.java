@@ -73,6 +73,7 @@ import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.symbol.scope.FileScope;
 import org.sonar.plugins.delphi.symbol.scope.LocalScope;
 import org.sonar.plugins.delphi.symbol.scope.MethodScope;
+import org.sonar.plugins.delphi.symbol.scope.SysInitScope;
 import org.sonar.plugins.delphi.symbol.scope.SystemScope;
 import org.sonar.plugins.delphi.symbol.scope.TypeScope;
 import org.sonar.plugins.delphi.symbol.scope.UnitScope;
@@ -104,6 +105,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     protected final ImportResolutionHandler importHandler;
     protected final CompilerSwitchRegistry switchRegistry;
     protected final SystemScope systemScope;
+    protected final SysInitScope sysInitScope;
     protected final Deque<DelphiScope> scopes;
     protected UnitNameDeclaration unitDeclaration;
 
@@ -111,10 +113,12 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
         ImportResolutionHandler importHandler,
         CompilerSwitchRegistry switchRegistry,
         @Nullable SystemScope systemScope,
+        @Nullable SysInitScope sysInitScope,
         @Nullable UnitNameDeclaration unitDeclaration) {
       this.importHandler = importHandler;
       this.switchRegistry = switchRegistry;
       this.systemScope = systemScope;
+      this.sysInitScope = sysInitScope;
       this.scopes = new ArrayDeque<>();
       this.unitDeclaration = unitDeclaration;
       if (unitDeclaration != null) {
@@ -619,15 +623,20 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   private Data createUnitScope(DelphiAST node, Data data) {
     FileHeaderNode fileHeader = node.getFileHeader();
     String name = fileHeader.getName();
-    boolean system = name.equals("System");
+    FileScope fileScope;
 
-    FileScope unitScope = system ? new SystemScope() : new UnitScope(name, data.systemScope);
-    data.scopes.add(unitScope);
-    node.setScope(unitScope);
+    if (name.equals("System")) {
+      fileScope = new SystemScope();
+    } else if (name.equals("SysInit")) {
+      fileScope = new SysInitScope(name, data.systemScope);
+    } else {
+      fileScope = new UnitScope(name, data.systemScope, data.sysInitScope);
+    }
 
-    data.unitDeclaration = new UnitNameDeclaration(fileHeader, unitScope);
-    NameDeclarationNode declarationNode = fileHeader.getNameNode();
-    data.addDeclaration(data.unitDeclaration, declarationNode);
+    data.scopes.add(fileScope);
+    node.setScope(fileScope);
+    data.unitDeclaration = new UnitNameDeclaration(fileHeader, fileScope);
+    data.addDeclaration(data.unitDeclaration, fileHeader.getNameNode());
 
     return visitScope(node, data);
   }
