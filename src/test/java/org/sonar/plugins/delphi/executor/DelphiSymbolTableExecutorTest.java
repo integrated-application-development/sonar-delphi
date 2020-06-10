@@ -1,11 +1,13 @@
 package org.sonar.plugins.delphi.executor;
 
+import static java.util.function.Predicate.not;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.delphi.utils.DelphiUtils.uriToAbsolutePath;
 
+import com.google.common.collect.Sets;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,8 +23,10 @@ import org.sonar.api.batch.fs.TextPointer;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultTextPointer;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.project.DelphiProjectHelper;
 import org.sonar.plugins.delphi.symbol.SymbolTable;
+import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 
@@ -30,6 +34,8 @@ public class DelphiSymbolTableExecutorTest {
   private static final String ROOT_PATH = "/org/sonar/plugins/delphi/symbol/";
   private static final String STANDARD_LIBRARY = "/org/sonar/plugins/delphi/standardLibrary";
 
+  private DelphiInputFile mainFile;
+  private SymbolTable symbolTable;
   private DelphiSymbolTableExecutor executor;
   private SensorContextTester context;
   private Set<String> unitScopeNames;
@@ -813,8 +819,72 @@ public class DelphiSymbolTableExecutorTest {
     verifyUsages(19, 10, reference(26, 2));
   }
 
+  @Test
+  public void testDependencyReferencedImplicitly() {
+    execute("dependencies/Implicit.pas");
+    verifyDependencies("System.SysUtils");
+  }
+
+  @Test
+  public void testDependencyReferencedExplicitly() {
+    execute("dependencies/Explicit.pas");
+    verifyDependencies("System.SysUtils");
+  }
+
+  @Test
+  public void testDependencyForHelperReference() {
+    execute("dependencies/Helper.pas");
+    verifyDependencies("System.SysUtils");
+  }
+
+  @Test
+  public void testDependencyForComponentAncestor() {
+    execute("dependencies/ComponentAncestor.pas");
+    verifyDependencies("Vcl.Controls", "System.Classes");
+  }
+
+  @Test
+  public void testDependencyForComponentAncestorDeclaredInImplementation() {
+    execute("dependencies/ComponentAncestorDeclaredInImplementation.pas");
+    verifyDependencies("Vcl.Controls");
+  }
+
+  @Test
+  public void testDependencyForComponentAncestorWithPublishedFieldInNonNonComponentType() {
+    execute("dependencies/ComponentAncestorWithPublishedFieldInNonComponentType.pas");
+    verifyDependencies("Vcl.Controls");
+  }
+
+  @Test
+  public void testDependencyForComponentAncestorDependencyWithNonPublishedField() {
+    execute("dependencies/ComponentAncestorWithNonPublishedField.pas");
+    verifyDependencies("Vcl.Controls");
+  }
+
+  @Test
+  public void testDependencyRequiredForInlineMethodExpansion() {
+    execute("dependencies/InlineMethodExpansion.pas");
+    verifyDependencies("System.UITypes", "Vcl.Dialogs");
+  }
+
+  @Test
+  public void testDependencyRequiredForInlineMethodExpansionViaDefaultArrayProperties() {
+    execute(
+        "dependencies/InlineMethodExpansionViaDefaultArrayProperty.pas",
+        "dependencies/imports/UnitWithDefaultArrayPropertyBackedByInlineMethod.pas");
+    verifyDependencies("UnitWithDefaultArrayPropertyBackedByInlineMethod", "System.SysUtils");
+  }
+
+  @Test
+  public void testDependencyShouldNotBeIntroducedForImplementationMethods() {
+    execute(
+        "dependencies/ImplementationVisibility.pas",
+        "dependencies/imports/UnitWithImplementationMethod.pas");
+    verifyDependencies("System.SysUtils");
+  }
+
   private void execute(String filename, String... include) {
-    var mainFile = DelphiTestFileBuilder.fromResource(ROOT_PATH + filename).delphiFile();
+    mainFile = DelphiTestFileBuilder.fromResource(ROOT_PATH + filename).delphiFile();
     Map<String, InputFile> inputFiles = new HashMap<>();
 
     inputFiles.put(uriToAbsolutePath(mainFile.getInputFile().uri()), mainFile.getInputFile());
@@ -833,7 +903,7 @@ public class DelphiSymbolTableExecutorTest {
               return inputFiles.get(path);
             });
 
-    SymbolTable symbolTable =
+    symbolTable =
         SymbolTable.builder()
             .sourceFiles(
                 inputFiles.values().stream()
@@ -866,5 +936,19 @@ public class DelphiSymbolTableExecutorTest {
 
   private static TextPointer reference(int line, int column) {
     return new DefaultTextPointer(line, column);
+  }
+
+  private void verifyDependencies(String... dependency) {
+    String path = mainFile.getSourceCodeFile().getAbsolutePath();
+    UnitNameDeclaration unit = symbolTable.getUnitByPath(path);
+
+    Set<String> dependencies =
+        Sets.union(unit.getInterfaceDependencies(), unit.getImplementationDependencies()).stream()
+            .map(UnitNameDeclaration::getName)
+            .filter(not("System"::equals))
+            .filter(not(unit.getName()::equals))
+            .collect(Collectors.toUnmodifiableSet());
+
+    assertThat(dependencies).containsExactlyInAnyOrder(dependency);
   }
 }

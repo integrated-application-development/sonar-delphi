@@ -60,7 +60,7 @@ public class UnusedImportsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testImplicitlyUsedImportShouldNotIssue() {
+  public void testImplicitlyUsedImportShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("uses")
@@ -76,110 +76,6 @@ public class UnusedImportsRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues().areNot(ruleKey("UnusedImportsRule_TEST"));
-  }
-
-  @Test
-  public void testExplicitlyUsedImportShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("uses")
-            .appendImpl("  System.SysUtils;")
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Obj: TObject;")
-            .appendImpl("begin")
-            .appendImpl("  Obj := TObject.Create;")
-            .appendImpl("  System.SysUtils.FreeAndNil(Obj);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedImportsRule_TEST"));
-  }
-
-  @Test
-  public void testHelperMethodUsedImportShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .unitName("Foos")
-            .appendDecl("function Bar: Boolean;")
-            .appendImpl("uses")
-            .appendImpl("  System.SysUtils;")
-            .appendImpl("function Foo: Boolean;")
-            .appendImpl("begin")
-            .appendImpl("  Result := Foos.Bar.NONEXISTENT;")
-            .appendImpl("end;")
-            .appendImpl("function Bar: Boolean;")
-            .appendImpl("begin")
-            .appendImpl("  Result := ''.IsEmpty;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedImportsRule_TEST"));
-  }
-
-  @Test
-  public void testComponentAncestorImportShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("uses")
-            .appendDecl("    Vcl.Controls")
-            .appendDecl("  , System.Classes")
-            .appendDecl("  ;")
-            .appendDecl("type")
-            .appendDecl("  TFooControl = class(TCustomControl)")
-            .appendDecl("  end;")
-            .appendDecl("  TFooComponent = class(TCustomControl)")
-            .appendDecl("    FControl: TFooControl;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedImportsRule_TEST"));
-  }
-
-  @Test
-  public void testComponentAncestorImportWithPublishedFieldInNonComponentTypeShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("uses")
-            .appendDecl("    Vcl.Controls")
-            .appendDecl("  , System.Classes")
-            .appendDecl("  ;")
-            .appendDecl("type")
-            .appendDecl("  TFooControl = class(TCustomControl)")
-            .appendDecl("  end;")
-            .appendDecl("  TFoo = class(TObject)")
-            .appendDecl("    FControl: TFooControl;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("UnusedImportsRule_TEST", builder.getOffsetDecl() + 3));
-  }
-
-  @Test
-  public void testComponentAncestorImportWithNonPublishedFieldShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("uses")
-            .appendDecl("    Vcl.Controls")
-            .appendDecl("  , System.Classes")
-            .appendDecl("  ;")
-            .appendDecl("type")
-            .appendDecl("  TFooControl = class(TCustomControl)")
-            .appendDecl("  end;")
-            .appendDecl("  TFooComponent = class(TCustomControl)")
-            .appendDecl("  public")
-            .appendDecl("    FControl: TFooControl;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("UnusedImportsRule_TEST", builder.getOffsetDecl() + 3));
   }
 
   @Test
@@ -220,23 +116,5 @@ public class UnusedImportsRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues().areExactly(1, ruleKeyAtLine("UnusedImportsRule_TEST", builder.getOffset() + 2));
-  }
-
-  @Test
-  public void testImportsRequiredByInlineMethodsShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("uses")
-            .appendImpl("    System.UITypes")
-            .appendImpl("  , Vcl.Dialogs")
-            .appendImpl("  ;")
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  MessageDlg('Spooky error!', mtError, [mbOK], 0);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedImportsRule_TEST"));
   }
 }
