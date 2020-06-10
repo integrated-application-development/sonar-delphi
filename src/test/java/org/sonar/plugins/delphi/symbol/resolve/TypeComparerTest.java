@@ -37,6 +37,7 @@ import static org.sonar.plugins.delphi.type.DelphiType.voidType;
 import static org.sonar.plugins.delphi.type.StructKind.CLASS;
 import static org.sonar.plugins.delphi.type.StructKind.INTERFACE;
 import static org.sonar.plugins.delphi.type.StructKind.OBJECT;
+import static org.sonar.plugins.delphi.type.StructKind.RECORD;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ARRAY;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_DYNAMIC_ARRAY;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_OBJECT;

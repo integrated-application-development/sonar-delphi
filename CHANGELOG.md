@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for `IsConstValue` intrinsic.
 - Support for `IsManagedType` intrinsic.
 - Support for implicit import of the `SysInit` unit
+- Support for implicit conversion from interface references to `System.TGUID`.
 
 ### Changed
 

@@ -557,8 +557,18 @@ class TypeComparer {
       } else if (fromPointer.isNilPointer()) {
         return CONVERT_LEVEL_1;
       }
+    } else if (isInterfaceReference(from) && isTGUID(to)) {
+      return CONVERT_LEVEL_5;
     }
     return INCOMPATIBLE_TYPES;
+  }
+
+  private static boolean isInterfaceReference(Type type) {
+    return type.isClassReference() && ((ClassReferenceType) type).classType().isInterface();
+  }
+
+  private static boolean isTGUID(Type type) {
+    return type.isRecord() && type.is("System.TGUID");
   }
 
   private static EqualityType compareClassReference(Type from, Type to) {
