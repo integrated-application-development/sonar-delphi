@@ -3,6 +3,7 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.delphi.symbol.declaration.MethodKind;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
@@ -39,7 +40,7 @@ public abstract class MethodNode extends DelphiNode implements Visibility {
     return getMethodHeading().fullyQualifiedName();
   }
 
-  public List<FormalParameter> getParameters() {
+  public List<FormalParameterData> getParameters() {
     return getMethodHeading().getParameters();
   }
 

@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 import org.sonar.plugins.delphi.antlr.ast.node.AsmStatementNode;
-import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
+import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
@@ -49,7 +49,7 @@ public class UnusedArgumentsRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(MethodImplementationNode method, RuleContext data) {
-    List<FormalParameter> unusedArguments =
+    List<FormalParameterData> unusedArguments =
         method.getParameters().stream()
             .filter(argument -> isUnusedArgument(method, argument.getNode()))
             .collect(Collectors.toList());
@@ -58,7 +58,7 @@ public class UnusedArgumentsRule extends AbstractDelphiRule {
       unusedArguments.clear();
     }
 
-    for (FormalParameter unusedArgument : unusedArguments) {
+    for (FormalParameterData unusedArgument : unusedArguments) {
       String message = format(MESSAGE, unusedArgument.getImage(), method.fullyQualifiedName());
       addViolationWithMessage(data, unusedArgument.getNode(), message);
     }

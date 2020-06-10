@@ -5,6 +5,7 @@ import java.util.List;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.DelphiParser;
+import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.symbol.declaration.MethodKind;
@@ -51,7 +52,7 @@ public final class MethodHeadingNode extends DelphiNode {
     return getFirstChildOfType(MethodParametersNode.class);
   }
 
-  public List<FormalParameter> getParameters() {
+  public List<FormalParameterData> getParameters() {
     MethodParametersNode parameters = getMethodParametersNode();
     return parameters != null ? parameters.getParameters() : Collections.emptyList();
   }

@@ -3,7 +3,7 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 import java.util.Collections;
 import java.util.List;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
+import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.type.Type;
 
@@ -24,7 +24,7 @@ public final class MethodParametersNode extends DelphiNode {
     return visitor.visit(this, data);
   }
 
-  public List<FormalParameter> getParameters() {
+  public List<FormalParameterData> getParameters() {
     return isEmpty() ? Collections.emptyList() : getFormalParametersList().getParameters();
   }
 

@@ -4,7 +4,6 @@ import static com.google.common.collect.Iterables.getLast;
 import static java.util.Collections.emptySet;
 
 import com.google.common.collect.ComparisonChain;
-import com.google.common.collect.ImmutableSet;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -14,9 +13,8 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
-import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
+import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.delphi.antlr.ast.node.GenericDefinitionNode.TypeParameter;
-import org.sonar.plugins.delphi.antlr.ast.node.MethodHeadingNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNameNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
@@ -129,7 +127,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
 
   private static List<Type> extractParameterTypes(MethodNode method) {
     return method.getParameters().stream()
-        .map(FormalParameter::getType)
+        .map(FormalParameterData::getType)
         .collect(Collectors.toUnmodifiableList());
   }
 

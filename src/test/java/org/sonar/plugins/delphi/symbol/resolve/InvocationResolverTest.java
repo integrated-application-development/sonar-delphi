@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.Test;
+import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
 import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
 import org.sonar.plugins.delphi.type.DelphiTypeType;
@@ -112,12 +113,12 @@ public class InvocationResolverTest {
     List<ParameterDeclaration> parameters = new ArrayList<>();
 
     for (Type paramType : parameterTypes) {
-      FormalParameter formalParameter = mock(FormalParameter.class);
-      when(formalParameter.getType()).thenReturn(paramType);
+      FormalParameterData formalParameterData = mock(FormalParameterData.class);
+      when(formalParameterData.getType()).thenReturn(paramType);
       if (var) {
-        when(formalParameter.isVar()).thenReturn(true);
+        when(formalParameterData.isVar()).thenReturn(true);
       }
-      parameters.add(ParameterDeclaration.create(formalParameter));
+      parameters.add(ParameterDeclaration.create(formalParameterData));
     }
 
     when(invocable.getParameters()).thenReturn(parameters);

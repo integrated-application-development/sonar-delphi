@@ -10,7 +10,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.CompoundStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionStatementNode;
-import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
+import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
@@ -88,7 +88,7 @@ public class InheritedMethodWithNoCodeRule extends AbstractDelphiRule {
   }
 
   private static boolean argumentSignaturesMatch(MethodNode method, ArgumentListNode argumentList) {
-    List<FormalParameter> parameters = method.getParameters();
+    List<FormalParameterData> parameters = method.getParameters();
     List<ExpressionNode> arguments =
         (argumentList == null) ? Collections.emptyList() : argumentList.getArguments();
 

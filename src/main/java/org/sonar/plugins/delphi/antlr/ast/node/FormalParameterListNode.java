@@ -4,12 +4,12 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
+import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class FormalParameterListNode extends DelphiNode {
-  private List<FormalParameter> parameters;
+  private List<FormalParameterData> parameters;
   private List<Type> parameterTypes;
   private String image;
 
@@ -26,9 +26,9 @@ public final class FormalParameterListNode extends DelphiNode {
     return visitor.visit(this, data);
   }
 
-  public List<FormalParameter> getParameters() {
+  public List<FormalParameterData> getParameters() {
     if (parameters == null) {
-      var builder = new ImmutableList.Builder<FormalParameter>();
+      var builder = new ImmutableList.Builder<FormalParameterData>();
       for (FormalParameterNode parameterNode : findChildrenOfType(FormalParameterNode.class)) {
         builder.addAll(parameterNode.getParameters());
       }
@@ -41,7 +41,7 @@ public final class FormalParameterListNode extends DelphiNode {
     if (parameterTypes == null) {
       parameterTypes =
           getParameters().stream()
-              .map(FormalParameter::getType)
+              .map(FormalParameterData::getType)
               .collect(Collectors.toUnmodifiableList());
     }
     return parameterTypes;
@@ -51,7 +51,7 @@ public final class FormalParameterListNode extends DelphiNode {
   public String getImage() {
     if (image == null) {
       StringBuilder imageBuilder = new StringBuilder();
-      for (FormalParameter parameter : getParameters()) {
+      for (FormalParameterData parameter : getParameters()) {
         if (imageBuilder.length() != 0) {
           imageBuilder.append(';');
         }

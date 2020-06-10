@@ -7,7 +7,7 @@ import net.sourceforge.pmd.lang.ast.Node;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
-import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
+import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
@@ -68,7 +68,7 @@ public final class PropertyNode extends DelphiNode implements Typed, Visibility 
     return getFirstChildOfType(PropertyWriteSpecifierNode.class);
   }
 
-  public List<FormalParameter> getParameters() {
+  public List<FormalParameterData> getParameters() {
     FormalParameterListNode paramList = getParameterListNode();
     return (paramList == null) ? Collections.emptyList() : paramList.getParameters();
   }
