@@ -136,6 +136,7 @@ public enum IntrinsicMethod {
   INITIALIZE(method("Initialize").parameters(untypedType(), NATIVEINT.type).required(1)),
   INSERT_STRING(method("Insert").parameters(UNICODESTRING.type, UNICODESTRING.type, INTEGER.type)),
   INSERT_ARRAY(method("Insert").parameters(ANY_DYNAMIC_ARRAY, ANY_DYNAMIC_ARRAY, INTEGER.type)),
+  IS_CONST_VALUE(method("IsConstValue").parameters(untypedType()).returns(BOOLEAN.type)),
   LENGTH_STRING(method("Length").parameters(UNICODESTRING.type).returns(INTEGER.type)),
   LENGTH_ARRAY(method("Length").parameters(ANY_DYNAMIC_ARRAY).returns(INTEGER.type)),
   LO(method("Lo").parameters(INTEGER.type).returns(BYTE.type)),
