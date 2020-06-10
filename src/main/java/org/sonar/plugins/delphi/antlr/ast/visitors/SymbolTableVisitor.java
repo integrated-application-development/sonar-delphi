@@ -160,15 +160,24 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     }
 
     protected void addDeclaration(DelphiNameDeclaration declaration, NameDeclarationNode node) {
+      handleImplementationDeclaration(declaration, node);
       registerDeclaration(declaration, node);
       node.setNameDeclaration(declaration);
       addDeclarationToCurrentScope(declaration);
     }
 
     protected void addDeclaration(MethodNameDeclaration declaration, MethodNameNode node) {
+      handleImplementationDeclaration(declaration, node);
       registerDeclaration(declaration, node);
       node.setMethodNameDeclaration(declaration);
       addDeclarationToCurrentScope(declaration);
+    }
+
+    private static void handleImplementationDeclaration(
+        DelphiNameDeclaration declaration, DelphiNode node) {
+      if (node.isImplementationSection()) {
+        declaration.setIsImplementationDeclaration();
+      }
     }
 
     protected void registerDeclaration(DelphiNameDeclaration declaration, DelphiNode node) {
