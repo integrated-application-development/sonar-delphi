@@ -1,7 +1,7 @@
 package org.sonar.plugins.delphi.antlr.ast.visitors;
 
 import static com.google.common.collect.Iterables.getFirst;
-import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveType.SCOPED_ENUMS;
+import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveType.SCOPEDENUMS;
 import static org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration.compilerVariable;
 import static org.sonar.plugins.delphi.symbol.resolve.NameResolver.resolve;
 
@@ -265,7 +265,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     EnumElementNameDeclaration declaration = new EnumElementNameDeclaration(node);
     data.addDeclaration(declaration, node.getNameDeclarationNode());
 
-    if (!data.switchRegistry.isActiveSwitch(SCOPED_ENUMS, node.getTokenIndex())) {
+    if (!data.switchRegistry.isActiveSwitch(SCOPEDENUMS, node.getTokenIndex())) {
       DelphiScope currentScope = data.currentScope();
 
       DelphiScope scope = currentScope.getEnclosingScope(MethodScope.class);

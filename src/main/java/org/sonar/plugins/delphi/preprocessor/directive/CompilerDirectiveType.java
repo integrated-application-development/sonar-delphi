@@ -16,7 +16,7 @@ public enum CompilerDirectiveType {
   ENDIF("endif"),
   IFEND("ifend"),
   INCLUDE("include", "i"),
-  SCOPED_ENUMS("scopedenums"),
+  SCOPEDENUMS("scopedenums"),
   UNSUPPORTED;
 
   private final ImmutableSet<String> names;
