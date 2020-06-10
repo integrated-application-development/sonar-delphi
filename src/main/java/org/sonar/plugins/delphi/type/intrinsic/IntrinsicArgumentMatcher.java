@@ -26,6 +26,9 @@ public class IntrinsicArgumentMatcher extends DelphiType implements ImmutableTyp
           "<ordinal>",
           type -> type.isInteger() || type.isBoolean() || type.isEnum() || type.isChar());
 
+  public static final ImmutableType ANY_CLASS_REFERENCE =
+      new IntrinsicArgumentMatcher("<class reference>", Type::isClassReference);
+
   @Immutable
   private interface Matcher extends Function<Type, Boolean> {}
 

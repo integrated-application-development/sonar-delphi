@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for `System.MaxInt` compiler constant.
 - Support for `System.MaxLongInt` compiler constant.
 - Support for `System.CompilerVersion` compiler constant.
+- Support for `Default` intrinsic.
 - Support for implicit import of the `SysInit` unit
 
 ### Changed

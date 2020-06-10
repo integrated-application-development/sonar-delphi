@@ -377,6 +377,15 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testDefaultIntrinsic() {
+    execute("intrinsics/DefaultIntrinsic.pas");
+    verifyUsages(9, 10, reference(31, 2));
+    verifyUsages(14, 10, reference(32, 2));
+    verifyUsages(19, 10, reference(33, 2));
+    verifyUsages(24, 10, reference(34, 2));
+  }
+
+  @Test
   public void testSimpleProperties() {
     execute("properties/Simple.pas");
     verifyUsages(

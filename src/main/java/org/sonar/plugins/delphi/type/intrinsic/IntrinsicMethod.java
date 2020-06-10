@@ -4,6 +4,7 @@ import static org.sonar.plugins.delphi.type.DelphiFileType.untypedFile;
 import static org.sonar.plugins.delphi.type.DelphiPointerType.untypedPointer;
 import static org.sonar.plugins.delphi.type.DelphiType.untypedType;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ARRAY;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_CLASS_REFERENCE;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_DYNAMIC_ARRAY;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_OBJECT;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
@@ -19,6 +20,7 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.NATIVEINT
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.NATIVEUINT;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.WORD;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicPointer.PCHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicReturnType.CLASS_REFERENCE_VALUE_TYPE;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicVariant.VARIANT;
@@ -107,6 +109,7 @@ public enum IntrinsicMethod {
           .required(1)
           .returns(UNICODESTRING.type)),
   DEC(method("Dec").parameters(ANY_ORDINAL, INTEGER.type).required(1).returns(INTEGER.type)),
+  DEFAULT(method("Default").parameters(ANY_CLASS_REFERENCE).returns(CLASS_REFERENCE_VALUE_TYPE)),
   DELETE_STRING(method("Delete").parameters(UNICODESTRING.type, INTEGER.type, INTEGER.type)),
   DELETE_ARRAY(method("Delete").parameters(ANY_DYNAMIC_ARRAY, INTEGER.type, INTEGER.type)),
   DISPOSE(method("Dispose").parameters(untypedPointer())),

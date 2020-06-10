@@ -16,6 +16,10 @@ public final class IntrinsicReturnType extends DelphiType implements ImmutableTy
   public static final IntrinsicReturnType HIGH_RETURN_TYPE =
       new IntrinsicReturnType("<high>", IntrinsicReturnType::highLowReturnType);
 
+  public static final IntrinsicReturnType CLASS_REFERENCE_VALUE_TYPE =
+      new IntrinsicReturnType(
+          "<class reference value type>", IntrinsicReturnType::classReferenceValueType);
+
   @Immutable
   @FunctionalInterface
   private interface ReturnTypeFunction {
@@ -45,5 +49,13 @@ public final class IntrinsicReturnType extends DelphiType implements ImmutableTy
     }
 
     return type;
+  }
+
+  private static Type classReferenceValueType(List<Type> arguments) {
+    Type type = arguments.get(0);
+    if (type.isClassReference()) {
+      return ((ClassReferenceType) type).classType();
+    }
+    return unknownType();
   }
 }
