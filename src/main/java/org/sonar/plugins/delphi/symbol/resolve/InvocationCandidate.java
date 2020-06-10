@@ -1,13 +1,19 @@
 package org.sonar.plugins.delphi.symbol.resolve;
 
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicVariant.VARIANT;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
+import org.sonar.plugins.delphi.operator.IntrinsicOperatorSignature;
+import org.sonar.plugins.delphi.operator.PointerMathOperatorSignature;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypedDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
@@ -18,8 +24,8 @@ import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
  * @see <a href="https://github.com/graemeg/freepascal/blob/master/compiler/htypechk.pas#L50">
  *     tcandidate</a>
  */
-public class InvocationCandidate {
-  public static final int CONVERT_LEVELS = 6;
+public final class InvocationCandidate {
+  public static final int CONVERT_LEVELS = 8;
 
   private final Invocable data;
   private int exactCount;
@@ -28,6 +34,7 @@ public class InvocationCandidate {
   private int convertOperatorCount;
   private double ordinalDistance;
   private int signMismatchCount;
+  private int structMismatchCount;
   private int proceduralDistance;
   private final List<VariantConversionType> variantConversions;
   private boolean invalid;
@@ -90,6 +97,14 @@ public class InvocationCandidate {
     ++this.signMismatchCount;
   }
 
+  public int getStructMismatchCount() {
+    return structMismatchCount;
+  }
+
+  public void incrementStructMismatchCount() {
+    ++this.structMismatchCount;
+  }
+
   public void increaseProceduralDistance(int proceduralDistance) {
     this.proceduralDistance += proceduralDistance;
   }
@@ -104,6 +119,16 @@ public class InvocationCandidate {
 
   public VariantConversionType getVariantConversionType(int argumentIndex) {
     return variantConversions.get(argumentIndex);
+  }
+
+  public boolean isBuiltinOperator() {
+    return data instanceof IntrinsicOperatorSignature
+        || data instanceof PointerMathOperatorSignature;
+  }
+
+  public boolean isVariantOperator() {
+    return data instanceof IntrinsicOperatorSignature
+        && data.getParameters().stream().map(Parameter::getType).anyMatch(VARIANT.type::is);
   }
 
   public boolean isInvalid() {
@@ -159,5 +184,22 @@ public class InvocationCandidate {
     Invocable invocable = (Invocable) methodDeclaration.specialize(context);
 
     return new InvocationCandidate(invocable);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    InvocationCandidate candidate = (InvocationCandidate) o;
+    return data.equals(candidate.data);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(data);
   }
 }

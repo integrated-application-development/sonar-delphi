@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.symbol.declaration;
 
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.Visibility;
@@ -95,13 +96,13 @@ public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
       return false;
     }
     VariableNameDeclaration that = (VariableNameDeclaration) other;
-    return getImage().equalsIgnoreCase(that.getImage());
+    return getImage().equalsIgnoreCase(that.getImage()) && type.is(that.type);
   }
 
   @Override
   public int hashCode() {
     if (hashCode == 0) {
-      hashCode = getImage().toLowerCase().hashCode();
+      hashCode = Objects.hash(getImage().toLowerCase(), type.getImage());
     }
     return hashCode;
   }

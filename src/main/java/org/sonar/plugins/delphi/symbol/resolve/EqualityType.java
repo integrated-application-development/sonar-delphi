@@ -10,7 +10,8 @@ package org.sonar.plugins.delphi.symbol.resolve;
  */
 enum EqualityType {
   INCOMPATIBLE_TYPES,
-  CONVERT_OPERATOR,
+  CONVERT_LEVEL_8,
+  CONVERT_LEVEL_7,
   CONVERT_LEVEL_6,
   CONVERT_LEVEL_5,
   CONVERT_LEVEL_4,

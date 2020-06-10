@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import net.sourceforge.pmd.RuleContext;
@@ -33,8 +34,8 @@ import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.pmd.DelphiLanguageModule;
 
 /** Basic rule class, extend this class to make your own rules. Do NOT extend from AbstractRule. */
-public class AbstractDelphiRule extends AbstractRule implements DelphiRule {
-  private Set<Integer> suppressions;
+public abstract class AbstractDelphiRule extends AbstractRule implements DelphiRule {
+  private Set<Integer> suppressions = new HashSet<>();
 
   public AbstractDelphiRule() {
     setLanguage(LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME));

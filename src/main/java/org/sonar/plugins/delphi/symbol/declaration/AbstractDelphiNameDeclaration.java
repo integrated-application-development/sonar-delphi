@@ -16,6 +16,7 @@ public abstract class AbstractDelphiNameDeclaration extends AbstractNameDeclarat
   private int hashcode;
   private boolean isForwardDeclaration;
   private DelphiNameDeclaration forwardDeclaration;
+  private boolean isImplementationDeclaration;
 
   AbstractDelphiNameDeclaration(DelphiNode node) {
     this(node, node.getScope());
@@ -31,7 +32,8 @@ public abstract class AbstractDelphiNameDeclaration extends AbstractNameDeclarat
   }
 
   private void generateHashCode() {
-    hashcode = Objects.hash(getImage().toLowerCase(), isForwardDeclaration);
+    hashcode =
+        Objects.hash(getImage().toLowerCase(), isForwardDeclaration, isImplementationDeclaration);
   }
 
   @Override
@@ -103,6 +105,17 @@ public abstract class AbstractDelphiNameDeclaration extends AbstractNameDeclarat
     return isForwardDeclaration;
   }
 
+  @Override
+  public void setIsImplementationDeclaration() {
+    this.isImplementationDeclaration = true;
+    generateHashCode();
+  }
+
+  @Override
+  public boolean isImplementationDeclaration() {
+    return isImplementationDeclaration;
+  }
+
   @SuppressWarnings("EqualsGetClass")
   @Override
   public boolean equals(Object o) {
@@ -114,7 +127,8 @@ public abstract class AbstractDelphiNameDeclaration extends AbstractNameDeclarat
     }
     DelphiNameDeclaration that = (DelphiNameDeclaration) o;
     return getImage().equalsIgnoreCase(that.getImage())
-        && isForwardDeclaration == that.isForwardDeclaration();
+        && isForwardDeclaration == that.isForwardDeclaration()
+        && isImplementationDeclaration == that.isImplementationDeclaration();
   }
 
   @Override

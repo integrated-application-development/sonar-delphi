@@ -40,7 +40,7 @@ public class StringLiteralRegexRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(TextLiteralNode string, RuleContext data) {
-    if (pattern != null && pattern.matcher(string.getImage()).matches()) {
+    if (pattern != null && pattern.matcher(string.getImageWithoutQuotes()).matches()) {
       addViolationWithMessage(data, string, getProperty(MESSAGE));
     }
 

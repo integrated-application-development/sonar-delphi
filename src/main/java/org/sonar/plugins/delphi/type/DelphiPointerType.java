@@ -6,16 +6,20 @@ import org.sonar.plugins.delphi.type.Type.PointerType;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public abstract class DelphiPointerType extends DelphiType implements PointerType {
-  private DelphiPointerType(String typeImage) {
-    super("^" + typeImage);
+  private DelphiPointerType(ImageSupplier<PointerType> imageSupplier) {
+    super(imageSupplier);
+  }
+
+  private DelphiPointerType(String image) {
+    super(image);
   }
 
   public static PointerType pointerTo(Type type) {
     return new MutableDelphiPointerType(type);
   }
 
-  public static ImmutablePointerType pointerTo(ImmutableType type) {
-    return new ImmutableDelphiPointerType(type);
+  public static ImmutablePointerType pointerTo(ImmutableType type, boolean allowsPointerMath) {
+    return new ImmutableDelphiPointerType(type, allowsPointerMath);
   }
 
   public static ImmutablePointerType untypedPointer() {
@@ -51,9 +55,10 @@ public abstract class DelphiPointerType extends DelphiType implements PointerTyp
 
   private static class MutableDelphiPointerType extends DelphiPointerType {
     private Type dereferencedType;
+    private boolean allowsPointerMath;
 
     MutableDelphiPointerType(Type dereferencedType) {
-      super(dereferencedType.getImage());
+      super((PointerType type) -> "^" + type.dereferencedType().getImage());
       this.dereferencedType = dereferencedType;
     }
 
@@ -64,8 +69,18 @@ public abstract class DelphiPointerType extends DelphiType implements PointerTyp
     }
 
     @Override
+    public boolean allowsPointerMath() {
+      return allowsPointerMath;
+    }
+
+    @Override
     public void setDereferencedType(Type type) {
       this.dereferencedType = type;
+    }
+
+    @Override
+    public void setAllowsPointerMath() {
+      this.allowsPointerMath = true;
     }
   }
 
@@ -73,16 +88,18 @@ public abstract class DelphiPointerType extends DelphiType implements PointerTyp
   private static class ImmutableDelphiPointerType extends DelphiPointerType
       implements ImmutablePointerType {
     private static final ImmutablePointerType UNTYPED =
-        new ImmutableDelphiPointerType(DelphiType.untypedType());
+        new ImmutableDelphiPointerType(DelphiType.untypedType(), false);
 
     private static final ImmutablePointerType NIL =
-        new ImmutableDelphiPointerType(DelphiType.voidType());
+        new ImmutableDelphiPointerType(DelphiType.voidType(), false);
 
     private final ImmutableType dereferencedType;
+    private final boolean allowsPointerMath;
 
-    ImmutableDelphiPointerType(ImmutableType dereferencedType) {
-      super(dereferencedType.getImage());
+    ImmutableDelphiPointerType(ImmutableType dereferencedType, boolean allowsPointerMath) {
+      super("^" + dereferencedType.getImage());
       this.dereferencedType = dereferencedType;
+      this.allowsPointerMath = allowsPointerMath;
     }
 
     @Override
@@ -92,7 +109,17 @@ public abstract class DelphiPointerType extends DelphiType implements PointerTyp
     }
 
     @Override
+    public boolean allowsPointerMath() {
+      return allowsPointerMath;
+    }
+
+    @Override
     public void setDereferencedType(Type type) {
+      throw new UnsupportedOperationException("Not allowed on immutable type!");
+    }
+
+    @Override
+    public void setAllowsPointerMath() {
       throw new UnsupportedOperationException("Not allowed on immutable type!");
     }
   }

@@ -24,7 +24,7 @@ public final class UnitImportNameDeclaration extends QualifiedDelphiNameDeclarat
     if (originalDeclaration == null) {
       return null;
     }
-    return originalDeclaration.getUnitScope();
+    return originalDeclaration.getFileScope();
   }
 
   @Override

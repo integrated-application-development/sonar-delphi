@@ -4,7 +4,6 @@ import static com.google.common.collect.Iterables.getLast;
 import static java.util.Collections.emptySet;
 
 import com.google.common.collect.ComparisonChain;
-import com.google.common.collect.ImmutableSet;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -14,17 +13,17 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
-import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
+import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.delphi.antlr.ast.node.GenericDefinitionNode.TypeParameter;
-import org.sonar.plugins.delphi.antlr.ast.node.MethodHeadingNode;
-import org.sonar.plugins.delphi.antlr.ast.node.MethodHeadingNode.MethodKind;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNameNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.SimpleNameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.Visibility;
-import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
+import org.sonar.plugins.delphi.symbol.declaration.parameter.FormalParameter;
+import org.sonar.plugins.delphi.symbol.declaration.parameter.IntrinsicParameter;
+import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.DelphiProceduralType;
 import org.sonar.plugins.delphi.type.Type;
@@ -34,7 +33,7 @@ import org.sonar.plugins.delphi.type.intrinsic.IntrinsicMethodData;
 public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
     implements GenerifiableDeclaration, TypedDeclaration, Invocable, Visibility {
   private final String qualifiedName;
-  private final List<ParameterDeclaration> parameters;
+  private final List<Parameter> parameters;
   private final Type returnType;
   private final Set<MethodDirective> directives;
   private final boolean isClassInvocable;
@@ -52,7 +51,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
   private MethodNameDeclaration(
       SymbolicNode location,
       String qualifiedName,
-      List<ParameterDeclaration> parameters,
+      List<Parameter> parameters,
       Type returnType,
       Set<MethodDirective> directives,
       boolean isClassInvocable,
@@ -84,7 +83,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
         node,
         "System." + data.getMethodName(),
         data.getParameters().stream()
-            .map(ParameterDeclaration::create)
+            .map(IntrinsicParameter::create)
             .collect(Collectors.toUnmodifiableList()),
         data.getReturnType(),
         emptySet(),
@@ -104,14 +103,17 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
     DelphiNode location = (declarationNode == null) ? nameNode : declarationNode.getIdentifier();
 
     boolean isCallable =
-        !((method.isDestructor() || method.isConstructor()) && method.isClassMethod());
+        !((method.isDestructor()
+                || method.isConstructor()
+                || method.getMethodKind() == MethodKind.OPERATOR)
+            && method.isClassMethod());
 
     return new MethodNameDeclaration(
         new SymbolicNode(location),
         method.fullyQualifiedName(),
         extractParameterDeclarations(method),
         method.getReturnType(),
-        extractDirectives(method),
+        method.getDirectives(),
         method.isClassMethod(),
         isCallable,
         false,
@@ -122,29 +124,16 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
         extractGenericTypeParameters(method));
   }
 
-  private static List<ParameterDeclaration> extractParameterDeclarations(MethodNode method) {
+  private static List<Parameter> extractParameterDeclarations(MethodNode method) {
     return method.getParameters().stream()
-        .map(ParameterDeclaration::create)
+        .map(FormalParameter::create)
         .collect(Collectors.toUnmodifiableList());
   }
 
   private static List<Type> extractParameterTypes(MethodNode method) {
     return method.getParameters().stream()
-        .map(FormalParameter::getType)
+        .map(FormalParameterData::getType)
         .collect(Collectors.toUnmodifiableList());
-  }
-
-  private static Set<MethodDirective> extractDirectives(MethodNode method) {
-    var builder = new ImmutableSet.Builder<MethodDirective>();
-    MethodHeadingNode heading = method.getMethodHeading();
-    for (int i = 0; i < heading.jjtGetNumChildren(); ++i) {
-      DelphiToken token = ((DelphiNode) heading.jjtGetChild(i)).getToken();
-      MethodDirective directive = MethodDirective.fromToken(token);
-      if (directive != null) {
-        builder.add(directive);
-      }
-    }
-    return builder.build();
   }
 
   private static List<TypedDeclaration> extractGenericTypeParameters(MethodNode method) {
@@ -161,7 +150,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
   }
 
   @Override
-  public List<ParameterDeclaration> getParameters() {
+  public List<Parameter> getParameters() {
     return parameters;
   }
 
@@ -218,7 +207,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
   }
 
   @Override
-  public ParameterDeclaration getParameter(int index) {
+  public Parameter getParameter(int index) {
     if (index < parameters.size()) {
       return parameters.get(index);
     } else if (isVariadic) {
@@ -275,7 +264,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
       MethodNameDeclaration that = (MethodNameDeclaration) other;
       return qualifiedName.equalsIgnoreCase(that.qualifiedName)
           && parameters.equals(that.parameters)
-          && returnType.equals(that.returnType)
+          && returnType.is(that.returnType)
           && directives.equals(that.directives)
           && isCallable == that.isCallable
           && isClassInvocable == that.isClassInvocable
@@ -292,7 +281,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
               super.hashCode(),
               qualifiedName.toLowerCase(),
               parameters,
-              returnType,
+              returnType.getImage().toLowerCase(),
               directives,
               isCallable,
               isClassInvocable,

@@ -1,23 +1,15 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.BOOLEAN;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.EXTENDED;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
-
-import com.google.common.base.Preconditions;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
-import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.sonar.plugins.delphi.operator.BinaryOperator;
+import org.sonar.plugins.delphi.symbol.resolve.ExpressionTypeUtils;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class BinaryExpressionNode extends ExpressionNode {
   private String image;
-  private BinaryOp operator;
+  private BinaryOperator operator;
 
   public BinaryExpressionNode(Token token) {
     super(token);
@@ -36,9 +28,9 @@ public final class BinaryExpressionNode extends ExpressionNode {
     return (ExpressionNode) jjtGetChild(1);
   }
 
-  public BinaryOp getOperator() {
+  public BinaryOperator getOperator() {
     if (operator == null) {
-      operator = BinaryOp.from(jjtGetId());
+      operator = BinaryOperator.from(jjtGetId());
     }
     return operator;
   }
@@ -54,70 +46,6 @@ public final class BinaryExpressionNode extends ExpressionNode {
   @Override
   @NotNull
   public Type createType() {
-    if (getOperator().isLogicalOperator) {
-      return BOOLEAN.type;
-    }
-
-    if (getOperator() == BinaryOp.AS) {
-      return getRight().getType();
-    }
-
-    Type type = getLeft().getType();
-
-    if (type.is(CHAR.type)) {
-      // Assume this expression is a string concatenation
-      type = UNICODESTRING.type;
-    }
-
-    if (getLeft().getType().isDecimal() || getRight().getType().isDecimal()) {
-      // Binary expressions including decimal types always produce an intermediary Extended value
-      type = EXTENDED.type;
-    }
-
-    return type;
-  }
-
-  public enum BinaryOp {
-    AND(DelphiLexer.AND, true),
-    OR(DelphiLexer.OR, true),
-    EQUAL(DelphiLexer.EQUAL, true),
-    GREATER_THAN(DelphiLexer.GT, true),
-    LESS_THAN(DelphiLexer.LT, true),
-    GREATER_THAN_EQUAL(DelphiLexer.GE, true),
-    LESS_THAN_EQUAL(DelphiLexer.LE, true),
-    NOT_EQUAL(DelphiLexer.NOT_EQUAL, true),
-    IN(DelphiLexer.IN, true),
-    IS(DelphiLexer.IS, true),
-    XOR(DelphiLexer.XOR),
-    ADD(DelphiLexer.PLUS),
-    SUBTRACT(DelphiLexer.MINUS),
-    MULTIPLY(DelphiLexer.STAR),
-    DIVIDE(DelphiLexer.SLASH),
-    DIV(DelphiLexer.DIV),
-    MOD(DelphiLexer.MOD),
-    SHL(DelphiLexer.SHL),
-    SHR(DelphiLexer.SHR),
-    AS(DelphiLexer.AS);
-
-    private final int tokenType;
-    public final boolean isLogicalOperator;
-    private static final Map<Integer, BinaryOp> TOKEN_TYPE_MAP = new HashMap<>();
-
-    static {
-      Arrays.asList(BinaryOp.values()).forEach(op -> TOKEN_TYPE_MAP.put(op.tokenType, op));
-    }
-
-    BinaryOp(int tokenType) {
-      this(tokenType, false);
-    }
-
-    BinaryOp(int tokenType, boolean isLogicalOperator) {
-      this.tokenType = tokenType;
-      this.isLogicalOperator = isLogicalOperator;
-    }
-
-    public static BinaryOp from(int tokenType) {
-      return Preconditions.checkNotNull(TOKEN_TYPE_MAP.get(tokenType));
-    }
+    return ExpressionTypeUtils.resolve(this);
   }
 }

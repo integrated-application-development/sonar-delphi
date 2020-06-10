@@ -2,7 +2,6 @@ package org.sonar.plugins.delphi.antlr.ast.visitors;
 
 import org.sonar.plugins.delphi.antlr.ast.node.AnonymousMethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode;
-import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode.BinaryOp;
 import org.sonar.plugins.delphi.antlr.ast.node.CaseItemStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ForStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.IfStatementNode;
@@ -10,6 +9,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RepeatStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.WhileStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.visitors.CyclomaticComplexityVisitor.Data;
+import org.sonar.plugins.delphi.operator.BinaryOperator;
 
 public class CyclomaticComplexityVisitor implements DelphiParserVisitor<Data> {
   public static class Data {
@@ -64,7 +64,8 @@ public class CyclomaticComplexityVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(BinaryExpressionNode expression, Data data) {
-    if (expression.getOperator() == BinaryOp.AND || expression.getOperator() == BinaryOp.OR) {
+    BinaryOperator operator = expression.getOperator();
+    if (operator == BinaryOperator.AND || operator == BinaryOperator.OR) {
       ++data.complexity;
     }
     return DelphiParserVisitor.super.visit(expression, data);

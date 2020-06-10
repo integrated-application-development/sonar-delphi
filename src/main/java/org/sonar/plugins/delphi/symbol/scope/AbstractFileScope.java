@@ -1,11 +1,14 @@
 package org.sonar.plugins.delphi.symbol.scope;
 
+import static java.util.function.Predicate.not;
+
 import com.google.common.collect.Iterables;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 import org.sonar.plugins.delphi.antlr.ast.node.ArrayAccessorNode;
@@ -67,9 +70,11 @@ abstract class AbstractFileScope extends AbstractDelphiScope implements FileScop
 
   @Override
   public Set<NameDeclaration> shallowFindDeclaration(DelphiNameOccurrence occurrence) {
-    Set<NameDeclaration> result = super.findDeclaration(occurrence);
-    result.removeIf(UnitImportNameDeclaration.class::isInstance);
-    return result;
+    return super.findDeclaration(occurrence).stream()
+        .map(DelphiNameDeclaration.class::cast)
+        .filter(not(DelphiNameDeclaration::isImplementationDeclaration))
+        .filter(not(UnitImportNameDeclaration.class::isInstance))
+        .collect(Collectors.toSet());
   }
 
   @Override

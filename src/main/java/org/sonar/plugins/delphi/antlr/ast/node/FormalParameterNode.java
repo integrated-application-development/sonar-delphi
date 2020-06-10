@@ -13,7 +13,7 @@ import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Typed;
 
 public final class FormalParameterNode extends DelphiNode implements Typed {
-  private List<FormalParameter> parameters;
+  private List<FormalParameterData> parameters;
 
   public FormalParameterNode(Token token) {
     super(token);
@@ -28,7 +28,7 @@ public final class FormalParameterNode extends DelphiNode implements Typed {
     return visitor.visit(this, data);
   }
 
-  public List<FormalParameter> getParameters() {
+  public List<FormalParameterData> getParameters() {
     if (parameters == null) {
       NameDeclarationListNode identifierList = (NameDeclarationListNode) jjtGetChild(0);
       Type type = getType();
@@ -38,7 +38,7 @@ public final class FormalParameterNode extends DelphiNode implements Typed {
           identifierList.getDeclarations().stream()
               .map(
                   identifier ->
-                      new FormalParameter(
+                      new FormalParameterData(
                           identifier, type, defaultValue, isOut(), isVar(), isConst()))
               .collect(Collectors.toList());
     }
@@ -74,7 +74,7 @@ public final class FormalParameterNode extends DelphiNode implements Typed {
     return getFirstChildWithId(DelphiLexer.CONST) != null;
   }
 
-  public static class FormalParameter implements Typed {
+  public static class FormalParameterData implements Typed {
     private final NameDeclarationNode node;
     private final Type type;
     private final ExpressionNode defaultValue;
@@ -82,7 +82,7 @@ public final class FormalParameterNode extends DelphiNode implements Typed {
     private final boolean isVar;
     private final boolean isConst;
 
-    private FormalParameter(
+    private FormalParameterData(
         NameDeclarationNode node,
         Type type,
         ExpressionNode defaultValue,

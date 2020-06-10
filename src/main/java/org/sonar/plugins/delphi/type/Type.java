@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
@@ -20,10 +19,13 @@ public interface Type {
   String getImage();
 
   /**
-   * Returns the concrete type that this inherits from. Note that this will never return an
-   * interface.
+   * Returns the type that this inherits from.
    *
-   * @return The type this inherits from. UnknownType if this does not inherit from a concrete type.
+   * <p>For an interface type, this will return the parent interface.
+   *
+   * <p>For any other type, this will return a concrete parent type, and never an interface.
+   *
+   * @return The type this inherits from. UnknownType if there is no such type.
    */
   @NotNull
   Type superType();
@@ -140,6 +142,13 @@ public interface Type {
   boolean isEnum();
 
   /**
+   * Check if this type is a subrange type
+   *
+   * @return true if the type is a subrange type
+   */
+  boolean isSubrange();
+
+  /**
    * Check if this type is an integer type
    *
    * @return true if the type is an integer type
@@ -187,20 +196,6 @@ public interface Type {
    * @return true if the type is a char type
    */
   boolean isChar();
-
-  /**
-   * Check if this type is a narrow char type (AnsiChar)
-   *
-   * @return true if the type is a narrow char type
-   */
-  boolean isNarrowChar();
-
-  /**
-   * Check if this type is a wide char type (Char or WideChar)
-   *
-   * @return true if the type is a wide char type
-   */
-  boolean isWideChar();
 
   /**
    * Check if this type is a boolean type (Boolean, ByteBool, WordBool, etc...)
@@ -333,7 +328,7 @@ public interface Type {
 
   interface CollectionType extends Type {
     /**
-     * The type that is is a collection of
+     * The type that this is a collection of
      *
      * @return Element type
      */
@@ -393,6 +388,20 @@ public interface Type {
     void setFullType(StructType fullType);
 
     /**
+     * Returns a set of types that this type defines implicit conversion to
+     *
+     * @return set of types that this type defines implicit conversion to
+     */
+    Set<Type> typesWithImplicitConversionsFromThis();
+
+    /**
+     * Returns a set of types that this type defines implicit conversion from
+     *
+     * @return set of types that this type defines implicit conversion from
+     */
+    Set<Type> typesWithImplicitConversionsToThis();
+
+    /**
      * Returns a set of all default array properties that can be called on this type.
      *
      * @return Set of default array property declarations
@@ -439,6 +448,16 @@ public interface Type {
      * @param type The dereferenced type
      */
     void setDereferencedType(Type type);
+
+    /** Flag this pointer type as allowing */
+    void setAllowsPointerMath();
+
+    /**
+     * Check if this pointer type was declared with {$POINTERMATH ON}
+     *
+     * @return true if this pointer type was declared with {$POINTERMATH ON}
+     */
+    boolean allowsPointerMath();
   }
 
   interface ProceduralType extends Type {
@@ -487,14 +506,16 @@ public interface Type {
     Type fileType();
   }
 
-  interface EnumType extends ScopedType {
+  interface EnumType extends ScopedType {}
+
+  interface SubrangeType extends Type {
     /**
-     * The base type that this is an enumeration of
+     * The base type that this is a subrange of
      *
      * @return Base type
      */
-    @Nullable
-    Type baseType();
+    @NotNull
+    Type hostType();
   }
 
   interface ClassReferenceType extends Type {
@@ -560,6 +581,9 @@ public interface Type {
 
   @Immutable
   interface ImmutablePointerType extends PointerType, ImmutableType {}
+
+  @Immutable
+  interface ImmutableCollectionType extends CollectionType, ImmutableType {}
 
   @Immutable
   interface IntegerType extends ImmutableType {

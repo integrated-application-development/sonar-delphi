@@ -5,19 +5,23 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSISTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.SHORTSTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDECHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDESTRING;
 
+import com.google.errorprone.annotations.Immutable;
 import java.util.Collections;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public abstract class DelphiType implements Type {
-  private final String image;
+  private final ImageSupplier<?> imageSupplier;
 
   protected DelphiType(String image) {
-    this.image = image;
+    this.imageSupplier = type -> image;
+  }
+
+  protected <T extends DelphiType> DelphiType(ImageSupplier<?> imageSupplier) {
+    this.imageSupplier = imageSupplier;
   }
 
   public static ImmutableType unknownType() {
@@ -34,7 +38,7 @@ public abstract class DelphiType implements Type {
 
   @Override
   public String getImage() {
-    return image;
+    return imageSupplier.getImage(this);
   }
 
   @NotNull
@@ -135,17 +139,7 @@ public abstract class DelphiType implements Type {
 
   @Override
   public final boolean isChar() {
-    return isNarrowChar() || isWideChar();
-  }
-
-  @Override
-  public final boolean isNarrowChar() {
-    return is(ANSICHAR.type);
-  }
-
-  @Override
-  public final boolean isWideChar() {
-    return is(CHAR.type) || is(WIDECHAR.type);
+    return is(CHAR.type) || is(ANSICHAR.type);
   }
 
   @Override
@@ -165,6 +159,11 @@ public abstract class DelphiType implements Type {
 
   @Override
   public boolean isEnum() {
+    return false;
+  }
+
+  @Override
+  public boolean isSubrange() {
     return false;
   }
 
@@ -251,5 +250,16 @@ public abstract class DelphiType implements Type {
   @Override
   public String toString() {
     return getImage();
+  }
+
+  @FunctionalInterface
+  @Immutable
+  protected interface ImageSupplier<T extends Type> {
+    @SuppressWarnings("unchecked")
+    default String getImage(DelphiType type) {
+      return getImage((T) type);
+    }
+
+    String getImage(T type);
   }
 }

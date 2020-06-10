@@ -9,6 +9,8 @@ type
   public
     procedure Bar;
   end;
+
+  function TestWithReturnTypeSpecifiedInInterface: TFoo;
   
 implementation
 
@@ -22,7 +24,22 @@ begin
   // Do nothing
 end;
 
-function Test: TFoo;
+function TestWithReturnTypeSpecifiedInImplementation: TFoo;
+begin
+  Result := TFoo.Create;
+  Result.Bar;
+  Baz(Result);
+end;
+
+function TestWithReturnTypeSpecifiedInInterface;
+begin
+  Result := TFoo.Create;
+  Result.Bar;
+  Baz(Result);
+end;
+
+
+function Cannot.Resolve.Method.Declaration: TFoo;
 begin
   Result := TFoo.Create;
   Result.Bar;

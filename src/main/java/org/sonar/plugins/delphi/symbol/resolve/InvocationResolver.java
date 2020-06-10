@@ -6,7 +6,7 @@ import static java.util.function.Predicate.not;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_1;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_2;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_3;
-import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_6;
+import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_7;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.EQUAL;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.EXACT;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
@@ -14,6 +14,8 @@ import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.ANSI
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.BYTE;
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.CARDINAL;
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.DOUBLE_CURRENCY;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.DYNAMIC_ARRAY;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.ENUM;
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.EXTENDED;
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.FORMAL_BOOLEAN;
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.INCOMPATIBLE_VARIANT;
@@ -33,8 +35,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
-import org.sonar.plugins.delphi.type.DelphiType;
+import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
+import org.sonar.plugins.delphi.symbol.resolve.TypeConverter.TypeConversion;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.CollectionType;
 import org.sonar.plugins.delphi.type.Type.DecimalType;
@@ -42,7 +44,8 @@ import org.sonar.plugins.delphi.type.Type.FileType;
 import org.sonar.plugins.delphi.type.Type.IntegerType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType.ProceduralKind;
-import org.sonar.plugins.delphi.type.Type.TypeType;
+import org.sonar.plugins.delphi.type.Type.StructType;
+import org.sonar.plugins.delphi.type.TypeUtils;
 
 /**
  * Resolves an invocation to the correct declaration. Based directly off of the tcallcandidates
@@ -78,7 +81,7 @@ public class InvocationResolver {
     for (InvocationCandidate candidate : candidates) {
       for (int i = 0; i < arguments.size(); ++i) {
         InvocationArgument argument = arguments.get(i);
-        ParameterDeclaration parameter = candidate.getData().getParameter(i);
+        Parameter parameter = candidate.getData().getParameter(i);
         processArgument(candidate, argument, parameter);
 
         if (candidate.isInvalid()) {
@@ -94,16 +97,19 @@ public class InvocationResolver {
    * @see <a href="https://github.com/graemeg/freepascal/blob/master/compiler/htypechk.pas#2858">
    *     tcallcandidates.get_information</a>
    */
-  private void processArgument(
-      InvocationCandidate candidate, InvocationArgument argument, ParameterDeclaration parameter) {
+  private static void processArgument(
+      InvocationCandidate candidate, InvocationArgument argument, Parameter parameter) {
     Type argumentType = argument.getType();
     Type parameterType = parameter.getType();
     boolean ambiguousMethodReference = false;
 
     // Convert ProceduralType to its returnType when not expecting a procedural type
     if (argumentType.isProcedural() && !parameterType.isProcedural()) {
-      argumentType = ((ProceduralType) argumentType).returnType();
-      ambiguousMethodReference = argument.looksLikeMethodReference();
+      ProceduralType proceduralType = ((ProceduralType) argumentType);
+      if (proceduralType.kind() != ProceduralKind.ANONYMOUS) {
+        argumentType = proceduralType.returnType();
+        ambiguousMethodReference = argument.looksLikeMethodReference();
+      }
     }
 
     // If the parameter expects a procedural type then we need to find the overload that the
@@ -112,86 +118,42 @@ public class InvocationResolver {
       argumentType = argument.findMethodReferenceType(parameterType);
     }
 
-    EqualityType equality;
+    EqualityType equality = TypeComparer.compare(argumentType, parameterType);
 
-    if (argumentType.is(parameterType)) {
-      equality = EXACT;
-    } else if (!equalTypeRequired(parameter)
-        && argumentType.isDecimal()
-        && parameterType.isDecimal()) {
-      equality = EQUAL;
-      int argumentSize = ((DecimalType) argumentType).size();
-      int parameterSize = ((DecimalType) parameterType).size();
-      int distance;
-      if (argumentSize > parameterSize) {
-        // Penalty for shrinking of precision
-        distance = (argumentSize - parameterSize) * 16;
-      } else {
-        distance = parameterSize - argumentSize;
-      }
-      candidate.increaseOrdinalDistance(distance);
-    } else if (!equalTypeRequired(parameter)
-        && argumentType.isStruct()
-        && parameterType.isStruct()
-        && argumentType.isSubTypeOf(parameterType)) {
-      equality = CONVERT_LEVEL_1;
-      Type comparisonType = argumentType;
-      while ((comparisonType = comparisonType.superType()) != DelphiType.unknownType()) {
-        candidate.increaseOrdinalDistance(1);
-        if (comparisonType.is(parameterType)) {
-          break;
+    if (equality != EXACT) {
+      if (equality == INCOMPATIBLE_TYPES) {
+        TypeConversion conversion = TypeConverter.convert(argumentType, parameterType);
+        if (conversion.isSuccessful()) {
+          argumentType = conversion.getFrom();
+          parameterType = conversion.getTo();
+          equality = conversion.getEquality();
+          candidate.incrementConvertOperatorCount();
         }
       }
-    } else {
-      // Generic type comparison
-      equality = TypeComparer.compare(argumentType, parameterType);
 
       if (equality.ordinal() < EQUAL.ordinal() && equalTypeRequired(parameter)) {
         // Parameter requires an equal type so the previous match was not good enough
         equality = varParameterAllowed(argumentType, parameter);
       }
-    }
 
-    if (argumentType.isTypeType()) {
-      argumentType = ((TypeType) argumentType).originalType();
-    }
+      if (argumentType.isInteger()
+          && parameterType.isPointer()
+          && !argument.isImplicitlyConvertibleToNilPointer()) {
+        equality = INCOMPATIBLE_TYPES;
+      }
 
-    if (parameterType.isTypeType()) {
-      parameterType = ((TypeType) parameterType).originalType();
-    }
+      argumentType = TypeUtils.findBaseType(argumentType);
+      parameterType = TypeUtils.findBaseType(parameterType);
 
-    if (argumentType.isProcedural() && parameterType.isProcedural()) {
-      ProceduralKind argKind = ((ProceduralType) argumentType).kind();
-      ProceduralKind paramKind = ((ProceduralType) parameterType).kind();
-      int kindDistance = abs(argKind.ordinal() - paramKind.ordinal());
-
-      candidate.increaseProceduralDistance(kindDistance);
-    }
-
-    if (!equalTypeRequired(parameter) && argumentType.isInteger() && parameterType.isInteger()) {
-      IntegerType argInteger = (IntegerType) argumentType;
-      IntegerType paramInteger = (IntegerType) parameterType;
-
-      candidate.increaseOrdinalDistance(argInteger.ordinalDistance(paramInteger));
-
-      if (argInteger.isSigned() != paramInteger.isSigned()) {
-        candidate.incrementSignMismatchCount();
+      if (!equalTypeRequired(parameter)) {
+        checkIntegerDistance(candidate, argumentType, parameterType);
+        checkDecimalDistance(candidate, argumentType, parameterType);
+        checkStructTypes(candidate, argumentType, parameterType);
+        checkProceduralDistance(candidate, argumentType, parameterType);
       }
     }
 
-    // Keep track of implicit variant conversions
-    // Also invalidate candidates that would produce invalid variant conversions
-    VariantConversionType variantConversionType = NO_CONVERSION_REQUIRED;
-    if (argumentType.isVariant()) {
-      variantConversionType = VariantConversionType.fromType(parameterType);
-    } else if (parameterType.isVariant()) {
-      variantConversionType = VariantConversionType.fromType(argumentType);
-    }
-
-    if (variantConversionType == INCOMPATIBLE_VARIANT) {
-      candidate.setInvalid();
-    }
-    candidate.addVariantConversion(variantConversionType);
+    checkVariantConversions(candidate, argumentType, parameterType);
 
     // When an ambiguous procedural type was changed to an invocation, an exact match is
     // downgraded to equal.
@@ -227,8 +189,11 @@ public class InvocationResolver {
       case CONVERT_LEVEL_6:
         candidate.incrementConvertLevelCount(6);
         break;
-      case CONVERT_OPERATOR:
-        candidate.incrementConvertOperatorCount();
+      case CONVERT_LEVEL_7:
+        candidate.incrementConvertLevelCount(7);
+        break;
+      case CONVERT_LEVEL_8:
+        candidate.incrementConvertLevelCount(8);
         break;
       case INCOMPATIBLE_TYPES:
         candidate.setInvalid();
@@ -238,11 +203,93 @@ public class InvocationResolver {
     }
   }
 
-  private EqualityType varParameterAllowed(Type argType, ParameterDeclaration parameter) {
+  private static void checkIntegerDistance(
+      InvocationCandidate candidate, Type argumentType, Type parameterType) {
+    if (argumentType.isInteger() && parameterType.isInteger()) {
+      IntegerType argInteger = (IntegerType) argumentType;
+      IntegerType paramInteger = (IntegerType) parameterType;
+
+      candidate.increaseOrdinalDistance(argInteger.ordinalDistance(paramInteger));
+
+      if (argInteger.isSigned() != paramInteger.isSigned()) {
+        candidate.incrementSignMismatchCount();
+      }
+    }
+  }
+
+  private static void checkDecimalDistance(
+      InvocationCandidate candidate, Type argumentType, Type parameterType) {
+    if (argumentType.isDecimal() && parameterType.isDecimal()) {
+      int argumentSize = ((DecimalType) argumentType).size();
+      int parameterSize = ((DecimalType) parameterType).size();
+      int distance;
+      if (argumentSize > parameterSize) {
+        // Penalty for shrinking of precision
+        distance = (argumentSize - parameterSize) * 16;
+      } else {
+        distance = parameterSize - argumentSize;
+      }
+      candidate.increaseOrdinalDistance(distance);
+    }
+  }
+
+  private static void checkStructTypes(
+      InvocationCandidate candidate, Type argumentType, Type parameterType) {
+    if (argumentType.isStruct() && parameterType.isStruct()) {
+      StructType from = (StructType) argumentType;
+      StructType to = (StructType) parameterType;
+      if (from.kind() != to.kind()) {
+        candidate.incrementStructMismatchCount();
+      }
+      candidate.increaseOrdinalDistance(calculateStructDistance(from, to));
+    }
+  }
+
+  private static int calculateStructDistance(Type from, Type to) {
+    int result = 0;
+    while (from.isSubTypeOf(to)) {
+      ++result;
+      from = from.superType();
+    }
+    return result;
+  }
+
+  private static void checkProceduralDistance(
+      InvocationCandidate candidate, Type argumentType, Type parameterType) {
+    if (argumentType.isProcedural() && parameterType.isProcedural()) {
+      ProceduralKind argKind = ((ProceduralType) argumentType).kind();
+      ProceduralKind paramKind = ((ProceduralType) parameterType).kind();
+      int kindDistance = abs(argKind.ordinal() - paramKind.ordinal());
+
+      candidate.increaseProceduralDistance(kindDistance);
+    }
+
+    if (argumentType.isPointer() && parameterType.isProcedural()) {
+      candidate.increaseProceduralDistance(((ProceduralType) parameterType).kind().ordinal());
+    }
+  }
+
+  // Keep track of implicit variant conversions
+  // Also invalidate candidates that would produce invalid variant conversions
+  private static void checkVariantConversions(
+      InvocationCandidate candidate, Type argumentType, Type parameterType) {
+    VariantConversionType variantConversionType = NO_CONVERSION_REQUIRED;
+    if (argumentType.isVariant()) {
+      variantConversionType = VariantConversionType.fromType(parameterType);
+      if (variantConversionType == INCOMPATIBLE_VARIANT) {
+        candidate.setInvalid();
+      }
+    } else if (parameterType.isVariant()) {
+      variantConversionType = VariantConversionType.fromType(argumentType);
+    }
+    candidate.addVariantConversion(variantConversionType);
+  }
+
+  private static EqualityType varParameterAllowed(Type argType, Parameter parameter) {
     Type paramType = parameter.getType();
 
     if (paramType.isUntyped() && !parameter.isConst()) {
-      return CONVERT_LEVEL_6;
+      return CONVERT_LEVEL_7;
     }
 
     if (paramType.isOpenArray()) {
@@ -272,7 +319,7 @@ public class InvocationResolver {
     return INCOMPATIBLE_TYPES;
   }
 
-  private static boolean equalTypeRequired(ParameterDeclaration parameter) {
+  private static boolean equalTypeRequired(Parameter parameter) {
     return parameter.isOut() || parameter.isVar();
   }
 
@@ -350,11 +397,15 @@ public class InvocationResolver {
 
     ComparisonChain comparisonChain =
         ComparisonChain.start()
-            // Less operator parameters?
+            // Builtin operators will always lose to user-defined operator overloads
+            .compareFalseFirst(bestCandidate.isBuiltinOperator(), candidate.isBuiltinOperator())
+            // Builtin operators will always lose to variant operators
+            .compareTrueFirst(bestCandidate.isVariantOperator(), candidate.isVariantOperator())
+            // Less Implicit operator arguments?
             .compare(bestCandidate.getConvertOperatorCount(), candidate.getConvertOperatorCount());
 
     for (int i = InvocationCandidate.CONVERT_LEVELS; i > 0; --i) {
-      // Less castLevel[6..1] parameters?
+      // Less castLevel[8..1] parameters?
       comparisonChain =
           comparisonChain.compare(
               bestCandidate.getConvertLevelCount(i), candidate.getConvertLevelCount(i));
@@ -370,6 +421,8 @@ public class InvocationResolver {
             .compare(bestCandidate.getOrdinalDistance(), candidate.getOrdinalDistance())
             // Less sign mismatches?
             .compare(bestCandidate.getSignMismatchCount(), candidate.getSignMismatchCount())
+            // Less struct mismatches?
+            .compare(bestCandidate.getStructMismatchCount(), candidate.getStructMismatchCount())
             // Smaller procedural distance?
             .compare(bestCandidate.getProceduralDistance(), candidate.getProceduralDistance())
             .result();
@@ -474,6 +527,10 @@ public class InvocationResolver {
       return (bestVcl == ANSISTRING) ? -1 : 1;
     } else if (currentVcl == SHORTSTRING || bestVcl == SHORTSTRING) {
       return (bestVcl == SHORTSTRING) ? -1 : 1;
+    } else if (currentVcl == ENUM || bestVcl == ENUM) {
+      return (bestVcl == ENUM) ? -1 : 1;
+    } else if (currentVcl == DYNAMIC_ARRAY || bestVcl == DYNAMIC_ARRAY) {
+      return (bestVcl == DYNAMIC_ARRAY) ? -1 : 1;
     }
 
     // All possibilities should have been checked now.

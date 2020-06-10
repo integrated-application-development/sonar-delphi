@@ -1,7 +1,5 @@
 package org.sonar.plugins.delphi.pmd.violation;
 
-import static org.sonar.plugins.delphi.pmd.FilePosition.UNDEFINED_COLUMN;
-
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.RuleViolation;
@@ -28,7 +26,7 @@ public class DelphiRuleViolationFactory extends AbstractRuleViolationFactory {
       Rule rule, RuleContext ruleContext, Node node, String message, int beginLine, int endLine) {
     return ((DelphiRule) rule)
         .newViolation(ruleContext)
-        .atPosition(FilePosition.from(beginLine, UNDEFINED_COLUMN, endLine, UNDEFINED_COLUMN))
+        .atPosition(FilePosition.atLineLevel(beginLine, endLine))
         .atLocation((DelphiNode) node)
         .message(message)
         .build();

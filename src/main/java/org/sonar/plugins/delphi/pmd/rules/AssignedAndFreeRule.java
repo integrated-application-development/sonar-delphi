@@ -27,7 +27,6 @@ import net.sourceforge.pmd.lang.ast.Node;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.antlr.ast.node.ArgumentListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode;
-import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode.BinaryOp;
 import org.sonar.plugins.delphi.antlr.ast.node.CompoundStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
@@ -35,6 +34,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.ExpressionStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.IfStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.StatementNode;
+import org.sonar.plugins.delphi.operator.BinaryOperator;
 
 public class AssignedAndFreeRule extends AbstractDelphiRule {
 
@@ -87,7 +87,7 @@ public class AssignedAndFreeRule extends AbstractDelphiRule {
 
   private static String findVariableNameForNilComparison(ExpressionNode guard) {
     BinaryExpressionNode expr = (BinaryExpressionNode) guard;
-    if (expr.getOperator() == BinaryOp.NOT_EQUAL) {
+    if (expr.getOperator() == BinaryOperator.NOT_EQUAL) {
       if (expr.getLeft().isNilLiteral()) {
         return expr.getRight().getImage();
       }

@@ -1,9 +1,11 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import static org.sonar.plugins.delphi.type.TypeUtils.ordinalSize;
+
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.type.DelphiEnumerationType;
+import org.sonar.plugins.delphi.type.DelphiSubrangeType;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class SubRangeTypeNode extends TypeNode {
@@ -20,11 +22,11 @@ public final class SubRangeTypeNode extends TypeNode {
     return visitor.visit(this, data);
   }
 
-  private ExpressionNode getLowExpression() {
+  public ExpressionNode getLowExpression() {
     return (ExpressionNode) jjtGetChild(0);
   }
 
-  private ExpressionNode getHighExpression() {
+  public ExpressionNode getHighExpression() {
     return (ExpressionNode) jjtGetChild(1);
   }
 
@@ -33,8 +35,15 @@ public final class SubRangeTypeNode extends TypeNode {
   public Type createType() {
     ExpressionNode low = getLowExpression();
     ExpressionNode high = getHighExpression();
+    Type baseType;
 
-    return DelphiEnumerationType.subRange(
-        DelphiEnumerationType.makeAnonymousImage(low.getImage(), high.getImage()), low.getType());
+    if (ordinalSize(low.getType()) > ordinalSize(high.getType())) {
+      baseType = low.getType();
+    } else {
+      baseType = high.getType();
+    }
+
+    return DelphiSubrangeType.subRange(
+        "Subrange(" + low.getImage() + ".." + high.getImage() + ")", baseType);
   }
 }

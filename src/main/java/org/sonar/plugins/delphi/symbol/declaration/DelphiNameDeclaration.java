@@ -37,4 +37,8 @@ public interface DelphiNameDeclaration extends NameDeclaration, Comparable<Delph
   void setIsForwardDeclaration();
 
   boolean isForwardDeclaration();
+
+  void setIsImplementationDeclaration();
+
+  boolean isImplementationDeclaration();
 }

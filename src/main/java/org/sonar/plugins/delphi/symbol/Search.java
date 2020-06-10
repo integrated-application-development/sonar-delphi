@@ -3,12 +3,14 @@ package org.sonar.plugins.delphi.symbol;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import javax.annotation.Nullable;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.symbol.scope.MethodScope;
 import org.sonar.plugins.delphi.symbol.scope.TypeScope;
+import org.sonar.plugins.delphi.symbol.scope.WithScope;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.HelperType;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
@@ -59,6 +61,10 @@ public class Search {
   }
 
   private Set<NameDeclaration> findDeclaration(DelphiScope scope) {
+    if (scope instanceof WithScope) {
+      scope = ((WithScope) scope).getTargetScope();
+    }
+
     if (scope instanceof TypeScope) {
       return searchTypeScope((TypeScope) scope);
     }
@@ -69,6 +75,9 @@ public class Search {
       DelphiScope typeScope = ((MethodScope) scope).getTypeScope();
       if (typeScope instanceof TypeScope) {
         result = searchTypeScope((TypeScope) typeScope);
+        if (result.isEmpty()) {
+          result = searchTopLevelTypeScopes(typeScope.getParent());
+        }
       }
     }
     return result;
@@ -110,6 +119,20 @@ public class Search {
       result = searchExtendedType((HelperType) type);
     }
 
+    return result;
+  }
+
+  private Set<NameDeclaration> searchTopLevelTypeScopes(@Nullable DelphiScope scope) {
+    Set<NameDeclaration> result = Collections.emptySet();
+    if (scope != null) {
+      TypeScope nextTypeScope = scope.getEnclosingScope(TypeScope.class);
+      if (nextTypeScope != null) {
+        result = nextTypeScope.findDeclaration(occurrence);
+        if (result.isEmpty()) {
+          result = searchTopLevelTypeScopes(nextTypeScope.getParent());
+        }
+      }
+    }
     return result;
   }
 

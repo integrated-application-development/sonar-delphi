@@ -52,12 +52,12 @@ public class DelphiRuleViolation implements RuleViolation {
   private Type classType = unknownType();
 
   /**
-   * C-tor used by DelphiRuleViolationBuilder
+   * Package-private constructor used by DelphiRuleViolationBuilder
    *
    * @param rule DelphiLanguage rule
    * @param ctx Rule context
    */
-  public DelphiRuleViolation(DelphiRule rule, RuleContext ctx) {
+  DelphiRuleViolation(DelphiRule rule, RuleContext ctx) {
     this.rule = rule;
     this.filename = ctx.getSourceCodeFile().getAbsolutePath();
     this.description = rule.getMessage();

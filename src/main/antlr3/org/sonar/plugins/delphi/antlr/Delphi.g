@@ -618,6 +618,7 @@ multOperator                 : '*'<BinaryExpressionNode>
                              | 'and'<BinaryExpressionNode>
                              | 'shl'<BinaryExpressionNode>
                              | 'shr'<BinaryExpressionNode>
+                             | 'as'<BinaryExpressionNode>
                              ;
 unaryOperator                : 'not'<UnaryExpressionNode>
                              | '+'<UnaryExpressionNode>
@@ -632,7 +633,6 @@ relationalOperator           : '='<BinaryExpressionNode>
                              | '<>'<BinaryExpressionNode>
                              | 'in'<BinaryExpressionNode>
                              | 'is'<BinaryExpressionNode>
-                             | 'as'<BinaryExpressionNode>
                              ;
 constExpression              : expression
                              | recordExpression
@@ -680,7 +680,7 @@ forStatement                 : 'for'<ForStatementNode>^ ident ':=' expression 't
                              | 'for'<ForStatementNode>^ ident ':=' expression 'downto' expression 'do' statement?
                              | 'for'<ForStatementNode>^ ident 'in' expression 'do' statement?
                              ;
-withStatement                : 'with'<WithStatementNode>^ expressionList 'do' statement
+withStatement                : 'with'<WithStatementNode>^ expressionList 'do' statement?
                              ;
 compoundStatement            : 'begin'<CompoundStatementNode>^ statementList 'end'
                              ;

@@ -1,10 +1,12 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
 import java.util.List;
+import java.util.Set;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
-import org.sonar.plugins.delphi.antlr.ast.node.MethodHeadingNode.MethodKind;
+import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
+import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
+import org.sonar.plugins.delphi.symbol.declaration.MethodKind;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.delphi.type.DelphiType;
@@ -40,7 +42,7 @@ public abstract class MethodNode extends DelphiNode implements Visibility {
     return getMethodHeading().fullyQualifiedName();
   }
 
-  public List<FormalParameter> getParameters() {
+  public List<FormalParameterData> getParameters() {
     return getMethodHeading().getParameters();
   }
 
@@ -63,6 +65,14 @@ public abstract class MethodNode extends DelphiNode implements Visibility {
 
   public MethodKind getMethodKind() {
     return getMethodHeading().getMethodKind();
+  }
+
+  public Set<MethodDirective> getDirectives() {
+    return getMethodHeading().getDirectives();
+  }
+
+  public boolean hasDirective(MethodDirective directive) {
+    return getDirectives().contains(directive);
   }
 
   public boolean isConstructor() {

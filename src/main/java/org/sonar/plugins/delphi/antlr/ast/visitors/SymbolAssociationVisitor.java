@@ -30,7 +30,7 @@ public class SymbolAssociationVisitor implements DelphiParserVisitor<Data> {
 
   public static class Data {
     private final SymbolTable symbolTable;
-    private FileScope unitScope;
+    private FileScope fileScope;
 
     public Data(SymbolTable symbolTable) {
       this.symbolTable = symbolTable;
@@ -46,39 +46,39 @@ public class SymbolAssociationVisitor implements DelphiParserVisitor<Data> {
 
     checkNotNull(declaration, String.format(UNIT_DOES_NOT_EXIST, unitName));
 
-    data.unitScope = declaration.getUnitScope();
-    node.setScope(data.unitScope);
+    data.fileScope = declaration.getFileScope();
+    node.setScope(data.fileScope);
 
     return node.childrenAccept(this, data);
   }
 
   @Override
   public Data visit(DelphiNode node, Data data) {
-    data.unitScope.attach(node);
+    data.fileScope.attach(node);
     return DelphiParserVisitor.super.visit(node, data);
   }
 
   @Override
   public Data visit(NameDeclarationNode node, Data data) {
-    data.unitScope.attach(node);
+    data.fileScope.attach(node);
     return DelphiParserVisitor.super.visit(node, data);
   }
 
   @Override
   public Data visit(NameReferenceNode node, Data data) {
-    data.unitScope.attach(node);
+    data.fileScope.attach(node);
     return DelphiParserVisitor.super.visit(node, data);
   }
 
   @Override
   public Data visit(ArrayAccessorNode node, Data data) {
-    data.unitScope.attach(node);
+    data.fileScope.attach(node);
     return DelphiParserVisitor.super.visit(node, data);
   }
 
   @Override
   public Data visit(MethodNameNode node, Data data) {
-    data.unitScope.attach(node);
+    data.fileScope.attach(node);
     return DelphiParserVisitor.super.visit(node, data);
   }
 }

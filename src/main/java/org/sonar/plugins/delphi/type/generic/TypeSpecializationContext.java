@@ -1,9 +1,10 @@
 package org.sonar.plugins.delphi.type.generic;
 
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
@@ -12,10 +13,11 @@ import org.sonar.plugins.delphi.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class TypeSpecializationContext {
+  private static final Comparator<Type> COMPARATOR = Comparator.comparing(Type::getImage);
   private Map<Type, Type> argumentsByParameter;
 
   public TypeSpecializationContext(NameDeclaration declaration, List<Type> typeArguments) {
-    argumentsByParameter = new HashMap<>();
+    argumentsByParameter = new TreeMap<>(COMPARATOR);
 
     if (!(declaration instanceof GenerifiableDeclaration)) {
       return;

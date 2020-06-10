@@ -93,7 +93,7 @@ public abstract class ExpressionNode extends DelphiNode implements Typed {
   }
 
   @Nullable
-  private LiteralNode extractLiteral() {
+  public LiteralNode extractLiteral() {
     ExpressionNode expr = skipParentheses();
     if (expr instanceof PrimaryExpressionNode) {
       PrimaryExpressionNode primary = (PrimaryExpressionNode) expr;

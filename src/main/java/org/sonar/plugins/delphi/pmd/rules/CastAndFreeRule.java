@@ -26,10 +26,10 @@ import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.ast.Node;
 import org.sonar.plugins.delphi.antlr.ast.node.ArgumentListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode;
-import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode.BinaryOp;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
+import org.sonar.plugins.delphi.operator.BinaryOperator;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.PointerType;
 
@@ -50,7 +50,7 @@ public class CastAndFreeRule extends AbstractDelphiRule {
 
   private static boolean isSoftCast(ExpressionNode expr) {
     return expr instanceof BinaryExpressionNode
-        && ((BinaryExpressionNode) expr).getOperator() == BinaryOp.AS;
+        && ((BinaryExpressionNode) expr).getOperator() == BinaryOperator.AS;
   }
 
   private static boolean isHardCast(ExpressionNode expr) {

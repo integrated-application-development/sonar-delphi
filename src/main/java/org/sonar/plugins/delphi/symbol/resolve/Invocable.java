@@ -3,14 +3,13 @@ package org.sonar.plugins.delphi.symbol.resolve;
 import static java.util.function.Predicate.not;
 
 import java.util.List;
-import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.type.Type;
 
 public interface Invocable {
-
   String getName();
 
-  List<ParameterDeclaration> getParameters();
+  List<Parameter> getParameters();
 
   Type getReturnType();
 
@@ -23,11 +22,10 @@ public interface Invocable {
   }
 
   default int getRequiredParametersCount() {
-    return (int)
-        getParameters().stream().filter(not(ParameterDeclaration::hasDefaultValue)).count();
+    return (int) getParameters().stream().filter(not(Parameter::hasDefaultValue)).count();
   }
 
-  default ParameterDeclaration getParameter(int index) {
+  default Parameter getParameter(int index) {
     return getParameters().get(index);
   }
 

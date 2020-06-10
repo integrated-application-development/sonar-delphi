@@ -1,10 +1,10 @@
 package org.sonar.plugins.delphi.type.intrinsic;
 
 import static org.sonar.plugins.delphi.type.DelphiFileType.untypedFile;
-import static org.sonar.plugins.delphi.type.DelphiPointerType.pointerTo;
 import static org.sonar.plugins.delphi.type.DelphiPointerType.untypedPointer;
 import static org.sonar.plugins.delphi.type.DelphiType.untypedType;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ARRAY;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_CLASS_REFERENCE;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_DYNAMIC_ARRAY;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_OBJECT;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
@@ -19,6 +19,8 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.INTEGER;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.NATIVEINT;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.NATIVEUINT;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.WORD;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicPointer.PCHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicReturnType.CLASS_REFERENCE_VALUE_TYPE;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicVariant.VARIANT;
@@ -104,8 +106,10 @@ public enum IntrinsicMethod {
   COPY_ARRAY(
       method("Copy")
           .parameters(ANY_DYNAMIC_ARRAY, INTEGER.type, INTEGER.type)
+          .required(1)
           .returns(UNICODESTRING.type)),
   DEC(method("Dec").parameters(ANY_ORDINAL, INTEGER.type).required(1).returns(INTEGER.type)),
+  DEFAULT(method("Default").parameters(ANY_CLASS_REFERENCE).returns(CLASS_REFERENCE_VALUE_TYPE)),
   DELETE_STRING(method("Delete").parameters(UNICODESTRING.type, INTEGER.type, INTEGER.type)),
   DELETE_ARRAY(method("Delete").parameters(ANY_DYNAMIC_ARRAY, INTEGER.type, INTEGER.type)),
   DISPOSE(method("Dispose").parameters(untypedPointer())),
@@ -124,17 +128,20 @@ public enum IntrinsicMethod {
   GETDIR(method("GetDir").parameters(BYTE.type, UNICODESTRING.type)),
   GETMEM(method("GetMem").parameters(untypedPointer(), INTEGER.type)),
   HALT(method("Halt").parameters(INTEGER.type).required(0)),
-  HI(method("Hi").parameters(INTEGER.type)),
-  HIGH(method("High").parameters(untypedType())),
+  HAS_WEAK_REF(method("HasWeakRef").parameters(ANY_CLASS_REFERENCE).returns(BOOLEAN.type)),
+  HI(method("Hi").parameters(INTEGER.type).returns(BYTE.type)),
+  HIGH(method("High").parameters(untypedType()).returns(IntrinsicReturnType.HIGH_RETURN_TYPE)),
   INC(method("Inc").parameters(ANY_ORDINAL, INTEGER.type).required(1)),
   INCLUDE(method("Include").parameters(ANY_SET, ANY_ORDINAL)),
   INITIALIZE(method("Initialize").parameters(untypedType(), NATIVEINT.type).required(1)),
   INSERT_STRING(method("Insert").parameters(UNICODESTRING.type, UNICODESTRING.type, INTEGER.type)),
   INSERT_ARRAY(method("Insert").parameters(ANY_DYNAMIC_ARRAY, ANY_DYNAMIC_ARRAY, INTEGER.type)),
+  IS_CONST_VALUE(method("IsConstValue").parameters(untypedType()).returns(BOOLEAN.type)),
+  IS_MANAGED_TYPE(method("IsManagedType").parameters(ANY_CLASS_REFERENCE).returns(BOOLEAN.type)),
   LENGTH_STRING(method("Length").parameters(UNICODESTRING.type).returns(INTEGER.type)),
-  LENGTH_ARRAY(method("Length").parameters(ANY_DYNAMIC_ARRAY).returns(INTEGER.type)),
+  LENGTH_ARRAY(method("Length").parameters(ANY_ARRAY).returns(INTEGER.type)),
   LO(method("Lo").parameters(INTEGER.type).returns(BYTE.type)),
-  LOW(method("Low").parameters(untypedType()).returns(INTEGER.type)),
+  LOW(method("Low").parameters(untypedType()).returns(IntrinsicReturnType.LOW_RETURN_TYPE)),
   MEMORY_BARRIER(method("MemoryBarrier")),
   MULDIVINT64(
       method("MulDivInt64")
@@ -160,8 +167,7 @@ public enum IntrinsicMethod {
   SEEK_EOLN(method("SeekEoln").parameters(TEXT.type).required(0).returns(BOOLEAN.type)),
   SET_LENGTH_STRING(method("SetLength").parameters(UNICODESTRING.type, INTEGER.type)),
   SET_LENGTH_ARRAY(method("SetLength").parameters(ANY_DYNAMIC_ARRAY, INTEGER.type)),
-  SET_STRING(
-      method("SetString").parameters(UNICODESTRING.type, pointerTo(CHAR.type), INTEGER.type)),
+  SET_STRING(method("SetString").parameters(UNICODESTRING.type, PCHAR.type, INTEGER.type)),
   SET_TEXT_BUF(method("SetTextBuf").parameters(TEXT.type, untypedType(), INTEGER.type).required(2)),
   SIZEOF(method("SizeOf").parameters(untypedType()).returns(INTEGER.type)),
   SLICE(method("Slice").parameters(ANY_ARRAY, INTEGER.type).returns(untypedPointer())),

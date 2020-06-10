@@ -1,11 +1,13 @@
 package org.sonar.plugins.delphi.executor;
 
+import static java.util.function.Predicate.not;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.delphi.utils.DelphiUtils.uriToAbsolutePath;
 
+import com.google.common.collect.Sets;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,8 +23,10 @@ import org.sonar.api.batch.fs.TextPointer;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultTextPointer;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.project.DelphiProjectHelper;
 import org.sonar.plugins.delphi.symbol.SymbolTable;
+import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 
@@ -30,6 +34,8 @@ public class DelphiSymbolTableExecutorTest {
   private static final String ROOT_PATH = "/org/sonar/plugins/delphi/symbol/";
   private static final String STANDARD_LIBRARY = "/org/sonar/plugins/delphi/standardLibrary";
 
+  private DelphiInputFile mainFile;
+  private SymbolTable symbolTable;
   private DelphiSymbolTableExecutor executor;
   private SensorContextTester context;
   private Set<String> unitScopeNames;
@@ -128,6 +134,13 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testNestedTypes() {
+    execute("NestedTypes.pas");
+    verifyUsages(9, 8, reference(22, 10), reference(23, 5));
+    verifyUsages(10, 26, reference(25, 4), reference(26, 4));
+  }
+
+  @Test
   public void testTypeAliasParameter() {
     execute("TypeAliasParameter.pas");
     verifyUsages(8, 2, reference(11, 14), reference(15, 25));
@@ -181,10 +194,13 @@ public class DelphiSymbolTableExecutorTest {
   @Test
   public void testAnonymousMethods() {
     execute("AnonymousMethods.pas");
-    verifyUsages(8, 2, reference(12, 20), reference(17, 20));
-    verifyUsages(12, 10, reference(21, 2), reference(22, 2));
-    verifyUsages(22, 16, reference(24, 4));
-    verifyUsages(19, 2, reference(24, 13));
+    verifyUsages(8, 2, reference(13, 20), reference(28, 20));
+    verifyUsages(9, 2, reference(18, 20), reference(28, 47));
+    verifyUsages(13, 10, reference(32, 2), reference(33, 2));
+    verifyUsages(18, 10, reference(38, 2), reference(39, 2));
+    verifyUsages(23, 10, reference(41, 4));
+    verifyUsages(30, 2, reference(35, 13));
+    verifyUsages(33, 16, reference(35, 4));
   }
 
   @Test
@@ -199,9 +215,18 @@ public class DelphiSymbolTableExecutorTest {
   @Test
   public void testResults() {
     execute("Results.pas");
-    verifyUsages(8, 2, reference(15, 10), reference(20, 19), reference(25, 15), reference(27, 12));
-    verifyUsages(10, 14, reference(15, 15), reference(28, 9));
-    verifyUsages(20, 10, reference(29, 2));
+    verifyUsages(
+        8,
+        2,
+        reference(17, 10),
+        reference(22, 19),
+        reference(27, 54),
+        reference(29, 12),
+        reference(36, 12),
+        reference(42, 44),
+        reference(44, 12));
+    verifyUsages(10, 14, reference(17, 15), reference(30, 9), reference(37, 9), reference(45, 9));
+    verifyUsages(22, 10, reference(31, 2), reference(38, 2), reference(46, 2));
   }
 
   @Test
@@ -230,6 +255,23 @@ public class DelphiSymbolTableExecutorTest {
     execute("HandlerProperty.pas");
     verifyUsages(12, 4, reference(23, 2));
     verifyUsages(21, 19, reference(23, 22));
+  }
+
+  @Test
+  public void testWithStatement() {
+    execute("WithStatement.pas");
+    verifyUsages(9, 4, reference(44, 4));
+    verifyUsages(14, 4, reference(26, 4));
+    verifyUsages(10, 4, reference(27, 4));
+    verifyUsages(23, 2, reference(28, 4));
+  }
+
+  @Test
+  public void testBareInterfaceMethodReference() {
+    execute("BareInterfaceMethodReference.pas");
+    verifyUsages(7, 9, reference(17, 9));
+    verifyUsages(8, 9, reference(22, 9));
+    verifyUsages(12, 10, reference(19, 2));
   }
 
   @Test
@@ -272,6 +314,13 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testTypeSignaturesOfForwardDeclaration() {
+    execute("forwardDeclarations/TypeSignature.pas");
+    verifyUsages(21, 12, reference(26, 10), reference(39, 2));
+    verifyUsages(22, 12, reference(31, 10), reference(42, 2));
+  }
+
+  @Test
   public void testSimpleTypeResolution() {
     execute("typeResolution/Simple.pas");
     verifyUsages(8, 2, reference(16, 10), reference(18, 21), reference(27, 2), reference(31, 22));
@@ -307,6 +356,265 @@ public class DelphiSymbolTableExecutorTest {
   public void testEnumsTypeResolution() {
     execute("typeResolution/Enums.pas");
     verifyUsages(20, 9, reference(30, 2), reference(31, 2), reference(32, 2));
+  }
+
+  @Test
+  public void testPointersTypeResolution() {
+    execute("typeResolution/Pointers.pas");
+    verifyUsages(9, 10, reference(18, 2), reference(19, 2), reference(20, 2), reference(21, 2));
+  }
+
+  @Test
+  public void testSubRangeHostTypeResolution() {
+    execute("typeResolution/SubRangeHostType.pas");
+    verifyUsages(14, 10, reference(21, 2), reference(22, 2), reference(23, 2));
+  }
+
+  @Test
+  public void testLowHighIntrinsics() {
+    execute("intrinsics/LowHighIntrinsics.pas");
+    verifyUsages(
+        14,
+        10,
+        reference(31, 2),
+        reference(32, 2),
+        reference(33, 2),
+        reference(34, 2),
+        reference(35, 2),
+        reference(36, 2),
+        reference(37, 2),
+        reference(38, 2));
+    verifyUsages(19, 10, reference(39, 2), reference(40, 2));
+    verifyUsages(24, 10, reference(41, 2), reference(42, 2));
+  }
+
+  @Test
+  public void testDefaultIntrinsic() {
+    execute("intrinsics/DefaultIntrinsic.pas");
+    verifyUsages(9, 10, reference(31, 2));
+    verifyUsages(14, 10, reference(32, 2));
+    verifyUsages(19, 10, reference(33, 2));
+    verifyUsages(24, 10, reference(34, 2));
+  }
+
+  @Test
+  public void testBinaryOperatorIntrinsics() {
+    execute("operators/BinaryOperatorIntrinsics.pas");
+    verifyUsages(
+        12,
+        10,
+        reference(48, 2),
+        reference(49, 2),
+        reference(50, 2),
+        reference(53, 2),
+        reference(54, 2),
+        reference(55, 2),
+        reference(56, 2),
+        reference(57, 2),
+        reference(58, 2),
+        reference(59, 2),
+        reference(117, 2));
+    verifyUsages(
+        17,
+        10,
+        reference(62, 2),
+        reference(63, 2),
+        reference(64, 2),
+        reference(65, 2),
+        reference(66, 2),
+        reference(79, 2),
+        reference(80, 2),
+        reference(81, 2),
+        reference(82, 2),
+        reference(83, 2));
+    verifyUsages(
+        22,
+        10,
+        reference(67, 2),
+        reference(68, 2),
+        reference(69, 2),
+        reference(70, 2),
+        reference(71, 2),
+        reference(72, 2),
+        reference(73, 2),
+        reference(74, 2),
+        reference(75, 2),
+        reference(76, 2),
+        reference(84, 2),
+        reference(85, 2),
+        reference(86, 2),
+        reference(87, 2),
+        reference(88, 2),
+        reference(89, 2),
+        reference(90, 2),
+        reference(91, 2),
+        reference(92, 2),
+        reference(93, 2));
+    verifyUsages(
+        27,
+        10,
+        reference(94, 2),
+        reference(95, 2),
+        reference(96, 2),
+        reference(97, 2),
+        reference(98, 2),
+        reference(99, 2),
+        reference(100, 2),
+        reference(101, 2),
+        reference(102, 2),
+        reference(103, 2),
+        reference(104, 2),
+        reference(105, 2),
+        reference(106, 2),
+        reference(107, 2),
+        reference(108, 2),
+        reference(109, 2),
+        reference(110, 2));
+    verifyUsages(32, 10, reference(113, 2), reference(114, 2));
+    verifyUsages(37, 10, reference(118, 2), reference(119, 2), reference(120, 2));
+  }
+
+  @Test
+  public void testBinaryOperatorOverloads() {
+    execute("operators/BinaryOperatorOverloads.pas");
+    verifyUsages(66, 10, reference(79, 2), reference(82, 2), reference(85, 2), reference(88, 2));
+    verifyUsages(71, 10, reference(91, 2), reference(94, 2));
+  }
+
+  @Test
+  public void testUnaryOperatorIntrinsics() {
+    execute("operators/UnaryOperatorIntrinsics.pas");
+    verifyUsages(12, 10, reference(42, 2));
+    verifyUsages(17, 10, reference(45, 2), reference(49, 2), reference(50, 2));
+    verifyUsages(22, 10, reference(46, 2), reference(51, 2), reference(52, 2));
+    verifyUsages(27, 10, reference(53, 2), reference(54, 2));
+  }
+
+  @Test
+  public void testUnaryOperatorOverloads() {
+    execute("operators/UnaryOperatorOverloads.pas");
+    verifyUsages(34, 10, reference(51, 2));
+    verifyUsages(39, 10, reference(52, 2));
+    verifyUsages(44, 10, reference(53, 2));
+  }
+
+  @Test
+  public void testImplicitOperator() {
+    execute("operators/ImplicitOperator.pas");
+    verifyUsages(25, 10, reference(37, 2));
+  }
+
+  @Test
+  public void testImplicitOperatorShouldHaveLowestPriority() {
+    execute("operators/ImplicitOperatorLowestPriority.pas");
+    verifyUsages(35, 10, reference(42, 2));
+  }
+
+  @Test
+  public void testOperatorsAreNotCallable() {
+    execute("operators/NotCallable.pas");
+    verifyUsages(9, 20, reference(17, 7));
+  }
+
+  @Test
+  public void testPointerMathOperators() {
+    execute("operators/PointerMath.pas");
+    verifyUsages(
+        17,
+        10,
+        reference(51, 2),
+        reference(62, 2),
+        reference(63, 2),
+        reference(74, 2),
+        reference(75, 2),
+        reference(52, 2),
+        reference(53, 2),
+        reference(64, 2),
+        reference(65, 2),
+        reference(76, 2),
+        reference(77, 2));
+    verifyUsages(
+        22,
+        10,
+        reference(44, 2),
+        reference(45, 2),
+        reference(46, 2),
+        reference(47, 2),
+        reference(48, 2),
+        reference(49, 2),
+        reference(50, 2));
+    verifyUsages(
+        27,
+        10,
+        reference(55, 2),
+        reference(56, 2),
+        reference(57, 2),
+        reference(58, 2),
+        reference(59, 2),
+        reference(60, 2),
+        reference(61, 2));
+    verifyUsages(
+        32,
+        10,
+        reference(67, 2),
+        reference(68, 2),
+        reference(69, 2),
+        reference(70, 2),
+        reference(71, 2),
+        reference(72, 2),
+        reference(73, 2));
+  }
+
+  @Test
+  public void testVariantOperators() {
+    execute("operators/VariantOperators.pas");
+    verifyUsages(
+        10,
+        10,
+        reference(43, 2),
+        reference(44, 2),
+        reference(45, 2),
+        reference(46, 2),
+        reference(47, 2),
+        reference(48, 2),
+        reference(49, 2),
+        reference(50, 2),
+        reference(51, 2),
+        reference(52, 2),
+        reference(53, 2),
+        reference(54, 2),
+        reference(55, 2),
+        reference(56, 2),
+        reference(57, 2),
+        reference(58, 2),
+        reference(59, 2),
+        reference(60, 2),
+        reference(61, 2),
+        reference(62, 2),
+        reference(63, 2),
+        reference(64, 2),
+        reference(65, 2),
+        reference(66, 2),
+        reference(67, 2),
+        reference(68, 2),
+        reference(69, 2),
+        reference(70, 2));
+    verifyUsages(25, 10, reference(72, 2), reference(73, 2));
+    verifyUsages(
+        30,
+        10,
+        reference(75, 2),
+        reference(76, 2),
+        reference(77, 2),
+        reference(78, 2),
+        reference(79, 2),
+        reference(80, 2),
+        reference(81, 2),
+        reference(82, 2),
+        reference(83, 2),
+        reference(84, 2),
+        reference(85, 2),
+        reference(86, 2));
   }
 
   @Test
@@ -444,6 +752,14 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testOverriddenOverloads() {
+    execute("overloads/Overrides.pas", "overloads/imports/BaseFoo.pas");
+    verifyUsages(33, 2, reference(37, 10));
+    verifyUsages(34, 2, reference(38, 10));
+    verifyUsages(35, 2, reference(39, 10));
+  }
+
+  @Test
   public void testRegularMethodPreferredOverImplicitSpecializations() {
     execute("generics/RegularMethodPreferredOverImplicitSpecialization.pas");
     verifyUsages(12, 20, reference(12, 26));
@@ -540,6 +856,12 @@ public class DelphiSymbolTableExecutorTest {
     verifyUsages(16, 11, reference(17, 11), reference(23, 19));
     verifyUsages(
         18, 19, reference(18, 33), reference(23, 27), reference(23, 35), reference(25, 10));
+  }
+
+  @Test
+  public void testPropertySpecialization() {
+    execute("generics/PropertySpecialization.pas");
+    verifyUsages(15, 10, reference(22, 2));
   }
 
   @Test
@@ -709,6 +1031,12 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testRecordHelperTypeReference() {
+    execute("helpers/RecordHelperTypeReference.pas");
+    verifyUsages(9, 14, reference(21, 9), reference(22, 16));
+  }
+
+  @Test
   public void testRecordHelperConstants() {
     execute("helpers/RecordHelperConstant.pas");
     verifyUsages(11, 6, reference(18, 11), reference(19, 16));
@@ -731,8 +1059,72 @@ public class DelphiSymbolTableExecutorTest {
     verifyUsages(19, 10, reference(26, 2));
   }
 
+  @Test
+  public void testDependencyReferencedImplicitly() {
+    execute("dependencies/Implicit.pas");
+    verifyDependencies("System.SysUtils");
+  }
+
+  @Test
+  public void testDependencyReferencedExplicitly() {
+    execute("dependencies/Explicit.pas");
+    verifyDependencies("System.SysUtils");
+  }
+
+  @Test
+  public void testDependencyForHelperReference() {
+    execute("dependencies/Helper.pas");
+    verifyDependencies("System.SysUtils");
+  }
+
+  @Test
+  public void testDependencyForComponentAncestor() {
+    execute("dependencies/ComponentAncestor.pas");
+    verifyDependencies("Vcl.Controls", "System.Classes");
+  }
+
+  @Test
+  public void testDependencyForComponentAncestorDeclaredInImplementation() {
+    execute("dependencies/ComponentAncestorDeclaredInImplementation.pas");
+    verifyDependencies("Vcl.Controls");
+  }
+
+  @Test
+  public void testDependencyForComponentAncestorWithPublishedFieldInNonNonComponentType() {
+    execute("dependencies/ComponentAncestorWithPublishedFieldInNonComponentType.pas");
+    verifyDependencies("Vcl.Controls");
+  }
+
+  @Test
+  public void testDependencyForComponentAncestorDependencyWithNonPublishedField() {
+    execute("dependencies/ComponentAncestorWithNonPublishedField.pas");
+    verifyDependencies("Vcl.Controls");
+  }
+
+  @Test
+  public void testDependencyRequiredForInlineMethodExpansion() {
+    execute("dependencies/InlineMethodExpansion.pas");
+    verifyDependencies("System.UITypes", "Vcl.Dialogs");
+  }
+
+  @Test
+  public void testDependencyRequiredForInlineMethodExpansionViaDefaultArrayProperties() {
+    execute(
+        "dependencies/InlineMethodExpansionViaDefaultArrayProperty.pas",
+        "dependencies/imports/UnitWithDefaultArrayPropertyBackedByInlineMethod.pas");
+    verifyDependencies("UnitWithDefaultArrayPropertyBackedByInlineMethod", "System.SysUtils");
+  }
+
+  @Test
+  public void testDependencyShouldNotBeIntroducedForImplementationMethods() {
+    execute(
+        "dependencies/ImplementationVisibility.pas",
+        "dependencies/imports/UnitWithImplementationMethod.pas");
+    verifyDependencies("System.SysUtils");
+  }
+
   private void execute(String filename, String... include) {
-    var mainFile = DelphiTestFileBuilder.fromResource(ROOT_PATH + filename).delphiFile();
+    mainFile = DelphiTestFileBuilder.fromResource(ROOT_PATH + filename).delphiFile();
     Map<String, InputFile> inputFiles = new HashMap<>();
 
     inputFiles.put(uriToAbsolutePath(mainFile.getInputFile().uri()), mainFile.getInputFile());
@@ -751,7 +1143,7 @@ public class DelphiSymbolTableExecutorTest {
               return inputFiles.get(path);
             });
 
-    SymbolTable symbolTable =
+    symbolTable =
         SymbolTable.builder()
             .sourceFiles(
                 inputFiles.values().stream()
@@ -784,5 +1176,19 @@ public class DelphiSymbolTableExecutorTest {
 
   private static TextPointer reference(int line, int column) {
     return new DefaultTextPointer(line, column);
+  }
+
+  private void verifyDependencies(String... dependency) {
+    String path = mainFile.getSourceCodeFile().getAbsolutePath();
+    UnitNameDeclaration unit = symbolTable.getUnitByPath(path);
+
+    Set<String> dependencies =
+        Sets.union(unit.getInterfaceDependencies(), unit.getImplementationDependencies()).stream()
+            .map(UnitNameDeclaration::getName)
+            .filter(not("System"::equals))
+            .filter(not(unit.getName()::equals))
+            .collect(Collectors.toUnmodifiableSet());
+
+    assertThat(dependencies).containsExactlyInAnyOrder(dependency);
   }
 }

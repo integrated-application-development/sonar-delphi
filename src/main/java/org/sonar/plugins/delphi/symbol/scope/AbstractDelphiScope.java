@@ -25,8 +25,8 @@ import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.GenerifiableDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
-import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.HelperType;
@@ -171,6 +171,24 @@ class AbstractDelphiScope implements DelphiScope {
     return occurrencesByDeclaration.get(getDeclaration(declaration));
   }
 
+  private void handleGenerics(DelphiNameOccurrence occurrence, Set<NameDeclaration> result) {
+    int typeArgumentCount = occurrence.getTypeArguments().size();
+    result.removeIf(
+        declaration -> {
+          if (typeArgumentCount == 0 && declaration instanceof MethodNameDeclaration) {
+            // Could be an implicit specialization
+            return false;
+          }
+
+          if (declaration instanceof GenerifiableDeclaration) {
+            GenerifiableDeclaration generifiable = (GenerifiableDeclaration) declaration;
+            return generifiable.getTypeParameters().size() != typeArgumentCount;
+          }
+
+          return occurrence.isGeneric();
+        });
+  }
+
   @Override
   public void findMethodOverloads(DelphiNameOccurrence occurrence, Set<NameDeclaration> result) {
     if (result.isEmpty() || !result.stream().allMatch(AbstractDelphiScope::canBeOverloaded)) {
@@ -197,8 +215,32 @@ class AbstractDelphiScope implements DelphiScope {
   private static boolean canBeOverloaded(NameDeclaration declaration) {
     if (declaration instanceof MethodNameDeclaration) {
       MethodNameDeclaration methodDeclaration = (MethodNameDeclaration) declaration;
-      return methodDeclaration.hasDirective(MethodDirective.OVERLOAD)
-          || !methodDeclaration.isCallable();
+      return !methodDeclaration.isCallable()
+          || methodDeclaration.hasDirective(MethodDirective.OVERLOAD)
+          || isOverrideForOverloadedMethod(methodDeclaration);
+    }
+    return false;
+  }
+
+  private static boolean isOverrideForOverloadedMethod(MethodNameDeclaration method) {
+    if (method.hasDirective(MethodDirective.OVERRIDE)) {
+      DelphiScope scope = method.getScope().getEnclosingScope(TypeScope.class).getSuperTypeScope();
+
+      while (scope instanceof TypeScope) {
+        MethodNameDeclaration overridden =
+            scope.getMethodDeclarations().stream()
+                .filter(ancestor -> ancestor.getImage().equalsIgnoreCase(method.getName()))
+                .filter(ancestor -> overridesMethodSignature(ancestor, method))
+                .findFirst()
+                .orElse(null);
+
+        if (overridden != null) {
+          return overridden.hasDirective(MethodDirective.VIRTUAL)
+              || overridden.hasDirective(MethodDirective.DYNAMIC);
+        }
+
+        scope = ((TypeScope) scope).getSuperTypeScope();
+      }
     }
     return false;
   }
@@ -230,8 +272,8 @@ class AbstractDelphiScope implements DelphiScope {
     }
 
     for (int i = 0; i < declaration.getParametersCount(); ++i) {
-      ParameterDeclaration declarationParam = declaration.getParameter(i);
-      ParameterDeclaration matchedParam = overridden.getParameter(i);
+      Parameter declarationParam = declaration.getParameter(i);
+      Parameter matchedParam = overridden.getParameter(i);
       if (!declarationParam.getType().is(matchedParam.getType())) {
         return false;
       }
@@ -248,6 +290,7 @@ class AbstractDelphiScope implements DelphiScope {
     if (!found.isEmpty()) {
       result = new HashSet<>(found);
       findMethodOverloads(occurrence, result);
+      handleGenerics(occurrence, result);
     }
 
     return result;

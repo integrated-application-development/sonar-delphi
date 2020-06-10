@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.delphi.type.DelphiArrayType.dynamicArray;
 import static org.sonar.plugins.delphi.type.DelphiArrayType.openArray;
+import static org.sonar.plugins.delphi.type.DelphiEnumerationType.enumeration;
 import static org.sonar.plugins.delphi.type.DelphiFileType.fileOf;
 import static org.sonar.plugins.delphi.type.DelphiFileType.untypedFile;
 import static org.sonar.plugins.delphi.type.DelphiPointerType.pointerTo;
@@ -46,8 +47,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.Test;
-import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
-import org.sonar.plugins.delphi.symbol.declaration.ParameterDeclaration;
+import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
+import org.sonar.plugins.delphi.symbol.declaration.parameter.FormalParameter;
+import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
+import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.DelphiTypeType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.utils.types.TypeMocker;
@@ -109,15 +112,15 @@ public class InvocationResolverTest {
 
   private static InvocationCandidate mockCandidate(List<Type> parameterTypes, boolean var) {
     Invocable invocable = mock(Invocable.class);
-    List<ParameterDeclaration> parameters = new ArrayList<>();
+    List<Parameter> parameters = new ArrayList<>();
 
     for (Type paramType : parameterTypes) {
-      FormalParameter formalParameter = mock(FormalParameter.class);
-      when(formalParameter.getType()).thenReturn(paramType);
+      FormalParameterData formalParameterData = mock(FormalParameterData.class);
+      when(formalParameterData.getType()).thenReturn(paramType);
       if (var) {
-        when(formalParameter.isVar()).thenReturn(true);
+        when(formalParameterData.isVar()).thenReturn(true);
       }
-      parameters.add(ParameterDeclaration.create(formalParameter));
+      parameters.add(FormalParameter.create(formalParameterData));
     }
 
     when(invocable.getParameters()).thenReturn(parameters);
@@ -232,6 +235,11 @@ public class InvocationResolverTest {
     assertResolved(VARIANT.type, WIDESTRING.type, UNICODESTRING.type);
     assertResolved(VARIANT.type, UNICODESTRING.type, ANSISTRING.type);
     assertResolved(VARIANT.type, ANSISTRING.type, SHORTSTRING.type);
+    assertResolved(VARIANT.type, dynamicArray(null, INTEGER.type), SHORTSTRING.type);
+    assertResolved(
+        VARIANT.type,
+        enumeration("MyEnum", DelphiScope.unknownScope()),
+        dynamicArray(null, INTEGER.type));
 
     assertAmbiguous(VARIANT.type, SMALLINT.type, WORD.type);
     assertIncompatible(VARIANT.type, unknownType());

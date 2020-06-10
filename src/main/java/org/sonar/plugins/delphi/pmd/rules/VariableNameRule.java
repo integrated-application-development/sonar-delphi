@@ -2,7 +2,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode;
-import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameter;
+import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarSectionNode;
@@ -34,7 +34,7 @@ public class VariableNameRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(FormalParameterNode parameter, RuleContext data) {
-    for (FormalParameter param : parameter.getParameters()) {
+    for (FormalParameterData param : parameter.getParameters()) {
       NameDeclarationNode node = param.getNode();
       if (isViolation(node, false)) {
         addViolation(data, node);

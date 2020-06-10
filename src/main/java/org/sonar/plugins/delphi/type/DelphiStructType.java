@@ -3,6 +3,7 @@ package org.sonar.plugins.delphi.type;
 import static java.util.function.Predicate.not;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -18,6 +19,8 @@ import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.GenericDefinitionNode.TypeParameter;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
+import org.sonar.plugins.delphi.symbol.declaration.MethodKind;
+import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
@@ -36,6 +39,8 @@ public class DelphiStructType extends DelphiGenerifiableType implements StructTy
   private Set<Type> parents;
   private StructKind kind;
   private Type superType;
+  private Set<Type> typesWithImplicitConversionsToThis;
+  private Set<Type> typesWithImplicitConversionsFromThis;
   private boolean isForwardType;
 
   protected DelphiStructType(
@@ -43,14 +48,22 @@ public class DelphiStructType extends DelphiGenerifiableType implements StructTy
     super(createImage(imageParts));
     this.imageParts = imageParts;
     this.scope = scope;
-    this.parents = Set.copyOf(parents);
     this.kind = kind;
-    this.superType =
-        this.parents.stream()
-            .filter(DelphiStructType.class::isInstance)
-            .filter(not(Type::isInterface))
-            .findFirst()
-            .orElse(super.superType());
+    setParents(parents);
+  }
+
+  private void setParents(Set<Type> parents) {
+    this.parents = Set.copyOf(parents);
+    if (isInterface()) {
+      this.superType = Iterables.getFirst(parents, unknownType());
+    } else {
+      this.superType =
+          this.parents.stream()
+              .filter(DelphiStructType.class::isInstance)
+              .filter(not(Type::isInterface))
+              .findFirst()
+              .orElse(unknownType());
+    }
   }
 
   public static StructType from(TypeNode node) {
@@ -210,6 +223,45 @@ public class DelphiStructType extends DelphiGenerifiableType implements StructTy
   }
 
   @Override
+  public Set<Type> typesWithImplicitConversionsFromThis() {
+    if (typesWithImplicitConversionsFromThis == null) {
+      indexImplicitConversions();
+    }
+
+    return typesWithImplicitConversionsFromThis;
+  }
+
+  @Override
+  public Set<Type> typesWithImplicitConversionsToThis() {
+    if (typesWithImplicitConversionsToThis == null) {
+      indexImplicitConversions();
+    }
+    return typesWithImplicitConversionsToThis;
+  }
+
+  private void indexImplicitConversions() {
+    ImmutableSet.Builder<Type> fromBuilder = ImmutableSet.builder();
+    ImmutableSet.Builder<Type> toBuilder = ImmutableSet.builder();
+
+    for (MethodNameDeclaration method : scope.getMethodDeclarations()) {
+      if (method.getMethodKind() == MethodKind.OPERATOR
+          && method.getName().equalsIgnoreCase("Implicit")
+          && method.getParametersCount() == 1) {
+        Type returnType = method.getReturnType();
+        Type parameterType = method.getParameter(0).getType();
+        if (returnType.is(this)) {
+          toBuilder.add(parameterType);
+        } else if (parameterType.is(this)) {
+          fromBuilder.add(returnType);
+        }
+      }
+    }
+
+    typesWithImplicitConversionsToThis = toBuilder.build();
+    typesWithImplicitConversionsFromThis = fromBuilder.build();
+  }
+
+  @Override
   public Set<NameDeclaration> findDefaultArrayProperties() {
     Set<NameDeclaration> result = new HashSet<>();
     findDefaultArrayProperties(this, result);
@@ -245,10 +297,10 @@ public class DelphiStructType extends DelphiGenerifiableType implements StructTy
 
   @Override
   protected final void doAfterSpecialization(TypeSpecializationContext context) {
-    this.parents =
+    this.setParents(
         parents.stream()
             .map(parent -> parent.specialize(context))
-            .collect(Collectors.toUnmodifiableSet());
+            .collect(Collectors.toUnmodifiableSet()));
     this.scope = TypeScope.specializedScope(scope, this, context);
   }
 

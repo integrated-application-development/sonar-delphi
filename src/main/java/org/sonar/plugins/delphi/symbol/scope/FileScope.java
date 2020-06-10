@@ -18,7 +18,8 @@ import org.sonar.plugins.delphi.type.Type.HelperType;
 public interface FileScope extends DelphiScope {
 
   /**
-   * Find declarations in this scope without traversing imports
+   * Find declarations in this scope without traversing imports or looking in the implementation
+   * section.
    *
    * @param occurrence The name for which we are trying to find a matching declaration
    * @return Set of name declarations matching the name occurrence

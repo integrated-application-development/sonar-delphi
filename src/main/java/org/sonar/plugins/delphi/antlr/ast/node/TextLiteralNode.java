@@ -29,7 +29,7 @@ public final class TextLiteralNode extends LiteralNode {
   @Override
   @NotNull
   public Type getType() {
-    if (getValueAsString().length() == 1) {
+    if (getImageWithoutQuotes().length() == 1) {
       return CHAR.type;
     }
 
@@ -39,19 +39,21 @@ public final class TextLiteralNode extends LiteralNode {
   @Override
   public String getImage() {
     if (image == null) {
-      StringBuilder imageBuilder = new StringBuilder();
+      StringBuilder imageBuilder = new StringBuilder("'");
       for (int i = 0; i < jjtGetNumChildren(); ++i) {
         Node child = jjtGetChild(i);
         switch (child.jjtGetId()) {
           case DelphiLexer.TkQuotedString:
-            imageBuilder.append(processString(child.getImage()));
+            String withoutQuotes = getStringWithoutQuotes(child.getImage()).toString();
+            String stringImage = withoutQuotes.replace("''", "'");
+            imageBuilder.append(stringImage);
             break;
 
           case DelphiLexer.TkCharacterEscapeCode:
-            String escapeImage = child.getImage();
-            boolean isHex = escapeImage.startsWith("#$");
-            escapeImage = escapeImage.substring(isHex ? 2 : 1);
-            imageBuilder.append((char) parseImage(escapeImage, isHex ? 16 : 10));
+            String escapedChar = child.getImage();
+            boolean isHex = escapedChar.startsWith("#$");
+            escapedChar = escapedChar.substring(isHex ? 2 : 1);
+            imageBuilder.append((char) parseImage(escapedChar, isHex ? 16 : 10));
             break;
 
           case DelphiLexer.TkEscapedCharacter:
@@ -62,15 +64,17 @@ public final class TextLiteralNode extends LiteralNode {
             // Do nothing
         }
       }
+      imageBuilder.append("'");
       image = imageBuilder.toString();
     }
     return image;
   }
 
-  private static String processString(String image) {
-    if (image.length() > 2) {
-      image = image.replace("''", "'");
-    }
-    return image.substring(1, image.length() - 1);
+  public CharSequence getImageWithoutQuotes() {
+    return getStringWithoutQuotes(getImage());
+  }
+
+  private static CharSequence getStringWithoutQuotes(String string) {
+    return string.subSequence(1, string.length() - 1);
   }
 }

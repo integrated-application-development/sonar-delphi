@@ -7,7 +7,6 @@ import static org.sonar.plugins.delphi.utils.DelphiUtils.stopProgressReport;
 
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.SetMultimap;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -41,6 +40,7 @@ import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
+import org.sonar.plugins.delphi.symbol.scope.SysInitScope;
 import org.sonar.plugins.delphi.symbol.scope.SystemScope;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -49,8 +49,8 @@ import org.sonarsource.analyzer.commons.ProgressReport;
 public class SymbolTableBuilder {
   private static final Logger LOG = Loggers.get(SymbolTableBuilder.class);
 
-  private static final String SYSTEM_UNIT_NOT_FOUND =
-      "System unit could not be found. (Is '"
+  private static final String REQUIRED_UNIT_NOT_FOUND =
+      "%s unit could not be found. (Is '"
           + DelphiPlugin.STANDARD_LIBRARY_KEY
           + "' set correctly?))";
 
@@ -73,6 +73,7 @@ public class SymbolTableBuilder {
 
   private DelphiFileConfig fileConfig;
   private SystemScope systemScope;
+  private SysInitScope sysInitScope;
   private int nestingLevel;
 
   SymbolTableBuilder() {
@@ -262,6 +263,7 @@ public class SymbolTableBuilder {
             this::createImportDeclaration,
             delphiFile.getCompilerSwitchRegistry(),
             this.systemScope,
+            this.sysInitScope,
             unit.unitDeclaration);
 
     symbolTableVisitor(resolutionLevel).visit(delphiFile.getAst(), data);
@@ -313,15 +315,13 @@ public class SymbolTableBuilder {
       return;
     }
 
-    LOG.debug(StringUtils.repeat("\t", nestingLevel) + "Processing imports with inline methods");
-
     for (UnitData imported : imports) {
       process(imported, ResolutionLevel.COMPLETE);
     }
   }
 
   private static boolean hasInlineMethods(UnitNameDeclaration unit) {
-    return hasInlineMethods(unit.getUnitScope());
+    return hasInlineMethods(unit.getFileScope());
   }
 
   private static boolean hasInlineMethods(DelphiScope scope) {
@@ -344,19 +344,37 @@ public class SymbolTableBuilder {
   }
 
   @NotNull
-  private UnitData getSystemUnit() {
-    UnitData systemData = getFirst(allUnitsByName.get("system"), null);
-    if (systemData != null) {
-      return systemData;
+  private UnitData getRequiredUnit(String unit) {
+    UnitData data = getFirst(allUnitsByName.get(unit.toLowerCase()), null);
+    if (data != null) {
+      return data;
     }
-    throw new SymbolTableConstructionException(SYSTEM_UNIT_NOT_FOUND);
+    throw new SymbolTableConstructionException(String.format(REQUIRED_UNIT_NOT_FOUND, unit));
+  }
+
+  @NotNull
+  private UnitData getSystemUnit() {
+    return getRequiredUnit("System");
+  }
+
+  @NotNull
+  private UnitData getSysInitUnit() {
+    return getRequiredUnit("SysInit");
   }
 
   private void indexSystemUnit() {
+    LOG.info("Indexing System unit...");
     UnitData systemData = getSystemUnit();
     indexUnit(systemData, ResolutionLevel.INTERFACE);
-    this.systemScope = (SystemScope) systemData.unitDeclaration.getUnitScope();
+    this.systemScope = (SystemScope) systemData.unitDeclaration.getFileScope();
     validateSystemScope();
+  }
+
+  private void indexSysInitUnit() {
+    LOG.info("Indexing SysInit unit...");
+    UnitData sysInitData = getSysInitUnit();
+    indexUnit(sysInitData, ResolutionLevel.INTERFACE);
+    this.sysInitScope = (SysInitScope) sysInitData.unitDeclaration.getFileScope();
   }
 
   private void validateSystemScope() {
@@ -380,14 +398,9 @@ public class SymbolTableBuilder {
             TimeUnit.SECONDS.toMillis(10),
             "indexed");
 
-    progressReport.start(
-        new ImmutableList.Builder<String>()
-            .add(getSystemUnit().unitFile.toString())
-            .addAll(getSourceFileNames())
-            .build());
-
     indexSystemUnit();
-    progressReport.nextFile();
+    indexSysInitUnit();
+    progressReport.start(getSourceFileNames());
 
     boolean success = false;
 
@@ -408,7 +421,7 @@ public class SymbolTableBuilder {
     return sourceFileUnits.stream()
         .map(data -> data.unitFile)
         .map(Path::toString)
-        .collect(Collectors.toList());
+        .collect(Collectors.toUnmodifiableList());
   }
 
   private enum ResolutionLevel {

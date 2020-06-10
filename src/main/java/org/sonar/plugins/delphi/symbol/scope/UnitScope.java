@@ -3,10 +3,11 @@ package org.sonar.plugins.delphi.symbol.scope;
 public class UnitScope extends AbstractFileScope {
   private final SystemScope systemScope;
 
-  public UnitScope(String name, SystemScope systemScope) {
+  public UnitScope(String name, SystemScope systemScope, SysInitScope sysInitScope) {
     super(name);
     this.systemScope = systemScope;
     addImport(systemScope);
+    addImport(sysInitScope);
   }
 
   @Override
