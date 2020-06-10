@@ -15,7 +15,8 @@ public class IntrinsicArgumentMatcher extends DelphiType implements ImmutableTyp
   public static final ImmutableType ANY_ARRAY =
       new IntrinsicArgumentMatcher("<array>", Type::isArray);
 
-  public static final ImmutableType ANY_SET = new IntrinsicArgumentMatcher("<set>", Type::isSet);
+  public static final ImmutableType ANY_SET =
+      new IntrinsicArgumentMatcher("<set>", type -> type.isSet() || type.isArrayConstructor());
 
   public static final ImmutableType ANY_OBJECT =
       new IntrinsicArgumentMatcher(
