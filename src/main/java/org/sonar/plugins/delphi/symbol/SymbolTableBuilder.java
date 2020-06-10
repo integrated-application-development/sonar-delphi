@@ -321,7 +321,7 @@ public class SymbolTableBuilder {
   }
 
   private static boolean hasInlineMethods(UnitNameDeclaration unit) {
-    return hasInlineMethods(unit.getUnitScope());
+    return hasInlineMethods(unit.getFileScope());
   }
 
   private static boolean hasInlineMethods(DelphiScope scope) {
@@ -355,7 +355,7 @@ public class SymbolTableBuilder {
   private void indexSystemUnit() {
     UnitData systemData = getSystemUnit();
     indexUnit(systemData, ResolutionLevel.INTERFACE);
-    this.systemScope = (SystemScope) systemData.unitDeclaration.getUnitScope();
+    this.systemScope = (SystemScope) systemData.unitDeclaration.getFileScope();
     validateSystemScope();
   }
 

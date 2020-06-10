@@ -118,7 +118,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       this.scopes = new ArrayDeque<>();
       this.unitDeclaration = unitDeclaration;
       if (unitDeclaration != null) {
-        scopes.add(unitDeclaration.getUnitScope());
+        scopes.add(unitDeclaration.getFileScope());
       }
     }
 
@@ -140,7 +140,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
      * @param node the AST node which the scope is associated to
      */
     protected void addScope(DelphiScope newScope, DelphiNode node) {
-      unitDeclaration.getUnitScope().registerScope(node, newScope);
+      unitDeclaration.getFileScope().registerScope(node, newScope);
       addScope(newScope);
       node.setScope(newScope);
     }
@@ -168,7 +168,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     }
 
     protected void registerDeclaration(DelphiNameDeclaration declaration, DelphiNode node) {
-      unitDeclaration.getUnitScope().registerDeclaration(node, declaration);
+      unitDeclaration.getFileScope().registerDeclaration(node, declaration);
     }
 
     protected void addDeclarationToCurrentScope(DelphiNameDeclaration declaration) {

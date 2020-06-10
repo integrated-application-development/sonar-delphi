@@ -9,7 +9,7 @@ import org.sonar.plugins.delphi.symbol.scope.FileScope;
 
 public final class UnitNameDeclaration extends QualifiedDelphiNameDeclaration {
   public static final String UNKNOWN_UNIT = "<unknown unit>";
-  private final FileScope unitScope;
+  private final FileScope fileScope;
   private final String namespace;
   private final Path path;
 
@@ -17,17 +17,17 @@ public final class UnitNameDeclaration extends QualifiedDelphiNameDeclaration {
   private Set<UnitNameDeclaration> implementationDependencies;
   private int hashCode;
 
-  public UnitNameDeclaration(FileHeaderNode node, FileScope unitScope) {
-    super(node.getNameNode(), unitScope);
-    this.unitScope = unitScope;
+  public UnitNameDeclaration(FileHeaderNode node, FileScope fileScope) {
+    super(node.getNameNode(), fileScope);
+    this.fileScope = fileScope;
     this.namespace = node.getNamespace();
     this.path = Path.of(node.getASTTree().getFileName());
     this.interfaceDependencies = new HashSet<>();
     this.implementationDependencies = new HashSet<>();
   }
 
-  public FileScope getUnitScope() {
-    return unitScope;
+  public FileScope getFileScope() {
+    return fileScope;
   }
 
   public String getNamespace() {
