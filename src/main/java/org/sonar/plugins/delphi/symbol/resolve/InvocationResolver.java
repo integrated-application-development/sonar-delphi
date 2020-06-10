@@ -102,8 +102,11 @@ public class InvocationResolver {
 
     // Convert ProceduralType to its returnType when not expecting a procedural type
     if (argumentType.isProcedural() && !parameterType.isProcedural()) {
-      argumentType = ((ProceduralType) argumentType).returnType();
-      ambiguousMethodReference = argument.looksLikeMethodReference();
+      ProceduralType proceduralType = ((ProceduralType) argumentType);
+      if (proceduralType.kind() != ProceduralKind.ANONYMOUS) {
+        argumentType = proceduralType.returnType();
+        ambiguousMethodReference = argument.looksLikeMethodReference();
+      }
     }
 
     // If the parameter expects a procedural type then we need to find the overload that the

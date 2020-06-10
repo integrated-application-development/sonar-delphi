@@ -181,10 +181,13 @@ public class DelphiSymbolTableExecutorTest {
   @Test
   public void testAnonymousMethods() {
     execute("AnonymousMethods.pas");
-    verifyUsages(8, 2, reference(12, 20), reference(17, 20));
-    verifyUsages(12, 10, reference(21, 2), reference(22, 2));
-    verifyUsages(22, 16, reference(24, 4));
-    verifyUsages(19, 2, reference(24, 13));
+    verifyUsages(8, 2, reference(13, 20), reference(28, 20));
+    verifyUsages(9, 2, reference(18, 20), reference(28, 47));
+    verifyUsages(13, 10, reference(32, 2), reference(33, 2));
+    verifyUsages(18, 10, reference(38, 2), reference(39, 2));
+    verifyUsages(23, 10, reference(41, 4));
+    verifyUsages(30, 2, reference(35, 13));
+    verifyUsages(33, 16, reference(35, 4));
   }
 
   @Test
