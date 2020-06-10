@@ -19,10 +19,13 @@ public interface Type {
   String getImage();
 
   /**
-   * Returns the concrete type that this inherits from. Note that this will never return an
-   * interface.
+   * Returns the type that this inherits from.
    *
-   * @return The type this inherits from. UnknownType if this does not inherit from a concrete type.
+   * <p>For an interface type, this will return the parent interface.
+   *
+   * <p>For any other type, this will return a concrete parent type, and never an interface.
+   *
+   * @return The type this inherits from. UnknownType if there is no such type.
    */
   @NotNull
   Type superType();

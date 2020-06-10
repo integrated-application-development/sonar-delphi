@@ -44,14 +44,22 @@ public class DelphiStructType extends DelphiGenerifiableType implements StructTy
     super(createImage(imageParts));
     this.imageParts = imageParts;
     this.scope = scope;
-    this.parents = Set.copyOf(parents);
     this.kind = kind;
-    this.superType =
-        this.parents.stream()
-            .filter(DelphiStructType.class::isInstance)
-            .filter(not(Type::isInterface))
-            .findFirst()
-            .orElse(super.superType());
+    setParents(parents);
+  }
+
+  private void setParents(Set<Type> parents) {
+    this.parents = Set.copyOf(parents);
+    if (isInterface()) {
+      this.superType = Iterables.getFirst(parents, unknownType());
+    } else {
+      this.superType =
+          this.parents.stream()
+              .filter(DelphiStructType.class::isInstance)
+              .filter(not(Type::isInterface))
+              .findFirst()
+              .orElse(unknownType());
+    }
   }
 
   public static StructType from(TypeNode node) {
@@ -246,10 +254,10 @@ public class DelphiStructType extends DelphiGenerifiableType implements StructTy
 
   @Override
   protected final void doAfterSpecialization(TypeSpecializationContext context) {
-    this.parents =
+    this.setParents(
         parents.stream()
             .map(parent -> parent.specialize(context))
-            .collect(Collectors.toUnmodifiableSet());
+            .collect(Collectors.toUnmodifiableSet()));
     this.scope = TypeScope.specializedScope(scope, this, context);
   }
 
