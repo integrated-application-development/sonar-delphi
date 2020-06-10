@@ -104,6 +104,7 @@ public enum IntrinsicMethod {
   COPY_ARRAY(
       method("Copy")
           .parameters(ANY_DYNAMIC_ARRAY, INTEGER.type, INTEGER.type)
+          .required(1)
           .returns(UNICODESTRING.type)),
   DEC(method("Dec").parameters(ANY_ORDINAL, INTEGER.type).required(1).returns(INTEGER.type)),
   DELETE_STRING(method("Delete").parameters(UNICODESTRING.type, INTEGER.type, INTEGER.type)),
