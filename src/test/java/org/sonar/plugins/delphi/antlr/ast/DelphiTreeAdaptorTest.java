@@ -125,7 +125,7 @@ public class DelphiTreeAdaptorTest {
   @Test
   public void testCreateTokenFromToken() {
     CommonToken token = new CommonToken(DelphiLexer.TkRootNode);
-    assertThat(adaptor.createToken(token).toString()).isEqualTo(token.toString());
+    assertThat(adaptor.createToken(token)).hasToString(token.toString());
   }
 
   @Test

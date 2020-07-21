@@ -76,8 +76,8 @@ public class SurefireSensorTest {
     SurefireSensor sensor = new SurefireSensor(settings.asConfig(), delphiProjectHelper);
     sensor.execute(sensorContext);
 
-    assertThat(sensorContext.measures(":MyTest1.pas").size()).isEqualTo(6);
-    assertThat(sensorContext.measures(":MyTest2.pas").size()).isEqualTo(6);
+    assertThat(sensorContext.measures(":MyTest1.pas")).hasSize(6);
+    assertThat(sensorContext.measures(":MyTest2.pas")).hasSize(6);
   }
 
   @Test
@@ -85,7 +85,7 @@ public class SurefireSensorTest {
     SurefireSensor sensor = new SurefireSensor(settings.asConfig(), delphiProjectHelper);
     sensor.execute(sensorContext);
 
-    assertThat(sensorContext.measures(":MyTest1.pas").size()).isEqualTo(0);
-    assertThat(sensorContext.measures(":MyTest2.pas").size()).isEqualTo(0);
+    assertThat(sensorContext.measures(":MyTest1.pas")).isEmpty();
+    assertThat(sensorContext.measures(":MyTest2.pas")).isEmpty();
   }
 }

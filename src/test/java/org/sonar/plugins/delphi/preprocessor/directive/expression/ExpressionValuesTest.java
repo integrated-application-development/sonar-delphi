@@ -21,13 +21,13 @@ public class ExpressionValuesTest {
     ExpressionValue value = createString("string");
     assertThat(value.type()).isEqualTo(ConstExpressionType.STRING);
     assertThat(value.asString()).isEqualTo("string");
-    assertThat(value.asInteger()).isEqualTo(0);
-    assertThat(value.asDecimal()).isEqualTo(0.0);
+    assertThat(value.asInteger()).isZero();
+    assertThat(value.asDecimal()).isZero();
     assertThat(value.asBoolean()).isFalse();
     assertThat(value.asSet()).isEmpty();
 
     assertThat(value)
-        .isNotEqualTo(null)
+        .isNotNull()
         .isNotEqualTo(createString("other"))
         .isNotEqualTo(unknownValue())
         .isEqualTo(value)
@@ -46,7 +46,7 @@ public class ExpressionValuesTest {
     assertThat(value.asSet()).isEmpty();
 
     assertThat(value)
-        .isNotEqualTo(null)
+        .isNotNull()
         .isNotEqualTo(createInteger(2))
         .isNotEqualTo(unknownValue())
         .isEqualTo(value)
@@ -65,7 +65,7 @@ public class ExpressionValuesTest {
     assertThat(value.asSet()).isEmpty();
 
     assertThat(value)
-        .isNotEqualTo(null)
+        .isNotNull()
         .isNotEqualTo(createDecimal(2.0))
         .isNotEqualTo(unknownValue())
         .isEqualTo(value)
@@ -78,13 +78,13 @@ public class ExpressionValuesTest {
     ExpressionValue value = createBoolean(true);
     assertThat(value.type()).isEqualTo(ConstExpressionType.BOOLEAN);
     assertThat(value.asString()).isEmpty();
-    assertThat(value.asInteger()).isEqualTo(0);
-    assertThat(value.asDecimal()).isEqualTo(0.0);
+    assertThat(value.asInteger()).isZero();
+    assertThat(value.asDecimal()).isZero();
     assertThat(value.asBoolean()).isTrue();
     assertThat(value.asSet()).isEmpty();
 
     assertThat(value)
-        .isNotEqualTo(null)
+        .isNotNull()
         .isNotEqualTo(createBoolean(false))
         .isNotEqualTo(unknownValue())
         .isEqualTo(value)
@@ -97,15 +97,15 @@ public class ExpressionValuesTest {
     ExpressionValue value = createSet(Set.of(createInteger(1), createInteger(2), createInteger(3)));
     assertThat(value.type()).isEqualTo(ConstExpressionType.SET);
     assertThat(value.asString()).isEmpty();
-    assertThat(value.asInteger()).isEqualTo(0);
-    assertThat(value.asDecimal()).isEqualTo(0.0);
+    assertThat(value.asInteger()).isZero();
+    assertThat(value.asDecimal()).isZero();
     assertThat(value.asBoolean()).isFalse();
     assertThat(value.asSet()).hasSize(3);
 
     ExpressionValue other = createSet(Set.of(createInteger(1), createInteger(2), createInteger(3)));
 
     assertThat(value)
-        .isNotEqualTo(null)
+        .isNotNull()
         .isNotEqualTo(createInteger(123))
         .isNotEqualTo(createSet(Collections.emptySet()))
         .isEqualTo(value)
@@ -118,8 +118,8 @@ public class ExpressionValuesTest {
     ExpressionValue value = unknownValue();
     assertThat(value.type()).isEqualTo(ConstExpressionType.UNKNOWN);
     assertThat(value.asString()).isEmpty();
-    assertThat(value.asInteger()).isEqualTo(0);
-    assertThat(value.asDecimal()).isEqualTo(0.0);
+    assertThat(value.asInteger()).isZero();
+    assertThat(value.asDecimal()).isZero();
     assertThat(value.asBoolean()).isFalse();
     assertThat(value.asSet()).isEmpty();
   }
