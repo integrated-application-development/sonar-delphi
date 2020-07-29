@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `ExplicitDefaultPropertyReferenceRule` analysis rule, which flags direct references to `default`
+  properties.
+
 ### Fixed
 
 - Type-modeling bugs around single-dimensional fixed array types.

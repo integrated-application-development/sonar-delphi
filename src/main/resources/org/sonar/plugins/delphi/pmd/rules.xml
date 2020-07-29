@@ -557,6 +557,33 @@ FreeAndNil(Foo); // Compliant
     </example>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ExplicitDefaultPropertyReferenceRule"
+    message="Default array properties should not be explicitly referenced"
+    name="ExplicitDefaultPropertyReferenceRule">
+    <priority>3</priority>
+    <description>
+      Default array properties should not be explicitly referenced.
+      &lt;br&gt;
+      Use the [] accessor directly on the object instead.
+    </description>
+    <properties>
+      <property name="baseEffort" value="2min"/>
+    </properties>
+    <example>
+      <![CDATA[
+      <![CDATA[
+<b>procedure</b> Foo(Bar: TObjectList);
+<b>var</b>
+  Baz: TObject;
+<b>begin</b>
+  Baz := Bar.Items[0]; // Noncompliant
+  Baz := Bar[0]; // Compliant
+<b>end</b>;
+        ]]>
+    </example>
+  </rule>
+
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyBeginStatementRule"
     message="Code blocks should not be empty"
     name="EmptyBeginStatementRule">
