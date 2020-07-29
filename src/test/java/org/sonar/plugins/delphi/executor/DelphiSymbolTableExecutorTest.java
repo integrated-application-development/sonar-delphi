@@ -213,8 +213,8 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
-  public void testResults() {
-    execute("Results.pas");
+  public void testResultTypes() {
+    execute("ResultTypes.pas");
     verifyUsages(
         8,
         2,
@@ -227,6 +227,14 @@ public class DelphiSymbolTableExecutorTest {
         reference(44, 12));
     verifyUsages(10, 14, reference(17, 15), reference(30, 9), reference(37, 9), reference(45, 9));
     verifyUsages(22, 10, reference(31, 2), reference(38, 2), reference(46, 2));
+  }
+
+  @Test
+  public void testSelfTypes() {
+    execute("SelfTypes.pas");
+    verifyUsages(19, 10, reference(36, 2));
+    verifyUsages(24, 10, reference(41, 2));
+    verifyUsages(29, 10, reference(48, 2));
   }
 
   @Test

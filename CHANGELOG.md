@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Type-modeling bugs around single-dimensional fixed array types.
 - The `SetLength` wouldn't accept variadic length parameters for multi-dimensional arrays.
+- `Self` in class methods is now treated as a class-reference instead of an instance variable.
+- `Self` is no longer created in class methods with the `static` directive.
 
 ## [0.21.0] - 2020-06-10
 
