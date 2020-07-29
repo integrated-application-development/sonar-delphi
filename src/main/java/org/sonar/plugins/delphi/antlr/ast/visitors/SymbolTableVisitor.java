@@ -5,6 +5,7 @@ import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveT
 import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveType.SCOPEDENUMS;
 import static org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration.compilerVariable;
 import static org.sonar.plugins.delphi.symbol.resolve.NameResolutionUtils.resolve;
+import static org.sonar.plugins.delphi.type.DelphiClassReferenceType.classOf;
 
 import com.google.common.base.Preconditions;
 import java.util.ArrayDeque;
@@ -174,13 +175,6 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       registerDeclaration(declaration, node);
       node.setMethodNameDeclaration(declaration);
       addDeclarationToCurrentScope(declaration);
-    }
-
-    private static void handleImplementationDeclaration(
-        DelphiNameDeclaration declaration, DelphiNode node) {
-      if (node.isImplementationSection()) {
-        declaration.setIsImplementationDeclaration();
-      }
     }
 
     protected void registerDeclaration(DelphiNameDeclaration declaration, DelphiNode node) {
@@ -378,7 +372,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       data.addDeclarationToCurrentScope(result);
     }
 
-    Type selfType = findSelfType(node);
+    Type selfType = findSelfType(node, methodDeclaration);
     if (selfType != null) {
       DelphiNameDeclaration self = compilerVariable("Self", selfType, scope);
       data.addDeclarationToCurrentScope(self);
@@ -395,13 +389,19 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     }
   }
 
-  private static Type findSelfType(MethodImplementationNode node) {
+  private static Type findSelfType(MethodNode node, @Nullable MethodNameDeclaration declaration) {
     Type selfType = null;
     TypeNameDeclaration methodType = node.getTypeDeclaration();
     if (methodType != null) {
       selfType = methodType.getType();
       if (selfType.isHelper()) {
         selfType = ((HelperType) selfType).extendedType();
+      }
+      if (node.isClassMethod()) {
+        selfType = classOf(selfType);
+        if (declaration != null && declaration.hasDirective(MethodDirective.STATIC)) {
+          selfType = null;
+        }
       }
     }
     return selfType;
@@ -637,6 +637,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     }
 
     TypeNameDeclaration declaration = new TypeNameDeclaration(node);
+    handleImplementationDeclaration(declaration, node);
     data.registerDeclaration(declaration, typeNameNode);
     typeNameNode.setNameDeclaration(declaration);
 
@@ -687,5 +688,12 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     }
     data.scopes.pop();
     return data;
+  }
+
+  private static void handleImplementationDeclaration(
+      DelphiNameDeclaration declaration, DelphiNode node) {
+    if (node.isImplementationSection()) {
+      declaration.setIsImplementationDeclaration();
+    }
   }
 }

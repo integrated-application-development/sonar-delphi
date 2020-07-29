@@ -80,6 +80,11 @@ public final class NameReferenceNode extends DelphiNode implements Qualifiable, 
     return (generic instanceof GenericArgumentsNode) ? (GenericArgumentsNode) generic : null;
   }
 
+  public NameReferenceNode prevName() {
+    Node parent = jjtGetParent();
+    return (parent instanceof NameReferenceNode) ? (NameReferenceNode) parent : null;
+  }
+
   public NameReferenceNode nextName() {
     Node child = jjtGetChild(jjtGetNumChildren() - 1);
     return (child instanceof NameReferenceNode) ? (NameReferenceNode) child : null;

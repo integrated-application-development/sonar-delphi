@@ -1,4 +1,4 @@
-unit Results;
+unit ResultTypes;
 
 {This is a sample Delphi file.}
 

@@ -86,6 +86,10 @@
     name="RedundantBooleanRule">
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.RedundantCastRule"
+    name="RedundantCastRule">
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.PublicFieldsRule"
     name="PublicFieldsRule">
   </rule>

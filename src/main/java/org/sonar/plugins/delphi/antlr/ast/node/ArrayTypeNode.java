@@ -58,7 +58,7 @@ public final class ArrayTypeNode extends TypeNode {
       options.add(ArrayOption.ARRAY_OF_CONST);
     }
 
-    if (indicesSize > 0) {
+    if (indicesSize > 1) {
       return DelphiArrayType.multiDimensionalArray(image, elementType, indicesSize, options);
     }
 
