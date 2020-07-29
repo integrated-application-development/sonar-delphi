@@ -166,7 +166,8 @@ public enum IntrinsicMethod {
   SEEK_EOF(method("SeekEof").parameters(TEXT.type).required(0).returns(BOOLEAN.type)),
   SEEK_EOLN(method("SeekEoln").parameters(TEXT.type).required(0).returns(BOOLEAN.type)),
   SET_LENGTH_STRING(method("SetLength").parameters(UNICODESTRING.type, INTEGER.type)),
-  SET_LENGTH_ARRAY(method("SetLength").parameters(ANY_DYNAMIC_ARRAY, INTEGER.type)),
+  SET_LENGTH_ARRAY(
+      method("SetLength").parameters(ANY_DYNAMIC_ARRAY, INTEGER.type).variadic(INTEGER.type)),
   SET_STRING(method("SetString").parameters(UNICODESTRING.type, PCHAR.type, INTEGER.type)),
   SET_TEXT_BUF(method("SetTextBuf").parameters(TEXT.type, untypedType(), INTEGER.type).required(2)),
   SIZEOF(method("SizeOf").parameters(untypedType()).returns(INTEGER.type)),
