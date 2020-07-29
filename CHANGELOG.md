@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `ExplicitDefaultPropertyReferenceRule` analysis rule, which flags direct references to `default`
   properties.
+- `RedundantCastRule` analysis rule, which flags casts that can be removed.
 
 ### Fixed
 
