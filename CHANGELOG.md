@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.22.0] - 2020-07-29
+
 ### Added
 
 - `ExplicitDefaultPropertyReferenceRule` analysis rule, which flags direct references to `default`
@@ -520,7 +522,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.21.0...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.22.0...HEAD
+[0.22.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.21.0...v0.22.0
 [0.21.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.20.0...v0.21.0
 [0.20.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.19.0...v0.20.0
 [0.19.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.18.0...v0.19.0
