@@ -119,7 +119,7 @@ public class NameResolver {
     return resolvedDeclarations;
   }
 
-  private NameDeclaration addResolvedDeclaration() {
+  NameDeclaration addResolvedDeclaration() {
     if (declarations.isEmpty()) {
       return null;
     }
@@ -153,7 +153,7 @@ public class NameResolver {
     }
   }
 
-  private void updateType(Type type) {
+  void updateType(Type type) {
     currentType = type;
     ScopedType scopedType = extractScopedType(currentType);
     DelphiScope newScope = unknownScope();
@@ -1186,7 +1186,7 @@ public class NameResolver {
     }
   }
 
-  private void addName(DelphiNameOccurrence name) {
+  void addName(DelphiNameOccurrence name) {
     names.add(name);
     if (names.size() > 1) {
       DelphiNameOccurrence qualifiedName = names.get(names.size() - 2);
@@ -1194,7 +1194,7 @@ public class NameResolver {
     }
   }
 
-  private void searchForDeclaration(DelphiNameOccurrence occurrence) {
+  void searchForDeclaration(DelphiNameOccurrence occurrence) {
     if (currentType.isTypeParameter()) {
       searchForDeclarationInConstraintTypes(occurrence);
       return;

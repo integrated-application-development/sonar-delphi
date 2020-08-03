@@ -9,8 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Improve dependency analysis around implicit invocations by `for`..`in` loops.
 - Update default `severity` of `RedundantCastRule` to `MINOR`.
 - Update default `severity` of `ExplicitDefaultPropertyReferenceRule` to `MINOR`.
+
+### Fixed
+
+- Loop variables were being skipped during name resolution.
 
 ## [0.22.0] - 2020-07-29
 

@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.sonar.plugins.delphi.antlr.ast.node.ArrayAccessorNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FinalizationSectionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ForInStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ImplementationSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.InitializationSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.InterfaceSectionNode;
@@ -30,7 +31,7 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
   private static final String TCOMPONENT = "System.Classes.TComponent";
 
   public static class Data {
-    private UnitNameDeclaration unitDeclaration;
+    private final UnitNameDeclaration unitDeclaration;
     private MethodNameDeclaration method;
     private boolean implementation;
 
@@ -157,6 +158,23 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
       handleInlineMethods(implicitOccurrence.getNameDeclaration(), data);
     }
     return DelphiParserVisitor.super.visit(accessorNode, data);
+  }
+
+  @Override
+  public Data visit(ForInStatementNode forInStatementNode, Data data) {
+    MethodNameDeclaration enumerator = forInStatementNode.getGetEnumeratorDeclaration();
+    addDependenciesForDeclaration(enumerator, data);
+    handleInlineMethods(enumerator, data);
+
+    MethodNameDeclaration moveNext = forInStatementNode.getMoveNextDeclaration();
+    addDependenciesForDeclaration(moveNext, data);
+    handleInlineMethods(moveNext, data);
+
+    PropertyNameDeclaration current = forInStatementNode.getCurrentDeclaration();
+    addDependenciesForDeclaration(current, data);
+    handleInlineMethods(current, data);
+
+    return DelphiParserVisitor.super.visit(forInStatementNode, data);
   }
 
   private void addDependenciesForDeclaration(@Nullable NameDeclaration declaration, Data data) {

@@ -64,7 +64,9 @@ import org.sonar.plugins.delphi.antlr.ast.node.FileHeaderNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FileTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FinalizationSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FinallyBlockNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ForInStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ForStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ForToStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode;
 import org.sonar.plugins.delphi.antlr.ast.node.GenericArgumentsNode;
@@ -646,6 +648,14 @@ public interface DelphiParserVisitor<T> {
 
   default T visit(ForStatementNode node, T data) {
     return visit((StatementNode) node, data);
+  }
+
+  default T visit(ForToStatementNode node, T data) {
+    return visit((ForStatementNode) node, data);
+  }
+
+  default T visit(ForInStatementNode node, T data) {
+    return visit((ForStatementNode) node, data);
   }
 
   default T visit(GotoStatementNode node, T data) {

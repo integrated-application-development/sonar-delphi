@@ -676,9 +676,9 @@ repeatStatement              : 'repeat'<RepeatStatementNode>^ statementList 'unt
                              ;
 whileStatement               : 'while'<WhileStatementNode>^ expression 'do' statement?
                              ;
-forStatement                 : 'for'<ForStatementNode>^ ident ':=' expression 'to' expression 'do' statement?
-                             | 'for'<ForStatementNode>^ ident ':=' expression 'downto' expression 'do' statement?
-                             | 'for'<ForStatementNode>^ ident 'in' expression 'do' statement?
+forStatement                 : 'for'<ForToStatementNode>^ simpleNameReference ':=' expression 'to' expression 'do' statement?
+                             | 'for'<ForToStatementNode>^ simpleNameReference ':=' expression 'downto' expression 'do' statement?
+                             | 'for'<ForInStatementNode>^ simpleNameReference 'in' expression 'do' statement?
                              ;
 withStatement                : 'with'<WithStatementNode>^ expressionList 'do' statement?
                              ;
@@ -831,6 +831,9 @@ qualifiedNameDeclaration     : ident ('.' extendedIdent)*
                              ;
 nameReference                : ident genericArguments? ('.' extendedNameReference)?
                              -> ^(TkNameReference<NameReferenceNode> ident genericArguments? ('.' extendedNameReference)?)
+                             ;
+simpleNameReference          : ident
+                             -> ^(TkNameReference<NameReferenceNode> ident)
                              ;
 extendedNameReference        : extendedIdent genericArguments? ('.' extendedNameReference)?
                              -> ^(TkNameReference<NameReferenceNode> extendedIdent genericArguments? ('.' extendedNameReference)?)
