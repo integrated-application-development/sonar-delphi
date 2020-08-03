@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Update default `severity` of `RedundantCastRule` to `MINOR`.
+- Update default `severity` of `ExplicitDefaultPropertyReferenceRule` to `MINOR`.
+
 ## [0.22.0] - 2020-07-29
 
 ### Added

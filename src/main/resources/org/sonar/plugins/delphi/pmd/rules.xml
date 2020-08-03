@@ -560,7 +560,7 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.RedundantCastRule"
     message="Redundant casts should not be used"
     name="RedundantCastRule">
-    <priority>3</priority>
+    <priority>4</priority>
     <description>Unnecessary casting expressions make the code harder to read and understand.</description>
     <properties>
       <property name="baseEffort" value="2min"/>
@@ -570,7 +570,7 @@ FreeAndNil(Foo); // Compliant
   <rule class="org.sonar.plugins.delphi.pmd.rules.ExplicitDefaultPropertyReferenceRule"
     message="Default array properties should not be explicitly referenced"
     name="ExplicitDefaultPropertyReferenceRule">
-    <priority>3</priority>
+    <priority>4</priority>
     <description>
       Default array properties should not be explicitly referenced.
       &lt;br&gt;
