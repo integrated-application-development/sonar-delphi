@@ -11,6 +11,7 @@ import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.sonar.plugins.delphi.antlr.ast.node.AnonymousMethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.AssignmentStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode;
@@ -36,6 +37,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.TypeReferenceNode;
 import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
 import org.sonar.plugins.delphi.symbol.declaration.GenerifiableDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
@@ -250,6 +252,36 @@ public final class NameResolutionUtils {
                 }
               });
     }
+  }
+
+  public static MethodNameDeclaration findMethodMember(
+      DelphiNode node, Type type, String name, List<Type> parameters) {
+    return findInvocableMember(node, type, name, parameters, MethodNameDeclaration.class);
+  }
+
+  public static PropertyNameDeclaration findPropertyMember(
+      DelphiNode node, Type type, String name, List<Type> parameters) {
+    return findInvocableMember(node, type, name, parameters, PropertyNameDeclaration.class);
+  }
+
+  private static <T extends Invocable> T findInvocableMember(
+      DelphiNode node, Type type, String name, List<Type> parameters, Class<T> declarationType) {
+    NameResolver resolver = memberResolver(node, type, name);
+    resolver.disambiguateParameters(parameters);
+    NameDeclaration resolved = resolver.addResolvedDeclaration();
+    if (declarationType.isInstance(resolved)) {
+      return declarationType.cast(resolved);
+    }
+    return null;
+  }
+
+  private static NameResolver memberResolver(DelphiNode node, Type type, String name) {
+    DelphiNameOccurrence implicitOccurrence = new DelphiNameOccurrence(node, name);
+    NameResolver resolver = new NameResolver();
+    resolver.updateType(type);
+    resolver.addName(implicitOccurrence);
+    resolver.searchForDeclaration(implicitOccurrence);
+    return resolver;
   }
 
   public static void resolve(ExpressionNode expression) {

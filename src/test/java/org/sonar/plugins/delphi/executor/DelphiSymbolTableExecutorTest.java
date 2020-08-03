@@ -275,6 +275,12 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testForStatement() {
+    execute("ForStatement.pas");
+    verifyUsages(11, 2, reference(13, 6), reference(17, 6), reference(21, 6));
+  }
+
+  @Test
   public void testBareInterfaceMethodReference() {
     execute("BareInterfaceMethodReference.pas");
     verifyUsages(7, 9, reference(17, 9));
@@ -1129,6 +1135,13 @@ public class DelphiSymbolTableExecutorTest {
         "dependencies/ImplementationVisibility.pas",
         "dependencies/imports/UnitWithImplementationMethod.pas");
     verifyDependencies("System.SysUtils");
+  }
+
+  @Test
+  public void testDependencyRequiredForImplicitInvocationOfGetEnumerator() {
+    execute(
+        "dependencies/Enumerator.pas", "dependencies/imports/UnitWithGetEnumeratorForTObject.pas");
+    verifyDependencies("UnitWithGetEnumeratorForTObject");
   }
 
   private void execute(String filename, String... include) {

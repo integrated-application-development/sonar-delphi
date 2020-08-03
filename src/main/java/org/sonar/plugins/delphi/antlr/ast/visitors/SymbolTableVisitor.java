@@ -468,7 +468,9 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(ForStatementNode node, Data data) {
-    return createLocalScope(node, data);
+    data.addScope(new LocalScope(), node);
+    resolve(node.getVariable());
+    return visitScope(node, data);
   }
 
   @Override
