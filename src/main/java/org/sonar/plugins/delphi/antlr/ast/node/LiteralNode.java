@@ -5,11 +5,11 @@ import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.type.Typed;
 
 public abstract class LiteralNode extends DelphiNode implements Typed {
-  public LiteralNode(Token token) {
+  protected LiteralNode(Token token) {
     super(token);
   }
 
-  public LiteralNode(int tokenType) {
+  protected LiteralNode(int tokenType) {
     super(tokenType);
   }
 

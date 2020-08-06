@@ -6,16 +6,16 @@ import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 
 public class TooManyArgumentsRule extends AbstractDelphiRule {
-
-  private static final String VIOLATION_MESSAGE = "Too many arguments: %d (max %d)";
-
   @Override
   public RuleContext visit(MethodImplementationNode method, RuleContext data) {
     int count = method.getParameters().size();
     int limit = getProperty(LIMIT);
     if (count > limit) {
       addViolationWithMessage(
-          data, method.getMethodNameNode(), String.format(VIOLATION_MESSAGE, count, limit));
+          data,
+          method.getMethodNameNode(),
+          "Too many arguments: {0} (max {1})",
+          new Object[] {count, limit});
     }
     return super.visit(method, data);
   }

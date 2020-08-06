@@ -32,8 +32,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 
 /** Class for counting method statements. If too many, creates a violation. */
 public class TooLargeMethodRule extends AbstractDelphiRule {
-  private static final String VIOLATION_MESSAGE =
-      "%s is too large. Method has %d statements (Limit is %d)";
 
   @Override
   public RuleContext visit(MethodImplementationNode method, RuleContext data) {
@@ -44,7 +42,8 @@ public class TooLargeMethodRule extends AbstractDelphiRule {
       addViolationWithMessage(
           data,
           method.getMethodNameNode(),
-          String.format(VIOLATION_MESSAGE, method.simpleName(), statements, limit));
+          "{0} is too large. Method has {1} statements (Limit is {2})",
+          new Object[] {method.simpleName(), statements, limit});
     }
 
     return super.visit(method, data);

@@ -8,10 +8,6 @@ import org.sonar.plugins.delphi.pmd.FilePosition;
 
 /** Class for counting line characters. If too long, creates a violation. */
 public class TooLongLineRule extends AbstractDelphiRule {
-
-  private static final String MESSAGE =
-      "Line too long (%s characters). Maximum length is %s " + "characters.";
-
   private int lastLineChecked;
 
   @Override
@@ -34,7 +30,10 @@ public class TooLongLineRule extends AbstractDelphiRule {
         newViolation(data)
             .atPosition(FilePosition.from(lineNumber, 0, lineNumber, lineLength))
             .atLocation(node)
-            .message(String.format(MESSAGE, lineLength, lineLimit))
+            .message(
+                String.format(
+                    "Line too long (%s characters). Maximum length is %s characters.",
+                    lineLength, lineLimit))
             .save();
       }
     }

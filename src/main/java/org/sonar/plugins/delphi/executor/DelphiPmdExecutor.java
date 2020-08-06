@@ -36,16 +36,12 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSetHelper;
 
 public class DelphiPmdExecutor implements Executor {
   private static final Logger LOG = Loggers.get(DelphiPmdExecutor.class);
-  private static final String DYSFUNCTIONAL_RULE = "Removed misconfigured rule: %s  cause: %s";
-
   private final SensorContext sensorContext;
   private final ActiveRules rulesProfile;
   private final DelphiPmdConfiguration pmdConfiguration;
   private final DelphiPmdViolationRecorder violationRecorder;
-
-  private final Language language =
-      LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME);
-  private final RuleContext ctx = new RuleContext();
+  private final Language language;
+  private final RuleContext ctx;
   private RuleSets ruleSets;
 
   /**
@@ -65,6 +61,8 @@ public class DelphiPmdExecutor implements Executor {
     this.rulesProfile = rulesProfile;
     this.pmdConfiguration = pmdConfiguration;
     this.violationRecorder = violationRecorder;
+    this.language = LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME);
+    this.ctx = new RuleContext();
   }
 
   @Override
@@ -119,7 +117,7 @@ public class DelphiPmdExecutor implements Executor {
     try {
       RuleSet ruleSet = ruleSetFactory.createRuleSet(ruleSetFile.getAbsolutePath());
       removeTemplateRules(ruleSet);
-      removeDysfunctionRules(ruleSet);
+      removeDysfunctionalRules(ruleSet);
       removeUnusedRules(ruleSet);
       rulesets.addRuleSet(ruleSet);
       return rulesets;
@@ -163,13 +161,14 @@ public class DelphiPmdExecutor implements Executor {
     ruleSet.getRules().removeIf(rule -> TRUE.equals(rule.getProperty(TEMPLATE)));
   }
 
-  private static void removeDysfunctionRules(final RuleSet ruleSet) {
+  private static void removeDysfunctionalRules(final RuleSet ruleSet) {
     final Set<Rule> brokenRules = new HashSet<>();
     ruleSet.removeDysfunctionalRules(brokenRules);
+    brokenRules.forEach(DelphiPmdExecutor::reportDysfunctionReason);
+  }
 
-    for (final Rule rule : brokenRules) {
-      LOG.warn(String.format(DYSFUNCTIONAL_RULE, rule.getName(), rule.dysfunctionReason()));
-    }
+  private static void reportDysfunctionReason(Rule rule) {
+    LOG.warn("Removed misconfigured rule: {}  cause: {}", rule.getName(), rule.dysfunctionReason());
   }
 
   private void removeUnusedRules(final RuleSet ruleSet) {

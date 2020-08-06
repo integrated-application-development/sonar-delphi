@@ -29,10 +29,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.pmd.FilePosition;
 
 public class ClassPerFileRule extends AbstractDelphiRule {
-
-  private static final String VIOLATION_MESSAGE =
-      "File has %d classes, maximum number of classes is %d.";
-
   private int count;
 
   @Override
@@ -46,7 +42,8 @@ public class ClassPerFileRule extends AbstractDelphiRule {
     if (count > limit) {
       newViolation(ctx)
           .atPosition(FilePosition.atFileLevel())
-          .message(String.format(VIOLATION_MESSAGE, count, limit))
+          .message(
+              String.format("File has %d classes, maximum number of classes is %d.", count, limit))
           .save();
     }
   }

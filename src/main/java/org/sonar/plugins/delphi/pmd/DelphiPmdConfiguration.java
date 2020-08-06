@@ -26,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import net.sourceforge.pmd.PMDConfiguration;
 import net.sourceforge.pmd.Report;
 import net.sourceforge.pmd.renderers.Renderer;
@@ -41,13 +42,10 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
 
 @ScannerSide
 public class DelphiPmdConfiguration extends PMDConfiguration {
-
   private static final Logger LOG = Loggers.get(DelphiPmdConfiguration.class);
   private static final String PMD_RESULT_XML = "pmd-result.xml";
-
   private static final String PMD_CONFIG_SAVE_FAILURE = "Failed to save the PMD configuration";
   private static final String PMD_REPORT_SAVE_FAILURE = "Failed to save the PMD report";
-  private static final String DEF_NOT_FOUND = "Rule definition not found for %s";
 
   private final FileSystem fileSystem;
   private final Configuration settings;
@@ -65,18 +63,17 @@ public class DelphiPmdConfiguration extends PMDConfiguration {
   public DelphiRule getRuleDefinition(DelphiRule rule) {
     List<DelphiRule> ruleDefinitions = ruleSetDefinitionProvider.getDefinition().getRules();
 
-    return ruleDefinitions.stream()
-        .filter(def -> def.getName().equals(rule.getTemplateName()))
-        .findFirst()
-        .orElseGet(
+    return findRuleByName(ruleDefinitions, rule.getTemplateName())
+        .or(() -> findRuleByName(ruleDefinitions, rule.getName()))
+        .orElseThrow(
             () ->
-                ruleDefinitions.stream()
-                    .filter(def -> def.getName().equals(rule.getName()))
-                    .findFirst()
-                    .orElseThrow(
-                        () ->
-                            new IllegalStateException(
-                                String.format(DEF_NOT_FOUND, rule.getName()))));
+                new IllegalStateException(
+                    String.format("Rule definition not found for %s", rule.getName())));
+  }
+
+  private static Optional<DelphiRule> findRuleByName(
+      List<DelphiRule> ruleDefinitions, String name) {
+    return ruleDefinitions.stream().filter(def -> def.getName().equals(name)).findFirst();
   }
 
   private static String reportToString(Report report) throws IOException {

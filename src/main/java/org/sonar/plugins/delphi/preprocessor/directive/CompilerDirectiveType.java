@@ -38,6 +38,8 @@ public enum CompilerDirectiveType {
   }
 
   /**
+   * Returns directive type by name
+   *
    * @param directiveName directive name
    * @return directive type with given name
    */

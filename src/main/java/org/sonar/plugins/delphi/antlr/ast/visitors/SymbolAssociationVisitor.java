@@ -26,8 +26,6 @@ import org.sonar.plugins.delphi.symbol.scope.FileScope;
  * <p>This visitor re-attaches applicable symbol information to the nodes of a fresh AST.
  */
 public class SymbolAssociationVisitor implements DelphiParserVisitor<Data> {
-  private static final String UNIT_DOES_NOT_EXIST = "Expected unit '%s' to exist in global scope.";
-
   public static class Data {
     private final SymbolTable symbolTable;
     private FileScope fileScope;
@@ -44,7 +42,7 @@ public class SymbolAssociationVisitor implements DelphiParserVisitor<Data> {
     UnitNameDeclaration declaration = data.symbolTable.getUnitByPath(filePath);
     String unitName = node.getFileHeader().getName();
 
-    checkNotNull(declaration, String.format(UNIT_DOES_NOT_EXIST, unitName));
+    checkNotNull(declaration, "Expected unit '%s' to exist in global scope.", unitName);
 
     data.fileScope = declaration.getFileScope();
     node.setScope(data.fileScope);

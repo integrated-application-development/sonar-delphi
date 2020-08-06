@@ -52,7 +52,11 @@ public class DelphiGroupProj {
     return groupProj;
   }
 
-  /** @return list of projects */
+  /**
+   * Returns a list of Delphi projects
+   *
+   * @return list of projects
+   */
   public List<DelphiProject> getProjects() {
     return projects;
   }

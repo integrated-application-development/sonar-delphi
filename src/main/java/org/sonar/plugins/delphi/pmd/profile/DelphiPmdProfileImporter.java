@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.delphi.pmd.profile;
 
+import com.google.errorprone.annotations.FormatMethod;
 import java.io.Reader;
 import org.sonar.api.profiles.ProfileImporter;
 import org.sonar.api.profiles.RulesProfile;
@@ -45,19 +46,6 @@ import org.sonar.plugins.delphi.utils.PmdLevelUtils;
 @ServerSide
 public class DelphiPmdProfileImporter extends ProfileImporter {
   private static final Logger LOG = Loggers.get(DelphiPmdProfileImporter.class);
-
-  private static final String MISSING_CLASS_WARNING =
-      "A PMD rule without 'class' attribute can't " + "be imported. see '%s'";
-
-  private static final String UNKNOWN_PMD_RULE_WARNING = "Unable to import unknown PMD rule '%s'";
-
-  private static final String PROP_NOT_SUPPORTED_WARNING =
-      "The property '%s' is not supported in " + "the pmd rule: %s";
-
-  private static final String XPATH_RULE_WARNING =
-      "XPath rule %s can't be imported automatically. "
-          + "The rule must be created manually through the SonarQube web interface.";
-
   private final RuleFinder ruleFinder;
   private ValidationMessages messages;
 
@@ -83,12 +71,15 @@ public class DelphiPmdProfileImporter extends ProfileImporter {
     String ruleName = delphiRule.getName();
 
     if (delphiRule.getClazz() == null) {
-      addWarning(String.format(MISSING_CLASS_WARNING, ruleName));
+      addWarning("A PMD rule without 'class' attribute can't be imported. See '%s'", ruleName);
       return;
     }
 
     if (delphiRule.getClazz().equals(DelphiPmdConstants.TEMPLATE_XPATH_CLASS)) {
-      addWarning(String.format(XPATH_RULE_WARNING, ruleName));
+      addWarning(
+          "XPath rule %s can't be imported automatically."
+              + " The rule must be created manually through the SonarQube web interface.",
+          ruleName);
       return;
     }
 
@@ -98,7 +89,7 @@ public class DelphiPmdProfileImporter extends ProfileImporter {
     Rule rule = ruleFinder.find(query);
 
     if (rule == null) {
-      addWarning(String.format(UNKNOWN_PMD_RULE_WARNING, ruleName));
+      addWarning("Unable to import unknown PMD rule '%s'", ruleName);
       return;
     }
 
@@ -123,16 +114,19 @@ public class DelphiPmdProfileImporter extends ProfileImporter {
     String propertyName = property.getName();
 
     if (sonarRule.getParam(property.getName()) == null) {
-      addWarning(String.format(PROP_NOT_SUPPORTED_WARNING, propertyName, sonarRule.getName()));
+      addWarning(
+          "The property '%s' is not supported in the PMD rule: %s",
+          propertyName, sonarRule.getName());
       return false;
     }
 
     return true;
   }
 
-  private void addWarning(String warning) {
+  @FormatMethod
+  private void addWarning(String warning, Object... args) {
     if (messages != null) {
-      messages.addWarningText(warning);
+      messages.addWarningText(String.format(warning, args));
     }
     LOG.warn(warning);
   }

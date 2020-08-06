@@ -28,8 +28,6 @@ import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 
 public class MixedNamesRule extends AbstractDelphiRule {
-  private static final String MESSAGE = "Avoid mixing names (found: '%s' expected: '%s').";
-
   @Override
   public RuleContext visit(NameReferenceNode reference, RuleContext data) {
     DelphiNameOccurrence occurrence = reference.getNameOccurrence();
@@ -39,8 +37,11 @@ public class MixedNamesRule extends AbstractDelphiRule {
       String actual = occurrence.getImage();
       String expected = declaration.getImage();
       if (!expected.equals(actual)) {
-        String message = String.format(MESSAGE, actual, expected);
-        addViolationWithMessage(data, reference.getIdentifier(), message);
+        addViolationWithMessage(
+            data,
+            reference.getIdentifier(),
+            "Avoid mixing names (found: '{0}' expected: '{1}').",
+            new Object[] {actual, expected});
       }
     }
 

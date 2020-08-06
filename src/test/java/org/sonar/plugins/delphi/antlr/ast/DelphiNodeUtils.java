@@ -24,9 +24,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 
 public final class DelphiNodeUtils {
-  private static final String NODE_INSTANTIATION_ERROR =
-      "Could not instantiate %s. Requires public constructor(Token)";
-
   public static final JavaClasses NODE_PACKAGE =
       new ClassFileImporter().importPackages("org.sonar.plugins.delphi.antlr.ast.node");
 
@@ -101,7 +98,9 @@ public final class DelphiNodeUtils {
       Constructor<?> constructor = nodeType.getConstructor(Token.class);
       instance = constructor.newInstance(Token.INVALID_TOKEN);
       assertThat(instance)
-          .as(String.format(NODE_INSTANTIATION_ERROR, nodeType.getSimpleName()))
+          .as(
+              "Could not instantiate %s. Requires public constructor(Token)",
+              nodeType.getSimpleName())
           .isNotNull();
     } catch (Exception e) {
       throw new AssertionError(e);

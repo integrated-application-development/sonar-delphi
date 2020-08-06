@@ -12,11 +12,11 @@ public abstract class NameDeclarationNode extends DelphiNode {
   private DelphiNameDeclaration declaration;
   private List<NameOccurrence> usages;
 
-  public NameDeclarationNode(Token token) {
+  protected NameDeclarationNode(Token token) {
     super(token);
   }
 
-  public NameDeclarationNode(int tokenType) {
+  protected NameDeclarationNode(int tokenType) {
     super(tokenType);
   }
 

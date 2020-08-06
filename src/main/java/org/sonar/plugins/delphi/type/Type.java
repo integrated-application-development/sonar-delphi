@@ -404,7 +404,7 @@ public interface Type {
     /**
      * Returns a set of all default array properties that can be called on this type.
      *
-     * @return Set of default array property declarations
+     * @return set of default array property declarations
      */
     Set<NameDeclaration> findDefaultArrayProperties();
   }
@@ -413,7 +413,7 @@ public interface Type {
     /**
      * The type that this is a helper for.
      *
-     * @return Helper type
+     * @return the type that this is a helper for
      */
     @NotNull
     Type extendedType();

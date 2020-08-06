@@ -13,11 +13,11 @@ import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
 
 public abstract class MethodNode extends DelphiNode implements Visibility {
-  public MethodNode(Token token) {
+  protected MethodNode(Token token) {
     super(token);
   }
 
-  public MethodNode(int tokenType) {
+  protected MethodNode(int tokenType) {
     super(tokenType);
   }
 

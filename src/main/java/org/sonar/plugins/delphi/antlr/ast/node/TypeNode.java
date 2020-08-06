@@ -15,11 +15,11 @@ public abstract class TypeNode extends DelphiNode implements Typed {
   private List<TypeReferenceNode> parentTypeNodes;
   private Set<Type> parentTypes;
 
-  public TypeNode(Token token) {
+  protected TypeNode(Token token) {
     super(token);
   }
 
-  public TypeNode(int tokenType) {
+  protected TypeNode(int tokenType) {
     super(tokenType);
   }
 

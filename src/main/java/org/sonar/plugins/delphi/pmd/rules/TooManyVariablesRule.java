@@ -9,15 +9,16 @@ import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarSectionNode;
 
 public class TooManyVariablesRule extends AbstractDelphiRule {
-  private static final String VIOLATION_MESSAGE = "Too many variables: %d (max %d)";
-
   @Override
   public RuleContext visit(MethodImplementationNode method, RuleContext data) {
     int count = countVariableDeclarations(method);
     int limit = getProperty(LIMIT);
     if (count > limit) {
       addViolationWithMessage(
-          data, method.getMethodNameNode(), String.format(VIOLATION_MESSAGE, count, limit));
+          data,
+          method.getMethodNameNode(),
+          "Too many variables: {0} (max {1})",
+          new Object[] {count, limit});
     }
     return super.visit(method, data);
   }

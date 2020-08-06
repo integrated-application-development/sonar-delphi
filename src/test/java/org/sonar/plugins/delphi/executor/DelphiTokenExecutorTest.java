@@ -23,7 +23,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
@@ -198,7 +197,7 @@ public class DelphiTokenExecutorTest {
               .setModuleBaseDir(ROOT_DIR.toPath())
               .setContents(DelphiUtils.readFileContent(srcFile, UTF_8.name()))
               .setLanguage(DelphiLanguage.KEY)
-              .setType(Type.MAIN)
+              .setType(InputFile.Type.MAIN)
               .build();
 
       return DelphiInputFile.from(inputFile, DelphiFile.createConfig(UTF_8.name()));

@@ -8,9 +8,6 @@ import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 import org.sonar.plugins.delphi.pmd.FilePosition;
 
 public class TabulationCharactersRule extends AbstractDelphiRule {
-  private static final String MESSAGE =
-      "Tabulation characters should not be used (%d found in file)";
-
   private int tabCount;
 
   @Override
@@ -21,7 +18,9 @@ public class TabulationCharactersRule extends AbstractDelphiRule {
     if (tabCount > 0) {
       newViolation(data)
           .atPosition(FilePosition.atFileLevel())
-          .message(String.format(MESSAGE, tabCount))
+          .message(
+              String.format(
+                  "Tabulation characters should not be used (%d found in file)", tabCount))
           .save();
     }
 

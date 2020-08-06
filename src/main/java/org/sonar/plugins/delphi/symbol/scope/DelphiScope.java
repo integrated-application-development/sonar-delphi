@@ -30,7 +30,7 @@ public interface DelphiScope extends Scope {
    * Find a helper type in this scope based off of some type
    *
    * @param type The type for which we are trying to find a helper
-   * @return Helper type
+   * @return Helper type for the specified type
    */
   @Nullable
   HelperType getHelperForType(Type type);

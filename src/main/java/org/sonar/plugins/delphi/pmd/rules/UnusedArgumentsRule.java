@@ -22,7 +22,6 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static java.lang.String.format;
 import static java.util.Collections.disjoint;
 
 import java.util.EnumSet;
@@ -43,7 +42,6 @@ import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 
 /** Rule violation for unused function/procedure/method arguments */
 public class UnusedArgumentsRule extends AbstractDelphiRule {
-  private static final String MESSAGE = "Unused argument: '%s' at %s";
   private static final Set<MethodDirective> EXCLUDED_DIRECTIVES =
       EnumSet.of(MethodDirective.OVERRIDE, MethodDirective.VIRTUAL, MethodDirective.MESSAGE);
 
@@ -59,8 +57,11 @@ public class UnusedArgumentsRule extends AbstractDelphiRule {
     }
 
     for (FormalParameterData unusedArgument : unusedArguments) {
-      String message = format(MESSAGE, unusedArgument.getImage(), method.fullyQualifiedName());
-      addViolationWithMessage(data, unusedArgument.getNode(), message);
+      addViolationWithMessage(
+          data,
+          unusedArgument.getNode(),
+          "Unused argument: '{0}' at {1}",
+          new Object[] {unusedArgument.getImage(), method.fullyQualifiedName()});
     }
 
     return super.visit(method, data);

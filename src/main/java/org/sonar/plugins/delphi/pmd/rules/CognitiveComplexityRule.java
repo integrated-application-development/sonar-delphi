@@ -9,9 +9,6 @@ import org.sonar.plugins.delphi.antlr.ast.visitors.CognitiveComplexityVisitor;
 import org.sonar.plugins.delphi.antlr.ast.visitors.CognitiveComplexityVisitor.Data;
 
 public class CognitiveComplexityRule extends AbstractDelphiRule {
-  private static final String VIOLATION_MESSAGE =
-      "The Cognitive Complexity of this method \"%s\" is %d which is greater than %d authorized.";
-
   private static final CognitiveComplexityVisitor COGNITIVE_VISITOR =
       new CognitiveComplexityVisitor() {
         @Override
@@ -28,8 +25,12 @@ public class CognitiveComplexityRule extends AbstractDelphiRule {
     int limit = getProperty(LIMIT);
 
     if (complexity > limit) {
-      String message = String.format(VIOLATION_MESSAGE, method.simpleName(), complexity, limit);
-      addViolationWithMessage(data, method.getMethodNameNode(), message);
+      addViolationWithMessage(
+          data,
+          method.getMethodNameNode(),
+          "The Cognitive Complexity of this method \"{0}\""
+              + " is {1} which is greater than {2} authorized.",
+          new Object[] {method.simpleName(), complexity, limit});
     }
     return super.visit(method, data);
   }

@@ -105,7 +105,7 @@
     <java-surefire.version>5.13.0.18197</java-surefire.version>
     <guava.version>28.1-jre</guava.version>
     <jdom.version>1.0</jdom.version>
-    <errorprone.version>2.3.4</errorprone.version>
+    <errorprone.version>2.4.0</errorprone.version>
     <!--Maven plugins-->
     <antlr3-plugin.version>3.5.2</antlr3-plugin.version>
     <jacoco-plugin.version>0.8.5</jacoco-plugin.version>
@@ -277,6 +277,7 @@
           <showDeprecation>true</showDeprecation>
           <compilerArgs>
             <arg>-XDcompilePolicy=simple</arg>
+            <arg>-Werror</arg>
             <arg>-Xlint:all,-serial,-path,-processing,-rawtypes,-cast,-classfile</arg>
             <arg>-Xplugin:ErrorProne -XepDisableWarningsInGeneratedCode -XepExcludedPaths:.*/Delphi(Lexer|Parser).java</arg>
           </compilerArgs>

@@ -1,7 +1,5 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static java.lang.String.format;
-
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
@@ -14,9 +12,6 @@ public class MethodNestingDepthRule extends AbstractDelphiRule {
           .defaultValue(1)
           .build();
 
-  private static final String MESSAGE =
-      "Extract this deeply nested method. Nesting level is %d. (Limit is %d)";
-
   public MethodNestingDepthRule() {
     definePropertyDescriptor(DEPTH);
   }
@@ -27,7 +22,11 @@ public class MethodNestingDepthRule extends AbstractDelphiRule {
     int limit = getProperty(DEPTH);
 
     if (depth > limit) {
-      addViolationWithMessage(data, method.getMethodNameNode(), format(MESSAGE, depth, limit));
+      addViolationWithMessage(
+          data,
+          method.getMethodNameNode(),
+          "Extract this deeply nested method. Nesting level is {0}. (Limit is {1})",
+          new Object[] {depth, limit});
     }
 
     return super.visit(method, data);

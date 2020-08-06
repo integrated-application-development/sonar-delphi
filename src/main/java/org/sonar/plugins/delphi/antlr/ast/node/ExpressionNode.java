@@ -11,11 +11,11 @@ import org.sonar.plugins.delphi.type.Typed;
 public abstract class ExpressionNode extends DelphiNode implements Typed {
   private Type type;
 
-  public ExpressionNode(Token token) {
+  protected ExpressionNode(Token token) {
     super(token);
   }
 
-  public ExpressionNode(int tokenType) {
+  protected ExpressionNode(int tokenType) {
     super(tokenType);
   }
 

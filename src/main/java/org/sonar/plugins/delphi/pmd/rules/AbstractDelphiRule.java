@@ -37,7 +37,7 @@ import org.sonar.plugins.delphi.pmd.DelphiLanguageModule;
 public abstract class AbstractDelphiRule extends AbstractRule implements DelphiRule {
   private Set<Integer> suppressions = new HashSet<>();
 
-  public AbstractDelphiRule() {
+  protected AbstractDelphiRule() {
     setLanguage(LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME));
     defineBaseProperties();
   }

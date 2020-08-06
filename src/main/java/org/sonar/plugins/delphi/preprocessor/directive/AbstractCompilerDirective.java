@@ -6,7 +6,7 @@ public abstract class AbstractCompilerDirective implements CompilerDirective {
   private final Token token;
   private final CompilerDirectiveType type;
 
-  public AbstractCompilerDirective(Token token, CompilerDirectiveType type) {
+  protected AbstractCompilerDirective(Token token, CompilerDirectiveType type) {
     this.token = token;
     this.type = type;
   }
