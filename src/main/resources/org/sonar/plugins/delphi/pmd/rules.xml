@@ -840,7 +840,6 @@ FreeAndNil(MyVar); // Compliant
     <properties>
       <property name="baseEffort" value="2min"/>
       <property name="limit" value="120"/>
-      <property name="scope" value="MAIN"/>
     </properties>
   </rule>
 
