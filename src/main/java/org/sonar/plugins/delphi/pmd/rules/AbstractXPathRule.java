@@ -8,7 +8,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 public abstract class AbstractXPathRule extends XPathRule implements DelphiRule {
   private Set<Integer> suppressions;
 
-  public AbstractXPathRule() {
+  protected AbstractXPathRule() {
     defineBaseProperties();
   }
 

@@ -37,7 +37,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
 import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 
 public class DelphiTreeAdaptor extends BaseTreeAdaptor {
-  private static final String NODE_CONSTRUCTOR_ERROR = "%s must have a public constructor(Token)";
 
   @Override
   public Object create(Token token) {
@@ -115,8 +114,10 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
       dupNode.jjtSetLastToken(getLastToken(node));
       return dupNode;
     } catch (Exception e) {
-      String errorMsg = String.format(NODE_CONSTRUCTOR_ERROR, node.getClass().getSimpleName());
-      throw new AssertionError(errorMsg, e);
+      throw new AssertionError(
+          String.format(
+              "%s must have an accessible constructor(Token)", node.getClass().getSimpleName()),
+          e);
     }
   }
 

@@ -49,17 +49,6 @@ import org.sonarsource.analyzer.commons.ProgressReport;
 public class SymbolTableBuilder {
   private static final Logger LOG = Loggers.get(SymbolTableBuilder.class);
 
-  private static final String REQUIRED_UNIT_NOT_FOUND =
-      "%s unit could not be found. (Is '"
-          + DelphiPlugin.STANDARD_LIBRARY_KEY
-          + "' set correctly?))";
-
-  private static final String REQUIRED_DEF_NOT_FOUND =
-      "Required definition '%s' was not found in System.pas.";
-
-  private static final String INVALID_STANDARD_LIBRARY_PATH =
-      "Path to Delphi standard library is invalid: %s";
-
   private final SymbolTable symbolTable = new SymbolTable();
   private final Set<UnitData> sourceFileUnits = new HashSet<>();
   private final SetMultimap<String, UnitData> allUnitsByName = HashMultimap.create();
@@ -115,8 +104,8 @@ public class SymbolTableBuilder {
   public SymbolTableBuilder standardLibraryPath(@NotNull Path standardLibraryPath) {
     if (!Files.exists(standardLibraryPath)) {
       Path absolutePath = standardLibraryPath.toAbsolutePath();
-      String message = String.format(INVALID_STANDARD_LIBRARY_PATH, absolutePath);
-      throw new SymbolTableConstructionException(message);
+      throw new SymbolTableConstructionException(
+          String.format("Path to Delphi standard library is invalid: %s", absolutePath));
     }
     this.processSearchPath(standardLibraryPath);
     return this;
@@ -349,7 +338,12 @@ public class SymbolTableBuilder {
     if (data != null) {
       return data;
     }
-    throw new SymbolTableConstructionException(String.format(REQUIRED_UNIT_NOT_FOUND, unit));
+    throw new SymbolTableConstructionException(
+        String.format(
+            "%s unit could not be found. (Is '"
+                + DelphiPlugin.STANDARD_LIBRARY_KEY
+                + "' set correctly?))",
+            unit));
   }
 
   @NotNull
@@ -386,7 +380,8 @@ public class SymbolTableBuilder {
 
   private static void checkSystemDeclaration(NameDeclaration declaration, String name) {
     if (declaration == null) {
-      throw new SymbolTableConstructionException(String.format(REQUIRED_DEF_NOT_FOUND, name));
+      throw new SymbolTableConstructionException(
+          String.format("Required definition '%s' was not found in System.pas.", name));
     }
   }
 

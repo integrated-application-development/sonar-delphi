@@ -6,7 +6,7 @@ import org.sonar.plugins.delphi.type.DelphiHelperType;
 import org.sonar.plugins.delphi.type.Type;
 
 public abstract class HelperTypeNode extends StructTypeNode {
-  public HelperTypeNode(Token token) {
+  protected HelperTypeNode(Token token) {
     super(token);
   }
 

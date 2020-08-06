@@ -34,7 +34,6 @@ import org.sonar.api.SonarRuntime;
 import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.utils.Version;
 
-/** @author Evgeny Mandrikov */
 public class DelphiPluginTest {
 
   private DelphiPlugin plugin;

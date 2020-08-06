@@ -10,9 +10,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
  * regardless of sub-procedure nesting level
  */
 public class TooManySubProceduresRule extends AbstractDelphiRule {
-  private static final String VIOLATION_MESSAGE =
-      "Code should not contain too many sub-procedures. Method has %d sub-procedures (Limit is %d)";
-
   @Override
   public RuleContext visit(MethodImplementationNode method, RuleContext data) {
     int count = countSubProcedures(method);
@@ -20,7 +17,11 @@ public class TooManySubProceduresRule extends AbstractDelphiRule {
 
     if (count > limit) {
       addViolationWithMessage(
-          data, method.getMethodNameNode(), String.format(VIOLATION_MESSAGE, count, limit));
+          data,
+          method.getMethodNameNode(),
+          "Code should not contain too many sub-procedures."
+              + " Method has {0} sub-procedures (Limit is {1})",
+          new Object[] {count, limit});
     }
 
     return data;

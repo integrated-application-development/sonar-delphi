@@ -22,6 +22,7 @@ package org.sonar.plugins.delphi.pmd.xml;
 
 import java.io.IOException;
 import java.io.Reader;
+import org.jetbrains.annotations.NotNull;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.utils.ValidationMessages;
@@ -32,7 +33,7 @@ import org.sonar.plugins.delphi.pmd.xml.factory.RuleSetFactory;
 import org.sonar.plugins.delphi.pmd.xml.factory.RulesProfileRuleSetFactory;
 import org.sonar.plugins.delphi.pmd.xml.factory.XmlRuleSetFactory;
 
-/** Convenience class that creates {@link DelphiRuleSet} instances out of the given input. */
+/** Utility class for creating {@link DelphiRuleSet} instances from different inputs. */
 public class DelphiRuleSetHelper {
   private static final Logger LOG = Loggers.get(DelphiRuleSetHelper.class);
 
@@ -41,36 +42,49 @@ public class DelphiRuleSetHelper {
   }
 
   /**
+   * Create a DelphiRuleSet from a PMD XML configuration file, reporting errors via Sonar
+   * ValidationMessages
+   *
    * @param configReader A character stream containing the data of the {@link DelphiRuleSet}.
-   * @param messages SonarQube validation messages - inform the end user about processing problems.
-   * @return An instance of DelphiRuleSet. The output may be empty but never null.
+   * @param messages Sonar validation messages - used to report processing problems.
+   * @return instance of DelphiRuleSet. Empty if an error occurs.
    */
+  @NotNull
   public static DelphiRuleSet createFrom(Reader configReader, ValidationMessages messages) {
     return createQuietly(new XmlRuleSetFactory(configReader, messages));
   }
 
   /**
+   * Create a DelphiRuleSet from a PMD XML configuration file
+   *
    * @param configReader A character stream containing the data of the {@link DelphiRuleSet}.
-   * @return An instance of DelphiRuleSet. The output may be empty but never null.
+   * @return An instance of DelphiRuleSet. Empty if an error occurs.
    */
+  @NotNull
   public static DelphiRuleSet createFrom(Reader configReader) {
     return createQuietly(new XmlRuleSetFactory(configReader, null));
   }
 
   /**
+   * Create a DelphiRuleSet from a Sonar ActiveRules object
+   *
    * @param activeRules The currently active rules.
    * @param repositoryKey The key identifier of the rule repository.
-   * @return An instance of DelphiRuleSet. The output may be empty but never null.
+   * @return instance of DelphiRuleSet. Empty if an error occurs.
    */
+  @NotNull
   public static DelphiRuleSet createFrom(ActiveRules activeRules, String repositoryKey) {
     return create(new ActiveRulesRuleSetFactory(activeRules, repositoryKey));
   }
 
   /**
+   * Create a DelphiRuleSet from a Sonar RulesProfile object
+   *
    * @param rulesProfile The current rules profile.
    * @param repositoryKey The key identifier of the rule repository.
-   * @return An instance of DelphiRuleSet. The output may be empty but never null.
+   * @return instance of DelphiRuleSet. Empty if an error occurs.
    */
+  @NotNull
   public static DelphiRuleSet createFrom(RulesProfile rulesProfile, String repositoryKey) {
     return create(new RulesProfileRuleSetFactory(rulesProfile, repositoryKey));
   }

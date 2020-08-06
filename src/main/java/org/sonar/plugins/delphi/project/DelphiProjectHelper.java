@@ -184,19 +184,19 @@ public class DelphiProjectHelper {
     return searchDirectories;
   }
 
-  /*
+  /**
    * Gets the set of conditional defines specified in settings and project files
    *
-   * @returns set of conditional defines
+   * @return set of conditional defines
    */
   public Set<String> getConditionalDefines() {
     return conditionalDefines;
   }
 
-  /*
+  /**
    * Gets the set of unit scope names specified in settings and project files
    *
-   * @returns set of unit scope names
+   * @return set of unit scope names
    */
   public Set<String> getUnitScopeNames() {
     return unitScopeNames;

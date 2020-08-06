@@ -11,7 +11,6 @@ import java.io.StringReader;
 import java.io.UncheckedIOException;
 import org.apache.commons.io.FileUtils;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
@@ -76,7 +75,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
               .setModuleBaseDir(baseDir.toPath())
               .setContents(DelphiUtils.readFileContent(file, UTF_8.name()))
               .setLanguage(DelphiLanguage.KEY)
-              .setType(Type.MAIN)
+              .setType(InputFile.Type.MAIN)
               .build();
     } catch (IOException e) {
       throw new UncheckedIOException(e);
@@ -164,7 +163,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
                 .setModuleBaseDir(baseDir.toPath())
                 .setContents(DelphiUtils.readFileContent(resource, UTF_8.name()))
                 .setLanguage(DelphiLanguage.KEY)
-                .setType(Type.MAIN)
+                .setType(InputFile.Type.MAIN)
                 .build();
       } catch (IOException e) {
         throw new UncheckedIOException(e);

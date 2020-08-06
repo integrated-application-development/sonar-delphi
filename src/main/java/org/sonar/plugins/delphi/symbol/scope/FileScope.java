@@ -30,7 +30,7 @@ public interface FileScope extends DelphiScope {
    * Find a helper type in this scope without traversing imports
    *
    * @param type The type for which we are trying to find a helper
-   * @return Helper type
+   * @return Helper type for the specified type
    */
   @Nullable
   HelperType shallowGetHelperForType(Type type);

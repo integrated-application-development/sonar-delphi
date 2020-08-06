@@ -17,7 +17,11 @@ import org.sonar.plugins.delphi.pmd.violation.DelphiRuleViolationBuilder;
 
 public interface DelphiRule extends Rule, DelphiParserVisitor<RuleContext>, ImmutableLanguage {
 
-  /** @return A set of lines with issue suppressions. */
+  /**
+   * Returns a set of lines with issue suppressions
+   *
+   * @return set of lines with issue suppressions.
+   */
   Set<Integer> getSuppressions();
 
   default void defineBaseProperties() {

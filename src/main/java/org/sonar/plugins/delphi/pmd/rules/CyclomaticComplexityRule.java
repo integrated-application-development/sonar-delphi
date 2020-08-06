@@ -9,9 +9,6 @@ import org.sonar.plugins.delphi.antlr.ast.visitors.CyclomaticComplexityVisitor;
 import org.sonar.plugins.delphi.antlr.ast.visitors.CyclomaticComplexityVisitor.Data;
 
 public class CyclomaticComplexityRule extends AbstractDelphiRule {
-  private static final String VIOLATION_MESSAGE =
-      "The Cyclomatic Complexity of this method \"%s\" is %d which is greater than %d authorized.";
-
   private static final CyclomaticComplexityVisitor CYCLOMATIC_VISITOR =
       new CyclomaticComplexityVisitor() {
         @Override
@@ -28,8 +25,12 @@ public class CyclomaticComplexityRule extends AbstractDelphiRule {
     int limit = getProperty(LIMIT);
 
     if (complexity > limit) {
-      String message = String.format(VIOLATION_MESSAGE, method.simpleName(), complexity, limit);
-      addViolationWithMessage(data, method.getMethodNameNode(), message);
+      addViolationWithMessage(
+          data,
+          method.getMethodNameNode(),
+          "The Cyclomatic Complexity of this method \"{0}\""
+              + " is {1} which is greater than {2} authorized.",
+          new Object[] {method.simpleName(), complexity, limit});
     }
     return super.visit(method, data);
   }

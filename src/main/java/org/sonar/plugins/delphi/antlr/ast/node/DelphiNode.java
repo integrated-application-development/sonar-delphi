@@ -54,7 +54,7 @@ public abstract class DelphiNode extends AbstractNode implements ScopedNode, Ind
    *
    * @param token Token to create the node with
    */
-  public DelphiNode(Token token) {
+  protected DelphiNode(Token token) {
     super(token == null ? Token.INVALID_TOKEN_TYPE : token.getType());
     this.token = new DelphiToken(token);
   }
@@ -64,7 +64,7 @@ public abstract class DelphiNode extends AbstractNode implements ScopedNode, Ind
    *
    * @param tokenType Token type
    */
-  public DelphiNode(int tokenType) {
+  protected DelphiNode(int tokenType) {
     this(new CommonToken(tokenType, DelphiParser.tokenNames[tokenType]));
   }
 

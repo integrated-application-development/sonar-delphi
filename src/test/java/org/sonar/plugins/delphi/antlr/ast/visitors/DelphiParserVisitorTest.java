@@ -10,7 +10,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 import net.sourceforge.pmd.lang.ast.RootNode;
 import org.junit.Test;
@@ -18,8 +17,6 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiNodeUtils;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 
 public class DelphiParserVisitorTest {
-  private static final String UNHANDLED_TYPES_ERROR =
-      "Expected the following types to be handled by DelphiParserVisitor: %s";
 
   @Test
   @SuppressWarnings("unchecked")
@@ -45,17 +42,18 @@ public class DelphiParserVisitorTest {
 
   @Test
   public void testAllASTNodesAreHandled() {
-    Set<Class<? extends DelphiNode>> nodeTypes = DelphiNodeUtils.getNodeTypes();
     Set<Class<?>> handledTypes = getTypesHandledByParserVisitor();
-
     Set<String> unhandledTypes =
-        nodeTypes.stream()
+        DelphiNodeUtils.getNodeTypes().stream()
             .filter(nodeType -> !handledTypes.contains(nodeType))
             .map(Class::getSimpleName)
-            .collect(Collectors.toCollection(TreeSet::new));
+            .collect(Collectors.toSet());
 
     if (!unhandledTypes.isEmpty()) {
-      throw new AssertionError(String.format(UNHANDLED_TYPES_ERROR, unhandledTypes.toString()));
+      throw new AssertionError(
+          String.format(
+              "Expected the following types to be handled by DelphiParserVisitor: %s",
+              unhandledTypes.toString()));
     }
   }
 

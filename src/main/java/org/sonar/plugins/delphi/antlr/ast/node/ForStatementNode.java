@@ -3,7 +3,7 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 import org.antlr.runtime.Token;
 
 public abstract class ForStatementNode extends StatementNode {
-  public ForStatementNode(Token token) {
+  protected ForStatementNode(Token token) {
     super(token);
   }
 

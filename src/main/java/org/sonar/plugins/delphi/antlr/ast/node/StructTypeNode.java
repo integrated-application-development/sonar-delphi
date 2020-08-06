@@ -6,7 +6,7 @@ import org.sonar.plugins.delphi.type.DelphiStructType;
 import org.sonar.plugins.delphi.type.Type;
 
 public abstract class StructTypeNode extends TypeNode {
-  public StructTypeNode(Token token) {
+  protected StructTypeNode(Token token) {
     super(token);
   }
 

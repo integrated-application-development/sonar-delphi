@@ -21,9 +21,12 @@ package org.sonar.plugins.delphi.pmd.xml.factory;
 
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 
-/** Interface for all RuleSetFactories. */
 public interface RuleSetFactory {
 
-  /** @return A DelphiRuleset. */
+  /**
+   * Creates a DelphiRuleSet instance
+   *
+   * @return a DelphiRuleset
+   */
   DelphiRuleSet create();
 }
