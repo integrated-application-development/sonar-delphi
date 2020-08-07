@@ -1489,6 +1489,27 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+    message="'goto' statements should not be used"
+    name="GotoStatementRule">
+    <priority>2</priority>
+    <description>
+      &lt;code&gt;goto&lt;/code&gt; is an unstructured control flow statement.
+      It makes code less readable and maintainable.
+      Structured control flow statements such as &lt;code&gt;if&lt;/code&gt;, &lt;code&gt;for&lt;/code&gt;, &lt;code&gt;while&lt;/code&gt;, &lt;code&gt;Continue&lt;/code&gt;, or &lt;code&gt;Break&lt;/code&gt; should be used instead.
+    </description>
+    <properties>
+      <property name="baseEffort" value="30min"/>
+      <property name="builtinXPath">
+        <value>
+          <![CDATA[
+            //GotoStatementNode
+          ]]>
+        </value>
+      </property>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathTemplateRule"
     message="Track breaches of an XPath rule"
     name="XPathRule">

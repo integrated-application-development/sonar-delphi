@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `TrailingWhitespaceRule` analysis rule, which flags source code lines with trailing whitespace.
 - `IfThenShortCircuitRule` analysis rule, which flags erroneous `IfThen` usages that may cause
   access violations.
+- `GotoStatementRule` analysis rule, which flags `goto` statements.
 
 ### Changed
 
