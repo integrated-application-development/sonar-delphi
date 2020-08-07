@@ -60,7 +60,7 @@ public class UnusedArgumentsRule extends AbstractDelphiRule {
       addViolationWithMessage(
           data,
           unusedArgument.getNode(),
-          "Unused argument: '{0}' at {1}",
+          "Unused argument: ''{0}'' at {1}",
           new Object[] {unusedArgument.getImage(), method.fullyQualifiedName()});
     }
 
