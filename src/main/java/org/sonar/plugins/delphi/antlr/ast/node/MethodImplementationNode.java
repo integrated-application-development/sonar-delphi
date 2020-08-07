@@ -24,7 +24,7 @@ public final class MethodImplementationNode extends MethodNode {
     return visitor.visit(this, data);
   }
 
-  private MethodBodyNode getMethodBody() {
+  public MethodBodyNode getMethodBody() {
     return (MethodBodyNode) jjtGetChild(1);
   }
 

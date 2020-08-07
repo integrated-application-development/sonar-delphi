@@ -80,9 +80,9 @@ public abstract class ExpressionNode extends DelphiNode implements Typed {
   }
 
   private boolean isReferenceTo(String image) {
-    ExpressionNode expr = skipParentheses();
-    if (expr.jjtGetNumChildren() == 1 && expr instanceof PrimaryExpressionNode) {
-      Node child = expr.jjtGetChild(0);
+    ExpressionNode expression = skipParentheses();
+    if (expression.jjtGetNumChildren() == 1 && expression instanceof PrimaryExpressionNode) {
+      Node child = expression.jjtGetChild(0);
       if (child instanceof NameReferenceNode) {
         NameReferenceNode reference = (NameReferenceNode) child;
         NameDeclaration declaration = reference.getLastName().getNameDeclaration();
@@ -94,11 +94,26 @@ public abstract class ExpressionNode extends DelphiNode implements Typed {
 
   @Nullable
   public LiteralNode extractLiteral() {
-    ExpressionNode expr = skipParentheses();
-    if (expr instanceof PrimaryExpressionNode) {
-      PrimaryExpressionNode primary = (PrimaryExpressionNode) expr;
+    ExpressionNode expression = skipParentheses();
+    if (expression instanceof PrimaryExpressionNode) {
+      PrimaryExpressionNode primary = (PrimaryExpressionNode) expression;
       if (primary.jjtGetNumChildren() == 1 && primary.jjtGetChild(0) instanceof LiteralNode) {
         return (LiteralNode) primary.jjtGetChild(0);
+      }
+    }
+    return null;
+  }
+
+  @Nullable
+  public NameReferenceNode extractSimpleNameReference() {
+    ExpressionNode expression = skipParentheses();
+    if (expression instanceof PrimaryExpressionNode && expression.jjtGetNumChildren() == 1) {
+      Node child = expression.jjtGetChild(0);
+      if (child instanceof NameReferenceNode) {
+        NameReferenceNode nameReference = (NameReferenceNode) child;
+        if (nameReference.nextName() == null) {
+          return nameReference;
+        }
       }
     }
     return null;

@@ -124,6 +124,50 @@
     </example>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.MethodResultAssignedRule"
+    message="Method results should be assigned a value"
+    name="MethodResultAssignedRule">
+    <priority>2</priority>
+    <description>
+      In functions, &lt;code&gt;Result&lt;/code&gt; must be assigned a value.
+      &lt;br&gt;
+      &lt;br&gt;
+      Any parameter with an &lt;code&gt;out&lt;/code&gt; specifier must also be assigned a value.
+      &lt;br&gt;
+      For more information, see the Embarcadero wiki page for
+      &lt;a href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Parameters_(Delphi)#Out_Parameters'&gt;
+      Out Parameters
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+      <property name="type" value="BUG"/>
+    </properties>
+    <example>
+      <![CDATA[
+<b>function</b> Test: String;
+<b>begin</b>
+  // Noncompliant
+<b>end</b>;
+
+<b>function</b> Test: TArray<String>;
+<b>begin</b>
+  // Noncompliant
+<b>end</b>;
+
+<b>function</b> Test: String;
+<b>begin</b>
+  Result := ''; // Compliant
+<b>end</b>;
+
+<b>function</b> Test: TArray<String>;
+<b>begin</b>
+  Result := TArray<String>.Create(); // Compliant
+<b>end</b>;
+        ]]>
+    </example>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="'finally' blocks should not be empty"
     name="EmptyFinallyBlockRule">

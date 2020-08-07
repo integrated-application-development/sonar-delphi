@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for pascal-style result assignments in semantic analysis.
 - `ObjectInvokedConstructorRule` analysis rule, which flags constructor calls on object instances.
+- `MethodResultAssignedRule` analysis rule, which flags methods where `Result` or `out` parameters
+  have not been assigned.
 
 ### Changed
 

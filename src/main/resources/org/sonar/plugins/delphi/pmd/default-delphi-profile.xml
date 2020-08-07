@@ -21,6 +21,10 @@
     name="ObjectInvokedConstructorRule">
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.MethodResultAssignedRule"
+    name="MethodResultAssignedRule">
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     name="EmptyFinallyBlockRule">
   </rule>
