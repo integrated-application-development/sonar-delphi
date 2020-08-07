@@ -94,6 +94,36 @@
     </example>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ObjectInvokedConstructorRule"
+    message="Constructors should not be invoked on object variables"
+    name="ObjectInvokedConstructorRule">
+    <priority>3</priority>
+    <description>
+      A common error for new Delphi programmers is to call a constructor using an object-type
+      variable. Rather than creating the object, such a call invariably results in access violations
+      because the object reference is most likely invalid.
+      &lt;br&gt;
+      &lt;br&gt;
+      Even if this is intentional and the object reference is valid, the constructor is treated like
+      a regular method invocation.
+      &lt;br&gt;
+      The constructor is called, but misleadingly a new object isn't instantiated.
+    </description>
+    <properties>
+      <property name="baseEffort" value="10min"/>
+      <property name="type" value="BUG"/>
+    </properties>
+    <example>
+      <![CDATA[
+<b>var</b>
+  Foo: TFoo;
+<b>begin</b>
+  Foo.Create; // Noncompliant
+  Foo := TFoo.Create; // Compliant
+        ]]>
+    </example>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="'finally' blocks should not be empty"
     name="EmptyFinallyBlockRule">

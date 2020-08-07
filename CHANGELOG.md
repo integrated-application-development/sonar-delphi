@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `ObjectInvokedConstructorRule` analysis rule, which flags constructor calls on object instances.
+
 ### Changed
 
 - Improve support for the `SetString` intrinsic.

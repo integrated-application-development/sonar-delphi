@@ -17,6 +17,10 @@
     name="SwallowedExceptionsRule">
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ObjectInvokedConstructorRule"
+    name="ObjectInvokedConstructorRule">
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     name="EmptyFinallyBlockRule">
   </rule>

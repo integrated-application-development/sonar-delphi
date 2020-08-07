@@ -97,13 +97,8 @@ public class DelphiNameOccurrence implements NameOccurrence {
     return typeParameters;
   }
 
-  /**
-   * Simply return true is the image is equal to reserved word 'Self'
-   *
-   * @return return true if image equal to 'Self'
-   */
   public boolean isSelf() {
-    return SELF.equals(image);
+    return SELF.equals(getImage());
   }
 
   @Override
