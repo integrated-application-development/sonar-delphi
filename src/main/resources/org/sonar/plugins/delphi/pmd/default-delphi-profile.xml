@@ -118,6 +118,10 @@
     name="AssignedAndFreeRule">
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.IfThenShortCircuitRule"
+    name="IfThenShortCircuitRule">
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyBeginStatementRule"
     name="EmptyBeginStatementRule">
   </rule>
@@ -169,7 +173,6 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.CognitiveComplexityRule"
     name="MethodCognitiveComplexityRule">
   </rule>
-
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.ConstantNotationRule"
     name="ConstantNotationRule">
