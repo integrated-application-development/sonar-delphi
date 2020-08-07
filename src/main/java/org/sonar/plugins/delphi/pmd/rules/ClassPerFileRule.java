@@ -25,6 +25,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.LIMIT;
 
 import net.sourceforge.pmd.RuleContext;
+import org.sonar.plugins.delphi.antlr.ast.node.StructTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.pmd.FilePosition;
 
@@ -50,9 +51,16 @@ public class ClassPerFileRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(TypeDeclarationNode type, RuleContext data) {
-    if (type.isClass() && !type.isNestedType() && !type.isForwardDeclaration()) {
+    if (shouldCount(type)) {
       ++count;
     }
     return super.visit(type, data);
+  }
+
+  private static boolean shouldCount(TypeDeclarationNode type) {
+    return type.isClass()
+        && !type.isNestedType()
+        && !type.isForwardDeclaration()
+        && !((StructTypeNode) type.getTypeNode()).getVisibilitySections().isEmpty();
   }
 }

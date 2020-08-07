@@ -29,7 +29,11 @@
     message="Files should not contain too many classes"
     name="ClassPerFileRule">
     <priority>3</priority>
-    <description>A file should not include too many classes.</description>
+    <description>
+      A file should not include too many classes.
+      &lt;br&gt;
+      This rule does not apply to nested classes or one-liner classes such as &lt;code&gt;ECustomException = class(Exception);&lt;/code&gt;
+    </description>
     <properties>
       <property name="baseEffort" value="1h"/>
       <property name="limit" value="1"/>

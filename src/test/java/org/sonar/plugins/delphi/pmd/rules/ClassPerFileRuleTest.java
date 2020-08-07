@@ -28,10 +28,12 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testOneClassShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class(TObject)");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TMyClass = class(TObject)")
+            .appendDecl("    procedure Foo;")
+            .appendDecl("  end;");
 
     execute(builder);
 
@@ -40,11 +42,26 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testForwardTypesShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class;");
-    builder.appendDecl("  TMyClass = class(TObject)");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TMyClass = class;")
+            .appendDecl("  TMyClass = class(TObject)")
+            .appendDecl("    procedure Foo;")
+            .appendDecl("  end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
+  }
+
+  @Test
+  public void testStubTypesShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TFoo = class(TObject);")
+            .appendDecl("  TBar = class(TFoo);");
 
     execute(builder);
 
@@ -53,12 +70,15 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testTwoClassesShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class(TObject)");
-    builder.appendDecl("  end;");
-    builder.appendDecl("  TMyClass2 = class(TObject)");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TMyClass = class(TObject)")
+            .appendDecl("    procedure Foo;")
+            .appendDecl("  end;")
+            .appendDecl("  TMyClass2 = class(TObject)")
+            .appendDecl("    procedure Foo;")
+            .appendDecl("  end;");
 
     execute(builder);
 
@@ -67,14 +87,18 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testMultipleViolationsShouldAddOneIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class(TObject)");
-    builder.appendDecl("  end;");
-    builder.appendDecl("  TMyClass2 = class(TObject)");
-    builder.appendDecl("  end;");
-    builder.appendDecl("  TMyClass3 = class(TObject)");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TMyClass = class(TObject)")
+            .appendDecl("    procedure Foo;")
+            .appendDecl("  end;")
+            .appendDecl("  TMyClass2 = class(TObject)")
+            .appendDecl("    procedure Foo;")
+            .appendDecl("  end;")
+            .appendDecl("  TMyClass3 = class(TObject)")
+            .appendDecl("    procedure Foo;")
+            .appendDecl("  end;");
 
     execute(builder);
 
@@ -83,11 +107,13 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testFalsePositiveMetaClass() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class(TObject)");
-    builder.appendDecl("  end;");
-    builder.appendDecl("  TMetaClassClass = class of TMyClass;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TMyClass = class(TObject)")
+            .appendDecl("    procedure Foo;")
+            .appendDecl("  end;")
+            .appendDecl("  TMetaClassClass = class of TMyClass;");
 
     execute(builder);
 
@@ -96,12 +122,13 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testFalsePositiveClassMethods() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class(TObject)");
-    builder.appendDecl("    class procedure TestProcedure;");
-    builder.appendDecl("    class function TestFunction: Boolean;");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TMyClass = class(TObject)")
+            .appendDecl("    class procedure TestProcedure;")
+            .appendDecl("    class function TestFunction: Boolean;")
+            .appendDecl("  end;");
 
     execute(builder);
 

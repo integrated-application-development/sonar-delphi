@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Improve support for the `SetString` intrinsic.
+- Exclude class declarations with no members in `ClassPerFileRule`.
 
 ## [0.22.1] - 2020-08-03
 
