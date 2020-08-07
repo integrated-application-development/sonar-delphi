@@ -19,10 +19,14 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.INTEGER;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.NATIVEINT;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.NATIVEUINT;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.WORD;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicPointer.PANSICHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicPointer.PCHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicReturnType.CLASS_REFERENCE_VALUE_TYPE;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSISTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.SHORTSTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDESTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicVariant.VARIANT;
 
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicMethodData.IntrinsicMethodDataBuilder;
@@ -168,7 +172,10 @@ public enum IntrinsicMethod {
   SET_LENGTH_STRING(method("SetLength").parameters(UNICODESTRING.type, INTEGER.type)),
   SET_LENGTH_ARRAY(
       method("SetLength").parameters(ANY_DYNAMIC_ARRAY, INTEGER.type).variadic(INTEGER.type)),
-  SET_STRING(method("SetString").parameters(UNICODESTRING.type, PCHAR.type, INTEGER.type)),
+  SET_STRING_SHORT(method("SetString").parameters(SHORTSTRING.type, PANSICHAR.type, INTEGER.type)),
+  SET_STRING_ANSI(method("SetString").parameters(ANSISTRING.type, PANSICHAR.type, INTEGER.type)),
+  SET_STRING_WIDE(method("SetString").parameters(WIDESTRING.type, PCHAR.type, INTEGER.type)),
+  SET_STRING_UNICODE(method("SetString").parameters(UNICODESTRING.type, PCHAR.type, INTEGER.type)),
   SET_TEXT_BUF(method("SetTextBuf").parameters(TEXT.type, untypedType(), INTEGER.type).required(2)),
   SIZEOF(method("SizeOf").parameters(untypedType()).returns(INTEGER.type)),
   SLICE(method("Slice").parameters(ANY_ARRAY, INTEGER.type).returns(untypedPointer())),
