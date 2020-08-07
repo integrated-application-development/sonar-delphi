@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the function name instead of `Result`.
 - `NoSemiAfterFieldDeclarationRule` analysis rule, which flags field declarations without trailing
   semicolons.
+- `TrailingWhitespaceRule` analysis rule, which flags source code lines with trailing whitespace.
 
 ### Changed
 
