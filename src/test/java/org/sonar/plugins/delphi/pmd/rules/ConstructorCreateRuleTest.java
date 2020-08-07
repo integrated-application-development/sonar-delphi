@@ -9,11 +9,12 @@ public class ConstructorCreateRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testConstructorWithPrefixShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyForm = class(TForm)");
-    builder.appendDecl("    constructor CreateClass;");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TMyForm = class(TForm)")
+            .appendDecl("    constructor CreateClass;")
+            .appendDecl("  end;");
 
     execute(builder);
 
@@ -22,11 +23,12 @@ public class ConstructorCreateRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testConstructorIsPrefixShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyForm = class(TForm)");
-    builder.appendDecl("    constructor Create;");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TMyForm = class(TForm)")
+            .appendDecl("    constructor Create;")
+            .appendDecl("  end;");
 
     execute(builder);
 
@@ -35,11 +37,12 @@ public class ConstructorCreateRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testConstructorWithoutPrefixShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyForm = class(TForm)");
-    builder.appendDecl("    constructor NotCreate;");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TMyForm = class(TForm)")
+            .appendDecl("    constructor NotCreate;")
+            .appendDecl("  end;");
 
     execute(builder);
 
@@ -50,11 +53,12 @@ public class ConstructorCreateRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testBadPascalCaseAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyForm = class(TForm)");
-    builder.appendDecl("    constructor Createclass;");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TMyForm = class(TForm)")
+            .appendDecl("    constructor Createclass;")
+            .appendDecl("  end;");
 
     execute(builder);
 
@@ -65,11 +69,12 @@ public class ConstructorCreateRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testClassConstructorShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyForm = class(TForm)");
-    builder.appendDecl("    class constructor NotCreate;");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TMyForm = class(TForm)")
+            .appendDecl("    class constructor NotCreate;")
+            .appendDecl("  end;");
 
     execute(builder);
 

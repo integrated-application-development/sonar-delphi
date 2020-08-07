@@ -8,10 +8,11 @@ import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 public class ObjectTypeRuleTest extends BasePmdRuleTest {
   @Test
   public void testClassShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TClassType = class(TObject)");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TClassType = class(TObject)")
+            .appendDecl("  end;");
 
     execute(builder);
 
@@ -20,10 +21,11 @@ public class ObjectTypeRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testObjectShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TObjectType = object");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TObjectType = object")
+            .appendDecl("  end;");
 
     execute(builder);
 

@@ -9,9 +9,10 @@ public class EnumNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testAcceptT() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TEnum = (someEnum, someOtherEnum, someThirdEnum);");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TEnum = (someEnum, someOtherEnum, someThirdEnum);");
 
     execute(builder);
 
@@ -20,9 +21,10 @@ public class EnumNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testNotAcceptLowercaseT() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  tEnum = (someEnum, someOtherEnum, someThirdEnum);");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  tEnum = (someEnum, someOtherEnum, someThirdEnum);");
 
     execute(builder);
 
@@ -33,9 +35,10 @@ public class EnumNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testNotAcceptBadPascalCase() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  Tenum = (someEnum, someOtherEnum, someThirdEnum);");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  Tenum = (someEnum, someOtherEnum, someThirdEnum);");
 
     execute(builder);
 
@@ -46,9 +49,10 @@ public class EnumNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testNotAcceptPrefixAlone() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  T = (someEnum, someOtherEnum, someThirdEnum);");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  T = (someEnum, someOtherEnum, someThirdEnum);");
 
     execute(builder);
 
