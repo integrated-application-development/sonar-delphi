@@ -18,6 +18,9 @@ public enum CompilerDirectiveType {
   INCLUDE("include", "i"),
   SCOPEDENUMS("scopedenums"),
   POINTERMATH("pointermath"),
+  HINTS("hints"),
+  WARNINGS("warnings"),
+  WARN("warn"),
   UNSUPPORTED;
 
   private final ImmutableSet<String> names;

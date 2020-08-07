@@ -91,7 +91,7 @@ public class CompilerDirectiveParserTest {
   }
 
   @Test
-  public void testCreateDefineDirective() {
+  public void testCreateDefinreDirective() {
     CompilerDirective directive = parse("{$define _DEBUG}");
     assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.DEFINE);
   }
@@ -101,7 +101,7 @@ public class CompilerDirectiveParserTest {
     CompilerDirective directive = parse("{$i+}");
     assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.UNSUPPORTED);
 
-    directive = parse("{$warn}");
+    directive = parse("{$FOO}");
     assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.UNSUPPORTED);
 
     directive = parse("{$R}");
