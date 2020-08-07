@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `IfThenShortCircuitRule` analysis rule, which flags erroneous `IfThen` usages that may cause
   access violations.
 - `GotoStatementRule` analysis rule, which flags `goto` statements.
+- `CompilerHintsRule` analysis rule, which flags places where hints are disabled.
 
 ### Changed
 

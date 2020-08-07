@@ -1406,6 +1406,18 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.CompilerHintsRule"
+    message="Compiler hints should not be disabled"
+    name="CompilerHintsRule">
+    <priority>2</priority>
+    <description>
+      Compiler hints should not be disabled.
+    </description>
+    <properties>
+      <property name="baseEffort" value="30min"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="Empty type sections should be removed"
     name="EmptyTypeSectionRule">

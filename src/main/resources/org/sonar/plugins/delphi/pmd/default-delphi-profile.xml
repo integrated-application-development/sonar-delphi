@@ -225,4 +225,8 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.ImportSpecificityRule"
     name="ImportSpecificityRule">
   </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.CompilerHintsRule"
+    name="CompilerHintsRule">
+  </rule>
 </ruleset>
