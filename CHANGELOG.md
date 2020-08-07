@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ObjectInvokedConstructorRule` analysis rule, which flags constructor calls on object instances.
 - `MethodResultAssignedRule` analysis rule, which flags methods where `Result` or `out` parameters
   have not been assigned.
+- `PascalStyleResultRule` analysis rule, which flags cases where a function result is assigned to
+  the function name instead of `Result`.
 
 ### Changed
 

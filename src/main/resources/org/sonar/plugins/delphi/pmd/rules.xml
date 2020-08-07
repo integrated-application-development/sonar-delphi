@@ -168,6 +168,28 @@
     </example>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.PascalStyleResultRule"
+    message="Pascal-style function result assignments should not be used"
+    name="PascalStyleResultRule">
+    <priority>4</priority>
+    <description>
+      In earlier versions of Pascal, function results were assigned to the function identifier.
+      &lt;/a&gt;
+      In Delphi, function results are assigned to the special &lt;code&gt;Result&lt;/code&gt; variable.
+      &lt;/a&gt;
+      The Delphi style should be used instead.
+      &lt;br&gt;
+      &lt;br&gt;
+      For more information, see the Embarcadero wiki page for
+      &lt;a href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Procedures_and_Functions_(Delphi)#Function_Declarations'&gt;
+      Function Declarations
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="3min"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="'finally' blocks should not be empty"
     name="EmptyFinallyBlockRule">
