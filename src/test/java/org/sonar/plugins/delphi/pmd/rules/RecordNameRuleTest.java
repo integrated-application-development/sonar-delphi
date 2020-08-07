@@ -27,10 +27,11 @@ public class RecordNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testValidRule() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyRecord = record");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TMyRecord = record")
+            .appendDecl("  end;");
 
     execute(builder);
 
@@ -39,10 +40,11 @@ public class RecordNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testNameWithoutPrefixShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  MyRecord = record");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  MyRecord = record")
+            .appendDecl("  end;");
 
     execute(builder);
 
@@ -53,10 +55,11 @@ public class RecordNameRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testBadPascalCaseShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TmyRecord = record");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TmyRecord = record")
+            .appendDecl("  end;");
 
     execute(builder);
 

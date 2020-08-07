@@ -17,12 +17,28 @@
     name="SwallowedExceptionsRule">
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ObjectInvokedConstructorRule"
+    name="ObjectInvokedConstructorRule">
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.MethodResultAssignedRule"
+    name="MethodResultAssignedRule">
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     name="EmptyFinallyBlockRule">
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     name="EmptyInterfaceRule">
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+    name="NoSemiAfterMethodDeclarationRule">
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+    name="NoSemiAfterFieldDeclarationRule">
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.TooLargeMethodRule"
@@ -35,10 +51,6 @@
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.TooManyVariablesRule"
     name="TooManyVariablesRule">
-  </rule>
-
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
-    name="NoSemiAfterMethodDeclarationRule">
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.NoFunctionReturnTypeRule"
@@ -106,6 +118,10 @@
     name="AssignedAndFreeRule">
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.IfThenShortCircuitRule"
+    name="IfThenShortCircuitRule">
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyBeginStatementRule"
     name="EmptyBeginStatementRule">
   </rule>
@@ -158,7 +174,6 @@
     name="MethodCognitiveComplexityRule">
   </rule>
 
-
   <rule class="org.sonar.plugins.delphi.pmd.rules.ConstantNotationRule"
     name="ConstantNotationRule">
   </rule>
@@ -209,5 +224,13 @@
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.ImportSpecificityRule"
     name="ImportSpecificityRule">
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.CompilerHintsRule"
+    name="CompilerHintsRule">
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.CompilerWarningsRule"
+    name="CompilerWarningsRule">
   </rule>
 </ruleset>

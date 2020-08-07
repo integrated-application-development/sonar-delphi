@@ -117,6 +117,8 @@ public class CommentedOutCodeRule extends AbstractDelphiRule {
           compile(VISIBILITY_SECTION_REGEX),
           compile(PARENTHESIZED_CAST_EXPRESSION));
 
+  private static final Pattern NEW_LINE_DELIMITER = compile("\r\n?|\n");
+
   @Override
   public RuleContext visit(DelphiAST ast, RuleContext data) {
     List<Integer> commentedOutCodeLines = new ArrayList<>();
@@ -140,7 +142,7 @@ public class CommentedOutCodeRule extends AbstractDelphiRule {
   private static List<Integer> handleComment(DelphiToken comment) {
     List<Integer> commentedOutCodeLines = new ArrayList<>();
     String commentString = extractCommentString(comment);
-    List<String> lines = Splitter.on(compile("\r\n?|\n")).splitToList(commentString);
+    List<String> lines = Splitter.on(NEW_LINE_DELIMITER).splitToList(commentString);
     for (int i = 0; i < lines.size(); ++i) {
       String line = lines.get(i);
       if (isLineOfCode(line)) {

@@ -58,10 +58,11 @@ public class TooLargeMethodRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testWhitespaceMethod() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("function Foo: Integer;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  Result := 1;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("function Foo: Integer;")
+            .appendImpl("begin")
+            .appendImpl("  Result := 1;");
 
     for (int i = 1; i <= 500; i++) {
       builder.appendImpl("");
@@ -76,10 +77,11 @@ public class TooLargeMethodRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testEmptyMethod() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("function Foo: Integer;");
-    builder.appendImpl("begin");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("function Foo: Integer;")
+            .appendImpl("begin")
+            .appendImpl("end;");
 
     execute(builder);
 

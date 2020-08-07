@@ -5,13 +5,15 @@ import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtL
 import org.junit.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class ObjectTypeRuleTest extends BasePmdRuleTest {
+public class NoSemiAfterFieldDeclarationRuleTest extends BasePmdRuleTest {
+
   @Test
-  public void testClassShouldNotAddIssue() {
+  public void testFieldDeclarationsWithSemicolonsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
-            .appendDecl("  TClassType = class(TObject)")
+            .appendDecl("  TType = class(TObject)")
+            .appendDecl("    Foo: TObject;")
             .appendDecl("  end;");
 
     execute(builder);
@@ -20,17 +22,18 @@ public class ObjectTypeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testObjectShouldAddIssue() {
+  public void testFieldDeclarationsWithoutSemicolonsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
-            .appendDecl("  TObjectType = object")
+            .appendDecl("  TType = class(TObject)")
+            .appendDecl("    Foo: TObject")
             .appendDecl("  end;");
 
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("ObjectTypeRule", builder.getOffsetDecl() + 2));
+        .areExactly(
+            1, ruleKeyAtLine("NoSemiAfterFieldDeclarationRule", builder.getOffsetDecl() + 3));
   }
 }

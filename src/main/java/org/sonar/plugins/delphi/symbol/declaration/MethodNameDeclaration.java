@@ -45,7 +45,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
   private final VisibilityType visibility;
   private final List<TypedDeclaration> typeParameters;
 
-  private Set<UnitNameDeclaration> dependencies;
+  private final Set<UnitNameDeclaration> dependencies;
   private int hashCode;
 
   private MethodNameDeclaration(

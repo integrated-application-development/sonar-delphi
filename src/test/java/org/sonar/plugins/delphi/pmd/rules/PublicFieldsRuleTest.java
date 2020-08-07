@@ -9,15 +9,16 @@ public class PublicFieldsRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testValidRule() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class(TObject)");
-    builder.appendDecl("     FPublishedField: Integer;");
-    builder.appendDecl("    private");
-    builder.appendDecl("     FPrivateField: Integer;");
-    builder.appendDecl("    protected");
-    builder.appendDecl("     FProtectedField: String;");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TMyClass = class(TObject)")
+            .appendDecl("     FPublishedField: Integer;")
+            .appendDecl("    private")
+            .appendDecl("     FPrivateField: Integer;")
+            .appendDecl("    protected")
+            .appendDecl("     FProtectedField: String;")
+            .appendDecl("  end;");
 
     execute(builder);
 
@@ -26,17 +27,18 @@ public class PublicFieldsRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testInvalidRule() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class(TObject)");
-    builder.appendDecl("     FPublishedField: Integer;");
-    builder.appendDecl("    private");
-    builder.appendDecl("     FPrivateField: Integer;");
-    builder.appendDecl("    protected");
-    builder.appendDecl("     FProtectedField: String;");
-    builder.appendDecl("    public");
-    builder.appendDecl("     FPublicField: String;");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TMyClass = class(TObject)")
+            .appendDecl("     FPublishedField: Integer;")
+            .appendDecl("    private")
+            .appendDecl("     FPrivateField: Integer;")
+            .appendDecl("    protected")
+            .appendDecl("     FProtectedField: String;")
+            .appendDecl("    public")
+            .appendDecl("     FPublicField: String;")
+            .appendDecl("  end;");
 
     execute(builder);
 
@@ -47,17 +49,18 @@ public class PublicFieldsRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testRecordsAreExcluded() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyRecord = record");
-    builder.appendDecl("     FPublishedField: Integer;");
-    builder.appendDecl("    private");
-    builder.appendDecl("     FPrivateField: Integer;");
-    builder.appendDecl("    protected");
-    builder.appendDecl("     FProtectedField: String;");
-    builder.appendDecl("    public");
-    builder.appendDecl("     FPublicField: String;");
-    builder.appendDecl("  end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TMyRecord = record")
+            .appendDecl("     FPublishedField: Integer;")
+            .appendDecl("    private")
+            .appendDecl("     FPrivateField: Integer;")
+            .appendDecl("    protected")
+            .appendDecl("     FProtectedField: String;")
+            .appendDecl("    public")
+            .appendDecl("     FPublicField: String;")
+            .appendDecl("  end;");
 
     execute(builder);
 

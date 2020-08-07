@@ -27,15 +27,16 @@ public class EmptyFinallyBlockRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testValidRule() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure Test;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  try");
-    builder.appendImpl("    WriteLn('try block');");
-    builder.appendImpl("  finally");
-    builder.appendImpl("    WriteLn('finally block');");
-    builder.appendImpl("  end;");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    WriteLn('try block');")
+            .appendImpl("  finally")
+            .appendImpl("    WriteLn('finally block');")
+            .appendImpl("  end;")
+            .appendImpl("end;");
 
     execute(builder);
 
@@ -44,14 +45,15 @@ public class EmptyFinallyBlockRuleTest extends BasePmdRuleTest {
 
   @Test
   public void testEmptyFinallyBlock() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure Test;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  try");
-    builder.appendImpl("    WriteLn('try block');");
-    builder.appendImpl("  finally");
-    builder.appendImpl("  end;");
-    builder.appendImpl("end;");
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    WriteLn('try block');")
+            .appendImpl("  finally")
+            .appendImpl("  end;")
+            .appendImpl("end;");
 
     execute(builder);
 

@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.ast.Node;
+import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
 import org.sonar.plugins.delphi.antlr.ast.node.ArgumentListNode;
@@ -17,11 +18,12 @@ import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RaiseStatementNode;
-import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
 import org.sonar.plugins.delphi.symbol.Qualifiable;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.MethodKind;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Typed;
@@ -88,10 +90,6 @@ public class MemoryManagementRule extends AbstractDelphiRule {
       return false;
     }
 
-    if (isSelfCall(expression)) {
-      return false;
-    }
-
     return !isMemoryManaged(expression);
   }
 
@@ -143,19 +141,6 @@ public class MemoryManagementRule extends AbstractDelphiRule {
     return expression.findParentheses().jjtGetParent() instanceof RaiseStatementNode;
   }
 
-  private static boolean isSelfCall(PrimaryExpressionNode expression) {
-    Node child = expression.jjtGetChild(0);
-    if (child instanceof NameReferenceNode) {
-      NameReferenceNode name = (NameReferenceNode) child;
-      if (name.getIdentifier().getImage().equalsIgnoreCase("Self")) {
-        NameReferenceNode next = name.nextName();
-        return next != null && requiresMemoryManagement(next);
-      }
-      return requiresMemoryManagement(name);
-    }
-    return false;
-  }
-
   private boolean isMemoryManaged(PrimaryExpressionNode expression) {
     Node argList = expression.findParentheses().jjtGetParent();
     if (!(argList instanceof ArgumentListNode)) {
@@ -170,40 +155,46 @@ public class MemoryManagementRule extends AbstractDelphiRule {
     return memoryFunctions.contains(((Qualifiable) nameReference).simpleName());
   }
 
-  private static boolean requiresMemoryManagement(NameReferenceNode referenceNode) {
-    DelphiNameOccurrence occurrence = referenceNode.getNameOccurrence();
-    if (occurrence == null) {
-      return false;
-    }
+  private static boolean requiresMemoryManagement(NameReferenceNode reference) {
+    DelphiNameDeclaration declaration = reference.getNameDeclaration();
+    if (declaration instanceof MethodNameDeclaration) {
+      MethodNameDeclaration method = (MethodNameDeclaration) declaration;
+      MethodKind kind = method.getMethodKind();
 
-    DelphiNameDeclaration declaration = occurrence.getNameDeclaration();
-    if (!(declaration instanceof MethodNameDeclaration)) {
-      return false;
-    }
+      if (kind == MethodKind.CONSTRUCTOR) {
+        NameReferenceNode previous = reference.prevName();
+        return previous != null
+            && !isExplicitSelf(previous)
+            && !isObjectInstance(previous)
+            && !isRecordConstructor(method);
+      }
 
-    return requiresMemoryManagement((MethodNameDeclaration) declaration);
+      if (kind == MethodKind.FUNCTION) {
+        return method.getName().equalsIgnoreCase("Clone") && returnsCovariantType(method);
+      }
+    }
+    return false;
   }
 
-  private static boolean requiresMemoryManagement(MethodNameDeclaration method) {
-    switch (method.getMethodKind()) {
-      case CONSTRUCTOR:
-        TypeNameDeclaration typeDeclaration = method.getTypeDeclaration();
-        boolean isRecordConstructor =
-            typeDeclaration != null && typeDeclaration.getType().isRecord();
+  private static boolean isExplicitSelf(NameReferenceNode reference) {
+    return reference.getNameOccurrence() != null && reference.getNameOccurrence().isSelf();
+  }
 
-        return !isRecordConstructor;
+  private static boolean isObjectInstance(NameReferenceNode reference) {
+    NameDeclaration declaration = reference.getNameDeclaration();
+    return declaration instanceof VariableNameDeclaration
+        && !((Typed) declaration).getType().isClassReference();
+  }
 
-      case FUNCTION:
-        return method.getName().equalsIgnoreCase("Clone") && returnsCovariantType(method);
-
-      default:
-        return false;
-    }
+  private static boolean isRecordConstructor(MethodNameDeclaration method) {
+    TypeNameDeclaration typeDeclaration = method.getTypeDeclaration();
+    return typeDeclaration != null && typeDeclaration.getType().isRecord();
   }
 
   private static boolean returnsCovariantType(MethodNameDeclaration method) {
     TypeNameDeclaration typeDeclaration = method.getTypeDeclaration();
     if (typeDeclaration != null) {
+
       Type methodType = typeDeclaration.getType();
       Type returnType = method.getReturnType();
 

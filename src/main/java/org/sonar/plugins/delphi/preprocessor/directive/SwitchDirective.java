@@ -15,4 +15,12 @@ public class SwitchDirective extends AbstractCompilerDirective {
   public void execute(DelphiPreprocessor preprocessor) {
     preprocessor.handleSwitch(getType(), getToken().getTokenIndex(), value);
   }
+
+  public boolean isOn() {
+    return value;
+  }
+
+  public boolean isOff() {
+    return !value;
+  }
 }

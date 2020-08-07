@@ -22,7 +22,7 @@ public class TabulationCharactersRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().hasSize(1).areExactly(1, ruleKey("TabulationCharactersRule"));
+    assertIssues().areExactly(1, ruleKey("TabulationCharactersRule"));
   }
 
   @Test
@@ -36,6 +36,6 @@ public class TabulationCharactersRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().hasSize(1).areExactly(1, ruleKey("TabulationCharactersRule"));
+    assertIssues().areExactly(1, ruleKey("TabulationCharactersRule"));
   }
 }

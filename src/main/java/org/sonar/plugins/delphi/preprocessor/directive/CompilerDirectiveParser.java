@@ -117,6 +117,15 @@ class CompilerDirectiveParser {
       case POINTERMATH:
         return new PointerMathDirective(token, type, trimmedItem);
 
+      case HINTS:
+        return new HintsDirective(token, type, trimmedItem);
+
+      case WARNINGS:
+        return new WarningsDirective(token, type, trimmedItem);
+
+      case WARN:
+        return new WarnDirective(token, type, item);
+
       default:
         return new DefaultCompilerDirective(token, type);
     }

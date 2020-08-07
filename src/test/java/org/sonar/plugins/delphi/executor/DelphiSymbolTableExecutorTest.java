@@ -230,6 +230,15 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testPascalResultAssignments() {
+    execute("PascalResultAssignments.pas");
+    verifyUsages(7, 9, reference(13, 9), reference(15, 2));
+    verifyUsages(8, 9, reference(18, 9), reference(23, 4), reference(27, 2));
+    verifyUsages(9, 9, reference(30, 9));
+    verifyUsages(32, 2, reference(34, 2));
+  }
+
+  @Test
   public void testSelfTypes() {
     execute("SelfTypes.pas");
     verifyUsages(19, 10, reference(36, 2));
