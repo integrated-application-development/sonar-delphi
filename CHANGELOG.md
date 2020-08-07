@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support for pascal-style result assignments in semantic analysis.
 - `ObjectInvokedConstructorRule` analysis rule, which flags constructor calls on object instances.
 
 ### Changed

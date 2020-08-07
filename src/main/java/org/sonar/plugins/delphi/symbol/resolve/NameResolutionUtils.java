@@ -95,7 +95,7 @@ public final class NameResolutionUtils {
     NameResolver resolver = new NameResolver();
     resolver.readPrimaryExpression(expression);
 
-    if (handleMethodReference(expression, resolver)) {
+    if (handleMethodReference(expression, resolver) || handlePascalReturn(expression, resolver)) {
       return;
     }
 
@@ -337,6 +337,52 @@ public final class NameResolutionUtils {
       resolver.addToSymbolTable();
       return true;
     }
+    return false;
+  }
+
+  private static boolean handlePascalReturn(
+      PrimaryExpressionNode expression, NameResolver resolver) {
+    if (expression.jjtGetNumChildren() != 1) {
+      return false;
+    }
+
+    if (!resolver.getDeclarations().stream().allMatch(MethodNameDeclaration.class::isInstance)) {
+      return false;
+    }
+
+    Node parent = expression.jjtGetParent();
+    if (!(parent instanceof AssignmentStatementNode)) {
+      return false;
+    }
+
+    ExpressionNode assignee = ((AssignmentStatementNode) parent).getAssignee();
+    if (expression != assignee) {
+      return false;
+    }
+
+    Node child = expression.jjtGetChild(0);
+    if (!(child instanceof NameReferenceNode)) {
+      return false;
+    }
+
+    NameReferenceNode reference = (NameReferenceNode) child;
+    if (reference.nextName() != null) {
+      return false;
+    }
+
+    String methodReference = reference.getImage();
+    DelphiNode node = expression;
+
+    while ((node = node.getFirstParentOfType(MethodImplementationNode.class)) != null) {
+      MethodNode method = (MethodNode) node;
+      if (method.simpleName().equalsIgnoreCase(methodReference)) {
+        MethodNameDeclaration methodDeclaration = method.getMethodNameDeclaration();
+        resolver.getDeclarations().removeIf(declaration -> declaration != methodDeclaration);
+        resolver.addToSymbolTable();
+        return true;
+      }
+    }
+
     return false;
   }
 
