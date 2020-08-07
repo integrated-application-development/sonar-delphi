@@ -244,6 +244,26 @@ public class MemoryManagementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  public void testRecordConstructorsShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TFoo = record")
+            .appendDecl("    constructor Create;")
+            .appendDecl("  end;")
+            .appendImpl("procedure Test;")
+            .appendImpl("var")
+            .appendImpl("  Foo: TFoo;")
+            .appendImpl("begin")
+            .appendImpl("  Foo := TFoo.Create;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
+  }
+
+  @Test
   public void testNonConstructorsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()

@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improve support for the `SetString` intrinsic.
 - Exclude class declarations with no members in `ClassPerFileRule`.
+- Exclude constructor invocations on instance variables in `MemoryManagementRule`.
 
 ## [0.22.1] - 2020-08-03
 
