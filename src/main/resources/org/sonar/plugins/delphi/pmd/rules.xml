@@ -1142,7 +1142,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       The explicit form is recommended by Embarcadero for readability.
       &lt;br&gt;
       &lt;br&gt;
-      For more information, see the Delphi wiki page for
+      For more information, see the Embarcadero wiki page for
       &lt;a
       href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Classes_and_Objects_(Delphi)#TObject_and_TClass'&gt;
       TObject and TClass
@@ -1238,7 +1238,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       Use 'Assigned' instead of comparing to nil.
       &lt;br&gt;
       &lt;br&gt;
-      For more information, see the Delphi wiki page for
+      For more information, see the Embarcadero wiki page for
       &lt;a href='http://docwiki.embarcadero.com/Libraries/Rio/en/System.Assigned'&gt;
       System.Assigned
       &lt;/a&gt;
@@ -1432,7 +1432,7 @@ Result := 123;; // Noncompliant
       Object types are supported for backward compatibility only. Their use is not recommended.
       &lt;br&gt;
       &lt;br&gt;
-      For more information on Object types, see the Delphi wiki page for
+      For more information on Object types, see the Embarcadero wiki page for
       &lt;a
       href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Classes_and_Objects_(Delphi)#Object_Types'&gt;
       Classes and Objects
