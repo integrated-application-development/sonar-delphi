@@ -33,6 +33,14 @@
     name="EmptyInterfaceRule">
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+    name="NoSemiAfterMethodDeclarationRule">
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+    name="NoSemiAfterFieldDeclarationRule">
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.TooLargeMethodRule"
     name="TooLargeMethodRule">
   </rule>
@@ -43,10 +51,6 @@
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.TooManyVariablesRule"
     name="TooManyVariablesRule">
-  </rule>
-
-  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
-    name="NoSemiAfterMethodDeclarationRule">
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.NoFunctionReturnTypeRule"

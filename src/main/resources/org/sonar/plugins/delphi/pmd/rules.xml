@@ -309,6 +309,37 @@
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
+    message="Field declarations should be followed by a semicolon"
+    name="NoSemiAfterFieldDeclarationRule">
+    <priority>4</priority>
+    <description>
+      Delphi syntax has corner cases which sometimes allow the semicolon to be omitted from the end
+      of a field declaration.
+      &lt;br&gt;
+      Regardless, there should always be a semicolon ';' at the end of field declarations.
+      &lt;br&gt;
+      &lt;br&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+      <property name="builtinXPath">
+        <value>
+          <![CDATA[
+              //FieldDeclarationNode/*[last()][@Image != ";"]
+            ]]>
+        </value>
+      </property>
+    </properties>
+    <example>
+      <![CDATA[
+Foo: TFoo	// Noncompliant
+
+Foo: TFoo; // Compliant
+        ]]>
+    </example>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="Extraneous commas in argument lists should be removed"
     name="ExtraneousArgumentListCommasRule">
     <priority>1</priority>

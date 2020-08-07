@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   have not been assigned.
 - `PascalStyleResultRule` analysis rule, which flags cases where a function result is assigned to
   the function name instead of `Result`.
+- `NoSemiAfterFieldDeclarationRule` analysis rule, which flags field declarations without trailing
+  semicolons.
 
 ### Changed
 
