@@ -40,7 +40,7 @@ public class MixedNamesRule extends AbstractDelphiRule {
         addViolationWithMessage(
             data,
             reference.getIdentifier(),
-            "Avoid mixing names (found: '{0}' expected: '{1}').",
+            "Avoid mixing names (found: ''{0}'' expected: ''{1}'').",
             new Object[] {actual, expected});
       }
     }
