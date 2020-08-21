@@ -1,7 +1,5 @@
 unit Namespaced.Unit2;
 
-{This is a sample Delphi file.}
-
 interface
 
 const

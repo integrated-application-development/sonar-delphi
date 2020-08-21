@@ -53,406 +53,408 @@ public class DelphiSymbolTableExecutorTest {
   @Test
   public void testSimpleFile() {
     execute("Simple.pas");
-    verifyUsages(9, 2, reference(22, 10), reference(31, 10), reference(36, 10));
-    verifyUsages(14, 3);
-    verifyUsages(22, 2);
-    verifyUsages(11, 14, reference(31, 22), reference(38, 1));
-    verifyUsages(12, 14, reference(33, 1), reference(36, 22));
+    verifyUsages(7, 2, reference(20, 10), reference(29, 10), reference(34, 10));
+    verifyUsages(12, 3);
+    verifyUsages(20, 2);
+    verifyUsages(9, 14, reference(29, 22), reference(36, 1));
+    verifyUsages(10, 14, reference(31, 1), reference(34, 22));
   }
 
   @Test
   public void testSimilarParameterDeclarations() {
     execute("SimilarParameterDeclarations.pas");
-    verifyUsages(8, 2, reference(16, 10), reference(21, 10));
-    verifyUsages(10, 14, reference(16, 15));
-    verifyUsages(10, 19);
-    verifyUsages(11, 14, reference(21, 15), reference(18, 2));
-    verifyUsages(11, 19);
+    verifyUsages(6, 2, reference(14, 10), reference(19, 10));
+    verifyUsages(8, 14, reference(14, 15));
+    verifyUsages(8, 19);
+    verifyUsages(9, 14, reference(19, 15), reference(16, 2));
+    verifyUsages(9, 19);
   }
 
   @Test
   public void testRecords() {
     execute("Records.pas");
-    verifyUsages(8, 2, reference(18, 21));
-    verifyUsages(9, 4, reference(33, 30));
-    verifyUsages(12, 2, reference(26, 11), reference(31, 11));
-    verifyUsages(14, 4, reference(28, 14));
-    verifyUsages(15, 6, reference(28, 31));
-    verifyUsages(18, 4, reference(33, 14));
-    verifyUsages(20, 13, reference(26, 16));
-    verifyUsages(21, 13, reference(31, 16));
+    verifyUsages(6, 2, reference(16, 21));
+    verifyUsages(7, 4, reference(31, 30));
+    verifyUsages(10, 2, reference(24, 11), reference(29, 11));
+    verifyUsages(12, 4, reference(26, 14));
+    verifyUsages(13, 6, reference(26, 31));
+    verifyUsages(16, 4, reference(31, 14));
+    verifyUsages(18, 13, reference(24, 16));
+    verifyUsages(19, 13, reference(29, 16));
   }
 
   @Test
   public void testInheritedInvocations() {
     execute("InheritedInvocations.pas");
-    verifyUsages(9, 14, reference(40, 14), reference(52, 14));
+    verifyUsages(7, 14, reference(38, 14), reference(50, 14));
     verifyUsages(
-        14,
+        12,
         13,
-        reference(27, 16),
+        reference(25, 16),
+        reference(37, 4),
+        reference(38, 4),
         reference(39, 4),
         reference(40, 4),
+        reference(40, 14),
         reference(41, 4),
-        reference(42, 4),
-        reference(42, 14),
-        reference(43, 4),
-        reference(54, 14),
-        reference(57, 14),
-        reference(64, 19),
-        reference(65, 14));
+        reference(52, 14),
+        reference(55, 14),
+        reference(62, 19),
+        reference(63, 14));
     verifyUsages(
-        15,
         13,
-        reference(32, 16),
+        13,
+        reference(30, 16),
+        reference(39, 14),
         reference(41, 14),
-        reference(43, 14),
-        reference(44, 14),
+        reference(42, 14),
+        reference(49, 4),
+        reference(50, 4),
         reference(51, 4),
+        reference(51, 14),
         reference(52, 4),
         reference(53, 4),
         reference(53, 14),
-        reference(54, 4),
-        reference(55, 4),
-        reference(55, 14),
-        reference(56, 14),
-        reference(64, 14),
-        reference(65, 30));
-    verifyUsages(20, 13, reference(37, 16), reference(58, 4));
-    verifyUsages(21, 13, reference(46, 4), reference(49, 16));
-    verifyUsages(22, 13, reference(59, 4), reference(62, 16));
+        reference(54, 14),
+        reference(62, 14),
+        reference(63, 30));
+    verifyUsages(18, 13, reference(35, 16), reference(56, 4));
+    verifyUsages(19, 13, reference(44, 4), reference(47, 16));
+    verifyUsages(20, 13, reference(57, 4), reference(60, 16));
   }
 
   @Test
   public void testNestedMethods() {
     execute("NestedMethods.pas");
-    verifyUsages(8, 9);
-    verifyUsages(10, 11, reference(29, 12));
-    verifyUsages(10, 15, reference(12, 7));
-    verifyUsages(19, 11, reference(29, 16));
-    verifyUsages(19, 15, reference(21, 7));
+    verifyUsages(6, 9);
+    verifyUsages(8, 11, reference(27, 12));
+    verifyUsages(8, 15, reference(10, 7));
+    verifyUsages(17, 11, reference(27, 16));
+    verifyUsages(17, 15, reference(19, 7));
   }
 
   @Test
   public void testNestedTypes() {
     execute("NestedTypes.pas");
-    verifyUsages(9, 8, reference(22, 10), reference(23, 5));
-    verifyUsages(10, 26, reference(25, 4), reference(26, 4));
+    verifyUsages(7, 8, reference(20, 10), reference(21, 5));
+    verifyUsages(8, 26, reference(23, 4), reference(24, 4));
   }
 
   @Test
   public void testTypeAliasParameter() {
     execute("TypeAliasParameter.pas");
-    verifyUsages(8, 2, reference(11, 14), reference(15, 25));
-    verifyUsages(11, 2, reference(20, 31));
-    verifyUsages(13, 2, reference(20, 10));
-    verifyUsages(15, 14, reference(20, 15));
+    verifyUsages(6, 2, reference(9, 14), reference(13, 25));
+    verifyUsages(9, 2, reference(18, 31));
+    verifyUsages(11, 2, reference(18, 10));
+    verifyUsages(13, 14, reference(18, 15));
   }
 
   @Test
   public void testArrays() {
     execute("Arrays.pas");
     verifyUsages(
-        10,
+        8,
         14,
-        reference(32, 15),
-        reference(42, 17),
-        reference(43, 30),
-        reference(44, 30),
-        reference(45, 23),
-        reference(46, 25),
-        reference(47, 9),
-        reference(48, 46),
-        reference(49, 14));
-    verifyUsages(17, 13, reference(48, 27));
-    verifyUsages(26, 13, reference(46, 6));
-    verifyUsages(27, 13, reference(48, 6));
-    verifyUsages(39, 2, reference(42, 2));
-    verifyUsages(40, 2, reference(43, 2), reference(44, 2));
+        reference(30, 15),
+        reference(40, 17),
+        reference(41, 30),
+        reference(42, 30),
+        reference(43, 23),
+        reference(44, 25),
+        reference(45, 9),
+        reference(46, 46),
+        reference(47, 14));
+    verifyUsages(15, 13, reference(46, 27));
+    verifyUsages(24, 13, reference(44, 6));
+    verifyUsages(25, 13, reference(46, 6));
+    verifyUsages(37, 2, reference(40, 2));
+    verifyUsages(38, 2, reference(41, 2), reference(42, 2));
   }
 
   @Test
   public void testArrayArgument() {
     execute("ArrayArgument.pas");
-    verifyUsages(9, 10, reference(16, 2));
-    verifyUsages(14, 14, reference(16, 6));
+    verifyUsages(7, 10, reference(14, 2));
+    verifyUsages(12, 14, reference(14, 6));
   }
 
   @Test
   public void testArrayConstructor() {
     execute("ArrayConstructor.pas");
-    verifyUsages(12, 10, reference(19, 2));
+    verifyUsages(10, 10, reference(17, 2));
   }
 
   @Test
   public void testArrayOfConst() {
     execute("ArrayOfConst.pas");
-    verifyUsages(9, 10, reference(16, 2), reference(17, 2), reference(18, 2));
-    verifyUsages(14, 14, reference(17, 7), reference(18, 7));
+    verifyUsages(7, 10, reference(14, 2), reference(15, 2), reference(16, 2));
+    verifyUsages(12, 14, reference(15, 7), reference(16, 7));
   }
 
   @Test
   public void testAnonymousMethods() {
     execute("AnonymousMethods.pas");
-    verifyUsages(8, 2, reference(13, 20), reference(28, 20));
-    verifyUsages(9, 2, reference(18, 20), reference(28, 47));
-    verifyUsages(13, 10, reference(32, 2), reference(33, 2));
-    verifyUsages(18, 10, reference(38, 2), reference(39, 2));
-    verifyUsages(23, 10, reference(41, 4));
-    verifyUsages(30, 2, reference(35, 13));
-    verifyUsages(33, 16, reference(35, 4));
+    verifyUsages(6, 2, reference(11, 20), reference(26, 20));
+    verifyUsages(7, 2, reference(16, 20), reference(26, 47));
+    verifyUsages(11, 10, reference(30, 2), reference(31, 2));
+    verifyUsages(16, 10, reference(36, 2), reference(37, 2));
+    verifyUsages(21, 10, reference(39, 4));
+    verifyUsages(28, 2, reference(33, 13));
+    verifyUsages(31, 16, reference(33, 4));
   }
 
   @Test
   public void testUsesDeclarations() {
     execute("UsesDeclarations.pas");
-    verifyUsages(1, 5, reference(25, 7));
-    verifyUsages(17, 11, reference(24, 2), reference(25, 2));
-    verifyUsages(8, 2, reference(26, 2));
-    verifyUsages(15, 2, reference(27, 2));
+    verifyUsages(1, 5, reference(23, 7));
+    verifyUsages(15, 11, reference(22, 2), reference(23, 2));
+    verifyUsages(6, 2, reference(24, 2));
+    verifyUsages(13, 2, reference(25, 2));
   }
 
   @Test
   public void testResultTypes() {
     execute("ResultTypes.pas");
     verifyUsages(
-        8,
+        6,
         2,
-        reference(17, 10),
-        reference(22, 19),
-        reference(27, 54),
-        reference(29, 12),
-        reference(36, 12),
-        reference(42, 44),
-        reference(44, 12));
-    verifyUsages(10, 14, reference(17, 15), reference(30, 9), reference(37, 9), reference(45, 9));
-    verifyUsages(22, 10, reference(31, 2), reference(38, 2), reference(46, 2));
+        reference(15, 10),
+        reference(20, 19),
+        reference(25, 54),
+        reference(27, 12),
+        reference(34, 12),
+        reference(40, 44),
+        reference(42, 12));
+    verifyUsages(8, 14, reference(15, 15), reference(28, 9), reference(35, 9), reference(43, 9));
+    verifyUsages(20, 10, reference(29, 2), reference(36, 2), reference(44, 2));
   }
 
   @Test
   public void testPascalResultAssignments() {
     execute("PascalResultAssignments.pas");
-    verifyUsages(7, 9, reference(13, 9), reference(15, 2));
-    verifyUsages(8, 9, reference(18, 9), reference(23, 4), reference(27, 2));
-    verifyUsages(9, 9, reference(30, 9));
-    verifyUsages(32, 2, reference(34, 2));
+    verifyUsages(5, 9, reference(11, 9), reference(13, 2));
+    verifyUsages(6, 9, reference(16, 9), reference(21, 4), reference(25, 2));
+    verifyUsages(7, 9, reference(28, 9));
+    verifyUsages(30, 2, reference(32, 2));
   }
 
   @Test
   public void testSelfTypes() {
     execute("SelfTypes.pas");
-    verifyUsages(19, 10, reference(36, 2));
-    verifyUsages(24, 10, reference(41, 2));
-    verifyUsages(29, 10, reference(48, 2));
+    verifyUsages(17, 10, reference(34, 2));
+    verifyUsages(22, 10, reference(39, 2));
+    verifyUsages(27, 10, reference(46, 2));
   }
 
   @Test
   public void testInitializationFinalization() {
     execute("InitializationFinalization.pas");
-    verifyUsages(8, 2, reference(16, 7), reference(19, 9));
-    verifyUsages(10, 14, reference(20, 6));
-    verifyUsages(16, 2, reference(22, 2));
+    verifyUsages(6, 2, reference(14, 7), reference(17, 9));
+    verifyUsages(8, 14, reference(18, 6));
+    verifyUsages(14, 2, reference(20, 2));
   }
 
   @Test
   public void testRecordExpressionItems() {
     execute("RecordExpressionItems.pas");
-    verifyUsages(16, 10, reference(23, 11));
+    verifyUsages(14, 10, reference(21, 11));
   }
 
   @Test
   public void testHardTypeCast() {
     execute("HardTypeCast.pas");
-    verifyUsages(10, 4, reference(19, 12));
-    verifyUsages(17, 18, reference(19, 44));
+    verifyUsages(8, 4, reference(17, 12));
+    verifyUsages(15, 18, reference(17, 44));
   }
 
   @Test
   public void testHandlerProperty() {
     execute("HandlerProperty.pas");
-    verifyUsages(12, 4, reference(23, 2));
-    verifyUsages(21, 19, reference(23, 22));
+    verifyUsages(10, 4, reference(21, 2));
+    verifyUsages(19, 19, reference(21, 22));
   }
 
   @Test
   public void testWithStatement() {
     execute("WithStatement.pas");
-    verifyUsages(9, 4, reference(44, 4));
-    verifyUsages(14, 4, reference(26, 4));
-    verifyUsages(10, 4, reference(27, 4));
-    verifyUsages(23, 2, reference(28, 4));
+    verifyUsages(7, 4, reference(42, 4));
+    verifyUsages(12, 4, reference(24, 4));
+    verifyUsages(8, 4, reference(25, 4));
+    verifyUsages(21, 2, reference(26, 4));
   }
 
   @Test
   public void testForStatement() {
     execute("ForStatement.pas");
-    verifyUsages(11, 2, reference(13, 6), reference(17, 6), reference(21, 6));
+    verifyUsages(9, 2, reference(11, 6), reference(15, 6), reference(19, 6));
   }
 
   @Test
   public void testBareInterfaceMethodReference() {
     execute("BareInterfaceMethodReference.pas");
-    verifyUsages(7, 9, reference(17, 9));
-    verifyUsages(8, 9, reference(22, 9));
-    verifyUsages(12, 10, reference(19, 2));
+    verifyUsages(5, 9, reference(15, 9));
+    verifyUsages(6, 9, reference(20, 9));
+    verifyUsages(10, 10, reference(17, 2));
   }
 
   @Test
   public void testClassReferenceMethodResolution() {
     execute("classReferences/MethodResolution.pas");
-    verifyUsages(11, 14, reference(20, 6));
+    verifyUsages(9, 14, reference(18, 6));
   }
 
   @Test
   public void testClassReferenceArgumentResolution() {
     execute("classReferences/ArgumentResolution.pas");
-    verifyUsages(20, 10, reference(27, 2), reference(28, 2));
+    verifyUsages(18, 10, reference(25, 2), reference(26, 2));
   }
 
   @Test
   public void testClassReferenceConstructorTypeResolution() {
     execute("classReferences/ConstructorTypeResolution.pas");
-    verifyUsages(17, 10, reference(24, 2));
-    verifyUsages(10, 16, reference(24, 11));
+    verifyUsages(15, 10, reference(22, 2));
+    verifyUsages(8, 16, reference(22, 11));
   }
 
   @Test
   public void testSimpleForwardDeclarations() {
     execute("forwardDeclarations/Simple.pas");
-    verifyUsages(24, 26, reference(26, 14));
+    verifyUsages(22, 26, reference(24, 14));
   }
 
   @Test
   public void testInheritanceForwardDeclarations() {
     execute("forwardDeclarations/Inheritance.pas");
-    verifyUsages(29, 10, reference(36, 2), reference(37, 2));
-    verifyUsages(16, 15, reference(36, 11));
-    verifyUsages(34, 26, reference(37, 7));
+    verifyUsages(27, 10, reference(34, 2), reference(35, 2));
+    verifyUsages(14, 15, reference(34, 11));
+    verifyUsages(32, 26, reference(35, 7));
   }
 
   @Test
   public void testImplicitForwardDeclarations() {
     execute("forwardDeclarations/ImplicitForwarding.pas");
-    verifyUsages(11, 2, reference(8, 17), reference(9, 22));
+    verifyUsages(9, 2, reference(6, 17), reference(7, 22));
   }
 
   @Test
   public void testTypeSignaturesOfForwardDeclaration() {
     execute("forwardDeclarations/TypeSignature.pas");
-    verifyUsages(21, 12, reference(26, 10), reference(39, 2));
-    verifyUsages(22, 12, reference(31, 10), reference(42, 2));
+    verifyUsages(19, 12, reference(24, 10), reference(37, 2));
+    verifyUsages(20, 12, reference(29, 10), reference(40, 2));
   }
 
   @Test
   public void testSimpleTypeResolution() {
     execute("typeResolution/Simple.pas");
-    verifyUsages(8, 2, reference(16, 10), reference(18, 21), reference(27, 2), reference(31, 22));
-    verifyUsages(10, 16, reference(27, 7), reference(28, 9));
-    verifyUsages(11, 14, reference(25, 7), reference(26, 9), reference(27, 14), reference(28, 16));
-    verifyUsages(14, 2, reference(23, 10), reference(31, 9));
-    verifyUsages(16, 4, reference(25, 2), reference(33, 12));
-    verifyUsages(17, 14, reference(23, 15));
-    verifyUsages(18, 13, reference(26, 2), reference(28, 2), reference(31, 14));
+    verifyUsages(6, 2, reference(14, 10), reference(16, 21), reference(25, 2), reference(29, 22));
+    verifyUsages(8, 16, reference(25, 7), reference(26, 9));
+    verifyUsages(9, 14, reference(23, 7), reference(24, 9), reference(25, 14), reference(26, 16));
+    verifyUsages(12, 2, reference(21, 10), reference(29, 9));
+    verifyUsages(14, 4, reference(23, 2), reference(31, 12));
+    verifyUsages(15, 14, reference(21, 15));
+    verifyUsages(16, 13, reference(24, 2), reference(26, 2), reference(29, 14));
   }
 
   @Test
   public void testCharTypeResolution() {
     execute("typeResolution/Chars.pas");
-    verifyUsages(9, 9, reference(24, 2));
-    verifyUsages(14, 9, reference(25, 2));
+    verifyUsages(7, 9, reference(22, 2));
+    verifyUsages(12, 9, reference(23, 2));
   }
 
   @Test
   public void testCastTypeResolution() {
     execute("typeResolution/Casts.pas");
-    verifyUsages(10, 14, reference(17, 12), reference(18, 16));
+    verifyUsages(8, 14, reference(15, 12), reference(16, 16));
   }
 
   @Test
   public void testConstructorTypeResolution() {
     execute("typeResolution/Constructors.pas");
-    verifyUsages(10, 14, reference(25, 14));
-    verifyUsages(15, 14, reference(26, 14));
+    verifyUsages(8, 14, reference(23, 14));
+    verifyUsages(13, 14, reference(24, 14));
   }
 
   @Test
   public void testEnumsTypeResolution() {
     execute("typeResolution/Enums.pas");
-    verifyUsages(20, 9, reference(30, 2), reference(31, 2), reference(32, 2));
+    verifyUsages(18, 9, reference(28, 2), reference(29, 2), reference(30, 2));
   }
 
   @Test
   public void testPointersTypeResolution() {
     execute("typeResolution/Pointers.pas");
-    verifyUsages(9, 10, reference(18, 2), reference(19, 2), reference(20, 2), reference(21, 2));
+    verifyUsages(7, 10, reference(16, 2), reference(17, 2), reference(18, 2), reference(19, 2));
   }
 
   @Test
   public void testSubRangeHostTypeResolution() {
     execute("typeResolution/SubRangeHostType.pas");
-    verifyUsages(14, 10, reference(21, 2), reference(22, 2), reference(23, 2));
+    verifyUsages(12, 10, reference(19, 2), reference(20, 2), reference(21, 2));
   }
 
   @Test
   public void testLowHighIntrinsics() {
     execute("intrinsics/LowHighIntrinsics.pas");
     verifyUsages(
-        14,
+        12,
         10,
+        reference(29, 2),
+        reference(30, 2),
         reference(31, 2),
         reference(32, 2),
         reference(33, 2),
         reference(34, 2),
         reference(35, 2),
-        reference(36, 2),
-        reference(37, 2),
-        reference(38, 2));
-    verifyUsages(19, 10, reference(39, 2), reference(40, 2));
-    verifyUsages(24, 10, reference(41, 2), reference(42, 2));
+        reference(36, 2));
+    verifyUsages(17, 10, reference(37, 2), reference(38, 2));
+    verifyUsages(22, 10, reference(39, 2), reference(40, 2));
   }
 
   @Test
   public void testDefaultIntrinsic() {
     execute("intrinsics/DefaultIntrinsic.pas");
-    verifyUsages(9, 10, reference(31, 2));
-    verifyUsages(14, 10, reference(32, 2));
-    verifyUsages(19, 10, reference(33, 2));
-    verifyUsages(24, 10, reference(34, 2));
+    verifyUsages(7, 10, reference(29, 2));
+    verifyUsages(12, 10, reference(30, 2));
+    verifyUsages(17, 10, reference(31, 2));
+    verifyUsages(22, 10, reference(32, 2));
   }
 
   @Test
   public void testBinaryOperatorIntrinsics() {
     execute("operators/BinaryOperatorIntrinsics.pas");
     verifyUsages(
-        12,
         10,
+        10,
+        reference(46, 2),
+        reference(47, 2),
         reference(48, 2),
-        reference(49, 2),
-        reference(50, 2),
+        reference(51, 2),
+        reference(52, 2),
         reference(53, 2),
         reference(54, 2),
         reference(55, 2),
         reference(56, 2),
         reference(57, 2),
-        reference(58, 2),
-        reference(59, 2),
-        reference(117, 2));
+        reference(115, 2));
     verifyUsages(
-        17,
+        15,
         10,
+        reference(60, 2),
+        reference(61, 2),
         reference(62, 2),
         reference(63, 2),
         reference(64, 2),
-        reference(65, 2),
-        reference(66, 2),
+        reference(77, 2),
+        reference(78, 2),
         reference(79, 2),
         reference(80, 2),
-        reference(81, 2),
-        reference(82, 2),
-        reference(83, 2));
+        reference(81, 2));
     verifyUsages(
-        22,
+        20,
         10,
+        reference(65, 2),
+        reference(66, 2),
         reference(67, 2),
         reference(68, 2),
         reference(69, 2),
@@ -461,8 +463,8 @@ public class DelphiSymbolTableExecutorTest {
         reference(72, 2),
         reference(73, 2),
         reference(74, 2),
-        reference(75, 2),
-        reference(76, 2),
+        reference(82, 2),
+        reference(83, 2),
         reference(84, 2),
         reference(85, 2),
         reference(86, 2),
@@ -470,12 +472,12 @@ public class DelphiSymbolTableExecutorTest {
         reference(88, 2),
         reference(89, 2),
         reference(90, 2),
-        reference(91, 2),
-        reference(92, 2),
-        reference(93, 2));
+        reference(91, 2));
     verifyUsages(
-        27,
+        25,
         10,
+        reference(92, 2),
+        reference(93, 2),
         reference(94, 2),
         reference(95, 2),
         reference(96, 2),
@@ -490,110 +492,110 @@ public class DelphiSymbolTableExecutorTest {
         reference(105, 2),
         reference(106, 2),
         reference(107, 2),
-        reference(108, 2),
-        reference(109, 2),
-        reference(110, 2));
-    verifyUsages(32, 10, reference(113, 2), reference(114, 2));
-    verifyUsages(37, 10, reference(118, 2), reference(119, 2), reference(120, 2));
+        reference(108, 2));
+    verifyUsages(30, 10, reference(111, 2), reference(112, 2));
+    verifyUsages(35, 10, reference(116, 2), reference(117, 2), reference(118, 2));
   }
 
   @Test
   public void testBinaryOperatorOverloads() {
     execute("operators/BinaryOperatorOverloads.pas");
-    verifyUsages(66, 10, reference(79, 2), reference(82, 2), reference(85, 2), reference(88, 2));
-    verifyUsages(71, 10, reference(91, 2), reference(94, 2));
+    verifyUsages(64, 10, reference(77, 2), reference(80, 2), reference(83, 2), reference(86, 2));
+    verifyUsages(69, 10, reference(89, 2), reference(92, 2));
   }
 
   @Test
   public void testUnaryOperatorIntrinsics() {
     execute("operators/UnaryOperatorIntrinsics.pas");
-    verifyUsages(12, 10, reference(42, 2));
-    verifyUsages(17, 10, reference(45, 2), reference(49, 2), reference(50, 2));
-    verifyUsages(22, 10, reference(46, 2), reference(51, 2), reference(52, 2));
-    verifyUsages(27, 10, reference(53, 2), reference(54, 2));
+    verifyUsages(10, 10, reference(40, 2));
+    verifyUsages(15, 10, reference(43, 2), reference(47, 2), reference(48, 2));
+    verifyUsages(20, 10, reference(44, 2), reference(49, 2), reference(50, 2));
+    verifyUsages(25, 10, reference(51, 2), reference(52, 2));
   }
 
   @Test
   public void testUnaryOperatorOverloads() {
     execute("operators/UnaryOperatorOverloads.pas");
-    verifyUsages(34, 10, reference(51, 2));
-    verifyUsages(39, 10, reference(52, 2));
-    verifyUsages(44, 10, reference(53, 2));
+    verifyUsages(32, 10, reference(49, 2));
+    verifyUsages(37, 10, reference(50, 2));
+    verifyUsages(42, 10, reference(51, 2));
   }
 
   @Test
   public void testImplicitOperator() {
     execute("operators/ImplicitOperator.pas");
-    verifyUsages(25, 10, reference(37, 2));
+    verifyUsages(23, 10, reference(35, 2));
   }
 
   @Test
   public void testImplicitOperatorShouldHaveLowestPriority() {
     execute("operators/ImplicitOperatorLowestPriority.pas");
-    verifyUsages(35, 10, reference(42, 2));
+    verifyUsages(33, 10, reference(40, 2));
   }
 
   @Test
   public void testOperatorsAreNotCallable() {
     execute("operators/NotCallable.pas");
-    verifyUsages(9, 20, reference(17, 7));
+    verifyUsages(7, 20, reference(15, 7));
   }
 
   @Test
   public void testPointerMathOperators() {
     execute("operators/PointerMath.pas");
     verifyUsages(
-        17,
+        15,
         10,
+        reference(49, 2),
+        reference(60, 2),
+        reference(61, 2),
+        reference(72, 2),
+        reference(73, 2),
+        reference(50, 2),
         reference(51, 2),
         reference(62, 2),
         reference(63, 2),
         reference(74, 2),
-        reference(75, 2),
-        reference(52, 2),
-        reference(53, 2),
-        reference(64, 2),
-        reference(65, 2),
-        reference(76, 2),
-        reference(77, 2));
+        reference(75, 2));
     verifyUsages(
-        22,
+        20,
         10,
+        reference(42, 2),
+        reference(43, 2),
         reference(44, 2),
         reference(45, 2),
         reference(46, 2),
         reference(47, 2),
-        reference(48, 2),
-        reference(49, 2),
-        reference(50, 2));
+        reference(48, 2));
     verifyUsages(
-        27,
+        25,
         10,
+        reference(53, 2),
+        reference(54, 2),
         reference(55, 2),
         reference(56, 2),
         reference(57, 2),
         reference(58, 2),
-        reference(59, 2),
-        reference(60, 2),
-        reference(61, 2));
+        reference(59, 2));
     verifyUsages(
-        32,
+        30,
         10,
+        reference(65, 2),
+        reference(66, 2),
         reference(67, 2),
         reference(68, 2),
         reference(69, 2),
         reference(70, 2),
-        reference(71, 2),
-        reference(72, 2),
-        reference(73, 2));
+        reference(71, 2));
   }
 
   @Test
   public void testVariantOperators() {
     execute("operators/VariantOperators.pas");
     verifyUsages(
+        8,
         10,
-        10,
+        reference(41, 2),
+        reference(42, 2),
         reference(43, 2),
         reference(44, 2),
         reference(45, 2),
@@ -619,13 +621,13 @@ public class DelphiSymbolTableExecutorTest {
         reference(65, 2),
         reference(66, 2),
         reference(67, 2),
-        reference(68, 2),
-        reference(69, 2),
-        reference(70, 2));
-    verifyUsages(25, 10, reference(72, 2), reference(73, 2));
+        reference(68, 2));
+    verifyUsages(23, 10, reference(70, 2), reference(71, 2));
     verifyUsages(
-        30,
+        28,
         10,
+        reference(73, 2),
+        reference(74, 2),
         reference(75, 2),
         reference(76, 2),
         reference(77, 2),
@@ -635,120 +637,117 @@ public class DelphiSymbolTableExecutorTest {
         reference(81, 2),
         reference(82, 2),
         reference(83, 2),
-        reference(84, 2),
-        reference(85, 2),
-        reference(86, 2));
+        reference(84, 2));
   }
 
   @Test
   public void testSimpleProperties() {
     execute("properties/Simple.pas");
     verifyUsages(
-        8,
+        6,
         2,
-        reference(16, 10),
-        reference(18, 26),
-        reference(19, 21),
-        reference(20, 24),
-        reference(21, 23),
-        reference(22, 26),
-        reference(27, 27),
-        reference(32, 22),
-        reference(39, 7),
-        reference(41, 19),
-        reference(44, 18),
-        reference(47, 21));
-    verifyUsages(10, 16, reference(41, 24), reference(44, 23), reference(47, 26));
-    verifyUsages(11, 14, reference(42, 16), reference(45, 15), reference(48, 18));
-    verifyUsages(14, 2, reference(27, 10), reference(32, 9), reference(37, 20));
+        reference(14, 10),
+        reference(16, 26),
+        reference(17, 21),
+        reference(18, 24),
+        reference(19, 23),
+        reference(20, 26),
+        reference(25, 27),
+        reference(30, 22),
+        reference(37, 7),
+        reference(39, 19),
+        reference(42, 18),
+        reference(45, 21));
+    verifyUsages(8, 16, reference(39, 24), reference(42, 23), reference(45, 26));
+    verifyUsages(9, 14, reference(40, 16), reference(43, 15), reference(46, 18));
+    verifyUsages(12, 2, reference(25, 10), reference(30, 9), reference(35, 20));
     verifyUsages(
-        16,
+        14,
         4,
-        reference(21, 33),
-        reference(21, 44),
-        reference(22, 36),
-        reference(22, 47),
-        reference(29, 2),
-        reference(34, 12));
-    verifyUsages(18, 14, reference(20, 47), reference(27, 15));
-    verifyUsages(19, 13, reference(20, 34), reference(32, 14));
-    verifyUsages(20, 13, reference(41, 6), reference(42, 6));
-    verifyUsages(21, 13, reference(44, 6), reference(45, 6));
-    verifyUsages(22, 13, reference(47, 6), reference(48, 6));
+        reference(19, 33),
+        reference(19, 44),
+        reference(20, 36),
+        reference(20, 47),
+        reference(27, 2),
+        reference(32, 12));
+    verifyUsages(16, 14, reference(18, 47), reference(25, 15));
+    verifyUsages(17, 13, reference(18, 34), reference(30, 14));
+    verifyUsages(18, 13, reference(39, 6), reference(40, 6));
+    verifyUsages(19, 13, reference(42, 6), reference(43, 6));
+    verifyUsages(20, 13, reference(45, 6), reference(46, 6));
   }
 
   @Test
   public void testOverrideProperties() {
     execute("properties/OverrideProperties.pas");
-    verifyUsages(
-        10, 14, reference(31, 10), reference(32, 10), reference(33, 13), reference(34, 13));
-    verifyUsages(18, 13, reference(31, 6), reference(33, 6));
-    verifyUsages(23, 13, reference(32, 6), reference(34, 6));
+    verifyUsages(8, 14, reference(29, 10), reference(30, 10), reference(31, 13), reference(32, 13));
+    verifyUsages(16, 13, reference(29, 6), reference(31, 6));
+    verifyUsages(21, 13, reference(30, 6), reference(32, 6));
   }
 
   @Test
   public void testProceduralProperties() {
     execute("properties/ProceduralProperties.pas");
-    verifyUsages(14, 13, reference(21, 6));
-    verifyUsages(19, 26, reference(21, 14));
+    verifyUsages(12, 13, reference(19, 6));
+    verifyUsages(17, 26, reference(19, 14));
   }
 
   @Test
   public void testHiddenDefaultProperties() {
     execute("properties/HiddenDefaultProperties.pas");
-    verifyUsages(13, 14, reference(29, 25));
+    verifyUsages(11, 14, reference(27, 25));
   }
 
   @Test
   public void testSimpleOverloads() {
     execute("overloads/Simple.pas");
-    verifyUsages(10, 10, reference(16, 10), reference(37, 2));
-    verifyUsages(11, 10, reference(21, 10), reference(38, 2));
-    verifyUsages(12, 10, reference(26, 10), reference(39, 2), reference(40, 2));
+    verifyUsages(8, 10, reference(14, 10), reference(35, 2));
+    verifyUsages(9, 10, reference(19, 10), reference(36, 2));
+    verifyUsages(10, 10, reference(24, 10), reference(37, 2), reference(38, 2));
   }
 
   @Test
   public void testTypeTypeOverloads() {
     execute("overloads/TypeType.pas");
-    verifyUsages(8, 2, reference(17, 19), reference(25, 10));
-    verifyUsages(12, 10, reference(27, 2));
-    verifyUsages(17, 10, reference(28, 2));
+    verifyUsages(6, 2, reference(15, 19), reference(23, 10));
+    verifyUsages(10, 10, reference(25, 2));
+    verifyUsages(15, 10, reference(26, 2));
   }
 
   @Test
   public void testNestedExpressions() {
     execute("overloads/NestedExpressions.pas");
-    verifyUsages(9, 2, reference(23, 9), reference(40, 12), reference(43, 14));
-    verifyUsages(10, 13, reference(23, 25), reference(44, 15));
-    verifyUsages(13, 10, reference(28, 10), reference(44, 2));
-    verifyUsages(14, 10, reference(33, 10), reference(45, 2), reference(46, 2));
-    verifyUsages(18, 9, reference(45, 6), reference(46, 9));
+    verifyUsages(7, 2, reference(21, 9), reference(38, 12), reference(41, 14));
+    verifyUsages(8, 13, reference(21, 25), reference(42, 15));
+    verifyUsages(11, 10, reference(26, 10), reference(42, 2));
+    verifyUsages(12, 10, reference(31, 10), reference(43, 2), reference(44, 2));
+    verifyUsages(16, 9, reference(43, 6), reference(44, 9));
   }
 
   @Test
   public void testAmbiguousMethodReferences() {
     execute("overloads/AmbiguousMethodReferences.pas");
-    verifyUsages(8, 2, reference(10, 19), reference(20, 19), reference(32, 11));
-    verifyUsages(10, 10, reference(20, 10), reference(35, 2), reference(36, 2));
-    verifyUsages(11, 10, reference(25, 10), reference(37, 2), reference(38, 2));
-    verifyUsages(15, 9, reference(36, 6));
+    verifyUsages(6, 2, reference(8, 19), reference(18, 19), reference(30, 11));
+    verifyUsages(8, 10, reference(18, 10), reference(33, 2), reference(34, 2));
+    verifyUsages(9, 10, reference(23, 10), reference(35, 2), reference(36, 2));
+    verifyUsages(13, 9, reference(34, 6));
   }
 
   @Test
   public void testProceduralVariables() {
     execute("overloads/ProceduralVariables.pas");
-    verifyUsages(7, 10, reference(12, 10), reference(27, 20));
-    verifyUsages(8, 10, reference(17, 10), reference(28, 19));
-    verifyUsages(24, 2, reference(27, 2), reference(30, 2));
-    verifyUsages(25, 2, reference(28, 2), reference(31, 2));
+    verifyUsages(5, 10, reference(10, 10), reference(25, 20));
+    verifyUsages(6, 10, reference(15, 10), reference(26, 19));
+    verifyUsages(22, 2, reference(25, 2), reference(28, 2));
+    verifyUsages(23, 2, reference(26, 2), reference(29, 2));
   }
 
   @Test
   public void testCharInSet() {
     execute("overloads/CharInSet.pas");
-    verifyUsages(15, 13, reference(27, 22));
-    verifyUsages(20, 10, reference(27, 12));
-    verifyUsages(25, 19, reference(27, 36));
+    verifyUsages(13, 13, reference(25, 22));
+    verifyUsages(18, 10, reference(25, 12));
+    verifyUsages(23, 19, reference(25, 36));
   }
 
   @Test
@@ -757,42 +756,51 @@ public class DelphiSymbolTableExecutorTest {
         "overloads/Imports.pas",
         "overloads/imports/IntegerFoo.pas",
         "overloads/imports/StringFoo.pas");
-    verifyUsages(15, 10, reference(32, 2), reference(33, 2));
+    verifyUsages(13, 10, reference(30, 2), reference(31, 2));
+    verifyUsages(24, 2, reference(28, 6));
+    verifyUsages(25, 2, reference(29, 6));
     verifyUsages(26, 2, reference(30, 6));
-    verifyUsages(27, 2, reference(31, 6));
-    verifyUsages(28, 2, reference(32, 6));
   }
 
   @Test
   public void testDisambiguationOfOverloadsByDistanceFromCallSite() {
     execute("overloads/Distance.pas", "overloads/imports/DistantFoo.pas");
-    verifyUsages(10, 10, reference(55, 2));
-    verifyUsages(14, 16, reference(58, 14));
-    verifyUsages(15, 14, reference(60, 6), reference(66, 2));
-    verifyUsages(19, 16, reference(57, 14));
-    verifyUsages(20, 14, reference(59, 6), reference(65, 2));
-    verifyUsages(51, 15, reference(56, 6), reference(58, 21), reference(60, 10));
+    verifyUsages(8, 10, reference(53, 2));
+    verifyUsages(12, 16, reference(56, 14));
+    verifyUsages(13, 14, reference(58, 6), reference(64, 2));
+    verifyUsages(17, 16, reference(55, 14));
+    verifyUsages(18, 14, reference(57, 6), reference(63, 2));
+    verifyUsages(49, 15, reference(54, 6), reference(56, 21), reference(58, 10));
   }
 
   @Test
   public void testOverriddenOverloads() {
     execute("overloads/Overrides.pas", "overloads/imports/BaseFoo.pas");
+    verifyUsages(31, 2, reference(35, 10));
+    verifyUsages(32, 2, reference(36, 10));
     verifyUsages(33, 2, reference(37, 10));
-    verifyUsages(34, 2, reference(38, 10));
-    verifyUsages(35, 2, reference(39, 10));
   }
 
   @Test
   public void testRegularMethodPreferredOverImplicitSpecializations() {
     execute("generics/RegularMethodPreferredOverImplicitSpecialization.pas");
-    verifyUsages(12, 20, reference(12, 26));
-    verifyUsages(12, 15, reference(22, 2));
-    verifyUsages(13, 15, reference(21, 2));
+    verifyUsages(10, 20, reference(10, 26));
+    verifyUsages(10, 15, reference(20, 2));
+    verifyUsages(11, 15, reference(19, 2));
   }
 
   @Test
   public void testGenericArrayAssignmentCompatibility() {
     execute("generics/ArrayAssignmentCompatibility.pas");
+    verifyUsages(12, 15, reference(25, 2));
+    verifyUsages(13, 15, reference(26, 2));
+    verifyUsages(14, 15, reference(27, 2));
+    verifyUsages(15, 15, reference(28, 2));
+  }
+
+  @Test
+  public void testStructAssignmentCompatibility() {
+    execute("generics/StructAssignmentCompatibility.pas");
     verifyUsages(14, 15, reference(27, 2));
     verifyUsages(15, 15, reference(28, 2));
     verifyUsages(16, 15, reference(29, 2));
@@ -800,114 +808,105 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
-  public void testStructAssignmentCompatibility() {
-    execute("generics/StructAssignmentCompatibility.pas");
-    verifyUsages(16, 15, reference(29, 2));
-    verifyUsages(17, 15, reference(30, 2));
-    verifyUsages(18, 15, reference(31, 2));
-    verifyUsages(19, 15, reference(32, 2));
-  }
-
-  @Test
   public void testGenericMethodInterfaceNameResolution() {
     execute("generics/MethodInterfaceNameResolution.pas");
-    verifyUsages(8, 2, reference(18, 10));
-    verifyUsages(9, 15, reference(18, 18));
-    verifyUsages(12, 2, reference(23, 10));
-    verifyUsages(13, 15, reference(23, 15));
+    verifyUsages(6, 2, reference(16, 10));
+    verifyUsages(7, 15, reference(16, 18));
+    verifyUsages(10, 2, reference(21, 10));
+    verifyUsages(11, 15, reference(21, 15));
   }
 
   @Test
   public void testGenericSameNameTypes() {
     execute("generics/SameNameType.pas");
-    verifyUsages(8, 2, reference(20, 15));
-    verifyUsages(9, 2, reference(21, 16));
-    verifyUsages(10, 2, reference(22, 18));
+    verifyUsages(6, 2, reference(18, 15));
+    verifyUsages(7, 2, reference(19, 16));
+    verifyUsages(8, 2, reference(20, 18));
   }
 
   @Test
   public void testGenericParameterizedMethods() {
     execute("generics/ParameterizedMethod.pas");
     verifyUsages(
-        13,
+        11,
         14,
-        reference(18, 15),
+        reference(16, 15),
+        reference(29, 2),
+        reference(30, 2),
         reference(31, 2),
-        reference(32, 2),
-        reference(33, 2),
-        reference(34, 2));
+        reference(32, 2));
   }
 
   @Test
   public void testGenericImplicitSpecializations() {
     execute("generics/ImplicitSpecialization.pas");
-    verifyUsages(16, 14, reference(21, 20), reference(28, 2), reference(29, 2), reference(30, 2));
+    verifyUsages(14, 14, reference(19, 20), reference(26, 2), reference(27, 2), reference(28, 2));
   }
 
   @Test
   public void testGenericConstraints() {
     execute("generics/Constraint.pas");
-    verifyUsages(13, 14, reference(22, 25), reference(55, 8));
+    verifyUsages(11, 14, reference(20, 25), reference(53, 8));
   }
 
   @Test
   public void testGenericTypeParameterNameDeclarations() {
     execute("generics/TypeParameterNameDeclaration.pas");
     verifyUsages(
-        8,
+        6,
         7,
-        reference(10, 22),
-        reference(11, 19),
-        reference(12, 18),
-        reference(15, 49),
-        reference(15, 53),
-        reference(17, 45),
-        reference(19, 31),
-        reference(24, 14),
-        reference(24, 35),
-        reference(24, 39));
-    verifyUsages(14, 13, reference(14, 27));
-    verifyUsages(15, 22, reference(15, 41));
-    verifyUsages(16, 11, reference(17, 31), reference(17, 54), reference(17, 58));
+        reference(8, 22),
+        reference(9, 19),
+        reference(10, 18),
+        reference(13, 49),
+        reference(13, 53),
+        reference(15, 45),
+        reference(17, 31),
+        reference(22, 14),
+        reference(22, 35),
+        reference(22, 39));
+    verifyUsages(12, 13, reference(12, 27));
+    verifyUsages(13, 22, reference(13, 41));
+    verifyUsages(14, 11, reference(15, 31), reference(15, 54), reference(15, 58));
   }
 
   @Test
   public void testGenericTypeParameterConflicts() {
     execute("generics/TypeParameterNameConflict.pas");
-    verifyUsages(9, 14, reference(27, 8));
-    verifyUsages(13, 14, reference(28, 6), reference(29, 9));
-    verifyUsages(16, 11, reference(17, 11), reference(23, 19));
+    verifyUsages(7, 14, reference(25, 8));
+    verifyUsages(11, 14, reference(26, 6), reference(27, 9));
+    verifyUsages(14, 11, reference(15, 11), reference(21, 19));
     verifyUsages(
-        18, 19, reference(18, 33), reference(23, 27), reference(23, 35), reference(25, 10));
+        16, 19, reference(16, 33), reference(21, 27), reference(21, 35), reference(23, 10));
   }
 
   @Test
   public void testPropertySpecialization() {
     execute("generics/PropertySpecialization.pas");
-    verifyUsages(15, 10, reference(22, 2));
+    verifyUsages(13, 10, reference(20, 2));
   }
 
   @Test
   public void testSimpleMethodResolutionClause() {
     execute("methodResolutionClauses/Simple.pas");
-    verifyUsages(9, 14, reference(14, 26));
-    verifyUsages(13, 14, reference(14, 42));
+    verifyUsages(7, 14, reference(12, 26));
+    verifyUsages(11, 14, reference(12, 42));
   }
 
   @Test
   public void testMethodResolutionClauseWithOverloadedImplementation() {
     execute("methodResolutionClauses/OverloadedImplementation.pas");
-    verifyUsages(9, 14, reference(15, 26));
-    verifyUsages(13, 14, reference(15, 42));
-    verifyUsages(14, 14);
+    verifyUsages(7, 14, reference(13, 26));
+    verifyUsages(11, 14, reference(13, 42));
+    verifyUsages(12, 14);
   }
 
   @Test
   public void testMethodResolutionClauseWithOverloadedInterfaceAndImplementation() {
     execute("methodResolutionClauses/OverloadedInterfaceAndImplementation.pas");
-    verifyUsages(9, 14, reference(16, 26));
-    verifyUsages(14, 14, reference(16, 42));
-    verifyUsages(15, 14);
+    verifyUsages(7, 14, reference(14, 26));
+    verifyUsages(12, 14, reference(14, 42));
+    verifyUsages(13, 14);
   }
 
   @Test
@@ -918,11 +917,11 @@ public class DelphiSymbolTableExecutorTest {
         "imports/source/Unit3.pas",
         "imports/ignored/Unit2.pas",
         "imports/ignored/Unit3.pas");
-    verifyUsages(1, 5, reference(25, 2), reference(28, 18));
-    verifyUsages(8, 2, reference(28, 2));
-    verifyUsages(11, 2, reference(28, 24), reference(29, 12));
-    verifyUsages(16, 2, reference(25, 18));
-    verifyUsages(18, 10, reference(25, 8), reference(26, 2));
+    verifyUsages(1, 5, reference(23, 2), reference(26, 18));
+    verifyUsages(6, 2, reference(26, 2));
+    verifyUsages(9, 2, reference(26, 24), reference(27, 12));
+    verifyUsages(14, 2, reference(23, 18));
+    verifyUsages(16, 10, reference(23, 8), reference(24, 2));
   }
 
   @Test
@@ -935,12 +934,12 @@ public class DelphiSymbolTableExecutorTest {
         "namespaces/UnitScopeName.Unit2.pas",
         "namespaces/UnitScopeName.ScopedUnit3.pas");
 
-    verifyUsages(1, 5, reference(25, 2), reference(28, 18));
-    verifyUsages(8, 2, reference(32, 2));
-    verifyUsages(8, 9, reference(28, 2));
-    verifyUsages(11, 2, reference(28, 35), reference(29, 12), reference(31, 23), reference(32, 29));
-    verifyUsages(16, 2, reference(25, 29));
-    verifyUsages(18, 10, reference(25, 19), reference(26, 2));
+    verifyUsages(1, 5, reference(23, 2), reference(26, 18));
+    verifyUsages(6, 2, reference(30, 2));
+    verifyUsages(6, 9, reference(26, 2));
+    verifyUsages(9, 2, reference(26, 35), reference(27, 12), reference(29, 23), reference(30, 29));
+    verifyUsages(14, 2, reference(23, 29));
+    verifyUsages(16, 10, reference(23, 19), reference(24, 2));
   }
 
   @Test
@@ -955,11 +954,11 @@ public class DelphiSymbolTableExecutorTest {
         "namespaces/Namespaced.Unit2.pas",
         "namespaces/Unit3.pas");
 
-    verifyUsages(1, 5, reference(25, 2), reference(28, 30));
-    verifyUsages(8, 2, reference(28, 2));
-    verifyUsages(11, 2, reference(28, 48), reference(29, 18));
-    verifyUsages(16, 2, reference(25, 30));
-    verifyUsages(18, 10, reference(25, 20), reference(26, 2));
+    verifyUsages(1, 5, reference(23, 2), reference(26, 30));
+    verifyUsages(6, 2, reference(26, 2));
+    verifyUsages(9, 2, reference(26, 48), reference(27, 18));
+    verifyUsages(14, 2, reference(23, 30));
+    verifyUsages(16, 10, reference(23, 20), reference(24, 2));
   }
 
   @Test
@@ -969,107 +968,107 @@ public class DelphiSymbolTableExecutorTest {
 
     execute("unitAliases/Unit1.pas", "unitAliases/Unit2.pas", "unitAliases/Unit3.pas");
 
-    verifyUsages(1, 5, reference(25, 2), reference(28, 18));
-    verifyUsages(8, 2, reference(28, 2));
-    verifyUsages(11, 2, reference(28, 24), reference(29, 12));
-    verifyUsages(16, 2, reference(25, 18));
-    verifyUsages(18, 10, reference(25, 8), reference(26, 2));
+    verifyUsages(1, 5, reference(23, 2), reference(26, 18));
+    verifyUsages(6, 2, reference(26, 2));
+    verifyUsages(9, 2, reference(26, 24), reference(27, 12));
+    verifyUsages(14, 2, reference(23, 18));
+    verifyUsages(16, 10, reference(23, 8), reference(24, 2));
   }
 
   @Test
   public void testUnscopedEnums() {
     execute("enums/UnscopedEnum.pas");
-    verifyUsages(8, 2, reference(12, 19));
-    verifyUsages(8, 9, reference(14, 11));
+    verifyUsages(6, 2, reference(10, 19));
+    verifyUsages(6, 9, reference(12, 11));
   }
 
   @Test
   public void testNestedUnscopedEnums() {
     execute("enums/NestedUnscopedEnum.pas");
-    verifyUsages(10, 12, reference(17, 9));
-    verifyUsages(22, 16, reference(26, 9));
-    verifyUsages(31, 8, reference(33, 9));
+    verifyUsages(8, 12, reference(15, 9));
+    verifyUsages(20, 16, reference(24, 9));
+    verifyUsages(29, 8, reference(31, 9));
   }
 
   @Test
   public void testScopedEnums() {
     execute("enums/ScopedEnum.pas");
-    verifyUsages(10, 2);
-    verifyUsages(10, 9);
+    verifyUsages(8, 2);
+    verifyUsages(8, 9);
   }
 
   @Test
   public void testSimpleHelpers() {
     execute("helpers/Simple.pas");
-    verifyUsages(12, 14, reference(17, 21), reference(24, 6));
+    verifyUsages(10, 14, reference(15, 21), reference(22, 6));
   }
 
   @Test
   public void testClassHelperOverrides() {
     execute("helpers/ClassHelperOverride.pas");
-    verifyUsages(9, 14, reference(18, 15));
-    verifyUsages(13, 14, reference(23, 21), reference(30, 6));
+    verifyUsages(7, 14, reference(16, 15));
+    verifyUsages(11, 14, reference(21, 21), reference(28, 6));
   }
 
   @Test
   public void testClassHelperOverloads() {
     execute("helpers/ClassHelperOverload.pas");
-    verifyUsages(9, 14, reference(22, 15), reference(39, 6));
-    verifyUsages(13, 14, reference(27, 25));
-    verifyUsages(17, 14, reference(32, 21), reference(40, 6));
+    verifyUsages(7, 14, reference(20, 15), reference(37, 6));
+    verifyUsages(11, 14, reference(25, 25));
+    verifyUsages(15, 14, reference(30, 21), reference(38, 6));
   }
 
   @Test
   public void testClassHelperSelfValues() {
     execute("helpers/ClassHelperSelfValue.pas");
-    verifyUsages(17, 10, reference(24, 2));
+    verifyUsages(15, 10, reference(22, 2));
   }
 
   @Test
   public void testClassHelperInheritedStatements() {
     execute("helpers/ClassHelperInheritedStatement.pas");
-    verifyUsages(9, 14, reference(31, 19), reference(68, 2));
-    verifyUsages(10, 14, reference(36, 19), reference(76, 2));
-    verifyUsages(15, 14, reference(46, 15), reference(69, 12), reference(77, 12));
-    verifyUsages(16, 14, reference(51, 15), reference(70, 12), reference(78, 12));
-    verifyUsages(11, 14, reference(41, 19), reference(71, 12), reference(79, 12));
+    verifyUsages(7, 14, reference(29, 19), reference(66, 2));
+    verifyUsages(8, 14, reference(34, 19), reference(74, 2));
+    verifyUsages(13, 14, reference(44, 15), reference(67, 12), reference(75, 12));
+    verifyUsages(14, 14, reference(49, 15), reference(68, 12), reference(76, 12));
+    verifyUsages(9, 14, reference(39, 19), reference(69, 12), reference(77, 12));
   }
 
   @Test
   public void testClassHelperAccessingExtendedTypes() {
     execute("helpers/ClassHelperAccessingExtendedType.pas");
-    verifyUsages(10, 14, reference(28, 19));
-    verifyUsages(12, 14, reference(33, 19), reference(54, 2));
-    verifyUsages(17, 14, reference(39, 15));
-    verifyUsages(19, 14, reference(44, 15), reference(55, 2));
+    verifyUsages(8, 14, reference(26, 19));
+    verifyUsages(10, 14, reference(31, 19), reference(52, 2));
+    verifyUsages(15, 14, reference(37, 15));
+    verifyUsages(17, 14, reference(42, 15), reference(53, 2));
   }
 
   @Test
   public void testRecordHelperLiterals() {
     execute("helpers/RecordHelperLiteral.pas");
-    verifyUsages(9, 14, reference(26, 21), reference(48, 10));
-    verifyUsages(13, 14, reference(31, 24), reference(49, 9));
-    verifyUsages(17, 14, reference(36, 22), reference(50, 6));
-    verifyUsages(21, 14, reference(41, 26), reference(51, 29));
+    verifyUsages(7, 14, reference(24, 21), reference(46, 10));
+    verifyUsages(11, 14, reference(29, 24), reference(47, 9));
+    verifyUsages(15, 14, reference(34, 22), reference(48, 6));
+    verifyUsages(19, 14, reference(39, 26), reference(49, 29));
   }
 
   @Test
   public void testRecordHelperTypeReference() {
     execute("helpers/RecordHelperTypeReference.pas");
-    verifyUsages(9, 14, reference(21, 9), reference(22, 16));
+    verifyUsages(7, 14, reference(19, 9), reference(20, 16));
   }
 
   @Test
   public void testRecordHelperConstants() {
     execute("helpers/RecordHelperConstant.pas");
-    verifyUsages(11, 6, reference(18, 11), reference(19, 16));
-    verifyUsages(16, 10, reference(18, 2), reference(19, 2));
+    verifyUsages(9, 6, reference(16, 11), reference(17, 16));
+    verifyUsages(14, 10, reference(16, 2), reference(17, 2));
   }
 
   @Test
   public void testRecordHelperSelfValues() {
     execute("helpers/RecordHelperSelfValue.pas");
-    verifyUsages(14, 10, reference(21, 2));
+    verifyUsages(12, 10, reference(19, 2));
   }
 
   @Test
@@ -1079,7 +1078,7 @@ public class DelphiSymbolTableExecutorTest {
         "helpers/imports/Unit2.pas",
         "helpers/imports/Unit3.pas",
         "helpers/imports/Unit4.pas");
-    verifyUsages(19, 10, reference(26, 2));
+    verifyUsages(17, 10, reference(24, 2));
   }
 
   @Test

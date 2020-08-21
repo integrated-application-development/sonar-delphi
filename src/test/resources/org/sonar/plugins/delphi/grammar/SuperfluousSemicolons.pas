@@ -1,7 +1,5 @@
 unit SuperfluousSemicolons;
 
-{This is a sample Delphi file.}
-
 interface
 
 implementation

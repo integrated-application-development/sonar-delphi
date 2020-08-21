@@ -1,7 +1,5 @@
 unit Pointers;
 
-{This is a sample Delphi file.}
-
 interface
 
 implementation

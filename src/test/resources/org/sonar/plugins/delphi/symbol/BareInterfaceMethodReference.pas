@@ -1,7 +1,5 @@
 unit BareInterfaceMethodReference;
 
-{This is a sample Delphi file.}
-
 interface
 
 function Foo(Baz: Integer): Integer;

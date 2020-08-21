@@ -1,7 +1,5 @@
 unit ListUtils;
 
-{This is a sample Delphi file.}
-
 interface
 
 {$I Elotech.inc}

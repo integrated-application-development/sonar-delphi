@@ -1,7 +1,5 @@
 unit UnitScopeName.ScopedUnit3;
 
-{This is a sample Delphi file.}
-
 interface
 
 procedure ScopedUnit3Proc(Argument: String);

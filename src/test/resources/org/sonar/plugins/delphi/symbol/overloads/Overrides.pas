@@ -1,7 +1,5 @@
 unit Overrides;
 
-{This is a sample Delphi file.}
-
 interface
 
 uses

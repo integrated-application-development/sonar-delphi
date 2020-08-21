@@ -1,7 +1,5 @@
 unit TypeSignature;
 
-{This is a sample Delphi file.}
-
 {$T+}
 
 interface

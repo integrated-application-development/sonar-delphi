@@ -1,7 +1,5 @@
 unit Unit3;
 
-{This is a sample Delphi file.}
-
 interface
 
 procedure Unit3Proc(Argument: String);

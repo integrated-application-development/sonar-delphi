@@ -1,7 +1,5 @@
 unit PascalResultAssignments;
 
-{This is a sample Delphi file.}
-
 interface
 
 function Foo(A: TObject): Integer; overload;

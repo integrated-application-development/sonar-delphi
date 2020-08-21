@@ -1,7 +1,5 @@
 unit OverloadedImplementation;
 
-{This is a sample Delphi file.}
-
 interface
 
 type

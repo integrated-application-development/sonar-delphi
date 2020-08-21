@@ -1,7 +1,5 @@
 unit ScopedEnum;
 
-{This is a sample Delphi file.}
-
 interface
 
 {$SCOPEDENUMS ON}

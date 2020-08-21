@@ -1,7 +1,5 @@
 unit ParameterizedMethod;
 
-{This is a sample Delphi file.}
-
 // Example from the Embarcadero wiki
 // See: http://docwiki.embarcadero.com/RADStudio/Rio/en/Declaring_Generics#Parameterized_Methods
 

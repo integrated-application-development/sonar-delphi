@@ -1,7 +1,5 @@
 unit Constraint;
 
-{This is a sample Delphi file.}
-
 interface
 
  type
