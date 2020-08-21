@@ -1,7 +1,5 @@
 unit MyTest1;
 
-{This is a sample Delphi file.}
-
 interface
 
 implementation

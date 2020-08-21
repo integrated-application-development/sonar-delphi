@@ -1,6 +1,5 @@
 ﻿unit DUnitX.AutoDetect.Console;
 
-{This is a sample Delphi file.}
 { Copyright Unicode Support}
 
 interface

@@ -1,7 +1,5 @@
 unit RecordHelperLiteral;
 
-{This is a sample Delphi file.}
-
 interface
 
 type

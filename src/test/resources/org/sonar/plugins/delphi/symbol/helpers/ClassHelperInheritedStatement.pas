@@ -1,7 +1,5 @@
 unit ClassHelperInheritedStatement;
 
-{This is a sample Delphi file.}
-
 interface
 
 type

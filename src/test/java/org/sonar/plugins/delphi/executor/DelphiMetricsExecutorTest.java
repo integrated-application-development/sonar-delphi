@@ -42,7 +42,7 @@ public class DelphiMetricsExecutorTest {
     checkMetric(CoreMetrics.CLASSES, 1);
     checkMetric(CoreMetrics.FUNCTIONS, 4);
     checkMetric(CoreMetrics.COMPLEXITY, 4);
-    checkMetric(CoreMetrics.COMMENT_LINES, 1);
+    checkMetric(CoreMetrics.COMMENT_LINES, 0);
     checkMetric(CoreMetrics.STATEMENTS, 1);
     checkMetric(CoreMetrics.NCLOC, 28);
     checkMetric(CoreMetrics.COGNITIVE_COMPLEXITY, 0);
@@ -54,7 +54,7 @@ public class DelphiMetricsExecutorTest {
     checkMetric(CoreMetrics.CLASSES, 1);
     checkMetric(CoreMetrics.FUNCTIONS, 0);
     checkMetric(CoreMetrics.COMPLEXITY, 0);
-    checkMetric(CoreMetrics.COMMENT_LINES, 14);
+    checkMetric(CoreMetrics.COMMENT_LINES, 13);
     checkMetric(CoreMetrics.STATEMENTS, 0);
     checkMetric(CoreMetrics.NCLOC, 15);
     checkMetric(CoreMetrics.COGNITIVE_COMPLEXITY, 0);
@@ -66,7 +66,7 @@ public class DelphiMetricsExecutorTest {
     checkMetric(CoreMetrics.CLASSES, 1);
     checkMetric(CoreMetrics.FUNCTIONS, 5);
     checkMetric(CoreMetrics.COMPLEXITY, 8);
-    checkMetric(CoreMetrics.COMMENT_LINES, 2);
+    checkMetric(CoreMetrics.COMMENT_LINES, 1);
     checkMetric(CoreMetrics.STATEMENTS, 12);
     checkMetric(CoreMetrics.NCLOC, 54);
     checkMetric(CoreMetrics.COGNITIVE_COMPLEXITY, 3);
@@ -78,7 +78,7 @@ public class DelphiMetricsExecutorTest {
     checkMetric(CoreMetrics.CLASSES, 1);
     checkMetric(CoreMetrics.FUNCTIONS, 1);
     checkMetric(CoreMetrics.COMPLEXITY, 1);
-    checkMetric(CoreMetrics.COMMENT_LINES, 2);
+    checkMetric(CoreMetrics.COMMENT_LINES, 1);
     checkMetric(CoreMetrics.STATEMENTS, 3);
     checkMetric(CoreMetrics.NCLOC, 18);
     checkMetric(CoreMetrics.COGNITIVE_COMPLEXITY, 0);

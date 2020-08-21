@@ -1,7 +1,5 @@
 unit Distance;
 
-{This is a sample Delphi file.}
-
 interface
 
 uses 

@@ -1,7 +1,5 @@
 unit AnonymousMethods;
 
-{This is a sample Delphi file.}
-
 interface
 
 type

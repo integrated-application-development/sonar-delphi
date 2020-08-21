@@ -1,7 +1,5 @@
 unit MethodResolution;
 
-{This is a sample Delphi file.}
-
 interface
 
 {** documented class **}

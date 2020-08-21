@@ -1,7 +1,5 @@
 unit NestedTypes;
 
-{This is a sample Delphi file.}
-
 interface
   type
     TFoo = class

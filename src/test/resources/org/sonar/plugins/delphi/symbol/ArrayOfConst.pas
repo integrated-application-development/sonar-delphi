@@ -1,7 +1,5 @@
 unit ArrayOfConst;
 
-{This is a sample Delphi file.}
-
 interface
 
 implementation

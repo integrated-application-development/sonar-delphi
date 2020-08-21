@@ -1,7 +1,5 @@
 unit ArgumentResolution;
 
-{This is a sample Delphi file.}
-
 interface
 
 type

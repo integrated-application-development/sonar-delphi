@@ -1,7 +1,5 @@
 unit Casts;
 
-{This is a sample Delphi file.}
-
 interface
 
 type

@@ -1,7 +1,5 @@
 unit InheritedInvocations;
 
-{This is a sample Delphi file.}
-
 interface
 
 type

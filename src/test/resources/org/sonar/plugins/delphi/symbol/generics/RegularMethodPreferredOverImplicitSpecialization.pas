@@ -1,7 +1,5 @@
 unit RegularMethodPreferredOverImplicitSpecialization;
 
-{This is a sample Delphi file.}
-
 // Example from the Embarcadero wiki
 // See: http://docwiki.embarcadero.com/RADStudio/Rio/en/Overloads_and_Type_Compatibility_in_Generics
 

@@ -1,7 +1,7 @@
 unit CpdWhitespaceTest;
 
 interface
-{This is a sample Delphi file.}
+
 //testDefinitionsIncludes
 { testDefinitionsIncludes }
 (* testDefinitionsIncludes *)

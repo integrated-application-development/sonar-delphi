@@ -90,7 +90,7 @@ public class DelphiTokenExecutorTest {
 
     cpdTokenCount(205);
     cpdTokenCount(0, DelphiTokenExecutorTest::isWhitespaceOrComment);
-    highlightCount(41);
+    highlightCount(40);
   }
 
   @Test
@@ -112,7 +112,7 @@ public class DelphiTokenExecutorTest {
     cpdTokenCount(0, DelphiTokenExecutorTest::isWhitespaceOrComment);
     cpdTokenCount(9, "over1");
     cpdTokenCount(2, "notover");
-    highlightCount(39);
+    highlightCount(38);
   }
 
   @Test
@@ -121,36 +121,36 @@ public class DelphiTokenExecutorTest {
 
     cpdTokenCount(275);
     cpdTokenCount(0, DelphiTokenExecutorTest::isWhitespaceOrComment);
-    highlightCount(41);
+    highlightCount(40);
 
     // shl
-    highlightExistsOnLine(17);
+    highlightExistsOnLine(15);
 
     // shr
-    highlightExistsOnLine(20);
+    highlightExistsOnLine(18);
 
     // xor
-    highlightExistsOnLine(23);
+    highlightExistsOnLine(21);
 
     // and
-    highlightExistsOnLine(26);
+    highlightExistsOnLine(24);
 
     // asm
-    highlightExistsOnLine(29);
-    highlightExistsOnLine(47);
-    highlightExistsOnLine(65);
+    highlightExistsOnLine(27);
+    highlightExistsOnLine(45);
+    highlightExistsOnLine(63);
 
     // asm end
-    highlightExistsOnLine(43);
-    highlightExistsOnLine(61);
-    highlightExistsOnLine(79);
+    highlightExistsOnLine(41);
+    highlightExistsOnLine(59);
+    highlightExistsOnLine(77);
 
     // No highlighting inside asm blocks
-    highlightCountInLineRange(0, Range.open(29, 43));
-    highlightCountInLineRange(0, Range.open(47, 61));
+    highlightCountInLineRange(0, Range.open(27, 41));
+    highlightCountInLineRange(0, Range.open(45, 59));
 
     // Except for comments!
-    highlightCountInLineRange(7, Range.open(65, 79));
+    highlightCountInLineRange(7, Range.open(63, 77));
   }
 
   private void cpdTokenCount(int count) {
