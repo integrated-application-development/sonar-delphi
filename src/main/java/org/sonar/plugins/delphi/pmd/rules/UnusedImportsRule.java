@@ -9,4 +9,9 @@ public class UnusedImportsRule extends AbstractImportRule {
     UnitNameDeclaration dependency = unitImport.getImportNameDeclaration().getOriginalDeclaration();
     return !getUnitDeclaration().hasDependency(dependency);
   }
+
+  @Override
+  public String getMessage() {
+    return "Review this potentially unnecessary import";
+  }
 }

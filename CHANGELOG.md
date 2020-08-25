@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for `ReturnAddress` intrinsic.
 - Support for `AddressOfReturnAddress` intrinsic.
 
+### Changed
+
+- Update issue message and rule description for `UnusedImportsRule`.
+
 ## [0.23.0] - 2020-08-07
 
 ### Added

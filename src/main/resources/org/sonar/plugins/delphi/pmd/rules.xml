@@ -1365,6 +1365,11 @@ Result := 123;; // Noncompliant
       WARNING: Take care when removing imports of units with a Register procedure or initialization/finalization section.
       &lt;br&gt;
       A unit must be imported at least once for code in these locations to be executed.
+      &lt;br&gt;
+      &lt;br&gt;
+      Known false-positives:
+      &lt;br&gt;
+      - Imports that are only referenced in the DFM file.
     </description>
     <properties>
       <property name="baseEffort" value="3min"/>
