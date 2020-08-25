@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.symbol.scope;
 
 import static org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration.compilerVariable;
+import static org.sonar.plugins.delphi.type.DelphiPointerType.untypedPointer;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.BOOLEAN;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.EXTENDED;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.INTEGER;
@@ -66,6 +67,8 @@ public class SystemScope extends AbstractFileScope {
     injectConstant("MaxLongInt", LONGINT.type);
     injectConstant("True", BOOLEAN.type);
     injectConstant("False", BOOLEAN.type);
+    injectConstant("ReturnAddress", untypedPointer());
+    injectConstant("AddressOfReturnAddress", untypedPointer());
   }
 
   private void injectIntrinsicType(Type type) {
