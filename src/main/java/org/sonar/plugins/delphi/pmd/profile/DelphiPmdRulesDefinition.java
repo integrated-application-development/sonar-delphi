@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.delphi.pmd.profile;
 
+import static java.util.function.Predicate.not;
 import static org.apache.commons.lang3.StringUtils.isNumeric;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.BASE_EFFORT;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.SCOPE;
@@ -29,7 +30,9 @@ import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TYPE;
 
 import com.google.common.base.Preconditions;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import org.sonar.api.rule.RuleScope;
 import org.sonar.api.rule.Severity;
 import org.sonar.api.rules.RuleType;
@@ -43,7 +46,6 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 import org.sonar.plugins.delphi.utils.PmdLevelUtils;
 
-/** Delphi rules definition */
 @ServerSide
 public class DelphiPmdRulesDefinition implements RulesDefinition {
   public static final String UNDEFINED_BASE_EFFORT =
@@ -62,12 +64,6 @@ public class DelphiPmdRulesDefinition implements RulesDefinition {
             .createRepository(DelphiPmdConstants.REPOSITORY_KEY, DelphiLanguage.KEY)
             .setName(DelphiPmdConstants.REPOSITORY_NAME);
 
-    extractRulesData(repository);
-
-    repository.done();
-  }
-
-  private void extractRulesData(NewRepository repository) {
     DelphiRuleSet ruleSet = ruleSetDefinitionProvider.getDefinition();
 
     for (DelphiRule pmdRule : ruleSet.getRules()) {
@@ -86,9 +82,11 @@ public class DelphiPmdRulesDefinition implements RulesDefinition {
       extractProperties(pmdRule, sonarRule);
       extractSecurityStandards(pmdRule, sonarRule);
     }
+
+    repository.done();
   }
 
-  private void extractSeverity(DelphiRule pmdRule, NewRule sonarRule) {
+  private static void extractSeverity(DelphiRule pmdRule, NewRule sonarRule) {
     String severity =
         Objects.requireNonNullElse(
             PmdLevelUtils.severityFromLevel(pmdRule.getPriority()), Severity.defaultSeverity());
@@ -96,7 +94,7 @@ public class DelphiPmdRulesDefinition implements RulesDefinition {
     sonarRule.setSeverity(severity);
   }
 
-  private void extractDebtRemediationFunction(DelphiRule pmdRule, NewRule sonarRule) {
+  private static void extractDebtRemediationFunction(DelphiRule pmdRule, NewRule sonarRule) {
     DelphiRuleProperty baseEffortProperty = pmdRule.getProperty(BASE_EFFORT.name());
 
     String error = String.format(UNDEFINED_BASE_EFFORT, pmdRule.getName());
@@ -106,33 +104,45 @@ public class DelphiPmdRulesDefinition implements RulesDefinition {
         sonarRule.debtRemediationFunctions().constantPerIssue(baseEffortProperty.getValue()));
   }
 
-  private void extractScope(DelphiRule pmdRule, NewRule sonarRule) {
+  private static void extractScope(DelphiRule pmdRule, NewRule sonarRule) {
     DelphiRuleProperty scopeProperty = pmdRule.getProperty(SCOPE.name());
     if (scopeProperty != null) {
       sonarRule.setScope(RuleScope.valueOf(scopeProperty.getValue()));
     }
   }
 
-  private void extractTemplate(DelphiRule pmdRule, NewRule sonarRule) {
+  private static void extractTemplate(DelphiRule pmdRule, NewRule sonarRule) {
     DelphiRuleProperty templateProperty = pmdRule.getProperty(TEMPLATE.name());
     if (templateProperty != null) {
       sonarRule.setTemplate(Boolean.parseBoolean(templateProperty.getValue()));
     }
   }
 
-  private void extractType(DelphiRule pmdRule, NewRule sonarRule) {
+  private static void extractType(DelphiRule pmdRule, NewRule sonarRule) {
     DelphiRuleProperty typeProperty = pmdRule.getProperty(TYPE.name());
     if (typeProperty != null) {
       sonarRule.setType(RuleType.valueOf(typeProperty.getValue()));
     }
   }
 
-  private void extractProperties(DelphiRule pmdRule, NewRule sonarRule) {
-    for (DelphiRuleProperty property : pmdRule.getProperties()) {
-      if (property.isBuiltinProperty()) {
-        continue;
-      }
+  private static void extractProperties(DelphiRule pmdRule, NewRule sonarRule) {
+    List<DelphiRuleProperty> properties =
+        pmdRule.getProperties().stream()
+            .filter(not(DelphiRuleProperty::isBuiltinProperty))
+            .collect(Collectors.toList());
 
+    if (pmdRule.isCustomRule() || pmdRule.isTemplateRule()) {
+      // The scope property should be exposed for user overrides via the SonarQube web interface,
+      // but only on template rules or custom rules derived from templates.
+      DelphiRuleProperty scopeProperty = pmdRule.getProperty(SCOPE.name());
+      sonarRule
+          .createParam(SCOPE.name())
+          .setDefaultValue(scopeProperty == null ? SCOPE.defaultValue() : scopeProperty.getValue())
+          .setType(RuleParamType.STRING)
+          .setDescription(SCOPE.description());
+    }
+
+    for (DelphiRuleProperty property : properties) {
       sonarRule
           .createParam(property.getName())
           .setDefaultValue(property.getValue())
@@ -141,7 +151,7 @@ public class DelphiPmdRulesDefinition implements RulesDefinition {
     }
   }
 
-  private void extractSecurityStandards(DelphiRule pmdRule, NewRule sonarRule) {
+  private static void extractSecurityStandards(DelphiRule pmdRule, NewRule sonarRule) {
     DelphiRuleProperty cweProperty = pmdRule.getProperty(SECURITY_STANDARD_CWE.name());
     if (cweProperty != null) {
       Arrays.stream(cweProperty.getValue().split("\\|"))

@@ -24,6 +24,9 @@ package org.sonar.plugins.delphi.pmd.profile;
 
 import com.google.errorprone.annotations.FormatMethod;
 import java.io.Reader;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import org.sonar.api.profiles.ProfileImporter;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
@@ -99,28 +102,21 @@ public class DelphiPmdProfileImporter extends ProfileImporter {
   }
 
   private void setParameters(ActiveRule activeRule, DelphiRule delphiRule, Rule sonarRule) {
-    for (DelphiRuleProperty property : delphiRule.getProperties()) {
-      if (shouldAddParameter(sonarRule, property)) {
-        activeRule.setParameter(property.getName(), property.getValue());
+    List<DelphiRuleProperty> properties =
+        delphiRule.getProperties().stream()
+            .filter(Predicate.not(DelphiRuleProperty::isBuiltinProperty))
+            .collect(Collectors.toList());
+
+    for (DelphiRuleProperty property : properties) {
+      if (sonarRule.getParam(property.getName()) == null) {
+        addWarning(
+            "The property '%s' is not supported in the PMD rule: %s",
+            property.getName(), sonarRule.getName());
+        continue;
       }
+
+      activeRule.setParameter(property.getName(), property.getValue());
     }
-  }
-
-  private boolean shouldAddParameter(Rule sonarRule, DelphiRuleProperty property) {
-    if (property.isBuiltinProperty()) {
-      return false;
-    }
-
-    String propertyName = property.getName();
-
-    if (sonarRule.getParam(property.getName()) == null) {
-      addWarning(
-          "The property '%s' is not supported in the PMD rule: %s",
-          propertyName, sonarRule.getName());
-      return false;
-    }
-
-    return true;
   }
 
   @FormatMethod

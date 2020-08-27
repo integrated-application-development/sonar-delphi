@@ -32,6 +32,7 @@ import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
 import org.sonar.plugins.delphi.pmd.violation.DelphiPmdViolationRecorder;
 import org.sonar.plugins.delphi.pmd.violation.DelphiRuleViolation;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
@@ -94,18 +95,22 @@ public class DelphiPmdExecutorTest {
     // The XPathRule template has 2 builtin properties: BASE_EFFORT and TEMPLATE
     // The TEMPLATE property should not be inherited by the custom rule
     DelphiRule rule = new DelphiRule();
+    DelphiRuleProperty scopeProperty = new DelphiRuleProperty(SCOPE.name(), "TEST");
+
     rule.setName("SomeCustomXPathRule");
     rule.setTemplateName("XPathRule");
     rule.setClazz(DelphiPmdConstants.TEMPLATE_XPATH_CLASS);
     rule.setPriority(2);
+    rule.addProperty(scopeProperty);
 
     DelphiRuleSet ruleSet = new DelphiRuleSet();
     ruleSet.addRule(rule);
 
     executor.addBuiltinProperties(ruleSet);
 
-    assertThat(rule.getProperties()).hasSize(1);
+    assertThat(rule.getProperties()).hasSize(2);
     assertThat(rule.getProperty(BASE_EFFORT.name())).isNotNull();
+    assertThat(rule.getProperty(SCOPE.name())).isEqualTo(scopeProperty);
   }
 
   @Test
@@ -121,7 +126,8 @@ public class DelphiPmdExecutorTest {
     ruleSet.addRule(rule);
 
     assertThatThrownBy(() -> executor.addBuiltinProperties(ruleSet))
-        .isInstanceOf(IllegalStateException.class);
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Rule definition not found for NonexistentRule");
   }
 
   @Test

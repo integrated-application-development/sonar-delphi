@@ -80,8 +80,8 @@ public abstract class BasePmdRuleTest {
   private final IssueContainer issues = new IssueContainer();
   private final DelphiPmdRuleSetDefinitionProvider ruleProvider =
       new DelphiPmdRuleSetDefinitionProvider();
-  private DelphiRuleSet ruleSet = ruleProvider.getDefinition();
-  private List<DelphiRule> baseRules = List.copyOf(ruleSet.getRules());
+  private final DelphiRuleSet ruleSet = ruleProvider.getDefinition();
+  private final List<DelphiRule> baseRules = List.copyOf(ruleSet.getRules());
 
   @BeforeClass
   public static void setupIssueContainerFormatting() {

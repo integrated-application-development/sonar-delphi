@@ -2,13 +2,16 @@ package org.sonar.plugins.delphi.executor;
 
 import static java.lang.Boolean.TRUE;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.REPOSITORY_KEY;
+import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.SCOPE;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TEMPLATE;
 
 import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import net.sourceforge.pmd.Report;
 import net.sourceforge.pmd.Rule;
@@ -142,18 +145,23 @@ public class DelphiPmdExecutor implements Executor {
     for (var rule : ruleSet.getRules()) {
       var definition = pmdConfiguration.getRuleDefinition(rule);
       boolean isCustomTemplateRule = definition.getName().equals(rule.getTemplateName());
+      List<DelphiRuleProperty> properties = new ArrayList<>(definition.getProperties());
 
-      for (DelphiRuleProperty propertyDefinition : definition.getProperties()) {
-        if (isCustomTemplateRule && propertyDefinition.isTemplateProperty()) {
-          // For custom rules, we extract the properties from the template definition.
-          // We don't want the TEMPLATE property on the custom rule.
-          continue;
-        }
-
-        if (propertyDefinition.isBuiltinProperty()) {
-          rule.addProperty(propertyDefinition);
+      // For custom rules, we extract the properties from the template definition.
+      if (isCustomTemplateRule) {
+        // We don't want the TEMPLATE property on the custom rule.
+        properties.removeIf(DelphiRuleProperty::isTemplateProperty);
+        // We want to use the SCOPE property from the custom rule if it exists, since it's exposed
+        // to the user via the SonarQube web interface.
+        if (rule.getProperty(SCOPE.name()) != null) {
+          properties.removeIf(DelphiRuleProperty::isScopeProperty);
         }
       }
+
+      properties.stream()
+          .filter(DelphiRuleProperty::isBuiltinProperty)
+          .filter(property -> !(property.isTemplateProperty() && isCustomTemplateRule))
+          .forEach(rule::addProperty);
     }
   }
 
