@@ -70,4 +70,8 @@ public class DelphiRuleProperty {
   public boolean isTemplateProperty() {
     return name.equals(TEMPLATE.name());
   }
+
+  public boolean isScopeProperty() {
+    return name.equals(SCOPE.name());
+  }
 }

@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.delphi.pmd.xml;
 
+import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TEMPLATE;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -153,5 +155,14 @@ public final class DelphiRule {
       desc += "<pre>" + example + "</pre>";
     }
     return desc;
+  }
+
+  public boolean isCustomRule() {
+    DelphiRuleProperty templateProperty = getProperty(TEMPLATE.name());
+    return templateProperty != null && Boolean.parseBoolean(templateProperty.getValue());
+  }
+
+  public boolean isTemplateRule() {
+    return templateName != null;
   }
 }

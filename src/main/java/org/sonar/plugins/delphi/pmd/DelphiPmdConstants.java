@@ -61,7 +61,7 @@ public final class DelphiPmdConstants {
 
   public static final PropertyDescriptor<String> SCOPE =
       PropertyFactory.stringProperty("scope")
-          .desc("The type of code this rule should apply to")
+          .desc("The type of code this rule should apply to. Options are: 'ALL', 'MAIN', 'TEST'")
           .defaultValue(RuleScope.ALL.name())
           .build();
 
@@ -73,7 +73,7 @@ public final class DelphiPmdConstants {
 
   public static final PropertyDescriptor<String> TYPE =
       PropertyFactory.stringProperty("type")
-          .desc("Rule type: Options are 'CODE_SMELL', 'BUG', 'VULNERABILITY' or 'SECURITY_HOTSPOT'")
+          .desc("Rule type. Options are: 'CODE_SMELL', 'BUG', 'VULNERABILITY', 'SECURITY_HOTSPOT'")
           .defaultValue(RuleType.CODE_SMELL.name())
           .build();
 
