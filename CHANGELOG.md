@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `ForbiddenPropertyRule` analysis rule template, which flags properties with a specified
+  fully-qualified name.
+
 ### Changed
 
 - Improve the symbol table's memory efficiency.
