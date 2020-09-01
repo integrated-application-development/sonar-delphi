@@ -8,10 +8,11 @@ import org.sonar.plugins.delphi.type.Type.TypeParameterType;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public class DelphiTypeParameterType extends DelphiType implements TypeParameterType {
+  private final String image;
   private List<Type> constraints;
 
   private DelphiTypeParameterType(String image, List<Type> constraints) {
-    super(image);
+    this.image = image;
     this.constraints = ImmutableList.copyOf(constraints);
   }
 
@@ -21,6 +22,11 @@ public class DelphiTypeParameterType extends DelphiType implements TypeParameter
 
   public static TypeParameterType create(String image) {
     return create(image, Collections.emptyList());
+  }
+
+  @Override
+  public String getImage() {
+    return image;
   }
 
   @Override

@@ -43,7 +43,6 @@ public final class SubRangeTypeNode extends TypeNode {
       baseType = high.getType();
     }
 
-    return DelphiSubrangeType.subRange(
-        "Subrange(" + low.getImage() + ".." + high.getImage() + ")", baseType);
+    return DelphiSubrangeType.subRange(low.getImage() + ".." + high.getImage(), baseType);
   }
 }

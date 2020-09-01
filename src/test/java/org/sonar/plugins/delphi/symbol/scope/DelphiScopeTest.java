@@ -3,6 +3,7 @@ package org.sonar.plugins.delphi.symbol.scope;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.sonar.plugins.delphi.symbol.scope.DelphiScope.unknownScope;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 
@@ -19,9 +20,12 @@ public class DelphiScopeTest {
 
   @Before
   public void setup() {
+    DelphiNode location = mock(DelphiNode.class);
+    when(location.getScope()).thenReturn(unknownScope());
+
     scope = new LocalScope();
     declaration = VariableNameDeclaration.compilerVariable("Image", unknownType(), unknownScope());
-    occurrence = new DelphiNameOccurrence(mock(DelphiNode.class), "image");
+    occurrence = new DelphiNameOccurrence(location, "image");
     occurrence.setNameDeclaration(declaration);
     scope.addDeclaration(declaration);
   }

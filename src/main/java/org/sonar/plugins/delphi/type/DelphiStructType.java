@@ -45,7 +45,6 @@ public class DelphiStructType extends DelphiGenerifiableType implements StructTy
 
   protected DelphiStructType(
       List<ImagePart> imageParts, DelphiScope scope, Set<Type> parents, StructKind kind) {
-    super(createImage(imageParts));
     this.imageParts = imageParts;
     this.scope = scope;
     this.kind = kind;
@@ -104,10 +103,6 @@ public class DelphiStructType extends DelphiGenerifiableType implements StructTy
     return new ImagePart(declaration.simpleName(), typeParameters);
   }
 
-  private static String createImage(List<ImagePart> imageParts) {
-    return imageParts.stream().map(ImagePart::toString).collect(Collectors.joining("."));
-  }
-
   protected static Set<Type> getAncestors(TypeDeclarationNode typeDeclaration, StructKind kind) {
     Set<Type> parents = typeDeclaration.getTypeNode().getParentTypes();
     if (parents.isEmpty()) {
@@ -159,6 +154,11 @@ public class DelphiStructType extends DelphiGenerifiableType implements StructTy
       return unitScope.getSystemScope();
     }
     return null;
+  }
+
+  @Override
+  public String getImage() {
+    return imageParts.stream().map(ImagePart::toString).collect(Collectors.joining("."));
   }
 
   @Override

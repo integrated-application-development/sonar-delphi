@@ -1,20 +1,22 @@
 package org.sonar.plugins.delphi.symbol;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Suppliers;
 import com.google.common.collect.Iterables;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Supplier;
 import org.apache.commons.lang3.StringUtils;
 
 public class QualifiedName {
   private final List<String> parts;
-  private String simpleName;
-  private String fullyQualifiedName;
+  private final Supplier<String> fullyQualifiedName;
 
   public QualifiedName(Collection<String> parts) {
     Preconditions.checkArgument(!parts.isEmpty());
     this.parts = List.copyOf(parts);
+    this.fullyQualifiedName = Suppliers.memoize(() -> StringUtils.join(parts, "."));
   }
 
   public static QualifiedName of(String... parts) {
@@ -23,20 +25,15 @@ public class QualifiedName {
   }
 
   public String simpleName() {
-    if (simpleName == null) {
-      simpleName = Iterables.getLast(parts);
-      if (simpleName.contains("<")) {
-        simpleName = simpleName.substring(0, simpleName.indexOf('<'));
-      }
+    String result = Iterables.getLast(parts);
+    if (result.contains("<")) {
+      result = result.substring(0, result.indexOf('<'));
     }
-    return simpleName;
+    return result;
   }
 
   public String fullyQualifiedName() {
-    if (fullyQualifiedName == null) {
-      fullyQualifiedName = StringUtils.join(parts, ".");
-    }
-    return fullyQualifiedName;
+    return fullyQualifiedName.get();
   }
 
   public List<String> parts() {

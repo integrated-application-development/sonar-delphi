@@ -14,7 +14,7 @@ import org.sonar.plugins.delphi.type.Type;
 
 public final class TypeSpecializationContext {
   private static final Comparator<Type> COMPARATOR = Comparator.comparing(Type::getImage);
-  private Map<Type, Type> argumentsByParameter;
+  private final Map<Type, Type> argumentsByParameter;
 
   public TypeSpecializationContext(NameDeclaration declaration, List<Type> typeArguments) {
     argumentsByParameter = new TreeMap<>(COMPARATOR);

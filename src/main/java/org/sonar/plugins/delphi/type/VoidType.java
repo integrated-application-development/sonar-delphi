@@ -8,7 +8,12 @@ class VoidType extends DelphiType implements ImmutableType {
   private static final VoidType INSTANCE = new VoidType();
 
   private VoidType() {
-    super("<Void>");
+    // Hide constructor
+  }
+
+  @Override
+  public String getImage() {
+    return "<Void>";
   }
 
   @Override

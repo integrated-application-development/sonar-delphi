@@ -332,7 +332,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(MethodImplementationNode node, Data data) {
-    MethodScope scope = new MethodScope(node.fullyQualifiedName());
+    MethodScope scope = new MethodScope();
     scope.setParent(data.currentScope());
     node.setScope(scope);
 
@@ -450,7 +450,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(AnonymousMethodNode node, Data data) {
-    MethodScope scope = new MethodScope("<anonymous method>");
+    MethodScope scope = new MethodScope();
     data.addScope(scope, node);
     resolve(node.getMethodParametersNode());
     resolve(node.getReturnTypeNode());

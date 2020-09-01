@@ -25,6 +25,7 @@ package org.sonar.plugins.delphi.project;
 import static org.sonar.plugins.delphi.utils.DelphiUtils.resolvePathFromBaseDir;
 
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
@@ -33,7 +34,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.apache.commons.lang3.StringUtils;
-import org.assertj.core.util.Lists;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.xml.sax.Attributes;

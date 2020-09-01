@@ -8,7 +8,12 @@ class UnknownType extends DelphiType implements ImmutableType {
   private static final UnknownType INSTANCE = new UnknownType();
 
   private UnknownType() {
-    super("<Unknown>");
+    // Hide constructor
+  }
+
+  @Override
+  public String getImage() {
+    return "<Unknown>";
   }
 
   @Override

@@ -5,16 +5,17 @@ import org.sonar.plugins.delphi.type.Type.FileType;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public abstract class DelphiFileType extends DelphiType implements FileType {
-  protected DelphiFileType(String image) {
-    super("file of " + image);
-  }
-
   public static Type fileOf(Type fileType) {
     return new MutableDelphiFileType(fileType);
   }
 
   public static ImmutableFileType untypedFile() {
     return new ImmutableDelphiFileType(DelphiType.untypedType());
+  }
+
+  @Override
+  public String getImage() {
+    return "file of " + fileType().getImage();
   }
 
   @Override
@@ -34,7 +35,6 @@ public abstract class DelphiFileType extends DelphiType implements FileType {
     private final Type fileType;
 
     MutableDelphiFileType(Type fileType) {
-      super(fileType.getImage());
       this.fileType = fileType;
     }
 
@@ -49,7 +49,6 @@ public abstract class DelphiFileType extends DelphiType implements FileType {
     private final ImmutableType fileType;
 
     ImmutableDelphiFileType(ImmutableType fileType) {
-      super(fileType.getImage());
       this.fileType = fileType;
     }
 

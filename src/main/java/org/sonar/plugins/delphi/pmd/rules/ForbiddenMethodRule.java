@@ -37,11 +37,9 @@ public class ForbiddenMethodRule extends AbstractDelphiRule {
   @Override
   public RuleContext visit(NameReferenceNode reference, RuleContext data) {
     DelphiNameDeclaration declaration = reference.getNameDeclaration();
-    if (declaration instanceof MethodNameDeclaration) {
-      String fullyQualifiedMethodName = ((MethodNameDeclaration) declaration).fullyQualifiedName();
-      if (blacklist.contains(fullyQualifiedMethodName)) {
-        addViolationWithMessage(data, reference.getIdentifier(), getProperty(MESSAGE));
-      }
+    if (declaration instanceof MethodNameDeclaration
+        && blacklist.contains(((MethodNameDeclaration) declaration).fullyQualifiedName())) {
+      addViolationWithMessage(data, reference.getIdentifier(), getProperty(MESSAGE));
     }
     return super.visit(reference, data);
   }

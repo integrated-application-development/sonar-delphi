@@ -9,7 +9,6 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.LONGINT;
 
 import java.util.Arrays;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
-import org.sonar.plugins.delphi.symbol.QualifiedName;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
@@ -77,8 +76,7 @@ public class SystemScope extends AbstractFileScope {
 
   private void injectIntrinsicType(String image, Type type) {
     SymbolicNode node = SymbolicNode.imaginary(image, this);
-    QualifiedName qualifiedName = QualifiedName.of("System", image);
-    TypeNameDeclaration declaration = new TypeNameDeclaration(node, type, qualifiedName);
+    TypeNameDeclaration declaration = new TypeNameDeclaration(node, type, "System." + image);
 
     this.addDeclaration(declaration);
   }

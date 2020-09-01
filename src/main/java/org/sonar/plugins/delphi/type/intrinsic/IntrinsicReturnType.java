@@ -26,11 +26,17 @@ public final class IntrinsicReturnType extends DelphiType implements ImmutableTy
     Type getReturnType(List<Type> arguments);
   }
 
+  private final String image;
   private final ReturnTypeFunction function;
 
   private IntrinsicReturnType(String image, ReturnTypeFunction function) {
-    super(image);
+    this.image = image;
     this.function = function;
+  }
+
+  @Override
+  public String getImage() {
+    return image;
   }
 
   public Type getReturnType(List<Type> arguments) {

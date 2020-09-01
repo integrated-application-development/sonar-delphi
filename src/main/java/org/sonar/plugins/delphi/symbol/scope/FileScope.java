@@ -80,6 +80,15 @@ public interface FileScope extends DelphiScope {
    */
   void attach(MethodNameNode node);
 
+  /** Removes all scope registrations */
+  void unregisterScopes();
+
+  /** Removes all name declaration registrations */
+  void unregisterDeclarations();
+
+  /** Removes all name occurrence registrations */
+  void unregisterOccurrences();
+
   /**
    * Attaches symbol occurrence information to a name reference node
    *

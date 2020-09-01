@@ -13,15 +13,13 @@ import org.sonar.plugins.delphi.antlr.ast.node.TypeAliasNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeReferenceNode;
-import org.sonar.plugins.delphi.symbol.Qualifiable;
-import org.sonar.plugins.delphi.symbol.QualifiedName;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public final class TypeNameDeclaration extends AbstractDelphiNameDeclaration
-    implements GenerifiableDeclaration, TypedDeclaration, Qualifiable {
-  private final QualifiedName qualifiedName;
+    implements GenerifiableDeclaration, TypedDeclaration {
+  private final String fullyQualifiedName;
   private final Type type;
   private final List<TypedDeclaration> typeParameters;
   private final TypeNameDeclaration aliased;
@@ -30,32 +28,32 @@ public final class TypeNameDeclaration extends AbstractDelphiNameDeclaration
     this(
         new SymbolicNode(node.getTypeNameNode().getIdentifier(), node.getScope()),
         node.getType(),
-        node.getQualifiedName(),
+        node.fullyQualifiedName(),
         extractTypeParameters(node),
         extractAliasedTypeDeclaration(node));
   }
 
-  public TypeNameDeclaration(SymbolicNode node, Type type, QualifiedName qualifiedName) {
-    this(node, type, qualifiedName, Collections.emptyList(), null);
+  public TypeNameDeclaration(SymbolicNode node, Type type, String fullyQualifiedName) {
+    this(node, type, fullyQualifiedName, Collections.emptyList(), null);
   }
 
   public TypeNameDeclaration(
       SymbolicNode node,
       Type type,
-      QualifiedName qualifiedName,
+      String fullyQualifiedName,
       List<TypedDeclaration> typeParameters) {
-    this(node, type, qualifiedName, typeParameters, null);
+    this(node, type, fullyQualifiedName, typeParameters, null);
   }
 
   private TypeNameDeclaration(
       SymbolicNode node,
       Type type,
-      QualifiedName qualifiedName,
+      String fullyQualifiedName,
       List<TypedDeclaration> typeParameters,
       @Nullable TypeNameDeclaration aliased) {
     super(node);
     this.type = type;
-    this.qualifiedName = qualifiedName;
+    this.fullyQualifiedName = fullyQualifiedName;
     this.typeParameters = typeParameters;
     this.aliased = aliased;
   }
@@ -86,9 +84,8 @@ public final class TypeNameDeclaration extends AbstractDelphiNameDeclaration
     return type;
   }
 
-  @Override
-  public QualifiedName getQualifiedName() {
-    return qualifiedName;
+  public String fullyQualifiedName() {
+    return fullyQualifiedName;
   }
 
   @Override
@@ -106,7 +103,7 @@ public final class TypeNameDeclaration extends AbstractDelphiNameDeclaration
     return new TypeNameDeclaration(
         getNode(),
         type.specialize(context),
-        qualifiedName,
+        fullyQualifiedName,
         typeParameters.stream()
             .map(parameter -> parameter.specialize(context))
             .map(TypedDeclaration.class::cast)

@@ -14,7 +14,6 @@ public class DelphiProceduralType extends DelphiGenerifiableType implements Proc
 
   private DelphiProceduralType(
       ProceduralKind kind, List<? extends Type> parameterTypes, Type returnType) {
-    super(kind.name() + makeSignature(parameterTypes, returnType));
     this.kind = kind;
     this.parameterTypes = ImmutableList.copyOf(parameterTypes);
     this.returnType = returnType;
@@ -38,6 +37,11 @@ public class DelphiProceduralType extends DelphiGenerifiableType implements Proc
 
   public static ProceduralType method(List<? extends Type> parameterTypes, Type returnType) {
     return new DelphiProceduralType(ProceduralKind.METHOD, parameterTypes, returnType);
+  }
+
+  @Override
+  public String getImage() {
+    return kind.name() + makeSignature(parameterTypes, returnType);
   }
 
   private static String makeSignature(List<? extends Type> parameterTypes, Type returnType) {

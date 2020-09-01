@@ -32,7 +32,7 @@ import org.sonar.plugins.delphi.type.intrinsic.IntrinsicMethodData;
 
 public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
     implements GenerifiableDeclaration, TypedDeclaration, Invocable, Visibility {
-  private final String qualifiedName;
+  private final String fullyQualifiedName;
   private final List<Parameter> parameters;
   private final Type returnType;
   private final Set<MethodDirective> directives;
@@ -50,7 +50,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
 
   private MethodNameDeclaration(
       SymbolicNode location,
-      String qualifiedName,
+      String fullyQualifiedName,
       List<Parameter> parameters,
       Type returnType,
       Set<MethodDirective> directives,
@@ -63,7 +63,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
       VisibilityType visibility,
       List<TypedDeclaration> typeParameters) {
     super(location);
-    this.qualifiedName = qualifiedName;
+    this.fullyQualifiedName = fullyQualifiedName;
     this.parameters = parameters;
     this.returnType = returnType;
     this.directives = directives;
@@ -180,7 +180,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
   }
 
   public String fullyQualifiedName() {
-    return qualifiedName;
+    return fullyQualifiedName;
   }
 
   public Set<MethodDirective> getDirectives() {
@@ -239,7 +239,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
   public MethodNameDeclaration doSpecialization(TypeSpecializationContext context) {
     return new MethodNameDeclaration(
         getNode(),
-        qualifiedName,
+        fullyQualifiedName,
         parameters.stream()
             .map(parameter -> parameter.specialize(context))
             .collect(Collectors.toUnmodifiableList()),
@@ -262,7 +262,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
   public boolean equals(Object other) {
     if (super.equals(other)) {
       MethodNameDeclaration that = (MethodNameDeclaration) other;
-      return qualifiedName.equalsIgnoreCase(that.qualifiedName)
+      return fullyQualifiedName.equalsIgnoreCase(that.fullyQualifiedName)
           && parameters.equals(that.parameters)
           && returnType.is(that.returnType)
           && directives.equals(that.directives)
@@ -279,7 +279,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
       hashCode =
           Objects.hash(
               super.hashCode(),
-              qualifiedName.toLowerCase(),
+              fullyQualifiedName.toLowerCase(),
               parameters,
               returnType.getImage().toLowerCase(),
               directives,
@@ -303,7 +303,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
               .compareTrueFirst(isCallable, that.isCallable)
               .compareTrueFirst(isClassInvocable, that.isClassInvocable)
               .compare(returnType.getImage(), that.returnType.getImage())
-              .compare(qualifiedName, that.qualifiedName, String.CASE_INSENSITIVE_ORDER)
+              .compare(fullyQualifiedName, that.fullyQualifiedName, String.CASE_INSENSITIVE_ORDER)
               .compare(typeParameters.size(), that.typeParameters.size())
               .result();
 

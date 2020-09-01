@@ -6,9 +6,15 @@ import org.sonar.plugins.delphi.type.Type.TextType;
 
 @Immutable
 class DelphiTextType extends DelphiType implements TextType {
+  private final String image;
 
   DelphiTextType(String image) {
-    super(image);
+    this.image = image;
+  }
+
+  @Override
+  public String getImage() {
+    return image;
   }
 
   @Override

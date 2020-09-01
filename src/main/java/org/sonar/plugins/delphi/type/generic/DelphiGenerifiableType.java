@@ -24,8 +24,7 @@ import org.sonar.plugins.delphi.type.Type;
 public abstract class DelphiGenerifiableType extends DelphiType {
   private final Map<TypeSpecializationContext, DelphiGenerifiableType> cache;
 
-  protected DelphiGenerifiableType(String image) {
-    super(image);
+  protected DelphiGenerifiableType() {
     cache = new HashMap<>();
   }
 
