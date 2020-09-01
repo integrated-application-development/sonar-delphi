@@ -9,13 +9,13 @@ import org.sonar.plugins.delphi.type.Type.IntegerType;
 
 @Immutable
 class DelphiIntegerType extends DelphiType implements IntegerType {
-
+  private final String image;
   private final BigInteger min;
   private final BigInteger max;
   private final int size;
 
   DelphiIntegerType(String image, int size, boolean signed) {
-    super(image);
+    this.image = image;
     this.size = size;
     BigInteger capacity = BigInteger.valueOf(256).pow(size).subtract(BigInteger.ONE);
     if (signed) {
@@ -25,6 +25,11 @@ class DelphiIntegerType extends DelphiType implements IntegerType {
       min = BigInteger.ZERO;
       max = capacity;
     }
+  }
+
+  @Override
+  public String getImage() {
+    return image;
   }
 
   @Override

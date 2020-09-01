@@ -2,7 +2,7 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>sonar-delphi-plugin</artifactId>
-  <version>3.2</version>
+  <version>3.3</version>
   <groupId>org.delphi.plugin</groupId>
   <name>Sonar Delphi Plugin</name>
   <description>Code analyzer for Delphi</description>
@@ -98,19 +98,20 @@
     <sonar-orchestrator.version>3.27.0.2172</sonar-orchestrator.version>
     <antlr-runtime.version>3.4</antlr-runtime.version>
     <pmd.version>6.18.0</pmd.version>
+    <java-surefire.version>5.13.0.18197</java-surefire.version>
+    <guava.version>28.1-jre</guava.version>
+    <jdom.version>1.0</jdom.version>
+    <jetbrains-annotations.version>17.0.0</jetbrains-annotations.version>
     <junit.version>4.12</junit.version>
     <assertj.version>3.16.1</assertj.version>
     <mockito.version>3.0.0</mockito.version>
     <archunit.version>0.13.0</archunit.version>
-    <java-surefire.version>5.13.0.18197</java-surefire.version>
-    <guava.version>28.1-jre</guava.version>
-    <jdom.version>1.0</jdom.version>
     <errorprone.version>2.4.0</errorprone.version>
     <!--Maven plugins-->
     <antlr3-plugin.version>3.5.2</antlr3-plugin.version>
     <jacoco-plugin.version>0.8.5</jacoco-plugin.version>
     <surefire-plugin.version>2.22.0</surefire-plugin.version>
-    <sonar-packaging-plugin.version>1.16</sonar-packaging-plugin.version>
+    <sonar-packaging-plugin.version>1.19.0.397</sonar-packaging-plugin.version>
     <license-plugin.version>1.9.0</license-plugin.version>
     <javadoc-plugin>3.1.0</javadoc-plugin>
     <dependency-plugin.version>2.10</dependency-plugin.version>
@@ -179,7 +180,7 @@
     <dependency>
       <groupId>org.jetbrains</groupId>
       <artifactId>annotations</artifactId>
-      <version>17.0.0</version>
+      <version>${jetbrains-annotations.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

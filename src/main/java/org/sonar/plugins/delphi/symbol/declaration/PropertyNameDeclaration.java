@@ -12,6 +12,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyReadSpecifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyWriteSpecifierNode;
+import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.symbol.declaration.parameter.FormalParameter;
 import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
@@ -22,6 +23,7 @@ import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
     implements TypedDeclaration, Invocable {
 
+  private final String fullyQualifiedName;
   private final List<Parameter> parameters;
   private final boolean isClassInvocable;
   private final boolean isDefaultProperty;
@@ -34,6 +36,7 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
       PropertyNode node, @Nullable PropertyNameDeclaration concreteDeclaration) {
     this(
         new SymbolicNode(node.getPropertyName()),
+        makeQualifiedName(node),
         extractParameters(node, concreteDeclaration),
         node.isClassProperty(),
         node.isDefaultProperty(),
@@ -44,6 +47,7 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
 
   private PropertyNameDeclaration(
       SymbolicNode location,
+      String fullyQualifiedName,
       List<Parameter> parameters,
       boolean isClassInvocable,
       boolean isDefaultProperty,
@@ -51,12 +55,19 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
       DelphiNameDeclaration readDeclaration,
       DelphiNameDeclaration writeDeclaration) {
     super(location);
+    this.fullyQualifiedName = fullyQualifiedName;
     this.parameters = parameters;
     this.isClassInvocable = isClassInvocable;
     this.isDefaultProperty = isDefaultProperty;
     this.type = type;
     this.readDeclaration = readDeclaration;
     this.writeDeclaration = writeDeclaration;
+  }
+
+  private static String makeQualifiedName(PropertyNode propertyNode) {
+    return propertyNode.getFirstParentOfType(TypeDeclarationNode.class).fullyQualifiedName()
+        + "."
+        + propertyNode.getPropertyName().getImage();
   }
 
   private static List<Parameter> extractParameters(
@@ -122,6 +133,10 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
     return type;
   }
 
+  public String fullyQualifiedName() {
+    return fullyQualifiedName;
+  }
+
   @Nullable
   public DelphiNameDeclaration getReadDeclaration() {
     return readDeclaration;
@@ -164,6 +179,7 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
   protected DelphiNameDeclaration doSpecialization(TypeSpecializationContext context) {
     return new PropertyNameDeclaration(
         getNode(),
+        fullyQualifiedName,
         parameters.stream()
             .map(parameter -> parameter.specialize(context))
             .collect(Collectors.toUnmodifiableList()),

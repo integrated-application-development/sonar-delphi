@@ -40,6 +40,7 @@ import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
+import org.sonar.plugins.delphi.symbol.scope.FileScope;
 import org.sonar.plugins.delphi.symbol.scope.SysInitScope;
 import org.sonar.plugins.delphi.symbol.scope.SystemScope;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
@@ -127,7 +128,7 @@ public class SymbolTableBuilder {
   private void createUnitData(Path unitPath, boolean isSourceFile) {
     if (!unitPaths.contains(unitPath)) {
       String unitName = getBaseName(unitPath.toString());
-      UnitData unitData = new UnitData(unitPath);
+      UnitData unitData = new UnitData(unitPath, isSourceFile);
 
       if (isSourceFile) {
         sourceFileUnits.add(unitData);
@@ -261,6 +262,12 @@ public class SymbolTableBuilder {
       String filePath = unit.unitFile.toAbsolutePath().toString();
       unit.unitDeclaration = data.getUnitDeclaration();
       symbolTable.addUnit(filePath, unit.unitDeclaration);
+      if (!unit.isSourceFile) {
+        FileScope fileScope = data.getUnitDeclaration().getFileScope();
+        fileScope.unregisterScopes();
+        fileScope.unregisterDeclarations();
+        fileScope.unregisterOccurrences();
+      }
     }
 
     unit.resolved = resolutionLevel;
@@ -427,11 +434,13 @@ public class SymbolTableBuilder {
 
   private static class UnitData {
     private final Path unitFile;
+    private final boolean isSourceFile;
     private ResolutionLevel resolved;
     private UnitNameDeclaration unitDeclaration;
 
-    private UnitData(Path unitFile) {
+    private UnitData(Path unitFile, boolean isSourceFile) {
       this.unitFile = unitFile;
+      this.isSourceFile = isSourceFile;
       this.resolved = ResolutionLevel.NONE;
     }
   }

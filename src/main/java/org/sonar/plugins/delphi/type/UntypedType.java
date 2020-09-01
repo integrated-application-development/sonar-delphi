@@ -8,7 +8,12 @@ class UntypedType extends DelphiType implements ImmutableType {
   private static final UntypedType INSTANCE = new UntypedType();
 
   private UntypedType() {
-    super("<Untyped>");
+    // Hide constructor
+  }
+
+  @Override
+  public String getImage() {
+    return "<Untyped>";
   }
 
   @Override

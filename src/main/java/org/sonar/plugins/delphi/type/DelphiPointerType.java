@@ -6,14 +6,6 @@ import org.sonar.plugins.delphi.type.Type.PointerType;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 public abstract class DelphiPointerType extends DelphiType implements PointerType {
-  private DelphiPointerType(ImageSupplier<PointerType> imageSupplier) {
-    super(imageSupplier);
-  }
-
-  private DelphiPointerType(String image) {
-    super(image);
-  }
-
   public static PointerType pointerTo(Type type) {
     return new MutableDelphiPointerType(type);
   }
@@ -28,6 +20,11 @@ public abstract class DelphiPointerType extends DelphiType implements PointerTyp
 
   public static ImmutablePointerType nilPointer() {
     return ImmutableDelphiPointerType.NIL;
+  }
+
+  @Override
+  public String getImage() {
+    return "^" + dereferencedType().getImage();
   }
 
   @Override
@@ -58,7 +55,6 @@ public abstract class DelphiPointerType extends DelphiType implements PointerTyp
     private boolean allowsPointerMath;
 
     MutableDelphiPointerType(Type dereferencedType) {
-      super((PointerType type) -> "^" + type.dereferencedType().getImage());
       this.dereferencedType = dereferencedType;
     }
 
@@ -97,7 +93,6 @@ public abstract class DelphiPointerType extends DelphiType implements PointerTyp
     private final boolean allowsPointerMath;
 
     ImmutableDelphiPointerType(ImmutableType dereferencedType, boolean allowsPointerMath) {
-      super("^" + dereferencedType.getImage());
       this.dereferencedType = dereferencedType;
       this.allowsPointerMath = allowsPointerMath;
     }

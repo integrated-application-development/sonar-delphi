@@ -6,11 +6,17 @@ import org.sonar.plugins.delphi.type.Type.BooleanType;
 
 @Immutable
 class DelphiBooleanType extends DelphiType implements BooleanType {
+  private final String image;
   private final int size;
 
   public DelphiBooleanType(String image, int size) {
-    super(image);
+    this.image = image;
     this.size = size;
+  }
+
+  @Override
+  public String getImage() {
+    return image;
   }
 
   @Override

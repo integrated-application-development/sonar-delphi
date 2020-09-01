@@ -28,9 +28,9 @@ import org.sonar.plugins.delphi.type.Type.HelperType;
 abstract class AbstractFileScope extends AbstractDelphiScope implements FileScope {
   private final String name;
   private final Deque<FileScope> imports = new ArrayDeque<>();
-  private final Map<Integer, DelphiScope> registeredScopes = new HashMap<>();
-  private final Map<Integer, DelphiNameDeclaration> registeredDeclarations = new HashMap<>();
-  private final Map<Integer, DelphiNameOccurrence> registeredOccurrences = new HashMap<>();
+  private Map<Integer, DelphiScope> registeredScopes = new HashMap<>();
+  private Map<Integer, DelphiNameDeclaration> registeredDeclarations = new HashMap<>();
+  private Map<Integer, DelphiNameOccurrence> registeredOccurrences = new HashMap<>();
 
   protected AbstractFileScope(String name) {
     this.name = name;
@@ -130,6 +130,21 @@ abstract class AbstractFileScope extends AbstractDelphiScope implements FileScop
   public void attach(MethodNameNode node) {
     var declaration = (MethodNameDeclaration) registeredDeclarations.get(node.getTokenIndex());
     node.setMethodNameDeclaration(declaration);
+  }
+
+  @Override
+  public void unregisterScopes() {
+    registeredScopes = new HashMap<>(0);
+  }
+
+  @Override
+  public void unregisterDeclarations() {
+    registeredDeclarations = new HashMap<>(0);
+  }
+
+  @Override
+  public void unregisterOccurrences() {
+    registeredOccurrences = new HashMap<>(0);
   }
 
   @Override

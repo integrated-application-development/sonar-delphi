@@ -45,11 +45,17 @@ public final class IntrinsicArgumentMatcher extends DelphiType implements Immuta
     boolean matches(Type type);
   }
 
+  private final String image;
   private final Matcher matcher;
 
-  private IntrinsicArgumentMatcher(String name, Matcher matcher) {
-    super(name);
+  private IntrinsicArgumentMatcher(String image, Matcher matcher) {
+    this.image = image;
     this.matcher = matcher;
+  }
+
+  @Override
+  public String getImage() {
+    return image;
   }
 
   public boolean matches(Type type) {

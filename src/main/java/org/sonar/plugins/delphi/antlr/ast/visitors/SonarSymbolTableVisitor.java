@@ -1,9 +1,9 @@
 package org.sonar.plugins.delphi.antlr.ast.visitors;
 
+import com.google.common.collect.Lists;
 import java.util.List;
 import javax.annotation.Nullable;
 import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
-import org.assertj.core.util.Lists;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.api.batch.sensor.symbol.NewSymbol;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;

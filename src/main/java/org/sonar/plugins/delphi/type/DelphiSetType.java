@@ -5,16 +5,17 @@ import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.type.Type.CollectionType;
 
 public abstract class DelphiSetType extends DelphiType implements CollectionType {
-  private DelphiSetType(Type elementType) {
-    super("set of " + elementType.getImage());
-  }
-
   public static CollectionType set(Type elementType) {
     return new MutableDelphiSetType(elementType);
   }
 
   public static ImmutableCollectionType emptySet() {
     return ImmutableDelphiSetType.EMPTY_SET;
+  }
+
+  @Override
+  public String getImage() {
+    return "set of " + elementType().getImage();
   }
 
   @Override
@@ -26,7 +27,6 @@ public abstract class DelphiSetType extends DelphiType implements CollectionType
     private final Type elementType;
 
     private MutableDelphiSetType(Type elementType) {
-      super(elementType);
       this.elementType = elementType;
     }
 
@@ -46,7 +46,6 @@ public abstract class DelphiSetType extends DelphiType implements CollectionType
     private final ImmutableType elementType;
 
     private ImmutableDelphiSetType(ImmutableType elementType) {
-      super(elementType);
       this.elementType = elementType;
     }
 

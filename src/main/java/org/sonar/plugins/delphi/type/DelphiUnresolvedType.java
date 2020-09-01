@@ -6,12 +6,19 @@ import org.sonar.plugins.delphi.type.Type.ImmutableType;
 
 @Immutable
 public class DelphiUnresolvedType extends DelphiType implements ImmutableType {
-  private DelphiUnresolvedType(NameReferenceNode reference) {
-    super(reference.getImage());
+  private final String image;
+
+  private DelphiUnresolvedType(String image) {
+    this.image = image;
   }
 
   public static ImmutableType referenceTo(NameReferenceNode reference) {
-    return new DelphiUnresolvedType(reference);
+    return new DelphiUnresolvedType(reference.getImage());
+  }
+
+  @Override
+  public String getImage() {
+    return image;
   }
 
   @Override

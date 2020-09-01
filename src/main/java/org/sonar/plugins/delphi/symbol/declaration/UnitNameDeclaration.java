@@ -13,8 +13,8 @@ public final class UnitNameDeclaration extends QualifiedDelphiNameDeclaration {
   private final String namespace;
   private final Path path;
 
-  private Set<UnitNameDeclaration> interfaceDependencies;
-  private Set<UnitNameDeclaration> implementationDependencies;
+  private final Set<UnitNameDeclaration> interfaceDependencies;
+  private final Set<UnitNameDeclaration> implementationDependencies;
   private int hashCode;
 
   public UnitNameDeclaration(FileHeaderNode node, FileScope fileScope) {

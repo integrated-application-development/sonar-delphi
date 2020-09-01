@@ -6,12 +6,17 @@ import org.sonar.plugins.delphi.type.Type.VariantType;
 
 @Immutable
 class DelphiVariantType extends DelphiType implements VariantType {
-
+  private final String image;
   private final VariantKind kind;
 
   DelphiVariantType(String image, VariantKind kind) {
-    super(image);
+    this.image = image;
     this.kind = kind;
+  }
+
+  @Override
+  public String getImage() {
+    return image;
   }
 
   @Override

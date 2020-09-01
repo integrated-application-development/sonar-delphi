@@ -1583,6 +1583,27 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenPropertyRule"
+    message="Track uses of disallowed properties"
+    name="ForbiddenPropertyRule">
+    <priority>3</priority>
+    <description>
+      This rule allows banning certain properties.
+      It will flag any direct reference to a property from the blacklist.
+      &lt;br&gt;
+      &lt;br&gt;
+      Please note:
+      &lt;br&gt;
+      - A fully qualified property name is required. (E.g. "Unit.Type.Property")
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+      <property name="template" value="true"/>
+      <property name="blacklist"/>
+      <property name="message"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenMethodRule"
     message="Track uses of disallowed methods"
     name="ForbiddenMethodRule">
