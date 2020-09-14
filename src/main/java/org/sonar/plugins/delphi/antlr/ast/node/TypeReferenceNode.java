@@ -41,7 +41,7 @@ public final class TypeReferenceNode extends TypeNode implements Qualifiable {
     if (declaration instanceof Typed) {
       return ((Typed) declaration).getType();
     }
-    return DelphiUnresolvedType.referenceTo(getNameNode());
+    return DelphiUnresolvedType.referenceTo(getNameNode().getImage());
   }
 
   @Override

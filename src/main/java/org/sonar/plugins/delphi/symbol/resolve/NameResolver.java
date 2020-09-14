@@ -388,6 +388,7 @@ public class NameResolver {
         occurrence.setTypeArguments(
             genericArguments.findChildrenOfType(TypeReferenceNode.class).stream()
                 .map(TypeReferenceNode::getNameNode)
+                .map(Node::getImage)
                 .map(DelphiUnresolvedType::referenceTo)
                 .collect(Collectors.toUnmodifiableList()));
       }

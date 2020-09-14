@@ -21,7 +21,7 @@ public class CompilerWarningsRule extends AbstractDelphiRule {
   private static boolean isViolation(CompilerDirective directive) {
     switch (directive.getType()) {
       case WARNINGS:
-        return ((WarningsDirective) directive).isOff();
+        return !((WarningsDirective) directive).isActive();
       case WARN:
         return ((WarnDirective) directive).getValue() == WarnDirectiveValue.OFF;
       default:
