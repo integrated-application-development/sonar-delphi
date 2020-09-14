@@ -10,7 +10,7 @@ public class CompilerHintsRule extends AbstractDelphiRule {
   public void visitToken(DelphiToken token, RuleContext context) {
     if (token.isCompilerDirective()) {
       CompilerDirective directive = CompilerDirective.fromToken(token.getAntlrToken());
-      if (directive instanceof HintsDirective && ((HintsDirective) directive).isOff()) {
+      if (directive instanceof HintsDirective && !((HintsDirective) directive).isActive()) {
         addViolation(context, token);
       }
     }

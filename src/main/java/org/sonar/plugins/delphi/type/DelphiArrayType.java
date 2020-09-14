@@ -107,7 +107,7 @@ public class DelphiArrayType extends DelphiGenerifiableType implements Collectio
   @Override
   public DelphiGenerifiableType doSpecialization(TypeSpecializationContext context) {
     Type specializedElement = elementType.specialize(context);
-    String image = createImage(specializedElement, options);
-    return new DelphiArrayType(image, specializedElement, options);
+    String specializedImage = createImage(specializedElement, options);
+    return new DelphiArrayType(specializedImage, specializedElement, options);
   }
 }

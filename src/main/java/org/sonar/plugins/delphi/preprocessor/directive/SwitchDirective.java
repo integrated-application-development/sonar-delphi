@@ -16,11 +16,7 @@ public class SwitchDirective extends AbstractCompilerDirective {
     preprocessor.handleSwitch(getType(), getToken().getTokenIndex(), value);
   }
 
-  public boolean isOn() {
+  public boolean isActive() {
     return value;
-  }
-
-  public boolean isOff() {
-    return !value;
   }
 }
