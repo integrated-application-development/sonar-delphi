@@ -63,6 +63,7 @@ public abstract class NameDeclarationNode extends DelphiNode {
     METHOD,
     PARAMETER,
     PROPERTY,
+    RECORD_VARIANT_TAG,
     TYPE,
     TYPE_PARAMETER,
     VAR,

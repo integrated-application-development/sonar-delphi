@@ -46,6 +46,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ProcedureTypeHeadingNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RecordTypeNode;
+import org.sonar.plugins.delphi.antlr.ast.node.RecordVariantTagNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RepeatStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TryStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
@@ -529,6 +530,11 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     return handleVarDeclaration(node, node.getTypeNode(), data);
   }
 
+  @Override
+  public Data visit(RecordVariantTagNode node, Data data) {
+    return handleVarDeclaration(node, node.getTypeNode(), data);
+  }
+
   private Data handleVarDeclaration(DelphiNode declarationNode, TypeNode typeNode, Data data) {
     if (typeNode instanceof RecordTypeNode || typeNode instanceof EnumTypeNode) {
       createAnonymousTypeScope(typeNode, data);
@@ -577,6 +583,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       case EXCEPT_ITEM:
       case FIELD:
       case PARAMETER:
+      case RECORD_VARIANT_TAG:
       case VAR:
         return true;
       default:

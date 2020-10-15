@@ -122,6 +122,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.RecordHelperTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RecordTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RecordVariantItemNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RecordVariantSectionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.RecordVariantTagNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RepeatStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RequiresClauseNode;
 import org.sonar.plugins.delphi.antlr.ast.node.SetTypeNode;
@@ -340,6 +341,10 @@ public interface DelphiParserVisitor<T> {
   }
 
   default T visit(RecordVariantSectionNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(RecordVariantTagNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 

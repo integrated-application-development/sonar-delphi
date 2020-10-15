@@ -43,6 +43,7 @@ public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
     switch (node.getKind()) {
       case CONST:
       case EXCEPT_ITEM:
+      case RECORD_VARIANT_TAG:
         typed = (Typed) node.jjtGetParent();
         break;
       case PARAMETER:

@@ -84,6 +84,14 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testRecordVariants() {
+    execute("RecordVariants.pas");
+    verifyUsages(14, 10, reference(33, 2));
+    verifyUsages(19, 10, reference(34, 2));
+    verifyUsages(24, 10, reference(35, 2));
+  }
+
+  @Test
   public void testInheritedInvocations() {
     execute("InheritedInvocations.pas");
     verifyUsages(7, 14, reference(38, 14), reference(50, 14));

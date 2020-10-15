@@ -14,6 +14,7 @@ public final class SimpleNameDeclarationNode extends NameDeclarationNode {
           ExceptItemNode.class, DeclarationKind.EXCEPT_ITEM,
           MethodNameNode.class, DeclarationKind.METHOD,
           PropertyNode.class, DeclarationKind.PROPERTY,
+          RecordVariantTagNode.class, DeclarationKind.RECORD_VARIANT_TAG,
           TypeDeclarationNode.class, DeclarationKind.TYPE,
           TypeParameterNode.class, DeclarationKind.TYPE_PARAMETER);
 
