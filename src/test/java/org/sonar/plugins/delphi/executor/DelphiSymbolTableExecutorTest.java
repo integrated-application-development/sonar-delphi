@@ -189,7 +189,8 @@ public class DelphiSymbolTableExecutorTest {
   @Test
   public void testArrayConstructor() {
     execute("ArrayConstructor.pas");
-    verifyUsages(10, 10, reference(17, 2));
+    verifyUsages(10, 10, reference(17, 2), reference(27, 2));
+    verifyUsages(20, 9, reference(28, 4), reference(29, 4), reference(30, 4));
   }
 
   @Test
