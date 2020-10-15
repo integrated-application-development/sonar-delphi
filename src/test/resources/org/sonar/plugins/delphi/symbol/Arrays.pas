@@ -20,7 +20,7 @@ type
     FBar: TBar;
     FBaz: TBaz;
   public
-    property ArrayProperty[Index: Integer]: TBar read FBar; 
+    property ArrayProperty[Index: Integer]: TBar read FBar;
     property DefaultProperty[Index: Integer]: TBar read FBar; default;
     property DefaultProperty[Index: Integer; Index2: Integer]: TBaz read FBaz; default;
   end;
@@ -45,6 +45,27 @@ begin
   Foo[0].Proc;
   Foo.DefaultProperty[0,0].DefaultProperty[0].Proc;
   Foo[0,0][0].Proc;
+end;
+
+type
+  TBarArray = array of TBar;
+
+function GetArray: TBarArray;
+begin
+  Result := TBarArray.Create();
+end;
+
+procedure TestArrayReturnType;
+begin
+  GetArray[0].Proc;
+end;
+
+procedure TestPointerToArray;
+var
+  Arr: ^TBarArray;
+begin
+  Arr := @(GetArray);
+  Arr[0].Proc;
 end;
 
 end.

@@ -171,7 +171,9 @@ public class DelphiSymbolTableExecutorTest {
         reference(44, 25),
         reference(45, 9),
         reference(46, 46),
-        reference(47, 14));
+        reference(47, 14),
+        reference(60, 14),
+        reference(68, 9));
     verifyUsages(15, 13, reference(46, 27));
     verifyUsages(24, 13, reference(44, 6));
     verifyUsages(25, 13, reference(46, 6));
