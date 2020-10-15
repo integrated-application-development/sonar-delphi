@@ -403,10 +403,6 @@ public final class NameResolutionUtils {
     List<TypeReferenceNode> typeArguments =
         genericArguments.findChildrenOfType(TypeReferenceNode.class);
 
-    if (typeParameters.size() != typeArguments.size()) {
-      return;
-    }
-
     for (int i = 0; i < typeParameters.size(); ++i) {
       TypedDeclaration parameterDeclaration = typeParameters.get(i);
       TypeReferenceNode parameterReference = typeArguments.get(i);

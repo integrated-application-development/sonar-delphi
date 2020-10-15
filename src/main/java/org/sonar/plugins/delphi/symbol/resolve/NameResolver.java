@@ -449,9 +449,6 @@ public class NameResolver {
 
     GenerifiableDeclaration generifiable = (GenerifiableDeclaration) currentDeclaration;
     List<TypedDeclaration> typeParameters = generifiable.getTypeParameters();
-    if (typeParameters.size() != typeReferences.size()) {
-      return;
-    }
 
     for (int i = 0; i < typeParameters.size(); ++i) {
       TypedDeclaration declaration = typeParameters.get(i);
