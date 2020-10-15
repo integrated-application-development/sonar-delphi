@@ -218,4 +218,25 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
 
     assertIssues().areNot(ruleKey("EmptyMethodRule"));
   }
+
+  @Test
+  public void testInterfaceImplementationShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  IFoo = interface")
+            .appendDecl("    procedure Bar;")
+            .appendDecl("  end;")
+            .appendDecl("  TFoo = class(TObject, IFoo)")
+            .appendDecl("    procedure Bar;")
+            .appendDecl("  end;")
+            .appendImpl("procedure TFoo.Bar;")
+            .appendImpl("begin")
+            .appendImpl("  // do nothing")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("EmptyMethodRule"));
+  }
 }

@@ -1,33 +1,21 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import java.util.ArrayList;
-import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
-import org.sonar.plugins.delphi.antlr.ast.node.MethodDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
+import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
+import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Type.ScopedType;
 
 public class EmptyMethodRule extends AbstractDelphiRule {
-
-  private final List<MethodDeclarationNode> methodDeclarations = new ArrayList<>();
-
-  @Override
-  public void start(RuleContext ctx) {
-    methodDeclarations.clear();
-  }
-
   @Override
   public RuleContext visit(MethodImplementationNode method, RuleContext data) {
     if (method.isEmptyMethod() && shouldAddViolation(method)) {
       addViolation(data, method.getMethodNameNode());
     }
     return super.visit(method, data);
-  }
-
-  @Override
-  public RuleContext visit(MethodDeclarationNode node, RuleContext data) {
-    methodDeclarations.add(node);
-    return data;
   }
 
   private boolean shouldAddViolation(MethodImplementationNode method) {
@@ -38,8 +26,37 @@ public class EmptyMethodRule extends AbstractDelphiRule {
       return true;
     }
 
-    return methodDeclarations.stream()
-        .filter(decl -> decl.isOverride() || decl.isVirtual())
-        .noneMatch(decl -> decl.getImage().equals(method.getImage()));
+    MethodNameDeclaration declaration = method.getMethodNameDeclaration();
+    if (declaration == null) {
+      return true;
+    }
+
+    return !declaration.hasDirective(MethodDirective.OVERRIDE)
+        && !declaration.hasDirective(MethodDirective.VIRTUAL)
+        && !implementsInterface(declaration);
+  }
+
+  private static boolean implementsInterface(MethodNameDeclaration declaration) {
+    TypeNameDeclaration type = declaration.getTypeDeclaration();
+    return type != null && hasInterfaceMethodDeclaration(type.getType(), declaration);
+  }
+
+  private static boolean hasInterfaceMethodDeclaration(
+      Type type, MethodNameDeclaration declaration) {
+    if (type.isInterface()
+        && ((ScopedType) type)
+            .typeScope().getMethodDeclarations().stream()
+                .anyMatch(overridden -> overridesMethodSignature(declaration, overridden))) {
+      return true;
+    }
+
+    return type.parents().stream()
+        .anyMatch(parent -> hasInterfaceMethodDeclaration(parent, declaration));
+  }
+
+  private static boolean overridesMethodSignature(
+      MethodNameDeclaration declaration, MethodNameDeclaration overridden) {
+    return declaration.getImage().equalsIgnoreCase(overridden.getImage())
+        && declaration.hasSameParameterTypes(overridden);
   }
 }
