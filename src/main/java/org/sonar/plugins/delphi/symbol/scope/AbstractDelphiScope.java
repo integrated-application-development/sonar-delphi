@@ -26,7 +26,6 @@ import org.sonar.plugins.delphi.symbol.declaration.GenerifiableDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
-import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.HelperType;
@@ -263,23 +262,9 @@ class AbstractDelphiScope implements DelphiScope {
 
   private static boolean overridesMethodSignature(
       MethodNameDeclaration declaration, MethodNameDeclaration overridden) {
-    if (!declaration.isCallable() || !overridden.isCallable()) {
-      return false;
-    }
-
-    if (declaration.getParametersCount() != overridden.getParametersCount()) {
-      return false;
-    }
-
-    for (int i = 0; i < declaration.getParametersCount(); ++i) {
-      Parameter declarationParam = declaration.getParameter(i);
-      Parameter matchedParam = overridden.getParameter(i);
-      if (!declarationParam.getType().is(matchedParam.getType())) {
-        return false;
-      }
-    }
-
-    return true;
+    return declaration.isCallable()
+        && overridden.isCallable()
+        && declaration.hasSameParameterTypes(overridden);
   }
 
   @Override
