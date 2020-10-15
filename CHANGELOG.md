@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Ambiguous type comparisons from array constructors to sets.
+- Subranges were not always considered convertible to their host type.
 
 ## [0.25.0] - 2020-09-01
 

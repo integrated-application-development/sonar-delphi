@@ -326,6 +326,9 @@ class TypeComparer {
   }
 
   private static EqualityType compareEnum(Type from, Type to) {
+    if (from.isSubrange()) {
+      from = ((SubrangeType) from).hostType();
+    }
     if ((from.isEnum() && from.is(to)) || from.isVariant()) {
       return CONVERT_LEVEL_1;
     }

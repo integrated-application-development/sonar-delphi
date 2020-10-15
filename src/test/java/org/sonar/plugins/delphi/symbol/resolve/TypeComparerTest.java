@@ -80,6 +80,7 @@ import org.sonar.plugins.delphi.type.DelphiArrayType;
 import org.sonar.plugins.delphi.type.DelphiEnumerationType;
 import org.sonar.plugins.delphi.type.DelphiFileType;
 import org.sonar.plugins.delphi.type.DelphiSetType;
+import org.sonar.plugins.delphi.type.DelphiSubrangeType;
 import org.sonar.plugins.delphi.type.DelphiTypeType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ArrayConstructorType;
@@ -209,7 +210,10 @@ public class TypeComparerTest {
   public void testToEnum() {
     EnumType enumType = enumeration("Enum1", unknownScope());
     EnumType enumType2 = enumeration("Enum2", unknownScope());
+    SubrangeType subrangeType = DelphiSubrangeType.subRange("Subrange", enumType);
 
+    compare(subrangeType, enumType, CONVERT_LEVEL_1);
+    compare(subrangeType, enumType2, INCOMPATIBLE_TYPES);
     compare(enumType, enumType2, INCOMPATIBLE_TYPES);
     compare(VARIANT.type, enumType, CONVERT_LEVEL_1);
     compare(INTEGER.type, enumType, INCOMPATIBLE_TYPES);
