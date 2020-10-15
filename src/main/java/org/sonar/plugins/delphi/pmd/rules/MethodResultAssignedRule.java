@@ -21,7 +21,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParamet
 import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodBodyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
-import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RaiseStatementNode;
@@ -117,7 +116,7 @@ public class MethodResultAssignedRule extends AbstractDelphiRule {
       for (StatementNode statement : body.getStatementBlock().getStatements()) {
         if (isStackUnwindingStatement(statement)) {
           return true;
-        } else if (!isResultAssignment(statement, method)) {
+        } else if (!(statement instanceof AssignmentStatementNode)) {
           return false;
         }
       }
@@ -135,21 +134,6 @@ public class MethodResultAssignedRule extends AbstractDelphiRule {
 
   private static boolean isAssertFalse(StatementNode statement) {
     return isMethodInvocation(statement, "System.Assert", arguments -> arguments.get(0).isFalse());
-  }
-
-  private static boolean isResultAssignment(StatementNode statement, MethodNode method) {
-    if (statement instanceof AssignmentStatementNode) {
-      ExpressionNode assignee = ((AssignmentStatementNode) statement).getAssignee();
-
-      if (assignee.isResult()) {
-        return true;
-      }
-
-      NameReferenceNode nameReference = assignee.extractSimpleNameReference();
-      return nameReference != null
-          && nameReference.getNameDeclaration() == method.getMethodNameDeclaration();
-    }
-    return false;
   }
 
   private static boolean isMethodInvocation(

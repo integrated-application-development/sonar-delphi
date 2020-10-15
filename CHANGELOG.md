@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Exclude record variant sections in `NoSemiAfterFieldDeclarationRule`.
 - Allow `Sorted := True` to be anywhere in the same block (instead of only on adjacent lines) in
   `DuplicatesRule`.
+- Improve detection of "unsupported operation" methods in `MethodResultAssignedRule`.
 
 ### Fixed
 
