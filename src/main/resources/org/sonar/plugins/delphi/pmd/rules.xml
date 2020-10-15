@@ -612,6 +612,23 @@ DoSomething(True); // Compliant
     </example>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.RedundantAssignmentRule"
+    message="Assignments should not be redundant"
+    name="RedundantAssignmentRule">
+    <priority>4</priority>
+    <description>Redundant assignments are useless and can be removed.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min"/>
+      <property name="type" value="BUG"/>
+    </properties>
+    <example>
+      <![CDATA[
+Foo := Foo; // Noncompliant
+        ]]>
+    </example>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.PublicFieldsRule"
     message="Fields should not have public visibility"
     name="PublicFieldsRule">
