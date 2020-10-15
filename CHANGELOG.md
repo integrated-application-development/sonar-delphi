@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improve dependency analysis around `inherited` expressions.
 
+### Fixed
+
+- Ambiguous type comparisons from array constructors to sets.
+
 ## [0.25.0] - 2020-09-01
 
 ### Added

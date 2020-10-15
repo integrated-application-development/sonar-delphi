@@ -392,6 +392,32 @@ class TypeComparer {
   private static EqualityType compareArrayConstructorToDynamicArray(
       ArrayConstructorType from, CollectionType to) {
     if (from.isEmpty()) {
+      return CONVERT_LEVEL_3;
+    }
+
+    // this should lose to the array constructor -> open array / set conversions,
+    // but it might happen that the end of the convert levels is reached
+    var subEquality = compare(from.elementTypes().get(0), to.elementType());
+    if (subEquality.ordinal() >= EQUAL.ordinal()) {
+      return CONVERT_LEVEL_3;
+    } else if (subEquality.ordinal() > CONVERT_LEVEL_5.ordinal()) {
+      // an array constructor is not a dynamic array, so use a lower level of compatibility
+      // than that one of the elements
+      return EqualityType.values()[subEquality.ordinal() - 3];
+    } else if (subEquality == CONVERT_LEVEL_6) {
+      return CONVERT_LEVEL_5;
+    } else if (subEquality == CONVERT_LEVEL_7) {
+      return CONVERT_LEVEL_6;
+    } else if (subEquality == CONVERT_LEVEL_8) {
+      return CONVERT_LEVEL_7;
+    } else {
+      return subEquality;
+    }
+  }
+
+  private static EqualityType compareArrayConstructorToSet(
+      ArrayConstructorType from, CollectionType to) {
+    if (from.isEmpty()) {
       // Only needs to lose to [] -> open array
       return CONVERT_LEVEL_2;
     }
@@ -500,8 +526,7 @@ class TypeComparer {
         return EQUAL;
       }
     } else if (from.isArrayConstructor()) {
-      // Automatic array constructor -> set conversion
-      return CONVERT_LEVEL_1;
+      return compareArrayConstructorToSet((ArrayConstructorType) from, toSet);
     }
 
     return INCOMPATIBLE_TYPES;
