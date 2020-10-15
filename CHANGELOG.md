@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for variant record tags in semantic analysis.
 
+### Changed
+
+- Improve dependency analysis around `inherited` expressions.
+
 ## [0.25.0] - 2020-09-01
 
 ### Added
