@@ -132,4 +132,27 @@ public class RedundantCastRuleTest extends BasePmdRuleTest {
         .areExactly(1, ruleKeyAtLine("RedundantCastRule", builder.getOffset() + 5))
         .areExactly(1, ruleKeyAtLine("RedundantCastRule", builder.getOffset() + 6));
   }
+
+  @Test
+  public void testUnknownTypesShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TFoo = class")
+            .appendDecl("  end;")
+            .appendImpl("function Foo(Foo: TFoo): TFoo;")
+            .appendImpl("var")
+            .appendImpl("  Unknown: TUnknown;")
+            .appendImpl("begin")
+            .appendImpl("  Result := TBar(Unknown);")
+            .appendImpl("  Result := Foo as TUnknown;")
+            .appendImpl("  Result := TUnknown(Foo);")
+            .appendImpl("  Result := Unknown as TFoo;")
+            .appendImpl("  Result := Unknown as TUnknown;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("RedundantCastRule"));
+  }
 }
