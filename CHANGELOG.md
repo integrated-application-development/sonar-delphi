@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for variant record tags in semantic analysis.
 - `RedundantAssignmentRule` analysis rule, which flags assignments where the left and right side are
   the same.
+- `ForbiddenImportFilePatternRule` analysis rule template, which flags imports matching a specified
+  file pattern.
 
 ### Changed
 

@@ -1647,6 +1647,32 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenImportFilePatternRule"
+    message="Track use of disallowed imports by file path"
+    name="ForbiddenImportFilePatternRule">
+    <priority>3</priority>
+    <description>
+      This rule allows banning certain imports.
+      It will flag any import of a unit with a file path matching the forbiddenImportPattern.
+      &lt;br&gt;
+      Units with a file path matching the optional whitelistPattern are permitted to import banned units.
+      &lt;br&gt;
+      &lt;br&gt;
+      Patterns can use glob or regex syntax, as specified by forbiddenImportPatternSyntax and whitelistPatternSyntax.
+      &lt;br&gt;
+      Patterns are compared against absolute paths.
+    </description>
+    <properties>
+      <property name="baseEffort" value="10min"/>
+      <property name="template" value="true"/>
+      <property name="forbiddenImportPattern"/>
+      <property name="forbiddenImportSyntax" value="GLOB"/>
+      <property name="whitelistPattern"/>
+      <property name="whitelistSyntax" value="GLOB"/>
+      <property name="message"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.CommentRegexRule"
     message="Track comments matching a regular expression"
     name="CommentRegexRule">
