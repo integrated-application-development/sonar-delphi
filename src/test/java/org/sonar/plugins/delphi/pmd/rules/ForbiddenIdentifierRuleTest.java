@@ -12,7 +12,7 @@ import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 public class ForbiddenIdentifierRuleTest extends BasePmdRuleTest {
   @Before
   public void setup() {
-    org.sonar.plugins.delphi.pmd.xml.DelphiRule rule = new DelphiRule();
+    DelphiRule rule = new DelphiRule();
     DelphiRuleProperty blacklist = new DelphiRuleProperty(BLACKLISTED_NAMES.name(), "BadName");
 
     rule.setName("ForbiddenNameRuleTest");
