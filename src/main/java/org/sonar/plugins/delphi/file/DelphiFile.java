@@ -16,16 +16,18 @@ import java.util.stream.Collectors;
 import net.sourceforge.pmd.lang.ast.GenericToken;
 import org.antlr.runtime.BufferedTokenStream;
 import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.Token;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.DelphiParser;
+import org.sonar.plugins.delphi.antlr.DelphiTokenStream;
 import org.sonar.plugins.delphi.antlr.LowercaseFileStream;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.DelphiTreeAdaptor;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
+import org.sonar.plugins.delphi.antlr.ast.token.IncludeToken;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.preprocessor.CompilerSwitchRegistry;
 import org.sonar.plugins.delphi.preprocessor.DelphiPreprocessor;
@@ -87,7 +89,7 @@ public interface DelphiFile {
       delphiFile.setAst(createAST(delphiFile, preprocessor.getTokenStream(), config));
       delphiFile.setCompilerSwitchRegistry(preprocessor.getCompilerSwitchRegistry());
       delphiFile.setSourceCodeLines(readLines(sourceFile, config.getEncoding()));
-      delphiFile.setTokens(createTokenList(delphiFile));
+      delphiFile.setTokens(createTokenList(delphiFile, preprocessor.getTokenStream()));
       delphiFile.setComments(extractComments(delphiFile.getTokens()));
       delphiFile.setSuppressions(findSuppressionLines(delphiFile.getComments()));
     } catch (IOException | RecognitionException | RuntimeException e) {
@@ -132,18 +134,43 @@ public interface DelphiFile {
     return new DelphiAST(delphiFile, root);
   }
 
-  private static List<DelphiToken> createTokenList(DelphiFile delphiFile) throws IOException {
+  private static List<DelphiToken> createTokenList(
+      DelphiFile delphiFile, DelphiTokenStream preprocessedTokenStream) throws IOException {
     String filePath = delphiFile.getSourceCodeFile().getAbsolutePath();
     DelphiLexer lexer = new DelphiLexer(new LowercaseFileStream(filePath, UTF_8.name()));
-    CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+    DelphiTokenStream tokenStream = new DelphiTokenStream(lexer);
     tokenStream.fill();
 
-    List<?> tokenObjects = tokenStream.getTokens();
-    return tokenObjects.stream()
-        .map(CommonToken.class::cast)
-        .map(DelphiToken::new)
-        .filter(not(DelphiToken::isEof))
-        .collect(Collectors.toUnmodifiableList());
+    List<DelphiToken> tokenList =
+        tokenStream.getTokens().stream()
+            .map(CommonToken.class::cast)
+            .map(DelphiToken::new)
+            .filter(not(DelphiToken::isEof))
+            .collect(Collectors.toUnmodifiableList());
+
+    int startIndex = 0;
+    boolean include = false;
+
+    for (Token token : preprocessedTokenStream.getTokens()) {
+      if (token instanceof IncludeToken) {
+        if (!include) {
+          startIndex = token.getTokenIndex();
+        }
+        include = true;
+      } else if (include) {
+        offsetTokenIndices(tokenList, startIndex, token.getTokenIndex() - startIndex);
+        include = false;
+      }
+    }
+
+    return tokenList;
+  }
+
+  private static void offsetTokenIndices(List<DelphiToken> tokens, int startIndex, int offset) {
+    tokens.stream()
+        .map(DelphiToken::getAntlrToken)
+        .filter(token -> token.getTokenIndex() > startIndex)
+        .forEach(token -> token.setTokenIndex(token.getTokenIndex() + offset));
   }
 
   private static List<DelphiToken> extractComments(List<DelphiToken> tokenList) {

@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Subranges were not always considered convertible to their host type.
 - Name resolution wasn't occurring for arguments in explicit array constructor invocations.
 - The `AtomicCmpExchange` intrinsic signature was missing the `Target` parameter.
+- Token indices would be get out of sync in files with preprocessor includes.
 
 ## [0.25.0] - 2020-09-01
 
