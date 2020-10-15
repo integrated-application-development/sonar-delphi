@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve dependency analysis around `inherited` expressions.
 - Exclude methods implementing interfaces in `EmptyMethodRule`.
 - Exclude cast expressions where both operands have unknown types in `RedundantCastRule`.
+- Exclude record variant sections in `NoSemiAfterFieldDeclarationRule`.
 
 ### Fixed
 

@@ -325,7 +325,7 @@
       <property name="builtinXPath">
         <value>
           <![CDATA[
-              //FieldDeclarationNode/*[last()][@Image != ";"]
+              //FieldDeclarationNode[name(parent::*) != "RecordVariantItemNode"]/*[last()][@Image != ";"]
             ]]>
         </value>
       </property>
