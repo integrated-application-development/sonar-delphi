@@ -56,6 +56,22 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  public void testSortedEarlierInBlockLineShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("function MyFunc: Boolean;")
+            .appendImpl("begin")
+            .appendImpl("  List.Sorted := True;")
+            .appendImpl("  Result := True;")
+            .appendImpl("  List.Duplicates := dupError;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
+  }
+
+  @Test
   public void testUnsortedShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
@@ -91,7 +107,6 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
             .appendImpl("begin")
-            .appendImpl("  List.Sorted := True;")
             .appendImpl("  List.Sorted := False;")
             .appendImpl("  List.Duplicates := dupError;")
             .appendImpl("end;");
@@ -100,7 +115,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
 
     assertIssues()
         .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("DuplicatesRule", builder.getOffset() + 5));
+        .areExactly(1, ruleKeyAtLine("DuplicatesRule", builder.getOffset() + 4));
   }
 
   @Test

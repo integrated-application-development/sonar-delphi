@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Exclude methods implementing interfaces in `EmptyMethodRule`.
 - Exclude cast expressions where both operands have unknown types in `RedundantCastRule`.
 - Exclude record variant sections in `NoSemiAfterFieldDeclarationRule`.
+- Allow `Sorted := True` to be anywhere in the same block (instead of only on adjacent lines) in
+  `DuplicatesRule`.
 
 ### Fixed
 
