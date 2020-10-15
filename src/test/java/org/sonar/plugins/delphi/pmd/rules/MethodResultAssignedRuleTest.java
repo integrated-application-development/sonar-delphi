@@ -312,4 +312,23 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
 
     assertIssues().areNot(ruleKey("MethodResultAssignedRule"));
   }
+
+  @Test
+  public void testMethodStubWithVariableAssignmentsShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("function Foo(out Bar: TObject): TObject;")
+            .appendImpl("var")
+            .appendImpl("  Baz: Integer;")
+            .appendImpl("begin")
+            .appendImpl("  Baz := 5;")
+            .appendImpl("  Bar := nil;")
+            .appendImpl("  raise Exception.Create('Foo not supported');")
+            .appendImpl("  Bar;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("MethodResultAssignedRule"));
+  }
 }

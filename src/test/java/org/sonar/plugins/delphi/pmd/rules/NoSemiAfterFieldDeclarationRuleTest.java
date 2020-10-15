@@ -36,4 +36,20 @@ public class NoSemiAfterFieldDeclarationRuleTest extends BasePmdRuleTest {
         .areExactly(
             1, ruleKeyAtLine("NoSemiAfterFieldDeclarationRule", builder.getOffsetDecl() + 3));
   }
+
+  @Test
+  public void testFieldDeclarationsWithoutSemicolonsInRecordVariantSectionsShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TType = record")
+            .appendDecl("    case Tag: Integer of")
+            .appendDecl("      0: (ByteField: Byte);")
+            .appendDecl("      1: (ShortIntField: ShortInt);")
+            .appendDecl("  end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
+  }
 }

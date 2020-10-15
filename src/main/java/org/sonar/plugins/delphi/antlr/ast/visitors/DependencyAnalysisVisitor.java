@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.antlr.ast.visitors;
 
 import javax.annotation.Nullable;
+import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.sonar.plugins.delphi.antlr.ast.node.ArrayAccessorNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FinalizationSectionNode;
@@ -117,7 +118,7 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
     // Type alias references indicate a dependency on the aliased type declaration
     handleTypeAliases(declaration, data);
 
-    // Inline method dependencies should be included in the callsite's dependencies
+    // Inline method dependencies should be included in the call site's dependencies
     // Inline methods cannot be expanded by the compiler unless these dependencies are present
     handleInlineMethods(declaration, data);
 
@@ -225,9 +226,18 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
   }
 
   private static boolean isNameStart(NameReferenceNode nameNode) {
-    return !(nameNode.jjtGetParent() instanceof NameReferenceNode)
-        && !(nameNode.jjtGetParent() instanceof PrimaryExpressionNode
-            && nameNode.jjtGetChildIndex() > 0);
+    Node parent = nameNode.jjtGetParent();
+    if (parent instanceof NameReferenceNode) {
+      return false;
+    }
+
+    if (parent instanceof PrimaryExpressionNode) {
+      PrimaryExpressionNode primaryExpression = (PrimaryExpressionNode) parent;
+      int nameStartIndex = primaryExpression.isInheritedCall() ? 1 : 0;
+      return nameNode.jjtGetChildIndex() == nameStartIndex;
+    }
+
+    return true;
   }
 
   private static boolean isFromHelperType(NameDeclaration declaration) {

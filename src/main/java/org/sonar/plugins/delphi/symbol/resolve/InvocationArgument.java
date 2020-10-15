@@ -60,10 +60,9 @@ public class InvocationArgument implements Typed {
 
   boolean isImplicitlyConvertibleToNilPointer() {
     LiteralNode literal = expression.extractLiteral();
-    if (literal != null && (literal.isIntegerLiteral() || literal.isHexadecimalLiteral())) {
-      return literal.getValueAsInt() == 0;
-    }
-    return false;
+    return literal != null
+        && (literal.isIntegerLiteral() || literal.isHexadecimalLiteral())
+        && literal.getValueAsInt() == 0;
   }
 
   Type findMethodReferenceType(Type parameterType) {

@@ -60,6 +60,7 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.SHORTINT;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.SMALLINT;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicPointer.PANSICHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicPointer.PCHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicPointer.POINTER;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSICHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSISTRING;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
@@ -79,6 +80,7 @@ import org.sonar.plugins.delphi.type.DelphiArrayType;
 import org.sonar.plugins.delphi.type.DelphiEnumerationType;
 import org.sonar.plugins.delphi.type.DelphiFileType;
 import org.sonar.plugins.delphi.type.DelphiSetType;
+import org.sonar.plugins.delphi.type.DelphiSubrangeType;
 import org.sonar.plugins.delphi.type.DelphiTypeType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ArrayConstructorType;
@@ -208,7 +210,10 @@ public class TypeComparerTest {
   public void testToEnum() {
     EnumType enumType = enumeration("Enum1", unknownScope());
     EnumType enumType2 = enumeration("Enum2", unknownScope());
+    SubrangeType subrangeType = DelphiSubrangeType.subRange("Subrange", enumType);
 
+    compare(subrangeType, enumType, CONVERT_LEVEL_1);
+    compare(subrangeType, enumType2, INCOMPATIBLE_TYPES);
     compare(enumType, enumType2, INCOMPATIBLE_TYPES);
     compare(VARIANT.type, enumType, CONVERT_LEVEL_1);
     compare(INTEGER.type, enumType, INCOMPATIBLE_TYPES);
@@ -277,6 +282,7 @@ public class TypeComparerTest {
   @Test
   public void testArrayConstructorToArray() {
     CollectionType toDynamicArray = dynamicArray(null, INTEGER.type);
+    CollectionType toDynamicPointerArray = dynamicArray(null, POINTER.type);
     CollectionType toIncompatibleDynamicArray =
         dynamicArray(null, TypeMocker.struct("Test", CLASS));
     CollectionType toFixedArray = fixedArray(null, INTEGER.type);
@@ -291,14 +297,15 @@ public class TypeComparerTest {
     ArrayConstructorType heterogeneousConstructor =
         arrayConstructor(List.of(INTEGER.type, UNICODESTRING.type, BOOLEAN.type));
 
-    compare(emptyConstructor, toDynamicArray, CONVERT_LEVEL_2);
+    compare(emptyConstructor, toDynamicArray, CONVERT_LEVEL_3);
     compare(emptyConstructor, toOpenArray, CONVERT_LEVEL_1);
     compare(emptyConstructor, toFixedArray, INCOMPATIBLE_TYPES);
 
-    compare(byteConstructor, toDynamicArray, CONVERT_LEVEL_3);
+    compare(byteConstructor, toDynamicArray, CONVERT_LEVEL_4);
     compare(byteConstructor, toOpenArray, CONVERT_LEVEL_2);
 
-    compare(integerConstructor, toDynamicArray, CONVERT_LEVEL_2);
+    compare(integerConstructor, toDynamicPointerArray, CONVERT_LEVEL_5);
+    compare(integerConstructor, toDynamicArray, CONVERT_LEVEL_3);
     compare(integerConstructor, toOpenArray, CONVERT_LEVEL_1);
 
     compare(stringConstructor, toDynamicArray, INCOMPATIBLE_TYPES);
@@ -315,22 +322,21 @@ public class TypeComparerTest {
 
   @Test
   public void testArrayConstructorToSet() {
-    CollectionType toSet = set(INTEGER.type);
+    CollectionType byteSet = set(BYTE.type);
+    CollectionType classSet = set(TypeMocker.struct("Foo", CLASS));
 
     ArrayConstructorType emptyConstructor = arrayConstructor(emptyList());
     ArrayConstructorType byteConstructor = arrayConstructor(List.of(BYTE.type));
     ArrayConstructorType integerConstructor = arrayConstructor(List.of(INTEGER.type));
     ArrayConstructorType stringConstructor = arrayConstructor(List.of(UNICODESTRING.type));
     ArrayConstructorType variantConstructor = arrayConstructor(List.of(VARIANT.type));
-    ArrayConstructorType heterogeneousConstructor =
-        arrayConstructor(List.of(INTEGER.type, UNICODESTRING.type, BOOLEAN.type));
 
-    compare(emptyConstructor, toSet, CONVERT_LEVEL_1);
-    compare(byteConstructor, toSet, CONVERT_LEVEL_1);
-    compare(integerConstructor, toSet, CONVERT_LEVEL_1);
-    compare(stringConstructor, toSet, CONVERT_LEVEL_1);
-    compare(variantConstructor, toSet, CONVERT_LEVEL_1);
-    compare(heterogeneousConstructor, toSet, CONVERT_LEVEL_1);
+    compare(emptyConstructor, byteSet, CONVERT_LEVEL_2);
+    compare(byteConstructor, byteSet, CONVERT_LEVEL_2);
+    compare(integerConstructor, byteSet, CONVERT_LEVEL_5);
+    compare(variantConstructor, byteSet, CONVERT_LEVEL_6);
+    compare(variantConstructor, classSet, CONVERT_LEVEL_7);
+    compare(stringConstructor, byteSet, INCOMPATIBLE_TYPES);
   }
 
   @Test

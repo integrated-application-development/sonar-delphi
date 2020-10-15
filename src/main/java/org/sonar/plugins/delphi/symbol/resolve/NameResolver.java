@@ -449,9 +449,6 @@ public class NameResolver {
 
     GenerifiableDeclaration generifiable = (GenerifiableDeclaration) currentDeclaration;
     List<TypedDeclaration> typeParameters = generifiable.getTypeParameters();
-    if (typeParameters.size() != typeReferences.size()) {
-      return;
-    }
 
     for (int i = 0; i < typeParameters.size(); ++i) {
       TypedDeclaration declaration = typeParameters.get(i);
@@ -738,13 +735,21 @@ public class NameResolver {
   }
 
   private void handleArgumentList(ArgumentListNode node) {
+    if (handleExplicitArrayConstructorInvocation(node)) {
+      return;
+    }
+    disambiguateArguments(node.getArguments(), true);
+  }
+
+  private boolean handleExplicitArrayConstructorInvocation(ArgumentListNode node) {
     Node previous = node.jjtGetParent().jjtGetChild(node.jjtGetChildIndex() - 1);
     if (previous instanceof NameReferenceNode
         && isExplicitArrayConstructorInvocation(((NameReferenceNode) previous))) {
       updateType(((ClassReferenceType) currentType).classType());
-      return;
+      node.getArguments().forEach(NameResolutionUtils::resolve);
+      return true;
     }
-    disambiguateArguments(node.getArguments(), true);
+    return false;
   }
 
   private boolean handleHardTypeCast(List<ExpressionNode> argumentExpressions) {

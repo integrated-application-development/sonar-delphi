@@ -84,6 +84,14 @@ public class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  public void testRecordVariants() {
+    execute("RecordVariants.pas");
+    verifyUsages(14, 10, reference(33, 2));
+    verifyUsages(19, 10, reference(34, 2));
+    verifyUsages(24, 10, reference(35, 2));
+  }
+
+  @Test
   public void testInheritedInvocations() {
     execute("InheritedInvocations.pas");
     verifyUsages(7, 14, reference(38, 14), reference(50, 14));
@@ -163,7 +171,9 @@ public class DelphiSymbolTableExecutorTest {
         reference(44, 25),
         reference(45, 9),
         reference(46, 46),
-        reference(47, 14));
+        reference(47, 14),
+        reference(60, 14),
+        reference(68, 9));
     verifyUsages(15, 13, reference(46, 27));
     verifyUsages(24, 13, reference(44, 6));
     verifyUsages(25, 13, reference(46, 6));
@@ -181,7 +191,8 @@ public class DelphiSymbolTableExecutorTest {
   @Test
   public void testArrayConstructor() {
     execute("ArrayConstructor.pas");
-    verifyUsages(10, 10, reference(17, 2));
+    verifyUsages(10, 10, reference(17, 2), reference(27, 2));
+    verifyUsages(20, 9, reference(28, 4), reference(29, 4), reference(30, 4));
   }
 
   @Test

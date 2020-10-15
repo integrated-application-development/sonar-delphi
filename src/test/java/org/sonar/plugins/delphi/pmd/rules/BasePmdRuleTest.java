@@ -71,9 +71,8 @@ import org.sonar.plugins.delphi.utils.PmdLevelUtils;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 
 public abstract class BasePmdRuleTest {
-  private static final String ROOT_DIR_NAME = "/org/sonar/plugins/delphi/pmd";
-  private static final File ROOT_DIR = DelphiUtils.getResource(ROOT_DIR_NAME);
-  private static final String STANDARD_LIBRARY = "/org/sonar/plugins/delphi/standardLibrary";
+  protected static final File ROOT_DIR = DelphiUtils.getResource("/org/sonar/plugins/delphi/pmd");
+  protected static final String STANDARD_LIBRARY = "/org/sonar/plugins/delphi/standardLibrary";
 
   protected DelphiSensor sensor;
   private SensorContextTester sensorContext;

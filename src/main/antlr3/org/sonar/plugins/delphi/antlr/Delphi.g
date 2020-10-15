@@ -361,7 +361,10 @@ objectType                   : 'object'<ObjectTypeNode>^ classParent? visibility
                              ;                                                                 // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re192.html
 recordType                   : 'record'<RecordTypeNode>^ visibilitySection* recordVariantSection? 'end' ('align' intNum)?
                              ;
-recordVariantSection         : 'case'<RecordVariantSectionNode>^ (ident ':')? typeReference 'of' recordVariant+
+recordVariantSection         : 'case'<RecordVariantSectionNode>^ recordVariantTag 'of' recordVariant+
+                             ;
+recordVariantTag             : (nameDeclaration ':')? typeReference
+                             -> ^(TkRecordVariantTag<RecordVariantTagNode> nameDeclaration? typeReference)
                              ;
 recordVariant                : expressionList ':' '(' fieldDecl* recordVariantSection? ')' ';'?
                              -> ^(TkRecordVariantItem<RecordVariantItemNode> expressionList fieldDecl* recordVariantSection? ';'?)
@@ -1043,6 +1046,8 @@ TkClass                 : 'CLASS'
 TkRecord                : 'RECORD_TYPE'
                         ;
 TkRecordVariantItem     : 'RECORD_VARIANT_ITEM'
+                        ;
+TkRecordVariantTag      : 'RECORD_VARIANT_TAG'
                         ;
 TkRecordExpressionItem  : 'RECORD_EXPRESSION_ITEM'
                         ;

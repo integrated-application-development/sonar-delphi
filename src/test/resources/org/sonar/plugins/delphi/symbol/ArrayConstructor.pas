@@ -17,4 +17,19 @@ begin
   Test(TIntArray.Create(0, 1, 2, 3, 4, 5, 6));
 end;
 
+function GetInteger: Integer;
+begin
+  Result := 0;
+end;
+
+procedure TestNestedPrimaryExpressions;
+begin
+  Test(TIntArray.Create(
+    GetInteger,
+    GetInteger,
+    GetInteger
+  ));
+end;
+
+
 end.

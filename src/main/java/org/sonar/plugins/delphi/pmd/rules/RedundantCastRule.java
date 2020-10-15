@@ -25,7 +25,7 @@ public class RedundantCastRule extends AbstractDelphiRule {
       Type originalType = getOriginalType(binaryExpression.getLeft());
       Type castedType = getSoftCastedType(binaryExpression.getRight());
 
-      if (originalType.is(castedType)) {
+      if (originalType.is(castedType) && !originalType.isUnknown() && !castedType.isUnknown()) {
         addViolation(data, binaryExpression);
       }
     }

@@ -44,13 +44,13 @@ public enum IntrinsicMethod {
       method("AssignFile").parameters(untypedFile(), UNICODESTRING.type, WORD.type).required(2)),
   ATOMIC_CMP_EXCHANGE_INTEGER(
       method("AtomicCmpExchange")
-          .parameters(INTEGER.type, INTEGER.type, BOOLEAN.type)
-          .required(2)
+          .parameters(untypedType(), INTEGER.type, INTEGER.type, BOOLEAN.type)
+          .required(3)
           .returns(INTEGER.type)),
   ATOMIC_CMP_EXCHANGE_POINTER(
       method("AtomicCmpExchange")
-          .parameters(untypedPointer(), untypedPointer(), BOOLEAN.type)
-          .required(2)
+          .parameters(untypedType(), untypedPointer(), untypedPointer(), BOOLEAN.type)
+          .required(3)
           .returns(untypedPointer())),
   ATOMIC_DECREMENT(
       method("AtomicDecrement")
