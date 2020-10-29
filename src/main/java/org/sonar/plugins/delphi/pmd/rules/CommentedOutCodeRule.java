@@ -18,7 +18,7 @@ public class CommentedOutCodeRule extends AbstractDelphiRule {
   private static final String IDENTIFIER = "([A-Z]|_)([A-Z]|_|[0-9])*";
   private static final String PRIMARY_EXPRESSION =
       "(inherited)?\\s*" + IDENTIFIER + "(\\^|(\\.(" + IDENTIFIER + ")|<.+>|(\\[.*])|(\\(.*\\))))*";
-  private static final String ARGUMENT_LIST_EOL = "(\\(((\\(.*\\))|[^)])*\\s*,)\\s*$";
+  private static final String ARGUMENT_LIST_EOL = "((\\(((\\(.*\\))|[^)])*\\s*,)\\s*$)";
   private static final String COMMENT_OR_WHITESPACE = "(\\s|//.*|\\{(.*?)}|\\(\\*(.*?)\\*\\))";
 
   private static final String TYPE_DECLARATION_REGEX =
