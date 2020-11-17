@@ -23,7 +23,7 @@
 package org.sonar.plugins.delphi.surefire;
 
 import java.io.File;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
@@ -66,7 +66,7 @@ public class SurefireSensor implements Sensor {
 
   /** The actual sensor code. */
   @Override
-  public void execute(@NonNull SensorContext context) {
+  public void execute(@NotNull SensorContext context) {
     LOG.info("Delphi sensor execute...");
     String[] paths = configuration.getStringArray(SurefireUtils.SUREFIRE_REPORT_PATHS_PROPERTY);
 

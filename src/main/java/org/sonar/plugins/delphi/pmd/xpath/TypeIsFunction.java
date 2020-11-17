@@ -3,7 +3,6 @@ package org.sonar.plugins.delphi.pmd.xpath;
 import java.util.List;
 import net.sourceforge.pmd.lang.ast.Node;
 import org.jaxen.Context;
-import org.jaxen.Function;
 import org.jaxen.SimpleFunctionContext;
 import org.jaxen.XPathFunctionContext;
 import org.sonar.plugins.delphi.type.Type;
@@ -17,7 +16,7 @@ import org.sonar.plugins.delphi.type.Typed;
  *
  * @see <a href="bit.ly/TypeIsFunction">TypeIsFunction.java</a>
  */
-public class TypeIsFunction implements Function {
+public class TypeIsFunction extends AbstractFunction {
 
   public static void registerSelfInSimpleContext() {
     ((SimpleFunctionContext) XPathFunctionContext.getInstance())
@@ -25,7 +24,7 @@ public class TypeIsFunction implements Function {
   }
 
   @Override
-  public Object call(final Context context, final List args) {
+  public Object doCall(final Context context, final List<?> args) {
     if (args.size() != 1) {
       throw new IllegalArgumentException(
           "typeIs function takes a single String argument with a fully qualified type name.");

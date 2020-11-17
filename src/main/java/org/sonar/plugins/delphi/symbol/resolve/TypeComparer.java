@@ -51,7 +51,7 @@ class TypeComparer {
    * @param from The type we are comparing from
    * @param to The type we are comparing to
    * @return equality type
-   * @see <a href="http://bit.ly/compare_defs_ext"/>
+   * @see <a href="http://bit.ly/compare_defs_ext">compare_defs_ext</a>
    */
   static EqualityType compare(Type from, Type to) {
     if (from.is(to) && !from.isUntyped()) {

@@ -4,7 +4,7 @@ package org.sonar.plugins.delphi.symbol.resolve;
  * Based directly off of the tequaltype enum from the FreePascal compiler.
  *
  * <p>The order of this enum is from lowest to highest priority. Note: The ordinal values of this
- * enum are compared with > and <.
+ * enum are compared with {@code >} and {@code <}.
  *
  * @see <a href="http://bit.ly/sym_const_tequaltype">tequaltype</a>
  */

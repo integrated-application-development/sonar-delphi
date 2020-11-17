@@ -25,7 +25,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.SCOPE;
 
@@ -141,8 +141,8 @@ public class DelphiPmdViolationRecorderTest {
 
     violationRecorder.saveViolation(pmdViolation, mockContext);
 
-    verifyZeroInteractions(mockActiveRules);
-    verifyZeroInteractions(mockContext);
+    verifyNoMoreInteractions(mockActiveRules);
+    verifyNoMoreInteractions(mockContext);
   }
 
   @Test
@@ -166,8 +166,8 @@ public class DelphiPmdViolationRecorderTest {
 
     violationRecorder.saveViolation(pmdViolation, mockContext);
 
-    verifyZeroInteractions(mockActiveRules);
-    verifyZeroInteractions(mockContext);
+    verifyNoMoreInteractions(mockActiveRules);
+    verifyNoMoreInteractions(mockContext);
   }
 
   @Test
@@ -184,8 +184,8 @@ public class DelphiPmdViolationRecorderTest {
 
     violationRecorder.saveViolation(pmdViolation, mockContext);
 
-    verifyZeroInteractions(mockActiveRules);
-    verifyZeroInteractions(mockContext);
+    verifyNoMoreInteractions(mockActiveRules);
+    verifyNoMoreInteractions(mockContext);
   }
 
   @Test
@@ -197,8 +197,8 @@ public class DelphiPmdViolationRecorderTest {
     when(pmdViolation.isSuppressed()).thenReturn(true);
     violationRecorder.saveViolation(pmdViolation, mockContext);
 
-    verifyZeroInteractions(mockActiveRules);
-    verifyZeroInteractions(mockContext);
+    verifyNoMoreInteractions(mockActiveRules);
+    verifyNoMoreInteractions(mockContext);
   }
 
   @Test
@@ -235,7 +235,7 @@ public class DelphiPmdViolationRecorderTest {
     verify(mockActiveRules).find(expectedRuleKey1);
     verify(mockActiveRules).find(expectedRuleKey2);
     verify(spiedFs, never()).inputFile(any(FilePredicate.class));
-    verifyZeroInteractions(mockContext);
+    verifyNoMoreInteractions(mockContext);
   }
 
   private DefaultInputFile addToFileSystem(File file) {

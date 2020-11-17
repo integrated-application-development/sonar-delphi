@@ -2,7 +2,7 @@ package org.sonar.plugins.delphi.preprocessor.directive;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveType.ELSE;
 import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveType.ELSEIF;
 import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveType.ENDIF;
@@ -55,7 +55,7 @@ public class DirectivesTest {
     EndIfDirective elseBranch = new EndIfDirective(mock(Token.class), ENDIF);
     DelphiPreprocessor preprocessor = mock(DelphiPreprocessor.class);
     elseBranch.execute(preprocessor);
-    verifyZeroInteractions(preprocessor);
+    verifyNoMoreInteractions(preprocessor);
   }
 
   @Test

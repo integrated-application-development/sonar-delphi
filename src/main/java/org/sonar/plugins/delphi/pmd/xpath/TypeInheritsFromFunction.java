@@ -3,7 +3,6 @@ package org.sonar.plugins.delphi.pmd.xpath;
 import java.util.List;
 import net.sourceforge.pmd.lang.ast.Node;
 import org.jaxen.Context;
-import org.jaxen.Function;
 import org.jaxen.SimpleFunctionContext;
 import org.jaxen.XPathFunctionContext;
 import org.sonar.plugins.delphi.type.Type;
@@ -13,7 +12,7 @@ import org.sonar.plugins.delphi.type.Typed;
  * A custom XPath function that operates on Typed nodes. Returns true if the type inherits from a
  * specified type.
  */
-public class TypeInheritsFromFunction implements Function {
+public class TypeInheritsFromFunction extends AbstractFunction {
 
   public static void registerSelfInSimpleContext() {
     ((SimpleFunctionContext) XPathFunctionContext.getInstance())
@@ -21,7 +20,7 @@ public class TypeInheritsFromFunction implements Function {
   }
 
   @Override
-  public Object call(final Context context, final List args) {
+  public Object doCall(final Context context, final List<?> args) {
     if (args.size() != 1) {
       throw new IllegalArgumentException(
           "typeInheritsFrom function takes a single String argument with a fully qualified type "

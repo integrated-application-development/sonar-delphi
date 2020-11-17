@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -61,7 +61,7 @@ public class DelphiSensor implements Sensor {
 
   /** The actual sensor code. */
   @Override
-  public void execute(@NonNull SensorContext context) {
+  public void execute(@NotNull SensorContext context) {
     if (shouldExecuteOnProject()) {
       executor.setup();
       executeOnFiles(context);

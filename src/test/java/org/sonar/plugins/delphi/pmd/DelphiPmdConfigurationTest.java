@@ -23,7 +23,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
@@ -126,6 +126,6 @@ public class DelphiPmdConfigurationTest {
     Path reportFile = configuration.dumpXmlReport(new Report());
 
     assertThat(reportFile).isNull();
-    verifyZeroInteractions(fs);
+    verifyNoMoreInteractions(fs);
   }
 }
