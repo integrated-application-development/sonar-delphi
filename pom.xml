@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>sonar-delphi-plugin</artifactId>
   <version>0.26.0</version>
@@ -7,7 +7,6 @@
   <name>Sonar Delphi Plugin</name>
   <description>Code analyzer for Delphi</description>
   <inceptionYear>2011</inceptionYear>
-  <url>https://www.integradev.com.au/</url>
   <organization>
     <name>IntegraDev</name>
     <url>https://www.integradev.com.au/</url>
@@ -82,112 +81,85 @@
     </site>
   </distributionManagement>
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <sonar.pluginName>Delphi</sonar.pluginName>
     <sonar.pluginName>Delphi</sonar.pluginName>
     <sonar.pluginClass>org.sonar.plugins.delphi.DelphiPlugin</sonar.pluginClass>
-    <!--Jacoco properties-->
-    <jacoco.dataFile>${basedir}/target/jacoco/jacoco.exec</jacoco.dataFile>
-    <jacoco.outputDirectory>${basedir}/target/jacoco/report/</jacoco.outputDirectory>
     <jacoco.dataFile.it>${basedir}/target/jacoco/jacoco-it.exec</jacoco.dataFile.it>
     <jacoco.outputDirectory.it>${basedir}/target/jacoco/report-it/</jacoco.outputDirectory.it>
-    <!--Version Fields-->
+    <lint.flags>-serial,-processing,-classfile</lint.flags>
+    <errorprone.flags>-XepExcludedPaths:.*/generated-sources/.*</errorprone.flags>
+    <!--Dependency versions-->
     <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
     <sonar.version>7.9</sonar.version>
-    <sonarqube-smell-api.version>4.0.0</sonarqube-smell-api.version>
+    <sonar-analyzers-commons.version>1.12.0.632</sonar-analyzers-commons.version>
     <sonar-orchestrator.version>3.27.0.2172</sonar-orchestrator.version>
     <antlr-runtime.version>3.4</antlr-runtime.version>
-    <pmd.version>6.18.0</pmd.version>
     <java-surefire.version>5.13.0.18197</java-surefire.version>
-    <guava.version>28.1-jre</guava.version>
+    <pmd.version>6.18.0</pmd.version>
     <jdom.version>1.0</jdom.version>
     <jetbrains-annotations.version>17.0.0</jetbrains-annotations.version>
     <junit.version>4.12</junit.version>
-    <assertj.version>3.16.1</assertj.version>
-    <mockito.version>3.0.0</mockito.version>
-    <archunit.version>0.13.0</archunit.version>
-    <errorprone.version>2.4.0</errorprone.version>
-    <!--Maven plugins-->
+    <archunit.version>0.14.1</archunit.version>
+    <!--Plugin versions-->
     <antlr3-plugin.version>3.5.2</antlr3-plugin.version>
-    <jacoco-plugin.version>0.8.5</jacoco-plugin.version>
-    <surefire-plugin.version>2.22.0</surefire-plugin.version>
+    <failsafe-plugin.version>3.0.0-M5</failsafe-plugin.version>
     <sonar-packaging-plugin.version>1.19.0.397</sonar-packaging-plugin.version>
     <license-plugin.version>1.9.0</license-plugin.version>
-    <javadoc-plugin>3.1.0</javadoc-plugin>
-    <dependency-plugin.version>2.10</dependency-plugin.version>
-    <dependency-check-plugin.version>5.2.1</dependency-check-plugin.version>
-    <compiler-plugin.version>3.5.1</compiler-plugin.version>
     <build-helper-plugin.version>3.0.0</build-helper-plugin.version>
-    <fmt-maven-plugin.version>2.9</fmt-maven-plugin.version>
+    <replacer-plugin.version>1.5.3</replacer-plugin.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jacoco.coverageRequirement>0.9000</jacoco.coverageRequirement>
+    <jacoco.dataFile>${basedir}/target/jacoco/jacoco.exec</jacoco.dataFile>
+    <jacoco.outputDirectory>${basedir}/target/jacoco/report/</jacoco.outputDirectory>
+    <enforcer.mavenVersion>3.6.3</enforcer.mavenVersion>
+    <lombok.sourceDirectory>${project.basedir}/src/main/java</lombok.sourceDirectory>
+    <lombok.outputDirectory>${project.build.directory}/delombok</lombok.outputDirectory>
+    <javadoc.sourcepath>${project.basedir}/src/main/java</javadoc.sourcepath>
+    <lombok.version>1.18.16</lombok.version>
+    <sonarqube-smell-api.version>4.0.0</sonarqube-smell-api.version>
+    <javax.annotation-api.version>1.3.2</javax.annotation-api.version>
+    <guava.version>30.0-jre</guava.version>
+    <commons-lang.version>3.11</commons-lang.version>
+    <commons-io.version>2.8.0</commons-io.version>
+    <assertj.version>3.18.1</assertj.version>
+    <mockito.version>3.6.0</mockito.version>
+    <compiler-plugin.version>3.8.1</compiler-plugin.version>
+    <dependency-plugin.version>3.1.2</dependency-plugin.version>
+    <javadoc-plugin.version>3.2.0</javadoc-plugin.version>
+    <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
+    <jacoco-plugin.version>0.8.6</jacoco-plugin.version>
+    <dependency-check-plugin.version>6.0.3</dependency-check-plugin.version>
+    <jxr-plugin.version>3.0.0</jxr-plugin.version>
+    <errorprone.version>2.4.0</errorprone.version>
+    <project-info-reports-plugin.version>3.1.0</project-info-reports-plugin.version>
+    <versions-plugin.version>2.8.1</versions-plugin.version>
   </properties>
   <!-- this is important for sonar-packaging-maven-plugin -->
   <packaging>sonar-plugin</packaging>
   <dependencies>
-    <!-- Sonar-specific deps -->
     <dependency>
-      <groupId>org.sonarsource.sonarqube</groupId>
-      <artifactId>sonar-plugin-api</artifactId>
-      <version>${sonar.version}</version>
-      <scope>provided</scope>
+      <groupId>javax.annotation</groupId>
+      <artifactId>javax.annotation-api</artifactId>
+      <version>${javax.annotation-api.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.sonarsource.sonarqube</groupId>
-      <artifactId>sonar-ws</artifactId>
-      <version>${sonar.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.sonarsource.java</groupId>
-      <artifactId>java-surefire</artifactId>
-      <version>${java-surefire.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.qualinsight.plugins.sonarqube</groupId>
-      <artifactId>qualinsight-plugins-sonarqube-smell-api</artifactId>
-      <version>${sonarqube-smell-api.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.sonarsource.orchestrator</groupId>
-      <artifactId>sonar-orchestrator</artifactId>
-      <version>${sonar-orchestrator.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <!-- Plugin-specific deps -->
-    <dependency>
-      <groupId>org.antlr</groupId>
-      <artifactId>antlr-runtime</artifactId>
-      <version>${antlr-runtime.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>net.sourceforge.pmd</groupId>
-      <artifactId>pmd-core</artifactId>
-      <version>${pmd.version}</version>
-      <scope>compile</scope>
+      <groupId>com.google.errorprone</groupId>
+      <artifactId>error_prone_annotations</artifactId>
+      <version>${errorprone.version}</version>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <version>${guava.version}</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>jdom</groupId>
-      <artifactId>jdom</artifactId>
-      <version>${jdom.version}</version>
-      <scope>compile</scope>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${commons-lang.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.jetbrains</groupId>
-      <artifactId>annotations</artifactId>
-      <version>${jetbrains-annotations.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>${commons-io.version}</version>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
@@ -201,14 +173,191 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-plugin-api</artifactId>
+      <version>${sonar.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.sonarsource.analyzer-commons</groupId>
+      <artifactId>sonar-analyzer-commons</artifactId>
+      <version>${sonar-analyzers-commons.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.sonarsource.java</groupId>
+      <artifactId>java-surefire</artifactId>
+      <version>${java-surefire.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.qualinsight.plugins.sonarqube</groupId>
+      <artifactId>qualinsight-plugins-sonarqube-smell-api</artifactId>
+      <version>${sonarqube-smell-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr-runtime</artifactId>
+      <version>${antlr-runtime.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sourceforge.pmd</groupId>
+      <artifactId>pmd-core</artifactId>
+      <version>${pmd.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>jdom</groupId>
+      <artifactId>jdom</artifactId>
+      <version>${jdom.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jetbrains</groupId>
+      <artifactId>annotations</artifactId>
+      <version>${jetbrains-annotations.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>com.tngtech.archunit</groupId>
       <artifactId>archunit-junit4</artifactId>
       <version>${archunit.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-ws</artifactId>
+      <version>${sonar.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.sonarsource.orchestrator</groupId>
+      <artifactId>sonar-orchestrator</artifactId>
+      <version>${sonar-orchestrator.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.owasp</groupId>
+        <artifactId>dependency-check-maven</artifactId>
+        <version>${dependency-check-plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <configuration>
+              <formats>
+                <format>HTML</format>
+                <format>XML</format>
+              </formats>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>pre-integration-test</id>
+            <goals>
+              <goal>prepare-agent-integration</goal>
+            </goals>
+            <configuration>
+              <destFile>${jacoco.dataFile.it}</destFile>
+            </configuration>
+          </execution>
+          <execution>
+            <id>post-integration-test</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>report-integration</goal>
+            </goals>
+            <configuration>
+              <dataFile>${jacoco.dataFile.it}</dataFile>
+              <outputDirectory>${jacoco.outputDirectory.it}</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>default-prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+            <configuration>
+              <destFile>${jacoco.dataFile}</destFile>
+            </configuration>
+          </execution>
+          <execution>
+            <id>default-report</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <configuration>
+              <dataFile>${jacoco.dataFile}</dataFile>
+              <outputDirectory>${jacoco.outputDirectory}</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>jacoco-check</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <configuration>
+              <haltOnFailure>true</haltOnFailure>
+              <rules>
+                <rule>
+                  <element>BUNDLE</element>
+                  <limits>
+                    <limit>
+                      <counter>INSTRUCTION</counter>
+                      <value>COVEREDRATIO</value>
+                      <minimum>${jacoco.coverageRequirement}</minimum>
+                    </limit>
+                  </limits>
+                </rule>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <redirectTestOutputToFile>true</redirectTestOutputToFile>
+          <excludes>
+            <exclude>**/IntegrationTests.java</exclude>
+          </excludes>
+        </configuration>
+        <version>${surefire-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>${failsafe-plugin.version}</version>
+        <configuration>
+          <redirectTestOutputToFile>true</redirectTestOutputToFile>
+          <includes>
+            <include>**/IntegrationTests.java</include>
+          </includes>
+          <failIfNoTests>true</failIfNoTests>
+          <argLine>@{argLine} -Dhttps.proxyHost=${env.HTTP_PROXY_SERVER} -Dhttps.proxyPort=${env.HTTP_PROXY_PORT}</argLine>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
         <artifactId>sonar-packaging-maven-plugin</artifactId>
@@ -232,159 +381,11 @@
         <groupId>org.antlr</groupId>
         <artifactId>antlr3-maven-plugin</artifactId>
         <version>${antlr3-plugin.version}</version>
-        <configuration>
-          <printGrammar>false</printGrammar>
-          <verbose>true</verbose>
-        </configuration>
         <executions>
           <execution>
             <goals>
               <goal>antlr</goal>
             </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>${javadoc-plugin}</version>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <source>11</source>
-          <javadocExecutable>${env.JAVA_HOME}/bin/javadoc.exe</javadocExecutable>
-          <quiet>true</quiet>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>${dependency-plugin.version}</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${compiler-plugin.version}</version>
-        <configuration>
-          <source>11</source>
-          <target>11</target>
-          <showWarnings>true</showWarnings>
-          <showDeprecation>true</showDeprecation>
-          <compilerArgs>
-            <arg>-XDcompilePolicy=simple</arg>
-            <arg>-Werror</arg>
-            <arg>-Xlint:all,-serial,-path,-processing,-rawtypes,-cast,-classfile</arg>
-            <arg>-Xplugin:ErrorProne -XepDisableWarningsInGeneratedCode -XepExcludedPaths:.*/Delphi(Lexer|Parser).java</arg>
-          </compilerArgs>
-          <annotationProcessorPaths>
-            <path>
-              <groupId>com.google.errorprone</groupId>
-              <artifactId>error_prone_core</artifactId>
-              <version>${errorprone.version}</version>
-            </path>
-          </annotationProcessorPaths>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <version>${jacoco-plugin.version}</version>
-        <executions>
-          <execution>
-            <id>pre-unit-test</id>
-            <goals>
-              <goal>prepare-agent</goal>
-            </goals>
-            <configuration>
-              <destFile>${jacoco.dataFile}</destFile>
-            </configuration>
-          </execution>
-          <execution>
-            <id>post-unit-test</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>report</goal>
-            </goals>
-            <configuration>
-              <dataFile>${jacoco.dataFile}</dataFile>
-              <outputDirectory>${jacoco.outputDirectory}</outputDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>pre-integration-test</id>
-            <goals>
-              <goal>prepare-agent-integration</goal>
-            </goals>
-            <configuration>
-              <destFile>${jacoco.dataFile.it}</destFile>
-            </configuration>
-          </execution>
-          <execution>
-            <id>post-integration-test</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>report-integration</goal>
-            </goals>
-            <configuration>
-              <dataFile>${jacoco.dataFile.it}</dataFile>
-              <outputDirectory>${jacoco.outputDirectory.it}</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>${surefire-plugin.version}</version>
-        <configuration>
-          <redirectTestOutputToFile>true</redirectTestOutputToFile>
-          <excludes>
-            <exclude>**/IntegrationTests.java</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
-        <version>3.0.0-M3</version>
-        <configuration>
-          <redirectTestOutputToFile>true</redirectTestOutputToFile>
-          <includes>
-            <include>**/IntegrationTests.java</include>
-          </includes>
-          <failIfNoTests>true</failIfNoTests>
-          <argLine>@{argLine} -Dhttps.proxyHost=${env.HTTP_PROXY_SERVER} -Dhttps.proxyPort=${env.HTTP_PROXY_PORT}</argLine>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>integration-test</goal>
-              <goal>verify</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.owasp</groupId>
-        <artifactId>dependency-check-maven</artifactId>
-        <version>${dependency-check-plugin.version}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>check</goal>
-            </goals>
-            <configuration>
-              <formats>
-                <format>HTML</format>
-                <format>XML</format>
-              </formats>
-            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -420,22 +421,125 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>com.coveo</groupId>
-        <artifactId>fmt-maven-plugin</artifactId>
-        <version>${fmt-maven-plugin.version}</version>
+        <groupId>com.google.code.maven-replacer-plugin</groupId>
+        <artifactId>replacer</artifactId>
+        <version>${replacer-plugin.version}</version>
         <executions>
           <execution>
+            <phase>process-sources</phase>
             <goals>
-              <goal>format</goal>
+              <goal>replace</goal>
             </goals>
-            <configuration>
-              <additionalSourceDirectories>
-                <param>${project.basedir}/src/it/java</param>
-              </additionalSourceDirectories>
-            </configuration>
           </execution>
         </executions>
+        <configuration>
+          <includes>
+            <include>${project.build.directory}/generated-sources/antlr3/org/sonar/plugins/delphi/antlr/DelphiLexer.java</include>
+            <include>${project.build.directory}/generated-sources/antlr3/org/sonar/plugins/delphi/antlr/DelphiParser.java</include>
+          </includes>
+          <regexFlags>MULTILINE</regexFlags>
+          <replacements>
+            <replacement>
+              <token>^@SuppressWarnings\("all"\)</token>
+              <value>@SuppressWarnings({"cast","rawtypes","unchecked"}) @javax.annotation.processing.Generated("ANTLR")</value>
+            </replacement>
+          </replacements>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${compiler-plugin.version}</version>
+        <configuration>
+          <source>11</source>
+          <target>11</target>
+          <showWarnings>true</showWarnings>
+          <showDeprecation>true</showDeprecation>
+          <compilerArgs>
+            <arg>-XDcompilePolicy=simple</arg>
+            <arg>-Werror</arg>
+            <arg>-Xlint:all,${lint.flags}</arg>
+            <arg>-Xplugin:ErrorProne ${errorprone.flags}</arg>
+          </compilerArgs>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${lombok.version}</version>
+            </path>
+            <path>
+              <groupId>com.google.errorprone</groupId>
+              <artifactId>error_prone_core</artifactId>
+              <version>${errorprone.version}</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
       </plugin>
     </plugins>
   </build>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>${project-info-reports-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>aggregate-no-fork</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+        <version>${javadoc-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>${versions-plugin.version}</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>dependency-updates-report</report>
+              <report>plugin-updates-report</report>
+              <report>property-updates-report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>analyze-report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+        <version>${dependency-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>${jxr-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>${surefire-plugin.version}</version>
+        <configuration>
+          <aggregate>true</aggregate>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco-plugin.version}</version>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>

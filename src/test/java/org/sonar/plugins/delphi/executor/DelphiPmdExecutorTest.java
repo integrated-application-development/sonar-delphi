@@ -11,7 +11,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.BASE_EFFORT;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.SCOPE;
@@ -136,7 +136,7 @@ public class DelphiPmdExecutorTest {
     executor.complete();
 
     verify(violationRecorder, never()).saveViolation(any(DelphiRuleViolation.class), eq(context));
-    verifyZeroInteractions(context);
+    verifyNoMoreInteractions(context);
   }
 
   @Test
