@@ -5,10 +5,13 @@ import net.sourceforge.pmd.lang.ast.Node;
 import org.sonar.plugins.delphi.antlr.ast.node.ArgumentListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodParametersNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
+import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
+import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Typed;
 
 public class EmptyBracketsRule extends AbstractDelphiRule {
+  private static final String SYSTEM_ASSIGNED_IMAGE = "System.Assigned";
 
   @Override
   public RuleContext visit(MethodParametersNode parameters, RuleContext data) {
@@ -22,7 +25,7 @@ public class EmptyBracketsRule extends AbstractDelphiRule {
   public RuleContext visit(ArgumentListNode arguments, RuleContext data) {
     if (arguments.isEmpty()
         && !isExplicitArrayConstructorInvocation(arguments)
-        && !isProcVarInvocation(arguments)) {
+        && !isRequiredToDistinguishProceduralFromReturn(arguments)) {
       addViolation(data, arguments);
     }
     return super.visit(arguments, data);
@@ -34,6 +37,10 @@ public class EmptyBracketsRule extends AbstractDelphiRule {
         && ((NameReferenceNode) previous).isExplicitArrayConstructorInvocation();
   }
 
+  private static boolean isRequiredToDistinguishProceduralFromReturn(ArgumentListNode arguments) {
+    return isProcVarInvocation(arguments) || isPartOfSystemAssignedArgumentExpression(arguments);
+  }
+
   private static boolean isProcVarInvocation(ArgumentListNode arguments) {
     Node previous = arguments.jjtGetParent().jjtGetChild(arguments.jjtGetChildIndex() - 1);
     if (previous instanceof Typed) {
@@ -41,5 +48,23 @@ public class EmptyBracketsRule extends AbstractDelphiRule {
       return type.isProcedural() && !type.isMethod();
     }
     return true;
+  }
+
+  private static boolean isPartOfSystemAssignedArgumentExpression(ArgumentListNode arguments) {
+    Node parent = arguments.jjtGetParent();
+    if (parent instanceof PrimaryExpressionNode) {
+      Node grandparent = parent.jjtGetParent();
+      if (grandparent instanceof ArgumentListNode) {
+        Node prev = grandparent.jjtGetParent().jjtGetChild(grandparent.jjtGetChildIndex() - 1);
+        if (prev instanceof NameReferenceNode) {
+          var declaration = ((NameReferenceNode) prev).getLastName().getNameDeclaration();
+          return declaration instanceof MethodNameDeclaration
+              && ((MethodNameDeclaration) declaration)
+                  .fullyQualifiedName()
+                  .equals(SYSTEM_ASSIGNED_IMAGE);
+        }
+      }
+    }
+    return false;
   }
 }

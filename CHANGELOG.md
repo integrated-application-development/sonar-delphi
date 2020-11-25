@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Configurable `prefixes` parameter for the various naming convention rules.
 
+### Changed
+
+- Exclude `System.Assigned` arguments in `EmptyBracketsRule`.
+
 ## [0.26.0] - 2020-10-15
 
 ### Added
