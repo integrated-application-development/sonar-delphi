@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Exclude `System.Assigned` arguments in `EmptyBracketsRule`.
 
+### Fixed
+
+- Preprocessor includes referenced via absolute paths would not resolve correctly.
+
 ## [0.26.0] - 2020-10-15
 
 ### Added

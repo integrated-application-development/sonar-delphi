@@ -131,8 +131,11 @@ public class DelphiPreprocessor {
   public void resolveInclude(Token insertionToken, String includeFilePath) {
     includeFilePath = includeFilePath.replace("*", getBaseName(lexer.getSourceName()));
 
-    Path currentPath = Path.of(lexer.getSourceName()).getParent();
-    Path includeFile = Path.of(currentPath.toString(), includeFilePath);
+    String currentParentPath = Path.of(lexer.getSourceName()).getParent().toString();
+    Path includeFile = Path.of(includeFilePath);
+    if (!includeFile.isAbsolute()) {
+      includeFile = Path.of(currentParentPath, includeFilePath);
+    }
 
     String includeFileName = includeFile.getFileName().toString();
     Path includePath = includeFile.getParent();
