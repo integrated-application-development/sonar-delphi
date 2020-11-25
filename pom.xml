@@ -103,10 +103,13 @@
     <pmd.version>6.18.0</pmd.version>
     <jdom.version>1.0</jdom.version>
     <jetbrains-annotations.version>17.0.0</jetbrains-annotations.version>
-    <junit.version>4.12</junit.version>
+    <junit-platform.version>1.7.0</junit-platform.version>
     <archunit.version>0.14.1</archunit.version>
-    <!--Plugin versions-->
+    <!--Maven plugins-->
     <antlr3-plugin.version>3.5.2</antlr3-plugin.version>
+    <jacoco-plugin.version>0.8.5</jacoco-plugin.version>
+    <!-- NOTE: Using Surefire M4 because M5 fails to find tests when surefire-platform-runner is present -->
+    <surefire-plugin.version>3.0.0-M4</surefire-plugin.version>
     <failsafe-plugin.version>3.0.0-M5</failsafe-plugin.version>
     <sonar-packaging-plugin.version>1.19.0.397</sonar-packaging-plugin.version>
     <license-plugin.version>1.9.0</license-plugin.version>
@@ -135,6 +138,7 @@
     <guava.version>30.0-jre</guava.version>
     <commons-lang.version>3.11</commons-lang.version>
     <commons-io.version>2.8.0</commons-io.version>
+    <junit.version>5.7.0</junit.version>
     <assertj.version>3.18.1</assertj.version>
     <mockito.version>3.6.28</mockito.version>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
@@ -142,8 +146,6 @@
     <dependency-plugin.version>3.1.2</dependency-plugin.version>
     <javadoc-plugin.version>3.2.0</javadoc-plugin.version>
     <site-plugin.version>3.9.1</site-plugin.version>
-    <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
-    <jacoco-plugin.version>0.8.6</jacoco-plugin.version>
     <dependency-check-plugin.version>6.0.3</dependency-check-plugin.version>
     <jxr-plugin.version>3.0.0</jxr-plugin.version>
     <errorprone.version>2.4.0</errorprone.version>
@@ -177,6 +179,12 @@
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>${commons-io.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
@@ -231,14 +239,19 @@
       <version>${jetbrains-annotations.version}</version>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
       <version>${junit.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-runner</artifactId>
+      <version>${junit-platform.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.tngtech.archunit</groupId>
-      <artifactId>archunit-junit4</artifactId>
+      <artifactId>archunit-junit5</artifactId>
       <version>${archunit.version}</version>
       <scope>test</scope>
     </dependency>
@@ -252,7 +265,6 @@
       <groupId>org.sonarsource.orchestrator</groupId>
       <artifactId>sonar-orchestrator</artifactId>
       <version>${sonar-orchestrator.version}</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>
@@ -349,13 +361,13 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
+        <version>${surefire-plugin.version}</version>
         <configuration>
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
           <excludes>
-            <exclude>**/IntegrationTests.java</exclude>
+            <exclude>**/IntegrationTestSuite.java</exclude>
           </excludes>
         </configuration>
-        <version>${surefire-plugin.version}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -364,7 +376,7 @@
         <configuration>
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
           <includes>
-            <include>**/IntegrationTests.java</include>
+            <include>**/IntegrationTestSuite.java</include>
           </includes>
           <failIfNoTests>true</failIfNoTests>
           <argLine>@{argLine} -Dhttps.proxyHost=${env.HTTP_PROXY_SERVER} -Dhttps.proxyPort=${env.HTTP_PROXY_PORT}</argLine>
