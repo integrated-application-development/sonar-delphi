@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Preprocessor includes referenced via absolute paths would not resolve correctly.
+- Obscure `ClassCastException` during name resolution.
 
 ## [0.26.0] - 2020-10-15
 
