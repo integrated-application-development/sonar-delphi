@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.27.0] - 2020-11-26
+
 ### Added
 
 - Configurable `prefixes` parameter for the various naming convention rules.
@@ -627,7 +629,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.26.0...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.27.0...HEAD
+[0.27.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.26.0...v0.27.0
 [0.26.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.25.0...v0.26.0
 [0.25.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.24.0...v0.25.0
 [0.24.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.23.1...v0.24.0
