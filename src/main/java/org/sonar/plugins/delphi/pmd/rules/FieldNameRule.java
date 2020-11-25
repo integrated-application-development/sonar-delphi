@@ -18,19 +18,30 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import java.util.List;
 import net.sourceforge.pmd.RuleContext;
+import net.sourceforge.pmd.properties.PropertyDescriptor;
+import net.sourceforge.pmd.properties.PropertyFactory;
 import org.sonar.plugins.delphi.antlr.ast.node.FieldDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 import org.sonar.plugins.delphi.utils.NameConventionUtils;
 
 public class FieldNameRule extends AbstractDelphiRule {
-  private static final String FIELD_PREFIX = "F";
+  private static final PropertyDescriptor<List<String>> PREFIXES =
+      PropertyFactory.stringListProperty("prefixes")
+          .desc("If defined, field names must begin with one of these prefixes.")
+          .defaultValue(List.of("F"))
+          .build();
+
+  public FieldNameRule() {
+    definePropertyDescriptor(PREFIXES);
+  }
 
   @Override
   public RuleContext visit(FieldDeclarationNode field, RuleContext data) {
     if (field.isPrivate() || field.isProtected()) {
       for (NameDeclarationNode identifier : field.getDeclarationList().getDeclarations()) {
-        if (!NameConventionUtils.compliesWithPrefix(identifier.getImage(), FIELD_PREFIX)) {
+        if (!NameConventionUtils.compliesWithPrefix(identifier.getImage(), getProperty(PREFIXES))) {
           addViolation(data, identifier);
         }
       }

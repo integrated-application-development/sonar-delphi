@@ -155,12 +155,12 @@ public class MemoryManagementRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
-            .appendDecl("  EException = class(Exception)")
+            .appendDecl("  ESpookyError = class(Exception)")
             .appendDecl("    constructor Create;")
             .appendDecl("  end;")
             .appendImpl("procedure Test;")
             .appendImpl("begin")
-            .appendImpl("  raise EException.Create;")
+            .appendImpl("  raise ESpookyError.Create;")
             .appendImpl("end;");
 
     execute(builder);

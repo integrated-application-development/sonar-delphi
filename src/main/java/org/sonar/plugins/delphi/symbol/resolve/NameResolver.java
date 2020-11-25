@@ -967,6 +967,7 @@ public class NameResolver {
   }
 
   void disambiguateIsClassInvocable(boolean isClassInvocable) {
+    disambiguateInvocable();
     declarations.removeIf(
         declaration -> ((Invocable) declaration).isClassInvocable() != isClassInvocable);
   }

@@ -18,18 +18,32 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import com.google.common.collect.Iterables;
+import java.util.List;
 import net.sourceforge.pmd.RuleContext;
+import net.sourceforge.pmd.properties.PropertyDescriptor;
+import net.sourceforge.pmd.properties.PropertyFactory;
 import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnitDeclarationNode;
 import org.sonar.plugins.delphi.utils.NameConventionUtils;
 
 public class UnitNameRule extends AbstractDelphiRule {
+  public static final PropertyDescriptor<List<String>> PREFIXES =
+      PropertyFactory.stringListProperty("prefixes")
+          .desc("If defined, unit names must begin with one of these prefixes.")
+          .emptyDefaultValue()
+          .build();
+
+  public UnitNameRule() {
+    definePropertyDescriptor(PREFIXES);
+  }
+
   @Override
   public RuleContext visit(UnitDeclarationNode unit, RuleContext data) {
-    unit.getNameNode().findChildrenOfType(IdentifierNode.class).stream()
-        .filter(ident -> !NameConventionUtils.compliesWithPascalCase(ident.getImage()))
-        .forEach(ident -> addViolation(data, ident));
-
+    var node = Iterables.getLast(unit.getNameNode().findChildrenOfType(IdentifierNode.class));
+    if (!NameConventionUtils.compliesWithPrefix(node.getImage(), getProperty(PREFIXES))) {
+      addViolation(data, node);
+    }
     return data;
   }
 }

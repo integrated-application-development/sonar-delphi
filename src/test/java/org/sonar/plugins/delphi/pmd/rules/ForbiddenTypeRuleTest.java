@@ -9,8 +9,8 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class ForbiddenTypeRuleTest extends BasePmdRuleTest {
-  private static final String UNIT_NAME = "TestUnits";
-  private static final String FORBIDDEN_TYPES = "TestUnits.TFoo|TestUnits.TFoo.TBar";
+  private static final String UNIT_NAME = "TestUnit";
+  private static final String FORBIDDEN_TYPES = "TestUnit.TFoo|TestUnit.TFoo.TBar";
 
   @Before
   public void setup() {

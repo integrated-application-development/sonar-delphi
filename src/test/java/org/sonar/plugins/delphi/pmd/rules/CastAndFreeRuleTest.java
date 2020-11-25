@@ -67,7 +67,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
             .appendDecl("end;")
             .appendImpl("procedure Foo(List: TList);")
             .appendImpl("begin")
-            .appendImpl("  (TObject(List[0])).Free;")
+            .appendImpl("  (TList(List[0])).Free;")
             .appendImpl("  FreeAndNil(TObject(List[0]));")
             .appendImpl("end;");
 

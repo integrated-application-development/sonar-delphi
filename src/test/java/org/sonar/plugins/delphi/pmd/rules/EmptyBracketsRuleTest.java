@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.Test;
@@ -105,5 +106,25 @@ public class EmptyBracketsRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues().isEmpty();
+  }
+
+  @Test
+  public void testAssignedArgumentShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("function Foo: TObject;")
+            .appendImpl("begin")
+            .appendImpl("  Result := TObject.Create;")
+            .appendImpl("end;")
+            .appendImpl("")
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  Result := Assigned(Foo());")
+            .appendImpl("  Result := System.Assigned(Foo());")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("EmptyBracketsRule"));
   }
 }

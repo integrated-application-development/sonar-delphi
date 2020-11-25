@@ -24,7 +24,7 @@ package org.sonar.plugins.delphi.utils.builders;
 
 public class DelphiTestUnitBuilder extends DelphiTestFileBuilder<DelphiTestUnitBuilder> {
 
-  private String unitName = "TestUnits";
+  private String unitName = "Test";
 
   @Override
   protected DelphiTestUnitBuilder getThis() {
