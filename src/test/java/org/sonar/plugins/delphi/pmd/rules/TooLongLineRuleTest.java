@@ -40,22 +40,6 @@ public class TooLongLineRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTooLongLineInTestCodeShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure TTestSuite_TooLongLine.Test;")
-            .appendImpl("begin")
-            .appendImpl(
-                "  Assert(FSomeField.SomeProperty.SomeFunction, 'This assertion message is running"
-                    + " a little long...');")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().isEmpty();
-  }
-
-  @Test
   public void testTrailingWhitespaceLineShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()

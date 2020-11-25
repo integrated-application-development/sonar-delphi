@@ -202,7 +202,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   public void testEmptyHandlerInTestCodeShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .unitName("Tests")
+            .unitName(TEST_UNIT)
             .appendDecl("type")
             .appendDecl("  TTestSuite = class(TObject)")
             .appendDecl("    procedure Test;")
@@ -225,7 +225,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   public void testNestedEmptyHandlerInTestCodeShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .unitName("Tests")
+            .unitName(TEST_UNIT)
             .appendDecl("type")
             .appendDecl("  TTestSuite = class(TObject)")
             .appendDecl("    procedure Test;")
@@ -237,7 +237,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
             .appendImpl("  try")
             .appendImpl("    ThrowException;")
             .appendImpl("  except")
-            .appendImpl("    on E:ESpookyError do begin")
+            .appendImpl("    on E: ESpookyError do begin")
             .appendImpl("      // Do nothing")
             .appendImpl("    end;")
             .appendImpl("  end;")
@@ -245,7 +245,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
             .appendImpl("    try")
             .appendImpl("      ThrowException;")
             .appendImpl("    except")
-            .appendImpl("      on E:ESpookyError do begin")
+            .appendImpl("      on E: ESpookyError do begin")
             .appendImpl("        // Do nothing")
             .appendImpl("      end;")
             .appendImpl("    end;")

@@ -70,7 +70,7 @@ public class StringLiteralRegexRuleTest extends BasePmdRuleTest {
   public void testMatchingStringInTestMethodShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .unitName("Tests")
+            .unitName(TEST_UNIT)
             .appendDecl("type")
             .appendDecl("  TTestSuite = class(TObject)")
             .appendDecl("    procedure TestWithHardcodedIDRef;")
@@ -91,7 +91,7 @@ public class StringLiteralRegexRuleTest extends BasePmdRuleTest {
   public void testMatchingStringInTestClassDeclarationShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .unitName("Tests")
+            .unitName(TEST_UNIT)
             .appendImpl("type")
             .appendImpl("  TTestSuite = class(TObject)")
             .appendImpl("  private const")

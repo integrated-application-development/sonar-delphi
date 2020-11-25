@@ -73,6 +73,7 @@ import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 public abstract class BasePmdRuleTest {
   protected static final File ROOT_DIR = DelphiUtils.getResource("/org/sonar/plugins/delphi/pmd");
   protected static final String STANDARD_LIBRARY = "/org/sonar/plugins/delphi/standardLibrary";
+  protected static final String TEST_UNIT = "TestHarnessUnit";
 
   protected DelphiSensor sensor;
   private SensorContextTester sensorContext;
@@ -118,7 +119,7 @@ public abstract class BasePmdRuleTest {
     DelphiProjectHelper delphiProjectHelper = mock(DelphiProjectHelper.class);
     when(delphiProjectHelper.shouldExecuteOnProject()).thenReturn(true);
     when(delphiProjectHelper.workDir()).thenReturn(new File("target"));
-    when(delphiProjectHelper.testSuiteType()).thenReturn("Tests.TTestSuite");
+    when(delphiProjectHelper.testSuiteType()).thenReturn(TEST_UNIT + ".TTestSuite");
     when(delphiProjectHelper.getFile(any(File.class))).thenReturn(inputFile);
     when(delphiProjectHelper.standardLibraryPath())
         .thenReturn(DelphiUtils.getResource(STANDARD_LIBRARY).toPath());
@@ -176,6 +177,14 @@ public abstract class BasePmdRuleTest {
 
   protected void addRule(DelphiRule rule) {
     ruleSet.addRule(rule);
+  }
+
+  protected DelphiRule getRule(
+      Class<? extends org.sonar.plugins.delphi.pmd.rules.DelphiRule> clazz) {
+    return ruleSet.getRules().stream()
+        .filter(rule -> rule.getClazz().equals(clazz.getName()))
+        .findFirst()
+        .orElseThrow();
   }
 
   protected ListAssert<Issue> assertIssues() {
