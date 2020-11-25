@@ -45,7 +45,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
   public void testFieldNameWithoutPrefixShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class");
+    builder.appendDecl("  TMyClass = class (TObject)");
     builder.appendDecl("    private");
     builder.appendDecl("     Id: Integer;");
     builder.appendDecl("     Code: Integer;");
@@ -56,6 +56,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
+        .hasSize(3)
         .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4))
         .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5))
         .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7));

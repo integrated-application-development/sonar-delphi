@@ -61,10 +61,10 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   public void testMatchingFunctionNamesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendDecl("type TClass = class(TObject)")
+            .appendDecl("type TFoo = class(TObject)")
             .appendDecl("  procedure DoThing(SomeArg: ArgType);")
             .appendDecl("end;")
-            .appendImpl("procedure TClass.DoThing(SomeArg: ArgType);")
+            .appendImpl("procedure TFoo.DoThing(SomeArg: ArgType);")
             .appendImpl("begin")
             .appendImpl("  DoAnotherThing(SomeArg);")
             .appendImpl("end;");
@@ -78,10 +78,10 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   public void testMismatchedTypeNameShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendDecl("type TClass = class(TObject)")
+            .appendDecl("type TFoo = class(TObject)")
             .appendDecl("  procedure DoThing(SomeArg: ArgType);")
             .appendDecl("end;")
-            .appendImpl("procedure Tclass.DoThing(SomeArg: ArgType);")
+            .appendImpl("procedure Tfoo.DoThing(SomeArg: ArgType);")
             .appendImpl("begin")
             .appendImpl("  DoAnotherThing(SomeArg);")
             .appendImpl("end;");
@@ -97,10 +97,10 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   public void testMismatchedFunctionNameShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendDecl("type TClass = class(TObject)")
+            .appendDecl("type TFoo = class(TObject)")
             .appendDecl("  procedure DoThing(SomeArg: ArgType);")
             .appendDecl("end;")
-            .appendImpl("procedure TClass.doThing(SomeArg: ArgType);")
+            .appendImpl("procedure TFoo.doThing(SomeArg: ArgType);")
             .appendImpl("begin")
             .appendImpl("  DoAnotherThing(SomeArg);")
             .appendImpl("end;");
@@ -116,17 +116,12 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   public void testMismatchedExceptionNameShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  EException = class (Exception)")
-            .appendDecl("    constructor Create(Message: String);")
-            .appendDecl("    procedure Bar;")
-            .appendDecl("  end;")
             .appendImpl("procedure Foo;")
             .appendImpl("begin")
             .appendImpl("  try")
-            .appendImpl("    raise EException.Create('Everything is on fire!');")
+            .appendImpl("    raise Exception.Create('Everything is on fire!');")
             .appendImpl("  except")
-            .appendImpl("    on E: EException do begin")
+            .appendImpl("    on E: Exception do begin")
             .appendImpl("      e.Bar;")
             .appendImpl("    end;")
             .appendImpl("  end;")
@@ -134,9 +129,7 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("MixedNamesRule", builder.getOffset() + 7));
+    assertIssues().areExactly(1, ruleKeyAtLine("MixedNamesRule", builder.getOffset() + 7));
   }
 
   @Test
@@ -200,12 +193,12 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
-            .appendDecl("  TType = class(TObject)")
+            .appendDecl("  TFoo = class(TObject)")
             .appendDecl("    class procedure Finalise;")
             .appendDecl("  end;")
-            .appendImpl("class procedure TType.Finalise;")
+            .appendImpl("class procedure TFoo.Finalise;")
             .appendImpl("begin")
-            .appendImpl("  TType(UnknownObject).Finalise;")
+            .appendImpl("  TFoo(UnknownObject).Finalise;")
             .appendImpl("end;");
 
     execute(builder);

@@ -11,7 +11,7 @@ public class EmptyTypeSectionRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
-            .appendDecl("  TClass = class(TObject)")
+            .appendDecl("  TFoo = class(TObject)")
             .appendDecl("  end;");
 
     execute(builder);
@@ -24,7 +24,7 @@ public class EmptyTypeSectionRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
-            .appendDecl("  TClass = class(TObject)")
+            .appendDecl("  TFoo = class(TObject)")
             .appendDecl("  type")
             .appendDecl("    // Empty nested type section")
             .appendDecl("  end;");
