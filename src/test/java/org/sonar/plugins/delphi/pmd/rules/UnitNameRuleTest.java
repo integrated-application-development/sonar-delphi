@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2015 Fabricio Colbo
+ * Copyright (C) 2015 Fabricio ColPrefixbo
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,21 +20,32 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
+import java.util.Objects;
+import org.junit.Before;
 import org.junit.Test;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class UnitNameRuleTest extends BasePmdRuleTest {
 
+  @Before
+  public void setup() {
+    DelphiRuleProperty property =
+        Objects.requireNonNull(
+            getRule(UnitNameRule.class).getProperty(UnitNameRule.PREFIXES.name()));
+    property.setValue("Prefix");
+  }
+
   @Test
   public void testValidRule() {
-    execute(new DelphiTestUnitBuilder().unitName("TestUnits"));
+    execute(new DelphiTestUnitBuilder().unitName("PrefixTestUnits"));
 
     assertIssues().isEmpty();
   }
 
   @Test
   public void testValidUnitUsingNameSpace() {
-    execute(new DelphiTestUnitBuilder().unitName("Namespaces.TestUnits"));
+    execute(new DelphiTestUnitBuilder().unitName("Namespace.PrefixTestUnits"));
 
     assertIssues().isEmpty();
   }
@@ -42,20 +53,6 @@ public class UnitNameRuleTest extends BasePmdRuleTest {
   @Test
   public void testInvalidUnit() {
     execute(new DelphiTestUnitBuilder().unitName("myUnit"));
-
-    assertIssues().hasSize(1).areExactly(1, ruleKeyAtLine("UnitNameRule", 1));
-  }
-
-  @Test
-  public void testInvalidNamespace() {
-    execute(new DelphiTestUnitBuilder().unitName("bad_Namespace.GoodUnit"));
-
-    assertIssues().hasSize(1).areExactly(1, ruleKeyAtLine("UnitNameRule", 1));
-  }
-
-  @Test
-  public void testInvalidUnitAndNameSpace() {
-    execute(new DelphiTestUnitBuilder().unitName("bad_Namespace.SUPER_bad_UNIT"));
 
     assertIssues().hasSize(1).areExactly(1, ruleKeyAtLine("UnitNameRule", 1));
   }

@@ -1,6 +1,9 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import java.util.List;
 import net.sourceforge.pmd.RuleContext;
+import net.sourceforge.pmd.properties.PropertyDescriptor;
+import net.sourceforge.pmd.properties.PropertyFactory;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
@@ -9,11 +12,16 @@ import org.sonar.plugins.delphi.antlr.ast.node.VarSectionNode;
 import org.sonar.plugins.delphi.symbol.scope.UnitScope;
 import org.sonar.plugins.delphi.utils.NameConventionUtils;
 
-/**
- * This rule looks at all variable names to ensure they follow basic Pascal Case. Also checks naming
- * conventions for global variables.
- */
 public class VariableNameRule extends AbstractDelphiRule {
+  private static final PropertyDescriptor<List<String>> GLOBAL_PREFIXES =
+      PropertyFactory.stringListProperty("global_prefixes")
+          .desc("If defined, global variables must begin with one of these prefixes.")
+          .emptyDefaultValue()
+          .build();
+
+  public VariableNameRule() {
+    definePropertyDescriptor(GLOBAL_PREFIXES);
+  }
 
   @Override
   public RuleContext visit(VarDeclarationNode varDecl, RuleContext data) {
@@ -50,11 +58,11 @@ public class VariableNameRule extends AbstractDelphiRule {
         && varSection.jjtGetChildIndex() == varSection.jjtGetParent().jjtGetNumChildren() - 1;
   }
 
-  private static boolean isViolation(NameDeclarationNode identifier, boolean globalVariable) {
+  private boolean isViolation(NameDeclarationNode identifier, boolean globalVariable) {
     String image = identifier.getImage();
     if (globalVariable) {
-      return !NameConventionUtils.compliesWithPrefix(image, "G") || image.contains("_");
+      return !NameConventionUtils.compliesWithPrefix(image, getProperty(GLOBAL_PREFIXES));
     }
-    return !Character.isUpperCase(image.charAt(0));
+    return !NameConventionUtils.compliesWithPascalCase(image);
   }
 }

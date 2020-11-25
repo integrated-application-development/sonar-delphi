@@ -2,10 +2,21 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
+import java.util.Objects;
+import org.junit.Before;
 import org.junit.Test;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 public class ConstantNotationRuleTest extends BasePmdRuleTest {
+
+  @Before
+  public void setup() {
+    DelphiRuleProperty property =
+        Objects.requireNonNull(
+            getRule(ConstantNotationRule.class).getProperty(ConstantNotationRule.PREFIXES.name()));
+    property.setValue("C_");
+  }
 
   @Test
   public void testConstantWithPrefixShouldNotAddIssue() {

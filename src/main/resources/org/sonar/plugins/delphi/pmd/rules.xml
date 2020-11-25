@@ -376,12 +376,13 @@ Foo(1, 2, 3); // Compliant
     name="InterfaceNameRule">
     <priority>4</priority>
     <description>
-      Interface names should begin with 'I' and follow Pascal case.
+      Interface names should begin with an acceptable prefix and follow Pascal case.
       &lt;br&gt;
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min"/>
+      <property name="prefixes" value="I"/>
+      <property name="baseEffort" value="15min"/>
     </properties>
   </rule>
 
@@ -390,12 +391,13 @@ Foo(1, 2, 3); // Compliant
     name="RecordNameRule">
     <priority>4</priority>
     <description>
-      Record names should begin with 'T' and follow Pascal case.
+      Record names should begin with an acceptable prefix and follow Pascal case.
       &lt;br&gt;
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="30min"/>
+      <property name="prefixes" value="T"/>
+      <property name="baseEffort" value="15min"/>
     </properties>
   </rule>
 
@@ -415,7 +417,7 @@ Foo(1, 2, 3); // Compliant
       - ^TType should be named PType
     </description>
     <properties>
-      <property name="baseEffort" value="30min"/>
+      <property name="baseEffort" value="15min"/>
     </properties>
   </rule>
 
@@ -429,7 +431,7 @@ Foo(1, 2, 3); // Compliant
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="30min"/>
+      <property name="baseEffort" value="15min"/>
     </properties>
   </rule>
 
@@ -438,11 +440,12 @@ Foo(1, 2, 3); // Compliant
     name="FieldNameRule">
     <priority>4</priority>
     <description>
-      Field names should begin with 'F' and follow Pascal case.
+      Field names should begin with an acceptable prefix and follow Pascal case.
       &lt;br&gt;
       Published fields are excluded from this check due to Delphi's generated form fields.
     </description>
     <properties>
+      <property name="prefixes" value="F"/>
       <property name="baseEffort" value="5min"/>
     </properties>
   </rule>
@@ -451,9 +454,12 @@ Foo(1, 2, 3); // Compliant
     message="Unit names should comply with a naming convention"
     name="UnitNameRule">
     <priority>4</priority>
-    <description>Unit name should follow Pascal Case.</description>
+    <description>
+      Unit names should begin with an acceptable prefix, and follow Pascal Case.
+    </description>
     <properties>
-      <property name="baseEffort" value="30min"/>
+      <property name="prefixes"/>
+      <property name="baseEffort" value="15min"/>
     </properties>
   </rule>
 
@@ -462,12 +468,13 @@ Foo(1, 2, 3); // Compliant
     name="ConstantNotationRule">
     <priority>4</priority>
     <description>
-      Constants should begin with 'C_' and follow Pascal case.
+      Constants should begin with an acceptable prefix, and follow Pascal case.
       &lt;br&gt;
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min"/>
+      <property name="prefixes"/>
+      <property name="baseEffort" value="15min"/>
     </properties>
   </rule>
 
@@ -476,12 +483,13 @@ Foo(1, 2, 3); // Compliant
     name="ClassNameRule">
     <priority>4</priority>
     <description>
-      Class names should begin with 'T', 'TForm', 'TFrame', or 'E', and follow Pascal case.
+      Class names should begin with an acceptable prefix, and follow Pascal case.
       &lt;br&gt;
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min"/>
+      <property name="prefixes" value="T|E"/>
+      <property name="baseEffort" value="15min"/>
     </properties>
   </rule>
 
@@ -495,7 +503,8 @@ Foo(1, 2, 3); // Compliant
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min"/>
+      <property name="prefixes" value="T"/>
+      <property name="baseEffort" value="15min"/>
     </properties>
   </rule>
 
@@ -524,7 +533,8 @@ Foo(1, 2, 3); // Compliant
       &lt;br&gt;
     </description>
     <properties>
-      <property name="baseEffort" value="1min"/>
+      <property name="global_prefixes" value="G"/>
+      <property name="baseEffort" value="5min"/>
     </properties>
   </rule>
 
