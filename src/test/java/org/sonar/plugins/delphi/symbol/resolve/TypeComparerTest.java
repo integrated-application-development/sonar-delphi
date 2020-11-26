@@ -75,7 +75,7 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicVariant.VARIANT;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.type.DelphiArrayType;
 import org.sonar.plugins.delphi.type.DelphiEnumerationType;
 import org.sonar.plugins.delphi.type.DelphiFileType;
@@ -91,18 +91,18 @@ import org.sonar.plugins.delphi.type.Type.StructType;
 import org.sonar.plugins.delphi.type.Type.SubrangeType;
 import org.sonar.plugins.delphi.utils.types.TypeMocker;
 
-public class TypeComparerTest {
+class TypeComparerTest {
   private static void compare(Type from, Type to, EqualityType equality) {
     assertThat(TypeComparer.compare(from, to)).isEqualTo(equality);
   }
 
   @Test
-  public void testExactTypes() {
+  void testExactTypes() {
     compare(UNICODESTRING.type, UNICODESTRING.type, EXACT);
   }
 
   @Test
-  public void testToInteger() {
+  void testToInteger() {
     compare(SMALLINT.type, INTEGER.type, CONVERT_LEVEL_1);
     compare(INTEGER.type, SMALLINT.type, CONVERT_LEVEL_3);
     compare(CURRENCY.type, INTEGER.type, CONVERT_LEVEL_2);
@@ -113,7 +113,7 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testToDecimal() {
+  void testToDecimal() {
     compare(INTEGER.type, SINGLE.type, CONVERT_LEVEL_3);
     compare(INTEGER.type, DOUBLE.type, CONVERT_LEVEL_4);
     compare(DOUBLE.type, SINGLE.type, CONVERT_LEVEL_2);
@@ -123,7 +123,7 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testStringToString() {
+  void testStringToString() {
     compare(WIDESTRING.type, UNICODESTRING.type, CONVERT_LEVEL_1);
     compare(WIDESTRING.type, ANSISTRING.type, CONVERT_LEVEL_2);
     compare(WIDESTRING.type, SHORTSTRING.type, CONVERT_LEVEL_3);
@@ -151,7 +151,7 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testArrayToString() {
+  void testArrayToString() {
     Type ansiCharOpenArray = openArray(null, ANSICHAR.type);
     Type wideCharOpenArray = openArray(null, WIDECHAR.type);
     Type ansiCharFixedArray = fixedArray(null, ANSICHAR.type);
@@ -177,7 +177,7 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testCharToText() {
+  void testCharToText() {
     compare(ANSICHAR.type, DelphiTypeType.create("_AnsiChar", ANSICHAR.type), CONVERT_LEVEL_1);
     compare(ANSICHAR.type, SHORTSTRING.type, CONVERT_LEVEL_2);
     compare(ANSICHAR.type, ANSISTRING.type, CONVERT_LEVEL_3);
@@ -199,7 +199,7 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testToBoolean() {
+  void testToBoolean() {
     compare(BOOLEAN.type, BYTEBOOL.type, CONVERT_LEVEL_1);
     compare(BOOLEAN.type, WORDBOOL.type, CONVERT_LEVEL_1);
     compare(WORDBOOL.type, BOOLEAN.type, CONVERT_LEVEL_3);
@@ -207,7 +207,7 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testToEnum() {
+  void testToEnum() {
     EnumType enumType = enumeration("Enum1", unknownScope());
     EnumType enumType2 = enumeration("Enum2", unknownScope());
     SubrangeType subrangeType = DelphiSubrangeType.subRange("Subrange", enumType);
@@ -220,7 +220,7 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testToSubrange() {
+  void testToSubrange() {
     SubrangeType subrangeOfShortInt = subRange("1..100", SHORTINT.type);
     SubrangeType subrangeOfInteger = subRange("5..High(Integer)", INTEGER.type);
     SubrangeType subrangeOfEnum = subRange("5..6", enumeration("Enum", unknownScope()));
@@ -231,7 +231,7 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testToArray() {
+  void testToArray() {
     CollectionType fromOpenArray = openArray("Open", INTEGER.type);
     CollectionType fromDynamicArray = dynamicArray("Dynamic", INTEGER.type);
     CollectionType fromFixedArray = fixedArray("Fixed", INTEGER.type);
@@ -280,7 +280,7 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testArrayConstructorToArray() {
+  void testArrayConstructorToArray() {
     CollectionType toDynamicArray = dynamicArray(null, INTEGER.type);
     CollectionType toDynamicPointerArray = dynamicArray(null, POINTER.type);
     CollectionType toIncompatibleDynamicArray =
@@ -321,7 +321,7 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testArrayConstructorToSet() {
+  void testArrayConstructorToSet() {
     CollectionType byteSet = set(BYTE.type);
     CollectionType classSet = set(TypeMocker.struct("Foo", CLASS));
 
@@ -340,7 +340,7 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testToSet() {
+  void testToSet() {
     // NOTE: Sets can't actually have such large ordinal element types (and certainly not strings)
     // This is just for testing convenience.
     CollectionType integerSet = DelphiSetType.set(INTEGER.type);
@@ -355,7 +355,7 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testToProceduralType() {
+  void testToProceduralType() {
     List<Type> parameters = Collections.singletonList(INTEGER.type);
     List<Type> similarParameters = Collections.singletonList(LONGINT.type);
     Type returnType = UNICODESTRING.type;
@@ -379,7 +379,7 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testToObject() {
+  void testToObject() {
     Type toClass = TypeMocker.struct("Foo", CLASS);
     Type fromClass = TypeMocker.struct("Bar", CLASS, toClass);
     Type toRecord = TypeMocker.struct("Baz", RECORD);
@@ -401,7 +401,7 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testToClassReference() {
+  void testToClassReference() {
     var toObject = TypeMocker.struct("Foo", CLASS);
     var fromObject = TypeMocker.struct("Bar", CLASS, toObject);
     var otherObject = TypeMocker.struct("Baz", CLASS);
@@ -419,7 +419,7 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testToFile() {
+  void testToFile() {
     Type fromFile = DelphiFileType.fileOf(INTEGER.type);
     Type toFile = DelphiFileType.fileOf(LONGINT.type);
 
@@ -431,7 +431,7 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testToPointer() {
+  void testToPointer() {
     var fooType = TypeMocker.struct("Foo", CLASS);
     var barType = TypeMocker.struct("Bar", CLASS, fooType);
     var arrayType = dynamicArray(null, INTEGER.type);
@@ -465,13 +465,13 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testToUntyped() {
+  void testToUntyped() {
     compare(untypedType(), untypedType(), EQUAL);
     compare(UNICODESTRING.type, untypedType(), CONVERT_LEVEL_7);
   }
 
   @Test
-  public void testToVariant() {
+  void testToVariant() {
     Type interfaceType = TypeMocker.struct("Test", INTERFACE);
 
     compare(enumeration("Enum", unknownScope()), VARIANT.type, CONVERT_LEVEL_1);
@@ -485,7 +485,7 @@ public class TypeComparerTest {
   }
 
   @Test
-  public void testToIntrinsicTypeArgument() {
+  void testToIntrinsicTypeArgument() {
     CollectionType fixedArray = DelphiArrayType.fixedArray(null, INTEGER.type);
     CollectionType dynamicArray = DelphiArrayType.dynamicArray(null, INTEGER.type);
     CollectionType openArray = DelphiArrayType.openArray(null, INTEGER.type);

@@ -3,13 +3,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class EmptyBracketsRuleTest extends BasePmdRuleTest {
+class EmptyBracketsRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testMethodParametersEmptyBracketsShouldAddIssue() {
+  void testMethodParametersEmptyBracketsShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyForm = class(TObject)");
@@ -24,7 +24,7 @@ public class EmptyBracketsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInvocationOfUnknownMethodShouldAddIssue() {
+  void testInvocationOfUnknownMethodShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -40,7 +40,7 @@ public class EmptyBracketsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInvocationOfKnownMethodShouldAddIssue() {
+  void testInvocationOfKnownMethodShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("procedure MyProcedure;")
@@ -57,7 +57,7 @@ public class EmptyBracketsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testExplicitArrayConstructorShouldNotAddIssue() {
+  void testExplicitArrayConstructorShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -75,7 +75,7 @@ public class EmptyBracketsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInvocationOfProcVarShouldNotAddIssue() {
+  void testInvocationOfProcVarShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("procedure MyProcedure;")
@@ -92,7 +92,7 @@ public class EmptyBracketsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInvocationOfProcVarArrayShouldNotAddIssue() {
+  void testInvocationOfProcVarArrayShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -109,7 +109,7 @@ public class EmptyBracketsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testAssignedArgumentShouldNotAddIssue() {
+  void testAssignedArgumentShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: TObject;")

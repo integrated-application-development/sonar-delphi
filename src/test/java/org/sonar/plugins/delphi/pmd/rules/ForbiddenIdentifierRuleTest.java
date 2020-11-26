@@ -3,15 +3,15 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.pmd.rules.ForbiddenIdentifierRule.BLACKLISTED_NAMES;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class ForbiddenIdentifierRuleTest extends BasePmdRuleTest {
-  @Before
-  public void setup() {
+class ForbiddenIdentifierRuleTest extends BasePmdRuleTest {
+  @BeforeEach
+  void setup() {
     DelphiRule rule = new DelphiRule();
     DelphiRuleProperty blacklist = new DelphiRuleProperty(BLACKLISTED_NAMES.name(), "BadName");
 
@@ -25,7 +25,7 @@ public class ForbiddenIdentifierRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testAllowedIdentifierShouldNotAddIssue() {
+  void testAllowedIdentifierShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder().appendDecl("var").appendDecl("  GoodName: TObject;");
     execute(builder);
@@ -34,7 +34,7 @@ public class ForbiddenIdentifierRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testForbiddenIdentifierShouldAddIssue() {
+  void testForbiddenIdentifierShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder().appendDecl("var").appendDecl("  BadName: TObject;");
     execute(builder);

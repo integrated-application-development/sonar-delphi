@@ -12,8 +12,8 @@ import net.sourceforge.pmd.RuleViolation;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.assertj.core.util.Arrays;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FileHeaderNode;
@@ -28,7 +28,7 @@ import org.sonar.plugins.delphi.pmd.rules.AbstractDelphiRule;
 import org.sonar.plugins.delphi.pmd.violation.DelphiRuleViolation;
 import org.sonar.plugins.delphi.pmd.violation.DelphiRuleViolationFactory;
 
-public class DelphiRuleViolationFactoryTest {
+class DelphiRuleViolationFactoryTest {
   private static final File SOURCE_FILE = new File("code.pas");
   private static final String MESSAGE = "MESSAGE";
   private static final int LINE = 1;
@@ -43,8 +43,8 @@ public class DelphiRuleViolationFactoryTest {
   private RuleContext context;
   private Rule rule;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     factory = new DelphiRuleViolationFactory();
     context = new RuleContext();
     context.setSourceCodeFile(SOURCE_FILE);
@@ -52,7 +52,7 @@ public class DelphiRuleViolationFactoryTest {
   }
 
   @Test
-  public void testCreateRuleViolation() {
+  void testCreateRuleViolation() {
     factory.addViolation(context, rule, createNode(), MESSAGE, Arrays.array());
 
     DelphiRuleViolation violation = getViolation();
@@ -65,7 +65,7 @@ public class DelphiRuleViolationFactoryTest {
   }
 
   @Test
-  public void testCreateRuleViolationWithLineOverride() {
+  void testCreateRuleViolationWithLineOverride() {
     factory.addViolation(
         context,
         rule,
@@ -85,7 +85,7 @@ public class DelphiRuleViolationFactoryTest {
   }
 
   @Test
-  public void testIncludeToken() {
+  void testIncludeToken() {
     Token token = mockToken(LINE, START_COLUMN);
     DelphiToken insertionToken = new DelphiToken(mockToken(INCLUDE_LINE, INCLUDE_START_COLUMN));
     IncludeToken includeToken = new IncludeToken(token, insertionToken);

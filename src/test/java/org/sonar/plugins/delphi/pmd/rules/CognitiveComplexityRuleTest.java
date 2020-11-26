@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class CognitiveComplexityRuleTest extends BasePmdRuleTest {
+class CognitiveComplexityRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testSimpleMethod() {
+  void testSimpleMethod() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")
@@ -22,7 +22,7 @@ public class CognitiveComplexityRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTooComplexMethod() {
+  void testTooComplexMethod() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder().appendImpl("function Foo: Integer;").appendImpl("begin");
 
@@ -39,7 +39,7 @@ public class CognitiveComplexityRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTooComplexSubProcedureShouldOnlyAddIssueForSubProcedure() {
+  void testTooComplexSubProcedureShouldOnlyAddIssueForSubProcedure() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")

@@ -20,13 +20,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class TypeAliasRuleTest extends BasePmdRuleTest {
+class TypeAliasRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testTypeAliasShouldAddViolation() {
+  void testTypeAliasShouldAddViolation() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyChar = Char;");
@@ -39,7 +39,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTypeAliasNewTypeShouldAddViolation() {
+  void testTypeAliasNewTypeShouldAddViolation() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyChar = type Char;");
@@ -52,7 +52,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFalsePositiveMetaClassIsNotTypeAlias() {
+  void testFalsePositiveMetaClassIsNotTypeAlias() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -66,7 +66,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFalsePositiveEmptyRecordIsNotTypeAlias() {
+  void testFalsePositiveEmptyRecordIsNotTypeAlias() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -79,7 +79,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFalsePositiveEmptyClassIsNotTypeAlias() {
+  void testFalsePositiveEmptyClassIsNotTypeAlias() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -92,7 +92,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFalsePositiveSetsAreNotTypeAlias() {
+  void testFalsePositiveSetsAreNotTypeAlias() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TSetOfChar = set of Char;");
@@ -103,7 +103,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFalsePositiveArraysAreNotTypeAlias() {
+  void testFalsePositiveArraysAreNotTypeAlias() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TArrayOfChar = array of Char;");
@@ -114,7 +114,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFalsePositiveSubRangesAreNotTypeAlias() {
+  void testFalsePositiveSubRangesAreNotTypeAlias() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TSubRange = Lower..Upper;");
@@ -125,7 +125,7 @@ public class TypeAliasRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFalsePositivePointerTypesAreNotTypeAlias() {
+  void testFalsePositivePointerTypesAreNotTypeAlias() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  PClass = ^TClass;");

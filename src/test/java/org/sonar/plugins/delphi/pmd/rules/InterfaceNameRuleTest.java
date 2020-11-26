@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class InterfaceNameRuleTest extends BasePmdRuleTest {
+class InterfaceNameRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testValidNameShouldNotAddIssue() {
+  void testValidNameShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -25,7 +25,7 @@ public class InterfaceNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInvalidNameShouldAddIssue() {
+  void testInvalidNameShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

@@ -3,12 +3,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class ExplicitDefaultPropertyReferenceRuleTest extends BasePmdRuleTest {
+class ExplicitDefaultPropertyReferenceRuleTest extends BasePmdRuleTest {
   @Test
-  public void testImplicitDefaultPropertyAccessShouldNotAddIssue() {
+  void testImplicitDefaultPropertyAccessShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -29,7 +29,7 @@ public class ExplicitDefaultPropertyReferenceRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testExplicitDefaultPropertyAccessShouldAddIssue() {
+  void testExplicitDefaultPropertyAccessShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -52,7 +52,7 @@ public class ExplicitDefaultPropertyReferenceRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testExplicitDefaultPropertyAccessOnSelfShouldNotAddIssue() {
+  void testExplicitDefaultPropertyAccessOnSelfShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

@@ -33,34 +33,34 @@ import java.net.URL;
 import net.sourceforge.pmd.RuleSet;
 import net.sourceforge.pmd.RuleSetFactory;
 import org.apache.commons.io.FileUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class DelphiRuleSetTest {
+class DelphiRuleSetTest {
 
   private DelphiRuleSet ruleset;
 
-  @Before
-  public void init() {
+  @BeforeEach
+  void init() {
     ruleset = new DelphiRuleSet();
   }
 
   @Test
-  public void testName() {
+  void testName() {
     assertThat(ruleset.getName()).isNull();
     ruleset.setName("name");
     assertThat(ruleset.getName()).isEqualTo("name");
   }
 
   @Test
-  public void testDescription() {
+  void testDescription() {
     assertThat(ruleset.getDescription()).isNull();
     ruleset.setDescription("desc");
     assertThat(ruleset.getDescription()).isEqualTo("desc");
   }
 
   @Test
-  public void testRules() {
+  void testRules() {
     assertThat(ruleset.getRules()).isEmpty();
 
     DelphiRule pmdRule = new DelphiRule("testRule");
@@ -70,7 +70,7 @@ public class DelphiRuleSetTest {
   }
 
   @Test
-  public void testWriteToIsValidPmdRuleSetSyntax() throws Exception {
+  void testWriteToIsValidPmdRuleSetSyntax() throws Exception {
     StringWriter writer = new StringWriter();
     String rulesXmlPath = "org/sonar/plugins/delphi/pmd/rules.xml";
     URL url = getClass().getClassLoader().getResource(rulesXmlPath);

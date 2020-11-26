@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
+class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testShouldAddIssue() {
+  void testShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -24,7 +24,7 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNoSemicolonShouldAddIssue() {
+  void testNoSemicolonShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -39,7 +39,7 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testImplementationShouldNotAddIssue() {
+  void testImplementationShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -54,7 +54,7 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testImplementationWithInheritedAtEndShouldNotAddIssue() {
+  void testImplementationWithInheritedAtEndShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -69,7 +69,7 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFalsePositiveImplementationShouldNotAddIssue() {
+  void testFalsePositiveImplementationShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -86,7 +86,7 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testExplicitInheritedShouldAddIssue() {
+  void testExplicitInheritedShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -101,7 +101,7 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testExplicitInheritedWithArgumentsShouldAddIssue() {
+  void testExplicitInheritedWithArgumentsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure(X, Y);")
@@ -116,7 +116,7 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testExplicitInheritedWithMismatchedArgumentSizesShouldNotAddIssue() {
+  void testExplicitInheritedWithMismatchedArgumentSizesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure(X, Y);")
@@ -130,7 +130,7 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testExplicitInheritedWithMismatchedArgumentsShouldNotAddIssue() {
+  void testExplicitInheritedWithMismatchedArgumentsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure(X, Y);")
@@ -144,7 +144,7 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testExplicitInheritedWithEmptyBracketsShouldAddIssue() {
+  void testExplicitInheritedWithEmptyBracketsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -159,7 +159,7 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testWrongExplicitInheritedShouldNotAddIssue() {
+  void testWrongExplicitInheritedShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -173,7 +173,7 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFunctionInheritedShouldAddIssue() {
+  void testFunctionInheritedShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function MyFunction: Integer;")
@@ -188,7 +188,7 @@ public class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFunctionQualifiedInheritedShouldNotAddIssue() {
+  void testFunctionQualifiedInheritedShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function MyFunction: Integer;")

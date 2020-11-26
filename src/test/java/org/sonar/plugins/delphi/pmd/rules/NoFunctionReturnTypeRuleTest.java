@@ -2,12 +2,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class NoFunctionReturnTypeRuleTest extends BasePmdRuleTest {
+class NoFunctionReturnTypeRuleTest extends BasePmdRuleTest {
   @Test
-  public void testFunctionWithReturnTypeShouldNotAddIssue() {
+  void testFunctionWithReturnTypeShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function TClass.MyFunction: String;")
@@ -21,7 +21,7 @@ public class NoFunctionReturnTypeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFunctionWithoutReturnTypeShouldAddIssue() {
+  void testFunctionWithoutReturnTypeShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function TClass.MyFunction;")

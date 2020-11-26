@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class CastAndFreeRuleTest extends BasePmdRuleTest {
+class CastAndFreeRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testRegularFreeShouldNotAddIssue() {
+  void testRegularFreeShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Bar: Baz);")
@@ -22,7 +22,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testPointerToObjectCastShouldNotAddIssue() {
+  void testPointerToObjectCastShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("uses")
@@ -39,7 +39,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testUntypedToObjectCastShouldNotAddIssue() {
+  void testUntypedToObjectCastShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("uses")
@@ -56,7 +56,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testWeirdPointerToObjectCastShouldNotAddIssue() {
+  void testWeirdPointerToObjectCastShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("uses")
@@ -77,7 +77,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testWeirdSoftCastFreeShouldAddIssue() {
+  void testWeirdSoftCastFreeShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -95,7 +95,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRegularFreeAndNilShouldNotAddIssue() {
+  void testRegularFreeAndNilShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Bar: Baz);")
@@ -109,7 +109,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testSoftCastFreeShouldAddIssue() {
+  void testSoftCastFreeShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Bar: Baz);")
@@ -125,7 +125,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testHardCastFreeShouldAddIssue() {
+  void testHardCastFreeShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Bar: Baz);")
@@ -141,7 +141,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testSoftCastFreeAndNilShouldAddIssue() {
+  void testSoftCastFreeAndNilShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Bar: Baz);")
@@ -155,7 +155,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testHardCastFreeAndNilShouldAddIssue() {
+  void testHardCastFreeAndNilShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Bar: Baz);")
@@ -169,7 +169,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNestedSoftCastFreeShouldAddIssue() {
+  void testNestedSoftCastFreeShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Bar: Baz);")
@@ -183,7 +183,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNestedHardCastFreeShouldAddIssue() {
+  void testNestedHardCastFreeShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Bar: Baz);")
@@ -197,7 +197,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNestedSoftCastFreeAndNilShouldAddIssue() {
+  void testNestedSoftCastFreeAndNilShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Bar: Baz);")
@@ -211,7 +211,7 @@ public class CastAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNestedHardCastFreeAndNilShouldAddIssue() {
+  void testNestedHardCastFreeAndNilShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Bar: Baz);")

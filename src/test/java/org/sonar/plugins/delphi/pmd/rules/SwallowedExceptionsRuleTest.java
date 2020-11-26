@@ -2,12 +2,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
+class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   @Test
-  public void testExceptBlockShouldNotAddIssue() {
+  void testExceptBlockShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -25,7 +25,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testHandlerShouldNotAddIssue() {
+  void testHandlerShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -45,7 +45,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testEmptyElseShouldAddIssue() {
+  void testEmptyElseShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -70,7 +70,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBareElseShouldAddIssue() {
+  void testBareElseShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -94,7 +94,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testElseWithSingleStatementShouldNotAddIssue() {
+  void testElseWithSingleStatementShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -116,7 +116,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testElseWithMultipleStatementsShouldNotAddIssue() {
+  void testElseWithMultipleStatementsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -139,7 +139,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testEmptyExceptBlockShouldAddIssue() {
+  void testEmptyExceptBlockShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -159,7 +159,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testEmptyHandlerShouldAddIssue() {
+  void testEmptyHandlerShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -181,7 +181,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testEmptyHandlerWithoutBeginShouldAddIssue() {
+  void testEmptyHandlerWithoutBeginShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -199,7 +199,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testEmptyHandlerInTestCodeShouldNotAddIssue() {
+  void testEmptyHandlerInTestCodeShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .unitName(TEST_UNIT)
@@ -222,7 +222,7 @@ public class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNestedEmptyHandlerInTestCodeShouldNotAddIssue() {
+  void testNestedEmptyHandlerInTestCodeShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .unitName(TEST_UNIT)

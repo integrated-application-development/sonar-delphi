@@ -3,13 +3,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.AtLine.atLine;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class SuperfluousSemicolonsRuleTest extends BasePmdRuleTest {
+class SuperfluousSemicolonsRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testRegularSemicolonsShouldNotAddIssue() {
+  void testRegularSemicolonsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure SemicolonTest;")
@@ -26,7 +26,7 @@ public class SuperfluousSemicolonsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testStraySemicolonsShouldAddIssue() {
+  void testStraySemicolonsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure SemicolonTest;")

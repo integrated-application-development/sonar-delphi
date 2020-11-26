@@ -20,13 +20,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class TooLargeMethodRuleTest extends BasePmdRuleTest {
+class TooLargeMethodRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testSmallMethod() {
+  void testSmallMethod() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")
@@ -40,7 +40,7 @@ public class TooLargeMethodRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testAlmostTooLargeMethod() {
+  void testAlmostTooLargeMethod() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("function Foo: Integer;");
     builder.appendImpl("begin");
@@ -57,7 +57,7 @@ public class TooLargeMethodRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testWhitespaceMethod() {
+  void testWhitespaceMethod() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")
@@ -76,7 +76,7 @@ public class TooLargeMethodRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testEmptyMethod() {
+  void testEmptyMethod() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")
@@ -89,7 +89,7 @@ public class TooLargeMethodRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTooLargeMethod() {
+  void testTooLargeMethod() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("function Foo: Integer;");
     builder.appendImpl("begin");
@@ -106,7 +106,7 @@ public class TooLargeMethodRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testComplexTooLargeMethod() {
+  void testComplexTooLargeMethod() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")

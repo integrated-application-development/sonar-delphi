@@ -3,13 +3,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class EmptyVisibilitySectionRuleTest extends BasePmdRuleTest {
+class EmptyVisibilitySectionRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testRegularVisibilitySectionShouldNotAddIssue() {
+  void testRegularVisibilitySectionShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -24,7 +24,7 @@ public class EmptyVisibilitySectionRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testImplicitVisibilitySectionShouldNotAddIssue() {
+  void testImplicitVisibilitySectionShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -41,7 +41,7 @@ public class EmptyVisibilitySectionRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testEmptyVisibilitySectionShouldAddIssue() {
+  void testEmptyVisibilitySectionShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

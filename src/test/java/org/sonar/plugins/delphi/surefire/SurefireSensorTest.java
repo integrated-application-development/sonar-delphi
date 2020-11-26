@@ -26,8 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.util.Objects;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
@@ -37,7 +37,7 @@ import org.sonar.plugins.delphi.project.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.surefire.api.SurefireUtils;
 
-public class SurefireSensorTest {
+class SurefireSensorTest {
 
   private static final String PROJECT_DIR = "/org/sonar/plugins/delphi/UnitTest";
   private static final String PROJECT_TEST_DIR = "/org/sonar/plugins/delphi/UnitTest/tests";
@@ -47,8 +47,8 @@ public class SurefireSensorTest {
   private DelphiProjectHelper delphiProjectHelper;
   private SensorContextTester sensorContext;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     File baseDir = DelphiUtils.getResource(PROJECT_TEST_DIR);
 
     sensorContext = SensorContextTester.create(DelphiUtils.getResource(PROJECT_DIR));
@@ -71,7 +71,7 @@ public class SurefireSensorTest {
   }
 
   @Test
-  public void testExecute() {
+  void testExecute() {
     settings.setProperty(SurefireUtils.SUREFIRE_REPORT_PATHS_PROPERTY, SUREFIRE_REPORT_DIR);
     SurefireSensor sensor = new SurefireSensor(settings.asConfig(), delphiProjectHelper);
     sensor.execute(sensorContext);
@@ -81,7 +81,7 @@ public class SurefireSensorTest {
   }
 
   @Test
-  public void testExecuteUsingDefaultSurefireReportsPath() {
+  void testExecuteUsingDefaultSurefireReportsPath() {
     SurefireSensor sensor = new SurefireSensor(settings.asConfig(), delphiProjectHelper);
     sensor.execute(sensorContext);
 

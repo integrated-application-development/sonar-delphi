@@ -21,13 +21,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.pmd.FilePosition.UNDEFINED_LINE;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class ClassPerFileRuleTest extends BasePmdRuleTest {
+class ClassPerFileRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testOneClassShouldNotAddIssue() {
+  void testOneClassShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -41,7 +41,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testForwardTypesShouldNotAddIssue() {
+  void testForwardTypesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -56,7 +56,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testStubTypesShouldNotAddIssue() {
+  void testStubTypesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -69,7 +69,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTwoClassesShouldAddIssue() {
+  void testTwoClassesShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -86,7 +86,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMultipleViolationsShouldAddOneIssue() {
+  void testMultipleViolationsShouldAddOneIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -106,7 +106,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFalsePositiveMetaClass() {
+  void testFalsePositiveMetaClass() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -121,7 +121,7 @@ public class ClassPerFileRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFalsePositiveClassMethods() {
+  void testFalsePositiveClassMethods() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

@@ -20,13 +20,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class MethodNameRuleTest extends BasePmdRuleTest {
+class MethodNameRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testInterfaceMethodValidRule() {
+  void testInterfaceMethodValidRule() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -41,7 +41,7 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInterfaceMethodNameStartWithLowerCaseShouldAddIssue() {
+  void testInterfaceMethodNameStartWithLowerCaseShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -60,7 +60,7 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testStandaloneMethodNameStartWithLowerCaseShouldAddIssue() {
+  void testStandaloneMethodNameStartWithLowerCaseShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("procedure foo;")
@@ -75,7 +75,7 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testPublishedMethodsShouldBeSkipped() {
+  void testPublishedMethodsShouldBeSkipped() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -89,7 +89,7 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMethodsImplementingInterfacesWithMatchingNameShouldBeSkipped() {
+  void testMethodsImplementingInterfacesWithMatchingNameShouldBeSkipped() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -110,7 +110,7 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMethodOverridesWithMatchingNameShouldBeSkipped() {
+  void testMethodOverridesWithMatchingNameShouldBeSkipped() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -131,7 +131,7 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMethodsImplementingInterfacesWithoutMatchingNameShouldAddIssue() {
+  void testMethodsImplementingInterfacesWithoutMatchingNameShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -152,7 +152,7 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMethodOverridesWithoutMatchingNameShouldAddIssue() {
+  void testMethodOverridesWithoutMatchingNameShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -173,7 +173,7 @@ public class MethodNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMethodOverridesWithUnknownTypeShouldAddIssue() {
+  void testMethodOverridesWithUnknownTypeShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

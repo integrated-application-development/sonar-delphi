@@ -12,15 +12,15 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 import net.sourceforge.pmd.lang.ast.RootNode;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.antlr.ast.DelphiNodeUtils;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 
-public class DelphiParserVisitorTest {
+class DelphiParserVisitorTest {
 
   @Test
   @SuppressWarnings("unchecked")
-  public void testAllNodeHandlersCallDelphiNodeHandlerByDefault() throws Exception {
+  void testAllNodeHandlersCallDelphiNodeHandlerByDefault() throws Exception {
     DelphiParserVisitor<?> visitor = spy(new DelphiParserVisitor<>() {});
     int expectedNumberOfVisits = 0;
 
@@ -41,7 +41,7 @@ public class DelphiParserVisitorTest {
   }
 
   @Test
-  public void testAllASTNodesAreHandled() {
+  void testAllASTNodesAreHandled() {
     Set<Class<?>> handledTypes = getTypesHandledByParserVisitor();
     Set<String> unhandledTypes =
         DelphiNodeUtils.getNodeTypes().stream()

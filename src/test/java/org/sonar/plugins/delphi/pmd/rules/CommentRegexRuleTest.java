@@ -2,18 +2,18 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class CommentRegexRuleTest extends BasePmdRuleTest {
+class CommentRegexRuleTest extends BasePmdRuleTest {
 
   private DelphiRuleProperty regexProperty;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     DelphiRule rule = new DelphiRule();
     regexProperty = new DelphiRuleProperty(CommentRegexRule.REGEX.name(), "(?i).*todo.*");
 
@@ -27,7 +27,7 @@ public class CommentRegexRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testValidCommentShouldNotAddIssue() {
+  void testValidCommentShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("// Wow, a comment!");
     execute(builder);
 
@@ -35,7 +35,7 @@ public class CommentRegexRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMatchingCommentShouldAddIssue() {
+  void testMatchingCommentShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("// TODO: Add comment");
     execute(builder);
 
@@ -45,7 +45,7 @@ public class CommentRegexRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInvalidRegexShouldNotAddIssue() {
+  void testInvalidRegexShouldNotAddIssue() {
     regexProperty.setValue("*");
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("// TODO: Add comment");
     execute(builder);

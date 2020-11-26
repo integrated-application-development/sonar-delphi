@@ -8,8 +8,10 @@ import com.sonar.orchestrator.locator.FileLocation;
 import java.io.File;
 import java.util.List;
 import org.junit.ClassRule;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.platform.suite.api.IncludeClassNamePatterns;
+import org.junit.platform.suite.api.SelectClasses;
 import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonarqube.ws.Measures.ComponentWsResponse;
 import org.sonarqube.ws.Measures.Measure;
@@ -18,10 +20,11 @@ import org.sonarqube.ws.client.WsClient;
 import org.sonarqube.ws.client.WsClientFactories;
 import org.sonarqube.ws.client.measures.ComponentRequest;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({DelphiCpdExecutorIT.class})
-public class IntegrationTests {
-
+@SuppressWarnings("JUnit5Platform")
+@RunWith(JUnitPlatform.class)
+@IncludeClassNamePatterns("^.*IT$")
+@SelectClasses({DelphiCpdExecutorIT.class})
+public class IntegrationTestSuite {
   private static final String PROJECTS_PATH = "src/it/projects/";
   private static final String STANDARD_LIBRARY_PATH =
       DelphiUtils.getResource("/org/sonar/plugins/delphi/standardLibrary").getAbsolutePath();
@@ -36,7 +39,7 @@ public class IntegrationTests {
           .addPlugin(PLUGIN_LOCATION)
           .build();
 
-  private IntegrationTests() {
+  private IntegrationTestSuite() {
     // Hide public constructor
   }
 

@@ -22,13 +22,13 @@ import static org.sonar.plugins.delphi.utils.conditions.AtLine.atLine;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest {
+class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testValidRule() {
+  void testValidRule() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -48,7 +48,7 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
   }
 
   @Test
-  public void testDestructorMissingInheritedShouldAddIssue() {
+  void testDestructorMissingInheritedShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

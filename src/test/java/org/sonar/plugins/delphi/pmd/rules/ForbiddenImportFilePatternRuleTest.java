@@ -6,21 +6,21 @@ import static org.sonar.plugins.delphi.pmd.rules.ForbiddenImportFilePatternRule.
 import static org.sonar.plugins.delphi.pmd.rules.ForbiddenImportFilePatternRule.WHITELIST_SYNTAX;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.utils.PathUtils;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class ForbiddenImportFilePatternRuleTest extends BasePmdRuleTest {
+class ForbiddenImportFilePatternRuleTest extends BasePmdRuleTest {
   private DelphiRuleProperty forbiddenPattern;
   private DelphiRuleProperty forbiddenSyntax;
   private DelphiRuleProperty whitelistPattern;
   private DelphiRuleProperty whitelistSyntax;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     DelphiRule rule = new DelphiRule();
     forbiddenPattern = new DelphiRuleProperty(FORBIDDEN_IMPORT_PATTERN.name());
     forbiddenSyntax = new DelphiRuleProperty(FORBIDDEN_IMPORT_SYNTAX.name());
@@ -40,7 +40,7 @@ public class ForbiddenImportFilePatternRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testForbiddenImportShouldAddIssue() {
+  void testForbiddenImportShouldAddIssue() {
     forbiddenPattern.setValue("**" + STANDARD_LIBRARY + "/System.SysUtils.pas");
     forbiddenSyntax.setValue("GLOB");
 
@@ -60,7 +60,7 @@ public class ForbiddenImportFilePatternRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testForbiddenImportInWhitelistedFileShouldNotAddIssue() {
+  void testForbiddenImportInWhitelistedFileShouldNotAddIssue() {
     forbiddenPattern.setValue("**" + STANDARD_LIBRARY + "/System.SysUtils.pas");
     forbiddenSyntax.setValue("GLOB");
     whitelistPattern.setValue(PathUtils.sanitize(ROOT_DIR.getAbsolutePath()) + "/**");
@@ -78,7 +78,7 @@ public class ForbiddenImportFilePatternRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInvalidPatternShouldNotAddIssue() {
+  void testInvalidPatternShouldNotAddIssue() {
     forbiddenPattern.setValue("**" + STANDARD_LIBRARY + "/System.SysUtils.pas");
     forbiddenSyntax.setValue("GLOB");
     whitelistPattern.setValue("[");

@@ -36,8 +36,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.file.DelphiFile;
@@ -45,13 +45,13 @@ import org.sonar.plugins.delphi.file.DelphiFile.DelphiFileConstructionException;
 import org.sonar.plugins.delphi.file.DelphiFileConfig;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 
-public class GrammarTest {
+class GrammarTest {
   private static final Logger LOG = Loggers.get(GrammarTest.class);
   private static final String BASE_DIR = "/org/sonar/plugins/delphi/grammar/";
   private DelphiFileConfig fileConfig;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     fileConfig = DelphiFile.createConfig(UTF_8.name());
   }
 
@@ -78,143 +78,143 @@ public class GrammarTest {
   }
 
   @Test
-  public void testEmptyBeginStatement() {
+  void testEmptyBeginStatement() {
     parseFile("EmptyProcs.pas");
   }
 
   @Test
-  public void testParseMultipleAttributes() {
+  void testParseMultipleAttributes() {
     parseFile("MultipleAttributes.pas");
   }
 
   @Test
-  public void testParseRecordInitialization() {
+  void testParseRecordInitialization() {
     parseFile("RecordInitialization.pas");
   }
 
   @Test
-  public void testParseRecordConstructor() {
+  void testParseRecordConstructor() {
     parseFile("RecordConstructor.pas");
   }
 
   @Test
-  public void testParseLabel() {
+  void testParseLabel() {
     parseFile("LabelUsage.pas");
   }
 
   @Test
-  public void testParseDUnitX() {
+  void testParseDUnitX() {
     parseFile("DUnitX.pas");
   }
 
   @Test
-  public void testParseUTF8FileWithBOM() {
+  void testParseUTF8FileWithBOM() {
     parseFile("UTF8WithBOM.pas");
   }
 
   @Test
-  public void testParseAnonymousMethods() {
+  void testParseAnonymousMethods() {
     parseFile("AnonymousMethods.pas");
   }
 
   @Test
-  public void testParseGenerics() {
+  void testParseGenerics() {
     parseFile("Generics.pas");
   }
 
   @Test
-  public void testParseKeyWordsAsIdentifier() {
+  void testParseKeyWordsAsIdentifier() {
     parseFile("KeyWordsAsIdentifier.pas");
   }
 
   @Test
-  public void testParseListUtils() {
+  void testParseListUtils() {
     parseFile("ListUtils.pas");
   }
 
   @Test
-  public void testParseEmptyNestedType() {
+  void testParseEmptyNestedType() {
     parseFile("EmptyNestedType.pas");
   }
 
   @Test
-  public void testParseEmptyClassDeclarations() {
+  void testParseEmptyClassDeclarations() {
     parseFile("EmptyClassDeclarations.pas");
   }
 
   @Test
-  public void testSubRangeTypes() {
+  void testSubRangeTypes() {
     parseFile("SubRangeTypes.pas");
   }
 
   @Test
-  public void testMethodProcDirectives() {
+  void testMethodProcDirectives() {
     parseFile("MethodProcDirectives.pas");
   }
 
   @Test
-  public void testOptionalFunctionReturnType() {
+  void testOptionalFunctionReturnType() {
     parseFile("OptionalFunctionReturnType.pas");
   }
 
   @Test
-  public void testConstExpressionAmbiguity() {
+  void testConstExpressionAmbiguity() {
     parseFile("ConstExpressionAmbiguity.pas");
   }
 
   @Test
-  public void testVariantRecord() {
+  void testVariantRecord() {
     parseFile("VariantRecord.pas");
   }
 
   @Test
-  public void testEmptyCaseItem() {
+  void testEmptyCaseItem() {
     parseFile("EmptyCaseItem.pas");
   }
 
   @Test
-  public void testRecordHelperConstants() {
+  void testRecordHelperConstants() {
     parseFile("RecordHelperConstants.pas");
   }
 
   @Test
-  public void testGenericSubTypeDecl() {
+  void testGenericSubTypeDecl() {
     parseFile("GenericSubTypeDecl.pas");
   }
 
   @Test
-  public void testArrayIndices() {
+  void testArrayIndices() {
     parseFile("ArrayIndices.pas");
   }
 
   @Test
-  public void testNumberNotConsumedByIdentifiers() {
+  void testNumberNotConsumedByIdentifiers() {
     parseFile("NumberNotConsumedByIdentifiers.pas");
   }
 
   @Test
-  public void testRaiseCastedException() {
+  void testRaiseCastedException() {
     parseFile("RaiseCastedException.pas");
   }
 
   @Test
-  public void testQualifiedKeywordIdentifier() {
+  void testQualifiedKeywordIdentifier() {
     parseFile("QualifiedKeywordIdentifier.pas");
   }
 
   @Test
-  public void testUndefinedInaccessibleNestedIfDef() {
+  void testUndefinedInaccessibleNestedIfDef() {
     fileConfig = DelphiFile.createConfig(UTF_8.name(), Collections.emptyList(), Set.of("Defined"));
     parseFile("UndefinedInaccessibleNestedIfDef.pas");
   }
 
   @Test
-  public void testSuperfluousSemicolons() {
+  void testSuperfluousSemicolons() {
     parseFile("SuperfluousSemicolons.pas");
   }
 
   @Test
-  public void testEmptyFileShouldThrow() {
+  void testEmptyFileShouldThrow() {
     assertThatThrownBy(() -> DelphiTestFileBuilder.fromResource(BASE_DIR + "Emptyfile.pas").parse())
         .isInstanceOf(DelphiFileConstructionException.class);
   }

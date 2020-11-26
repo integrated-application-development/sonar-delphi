@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class NoSemiAfterFieldDeclarationRuleTest extends BasePmdRuleTest {
+class NoSemiAfterFieldDeclarationRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testFieldDeclarationsWithSemicolonsShouldNotAddIssue() {
+  void testFieldDeclarationsWithSemicolonsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -22,7 +22,7 @@ public class NoSemiAfterFieldDeclarationRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFieldDeclarationsWithoutSemicolonsShouldAddIssue() {
+  void testFieldDeclarationsWithoutSemicolonsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -38,7 +38,7 @@ public class NoSemiAfterFieldDeclarationRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFieldDeclarationsWithoutSemicolonsInRecordVariantSectionsShouldNotAddIssue() {
+  void testFieldDeclarationsWithoutSemicolonsInRecordVariantSectionsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

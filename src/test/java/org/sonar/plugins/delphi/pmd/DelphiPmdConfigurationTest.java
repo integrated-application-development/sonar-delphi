@@ -32,16 +32,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import net.sourceforge.pmd.Report;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.internal.MapSettings;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
 
-public class DelphiPmdConfigurationTest {
+class DelphiPmdConfigurationTest {
 
   private static final File WORK_DIR = new File("test-work-dir");
 
@@ -50,15 +50,15 @@ public class DelphiPmdConfigurationTest {
   private MapSettings settings;
 
   @SuppressWarnings("ResultOfMethodCallIgnored")
-  @BeforeClass
-  public static void createTempDir() {
+  @BeforeAll
+  static void createTempDir() {
     deleteTempDir();
     WORK_DIR.mkdir();
   }
 
   @SuppressWarnings({"ResultOfMethodCallIgnored", "ConstantConditions"})
-  @AfterClass
-  public static void deleteTempDir() {
+  @AfterAll
+  protected static void deleteTempDir() {
     if (WORK_DIR.exists()) {
       for (File file : WORK_DIR.listFiles()) {
         file.delete();
@@ -67,15 +67,15 @@ public class DelphiPmdConfigurationTest {
     }
   }
 
-  @Before
-  public void setUpPmdConfiguration() {
+  @BeforeEach
+  void setUpPmdConfiguration() {
     settings = new MapSettings();
     DelphiPmdRuleSetDefinitionProvider provider = new DelphiPmdRuleSetDefinitionProvider();
     configuration = new DelphiPmdConfiguration(fs, settings.asConfig(), provider);
   }
 
   @Test
-  public void testShouldDumpXmlRuleSet() throws IOException {
+  void testShouldDumpXmlRuleSet() throws IOException {
     when(fs.workDir()).thenReturn(WORK_DIR);
 
     File rulesFile = configuration.dumpXmlRuleSet("pmd", "<rules>");
@@ -85,7 +85,7 @@ public class DelphiPmdConfigurationTest {
   }
 
   @Test
-  public void testShouldFailToDumpXmlRuleSet() {
+  void testShouldFailToDumpXmlRuleSet() {
     when(fs.workDir()).thenReturn(new File("xxx"));
 
     final Throwable thrown = catchThrowable(() -> configuration.dumpXmlRuleSet("pmd", "<xml>"));
@@ -96,7 +96,7 @@ public class DelphiPmdConfigurationTest {
   }
 
   @Test
-  public void testShouldDumpXmlReport() throws IOException {
+  void testShouldDumpXmlReport() throws IOException {
     when(fs.workDir()).thenReturn(WORK_DIR);
 
     settings.setProperty(DelphiPlugin.GENERATE_PMD_REPORT_XML_KEY, true);
@@ -109,7 +109,7 @@ public class DelphiPmdConfigurationTest {
   }
 
   @Test
-  public void testShouldFailToDumpXmlReport() {
+  void testShouldFailToDumpXmlReport() {
     when(fs.workDir()).thenReturn(new File("xxx"));
 
     settings.setProperty(DelphiPlugin.GENERATE_PMD_REPORT_XML_KEY, true);
@@ -122,7 +122,7 @@ public class DelphiPmdConfigurationTest {
   }
 
   @Test
-  public void testShouldIgnoreXmlReportWhenPropertyIsNotSet() {
+  void testShouldIgnoreXmlReportWhenPropertyIsNotSet() {
     Path reportFile = configuration.dumpXmlReport(new Report());
 
     assertThat(reportFile).isNull();

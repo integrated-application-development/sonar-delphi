@@ -4,17 +4,17 @@ import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TEMPLATE_XPATH_CLA
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TEMPLATE_XPATH_EXPRESSION_PARAM;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class XPathRuleTest extends BasePmdRuleTest {
+class XPathRuleTest extends BasePmdRuleTest {
   private DelphiRuleProperty xPathProperty;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     DelphiRule rule = new DelphiRule();
     xPathProperty = new DelphiRuleProperty(TEMPLATE_XPATH_EXPRESSION_PARAM, "");
     rule.setName("XPathTestRule");
@@ -26,7 +26,7 @@ public class XPathRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTypeIsFunctionShouldAddIssueForExactMatch() {
+  void testTypeIsFunctionShouldAddIssueForExactMatch() {
     xPathProperty.setValue("//TypeDeclarationNode[typeIs('Test.TFoo')]");
 
     DelphiTestUnitBuilder builder =
@@ -43,7 +43,7 @@ public class XPathRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTypeIsFunctionShouldAddIssueForSubTypeExactMatch() {
+  void testTypeIsFunctionShouldAddIssueForSubTypeExactMatch() {
     xPathProperty.setValue("//TypeDeclarationNode[typeIs('System.TObject')]");
 
     DelphiTestUnitBuilder builder =
@@ -60,7 +60,7 @@ public class XPathRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTypeIsFunctionShouldNotAddIssueForUnrelatedType() {
+  void testTypeIsFunctionShouldNotAddIssueForUnrelatedType() {
     xPathProperty.setValue("//TypeDeclarationNode[typeIs('Bars.TBar')]");
 
     DelphiTestUnitBuilder builder =
@@ -75,7 +75,7 @@ public class XPathRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTypeIsFunctionUnexpectedArgumentsShouldFail() {
+  void testTypeIsFunctionUnexpectedArgumentsShouldFail() {
     xPathProperty.setValue("//TypeDeclarationNode[typeIs('Test.TFoo', 'BadArgument')]");
 
     DelphiTestUnitBuilder builder =
@@ -90,7 +90,7 @@ public class XPathRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTypeIsFunctionOnUntypedNodeShouldFail() {
+  void testTypeIsFunctionOnUntypedNodeShouldFail() {
     xPathProperty.setValue("//CommonDelphiNode[typeIs('Test.TFoo')]");
 
     DelphiTestUnitBuilder builder =
@@ -105,7 +105,7 @@ public class XPathRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTypeIsExactlyFunctionShouldAddIssue() {
+  void testTypeIsExactlyFunctionShouldAddIssue() {
     xPathProperty.setValue("//TypeDeclarationNode[typeIsExactly('Test.TFoo')]");
 
     DelphiTestUnitBuilder builder =
@@ -122,7 +122,7 @@ public class XPathRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTypeIsExactlyFunctionUnexpectedArgumentsShouldFail() {
+  void testTypeIsExactlyFunctionUnexpectedArgumentsShouldFail() {
     xPathProperty.setValue("//TypeDeclarationNode[typeIsExactly('Test.TFoo', 'BadArgument')]");
 
     DelphiTestUnitBuilder builder =
@@ -137,7 +137,7 @@ public class XPathRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTypeIsExactlyFunctionOnUntypedNodeShouldFail() {
+  void testTypeIsExactlyFunctionOnUntypedNodeShouldFail() {
     xPathProperty.setValue("//CommonDelphiNode[typeIsExactly('Test.TFoo')]");
 
     DelphiTestUnitBuilder builder =
@@ -152,7 +152,7 @@ public class XPathRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTypeInheritsFromShouldAddIssue() {
+  void testTypeInheritsFromShouldAddIssue() {
     xPathProperty.setValue("//TypeDeclarationNode[typeInheritsFrom('System.TObject')]");
 
     DelphiTestUnitBuilder builder =
@@ -169,7 +169,7 @@ public class XPathRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTypeInheritsFromFunctionUnexpectedArgumentsShouldFail() {
+  void testTypeInheritsFromFunctionUnexpectedArgumentsShouldFail() {
     xPathProperty.setValue("//TypeDeclarationNode[typeInheritsFrom('Test.TFoo', 'BadArgument')]");
 
     DelphiTestUnitBuilder builder =
@@ -184,7 +184,7 @@ public class XPathRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTypeInheritsFromFunctionOnUntypedNodeShouldFail() {
+  void testTypeInheritsFromFunctionOnUntypedNodeShouldFail() {
     xPathProperty.setValue("//CommonDelphiNode[typeInheritsFrom('Test.TFoo')]");
 
     DelphiTestUnitBuilder builder =

@@ -35,8 +35,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ListAssert;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
@@ -75,7 +75,7 @@ public abstract class BasePmdRuleTest {
   protected static final String STANDARD_LIBRARY = "/org/sonar/plugins/delphi/standardLibrary";
   protected static final String TEST_UNIT = "TestHarnessUnit";
 
-  protected DelphiSensor sensor;
+  private DelphiSensor sensor;
   private SensorContextTester sensorContext;
   private final IssueContainer issues = new IssueContainer();
   private final DelphiPmdRuleSetDefinitionProvider ruleProvider =
@@ -83,18 +83,18 @@ public abstract class BasePmdRuleTest {
   private final DelphiRuleSet ruleSet = ruleProvider.getDefinition();
   private final List<DelphiRule> baseRules = List.copyOf(ruleSet.getRules());
 
-  @BeforeClass
+  @BeforeAll
   public static void setupIssueContainerFormatting() {
     Assertions.registerFormatterForType(IssueContainer.class, IssueContainer::toString);
   }
 
-  @Before
+  @BeforeEach
   public void setupRuleSet() {
     ruleSet.getRules().clear();
     ruleSet.getRules().addAll(baseRules);
   }
 
-  public void execute(DelphiTestFileBuilder<?> builder) {
+  protected void execute(DelphiTestFileBuilder<?> builder) {
     configureTest(builder);
 
     sensor.execute(sensorContext);

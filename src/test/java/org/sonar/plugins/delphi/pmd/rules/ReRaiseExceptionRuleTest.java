@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
+class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testRaiseInExceptShouldNotAddIssue() {
+  void testRaiseInExceptShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -26,7 +26,7 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRaiseInExceptionHandlerShouldNotAddIssue() {
+  void testRaiseInExceptionHandlerShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -46,7 +46,7 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRaisingNormalExceptionShouldNotAddIssue() {
+  void testRaisingNormalExceptionShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure ThrowException;")
@@ -60,7 +60,7 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRaiseInExceptionHandlerWithNoSemicolonOrBeginEndShouldNotAddIssue() {
+  void testRaiseInExceptionHandlerWithNoSemicolonOrBeginEndShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -78,7 +78,7 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBadRaiseShouldAddIssue() {
+  void testBadRaiseShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -100,7 +100,7 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBadRaiseWithNoSemicolonOrBeginEndShouldAddIssue() {
+  void testBadRaiseWithNoSemicolonOrBeginEndShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -118,7 +118,7 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMultipleBadRaisesShouldAddIssues() {
+  void testMultipleBadRaisesShouldAddIssues() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -144,7 +144,7 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRaiseDifferentExceptionShouldNotAddIssue() {
+  void testRaiseDifferentExceptionShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -164,7 +164,7 @@ public class ReRaiseExceptionRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRaiseDifferentExceptionWithoutIdentifierShouldNotAddIssue() {
+  void testRaiseDifferentExceptionWithoutIdentifierShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")

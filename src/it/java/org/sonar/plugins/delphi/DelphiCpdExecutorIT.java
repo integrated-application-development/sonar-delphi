@@ -1,8 +1,8 @@
 package org.sonar.plugins.delphi;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.sonar.plugins.delphi.IntegrationTests.createScanner;
-import static org.sonar.plugins.delphi.IntegrationTests.getProjectMeasureAsDouble;
+import static org.sonar.plugins.delphi.IntegrationTestSuite.createScanner;
+import static org.sonar.plugins.delphi.IntegrationTestSuite.getProjectMeasureAsDouble;
 
 import com.sonar.orchestrator.Orchestrator;
 import org.junit.ClassRule;
@@ -13,7 +13,7 @@ public class DelphiCpdExecutorIT {
   private static final String LITERALS_PROJECT_KEY = "delphi-cpd-literals-test";
   private static final String WHITESPACE_PROJECT_KEY = "delphi-cpd-whitespace-test";
 
-  @ClassRule public static final Orchestrator ORCHESTRATOR = IntegrationTests.ORCHESTRATOR;
+  @ClassRule public static final Orchestrator ORCHESTRATOR = IntegrationTestSuite.ORCHESTRATOR;
 
   @Test
   public void testShouldDetectDuplicates() {

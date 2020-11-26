@@ -32,8 +32,8 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.Optional;
 import org.assertj.core.util.Arrays;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
@@ -42,14 +42,14 @@ import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-public class DelphiProjectHelperTest {
+class DelphiProjectHelperTest {
   private static final String PROJECTS_PATH = "/org/sonar/plugins/delphi/projects/";
   private static final File BASE_DIR = DelphiUtils.getResource(PROJECTS_PATH);
   private Configuration settings;
   private DefaultFileSystem fs;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     fs = new DefaultFileSystem(BASE_DIR);
     settings = mock(Configuration.class);
 
@@ -61,7 +61,7 @@ public class DelphiProjectHelperTest {
   }
 
   @Test
-  public void testInvalidIncludesShouldBeSkipped() {
+  void testInvalidIncludesShouldBeSkipped() {
     String[] includes = {"EmptyProject/empty", "BadSyntaxProject", "BadPath/Spooky"};
     when(settings.getStringArray(DelphiPlugin.SEARCH_PATH_KEY)).thenReturn(includes);
 
@@ -71,7 +71,7 @@ public class DelphiProjectHelperTest {
   }
 
   @Test
-  public void testDprojProject() {
+  void testDprojProject() {
     InputFile inputFile =
         TestInputFileBuilder.create(
                 DelphiLanguage.KEY,
@@ -98,7 +98,7 @@ public class DelphiProjectHelperTest {
   }
 
   @Test
-  public void testWorkgroupProject() {
+  void testWorkgroupProject() {
     InputFile inputFile =
         TestInputFileBuilder.create(
                 DelphiLanguage.KEY,
@@ -124,7 +124,7 @@ public class DelphiProjectHelperTest {
   }
 
   @Test
-  public void testStandardLibraryPath() {
+  void testStandardLibraryPath() {
     DelphiProjectHelper delphiProjectHelper = new DelphiProjectHelper(settings, fs);
 
     assertThatThrownBy(delphiProjectHelper::standardLibraryPath)
@@ -139,7 +139,7 @@ public class DelphiProjectHelperTest {
   }
 
   @Test
-  public void testSearchPathShouldSkipBlankPaths() {
+  void testSearchPathShouldSkipBlankPaths() {
     DelphiProjectHelper delphiProjectHelper = new DelphiProjectHelper(settings, fs);
     when(settings.getStringArray(DelphiPlugin.SEARCH_PATH_KEY))
         .thenReturn(new String[] {"", "\n", "\t\t\n"});
@@ -148,7 +148,7 @@ public class DelphiProjectHelperTest {
   }
 
   @Test
-  public void testUnitAliases() {
+  void testUnitAliases() {
     when(settings.getStringArray(DelphiPlugin.UNIT_ALIASES_KEY))
         .thenReturn(Arrays.array("Foo=Bar", "Blue=Red", "X=Y"));
 
@@ -159,7 +159,7 @@ public class DelphiProjectHelperTest {
   }
 
   @Test
-  public void testUnitAliasesShouldSkipBadSyntax() {
+  void testUnitAliasesShouldSkipBadSyntax() {
     when(settings.getStringArray(DelphiPlugin.UNIT_ALIASES_KEY))
         .thenReturn(Arrays.array("Foo=Bar", "BlueRed", "X==Y"));
 

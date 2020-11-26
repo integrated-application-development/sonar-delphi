@@ -26,32 +26,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class DelphiRuleTest {
+class DelphiRuleTest {
 
   private DelphiRule rule;
 
-  @Before
-  public void init() {
+  @BeforeEach
+  void init() {
     rule = new DelphiRule("class", 1);
   }
 
   @Test
-  public void testName() {
+  void testName() {
     assertThat(rule.getName()).isNull();
     rule.setName("test");
     assertThat(rule.getName()).isEqualTo("test");
   }
 
   @Test
-  public void testClazz() {
+  void testClazz() {
     assertThat(rule.getClazz()).isEqualTo("class");
   }
 
   @Test
-  public void testProperties() {
+  void testProperties() {
     List<DelphiRuleProperty> properties = new ArrayList<>();
     properties.add(new DelphiRuleProperty("a", "b"));
     rule.setProperties(properties);
@@ -68,19 +68,19 @@ public class DelphiRuleTest {
   }
 
   @Test
-  public void testPriority() {
+  void testPriority() {
     assertThat(rule.getPriority()).isEqualTo(1);
     assertThat(new DelphiRule("class").getPriority()).isNull();
   }
 
   @Test
-  public void testMessage() {
+  void testMessage() {
     rule.setMessage("my message");
     assertThat(rule.getMessage()).isEqualTo("my message");
   }
 
   @Test
-  public void testDescription() {
+  void testDescription() {
     assertThat(rule.getHtmlDescription()).isEmpty();
     rule.setDescription("abc");
     assertThat(rule.getDescription()).isEqualTo("abc");

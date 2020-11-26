@@ -19,8 +19,8 @@ import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TYPE;
 
 import java.io.File;
 import net.sourceforge.pmd.Report;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -36,7 +36,7 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-public class DelphiPmdExecutorTest {
+class DelphiPmdExecutorTest {
 
   private static final String ROOT_PATH = "/org/sonar/plugins/delphi";
   private static final File ROOT_DIR = DelphiUtils.getResource(ROOT_PATH);
@@ -46,8 +46,8 @@ public class DelphiPmdExecutorTest {
   private DelphiPmdConfiguration pmdConfiguration;
   private DelphiPmdViolationRecorder violationRecorder;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     DefaultFileSystem fileSystem = new DefaultFileSystem(ROOT_DIR).setWorkDir(ROOT_DIR.toPath());
     Configuration configuration = mock(Configuration.class);
     DelphiPmdRuleSetDefinitionProvider provider = new DelphiPmdRuleSetDefinitionProvider();
@@ -62,7 +62,7 @@ public class DelphiPmdExecutorTest {
   }
 
   @Test
-  public void testNonexistentRuleSetIllegalState() {
+  void testNonexistentRuleSetIllegalState() {
     File badFile = mock(File.class);
     when(badFile.getAbsolutePath()).thenReturn("does/not/exist.xml");
     when(pmdConfiguration.dumpXmlRuleSet(anyString(), anyString())).thenReturn(badFile);
@@ -71,7 +71,7 @@ public class DelphiPmdExecutorTest {
   }
 
   @Test
-  public void testAddBuiltinProperties() {
+  void testAddBuiltinProperties() {
     // The SwallowedExceptionsRule has 3 builtin properties: BASE_EFFORT, SCOPE and TYPE
     DelphiRule rule = new DelphiRule();
     rule.setName("SwallowedExceptionsRule");
@@ -90,7 +90,7 @@ public class DelphiPmdExecutorTest {
   }
 
   @Test
-  public void testAddBuiltinPropertiesToCustomRule() {
+  void testAddBuiltinPropertiesToCustomRule() {
     // A custom template rule, created via the SonarQube web interface
     // The XPathRule template has 2 builtin properties: BASE_EFFORT and TEMPLATE
     // The TEMPLATE property should not be inherited by the custom rule
@@ -114,7 +114,7 @@ public class DelphiPmdExecutorTest {
   }
 
   @Test
-  public void testAddBuiltinPropertiesToNonexistentRule() {
+  void testAddBuiltinPropertiesToNonexistentRule() {
     // An undefined rule in ActiveRules should be impossible
     // Undefined -> The rule is not specified in rules.xml, either concretely or as a template
     DelphiRule rule = new DelphiRule();
@@ -131,7 +131,7 @@ public class DelphiPmdExecutorTest {
   }
 
   @Test
-  public void testShouldNotReportZeroViolations() {
+  void testShouldNotReportZeroViolations() {
     // The report is empty if executor.execute(DelphiFile) is never called
     executor.complete();
 
@@ -140,7 +140,7 @@ public class DelphiPmdExecutorTest {
   }
 
   @Test
-  public void testViolationRecorderExceptionShouldThrowFatalError() {
+  void testViolationRecorderExceptionShouldThrowFatalError() {
     doAnswer(
             invocation -> {
               ((Report) invocation.getArgument(0))

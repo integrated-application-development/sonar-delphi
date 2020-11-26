@@ -36,7 +36,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
@@ -51,7 +51,7 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSetHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-public class DelphiPmdProfileExporterTest {
+class DelphiPmdProfileExporterTest {
 
   private final DelphiPmdProfileExporter exporter = new DelphiPmdProfileExporter();
 
@@ -131,23 +131,23 @@ public class DelphiPmdProfileExporterTest {
   }
 
   @Test
-  public void testShouldExportPmdProfileOnWriter() {
+  void testShouldExportPmdProfileOnWriter() {
     assertExportFormat("import_simple.xml", "export_simple.xml");
   }
 
   @Test
-  public void testShouldSkipBuiltinProperties() {
+  void testShouldSkipBuiltinProperties() {
     assertExportFormat(
         "import_rule_with_builtin_properties.xml", "export_rule_with_builtin_properties.xml");
   }
 
   @Test
-  public void testShouldSkipEmptyProperty() {
+  void testShouldSkipEmptyProperty() {
     assertExportFormat("import_rule_with_empty_param.xml", "export_rule_with_empty_param.xml");
   }
 
   @Test
-  public void testShouldExportEmptyConfigurationAsXml() {
+  void testShouldExportEmptyConfigurationAsXml() {
     final StringWriter writer = new StringWriter();
 
     exporter.exportProfile(RulesProfile.create(), writer);
@@ -162,7 +162,7 @@ public class DelphiPmdProfileExporterTest {
   }
 
   @Test
-  public void testShouldAbortExportOnWriterException() throws IOException {
+  void testShouldAbortExportOnWriterException() throws IOException {
     String importedXml = getRuleSetXml("import_simple.xml");
     final Writer writer = mock(Writer.class);
     doThrow(new IOException("test")).when(writer).write(anyString());
@@ -173,7 +173,7 @@ public class DelphiPmdProfileExporterTest {
   }
 
   @Test
-  public void testShouldExportXPathRule() {
+  void testShouldExportXPathRule() {
     Rule rule =
         Rule.create(DelphiPmdConstants.REPOSITORY_KEY, "MyXpathRule", "This is my own xpath rule.")
             .setConfigKey(DelphiPmdConstants.TEMPLATE_XPATH_CLASS)

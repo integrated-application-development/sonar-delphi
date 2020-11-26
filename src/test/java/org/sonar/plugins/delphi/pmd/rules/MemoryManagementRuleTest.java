@@ -3,13 +3,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class MemoryManagementRuleTest extends BasePmdRuleTest {
+class MemoryManagementRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testRequiresMemoryManagementShouldAddIssue() {
+  void testRequiresMemoryManagementShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -39,7 +39,7 @@ public class MemoryManagementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNestedUnmanagedShouldAddIssue() {
+  void testNestedUnmanagedShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -66,7 +66,7 @@ public class MemoryManagementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInheritedShouldNotAddIssue() {
+  void testInheritedShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -84,7 +84,7 @@ public class MemoryManagementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testCreateOnSelfShouldNotAddIssue() {
+  void testCreateOnSelfShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -108,7 +108,7 @@ public class MemoryManagementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testWhitelistedShouldNotAddIssue() {
+  void testWhitelistedShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -128,7 +128,7 @@ public class MemoryManagementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMemoryManagedShouldNotAddIssue() {
+  void testMemoryManagedShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -151,7 +151,7 @@ public class MemoryManagementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRaisingExceptionShouldNotAddIssue() {
+  void testRaisingExceptionShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -169,7 +169,7 @@ public class MemoryManagementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInterfaceAssignmentShouldNotAddIssue() {
+  void testInterfaceAssignmentShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -193,7 +193,7 @@ public class MemoryManagementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInterfaceArgumentShouldNotAddIssue() {
+  void testInterfaceArgumentShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -217,7 +217,7 @@ public class MemoryManagementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testProceduralHardCastShouldAddIssue() {
+  void testProceduralHardCastShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -244,7 +244,7 @@ public class MemoryManagementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRecordConstructorsShouldNotAddIssue() {
+  void testRecordConstructorsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -264,7 +264,7 @@ public class MemoryManagementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNonConstructorsShouldNotAddIssue() {
+  void testNonConstructorsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -294,7 +294,7 @@ public class MemoryManagementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNestedInObscureProceduralUsageShouldAddIssue() {
+  void testNestedInObscureProceduralUsageShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

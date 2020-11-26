@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestProgramBuilder;
 
-public class DprFunctionRuleTest extends BasePmdRuleTest {
+class DprFunctionRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testValidDprFile() {
+  void testValidDprFile() {
     DelphiTestProgramBuilder builder =
         new DelphiTestProgramBuilder().programName("ValidProgram").appendImpl("Exit;");
 
@@ -18,7 +18,7 @@ public class DprFunctionRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMethodInDprFileShouldAddIssue() {
+  void testMethodInDprFileShouldAddIssue() {
     DelphiTestProgramBuilder builder =
         new DelphiTestProgramBuilder()
             .appendDecl("procedure MyProcedure;")

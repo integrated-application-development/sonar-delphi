@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2015 Fabricio ColPrefixbo
+ * Copyright (C) 2015 Fabricio Colombo
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,15 +21,15 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import java.util.Objects;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class UnitNameRuleTest extends BasePmdRuleTest {
+class UnitNameRuleTest extends BasePmdRuleTest {
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     DelphiRuleProperty property =
         Objects.requireNonNull(
             getRule(UnitNameRule.class).getProperty(UnitNameRule.PREFIXES.name()));
@@ -37,21 +37,21 @@ public class UnitNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testValidRule() {
+  void testValidRule() {
     execute(new DelphiTestUnitBuilder().unitName("PrefixTestUnits"));
 
     assertIssues().isEmpty();
   }
 
   @Test
-  public void testValidUnitUsingNameSpace() {
+  void testValidUnitUsingNameSpace() {
     execute(new DelphiTestUnitBuilder().unitName("Namespace.PrefixTestUnits"));
 
     assertIssues().isEmpty();
   }
 
   @Test
-  public void testInvalidUnit() {
+  void testInvalidUnit() {
     execute(new DelphiTestUnitBuilder().unitName("myUnit"));
 
     assertIssues().hasSize(1).areExactly(1, ruleKeyAtLine("UnitNameRule", 1));

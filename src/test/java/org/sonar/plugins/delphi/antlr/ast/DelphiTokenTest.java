@@ -1,18 +1,19 @@
 package org.sonar.plugins.delphi.antlr.ast;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.antlr.runtime.CommonToken;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 
-public class DelphiTokenTest {
+class DelphiTokenTest {
   private DelphiToken commentToken;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     CommonToken commonToken = new CommonToken(DelphiLexer.COMMENT);
     commonToken.setText("{ This is my multiline comment.\n As you can see, it's 3 whole lines.\n}");
     commonToken.setLine(5);
@@ -21,32 +22,34 @@ public class DelphiTokenTest {
   }
 
   @Test
-  public void testGetBeginLine() {
+  void testGetBeginLine() {
     assertThat(commentToken.getBeginLine()).isEqualTo(5);
   }
 
   @Test
-  public void testGetBeginColumn() {
+  void testGetBeginColumn() {
     assertThat(commentToken.getBeginColumn()).isEqualTo(12);
   }
 
   @Test
-  public void testGetEndLine() {
+  void testGetEndLine() {
     assertThat(commentToken.getEndLine()).isEqualTo(7);
   }
 
   @Test
-  public void testGetEndColumn() {
+  void testGetEndColumn() {
     assertThat(commentToken.getEndColumn()).isEqualTo(1);
   }
 
-  @Test(expected = UnsupportedOperationException.class)
-  public void testGetNext() {
-    commentToken.getNext();
+  @Test
+  void testGetNext() {
+    assertThatThrownBy(() -> commentToken.getNext())
+        .isInstanceOf(UnsupportedOperationException.class);
   }
 
-  @Test(expected = UnsupportedOperationException.class)
-  public void testGetPreviousComment() {
-    commentToken.getPreviousComment();
+  @Test
+  void testGetPreviousComment() {
+    assertThatThrownBy(() -> commentToken.getPreviousComment())
+        .isInstanceOf(UnsupportedOperationException.class);
   }
 }

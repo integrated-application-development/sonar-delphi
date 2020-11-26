@@ -10,25 +10,25 @@ import static org.sonar.plugins.delphi.preprocessor.directive.expression.Express
 import static org.sonar.plugins.delphi.preprocessor.directive.expression.Token.TokenType.INTEGER;
 import static org.sonar.plugins.delphi.preprocessor.directive.expression.Token.TokenType.UNKNOWN;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.preprocessor.DelphiPreprocessor;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Expression;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Expression.ConstExpressionType;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Expression.ExpressionValue;
 
-public class ExpressionsTest {
+class ExpressionsTest {
   private DelphiPreprocessor preprocessor;
   private ExpressionEvaluator evaluator;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     preprocessor = mock(DelphiPreprocessor.class);
     evaluator = new ExpressionEvaluator(preprocessor);
   }
 
   @Test
-  public void testMathematicEvaluation() {
+  void testMathematicEvaluation() {
     assertInt("1 + 2", 3);
     assertInt("1 - 2", -1);
     assertInt("1 * 2", 2);
@@ -47,14 +47,14 @@ public class ExpressionsTest {
   }
 
   @Test
-  public void testStringConcatenation() {
+  void testStringConcatenation() {
     assertString("'abc' + '123", "abc123");
     assertString("'abc' + '", "abc");
     assertUnknown("'abc' + 123");
   }
 
   @Test
-  public void testEqualityEvaluation() {
+  void testEqualityEvaluation() {
     assertBool("1 = 1", true);
     assertBool("1 = 2", false);
     assertBool("1 = 1.0", true);
@@ -83,7 +83,7 @@ public class ExpressionsTest {
   }
 
   @Test
-  public void testComparisonEvaluation() {
+  void testComparisonEvaluation() {
     assertBool("1 > 1", false);
     assertBool("2 > 1", true);
     assertBool("1 > 1.0", false);
@@ -120,7 +120,7 @@ public class ExpressionsTest {
   }
 
   @Test
-  public void testLogicalOperators() {
+  void testLogicalOperators() {
     assertBool("1 in [1, 2, 3]", true);
     assertBool("1 in [2, 3]", false);
     assertBool("1 in []", false);
@@ -144,7 +144,7 @@ public class ExpressionsTest {
   }
 
   @Test
-  public void testUnaryEvaluation() {
+  void testUnaryEvaluation() {
     assertInt("+1", 1);
     assertInt("-1", -1);
 
@@ -160,7 +160,7 @@ public class ExpressionsTest {
   }
 
   @Test
-  public void testInvocationEvaluation() {
+  void testInvocationEvaluation() {
     when(preprocessor.isDefined("TEST_DEFINE")).thenReturn(true);
 
     assertBool("Defined(TEST_DEFINE)", true);
@@ -171,21 +171,21 @@ public class ExpressionsTest {
   }
 
   @Test
-  public void testBinaryExpressionWithUnhandledOperatorShouldThrow() {
+  void testBinaryExpressionWithUnhandledOperatorShouldThrow() {
     Expression expression = binary(literal(INTEGER, "1"), UNKNOWN, literal(INTEGER, "1"));
     assertThatThrownBy(() -> expression.evaluate(preprocessor))
         .isInstanceOf(NullPointerException.class);
   }
 
   @Test
-  public void testUnaryExpressionWithUnhandledOperatorShouldThrow() {
+  void testUnaryExpressionWithUnhandledOperatorShouldThrow() {
     Expression expression = unary(UNKNOWN, literal(INTEGER, "1"));
     assertThatThrownBy(() -> expression.evaluate(preprocessor))
         .isInstanceOf(NullPointerException.class);
   }
 
   @Test
-  public void testUnhandledLiteralTypeShouldThrow() {
+  void testUnhandledLiteralTypeShouldThrow() {
     assertThatThrownBy(() -> literal(UNKNOWN, "value")).isInstanceOf(AssertionError.class);
   }
 

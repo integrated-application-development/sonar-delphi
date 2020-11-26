@@ -2,12 +2,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class AssertMessageRuleTest extends BasePmdRuleTest {
+class AssertMessageRuleTest extends BasePmdRuleTest {
   @Test
-  public void testAssertWithoutErrorMessageShouldAddIssue() {
+  void testAssertWithoutErrorMessageShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -21,7 +21,7 @@ public class AssertMessageRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testAssertWithErrorMessageShouldNotAddIssue() {
+  void testAssertWithErrorMessageShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -35,7 +35,7 @@ public class AssertMessageRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testAssertMethodReferenceShouldNotAddIssue() {
+  void testAssertMethodReferenceShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")

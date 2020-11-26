@@ -22,13 +22,13 @@ import static org.sonar.plugins.delphi.utils.conditions.AtLine.atLine;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class PointerNameRuleTest extends BasePmdRuleTest {
+class PointerNameRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testValidRule() {
+  void testValidRule() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -41,7 +41,7 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInvalidRule() {
+  void testInvalidRule() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -58,7 +58,7 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBadCase() {
+  void testBadCase() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  Pinteger = ^Integer;");
@@ -71,7 +71,7 @@ public class PointerNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testShouldIgnorePointerAssignment() {
+  void testShouldIgnorePointerAssignment() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("procedure Foo;");
     builder.appendImpl("var");

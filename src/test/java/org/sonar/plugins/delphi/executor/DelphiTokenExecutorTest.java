@@ -19,8 +19,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatcher;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
@@ -34,7 +34,7 @@ import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.symbol.SymbolTable;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-public class DelphiTokenExecutorTest {
+class DelphiTokenExecutorTest {
   private static final String ROOT_DIR_NAME = "/org/sonar/plugins/delphi/token";
   private static final File ROOT_DIR = DelphiUtils.getResource(ROOT_DIR_NAME);
 
@@ -51,8 +51,8 @@ public class DelphiTokenExecutorTest {
   private NewCpdTokens cpdTokens;
   private NewHighlighting highlighting;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     cpdTokens = mock(NewCpdTokens.class);
     when(cpdTokens.onFile(any())).thenReturn(cpdTokens);
 
@@ -71,7 +71,7 @@ public class DelphiTokenExecutorTest {
   }
 
   @Test
-  public void testResultsNotSavedTokenizationFailure() {
+  void testResultsNotSavedTokenizationFailure() {
     when(cpdTokens.addToken(anyInt(), anyInt(), anyInt(), anyInt(), any()))
         .thenThrow(IllegalStateException.class);
 
@@ -85,7 +85,7 @@ public class DelphiTokenExecutorTest {
   }
 
   @Test
-  public void testSimpleFile() {
+  void testSimpleFile() {
     execute(makeDelphiFile(SIMPLE_FILE));
 
     cpdTokenCount(205);
@@ -94,7 +94,7 @@ public class DelphiTokenExecutorTest {
   }
 
   @Test
-  public void testLiteralsFile() {
+  void testLiteralsFile() {
     execute(makeDelphiFile(LITERALS_FILE));
 
     cpdTokenCount(62);
@@ -105,7 +105,7 @@ public class DelphiTokenExecutorTest {
   }
 
   @Test
-  public void testMixedCaseFile() {
+  void testMixedCaseFile() {
     execute(makeDelphiFile(MIXED_CASE_FILE));
 
     cpdTokenCount(184);
@@ -116,7 +116,7 @@ public class DelphiTokenExecutorTest {
   }
 
   @Test
-  public void testAsmFile() {
+  void testAsmFile() {
     execute(makeDelphiFile(ASM_FILE));
 
     cpdTokenCount(275);

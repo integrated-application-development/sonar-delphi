@@ -9,13 +9,13 @@ import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveT
 import static org.sonar.plugins.delphi.preprocessor.directive.expression.Expressions.nameReference;
 
 import org.antlr.runtime.Token;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.preprocessor.DelphiPreprocessor;
 
-public class DirectivesTest {
+class DirectivesTest {
 
   @Test
-  public void testIfSuccessfulBranch() {
+  void testIfSuccessfulBranch() {
     IfDirective trueBranch = new IfDirective(mock(Token.class), ELSEIF, nameReference("True"));
 
     IfDirective falseBranch = new IfDirective(mock(Token.class), ELSEIF, nameReference("False"));
@@ -29,7 +29,7 @@ public class DirectivesTest {
   }
 
   @Test
-  public void testElseIfSuccessfulBranch() {
+  void testElseIfSuccessfulBranch() {
     ElseIfDirective trueBranch =
         new ElseIfDirective(mock(Token.class), ELSEIF, nameReference("True"));
 
@@ -45,13 +45,13 @@ public class DirectivesTest {
   }
 
   @Test
-  public void testElseIsAlwaysSuccessfulBranch() {
+  void testElseIsAlwaysSuccessfulBranch() {
     ElseDirective elseBranch = new ElseDirective(mock(Token.class), ELSE);
     assertThat(elseBranch.isSuccessfulBranch(mock(DelphiPreprocessor.class))).isTrue();
   }
 
   @Test
-  public void testEndIfHasNoExecutionAction() {
+  void testEndIfHasNoExecutionAction() {
     EndIfDirective elseBranch = new EndIfDirective(mock(Token.class), ENDIF);
     DelphiPreprocessor preprocessor = mock(DelphiPreprocessor.class);
     elseBranch.execute(preprocessor);
@@ -59,7 +59,7 @@ public class DirectivesTest {
   }
 
   @Test
-  public void testIfOptIsNeverSuccessfulBranchShouldFailOnUpgrade() {
+  void testIfOptIsNeverSuccessfulBranchShouldFailOnUpgrade() {
     IfOptDirective directive = new IfOptDirective(mock(Token.class), CompilerDirectiveType.IFOPT);
     assertThat(directive.isSuccessfulBranch(mock(DelphiPreprocessor.class))).isFalse();
   }

@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class RaisingGeneralExceptionRuleTest extends BasePmdRuleTest {
+class RaisingGeneralExceptionRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testCustomExceptionShouldNotAddIssue() {
+  void testCustomExceptionShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -22,7 +22,7 @@ public class RaisingGeneralExceptionRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testGeneralExceptionShouldAddIssue() {
+  void testGeneralExceptionShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -38,7 +38,7 @@ public class RaisingGeneralExceptionRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRaisingInvalidExpressionShouldNotAddIssue() {
+  void testRaisingInvalidExpressionShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")

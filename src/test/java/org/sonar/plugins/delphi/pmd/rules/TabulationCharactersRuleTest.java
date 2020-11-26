@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class TabulationCharactersRuleTest extends BasePmdRuleTest {
+class TabulationCharactersRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testRegularFileShouldNotAddIssue() {
+  void testRegularFileShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
 
     execute(builder);
@@ -17,7 +17,7 @@ public class TabulationCharactersRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFileWithTabsShouldAddIssue() {
+  void testFileWithTabsShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendDecl("\t");
 
     execute(builder);
@@ -26,7 +26,7 @@ public class TabulationCharactersRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFileWithMultipleTabsShouldAddOnlyOneIssue() {
+  void testFileWithMultipleTabsShouldAddOnlyOneIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("\t")

@@ -20,13 +20,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest {
+class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testValidRule() {
+  void testValidRule() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -46,7 +46,7 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
   }
 
   @Test
-  public void testConstructorMissingInheritedShouldAddIssue() {
+  void testConstructorMissingInheritedShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -68,7 +68,7 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
   }
 
   @Test
-  public void testClassConstructorShouldNotAddIssue() {
+  void testClassConstructorShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -87,7 +87,7 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
   }
 
   @Test
-  public void testRecordConstructorShouldNotAddIssue() {
+  void testRecordConstructorShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -106,7 +106,7 @@ public class ConstructorWithoutInheritedStatementRuleTest extends BasePmdRuleTes
   }
 
   @Test
-  public void testConstructorWithMissingTypeDeclarationShouldAddIssue() {
+  void testConstructorWithMissingTypeDeclarationShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("constructor TTestConstructor.Create;")

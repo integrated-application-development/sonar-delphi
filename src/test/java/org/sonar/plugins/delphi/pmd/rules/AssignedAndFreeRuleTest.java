@@ -3,13 +3,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
+class AssignedAndFreeRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testNilComparisonFollowedByFreeShouldAddIssue() {
+  void testNilComparisonFollowedByFreeShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -25,7 +25,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testQualifiedNilComparisonFollowedByFreeShouldAddIssue() {
+  void testQualifiedNilComparisonFollowedByFreeShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -41,7 +41,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBackwardsNilComparisonFollowedByFreeShouldAddIssue() {
+  void testBackwardsNilComparisonFollowedByFreeShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -57,7 +57,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testQualifiedBackwardsNilComparisonFollowedByFreeShouldAddIssue() {
+  void testQualifiedBackwardsNilComparisonFollowedByFreeShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -73,7 +73,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testAssignedFollowedByFreeShouldAddIssue() {
+  void testAssignedFollowedByFreeShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -91,7 +91,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testQualifiedAssignedFollowedByFreeShouldAddIssue() {
+  void testQualifiedAssignedFollowedByFreeShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -109,7 +109,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testStandaloneFreeShouldNotAddIssue() {
+  void testStandaloneFreeShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -123,7 +123,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNilComparisonFollowedByFreeWithoutBeginShouldAddIssue() {
+  void testNilComparisonFollowedByFreeWithoutBeginShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -137,7 +137,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBackwardsNilComparisonFollowedByFreeWithoutBeginShouldAddIssue() {
+  void testBackwardsNilComparisonFollowedByFreeWithoutBeginShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -151,7 +151,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testAssignedFollowedByFreeWithoutBeginShouldAddIssue() {
+  void testAssignedFollowedByFreeWithoutBeginShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -165,7 +165,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNilComparisonFollowedByFreeAndNilShouldAddIssue() {
+  void testNilComparisonFollowedByFreeAndNilShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -181,7 +181,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testQualifiedNilComparisonFollowedByFreeAndNilShouldAddIssue() {
+  void testQualifiedNilComparisonFollowedByFreeAndNilShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -197,7 +197,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBackwardsNilComparisonFollowedByFreeAndNilShouldAddIssue() {
+  void testBackwardsNilComparisonFollowedByFreeAndNilShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -213,7 +213,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testAssignedFollowedByFreeAndNilShouldAddIssue() {
+  void testAssignedFollowedByFreeAndNilShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -231,7 +231,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testQualifiedAssignedFollowedByFreeAndNilShouldAddIssue() {
+  void testQualifiedAssignedFollowedByFreeAndNilShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -249,7 +249,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testStandaloneFreeAndNilShouldNotAddIssue() {
+  void testStandaloneFreeAndNilShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -263,7 +263,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNilComparisonFollowedByFreeAndNilWithoutBeginShouldAddIssue() {
+  void testNilComparisonFollowedByFreeAndNilWithoutBeginShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -277,7 +277,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBackwardsNilComparisonFollowedByFreeAndNilWithoutBeginShouldAddIssue() {
+  void testBackwardsNilComparisonFollowedByFreeAndNilWithoutBeginShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -291,7 +291,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testAssignedFollowedByFreeAndNilWithoutBeginShouldAddIssue() {
+  void testAssignedFollowedByFreeAndNilWithoutBeginShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -305,7 +305,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testAssignCheckFollowedByAdditionalConditionsShouldNotAddIssue() {
+  void testAssignCheckFollowedByAdditionalConditionsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure AndProcedure;")
@@ -328,7 +328,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testUnrelatedGuardConditionShouldNotAddIssue() {
+  void testUnrelatedGuardConditionShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure AndProcedure;")
@@ -344,7 +344,7 @@ public class AssignedAndFreeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testEdgeCasesShouldNotAddIssue() {
+  void testEdgeCasesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")

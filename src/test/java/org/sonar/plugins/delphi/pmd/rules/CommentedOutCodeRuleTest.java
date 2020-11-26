@@ -4,13 +4,13 @@ import static org.sonar.plugins.delphi.utils.conditions.AtLine.atLine;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class CommentedOutCodeRuleTest extends BasePmdRuleTest {
+class CommentedOutCodeRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testRegularCommentsShouldNotAddIssue() {
+  void testRegularCommentsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("// huh?")
@@ -29,7 +29,7 @@ public class CommentedOutCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testCommentedOutTypeDeclarationsShouldAddIssue() {
+  void testCommentedOutTypeDeclarationsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("// type")
@@ -51,7 +51,7 @@ public class CommentedOutCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testCommentedOutVariableDeclarationsShouldAddIssue() {
+  void testCommentedOutVariableDeclarationsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("// var")
@@ -77,7 +77,7 @@ public class CommentedOutCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testCommentedOutConstantDeclarationsShouldAddIssue() {
+  void testCommentedOutConstantDeclarationsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("// const")
@@ -100,7 +100,7 @@ public class CommentedOutCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testCommentedOutPropertiesShouldAddIssue() {
+  void testCommentedOutPropertiesShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -116,7 +116,7 @@ public class CommentedOutCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testCommentedOutMethodsShouldAddIssue() {
+  void testCommentedOutMethodsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("{")
@@ -143,7 +143,7 @@ public class CommentedOutCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testCommentedOutPrimaryExpressionsShouldAddIssue() {
+  void testCommentedOutPrimaryExpressionsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -167,7 +167,7 @@ public class CommentedOutCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testCommentedOutPrimaryExpressionsWithCommentsShouldAddIssue() {
+  void testCommentedOutPrimaryExpressionsWithCommentsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -191,7 +191,7 @@ public class CommentedOutCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testCommentedOutAssignmentsShouldAddIssue() {
+  void testCommentedOutAssignmentsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -208,7 +208,7 @@ public class CommentedOutCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testCommentedOutIfStatementShouldAddIssue() {
+  void testCommentedOutIfStatementShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -235,7 +235,7 @@ public class CommentedOutCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testCommentedOutWithStatementShouldAddIssue() {
+  void testCommentedOutWithStatementShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -256,7 +256,7 @@ public class CommentedOutCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testCommentedOutCompilerDirectivesShouldAddIssue() {
+  void testCommentedOutCompilerDirectivesShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -277,7 +277,7 @@ public class CommentedOutCodeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testCommentedOutForStatementShouldAddIssue() {
+  void testCommentedOutForStatementShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")

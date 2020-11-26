@@ -3,12 +3,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class MethodNestingDepthRuleTest extends BasePmdRuleTest {
+class MethodNestingDepthRuleTest extends BasePmdRuleTest {
   @Test
-  public void testShallowNestedMethodShouldNotAddIssue() {
+  void testShallowNestedMethodShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Outer;")
@@ -26,7 +26,7 @@ public class MethodNestingDepthRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testDeeplyNestedMethodShouldAddIssue() {
+  void testDeeplyNestedMethodShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Outer;")

@@ -32,7 +32,7 @@ import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.SCOPE;
 import java.io.File;
 import java.util.Optional;
 import net.sourceforge.pmd.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
@@ -56,7 +56,7 @@ import org.sonar.plugins.delphi.symbol.scope.TypeScope;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
 
-public class DelphiPmdViolationRecorderTest {
+class DelphiPmdViolationRecorderTest {
   private static final String RULE_KEY = "RULE";
 
   private final File baseDir = new File("").getAbsoluteFile();
@@ -70,14 +70,14 @@ public class DelphiPmdViolationRecorderTest {
   private final DelphiPmdViolationRecorder violationRecorder =
       new DelphiPmdViolationRecorder(projectHelper, mockActiveRules);
 
-  public DelphiPmdViolationRecorderTest() {
+  DelphiPmdViolationRecorderTest() {
     RuleKey ruleKey = RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, RULE_KEY);
     when(mockActiveRules.find(ruleKey)).thenReturn(activeRule);
     when(activeRule.ruleKey()).thenReturn(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, RULE_KEY));
   }
 
   @Test
-  public void testShouldConvertPmdViolationToSonarViolation() {
+  void testShouldConvertPmdViolationToSonarViolation() {
     final File file = new File(baseDir, "FileWithViolation.java");
     final DefaultInputFile inputFile = addToFileSystem(file);
     final DelphiRuleViolation pmdViolation = mockViolation(file);
@@ -99,7 +99,7 @@ public class DelphiPmdViolationRecorderTest {
   }
 
   @Test
-  public void testShouldRecordViolationInTestCodeWhenScopeIsTest() {
+  void testShouldRecordViolationInTestCodeWhenScopeIsTest() {
     final File file = new File(baseDir, "FileWithViolation.java");
     InputFile inputFile = addToFileSystem(file);
     final DelphiRuleViolation pmdViolation = mockViolation(file);
@@ -128,7 +128,7 @@ public class DelphiPmdViolationRecorderTest {
   }
 
   @Test
-  public void testShouldIgnoreViolationInTestCodeWhenScopeIsMain() {
+  void testShouldIgnoreViolationInTestCodeWhenScopeIsMain() {
     final File file = new File(baseDir, "FileWithViolation.java");
     addToFileSystem(file);
     final DelphiRuleViolation pmdViolation = mockViolation(file);
@@ -146,7 +146,7 @@ public class DelphiPmdViolationRecorderTest {
   }
 
   @Test
-  public void testShouldIgnoreViolationInNestedTestCodeWhenScopeIsMain() {
+  void testShouldIgnoreViolationInNestedTestCodeWhenScopeIsMain() {
     final File file = new File(baseDir, "FileWithViolation.java");
     addToFileSystem(file);
     final DelphiRuleViolation pmdViolation = mockViolation(file);
@@ -171,7 +171,7 @@ public class DelphiPmdViolationRecorderTest {
   }
 
   @Test
-  public void testShouldIgnoreViolationInMainCodeWhenScopeIsTest() {
+  void testShouldIgnoreViolationInMainCodeWhenScopeIsTest() {
     final File file = new File(baseDir, "FileWithViolation.java");
     addToFileSystem(file);
     final DelphiRuleViolation pmdViolation = mockViolation(file);
@@ -189,7 +189,7 @@ public class DelphiPmdViolationRecorderTest {
   }
 
   @Test
-  public void testShouldIgnoreViolationWhenSuppressed() {
+  void testShouldIgnoreViolationWhenSuppressed() {
     final File file = new File(baseDir, "FileWithViolation.java");
     addToFileSystem(file);
     final DelphiRuleViolation pmdViolation = mockViolation(file);
@@ -202,7 +202,7 @@ public class DelphiPmdViolationRecorderTest {
   }
 
   @Test
-  public void testShouldThrowOnUnknownResource() {
+  void testShouldThrowOnUnknownResource() {
     final File unknownFile = new File(baseDir, "UNKNOWN.pas");
     final DelphiRuleViolation pmdViolation = mockViolation(unknownFile);
     final NewIssue newIssue = mock(NewIssue.class);
@@ -216,7 +216,7 @@ public class DelphiPmdViolationRecorderTest {
   }
 
   @Test
-  public void testShouldIgnoreViolationOnUnknownRule() {
+  void testShouldIgnoreViolationOnUnknownRule() {
     final File file = new File("src/FileWithUnknownViolations.Pas");
     addToFileSystem(file);
 

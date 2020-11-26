@@ -2,18 +2,18 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class StringLiteralRegexRuleTest extends BasePmdRuleTest {
+class StringLiteralRegexRuleTest extends BasePmdRuleTest {
   private static final String IDREF_PATTERN = ".*ID(\\d|[A-Z]){8}.*";
   private DelphiRuleProperty regexProperty;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     DelphiRule rule = new DelphiRule();
     regexProperty = new DelphiRuleProperty(StringLiteralRegexRule.REGEX.name(), IDREF_PATTERN);
 
@@ -27,7 +27,7 @@ public class StringLiteralRegexRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testValidStringShouldNotAddIssue() {
+  void testValidStringShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("const")
@@ -39,7 +39,7 @@ public class StringLiteralRegexRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMatchingStringShouldAddIssue() {
+  void testMatchingStringShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("const")
@@ -53,7 +53,7 @@ public class StringLiteralRegexRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInvalidRegexShouldNotAddIssue() {
+  void testInvalidRegexShouldNotAddIssue() {
     regexProperty.setValue("*");
 
     DelphiTestUnitBuilder builder =
@@ -67,7 +67,7 @@ public class StringLiteralRegexRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMatchingStringInTestMethodShouldNotAddIssue() {
+  void testMatchingStringInTestMethodShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .unitName(TEST_UNIT)
@@ -88,7 +88,7 @@ public class StringLiteralRegexRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMatchingStringInTestClassDeclarationShouldNotAddIssue() {
+  void testMatchingStringInTestClassDeclarationShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .unitName(TEST_UNIT)

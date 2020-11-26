@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class AssignedNilCheckRuleTest extends BasePmdRuleTest {
+class AssignedNilCheckRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testAssignedCheckShouldNotAddIssue() {
+  void testAssignedCheckShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -26,7 +26,7 @@ public class AssignedNilCheckRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRegularComparisonsShouldNotAddIssue() {
+  void testRegularComparisonsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -48,7 +48,7 @@ public class AssignedNilCheckRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNilComparisonsShouldAddIssue() {
+  void testNilComparisonsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")

@@ -3,12 +3,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
+class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   @Test
-  public void testNotAssignedResultShouldAddIssue() {
+  void testNotAssignedResultShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: TObject;")
@@ -23,7 +23,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNotAssignedOutParameterShouldAddIssue() {
+  void testNotAssignedOutParameterShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(")
@@ -39,7 +39,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNotAssignedOtherParametersShouldNotAddIssue() {
+  void testNotAssignedOtherParametersShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(")
@@ -56,7 +56,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testExplicitlyAssignedResultShouldNotAddIssue() {
+  void testExplicitlyAssignedResultShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: TObject;")
@@ -70,7 +70,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testResultExplicitlyAssignedInNestedFunctionShouldNotAddIssue() {
+  void testResultExplicitlyAssignedInNestedFunctionShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: TObject;")
@@ -88,7 +88,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testResultAssignedViaFunctionNameShouldNotAddIssue() {
+  void testResultAssignedViaFunctionNameShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: TObject;")
@@ -102,7 +102,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testResultReturnedViaExitShouldNotAddIssue() {
+  void testResultReturnedViaExitShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: TObject;")
@@ -116,7 +116,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testResultReturnedViaExitInNestedFunctionShouldNotAddIssue() {
+  void testResultReturnedViaExitInNestedFunctionShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -134,7 +134,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testResultAssignedViaFunctionNameInNestedFunctionShouldNotAddIssue() {
+  void testResultAssignedViaFunctionNameInNestedFunctionShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: TObject;")
@@ -152,7 +152,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testForLoopVariableAssignedResultOutParameterShouldNotAddIssue() {
+  void testForLoopVariableAssignedResultOutParameterShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")
@@ -166,7 +166,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testPassedAsArgumentResultShouldNotAddIssue() {
+  void testPassedAsArgumentResultShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("procedure Baz(out Bar: TObject);")
@@ -181,7 +181,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testPassedAsPointerArgumentResultShouldNotAddIssue() {
+  void testPassedAsPointerArgumentResultShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("procedure Baz(out Bar: TObject);")
@@ -196,7 +196,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testAsmMethodShouldNotAddIssue() {
+  void testAsmMethodShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo(out Bar: TObject): TObject;")
@@ -210,7 +210,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testExplicitlyAssignedOutParameterShouldNotAddIssue() {
+  void testExplicitlyAssignedOutParameterShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(out Bar: TObject);")
@@ -224,7 +224,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testForLoopVariableAssignedOutParameterShouldNotAddIssue() {
+  void testForLoopVariableAssignedOutParameterShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(out Bar: Integer);")
@@ -238,7 +238,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testPassedAsArgumentOutParameterShouldNotAddIssue() {
+  void testPassedAsArgumentOutParameterShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("procedure Baz(out Bar: TObject);")
@@ -254,7 +254,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMethodStubWithExceptionShouldNotAddIssue() {
+  void testMethodStubWithExceptionShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo(out Bar: TObject): TObject;")
@@ -268,7 +268,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMethodStubWithAssertFalseShouldNotAddIssue() {
+  void testMethodStubWithAssertFalseShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo(out Bar: TObject): TObject;")
@@ -282,7 +282,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMethodStubWithExceptionAndExtraStatementsShouldNotAddIssue() {
+  void testMethodStubWithExceptionAndExtraStatementsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo(out Bar: TObject): TObject;")
@@ -298,7 +298,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMethodStubWithAssertFalseAndExtraStatementsShouldNotAddIssue() {
+  void testMethodStubWithAssertFalseAndExtraStatementsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo(out Bar: TObject): TObject;")
@@ -314,7 +314,7 @@ public class MethodResultAssignedRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMethodStubWithVariableAssignmentsShouldNotAddIssue() {
+  void testMethodStubWithVariableAssignmentsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo(out Bar: TObject): TObject;")

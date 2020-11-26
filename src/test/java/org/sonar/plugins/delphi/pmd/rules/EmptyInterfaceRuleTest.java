@@ -3,12 +3,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class EmptyInterfaceRuleTest extends BasePmdRuleTest {
+class EmptyInterfaceRuleTest extends BasePmdRuleTest {
   @Test
-  public void testInterfaceWithMethodsShouldNotAddIssue() {
+  void testInterfaceWithMethodsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -23,7 +23,7 @@ public class EmptyInterfaceRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInterfaceWithMethodsAndNoGuidShouldNotAddIssue() {
+  void testInterfaceWithMethodsAndNoGuidShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -37,7 +37,7 @@ public class EmptyInterfaceRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInterfaceWithoutMethodsWithGuidShouldAddIssue() {
+  void testInterfaceWithoutMethodsWithGuidShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -51,7 +51,7 @@ public class EmptyInterfaceRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInterfaceThatLooksLikeForwardDeclarationShouldAddIssue() {
+  void testInterfaceThatLooksLikeForwardDeclarationShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -64,7 +64,7 @@ public class EmptyInterfaceRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInterfaceForwardDeclarationShouldNotAddIssue() {
+  void testInterfaceForwardDeclarationShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

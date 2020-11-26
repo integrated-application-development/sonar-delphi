@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class LowerCaseReservedWordsRuleTest extends BasePmdRuleTest {
+class LowerCaseReservedWordsRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testUppercaseKeywordShouldAddIssue() {
+  void testUppercaseKeywordShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -25,7 +25,7 @@ public class LowerCaseReservedWordsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testAsmBlockShouldNotAddIssue() {
+  void testAsmBlockShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Bar;")

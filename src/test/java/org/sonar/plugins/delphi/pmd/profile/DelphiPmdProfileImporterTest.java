@@ -32,8 +32,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
@@ -44,7 +44,7 @@ import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-public class DelphiPmdProfileImporterTest {
+class DelphiPmdProfileImporterTest {
   private static final int DEFAULT_LEVEL = 1;
   private DelphiPmdProfileImporter importer;
   private ValidationMessages messages;
@@ -92,14 +92,14 @@ public class DelphiPmdProfileImporterTest {
     return profile.getActiveRule(DelphiPmdConstants.REPOSITORY_KEY, key);
   }
 
-  @Before
-  public void setUpImporter() {
+  @BeforeEach
+  void setUpImporter() {
     messages = ValidationMessages.create();
     importer = new DelphiPmdProfileImporter(createRuleFinder());
   }
 
   @Test
-  public void testShouldImportSimpleProfile() {
+  void testShouldImportSimpleProfile() {
     Reader reader = read("simple.xml");
 
     RulesProfile profile = importer.importProfile(reader, messages);
@@ -112,7 +112,7 @@ public class DelphiPmdProfileImporterTest {
   }
 
   @Test
-  public void testShouldNotImportXpathRule() {
+  void testShouldNotImportXpathRule() {
     Reader reader = read("xpath_rules.xml");
 
     RulesProfile profile = importer.importProfile(reader, messages);
@@ -120,7 +120,7 @@ public class DelphiPmdProfileImporterTest {
   }
 
   @Test
-  public void testShouldNotImportBuiltinProperties() {
+  void testShouldNotImportBuiltinProperties() {
     Reader reader = read("builtin_xpath_rules.xml");
 
     RulesProfile profile = importer.importProfile(reader, messages);
@@ -132,7 +132,7 @@ public class DelphiPmdProfileImporterTest {
   }
 
   @Test
-  public void testShouldImportParameter() {
+  void testShouldImportParameter() {
     Reader reader = read("simple.xml");
 
     RulesProfile profile = importer.importProfile(reader, messages);
@@ -142,7 +142,7 @@ public class DelphiPmdProfileImporterTest {
   }
 
   @Test
-  public void testShouldImportDefaultPriority() {
+  void testShouldImportDefaultPriority() {
     Reader reader = read("simple.xml");
 
     RulesProfile profile = importer.importProfile(reader, messages);
@@ -152,7 +152,7 @@ public class DelphiPmdProfileImporterTest {
   }
 
   @Test
-  public void testShouldImportPriority() {
+  void testShouldImportPriority() {
     Reader reader = read("simple.xml");
 
     RulesProfile profile = importer.importProfile(reader, messages);
@@ -165,7 +165,7 @@ public class DelphiPmdProfileImporterTest {
   }
 
   @Test
-  public void testShouldImportPmdConfigurationWithUnknownNodes() {
+  void testShouldImportPmdConfigurationWithUnknownNodes() {
     Reader reader = read("complex_with_unknown_nodes.xml");
 
     RulesProfile profile = importer.importProfile(reader, messages);
@@ -178,7 +178,7 @@ public class DelphiPmdProfileImporterTest {
   }
 
   @Test
-  public void testShouldHandleUnsupportedProperty() {
+  void testShouldHandleUnsupportedProperty() {
     Reader reader = read("import_rule_with_unsupported_property.xml");
 
     RulesProfile profile = importer.importProfile(reader, messages);
@@ -189,7 +189,7 @@ public class DelphiPmdProfileImporterTest {
   }
 
   @Test
-  public void testShouldFailOnInvalidXml() {
+  void testShouldFailOnInvalidXml() {
     Reader reader = new StringReader("not xml");
 
     importer.importProfile(reader, messages);
@@ -198,7 +198,7 @@ public class DelphiPmdProfileImporterTest {
   }
 
   @Test
-  public void testShouldWarnOnUnknownRule() {
+  void testShouldWarnOnUnknownRule() {
     Reader reader = read("simple.xml");
 
     importer = new DelphiPmdProfileImporter(mock(RuleFinder.class));
@@ -209,7 +209,7 @@ public class DelphiPmdProfileImporterTest {
   }
 
   @Test
-  public void testShouldWarnOnRuleClassMissing() {
+  void testShouldWarnOnRuleClassMissing() {
     Reader reader = read("import_rule_with_missing_class.xml");
 
     RulesProfile profile = importer.importProfile(reader, messages);
@@ -219,7 +219,7 @@ public class DelphiPmdProfileImporterTest {
   }
 
   @Test
-  public void testMessagesCanBeNull() {
+  void testMessagesCanBeNull() {
     Reader reader = read("import_rule_with_missing_class.xml");
 
     RulesProfile profile = importer.importProfile(reader, null);

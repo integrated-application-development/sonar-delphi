@@ -2,12 +2,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class RedundantAssignmentRuleTest extends BasePmdRuleTest {
+class RedundantAssignmentRuleTest extends BasePmdRuleTest {
   @Test
-  public void testRedundantAssignmentShouldAddIssue() {
+  void testRedundantAssignmentShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -25,7 +25,7 @@ public class RedundantAssignmentRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRedundantAssignmentWithNestingShouldAddIssue() {
+  void testRedundantAssignmentWithNestingShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -43,7 +43,7 @@ public class RedundantAssignmentRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRegularAssignmentShouldNotAddIssue() {
+  void testRegularAssignmentShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")

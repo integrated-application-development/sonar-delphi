@@ -20,13 +20,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class EmptyFinallyBlockRuleTest extends BasePmdRuleTest {
+class EmptyFinallyBlockRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testValidRule() {
+  void testValidRule() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -44,7 +44,7 @@ public class EmptyFinallyBlockRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testEmptyFinallyBlock() {
+  void testEmptyFinallyBlock() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")

@@ -27,25 +27,25 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 import net.sourceforge.pmd.lang.ast.Node;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 
-public class DelphiASTTest {
+class DelphiASTTest {
 
   private static final String TEST_FILE = "/org/sonar/plugins/delphi/grammar/GrammarTest.pas";
   private final DelphiAST ast = DelphiTestFileBuilder.fromResource(TEST_FILE).parse();
 
   @Test
-  public void testAcceptImplemented() {
+  void testAcceptImplemented() {
     DelphiParserVisitor<?> visitor = spy(new DelphiParserVisitor<>() {});
     ast.accept(visitor, null);
     verify(visitor).visit(ast, null);
   }
 
   @Test
-  public void testNodesAreExpectedType() {
+  void testNodesAreExpectedType() {
     checkTypes(ast);
   }
 

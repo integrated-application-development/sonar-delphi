@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class BeginEndRequiredRuleTest extends BasePmdRuleTest {
+class BeginEndRequiredRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testSimpleProcedureShouldNotAddIssue() {
+  void testSimpleProcedureShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("procedure Foo;");
     builder.appendImpl("begin");
@@ -21,7 +21,7 @@ public class BeginEndRequiredRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBareWhileLoopShouldAddIssue() {
+  void testBareWhileLoopShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("procedure Foo;");
     builder.appendImpl("var");
@@ -39,7 +39,7 @@ public class BeginEndRequiredRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBareForLoopShouldAddIssue() {
+  void testBareForLoopShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("procedure Foo;");
     builder.appendImpl("var");
@@ -57,7 +57,7 @@ public class BeginEndRequiredRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBareRepeatShouldNotAddIssue() {
+  void testBareRepeatShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("procedure SemicolonTest;");
     builder.appendImpl("var");
@@ -74,7 +74,7 @@ public class BeginEndRequiredRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBareTryExceptShouldNotAddIssue() {
+  void testBareTryExceptShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("procedure SemicolonTest;");
     builder.appendImpl("var");
@@ -93,7 +93,7 @@ public class BeginEndRequiredRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testShouldSkipAsmProcedure() {
+  void testShouldSkipAsmProcedure() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("procedure Foo; assembler; register;");
     builder.appendImpl("asm");
@@ -107,7 +107,7 @@ public class BeginEndRequiredRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testElseIfShouldNotAddIssue() {
+  void testElseIfShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("procedure Foo;");
     builder.appendImpl("begin");
@@ -125,7 +125,7 @@ public class BeginEndRequiredRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBareCaseItemShouldAddIssue() {
+  void testBareCaseItemShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendImpl("procedure foo;");
     builder.appendImpl("var");
