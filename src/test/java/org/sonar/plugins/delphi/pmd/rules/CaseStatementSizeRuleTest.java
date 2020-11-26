@@ -3,13 +3,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class CaseStatementSizeRuleTest extends BasePmdRuleTest {
+class CaseStatementSizeRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testTwoCaseItemsShouldNotAddIssue() {
+  void testTwoCaseItemsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -26,7 +26,7 @@ public class CaseStatementSizeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTwoCaseItemsWithElseShouldNotAddIssue() {
+  void testTwoCaseItemsWithElseShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -46,7 +46,7 @@ public class CaseStatementSizeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testOneCaseItemsShouldAddIssue() {
+  void testOneCaseItemsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -62,7 +62,7 @@ public class CaseStatementSizeRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testOneCaseItemWithElseShouldAddIssue() {
+  void testOneCaseItemWithElseShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")

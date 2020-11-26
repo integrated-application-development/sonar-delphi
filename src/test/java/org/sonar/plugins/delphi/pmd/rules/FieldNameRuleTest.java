@@ -20,13 +20,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class FieldNameRuleTest extends BasePmdRuleTest {
+class FieldNameRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testValidRule() {
+  void testValidRule() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class(TObject)");
@@ -42,7 +42,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFieldNameWithoutPrefixShouldAddIssue() {
+  void testFieldNameWithoutPrefixShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class (TObject)");
@@ -63,7 +63,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testPublishedFieldsShouldBeSkipped() {
+  void testPublishedFieldsShouldBeSkipped() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
@@ -86,7 +86,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testPublishedFieldsInMultipleClassesShouldBeSkipped() {
+  void testPublishedFieldsInMultipleClassesShouldBeSkipped() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
@@ -124,7 +124,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBadPascalCaseShouldAddIssue() {
+  void testBadPascalCaseShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class(TObject)");
@@ -145,7 +145,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testOneLetterNameFields() {
+  void testOneLetterNameFields() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class");
@@ -162,7 +162,7 @@ public class FieldNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testIdentListField() {
+  void testIdentListField() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TMyClass = class(TObject)");

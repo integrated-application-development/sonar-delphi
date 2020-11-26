@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class RedundantBooleanRuleTest extends BasePmdRuleTest {
+class RedundantBooleanRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testRedundantBooleanComparisonShouldAddIssue() {
+  void testRedundantBooleanComparisonShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -28,7 +28,7 @@ public class RedundantBooleanRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBooleanComparisonImplicitConversionShouldNotAddIssue() {
+  void testBooleanComparisonImplicitConversionShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -46,7 +46,7 @@ public class RedundantBooleanRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRedundantBooleanNegativeComparisonShouldAddIssue() {
+  void testRedundantBooleanNegativeComparisonShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -66,7 +66,7 @@ public class RedundantBooleanRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRedundantNestedBooleanComparisonShouldAddIssue() {
+  void testRedundantNestedBooleanComparisonShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -84,7 +84,7 @@ public class RedundantBooleanRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNeedlesslyInvertedBooleanShouldAddIssue() {
+  void testNeedlesslyInvertedBooleanShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("procedure Foo(Bar: Boolean);")

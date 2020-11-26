@@ -3,15 +3,15 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class IfThenShortCircuitRuleTest extends BasePmdRuleTest {
+class IfThenShortCircuitRuleTest extends BasePmdRuleTest {
   private DelphiTestUnitBuilder builder;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     builder =
         new DelphiTestUnitBuilder()
             .appendDecl("function IfThen(")
@@ -22,7 +22,7 @@ public class IfThenShortCircuitRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNilNotEqualComparisonWithAccessShouldAddIssue() {
+  void testNilNotEqualComparisonWithAccessShouldAddIssue() {
     builder
         .appendImpl("function Foo(Bar: TObject): String;")
         .appendImpl("begin")
@@ -35,7 +35,7 @@ public class IfThenShortCircuitRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNilEqualComparisonWithAccessShouldAddIssue() {
+  void testNilEqualComparisonWithAccessShouldAddIssue() {
     builder
         .appendImpl("function Foo(Bar: TObject): String;")
         .appendImpl("begin")
@@ -48,7 +48,7 @@ public class IfThenShortCircuitRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testAssignedCheckWithAccessShouldAddIssue() {
+  void testAssignedCheckWithAccessShouldAddIssue() {
     builder
         .appendImpl("function Foo(Bar: TObject): String;")
         .appendImpl("begin")
@@ -61,7 +61,7 @@ public class IfThenShortCircuitRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNilNotEqualComparisonWithoutAccessShouldNotAddIssue() {
+  void testNilNotEqualComparisonWithoutAccessShouldNotAddIssue() {
     builder
         .appendImpl("function Foo(Bar: TObject): String;")
         .appendImpl("begin")
@@ -74,7 +74,7 @@ public class IfThenShortCircuitRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNilEqualComparisonWithoutAccessShouldNotAddIssue() {
+  void testNilEqualComparisonWithoutAccessShouldNotAddIssue() {
     builder
         .appendImpl("function Foo(Bar: TObject): String;")
         .appendImpl("begin")
@@ -87,7 +87,7 @@ public class IfThenShortCircuitRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testAssignedCheckWithoutAccessShouldNotAddIssue() {
+  void testAssignedCheckWithoutAccessShouldNotAddIssue() {
     builder
         .appendImpl("function Foo(Bar: TObject): String;")
         .appendImpl("begin")
@@ -100,7 +100,7 @@ public class IfThenShortCircuitRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testIfThenWithWrongNumberOfArgumentsShouldNotAddIssue() {
+  void testIfThenWithWrongNumberOfArgumentsShouldNotAddIssue() {
     builder
         .appendImpl("function Foo(Bar: TObject): String;")
         .appendImpl("begin")

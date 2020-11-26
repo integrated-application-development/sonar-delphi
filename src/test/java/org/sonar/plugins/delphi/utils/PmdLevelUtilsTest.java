@@ -22,15 +22,15 @@ package org.sonar.plugins.delphi.utils;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.reflect.Constructor;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.rule.Severity;
 import org.sonar.api.rules.RulePriority;
 
-public class PmdLevelUtilsTest {
+class PmdLevelUtilsTest {
 
   @Test
   @SuppressWarnings("deprecation")
-  public void testShouldGetPriorityFromLevel() {
+  void testShouldGetPriorityFromLevel() {
     assertThat(PmdLevelUtils.fromLevel(1)).isEqualTo(RulePriority.BLOCKER);
     assertThat(PmdLevelUtils.fromLevel(2)).isEqualTo(RulePriority.CRITICAL);
     assertThat(PmdLevelUtils.fromLevel(3)).isEqualTo(RulePriority.MAJOR);
@@ -41,7 +41,7 @@ public class PmdLevelUtilsTest {
   }
 
   @Test
-  public void testShouldGetLevelFromSeverity() {
+  void testShouldGetLevelFromSeverity() {
     assertThat(PmdLevelUtils.toLevel(Severity.BLOCKER)).isEqualTo(1);
     assertThat(PmdLevelUtils.toLevel(Severity.CRITICAL)).isEqualTo(2);
     assertThat(PmdLevelUtils.toLevel(Severity.MAJOR)).isEqualTo(3);
@@ -50,7 +50,7 @@ public class PmdLevelUtilsTest {
   }
 
   @Test
-  public void testHasPrivateConstructor() throws Exception {
+  void testHasPrivateConstructor() throws Exception {
     Constructor<?> constructor = PmdLevelUtils.class.getDeclaredConstructor();
     assertThat(constructor.canAccess(null)).isFalse();
     constructor.setAccessible(true);

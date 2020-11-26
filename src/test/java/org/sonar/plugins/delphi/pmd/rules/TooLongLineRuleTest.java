@@ -3,12 +3,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class TooLongLineRuleTest extends BasePmdRuleTest {
+class TooLongLineRuleTest extends BasePmdRuleTest {
   @Test
-  public void testShouldNotAddIssue() {
+  void testShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure TClass.Test;")
@@ -22,7 +22,7 @@ public class TooLongLineRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTooLongLineShouldAddIssue() {
+  void testTooLongLineShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure TClass.Test;")
@@ -40,7 +40,7 @@ public class TooLongLineRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTrailingWhitespaceLineShouldNotAddIssue() {
+  void testTrailingWhitespaceLineShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure TClass.Test;")

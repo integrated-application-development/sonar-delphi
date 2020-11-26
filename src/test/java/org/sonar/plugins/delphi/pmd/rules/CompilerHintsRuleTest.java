@@ -2,12 +2,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class CompilerHintsRuleTest extends BasePmdRuleTest {
+class CompilerHintsRuleTest extends BasePmdRuleTest {
   @Test
-  public void testHintsOffShouldAddIssue() {
+  void testHintsOffShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("{$HINTS OFF}");
 
     execute(builder);
@@ -18,7 +18,7 @@ public class CompilerHintsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testHintsOnShouldNotAddIssue() {
+  void testHintsOnShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("{$HINTS ON}");
 
     execute(builder);

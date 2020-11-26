@@ -27,11 +27,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-public class DelphiProjectTest {
+class DelphiProjectTest {
 
   private static final String SIMPLE_PROJECT =
       "/org/sonar/plugins/delphi/projects/SimpleProject/dproj/SimpleDelphiProject.dproj";
@@ -43,13 +43,13 @@ public class DelphiProjectTest {
 
   private DelphiProject project;
 
-  @Before
-  public void init() {
+  @BeforeEach
+  void init() {
     project = DelphiProject.create("simple project");
   }
 
   @Test
-  public void testSimpleProject() throws IOException {
+  void testSimpleProject() throws IOException {
     File sourceFile = File.createTempFile("tempfile", ".pas");
     sourceFile.deleteOnExit();
 
@@ -73,7 +73,7 @@ public class DelphiProjectTest {
   }
 
   @Test
-  public void testSimpleProjectFile() {
+  void testSimpleProjectFile() {
     project = DelphiProject.parse(DelphiUtils.getResource(SIMPLE_PROJECT).toPath());
 
     assertThat(project.getName()).isEqualTo("Simple Delphi Project");
@@ -129,14 +129,14 @@ public class DelphiProjectTest {
   }
 
   @Test
-  public void testProjectWithOptSets() {
+  void testProjectWithOptSets() {
     project = DelphiProject.parse(DelphiUtils.getResource(OPT_SET_PROJECT).toPath());
     assertThat(project.getUnitAliases())
         .containsExactlyInAnyOrderEntriesOf(Map.of("WinProcs", "Windows", "WinTypes", "Windows"));
   }
 
   @Test
-  public void testBadUnitAliasFileShouldContainValidAliases() {
+  void testBadUnitAliasFileShouldContainValidAliases() {
     project = DelphiProject.parse(DelphiUtils.getResource(BAD_UNIT_ALIAS_PROJECT).toPath());
 
     assertThat(project.getUnitAliases())

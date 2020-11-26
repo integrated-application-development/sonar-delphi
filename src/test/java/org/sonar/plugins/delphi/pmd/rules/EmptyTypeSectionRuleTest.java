@@ -2,12 +2,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class EmptyTypeSectionRuleTest extends BasePmdRuleTest {
+class EmptyTypeSectionRuleTest extends BasePmdRuleTest {
   @Test
-  public void testRegularTypeSectionShouldNotAddIssue() {
+  void testRegularTypeSectionShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -20,7 +20,7 @@ public class EmptyTypeSectionRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testEmptyTypeSectionShouldAddIssue() {
+  void testEmptyTypeSectionShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

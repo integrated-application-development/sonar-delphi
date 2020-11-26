@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class RedundantParenthesesRuleTest extends BasePmdRuleTest {
+class RedundantParenthesesRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testNoParenthesesShouldNotAddIssue() {
+  void testNoParenthesesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function GetInteger: Integer;")
@@ -22,7 +22,7 @@ public class RedundantParenthesesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testParenthesesShouldNotAddIssue() {
+  void testParenthesesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function GetInteger: Integer;")
@@ -36,7 +36,7 @@ public class RedundantParenthesesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRedundantParenthesesShouldAddIssue() {
+  void testRedundantParenthesesShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function GetInteger: Integer;")

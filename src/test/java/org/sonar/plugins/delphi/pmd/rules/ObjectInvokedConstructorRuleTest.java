@@ -3,13 +3,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class ObjectInvokedConstructorRuleTest extends BasePmdRuleTest {
+class ObjectInvokedConstructorRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testConstructorInvokedOnObjectShouldAddIssue() {
+  void testConstructorInvokedOnObjectShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -26,7 +26,7 @@ public class ObjectInvokedConstructorRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testConstructorInvokedOnTypeIdentifierShouldNotAddIssue() {
+  void testConstructorInvokedOnTypeIdentifierShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -42,7 +42,7 @@ public class ObjectInvokedConstructorRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testConstructorInvokedOnClassReferenceShouldNotAddIssue() {
+  void testConstructorInvokedOnClassReferenceShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -59,7 +59,7 @@ public class ObjectInvokedConstructorRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testConstructorInvokedOnSelfShouldNotAddIssue() {
+  void testConstructorInvokedOnSelfShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -79,7 +79,7 @@ public class ObjectInvokedConstructorRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBareInheritedShouldNotAddIssue() {
+  void testBareInheritedShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -97,7 +97,7 @@ public class ObjectInvokedConstructorRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNamedInheritedShouldNotAddIssue() {
+  void testNamedInheritedShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -115,7 +115,7 @@ public class ObjectInvokedConstructorRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testQualifiedInheritedShouldNotAddIssue() {
+  void testQualifiedInheritedShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

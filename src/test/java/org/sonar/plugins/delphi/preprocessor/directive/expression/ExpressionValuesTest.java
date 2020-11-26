@@ -10,14 +10,14 @@ import static org.sonar.plugins.delphi.preprocessor.directive.expression.Express
 
 import java.util.Collections;
 import java.util.Set;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Expression.ConstExpressionType;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Expression.ExpressionValue;
 
-public class ExpressionValuesTest {
+class ExpressionValuesTest {
 
   @Test
-  public void testStringValue() {
+  void testStringValue() {
     ExpressionValue value = createString("string");
     assertThat(value.type()).isEqualTo(ConstExpressionType.STRING);
     assertThat(value.asString()).isEqualTo("string");
@@ -36,7 +36,7 @@ public class ExpressionValuesTest {
   }
 
   @Test
-  public void testIntegerValue() {
+  void testIntegerValue() {
     ExpressionValue value = createInteger(1);
     assertThat(value.type()).isEqualTo(ConstExpressionType.INTEGER);
     assertThat(value.asString()).isEmpty();
@@ -55,7 +55,7 @@ public class ExpressionValuesTest {
   }
 
   @Test
-  public void testDecimalValue() {
+  void testDecimalValue() {
     ExpressionValue value = createDecimal(1.0);
     assertThat(value.type()).isEqualTo(ConstExpressionType.DECIMAL);
     assertThat(value.asString()).isEmpty();
@@ -74,7 +74,7 @@ public class ExpressionValuesTest {
   }
 
   @Test
-  public void testBooleanValue() {
+  void testBooleanValue() {
     ExpressionValue value = createBoolean(true);
     assertThat(value.type()).isEqualTo(ConstExpressionType.BOOLEAN);
     assertThat(value.asString()).isEmpty();
@@ -93,7 +93,7 @@ public class ExpressionValuesTest {
   }
 
   @Test
-  public void testSetValue() {
+  void testSetValue() {
     ExpressionValue value = createSet(Set.of(createInteger(1), createInteger(2), createInteger(3)));
     assertThat(value.type()).isEqualTo(ConstExpressionType.SET);
     assertThat(value.asString()).isEmpty();
@@ -114,7 +114,7 @@ public class ExpressionValuesTest {
   }
 
   @Test
-  public void testUnknownValue() {
+  void testUnknownValue() {
     ExpressionValue value = unknownValue();
     assertThat(value.type()).isEqualTo(ConstExpressionType.UNKNOWN);
     assertThat(value.asString()).isEmpty();

@@ -25,17 +25,17 @@ import static org.mockito.Mockito.when;
 
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleViolation;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 
-public class TextRangeCalculatorTest {
+class TextRangeCalculatorTest {
 
   private final InputFile testInput = createTestInput();
 
   @Test
-  public void testCalculateTextRange() {
+  void testCalculateTextRange() {
     final RuleViolation violation = createRuleViolation(1, 1, 3, 1);
     final TextRange range = TextRangeCalculator.calculate(violation, testInput);
 
@@ -43,7 +43,7 @@ public class TextRangeCalculatorTest {
   }
 
   @Test
-  public void testWhenEndLineIsGreaterThanBeginLineThenLineNumbersAreFlipped() {
+  void testWhenEndLineIsGreaterThanBeginLineThenLineNumbersAreFlipped() {
     final RuleViolation violation = createRuleViolation(3, 1, 1, 1);
     final TextRange range = TextRangeCalculator.calculate(violation, testInput);
 
@@ -51,7 +51,7 @@ public class TextRangeCalculatorTest {
   }
 
   @Test
-  public void testWhenEndLineEqualsBeginLineThenRangeStartAndEndsAtSameLine() {
+  void testWhenEndLineEqualsBeginLineThenRangeStartAndEndsAtSameLine() {
     final RuleViolation violation = createRuleViolation(2, 1, 2, 2);
     final TextRange range = TextRangeCalculator.calculate(violation, testInput);
 
@@ -59,7 +59,7 @@ public class TextRangeCalculatorTest {
   }
 
   @Test
-  public void testWhenBeginLineIsNegativeThenRangeStartsAndEndsAtEndLine() {
+  void testWhenBeginLineIsNegativeThenRangeStartsAndEndsAtEndLine() {
     final RuleViolation violation = createRuleViolation(-1, 1, 1, 2);
     final TextRange range = TextRangeCalculator.calculate(violation, testInput);
 
@@ -67,7 +67,7 @@ public class TextRangeCalculatorTest {
   }
 
   @Test
-  public void testWhenEndLineIsNegativeThenRangeStartsAndEndsAtBeginLine() {
+  void testWhenEndLineIsNegativeThenRangeStartsAndEndsAtBeginLine() {
     final RuleViolation violation = createRuleViolation(1, 1, -1, 2);
     final TextRange range = TextRangeCalculator.calculate(violation, testInput);
 
@@ -75,7 +75,7 @@ public class TextRangeCalculatorTest {
   }
 
   @Test
-  public void testWhenColumnValuesAreBadThenFullLinesAreSelected() {
+  void testWhenColumnValuesAreBadThenFullLinesAreSelected() {
     final RuleViolation violation = createRuleViolation(2, -1, 2, -1);
     final TextRange range = TextRangeCalculator.calculate(violation, testInput);
 

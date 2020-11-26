@@ -3,13 +3,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class EmptyMethodRuleTest extends BasePmdRuleTest {
+class EmptyMethodRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testValidRule() {
+  void testValidRule() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -46,7 +46,7 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testEmptyMethods() {
+  void testEmptyMethods() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -91,7 +91,7 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testEmptyExceptionalMethodsWithoutComments() {
+  void testEmptyExceptionalMethodsWithoutComments() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -125,7 +125,7 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testEmptyExceptionalMethodsWithComments() {
+  void testEmptyExceptionalMethodsWithComments() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -158,7 +158,7 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFalsePositiveForwardTypeDeclaration() {
+  void testFalsePositiveForwardTypeDeclaration() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -178,7 +178,7 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFalsePositiveOverloadedMethod() {
+  void testFalsePositiveOverloadedMethod() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -198,7 +198,7 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testForwardDeclarationShouldNotAddIssue() {
+  void testForwardDeclarationShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure ForwardProc(FirstName: String; LastName: String); forward;");
@@ -209,7 +209,7 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testExternalImplementationShouldNotAddIssue() {
+  void testExternalImplementationShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure ExternalProc(FirstName: String; LastName: String); external;");
@@ -220,7 +220,7 @@ public class EmptyMethodRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInterfaceImplementationShouldNotAddIssue() {
+  void testInterfaceImplementationShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

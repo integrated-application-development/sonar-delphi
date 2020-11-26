@@ -2,22 +2,22 @@ package org.sonar.plugins.delphi.antlr.ast.visitors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.visitors.CognitiveComplexityVisitor.Data;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class CognitiveComplexityVisitorTest {
+class CognitiveComplexityVisitorTest {
   private CognitiveComplexityVisitor visitor;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     visitor = new CognitiveComplexityVisitor();
   }
 
   @Test
-  public void testSimpleMethod() {
+  void testSimpleMethod() {
     DelphiAST ast =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")
@@ -30,7 +30,7 @@ public class CognitiveComplexityVisitorTest {
   }
 
   @Test
-  public void testTooComplexMethod() {
+  void testTooComplexMethod() {
     DelphiAST ast =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")
@@ -81,7 +81,7 @@ public class CognitiveComplexityVisitorTest {
   }
 
   @Test
-  public void testSimpleBinaryExpression() {
+  void testSimpleBinaryExpression() {
     DelphiAST ast =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")
@@ -94,7 +94,7 @@ public class CognitiveComplexityVisitorTest {
   }
 
   @Test
-  public void testComplexBinaryExpression() {
+  void testComplexBinaryExpression() {
     DelphiAST ast =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")

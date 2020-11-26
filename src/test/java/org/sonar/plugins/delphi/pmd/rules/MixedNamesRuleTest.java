@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class MixedNamesRuleTest extends BasePmdRuleTest {
+class MixedNamesRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testMatchingVarNamesShouldNotAddIssue() {
+  void testMatchingVarNamesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -24,7 +24,7 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMismatchedVarNamesShouldAddIssue() {
+  void testMismatchedVarNamesShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -42,7 +42,7 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testQualifiedVarNamesShouldNotAddIssue() {
+  void testQualifiedVarNamesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
@@ -58,7 +58,7 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMatchingFunctionNamesShouldNotAddIssue() {
+  void testMatchingFunctionNamesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type TFoo = class(TObject)")
@@ -75,7 +75,7 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMismatchedTypeNameShouldAddIssue() {
+  void testMismatchedTypeNameShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type TFoo = class(TObject)")
@@ -94,7 +94,7 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMismatchedFunctionNameShouldAddIssue() {
+  void testMismatchedFunctionNameShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type TFoo = class(TObject)")
@@ -113,7 +113,7 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMismatchedExceptionNameShouldAddIssue() {
+  void testMismatchedExceptionNameShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -133,7 +133,7 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMismatchedVarNameInAsmBlockShouldNotAddIssue() {
+  void testMismatchedVarNameInAsmBlockShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure; forward;")
@@ -153,7 +153,7 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMismatchedVarNameInAsmProcShouldNotAddIssue() {
+  void testMismatchedVarNameInAsmProcShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure; forward;")
@@ -171,7 +171,7 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testSelfShouldNotAddIssue() {
+  void testSelfShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -189,7 +189,7 @@ public class MixedNamesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testPrimaryExpressionNameResolverBugShouldNotAddIssue() {
+  void testPrimaryExpressionNameResolverBugShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

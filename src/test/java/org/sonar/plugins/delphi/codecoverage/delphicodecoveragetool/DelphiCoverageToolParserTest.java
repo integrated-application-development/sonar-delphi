@@ -26,8 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.IOException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
@@ -35,7 +35,7 @@ import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.project.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-public class DelphiCoverageToolParserTest {
+class DelphiCoverageToolParserTest {
 
   private SensorContextTester context;
   private File baseDir;
@@ -57,8 +57,8 @@ public class DelphiCoverageToolParserTest {
     context.fileSystem().add(inputFile);
   }
 
-  @Before
-  public void init() throws IOException {
+  @BeforeEach
+  void init() throws IOException {
 
     baseDir = DelphiUtils.getResource(ROOT_NAME);
 
@@ -71,7 +71,7 @@ public class DelphiCoverageToolParserTest {
   }
 
   @Test
-  public void testParse() {
+  void testParse() {
     DelphiCodeCoverageToolParser parser =
         new DelphiCodeCoverageToolParser(reportFile, delphiProjectHelper);
     parser.parse(context);

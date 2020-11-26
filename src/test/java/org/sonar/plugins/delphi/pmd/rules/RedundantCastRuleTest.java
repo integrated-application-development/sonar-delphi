@@ -3,13 +3,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class RedundantCastRuleTest extends BasePmdRuleTest {
+class RedundantCastRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testNoCastShouldNotAddIssue() {
+  void testNoCastShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -30,7 +30,7 @@ public class RedundantCastRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRequiredCastShouldNotAddIssue() {
+  void testRequiredCastShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -52,7 +52,7 @@ public class RedundantCastRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRedundantCastShouldAddIssue() {
+  void testRedundantCastShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -76,7 +76,7 @@ public class RedundantCastRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRedundantCastWithStringKeywordShouldAddIssue() {
+  void testRedundantCastWithStringKeywordShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Arg: String);")
@@ -95,7 +95,7 @@ public class RedundantCastRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRedundantCastWithFileKeywordShouldAddIssue() {
+  void testRedundantCastWithFileKeywordShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Arg: file);")
@@ -114,7 +114,7 @@ public class RedundantCastRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRedundantCastWithAmbiguousMethodCallShouldAddIssue() {
+  void testRedundantCastWithAmbiguousMethodCallShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("function GetString: String;")
@@ -134,7 +134,7 @@ public class RedundantCastRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testUnknownTypesShouldNotAddIssue() {
+  void testUnknownTypesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

@@ -46,7 +46,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.delphi.symbol.declaration.parameter.FormalParameter;
 import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
@@ -55,7 +55,7 @@ import org.sonar.plugins.delphi.type.DelphiTypeType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.utils.types.TypeMocker;
 
-public class InvocationResolverTest {
+class InvocationResolverTest {
   private Set<InvocationCandidate> resolved;
 
   private void assertResolved(Type argumentType, Type winnerType, Type loserType) {
@@ -132,7 +132,7 @@ public class InvocationResolverTest {
   }
 
   @Test
-  public void testIntegerTypes() {
+  void testIntegerTypes() {
     assertResolved(INTEGER.type, LONGINT.type, BYTE.type);
     assertResolved(INTEGER.type, LONGINT.type, INT64.type);
     assertResolved(INTEGER.type, INT64.type, UINT64.type);
@@ -153,7 +153,7 @@ public class InvocationResolverTest {
   }
 
   @Test
-  public void testFloatingPointTypes() {
+  void testFloatingPointTypes() {
     assertResolved(EXTENDED.type, DOUBLE.type, SINGLE.type);
     assertResolved(EXTENDED.type, REAL.type, SINGLE.type);
     assertResolved(DOUBLE.type, EXTENDED.type, SINGLE.type);
@@ -161,7 +161,7 @@ public class InvocationResolverTest {
   }
 
   @Test
-  public void testTextTypes() {
+  void testTextTypes() {
     assertResolved(
         DelphiTypeType.create("MyString", UNICODESTRING.type),
         UNICODESTRING.type,
@@ -173,7 +173,7 @@ public class InvocationResolverTest {
   }
 
   @Test
-  public void testVariantTypes() {
+  void testVariantTypes() {
     Type variantIncompatibleType = TypeMocker.struct("MyRecord", RECORD);
     assertResolved(
         List.of(UNICODESTRING.type, variantIncompatibleType, BOOLEAN.type),
@@ -189,7 +189,7 @@ public class InvocationResolverTest {
   }
 
   @Test
-  public void testInheritedTypes() {
+  void testInheritedTypes() {
     Type grandparent = TypeMocker.struct("Grandparent", CLASS);
     Type parent = TypeMocker.struct("Parent", CLASS, grandparent);
     Type child = TypeMocker.struct("Child", CLASS, parent);
@@ -199,7 +199,7 @@ public class InvocationResolverTest {
   }
 
   @Test
-  public void testVarParameters() {
+  void testVarParameters() {
     Type openArray = openArray(null, INTEGER.type);
     Type dynamicArray = dynamicArray(null, INTEGER.type);
 
@@ -212,7 +212,7 @@ public class InvocationResolverTest {
   }
 
   @Test
-  public void testSingleVariantArgument() {
+  void testSingleVariantArgument() {
     assertResolved(VARIANT.type, VARIANT.type, INTEGER.type);
     assertResolved(VARIANT.type, INTEGER.type, unknownType());
     assertResolved(VARIANT.type, SINGLE.type, INT64.type);

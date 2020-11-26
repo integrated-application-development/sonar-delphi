@@ -25,8 +25,8 @@ package org.sonar.plugins.delphi;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.Plugin;
 import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
@@ -34,22 +34,22 @@ import org.sonar.api.SonarRuntime;
 import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.utils.Version;
 
-public class DelphiPluginTest {
+class DelphiPluginTest {
 
   private DelphiPlugin plugin;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     plugin = new DelphiPlugin();
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     assertThat(plugin).hasToString("DelphiPlugin");
   }
 
   @Test
-  public void testExtensions() {
+  void testExtensions() {
     SonarRuntime runtime =
         SonarRuntimeImpl.forSonarQube(
             Version.create(1, 0), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);

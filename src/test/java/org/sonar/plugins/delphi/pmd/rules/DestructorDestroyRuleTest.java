@@ -2,12 +2,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class DestructorDestroyRuleTest extends BasePmdRuleTest {
+class DestructorDestroyRuleTest extends BasePmdRuleTest {
   @Test
-  public void testDestructorDestroyShouldNotAddIssue() {
+  void testDestructorDestroyShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -21,7 +21,7 @@ public class DestructorDestroyRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testDestructorNotDestroyShouldAddIssue() {
+  void testDestructorNotDestroyShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -37,7 +37,7 @@ public class DestructorDestroyRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testDestructorNotOverrideShouldAddIssue() {
+  void testDestructorNotOverrideShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -53,7 +53,7 @@ public class DestructorDestroyRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testDestructorWithArgumentsShouldAddIssue() {
+  void testDestructorWithArgumentsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -69,7 +69,7 @@ public class DestructorDestroyRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testClassDestructorShouldNotAddIssue() {
+  void testClassDestructorShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

@@ -21,12 +21,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class EmptyBeginStatementRuleTest extends BasePmdRuleTest {
+class EmptyBeginStatementRuleTest extends BasePmdRuleTest {
   @Test
-  public void testValidRule() {
+  void testValidRule() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -63,7 +63,7 @@ public class EmptyBeginStatementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testEmptyBeginStatements() {
+  void testEmptyBeginStatements() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -109,7 +109,7 @@ public class EmptyBeginStatementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testEmptyBlocksInCaseStatementShouldAddIssue() {
+  void testEmptyBlocksInCaseStatementShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test(Arg: Integer);")
@@ -130,7 +130,7 @@ public class EmptyBeginStatementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testEmptyBlocksInCaseStatementShouldNotAddIssue() {
+  void testEmptyBlocksInCaseStatementShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test(Arg: Integer);")
@@ -151,7 +151,7 @@ public class EmptyBeginStatementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testEmptyMethodShouldNotAddIssue() {
+  void testEmptyMethodShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

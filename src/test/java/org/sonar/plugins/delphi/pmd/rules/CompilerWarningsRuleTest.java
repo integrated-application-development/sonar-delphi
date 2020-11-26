@@ -3,12 +3,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class CompilerWarningsRuleTest extends BasePmdRuleTest {
+class CompilerWarningsRuleTest extends BasePmdRuleTest {
   @Test
-  public void testWarningsOffShouldAddIssue() {
+  void testWarningsOffShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("{$WARNINGS OFF}");
 
     execute(builder);
@@ -19,7 +19,7 @@ public class CompilerWarningsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testWarningsOnShouldNotAddIssue() {
+  void testWarningsOnShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("{$WARNINGS ON}");
 
     execute(builder);
@@ -28,7 +28,7 @@ public class CompilerWarningsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testWarnOffShouldAddIssue() {
+  void testWarnOffShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder().appendImpl("{$WARN SYMBOL_DEPRECATED OFF}");
 
@@ -40,7 +40,7 @@ public class CompilerWarningsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testWarnUnknownShouldAddIssue() {
+  void testWarnUnknownShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder().appendImpl("{$WARN SYMBOL_DEPRECATED FOO}");
 
@@ -50,7 +50,7 @@ public class CompilerWarningsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testHintsOffShouldNotAddIssue() {
+  void testHintsOffShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("{$HINTS OFF}");
 
     execute(builder);

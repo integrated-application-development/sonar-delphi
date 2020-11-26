@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class NoSemiAfterMethodDeclarationRuleTest extends BasePmdRuleTest {
+class NoSemiAfterMethodDeclarationRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testMethodDeclarationsWithSemicolonsShouldNotAddIssue() {
+  void testMethodDeclarationsWithSemicolonsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -26,7 +26,7 @@ public class NoSemiAfterMethodDeclarationRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMethodDeclarationsWithoutSemicolonsShouldAddIssue() {
+  void testMethodDeclarationsWithoutSemicolonsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

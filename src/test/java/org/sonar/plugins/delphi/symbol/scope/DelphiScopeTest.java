@@ -7,19 +7,19 @@ import static org.mockito.Mockito.when;
 import static org.sonar.plugins.delphi.symbol.scope.DelphiScope.unknownScope;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
 import org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration;
 
-public class DelphiScopeTest {
+class DelphiScopeTest {
   private DelphiScope scope;
   private VariableNameDeclaration declaration;
   private DelphiNameOccurrence occurrence;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     DelphiNode location = mock(DelphiNode.class);
     when(location.getScope()).thenReturn(unknownScope());
 
@@ -31,22 +31,22 @@ public class DelphiScopeTest {
   }
 
   @Test
-  public void testContains() {
+  void testContains() {
     assertThat(scope.contains(occurrence)).isTrue();
   }
 
   @Test
-  public void testGetDeclarations() {
+  void testGetDeclarations() {
     assertThat(scope.getDeclarations()).containsKey(declaration);
   }
 
   @Test
-  public void testGetDeclarationsByClass() {
+  void testGetDeclarationsByClass() {
     assertThat(scope.getDeclarations(VariableNameDeclaration.class)).containsKey(declaration);
   }
 
   @Test
-  public void testDuplicateNameDeclarations() {
+  void testDuplicateNameDeclarations() {
     assertThatThrownBy(() -> scope.addDeclaration(declaration))
         .isInstanceOf(RuntimeException.class);
   }

@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class TooManySubProceduresRuleTest extends BasePmdRuleTest {
+class TooManySubProceduresRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testValidCaseShouldNotAddIssue() {
+  void testValidCaseShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")
@@ -34,7 +34,7 @@ public class TooManySubProceduresRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTooManySubProceduresShouldAddIssue() {
+  void testTooManySubProceduresShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")
@@ -66,7 +66,7 @@ public class TooManySubProceduresRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTooManyConstructorSubProceduresShouldAddIssue() {
+  void testTooManyConstructorSubProceduresShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("constructor TMyObject.Create;")
@@ -99,7 +99,7 @@ public class TooManySubProceduresRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTooManyDestructorSubProceduresShouldAddIssue() {
+  void testTooManyDestructorSubProceduresShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("destructor TMyObject.Destroy;")
@@ -132,7 +132,7 @@ public class TooManySubProceduresRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testTooManyNestedProceduresShouldAddIssue() {
+  void testTooManyNestedProceduresShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")

@@ -11,13 +11,13 @@ import static org.sonar.plugins.delphi.antlr.ast.DelphiNodeUtils.IMPLEMENT_ACCEP
 import static org.sonar.plugins.delphi.antlr.ast.DelphiNodeUtils.NODE_PACKAGE;
 
 import com.tngtech.archunit.core.domain.JavaModifier;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 
-public class DelphiNodeTest {
+class DelphiNodeTest {
   @Test
-  public void testAllNodesShouldBeAbstractOrFinal() {
+  void testAllNodesShouldBeAbstractOrFinal() {
     classes()
         .that(ARE_DELPHI_NODES)
         .should()
@@ -28,12 +28,12 @@ public class DelphiNodeTest {
   }
 
   @Test
-  public void testAllNodesShouldEndNameWithNode() {
+  void testAllNodesShouldEndNameWithNode() {
     classes().that(ARE_DELPHI_NODES).should().haveSimpleNameEndingWith("Node").check(NODE_PACKAGE);
   }
 
   @Test
-  public void testAbstractNodesShouldNotImplementAccept() {
+  void testAbstractNodesShouldNotImplementAccept() {
     classes()
         .that(ARE_DELPHI_NODES)
         .and(IMPLEMENT_ACCEPT)
@@ -43,7 +43,7 @@ public class DelphiNodeTest {
   }
 
   @Test
-  public void testAcceptShouldCallCorrectVisitorMethod() {
+  void testAcceptShouldCallCorrectVisitorMethod() {
     for (DelphiNode node : DelphiNodeUtils.getNodeInstances()) {
       DelphiParserVisitor<?> visitor = spy(new DelphiParserVisitor<>() {});
       node.accept(visitor, null);
@@ -52,7 +52,7 @@ public class DelphiNodeTest {
   }
 
   @Test
-  public void testAllNodesHaveTokenConstructor() {
+  void testAllNodesHaveTokenConstructor() {
     classes()
         .that(ARE_DELPHI_NODES)
         .should(HAVE_TOKEN_CONSTRUCTOR)

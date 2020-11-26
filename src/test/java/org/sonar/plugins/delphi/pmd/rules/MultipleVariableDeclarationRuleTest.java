@@ -3,13 +3,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class MultipleVariableDeclarationRuleTest extends BasePmdRuleTest {
+class MultipleVariableDeclarationRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testSingleVariableDeclarationsShouldNotAddIssue() {
+  void testSingleVariableDeclarationsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("var")
@@ -22,7 +22,7 @@ public class MultipleVariableDeclarationRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testSingleFieldDeclarationsShouldNotAddIssue() {
+  void testSingleFieldDeclarationsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -37,7 +37,7 @@ public class MultipleVariableDeclarationRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testSingleParameterDeclarationsShouldNotAddIssue() {
+  void testSingleParameterDeclarationsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test(Foo: Integer; Bar: Integer);")
@@ -51,7 +51,7 @@ public class MultipleVariableDeclarationRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMultipleVariableDeclarationShouldNotAddIssue() {
+  void testMultipleVariableDeclarationShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder().appendDecl("var").appendDecl("  GFoo, GBar: Integer;");
 
@@ -64,7 +64,7 @@ public class MultipleVariableDeclarationRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMultipleFieldDeclarationShouldNotAddIssue() {
+  void testMultipleFieldDeclarationShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -81,7 +81,7 @@ public class MultipleVariableDeclarationRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMultipleParameterDeclarationShouldNotAddIssue() {
+  void testMultipleParameterDeclarationShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test(Foo, Bar: Integer);")

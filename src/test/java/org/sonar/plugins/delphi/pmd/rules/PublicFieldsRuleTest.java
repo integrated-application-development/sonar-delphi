@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class PublicFieldsRuleTest extends BasePmdRuleTest {
+class PublicFieldsRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testValidRule() {
+  void testValidRule() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -26,7 +26,7 @@ public class PublicFieldsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInvalidRule() {
+  void testInvalidRule() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -48,7 +48,7 @@ public class PublicFieldsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testRecordsAreExcluded() {
+  void testRecordsAreExcluded() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

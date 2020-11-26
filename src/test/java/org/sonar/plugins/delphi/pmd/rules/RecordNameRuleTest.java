@@ -20,13 +20,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class RecordNameRuleTest extends BasePmdRuleTest {
+class RecordNameRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testValidRule() {
+  void testValidRule() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -39,7 +39,7 @@ public class RecordNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNameWithoutPrefixShouldAddIssue() {
+  void testNameWithoutPrefixShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -54,7 +54,7 @@ public class RecordNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBadPascalCaseShouldAddIssue() {
+  void testBadPascalCaseShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

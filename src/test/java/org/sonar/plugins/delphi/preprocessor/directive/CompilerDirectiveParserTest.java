@@ -4,23 +4,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.antlr.runtime.CommonToken;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveParser.CompilerDirectiveParserError;
 import org.sonar.plugins.delphi.preprocessor.directive.expression.ExpressionLexer.ExpressionLexerError;
 import org.sonar.plugins.delphi.preprocessor.directive.expression.ExpressionParser.ExpressionParserError;
 
-public class CompilerDirectiveParserTest {
+class CompilerDirectiveParserTest {
   private CompilerDirectiveParser parser;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     parser = new CompilerDirectiveParser();
   }
 
   @Test
-  public void testCreateIncludeDirective() {
+  void testCreateIncludeDirective() {
     CompilerDirective directive = parse("{$include file.inc}");
     assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.INCLUDE);
 
@@ -29,7 +29,7 @@ public class CompilerDirectiveParserTest {
   }
 
   @Test
-  public void testCreateIfDirective() {
+  void testCreateIfDirective() {
     CompilerDirective directive = parse("{$if True}");
     assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.IF);
 
@@ -39,7 +39,7 @@ public class CompilerDirectiveParserTest {
   }
 
   @Test
-  public void testCreateIfDef() {
+  void testCreateIfDef() {
     CompilerDirective ifdef = parse("{$IFDEF MY_DEFINITION}");
     CompilerDirective ifndef = parse("{$IFNDEF MY_DEFINITION}");
 
@@ -48,19 +48,19 @@ public class CompilerDirectiveParserTest {
   }
 
   @Test
-  public void testCreateIfOpt() {
+  void testCreateIfOpt() {
     CompilerDirective directive = parse("{$IFOPT O+}");
     assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.IFOPT);
   }
 
   @Test
-  public void testCreateUndefineDirective() {
+  void testCreateUndefineDirective() {
     CompilerDirective directive = parse("{$undef _DEBUG}");
     assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.UNDEFINE);
   }
 
   @Test
-  public void testCreateElseDirective() {
+  void testCreateElseDirective() {
     CompilerDirective directive = parse("{$else}");
     assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.ELSE);
 
@@ -79,25 +79,25 @@ public class CompilerDirectiveParserTest {
   }
 
   @Test
-  public void testCreateIfEndDirective() {
+  void testCreateIfEndDirective() {
     CompilerDirective directive = parse("{$ifend}");
     assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.IFEND);
   }
 
   @Test
-  public void testCreateEndIfDirective() {
+  void testCreateEndIfDirective() {
     CompilerDirective directive = parse("{$endif}");
     assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.ENDIF);
   }
 
   @Test
-  public void testCreateDefinreDirective() {
+  void testCreateDefinreDirective() {
     CompilerDirective directive = parse("{$define _DEBUG}");
     assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.DEFINE);
   }
 
   @Test
-  public void testCreateUnsupportedDirectives() {
+  void testCreateUnsupportedDirectives() {
     CompilerDirective directive = parse("{$i+}");
     assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.UNSUPPORTED);
 

@@ -27,12 +27,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class DelphiUtilsTest {
+class DelphiUtilsTest {
 
   @Test
-  public void testGetAbsolutePath() throws IOException {
+  void testGetAbsolutePath() throws IOException {
     File tempFile = File.createTempFile("testFile", "tmp");
     tempFile.deleteOnExit();
 
@@ -48,21 +48,21 @@ public class DelphiUtilsTest {
   }
 
   @Test
-  public void testAcceptFile() {
+  void testAcceptFile() {
     assertThat(DelphiUtils.acceptFile("Unit.pas")).isTrue();
     assertThat(DelphiUtils.acceptFile("Project.dpr")).isTrue();
     assertThat(DelphiUtils.acceptFile("Package.dpk")).isTrue();
   }
 
   @Test
-  public void testAcceptFileCaseInsensitive() {
+  void testAcceptFileCaseInsensitive() {
     assertThat(DelphiUtils.acceptFile("Unit.Pas")).isTrue();
     assertThat(DelphiUtils.acceptFile("Project.dPr")).isTrue();
     assertThat(DelphiUtils.acceptFile("Package.DPK")).isTrue();
   }
 
   @Test
-  public void testCommonPath() {
+  void testCommonPath() {
     assertCommonPath("a/b/c", "a/b/d", "a/b");
     assertCommonPath("a/", "a/b/d", "a");
     assertCommonPath("a/b", "a/f/../b/g", "a/b");

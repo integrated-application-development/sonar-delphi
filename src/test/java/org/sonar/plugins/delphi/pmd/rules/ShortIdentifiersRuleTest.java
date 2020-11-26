@@ -3,12 +3,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class ShortIdentifiersRuleTest extends BasePmdRuleTest {
+class ShortIdentifiersRuleTest extends BasePmdRuleTest {
   @Test
-  public void testShortIdentifiersShouldAddIssues() {
+  void testShortIdentifiersShouldAddIssues() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -33,7 +33,7 @@ public class ShortIdentifiersRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testWhitelistedIdentifiersShouldNotAddIssues() {
+  void testWhitelistedIdentifiersShouldNotAddIssues() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -47,7 +47,7 @@ public class ShortIdentifiersRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testUnitImportsShouldNotAddIssues() {
+  void testUnitImportsShouldNotAddIssues() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder().appendDecl("uses").appendDecl("  DB;");
 

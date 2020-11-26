@@ -4,13 +4,13 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 import java.io.File;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiFileConstructionException;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-public class DelphiFileTest {
+class DelphiFileTest {
   @Test
-  public void testEmptyFileShouldThrowException() {
+  void testEmptyFileShouldThrowException() {
     File sourceFile = DelphiUtils.getResource("/org/sonar/plugins/delphi/file/Empty.pas");
     DelphiFileConfig config = DelphiFile.createConfig(UTF_8.name());
 

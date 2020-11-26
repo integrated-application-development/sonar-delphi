@@ -6,21 +6,21 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.Tree;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodDeclarationNode;
 
-public class DelphiTreeAdaptorTest {
+class DelphiTreeAdaptorTest {
   private final DelphiTreeAdaptor adaptor = new DelphiTreeAdaptor();
 
   @Test
-  public void testNullDupTree() {
+  void testNullDupTree() {
     assertThat(adaptor.dupTree(null)).isNull();
   }
 
   @Test
-  public void testDupTree() {
+  void testDupTree() {
     Object node = adaptor.create(Token.INVALID_TOKEN);
     Object parent = adaptor.create(Token.INVALID_TOKEN);
     Object child = adaptor.create(Token.INVALID_TOKEN);
@@ -34,14 +34,14 @@ public class DelphiTreeAdaptorTest {
   }
 
   @Test
-  public void testDupNode() {
+  void testDupNode() {
     MethodDeclarationNode methodNode = new MethodDeclarationNode(DelphiLexer.TkMethodDeclaration);
     Object dupNode = adaptor.dupNode(methodNode);
     assertThat(methodNode).isNotEqualTo(dupNode).isInstanceOf(dupNode.getClass());
   }
 
   @Test
-  public void testBecomeRoot() {
+  void testBecomeRoot() {
     Object oldRoot = adaptor.create(Token.INVALID_TOKEN);
     Object newRoot = adaptor.create(Token.INVALID_TOKEN);
     assertThat(adaptor.becomeRoot(newRoot, oldRoot)).isEqualTo(newRoot);
@@ -49,13 +49,13 @@ public class DelphiTreeAdaptorTest {
   }
 
   @Test
-  public void testBecomeRootWithNullOldRoot() {
+  void testBecomeRootWithNullOldRoot() {
     Object newRoot = adaptor.create(Token.INVALID_TOKEN);
     assertThat(adaptor.becomeRoot(newRoot, null)).isEqualTo(newRoot);
   }
 
   @Test
-  public void testBecomeRootWithNilNewRootWithSingleChild() {
+  void testBecomeRootWithNilNewRootWithSingleChild() {
     Object oldRoot = adaptor.create(Token.INVALID_TOKEN);
     Object newRoot = adaptor.nil();
     Object child = adaptor.create(Token.INVALID_TOKEN);
@@ -64,7 +64,7 @@ public class DelphiTreeAdaptorTest {
   }
 
   @Test
-  public void testBecomeRootWithNilNewRootWithMultipleChildren() {
+  void testBecomeRootWithNilNewRootWithMultipleChildren() {
     Object oldRoot = adaptor.create(Token.INVALID_TOKEN);
     Object newRoot = adaptor.nil();
     adaptor.addChild(newRoot, adaptor.create(Token.INVALID_TOKEN));
@@ -74,18 +74,18 @@ public class DelphiTreeAdaptorTest {
   }
 
   @Test
-  public void testDupNodeInstantiationError() {
+  void testDupNodeInstantiationError() {
     assertThatThrownBy(() -> adaptor.dupNode(Tree.INVALID_NODE)).isInstanceOf(AssertionError.class);
   }
 
   @Test
-  public void testRulePostProcessing() {
+  void testRulePostProcessing() {
     Object root = adaptor.create(Token.INVALID_TOKEN);
     assertThat(adaptor.rulePostProcessing(root)).isEqualTo(root);
   }
 
   @Test
-  public void testRulePostProcessingNilWithSingleChild() {
+  void testRulePostProcessingNilWithSingleChild() {
     Object root = adaptor.nil();
     Object child = adaptor.create(Token.INVALID_TOKEN);
     adaptor.addChild(root, child);
@@ -93,19 +93,19 @@ public class DelphiTreeAdaptorTest {
   }
 
   @Test
-  public void testRulePostProcessingNilWithoutChildren() {
+  void testRulePostProcessingNilWithoutChildren() {
     Object root = adaptor.nil();
     assertThat(adaptor.rulePostProcessing(root)).isNull();
   }
 
   @Test
-  public void testGetType() {
+  void testGetType() {
     Object node = adaptor.create(Token.INVALID_TOKEN);
     assertThat(adaptor.getType(node)).isEqualTo(Token.INVALID_TOKEN_TYPE);
   }
 
   @Test
-  public void testGetParent() {
+  void testGetParent() {
     Object parent = adaptor.create(Token.INVALID_TOKEN);
     Object child = adaptor.create(Token.INVALID_TOKEN);
     adaptor.addChild(parent, child);
@@ -113,44 +113,48 @@ public class DelphiTreeAdaptorTest {
   }
 
   @Test
-  public void testErrorNode() {
+  void testErrorNode() {
     assertThat(adaptor.errorNode(null, null, null, null)).isNull();
   }
 
   @Test
-  public void testCreateToken() {
+  void testCreateToken() {
     assertThat(adaptor.createToken(Token.INVALID_TOKEN_TYPE, "")).isInstanceOf(CommonToken.class);
   }
 
   @Test
-  public void testCreateTokenFromToken() {
+  void testCreateTokenFromToken() {
     CommonToken token = new CommonToken(DelphiLexer.TkRootNode);
     assertThat(adaptor.createToken(token)).hasToString(token.toString());
   }
 
   @Test
-  public void testCreateDelphiNode() {
+  void testCreateDelphiNode() {
     Object node = adaptor.create(Token.INVALID_TOKEN_TYPE, "");
     assertThat(node).isInstanceOf(DelphiNode.class);
   }
 
-  @Test(expected = UnsupportedOperationException.class)
-  public void testGetTokenStartIndex() {
-    adaptor.getTokenStartIndex(null);
+  @Test
+  void testGetTokenStartIndex() {
+    assertThatThrownBy(() -> adaptor.getTokenStartIndex(null))
+        .isInstanceOf(UnsupportedOperationException.class);
   }
 
-  @Test(expected = UnsupportedOperationException.class)
-  public void testGetTokenStopIndex() {
-    adaptor.getTokenStopIndex(null);
+  @Test
+  void testGetTokenStopIndex() {
+    assertThatThrownBy(() -> adaptor.getTokenStopIndex(null))
+        .isInstanceOf(UnsupportedOperationException.class);
   }
 
-  @Test(expected = UnsupportedOperationException.class)
-  public void testDeleteChild() {
-    adaptor.deleteChild(null, 0);
+  @Test
+  void testDeleteChild() {
+    assertThatThrownBy(() -> adaptor.deleteChild(null, 0))
+        .isInstanceOf(UnsupportedOperationException.class);
   }
 
-  @Test(expected = UnsupportedOperationException.class)
-  public void testReplaceChildren() {
-    adaptor.replaceChildren(null, 0, 0, null);
+  @Test
+  void testReplaceChildren() {
+    assertThatThrownBy(() -> adaptor.replaceChildren(null, 0, 0, null))
+        .isInstanceOf(UnsupportedOperationException.class);
   }
 }

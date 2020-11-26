@@ -31,8 +31,8 @@ import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.sensor.SensorDescriptor;
@@ -44,7 +44,7 @@ import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.project.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-public class DelphiSensorTest {
+class DelphiSensorTest {
   private static final String STANDARD_LIBRARY = "/org/sonar/plugins/delphi/standardLibrary";
   private static final String BASE_PATH = "/org/sonar/plugins/delphi/projects/";
   private static final File BASE_DIR = DelphiUtils.getResource(BASE_PATH);
@@ -58,20 +58,20 @@ public class DelphiSensorTest {
 
   private DelphiSensor sensor;
 
-  @Before
-  public void setupSensor() {
+  @BeforeEach
+  void setupSensor() {
     sensor = new DelphiSensor(delphiProjectHelper, executor);
     when(delphiProjectHelper.shouldExecuteOnProject()).thenReturn(true);
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     final String toString = sensor.toString();
     assertThat(toString).isEqualTo("DelphiSensor");
   }
 
   @Test
-  public void testDescribe() {
+  void testDescribe() {
     final SensorDescriptor mockDescriptor = mock(SensorDescriptor.class);
     when(mockDescriptor.onlyOnLanguage(anyString())).thenReturn(mockDescriptor);
 
@@ -82,7 +82,7 @@ public class DelphiSensorTest {
   }
 
   @Test
-  public void testSensorShouldNotRethrowOtherExceptions() {
+  void testSensorShouldNotRethrowOtherExceptions() {
     setupProject(GLOBALS);
 
     final RuntimeException expectedException = new RuntimeException();
@@ -94,7 +94,7 @@ public class DelphiSensorTest {
   }
 
   @Test
-  public void testParsingExceptionShouldAddError() {
+  void testParsingExceptionShouldAddError() {
     setupProject(BAD_SYNTAX);
 
     sensor.execute(context);
@@ -103,7 +103,7 @@ public class DelphiSensorTest {
   }
 
   @Test
-  public void testWhenShouldExecuteOnProjectReturnsFalseThenExecutorIsNotCalled() {
+  void testWhenShouldExecuteOnProjectReturnsFalseThenExecutorIsNotCalled() {
     when(delphiProjectHelper.shouldExecuteOnProject()).thenReturn(false);
 
     sensor.execute(context);

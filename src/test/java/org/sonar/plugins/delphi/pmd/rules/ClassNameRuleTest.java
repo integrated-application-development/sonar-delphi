@@ -20,13 +20,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class ClassNameRuleTest extends BasePmdRuleTest {
+class ClassNameRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testAcceptT() {
+  void testAcceptT() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TType = class(TObject)");
@@ -38,7 +38,7 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNotAcceptLowercaseT() {
+  void testNotAcceptLowercaseT() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  tType = class(TObject)");
@@ -52,7 +52,7 @@ public class ClassNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNestedType() {
+  void testNestedType() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TOuterClass = class(TObject)");

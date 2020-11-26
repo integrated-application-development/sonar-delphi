@@ -2,12 +2,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class VariableNameRuleTest extends BasePmdRuleTest {
+class VariableNameRuleTest extends BasePmdRuleTest {
   @Test
-  public void testValidGlobalNamesShouldNotAddIssue() {
+  void testValidGlobalNamesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("var")
@@ -21,7 +21,7 @@ public class VariableNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInvalidGlobalNamesShouldAddIssue() {
+  void testInvalidGlobalNamesShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("var")
@@ -39,7 +39,7 @@ public class VariableNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testValidNameInMethodShouldNotAddIssue() {
+  void testValidNameInMethodShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -57,7 +57,7 @@ public class VariableNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBadPascalCaseInMethodShouldAddIssue() {
+  void testBadPascalCaseInMethodShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -77,7 +77,7 @@ public class VariableNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testAutoCreateFormVariableShouldNotAddIssue() {
+  void testAutoCreateFormVariableShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("var")
@@ -96,7 +96,7 @@ public class VariableNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testValidArgumentNameShouldNotAddIssue() {
+  void testValidArgumentNameShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure(Arg: Integer);")
@@ -110,7 +110,7 @@ public class VariableNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBadPascalCaseInArgumentNameShouldAddIssue() {
+  void testBadPascalCaseInArgumentNameShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure(arg: Integer);")

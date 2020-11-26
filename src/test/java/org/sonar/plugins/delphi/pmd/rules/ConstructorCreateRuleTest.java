@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class ConstructorCreateRuleTest extends BasePmdRuleTest {
+class ConstructorCreateRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testConstructorWithPrefixShouldNotAddIssue() {
+  void testConstructorWithPrefixShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -22,7 +22,7 @@ public class ConstructorCreateRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testConstructorIsPrefixShouldNotAddIssue() {
+  void testConstructorIsPrefixShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -36,7 +36,7 @@ public class ConstructorCreateRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testConstructorWithoutPrefixShouldAddIssue() {
+  void testConstructorWithoutPrefixShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -52,7 +52,7 @@ public class ConstructorCreateRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBadPascalCaseAddIssue() {
+  void testBadPascalCaseAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -68,7 +68,7 @@ public class ConstructorCreateRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testClassConstructorShouldNotAddIssue() {
+  void testClassConstructorShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

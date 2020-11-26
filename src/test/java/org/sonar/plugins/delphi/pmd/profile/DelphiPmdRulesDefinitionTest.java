@@ -13,7 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.rule.RuleScope;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
@@ -23,10 +23,10 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSetHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-public class DelphiPmdRulesDefinitionTest {
+class DelphiPmdRulesDefinitionTest {
 
   @Test
-  public void testShouldDefineRules() {
+  void testShouldDefineRules() {
     var provider = mock(DelphiPmdRuleSetDefinitionProvider.class);
     when(provider.getDefinition()).thenReturn(getRuleSet("import_simple.xml"));
 
@@ -43,7 +43,7 @@ public class DelphiPmdRulesDefinitionTest {
   }
 
   @Test
-  public void testSecurityStandardsShouldBeExtracted() {
+  void testSecurityStandardsShouldBeExtracted() {
     var provider = mock(DelphiPmdRuleSetDefinitionProvider.class);
     when(provider.getDefinition()).thenReturn(getRuleSet("import_security_hotspots.xml"));
 
@@ -63,7 +63,7 @@ public class DelphiPmdRulesDefinitionTest {
   }
 
   @Test
-  public void testScopePropertyOnTemplateAndCustomRules() {
+  void testScopePropertyOnTemplateAndCustomRules() {
     DelphiRule templateDefinition = new DelphiRule();
     templateDefinition.setName("MyTemplateRule");
     templateDefinition.setMessage("Test");
@@ -105,7 +105,7 @@ public class DelphiPmdRulesDefinitionTest {
   }
 
   @Test
-  public void testShouldAbortExportOnWriterException() {
+  void testShouldAbortExportOnWriterException() {
     var provider = mock(DelphiPmdRuleSetDefinitionProvider.class);
     when(provider.getDefinition())
         .thenReturn(getRuleSet("definition_missing_required_property.xml"));

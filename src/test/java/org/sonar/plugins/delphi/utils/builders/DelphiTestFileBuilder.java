@@ -40,11 +40,11 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
     return getThis();
   }
 
-  public String getDeclaration() {
+  protected String getDeclaration() {
     return declaration.toString();
   }
 
-  public String getImplementation() {
+  protected String getImplementation() {
     return implementation.toString();
   }
 
@@ -92,7 +92,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
     return DelphiInputFile.from(inputFile(), fileConfig);
   }
 
-  public StringBuilder getSourceCode() {
+  private StringBuilder getSourceCode() {
     return generateSourceCode();
   }
 

@@ -25,13 +25,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
+class UnusedArgumentsRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testUnusedArgumentShouldAddIssue() {
+  void testUnusedArgumentShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -58,7 +58,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testPublishedMethodsShouldNotAddIssue() {
+  void testPublishedMethodsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -88,7 +88,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testOverrideMethodsShouldNotAddIssue() {
+  void testOverrideMethodsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -107,7 +107,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNestedOverrideMethodsShouldNotAddIssue() {
+  void testNestedOverrideMethodsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -129,7 +129,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testVirtualMethodsShouldNotAddIssue() {
+  void testVirtualMethodsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -148,7 +148,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testMessageMethodsShouldNotAddIssue() {
+  void testMessageMethodsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -167,7 +167,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testValidSubProcedureShouldNotAddIssue() {
+  void testValidSubProcedureShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("procedure TestNestedParams(const Value : String);")
@@ -190,7 +190,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testValidSubProceduresShouldNotAddIssue() {
+  void testValidSubProceduresShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("procedure TestNestedParams(const Value : String);")
@@ -223,7 +223,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testValidNestedSubProceduresShouldNotAddIssue() {
+  void testValidNestedSubProceduresShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("procedure TestNestedParams(const Value : string);")
@@ -254,7 +254,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testValidSubProcedureUsingOuterArgumentShouldNotAddIssue() {
+  void testValidSubProcedureUsingOuterArgumentShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("procedure TestNestedParams(const Value: String);")
@@ -277,7 +277,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInvalidNestedSubProceduresShouldAddIssue() {
+  void testInvalidNestedSubProceduresShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("procedure TestNestedParams(const Value : String);")
@@ -312,7 +312,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testForwardedMethodShouldNotAddIssue() {
+  void testForwardedMethodShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("function Foo(const Bar: String): Boolean; forward;");
@@ -323,7 +323,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testHandlerMethodShouldNotAddIssue() {
+  void testHandlerMethodShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -367,7 +367,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testImplementationMethodDeclShouldNotAddIssue() {
+  void testImplementationMethodDeclShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure(MyArg: String); forward;")
@@ -382,7 +382,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testUsageInAsmBlockShouldNotAddIssue() {
+  void testUsageInAsmBlockShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure(MyArg: Integer); forward;")
@@ -400,7 +400,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testUsageInAsmProcShouldNotAddIssue() {
+  void testUsageInAsmProcShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure(MyArg: Integer); forward;")
@@ -416,7 +416,7 @@ public class UnusedArgumentsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testUnusedArgumentInAsmProcShouldAddIssue() {
+  void testUnusedArgumentInAsmProcShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure(MyArg: Integer);")

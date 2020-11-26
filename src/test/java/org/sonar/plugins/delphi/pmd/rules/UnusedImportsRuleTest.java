@@ -4,17 +4,17 @@ import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class UnusedImportsRuleTest extends BasePmdRuleTest {
+class UnusedImportsRuleTest extends BasePmdRuleTest {
   private final DelphiRuleProperty property = new DelphiRuleProperty("exclusions");
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     DelphiRule rule = new DelphiRule();
     rule.setClazz("org.sonar.plugins.delphi.pmd.rules.UnusedImportsRule");
     rule.setPriority(4);
@@ -24,7 +24,7 @@ public class UnusedImportsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testUnusedImportShouldAddIssue() {
+  void testUnusedImportShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("uses")
@@ -42,7 +42,7 @@ public class UnusedImportsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testUnresolvedImportShouldNotAddIssue() {
+  void testUnresolvedImportShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("uses")
@@ -60,7 +60,7 @@ public class UnusedImportsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testImplicitlyUsedImportShouldNotAddIssue() {
+  void testImplicitlyUsedImportShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("uses")
@@ -79,7 +79,7 @@ public class UnusedImportsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testExcludedUnusedImportInInterfaceSectionShouldNotAddIssue() {
+  void testExcludedUnusedImportInInterfaceSectionShouldNotAddIssue() {
     property.setValue("System.SysUtils");
 
     DelphiTestUnitBuilder builder =
@@ -99,7 +99,7 @@ public class UnusedImportsRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testExcludedUnusedImportInImplementationSectionShouldAddIssue() {
+  void testExcludedUnusedImportInImplementationSectionShouldAddIssue() {
     property.setValue("System.SysUtils");
 
     DelphiTestUnitBuilder builder =

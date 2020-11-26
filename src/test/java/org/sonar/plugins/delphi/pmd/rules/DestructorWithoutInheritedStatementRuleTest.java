@@ -22,13 +22,13 @@ import static org.sonar.plugins.delphi.utils.conditions.AtLine.atLine;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest {
+class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testValidRule() {
+  void testValidRule() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -48,7 +48,7 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
   }
 
   @Test
-  public void testDestructorMissingInheritedShouldAddIssue() {
+  void testDestructorMissingInheritedShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -70,7 +70,7 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
   }
 
   @Test
-  public void testDestructorLikeMethodShouldAddIssue() {
+  void testDestructorLikeMethodShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -98,7 +98,7 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
   }
 
   @Test
-  public void testDestructorLikeMethodWithoutOverrideShouldNotAddIssue() {
+  void testDestructorLikeMethodWithoutOverrideShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -122,7 +122,7 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
   }
 
   @Test
-  public void testDestructorLikeMethodWithoutDeclarationsShouldNotAddIssue() {
+  void testDestructorLikeMethodWithoutDeclarationsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure TTestDestructor.Deinit;")
@@ -140,7 +140,7 @@ public class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest
   }
 
   @Test
-  public void testClassDestructorShouldNotAddIssue() {
+  void testClassDestructorShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

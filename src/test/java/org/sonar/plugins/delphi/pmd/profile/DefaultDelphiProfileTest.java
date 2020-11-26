@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 import static org.sonar.plugins.delphi.utils.PmdLevelUtils.fromLevel;
 
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
@@ -16,7 +16,7 @@ import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInActiveRule;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 
-public class DefaultDelphiProfileTest {
+class DefaultDelphiProfileTest {
 
   private static RuleFinder createRuleFinder() {
     RuleFinder ruleFinder = mock(RuleFinder.class);
@@ -33,7 +33,7 @@ public class DefaultDelphiProfileTest {
   }
 
   @Test
-  public void testShouldCreateDefaultDelphiProfile() {
+  void testShouldCreateDefaultDelphiProfile() {
     DelphiPmdProfileImporter importer = new DelphiPmdProfileImporter(createRuleFinder());
     DefaultDelphiProfile profileDef = new DefaultDelphiProfile(importer);
 

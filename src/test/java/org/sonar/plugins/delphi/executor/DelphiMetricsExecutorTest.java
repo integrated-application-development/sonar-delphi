@@ -5,8 +5,8 @@ import static org.mockito.Mockito.mock;
 
 import java.io.File;
 import java.io.Serializable;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
@@ -15,7 +15,7 @@ import org.sonar.plugins.delphi.symbol.SymbolTable;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 
-public class DelphiMetricsExecutorTest {
+class DelphiMetricsExecutorTest {
   private static final String ROOT_PATH = "/org/sonar/plugins/delphi/projects/SimpleProject/tools/";
   private static final String ACCESSORS_TEST = "AccessorsTest.pas";
   private static final String COMMENTS_TEST = "CommentsTest.pas";
@@ -29,15 +29,15 @@ public class DelphiMetricsExecutorTest {
   private ExecutorContext context;
   private String componentKey;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     executor = new DelphiMetricsExecutor();
     sensorContext = SensorContextTester.create(ROOT_DIR);
     context = new ExecutorContext(sensorContext, mock(SymbolTable.class));
   }
 
   @Test
-  public void testAccessorsFile() {
+  void testAccessorsFile() {
     execute(ACCESSORS_TEST);
     checkMetric(CoreMetrics.CLASSES, 1);
     checkMetric(CoreMetrics.FUNCTIONS, 4);
@@ -49,7 +49,7 @@ public class DelphiMetricsExecutorTest {
   }
 
   @Test
-  public void testCommentsFile() {
+  void testCommentsFile() {
     execute(COMMENTS_TEST);
     checkMetric(CoreMetrics.CLASSES, 1);
     checkMetric(CoreMetrics.FUNCTIONS, 0);
@@ -61,7 +61,7 @@ public class DelphiMetricsExecutorTest {
   }
 
   @Test
-  public void testFunctionFile() {
+  void testFunctionFile() {
     execute(FUNCTION_TEST);
     checkMetric(CoreMetrics.CLASSES, 1);
     checkMetric(CoreMetrics.FUNCTIONS, 5);
@@ -73,7 +73,7 @@ public class DelphiMetricsExecutorTest {
   }
 
   @Test
-  public void testGlobalsFile() {
+  void testGlobalsFile() {
     execute(GLOBALS_TEST);
     checkMetric(CoreMetrics.CLASSES, 1);
     checkMetric(CoreMetrics.FUNCTIONS, 1);

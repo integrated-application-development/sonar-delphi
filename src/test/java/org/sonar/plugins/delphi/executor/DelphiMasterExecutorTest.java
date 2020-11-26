@@ -11,19 +11,19 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Set;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.sonar.plugins.delphi.executor.Executor.Context;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 
-public class DelphiMasterExecutorTest {
+class DelphiMasterExecutorTest {
   private static final DelphiInputFile TEST_FILE =
       DelphiTestFileBuilder.fromResource("/org/sonar/plugins/delphi/grammar/GrammarTest.pas")
           .delphiFile();
 
   @Test
-  public void testRegularExceptionShouldNotAbortExecution() {
+  void testRegularExceptionShouldNotAbortExecution() {
     ExecutorContext context = mock(ExecutorContext.class);
     Executor brokenExecutor = mock(Executor.class);
     Executor workingExecutor = mock(Executor.class);
@@ -36,7 +36,7 @@ public class DelphiMasterExecutorTest {
   }
 
   @Test
-  public void testFatalExecutorErrorShouldAbortExecution() {
+  void testFatalExecutorErrorShouldAbortExecution() {
     ExecutorContext context = mock(ExecutorContext.class);
     Executor brokenExecutor = mock(Executor.class);
     Executor workingExecutor = mock(Executor.class);
@@ -53,7 +53,7 @@ public class DelphiMasterExecutorTest {
   }
 
   @Test
-  public void testDependenciesShouldBeExecutedInOrder() {
+  void testDependenciesShouldBeExecutedInOrder() {
     Executor dependency = mock(DelphiSymbolTableExecutor.class);
     Executor executor = mock(DelphiPmdExecutor.class);
     when(executor.dependencies()).thenReturn(Set.of(dependency.getClass()));
@@ -68,7 +68,7 @@ public class DelphiMasterExecutorTest {
   }
 
   @Test
-  public void testUnresolvedDependencyShouldSkipExecutor() {
+  void testUnresolvedDependencyShouldSkipExecutor() {
     Executor dependency = mock(DelphiSymbolTableExecutor.class);
     Executor executor = mock(DelphiPmdExecutor.class);
     when(executor.dependencies()).thenReturn(Set.of(dependency.getClass()));
@@ -80,7 +80,7 @@ public class DelphiMasterExecutorTest {
   }
 
   @Test
-  public void testFailedDependencyExecutionShouldSkipExecutor() {
+  void testFailedDependencyExecutionShouldSkipExecutor() {
     Executor dependency = mock(DelphiSymbolTableExecutor.class);
     doThrow(new RuntimeException("Test")).when(dependency).execute(any(), any());
 
@@ -94,7 +94,7 @@ public class DelphiMasterExecutorTest {
   }
 
   @Test
-  public void testFatalErrorInDependencyExecutionShouldAbortExecution() {
+  void testFatalErrorInDependencyExecutionShouldAbortExecution() {
     Executor dependency = mock(DelphiSymbolTableExecutor.class);
     doThrow(new FatalExecutorError("Test", new RuntimeException("Test")))
         .when(dependency)

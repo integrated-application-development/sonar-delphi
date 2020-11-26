@@ -24,13 +24,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class NoSemicolonRuleTest extends BasePmdRuleTest {
+class NoSemicolonRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testRule() {
+  void testRule() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure SemicolonTest;")
@@ -46,7 +46,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInsideWhile() {
+  void testInsideWhile() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure SemicolonTest;")
@@ -63,7 +63,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInsideFor() {
+  void testInsideFor() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure SemicolonTest;")
@@ -80,7 +80,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInsideRepeat() {
+  void testInsideRepeat() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure SemicolonTest;")
@@ -100,7 +100,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInsideTryExcept() {
+  void testInsideTryExcept() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder
         .appendImpl("procedure SemicolonTest;")
@@ -123,7 +123,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInsideExceptionHandler() {
+  void testInsideExceptionHandler() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure SemicolonTest;")
@@ -144,7 +144,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInsideTryFinally() {
+  void testInsideTryFinally() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure SemicolonTest;")
@@ -167,7 +167,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testOnEndOfWhile() {
+  void testOnEndOfWhile() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure SemicolonTest;")
@@ -188,7 +188,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testOnCaseItem() {
+  void testOnCaseItem() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure SemicolonTest;")
@@ -206,7 +206,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testShouldSkipEndFollowedByElse() {
+  void testShouldSkipEndFollowedByElse() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure SemicolonTest(Val: Boolean);")
@@ -227,7 +227,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testShouldSkipRecordDeclarationOnImplementationSection() {
+  void testShouldSkipRecordDeclarationOnImplementationSection() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("type")
@@ -247,7 +247,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testShouldSkipClassDeclarationOnImplementationSection() {
+  void testShouldSkipClassDeclarationOnImplementationSection() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("type")
@@ -267,7 +267,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testShouldSkipInterfaceDeclarationOnImplementationSection() {
+  void testShouldSkipInterfaceDeclarationOnImplementationSection() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("type")
@@ -282,7 +282,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testShouldSkipAsmProcedure() {
+  void testShouldSkipAsmProcedure() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test; assembler; register;")
@@ -297,7 +297,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testShouldSkipInlineAsm() {
+  void testShouldSkipInlineAsm() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test; assembler; register;")
@@ -317,7 +317,7 @@ public class NoSemicolonRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInlineAsmWithoutSemicolonAfterEndShouldAddIssue() {
+  void testInlineAsmWithoutSemicolonAfterEndShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test; assembler; register;")

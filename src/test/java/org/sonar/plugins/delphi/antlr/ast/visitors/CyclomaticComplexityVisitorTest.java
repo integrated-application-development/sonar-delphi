@@ -2,22 +2,22 @@ package org.sonar.plugins.delphi.antlr.ast.visitors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.visitors.CyclomaticComplexityVisitor.Data;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class CyclomaticComplexityVisitorTest {
+class CyclomaticComplexityVisitorTest {
   private CyclomaticComplexityVisitor visitor;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     visitor = new CyclomaticComplexityVisitor();
   }
 
   @Test
-  public void testEmptyMethod() {
+  void testEmptyMethod() {
     DelphiAST ast =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;") // 1
@@ -29,7 +29,7 @@ public class CyclomaticComplexityVisitorTest {
   }
 
   @Test
-  public void testSimpleMethod() {
+  void testSimpleMethod() {
     DelphiAST ast =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;") // 1
@@ -44,7 +44,7 @@ public class CyclomaticComplexityVisitorTest {
   }
 
   @Test
-  public void testComplexMethod() {
+  void testComplexMethod() {
     DelphiAST ast =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;") // 1

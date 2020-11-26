@@ -20,13 +20,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class DuplicatesRuleTest extends BasePmdRuleTest {
+class DuplicatesRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testSortedOnNextLineShouldNotAddIssue() {
+  void testSortedOnNextLineShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -41,7 +41,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testSortedOnPreviousLineShouldNotAddIssue() {
+  void testSortedOnPreviousLineShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -56,7 +56,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testSortedEarlierInBlockLineShouldNotAddIssue() {
+  void testSortedEarlierInBlockLineShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function MyFunc: Boolean;")
@@ -72,7 +72,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testUnsortedShouldAddIssue() {
+  void testUnsortedShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -88,7 +88,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testUnsortedWithoutSemicolonShouldAddIssue() {
+  void testUnsortedWithoutSemicolonShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -102,7 +102,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testSortedFalseOnPreviousLineShouldAddIssue() {
+  void testSortedFalseOnPreviousLineShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -119,7 +119,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testSortedFalseOnNextLineShouldAddIssue() {
+  void testSortedFalseOnNextLineShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -136,7 +136,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testSortedDifferentListOnPreviousLineShouldAddIssue() {
+  void testSortedDifferentListOnPreviousLineShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -153,7 +153,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testSortedDifferentListOnNextLineShouldAddIssue() {
+  void testSortedDifferentListOnNextLineShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -170,7 +170,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testDupAcceptShouldNotAddIssue() {
+  void testDupAcceptShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -184,7 +184,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testUnassignedDuplicatesShouldNotAddIssue() {
+  void testUnassignedDuplicatesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -198,7 +198,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testUnassignedSortedShouldAddIssue() {
+  void testUnassignedSortedShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -213,7 +213,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testStandaloneSortedShouldAddIssue() {
+  void testStandaloneSortedShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -230,7 +230,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testProcedureOnNextLineShouldAddIssue() {
+  void testProcedureOnNextLineShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -245,7 +245,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testQualifiedSortedShouldNotAddIssue() {
+  void testQualifiedSortedShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -260,7 +260,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testQualifiedNotSortedShouldAddIssue() {
+  void testQualifiedNotSortedShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -276,7 +276,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testQualifiedTrueShouldNotAddIssue() {
+  void testQualifiedTrueShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -291,7 +291,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testQualifiedFalseShouldAddIssue() {
+  void testQualifiedFalseShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")
@@ -308,7 +308,7 @@ public class DuplicatesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testSettingWrongPropertyShouldAddIssue() {
+  void testSettingWrongPropertyShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure MyProcedure;")

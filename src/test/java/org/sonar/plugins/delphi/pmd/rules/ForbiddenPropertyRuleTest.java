@@ -2,18 +2,18 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class ForbiddenPropertyRuleTest extends BasePmdRuleTest {
+class ForbiddenPropertyRuleTest extends BasePmdRuleTest {
   private static final String UNIT_NAME = "TestUnit";
   private static final String FORBIDDEN_PROPERTY = "TestUnit.TFoo.Bar";
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     DelphiRule rule = new DelphiRule();
     DelphiRuleProperty blacklist =
         new DelphiRuleProperty(
@@ -29,7 +29,7 @@ public class ForbiddenPropertyRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testForbiddenPropertyUsageShouldAddIssue() {
+  void testForbiddenPropertyUsageShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .unitName(UNIT_NAME)
@@ -54,7 +54,7 @@ public class ForbiddenPropertyRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNotUsingForbiddenPropertyShouldNotAddIssue() {
+  void testNotUsingForbiddenPropertyShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .unitName(UNIT_NAME)

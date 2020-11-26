@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.antlr.runtime.BufferedTokenStream;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.DelphiParser;
 import org.sonar.plugins.delphi.antlr.LowercaseFileStream;
@@ -21,61 +21,61 @@ import org.sonar.plugins.delphi.file.DelphiFile;
 import org.sonar.plugins.delphi.file.DelphiFileConfig;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-public class DelphiPreprocessorTest {
+class DelphiPreprocessorTest {
   private static final String BASE_DIR = "/org/sonar/plugins/delphi/preprocessor/";
 
   @Test
-  public void testUndefineDirectives() {
+  void testUndefineDirectives() {
     executeWithDefines("UndefineDirectives.pas", "FAIL_IF_DEFINED");
   }
 
   @Test
-  public void testNestedDirectives() {
+  void testNestedDirectives() {
     executeWithDefines("NestedDirectives.pas", "FAIL_IF_DEFINED", "NESTED");
   }
 
   @Test
-  public void testSameFolderIncludeDirectives() {
+  void testSameFolderIncludeDirectives() {
     execute("includeTest/SameFolder.pas");
   }
 
   @Test
-  public void testBacktrackIncludeDirectives() {
+  void testBacktrackIncludeDirectives() {
     execute("includeTest/Backtrack.pas");
   }
 
   @Test
-  public void testSearchPathIncludeDirectives() {
+  void testSearchPathIncludeDirectives() {
     executeWithSearchPath("includeTest/SearchPath.pas", "includes");
   }
 
   @Test
-  public void testNestedIncludeDirectives() {
+  void testNestedIncludeDirectives() {
     executeWithSearchPath("includeTest/NestedSearchPath.pas", "includes", "nestedIncludes");
   }
 
   @Test
-  public void testSameNameBacktrackIncludeDirectives() {
+  void testSameNameBacktrackIncludeDirectives() {
     execute("includeTest/SameNameBacktrack.pas");
   }
 
   @Test
-  public void testBadIncludeTokenShouldNotThrowException() {
+  void testBadIncludeTokenShouldNotThrowException() {
     execute("includeTest/BadIncludeToken.pas");
   }
 
   @Test
-  public void testNonexistentIncludeShouldNotThrowException() {
+  void testNonexistentIncludeShouldNotThrowException() {
     executeWithSearchPath("includeTest/IncludeDoesNotExist.pas", "includes");
   }
 
   @Test
-  public void testSelfReferencingIncludeShouldNotThrowException() {
+  void testSelfReferencingIncludeShouldNotThrowException() {
     executeWithSearchPath("includeTest/SelfReferencingInclude.pas");
   }
 
   @Test
-  public void testCallingProcessTwiceShouldThrowException() throws Exception {
+  void testCallingProcessTwiceShouldThrowException() throws Exception {
     String filePath =
         DelphiUtils.getResource(BASE_DIR + "includeTest/SameNameBacktrack.pas").getAbsolutePath();
     DelphiFileConfig config = DelphiFile.createConfig(UTF_8.name(), emptyList(), emptySet());

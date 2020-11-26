@@ -3,13 +3,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class ImportSpecificityRuleTest extends BasePmdRuleTest {
+class ImportSpecificityRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testImportUsedInImplementationShouldAddIssue() {
+  void testImportUsedInImplementationShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("uses")
@@ -24,7 +24,7 @@ public class ImportSpecificityRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testImportUsedInInterfaceShouldNotAddIssue() {
+  void testImportUsedInInterfaceShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("uses")
@@ -38,7 +38,7 @@ public class ImportSpecificityRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testUnusedImportShouldNotAddIssue() {
+  void testUnusedImportShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("uses System.UITypes;");
 
     execute(builder);

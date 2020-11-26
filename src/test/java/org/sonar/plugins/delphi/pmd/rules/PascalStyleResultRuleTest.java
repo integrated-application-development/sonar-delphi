@@ -3,12 +3,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class PascalStyleResultRuleTest extends BasePmdRuleTest {
+class PascalStyleResultRuleTest extends BasePmdRuleTest {
   @Test
-  public void testDelphiStyleResultShouldNotAddIssue() {
+  void testDelphiStyleResultShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: TObject;")
@@ -22,7 +22,7 @@ public class PascalStyleResultRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testPascalStyleResultShouldAddIssue() {
+  void testPascalStyleResultShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: TObject;")
@@ -36,7 +36,7 @@ public class PascalStyleResultRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNestedPascalStyleResultShouldAddIssue() {
+  void testNestedPascalStyleResultShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: TObject;")

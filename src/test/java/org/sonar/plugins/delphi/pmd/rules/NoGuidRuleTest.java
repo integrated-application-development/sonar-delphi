@@ -2,12 +2,12 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class NoGuidRuleTest extends BasePmdRuleTest {
+class NoGuidRuleTest extends BasePmdRuleTest {
   @Test
-  public void testInterfaceWithGuidShouldNotAddIssue() {
+  void testInterfaceWithGuidShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -24,7 +24,7 @@ public class NoGuidRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testInterfaceWithoutGuidShouldAddIssue() {
+  void testInterfaceWithoutGuidShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

@@ -2,19 +2,19 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class InheritedTypeNameRuleTest extends BasePmdRuleTest {
+class InheritedTypeNameRuleTest extends BasePmdRuleTest {
 
   private DelphiRuleProperty nameRegex;
   private DelphiRuleProperty parentRegex;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     nameRegex = new DelphiRuleProperty(InheritedTypeNameRule.NAME_REGEX.name(), ".*_Child");
     parentRegex = new DelphiRuleProperty(InheritedTypeNameRule.PARENT_REGEX.name(), ".*_Parent");
 
@@ -29,7 +29,7 @@ public class InheritedTypeNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testCompliesWithNamingConventionShouldNotAddIssue() {
+  void testCompliesWithNamingConventionShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TType_Child = class(TType_Parent)");
@@ -41,7 +41,7 @@ public class InheritedTypeNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFailsNamingConventionShouldAddIssue() {
+  void testFailsNamingConventionShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TType = class(TType_Parent)");
@@ -55,7 +55,7 @@ public class InheritedTypeNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testFailsNamingConventionWithMultipleParentsShouldAddIssue() {
+  void testFailsNamingConventionWithMultipleParentsShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TType = class(IType, TType_Parent)");
@@ -69,7 +69,7 @@ public class InheritedTypeNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testDoesNotInheritFromExpectedTypeShouldNotAddIssue() {
+  void testDoesNotInheritFromExpectedTypeShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TType = class(TSomeOtherType)");
@@ -81,7 +81,7 @@ public class InheritedTypeNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testDoesNotInheritFromAnyTypeShouldNotAddIssue() {
+  void testDoesNotInheritFromAnyTypeShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TType = class(TObject)");
@@ -93,7 +93,7 @@ public class InheritedTypeNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBadNameRegexShouldNotAddIssue() {
+  void testBadNameRegexShouldNotAddIssue() {
     nameRegex.setValue("*");
 
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
@@ -107,7 +107,7 @@ public class InheritedTypeNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testBadParentRegexShouldNotAddIssue() {
+  void testBadParentRegexShouldNotAddIssue() {
     parentRegex.setValue("*");
 
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();

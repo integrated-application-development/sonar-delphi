@@ -2,13 +2,13 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
-public class EnumNameRuleTest extends BasePmdRuleTest {
+class EnumNameRuleTest extends BasePmdRuleTest {
 
   @Test
-  public void testAcceptT() {
+  void testAcceptT() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -20,7 +20,7 @@ public class EnumNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNotAcceptLowercaseT() {
+  void testNotAcceptLowercaseT() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -34,7 +34,7 @@ public class EnumNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNotAcceptBadPascalCase() {
+  void testNotAcceptBadPascalCase() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -48,7 +48,7 @@ public class EnumNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  public void testNotAcceptPrefixAlone() {
+  void testNotAcceptPrefixAlone() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -56,7 +56,6 @@ public class EnumNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("EnumNameRule", builder.getOffsetDecl() + 2));
+    assertIssues().areExactly(1, ruleKeyAtLine("EnumNameRule", builder.getOffsetDecl() + 2));
   }
 }

@@ -24,13 +24,13 @@ package org.sonar.plugins.delphi.pmd.xml;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 
-public class DelphiPropertyTest {
+class DelphiPropertyTest {
 
   @Test
-  public void testConstructors() {
+  void testConstructors() {
     DelphiRuleProperty property = new DelphiRuleProperty("name");
     assertThat(property.getName()).isEqualTo("name");
     assertThat(property.getValue()).isNull();
@@ -41,7 +41,7 @@ public class DelphiPropertyTest {
   }
 
   @Test
-  public void testIsCdataValue() {
+  void testIsCdataValue() {
     DelphiRuleProperty property = new DelphiRuleProperty("name", "value");
     assertThat(property.isCdataValue()).isFalse();
 
