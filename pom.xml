@@ -87,6 +87,11 @@
     <jacoco.outputDirectory.it>${basedir}/target/jacoco/report-it/</jacoco.outputDirectory.it>
     <lint.flags>-serial,-processing,-classfile</lint.flags>
     <errorprone.flags>-XepExcludedPaths:.*/generated-sources/.*</errorprone.flags>
+    <!-- Sonar wants equals() and hashcode() overrides on a bunch of DelphiRules.
+         The existing methods in PMD's AbstractRule already handle all the important data. -->
+    <sonar.issue.ignore.multicriteria>j1</sonar.issue.ignore.multicriteria>
+    <sonar.issue.ignore.multicriteria.j1.ruleKey>java:S2160</sonar.issue.ignore.multicriteria.j1.ruleKey>
+    <sonar.issue.ignore.multicriteria.j1.resourceKey>**/pmd/rules/*.java</sonar.issue.ignore.multicriteria.j1.resourceKey>
     <!--Dependency versions-->
     <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
     <sonar.version>7.9</sonar.version>
