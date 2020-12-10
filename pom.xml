@@ -96,7 +96,7 @@
     <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
     <sonar.version>7.9</sonar.version>
     <sonar-analyzers-commons.version>1.12.0.632</sonar-analyzers-commons.version>
-    <sonar-orchestrator.version>3.27.0.2172</sonar-orchestrator.version>
+    <sonar-orchestrator.version>3.34.0.2692</sonar-orchestrator.version>
     <antlr-runtime.version>3.4</antlr-runtime.version>
     <java-surefire.version>5.13.0.18197</java-surefire.version>
     <pmd.version>6.18.0</pmd.version>
@@ -126,7 +126,7 @@
     <commons-lang.version>3.11</commons-lang.version>
     <commons-io.version>2.8.0</commons-io.version>
     <assertj.version>3.18.1</assertj.version>
-    <mockito.version>3.6.0</mockito.version>
+    <mockito.version>3.6.28</mockito.version>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <dependency-plugin.version>3.1.2</dependency-plugin.version>
     <javadoc-plugin.version>3.2.0</javadoc-plugin.version>
@@ -262,6 +262,9 @@
             </configuration>
           </execution>
         </executions>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>
