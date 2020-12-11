@@ -87,6 +87,7 @@
     <jacoco.outputDirectory.it>${basedir}/target/jacoco/report-it/</jacoco.outputDirectory.it>
     <lint.flags>-serial,-processing,-classfile</lint.flags>
     <errorprone.flags>-XepExcludedPaths:.*/generated-sources/.*</errorprone.flags>
+    <dependency-track.projectName>tools::sonar-delphi</dependency-track.projectName>
     <!-- Sonar wants equals() and hashcode() overrides on a bunch of DelphiRules.
          The existing methods in PMD's AbstractRule already handle all the important data. -->
     <sonar.issue.ignore.multicriteria>j1</sonar.issue.ignore.multicriteria>
@@ -128,8 +129,10 @@
     <assertj.version>3.18.1</assertj.version>
     <mockito.version>3.6.28</mockito.version>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
+    <cyclonedx-plugin.version>2.1.1</cyclonedx-plugin.version>
     <dependency-plugin.version>3.1.2</dependency-plugin.version>
     <javadoc-plugin.version>3.2.0</javadoc-plugin.version>
+    <site-plugin.version>3.9.1</site-plugin.version>
     <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
     <jacoco-plugin.version>0.8.6</jacoco-plugin.version>
     <dependency-check-plugin.version>6.0.3</dependency-check-plugin.version>
@@ -482,6 +485,41 @@
             </path>
           </annotationProcessorPaths>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.cyclonedx</groupId>
+        <artifactId>cyclonedx-maven-plugin</artifactId>
+        <version>${cyclonedx-plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>verify</phase>
+            <goals>
+              <goal>makeAggregateBom</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <schemaVersion>1.1</schemaVersion>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>${site-plugin.version}</version>
+        <configuration>
+          <siteDirectory>${rootDir}</siteDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>attach-descriptor</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <pomPackagingOnly>false</pomPackagingOnly>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
