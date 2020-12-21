@@ -21,8 +21,8 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRIN
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDECHAR;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDESTRING;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.util.List;
-import org.assertj.core.util.VisibleForTesting;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ArrayConstructorType;
 import org.sonar.plugins.delphi.type.Type.BooleanType;
