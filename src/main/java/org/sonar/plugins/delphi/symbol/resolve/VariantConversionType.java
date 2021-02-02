@@ -2,12 +2,10 @@ package org.sonar.plugins.delphi.symbol.resolve;
 
 import static java.util.Objects.requireNonNullElse;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal;
-import org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger;
-import org.sonar.plugins.delphi.type.intrinsic.IntrinsicText;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
 
 enum VariantConversionType {
   NO_CONVERSION_REQUIRED,
@@ -24,82 +22,58 @@ enum VariantConversionType {
   DOUBLE_CURRENCY,
   SINGLE,
   CARDINAL,
-  LONGINT,
+  INTEGER,
   SMALLINT,
   WORD,
   SHORTINT,
   BYTE;
 
-  private static final Map<String, VariantConversionType> integerTypeMap =
-      new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-
-  private static final Map<String, VariantConversionType> decimalTypeMap =
-      new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-
-  private static final Map<String, VariantConversionType> textTypeMap =
-      new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+  private static final Map<String, VariantConversionType> intrinsicTypeMap = new HashMap<>();
 
   static {
-    add(IntrinsicInteger.BYTE, BYTE);
-    add(IntrinsicInteger.WORD, WORD);
-    add(IntrinsicInteger.CARDINAL, CARDINAL);
-    add(IntrinsicInteger.LONGWORD, CARDINAL);
-    add(IntrinsicInteger.FIXEDUINT, CARDINAL);
-    add(IntrinsicInteger.UINT64, CHARI64);
+    add(IntrinsicType.BYTE, BYTE);
+    add(IntrinsicType.WORD, WORD);
+    add(IntrinsicType.CARDINAL, CARDINAL);
+    add(IntrinsicType.UINT64, CHARI64);
 
-    add(IntrinsicInteger.SHORTINT, SHORTINT);
-    add(IntrinsicInteger.SMALLINT, SMALLINT);
-    add(IntrinsicInteger.INTEGER, LONGINT);
-    add(IntrinsicInteger.LONGINT, LONGINT);
-    add(IntrinsicInteger.FIXEDINT, LONGINT);
-    add(IntrinsicInteger.INT64, CHARI64);
+    add(IntrinsicType.SHORTINT, SHORTINT);
+    add(IntrinsicType.SMALLINT, SMALLINT);
+    add(IntrinsicType.INTEGER, INTEGER);
+    add(IntrinsicType.INT64, CHARI64);
 
-    add(IntrinsicDecimal.SINGLE, SINGLE);
-    add(IntrinsicDecimal.REAL48, DOUBLE_CURRENCY);
-    add(IntrinsicDecimal.REAL, DOUBLE_CURRENCY);
-    add(IntrinsicDecimal.DOUBLE, DOUBLE_CURRENCY);
-    add(IntrinsicDecimal.COMP, DOUBLE_CURRENCY);
-    add(IntrinsicDecimal.CURRENCY, DOUBLE_CURRENCY);
-    add(IntrinsicDecimal.EXTENDED, EXTENDED);
+    add(IntrinsicType.SINGLE, SINGLE);
+    add(IntrinsicType.REAL48, DOUBLE_CURRENCY);
+    add(IntrinsicType.REAL, DOUBLE_CURRENCY);
+    add(IntrinsicType.DOUBLE, DOUBLE_CURRENCY);
+    add(IntrinsicType.COMP, DOUBLE_CURRENCY);
+    add(IntrinsicType.CURRENCY, DOUBLE_CURRENCY);
+    add(IntrinsicType.EXTENDED, EXTENDED);
 
-    add(IntrinsicText.ANSICHAR, CHARI64);
-    add(IntrinsicText.WIDECHAR, CHARI64);
-    add(IntrinsicText.CHAR, CHARI64);
-    add(IntrinsicText.SHORTSTRING, SHORTSTRING);
-    add(IntrinsicText.ANSISTRING, ANSISTRING);
-    add(IntrinsicText.WIDESTRING, WIDESTRING);
-    add(IntrinsicText.UNICODESTRING, UNICODESTRING);
+    add(IntrinsicType.ANSICHAR, CHARI64);
+    add(IntrinsicType.WIDECHAR, CHARI64);
+    add(IntrinsicType.SHORTSTRING, SHORTSTRING);
+    add(IntrinsicType.ANSISTRING, ANSISTRING);
+    add(IntrinsicType.WIDESTRING, WIDESTRING);
+    add(IntrinsicType.UNICODESTRING, UNICODESTRING);
   }
 
-  private static void add(IntrinsicInteger integerType, VariantConversionType variantType) {
-    integerTypeMap.put(integerType.type.getImage(), variantType);
-  }
-
-  private static void add(IntrinsicDecimal decimalType, VariantConversionType variantType) {
-    decimalTypeMap.put(decimalType.type.getImage(), variantType);
-  }
-
-  private static void add(IntrinsicText textType, VariantConversionType variantType) {
-    textTypeMap.put(textType.type.getImage(), variantType);
+  private static void add(IntrinsicType intrinsic, VariantConversionType variantType) {
+    intrinsicTypeMap.put(intrinsic.fullyQualifiedName(), variantType);
   }
 
   static VariantConversionType fromType(Type type) {
-    VariantConversionType result = null;
+    VariantConversionType result;
 
     if (type.isVariant()) {
       result = NO_CONVERSION_REQUIRED;
-    } else if (type.isInteger()) {
-      result = integerTypeMap.get(type.getImage());
-    } else if (type.isDecimal()) {
-      result = decimalTypeMap.get(type.getImage());
-    } else if (type.isText()) {
-      result = textTypeMap.get(type.getImage());
     } else if (type.isEnum()) {
       result = ENUM;
     } else if (type.isDynamicArray()) {
       result = DYNAMIC_ARRAY;
     } else if (type.isBoolean() || type.isUntyped()) {
       result = FORMAL_BOOLEAN;
+    } else {
+      result = intrinsicTypeMap.get(type.getImage());
     }
 
     return requireNonNullElse(result, INCOMPATIBLE_VARIANT);

@@ -5,8 +5,7 @@ import java.util.Set;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.type.DelphiArrayType;
-import org.sonar.plugins.delphi.type.DelphiArrayType.ArrayOption;
+import org.sonar.plugins.delphi.type.ArrayOption;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
 
@@ -48,6 +47,6 @@ public final class ArrayExpressionNode extends ExpressionNode {
     if (!elements.isEmpty()) {
       elementType = elements.get(0).getType();
     }
-    return DelphiArrayType.array(null, elementType, Set.of(ArrayOption.FIXED));
+    return getTypeFactory().array(null, elementType, Set.of(ArrayOption.FIXED));
   }
 }

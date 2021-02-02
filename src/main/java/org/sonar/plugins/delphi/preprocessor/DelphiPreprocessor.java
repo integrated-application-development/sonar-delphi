@@ -32,6 +32,7 @@ import org.sonar.plugins.delphi.preprocessor.directive.BranchingDirective;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveType;
 import org.sonar.plugins.delphi.preprocessor.directive.EndIfDirective;
+import org.sonar.plugins.delphi.type.factory.TypeFactory;
 
 public class DelphiPreprocessor {
   private static final Logger LOG = Loggers.get(DelphiPreprocessor.class);
@@ -258,5 +259,9 @@ public class DelphiPreprocessor {
 
   public CompilerSwitchRegistry getCompilerSwitchRegistry() {
     return switchRegistry;
+  }
+
+  public TypeFactory getTypeFactory() {
+    return config.getTypeFactory();
   }
 }

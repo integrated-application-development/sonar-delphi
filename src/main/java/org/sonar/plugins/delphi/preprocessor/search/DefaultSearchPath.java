@@ -19,13 +19,11 @@ public class DefaultSearchPath implements SearchPath {
   private static final Logger LOG = Loggers.get(DefaultSearchPath.class);
   private final Set<Path> rootDirectories;
   private final SetMultimap<Path, Path> filesByDirectory;
-  private final Set<Path> allFiles;
   private final Set<Path> indexedPaths;
 
   DefaultSearchPath(Iterable<Path> searchDirectories) {
     this.rootDirectories = ImmutableSet.copyOf(searchDirectories);
     this.filesByDirectory = HashMultimap.create();
-    this.allFiles = new HashSet<>();
     this.indexedPaths = new HashSet<>();
 
     rootDirectories.forEach(this::indexIncludePath);
@@ -51,6 +49,11 @@ public class DefaultSearchPath implements SearchPath {
     return path;
   }
 
+  @Override
+  public Set<Path> getRootDirectories() {
+    return rootDirectories;
+  }
+
   private Set<Path> indexIncludePath(Path path) {
     try (DirectoryStream<Path> stream = Files.newDirectoryStream(path)) {
       for (Path child : stream) {
@@ -58,7 +61,6 @@ public class DefaultSearchPath implements SearchPath {
           filesByDirectory.putAll(path, indexIncludePath(child));
         } else {
           filesByDirectory.put(path, child);
-          allFiles.add(child);
         }
       }
     } catch (IOException e) {

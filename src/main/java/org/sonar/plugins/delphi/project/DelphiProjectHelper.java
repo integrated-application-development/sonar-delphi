@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.api.batch.fs.FilePredicates;
@@ -46,6 +47,9 @@ import org.sonar.api.scanner.ScannerSide;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.plugins.delphi.compiler.CompilerVersion;
+import org.sonar.plugins.delphi.compiler.PredefinedConditionals;
+import org.sonar.plugins.delphi.compiler.Toolchain;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
@@ -54,14 +58,16 @@ public class DelphiProjectHelper {
   private static final Logger LOG = Loggers.get(DelphiProjectHelper.class);
   private final Configuration settings;
   private final FileSystem fs;
+  private final List<DelphiProject> projects;
+  private final Toolchain toolchain;
+  private final CompilerVersion compilerVersion;
   private final List<Path> searchDirectories;
   private final Set<String> conditionalDefines;
   private final Set<String> unitScopeNames;
   private final Map<String, String> unitAliases;
-  private final List<DelphiProject> projects;
 
   /**
-   * ctor used by Sonar
+   * Constructor
    *
    * @param settings Project settings
    * @param fs Sonar FileSystem
@@ -70,27 +76,53 @@ public class DelphiProjectHelper {
     this.settings = settings;
     this.fs = fs;
     this.projects = new ArrayList<>();
-
-    conditionalDefines = getSetFromSettings(DelphiPlugin.CONDITIONAL_DEFINES_KEY);
-    unitScopeNames = getSetFromSettings(DelphiPlugin.UNIT_SCOPE_NAMES_KEY);
-    searchDirectories = getSearchDirectoriesFromSettings();
-    unitAliases = getUnitAliasesFromSettings();
+    this.toolchain = getToolchainFromSettings();
+    this.compilerVersion = getCompilerVersionFromSettings();
+    this.searchDirectories = getSearchDirectoriesFromSettings();
+    this.conditionalDefines = getPredefinedConditionalDefines();
+    this.unitScopeNames = getSetFromSettings(DelphiPlugin.UNIT_SCOPE_NAMES_KEY);
+    this.unitAliases = getUnitAliasesFromSettings();
 
     this.indexProjects();
 
     for (DelphiProject project : projects) {
-      searchDirectories.addAll(project.getSearchDirectories());
-      conditionalDefines.addAll(project.getConditionalDefines());
-      unitScopeNames.addAll(project.getUnitScopeNames());
-      unitAliases.putAll(project.getUnitAliases());
+      this.searchDirectories.addAll(project.getSearchDirectories());
+      this.conditionalDefines.addAll(project.getConditionalDefines());
+      this.unitScopeNames.addAll(project.getUnitScopeNames());
+      this.unitAliases.putAll(project.getUnitAliases());
     }
 
-    Set<String> conditionalUndefines = getSetFromSettings(DelphiPlugin.CONDITIONAL_UNDEFINES_KEY);
-    conditionalDefines.removeAll(conditionalUndefines);
+    this.conditionalDefines.addAll(getSetFromSettings(DelphiPlugin.CONDITIONAL_DEFINES_KEY));
+    this.conditionalDefines.removeAll(getSetFromSettings(DelphiPlugin.CONDITIONAL_UNDEFINES_KEY));
   }
 
   private Set<String> getSetFromSettings(String key) {
     return Arrays.stream(nullToEmpty(settings.getStringArray(key))).collect(Collectors.toSet());
+  }
+
+  private Toolchain getToolchainFromSettings() {
+    return EnumUtils.getEnumIgnoreCase(
+        Toolchain.class,
+        settings.get(DelphiPlugin.COMPILER_TOOLCHAIN_KEY).orElse(null),
+        DelphiPlugin.COMPILER_TOOLCHAIN_DEFAULT);
+  }
+
+  private CompilerVersion getCompilerVersionFromSettings() {
+    String versionSymbol =
+        settings
+            .get(DelphiPlugin.COMPILER_VERSION_KEY)
+            .orElse(DelphiPlugin.COMPILER_VERSION_DEFAULT.symbol());
+
+    try {
+      return CompilerVersion.fromVersionSymbol(versionSymbol);
+    } catch (CompilerVersion.FormatException e) {
+      LOG.warn(
+          "Defaulting to compiler version \"{}\" because the provided one was invalid: \"{}\"",
+          DelphiPlugin.COMPILER_VERSION_DEFAULT,
+          versionSymbol);
+      LOG.debug("Exception: ", e);
+      return DelphiPlugin.COMPILER_VERSION_DEFAULT;
+    }
   }
 
   private List<Path> getSearchDirectoriesFromSettings() {
@@ -132,6 +164,10 @@ public class DelphiProjectHelper {
             });
 
     return result;
+  }
+
+  private Set<String> getPredefinedConditionalDefines() {
+    return PredefinedConditionals.getConditionalDefines(toolchain, compilerVersion);
   }
 
   private void indexProjects() {
@@ -182,6 +218,24 @@ public class DelphiProjectHelper {
    */
   public List<Path> getSearchDirectories() {
     return searchDirectories;
+  }
+
+  /**
+   * Get the compiler version
+   *
+   * @return the compiler version
+   */
+  public CompilerVersion getCompilerVersion() {
+    return compilerVersion;
+  }
+
+  /**
+   * Get the compiler toolchain
+   *
+   * @return the compiler toolchain
+   */
+  public Toolchain getToolchain() {
+    return toolchain;
   }
 
   /**
@@ -257,10 +311,6 @@ public class DelphiProjectHelper {
       return fileName + "." + DelphiLanguage.FILE_SOURCE_CODE_SUFFIX;
     }
     return fileName;
-  }
-
-  public File workDir() {
-    return fs.workDir();
   }
 
   public String encoding() {

@@ -1,23 +1,25 @@
 package org.sonar.plugins.delphi.type;
 
-import com.google.errorprone.annotations.Immutable;
-import org.sonar.plugins.delphi.type.Type.ImmutableType;
-
-@Immutable
-public class DelphiUnresolvedType extends DelphiType implements ImmutableType {
+public class DelphiUnresolvedType extends DelphiType {
   private final String image;
 
   private DelphiUnresolvedType(String image) {
     this.image = image;
   }
 
-  public static ImmutableType referenceTo(String image) {
+  public static Type referenceTo(String image) {
     return new DelphiUnresolvedType(image);
   }
 
   @Override
   public String getImage() {
     return image;
+  }
+
+  @Override
+  public int size() {
+    // meta type
+    return 0;
   }
 
   @Override

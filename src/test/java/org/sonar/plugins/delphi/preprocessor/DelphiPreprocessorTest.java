@@ -1,15 +1,12 @@
 package org.sonar.plugins.delphi.preprocessor;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import org.antlr.runtime.BufferedTokenStream;
 import org.junit.jupiter.api.Test;
@@ -19,7 +16,11 @@ import org.sonar.plugins.delphi.antlr.DelphiParser;
 import org.sonar.plugins.delphi.antlr.ast.DelphiTreeAdaptor;
 import org.sonar.plugins.delphi.file.DelphiFile;
 import org.sonar.plugins.delphi.file.DelphiFileConfig;
+import org.sonar.plugins.delphi.preprocessor.search.SearchPath;
+import org.sonar.plugins.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.sonar.plugins.delphi.utils.files.DelphiFileUtils;
+import org.sonar.plugins.delphi.utils.types.TypeFactoryUtils;
 
 class DelphiPreprocessorTest {
   private static final String BASE_DIR = "/org/sonar/plugins/delphi/preprocessor/";
@@ -78,7 +79,7 @@ class DelphiPreprocessorTest {
   void testCallingProcessTwiceShouldThrowException() throws Exception {
     String filePath =
         DelphiUtils.getResource(BASE_DIR + "includeTest/SameNameBacktrack.pas").getAbsolutePath();
-    DelphiFileConfig config = DelphiFile.createConfig(UTF_8.name(), emptyList(), emptySet());
+    DelphiFileConfig config = DelphiFileUtils.mockConfig();
     DelphiFileStream fileStream = new DelphiFileStream(filePath, config.getEncoding());
 
     DelphiLexer lexer = new DelphiLexer(fileStream);
@@ -89,21 +90,28 @@ class DelphiPreprocessorTest {
   }
 
   private static void executeWithDefines(String filename, String... defines) {
-    Set<String> defineSet = new HashSet<>(Arrays.asList(defines));
-    execute(filename, DelphiFile.createConfig(UTF_8.name(), emptyList(), defineSet));
+    DelphiFileConfig config =
+        DelphiFile.createConfig(
+            UTF_8.name(),
+            TypeFactoryUtils.defaultFactory(),
+            SearchPath.create(Collections.emptyList()),
+            new HashSet<>(Arrays.asList(defines)));
+    execute(filename, config);
   }
 
   private static void executeWithSearchPath(String filename, String... directories) {
-    List<Path> searchPath =
-        Arrays.stream(directories)
-            .map(dir -> DelphiUtils.getResource(BASE_DIR + dir).toPath())
-            .collect(Collectors.toList());
+    TypeFactory typeFactory = TypeFactoryUtils.defaultFactory();
+    SearchPath searchPath =
+        SearchPath.create(
+            Arrays.stream(directories)
+                .map(dir -> DelphiUtils.getResource(BASE_DIR + dir).toPath())
+                .collect(Collectors.toList()));
 
-    execute(filename, DelphiFile.createConfig(UTF_8.name(), searchPath, emptySet()));
+    execute(filename, DelphiFile.createConfig(UTF_8.name(), typeFactory, searchPath, emptySet()));
   }
 
   private static void execute(String filename) {
-    execute(filename, DelphiFile.createConfig(UTF_8.name()));
+    execute(filename, DelphiFileUtils.mockConfig());
   }
 
   private static void execute(String filename, DelphiFileConfig config) {

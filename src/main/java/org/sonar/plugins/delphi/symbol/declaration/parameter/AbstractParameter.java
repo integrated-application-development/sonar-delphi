@@ -57,7 +57,7 @@ public abstract class AbstractParameter implements Parameter {
   public final int compareTo(@NotNull Parameter other) {
     return ComparisonChain.start()
         .compare(getImage(), other.getImage(), String.CASE_INSENSITIVE_ORDER)
-        .compare(getType().getImage(), other.getType().getImage())
+        .compare(getType().getImage(), other.getType().getImage(), String.CASE_INSENSITIVE_ORDER)
         .result();
   }
 }

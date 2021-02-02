@@ -1,14 +1,12 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
-
 import net.sourceforge.pmd.lang.ast.Node;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
 
 public final class TextLiteralNode extends LiteralNode {
   private String image;
@@ -29,11 +27,10 @@ public final class TextLiteralNode extends LiteralNode {
   @Override
   @NotNull
   public Type getType() {
-    if (getImageWithoutQuotes().length() == 1) {
-      return CHAR.type;
-    }
+    IntrinsicType intrinsic =
+        (getImageWithoutQuotes().length() == 1) ? IntrinsicType.CHAR : IntrinsicType.STRING;
 
-    return UNICODESTRING.type;
+    return getTypeFactory().getIntrinsic(intrinsic);
   }
 
   @Override

@@ -280,7 +280,7 @@ pointerType                  : '^'<PointerTypeNode>^ varType
 stringType                   : 'string'<StringTypeNode>^ ('['! expression ']'!)?
                              | ANSISTRING<AnsiStringTypeNode>^ (codePageNumber)?
                              ;
-codePageNumber               : '(' expression ')'
+codePageNumber               : '('! expression ')'!
                              ;
 procedureType                : methodType
                              | procedureReference

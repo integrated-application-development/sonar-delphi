@@ -41,6 +41,7 @@ import org.sonar.plugins.delphi.antlr.ast.DelphiTreeAdaptor;
 import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
+import org.sonar.plugins.delphi.type.factory.TypeFactory;
 
 /** AST node extended with PMD interfaces for PMD analysis */
 public abstract class DelphiNode extends AbstractNode implements ScopedNode, IndexedNode {
@@ -271,6 +272,10 @@ public abstract class DelphiNode extends AbstractNode implements ScopedNode, Ind
     }
 
     return getFirstParentOfType(DelphiAST.class);
+  }
+
+  public final TypeFactory getTypeFactory() {
+    return getASTTree().getDelphiFile().getTypeFactory();
   }
 
   /**

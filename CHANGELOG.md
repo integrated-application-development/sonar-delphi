@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for toolchain-aware-analysis.
+- Support for the `SizeOf` intrinsic in constant expressions.
+- `sonar.delphi.compiler.toolchain` property to specify the compiler toolchain used by the project.
+- `sonar.delphi.compiler.version` property to specify the compiler version used by the project.
+
 ### Changed
 
 - Improve handling of files with differing encodings:
@@ -16,10 +23,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Encoding detection will not be used for files being analyzed by Sonar, which must continue to
     match the `sonar.sourceEncoding` property. The Sonar API does not support analysis of projects
     with mixed encodings.
+- Improve type comparisons between `AnsiString` types with different code pages.
 
 ### Fixed
 
 - Allow custom attributes after parameter specifiers.
+- Fix type comparison issues between `PChar` and array of `Char`.
+- Fix type comparison issues between `PChar` and `String`.
+- Remove `FixedInt` and `FixedUInt` intrinsic type definitions, as they're actually real type
+  aliases defined in `System`.
+- Remove `Flush` intrinsic method definition, as it's actually a real method defined in `System`.
 
 ## [0.27.0] - 2020-11-26
 

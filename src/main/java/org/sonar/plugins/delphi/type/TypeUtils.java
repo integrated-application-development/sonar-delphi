@@ -1,37 +1,13 @@
 package org.sonar.plugins.delphi.type;
 
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSICHAR;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDECHAR;
-
-import org.sonar.plugins.delphi.type.Type.BooleanType;
-import org.sonar.plugins.delphi.type.Type.IntegerType;
 import org.sonar.plugins.delphi.type.Type.PointerType;
+import org.sonar.plugins.delphi.type.Type.StringType;
 import org.sonar.plugins.delphi.type.Type.SubrangeType;
 import org.sonar.plugins.delphi.type.Type.TypeType;
 
 public final class TypeUtils {
   private TypeUtils() {
     // utility class
-  }
-
-  /**
-   * If type is an ordinal type, returns the ordinal size in bytes.
-   *
-   * @param type The type having its ordinal size checked
-   * @return Ordinal size in bytes, or 0 if type is not an ordinal type.
-   */
-  public static int ordinalSize(Type type) {
-    if (type.isInteger()) {
-      return ((IntegerType) type).size();
-    } else if (type.isBoolean()) {
-      return ((BooleanType) type).size();
-    } else if (type.is(WIDECHAR.type)) {
-      return 2;
-    } else if (type.is(ANSICHAR.type)) {
-      return 1;
-    } else {
-      return 0;
-    }
   }
 
   public static Type findBaseType(Type type) {
@@ -52,5 +28,25 @@ public final class TypeUtils {
       return ((PointerType) baseType).dereferencedType();
     }
     return type;
+  }
+
+  /**
+   * Check if the supplied type is a string with single-byte characters
+   *
+   * @param type The type we're checking
+   * @return true if this is a string type with single-byte characters
+   */
+  public static boolean isNarrowString(Type type) {
+    return type.isString() && ((StringType) type).characterType().size() == 1;
+  }
+
+  /**
+   * Check if the supplied type is a string with multi-byte characters
+   *
+   * @param type The type we're checking
+   * @return true if this is a string type with multi-byte characters
+   */
+  public static boolean isWideString(Type type) {
+    return type.isString() && ((StringType) type).characterType().size() > 1;
   }
 }

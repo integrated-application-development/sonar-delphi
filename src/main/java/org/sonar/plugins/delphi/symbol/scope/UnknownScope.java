@@ -3,7 +3,6 @@ package org.sonar.plugins.delphi.symbol.scope;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
 
-import com.google.errorprone.annotations.Immutable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,6 @@ import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.HelperType;
 
-@Immutable
 public final class UnknownScope implements DelphiScope {
   private static final UnknownScope UNKNOWN_SCOPE = new UnknownScope();
 

@@ -4,7 +4,6 @@ import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.type.DelphiFileType;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class FileTypeNode extends TypeNode {
@@ -26,6 +25,6 @@ public final class FileTypeNode extends TypeNode {
   @NotNull
   public Type createType() {
     TypeNode type = getTypeNode();
-    return type == null ? DelphiFileType.untypedFile() : DelphiFileType.fileOf(type.getType());
+    return type == null ? getTypeFactory().untypedFile() : getTypeFactory().fileOf(type.getType());
   }
 }

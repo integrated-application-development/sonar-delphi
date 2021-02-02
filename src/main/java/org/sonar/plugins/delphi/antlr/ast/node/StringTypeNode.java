@@ -1,12 +1,10 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.SHORTSTRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
-
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
 
 public final class StringTypeNode extends TypeNode {
   public StringTypeNode(Token token) {
@@ -25,6 +23,7 @@ public final class StringTypeNode extends TypeNode {
   @Override
   @NotNull
   public Type createType() {
-    return isFixedString() ? SHORTSTRING.type : UNICODESTRING.type;
+    IntrinsicType intrinsic = isFixedString() ? IntrinsicType.SHORTSTRING : IntrinsicType.STRING;
+    return getTypeFactory().getIntrinsic(intrinsic);
   }
 }

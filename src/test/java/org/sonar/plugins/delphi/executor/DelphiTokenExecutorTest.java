@@ -29,10 +29,10 @@ import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
-import org.sonar.plugins.delphi.file.DelphiFile;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.symbol.SymbolTable;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.sonar.plugins.delphi.utils.files.DelphiFileUtils;
 
 class DelphiTokenExecutorTest {
   private static final String ROOT_DIR_NAME = "/org/sonar/plugins/delphi/token";
@@ -200,7 +200,7 @@ class DelphiTokenExecutorTest {
               .setType(InputFile.Type.MAIN)
               .build();
 
-      return DelphiInputFile.from(inputFile, DelphiFile.createConfig(UTF_8.name()));
+      return DelphiInputFile.from(inputFile, DelphiFileUtils.mockConfig());
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }

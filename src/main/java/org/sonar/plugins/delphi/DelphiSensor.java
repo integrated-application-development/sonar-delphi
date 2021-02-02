@@ -44,6 +44,8 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.codecoverage.DelphiCodeCoverageParser;
 import org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
+import org.sonar.plugins.delphi.compiler.CompilerVersion;
+import org.sonar.plugins.delphi.compiler.Toolchain;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.executor.DelphiMasterExecutor;
 import org.sonar.plugins.delphi.executor.ExecutorContext;
@@ -51,8 +53,10 @@ import org.sonar.plugins.delphi.file.DelphiFile;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiFileConstructionException;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.file.DelphiFileConfig;
+import org.sonar.plugins.delphi.preprocessor.search.SearchPath;
 import org.sonar.plugins.delphi.project.DelphiProjectHelper;
 import org.sonar.plugins.delphi.symbol.SymbolTable;
+import org.sonar.plugins.delphi.type.factory.TypeFactory;
 import org.sonarsource.analyzer.commons.ProgressReport;
 
 /** PMD sensor */
@@ -93,16 +97,25 @@ public class DelphiSensor implements Sensor {
   }
 
   private void executeOnFiles(SensorContext sensorContext) {
+    Toolchain toolchain = delphiProjectHelper.getToolchain();
+    CompilerVersion compilerVersion = delphiProjectHelper.getCompilerVersion();
+
+    LOG.info("Platform: {}", toolchain.platform.name());
+    LOG.info("Architecture: {}", toolchain.architecture.name());
+    LOG.info("Compiler version: {}", compilerVersion.number().toString());
     LOG.info("Conditional defines: {}", delphiProjectHelper.getConditionalDefines());
 
+    TypeFactory typeFactory = new TypeFactory(toolchain, compilerVersion);
     Iterable<InputFile> inputFiles = delphiProjectHelper.mainFiles();
     List<Path> sourceFiles = inputFilesToPaths(inputFiles);
+    SearchPath searchPath = SearchPath.create(delphiProjectHelper.getSearchDirectories());
 
     SymbolTable symbolTable =
         SymbolTable.builder()
+            .typeFactory(typeFactory)
             .sourceFiles(sourceFiles)
             .encoding(delphiProjectHelper.encoding())
-            .searchDirectories(delphiProjectHelper.getSearchDirectories())
+            .searchPath(searchPath)
             .conditionalDefines(delphiProjectHelper.getConditionalDefines())
             .unitScopeNames(delphiProjectHelper.getUnitScopeNames())
             .unitAliases(delphiProjectHelper.getUnitAliases())
@@ -119,7 +132,8 @@ public class DelphiSensor implements Sensor {
     DelphiFileConfig config =
         DelphiFile.createConfig(
             delphiProjectHelper.encoding(),
-            delphiProjectHelper.getSearchDirectories(),
+            typeFactory,
+            searchPath,
             delphiProjectHelper.getConditionalDefines());
 
     boolean success = false;

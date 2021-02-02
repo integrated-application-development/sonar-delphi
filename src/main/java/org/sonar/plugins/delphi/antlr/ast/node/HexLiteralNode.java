@@ -5,7 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger;
 
 public final class HexLiteralNode extends LiteralNode {
   private String image;
@@ -39,7 +38,7 @@ public final class HexLiteralNode extends LiteralNode {
   @NotNull
   public Type getType() {
     if (type == null) {
-      type = IntrinsicInteger.fromLiteralValue(this.getValueAsLong());
+      type = getTypeFactory().integerFromLiteralValue(this.getValueAsLong());
     }
     return type;
   }

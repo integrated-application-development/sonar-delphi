@@ -1,28 +1,22 @@
 package org.sonar.plugins.delphi.type;
 
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSICHAR;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSISTRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.SHORTSTRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDESTRING;
-
 import java.util.Collections;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
 
 public abstract class DelphiType implements Type {
-  public static ImmutableType unknownType() {
-    return UnknownType.instance();
+  public static Type unknownType() {
+    return DelphiUnknownType.instance();
   }
 
-  public static ImmutableType untypedType() {
-    return UntypedType.instance();
+  public static Type untypedType() {
+    return DelphiUntypedType.instance();
   }
 
-  public static ImmutableType voidType() {
-    return VoidType.instance();
+  public static Type voidType() {
+    return DelphiVoidType.instance();
   }
 
   @NotNull
@@ -54,6 +48,11 @@ public abstract class DelphiType implements Type {
   @Override
   public final boolean is(Type type) {
     return is(type.getImage());
+  }
+
+  @Override
+  public final boolean is(IntrinsicType intrinsic) {
+    return is(intrinsic.fullyQualifiedName());
   }
 
   @Override
@@ -97,33 +96,23 @@ public abstract class DelphiType implements Type {
   }
 
   @Override
-  public boolean isText() {
-    return false;
-  }
-
-  @Override
   public boolean isBoolean() {
     return false;
   }
 
   @Override
-  public final boolean isString() {
-    return isText() && !isChar();
+  public boolean isString() {
+    return false;
   }
 
   @Override
-  public final boolean isNarrowString() {
-    return isText() && (is(ANSISTRING.type) || is(SHORTSTRING.type));
+  public boolean isAnsiString() {
+    return false;
   }
 
   @Override
-  public final boolean isWideString() {
-    return isText() && (is(WIDESTRING.type) || is(UNICODESTRING.type));
-  }
-
-  @Override
-  public final boolean isChar() {
-    return is(CHAR.type) || is(ANSICHAR.type);
+  public boolean isChar() {
+    return false;
   }
 
   @Override

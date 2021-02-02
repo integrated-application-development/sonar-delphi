@@ -3,7 +3,6 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.type.DelphiPointerType;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class PointerTypeNode extends TypeNode {
@@ -23,6 +22,6 @@ public final class PointerTypeNode extends TypeNode {
   @NotNull
   @Override
   public Type createType() {
-    return DelphiPointerType.pointerTo(getDereferencedTypeNode().getType());
+    return getTypeFactory().pointerTo(getDereferencedTypeNode().getType());
   }
 }

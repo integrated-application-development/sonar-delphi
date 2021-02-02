@@ -1,7 +1,9 @@
 package org.sonar.plugins.delphi.file;
 
 import java.util.Set;
+import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.preprocessor.search.SearchPath;
+import org.sonar.plugins.delphi.type.factory.TypeFactory;
 
 public interface DelphiFileConfig {
   /**
@@ -9,7 +11,15 @@ public interface DelphiFileConfig {
    *
    * @return Name of encoding
    */
+  @Nullable
   String getEncoding();
+
+  /**
+   * Returns the type factory, which can be used to create different types
+   *
+   * @return Type factory
+   */
+  TypeFactory getTypeFactory();
 
   /**
    * Returns the search path where include files can be found and imports can be resolved
@@ -35,15 +45,4 @@ public interface DelphiFileConfig {
    * @return true if the implementation should be skipped when parsing the file
    */
   boolean shouldSkipImplementation();
-
-  /**
-   * Sets whether the implementation section can be skipped when lexing the file.
-   *
-   * <p>NOTE: In some circumstances, this will not be logically possible. For example, if the
-   * implementation section is nested inside of a branching conditional directive then the
-   * implementation section will not be skipped.
-   *
-   * @param skipImplementation whether the implementation should be skipped when lexing the file
-   */
-  void setShouldSkipImplementation(boolean skipImplementation);
 }

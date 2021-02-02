@@ -7,8 +7,7 @@ import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.type.DelphiArrayType;
-import org.sonar.plugins.delphi.type.DelphiArrayType.ArrayOption;
+import org.sonar.plugins.delphi.type.ArrayOption;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class ArrayTypeNode extends TypeNode {
@@ -59,9 +58,9 @@ public final class ArrayTypeNode extends TypeNode {
     }
 
     if (indicesSize > 1) {
-      return DelphiArrayType.multiDimensionalArray(image, elementType, indicesSize, options);
+      return getTypeFactory().multiDimensionalArray(image, elementType, indicesSize, options);
     }
 
-    return DelphiArrayType.array(image, elementType, options);
+    return getTypeFactory().array(image, elementType, options);
   }
 }

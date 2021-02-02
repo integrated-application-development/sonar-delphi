@@ -1,6 +1,5 @@
 package org.sonar.plugins.delphi.type;
 
-import com.google.errorprone.annotations.Immutable;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
@@ -8,6 +7,7 @@ import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
 
 public interface Type {
 
@@ -36,6 +36,13 @@ public interface Type {
    * @return The types that this inherits from.
    */
   Set<Type> parents();
+
+  /**
+   * The size of this integer type
+   *
+   * @return Size
+   */
+  int size();
 
   /**
    * Returns whether this type can be specialized.
@@ -72,6 +79,14 @@ public interface Type {
    * @return true if the types are equivalent
    */
   boolean is(Type type);
+
+  /**
+   * Check whether a type is one of the intrinsic types
+   *
+   * @param intrinsic Intrinsic type to compare against
+   * @return true if the type is the specified intrinsic
+   */
+  boolean is(IntrinsicType intrinsic);
 
   /**
    * Check whether a type is a subtype of another.
@@ -163,13 +178,6 @@ public interface Type {
   boolean isDecimal();
 
   /**
-   * Check if this type is a text type (Char, ShortString, String, etc...)
-   *
-   * @return true if the type is a text type
-   */
-  boolean isText();
-
-  /**
    * Check if this type is a string type (ShortString, WideString, UnicodeString, etc...)
    *
    * @return true if the type is a string type
@@ -177,18 +185,11 @@ public interface Type {
   boolean isString();
 
   /**
-   * Check if this type is a narrow string type (AnsiString, ShortString, etc...)
+   * Check if this type is an AnsiString
    *
-   * @return true if the type is a narrow string type
+   * @return true if the type is an AnsiString
    */
-  boolean isNarrowString();
-
-  /**
-   * Check if this type is a wide string type (WideString, UnicodeString, etc...)
-   *
-   * @return true if the type is a wide string type
-   */
-  boolean isWideString();
+  boolean isAnsiString();
 
   /**
    * Check if this type is a char type (Char, WideChar, etc...)
@@ -565,35 +566,7 @@ public interface Type {
     void setFullType(TypeParameterType fullType);
   }
 
-  /**
-   * Most Type objects are immutable in the sense that application code cannot modify them once they
-   * are created.
-   *
-   * <p>This interface is used to tag Type objects which are provably and deeply immutable. <br>
-   * This is helpful if you want to store Type objects in enums, which should only contain immutable
-   * members.
-   */
-  @Immutable
-  interface ImmutableType extends Type {}
-
-  @Immutable
-  interface ImmutableFileType extends FileType, ImmutableType {}
-
-  @Immutable
-  interface ImmutablePointerType extends PointerType, ImmutableType {}
-
-  @Immutable
-  interface ImmutableCollectionType extends CollectionType, ImmutableType {}
-
-  @Immutable
-  interface IntegerType extends ImmutableType {
-    /**
-     * The size of this integer type
-     *
-     * @return Size
-     */
-    int size();
-
+  interface IntegerType extends Type {
     /**
      * Minimum value that this type can hold
      *
@@ -642,31 +615,31 @@ public interface Type {
     double ordinalDistance(IntegerType other);
   }
 
-  @Immutable
-  interface DecimalType extends ImmutableType {
+  interface DecimalType extends Type {}
+
+  interface BooleanType extends Type {}
+
+  interface CharacterType extends Type {}
+
+  interface StringType extends Type {
     /**
-     * The size of this floating point type
+     * The type used for the characters in this string type
      *
-     * @return Size
+     * @return the type used for the characters in this string type
      */
-    int size();
+    CharacterType characterType();
   }
 
-  @Immutable
-  interface BooleanType extends ImmutableType {
+  interface AnsiStringType extends Type {
     /**
-     * The size of this boolean type
+     * The ansi code page used by this AnsiString
      *
-     * @return Size
+     * @return the ansi code page used by this AnsiString
      */
-    int size();
+    int codePage();
   }
 
-  @Immutable
-  interface TextType extends ImmutableType {}
-
-  @Immutable
-  interface VariantType extends ImmutableType {
+  interface VariantType {
     enum VariantKind {
       OLE_VARIANT,
       NORMAL_VARIANT

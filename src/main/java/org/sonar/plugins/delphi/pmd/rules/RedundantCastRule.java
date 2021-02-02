@@ -1,7 +1,5 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
-
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.ast.Node;
@@ -13,10 +11,10 @@ import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.operator.BinaryOperator;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
-import org.sonar.plugins.delphi.type.DelphiFileType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ClassReferenceType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
 
 public class RedundantCastRule extends AbstractDelphiRule {
   @Override
@@ -73,9 +71,9 @@ public class RedundantCastRule extends AbstractDelphiRule {
 
     switch (previous.jjtGetId()) {
       case DelphiLexer.STRING:
-        return UNICODESTRING.type;
+        return argumentList.getTypeFactory().getIntrinsic(IntrinsicType.STRING);
       case DelphiLexer.FILE:
-        return DelphiFileType.untypedFile();
+        return argumentList.getTypeFactory().untypedFile();
       default:
         return null;
     }

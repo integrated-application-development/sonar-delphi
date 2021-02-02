@@ -8,17 +8,22 @@ import static org.sonar.plugins.delphi.preprocessor.directive.expression.Express
 import static org.sonar.plugins.delphi.preprocessor.directive.expression.ExpressionValues.createString;
 import static org.sonar.plugins.delphi.preprocessor.directive.expression.ExpressionValues.unknownValue;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.preprocessor.DelphiPreprocessor;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Expression;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Expression.ExpressionValue.BinaryEvaluator;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Expression.ExpressionValue.UnaryEvaluator;
 import org.sonar.plugins.delphi.preprocessor.directive.expression.Token.TokenType;
+import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.factory.TypeFactory;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
 
 public class Expressions {
   private Expressions() {
@@ -195,6 +200,58 @@ public class Expressions {
       this.arguments = arguments;
     }
 
+    @Nullable
+    private static IntrinsicType searchIntrinsicTypes(String name) {
+      return Arrays.stream(IntrinsicType.values())
+          .filter(
+              intrinsic ->
+                  intrinsic.simpleName().equalsIgnoreCase(name)
+                      || intrinsic.fullyQualifiedName().equalsIgnoreCase(name))
+          .findFirst()
+          .orElse(null);
+    }
+
+    private static int sizeOf(DelphiPreprocessor preprocessor, Expression expression) {
+      Type type = null;
+      TypeFactory typeFactory = preprocessor.getTypeFactory();
+
+      if (expression instanceof NameReferenceExpression) {
+        IntrinsicType intrinsic = searchIntrinsicTypes(((NameReferenceExpression) expression).name);
+        if (intrinsic != null) {
+          type = typeFactory.getIntrinsic(intrinsic);
+        }
+      }
+
+      if (type == null) {
+        ExpressionValue value = expression.evaluate(preprocessor);
+        switch (value.type()) {
+          case STRING:
+            type = typeFactory.getIntrinsic(IntrinsicType.STRING);
+            break;
+          case INTEGER:
+            type = typeFactory.integerFromLiteralValue(value.asInteger());
+            break;
+          case DECIMAL:
+            type = typeFactory.getIntrinsic(IntrinsicType.EXTENDED);
+            break;
+          case BOOLEAN:
+            type = typeFactory.getIntrinsic(IntrinsicType.BOOLEAN);
+            break;
+          case SET:
+            type = typeFactory.emptySet();
+            break;
+          default:
+            // Do nothing
+        }
+      }
+
+      if (type == null) {
+        type = typeFactory.getIntrinsic(IntrinsicType.POINTER);
+      }
+
+      return type.size();
+    }
+
     @Override
     public ExpressionValue evaluate(DelphiPreprocessor preprocessor) {
       if (name.equalsIgnoreCase("Defined") && !arguments.isEmpty()) {
@@ -203,6 +260,9 @@ public class Expressions {
           boolean isDefined = preprocessor.isDefined(((NameReferenceExpression) argument).name);
           return createBoolean(isDefined);
         }
+      } else if (name.equalsIgnoreCase("SizeOf") && !arguments.isEmpty()) {
+        int size = sizeOf(preprocessor, arguments.get(0));
+        return createInteger(size);
       }
       return unknownValue();
     }
