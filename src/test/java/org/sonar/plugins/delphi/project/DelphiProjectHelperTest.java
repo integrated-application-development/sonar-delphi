@@ -39,6 +39,8 @@ import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.config.Configuration;
 import org.sonar.plugins.delphi.DelphiPlugin;
+import org.sonar.plugins.delphi.compiler.CompilerVersion;
+import org.sonar.plugins.delphi.compiler.Toolchain;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
@@ -85,7 +87,6 @@ class DelphiProjectHelperTest {
 
     assertThat(delphiProjectHelper.getSearchDirectories()).hasSize(3);
     assertThat(delphiProjectHelper.getConditionalDefines())
-        .hasSize(8)
         .contains(
             "MSWINDOWS",
             "CPUX86",
@@ -111,7 +112,6 @@ class DelphiProjectHelperTest {
 
     assertThat(delphiProjectHelper.getSearchDirectories()).hasSize(3);
     assertThat(delphiProjectHelper.getConditionalDefines())
-        .hasSize(8)
         .contains(
             "MSWINDOWS",
             "CPUX86",
@@ -166,5 +166,53 @@ class DelphiProjectHelperTest {
     DelphiProjectHelper delphiProjectHelper = new DelphiProjectHelper(settings, fs);
 
     assertThat(delphiProjectHelper.getUnitAliases()).containsExactlyEntriesOf(Map.of("Foo", "Bar"));
+  }
+
+  @Test
+  void testToolchain() {
+    when(settings.get(DelphiPlugin.COMPILER_TOOLCHAIN_KEY)).thenReturn(Optional.of("DCC64"));
+
+    DelphiProjectHelper delphiProjectHelper = new DelphiProjectHelper(settings, fs);
+
+    assertThat(delphiProjectHelper.getToolchain()).isEqualTo(Toolchain.DCC64);
+  }
+
+  @Test
+  void testDefaultToolchain() {
+    when(settings.get(DelphiPlugin.COMPILER_TOOLCHAIN_KEY)).thenReturn(Optional.empty());
+
+    DelphiProjectHelper delphiProjectHelper = new DelphiProjectHelper(settings, fs);
+
+    assertThat(delphiProjectHelper.getToolchain()).isEqualTo(Toolchain.DCC32);
+  }
+
+  @Test
+  void testCompilerVersionDelphi1() {
+    when(settings.get(DelphiPlugin.COMPILER_VERSION_KEY)).thenReturn(Optional.of("VER80"));
+
+    DelphiProjectHelper delphiProjectHelper = new DelphiProjectHelper(settings, fs);
+
+    assertThat(delphiProjectHelper.getCompilerVersion())
+        .isEqualTo(CompilerVersion.fromVersionNumber("8.0"));
+  }
+
+  @Test
+  void testCompilerVersionDelphiXE6() {
+    when(settings.get(DelphiPlugin.COMPILER_VERSION_KEY)).thenReturn(Optional.of("VER270"));
+
+    DelphiProjectHelper delphiProjectHelper = new DelphiProjectHelper(settings, fs);
+
+    assertThat(delphiProjectHelper.getCompilerVersion())
+        .isEqualTo(CompilerVersion.fromVersionNumber("27.0"));
+  }
+
+  @Test
+  void testDefaultCompilerVersion() {
+    when(settings.get(DelphiPlugin.COMPILER_VERSION_KEY)).thenReturn(Optional.empty());
+
+    DelphiProjectHelper delphiProjectHelper = new DelphiProjectHelper(settings, fs);
+
+    assertThat(delphiProjectHelper.getCompilerVersion())
+        .isEqualTo(DelphiPlugin.COMPILER_VERSION_DEFAULT);
   }
 }

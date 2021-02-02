@@ -9,7 +9,6 @@ import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -35,6 +34,7 @@ import org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor;
 import org.sonar.plugins.delphi.file.DelphiFile;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiFileConstructionException;
 import org.sonar.plugins.delphi.file.DelphiFileConfig;
+import org.sonar.plugins.delphi.preprocessor.search.SearchPath;
 import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
@@ -44,6 +44,7 @@ import org.sonar.plugins.delphi.symbol.scope.FileScope;
 import org.sonar.plugins.delphi.symbol.scope.SysInitScope;
 import org.sonar.plugins.delphi.symbol.scope.SystemScope;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
+import org.sonar.plugins.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonarsource.analyzer.commons.ProgressReport;
 
@@ -56,12 +57,12 @@ public class SymbolTableBuilder {
   private final Set<Path> unitPaths = new HashSet<>();
 
   private String encoding;
-  private List<Path> searchDirectories = Collections.emptyList();
+  private TypeFactory typeFactory;
+  private SearchPath searchPath = SearchPath.create(Collections.emptyList());
   private Set<String> conditionalDefines = Collections.emptySet();
   private Set<String> unitScopeNames = Collections.emptySet();
   private Map<String, String> unitAliases = Collections.emptyMap();
 
-  private DelphiFileConfig fileConfig;
   private SystemScope systemScope;
   private SysInitScope sysInitScope;
   private int nestingLevel;
@@ -85,9 +86,14 @@ public class SymbolTableBuilder {
     return this;
   }
 
-  public SymbolTableBuilder searchDirectories(@NotNull List<Path> searchDirectories) {
-    this.searchDirectories = searchDirectories;
-    searchDirectories.forEach(this::processSearchPath);
+  public SymbolTableBuilder typeFactory(TypeFactory typeFactory) {
+    this.typeFactory = typeFactory;
+    return this;
+  }
+
+  public SymbolTableBuilder searchPath(@NotNull SearchPath searchPath) {
+    this.searchPath = searchPath;
+    this.searchPath.getRootDirectories().forEach(this::processSearchPath);
     return this;
   }
 
@@ -121,7 +127,7 @@ public class SymbolTableBuilder {
         Files.find(path, Integer.MAX_VALUE, (filePath, attributes) -> attributes.isRegularFile())) {
       return fileStream.filter(DelphiUtils::acceptFile).collect(Collectors.toList());
     } catch (IOException e) {
-      throw new UncheckedIOException(e);
+      throw new SymbolTableConstructionException(e);
     }
   }
 
@@ -216,6 +222,15 @@ public class SymbolTableBuilder {
     return -1;
   }
 
+  private DelphiFileConfig createFileConfig(UnitData unit, boolean shouldSkipImplementation) {
+    return DelphiFile.createConfig(
+        sourceFileUnits.contains(unit) ? encoding : null,
+        typeFactory,
+        searchPath,
+        conditionalDefines,
+        shouldSkipImplementation);
+  }
+
   private void process(UnitData unit, ResolutionLevel resolutionLevel) {
     if (unit.resolved.ordinal() >= resolutionLevel.ordinal()) {
       return;
@@ -224,8 +239,8 @@ public class SymbolTableBuilder {
     try {
       LOG.debug(StringUtils.repeat('\t', ++nestingLevel) + "> " + unit.unitFile.getFileName());
 
-      fileConfig.setShouldSkipImplementation(resolutionLevel != ResolutionLevel.COMPLETE);
-
+      boolean shouldSkipImplementation = (resolutionLevel != ResolutionLevel.COMPLETE);
+      DelphiFileConfig fileConfig = createFileConfig(unit, shouldSkipImplementation);
       DelphiFile delphiFile = DelphiFile.from(unit.unitFile.toFile(), fileConfig);
 
       if (unit.resolved == ResolutionLevel.NONE) {
@@ -250,8 +265,9 @@ public class SymbolTableBuilder {
       UnitData unit, DelphiFile delphiFile, ResolutionLevel resolutionLevel) {
     var data =
         new SymbolTableVisitor.Data(
-            this::createImportDeclaration,
+            typeFactory,
             delphiFile.getCompilerSwitchRegistry(),
+            this::createImportDeclaration,
             this.systemScope,
             this.sysInitScope,
             unit.unitDeclaration);
@@ -393,7 +409,10 @@ public class SymbolTableBuilder {
   }
 
   public SymbolTable build() {
-    fileConfig = DelphiFile.createConfig(encoding, searchDirectories, conditionalDefines);
+    if (typeFactory == null) {
+      throw new SymbolTableConstructionException("TypeFactory was not supplied.");
+    }
+
     ProgressReport progressReport =
         new ProgressReport(
             "Report about progress of Symbol Table construction",
@@ -448,6 +467,10 @@ public class SymbolTableBuilder {
   private static class SymbolTableConstructionException extends RuntimeException {
     SymbolTableConstructionException(String message) {
       super(message);
+    }
+
+    SymbolTableConstructionException(Exception cause) {
+      super(cause);
     }
   }
 }

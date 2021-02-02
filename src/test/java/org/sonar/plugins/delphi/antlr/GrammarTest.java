@@ -22,10 +22,10 @@
  */
 package org.sonar.plugins.delphi.antlr;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Set;
 import javax.xml.XMLConstants;
@@ -43,7 +43,10 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.file.DelphiFile;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiFileConstructionException;
 import org.sonar.plugins.delphi.file.DelphiFileConfig;
+import org.sonar.plugins.delphi.preprocessor.search.SearchPath;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
+import org.sonar.plugins.delphi.utils.files.DelphiFileUtils;
+import org.sonar.plugins.delphi.utils.types.TypeFactoryUtils;
 
 class GrammarTest {
   private static final Logger LOG = Loggers.get(GrammarTest.class);
@@ -52,7 +55,7 @@ class GrammarTest {
 
   @BeforeEach
   void setup() {
-    fileConfig = DelphiFile.createConfig(UTF_8.name());
+    fileConfig = DelphiFileUtils.mockConfig();
   }
 
   private void parseFile(String fileName) {
@@ -204,7 +207,12 @@ class GrammarTest {
 
   @Test
   void testUndefinedInaccessibleNestedIfDef() {
-    fileConfig = DelphiFile.createConfig(UTF_8.name(), Collections.emptyList(), Set.of("Defined"));
+    fileConfig =
+        DelphiFile.createConfig(
+            StandardCharsets.UTF_8.name(),
+            TypeFactoryUtils.defaultFactory(),
+            SearchPath.create(Collections.emptyList()),
+            Set.of("Defined"));
     parseFile("UndefinedInaccessibleNestedIfDef.pas");
   }
 

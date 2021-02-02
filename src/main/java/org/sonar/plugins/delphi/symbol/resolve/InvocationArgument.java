@@ -25,7 +25,7 @@ public class InvocationArgument implements Typed {
     this.expression = expression;
 
     if (expression instanceof PrimaryExpressionNode) {
-      resolver = new NameResolver();
+      resolver = new NameResolver(expression.getTypeFactory());
       resolver.readPrimaryExpression((PrimaryExpressionNode) expression);
       type = resolver.getApproximateType();
     }

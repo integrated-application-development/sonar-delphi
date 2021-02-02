@@ -3,7 +3,6 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.type.DelphiPointerType;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class NilLiteralNode extends LiteralNode {
@@ -19,6 +18,6 @@ public final class NilLiteralNode extends LiteralNode {
   @Override
   @NotNull
   public Type getType() {
-    return DelphiPointerType.nilPointer();
+    return getTypeFactory().nilPointer();
   }
 }

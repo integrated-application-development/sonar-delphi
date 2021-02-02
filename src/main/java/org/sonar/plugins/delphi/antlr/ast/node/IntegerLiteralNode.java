@@ -4,7 +4,6 @@ import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger;
 
 public final class IntegerLiteralNode extends LiteralNode {
   private Type type;
@@ -27,7 +26,7 @@ public final class IntegerLiteralNode extends LiteralNode {
   @NotNull
   public Type getType() {
     if (type == null) {
-      type = IntrinsicInteger.fromLiteralValue(this.getValueAsLong());
+      type = getTypeFactory().integerFromLiteralValue(this.getValueAsLong());
     }
     return type;
   }

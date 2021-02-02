@@ -1,67 +1,67 @@
 package org.sonar.plugins.delphi.type.intrinsic;
 
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.INTEGER;
-
-import com.google.errorprone.annotations.Immutable;
 import java.util.List;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.Type.ImmutableType;
+import org.sonar.plugins.delphi.type.factory.TypeFactory;
 
-@Immutable
-public final class IntrinsicReturnType extends DelphiType implements ImmutableType {
-  public static final IntrinsicReturnType LOW_RETURN_TYPE =
-      new IntrinsicReturnType("<low>", IntrinsicReturnType::highLowReturnType);
-
-  public static final IntrinsicReturnType HIGH_RETURN_TYPE =
-      new IntrinsicReturnType("<high>", IntrinsicReturnType::highLowReturnType);
-
-  public static final IntrinsicReturnType CLASS_REFERENCE_VALUE_TYPE =
-      new IntrinsicReturnType(
-          "<class reference value type>", IntrinsicReturnType::classReferenceValueType);
-
-  @Immutable
-  @FunctionalInterface
-  private interface ReturnTypeFunction {
-    Type getReturnType(List<Type> arguments);
-  }
-
-  private final String image;
-  private final ReturnTypeFunction function;
-
-  private IntrinsicReturnType(String image, ReturnTypeFunction function) {
-    this.image = image;
-    this.function = function;
+public abstract class IntrinsicReturnType extends DelphiType {
+  @Override
+  public String getImage() {
+    return "<" + getClass().getSimpleName() + ">";
   }
 
   @Override
-  public String getImage() {
-    return image;
+  public int size() {
+    // meta type
+    return 0;
   }
 
-  public Type getReturnType(List<Type> arguments) {
-    return function.getReturnType(arguments);
+  public abstract Type getReturnType(List<Type> arguments);
+
+  public static Type high(TypeFactory typeFactory) {
+    return new HighLowReturnType(typeFactory);
   }
 
-  private static Type highLowReturnType(List<Type> arguments) {
-    Type type = arguments.get(0);
-
-    if (type.isClassReference()) {
-      type = ((ClassReferenceType) type).classType();
-    }
-
-    if (type.isArray() || type.isString()) {
-      type = INTEGER.type;
-    }
-
-    return type;
+  public static Type low(TypeFactory typeFactory) {
+    return new HighLowReturnType(typeFactory);
   }
 
-  private static Type classReferenceValueType(List<Type> arguments) {
-    Type type = arguments.get(0);
-    if (type.isClassReference()) {
-      return ((ClassReferenceType) type).classType();
+  public static Type classReferenceValue() {
+    return new ClassReferenceValueType();
+  }
+
+  private static class HighLowReturnType extends IntrinsicReturnType {
+    private final Type integerType;
+
+    private HighLowReturnType(TypeFactory typeFactory) {
+      this.integerType = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
     }
-    return unknownType();
+
+    @Override
+    public Type getReturnType(List<Type> arguments) {
+      Type type = arguments.get(0);
+
+      if (type.isClassReference()) {
+        type = ((ClassReferenceType) type).classType();
+      }
+
+      if (type.isArray() || type.isString()) {
+        type = integerType;
+      }
+
+      return type;
+    }
+  }
+
+  private static class ClassReferenceValueType extends IntrinsicReturnType {
+    @Override
+    public Type getReturnType(List<Type> arguments) {
+      Type type = arguments.get(0);
+      if (type.isClassReference()) {
+        return ((ClassReferenceType) type).classType();
+      }
+      return unknownType();
+    }
   }
 }

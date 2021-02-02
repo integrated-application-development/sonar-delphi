@@ -23,9 +23,14 @@
 package org.sonar.plugins.delphi;
 
 import com.google.common.collect.ImmutableList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.Plugin;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
+import org.sonar.plugins.delphi.compiler.CompilerVersion;
+import org.sonar.plugins.delphi.compiler.Toolchain;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.executor.DelphiCpdExecutor;
 import org.sonar.plugins.delphi.executor.DelphiHighlightExecutor;
@@ -48,6 +53,8 @@ public class DelphiPlugin implements Plugin {
   public static final String CC_EXCLUDED_KEY = "sonar.delphi.codecoverage.excluded";
   public static final String SEARCH_PATH_KEY = "sonar.delphi.sources.searchPath";
   public static final String STANDARD_LIBRARY_KEY = "sonar.delphi.sources.standardLibrarySource";
+  public static final String COMPILER_TOOLCHAIN_KEY = "sonar.delphi.compiler.toolchain";
+  public static final String COMPILER_VERSION_KEY = "sonar.delphi.compiler.version";
   public static final String CONDITIONAL_DEFINES_KEY = "sonar.delphi.conditionalDefines";
   public static final String CONDITIONAL_UNDEFINES_KEY = "sonar.delphi.conditionalUndefines";
   public static final String UNIT_SCOPE_NAMES_KEY = "sonar.delphi.unitScopeNames";
@@ -56,6 +63,10 @@ public class DelphiPlugin implements Plugin {
   public static final String CODECOVERAGE_REPORT_KEY = "sonar.delphi.codecoverage.report";
   public static final String GENERATE_PMD_REPORT_XML_KEY = "sonar.delphi.pmd.generateXml";
   public static final String TEST_SUITE_TYPE_KEY = "sonar.delphi.pmd.testSuiteType";
+
+  public static final Toolchain COMPILER_TOOLCHAIN_DEFAULT = Toolchain.DCC32;
+  public static final CompilerVersion COMPILER_VERSION_DEFAULT =
+      CompilerVersion.fromVersionSymbol("VER340");
 
   @Override
   public String toString() {
@@ -82,6 +93,26 @@ public class DelphiPlugin implements Plugin {
         PropertyDefinition.builder(DelphiPlugin.STANDARD_LIBRARY_KEY)
             .name("Standard library path")
             .description("Path to the Delphi RAD Studio 'source' folder.")
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(DelphiPlugin.COMPILER_TOOLCHAIN_KEY)
+            .name("Compiler toolchain")
+            .defaultValue(COMPILER_TOOLCHAIN_DEFAULT.name())
+            .description(
+                "The compiler toolchain used by this project. Options are: "
+                    + StringUtils.join(
+                        Stream.of(Toolchain.values())
+                            .map(value -> "\"" + value + "\"")
+                            .collect(Collectors.toList())))
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(DelphiPlugin.COMPILER_VERSION_KEY)
+            .name("Compiler version")
+            .defaultValue(COMPILER_VERSION_DEFAULT.symbol())
+            .description(
+                "The Delphi conditional symbol representing the compiler version."
+                    + "\nFormat is \"VER<nnn>\"."
+                    + "\nSee: http://docwiki.embarcadero.com/RADStudio/en/Compiler_Versions")
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
         PropertyDefinition.builder(DelphiPlugin.CONDITIONAL_DEFINES_KEY)

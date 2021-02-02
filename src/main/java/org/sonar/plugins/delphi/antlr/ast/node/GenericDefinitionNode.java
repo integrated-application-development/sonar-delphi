@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.type.DelphiTypeParameterType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.TypeParameterType;
 import org.sonar.plugins.delphi.type.Typed;
+import org.sonar.plugins.delphi.type.generic.DelphiTypeParameterType;
 
 public final class GenericDefinitionNode extends DelphiNode {
   private String image;

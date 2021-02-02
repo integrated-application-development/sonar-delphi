@@ -3,7 +3,6 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.type.DelphiProceduralType;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class ProcedureTypeNode extends ProceduralTypeNode {
@@ -23,6 +22,6 @@ public final class ProcedureTypeNode extends ProceduralTypeNode {
   @Override
   @NotNull
   public Type createType() {
-    return DelphiProceduralType.procedure(getParameterTypes(), getReturnType());
+    return getTypeFactory().procedure(getParameterTypes(), getReturnType());
   }
 }

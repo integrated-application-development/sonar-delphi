@@ -4,12 +4,11 @@ import static com.google.common.collect.Iterables.getFirst;
 import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveType.POINTERMATH;
 import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveType.SCOPEDENUMS;
 import static org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration.compilerVariable;
-import static org.sonar.plugins.delphi.symbol.resolve.NameResolutionUtils.resolve;
-import static org.sonar.plugins.delphi.type.DelphiClassReferenceType.classOf;
 
 import com.google.common.base.Preconditions;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Objects;
 import javax.annotation.Nullable;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
@@ -72,7 +71,7 @@ import org.sonar.plugins.delphi.symbol.declaration.TypeParameterNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration;
-import org.sonar.plugins.delphi.symbol.resolve.NameResolutionUtils;
+import org.sonar.plugins.delphi.symbol.resolve.NameResolutionHelper;
 import org.sonar.plugins.delphi.symbol.scope.DeclarationScope;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.symbol.scope.FileScope;
@@ -90,6 +89,7 @@ import org.sonar.plugins.delphi.type.Type.PointerType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
 import org.sonar.plugins.delphi.type.TypeUtils;
+import org.sonar.plugins.delphi.type.factory.TypeFactory;
 
 /**
  * Visitor for symbol table creation.
@@ -103,25 +103,29 @@ import org.sonar.plugins.delphi.type.TypeUtils;
  * embedding syntactic entity that has a scope.
  *
  * <p>Also finds occurrences of the declarations and creates NameOccurrence objects accordingly.
- * (Delegated to the {@link NameResolutionUtils})
  */
 public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   public static class Data {
-    protected final ImportResolutionHandler importHandler;
+    protected final TypeFactory typeFactory;
+    protected final NameResolutionHelper nameResolutionHelper;
     protected final CompilerSwitchRegistry switchRegistry;
+    protected final ImportResolutionHandler importHandler;
     protected final SystemScope systemScope;
     protected final SysInitScope sysInitScope;
     protected final Deque<DelphiScope> scopes;
     protected UnitNameDeclaration unitDeclaration;
 
     public Data(
-        ImportResolutionHandler importHandler,
+        TypeFactory typeFactory,
         CompilerSwitchRegistry switchRegistry,
+        ImportResolutionHandler importHandler,
         @Nullable SystemScope systemScope,
         @Nullable SysInitScope sysInitScope,
         @Nullable UnitNameDeclaration unitDeclaration) {
-      this.importHandler = importHandler;
+      this.typeFactory = typeFactory;
+      this.nameResolutionHelper = new NameResolutionHelper(typeFactory);
       this.switchRegistry = switchRegistry;
+      this.importHandler = importHandler;
       this.systemScope = systemScope;
       this.sysInitScope = sysInitScope;
       this.scopes = new ArrayDeque<>();
@@ -254,7 +258,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(MethodResolutionClauseNode node, Data data) {
-    resolve(node);
+    data.nameResolutionHelper.resolve(node);
     return data;
   }
 
@@ -294,7 +298,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   @Override
   public Data visit(ExceptItemNode node, Data data) {
     data.addScope(new LocalScope(), node);
-    resolve(node.getExceptionType());
+    data.nameResolutionHelper.resolve(node.getExceptionType());
     return visitScope(node, data);
   }
 
@@ -306,12 +310,12 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
     NameDeclarationNode nameNode = node.getMethodNameNode().getNameDeclarationNode();
     createTypeParameterDeclarations(nameNode.getGenericDefinition(), data);
-    resolve(node);
+    data.nameResolutionHelper.resolve(node);
 
     visitScope(node, data);
     node.setScope(null);
 
-    MethodNameDeclaration declaration = MethodNameDeclaration.create(node);
+    MethodNameDeclaration declaration = MethodNameDeclaration.create(node, data.typeFactory);
     data.addDeclaration(declaration, node.getMethodNameNode().getNameDeclarationNode());
     return data;
   }
@@ -320,7 +324,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       @Nullable GenericDefinitionNode definition, Data data) {
     if (definition != null) {
       for (TypeParameterNode parameterNode : definition.getTypeParameterNodes()) {
-        parameterNode.getTypeConstraintNodes().forEach(NameResolutionUtils::resolve);
+        parameterNode.getTypeConstraintNodes().forEach(data.nameResolutionHelper::resolve);
       }
 
       for (TypeParameter typeParameter : definition.getTypeParameters()) {
@@ -337,7 +341,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     scope.setParent(data.currentScope());
     node.setScope(scope);
 
-    resolve(node);
+    data.nameResolutionHelper.resolve(node);
 
     NameReferenceNode methodReference = node.getNameReferenceNode();
     NameDeclaration declaration = methodReference.getLastName().getNameDeclaration();
@@ -352,7 +356,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     }
 
     if (!foundInterfaceDeclaration && !qualifiedMethodName) {
-      methodDeclaration = MethodNameDeclaration.create(node);
+      methodDeclaration = MethodNameDeclaration.create(node, data.typeFactory);
       MethodNameNode nameNode = node.getMethodHeading().getMethodNameNode();
       data.addDeclaration(methodDeclaration, nameNode);
     }
@@ -373,7 +377,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       data.addDeclarationToCurrentScope(result);
     }
 
-    Type selfType = findSelfType(node, methodDeclaration);
+    Type selfType = findSelfType(node, methodDeclaration, data);
     if (selfType != null) {
       DelphiNameDeclaration self = compilerVariable("Self", selfType, scope);
       data.addDeclarationToCurrentScope(self);
@@ -390,7 +394,8 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     }
   }
 
-  private static Type findSelfType(MethodNode node, @Nullable MethodNameDeclaration declaration) {
+  private static Type findSelfType(
+      MethodNode node, @Nullable MethodNameDeclaration declaration, Data data) {
     Type selfType = null;
     TypeNameDeclaration methodType = node.getTypeDeclaration();
     if (methodType != null) {
@@ -399,7 +404,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
         selfType = ((HelperType) selfType).extendedType();
       }
       if (node.isClassMethod()) {
-        selfType = classOf(selfType);
+        selfType = data.typeFactory.classOf(selfType);
         if (declaration != null && declaration.hasDirective(MethodDirective.STATIC)) {
           selfType = null;
         }
@@ -410,7 +415,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(PropertyNode node, Data data) {
-    resolve(node);
+    data.nameResolutionHelper.resolve(node);
 
     var declaration = new PropertyNameDeclaration(node, findConcretePropertyDeclaration(node));
     data.addDeclaration(declaration, node.getPropertyName());
@@ -453,8 +458,8 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   public Data visit(AnonymousMethodNode node, Data data) {
     MethodScope scope = new MethodScope();
     data.addScope(scope, node);
-    resolve(node.getMethodParametersNode());
-    resolve(node.getReturnTypeNode());
+    data.nameResolutionHelper.resolve(node.getMethodParametersNode());
+    data.nameResolutionHelper.resolve(node.getReturnTypeNode());
     if (node.isFunction()) {
       DelphiNameDeclaration result = compilerVariable("Result", node.getReturnType(), scope);
       data.addDeclarationToCurrentScope(result);
@@ -470,7 +475,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   @Override
   public Data visit(ForStatementNode node, Data data) {
     data.addScope(new LocalScope(), node);
-    resolve(node.getVariable());
+    data.nameResolutionHelper.resolve(node.getVariable());
     return visitScope(node, data);
   }
 
@@ -539,7 +544,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     if (typeNode instanceof RecordTypeNode || typeNode instanceof EnumTypeNode) {
       createAnonymousTypeScope(typeNode, data);
     } else {
-      resolve(typeNode);
+      data.nameResolutionHelper.resolve(typeNode);
     }
 
     for (int i = 0; i < declarationNode.jjtGetNumChildren(); ++i) {
@@ -556,7 +561,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   public Data visit(ConstDeclarationNode node, Data data) {
     TypeNode typeNode = node.getTypeNode();
     if (typeNode != null) {
-      resolve(node.getTypeNode());
+      data.nameResolutionHelper.resolve(node.getTypeNode());
     }
 
     // Visit the expression before we visit the name declaration node and create a name declaration
@@ -599,7 +604,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
         .forEach(
             arrayConstructor ->
                 arrayConstructor.getElements().forEach(element -> element.accept(this, data)));
-    resolve(node);
+    data.nameResolutionHelper.resolve(node);
     return data;
   }
 
@@ -612,12 +617,12 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       if (typeDeclaration.isClassReference()) {
         var classReference = (ClassReferenceTypeNode) typeDeclaration.getTypeNode();
         TypeNode classOf = classReference.getClassOfTypeNode();
-        resolve(classOf);
+        data.nameResolutionHelper.resolve(classOf);
         ((ClassReferenceType) classReference.getType()).setClassType(classOf.getType());
       } else if (typeDeclaration.isPointer()) {
         var pointer = (PointerTypeNode) typeDeclaration.getTypeNode();
         TypeNode dereferenced = pointer.getDereferencedTypeNode();
-        resolve(dereferenced);
+        data.nameResolutionHelper.resolve(dereferenced);
         ((PointerType) pointer.getType()).setDereferencedType(dereferenced.getType());
       }
     }
@@ -642,7 +647,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     NameDeclarationNode typeNameNode = node.getTypeNameNode();
     createTypeParameterDeclarations(typeNameNode.getGenericDefinition(), data);
     if (!node.isPointer() && !node.isClassReference()) {
-      resolve(node);
+      data.nameResolutionHelper.resolve(node);
     }
 
     TypeNameDeclaration declaration = new TypeNameDeclaration(node);
@@ -659,7 +664,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       ((PointerType) type).setAllowsPointerMath();
     }
 
-    DelphiScope parent = Preconditions.checkNotNull(data.currentScope().getParent());
+    DelphiScope parent = Objects.requireNonNull(data.currentScope().getParent());
     parent.addDeclaration(declaration);
 
     return visitScope(node, data);
@@ -676,7 +681,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     FileScope fileScope;
 
     if (name.equals("System")) {
-      fileScope = new SystemScope();
+      fileScope = new SystemScope(data.typeFactory);
     } else if (name.equals("SysInit")) {
       fileScope = new SysInitScope(name, data.systemScope);
     } else {

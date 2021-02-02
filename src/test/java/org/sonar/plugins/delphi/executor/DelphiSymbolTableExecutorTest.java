@@ -29,6 +29,7 @@ import org.sonar.plugins.delphi.symbol.SymbolTable;
 import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
+import org.sonar.plugins.delphi.utils.types.TypeFactoryUtils;
 
 class DelphiSymbolTableExecutorTest {
   private static final String ROOT_PATH = "/org/sonar/plugins/delphi/symbol/";
@@ -1185,6 +1186,7 @@ class DelphiSymbolTableExecutorTest {
 
     symbolTable =
         SymbolTable.builder()
+            .typeFactory(TypeFactoryUtils.defaultFactory())
             .sourceFiles(
                 inputFiles.values().stream()
                     .map(InputFile::uri)

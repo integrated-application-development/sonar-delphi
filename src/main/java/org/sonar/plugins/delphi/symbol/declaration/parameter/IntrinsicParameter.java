@@ -1,27 +1,23 @@
 package org.sonar.plugins.delphi.symbol.declaration.parameter;
 
-import com.google.errorprone.annotations.Immutable;
 import org.jetbrains.annotations.NotNull;
-import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter.ImmutableParameter;
 import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.Type.ImmutableType;
-import org.sonar.plugins.delphi.type.intrinsic.IntrinsicMethodData.IntrinsicMethodParameterData;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicMethod.IntrinsicParameterData;
 
-@Immutable
-public class IntrinsicParameter extends AbstractParameter implements ImmutableParameter {
-  private final ImmutableType type;
+public class IntrinsicParameter extends AbstractParameter {
+  private final Type type;
   private final boolean hasDefaultValue;
 
-  private IntrinsicParameter(ImmutableType type, boolean hasDefaultValue) {
+  private IntrinsicParameter(Type type, boolean hasDefaultValue) {
     this.type = type;
     this.hasDefaultValue = hasDefaultValue;
   }
 
-  public static ImmutableParameter create(IntrinsicMethodParameterData data) {
+  public static Parameter create(IntrinsicParameterData data) {
     return new IntrinsicParameter(data.getType(), data.hasDefaultValue());
   }
 
-  public static ImmutableParameter create(ImmutableType type) {
+  public static Parameter create(Type type) {
     return new IntrinsicParameter(type, false);
   }
 

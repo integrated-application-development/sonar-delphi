@@ -107,7 +107,7 @@ class AbstractDelphiScope implements DelphiScope {
       return;
     }
 
-    throw new RuntimeException(declaration + " is already in the symbol table");
+    throw new RuntimeException(declaration.getImage() + " is already in the symbol table");
   }
 
   private boolean isAcceptableDuplicate(NameDeclaration declaration) {

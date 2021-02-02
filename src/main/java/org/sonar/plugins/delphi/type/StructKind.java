@@ -22,7 +22,7 @@ public enum StructKind {
     this.nodeType = nodeType;
   }
 
-  static StructKind fromNode(DelphiNode node) {
+  public static StructKind fromNode(DelphiNode node) {
     for (StructKind kind : StructKind.values()) {
       if (kind.nodeType == node.getClass()) {
         return kind;

@@ -15,24 +15,6 @@ import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.EQUAL;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.EXACT;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
 import static org.sonar.plugins.delphi.symbol.scope.DelphiScope.unknownScope;
-import static org.sonar.plugins.delphi.type.DelphiArrayConstructorType.arrayConstructor;
-import static org.sonar.plugins.delphi.type.DelphiArrayType.ArrayOption.ARRAY_OF_CONST;
-import static org.sonar.plugins.delphi.type.DelphiArrayType.ArrayOption.OPEN;
-import static org.sonar.plugins.delphi.type.DelphiArrayType.array;
-import static org.sonar.plugins.delphi.type.DelphiArrayType.dynamicArray;
-import static org.sonar.plugins.delphi.type.DelphiArrayType.fixedArray;
-import static org.sonar.plugins.delphi.type.DelphiArrayType.openArray;
-import static org.sonar.plugins.delphi.type.DelphiClassReferenceType.classOf;
-import static org.sonar.plugins.delphi.type.DelphiEnumerationType.enumeration;
-import static org.sonar.plugins.delphi.type.DelphiFileType.untypedFile;
-import static org.sonar.plugins.delphi.type.DelphiPointerType.nilPointer;
-import static org.sonar.plugins.delphi.type.DelphiPointerType.pointerTo;
-import static org.sonar.plugins.delphi.type.DelphiPointerType.untypedPointer;
-import static org.sonar.plugins.delphi.type.DelphiProceduralType.anonymous;
-import static org.sonar.plugins.delphi.type.DelphiProceduralType.procedure;
-import static org.sonar.plugins.delphi.type.DelphiSetType.emptySet;
-import static org.sonar.plugins.delphi.type.DelphiSetType.set;
-import static org.sonar.plugins.delphi.type.DelphiSubrangeType.subRange;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 import static org.sonar.plugins.delphi.type.DelphiType.untypedType;
 import static org.sonar.plugins.delphi.type.DelphiType.voidType;
@@ -45,185 +27,203 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.A
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_OBJECT;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_SET;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.BOOLEAN;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.BYTEBOOL;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.WORDBOOL;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.COMP;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.CURRENCY;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.DOUBLE;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.SINGLE;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.BYTE;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.INTEGER;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.LONGINT;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.NATIVEINT;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.SHORTINT;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.SMALLINT;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicPointer.PANSICHAR;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicPointer.PCHAR;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicPointer.POINTER;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSICHAR;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSISTRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.SHORTSTRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.STRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDECHAR;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDESTRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicVariant.OLE_VARIANT;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicVariant.VARIANT;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
-import org.sonar.plugins.delphi.type.DelphiArrayType;
-import org.sonar.plugins.delphi.type.DelphiEnumerationType;
-import org.sonar.plugins.delphi.type.DelphiFileType;
-import org.sonar.plugins.delphi.type.DelphiSetType;
-import org.sonar.plugins.delphi.type.DelphiSubrangeType;
-import org.sonar.plugins.delphi.type.DelphiTypeType;
+import org.sonar.plugins.delphi.type.ArrayOption;
+import org.sonar.plugins.delphi.type.CodePages;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Type.AnsiStringType;
 import org.sonar.plugins.delphi.type.Type.ArrayConstructorType;
+import org.sonar.plugins.delphi.type.Type.ClassReferenceType;
 import org.sonar.plugins.delphi.type.Type.CollectionType;
 import org.sonar.plugins.delphi.type.Type.EnumType;
+import org.sonar.plugins.delphi.type.Type.FileType;
+import org.sonar.plugins.delphi.type.Type.PointerType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Type.StructType;
 import org.sonar.plugins.delphi.type.Type.SubrangeType;
+import org.sonar.plugins.delphi.type.Type.TypeType;
+import org.sonar.plugins.delphi.type.factory.TypeFactory;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
+import org.sonar.plugins.delphi.utils.types.TypeFactoryUtils;
 import org.sonar.plugins.delphi.utils.types.TypeMocker;
 
 class TypeComparerTest {
+  private static final TypeFactory FACTORY = TypeFactoryUtils.defaultFactory();
+
   private static void compare(Type from, Type to, EqualityType equality) {
     assertThat(TypeComparer.compare(from, to)).isEqualTo(equality);
   }
 
+  private static Type toType(Object object) {
+    if (object instanceof IntrinsicType) {
+      return FACTORY.getIntrinsic((IntrinsicType) object);
+    }
+
+    if (object instanceof Type) {
+      return (Type) object;
+    }
+
+    throw new AssertionError(object.toString() + " is convertible to Type.");
+  }
+
+  private static void compare(Object from, Object to, EqualityType equality) {
+    compare(toType(from), toType(to), equality);
+  }
+
   @Test
   void testExactTypes() {
-    compare(UNICODESTRING.type, UNICODESTRING.type, EXACT);
+    compare(IntrinsicType.UNICODESTRING, IntrinsicType.UNICODESTRING, EXACT);
   }
 
   @Test
   void testToInteger() {
-    compare(SMALLINT.type, INTEGER.type, CONVERT_LEVEL_1);
-    compare(INTEGER.type, SMALLINT.type, CONVERT_LEVEL_3);
-    compare(CURRENCY.type, INTEGER.type, CONVERT_LEVEL_2);
-    compare(VARIANT.type, INTEGER.type, CONVERT_LEVEL_7);
-    compare(subRange("0..5", SHORTINT.type), SHORTINT.type, EQUAL);
-    compare(subRange("-100..100", BYTE.type), SHORTINT.type, CONVERT_LEVEL_1);
-    compare(UNICODESTRING.type, INTEGER.type, INCOMPATIBLE_TYPES);
+    compare(IntrinsicType.SMALLINT, IntrinsicType.INTEGER, CONVERT_LEVEL_1);
+    compare(IntrinsicType.INTEGER, IntrinsicType.SMALLINT, CONVERT_LEVEL_3);
+    compare(IntrinsicType.CURRENCY, IntrinsicType.INTEGER, CONVERT_LEVEL_2);
+    compare(IntrinsicType.VARIANT, IntrinsicType.INTEGER, CONVERT_LEVEL_7);
+    compare(subRange("0..5", IntrinsicType.SHORTINT), IntrinsicType.SHORTINT, EQUAL);
+    compare(subRange("-100..100", IntrinsicType.BYTE), IntrinsicType.SHORTINT, CONVERT_LEVEL_1);
+    compare(IntrinsicType.UNICODESTRING, IntrinsicType.INTEGER, INCOMPATIBLE_TYPES);
   }
 
   @Test
   void testToDecimal() {
-    compare(INTEGER.type, SINGLE.type, CONVERT_LEVEL_3);
-    compare(INTEGER.type, DOUBLE.type, CONVERT_LEVEL_4);
-    compare(DOUBLE.type, SINGLE.type, CONVERT_LEVEL_2);
-    compare(SINGLE.type, DOUBLE.type, CONVERT_LEVEL_1);
-    compare(DOUBLE.type, COMP.type, EQUAL);
-    compare(UNICODESTRING.type, DOUBLE.type, INCOMPATIBLE_TYPES);
+    compare(IntrinsicType.INTEGER, IntrinsicType.SINGLE, CONVERT_LEVEL_3);
+    compare(IntrinsicType.INTEGER, IntrinsicType.DOUBLE, CONVERT_LEVEL_4);
+    compare(IntrinsicType.DOUBLE, IntrinsicType.SINGLE, CONVERT_LEVEL_2);
+    compare(IntrinsicType.SINGLE, IntrinsicType.DOUBLE, CONVERT_LEVEL_1);
+    compare(IntrinsicType.DOUBLE, IntrinsicType.COMP, EQUAL);
+    compare(IntrinsicType.UNICODESTRING, IntrinsicType.DOUBLE, INCOMPATIBLE_TYPES);
   }
 
   @Test
   void testStringToString() {
-    compare(WIDESTRING.type, UNICODESTRING.type, CONVERT_LEVEL_1);
-    compare(WIDESTRING.type, ANSISTRING.type, CONVERT_LEVEL_2);
-    compare(WIDESTRING.type, SHORTSTRING.type, CONVERT_LEVEL_3);
-    compare(WIDESTRING.type, CHAR.type, INCOMPATIBLE_TYPES);
+    compare(IntrinsicType.WIDESTRING, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_1);
+    compare(IntrinsicType.WIDESTRING, IntrinsicType.ANSISTRING, CONVERT_LEVEL_2);
+    compare(IntrinsicType.WIDESTRING, IntrinsicType.SHORTSTRING, CONVERT_LEVEL_3);
+    compare(IntrinsicType.WIDESTRING, IntrinsicType.CHAR, INCOMPATIBLE_TYPES);
 
-    compare(UNICODESTRING.type, WIDESTRING.type, CONVERT_LEVEL_1);
-    compare(UNICODESTRING.type, ANSISTRING.type, CONVERT_LEVEL_2);
-    compare(UNICODESTRING.type, SHORTSTRING.type, CONVERT_LEVEL_3);
-    compare(UNICODESTRING.type, CHAR.type, INCOMPATIBLE_TYPES);
+    compare(IntrinsicType.UNICODESTRING, IntrinsicType.WIDESTRING, CONVERT_LEVEL_1);
+    compare(IntrinsicType.UNICODESTRING, IntrinsicType.ANSISTRING, CONVERT_LEVEL_2);
+    compare(IntrinsicType.UNICODESTRING, IntrinsicType.SHORTSTRING, CONVERT_LEVEL_3);
+    compare(IntrinsicType.UNICODESTRING, IntrinsicType.CHAR, INCOMPATIBLE_TYPES);
 
-    compare(SHORTSTRING.type, ANSISTRING.type, CONVERT_LEVEL_1);
-    compare(SHORTSTRING.type, UNICODESTRING.type, CONVERT_LEVEL_2);
-    compare(SHORTSTRING.type, WIDESTRING.type, CONVERT_LEVEL_3);
-    compare(SHORTSTRING.type, CHAR.type, INCOMPATIBLE_TYPES);
+    compare(IntrinsicType.SHORTSTRING, IntrinsicType.ANSISTRING, CONVERT_LEVEL_1);
+    compare(IntrinsicType.SHORTSTRING, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_2);
+    compare(IntrinsicType.SHORTSTRING, IntrinsicType.WIDESTRING, CONVERT_LEVEL_3);
+    compare(IntrinsicType.SHORTSTRING, IntrinsicType.CHAR, INCOMPATIBLE_TYPES);
 
-    compare(ANSISTRING.type, UNICODESTRING.type, CONVERT_LEVEL_1);
-    compare(ANSISTRING.type, WIDESTRING.type, CONVERT_LEVEL_2);
-    compare(ANSISTRING.type, SHORTSTRING.type, CONVERT_LEVEL_3);
-    compare(ANSISTRING.type, CHAR.type, INCOMPATIBLE_TYPES);
+    compare(IntrinsicType.ANSISTRING, typeType("_", IntrinsicType.ANSISTRING), EQUAL);
+    compare(typeType("_", IntrinsicType.ANSISTRING), IntrinsicType.ANSISTRING, EQUAL);
+    compare(IntrinsicType.ANSISTRING, ansiString(CodePages.CP_NONE), EQUAL);
+    compare(IntrinsicType.ANSISTRING, ansiString(CodePages.CP_UTF8), CONVERT_LEVEL_1);
+    compare(ansiString(CodePages.CP_1252), IntrinsicType.ANSISTRING, CONVERT_LEVEL_2);
+    compare(ansiString(CodePages.CP_NONE), IntrinsicType.ANSISTRING, CONVERT_LEVEL_2);
+    compare(ansiString(CodePages.CP_1252), ansiString(50937), CONVERT_LEVEL_3);
+    compare(IntrinsicType.ANSISTRING, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_4);
+    compare(IntrinsicType.ANSISTRING, IntrinsicType.WIDESTRING, CONVERT_LEVEL_5);
+    compare(IntrinsicType.ANSISTRING, IntrinsicType.SHORTSTRING, CONVERT_LEVEL_6);
+    compare(IntrinsicType.ANSISTRING, IntrinsicType.CHAR, INCOMPATIBLE_TYPES);
 
-    compare(DelphiTypeType.create("Test", UNICODESTRING.type), UNICODESTRING.type, EQUAL);
+    compare(typeType("Test", IntrinsicType.UNICODESTRING), IntrinsicType.UNICODESTRING, EQUAL);
 
-    assertThatThrownBy(() -> TypeComparer.compareStringToString(unknownType(), UNICODESTRING.type))
+    assertThatThrownBy(
+            () ->
+                TypeComparer.compareStringToString(
+                    unknownType(), toType(IntrinsicType.UNICODESTRING)))
         .isInstanceOf(AssertionError.class);
   }
 
   @Test
   void testArrayToString() {
-    Type ansiCharOpenArray = openArray(null, ANSICHAR.type);
-    Type wideCharOpenArray = openArray(null, WIDECHAR.type);
-    Type ansiCharFixedArray = fixedArray(null, ANSICHAR.type);
-    Type wideCharFixedArray = fixedArray(null, WIDECHAR.type);
+    Type ansiCharOpenArray = openArray(null, IntrinsicType.ANSICHAR);
+    Type wideCharOpenArray = openArray(null, IntrinsicType.WIDECHAR);
+    Type ansiCharFixedArray = fixedArray(null, IntrinsicType.ANSICHAR);
+    Type wideCharFixedArray = fixedArray(null, IntrinsicType.WIDECHAR);
 
-    compare(ansiCharOpenArray, ANSISTRING.type, CONVERT_LEVEL_2);
-    compare(ansiCharOpenArray, WIDESTRING.type, CONVERT_LEVEL_3);
-    compare(ansiCharOpenArray, UNICODESTRING.type, CONVERT_LEVEL_4);
-    compare(wideCharOpenArray, UNICODESTRING.type, CONVERT_LEVEL_2);
-    compare(wideCharOpenArray, WIDESTRING.type, CONVERT_LEVEL_3);
-    compare(wideCharOpenArray, ANSISTRING.type, CONVERT_LEVEL_4);
-    compare(openArray(null, unknownType()), ANSISTRING.type, INCOMPATIBLE_TYPES);
+    compare(ansiCharOpenArray, IntrinsicType.ANSISTRING, CONVERT_LEVEL_2);
+    compare(ansiCharOpenArray, IntrinsicType.WIDESTRING, CONVERT_LEVEL_3);
+    compare(ansiCharOpenArray, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_4);
+    compare(wideCharOpenArray, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_2);
+    compare(wideCharOpenArray, IntrinsicType.WIDESTRING, CONVERT_LEVEL_3);
+    compare(wideCharOpenArray, IntrinsicType.ANSISTRING, CONVERT_LEVEL_4);
+    compare(openArray(null, unknownType()), IntrinsicType.ANSISTRING, INCOMPATIBLE_TYPES);
 
-    compare(ansiCharFixedArray, ANSISTRING.type, CONVERT_LEVEL_2);
-    compare(ansiCharFixedArray, WIDESTRING.type, CONVERT_LEVEL_3);
-    compare(ansiCharFixedArray, UNICODESTRING.type, CONVERT_LEVEL_4);
-    compare(wideCharFixedArray, UNICODESTRING.type, CONVERT_LEVEL_2);
-    compare(wideCharFixedArray, WIDESTRING.type, CONVERT_LEVEL_3);
-    compare(wideCharFixedArray, ANSISTRING.type, CONVERT_LEVEL_4);
-    compare(fixedArray(null, unknownType()), ANSISTRING.type, INCOMPATIBLE_TYPES);
+    compare(ansiCharFixedArray, IntrinsicType.ANSISTRING, CONVERT_LEVEL_2);
+    compare(ansiCharFixedArray, IntrinsicType.WIDESTRING, CONVERT_LEVEL_3);
+    compare(ansiCharFixedArray, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_4);
+    compare(wideCharFixedArray, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_2);
+    compare(wideCharFixedArray, IntrinsicType.WIDESTRING, CONVERT_LEVEL_3);
+    compare(wideCharFixedArray, IntrinsicType.ANSISTRING, CONVERT_LEVEL_4);
+    compare(fixedArray(null, unknownType()), IntrinsicType.ANSISTRING, INCOMPATIBLE_TYPES);
 
-    compare(dynamicArray(null, ANSICHAR.type), ANSISTRING.type, INCOMPATIBLE_TYPES);
+    compare(
+        dynamicArray(null, IntrinsicType.ANSICHAR), IntrinsicType.ANSISTRING, INCOMPATIBLE_TYPES);
   }
 
   @Test
-  void testCharToText() {
-    compare(ANSICHAR.type, DelphiTypeType.create("_AnsiChar", ANSICHAR.type), CONVERT_LEVEL_1);
-    compare(ANSICHAR.type, SHORTSTRING.type, CONVERT_LEVEL_2);
-    compare(ANSICHAR.type, ANSISTRING.type, CONVERT_LEVEL_3);
-    compare(ANSICHAR.type, UNICODESTRING.type, CONVERT_LEVEL_4);
-    compare(ANSICHAR.type, UNICODESTRING.type, CONVERT_LEVEL_4);
-    compare(ANSICHAR.type, WIDESTRING.type, CONVERT_LEVEL_5);
-    assertThat(TypeComparer.compareAnsiCharToText(unknownType())).isEqualTo(INCOMPATIBLE_TYPES);
+  void testCharToString() {
+    compare(IntrinsicType.ANSICHAR, IntrinsicType.SHORTSTRING, CONVERT_LEVEL_2);
+    compare(IntrinsicType.ANSICHAR, IntrinsicType.ANSISTRING, CONVERT_LEVEL_3);
+    compare(IntrinsicType.ANSICHAR, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_4);
+    compare(IntrinsicType.ANSICHAR, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_4);
+    compare(IntrinsicType.ANSICHAR, IntrinsicType.WIDESTRING, CONVERT_LEVEL_5);
+    assertThat(TypeComparer.compareAnsiCharToString(unknownType())).isEqualTo(INCOMPATIBLE_TYPES);
 
-    compare(CHAR.type, DelphiTypeType.create("_WideChar", WIDECHAR.type), CONVERT_LEVEL_1);
-    compare(CHAR.type, UNICODESTRING.type, CONVERT_LEVEL_2);
-    compare(CHAR.type, WIDESTRING.type, CONVERT_LEVEL_3);
-    compare(CHAR.type, ANSICHAR.type, CONVERT_LEVEL_3);
-    compare(CHAR.type, ANSISTRING.type, CONVERT_LEVEL_4);
-    compare(CHAR.type, SHORTSTRING.type, CONVERT_LEVEL_5);
-    assertThat(TypeComparer.compareWideCharToText(unknownType())).isEqualTo(INCOMPATIBLE_TYPES);
+    compare(IntrinsicType.CHAR, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_3);
+    compare(IntrinsicType.CHAR, IntrinsicType.WIDESTRING, CONVERT_LEVEL_4);
+    compare(IntrinsicType.CHAR, IntrinsicType.ANSISTRING, CONVERT_LEVEL_5);
+    compare(IntrinsicType.CHAR, IntrinsicType.SHORTSTRING, CONVERT_LEVEL_6);
+    assertThat(TypeComparer.compareWideCharToString(unknownType())).isEqualTo(INCOMPATIBLE_TYPES);
 
-    assertThatThrownBy(() -> TypeComparer.compareCharToText(unknownType(), unknownType()))
+    assertThatThrownBy(() -> TypeComparer.compareCharToString(unknownType(), unknownType()))
+        .isInstanceOf(AssertionError.class);
+  }
+
+  @Test
+  void testCharToChar() {
+    compare(IntrinsicType.ANSICHAR, typeType("_AnsiChar", IntrinsicType.ANSICHAR), CONVERT_LEVEL_1);
+    compare(IntrinsicType.CHAR, typeType("_WideChar", IntrinsicType.WIDECHAR), CONVERT_LEVEL_1);
+    compare(IntrinsicType.WIDECHAR, IntrinsicType.ANSICHAR, CONVERT_LEVEL_2);
+    assertThat(TypeComparer.compareWideCharToChar(unknownType())).isEqualTo(INCOMPATIBLE_TYPES);
+
+    assertThatThrownBy(() -> TypeComparer.compareCharToString(unknownType(), unknownType()))
+        .isInstanceOf(AssertionError.class);
+
+    assertThatThrownBy(() -> TypeComparer.compareCharToChar(unknownType(), unknownType()))
         .isInstanceOf(AssertionError.class);
   }
 
   @Test
   void testToBoolean() {
-    compare(BOOLEAN.type, BYTEBOOL.type, CONVERT_LEVEL_1);
-    compare(BOOLEAN.type, WORDBOOL.type, CONVERT_LEVEL_1);
-    compare(WORDBOOL.type, BOOLEAN.type, CONVERT_LEVEL_3);
-    compare(UNICODESTRING.type, BOOLEAN.type, INCOMPATIBLE_TYPES);
+    compare(IntrinsicType.BOOLEAN, IntrinsicType.BYTEBOOL, CONVERT_LEVEL_1);
+    compare(IntrinsicType.BOOLEAN, IntrinsicType.WORDBOOL, CONVERT_LEVEL_1);
+    compare(IntrinsicType.WORDBOOL, IntrinsicType.BOOLEAN, CONVERT_LEVEL_3);
+    compare(IntrinsicType.UNICODESTRING, IntrinsicType.BOOLEAN, INCOMPATIBLE_TYPES);
   }
 
   @Test
   void testToEnum() {
-    EnumType enumType = enumeration("Enum1", unknownScope());
-    EnumType enumType2 = enumeration("Enum2", unknownScope());
-    SubrangeType subrangeType = DelphiSubrangeType.subRange("Subrange", enumType);
+    EnumType enumType = enumeration("Enum1");
+    EnumType enumType2 = enumeration("Enum2");
+    SubrangeType subrangeType = subRange("Subrange", enumType);
 
     compare(subrangeType, enumType, CONVERT_LEVEL_1);
     compare(subrangeType, enumType2, INCOMPATIBLE_TYPES);
     compare(enumType, enumType2, INCOMPATIBLE_TYPES);
-    compare(VARIANT.type, enumType, CONVERT_LEVEL_1);
-    compare(INTEGER.type, enumType, INCOMPATIBLE_TYPES);
+    compare(IntrinsicType.VARIANT, enumType, CONVERT_LEVEL_1);
+    compare(IntrinsicType.INTEGER, enumType, INCOMPATIBLE_TYPES);
   }
 
   @Test
   void testToSubrange() {
-    SubrangeType subrangeOfShortInt = subRange("1..100", SHORTINT.type);
-    SubrangeType subrangeOfInteger = subRange("5..High(Integer)", INTEGER.type);
-    SubrangeType subrangeOfEnum = subRange("5..6", enumeration("Enum", unknownScope()));
+    SubrangeType subrangeOfShortInt = subRange("1..100", IntrinsicType.SHORTINT);
+    SubrangeType subrangeOfInteger = subRange("5..High(Integer)", IntrinsicType.INTEGER);
+    SubrangeType subrangeOfEnum = subRange("5..6", enumeration("Enum"));
 
     compare(subrangeOfShortInt, subrangeOfInteger, CONVERT_LEVEL_1);
     compare(subrangeOfInteger, subrangeOfShortInt, CONVERT_LEVEL_3);
@@ -232,47 +232,52 @@ class TypeComparerTest {
 
   @Test
   void testToArray() {
-    CollectionType fromOpenArray = openArray("Open", INTEGER.type);
-    CollectionType fromDynamicArray = dynamicArray("Dynamic", INTEGER.type);
-    CollectionType fromFixedArray = fixedArray("Fixed", INTEGER.type);
-    CollectionType fromIncompatibleOpenArray = openArray("OpenString", UNICODESTRING.type);
-    CollectionType fromIncompatibleDynamicArray = dynamicArray("DynamicString", UNICODESTRING.type);
-    CollectionType fromIncompatibleFixedArray = fixedArray("FixedString", UNICODESTRING.type);
-    CollectionType toDynamicArray = dynamicArray(null, INTEGER.type);
-    CollectionType toFixedArray = fixedArray(null, INTEGER.type);
-    CollectionType toOpenArray = openArray(null, INTEGER.type);
-    CollectionType toSimilarOpenArray = openArray(null, NATIVEINT.type);
+    CollectionType fromOpenArray = openArray("Open", IntrinsicType.INTEGER);
+    CollectionType fromDynamicArray = dynamicArray("Dynamic", IntrinsicType.INTEGER);
+    CollectionType fromFixedArray = fixedArray("Fixed", IntrinsicType.INTEGER);
+    CollectionType fromIncompatibleOpenArray = openArray("OpenString", IntrinsicType.UNICODESTRING);
+    CollectionType fromIncompatibleDynamicArray =
+        dynamicArray("DynamicString", IntrinsicType.UNICODESTRING);
+    CollectionType fromIncompatibleFixedArray =
+        fixedArray("FixedString", IntrinsicType.UNICODESTRING);
+    CollectionType toDynamicArray = dynamicArray(null, IntrinsicType.INTEGER);
+    CollectionType toFixedArray = fixedArray(null, IntrinsicType.INTEGER);
+    CollectionType toOpenArray = openArray(null, IntrinsicType.INTEGER);
+    CollectionType toSimilarOpenArray = openArray(null, IntrinsicType.NATIVEINT);
 
-    compare(INTEGER.type, toOpenArray, CONVERT_LEVEL_3);
+    compare(IntrinsicType.INTEGER, toOpenArray, CONVERT_LEVEL_3);
     compare(fromDynamicArray, toDynamicArray, EQUAL);
     compare(fromFixedArray, toDynamicArray, CONVERT_LEVEL_2);
-    compare(dynamicArray(null, UNICODESTRING.type), toDynamicArray, INCOMPATIBLE_TYPES);
+    compare(dynamicArray(null, IntrinsicType.UNICODESTRING), toDynamicArray, INCOMPATIBLE_TYPES);
 
     compare(fromDynamicArray, toOpenArray, CONVERT_LEVEL_1);
     compare(fromDynamicArray, toSimilarOpenArray, CONVERT_LEVEL_2);
     compare(fromIncompatibleDynamicArray, toOpenArray, INCOMPATIBLE_TYPES);
     compare(fromOpenArray, toOpenArray, EXACT);
-    compare(openArray(null, LONGINT.type), toOpenArray, EQUAL);
+    compare(openArray(null, IntrinsicType.NATIVEINT), toOpenArray, EQUAL);
     compare(fromFixedArray, toOpenArray, EQUAL);
     compare(fromIncompatibleFixedArray, toOpenArray, INCOMPATIBLE_TYPES);
     compare(openArray(null, unknownType()), toOpenArray, INCOMPATIBLE_TYPES);
-    compare(openArray(null, ANSICHAR.type), openArray(null, CHAR.type), CONVERT_LEVEL_5);
+    compare(
+        openArray(null, IntrinsicType.ANSICHAR),
+        openArray(null, IntrinsicType.CHAR),
+        CONVERT_LEVEL_5);
 
     compare(fromOpenArray, toFixedArray, EQUAL);
     compare(fromIncompatibleOpenArray, toFixedArray, INCOMPATIBLE_TYPES);
     compare(fromDynamicArray, toFixedArray, INCOMPATIBLE_TYPES);
 
-    compare(pointerTo(INTEGER.type), toOpenArray, CONVERT_LEVEL_3);
-    compare(nilPointer(), toDynamicArray, CONVERT_LEVEL_3);
-    compare(untypedPointer(), toDynamicArray, CONVERT_LEVEL_3);
-    compare(pointerTo(UNICODESTRING.type), toOpenArray, INCOMPATIBLE_TYPES);
+    compare(pointerTo(IntrinsicType.INTEGER), toOpenArray, CONVERT_LEVEL_3);
+    compare(nilPointer(), toDynamicArray, CONVERT_LEVEL_5);
+    compare(untypedPointer(), toDynamicArray, CONVERT_LEVEL_5);
+    compare(pointerTo(IntrinsicType.UNICODESTRING), toOpenArray, INCOMPATIBLE_TYPES);
     compare(pointerTo(unknownType()), toDynamicArray, INCOMPATIBLE_TYPES);
 
-    compare(ANSICHAR.type, dynamicArray(null, ANSICHAR.type), CONVERT_LEVEL_1);
-    compare(ANSICHAR.type, toDynamicArray, INCOMPATIBLE_TYPES);
+    compare(IntrinsicType.ANSICHAR, dynamicArray(null, IntrinsicType.ANSICHAR), CONVERT_LEVEL_1);
+    compare(IntrinsicType.ANSICHAR, toDynamicArray, INCOMPATIBLE_TYPES);
 
-    compare(VARIANT.type, toDynamicArray, CONVERT_LEVEL_1);
-    compare(VARIANT.type, toOpenArray, CONVERT_LEVEL_8);
+    compare(IntrinsicType.VARIANT, toDynamicArray, CONVERT_LEVEL_1);
+    compare(IntrinsicType.VARIANT, toOpenArray, CONVERT_LEVEL_8);
 
     compare(unknownType(), toOpenArray, INCOMPATIBLE_TYPES);
     compare(unknownType(), toDynamicArray, INCOMPATIBLE_TYPES);
@@ -281,21 +286,22 @@ class TypeComparerTest {
 
   @Test
   void testArrayConstructorToArray() {
-    CollectionType toDynamicArray = dynamicArray(null, INTEGER.type);
-    CollectionType toDynamicPointerArray = dynamicArray(null, POINTER.type);
+    CollectionType toDynamicArray = dynamicArray(null, IntrinsicType.INTEGER);
+    CollectionType toDynamicPointerArray = dynamicArray(null, IntrinsicType.POINTER);
     CollectionType toIncompatibleDynamicArray =
         dynamicArray(null, TypeMocker.struct("Test", CLASS));
-    CollectionType toFixedArray = fixedArray(null, INTEGER.type);
-    CollectionType toOpenArray = openArray(null, INTEGER.type);
-    CollectionType toArrayOfConst = array(null, voidType(), Set.of(OPEN, ARRAY_OF_CONST));
+    CollectionType toFixedArray = fixedArray(null, IntrinsicType.INTEGER);
+    CollectionType toOpenArray = openArray(null, IntrinsicType.INTEGER);
+    CollectionType toArrayOfConst = arrayOfConst();
 
     ArrayConstructorType emptyConstructor = arrayConstructor(emptyList());
-    ArrayConstructorType byteConstructor = arrayConstructor(List.of(BYTE.type));
-    ArrayConstructorType integerConstructor = arrayConstructor(List.of(INTEGER.type));
-    ArrayConstructorType stringConstructor = arrayConstructor(List.of(UNICODESTRING.type));
-    ArrayConstructorType variantConstructor = arrayConstructor(List.of(VARIANT.type));
+    ArrayConstructorType byteConstructor = arrayConstructor(List.of(IntrinsicType.BYTE));
+    ArrayConstructorType integerConstructor = arrayConstructor(List.of(IntrinsicType.INTEGER));
+    ArrayConstructorType stringConstructor = arrayConstructor(List.of(IntrinsicType.UNICODESTRING));
+    ArrayConstructorType variantConstructor = arrayConstructor(List.of(IntrinsicType.VARIANT));
     ArrayConstructorType heterogeneousConstructor =
-        arrayConstructor(List.of(INTEGER.type, UNICODESTRING.type, BOOLEAN.type));
+        arrayConstructor(
+            List.of(IntrinsicType.INTEGER, IntrinsicType.UNICODESTRING, IntrinsicType.BOOLEAN));
 
     compare(emptyConstructor, toDynamicArray, CONVERT_LEVEL_3);
     compare(emptyConstructor, toOpenArray, CONVERT_LEVEL_1);
@@ -322,14 +328,14 @@ class TypeComparerTest {
 
   @Test
   void testArrayConstructorToSet() {
-    CollectionType byteSet = set(BYTE.type);
+    CollectionType byteSet = set(IntrinsicType.BYTE);
     CollectionType classSet = set(TypeMocker.struct("Foo", CLASS));
 
     ArrayConstructorType emptyConstructor = arrayConstructor(emptyList());
-    ArrayConstructorType byteConstructor = arrayConstructor(List.of(BYTE.type));
-    ArrayConstructorType integerConstructor = arrayConstructor(List.of(INTEGER.type));
-    ArrayConstructorType stringConstructor = arrayConstructor(List.of(UNICODESTRING.type));
-    ArrayConstructorType variantConstructor = arrayConstructor(List.of(VARIANT.type));
+    ArrayConstructorType byteConstructor = arrayConstructor(List.of(IntrinsicType.BYTE));
+    ArrayConstructorType integerConstructor = arrayConstructor(List.of(IntrinsicType.INTEGER));
+    ArrayConstructorType stringConstructor = arrayConstructor(List.of(IntrinsicType.UNICODESTRING));
+    ArrayConstructorType variantConstructor = arrayConstructor(List.of(IntrinsicType.VARIANT));
 
     compare(emptyConstructor, byteSet, CONVERT_LEVEL_2);
     compare(byteConstructor, byteSet, CONVERT_LEVEL_2);
@@ -343,26 +349,27 @@ class TypeComparerTest {
   void testToSet() {
     // NOTE: Sets can't actually have such large ordinal element types (and certainly not strings)
     // This is just for testing convenience.
-    CollectionType integerSet = DelphiSetType.set(INTEGER.type);
-    CollectionType longIntSet = DelphiSetType.set(LONGINT.type);
-    CollectionType stringSet = DelphiSetType.set(UNICODESTRING.type);
+    CollectionType integerSet = set(IntrinsicType.INTEGER);
+    CollectionType nativeIntSet = set(IntrinsicType.NATIVEINT);
+    CollectionType stringSet = set(IntrinsicType.UNICODESTRING);
 
     compare(emptySet(), integerSet, CONVERT_LEVEL_1);
     compare(integerSet, emptySet(), CONVERT_LEVEL_1);
-    compare(integerSet, longIntSet, EQUAL);
+    compare(integerSet, nativeIntSet, EQUAL);
     compare(integerSet, stringSet, INCOMPATIBLE_TYPES);
     compare(unknownType(), integerSet, INCOMPATIBLE_TYPES);
   }
 
   @Test
   void testToProceduralType() {
-    List<Type> parameters = Collections.singletonList(INTEGER.type);
-    List<Type> similarParameters = Collections.singletonList(LONGINT.type);
-    Type returnType = UNICODESTRING.type;
+    List<Type> parameters = List.of(toType(IntrinsicType.INTEGER));
+    List<Type> similarParameters = List.of(toType(IntrinsicType.NATIVEINT));
+    Type returnType = toType(IntrinsicType.UNICODESTRING);
+    Type incompatibleReturnType = toType(IntrinsicType.INTEGER);
 
     ProceduralType fromProcedure = procedure(parameters, returnType);
     ProceduralType similarFromProcedure = procedure(similarParameters, returnType);
-    ProceduralType incompatibleReturnTypeProcedure = procedure(parameters, INTEGER.type);
+    ProceduralType incompatibleReturnTypeProcedure = procedure(parameters, incompatibleReturnType);
     ProceduralType incompatibleParametersProcedure = procedure(emptyList(), returnType);
     ProceduralType toProcedure = anonymous(parameters, returnType);
 
@@ -390,7 +397,7 @@ class TypeComparerTest {
     compare(untypedPointer(), toClass, CONVERT_LEVEL_4);
     compare(nilPointer(), toClass, CONVERT_LEVEL_3);
     compare(classOf(fromInterface), toGUID, CONVERT_LEVEL_5);
-    compare(VARIANT.type, toClass, CONVERT_LEVEL_8);
+    compare(IntrinsicType.VARIANT, toClass, CONVERT_LEVEL_8);
     compare(untypedPointer(), toRecord, INCOMPATIBLE_TYPES);
     compare(nilPointer(), toRecord, INCOMPATIBLE_TYPES);
     compare(pointerTo(toClass), toClass, INCOMPATIBLE_TYPES);
@@ -420,78 +427,84 @@ class TypeComparerTest {
 
   @Test
   void testToFile() {
-    Type fromFile = DelphiFileType.fileOf(INTEGER.type);
-    Type toFile = DelphiFileType.fileOf(LONGINT.type);
+    Type fromFile = fileOf(IntrinsicType.INTEGER);
+    Type toFile = fileOf(IntrinsicType.NATIVEINT);
 
     compare(fromFile, toFile, EQUAL);
     compare(untypedFile(), toFile, CONVERT_LEVEL_1);
     compare(fromFile, untypedFile(), CONVERT_LEVEL_1);
-    compare(LONGINT.type, toFile, INCOMPATIBLE_TYPES);
-    compare(DelphiFileType.fileOf(UNICODESTRING.type), toFile, INCOMPATIBLE_TYPES);
+    compare(IntrinsicType.NATIVEINT, toFile, INCOMPATIBLE_TYPES);
+    compare(fileOf(IntrinsicType.UNICODESTRING), toFile, INCOMPATIBLE_TYPES);
   }
 
   @Test
   void testToPointer() {
     var fooType = TypeMocker.struct("Foo", CLASS);
     var barType = TypeMocker.struct("Bar", CLASS, fooType);
-    var arrayType = dynamicArray(null, INTEGER.type);
+    var arrayType = dynamicArray(null, IntrinsicType.INTEGER);
 
-    compare(pointerTo(LONGINT.type), pointerTo(INTEGER.type), EQUAL);
+    compare(pointerTo(IntrinsicType.NATIVEINT), pointerTo(IntrinsicType.INTEGER), EQUAL);
     compare(pointerTo(barType), pointerTo(fooType), CONVERT_LEVEL_1);
-    compare(UNICODESTRING.type, pointerTo(CHAR.type), CONVERT_LEVEL_2);
-    compare(UNICODESTRING.type, pointerTo(ANSICHAR.type), CONVERT_LEVEL_3);
-    compare(WIDECHAR.type, pointerTo(CHAR.type), CONVERT_LEVEL_1);
-    compare(ANSICHAR.type, pointerTo(CHAR.type), CONVERT_LEVEL_1);
-    compare(WIDECHAR.type, pointerTo(ANSICHAR.type), CONVERT_LEVEL_2);
-    compare(ANSICHAR.type, pointerTo(ANSICHAR.type), CONVERT_LEVEL_2);
+    compare(IntrinsicType.UNICODESTRING, pointerTo(IntrinsicType.CHAR), CONVERT_LEVEL_2);
+    compare(IntrinsicType.UNICODESTRING, pointerTo(IntrinsicType.ANSICHAR), CONVERT_LEVEL_3);
+    compare(IntrinsicType.WIDECHAR, pointerTo(IntrinsicType.CHAR), CONVERT_LEVEL_1);
+    compare(IntrinsicType.ANSICHAR, pointerTo(IntrinsicType.CHAR), CONVERT_LEVEL_1);
+    compare(IntrinsicType.WIDECHAR, pointerTo(IntrinsicType.ANSICHAR), CONVERT_LEVEL_2);
+    compare(IntrinsicType.ANSICHAR, pointerTo(IntrinsicType.ANSICHAR), CONVERT_LEVEL_2);
     compare(fooType, untypedPointer(), CONVERT_LEVEL_5);
-    compare(INTEGER.type, pointerTo(UNICODESTRING.type), CONVERT_LEVEL_6);
-    compare(untypedPointer(), pointerTo(CHAR.type), CONVERT_LEVEL_2);
-    compare(untypedPointer(), pointerTo(INTEGER.type), CONVERT_LEVEL_1);
-    compare(pointerTo(CHAR.type), untypedPointer(), CONVERT_LEVEL_2);
-    compare(pointerTo(INTEGER.type), untypedPointer(), CONVERT_LEVEL_1);
-    compare(arrayType, pointerTo(INTEGER.type), CONVERT_LEVEL_3);
+    compare(IntrinsicType.INTEGER, pointerTo(IntrinsicType.UNICODESTRING), CONVERT_LEVEL_6);
+    compare(untypedPointer(), pointerTo(IntrinsicType.CHAR), CONVERT_LEVEL_2);
+    compare(untypedPointer(), pointerTo(IntrinsicType.INTEGER), CONVERT_LEVEL_1);
+    compare(pointerTo(IntrinsicType.CHAR), untypedPointer(), CONVERT_LEVEL_2);
+    compare(pointerTo(IntrinsicType.INTEGER), untypedPointer(), CONVERT_LEVEL_1);
+    compare(arrayType, pointerTo(IntrinsicType.INTEGER), CONVERT_LEVEL_3);
     compare(arrayType, untypedPointer(), CONVERT_LEVEL_4);
-    compare(PANSICHAR.type, ANSISTRING.type, CONVERT_LEVEL_3);
-    compare(PCHAR.type, UNICODESTRING.type, CONVERT_LEVEL_3);
-    compare(PANSICHAR.type, UNICODESTRING.type, CONVERT_LEVEL_4);
-    compare(PCHAR.type, ANSISTRING.type, CONVERT_LEVEL_4);
-    compare(pointerTo(INTEGER.type), UNICODESTRING.type, INCOMPATIBLE_TYPES);
+    compare(IntrinsicType.PANSICHAR, IntrinsicType.ANSISTRING, CONVERT_LEVEL_3);
+    compare(IntrinsicType.PCHAR, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_3);
+    compare(IntrinsicType.PANSICHAR, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_4);
+    compare(IntrinsicType.PCHAR, IntrinsicType.ANSISTRING, CONVERT_LEVEL_4);
+    compare(pointerTo(IntrinsicType.INTEGER), IntrinsicType.UNICODESTRING, INCOMPATIBLE_TYPES);
     compare(fooType, pointerTo(fooType), INCOMPATIBLE_TYPES);
-    compare(pointerTo(INTEGER.type), pointerTo(UNICODESTRING.type), INCOMPATIBLE_TYPES);
-    compare(UNICODESTRING.type, pointerTo(INTEGER.type), INCOMPATIBLE_TYPES);
-    compare(dynamicArray(null, STRING.type), pointerTo(INTEGER.type), INCOMPATIBLE_TYPES);
+    compare(
+        pointerTo(IntrinsicType.INTEGER),
+        pointerTo(IntrinsicType.UNICODESTRING),
+        INCOMPATIBLE_TYPES);
+    compare(IntrinsicType.UNICODESTRING, pointerTo(IntrinsicType.INTEGER), INCOMPATIBLE_TYPES);
+    compare(
+        dynamicArray(null, IntrinsicType.STRING),
+        pointerTo(IntrinsicType.INTEGER),
+        INCOMPATIBLE_TYPES);
     compare(unknownType(), untypedPointer(), INCOMPATIBLE_TYPES);
   }
 
   @Test
   void testToUntyped() {
     compare(untypedType(), untypedType(), EQUAL);
-    compare(UNICODESTRING.type, untypedType(), CONVERT_LEVEL_7);
+    compare(IntrinsicType.UNICODESTRING, untypedType(), CONVERT_LEVEL_7);
   }
 
   @Test
   void testToVariant() {
     Type interfaceType = TypeMocker.struct("Test", INTERFACE);
 
-    compare(enumeration("Enum", unknownScope()), VARIANT.type, CONVERT_LEVEL_1);
-    compare(dynamicArray("MyArray", unknownType()), VARIANT.type, CONVERT_LEVEL_1);
-    compare(interfaceType, VARIANT.type, CONVERT_LEVEL_1);
-    compare(INTEGER.type, VARIANT.type, CONVERT_LEVEL_1);
-    compare(DOUBLE.type, VARIANT.type, CONVERT_LEVEL_1);
-    compare(STRING.type, VARIANT.type, CONVERT_LEVEL_1);
-    compare(OLE_VARIANT.type, VARIANT.type, CONVERT_LEVEL_1);
-    compare(unknownType(), VARIANT.type, CONVERT_LEVEL_8);
+    compare(enumeration("Enum"), IntrinsicType.VARIANT, CONVERT_LEVEL_1);
+    compare(dynamicArray("MyArray", unknownType()), IntrinsicType.VARIANT, CONVERT_LEVEL_1);
+    compare(interfaceType, IntrinsicType.VARIANT, CONVERT_LEVEL_1);
+    compare(IntrinsicType.INTEGER, IntrinsicType.VARIANT, CONVERT_LEVEL_1);
+    compare(IntrinsicType.DOUBLE, IntrinsicType.VARIANT, CONVERT_LEVEL_1);
+    compare(IntrinsicType.STRING, IntrinsicType.VARIANT, CONVERT_LEVEL_1);
+    compare(IntrinsicType.OLEVARIANT, IntrinsicType.VARIANT, CONVERT_LEVEL_1);
+    compare(unknownType(), IntrinsicType.VARIANT, CONVERT_LEVEL_8);
   }
 
   @Test
   void testToIntrinsicTypeArgument() {
-    CollectionType fixedArray = DelphiArrayType.fixedArray(null, INTEGER.type);
-    CollectionType dynamicArray = DelphiArrayType.dynamicArray(null, INTEGER.type);
-    CollectionType openArray = DelphiArrayType.openArray(null, INTEGER.type);
-    CollectionType set = DelphiSetType.set(BYTE.type);
+    CollectionType fixedArray = fixedArray(null, IntrinsicType.INTEGER);
+    CollectionType dynamicArray = dynamicArray(null, IntrinsicType.INTEGER);
+    CollectionType openArray = openArray(null, IntrinsicType.INTEGER);
+    CollectionType set = set(IntrinsicType.BYTE);
     StructType object = TypeMocker.struct("MyObject", OBJECT);
-    EnumType enumeration = DelphiEnumerationType.enumeration("MyEnum", unknownScope());
+    EnumType enumeration = enumeration("MyEnum");
 
     compare(fixedArray, ANY_ARRAY, EQUAL);
     compare(dynamicArray, ANY_ARRAY, EQUAL);
@@ -505,10 +518,115 @@ class TypeComparerTest {
 
     compare(object, ANY_OBJECT, EQUAL);
 
-    compare(INTEGER.type, ANY_ORDINAL, EQUAL);
-    compare(BOOLEAN.type, ANY_ORDINAL, EQUAL);
+    compare(IntrinsicType.INTEGER, ANY_ORDINAL, EQUAL);
+    compare(IntrinsicType.BOOLEAN, ANY_ORDINAL, EQUAL);
     compare(enumeration, ANY_ORDINAL, EQUAL);
-    compare(CHAR.type, ANY_ORDINAL, EQUAL);
-    compare(DOUBLE.type, ANY_ORDINAL, INCOMPATIBLE_TYPES);
+    compare(IntrinsicType.CHAR, ANY_ORDINAL, EQUAL);
+    compare(IntrinsicType.DOUBLE, ANY_ORDINAL, INCOMPATIBLE_TYPES);
+  }
+
+  private static CollectionType openArray(String image, Type type) {
+    return FACTORY.array(image, type, Set.of(ArrayOption.OPEN));
+  }
+
+  private static CollectionType fixedArray(String image, Type type) {
+    return FACTORY.array(image, type, Set.of(ArrayOption.FIXED));
+  }
+
+  private static CollectionType dynamicArray(String image, Type type) {
+    return FACTORY.array(image, type, Set.of(ArrayOption.DYNAMIC));
+  }
+
+  private static CollectionType arrayOfConst() {
+    return FACTORY.array(null, voidType(), Set.of(ArrayOption.OPEN, ArrayOption.ARRAY_OF_CONST));
+  }
+
+  private static CollectionType openArray(String image, IntrinsicType intrinsic) {
+    return openArray(image, toType(intrinsic));
+  }
+
+  private static CollectionType fixedArray(String image, IntrinsicType intrinsic) {
+    return fixedArray(image, toType(intrinsic));
+  }
+
+  private static CollectionType dynamicArray(String image, IntrinsicType intrinsic) {
+    return dynamicArray(image, toType(intrinsic));
+  }
+
+  private static ArrayConstructorType arrayConstructor(List<Object> types) {
+    return FACTORY.arrayConstructor(
+        types.stream().map(TypeComparerTest::toType).collect(Collectors.toList()));
+  }
+
+  private static CollectionType set(Type type) {
+    return FACTORY.set(type);
+  }
+
+  private static CollectionType set(IntrinsicType intrinsic) {
+    return set(toType(intrinsic));
+  }
+
+  private static CollectionType emptySet() {
+    return FACTORY.emptySet();
+  }
+
+  private static TypeType typeType(String image, IntrinsicType intrinsic) {
+    return FACTORY.typeType(image, toType(intrinsic));
+  }
+
+  private static EnumType enumeration(String image) {
+    return FACTORY.enumeration(image, unknownScope());
+  }
+
+  private static SubrangeType subRange(String image, Type type) {
+    return FACTORY.subRange(image, type);
+  }
+
+  private static SubrangeType subRange(String image, IntrinsicType intrinsic) {
+    return subRange(image, toType(intrinsic));
+  }
+
+  private static PointerType pointerTo(Type type) {
+    return FACTORY.pointerTo(type);
+  }
+
+  private static PointerType pointerTo(IntrinsicType intrinsic) {
+    return pointerTo(toType(intrinsic));
+  }
+
+  private static PointerType untypedPointer() {
+    return FACTORY.untypedPointer();
+  }
+
+  private static PointerType nilPointer() {
+    return FACTORY.nilPointer();
+  }
+
+  private static FileType fileOf(Type type) {
+    return FACTORY.fileOf(type);
+  }
+
+  private static FileType fileOf(IntrinsicType intrinsic) {
+    return fileOf(toType(intrinsic));
+  }
+
+  private static FileType untypedFile() {
+    return FACTORY.untypedFile();
+  }
+
+  private static ClassReferenceType classOf(Type type) {
+    return FACTORY.classOf(type);
+  }
+
+  private static ProceduralType procedure(List<Type> parameterTypes, Type returnType) {
+    return FACTORY.procedure(parameterTypes, returnType);
+  }
+
+  private static ProceduralType anonymous(List<Type> parameterTypes, Type returnType) {
+    return FACTORY.anonymous(parameterTypes, returnType);
+  }
+
+  private static AnsiStringType ansiString(int codePage) {
+    return FACTORY.ansiString(codePage);
   }
 }

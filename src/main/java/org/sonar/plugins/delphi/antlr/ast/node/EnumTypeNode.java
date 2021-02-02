@@ -8,7 +8,6 @@ import net.sourceforge.pmd.lang.ast.Node;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.type.DelphiEnumerationType;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class EnumTypeNode extends TypeNode {
@@ -37,7 +36,7 @@ public final class EnumTypeNode extends TypeNode {
       image = makeAnonymousImage(this);
     }
 
-    return DelphiEnumerationType.enumeration(image, getScope());
+    return getTypeFactory().enumeration(image, getScope());
   }
 
   private static String makeAnonymousImage(EnumTypeNode typeNode) {

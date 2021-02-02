@@ -48,6 +48,7 @@ import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.batch.sensor.issue.IssueLocation;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.rule.RuleKey;
+import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.DelphiSensor;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.executor.DelphiCpdExecutor;
@@ -118,11 +119,13 @@ public abstract class BasePmdRuleTest {
 
     DelphiProjectHelper delphiProjectHelper = mock(DelphiProjectHelper.class);
     when(delphiProjectHelper.shouldExecuteOnProject()).thenReturn(true);
-    when(delphiProjectHelper.workDir()).thenReturn(new File("target"));
     when(delphiProjectHelper.testSuiteType()).thenReturn(TEST_UNIT + ".TTestSuite");
     when(delphiProjectHelper.getFile(any(File.class))).thenReturn(inputFile);
     when(delphiProjectHelper.standardLibraryPath())
         .thenReturn(DelphiUtils.getResource(STANDARD_LIBRARY).toPath());
+    when(delphiProjectHelper.getToolchain()).thenReturn(DelphiPlugin.COMPILER_TOOLCHAIN_DEFAULT);
+    when(delphiProjectHelper.getCompilerVersion())
+        .thenReturn(DelphiPlugin.COMPILER_VERSION_DEFAULT);
 
     DelphiProject delphiProject = DelphiProject.create("Default Project");
     delphiProject.addSourceFile(inputFileToPath(inputFile));

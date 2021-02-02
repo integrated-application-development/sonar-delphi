@@ -1,11 +1,10 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.EXTENDED;
-
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
 
 public final class DecimalLiteralNode extends LiteralNode {
   public DecimalLiteralNode(Token token) {
@@ -25,6 +24,6 @@ public final class DecimalLiteralNode extends LiteralNode {
   @Override
   @NotNull
   public Type getType() {
-    return EXTENDED.type;
+    return getTypeFactory().getIntrinsic(IntrinsicType.EXTENDED);
   }
 }

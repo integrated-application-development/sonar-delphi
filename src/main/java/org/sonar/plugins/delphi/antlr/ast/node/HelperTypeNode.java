@@ -2,7 +2,6 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
-import org.sonar.plugins.delphi.type.DelphiHelperType;
 import org.sonar.plugins.delphi.type.Type;
 
 public abstract class HelperTypeNode extends StructTypeNode {
@@ -18,6 +17,6 @@ public abstract class HelperTypeNode extends StructTypeNode {
   @NotNull
   @Override
   public final Type createType() {
-    return DelphiHelperType.from(this);
+    return getTypeFactory().helper(this);
   }
 }

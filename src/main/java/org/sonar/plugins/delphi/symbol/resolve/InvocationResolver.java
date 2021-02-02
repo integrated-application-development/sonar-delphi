@@ -19,7 +19,7 @@ import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.ENUM
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.EXTENDED;
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.FORMAL_BOOLEAN;
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.INCOMPATIBLE_VARIANT;
-import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.LONGINT;
+import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.INTEGER;
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.NO_CONVERSION_REQUIRED;
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.SHORTINT;
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.SHORTSTRING;
@@ -55,8 +55,13 @@ import org.sonar.plugins.delphi.type.TypeUtils;
  *     tcallcandidates</a>
  */
 public class InvocationResolver {
-  private final List<InvocationCandidate> candidates = new ArrayList<>();
-  private final List<InvocationArgument> arguments = new ArrayList<>();
+  private final List<InvocationCandidate> candidates;
+  private final List<InvocationArgument> arguments;
+
+  public InvocationResolver() {
+    this.candidates = new ArrayList<>();
+    this.arguments = new ArrayList<>();
+  }
 
   public void addCandidate(InvocationCandidate candidate) {
     candidates.add(candidate);
@@ -97,7 +102,7 @@ public class InvocationResolver {
    * @see <a href="https://github.com/graemeg/freepascal/blob/master/compiler/htypechk.pas#2858">
    *     tcallcandidates.get_information</a>
    */
-  private static void processArgument(
+  private void processArgument(
       InvocationCandidate candidate, InvocationArgument argument, Parameter parameter) {
     Type argumentType = argument.getType();
     Type parameterType = parameter.getType();
@@ -285,7 +290,7 @@ public class InvocationResolver {
     candidate.addVariantConversion(variantConversionType);
   }
 
-  private static EqualityType varParameterAllowed(Type argType, Parameter parameter) {
+  private EqualityType varParameterAllowed(Type argType, Parameter parameter) {
     Type paramType = parameter.getType();
 
     if (paramType.isUntyped() && !parameter.isConst()) {
@@ -398,7 +403,7 @@ public class InvocationResolver {
     ComparisonChain comparisonChain =
         ComparisonChain.start()
             // Builtin operators will always lose to user-defined operator overloads
-            .compareFalseFirst(bestCandidate.isBuiltinOperator(), candidate.isBuiltinOperator())
+            .compareFalseFirst(bestCandidate.isOperatorIntrinsic(), candidate.isOperatorIntrinsic())
             // Builtin operators will always lose to variant operators
             .compareTrueFirst(bestCandidate.isVariantOperator(), candidate.isVariantOperator())
             // Less Implicit operator arguments?
@@ -510,9 +515,9 @@ public class InvocationResolver {
     } else if (currentVcl == SMALLINT || bestVcl == SMALLINT) {
       return calculateRelation(currentVcl, bestVcl, SMALLINT, Set.of(CARDINAL));
     } else if (currentVcl == CARDINAL || bestVcl == CARDINAL) {
-      return calculateRelation(currentVcl, bestVcl, CARDINAL, Set.of(LONGINT));
-    } else if (currentVcl == LONGINT || bestVcl == LONGINT) {
-      return (bestVcl == LONGINT) ? -1 : 1;
+      return calculateRelation(currentVcl, bestVcl, CARDINAL, Set.of(INTEGER));
+    } else if (currentVcl == INTEGER || bestVcl == INTEGER) {
+      return (bestVcl == INTEGER) ? -1 : 1;
     } else if (currentVcl == SINGLE || bestVcl == SINGLE) {
       return (bestVcl == SINGLE) ? -1 : 1;
     } else if (currentVcl == DOUBLE_CURRENCY || bestVcl == DOUBLE_CURRENCY) {

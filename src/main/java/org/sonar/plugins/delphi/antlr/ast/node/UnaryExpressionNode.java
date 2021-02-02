@@ -4,7 +4,7 @@ import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.operator.UnaryOperator;
-import org.sonar.plugins.delphi.symbol.resolve.ExpressionTypeUtils;
+import org.sonar.plugins.delphi.symbol.resolve.ExpressionTypeResolver;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class UnaryExpressionNode extends ExpressionNode {
@@ -42,6 +42,6 @@ public final class UnaryExpressionNode extends ExpressionNode {
   @Override
   @NotNull
   public Type createType() {
-    return ExpressionTypeUtils.resolve(this);
+    return new ExpressionTypeResolver(getTypeFactory()).resolve(this);
   }
 }

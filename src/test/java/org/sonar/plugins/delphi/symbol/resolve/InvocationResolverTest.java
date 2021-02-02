@@ -4,41 +4,34 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.delphi.type.DelphiArrayType.dynamicArray;
-import static org.sonar.plugins.delphi.type.DelphiArrayType.openArray;
-import static org.sonar.plugins.delphi.type.DelphiEnumerationType.enumeration;
-import static org.sonar.plugins.delphi.type.DelphiFileType.fileOf;
-import static org.sonar.plugins.delphi.type.DelphiFileType.untypedFile;
-import static org.sonar.plugins.delphi.type.DelphiPointerType.pointerTo;
-import static org.sonar.plugins.delphi.type.DelphiPointerType.untypedPointer;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 import static org.sonar.plugins.delphi.type.DelphiType.untypedType;
 import static org.sonar.plugins.delphi.type.StructKind.CLASS;
 import static org.sonar.plugins.delphi.type.StructKind.RECORD;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicBoolean.BOOLEAN;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.CURRENCY;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.DOUBLE;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.EXTENDED;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.REAL;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicDecimal.SINGLE;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.BYTE;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.CARDINAL;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.INT64;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.INTEGER;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.LONGINT;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.LONGWORD;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.NATIVEINT;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.NATIVEUINT;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.SHORTINT;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.SMALLINT;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.UINT64;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicInteger.WORD;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSISTRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.CHAR;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.SHORTSTRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDESTRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicVariant.VARIANT;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.ANSISTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.BOOLEAN;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.BYTE;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.CARDINAL;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.CHAR;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.CURRENCY;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.DOUBLE;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.EXTENDED;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.INT64;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.INTEGER;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.LONGINT;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.LONGWORD;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.NATIVEINT;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.NATIVEUINT;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.REAL;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.SHORTINT;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.SHORTSTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.SINGLE;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.SMALLINT;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.UINT64;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.UNICODESTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.VARIANT;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.WIDESTRING;
+import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicType.WORD;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,15 +44,23 @@ import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParamet
 import org.sonar.plugins.delphi.symbol.declaration.parameter.FormalParameter;
 import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
-import org.sonar.plugins.delphi.type.DelphiTypeType;
+import org.sonar.plugins.delphi.type.ArrayOption;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.factory.TypeFactory;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
+import org.sonar.plugins.delphi.utils.types.TypeFactoryUtils;
 import org.sonar.plugins.delphi.utils.types.TypeMocker;
 
 class InvocationResolverTest {
+  private static final TypeFactory FACTORY = TypeFactoryUtils.defaultFactory();
   private Set<InvocationCandidate> resolved;
 
   private void assertResolved(Type argumentType, Type winnerType, Type loserType) {
     assertResolved(List.of(argumentType), List.of(winnerType), List.of(loserType));
+  }
+
+  private static Type type(IntrinsicType intrinsic) {
+    return FACTORY.getIntrinsic(intrinsic);
   }
 
   private void assertResolved(
@@ -98,6 +99,7 @@ class InvocationResolverTest {
 
   private void runResolver(List<Type> argumentTypes, List<InvocationCandidate> candidates) {
     InvocationResolver resolver = new InvocationResolver();
+
     for (Type argumentType : argumentTypes) {
       InvocationArgument argument = mock(InvocationArgument.class);
       when(argument.getType()).thenReturn(argumentType);
@@ -133,59 +135,55 @@ class InvocationResolverTest {
 
   @Test
   void testIntegerTypes() {
-    assertResolved(INTEGER.type, LONGINT.type, BYTE.type);
-    assertResolved(INTEGER.type, LONGINT.type, INT64.type);
-    assertResolved(INTEGER.type, INT64.type, UINT64.type);
-    assertResolved(INTEGER.type, WORD.type, SHORTINT.type);
-    assertResolved(INTEGER.type, WORD.type, BYTE.type);
-    assertResolved(SHORTINT.type, NATIVEINT.type, NATIVEUINT.type);
+    assertResolved(type(INTEGER), type(LONGINT), type(BYTE));
+    assertResolved(type(INTEGER), type(LONGINT), type(INT64));
+    assertResolved(type(INTEGER), type(INT64), type(UINT64));
+    assertResolved(type(INTEGER), type(WORD), type(SHORTINT));
+    assertResolved(type(INTEGER), type(WORD), type(BYTE));
+    assertResolved(type(SHORTINT), type(NATIVEINT), type(NATIVEUINT));
 
-    Type HWND = DelphiTypeType.create("HWND", NATIVEUINT.type);
+    Type HWND = FACTORY.typeType("HWND", type(NATIVEUINT));
     assertResolved(
-        List.of(HWND, NATIVEUINT.type, SHORTINT.type, SHORTINT.type),
-        List.of(HWND, NATIVEUINT.type, NATIVEINT.type, NATIVEINT.type),
-        List.of(HWND, NATIVEUINT.type, NATIVEUINT.type, NATIVEINT.type));
+        List.of(HWND, type(NATIVEUINT), type(SHORTINT), type(SHORTINT)),
+        List.of(HWND, type(NATIVEUINT), type(NATIVEINT), type(NATIVEINT)),
+        List.of(HWND, type(NATIVEUINT), type(NATIVEUINT), type(NATIVEINT)));
 
-    assertResolved(BYTE.type, INTEGER.type, DOUBLE.type);
+    assertResolved(type(BYTE), type(INTEGER), type(DOUBLE));
 
-    assertResolved(DelphiTypeType.create("MyWord", LONGWORD.type), INTEGER.type, INT64.type);
-    assertResolved(LONGWORD.type, DelphiTypeType.create("MyInt", INTEGER.type), INT64.type);
+    assertResolved(FACTORY.typeType("MyWord", type(LONGWORD)), type(INTEGER), type(INT64));
+    assertResolved(type(LONGWORD), FACTORY.typeType("MyInt", type(INTEGER)), type(INT64));
   }
 
   @Test
   void testFloatingPointTypes() {
-    assertResolved(EXTENDED.type, DOUBLE.type, SINGLE.type);
-    assertResolved(EXTENDED.type, REAL.type, SINGLE.type);
-    assertResolved(DOUBLE.type, EXTENDED.type, SINGLE.type);
-    assertResolved(REAL.type, EXTENDED.type, SINGLE.type);
+    assertResolved(type(EXTENDED), type(DOUBLE), type(SINGLE));
+    assertResolved(type(EXTENDED), type(REAL), type(SINGLE));
+    assertResolved(type(DOUBLE), type(EXTENDED), type(SINGLE));
+    assertResolved(type(REAL), type(EXTENDED), type(SINGLE));
   }
 
   @Test
   void testTextTypes() {
     assertResolved(
-        DelphiTypeType.create("MyString", UNICODESTRING.type),
-        UNICODESTRING.type,
-        SHORTSTRING.type);
+        FACTORY.typeType("MyString", type(UNICODESTRING)), type(UNICODESTRING), type(SHORTSTRING));
     assertResolved(
-        UNICODESTRING.type,
-        DelphiTypeType.create("MyString", UNICODESTRING.type),
-        SHORTSTRING.type);
+        type(UNICODESTRING), FACTORY.typeType("MyString", type(UNICODESTRING)), type(SHORTSTRING));
   }
 
   @Test
   void testVariantTypes() {
     Type variantIncompatibleType = TypeMocker.struct("MyRecord", RECORD);
     assertResolved(
-        List.of(UNICODESTRING.type, variantIncompatibleType, BOOLEAN.type),
-        List.of(UNICODESTRING.type, variantIncompatibleType, VARIANT.type, BOOLEAN.type),
-        List.of(UNICODESTRING.type, VARIANT.type, BOOLEAN.type));
+        List.of(type(UNICODESTRING), variantIncompatibleType, type(BOOLEAN)),
+        List.of(type(UNICODESTRING), variantIncompatibleType, type(VARIANT), type(BOOLEAN)),
+        List.of(type(UNICODESTRING), type(VARIANT), type(BOOLEAN)));
     assertResolved(
-        List.of(VARIANT.type, BYTE.type),
-        List.of(UNICODESTRING.type, INTEGER.type),
-        List.of(ANSISTRING.type, INTEGER.type));
-    assertResolved(VARIANT.type, INTEGER.type, INT64.type);
-    assertResolved(VARIANT.type, SINGLE.type, DOUBLE.type);
-    assertResolved(VARIANT.type, DOUBLE.type, EXTENDED.type);
+        List.of(type(VARIANT), type(BYTE)),
+        List.of(type(UNICODESTRING), type(INTEGER)),
+        List.of(type(ANSISTRING), type(INTEGER)));
+    assertResolved(type(VARIANT), type(INTEGER), type(INT64));
+    assertResolved(type(VARIANT), type(SINGLE), type(DOUBLE));
+    assertResolved(type(VARIANT), type(DOUBLE), type(EXTENDED));
   }
 
   @Test
@@ -200,48 +198,48 @@ class InvocationResolverTest {
 
   @Test
   void testVarParameters() {
-    Type openArray = openArray(null, INTEGER.type);
-    Type dynamicArray = dynamicArray(null, INTEGER.type);
+    Type openArray = FACTORY.array(null, type(INTEGER), Set.of(ArrayOption.OPEN));
+    Type dynamicArray = FACTORY.array(null, type(INTEGER), Set.of(ArrayOption.DYNAMIC));
 
-    assertResolvedVar(INTEGER.type, untypedType());
+    assertResolvedVar(type(INTEGER), untypedType());
     assertResolvedVar(dynamicArray, openArray);
-    assertResolvedVar(INTEGER.type, openArray);
-    assertResolvedVar(untypedPointer(), untypedPointer());
-    assertResolvedVar(pointerTo(INTEGER.type), pointerTo(SHORTINT.type));
-    assertResolvedVar(fileOf(INTEGER.type), untypedFile());
+    assertResolvedVar(type(INTEGER), openArray);
+    assertResolvedVar(FACTORY.untypedPointer(), FACTORY.untypedPointer());
+    assertResolvedVar(FACTORY.pointerTo(type(INTEGER)), FACTORY.pointerTo(type(SHORTINT)));
+    assertResolvedVar(FACTORY.fileOf(type(INTEGER)), FACTORY.untypedFile());
   }
 
   @Test
   void testSingleVariantArgument() {
-    assertResolved(VARIANT.type, VARIANT.type, INTEGER.type);
-    assertResolved(VARIANT.type, INTEGER.type, unknownType());
-    assertResolved(VARIANT.type, SINGLE.type, INT64.type);
-    assertResolved(VARIANT.type, DOUBLE.type, INT64.type);
-    assertResolved(VARIANT.type, CURRENCY.type, INT64.type);
-    assertResolved(VARIANT.type, EXTENDED.type, INT64.type);
-    assertResolved(VARIANT.type, LONGINT.type, INT64.type);
-    assertResolved(VARIANT.type, CARDINAL.type, INT64.type);
-    assertResolved(VARIANT.type, SMALLINT.type, LONGINT.type);
-    assertResolved(VARIANT.type, WORD.type, LONGINT.type);
-    assertResolved(VARIANT.type, SHORTINT.type, LONGINT.type);
-    assertResolved(VARIANT.type, BYTE.type, LONGINT.type);
-    assertResolved(VARIANT.type, BOOLEAN.type, CHAR.type);
-    assertResolved(VARIANT.type, untypedType(), CHAR.type);
-    assertResolved(VARIANT.type, BOOLEAN.type, ANSISTRING.type);
-    assertResolved(VARIANT.type, WIDESTRING.type, CHAR.type);
-    assertResolved(VARIANT.type, UNICODESTRING.type, CHAR.type);
-    assertResolved(VARIANT.type, ANSISTRING.type, CHAR.type);
-    assertResolved(VARIANT.type, SHORTSTRING.type, CHAR.type);
-    assertResolved(VARIANT.type, WIDESTRING.type, UNICODESTRING.type);
-    assertResolved(VARIANT.type, UNICODESTRING.type, ANSISTRING.type);
-    assertResolved(VARIANT.type, ANSISTRING.type, SHORTSTRING.type);
-    assertResolved(VARIANT.type, dynamicArray(null, INTEGER.type), SHORTSTRING.type);
-    assertResolved(
-        VARIANT.type,
-        enumeration("MyEnum", DelphiScope.unknownScope()),
-        dynamicArray(null, INTEGER.type));
+    Type arrayOfInteger = FACTORY.array(null, type(INTEGER), Set.of(ArrayOption.DYNAMIC));
 
-    assertAmbiguous(VARIANT.type, SMALLINT.type, WORD.type);
-    assertIncompatible(VARIANT.type, unknownType());
+    assertResolved(type(VARIANT), type(VARIANT), type(INTEGER));
+    assertResolved(type(VARIANT), type(INTEGER), unknownType());
+    assertResolved(type(VARIANT), type(SINGLE), type(INT64));
+    assertResolved(type(VARIANT), type(DOUBLE), type(INT64));
+    assertResolved(type(VARIANT), type(CURRENCY), type(INT64));
+    assertResolved(type(VARIANT), type(EXTENDED), type(INT64));
+    assertResolved(type(VARIANT), type(LONGINT), type(INT64));
+    assertResolved(type(VARIANT), type(CARDINAL), type(INT64));
+    assertResolved(type(VARIANT), type(SMALLINT), type(LONGINT));
+    assertResolved(type(VARIANT), type(WORD), type(LONGINT));
+    assertResolved(type(VARIANT), type(SHORTINT), type(LONGINT));
+    assertResolved(type(VARIANT), type(BYTE), type(LONGINT));
+    assertResolved(type(VARIANT), type(BOOLEAN), type(CHAR));
+    assertResolved(type(VARIANT), untypedType(), type(CHAR));
+    assertResolved(type(VARIANT), type(BOOLEAN), type(ANSISTRING));
+    assertResolved(type(VARIANT), type(WIDESTRING), type(CHAR));
+    assertResolved(type(VARIANT), type(UNICODESTRING), type(CHAR));
+    assertResolved(type(VARIANT), type(ANSISTRING), type(CHAR));
+    assertResolved(type(VARIANT), type(SHORTSTRING), type(CHAR));
+    assertResolved(type(VARIANT), type(WIDESTRING), type(UNICODESTRING));
+    assertResolved(type(VARIANT), type(UNICODESTRING), type(ANSISTRING));
+    assertResolved(type(VARIANT), type(ANSISTRING), type(SHORTSTRING));
+    assertResolved(type(VARIANT), arrayOfInteger, type(SHORTSTRING));
+    assertResolved(
+        type(VARIANT), FACTORY.enumeration("MyEnum", DelphiScope.unknownScope()), arrayOfInteger);
+
+    assertAmbiguous(type(VARIANT), type(SMALLINT), type(WORD));
+    assertIncompatible(type(VARIANT), unknownType());
   }
 }

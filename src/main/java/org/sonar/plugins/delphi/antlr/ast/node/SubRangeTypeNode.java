@@ -1,11 +1,8 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
-import static org.sonar.plugins.delphi.type.TypeUtils.ordinalSize;
-
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.delphi.type.DelphiSubrangeType;
 import org.sonar.plugins.delphi.type.Type;
 
 public final class SubRangeTypeNode extends TypeNode {
@@ -37,12 +34,12 @@ public final class SubRangeTypeNode extends TypeNode {
     ExpressionNode high = getHighExpression();
     Type baseType;
 
-    if (ordinalSize(low.getType()) > ordinalSize(high.getType())) {
+    if (low.getType().size() > high.getType().size()) {
       baseType = low.getType();
     } else {
       baseType = high.getType();
     }
 
-    return DelphiSubrangeType.subRange(low.getImage() + ".." + high.getImage(), baseType);
+    return getTypeFactory().subRange(low.getImage() + ".." + high.getImage(), baseType);
   }
 }

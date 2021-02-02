@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.delphi.antlr.DelphiFileStream;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.DelphiTokenStream;
-import org.sonar.plugins.delphi.antlr.LowercaseFileStream;
 import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 import org.sonar.plugins.delphi.antlr.ast.token.IncludeToken;
 import org.sonar.plugins.delphi.file.DelphiFileConfig;
@@ -32,6 +32,7 @@ import org.sonar.plugins.delphi.preprocessor.directive.BranchingDirective;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveType;
 import org.sonar.plugins.delphi.preprocessor.directive.EndIfDirective;
+import org.sonar.plugins.delphi.type.factory.TypeFactory;
 
 public class DelphiPreprocessor {
   private static final Logger LOG = Loggers.get(DelphiPreprocessor.class);
@@ -173,7 +174,7 @@ public class DelphiPreprocessor {
               "Self-referencing include file <" + includeFile.toAbsolutePath() + ">");
         }
 
-        LowercaseFileStream fileStream = new LowercaseFileStream(path, config.getEncoding());
+        DelphiFileStream fileStream = new DelphiFileStream(path, config.getEncoding());
         DelphiLexer includeLexer = new DelphiLexer(fileStream);
         DelphiPreprocessor preprocessor =
             new DelphiPreprocessor(
@@ -258,5 +259,9 @@ public class DelphiPreprocessor {
 
   public CompilerSwitchRegistry getCompilerSwitchRegistry() {
     return switchRegistry;
+  }
+
+  public TypeFactory getTypeFactory() {
+    return config.getTypeFactory();
   }
 }

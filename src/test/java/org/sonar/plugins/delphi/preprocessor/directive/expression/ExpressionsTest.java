@@ -16,14 +16,19 @@ import org.sonar.plugins.delphi.preprocessor.DelphiPreprocessor;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Expression;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Expression.ConstExpressionType;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Expression.ExpressionValue;
+import org.sonar.plugins.delphi.type.factory.TypeFactory;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
+import org.sonar.plugins.delphi.utils.types.TypeFactoryUtils;
 
 class ExpressionsTest {
+  private static final TypeFactory TYPE_FACTORY = TypeFactoryUtils.defaultFactory();
   private DelphiPreprocessor preprocessor;
   private ExpressionEvaluator evaluator;
 
   @BeforeEach
   void setup() {
     preprocessor = mock(DelphiPreprocessor.class);
+    when(preprocessor.getTypeFactory()).thenReturn(TYPE_FACTORY);
     evaluator = new ExpressionEvaluator(preprocessor);
   }
 
@@ -160,7 +165,7 @@ class ExpressionsTest {
   }
 
   @Test
-  void testInvocationEvaluation() {
+  void testDefinedEvaluation() {
     when(preprocessor.isDefined("TEST_DEFINE")).thenReturn(true);
 
     assertBool("Defined(TEST_DEFINE)", true);
@@ -168,6 +173,34 @@ class ExpressionsTest {
 
     assertUnknown("Defined()");
     assertUnknown("Defined(123)");
+  }
+
+  private static int size(IntrinsicType type) {
+    return TYPE_FACTORY.getIntrinsic(type).size();
+  }
+
+  @Test
+  void testSizeOfEvaluation() {
+    assertInt("SizeOf(Byte)", size(IntrinsicType.BYTE));
+    assertInt("SizeOf(NativeInt)", size(IntrinsicType.NATIVEINT));
+    assertInt("SizeOf(LongWord)", size(IntrinsicType.LONGWORD));
+    assertInt("SizeOf(Double)", size(IntrinsicType.DOUBLE));
+    assertInt("SizeOf(Boolean)", size(IntrinsicType.BOOLEAN));
+    assertInt("SizeOf(String)", size(IntrinsicType.UNICODESTRING));
+    assertInt("SizeOf(Pointer)", size(IntrinsicType.POINTER));
+    assertInt("SizeOf(Variant)", size(IntrinsicType.VARIANT));
+    assertInt("SizeOf(TObject)", size(IntrinsicType.POINTER));
+    assertInt("SizeOf('Foo')", size(IntrinsicType.UNICODESTRING));
+    assertInt("SizeOf(123)", size(IntrinsicType.BYTE));
+    assertInt("SizeOf(123.456)", size(IntrinsicType.EXTENDED));
+    assertInt("SizeOf(True)", size(IntrinsicType.BOOLEAN));
+    assertInt("SizeOf([])", TYPE_FACTORY.emptySet().size());
+    assertInt("SizeOf(String)", size(IntrinsicType.UNICODESTRING));
+  }
+
+  @Test
+  void testSizeOfUnknownShouldFailOnUpgrade() {
+    assertInt("SizeOf(SomeUnknownType)", size(IntrinsicType.POINTER));
   }
 
   @Test

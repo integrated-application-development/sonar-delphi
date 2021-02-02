@@ -7,6 +7,7 @@ import java.util.Set;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
 import org.sonar.plugins.delphi.preprocessor.CompilerSwitchRegistry;
+import org.sonar.plugins.delphi.type.factory.TypeFactory;
 
 class DefaultDelphiFile implements DelphiFile {
   private File sourceCodeFile;
@@ -16,6 +17,7 @@ class DefaultDelphiFile implements DelphiFile {
   private List<DelphiToken> comments;
   private Set<Integer> suppressions;
   private CompilerSwitchRegistry switchRegistry;
+  private TypeFactory typeFactory;
 
   DefaultDelphiFile() {
     // package-private constructor
@@ -57,6 +59,11 @@ class DefaultDelphiFile implements DelphiFile {
     return switchRegistry;
   }
 
+  @Override
+  public TypeFactory getTypeFactory() {
+    return typeFactory;
+  }
+
   void setSourceCodeFile(File sourceCodeFile) {
     this.sourceCodeFile = sourceCodeFile;
   }
@@ -83,5 +90,9 @@ class DefaultDelphiFile implements DelphiFile {
 
   void setCompilerSwitchRegistry(CompilerSwitchRegistry switchRegistry) {
     this.switchRegistry = switchRegistry;
+  }
+
+  void setTypeFactory(TypeFactory typeFactory) {
+    this.typeFactory = typeFactory;
   }
 }

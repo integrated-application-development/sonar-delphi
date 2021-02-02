@@ -2,20 +2,24 @@ package org.sonar.plugins.delphi.symbol;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Suppliers;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import com.google.errorprone.annotations.Immutable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 import org.apache.commons.lang3.StringUtils;
 
+@Immutable
+@SuppressWarnings("Immutable")
 public class QualifiedName {
-  private final List<String> parts;
+  private final ImmutableList<String> parts;
   private final Supplier<String> fullyQualifiedName;
 
   public QualifiedName(Collection<String> parts) {
     Preconditions.checkArgument(!parts.isEmpty());
-    this.parts = List.copyOf(parts);
+    this.parts = ImmutableList.copyOf(parts);
     this.fullyQualifiedName = Suppliers.memoize(() -> StringUtils.join(parts, "."));
   }
 

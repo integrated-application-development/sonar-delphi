@@ -25,10 +25,11 @@ import org.sonar.plugins.delphi.symbol.declaration.parameter.FormalParameter;
 import org.sonar.plugins.delphi.symbol.declaration.parameter.IntrinsicParameter;
 import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
-import org.sonar.plugins.delphi.type.DelphiProceduralType;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
-import org.sonar.plugins.delphi.type.intrinsic.IntrinsicMethodData;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicMethod;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicMethod.IntrinsicParameterData;
 
 public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
     implements GenerifiableDeclaration, TypedDeclaration, Invocable, Visibility {
@@ -78,10 +79,11 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
     this.dependencies = new HashSet<>();
   }
 
-  public static MethodNameDeclaration create(SymbolicNode node, IntrinsicMethodData data) {
+  public static MethodNameDeclaration create(
+      SymbolicNode node, IntrinsicMethod data, TypeFactory typeFactory) {
     return new MethodNameDeclaration(
         node,
-        "System." + data.getMethodName(),
+        data.fullyQualifiedName(),
         data.getParameters().stream()
             .map(IntrinsicParameter::create)
             .collect(Collectors.toUnmodifiableList()),
@@ -91,13 +93,17 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
         true,
         data.isVariadic(),
         data.getMethodKind(),
-        data.createMethodType(),
+        typeFactory.method(
+            data.getParameters().stream()
+                .map(IntrinsicParameterData::getType)
+                .collect(Collectors.toUnmodifiableList()),
+            data.getReturnType()),
         null,
         VisibilityType.PUBLIC,
         Collections.emptyList());
   }
 
-  public static MethodNameDeclaration create(MethodNode method) {
+  public static MethodNameDeclaration create(MethodNode method, TypeFactory typeFactory) {
     MethodNameNode nameNode = method.getMethodNameNode();
     SimpleNameDeclarationNode declarationNode = nameNode.getNameDeclarationNode();
     DelphiNode location = (declarationNode == null) ? nameNode : declarationNode.getIdentifier();
@@ -118,7 +124,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
         isCallable,
         false,
         method.getMethodKind(),
-        DelphiProceduralType.method(extractParameterTypes(method), method.getReturnType()),
+        typeFactory.method(extractParameterTypes(method), method.getReturnType()),
         method.getTypeDeclaration(),
         method.getVisibility(),
         extractGenericTypeParameters(method));

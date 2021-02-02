@@ -1,7 +1,5 @@
 package org.sonar.plugins.delphi.symbol.resolve;
 
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicVariant.VARIANT;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,13 +7,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
-import org.sonar.plugins.delphi.operator.IntrinsicOperatorSignature;
-import org.sonar.plugins.delphi.operator.PointerMathOperatorSignature;
+import org.sonar.plugins.delphi.operator.OperatorIntrinsic;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
 
 /**
  * Stores information about an invocation candidate, used for overload resolution. Based directly
@@ -121,14 +119,15 @@ public final class InvocationCandidate {
     return variantConversions.get(argumentIndex);
   }
 
-  public boolean isBuiltinOperator() {
-    return data instanceof IntrinsicOperatorSignature
-        || data instanceof PointerMathOperatorSignature;
+  public boolean isOperatorIntrinsic() {
+    return data instanceof OperatorIntrinsic;
   }
 
   public boolean isVariantOperator() {
-    return data instanceof IntrinsicOperatorSignature
-        && data.getParameters().stream().map(Parameter::getType).anyMatch(VARIANT.type::is);
+    return isOperatorIntrinsic()
+        && data.getParameters().stream()
+            .map(Parameter::getType)
+            .anyMatch(type -> type.is(IntrinsicType.VARIANT));
   }
 
   public boolean isInvalid() {

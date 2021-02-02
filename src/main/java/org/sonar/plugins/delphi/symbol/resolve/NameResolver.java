@@ -5,14 +5,10 @@ import static com.google.common.collect.Iterables.getLast;
 import static java.util.function.Predicate.not;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
 import static org.sonar.plugins.delphi.symbol.scope.DelphiScope.unknownScope;
-import static org.sonar.plugins.delphi.type.DelphiClassReferenceType.classOf;
-import static org.sonar.plugins.delphi.type.DelphiFileType.untypedFile;
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 import static org.sonar.plugins.delphi.type.DelphiType.voidType;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.ANSICHAR;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.UNICODESTRING;
-import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicText.WIDECHAR;
 
+import com.google.common.base.Suppliers;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import net.sourceforge.pmd.lang.ast.Node;
@@ -59,7 +56,6 @@ import org.sonar.plugins.delphi.symbol.scope.FileScope;
 import org.sonar.plugins.delphi.symbol.scope.MethodScope;
 import org.sonar.plugins.delphi.symbol.scope.TypeScope;
 import org.sonar.plugins.delphi.symbol.scope.UnknownScope;
-import org.sonar.plugins.delphi.type.DelphiTypeParameterType;
 import org.sonar.plugins.delphi.type.DelphiUnresolvedType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ClassReferenceType;
@@ -68,14 +64,19 @@ import org.sonar.plugins.delphi.type.Type.HelperType;
 import org.sonar.plugins.delphi.type.Type.PointerType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
+import org.sonar.plugins.delphi.type.Type.StringType;
 import org.sonar.plugins.delphi.type.Type.StructType;
 import org.sonar.plugins.delphi.type.Type.TypeParameterType;
 import org.sonar.plugins.delphi.type.TypeUtils;
 import org.sonar.plugins.delphi.type.Typed;
+import org.sonar.plugins.delphi.type.factory.TypeFactory;
+import org.sonar.plugins.delphi.type.generic.DelphiTypeParameterType;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicReturnType;
+import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
 
 public class NameResolver {
+  private final TypeFactory typeFactory;
   private final List<DelphiNameOccurrence> names = new ArrayList<>();
   private final List<NameDeclaration> resolvedDeclarations = new ArrayList<>();
 
@@ -83,16 +84,28 @@ public class NameResolver {
   private DelphiScope currentScope;
   private Type currentType = unknownType();
 
-  NameResolver() {
-    // Default constructor
+  private final Supplier<NameResolutionHelper> nameResolutionHelper =
+      Suppliers.memoize(() -> new NameResolutionHelper(getTypeFactory()));
+
+  NameResolver(TypeFactory typeFactory) {
+    this.typeFactory = typeFactory;
   }
 
   NameResolver(NameResolver resolver) {
+    typeFactory = resolver.typeFactory;
     declarations.addAll(resolver.declarations);
     currentScope = resolver.currentScope;
     currentType = resolver.currentType;
     names.addAll(resolver.names);
     resolvedDeclarations.addAll(resolver.resolvedDeclarations);
+  }
+
+  private TypeFactory getTypeFactory() {
+    return typeFactory;
+  }
+
+  private NameResolutionHelper getNameResolutionHelper() {
+    return nameResolutionHelper.get();
   }
 
   public Type getApproximateType() {
@@ -196,7 +209,7 @@ public class NameResolver {
     } else {
       result = declaration.getType();
       if (isTypeIdentifier(declaration)) {
-        result = classOf(result);
+        result = typeFactory.classOf(result);
       }
     }
 
@@ -266,11 +279,11 @@ public class NameResolver {
         break;
 
       case DelphiLexer.STRING:
-        updateType(classOf(UNICODESTRING.type));
+        updateType(typeFactory.classOf(typeFactory.getIntrinsic(IntrinsicType.UNICODESTRING)));
         break;
 
       case DelphiLexer.FILE:
-        updateType(classOf(untypedFile()));
+        updateType(typeFactory.classOf(typeFactory.untypedFile()));
         break;
 
       default:
@@ -458,7 +471,7 @@ public class NameResolver {
       occurrence.setNameDeclaration(declaration);
       typeReference.setNameOccurrence(occurrence);
 
-      NameResolver resolver = new NameResolver();
+      NameResolver resolver = new NameResolver(typeReference.getTypeFactory());
       resolver.resolvedDeclarations.add(declaration);
       resolver.names.add(occurrence);
       resolver.addToSymbolTable();
@@ -477,7 +490,7 @@ public class NameResolver {
       occurrence.setNameDeclaration(declaration);
       typeReference.setNameOccurrence(occurrence);
 
-      NameResolver resolver = new NameResolver();
+      NameResolver resolver = new NameResolver(typeNode.getTypeFactory());
       resolver.resolvedDeclarations.add(declaration);
       resolver.names.add(occurrence);
       resolver.addToSymbolTable();
@@ -521,12 +534,12 @@ public class NameResolver {
     }
   }
 
-  private static DelphiNameOccurrence createNameOccurrence(NameReferenceNode reference) {
+  private DelphiNameOccurrence createNameOccurrence(NameReferenceNode reference) {
     DelphiNameOccurrence occurrence = new DelphiNameOccurrence(reference.getIdentifier());
     GenericArgumentsNode genericArguments = reference.getGenericArguments();
     if (genericArguments != null) {
       List<TypeNode> typeArgumentNodes = genericArguments.getTypeArguments();
-      typeArgumentNodes.forEach(NameResolutionUtils::resolve);
+      typeArgumentNodes.forEach(getNameResolutionHelper()::resolve);
       occurrence.setIsGeneric();
       occurrence.setTypeArguments(
           typeArgumentNodes.stream().map(TypeNode::getType).collect(Collectors.toList()));
@@ -562,7 +575,7 @@ public class NameResolver {
   }
 
   private void readPossibleUnitNameReference(NameReferenceNode node) {
-    NameResolver unitNameResolver = new NameResolver();
+    NameResolver unitNameResolver = new NameResolver(node.getTypeFactory());
     if (unitNameResolver.readUnitNameReference(node)) {
       this.currentType = unknownType();
       this.names.clear();
@@ -656,21 +669,19 @@ public class NameResolver {
       updateType(TypeUtils.dereference(((ProceduralType) currentType).returnType()));
     }
 
-    accessor.getExpressions().forEach(NameResolutionUtils::resolve);
+    accessor.getExpressions().forEach(getNameResolutionHelper()::resolve);
 
     for (int i = 0; i < accessor.getExpressions().size(); ++i) {
       if (currentType.isArray()) {
         updateType(((CollectionType) currentType).elementType());
-      } else if (currentType.isNarrowString()) {
-        updateType(ANSICHAR.type);
-      } else if (currentType.isWideString()) {
-        updateType(WIDECHAR.type);
+      } else if (currentType.isString()) {
+        updateType(((StringType) currentType).characterType());
       }
     }
   }
 
   private void handleParenthesizedExpression(ParenthesizedExpressionNode parenthesized) {
-    NameResolutionUtils.resolve(parenthesized);
+    getNameResolutionHelper().resolve(parenthesized);
     updateType(parenthesized.getType());
 
     ScopedType type = extractScopedType(currentType);
@@ -746,7 +757,7 @@ public class NameResolver {
     if (previous instanceof NameReferenceNode
         && isExplicitArrayConstructorInvocation(((NameReferenceNode) previous))) {
       updateType(((ClassReferenceType) currentType).classType());
-      node.getArguments().forEach(NameResolutionUtils::resolve);
+      node.getArguments().forEach(getNameResolutionHelper()::resolve);
       return true;
     }
     return false;
@@ -760,7 +771,7 @@ public class NameResolver {
 
       if (declarations.isEmpty() && currentType.isClassReference()) {
         updateType(((ClassReferenceType) currentType).classType());
-        NameResolutionUtils.resolve(argumentExpressions.get(0));
+        getNameResolutionHelper().resolve(argumentExpressions.get(0));
         return true;
       }
     }
@@ -805,7 +816,7 @@ public class NameResolver {
 
     for (int i = 0; i < count; ++i) {
       ExpressionNode argument = argumentExpressions.get(i);
-      NameResolutionUtils.resolveSubExpressions(argument);
+      getNameResolutionHelper().resolveSubExpressions(argument);
       InvocationArgument invocationArgument = new InvocationArgument(argument);
       invocationArgument.resolve(parameterTypes.get(i));
     }
@@ -826,7 +837,7 @@ public class NameResolver {
     disambiguateInvocable();
     disambiguateArity(argumentExpressions.size());
 
-    argumentExpressions.forEach(NameResolutionUtils::resolveSubExpressions);
+    argumentExpressions.forEach(getNameResolutionHelper()::resolveSubExpressions);
 
     InvocationResolver resolver = new InvocationResolver();
     argumentExpressions.stream().map(InvocationArgument::new).forEach(resolver::addArgument);

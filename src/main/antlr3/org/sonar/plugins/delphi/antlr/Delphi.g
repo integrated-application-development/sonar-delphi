@@ -280,7 +280,7 @@ pointerType                  : '^'<PointerTypeNode>^ varType
 stringType                   : 'string'<StringTypeNode>^ ('['! expression ']'!)?
                              | ANSISTRING<AnsiStringTypeNode>^ (codePageNumber)?
                              ;
-codePageNumber               : '(' expression ')'
+codePageNumber               : '('! expression ')'!
                              ;
 procedureType                : methodType
                              | procedureReference
@@ -516,8 +516,8 @@ methodParameters             : '(' formalParameterList? ')' -> ^(TkMethodParamet
                              ;
 formalParameterList          : formalParameter (';' formalParameter)* -> ^(TkFormalParameterList<FormalParameterListNode> formalParameter formalParameter*)
                              ;
-formalParameter              : customAttribute? paramSpecifier? nameDeclarationList (':' parameterType)? ('=' expression)?
-                             -> ^(TkFormalParameter<FormalParameterNode> nameDeclarationList parameterType? paramSpecifier? expression? customAttribute?)
+formalParameter              : a1=customAttribute? (paramSpecifier a2=customAttribute?)? nameDeclarationList (':' parameterType)? ('=' expression)?
+                             -> ^(TkFormalParameter<FormalParameterNode> nameDeclarationList parameterType? paramSpecifier? expression? $a1? $a2?)
                              ;
 paramSpecifier               : 'const'
                              | 'var'
