@@ -1,7 +1,6 @@
 package org.sonar.plugins.delphi.file;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.Collections.emptySet;
 import static java.util.function.Predicate.not;
 import static org.antlr.runtime.Token.EOF;
 import static org.antlr.runtime.Token.HIDDEN_CHANNEL;
@@ -9,7 +8,6 @@ import static org.apache.commons.io.FileUtils.readLines;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,11 +16,12 @@ import org.antlr.runtime.BufferedTokenStream;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
+import org.jetbrains.annotations.Nullable;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.plugins.delphi.antlr.DelphiFileStream;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.DelphiParser;
 import org.sonar.plugins.delphi.antlr.DelphiTokenStream;
-import org.sonar.plugins.delphi.antlr.LowercaseFileStream;
 import org.sonar.plugins.delphi.antlr.ast.DelphiAST;
 import org.sonar.plugins.delphi.antlr.ast.DelphiTreeAdaptor;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
@@ -32,6 +31,7 @@ import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.preprocessor.CompilerSwitchRegistry;
 import org.sonar.plugins.delphi.preprocessor.DelphiPreprocessor;
 import org.sonar.plugins.delphi.preprocessor.search.SearchPath;
+import org.sonar.plugins.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public interface DelphiFile {
@@ -48,6 +48,8 @@ public interface DelphiFile {
   Set<Integer> getSuppressions();
 
   CompilerSwitchRegistry getCompilerSwitchRegistry();
+
+  TypeFactory getTypeFactory();
 
   interface DelphiInputFile extends DelphiFile {
     InputFile getInputFile();
@@ -67,13 +69,19 @@ public interface DelphiFile {
     }
   }
 
-  static DelphiFileConfig createConfig(String encoding) {
-    return new DefaultDelphiFileConfig(encoding, SearchPath.create(emptySet()), emptySet());
+  static DelphiFileConfig createConfig(
+      String encoding, TypeFactory typeFactory, SearchPath searchPath, Set<String> definitions) {
+    return createConfig(encoding, typeFactory, searchPath, definitions, false);
   }
 
   static DelphiFileConfig createConfig(
-      String encoding, List<Path> searchPath, Set<String> definitions) {
-    return new DefaultDelphiFileConfig(encoding, SearchPath.create(searchPath), definitions);
+      @Nullable String encoding,
+      TypeFactory typeFactory,
+      SearchPath searchPath,
+      Set<String> definitions,
+      boolean shouldSkipImplementation) {
+    return new DefaultDelphiFileConfig(
+        encoding, typeFactory, searchPath, definitions, shouldSkipImplementation);
   }
 
   static DelphiFile from(File sourceFile, DelphiFileConfig config) {
@@ -85,6 +93,7 @@ public interface DelphiFile {
   static void setupFile(DefaultDelphiFile delphiFile, File sourceFile, DelphiFileConfig config) {
     try {
       delphiFile.setSourceCodeFile(sourceFile);
+      delphiFile.setTypeFactory(config.getTypeFactory());
       DelphiPreprocessor preprocessor = preprocess(delphiFile, config);
       delphiFile.setAst(createAST(delphiFile, preprocessor.getTokenStream(), config));
       delphiFile.setCompilerSwitchRegistry(preprocessor.getCompilerSwitchRegistry());
@@ -100,7 +109,7 @@ public interface DelphiFile {
   private static DelphiPreprocessor preprocess(DelphiFile delphiFile, DelphiFileConfig config)
       throws IOException {
     String filePath = delphiFile.getSourceCodeFile().getAbsolutePath();
-    LowercaseFileStream fileStream = new LowercaseFileStream(filePath, config.getEncoding());
+    DelphiFileStream fileStream = new DelphiFileStream(filePath, config.getEncoding());
 
     DelphiLexer lexer = new DelphiLexer(fileStream, config.shouldSkipImplementation());
     DelphiPreprocessor preprocessor = new DelphiPreprocessor(lexer, config);
@@ -137,7 +146,7 @@ public interface DelphiFile {
   private static List<DelphiToken> createTokenList(
       DelphiFile delphiFile, DelphiTokenStream preprocessedTokenStream) throws IOException {
     String filePath = delphiFile.getSourceCodeFile().getAbsolutePath();
-    DelphiLexer lexer = new DelphiLexer(new LowercaseFileStream(filePath, UTF_8.name()));
+    DelphiLexer lexer = new DelphiLexer(new DelphiFileStream(filePath, UTF_8.name()));
     DelphiTokenStream tokenStream = new DelphiTokenStream(lexer);
     tokenStream.fill();
 

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Improve handling of files with differing encodings:
+  - If a file is not being analyzed, but is simply in the search path or standard library, the
+    encoding will be detected by the BOM (or lack thereof).
+  - [This encoding detection behavior matches the Delphi compiler](https://blogs.embarcadero.com/the-delphi-compiler-and-utf-8-encoded-source-code-files-with-no-bom/).
+  - Encoding detection will not be used for files being analyzed by Sonar, which must continue to
+    match the sonar.sourceEncoding property. The Sonar API does not support analysis of projects
+    with mixed encodings.
+
 ## [0.27.0] - 2020-11-26
 
 ### Added

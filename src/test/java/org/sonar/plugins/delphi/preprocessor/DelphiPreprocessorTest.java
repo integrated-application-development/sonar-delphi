@@ -13,9 +13,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.antlr.runtime.BufferedTokenStream;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.delphi.antlr.DelphiFileStream;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.DelphiParser;
-import org.sonar.plugins.delphi.antlr.LowercaseFileStream;
 import org.sonar.plugins.delphi.antlr.ast.DelphiTreeAdaptor;
 import org.sonar.plugins.delphi.file.DelphiFile;
 import org.sonar.plugins.delphi.file.DelphiFileConfig;
@@ -79,7 +79,7 @@ class DelphiPreprocessorTest {
     String filePath =
         DelphiUtils.getResource(BASE_DIR + "includeTest/SameNameBacktrack.pas").getAbsolutePath();
     DelphiFileConfig config = DelphiFile.createConfig(UTF_8.name(), emptyList(), emptySet());
-    LowercaseFileStream fileStream = new LowercaseFileStream(filePath, config.getEncoding());
+    DelphiFileStream fileStream = new DelphiFileStream(filePath, config.getEncoding());
 
     DelphiLexer lexer = new DelphiLexer(fileStream);
     DelphiPreprocessor preprocessor = new DelphiPreprocessor(lexer, config);
@@ -109,7 +109,7 @@ class DelphiPreprocessorTest {
   private static void execute(String filename, DelphiFileConfig config) {
     try {
       String filePath = DelphiUtils.getResource(BASE_DIR + filename).getAbsolutePath();
-      LowercaseFileStream fileStream = new LowercaseFileStream(filePath, config.getEncoding());
+      DelphiFileStream fileStream = new DelphiFileStream(filePath, config.getEncoding());
 
       DelphiLexer lexer = new DelphiLexer(fileStream);
       DelphiPreprocessor preprocessor = new DelphiPreprocessor(lexer, config);
