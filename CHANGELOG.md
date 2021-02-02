@@ -14,8 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     encoding will be detected by the BOM (or lack thereof).
   - [This encoding detection behavior matches the Delphi compiler](https://blogs.embarcadero.com/the-delphi-compiler-and-utf-8-encoded-source-code-files-with-no-bom/).
   - Encoding detection will not be used for files being analyzed by Sonar, which must continue to
-    match the sonar.sourceEncoding property. The Sonar API does not support analysis of projects
+    match the `sonar.sourceEncoding` property. The Sonar API does not support analysis of projects
     with mixed encodings.
+
+### Fixed
+
+- Allow custom attributes after parameter specifiers.
 
 ## [0.27.0] - 2020-11-26
 
