@@ -135,12 +135,12 @@
     <lombok.version>1.18.16</lombok.version>
     <sonarqube-smell-api.version>4.0.0</sonarqube-smell-api.version>
     <javax.annotation-api.version>1.3.2</javax.annotation-api.version>
-    <guava.version>30.0-jre</guava.version>
+    <guava.version>30.1-jre</guava.version>
     <commons-lang.version>3.11</commons-lang.version>
     <commons-io.version>2.8.0</commons-io.version>
-    <junit.version>5.7.0</junit.version>
-    <assertj.version>3.18.1</assertj.version>
-    <mockito.version>3.6.28</mockito.version>
+    <junit.version>5.7.1</junit.version>
+    <assertj.version>3.19.0</assertj.version>
+    <mockito.version>3.7.7</mockito.version>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <cyclonedx-plugin.version>2.1.1</cyclonedx-plugin.version>
     <dependency-plugin.version>3.1.2</dependency-plugin.version>
