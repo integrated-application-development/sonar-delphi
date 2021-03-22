@@ -38,7 +38,7 @@ public final class StatementListNode extends DelphiNode {
   }
 
   public boolean isEmpty() {
-    return this.jjtGetNumChildren() == 0;
+    return getStatements().isEmpty();
   }
 
   public List<StatementNode> getStatements() {
