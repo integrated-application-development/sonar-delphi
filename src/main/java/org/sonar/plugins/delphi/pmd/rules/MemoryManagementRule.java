@@ -2,6 +2,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Iterables;
 import java.util.List;
 import java.util.Objects;
@@ -14,11 +15,12 @@ import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
 import org.sonar.plugins.delphi.antlr.ast.node.ArgumentListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.AssignmentStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.RaiseStatementNode;
-import org.sonar.plugins.delphi.symbol.Qualifiable;
+import org.sonar.plugins.delphi.operator.BinaryOperator;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.MethodKind;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
@@ -30,13 +32,15 @@ import org.sonar.plugins.delphi.type.Typed;
 
 public class MemoryManagementRule extends AbstractDelphiRule {
 
-  private static final PropertyDescriptor<List<String>> MEMORY_FUNCTIONS =
+  @VisibleForTesting
+  static final PropertyDescriptor<List<String>> MEMORY_FUNCTIONS =
       PropertyFactory.stringListProperty("memoryFunctions")
           .desc("A list of functions used for memory management")
           .emptyDefaultValue()
           .build();
 
-  private static final PropertyDescriptor<List<String>> WHITELISTED_NAMES =
+  @VisibleForTesting
+  static final PropertyDescriptor<List<String>> WHITELISTED_NAMES =
       PropertyFactory.stringListProperty("whitelist")
           .desc("A list of constructor names which don't require memory management.")
           .emptyDefaultValue()
@@ -142,17 +146,32 @@ public class MemoryManagementRule extends AbstractDelphiRule {
   }
 
   private boolean isMemoryManaged(PrimaryExpressionNode expression) {
-    Node argList = expression.findParentheses().jjtGetParent();
-    if (!(argList instanceof ArgumentListNode)) {
+    Node ancestor = expression.findParentheses().jjtGetParent();
+
+    if (ancestor instanceof BinaryExpressionNode) {
+      BinaryExpressionNode binaryExpression = (BinaryExpressionNode) ancestor;
+      if (binaryExpression.getOperator() == BinaryOperator.AS) {
+        ancestor = ancestor.jjtGetParent();
+      }
+    }
+
+    if (!(ancestor instanceof ArgumentListNode)) {
       return false;
     }
 
-    Node nameReference = argList.jjtGetParent().jjtGetChild(argList.jjtGetChildIndex() - 1);
-    if (!(nameReference instanceof NameReferenceNode)) {
+    Node node = ancestor.jjtGetParent().jjtGetChild(ancestor.jjtGetChildIndex() - 1);
+    if (!(node instanceof NameReferenceNode)) {
       return false;
     }
 
-    return memoryFunctions.contains(((Qualifiable) nameReference).simpleName());
+    NameReferenceNode nameReference = ((NameReferenceNode) node).getLastName();
+    NameDeclaration declaration = nameReference.getNameDeclaration();
+    if (declaration instanceof MethodNameDeclaration) {
+      var method = (MethodNameDeclaration) declaration;
+      return memoryFunctions.contains(method.fullyQualifiedName());
+    }
+
+    return false;
   }
 
   private static boolean requiresMemoryManagement(NameReferenceNode reference) {
@@ -194,7 +213,6 @@ public class MemoryManagementRule extends AbstractDelphiRule {
   private static boolean returnsCovariantType(MethodNameDeclaration method) {
     TypeNameDeclaration typeDeclaration = method.getTypeDeclaration();
     if (typeDeclaration != null) {
-
       Type methodType = typeDeclaration.getType();
       Type returnType = method.getReturnType();
 

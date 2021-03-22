@@ -1163,8 +1163,8 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </description>
     <properties>
       <property name="baseEffort" value="10min"/>
-      <property name="memoryFunctions" value="Local|Managed|ManagedBy|ManagedInterface|Unmanaged"/>
-      <property name="whitelist" value="CreateNew"/>
+      <property name="memoryFunctions"/>
+      <property name="whitelist"/>
     </properties>
   </rule>
 
