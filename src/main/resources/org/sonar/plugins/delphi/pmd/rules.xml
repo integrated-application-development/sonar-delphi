@@ -1462,6 +1462,23 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.NoSonarRule"
+    message="Track uses of &quot;NOSONAR&quot; comments"
+    name="NoSonarRule">
+    <priority>3</priority>
+    <description>
+      Any issue to quality rule can be deactivated with the &lt;code&gt;NOSONAR&lt;/code&gt; marker.
+      This marker is pretty useful to exclude false-positive results but it can also be used
+      abusively to hide real quality flaws.
+      &lt;br&gt;
+      &lt;br&gt;
+      This rule raises an issue when &lt;code&gt;NOSONAR&lt;/code&gt; is used.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min"/>n
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="Empty type sections should be removed"
     name="EmptyTypeSectionRule">
