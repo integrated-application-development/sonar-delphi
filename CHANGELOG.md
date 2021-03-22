@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `NoSonarRule` analysis rule, which flags usages of the `NOSONAR` marker.
+- `PlatformDependentCastRule` analysis rule, which flags casts between platform-dependent and
+  platform-independent types.
 
 ## [0.28.0] - 2021-02-02
 
