@@ -687,9 +687,9 @@ withStatement                : 'with'<WithStatementNode>^ expressionList 'do' st
                              ;
 compoundStatement            : 'begin'<CompoundStatementNode>^ statementList 'end'
                              ;
-statementList                : delimetedStatements? -> ^(TkStatementList<StatementListNode> delimetedStatements?)
+statementList                : delimitedStatements? -> ^(TkStatementList<StatementListNode> delimitedStatements?)
                              ;
-delimetedStatements          : (statement | ';')+
+delimitedStatements          : (statement | ';')+
                              ;
 labelStatement               : label ':' statement -> ^(TkLabelStatement<LabelStatementNode> label statement)
                              ;
