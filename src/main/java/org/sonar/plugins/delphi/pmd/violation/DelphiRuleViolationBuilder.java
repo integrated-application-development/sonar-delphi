@@ -53,7 +53,7 @@ public class DelphiRuleViolationBuilder {
   }
 
   private void checkIfViolationSuppressed() {
-    boolean suppressed = rule.getSuppressions().contains(ruleViolation.getBeginLine());
+    boolean suppressed = rule.isSuppressedLine(ruleViolation.getBeginLine());
     ruleViolation.setSuppressed(suppressed);
   }
 

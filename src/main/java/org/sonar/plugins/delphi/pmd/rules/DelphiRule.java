@@ -6,7 +6,6 @@ import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.SCOPE;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TEMPLATE;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TYPE;
 
-import java.util.Set;
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.rule.ImmutableLanguage;
@@ -18,11 +17,13 @@ import org.sonar.plugins.delphi.pmd.violation.DelphiRuleViolationBuilder;
 public interface DelphiRule extends Rule, DelphiParserVisitor<RuleContext>, ImmutableLanguage {
 
   /**
-   * Returns a set of lines with issue suppressions
+   * Returns true if the line should have issues suppressed
    *
-   * @return set of lines with issue suppressions.
+   * @param line the line to check
+   * @return true if the line should have issues suppressed
+   * @see org.sonar.plugins.delphi.pmd.DelphiPmdConstants#SUPPRESSION_TAG
    */
-  Set<Integer> getSuppressions();
+  boolean isSuppressedLine(int line);
 
   default void defineBaseProperties() {
     definePropertyDescriptor(BASE_EFFORT);
