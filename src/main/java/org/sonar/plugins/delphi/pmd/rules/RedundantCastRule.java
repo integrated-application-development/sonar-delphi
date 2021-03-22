@@ -45,6 +45,9 @@ public class RedundantCastRule extends AbstractDelphiRule {
 
   private static Type getOriginalType(ExpressionNode expression) {
     Type result = expression.getType();
+    if (result.isClassReference()) {
+      result = ((ClassReferenceType) result).classType();
+    }
     if (result.isMethod()) {
       result = ((ProceduralType) result).returnType();
     }

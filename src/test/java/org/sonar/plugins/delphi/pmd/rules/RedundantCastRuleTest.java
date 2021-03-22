@@ -58,14 +58,34 @@ class RedundantCastRuleTest extends BasePmdRuleTest {
             .appendDecl("type")
             .appendDecl("  TFoo = class")
             .appendDecl("  end;")
-            .appendDecl("  TBar = class (TFoo)")
-            .appendDecl("  end;")
             .appendImpl("procedure Foo(Foo: TFoo);")
             .appendImpl("var")
             .appendImpl("  Foo2: TFoo;")
             .appendImpl("begin")
             .appendImpl("  Foo2 := TFoo(Foo);")
             .appendImpl("  Foo2 := Foo as TFoo;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("RedundantCastRule", builder.getOffset() + 5))
+        .areExactly(1, ruleKeyAtLine("RedundantCastRule", builder.getOffset() + 6));
+  }
+
+  @Test
+  void testRedundantCastWithConstructorShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TFoo = class")
+            .appendDecl("  end;")
+            .appendImpl("procedure Foo;")
+            .appendImpl("var")
+            .appendImpl("  Foo: TFoo;")
+            .appendImpl("begin")
+            .appendImpl("  Foo := TFoo(TFoo.Create);")
+            .appendImpl("  Foo := TFoo.Create as TFoo;")
             .appendImpl("end;");
 
     execute(builder);
