@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove `MemoryManagementRule` from the Sonar Way quality profile.
 - Improve handling of constructor calls in `RedundantCastRule`.
 - Improve handling of multi-variable declarations in `TooManyVariablesRule`.
+- Improved handling of `else` blocks (within `case` statements and `except` blocks) in
+  `BeginEndRequiredRule`.
 
 ## [0.28.0] - 2021-02-02
 

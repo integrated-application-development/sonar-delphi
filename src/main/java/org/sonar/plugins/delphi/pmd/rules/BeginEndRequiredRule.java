@@ -4,6 +4,7 @@ import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.ast.Node;
 import org.sonar.plugins.delphi.antlr.ast.node.CaseItemStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.CompoundStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ElseBlockNode;
 import org.sonar.plugins.delphi.antlr.ast.node.IfStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodBodyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.StatementListNode;
@@ -17,6 +18,17 @@ public class BeginEndRequiredRule extends AbstractDelphiRule {
       addViolation(data, statement);
     }
     return super.visit(statement, data);
+  }
+
+  @Override
+  public RuleContext visit(ElseBlockNode elseBlock, RuleContext data) {
+    StatementListNode statementList = elseBlock.getStatementList();
+    if (statementList.isEmpty()
+        || statementList.getStatements().size() > 1
+        || !(statementList.getStatements().get(0) instanceof CompoundStatementNode)) {
+      addViolation(data, elseBlock);
+    }
+    return super.visit(elseBlock, data);
   }
 
   private static boolean isMissingBeginEnd(StatementNode statement) {
