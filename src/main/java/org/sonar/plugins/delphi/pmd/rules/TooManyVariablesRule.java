@@ -6,6 +6,7 @@ import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.node.BlockDeclarationSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.VarDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarSectionNode;
 
 public class TooManyVariablesRule extends AbstractDelphiRule {
@@ -29,7 +30,9 @@ public class TooManyVariablesRule extends AbstractDelphiRule {
     if (declSection != null) {
       List<VarSectionNode> varSections = declSection.findChildrenOfType(VarSectionNode.class);
       for (VarSectionNode varSection : varSections) {
-        count += varSection.getDeclarations().size();
+        for (VarDeclarationNode varDeclaration : varSection.getDeclarations()) {
+          count += varDeclaration.getNameDeclarationList().getDeclarations().size();
+        }
       }
     }
     return count;

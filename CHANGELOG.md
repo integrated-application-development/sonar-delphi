@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Change `memoryFunctions` parameter to fully-qualified names in `MemoryManagementRule`.
 - Remove `MemoryManagementRule` from the Sonar Way quality profile.
 - Improve handling of constructor calls in `RedundantCastRule`.
+- Improve handling of multi-variable declarations in `TooManyVariablesRule`.
 
 ## [0.28.0] - 2021-02-02
 
