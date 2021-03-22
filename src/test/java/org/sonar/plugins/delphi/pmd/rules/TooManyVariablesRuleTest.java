@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.jupiter.api.Test;
@@ -15,16 +16,16 @@ class TooManyVariablesRuleTest extends BasePmdRuleTest {
             .appendImpl("var")
             .appendImpl("  MyVar: Boolean;")
             .appendImpl("begin")
-            .appendImpl("  MyVar := True;")
+            .appendImpl("  // Do nothing")
             .appendImpl("end;");
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("TooManyVariablesRule"));
   }
 
   @Test
-  void testTooManyVariablesShouldAddIssue() {
+  void testSingleVariableDeclarationsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -41,7 +42,33 @@ class TooManyVariablesRuleTest extends BasePmdRuleTest {
             .appendImpl("  MyVar10: Boolean;")
             .appendImpl("  MyVar11: Boolean;")
             .appendImpl("begin")
-            .appendImpl("  MyVar1 := MyVar2;")
+            .appendImpl("  // Do nothing")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areExactly(1, ruleKeyAtLine("TooManyVariablesRule", builder.getOffset() + 1));
+  }
+
+  @Test
+  void testMultiVariableDeclarationsShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Foo;")
+            .appendImpl("var")
+            .appendImpl("  MyVar1,")
+            .appendImpl("  MyVar2,")
+            .appendImpl("  MyVar3,")
+            .appendImpl("  MyVar4,")
+            .appendImpl("  MyVar5,")
+            .appendImpl("  MyVar6,")
+            .appendImpl("  MyVar7,")
+            .appendImpl("  MyVar8,")
+            .appendImpl("  MyVar9,")
+            .appendImpl("  MyVar10,")
+            .appendImpl("  MyVar11: Boolean;")
+            .appendImpl("begin")
+            .appendImpl("  // Do nothing")
             .appendImpl("end;");
 
     execute(builder);

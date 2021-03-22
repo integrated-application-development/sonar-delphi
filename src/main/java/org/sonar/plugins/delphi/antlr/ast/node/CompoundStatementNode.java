@@ -23,10 +23,6 @@ public final class CompoundStatementNode extends StatementNode {
     return getStatementList().getStatements();
   }
 
-  public List<StatementNode> getDescendantStatements() {
-    return getStatementList().getDescendantStatements();
-  }
-
   public Stream<StatementNode> statementStream() {
     return getStatementList().statementStream();
   }

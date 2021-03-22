@@ -727,6 +727,30 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.PlatformDependentCastRule"
+    message="Platform-dependent casts should not be used"
+    name="PlatformDependentCastRule">
+    <priority>2</priority>
+    <description>
+      &lt;b&gt;Platform-dependent types&lt;/b&gt; have different sizes on different target platforms.
+      &lt;br&gt;
+      &lt;b&gt;Platform-independent types&lt;/b&gt; have the same size on all target platforms.
+      &lt;br&gt;
+      This rule identifies casts between platform-dependent and platform-independent types. These
+      casts will have different behaviors on different target platforms, and should be removed.
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Converting_32-bit_Delphi_Applications_to_64-bit_Windows'&gt;
+      Converting 32-bit Delphi Applications to 64-bit Windows
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.ExplicitDefaultPropertyReferenceRule"
     message="Default array properties should not be explicitly referenced"
     name="ExplicitDefaultPropertyReferenceRule">
@@ -752,7 +776,6 @@ FreeAndNil(Foo); // Compliant
         ]]>
     </example>
   </rule>
-
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyBeginStatementRule"
     message="Code blocks should not be empty"
@@ -1153,8 +1176,8 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </description>
     <properties>
       <property name="baseEffort" value="10min"/>
-      <property name="memoryFunctions" value="Local|Managed|ManagedBy|ManagedInterface|Unmanaged"/>
-      <property name="whitelist" value="CreateNew"/>
+      <property name="memoryFunctions"/>
+      <property name="whitelist"/>
     </properties>
   </rule>
 
@@ -1472,6 +1495,23 @@ Result := 123;; // Noncompliant
     </description>
     <properties>
       <property name="baseEffort" value="30min"/>
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.NoSonarRule"
+    message="Track uses of &quot;NOSONAR&quot; comments"
+    name="NoSonarRule">
+    <priority>3</priority>
+    <description>
+      Any issue to quality rule can be deactivated with the &lt;code&gt;NOSONAR&lt;/code&gt; marker.
+      This marker is pretty useful to exclude false-positive results but it can also be used
+      abusively to hide real quality flaws.
+      &lt;br&gt;
+      &lt;br&gt;
+      This rule raises an issue when &lt;code&gt;NOSONAR&lt;/code&gt; is used.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min"/>n
     </properties>
   </rule>
 

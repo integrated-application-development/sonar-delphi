@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -40,15 +41,13 @@ class ForbiddenMethodRuleTest extends BasePmdRuleTest {
             .appendImpl("var")
             .appendImpl("  Foo: TFoo;")
             .appendImpl("begin")
-            .appendImpl("  Foo := Local(TFoo.Create);")
+            .appendImpl("  Foo := TFoo.Create;")
             .appendImpl("  Foo.Bar;")
             .appendImpl("end;");
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("ForbiddenMethodRuleTest", builder.getOffset() + 6));
+    assertIssues().areExactly(1, ruleKeyAtLine("ForbiddenMethodRuleTest", builder.getOffset() + 6));
   }
 
   @Test
@@ -65,13 +64,13 @@ class ForbiddenMethodRuleTest extends BasePmdRuleTest {
             .appendImpl("var")
             .appendImpl("  Foo: TFoo;")
             .appendImpl("begin")
-            .appendImpl("  Foo := Local(TFoo.Create);")
+            .appendImpl("  Foo := TFoo.Create;")
             .appendImpl("  Foo.Baz;")
             .appendImpl("end;");
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("ForbiddenMethodRuleTest"));
   }
 
   @Test

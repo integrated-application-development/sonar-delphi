@@ -19,7 +19,7 @@ public abstract class AbstractXPathRule extends XPathRule implements DelphiRule 
   }
 
   @Override
-  public Set<Integer> getSuppressions() {
-    return suppressions;
+  public boolean isSuppressedLine(int line) {
+    return suppressions.contains(line);
   }
 }

@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.jupiter.api.Test;
@@ -139,5 +140,96 @@ class BeginEndRequiredRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues().areExactly(1, ruleKeyAtLine("BeginEndRequiredRule", builder.getOffset() + 6));
+  }
+
+  @Test
+  void testCaseElseShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure foo;")
+            .appendImpl("var")
+            .appendImpl("  SomeVar: Integer;")
+            .appendImpl("begin")
+            .appendImpl("  case SomeVar of")
+            .appendImpl("    1: begin")
+            .appendImpl("     WriteLn('test');")
+            .appendImpl("    end;")
+            .appendImpl("    else WriteLn('test');")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areExactly(1, ruleKeyAtLine("BeginEndRequiredRule", builder.getOffset() + 9));
+  }
+
+  @Test
+  void testBareCaseElseShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure foo;")
+            .appendImpl("var")
+            .appendImpl("  SomeVar: Integer;")
+            .appendImpl("begin")
+            .appendImpl("  case SomeVar of")
+            .appendImpl("    1: begin")
+            .appendImpl("     WriteLn('test');")
+            .appendImpl("    end;")
+            .appendImpl("    else;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areExactly(1, ruleKeyAtLine("BeginEndRequiredRule", builder.getOffset() + 9));
+  }
+
+  @Test
+  void testCaseElseBeginEndWithExtraStatementShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure foo;")
+            .appendImpl("var")
+            .appendImpl("  SomeVar: Integer;")
+            .appendImpl("begin")
+            .appendImpl("  case SomeVar of")
+            .appendImpl("    1: begin")
+            .appendImpl("     WriteLn('test');")
+            .appendImpl("    end;")
+            .appendImpl("    else")
+            .appendImpl("      begin")
+            .appendImpl("        WriteLn('test');")
+            .appendImpl("      end;")
+            .appendImpl(
+                "      WriteLn('This statement is still in the else-block statement list!');")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areExactly(1, ruleKeyAtLine("BeginEndRequiredRule", builder.getOffset() + 9));
+  }
+
+  @Test
+  void testCaseElseBeginEndShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure foo;")
+            .appendImpl("var")
+            .appendImpl("  SomeVar: Integer;")
+            .appendImpl("begin")
+            .appendImpl("  case SomeVar of")
+            .appendImpl("    1: begin")
+            .appendImpl("     WriteLn('test');")
+            .appendImpl("    end;")
+            .appendImpl("    else begin")
+            .appendImpl("      WriteLn('test');")
+            .appendImpl("    end;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("BeginEndRequiredRule"));
   }
 }

@@ -102,6 +102,10 @@
     name="RedundantCastRule">
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.PlatformDependentCastRule"
+    name="PlatformDependentCastRule">
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.RedundantAssignmentRule"
     name="RedundantAssignmentRule">
   </rule>
@@ -216,10 +220,6 @@
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.ShortIdentifiersRule"
     name="ShortIdentifiersRule">
-  </rule>
-
-  <rule class="org.sonar.plugins.delphi.pmd.rules.MemoryManagementRule"
-    name="MemoryManagementRule">
   </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedImportsRule"

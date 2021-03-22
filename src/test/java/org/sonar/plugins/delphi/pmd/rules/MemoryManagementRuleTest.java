@@ -3,10 +3,22 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
+import java.util.Objects;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 class MemoryManagementRuleTest extends BasePmdRuleTest {
+  @BeforeEach
+  void setup() {
+    var rule = getRule(MemoryManagementRule.class);
+
+    var memoryFunctions = rule.getProperty(MemoryManagementRule.MEMORY_FUNCTIONS.name());
+    Objects.requireNonNull(memoryFunctions).setValue("Test.TMemory.Manage<T>");
+
+    var whitelist = rule.getProperty(MemoryManagementRule.WHITELISTED_NAMES.name());
+    Objects.requireNonNull(whitelist).setValue("CreateNew");
+  }
 
   @Test
   void testRequiresMemoryManagementShouldAddIssue() {
@@ -118,8 +130,6 @@ class MemoryManagementRuleTest extends BasePmdRuleTest {
             .appendImpl("procedure Foo;")
             .appendImpl("begin")
             .appendImpl("  TFoo.CreateNew;")
-            .appendImpl("  TPoint.Create;")
-            .appendImpl("  TRect.Create;")
             .appendImpl("end;");
 
     execute(builder);
@@ -136,18 +146,53 @@ class MemoryManagementRuleTest extends BasePmdRuleTest {
             .appendDecl("    constructor Create;")
             .appendDecl("    procedure Foo;")
             .appendDecl("  end;")
+            .appendDecl("  TMemory = class")
+            .appendDecl("    class function Manage<T>(Obj: T): T;")
+            .appendDecl("  end;")
+            .appendImpl("function TMemory.Manage<T>(Obj: T): T;")
+            .appendImpl("begin")
+            .appendImpl("  // Memory management voodoo")
+            .appendImpl("  Result := Obj;")
+            .appendImpl("end;")
             .appendImpl("procedure Test;")
             .appendImpl("var")
             .appendImpl("  Foo: TFoo;")
             .appendImpl("begin")
-            .appendImpl("  Foo := Local(TFoo.Create).Obj as TFoo;")
-            .appendImpl("  Foo := Managed(TFoo.Create).Obj as TFoo;")
-            .appendImpl("  Foo := Unmanaged(TFoo.Create).Obj as TFoo;")
+            .appendImpl("  Foo := TMemory.Manage(TFoo.Create);")
             .appendImpl("end;");
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("MemoryManagementRule"));
+  }
+
+  @Test
+  void testMemoryManagedWithCastShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TFoo = class(IBar)")
+            .appendDecl("    constructor Create;")
+            .appendDecl("    procedure Foo;")
+            .appendDecl("  end;")
+            .appendDecl("  TMemory = class")
+            .appendDecl("    class function Manage<T>(Obj: T): T;")
+            .appendDecl("  end;")
+            .appendImpl("function TMemory.Manage<T>(Obj: T): T;")
+            .appendImpl("begin")
+            .appendImpl("  // Memory management voodoo")
+            .appendImpl("  Result := Obj;")
+            .appendImpl("end;")
+            .appendImpl("procedure Test;")
+            .appendImpl("var")
+            .appendImpl("  Foo: TObject;")
+            .appendImpl("begin")
+            .appendImpl("  Foo := TMemory.Manage(TFoo.Create as TObject);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("MemoryManagementRule"));
   }
 
   @Test

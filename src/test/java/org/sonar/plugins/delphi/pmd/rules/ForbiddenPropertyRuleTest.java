@@ -42,14 +42,13 @@ class ForbiddenPropertyRuleTest extends BasePmdRuleTest {
             .appendImpl("var")
             .appendImpl("  Foo: TFoo;")
             .appendImpl("begin")
-            .appendImpl("  Foo := Local(TFoo.Create).Obj as TFoo;")
-            .appendImpl("  Foo := Foo.Bar;")
+            .appendImpl("  Foo := TFoo.Create;")
+            .appendImpl("  Foo := TFoo.Bar;")
             .appendImpl("end;");
 
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
         .areExactly(1, ruleKeyAtLine("ForbiddenPropertyRuleTest", builder.getOffset() + 6));
   }
 

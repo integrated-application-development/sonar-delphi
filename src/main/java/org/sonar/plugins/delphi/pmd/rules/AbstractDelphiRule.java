@@ -62,7 +62,7 @@ public abstract class AbstractDelphiRule extends AbstractRule implements DelphiR
   }
 
   @Override
-  public Set<Integer> getSuppressions() {
-    return suppressions;
+  public boolean isSuppressedLine(int line) {
+    return suppressions.contains(line);
   }
 }
