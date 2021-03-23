@@ -29,8 +29,9 @@ class DefaultDelphiFile implements DelphiFile {
   }
 
   @Override
-  public String getSourceCodeLine(int index) {
-    Preconditions.checkPositionIndex(--index, sourceCodeLines.size());
+  public String getSourceCodeLine(int line) {
+    int index = line - 1;
+    Preconditions.checkPositionIndex(index, sourceCodeLines.size());
     return sourceCodeLines.get(index);
   }
 

@@ -102,7 +102,9 @@ public class DelphiPreprocessor {
   }
 
   private void processToken(Token token) {
-    token.setTokenIndex(tokenIndex++);
+    token.setTokenIndex(tokenIndex);
+    tokenIndex++;
+
     if (token.getType() == DelphiLexer.TkCompilerDirective) {
       CompilerDirective directive = CompilerDirective.fromToken(token);
       processDirective(directive);
