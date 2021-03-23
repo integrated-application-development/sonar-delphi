@@ -241,7 +241,7 @@ public class DelphiSureFireParser {
 
     int passedTests = testsCount - report.getErrors() - report.getFailures();
     if (testsCount > 0) {
-      double percentage = passedTests * 100d / testsCount;
+      double percentage = passedTests * 100D / testsCount;
       context
           .<Double>newMeasure()
           .forMetric(CoreMetrics.TEST_SUCCESS_DENSITY)
