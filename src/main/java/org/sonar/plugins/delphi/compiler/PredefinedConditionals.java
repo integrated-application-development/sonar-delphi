@@ -200,8 +200,11 @@ public class PredefinedConditionals {
   }
 
   /**
-   * Returns the predefined conditional symbols that on this compiler toolchain and version
+   * Returns the conditional symbols that should be predefined on this compiler toolchain and
+   * version
    *
+   * @param toolchain The compiler toolchain
+   * @param compilerVersion The compiler version
    * @return set of conditional symbols that are defined on this compiler toolchain
    * @see <a href="http://bit.ly/delphi_predefined_conditionals">Predefined Conditionals</a>
    */

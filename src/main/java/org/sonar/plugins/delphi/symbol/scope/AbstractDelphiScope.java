@@ -341,7 +341,7 @@ class AbstractDelphiScope implements DelphiScope {
       result.append(t.toString());
       result.append(',');
     }
-    return result.length() == 0 ? "" : result.toString().substring(0, result.length() - 1);
+    return result.length() == 0 ? "" : result.substring(0, result.length() - 1);
   }
 
   private static DelphiNameDeclaration getDeclaration(NameDeclaration declaration) {

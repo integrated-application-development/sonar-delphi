@@ -193,7 +193,7 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
   private static DelphiNameDeclaration specializeIfNotNull(
       DelphiNameDeclaration declaration, TypeSpecializationContext context) {
     if (declaration != null) {
-      declaration.specialize(context);
+      return declaration.specialize(context);
     }
     return null;
   }

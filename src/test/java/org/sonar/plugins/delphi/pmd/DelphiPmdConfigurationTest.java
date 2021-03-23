@@ -56,9 +56,9 @@ class DelphiPmdConfigurationTest {
     WORK_DIR.mkdir();
   }
 
-  @SuppressWarnings({"ResultOfMethodCallIgnored", "ConstantConditions"})
+  @SuppressWarnings({"ResultOfMethodCallIgnored"})
   @AfterAll
-  protected static void deleteTempDir() {
+  static void deleteTempDir() {
     if (WORK_DIR.exists()) {
       for (File file : WORK_DIR.listFiles()) {
         file.delete();

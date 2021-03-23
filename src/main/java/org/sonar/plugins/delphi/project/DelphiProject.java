@@ -39,7 +39,7 @@ public class DelphiProject {
   private static final Logger LOG = Loggers.get(DelphiProject.class);
 
   private String name = "";
-  private Set<String> definitions = new HashSet<>();
+  private final Set<String> definitions = new HashSet<>();
   private final Set<String> unitScopeNames = new HashSet<>();
   private final List<Path> sourceFiles = new ArrayList<>();
   private final List<Path> searchDirectories = new ArrayList<>();
