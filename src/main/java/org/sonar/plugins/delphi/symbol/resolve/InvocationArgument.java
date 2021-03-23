@@ -14,8 +14,8 @@ import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Typed;
 
 public class InvocationArgument implements Typed {
+  private final ExpressionNode expression;
   private Type type = DelphiType.unknownType();
-  private ExpressionNode expression;
 
   // Null if the expression was not a PrimaryExpression.
   // This is important because method references can only be bare PrimaryExpressions.

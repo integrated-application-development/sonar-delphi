@@ -16,8 +16,8 @@ import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
  * <p>Examples:
  *
  * <ul>
- *   <li><code>try {statementList} except {statementList} end</code>
- *   <li><code>repeat {statementList} until {expression}</code>
+ *   <li>{@code try {statementList} except {statementList} end}
+ *   <li>{@code repeat {statementList} until {expression}}
  * </ul>
  */
 public final class StatementListNode extends DelphiNode {

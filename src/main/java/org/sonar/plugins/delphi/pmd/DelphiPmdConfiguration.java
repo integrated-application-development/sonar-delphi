@@ -102,7 +102,7 @@ public class DelphiPmdConfiguration extends PMDConfiguration {
 
   /**
    * Writes an XML Report about the analyzed project into the current working directory unless
-   * <code>sonar.pmd.generateXml</code> is set to false.
+   * <b>sonar.pmd.generateXml</b> is set to false.
    *
    * @param report The report which shall be written into an XML file.
    * @return Path to the report

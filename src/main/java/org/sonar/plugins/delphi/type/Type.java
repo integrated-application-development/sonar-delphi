@@ -48,7 +48,7 @@ public interface Type {
    * Returns whether this type can be specialized.
    *
    * <p>NOTE: When specializing a type, this method does not need to be called. If a Type cannot be
-   * specialized, then <code>Type.specialize</code> will return <code>this</code>.
+   * specialized, then {@link Type#specialize} will return {@code this}.
    *
    * @param context a specialization context, contains information to help specialize the type
    * @return true if this type can be specialized
@@ -60,7 +60,7 @@ public interface Type {
    * arguments.
    *
    * @param context a specialization context, contains information to help specialize the type
-   * @return the specialized type, or <code>this</code> if generic specialization wasn't possible
+   * @return the specialized type, or {@code this} if generic specialization wasn't possible
    */
   Type specialize(TypeSpecializationContext context);
 
