@@ -56,7 +56,7 @@ class CompilerDirectiveParser {
     this.position = 0;
 
     this.token = token;
-    this.directiveBracketType = (getChar(position) == '{') ? CURLY : PAREN;
+    this.directiveBracketType = (currentChar() == '{') ? CURLY : PAREN;
 
     if (directiveBracketType == CURLY) {
       position += 2;
@@ -142,7 +142,7 @@ class CompilerDirectiveParser {
 
   private void parseDirectiveName() {
     directiveName.setLength(0);
-    char character = getChar(position);
+    char character = currentChar();
 
     while (true) {
       if (Character.isWhitespace(character) || isEndOfDirective(character)) {
@@ -152,25 +152,25 @@ class CompilerDirectiveParser {
       }
 
       directiveName.append(character);
-      character = getChar(++position);
+      character = nextChar();
     }
   }
 
   private void parseDirectiveItem() {
     directiveItem.setLength(0);
     trimmedDirectiveItem.setLength(0);
-    char character = getChar(position);
+    char character = currentChar();
     boolean insideQuote = false;
     boolean foundWhitespace = false;
 
     while (Character.isWhitespace(character)) {
-      character = getChar(++position);
+      character = nextChar();
     }
 
     while (true) {
       if (character == '\'') {
         insideQuote = !insideQuote;
-        character = getChar(++position);
+        character = nextChar();
         continue;
       }
 
@@ -184,7 +184,8 @@ class CompilerDirectiveParser {
       if (!foundWhitespace) {
         trimmedDirectiveItem.append(character);
       }
-      character = getChar(++position);
+
+      character = nextChar();
     }
   }
 
@@ -200,6 +201,15 @@ class CompilerDirectiveParser {
     }
 
     return result;
+  }
+
+  private char currentChar() {
+    return getChar(position);
+  }
+
+  private char nextChar() {
+    ++position;
+    return getChar(position);
   }
 
   private char peekChar() {

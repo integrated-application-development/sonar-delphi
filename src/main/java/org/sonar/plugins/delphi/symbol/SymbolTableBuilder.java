@@ -237,7 +237,8 @@ public class SymbolTableBuilder {
     }
 
     try {
-      LOG.debug(StringUtils.repeat('\t', ++nestingLevel) + "> " + unit.unitFile.getFileName());
+      ++nestingLevel;
+      LOG.debug(StringUtils.repeat('\t', nestingLevel) + "> " + unit.unitFile.getFileName());
 
       boolean shouldSkipImplementation = (resolutionLevel != ResolutionLevel.COMPLETE);
       DelphiFileConfig fileConfig = createFileConfig(unit, shouldSkipImplementation);
