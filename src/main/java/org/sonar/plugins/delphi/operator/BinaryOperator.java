@@ -31,12 +31,12 @@ public enum BinaryOperator implements Operator {
   IS(DelphiLexer.IS),
   AS(DelphiLexer.AS);
 
-  private final int tokenType;
-  private final ImmutableSet<String> names;
-
   private static final Map<Integer, BinaryOperator> TOKEN_TYPE_MAP =
       Arrays.stream(BinaryOperator.values())
           .collect(Collectors.toUnmodifiableMap(op -> op.tokenType, op -> op));
+
+  private final int tokenType;
+  private final ImmutableSet<String> names;
 
   BinaryOperator(int tokenType, String... names) {
     this.tokenType = tokenType;

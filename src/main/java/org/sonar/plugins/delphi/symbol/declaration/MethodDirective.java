@@ -36,20 +36,21 @@ public enum MethodDirective {
   INDEX(DelphiLexer.INDEX),
   DISPID(DelphiLexer.DISPID);
 
-  private final int tokenType;
-  private static final Map<Integer, MethodDirective> tokenTypeMap = new HashMap<>();
+  private static final Map<Integer, MethodDirective> TOKEN_TYPE_MAP = new HashMap<>();
 
   static {
     for (MethodDirective directive : MethodDirective.values()) {
-      tokenTypeMap.put(directive.tokenType, directive);
+      TOKEN_TYPE_MAP.put(directive.tokenType, directive);
     }
   }
+
+  private final int tokenType;
 
   MethodDirective(int tokenType) {
     this.tokenType = tokenType;
   }
 
   public static MethodDirective fromToken(DelphiToken token) {
-    return tokenTypeMap.get(token.getType());
+    return TOKEN_TYPE_MAP.get(token.getType());
   }
 }

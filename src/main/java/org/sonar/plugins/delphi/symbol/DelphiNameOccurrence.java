@@ -17,8 +17,6 @@ public class DelphiNameOccurrence implements NameOccurrence {
   private boolean isGeneric;
   private List<Type> typeParameters = Collections.emptyList();
 
-  private static final String SELF = "Self";
-
   public DelphiNameOccurrence(DelphiNode concreteNode, String imageOverride) {
     this(concreteNode);
     this.image = imageOverride;
@@ -98,7 +96,7 @@ public class DelphiNameOccurrence implements NameOccurrence {
   }
 
   public boolean isSelf() {
-    return SELF.equals(getImage());
+    return "Self".equals(getImage());
   }
 
   @Override
