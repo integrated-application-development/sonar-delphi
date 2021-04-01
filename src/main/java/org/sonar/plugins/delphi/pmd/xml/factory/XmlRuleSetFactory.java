@@ -59,8 +59,8 @@ public class XmlRuleSetFactory implements RuleSetFactory, Closeable {
 
     List<?> children = parent.getChildren(child, namespace);
     return children.stream()
-        .filter(element -> element instanceof Element)
-        .map(element -> (Element) element)
+        .filter(Element.class::isInstance)
+        .map(Element.class::cast)
         .collect(Collectors.toList());
   }
 
