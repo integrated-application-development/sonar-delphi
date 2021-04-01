@@ -30,12 +30,11 @@ import net.sourceforge.pmd.properties.PropertyDescriptor;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 
 public class DelphiRuleProperty {
+  private static final Set<PropertyDescriptor<?>> BUILTIN_PROPERTIES =
+      Set.of(BASE_EFFORT, SCOPE, TEMPLATE, TYPE, BUILTIN_XPATH);
 
   private final String name;
   private String value;
-
-  private static final Set<PropertyDescriptor<?>> BUILTIN_PROPERTIES =
-      Set.of(BASE_EFFORT, SCOPE, TEMPLATE, TYPE, BUILTIN_XPATH);
 
   public DelphiRuleProperty(String name) {
     this(name, null);

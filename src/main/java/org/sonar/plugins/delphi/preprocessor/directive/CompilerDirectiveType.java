@@ -23,18 +23,19 @@ public enum CompilerDirectiveType {
   WARN("warn"),
   UNSUPPORTED;
 
-  private final ImmutableSet<String> names;
-  private static final Map<String, CompilerDirectiveType> typesByName;
+  private static final Map<String, CompilerDirectiveType> TYPES_BY_NAME;
 
   static {
-    typesByName = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    TYPES_BY_NAME = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     CompilerDirectiveType[] values = CompilerDirectiveType.values();
     for (CompilerDirectiveType type : values) {
       for (String name : type.names) {
-        typesByName.put(name, type);
+        TYPES_BY_NAME.put(name, type);
       }
     }
   }
+
+  private final ImmutableSet<String> names;
 
   CompilerDirectiveType(String... names) {
     this.names = ImmutableSet.copyOf(names);
@@ -47,6 +48,6 @@ public enum CompilerDirectiveType {
    * @return directive type with given name
    */
   public static CompilerDirectiveType getTypeByName(String directiveName) {
-    return typesByName.getOrDefault(directiveName, UNSUPPORTED);
+    return TYPES_BY_NAME.getOrDefault(directiveName, UNSUPPORTED);
   }
 }

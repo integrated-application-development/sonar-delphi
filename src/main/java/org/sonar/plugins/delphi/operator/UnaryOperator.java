@@ -15,12 +15,12 @@ public enum UnaryOperator implements Operator {
   NEGATE(DelphiLexer.MINUS, "Negative"),
   ADDRESS(DelphiLexer.AT2);
 
-  private final int tokenType;
-  private final ImmutableSet<String> names;
-
   private static final Map<Integer, UnaryOperator> TOKEN_TYPE_MAP =
       Arrays.stream(UnaryOperator.values())
           .collect(Collectors.toUnmodifiableMap(op -> op.tokenType, op -> op));
+
+  private final int tokenType;
+  private final ImmutableSet<String> names;
 
   UnaryOperator(int tokenType, String... names) {
     this.tokenType = tokenType;
