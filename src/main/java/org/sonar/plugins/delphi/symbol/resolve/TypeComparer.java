@@ -14,6 +14,7 @@ import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_
 import static org.sonar.plugins.delphi.symbol.resolve.VariantConversionType.INCOMPATIBLE_VARIANT;
 
 import com.google.common.annotations.VisibleForTesting;
+import java.util.Comparator;
 import java.util.List;
 import org.sonar.plugins.delphi.type.CodePages;
 import org.sonar.plugins.delphi.type.Type;
@@ -79,6 +80,8 @@ class TypeComparer {
       result = compareSubrange(from, to);
     } else if (to.isArray()) {
       result = compareArray(from, to);
+    } else if (to.isArrayConstructor()) {
+      result = compareArrayConstructor(from, to);
     } else if (to.isSet()) {
       result = compareSet(from, to);
     } else if (to.isProcedural()) {
@@ -426,6 +429,10 @@ class TypeComparer {
     return INCOMPATIBLE_TYPES;
   }
 
+  private static Type getLargestType(List<Type> types) {
+    return types.stream().max(Comparator.comparingInt(Type::size)).orElseThrow();
+  }
+
   private static EqualityType compareArrayConstructorToDynamicArray(
       ArrayConstructorType from, CollectionType to) {
     if (from.isEmpty()) {
@@ -434,7 +441,7 @@ class TypeComparer {
 
     // this should lose to the array constructor -> open array / set conversions,
     // but it might happen that the end of the convert levels is reached
-    var subEquality = compare(from.elementTypes().get(0), to.elementType());
+    var subEquality = compare(getLargestType(from.elementTypes()), to.elementType());
     if (subEquality.ordinal() >= EQUAL.ordinal()) {
       return CONVERT_LEVEL_3;
     } else if (subEquality.ordinal() > CONVERT_LEVEL_5.ordinal()) {
@@ -461,7 +468,7 @@ class TypeComparer {
 
     // this should lose to the array constructor -> open array conversions,
     // but it might happen that the end of the convert levels is reached
-    var subEquality = compare(from.elementTypes().get(0), to.elementType());
+    var subEquality = compare(getLargestType(from.elementTypes()), to.elementType());
     if (subEquality.ordinal() >= EQUAL.ordinal()) {
       return CONVERT_LEVEL_2;
     } else if (subEquality.ordinal() > CONVERT_LEVEL_6.ordinal()) {
@@ -482,7 +489,7 @@ class TypeComparer {
     if (from.isEmpty()) {
       return CONVERT_LEVEL_1;
     } else {
-      var subEquality = compare(from.elementTypes().get(0), to.elementType());
+      var subEquality = compare(getLargestType(from.elementTypes()), to.elementType());
       if (subEquality.ordinal() >= EQUAL.ordinal()) {
         return CONVERT_LEVEL_1;
       } else if (subEquality.ordinal() > CONVERT_LEVEL_7.ordinal()) {
@@ -493,6 +500,20 @@ class TypeComparer {
         return subEquality;
       }
     }
+  }
+
+  private static EqualityType compareArrayConstructor(Type from, Type to) {
+    if (from.isArrayConstructor()) {
+      var fromArrayConstructor = (ArrayConstructorType) from;
+      var toArrayConstructor = (ArrayConstructorType) to;
+
+      if (!fromArrayConstructor.isEmpty()) {
+        return compare(
+            getLargestType(fromArrayConstructor.elementTypes()),
+            getLargestType(toArrayConstructor.elementTypes()));
+      }
+    }
+    return INCOMPATIBLE_TYPES;
   }
 
   private static EqualityType compareDynamicArray(CollectionType from, CollectionType to) {

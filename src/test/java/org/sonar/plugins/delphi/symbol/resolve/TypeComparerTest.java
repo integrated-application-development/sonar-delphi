@@ -346,6 +346,17 @@ class TypeComparerTest {
   }
 
   @Test
+  void testToArrayConstructor() {
+    ArrayConstructorType byteConstructor = arrayConstructor(List.of(IntrinsicType.BYTE));
+    ArrayConstructorType int64Constructor = arrayConstructor(List.of(IntrinsicType.INT64));
+
+    compare(byteConstructor, byteConstructor, EXACT);
+    compare(byteConstructor, int64Constructor, CONVERT_LEVEL_1);
+    compare(dynamicArray(null, IntrinsicType.INTEGER), byteConstructor, INCOMPATIBLE_TYPES);
+    compare(set(IntrinsicType.BYTE), byteConstructor, INCOMPATIBLE_TYPES);
+  }
+
+  @Test
   void testToSet() {
     // NOTE: Sets can't actually have such large ordinal element types (and certainly not strings)
     // This is just for testing convenience.

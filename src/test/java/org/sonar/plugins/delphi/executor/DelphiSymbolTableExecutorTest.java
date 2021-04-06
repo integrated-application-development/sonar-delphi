@@ -190,6 +190,13 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testArrayConstantExpressions() {
+    execute("ArrayConstantExpressions.pas");
+    verifyUsages(11, 10, reference(23, 2), reference(24, 2));
+    verifyUsages(16, 10, reference(25, 2), reference(26, 2), reference(27, 2), reference(30, 2));
+  }
+
+  @Test
   void testArrayConstructor() {
     execute("ArrayConstructor.pas");
     verifyUsages(10, 10, reference(17, 2), reference(27, 2));

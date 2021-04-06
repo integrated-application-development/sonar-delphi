@@ -7,14 +7,17 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.P
 
 import com.google.common.collect.Sets;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.sonar.plugins.delphi.symbol.declaration.MethodKind;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
+import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Type.ArrayConstructorType;
+import org.sonar.plugins.delphi.type.Type.CollectionType;
 import org.sonar.plugins.delphi.type.Type.PointerType;
 import org.sonar.plugins.delphi.type.Type.StructType;
 import org.sonar.plugins.delphi.type.factory.TypeFactory;
@@ -48,6 +51,10 @@ public class OperatorInvocableCollector {
       result.addAll(createPointerMath((PointerType) type, operator));
     } else if (type.isVariant() && operator != BinaryOperator.IN && operator != BinaryOperator.AS) {
       result.add(createVariantBinary(operator));
+    } else if (type.isSet() || type.isArrayConstructor()) {
+      result.addAll(createSetLike(type, operator));
+    } else if (type.isDynamicArray()) {
+      result.addAll(createDynamicArray((CollectionType) type, operator));
     }
 
     switch (operator) {
@@ -85,10 +92,10 @@ public class OperatorInvocableCollector {
         result.addAll(createAdd());
         break;
       case SUBTRACT:
-        result.addAll(createArithmeticAndSet("Subtract"));
+        result.addAll(createArithmeticBinary("Subtract"));
         break;
       case MULTIPLY:
-        result.addAll(createArithmeticAndSet("Multiply"));
+        result.addAll(createArithmeticBinary("Multiply"));
         break;
       case DIVIDE:
         result.add(createDivide());
@@ -130,7 +137,7 @@ public class OperatorInvocableCollector {
 
   private Set<Invocable> createPointerMath(PointerType type, BinaryOperator operator) {
     if (!type.allowsPointerMath()) {
-      return Collections.emptySet();
+      return Sets.newHashSet();
     }
 
     switch (operator) {
@@ -139,7 +146,7 @@ public class OperatorInvocableCollector {
       case SUBTRACT:
         return createPointerMathSubtract(type);
       default:
-        return Collections.emptySet();
+        return Sets.newHashSet();
     }
   }
 
@@ -182,6 +189,51 @@ public class OperatorInvocableCollector {
         new OperatorIntrinsic(NAME, List.of(type, POINTER_MATH_OPERAND), integer));
   }
 
+  private Set<Invocable> createSetLike(Type type, BinaryOperator operator) {
+    String name;
+
+    switch (operator) {
+      case ADD:
+        name = "Add";
+        break;
+      case SUBTRACT:
+        name = "Subtract";
+        break;
+      case MULTIPLY:
+        name = "Multiply";
+        break;
+      default:
+        name = null;
+    }
+
+    Set<Invocable> result = new HashSet<>();
+
+    if (name != null) {
+      if (type.isArrayConstructor()) {
+        type = normalizeArrayConstructor((ArrayConstructorType) type);
+      }
+      result.add(new OperatorIntrinsic(name, List.of(type, type), type));
+    }
+
+    return result;
+  }
+
+  private Type normalizeArrayConstructor(ArrayConstructorType type) {
+    Type elementType =
+        type.elementTypes().stream()
+            .max(Comparator.comparingInt(Type::size))
+            .orElse(DelphiType.voidType());
+    return typeFactory.arrayConstructor(List.of(elementType));
+  }
+
+  private Set<Invocable> createDynamicArray(CollectionType type, Operator operator) {
+    Set<Invocable> result = new HashSet<>();
+    if (operator == BinaryOperator.ADD) {
+      result.add(new OperatorIntrinsic("Add", List.of(type, type), type));
+    }
+    return result;
+  }
+
   private Set<Invocable> createArithmeticBinary(String name) {
     Type integer = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
     Type extended = typeFactory.getIntrinsic(IntrinsicType.EXTENDED);
@@ -192,15 +244,11 @@ public class OperatorInvocableCollector {
         new OperatorIntrinsic(name, List.of(extended, integer), extended));
   }
 
-  private Set<Invocable> createArithmeticAndSet(String name) {
-    return addAll(createArithmeticBinary(name), createSet(name));
-  }
-
   private Set<Invocable> createAdd() {
     final String NAME = "Add";
     Type string = typeFactory.getIntrinsic(IntrinsicType.STRING);
     return addAll(
-        createArithmeticAndSet(NAME), new OperatorIntrinsic(NAME, List.of(string, string), string));
+        createArithmeticBinary(NAME), new OperatorIntrinsic(NAME, List.of(string, string), string));
   }
 
   private Invocable createDivide() {
@@ -220,10 +268,6 @@ public class OperatorInvocableCollector {
   private Invocable createComparison(String name) {
     Type bool = typeFactory.getIntrinsic(IntrinsicType.BOOLEAN);
     return new OperatorIntrinsic(name, List.of(untypedType(), untypedType()), bool);
-  }
-
-  private Invocable createSet(String name) {
-    return new OperatorIntrinsic(name, List.of(ANY_SET, ANY_SET), typeFactory.emptySet());
   }
 
   private Invocable createIn() {
