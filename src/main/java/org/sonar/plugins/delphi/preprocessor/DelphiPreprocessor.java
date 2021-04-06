@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.EnumMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -53,7 +52,7 @@ public class DelphiPreprocessor {
     this(
         lexer,
         config,
-        new HashSet<>(config.getDefinitions()),
+        caseInsensitiveSet(config.getDefinitions()),
         new EnumMap<>(CompilerDirectiveType.class),
         new CompilerSwitchRegistry(),
         0,
@@ -77,6 +76,12 @@ public class DelphiPreprocessor {
     this.currentSwitches = currentSwitches;
     this.processingIncludeFile = processingIncludeFile;
     this.tokenIndex = tokenIndexStart;
+  }
+
+  private static Set<String> caseInsensitiveSet(Set<String> set) {
+    Set<String> result = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+    result.addAll(set);
+    return result;
   }
 
   public void process() {

@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Treat the `Exit` intrinsic's parameter as optional.
+- Make preprocessor defines case-insensitive.
 
 ## [0.29.0] - 2021-03-23
 
