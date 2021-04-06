@@ -147,6 +147,10 @@ public class InvocationResolver {
         equality = INCOMPATIBLE_TYPES;
       }
 
+      if (argument.violatesBounds(parameterType)) {
+        equality = INCOMPATIBLE_TYPES;
+      }
+
       argumentType = TypeUtils.findBaseType(argumentType);
       parameterType = TypeUtils.findBaseType(parameterType);
 

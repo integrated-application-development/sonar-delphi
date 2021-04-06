@@ -58,6 +58,10 @@ public class InvocationArgument implements Typed {
         && parameterType.isProcedural();
   }
 
+  boolean violatesBounds(Type type) {
+    return BoundsChecker.forType(type).violatesBounds(expression);
+  }
+
   boolean isImplicitlyConvertibleToNilPointer() {
     LiteralNode literal = expression.extractLiteral();
     return literal != null
