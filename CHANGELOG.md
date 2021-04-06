@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Treat the `Exit` intrinsic's parameter as optional.
 - Make preprocessor defines case-insensitive.
+- FPs around casts from class reference to class in `RedundantCastRule`.
 
 ## [0.29.0] - 2021-03-23
 

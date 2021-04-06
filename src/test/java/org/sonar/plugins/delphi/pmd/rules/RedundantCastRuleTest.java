@@ -154,6 +154,23 @@ class RedundantCastRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  void testTClassToTObjectShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Foo;")
+            .appendImpl("var")
+            .appendImpl("  Clazz: TClass;")
+            .appendImpl("  Obj: TObject;")
+            .appendImpl("begin")
+            .appendImpl("  Obj := TObject(Clazz);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("RedundantCastRule"));
+  }
+
+  @Test
   void testUnknownTypesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
