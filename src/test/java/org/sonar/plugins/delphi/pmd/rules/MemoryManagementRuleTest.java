@@ -188,6 +188,7 @@ class MemoryManagementRuleTest extends BasePmdRuleTest {
             .appendImpl("  Foo: TObject;")
             .appendImpl("begin")
             .appendImpl("  Foo := TMemory.Manage(TFoo.Create as TObject);")
+            .appendImpl("  Foo := TMemory.Manage(TObject(TFoo.Create));")
             .appendImpl("end;");
 
     execute(builder);
@@ -238,6 +239,31 @@ class MemoryManagementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  void testInterfaceAssignmentWithCastsShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  IBar = interface")
+            .appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']")
+            .appendDecl("    procedure Foo;")
+            .appendDecl("  end;")
+            .appendDecl("  TFoo = class(TObject, IBar)")
+            .appendDecl("    procedure Foo;")
+            .appendDecl("  end;")
+            .appendImpl("procedure Test;")
+            .appendImpl("var")
+            .appendImpl("  Foo: IBar;")
+            .appendImpl("begin")
+            .appendImpl("  Foo := TFoo.Create as IBar;")
+            .appendImpl("  Foo := IBar(TFoo.Create);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().isEmpty();
+  }
+
+  @Test
   void testInterfaceArgumentShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
@@ -262,7 +288,7 @@ class MemoryManagementRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  void testProceduralHardCastShouldAddIssue() {
+  void testInterfaceArgumentWithCastsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
@@ -270,22 +296,20 @@ class MemoryManagementRuleTest extends BasePmdRuleTest {
             .appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']")
             .appendDecl("    procedure Foo;")
             .appendDecl("  end;")
-            .appendDecl("  TBar = procedure;")
             .appendDecl("  TFoo = class(TObject, IBar)")
             .appendDecl("    procedure Baz(Bar: IBar);")
             .appendDecl("  end;")
             .appendImpl("procedure Test;")
             .appendImpl("var")
-            .appendImpl("  Bar: TBar;")
+            .appendImpl("  Foo: TFoo;")
             .appendImpl("begin")
-            .appendImpl("  Bar := TBar(TFoo.Create);")
+            .appendImpl("  Foo.Baz(IBar(TFoo.Create));")
+            .appendImpl("  Foo.Baz(TFoo.Create as IBar);")
             .appendImpl("end;");
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("MemoryManagementRule", builder.getOffset() + 5));
+    assertIssues().isEmpty();
   }
 
   @Test

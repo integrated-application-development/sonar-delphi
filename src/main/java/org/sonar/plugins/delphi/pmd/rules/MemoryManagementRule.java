@@ -31,7 +31,6 @@ import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Typed;
 
 public class MemoryManagementRule extends AbstractDelphiRule {
-
   @VisibleForTesting
   static final PropertyDescriptor<List<String>> MEMORY_FUNCTIONS =
       PropertyFactory.stringListProperty("memoryFunctions")
@@ -98,7 +97,7 @@ public class MemoryManagementRule extends AbstractDelphiRule {
   }
 
   private static boolean isInterfaceVariableAssignment(PrimaryExpressionNode expression) {
-    Node assignStatement = expression.findParentheses().jjtGetParent();
+    Node assignStatement = findParentSkipCasts(expression);
     if (assignStatement instanceof AssignmentStatementNode) {
       Type assignedType = ((AssignmentStatementNode) assignStatement).getAssignee().getType();
       return assignedType.isInterface();
@@ -107,8 +106,7 @@ public class MemoryManagementRule extends AbstractDelphiRule {
   }
 
   private static boolean isInterfaceParameter(ExpressionNode expression) {
-    expression = expression.findParentheses();
-    Node parent = expression.jjtGetParent();
+    Node parent = findParentSkipCasts(expression);
 
     if (!(parent instanceof ArgumentListNode)) {
       return false;
@@ -124,15 +122,13 @@ public class MemoryManagementRule extends AbstractDelphiRule {
       return false;
     }
 
-    if (previous instanceof NameReferenceNode) {
-      NameReferenceNode nameReference = (NameReferenceNode) previous;
-      if (nameReference.getLastName().getNameDeclaration() instanceof TypeNameDeclaration) {
-        return false;
-      }
+    Node argument = expression;
+    while (argument.jjtGetParent() != parent) {
+      argument = argument.jjtGetParent();
     }
 
     List<ExpressionNode> arguments = ((ArgumentListNode) parent).getArguments();
-    int argumentIndex = arguments.indexOf(expression);
+    int argumentIndex = arguments.indexOf((ExpressionNode) argument);
 
     List<Type> parameters = ((ProceduralType) type).parameterTypes();
     Type parameterType =
@@ -142,24 +138,17 @@ public class MemoryManagementRule extends AbstractDelphiRule {
   }
 
   private static boolean isExceptionRaise(PrimaryExpressionNode expression) {
-    return expression.findParentheses().jjtGetParent() instanceof RaiseStatementNode;
+    return findParentSkipCasts(expression) instanceof RaiseStatementNode;
   }
 
   private boolean isMemoryManaged(PrimaryExpressionNode expression) {
-    Node ancestor = expression.findParentheses().jjtGetParent();
+    Node parent = findParentSkipCasts(expression);
 
-    if (ancestor instanceof BinaryExpressionNode) {
-      BinaryExpressionNode binaryExpression = (BinaryExpressionNode) ancestor;
-      if (binaryExpression.getOperator() == BinaryOperator.AS) {
-        ancestor = ancestor.jjtGetParent();
-      }
-    }
-
-    if (!(ancestor instanceof ArgumentListNode)) {
+    if (!(parent instanceof ArgumentListNode)) {
       return false;
     }
 
-    Node node = ancestor.jjtGetParent().jjtGetChild(ancestor.jjtGetChildIndex() - 1);
+    Node node = parent.jjtGetParent().jjtGetChild(parent.jjtGetChildIndex() - 1);
     if (!(node instanceof NameReferenceNode)) {
       return false;
     }
@@ -172,6 +161,55 @@ public class MemoryManagementRule extends AbstractDelphiRule {
     }
 
     return false;
+  }
+
+  private static Node findParentSkipCasts(ExpressionNode expression) {
+    Node result = getParentSkipParentheses(expression);
+    while (true) {
+      if (isSoftCast(result)) {
+        result = getParentSkipParentheses(result);
+      } else if (isHardCast(result)) {
+        result = getNthParentSkipParentheses(result, 2);
+      } else {
+        return result;
+      }
+    }
+  }
+
+  private static Node getParentSkipParentheses(Node node) {
+    return getNthParentSkipParentheses(node, 1);
+  }
+
+  private static Node getNthParentSkipParentheses(Node node, int n) {
+    for (int i = 0; i < n; ++i) {
+      if (node instanceof ExpressionNode) {
+        node = ((ExpressionNode) node).findParentheses();
+      }
+      node = node.jjtGetParent();
+    }
+    return node;
+  }
+
+  private static boolean isSoftCast(Node node) {
+    return node instanceof BinaryExpressionNode
+        && ((BinaryExpressionNode) node).getOperator() == BinaryOperator.AS;
+  }
+
+  private static boolean isHardCast(Node node) {
+    if (node instanceof ArgumentListNode) {
+      ArgumentListNode argumentList = (ArgumentListNode) node;
+      Node previous = argumentList.jjtGetParent().jjtGetChild(argumentList.jjtGetChildIndex() - 1);
+      if (previous instanceof NameReferenceNode && isLastChild(argumentList)) {
+        NameReferenceNode nameReference = ((NameReferenceNode) previous);
+        DelphiNameDeclaration declaration = nameReference.getLastName().getNameDeclaration();
+        return declaration instanceof TypeNameDeclaration;
+      }
+    }
+    return false;
+  }
+
+  private static boolean isLastChild(Node node) {
+    return node.jjtGetChildIndex() == node.jjtGetParent().jjtGetNumChildren() - 1;
   }
 
   private static boolean requiresMemoryManagement(NameReferenceNode reference) {

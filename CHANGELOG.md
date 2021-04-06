@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Improve handling of cast expressions in `MemoryManagementRule`.
 - Update various rule descriptions.
 
 ### Fixed
