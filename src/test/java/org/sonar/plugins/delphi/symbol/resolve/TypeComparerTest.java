@@ -166,6 +166,15 @@ class TypeComparerTest {
   }
 
   @Test
+  void testPointerToString() {
+    compare(IntrinsicType.PANSICHAR, IntrinsicType.ANSISTRING, CONVERT_LEVEL_3);
+    compare(IntrinsicType.PCHAR, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_3);
+    compare(IntrinsicType.PANSICHAR, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_4);
+    compare(IntrinsicType.PCHAR, IntrinsicType.ANSISTRING, CONVERT_LEVEL_4);
+    compare(pointerTo(IntrinsicType.INTEGER), IntrinsicType.UNICODESTRING, INCOMPATIBLE_TYPES);
+  }
+
+  @Test
   void testCharToString() {
     compare(IntrinsicType.ANSICHAR, IntrinsicType.SHORTSTRING, CONVERT_LEVEL_2);
     compare(IntrinsicType.ANSICHAR, IntrinsicType.ANSISTRING, CONVERT_LEVEL_3);
@@ -346,6 +355,17 @@ class TypeComparerTest {
   }
 
   @Test
+  void testToArrayConstructor() {
+    ArrayConstructorType byteConstructor = arrayConstructor(List.of(IntrinsicType.BYTE));
+    ArrayConstructorType int64Constructor = arrayConstructor(List.of(IntrinsicType.INT64));
+
+    compare(byteConstructor, byteConstructor, EXACT);
+    compare(byteConstructor, int64Constructor, CONVERT_LEVEL_1);
+    compare(dynamicArray(null, IntrinsicType.INTEGER), byteConstructor, INCOMPATIBLE_TYPES);
+    compare(set(IntrinsicType.BYTE), byteConstructor, INCOMPATIBLE_TYPES);
+  }
+
+  @Test
   void testToSet() {
     // NOTE: Sets can't actually have such large ordinal element types (and certainly not strings)
     // This is just for testing convenience.
@@ -451,6 +471,7 @@ class TypeComparerTest {
     compare(IntrinsicType.ANSICHAR, pointerTo(IntrinsicType.CHAR), CONVERT_LEVEL_1);
     compare(IntrinsicType.WIDECHAR, pointerTo(IntrinsicType.ANSICHAR), CONVERT_LEVEL_2);
     compare(IntrinsicType.ANSICHAR, pointerTo(IntrinsicType.ANSICHAR), CONVERT_LEVEL_2);
+    compare(IntrinsicType.ANSICHAR, pointerTo(IntrinsicType.INTEGER), INCOMPATIBLE_TYPES);
     compare(fooType, untypedPointer(), CONVERT_LEVEL_5);
     compare(IntrinsicType.INTEGER, pointerTo(IntrinsicType.UNICODESTRING), CONVERT_LEVEL_6);
     compare(untypedPointer(), pointerTo(IntrinsicType.CHAR), CONVERT_LEVEL_2);
@@ -459,11 +480,6 @@ class TypeComparerTest {
     compare(pointerTo(IntrinsicType.INTEGER), untypedPointer(), CONVERT_LEVEL_1);
     compare(arrayType, pointerTo(IntrinsicType.INTEGER), CONVERT_LEVEL_3);
     compare(arrayType, untypedPointer(), CONVERT_LEVEL_4);
-    compare(IntrinsicType.PANSICHAR, IntrinsicType.ANSISTRING, CONVERT_LEVEL_3);
-    compare(IntrinsicType.PCHAR, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_3);
-    compare(IntrinsicType.PANSICHAR, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_4);
-    compare(IntrinsicType.PCHAR, IntrinsicType.ANSISTRING, CONVERT_LEVEL_4);
-    compare(pointerTo(IntrinsicType.INTEGER), IntrinsicType.UNICODESTRING, INCOMPATIBLE_TYPES);
     compare(fooType, pointerTo(fooType), INCOMPATIBLE_TYPES);
     compare(
         pointerTo(IntrinsicType.INTEGER),

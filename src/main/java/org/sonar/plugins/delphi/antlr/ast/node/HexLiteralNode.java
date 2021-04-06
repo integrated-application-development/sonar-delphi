@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import java.math.BigInteger;
 import org.antlr.runtime.Token;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -20,8 +21,8 @@ public final class HexLiteralNode extends LiteralNode {
   }
 
   @Override
-  public long getValueAsLong() {
-    return parseImage(getImage(), 16);
+  public BigInteger getValueAsBigInteger() {
+    return new BigInteger(getImage(), 16);
   }
 
   @Override
@@ -38,7 +39,7 @@ public final class HexLiteralNode extends LiteralNode {
   @NotNull
   public Type getType() {
     if (type == null) {
-      type = getTypeFactory().integerFromLiteralValue(this.getValueAsLong());
+      type = getTypeFactory().integerFromLiteralValue(this.getValueAsBigInteger());
     }
     return type;
   }

@@ -36,6 +36,11 @@ class DelphiPreprocessorTest {
   }
 
   @Test
+  void testSizeOfIntrinsic() {
+    execute("SizeOfIntrinsic.pas");
+  }
+
+  @Test
   void testSameFolderIncludeDirectives() {
     execute("includeTest/SameFolder.pas");
   }
@@ -72,7 +77,7 @@ class DelphiPreprocessorTest {
 
   @Test
   void testSelfReferencingIncludeShouldNotThrowException() {
-    executeWithSearchPath("includeTest/SelfReferencingInclude.pas");
+    execute("includeTest/SelfReferencingInclude.pas");
   }
 
   @Test

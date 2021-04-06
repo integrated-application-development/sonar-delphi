@@ -16,7 +16,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.AssignmentStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionStatementNode;
-import org.sonar.plugins.delphi.antlr.ast.node.ForStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ForLoopVarReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodBodyNode;
@@ -58,9 +58,9 @@ public class MethodResultAssignedRule extends AbstractDelphiRule {
   }
 
   @Override
-  public RuleContext visit(ForStatementNode forStatement, RuleContext data) {
-    handleResultReference(forStatement.getVariable());
-    return super.visit(forStatement, data);
+  public RuleContext visit(ForLoopVarReferenceNode loopVar, RuleContext data) {
+    handleResultReference(loopVar.getNameReference());
+    return super.visit(loopVar, data);
   }
 
   @Override

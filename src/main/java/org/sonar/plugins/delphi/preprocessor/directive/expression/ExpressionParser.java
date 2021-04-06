@@ -177,15 +177,11 @@ public class ExpressionParser {
   }
 
   private Expression parseIdentifier() {
-    Token token;
     StringBuilder identifier = new StringBuilder();
-    while ((token = peekToken()) != END_OF_INPUT) {
-      if (token.getType() == TokenType.IDENTIFIER) {
-        identifier.append(getToken().getText());
-      }
+    while (peekToken().getType() == TokenType.IDENTIFIER) {
+      identifier.append(getToken().getText());
 
       Token peek = peekToken();
-
       if (peek.getType() != TokenType.DOT) {
         if (peek.getType() == TokenType.LPAREN) {
           String invocationName = identifier.toString();
@@ -195,7 +191,7 @@ public class ExpressionParser {
         break;
       }
 
-      getToken();
+      identifier.append(getToken().getText());
     }
     return Expressions.nameReference(identifier.toString());
   }

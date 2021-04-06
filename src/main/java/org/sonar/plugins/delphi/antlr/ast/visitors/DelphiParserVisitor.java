@@ -46,6 +46,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.CompoundStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ConstArraySubTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ConstDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ConstSectionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ConstStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ContainsClauseNode;
 import org.sonar.plugins.delphi.antlr.ast.node.CustomAttributeListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.CustomAttributeNode;
@@ -65,6 +66,9 @@ import org.sonar.plugins.delphi.antlr.ast.node.FileTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FinalizationSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FinallyBlockNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ForInStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ForLoopVarDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ForLoopVarNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ForLoopVarReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ForStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ForToStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterListNode;
@@ -148,6 +152,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.UnitImportNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UsesClauseNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarSectionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.VarStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VisibilityNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VisibilitySectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.WhileStatementNode;
@@ -254,6 +259,18 @@ public interface DelphiParserVisitor<T> {
 
   default T visit(FormalParameterNode node, T data) {
     return visit((DelphiNode) node, data);
+  }
+
+  default T visit(ForLoopVarNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(ForLoopVarDeclarationNode node, T data) {
+    return visit((ForLoopVarNode) node, data);
+  }
+
+  default T visit(ForLoopVarReferenceNode node, T data) {
+    return visit((ForLoopVarNode) node, data);
   }
 
   default T visit(GenericArgumentsNode node, T data) {
@@ -647,6 +664,10 @@ public interface DelphiParserVisitor<T> {
     return visit((StatementNode) node, data);
   }
 
+  default T visit(ConstStatementNode node, T data) {
+    return visit((StatementNode) node, data);
+  }
+
   default T visit(ExpressionStatementNode node, T data) {
     return visit((StatementNode) node, data);
   }
@@ -684,6 +705,10 @@ public interface DelphiParserVisitor<T> {
   }
 
   default T visit(TryStatementNode node, T data) {
+    return visit((StatementNode) node, data);
+  }
+
+  default T visit(VarStatementNode node, T data) {
     return visit((StatementNode) node, data);
   }
 

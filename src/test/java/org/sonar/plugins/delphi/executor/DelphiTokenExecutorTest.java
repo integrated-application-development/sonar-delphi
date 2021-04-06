@@ -193,7 +193,7 @@ class DelphiTokenExecutorTest {
       File srcFile = DelphiUtils.getResource(filePath);
 
       InputFile inputFile =
-          TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", ROOT_DIR, srcFile)
+          TestInputFileBuilder.create("moduleKey", ROOT_DIR, srcFile)
               .setModuleBaseDir(ROOT_DIR.toPath())
               .setContents(DelphiUtils.readFileContent(srcFile, UTF_8.name()))
               .setLanguage(DelphiLanguage.KEY)

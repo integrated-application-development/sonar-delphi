@@ -266,7 +266,14 @@ parameterType                : stringType
 arrayType                    :  'array' arrayIndices? 'of' arraySubType
                              -> ^('array'<ArrayTypeNode> 'of' arraySubType arrayIndices? )
                              ;
-arrayIndices                 : '['<ArrayIndicesNode>^ (varType (','!)?)+ ']'!
+lbrack                       : '['
+                             | '(.'
+                             ;
+rbrack                       : ']'
+                             | '.)'
+                             ;
+arrayIndices                 : lbrack (varType ','?)+ rbrack
+                             -> ^(TkArrayIndices<ArrayIndicesNode> lbrack (varType ','?)+ rbrack)
                              ;
 arraySubType                 : 'const'<ConstArraySubTypeNode>
                              | varType
@@ -277,10 +284,8 @@ fileType                     : 'file'<FileTypeNode>^ ('of' varType)?
                              ;
 pointerType                  : '^'<PointerTypeNode>^ varType
                              ;
-stringType                   : 'string'<StringTypeNode>^ ('['! expression ']'!)?
-                             | ANSISTRING<AnsiStringTypeNode>^ (codePageNumber)?
-                             ;
-codePageNumber               : '('! expression ')'!
+stringType                   : 'string'<StringTypeNode>^ (lbrack! expression rbrack!)?
+                             | ANSISTRING<AnsiStringTypeNode>^ ('('! expression ')'!)?
                              ;
 procedureType                : methodType
                              | procedureReference
@@ -350,7 +355,7 @@ classHelperType              : 'class'<ClassHelperTypeNode>^ 'helper' classParen
                              ;
 interfaceType                : ('interface'<InterfaceTypeNode>^ | 'dispinterface'<InterfaceTypeNode>^) classParent? (interfaceGuid? interfaceItems? 'end')?
                              ;
-interfaceGuid                : '[' expression ']' -> ^(TkGuid<InterfaceGuidNode> expression)
+interfaceGuid                : lbrack expression rbrack -> ^(TkGuid<InterfaceGuidNode> expression)
                              ;
 interfaceItems               : interfaceItem+ -> ^(TkVisibilitySection<VisibilitySectionNode> interfaceItem+)
                              ;
@@ -374,7 +379,7 @@ recordHelperType             : 'record'<RecordHelperTypeNode>^ 'helper' 'for' ty
 property                     : customAttribute? 'class'? 'property' nameDeclaration propertyArray? (':' varType)? (propertyDirective)* ';'
                              -> ^('property'<PropertyNode> nameDeclaration propertyArray? varType? 'class'? customAttribute? propertyDirective*)
                              ;
-propertyArray                : '['! formalParameterList ']'!
+propertyArray                : lbrack! formalParameterList rbrack!
                              ;
 propertyDirective            : ';' 'default'
                              | 'default' expression
@@ -533,8 +538,8 @@ customAttribute              : customAttributeList -> ^(TkCustomAttributeList<Cu
                              ;
 customAttributeList          : customAttributeDecl+
                              ;
-customAttributeDecl          : '[' (nameReference argumentList? ','?)+ ']'
-                             -> ^(TkCustomAttribute<CustomAttributeNode> '[' (nameReference argumentList?)+ ']')
+customAttributeDecl          : lbrack (nameReference argumentList? ','?)+ rbrack
+                             -> ^(TkCustomAttribute<CustomAttributeNode> lbrack (nameReference argumentList?)+ rbrack)
                              ;
 
 //----------------------------------------------------------------------------
@@ -576,7 +581,8 @@ particleItem                 : '.' extendedNameReference
                              | arrayAccessor
                              | '^'
                              ;
-arrayAccessor                : '['<ArrayAccessorNode>^ expressionList ']'!
+arrayAccessor                : lbrack expressionList rbrack
+                             -> ^(TkArrayAccessorNode<ArrayAccessorNode> expressionList)
                              ;
 argumentList                 : '('<ArgumentListNode>^ (argument ','?)* ')'
                              ;
@@ -607,7 +613,8 @@ escapedCharacter             : TkCharacterEscapeCode
                              ;
 nilLiteral                   : 'nil'<NilLiteralNode>
                              ;
-arrayConstructor             : '['<ArrayConstructorNode>^ (expressionOrRangeList)? ']'
+arrayConstructor             : lbrack expressionOrRangeList? rbrack
+                             -> ^(TkArrayConstructor<ArrayConstructorNode> lbrack expressionOrRangeList? rbrack)
                              ;
 addOperator                  : '+'<BinaryExpressionNode>
                              | '-'<BinaryExpressionNode>
@@ -653,6 +660,8 @@ arrayExpression              : '('<ArrayExpressionNode>^ (constExpression (','!)
 // Statements
 //----------------------------------------------------------------------------
 statement                    : ifStatement
+                             | varStatement
+                             | constStatement
                              | caseStatement
                              | repeatStatement
                              | whileStatement
@@ -669,6 +678,12 @@ statement                    : ifStatement
                              ;
 ifStatement                  : 'if'<IfStatementNode>^ expression 'then' statement? ('else' statement?)?
                              ;
+varStatement                 : 'var' customAttribute? nameDeclarationList (':' varType)? (':=' expressionOrAnonymousMethod)?
+                             -> ^('var'<VarStatementNode> nameDeclarationList (':' varType)? (':=' expressionOrAnonymousMethod)? customAttribute?)
+                             ;
+constStatement               : 'const' customAttribute? nameDeclaration (':' varType)? '=' expressionOrAnonymousMethod
+                             -> ^('const'<ConstStatementNode> nameDeclaration (':' varType)? '=' expressionOrAnonymousMethod customAttribute?)
+                             ;
 caseStatement                : 'case'<CaseStatementNode>^ expression 'of' caseItem* elseBlock? 'end'
                              ;
 elseBlock                    : 'else'<ElseBlockNode>^ statementList
@@ -679,9 +694,12 @@ repeatStatement              : 'repeat'<RepeatStatementNode>^ statementList 'unt
                              ;
 whileStatement               : 'while'<WhileStatementNode>^ expression 'do' statement?
                              ;
-forStatement                 : 'for'<ForToStatementNode>^ simpleNameReference ':=' expression 'to' expression 'do' statement?
-                             | 'for'<ForToStatementNode>^ simpleNameReference ':=' expression 'downto' expression 'do' statement?
-                             | 'for'<ForInStatementNode>^ simpleNameReference 'in' expression 'do' statement?
+forStatement                 : 'for'<ForToStatementNode>^ forVar ':=' expression 'to' expression 'do' statement?
+                             | 'for'<ForToStatementNode>^ forVar ':=' expression 'downto' expression 'do' statement?
+                             | 'for'<ForInStatementNode>^ forVar 'in' expression 'do' statement?
+                             ;
+forVar                       : 'var' nameDeclaration (':' varType)? -> ^(TkForLoopVar<ForLoopVarDeclarationNode> nameDeclaration varType?)
+                             | simpleNameReference -> ^(TkForLoopVar<ForLoopVarReferenceNode> simpleNameReference)
                              ;
 withStatement                : 'with'<WithStatementNode>^ expressionList 'do' statement?
                              ;
@@ -1008,12 +1026,12 @@ LT                : '<'   ;
 LE                : '<='  ;
 GE                : '>='  ;
 GT                : '>'   ;
-LPAREN            : '('   ;
-RPAREN            : ')'   ;
-LBRACK            : '['   ; // line_tab[line]
-LBRACK2           : '(.'  ; // line_tab(.line.)
+LBRACK            : '['   ;
+LBRACK2           : '(.'  ;
 RBRACK            : ']'   ;
 RBRACK2           : '.)'  ;
+LPAREN            : '('   ;
+RPAREN            : ')'   ;
 POINTER           : '^'   ;
 AT2               : '@'   ;
 DOT               : '.'   ;
@@ -1146,6 +1164,14 @@ TkCompilerDirective     : 'COMPILER_DIRECTIVE'
 TkRealNum               : 'REAL_NUMBER'
                         ;
 TkTypeParameter         : 'TYPE_PARAMETER'
+                        ;
+TkForLoopVar            : 'FOR_LOOP_VAR'
+                        ;
+TkArrayAccessorNode     : 'ARRAY_ACCESSOR'
+                        ;
+TkArrayConstructor      : 'ARRAY_CONSTRUCTOR'
+                        ;
+TkArrayIndices          : 'ARRAY_INDICES'
                         ;
 
 //****************************

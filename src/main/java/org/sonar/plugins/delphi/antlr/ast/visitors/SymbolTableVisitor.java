@@ -18,6 +18,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.CaseStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ClassReferenceTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.CompoundStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ConstDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ConstStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.EnumElementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.EnumTypeNode;
@@ -26,7 +27,11 @@ import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FieldDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FileHeaderNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FinalizationSectionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ForInStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ForLoopVarDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ForLoopVarReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ForStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ForToStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.GenericDefinitionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.GenericDefinitionNode.TypeParameter;
 import org.sonar.plugins.delphi.antlr.ast.node.ImplementationSectionNode;
@@ -55,6 +60,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.TypeSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnitDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnitImportNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.VarStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.WithStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.visitors.SymbolTableVisitor.Data;
 import org.sonar.plugins.delphi.preprocessor.CompilerSwitchRegistry;
@@ -473,10 +479,32 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   }
 
   @Override
-  public Data visit(ForStatementNode node, Data data) {
+  public Data visit(ForToStatementNode node, Data data) {
     data.addScope(new LocalScope(), node);
-    data.nameResolutionHelper.resolve(node.getVariable());
-    return visitScope(node, data);
+
+    // Visit the initializer expression first - we may need the expression type for type inference.
+    node.getInitializerExpression().accept(this, data);
+    node.getTargetExpression().accept(this, data);
+    node.getVariable().accept(this, data);
+
+    return visitScope(node.getStatement(), data);
+  }
+
+  @Override
+  public Data visit(ForInStatementNode node, Data data) {
+    data.addScope(new LocalScope(), node);
+
+    // Visit the enumerable expression first - we may need the expression type for type inference.
+    node.getEnumerable().accept(this, data);
+    node.getVariable().accept(this, data);
+
+    return visitScope(node.getStatement(), data);
+  }
+
+  @Override
+  public Data visit(ForLoopVarReferenceNode node, Data data) {
+    data.nameResolutionHelper.resolve(node.getNameReference());
+    return DelphiParserVisitor.super.visit(node, data);
   }
 
   @Override
@@ -526,6 +554,16 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   }
 
   @Override
+  public Data visit(ConstStatementNode node, Data data) {
+    return handleVarDeclaration(node, node.getTypeNode(), data);
+  }
+
+  @Override
+  public Data visit(VarStatementNode node, Data data) {
+    return handleVarDeclaration(node, node.getTypeNode(), data);
+  }
+
+  @Override
   public Data visit(VarDeclarationNode node, Data data) {
     return handleVarDeclaration(node, node.getTypeNode(), data);
   }
@@ -540,35 +578,29 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     return handleVarDeclaration(node, node.getTypeNode(), data);
   }
 
+  @Override
+  public Data visit(ForLoopVarDeclarationNode node, Data data) {
+    return handleVarDeclaration(node, node.getTypeNode(), data);
+  }
+
+  @Override
+  public Data visit(ConstDeclarationNode node, Data data) {
+    return handleVarDeclaration(node, node.getTypeNode(), data);
+  }
+
   private Data handleVarDeclaration(DelphiNode declarationNode, TypeNode typeNode, Data data) {
     if (typeNode instanceof RecordTypeNode || typeNode instanceof EnumTypeNode) {
       createAnonymousTypeScope(typeNode, data);
-    } else {
+    } else if (typeNode != null) {
       data.nameResolutionHelper.resolve(typeNode);
     }
 
-    for (int i = 0; i < declarationNode.jjtGetNumChildren(); ++i) {
+    for (int i = declarationNode.jjtGetNumChildren() - 1; i >= 0; --i) {
       DelphiNode child = (DelphiNode) declarationNode.jjtGetChild(i);
       if (!(child instanceof TypeNode)) {
         child.accept(this, data);
       }
     }
-
-    return data;
-  }
-
-  @Override
-  public Data visit(ConstDeclarationNode node, Data data) {
-    TypeNode typeNode = node.getTypeNode();
-    if (typeNode != null) {
-      data.nameResolutionHelper.resolve(node.getTypeNode());
-    }
-
-    // Visit the expression before we visit the name declaration node and create a name declaration
-    // We need the type before we can create the name declaration,
-    // and we have to infer the type from the expression for true constants.
-    node.getExpression().accept(this, data);
-    node.getNameDeclarationNode().accept(this, data);
 
     return data;
   }
@@ -587,6 +619,9 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       case CONST:
       case EXCEPT_ITEM:
       case FIELD:
+      case INLINE_CONST:
+      case INLINE_VAR:
+      case LOOP_VAR:
       case PARAMETER:
       case RECORD_VARIANT_TAG:
       case VAR:

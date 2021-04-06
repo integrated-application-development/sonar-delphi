@@ -10,8 +10,10 @@ public final class SimpleNameDeclarationNode extends NameDeclarationNode {
   private static final Map<Class<?>, DeclarationKind> PARENT_NODE_KIND_MAP =
       Map.of(
           ConstDeclarationNode.class, DeclarationKind.CONST,
+          ConstStatementNode.class, DeclarationKind.INLINE_CONST,
           EnumElementNode.class, DeclarationKind.ENUM_ELEMENT,
           ExceptItemNode.class, DeclarationKind.EXCEPT_ITEM,
+          ForLoopVarDeclarationNode.class, DeclarationKind.LOOP_VAR,
           MethodNameNode.class, DeclarationKind.METHOD,
           PropertyNode.class, DeclarationKind.PROPERTY,
           RecordVariantTagNode.class, DeclarationKind.RECORD_VARIANT_TAG,
@@ -22,7 +24,8 @@ public final class SimpleNameDeclarationNode extends NameDeclarationNode {
       Map.of(
           VarDeclarationNode.class, DeclarationKind.VAR,
           FieldDeclarationNode.class, DeclarationKind.FIELD,
-          FormalParameterNode.class, DeclarationKind.PARAMETER);
+          FormalParameterNode.class, DeclarationKind.PARAMETER,
+          VarStatementNode.class, DeclarationKind.INLINE_VAR);
 
   private String image;
 

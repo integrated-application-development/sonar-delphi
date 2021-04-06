@@ -8,6 +8,7 @@ import static org.sonar.plugins.delphi.preprocessor.directive.expression.Express
 import static org.sonar.plugins.delphi.preprocessor.directive.expression.ExpressionValues.createString;
 import static org.sonar.plugins.delphi.preprocessor.directive.expression.ExpressionValues.unknownValue;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.preprocessor.DelphiPreprocessor;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Expression;
@@ -139,7 +141,7 @@ public class Expressions {
     private static ExpressionValue createValue(TokenType type, String text) {
       switch (type) {
         case INTEGER:
-          return createInteger(Integer.parseInt(text));
+          return createInteger(new BigInteger(text));
         case DECIMAL:
           return createDecimal(Double.parseDouble(text));
         case STRING:
@@ -229,7 +231,7 @@ public class Expressions {
             type = typeFactory.getIntrinsic(IntrinsicType.STRING);
             break;
           case INTEGER:
-            type = typeFactory.integerFromLiteralValue(value.asInteger());
+            type = typeFactory.integerFromLiteralValue(value.asBigInteger());
             break;
           case DECIMAL:
             type = typeFactory.getIntrinsic(IntrinsicType.EXTENDED);
@@ -252,15 +254,20 @@ public class Expressions {
       return type.size();
     }
 
+    private boolean isIntrinsic(String intrinsic, int minArguments) {
+      return StringUtils.removeStartIgnoreCase(name, "System.").equalsIgnoreCase(intrinsic)
+          && arguments.size() >= minArguments;
+    }
+
     @Override
     public ExpressionValue evaluate(DelphiPreprocessor preprocessor) {
-      if (name.equalsIgnoreCase("Defined") && !arguments.isEmpty()) {
+      if (isIntrinsic("Defined", 1)) {
         Expression argument = arguments.get(0);
         if (argument instanceof NameReferenceExpression) {
           boolean isDefined = preprocessor.isDefined(((NameReferenceExpression) argument).name);
           return createBoolean(isDefined);
         }
-      } else if (name.equalsIgnoreCase("SizeOf") && !arguments.isEmpty()) {
+      } else if (isIntrinsic("SizeOf", 1)) {
         int size = sizeOf(preprocessor, arguments.get(0));
         return createInteger(size);
       }

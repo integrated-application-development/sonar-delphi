@@ -12,11 +12,6 @@ public abstract class AbstractParameter implements Parameter {
   }
 
   @Override
-  public boolean hasDefaultValue() {
-    return false;
-  }
-
-  @Override
   public boolean isVar() {
     return false;
   }

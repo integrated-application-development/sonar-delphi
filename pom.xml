@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>sonar-delphi-plugin</artifactId>
-  <version>3.7</version>
+  <version>3.8</version>
   <groupId>org.delphi.plugin</groupId>
   <name>Sonar Delphi Plugin</name>
   <description>Code analyzer for Delphi</description>
@@ -140,7 +140,7 @@
     <commons-io.version>2.8.0</commons-io.version>
     <junit.version>5.7.1</junit.version>
     <assertj.version>3.19.0</assertj.version>
-    <mockito.version>3.7.7</mockito.version>
+    <mockito.version>3.9.0</mockito.version>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <cyclonedx-plugin.version>2.1.1</cyclonedx-plugin.version>
     <dependency-plugin.version>3.1.2</dependency-plugin.version>

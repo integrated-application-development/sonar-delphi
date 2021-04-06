@@ -215,4 +215,14 @@ class DelphiProjectHelperTest {
     assertThat(delphiProjectHelper.getCompilerVersion())
         .isEqualTo(DelphiPlugin.COMPILER_VERSION_DEFAULT);
   }
+
+  @Test
+  void testInvalidCompilerVersion() {
+    when(settings.get(DelphiPlugin.COMPILER_VERSION_KEY)).thenReturn(Optional.of("INVALID"));
+
+    DelphiProjectHelper delphiProjectHelper = new DelphiProjectHelper(settings, fs);
+
+    assertThat(delphiProjectHelper.getCompilerVersion())
+        .isEqualTo(DelphiPlugin.COMPILER_VERSION_DEFAULT);
+  }
 }

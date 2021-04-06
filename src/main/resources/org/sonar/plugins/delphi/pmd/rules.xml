@@ -8,10 +8,9 @@
     name="NoFunctionReturnTypeRule">
     <priority>3</priority>
     <description>
-      Delphi allows Function return types to be omitted in the implementation section. We have no
-      desire to use this "feature".
+      Delphi allows function return types to be omitted in the implementation section.
       &lt;br&gt;
-      Function return types should always be specified.
+      For the sake of code readability, function return types should always be specified.
     </description>
     <properties>
       <property name="baseEffort" value="1min"/>
@@ -75,6 +74,7 @@
   // Do nothing
 <b>end;</b>
 
+
 <b>try</b>
   ThrowException;
 <b>except</b>	// Noncompliant
@@ -135,7 +135,7 @@
       Any parameter with an &lt;code&gt;out&lt;/code&gt; specifier must also be assigned a value.
       &lt;br&gt;
       For more information, see the Embarcadero wiki page for
-      &lt;a href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Parameters_(Delphi)#Out_Parameters'&gt;
+      &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Parameters_(Delphi)#Out_Parameters'&gt;
       Out Parameters
       &lt;/a&gt;
     </description>
@@ -181,7 +181,7 @@
       &lt;br&gt;
       &lt;br&gt;
       For more information, see the Embarcadero wiki page for
-      &lt;a href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Procedures_and_Functions_(Delphi)#Function_Declarations'&gt;
+      &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Procedures_and_Functions_(Delphi)#Function_Declarations'&gt;
       Function Declarations
       &lt;/a&gt;
     </description>
@@ -1106,7 +1106,7 @@ FunctionWithoutArguments;	// Compliant
       &lt;/b&gt;
       &lt;br&gt;
       - &lt;a
-      href='http://docwiki.embarcadero.com/Libraries/XE3/en/System.Classes.TStringList.Duplicates'&gt;
+      href='http://docwiki.embarcadero.com/Libraries/en/System.Classes.TStringList.Duplicates'&gt;
       API Documentation
       &lt;/a&gt;
     </description>
@@ -1207,7 +1207,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       &lt;br&gt;
       For more information, see the Embarcadero wiki page for
       &lt;a
-      href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Classes_and_Objects_(Delphi)#TObject_and_TClass'&gt;
+      href='http://docwiki.embarcadero.com/RADStudio/en/Classes_and_Objects_(Delphi)#TObject_and_TClass'&gt;
       TObject and TClass
       &lt;/a&gt;
     </description>
@@ -1302,7 +1302,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       &lt;br&gt;
       &lt;br&gt;
       For more information, see the Embarcadero wiki page for
-      &lt;a href='http://docwiki.embarcadero.com/Libraries/Rio/en/System.Assigned'&gt;
+      &lt;a href='http://docwiki.embarcadero.com/Libraries/en/System.Assigned'&gt;
       System.Assigned
       &lt;/a&gt;
     </description>
@@ -1515,6 +1515,171 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.InlineVarExplicitTypeRule"
+    message="Inline var declarations should not use type inference"
+    name="InlineVarExplicitTypeRule">
+    <priority>3</priority>
+    <description>
+      Inline var declarations can omit the type and allow the compiler to infer it.
+      &lt;br&gt;
+      &lt;br&gt;
+      There are a few downsides to using this feature:
+      &lt;br&gt;
+      - Lack of type information can make code harder to follow and understand at a glance.
+      &lt;br&gt;
+      - Type expansion that occurs during type inference can lead to unexpected inferred types.
+      &lt;br&gt;
+      - Wrapper types relying on implicit type conversions will not have those conversions invoked.
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Inline_Variable_Declaration#Type_Inference_for_Inlined_Variables'&gt;
+      Type Inference for Inlined Variables
+      &lt;/a&gt;
+    </description>
+    <example>
+      <![CDATA[
+<b>procedure</b> Example;
+<b>begin</b>
+  <b>var</b> Foo := 123; // Noncompliant
+  <b>var</b> Bar: Integer := 123; // Compliant
+<b>end</b>;
+        ]]>
+    </example>
+    <properties>
+      <property name="baseEffort" value="1min"/>
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.InlineConstExplicitTypeRule"
+    message="Inline const declarations should not use type inference"
+    name="InlineConstExplicitTypeRule">
+    <priority>3</priority>
+    <description>
+      Inline const declarations can omit the type and allow the compiler to infer it.
+      &lt;br&gt;
+      &lt;br&gt;
+      The downside is that untyped inline const declarations use different type inference rules from
+      traditional untyped const declarations. They use the same rules as inline var declarations,
+      with the same caveats and pitfalls.
+      &lt;br&gt;
+      As a consequence, it's possible for a traditional and inline const declaration to have
+      identical values, but different inferred types.
+      &lt;br&gt;
+      &lt;br&gt;
+      This can cause confusion and negatively impact code readability.
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Inline_Variable_Declaration#Type_Inference_for_Inlined_Variables'&gt;
+      Type Inference for Inlined Variables
+      &lt;/a&gt;
+    </description>
+    <example>
+      <![CDATA[
+<b>procedure</b> Example;
+<b>const</b>
+  <i>{
+    Foo: ShortInt
+    Bar: set of Byte
+  }</i>
+  Foo = 123;
+  Bar = [1, 2, 3];
+<b>type</b>
+  TByteSet = <b>set</b> of Byte;
+<b>begin</b>
+  <i>{
+    Glomp: Integer
+    Flarp: array of Integer
+  }</i>
+  <b>const</b> Glomp = 123; // Noncompliant
+  <b>const</b> Flarp = [1, 2, 3]; // Noncompliant
+
+  <b>const</b> Beep: ShortInt = 123; // Compliant
+  <b>const</b> Boop: TByteSet = [1, 2, 3]; // Compliant
+<b>end</b>;
+        ]]>
+    </example>
+    <properties>
+      <property name="baseEffort" value="1min"/>
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.InlineLoopVarExplicitTypeRule"
+    message="Inline loop var declarations should not use type inference"
+    name="InlineLoopVarExplicitTypeRule">
+    <priority>3</priority>
+    <description>
+      Inline loop var declarations can omit the type and allow the compiler to infer it.
+      &lt;br&gt;
+      &lt;br&gt;
+      There are a few downsides to using this feature:
+      &lt;br&gt;
+      - Lack of type information can make code harder to follow and understand at a glance.
+      &lt;br&gt;
+      - Type expansion that occurs during type inference can lead to unexpected inferred types.
+      &lt;br&gt;
+      - Wrapper types relying on implicit type conversions will not have those conversions invoked.
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Inline_Variable_Declaration#Type_Inference_for_Inlined_Variables'&gt;
+      Type Inference for Inlined Variables
+      &lt;/a&gt;
+    </description>
+    <example>
+      <![CDATA[
+<b>procedure</b> Example;
+<b>begin</b>
+  <b>for</b> <b>var</b> I := 1 to 100 do <b>Continue</b>; // Noncompliant
+  <b>for</b> <b>var</b> I: Integer := 1 to 100 do <b>Continue</b>; // Compliant
+<b>end</b>;
+        ]]>
+    </example>
+    <properties>
+      <property name="baseEffort" value="1min"/>
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.InlineDeclarationCapturedByAnonymousMethodRule"
+    message="Inline variables should not be captured by anonymous methods"
+    name="InlineDeclarationCapturedByAnonymousMethodRule">
+    <priority>2</priority>
+    <description>
+      Up until Delphi 10.4.2, there are compiler bugs related to inline variables captured by
+      anonymous methods.
+      &lt;br&gt;
+      &lt;br&gt;
+      - Inline variables will not have their lifetimes extended until
+      the anonymous method goes out of scope. (Fixed in 10.4.1)
+      &lt;br&gt;
+      - Inline variables with managed types will not have their reference count updated when the
+      anonymous method goes out of scope, causing memory leaks. (Fixed in 10.4.2)
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='https://quality.embarcadero.com/browse/RSP-26666'&gt;
+      RSP-26666
+      &lt;/a&gt;
+      &lt;br&gt;
+      - &lt;a href='https://quality.embarcadero.com/browse/RSP-29564'&gt;
+      RSP-29564
+      &lt;/a&gt;
+      &lt;br&gt;
+      - &lt;a href='https://quality.embarcadero.com/browse/RSP-31864'&gt;
+      RSP-31864
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+      <property name="type" value="BUG"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="Empty type sections should be removed"
     name="EmptyTypeSectionRule">
@@ -1582,7 +1747,7 @@ Result := 123;; // Noncompliant
       &lt;br&gt;
       For more information on Object types, see the Embarcadero wiki page for
       &lt;a
-      href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Classes_and_Objects_(Delphi)#Object_Types'&gt;
+      href='http://docwiki.embarcadero.com/RADStudio/en/Classes_and_Objects_(Delphi)#Object_Types'&gt;
       Classes and Objects
       &lt;/a&gt;
     </description>

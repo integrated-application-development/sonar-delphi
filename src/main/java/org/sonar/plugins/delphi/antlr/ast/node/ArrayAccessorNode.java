@@ -14,6 +14,10 @@ public final class ArrayAccessorNode extends DelphiNode {
     super(token);
   }
 
+  public ArrayAccessorNode(int tokenType) {
+    super(tokenType);
+  }
+
   @Override
   public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
     return visitor.visit(this, data);

@@ -190,6 +190,13 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testArrayConstantExpressions() {
+    execute("ArrayConstantExpressions.pas");
+    verifyUsages(11, 10, reference(23, 2), reference(24, 2));
+    verifyUsages(16, 10, reference(25, 2), reference(26, 2), reference(27, 2), reference(30, 2));
+  }
+
+  @Test
   void testArrayConstructor() {
     execute("ArrayConstructor.pas");
     verifyUsages(10, 10, reference(17, 2), reference(27, 2));
@@ -388,6 +395,12 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testConstructorInvokedOnInstanceTypeResolution() {
+    execute("typeResolution/ConstructorInvokedOnInstance.pas");
+    verifyUsages(12, 10, reference(20, 2), reference(23, 2), reference(27, 2));
+  }
+
+  @Test
   void testEnumsTypeResolution() {
     execute("typeResolution/Enums.pas");
     verifyUsages(18, 9, reference(28, 2), reference(29, 2), reference(30, 2));
@@ -403,6 +416,16 @@ class DelphiSymbolTableExecutorTest {
   void testSubRangeHostTypeResolution() {
     execute("typeResolution/SubRangeHostType.pas");
     verifyUsages(12, 10, reference(19, 2), reference(20, 2), reference(21, 2));
+  }
+
+  @Test
+  void testTypeInference() {
+    execute("typeResolution/TypeInference.pas");
+    verifyUsages(9, 10, reference(57, 2), reference(64, 2), reference(71, 2));
+    verifyUsages(14, 10, reference(65, 2), reference(72, 2));
+    verifyUsages(19, 10, reference(59, 2), reference(60, 2), reference(66, 2), reference(67, 2));
+    verifyUsages(24, 10, reference(58, 2), reference(62, 2), reference(69, 2));
+    verifyUsages(29, 10, reference(61, 2), reference(63, 2), reference(68, 2), reference(70, 2));
   }
 
   @Test

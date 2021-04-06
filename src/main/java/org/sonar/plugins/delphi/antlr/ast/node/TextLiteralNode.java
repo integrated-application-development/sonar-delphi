@@ -50,7 +50,7 @@ public final class TextLiteralNode extends LiteralNode {
             String escapedChar = child.getImage();
             boolean isHex = escapedChar.startsWith("#$");
             escapedChar = escapedChar.substring(isHex ? 2 : 1);
-            imageBuilder.append((char) parseImage(escapedChar, isHex ? 16 : 10));
+            imageBuilder.append((char) Integer.parseInt(escapedChar, isHex ? 16 : 10));
             break;
 
           case DelphiLexer.TkEscapedCharacter:
