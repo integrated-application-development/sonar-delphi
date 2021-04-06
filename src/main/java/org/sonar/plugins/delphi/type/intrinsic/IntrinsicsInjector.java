@@ -152,7 +152,7 @@ public final class IntrinsicsInjector {
     method("Eoln").parameters(typeFactory.untypedFile()).required(0).returns(type(BOOLEAN));
     method("Erase").parameters(typeFactory.untypedFile());
     method("Exclude").parameters(ANY_SET, ANY_ORDINAL);
-    method("Exit").parameters(typeFactory.untypedType());
+    method("Exit").parameters(typeFactory.untypedType()).required(0);
     method("Fail");
     method("FilePos").parameters(typeFactory.untypedFile()).returns(type(INTEGER));
     method("FileSize").parameters(typeFactory.untypedFile()).returns(type(INTEGER));
