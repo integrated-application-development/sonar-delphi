@@ -72,7 +72,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
       }
 
       inputFile =
-          TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, file)
+          TestInputFileBuilder.create("moduleKey", baseDir, file)
               .setModuleBaseDir(baseDir.toPath())
               .setContents(DelphiUtils.readFileContent(file, UTF_8.name()))
               .setLanguage(DelphiLanguage.KEY)
@@ -160,7 +160,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
       try {
         File baseDir = resource.getParentFile();
         inputFile =
-            TestInputFileBuilder.create("ROOT_KEY_CHANGE_AT_SONARAPI_5", baseDir, resource)
+            TestInputFileBuilder.create("moduleKey", baseDir, resource)
                 .setModuleBaseDir(baseDir.toPath())
                 .setContents(DelphiUtils.readFileContent(resource, UTF_8.name()))
                 .setLanguage(DelphiLanguage.KEY)
