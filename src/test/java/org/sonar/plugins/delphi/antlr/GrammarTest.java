@@ -206,6 +206,11 @@ class GrammarTest {
   }
 
   @Test
+  void testUnusualBrackets() {
+    parseFile("UnusualBrackets.pas");
+  }
+
+  @Test
   void testUndefinedInaccessibleNestedIfDef() {
     fileConfig =
         DelphiFile.createConfig(

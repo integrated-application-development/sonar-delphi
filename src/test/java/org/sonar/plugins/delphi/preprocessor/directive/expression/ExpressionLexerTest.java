@@ -4,50 +4,91 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
-import org.junit.jupiter.api.Test;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.sonar.plugins.delphi.preprocessor.directive.expression.ExpressionLexer.ExpressionLexerError;
 import org.sonar.plugins.delphi.preprocessor.directive.expression.Token.TokenType;
 
 class ExpressionLexerTest {
-  private static final ExpressionLexer LEXER = new ExpressionLexer();
-
-  @Test
-  void testNumbers() {
-    assertThat(lexToken("12345").getType()).isEqualTo(TokenType.INTEGER);
-    assertThat(lexToken("123.45").getType()).isEqualTo(TokenType.DECIMAL);
-    assertThat(lexToken("     123.45      ").getType()).isEqualTo(TokenType.DECIMAL);
-    assertThatThrownBy(() -> lexToken("123.45.67")).isInstanceOf(ExpressionLexerError.class);
+  static class NumberTokensArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return Stream.of(
+          Arguments.of("12345", TokenType.INTEGER),
+          Arguments.of("123.45", TokenType.DECIMAL),
+          Arguments.of("     123.45      ", TokenType.DECIMAL));
+    }
   }
 
-  @Test
-  void testIdentifier() {
-    assertThat(lexToken("MyIdentifier").getType()).isEqualTo(TokenType.IDENTIFIER);
-    assertThat(lexToken("_MyIdentifier").getType()).isEqualTo(TokenType.IDENTIFIER);
-    assertThat(lexToken("True").getType()).isEqualTo(TokenType.IDENTIFIER);
-    assertThat(lexToken("False").getType()).isEqualTo(TokenType.IDENTIFIER);
+  static class IdentifierTokensArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return Stream.of(
+          Arguments.of("MyIdentifier", TokenType.IDENTIFIER),
+          Arguments.of("_MyIdentifier", TokenType.IDENTIFIER),
+          Arguments.of("True", TokenType.IDENTIFIER),
+          Arguments.of("False", TokenType.IDENTIFIER));
+    }
   }
 
-  @Test
-  void testOperator() {
-    assertThat(lexToken("<>").getType()).isEqualTo(TokenType.NOT_EQUALS);
-    assertThat(lexToken("<=").getType()).isEqualTo(TokenType.LESS_THAN_EQUAL);
-    assertThat(lexToken(">=").getType()).isEqualTo(TokenType.GREATER_THAN_EQUAL);
-    assertThat(lexToken("=").getType()).isEqualTo(TokenType.EQUALS);
+  static class SyntaxTokensArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return Stream.of(
+          Arguments.of(".", TokenType.DOT),
+          Arguments.of(",", TokenType.COMMA),
+          Arguments.of("(", TokenType.LPAREN),
+          Arguments.of(")", TokenType.RPAREN),
+          Arguments.of("[", TokenType.LBRACKET),
+          Arguments.of("]", TokenType.RBRACKET),
+          Arguments.of("(.", TokenType.LBRACKET),
+          Arguments.of(".)", TokenType.RBRACKET));
+    }
   }
 
-  @Test
-  void testString() {
-    assertThat(lexToken("'My string'").getType()).isEqualTo(TokenType.STRING);
-    assertThat(lexToken("'Escaped '' single-quotes'").getType()).isEqualTo(TokenType.STRING);
+  static class OperatorTokensArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return Stream.of(
+          Arguments.of("<>", TokenType.NOT_EQUALS),
+          Arguments.of("<=", TokenType.LESS_THAN_EQUAL),
+          Arguments.of(">=", TokenType.GREATER_THAN_EQUAL),
+          Arguments.of("=", TokenType.EQUALS));
+    }
   }
 
-  @Test
-  void testInvalidToken() {
-    assertThatThrownBy(() -> lexToken("#")).isInstanceOf(ExpressionLexerError.class);
+  static class StringTokensArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return Stream.of(
+          Arguments.of("'My string'", TokenType.STRING),
+          Arguments.of("'Escaped '' single-quotes'", TokenType.STRING));
+    }
+  }
+
+  @ParameterizedTest(name = "\"{0}\" should be token type: {1}")
+  @ArgumentsSource(NumberTokensArgumentsProvider.class)
+  @ArgumentsSource(IdentifierTokensArgumentsProvider.class)
+  @ArgumentsSource(SyntaxTokensArgumentsProvider.class)
+  @ArgumentsSource(OperatorTokensArgumentsProvider.class)
+  @ArgumentsSource(StringTokensArgumentsProvider.class)
+  void testTokenTypes(String data, TokenType type) {
+    assertThat(lexToken(data).getType()).isEqualTo(type);
+  }
+
+  @ParameterizedTest(name = "\"{0}\" should throw a lexer error")
+  @ValueSource(strings = {"123.45.67", "#"})
+  void testInvalidTokens(String data) {
+    assertThatThrownBy(() -> lexToken(data)).isInstanceOf(ExpressionLexerError.class);
   }
 
   private static Token lexToken(String data) {
-    List<Token> tokens = LEXER.lex(data);
+    List<Token> tokens = new ExpressionLexer().lex(data);
     assertThat(tokens).hasSize(1);
     return tokens.get(0);
   }

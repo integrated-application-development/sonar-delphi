@@ -15,6 +15,10 @@ public final class ArrayConstructorNode extends ExpressionNode {
     super(token);
   }
 
+  public ArrayConstructorNode(int tokenType) {
+    super(tokenType);
+  }
+
   @Override
   public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
     return visitor.visit(this, data);

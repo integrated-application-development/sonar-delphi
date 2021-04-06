@@ -149,7 +149,15 @@ public class ExpressionLexer {
 
   private Token readSyntaxToken() {
     char character = getChar();
-    return new Token(SYNTAX_CHARACTERS.get(character), Character.toString(character));
+    String characterString = Character.toString(character);
+
+    if (character == '(' && peekChar() == '.') {
+      return new Token(TokenType.LBRACKET, characterString + getChar());
+    } else if (character == '.' && peekChar() == ')') {
+      return new Token(TokenType.RBRACKET, characterString + getChar());
+    } else {
+      return new Token(SYNTAX_CHARACTERS.get(character), Character.toString(character));
+    }
   }
 
   private Token readIdentifier() {
