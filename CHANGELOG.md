@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - These are now interpreted correctly by the lexer as square brackets.
   - See: [The Future of the Delphi Compiler](https://web.archive.org/web/20210330140547/https://edn.embarcadero.com/article/39174)
 
+### Changed
+
+- Update various rule descriptions.
+
 ### Fixed
 
 - Treat the `Exit` intrinsic's parameter as optional.

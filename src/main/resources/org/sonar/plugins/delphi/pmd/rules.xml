@@ -8,10 +8,9 @@
     name="NoFunctionReturnTypeRule">
     <priority>3</priority>
     <description>
-      Delphi allows Function return types to be omitted in the implementation section. We have no
-      desire to use this "feature".
+      Delphi allows function return types to be omitted in the implementation section.
       &lt;br&gt;
-      Function return types should always be specified.
+      For the sake of code readability, function return types should always be specified.
     </description>
     <properties>
       <property name="baseEffort" value="1min"/>
@@ -135,7 +134,7 @@
       Any parameter with an &lt;code&gt;out&lt;/code&gt; specifier must also be assigned a value.
       &lt;br&gt;
       For more information, see the Embarcadero wiki page for
-      &lt;a href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Parameters_(Delphi)#Out_Parameters'&gt;
+      &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Parameters_(Delphi)#Out_Parameters'&gt;
       Out Parameters
       &lt;/a&gt;
     </description>
@@ -181,7 +180,7 @@
       &lt;br&gt;
       &lt;br&gt;
       For more information, see the Embarcadero wiki page for
-      &lt;a href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Procedures_and_Functions_(Delphi)#Function_Declarations'&gt;
+      &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Procedures_and_Functions_(Delphi)#Function_Declarations'&gt;
       Function Declarations
       &lt;/a&gt;
     </description>
@@ -1093,7 +1092,7 @@ FunctionWithoutArguments;	// Compliant
       &lt;/b&gt;
       &lt;br&gt;
       - &lt;a
-      href='http://docwiki.embarcadero.com/Libraries/XE3/en/System.Classes.TStringList.Duplicates'&gt;
+      href='http://docwiki.embarcadero.com/Libraries/en/System.Classes.TStringList.Duplicates'&gt;
       API Documentation
       &lt;/a&gt;
     </description>
@@ -1194,7 +1193,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       &lt;br&gt;
       For more information, see the Embarcadero wiki page for
       &lt;a
-      href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Classes_and_Objects_(Delphi)#TObject_and_TClass'&gt;
+      href='http://docwiki.embarcadero.com/RADStudio/en/Classes_and_Objects_(Delphi)#TObject_and_TClass'&gt;
       TObject and TClass
       &lt;/a&gt;
     </description>
@@ -1289,7 +1288,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       &lt;br&gt;
       &lt;br&gt;
       For more information, see the Embarcadero wiki page for
-      &lt;a href='http://docwiki.embarcadero.com/Libraries/Rio/en/System.Assigned'&gt;
+      &lt;a href='http://docwiki.embarcadero.com/Libraries/en/System.Assigned'&gt;
       System.Assigned
       &lt;/a&gt;
     </description>
@@ -1569,7 +1568,7 @@ Result := 123;; // Noncompliant
       &lt;br&gt;
       For more information on Object types, see the Embarcadero wiki page for
       &lt;a
-      href='http://docwiki.embarcadero.com/RADStudio/Rio/en/Classes_and_Objects_(Delphi)#Object_Types'&gt;
+      href='http://docwiki.embarcadero.com/RADStudio/en/Classes_and_Objects_(Delphi)#Object_Types'&gt;
       Classes and Objects
       &lt;/a&gt;
     </description>
