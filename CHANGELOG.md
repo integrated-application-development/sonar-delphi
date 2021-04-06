@@ -20,7 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `InlineVarExplicitTypeRule` analysis rule, which flags inline `var` declarations that don't
   specify a type.
 - `InlineConstExplicitTypeRule` analysis rule, which flags inline `const` declarations that don't
-   specify a type.
+  specify a type.
+- `InlineLoopVarExplicitTypeRule` analysis rule, which flags inline loop `var` declarations that
+  don't specify a type.
 
 ### Changed
 

@@ -1593,6 +1593,43 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.InlineLoopVarExplicitTypeRule"
+    message="Inline loop var declarations should not use type inference"
+    name="InlineLoopVarExplicitTypeRule">
+    <priority>3</priority>
+    <description>
+      Inline loop var declarations can omit the type and allow the compiler to infer it.
+      &lt;br&gt;
+      &lt;br&gt;
+      There are a few downsides to using this feature:
+      &lt;br&gt;
+      - Lack of type information can make code harder to follow and understand at a glance.
+      &lt;br&gt;
+      - Type expansion that occurs during type inference can lead to unexpected inferred types.
+      &lt;br&gt;
+      - Wrapper types relying on implicit type conversions will not have those conversions invoked.
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Inline_Variable_Declaration#Type_Inference_for_Inlined_Variables'&gt;
+      Type Inference for Inlined Variables
+      &lt;/a&gt;
+    </description>
+    <example>
+      <![CDATA[
+<b>procedure</b> Example;
+<b>begin</b>
+  <b>for</b> <b>var</b> I := 1 to 100 do <b>Continue</b>; // Noncompliant
+  <b>for</b> <b>var</b> I: Integer := 1 to 100 do <b>Continue</b>; // Compliant
+<b>end</b>;
+        ]]>
+    </example>
+    <properties>
+      <property name="baseEffort" value="1min"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="Empty type sections should be removed"
     name="EmptyTypeSectionRule">
