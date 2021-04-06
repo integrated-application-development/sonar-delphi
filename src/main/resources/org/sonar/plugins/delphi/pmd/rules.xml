@@ -1630,6 +1630,42 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.InlineDeclarationCapturedByAnonymousMethodRule"
+    message="Inline variables should not be captured by anonymous methods"
+    name="InlineDeclarationCapturedByAnonymousMethodRule">
+    <priority>2</priority>
+    <description>
+      Up until Delphi 10.4.2, there are compiler bugs related to inline variables captured by
+      anonymous methods.
+      &lt;br&gt;
+      &lt;br&gt;
+      - Inline variables will not have their lifetimes extended until
+      the anonymous method goes out of scope. (Fixed in 10.4.1)
+      &lt;br&gt;
+      - Inline variables with managed types will not have their reference count updated when the
+      anonymous method goes out of scope, causing memory leaks. (Fixed in 10.4.2)
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='https://quality.embarcadero.com/browse/RSP-26666'&gt;
+      RSP-26666
+      &lt;/a&gt;
+      &lt;br&gt;
+      - &lt;a href='https://quality.embarcadero.com/browse/RSP-29564'&gt;
+      RSP-29564
+      &lt;/a&gt;
+      &lt;br&gt;
+      - &lt;a href='https://quality.embarcadero.com/browse/RSP-31864'&gt;
+      RSP-31864
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+      <property name="type" value="BUG"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="Empty type sections should be removed"
     name="EmptyTypeSectionRule">

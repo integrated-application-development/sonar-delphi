@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   specify a type.
 - `InlineLoopVarExplicitTypeRule` analysis rule, which flags inline loop `var` declarations that
   don't specify a type.
+- `InlineDeclarationCapturedByAnonymousMethodRule` analysis rule, which flags places where inline
+  declarations are captured by anonymous methods.
 
 ### Changed
 
