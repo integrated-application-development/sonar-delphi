@@ -14,10 +14,6 @@ class DelphiSubrangeType extends DelphiType implements SubrangeType {
     this.hostType = hostType;
   }
 
-  public static SubrangeType subRange(String image, Type hostType) {
-    return new DelphiSubrangeType(image, hostType);
-  }
-
   @Override
   public String getImage() {
     return image;
