@@ -121,7 +121,7 @@ public final class DelphiUtils {
    * @throws IOException When file does not exist
    */
   public static String readFileContent(@NotNull File file, String encoding) throws IOException {
-    return FileUtils.readFileToString(file, encoding).replace("\uFEFF", "");
+    return FileUtils.readFileToString(file, encoding);
   }
 
   public static String uriToAbsolutePath(URI uri) {
