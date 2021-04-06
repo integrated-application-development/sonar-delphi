@@ -22,6 +22,7 @@ class ExpressionValuesTest {
     assertThat(value.type()).isEqualTo(ConstExpressionType.STRING);
     assertThat(value.asString()).isEqualTo("string");
     assertThat(value.asInteger()).isZero();
+    assertThat(value.asBigInteger()).isZero();
     assertThat(value.asDecimal()).isZero();
     assertThat(value.asBoolean()).isFalse();
     assertThat(value.asSet()).isEmpty();
@@ -41,6 +42,7 @@ class ExpressionValuesTest {
     assertThat(value.type()).isEqualTo(ConstExpressionType.INTEGER);
     assertThat(value.asString()).isEmpty();
     assertThat(value.asInteger()).isEqualTo(1);
+    assertThat(value.asBigInteger()).isEqualTo(1);
     assertThat(value.asDecimal()).isEqualTo(1.0);
     assertThat(value.asBoolean()).isFalse();
     assertThat(value.asSet()).isEmpty();
@@ -60,6 +62,7 @@ class ExpressionValuesTest {
     assertThat(value.type()).isEqualTo(ConstExpressionType.DECIMAL);
     assertThat(value.asString()).isEmpty();
     assertThat(value.asInteger()).isEqualTo(1);
+    assertThat(value.asBigInteger()).isEqualTo(1);
     assertThat(value.asDecimal()).isEqualTo(1.0);
     assertThat(value.asBoolean()).isFalse();
     assertThat(value.asSet()).isEmpty();
@@ -79,6 +82,7 @@ class ExpressionValuesTest {
     assertThat(value.type()).isEqualTo(ConstExpressionType.BOOLEAN);
     assertThat(value.asString()).isEmpty();
     assertThat(value.asInteger()).isZero();
+    assertThat(value.asBigInteger()).isZero();
     assertThat(value.asDecimal()).isZero();
     assertThat(value.asBoolean()).isTrue();
     assertThat(value.asSet()).isEmpty();
@@ -98,6 +102,7 @@ class ExpressionValuesTest {
     assertThat(value.type()).isEqualTo(ConstExpressionType.SET);
     assertThat(value.asString()).isEmpty();
     assertThat(value.asInteger()).isZero();
+    assertThat(value.asBigInteger()).isZero();
     assertThat(value.asDecimal()).isZero();
     assertThat(value.asBoolean()).isFalse();
     assertThat(value.asSet()).hasSize(3);
@@ -119,6 +124,7 @@ class ExpressionValuesTest {
     assertThat(value.type()).isEqualTo(ConstExpressionType.UNKNOWN);
     assertThat(value.asString()).isEmpty();
     assertThat(value.asInteger()).isZero();
+    assertThat(value.asBigInteger()).isZero();
     assertThat(value.asDecimal()).isZero();
     assertThat(value.asBoolean()).isFalse();
     assertThat(value.asSet()).isEmpty();

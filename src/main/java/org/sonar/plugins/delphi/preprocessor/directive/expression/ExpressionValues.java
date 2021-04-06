@@ -10,6 +10,8 @@ import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.
 import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Expression.ConstExpressionType.UNKNOWN;
 
 import com.google.common.math.DoubleMath;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
@@ -29,7 +31,11 @@ class ExpressionValues {
     return UNKNOWN_VALUE;
   }
 
-  static ExpressionValue createInteger(Integer value) {
+  static ExpressionValue createInteger(long value) {
+    return new PrimitiveExpressionValue(INTEGER, BigInteger.valueOf(value));
+  }
+
+  static ExpressionValue createInteger(BigInteger value) {
     return new PrimitiveExpressionValue(INTEGER, value);
   }
 
@@ -198,7 +204,7 @@ class ExpressionValues {
   static ExpressionValue negate(ExpressionValue value) {
     switch (value.type()) {
       case INTEGER:
-        return createInteger(-value.asInteger());
+        return createInteger(value.asBigInteger().negate());
       case DECIMAL:
         return createDecimal(-value.asDecimal());
       case BOOLEAN:
@@ -239,8 +245,8 @@ class ExpressionValues {
 
     @Override
     public Integer asInteger() {
-      if (value instanceof Integer) {
-        return (Integer) value;
+      if (value instanceof BigInteger) {
+        return ((BigInteger) value).intValue();
       } else if (value instanceof Double) {
         return ((Double) value).intValue();
       }
@@ -248,11 +254,21 @@ class ExpressionValues {
     }
 
     @Override
+    public BigInteger asBigInteger() {
+      if (value instanceof BigInteger) {
+        return (BigInteger) value;
+      } else if (value instanceof Double) {
+        return BigDecimal.valueOf((Double) value).toBigInteger();
+      }
+      return BigInteger.ZERO;
+    }
+
+    @Override
     public Double asDecimal() {
       if (value instanceof Double) {
         return (Double) value;
-      } else if (value instanceof Integer) {
-        return ((Integer) value).doubleValue();
+      } else if (value instanceof BigInteger) {
+        return ((BigInteger) value).doubleValue();
       }
       return 0.0;
     }

@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.preprocessor.directive;
 
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -8,7 +9,6 @@ import org.antlr.runtime.Token;
 import org.sonar.plugins.delphi.preprocessor.DelphiPreprocessor;
 
 public interface CompilerDirective {
-
   Token getToken();
 
   CompilerDirectiveType getType();
@@ -46,6 +46,10 @@ public interface CompilerDirective {
 
       default Integer asInteger() {
         return 0;
+      }
+
+      default BigInteger asBigInteger() {
+        return BigInteger.ZERO;
       }
 
       default Double asDecimal() {

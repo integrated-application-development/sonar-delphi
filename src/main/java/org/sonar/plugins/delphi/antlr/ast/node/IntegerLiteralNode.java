@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import java.math.BigInteger;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
@@ -18,15 +19,15 @@ public final class IntegerLiteralNode extends LiteralNode {
   }
 
   @Override
-  public long getValueAsLong() {
-    return parseImage(getImage(), 10);
+  public BigInteger getValueAsBigInteger() {
+    return new BigInteger(getImage(), 10);
   }
 
   @Override
   @NotNull
   public Type getType() {
     if (type == null) {
-      type = getTypeFactory().integerFromLiteralValue(this.getValueAsLong());
+      type = getTypeFactory().integerFromLiteralValue(this.getValueAsBigInteger());
     }
     return type;
   }

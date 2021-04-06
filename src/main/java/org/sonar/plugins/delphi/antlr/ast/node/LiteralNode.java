@@ -38,11 +38,11 @@ public abstract class LiteralNode extends DelphiNode implements Typed {
   }
 
   public int getValueAsInt() {
-    return (int) getValueAsLong();
+    return getValueAsBigInteger().intValue();
   }
 
-  public long getValueAsLong() {
-    return 0L;
+  public BigInteger getValueAsBigInteger() {
+    return BigInteger.ZERO;
   }
 
   public double getValueAsDouble() {

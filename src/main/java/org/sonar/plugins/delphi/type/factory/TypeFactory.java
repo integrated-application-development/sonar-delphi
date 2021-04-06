@@ -3,6 +3,7 @@ package org.sonar.plugins.delphi.type.factory;
 import static org.sonar.plugins.delphi.type.StructKind.CLASS_HELPER;
 import static org.sonar.plugins.delphi.type.StructKind.RECORD_HELPER;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -470,14 +471,11 @@ public class TypeFactory {
         kind);
   }
 
-  public IntegerType integerFromLiteralValue(long value) {
+  public IntegerType integerFromLiteralValue(BigInteger value) {
     return intrinsicTypes.values().stream()
         .filter(IntegerType.class::isInstance)
         .map(IntegerType.class::cast)
-        .filter(
-            type ->
-                type.min().longValue() <= value
-                    && ((value < 0) || Long.compareUnsigned(type.max().longValue(), value) >= 0))
+        .filter(type -> type.min().compareTo(value) <= 0 && type.max().compareTo(value) >= 0)
         .findFirst()
         .orElseThrow(IllegalStateException::new);
   }
