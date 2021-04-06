@@ -48,9 +48,4 @@ public abstract class LiteralNode extends DelphiNode implements Typed {
   public double getValueAsDouble() {
     return Double.NaN;
   }
-
-  protected static long parseImage(String image, int base) {
-    BigInteger bigInt = new BigInteger(image, base);
-    return bigInt.longValue();
-  }
 }
