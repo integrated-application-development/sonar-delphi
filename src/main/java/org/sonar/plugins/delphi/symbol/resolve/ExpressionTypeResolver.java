@@ -230,6 +230,10 @@ public final class ExpressionTypeResolver {
         if (type == null) {
           type = findCurrentType(reference);
         }
+
+        if (type.isClassReference()) {
+          type = ((ClassReferenceType) type).classType();
+        }
       } else {
         type = handleNameOccurrence(occurrence);
       }

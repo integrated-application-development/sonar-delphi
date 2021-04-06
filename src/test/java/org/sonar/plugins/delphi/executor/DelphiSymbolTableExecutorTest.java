@@ -395,6 +395,12 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testConstructorInvokedOnInstanceTypeResolution() {
+    execute("typeResolution/ConstructorInvokedOnInstance.pas");
+    verifyUsages(12, 10, reference(20, 2), reference(23, 2), reference(27, 2));
+  }
+
+  @Test
   void testEnumsTypeResolution() {
     execute("typeResolution/Enums.pas");
     verifyUsages(18, 9, reference(28, 2), reference(29, 2), reference(30, 2));
