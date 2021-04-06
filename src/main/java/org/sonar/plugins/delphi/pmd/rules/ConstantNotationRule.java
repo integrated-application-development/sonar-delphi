@@ -5,6 +5,7 @@ import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
 import org.sonar.plugins.delphi.antlr.ast.node.ConstDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ConstStatementNode;
 import org.sonar.plugins.delphi.utils.NameConventionUtils;
 
 public class ConstantNotationRule extends AbstractDelphiRule {
@@ -25,5 +26,14 @@ public class ConstantNotationRule extends AbstractDelphiRule {
       addViolation(data, declaration.getNameDeclarationNode());
     }
     return super.visit(declaration, data);
+  }
+
+  @Override
+  public RuleContext visit(ConstStatementNode statement, RuleContext data) {
+    if (!NameConventionUtils.compliesWithPrefix(
+        statement.getNameDeclarationNode().getImage(), getProperty(PREFIXES))) {
+      addViolation(data, statement.getNameDeclarationNode());
+    }
+    return super.visit(statement, data);
   }
 }

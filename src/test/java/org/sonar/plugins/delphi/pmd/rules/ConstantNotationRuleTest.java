@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import java.util.Objects;
@@ -9,7 +10,6 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 class ConstantNotationRuleTest extends BasePmdRuleTest {
-
   @BeforeEach
   void setup() {
     DelphiRuleProperty property =
@@ -26,7 +26,7 @@ class ConstantNotationRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("ConstantNotationRule"));
   }
 
   @Test
@@ -37,18 +37,7 @@ class ConstantNotationRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
-  }
-
-  @Test
-  void testTypedConstantWithPrefixShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("const");
-    builder.appendDecl("  C_MyConstant: String = 'Value';");
-
-    execute(builder);
-
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("ConstantNotationRule"));
   }
 
   @Test
@@ -60,7 +49,6 @@ class ConstantNotationRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
         .areExactly(1, ruleKeyAtLine("ConstantNotationRule", builder.getOffsetDecl() + 2));
   }
 
@@ -73,7 +61,62 @@ class ConstantNotationRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
         .areExactly(1, ruleKeyAtLine("ConstantNotationRule", builder.getOffsetDecl() + 2));
+  }
+
+  @Test
+  void testInlineConstantWithPrefixShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  const C_MyConstant = 'Value';")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("ConstantNotationRule"));
+  }
+
+  @Test
+  void testInlineFirstCharacterIsNumberShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  const C_85Constant = 'Value';")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("ConstantNotationRule"));
+  }
+
+  @Test
+  void testInlineBadPrefixShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  const CConstant = 'Value';")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areExactly(1, ruleKeyAtLine("ConstantNotationRule", builder.getOffset() + 3));
+  }
+
+  @Test
+  void testInlineBadPascalCaseShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  const C_myConstant = 'Value';")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areExactly(1, ruleKeyAtLine("ConstantNotationRule", builder.getOffset() + 3));
   }
 }

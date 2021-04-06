@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support for inline vars:
+  - See: [Introducing Inline Variables in the Delphi Language](https://blog.marcocantu.com/blog/2018-october-inline-variables-delphi.html)
 - Support for XE7 dynamic array operations:
   - See: [Dynamic Arrays in XE7](https://blog.marcocantu.com/blog/2014_september_dynamic_arrays_delphixe7.html)
 - Support for `SizeOf` intrinsic in preprocessor expressions.

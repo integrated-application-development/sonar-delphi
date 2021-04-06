@@ -660,6 +660,8 @@ arrayExpression              : '('<ArrayExpressionNode>^ (constExpression (','!)
 // Statements
 //----------------------------------------------------------------------------
 statement                    : ifStatement
+                             | varStatement
+                             | constStatement
                              | caseStatement
                              | repeatStatement
                              | whileStatement
@@ -676,6 +678,12 @@ statement                    : ifStatement
                              ;
 ifStatement                  : 'if'<IfStatementNode>^ expression 'then' statement? ('else' statement?)?
                              ;
+varStatement                 : 'var' customAttribute? nameDeclarationList (':' varType)? (':=' expressionOrAnonymousMethod)?
+                             -> ^('var'<VarStatementNode> nameDeclarationList (':' varType)? (':=' expressionOrAnonymousMethod)? customAttribute?)
+                             ;
+constStatement               : 'const' customAttribute? nameDeclaration (':' varType)? '=' expressionOrAnonymousMethod
+                             -> ^('const'<ConstStatementNode> nameDeclaration (':' varType)? '=' expressionOrAnonymousMethod customAttribute?)
+                             ;
 caseStatement                : 'case'<CaseStatementNode>^ expression 'of' caseItem* elseBlock? 'end'
                              ;
 elseBlock                    : 'else'<ElseBlockNode>^ statementList
@@ -686,9 +694,12 @@ repeatStatement              : 'repeat'<RepeatStatementNode>^ statementList 'unt
                              ;
 whileStatement               : 'while'<WhileStatementNode>^ expression 'do' statement?
                              ;
-forStatement                 : 'for'<ForToStatementNode>^ simpleNameReference ':=' expression 'to' expression 'do' statement?
-                             | 'for'<ForToStatementNode>^ simpleNameReference ':=' expression 'downto' expression 'do' statement?
-                             | 'for'<ForInStatementNode>^ simpleNameReference 'in' expression 'do' statement?
+forStatement                 : 'for'<ForToStatementNode>^ forVar ':=' expression 'to' expression 'do' statement?
+                             | 'for'<ForToStatementNode>^ forVar ':=' expression 'downto' expression 'do' statement?
+                             | 'for'<ForInStatementNode>^ forVar 'in' expression 'do' statement?
+                             ;
+forVar                       : 'var' nameDeclaration (':' varType)? -> ^(TkForLoopVar<ForLoopVarDeclarationNode> nameDeclaration varType?)
+                             | simpleNameReference -> ^(TkForLoopVar<ForLoopVarReferenceNode> simpleNameReference)
                              ;
 withStatement                : 'with'<WithStatementNode>^ expressionList 'do' statement?
                              ;
@@ -1153,6 +1164,9 @@ TkCompilerDirective     : 'COMPILER_DIRECTIVE'
 TkRealNum               : 'REAL_NUMBER'
                         ;
 TkTypeParameter         : 'TYPE_PARAMETER'
+                        ;
+TkForLoopVar            : 'FOR_LOOP_VAR'
+                        ;
 TkArrayAccessorNode     : 'ARRAY_ACCESSOR'
                         ;
 TkArrayConstructor      : 'ARRAY_CONSTRUCTOR'

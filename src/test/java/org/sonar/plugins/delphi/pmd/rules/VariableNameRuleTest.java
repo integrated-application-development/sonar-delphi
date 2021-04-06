@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.jupiter.api.Test;
@@ -123,5 +124,61 @@ class VariableNameRuleTest extends BasePmdRuleTest {
     assertIssues()
         .hasSize(1)
         .areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffset() + 1));
+  }
+
+  @Test
+  void testValidInlineVariableNameShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  var SomeVar: Integer;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("VariableNameRule"));
+  }
+
+  @Test
+  void testBadPascalCaseInlineVariableShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  var someVar: Integer;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffset() + 3));
+  }
+
+  @Test
+  void testValidLoopVariableNameShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  for var SomeVar := 1 to 100 do;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("VariableNameRule"));
+  }
+
+  @Test
+  void testBadPascalCaseInLoopVariableShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  for var someVar := 1 to 100 do;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffset() + 3));
   }
 }

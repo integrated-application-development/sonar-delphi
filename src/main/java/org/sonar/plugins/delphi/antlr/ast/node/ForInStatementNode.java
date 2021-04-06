@@ -74,4 +74,9 @@ public final class ForInStatementNode extends ForStatementNode {
   public ExpressionNode getEnumerable() {
     return (ExpressionNode) jjtGetChild(2);
   }
+
+  @Override
+  public StatementNode getStatement() {
+    return (StatementNode) jjtGetChild(4);
+  }
 }

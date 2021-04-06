@@ -4,11 +4,14 @@ import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
+import org.sonar.plugins.delphi.antlr.ast.node.ForLoopVarDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarSectionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.VarStatementNode;
+import org.sonar.plugins.delphi.symbol.scope.FileScope;
 import org.sonar.plugins.delphi.symbol.scope.UnitScope;
 import org.sonar.plugins.delphi.utils.NameConventionUtils;
 
@@ -24,42 +27,55 @@ public class VariableNameRule extends AbstractDelphiRule {
   }
 
   @Override
-  public RuleContext visit(VarDeclarationNode varDecl, RuleContext data) {
-    if (isAutoCreateFormVar(varDecl)) {
+  public RuleContext visit(VarDeclarationNode varDeclaration, RuleContext data) {
+    if (isAutoCreateFormVar(varDeclaration)) {
       return data;
     }
 
-    boolean globalVariable = varDecl.getScope() instanceof UnitScope;
-
-    for (NameDeclarationNode declaration : varDecl.getNameDeclarationList().getDeclarations()) {
-      if (isViolation(declaration, globalVariable)) {
-        addViolation(data, declaration);
-      }
-    }
+    boolean globalVariable = varDeclaration.getScope() instanceof UnitScope;
+    varDeclaration.getNameDeclarationList().getDeclarations().stream()
+        .filter(node -> isViolation(node, globalVariable))
+        .forEach(node -> addViolation(data, node));
 
     return data;
   }
 
   @Override
-  public RuleContext visit(FormalParameterNode parameter, RuleContext data) {
-    for (FormalParameterData param : parameter.getParameters()) {
-      NameDeclarationNode node = param.getNode();
-      if (isViolation(node, false)) {
-        addViolation(data, node);
-      }
+  public RuleContext visit(VarStatementNode varStatement, RuleContext data) {
+    varStatement.getNameDeclarationList().getDeclarations().stream()
+        .filter(node -> isViolation(node, false))
+        .forEach(node -> addViolation(data, node));
+    return data;
+  }
+
+  @Override
+  public RuleContext visit(ForLoopVarDeclarationNode loopVar, RuleContext data) {
+    NameDeclarationNode name = loopVar.getNameDeclarationNode();
+    if (isViolation(name, false)) {
+      addViolation(data, name);
     }
+    return data;
+  }
+
+  @Override
+  public RuleContext visit(FormalParameterNode parameter, RuleContext data) {
+    parameter.getParameters().stream()
+        .map(FormalParameterData::getNode)
+        .filter(name -> isViolation(name, false))
+        .forEach(name -> addViolation(data, name));
     return data;
   }
 
   private static boolean isAutoCreateFormVar(VarDeclarationNode varDecl) {
     VarSectionNode varSection = varDecl.getVarSection();
     return varSection.isInterfaceSection()
+        && varSection.getScope() instanceof FileScope
         && varSection.getDeclarations().size() == 1
         && varSection.jjtGetChildIndex() == varSection.jjtGetParent().jjtGetNumChildren() - 1;
   }
 
-  private boolean isViolation(NameDeclarationNode identifier, boolean globalVariable) {
-    String image = identifier.getImage();
+  private boolean isViolation(NameDeclarationNode name, boolean globalVariable) {
+    String image = name.getImage();
     if (globalVariable) {
       return !NameConventionUtils.compliesWithPrefix(image, getProperty(GLOBAL_PREFIXES));
     }

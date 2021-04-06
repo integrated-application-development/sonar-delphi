@@ -7,7 +7,9 @@ public abstract class ForStatementNode extends StatementNode {
     super(token);
   }
 
-  public NameReferenceNode getVariable() {
-    return (NameReferenceNode) jjtGetChild(0);
+  public ForLoopVarNode getVariable() {
+    return (ForLoopVarNode) jjtGetChild(0);
   }
+
+  public abstract StatementNode getStatement();
 }

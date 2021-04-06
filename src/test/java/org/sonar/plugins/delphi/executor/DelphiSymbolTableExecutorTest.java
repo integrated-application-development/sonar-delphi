@@ -419,6 +419,16 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testTypeInference() {
+    execute("typeResolution/TypeInference.pas");
+    verifyUsages(9, 10, reference(57, 2), reference(64, 2), reference(71, 2));
+    verifyUsages(14, 10, reference(65, 2), reference(72, 2));
+    verifyUsages(19, 10, reference(59, 2), reference(60, 2), reference(66, 2), reference(67, 2));
+    verifyUsages(24, 10, reference(58, 2), reference(62, 2), reference(69, 2));
+    verifyUsages(29, 10, reference(61, 2), reference(63, 2), reference(68, 2), reference(70, 2));
+  }
+
+  @Test
   void testLowHighIntrinsics() {
     execute("intrinsics/LowHighIntrinsics.pas");
     verifyUsages(

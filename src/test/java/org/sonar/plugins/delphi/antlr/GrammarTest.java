@@ -206,6 +206,11 @@ class GrammarTest {
   }
 
   @Test
+  void testInlineVars() {
+    parseFile("InlineVars.pas");
+  }
+
+  @Test
   void testUnusualBrackets() {
     parseFile("UnusualBrackets.pas");
   }
