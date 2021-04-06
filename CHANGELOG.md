@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for obscure `(.` and `.)` tokens:
   - These are now interpreted correctly by the lexer as square brackets.
   - See: [The Future of the Delphi Compiler](https://web.archive.org/web/20210330140547/https://edn.embarcadero.com/article/39174)
+- `InlineVarExplicitTypeRule` analysis rule, which flags inline `var` declarations that don't
+  specify a type.
 
 ### Changed
 
