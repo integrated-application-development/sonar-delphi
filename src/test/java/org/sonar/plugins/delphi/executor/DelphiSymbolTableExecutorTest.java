@@ -194,6 +194,7 @@ class DelphiSymbolTableExecutorTest {
     execute("ArrayConstantExpressions.pas");
     verifyUsages(11, 10, reference(23, 2), reference(24, 2));
     verifyUsages(16, 10, reference(25, 2), reference(26, 2), reference(27, 2), reference(30, 2));
+    verifyUsages(36, 10, reference(46, 2), reference(47, 2), reference(48, 2), reference(49, 2));
   }
 
   @Test
@@ -419,13 +420,22 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
-  void testTypeInference() {
-    execute("typeResolution/TypeInference.pas");
-    verifyUsages(9, 10, reference(57, 2), reference(64, 2), reference(71, 2));
-    verifyUsages(14, 10, reference(65, 2), reference(72, 2));
-    verifyUsages(19, 10, reference(59, 2), reference(60, 2), reference(66, 2), reference(67, 2));
-    verifyUsages(24, 10, reference(58, 2), reference(62, 2), reference(69, 2));
-    verifyUsages(29, 10, reference(61, 2), reference(63, 2), reference(68, 2), reference(70, 2));
+  void testIntegersTypeInference() {
+    execute("typeInference/Integers.pas");
+    verifyUsages(10, 10, reference(63, 2));
+    verifyUsages(15, 10, reference(70, 2), reference(77, 2));
+    verifyUsages(20, 10, reference(71, 2), reference(78, 2));
+    verifyUsages(25, 10, reference(65, 2), reference(66, 2), reference(72, 2), reference(73, 2));
+    verifyUsages(30, 10, reference(64, 2), reference(68, 2), reference(75, 2));
+    verifyUsages(35, 10, reference(67, 2), reference(69, 2), reference(74, 2), reference(76, 2));
+  }
+
+  @Test
+  void testCharsTypeInference() {
+    execute("typeInference/Chars.pas");
+    verifyUsages(15, 10, reference(47, 2), reference(49, 2), reference(50, 2));
+    verifyUsages(20, 10, reference(48, 2));
+    verifyUsages(30, 10, reference(52, 2), reference(53, 2));
   }
 
   @Test

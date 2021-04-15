@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Improve type inference around array constant expressions.
+
 ## [0.30.0] - 2021-04-06
 
 ### Added
