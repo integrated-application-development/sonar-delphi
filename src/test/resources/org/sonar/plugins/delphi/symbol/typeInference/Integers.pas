@@ -1,12 +1,18 @@
-unit TypeInference;
+unit Integers;
 
 interface
+
 implementation
 
 type
   TByteSet = set of Byte;
 
 procedure Foo(Bar: TByteSet); overload;
+begin
+  // do nothing
+end;
+
+procedure Foo(Bar: array of ShortInt); overload;
 begin
   // do nothing
 end;

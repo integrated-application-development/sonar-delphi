@@ -8,7 +8,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.type.ArrayOption;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.Type.IntegerType;
 import org.sonar.plugins.delphi.type.Typed;
 import org.sonar.plugins.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
@@ -42,13 +41,6 @@ public final class TypeInferrer {
             .max(Comparator.comparingInt(Type::size))
             .orElse(DelphiType.voidType());
 
-    if (element.size() == 1) {
-      if (element.isInteger() && ((IntegerType) element).isSigned()) {
-        element = typeFactory.getIntrinsic(IntrinsicType.BYTE);
-      }
-      return typeFactory.set(element);
-    } else {
-      return typeFactory.array(null, element, Set.of(ArrayOption.DYNAMIC));
-    }
+    return typeFactory.array(null, element, Set.of(ArrayOption.DYNAMIC));
   }
 }
