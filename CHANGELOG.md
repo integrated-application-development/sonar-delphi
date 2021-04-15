@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.30.1] - 2021-04-06
+
 ### Changed
 
 - Improve type inference around array constant expressions.
@@ -718,7 +720,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.30.0...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.30.1...HEAD
+[0.30.1]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.30.0...v0.30.1
 [0.30.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.29.0...v0.30.0
 [0.29.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.28.0...v0.29.0
 [0.28.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.27.0...v0.28.0
