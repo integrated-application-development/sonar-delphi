@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improve type inference around array constant expressions.
 
+### Fixed
+
+- Fix overload resolution regressions caused by the new bounds checking.
+
 ## [0.30.0] - 2021-04-06
 
 ### Added

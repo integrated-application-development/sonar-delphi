@@ -14,10 +14,8 @@ interface BoundsChecker {
   static BoundsChecker forType(Type type) {
     if (type.isInteger()) {
       return new IntegerBoundsChecker((IntegerType) type);
-    } else if (type.isArray()) {
-      return new ArrayBoundsChecker((CollectionType) type);
-    } else if (type.isSet()) {
-      return new SetBoundsChecker((CollectionType) type);
+    } else if (type instanceof CollectionType) {
+      return new CollectionBoundsChecker((CollectionType) type);
     } else {
       return new DefaultBoundsChecker();
     }
@@ -41,17 +39,11 @@ interface BoundsChecker {
 
     @Override
     public boolean violatesBounds(ExpressionNode expression) {
-      Type expressionType = expression.getType();
-      if (expressionType.size() > type.size()) {
-        return true;
-      }
-
       if (expression.isIntegerLiteral()) {
         LiteralNode literal = Objects.requireNonNull(expression.extractLiteral());
         BigInteger value = literal.getValueAsBigInteger();
         return type.min().compareTo(value) > 0 || type.max().compareTo(value) < 0;
       }
-
       return false;
     }
   }
@@ -76,23 +68,6 @@ interface BoundsChecker {
 
     protected boolean elementViolatesBounds(ExpressionNode element) {
       return BoundsChecker.forType(type.elementType()).violatesBounds(element);
-    }
-  }
-
-  class ArrayBoundsChecker extends CollectionBoundsChecker {
-    private ArrayBoundsChecker(CollectionType type) {
-      super(type);
-    }
-  }
-
-  class SetBoundsChecker extends CollectionBoundsChecker {
-    private SetBoundsChecker(CollectionType type) {
-      super(type);
-    }
-
-    @Override
-    protected boolean elementViolatesBounds(ExpressionNode element) {
-      return element.getType().size() > 1 || super.elementViolatesBounds(element);
     }
   }
 }
