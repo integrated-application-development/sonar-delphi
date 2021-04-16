@@ -69,14 +69,13 @@
     <example>
       <![CDATA[
 <b>try</b>
-  ThrowException;
+  RaiseException;
 <b>except</b>	// Noncompliant
   // Do nothing
 <b>end;</b>
 
-
 <b>try</b>
-  ThrowException;
+  RaiseException;
 <b>except</b>	// Noncompliant
   <b>on</b> E: Exception <b>do begin</b>
     // Do nothing
@@ -84,7 +83,7 @@
 <b>end;</b>
 
 <b>try</b>
-  ThrowException;
+  RaiseException;
 <b>except</b>	// Compliant
   <b>on</b> E: Exception <b>do begin</b>
     Log.Audit(<i>'He''s dead, Jim!'</i>);
