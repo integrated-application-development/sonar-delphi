@@ -104,7 +104,6 @@
     <jdom.version>1.0</jdom.version>
     <jetbrains-annotations.version>17.0.0</jetbrains-annotations.version>
     <junit-platform.version>1.7.0</junit-platform.version>
-    <archunit.version>0.14.1</archunit.version>
     <!--Maven plugins-->
     <antlr3-plugin.version>3.5.2</antlr3-plugin.version>
     <jacoco-plugin.version>0.8.5</jacoco-plugin.version>
@@ -141,6 +140,7 @@
     <junit.version>5.7.1</junit.version>
     <assertj.version>3.19.0</assertj.version>
     <mockito.version>3.9.0</mockito.version>
+    <archunit.version>0.18.0</archunit.version>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <cyclonedx-plugin.version>2.1.1</cyclonedx-plugin.version>
     <dependency-plugin.version>3.1.2</dependency-plugin.version>
@@ -254,8 +254,8 @@
     <dependency>
       <groupId>com.tngtech.archunit</groupId>
       <artifactId>archunit-junit5</artifactId>
-      <version>${archunit.version}</version>
       <scope>test</scope>
+      <version>${archunit.version}</version>
     </dependency>
     <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
