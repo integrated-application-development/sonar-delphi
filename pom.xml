@@ -97,7 +97,7 @@
     <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
     <sonar.version>7.9</sonar.version>
     <sonar-analyzers-commons.version>1.12.0.632</sonar-analyzers-commons.version>
-    <sonar-orchestrator.version>3.34.0.2692</sonar-orchestrator.version>
+    <sonar-orchestrator.version>3.35.1.2719</sonar-orchestrator.version>
     <antlr-runtime.version>3.4</antlr-runtime.version>
     <java-surefire.version>5.13.0.18197</java-surefire.version>
     <pmd.version>6.18.0</pmd.version>
