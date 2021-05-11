@@ -260,6 +260,7 @@
     <properties>
       <property name="baseEffort" value="1h"/>
       <property name="limit" value="6"/>
+      <property name="scope" value="MAIN"/>
     </properties>
   </rule>
 
