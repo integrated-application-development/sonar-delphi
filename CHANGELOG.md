@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `PlatformDependentTruncationRule` analysis rule, which flags places where an integer type may or
+  may not be truncated depending on the platform.
+
 ### Changed
 
 - Improve type inference around procedural types.

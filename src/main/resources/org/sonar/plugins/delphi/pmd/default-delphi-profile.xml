@@ -106,6 +106,10 @@
     name="PlatformDependentCastRule">
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.PlatformDependentTruncationRule"
+    name="PlatformDependentTruncationRule">
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.RedundantAssignmentRule"
     name="RedundantAssignmentRule">
   </rule>
