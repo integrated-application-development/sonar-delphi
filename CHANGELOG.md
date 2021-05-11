@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Handle casts involving classes and interfaces in `PlatformDependentCastRule`.
 - Exclude test code in `TooManyArgumentsRule`.
+- Exclude test code in `TooManyVariablesRule`.
 - Update rule description for `SwallowedExceptionsRule`.
 
 ## [0.30.1] - 2021-04-06

@@ -274,6 +274,7 @@
     <properties>
       <property name="baseEffort" value="30min"/>
       <property name="limit" value="10"/>
+      <property name="scope" value="MAIN"/>
     </properties>
   </rule>
 
