@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (`begin`..`end` instead of `initialization`).
 - `FormatSettingsInitializationRule` analysis rule, which flags `TFormatSettings` variables that
   aren't initialized before use.
+- `DateFormatSettingsRule` analysis rule, which flags places where the default `TFormatSettings` is
+  implicitly used.
 
 ### Changed
 

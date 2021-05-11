@@ -688,6 +688,55 @@ Foo := Foo; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.DateFormatSettingsRule"
+    message="Date formatting should not use the default TFormatSettings"
+    name="DateFormatSettingsRule">
+    <priority>3</priority>
+    <description>
+      A &lt;code&gt;TFormatSettings&lt;/code&gt; argument can be provided to the
+      &lt;code&gt;TDate&lt;/code&gt; and &lt;code&gt;TDateTime&lt;/code&gt; string formatting
+      functions in &lt;code&gt;System.SysUtils&lt;/code&gt;.
+      &lt;br&gt;
+      If a &lt;code&gt;TFormatSettings&lt;/code&gt; argument is not provided, then the global
+      &lt;code&gt;TFormatSettings&lt;/code&gt; will be used by default.
+      &lt;br&gt;
+      &lt;br&gt;
+      Relying on the global &lt;code&gt;TFormatSettings&lt;/code&gt; is problematic because it is
+      populated with system default values from the OS, leading to different behavior on different
+      machines.
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;Relevant functions:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;code&gt;System.SysUtils.DateToStr&lt;/code&gt;
+      &lt;br&gt;
+      - &lt;code&gt;System.SysUtils.DateTimeToStr&lt;/code&gt;
+      &lt;br&gt;
+      - &lt;code&gt;System.SysUtils.StrToDate&lt;/code&gt;
+      &lt;br&gt;
+      - &lt;code&gt;System.SysUtils.StrToDateDef&lt;/code&gt;
+      &lt;br&gt;
+      - &lt;code&gt;System.SysUtils.TryStrToDate&lt;/code&gt;
+      &lt;br&gt;
+      - &lt;code&gt;System.SysUtils.StrToDateTime&lt;/code&gt;
+      &lt;br&gt;
+      - &lt;code&gt;System.SysUtils.StrToDateTimeDef&lt;/code&gt;
+      &lt;br&gt;
+      - &lt;code&gt;System.SysUtils.TryStrToDateTime&lt;/code&gt;
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='http://docwiki.embarcadero.com/Libraries/en/System.SysUtils.TFormatSettings'&gt;
+      System.SysUtils.TFormatSettings
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+      <property name="type" value="BUG"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.LegacyInitializationSectionRule"
     message="Legacy initialization sections should not be used"
     name="LegacyInitializationSectionRule">
