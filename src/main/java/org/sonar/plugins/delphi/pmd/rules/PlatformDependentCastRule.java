@@ -11,6 +11,7 @@ import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
+import org.sonar.plugins.delphi.type.Type.StructType;
 import org.sonar.plugins.delphi.type.TypeUtils;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
 
@@ -59,13 +60,31 @@ public class PlatformDependentCastRule extends AbstractDelphiRule {
   }
 
   private static boolean isApplicableType(Type type) {
-    return type.isPointer() || type.isInteger();
+    return isPointerBasedType(type) || type.isInteger();
   }
 
   private static boolean isPlatformDependentType(Type type) {
     type = TypeUtils.findBaseType(type);
-    return type.isPointer()
+    return isPointerBasedType(type)
         || type.is(IntrinsicType.NATIVEINT)
         || type.is(IntrinsicType.NATIVEUINT);
+  }
+
+  private static boolean isPointerBasedType(Type type) {
+    if (type.isPointer()) {
+      return true;
+    }
+
+    if (type.isStruct()) {
+      switch (((StructType) type).kind()) {
+        case CLASS:
+        case INTERFACE:
+          return true;
+        default:
+          // do nothing
+      }
+    }
+
+    return false;
   }
 }
