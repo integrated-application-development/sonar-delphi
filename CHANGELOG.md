@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Improve type inference around procedural types.
 - Handle casts involving classes and interfaces in `PlatformDependentCastRule`.
 - Exclude test code in `TooManyArgumentsRule`.
 - Exclude test code in `TooManyVariablesRule`.

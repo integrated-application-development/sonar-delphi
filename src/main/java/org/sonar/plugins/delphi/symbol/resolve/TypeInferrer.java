@@ -8,6 +8,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.type.ArrayOption;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Typed;
 import org.sonar.plugins.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
@@ -21,6 +22,7 @@ public final class TypeInferrer {
 
   public Type infer(Typed typed) {
     Type type = typed == null ? DelphiType.unknownType() : typed.getType();
+
     if (typed instanceof ExpressionNode) {
       ExpressionNode expression = (ExpressionNode) typed;
       Node arrayConstructor = expression.skipParentheses().jjtGetChild(0);
@@ -31,6 +33,14 @@ public final class TypeInferrer {
         type = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
       }
     }
+
+    if (type.isProcedural()) {
+      Type returnType = ((ProceduralType) type).returnType();
+      if (!returnType.isVoid()) {
+        type = returnType;
+      }
+    }
+
     return type;
   }
 
