@@ -1223,13 +1223,11 @@ FunctionWithoutArguments;	// Compliant
       For the purposes of this rule, the list must be sorted on the next or previous line.
       &lt;br&gt;
       &lt;br&gt;
-      &lt;b&gt;
-      See:
-      &lt;/b&gt;
+      &lt;b&gt;See:&lt;/b&gt;
       &lt;br&gt;
       - &lt;a
       href='http://docwiki.embarcadero.com/Libraries/en/System.Classes.TStringList.Duplicates'&gt;
-      API Documentation
+      System.Classes.TStringList.Duplicates
       &lt;/a&gt;
     </description>
     <properties>
