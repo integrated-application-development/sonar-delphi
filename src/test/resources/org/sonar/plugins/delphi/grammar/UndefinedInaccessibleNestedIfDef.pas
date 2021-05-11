@@ -15,6 +15,4 @@ implementation
 
 {$endif}
 
-initialization
-
 end.

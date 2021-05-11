@@ -11,7 +11,5 @@ type
 
 implementation
 
-initialization
-
 end.
 
