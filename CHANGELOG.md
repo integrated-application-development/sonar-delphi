@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `EmptyUnitRule` analysis rule, which flags units that don't contain any meaningful code.
 - `LegacyInitializationSectionRule` analysis rule, which flags legacy initialization sections
   (`begin`..`end` instead of `initialization`).
+- `FormatSettingsInitializationRule` analysis rule, which flags `TFormatSettings` variables that
+  aren't initialized before use.
 
 ### Changed
 

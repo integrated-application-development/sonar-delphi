@@ -249,4 +249,8 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.LegacyInitializationSectionRule"
     name="LegacyInitializationSectionRule">
   </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.FormatSettingsInitializationRule"
+    name="FormatSettingsInitializationRule">
+  </rule>
 </ruleset>
