@@ -1995,6 +1995,29 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenFieldRule"
+    message="Track uses of disallowed fields"
+    name="ForbiddenFieldRule">
+    <priority>3</priority>
+    <description>
+      This rule allows banning particular fields declared by a particular type.
+      It will flag any direct reference to a field from the blacklist.
+      &lt;br&gt;
+      Please note:
+      &lt;br&gt;
+      - Blacklisted field names should be unqualified. (E.g. "FSomeField")
+      &lt;br&gt;
+      - The declaring type name should fully qualified. (E.g. "Unit.Type.InnerType")
+    </description>
+    <properties>
+      <property name="baseEffort" value="10min"/>
+      <property name="template" value="true"/>
+      <property name="blacklist"/>
+      <property name="declaringType"/>
+      <property name="message"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenImportFilePatternRule"
     message="Track use of disallowed imports by file path"
     name="ForbiddenImportFilePatternRule">
