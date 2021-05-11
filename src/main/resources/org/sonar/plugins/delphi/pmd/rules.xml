@@ -2018,6 +2018,30 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenConstantRule"
+    message="Track uses of disallowed constants"
+    name="ForbiddenConstantRule">
+    <priority>3</priority>
+    <description>
+      This rule allows banning certain constants.
+      It will flag any direct reference to a constant from the blacklist.
+      &lt;br&gt;
+      &lt;br&gt;
+      Please note:
+      &lt;br&gt;
+      - Blacklisted constant names should be unqualified. (E.g. "C_MyConstant")
+      &lt;br&gt;
+      - Only top-level constants in a specified unit are supported.
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+      <property name="template" value="true"/>
+      <property name="blacklist"/>
+      <property name="unitName"/>
+      <property name="message"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenImportFilePatternRule"
     message="Track use of disallowed imports by file path"
     name="ForbiddenImportFilePatternRule">
