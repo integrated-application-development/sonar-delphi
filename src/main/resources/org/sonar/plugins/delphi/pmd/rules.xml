@@ -2042,6 +2042,29 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenEnumValueRule"
+    message="Track uses of disallowed enum values"
+    name="ForbiddenEnumValueRule">
+    <priority>3</priority>
+    <description>
+      This rule allows banning certain enum values.
+      It will flag any direct reference to an enum value from the blacklist.
+      &lt;br&gt;
+      &lt;br&gt;
+      Please note:
+      &lt;br&gt;
+      - Blacklisted enum value names should be unqualified. (E.g. "Foo")
+      - The enum name should be fully qualified. (E.g. "Unit.TEnum")
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+      <property name="template" value="true"/>
+      <property name="blacklist"/>
+      <property name="enumName"/>
+      <property name="message"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenImportFilePatternRule"
     message="Track use of disallowed imports by file path"
     name="ForbiddenImportFilePatternRule">

@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a type with a specified fully-qualified name.
 - `ForbiddenConstantRule` analysis rule template, which flags constants from a specified list of
   names from a unit with a specified fully-qualified name.
+- `ForbiddenEnumValueRule` analysis rule template, which flags enum values from a specified list of
+  names on an enum type with a specified fully-qualified name.
 
 ### Changed
 
