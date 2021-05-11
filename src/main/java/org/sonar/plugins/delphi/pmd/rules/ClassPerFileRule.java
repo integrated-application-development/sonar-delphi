@@ -33,15 +33,15 @@ public class ClassPerFileRule extends AbstractDelphiRule {
   private int count;
 
   @Override
-  public void start(RuleContext ctx) {
+  public void start(RuleContext data) {
     count = 0;
   }
 
   @Override
-  public void end(RuleContext ctx) {
+  public void end(RuleContext data) {
     int limit = getProperty(LIMIT);
     if (count > limit) {
-      newViolation(ctx)
+      newViolation(data)
           .atPosition(FilePosition.atFileLevel())
           .message(
               String.format("File has %d classes, maximum number of classes is %d.", count, limit))

@@ -260,6 +260,7 @@
     <properties>
       <property name="baseEffort" value="1h"/>
       <property name="limit" value="6"/>
+      <property name="scope" value="MAIN"/>
     </properties>
   </rule>
 
@@ -273,6 +274,7 @@
     <properties>
       <property name="baseEffort" value="30min"/>
       <property name="limit" value="10"/>
+      <property name="scope" value="MAIN"/>
     </properties>
   </rule>
 
@@ -663,6 +665,104 @@ Foo := Foo; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.FormatSettingsInitializationRule"
+    message="TFormatSettings must be initialized before being used"
+    name="FormatSettingsInitializationRule">
+    <priority>3</priority>
+    <description>
+      A &lt;code&gt;TFormatSettings&lt;/code&gt; record must be populated before use.
+      &lt;br&gt;
+      This can be done by calling &lt;code&gt;TFormatSettings.Create&lt;/code&gt; and specifying the desired locale.
+      &lt;br&gt;
+      Alternatively, &lt;code&gt;TFormatSettings.Invariant&lt;/code&gt; will set the record to predefined
+      standard values which correspond to the English locale but do not set any country/region.
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='http://docwiki.embarcadero.com/Libraries/en/System.SysUtils.TFormatSettings'&gt;
+      System.SysUtils.TFormatSettings
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+      <property name="type" value="BUG"/>
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.DateFormatSettingsRule"
+    message="Date formatting should not use the default TFormatSettings"
+    name="DateFormatSettingsRule">
+    <priority>3</priority>
+    <description>
+      A &lt;code&gt;TFormatSettings&lt;/code&gt; argument can be provided to the
+      &lt;code&gt;TDate&lt;/code&gt; and &lt;code&gt;TDateTime&lt;/code&gt; string formatting
+      functions in &lt;code&gt;System.SysUtils&lt;/code&gt;.
+      &lt;br&gt;
+      If a &lt;code&gt;TFormatSettings&lt;/code&gt; argument is not provided, then the global
+      &lt;code&gt;TFormatSettings&lt;/code&gt; will be used by default.
+      &lt;br&gt;
+      &lt;br&gt;
+      Relying on the global &lt;code&gt;TFormatSettings&lt;/code&gt; is problematic because it is
+      populated with system default values from the OS, leading to different behavior on different
+      machines.
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;Relevant functions:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;code&gt;System.SysUtils.DateToStr&lt;/code&gt;
+      &lt;br&gt;
+      - &lt;code&gt;System.SysUtils.DateTimeToStr&lt;/code&gt;
+      &lt;br&gt;
+      - &lt;code&gt;System.SysUtils.StrToDate&lt;/code&gt;
+      &lt;br&gt;
+      - &lt;code&gt;System.SysUtils.StrToDateDef&lt;/code&gt;
+      &lt;br&gt;
+      - &lt;code&gt;System.SysUtils.TryStrToDate&lt;/code&gt;
+      &lt;br&gt;
+      - &lt;code&gt;System.SysUtils.StrToDateTime&lt;/code&gt;
+      &lt;br&gt;
+      - &lt;code&gt;System.SysUtils.StrToDateTimeDef&lt;/code&gt;
+      &lt;br&gt;
+      - &lt;code&gt;System.SysUtils.TryStrToDateTime&lt;/code&gt;
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='http://docwiki.embarcadero.com/Libraries/en/System.SysUtils.TFormatSettings'&gt;
+      System.SysUtils.TFormatSettings
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+      <property name="type" value="BUG"/>
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.LegacyInitializationSectionRule"
+    message="Legacy initialization sections should not be used"
+    name="LegacyInitializationSectionRule">
+    <priority>3</priority>
+    <description>
+      Legacy initialization sections using &lt;code&gt;begin .. end&lt;/code&gt; are functionally equivalent to a
+      regular initialization section. However:
+      &lt;br&gt;
+      - A finalization section cannot be specified.
+      &lt;br&gt;
+      - The syntax is old and not recommended by Embarcadero.
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Programs_and_Units_(Delphi)#The_Initialization_Section'&gt;
+      The Initialization Section
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="Interfaces should have unique GUIDs"
     name="NoGuidRule">
@@ -750,6 +850,30 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.PlatformDependentTruncationRule"
+    message="Platform-dependent truncation should be avoided"
+    name="PlatformDependentTruncationRule">
+    <priority>2</priority>
+    <description>
+      &lt;b&gt;Platform-dependent types&lt;/b&gt; have different sizes on different target platforms.
+      &lt;br&gt;
+      &lt;b&gt;Platform-independent types&lt;/b&gt; have the same size on all target platforms.
+      &lt;br&gt;
+      This rule identifies places where an integer type may or may not be truncated depending on the
+      platform.
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Converting_32-bit_Delphi_Applications_to_64-bit_Windows'&gt;
+      Converting 32-bit Delphi Applications to 64-bit Windows
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.ExplicitDefaultPropertyReferenceRule"
     message="Default array properties should not be explicitly referenced"
     name="ExplicitDefaultPropertyReferenceRule">
@@ -808,6 +932,18 @@ FreeAndNil(Foo); // Compliant
       - This rule does not detect if a method is an implementation for an interface.
       In the future, such implementations will be considered overrides and excluded if there is a
       comment inside.
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyUnitRule"
+    message="Units should not be empty"
+    name="EmptyUnitRule">
+    <priority>4</priority>
+    <description>
+      Units with no meaningful code are superfluous and can be removed.
     </description>
     <properties>
       <property name="baseEffort" value="5min"/>
@@ -1100,13 +1236,11 @@ FunctionWithoutArguments;	// Compliant
       For the purposes of this rule, the list must be sorted on the next or previous line.
       &lt;br&gt;
       &lt;br&gt;
-      &lt;b&gt;
-      See:
-      &lt;/b&gt;
+      &lt;b&gt;See:&lt;/b&gt;
       &lt;br&gt;
       - &lt;a
       href='http://docwiki.embarcadero.com/Libraries/en/System.Classes.TStringList.Duplicates'&gt;
-      API Documentation
+      System.Classes.TStringList.Duplicates
       &lt;/a&gt;
     </description>
     <properties>
@@ -1870,6 +2004,76 @@ Result := 123;; // Noncompliant
       <property name="baseEffort" value="10min"/>
       <property name="template" value="true"/>
       <property name="blacklist"/>
+      <property name="message"/>
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenFieldRule"
+    message="Track uses of disallowed fields"
+    name="ForbiddenFieldRule">
+    <priority>3</priority>
+    <description>
+      This rule allows banning particular fields declared by a particular type.
+      It will flag any direct reference to a field from the blacklist.
+      &lt;br&gt;
+      Please note:
+      &lt;br&gt;
+      - Blacklisted field names should be unqualified. (E.g. "FSomeField")
+      &lt;br&gt;
+      - The declaring type name should fully qualified. (E.g. "Unit.Type.InnerType")
+    </description>
+    <properties>
+      <property name="baseEffort" value="10min"/>
+      <property name="template" value="true"/>
+      <property name="blacklist"/>
+      <property name="declaringType"/>
+      <property name="message"/>
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenConstantRule"
+    message="Track uses of disallowed constants"
+    name="ForbiddenConstantRule">
+    <priority>3</priority>
+    <description>
+      This rule allows banning certain constants.
+      It will flag any direct reference to a constant from the blacklist.
+      &lt;br&gt;
+      &lt;br&gt;
+      Please note:
+      &lt;br&gt;
+      - Blacklisted constant names should be unqualified. (E.g. "C_MyConstant")
+      &lt;br&gt;
+      - Only top-level constants in a specified unit are supported.
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+      <property name="template" value="true"/>
+      <property name="blacklist"/>
+      <property name="unitName"/>
+      <property name="message"/>
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.ForbiddenEnumValueRule"
+    message="Track uses of disallowed enum values"
+    name="ForbiddenEnumValueRule">
+    <priority>3</priority>
+    <description>
+      This rule allows banning certain enum values.
+      It will flag any direct reference to an enum value from the blacklist.
+      &lt;br&gt;
+      &lt;br&gt;
+      Please note:
+      &lt;br&gt;
+      - Blacklisted enum value names should be unqualified. (E.g. "Foo")
+      - The enum name should be fully qualified. (E.g. "Unit.TEnum")
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+      <property name="template" value="true"/>
+      <property name="blacklist"/>
+      <property name="enumName"/>
       <property name="message"/>
     </properties>
   </rule>

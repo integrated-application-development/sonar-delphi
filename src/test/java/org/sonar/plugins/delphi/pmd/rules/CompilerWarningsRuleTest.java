@@ -13,9 +13,7 @@ class CompilerWarningsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("CompilerWarningsRule", builder.getOffset() + 1));
+    assertIssues().areExactly(1, ruleKeyAtLine("CompilerWarningsRule", builder.getOffset() + 1));
   }
 
   @Test
@@ -24,7 +22,7 @@ class CompilerWarningsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("CompilerWarningsRule"));
   }
 
   @Test
@@ -34,9 +32,7 @@ class CompilerWarningsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("CompilerWarningsRule", builder.getOffset() + 1));
+    assertIssues().areExactly(1, ruleKeyAtLine("CompilerWarningsRule", builder.getOffset() + 1));
   }
 
   @Test
@@ -46,7 +42,7 @@ class CompilerWarningsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("CompilerWarningsRule"));
   }
 
   @Test
