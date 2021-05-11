@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `PlatformDependentTruncationRule` analysis rule, which flags places where an integer type may or
   may not be truncated depending on the platform.
 - `EmptyUnitRule` analysis rule, which flags units that don't contain any meaningful code.
+- `LegacyInitializationSectionRule` analysis rule, which flags legacy initialization sections
+  (`begin`..`end` instead of `initialization`).
 
 ### Changed
 

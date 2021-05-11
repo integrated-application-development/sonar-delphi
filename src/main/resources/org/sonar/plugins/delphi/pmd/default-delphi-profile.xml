@@ -245,4 +245,8 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.CompilerWarningsRule"
     name="CompilerWarningsRule">
   </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.LegacyInitializationSectionRule"
+    name="LegacyInitializationSectionRule">
+  </rule>
 </ruleset>

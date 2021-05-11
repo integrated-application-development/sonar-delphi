@@ -663,6 +663,30 @@ Foo := Foo; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.LegacyInitializationSectionRule"
+    message="Legacy initialization sections should not be used"
+    name="LegacyInitializationSectionRule">
+    <priority>3</priority>
+    <description>
+      Legacy initialization sections using &lt;code&gt;begin .. end&lt;/code&gt; are functionally equivalent to a
+      regular initialization section. However:
+      &lt;br&gt;
+      - A finalization section cannot be specified.
+      &lt;br&gt;
+      - The syntax is old and not recommended by Embarcadero.
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Programs_and_Units_(Delphi)#The_Initialization_Section'&gt;
+      The Initialization Section
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="Interfaces should have unique GUIDs"
     name="NoGuidRule">
