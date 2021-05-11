@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +32,7 @@ class CommentRegexRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("// Wow, a comment!");
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("TodoCommentsRule"));
   }
 
   @Test
@@ -39,9 +40,7 @@ class CommentRegexRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("// TODO: Add comment");
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("TodoCommentsRule", builder.getOffset() + 1));
+    assertIssues().areExactly(1, ruleKeyAtLine("TodoCommentsRule", builder.getOffset() + 1));
   }
 
   @Test
@@ -50,6 +49,6 @@ class CommentRegexRuleTest extends BasePmdRuleTest {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("// TODO: Add comment");
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("TodoCommentsRule"));
   }
 }

@@ -829,6 +829,18 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyUnitRule"
+    message="Units should not be empty"
+    name="EmptyUnitRule">
+    <priority>4</priority>
+    <description>
+      Units with no meaningful code are superfluous and can be removed.
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.DprFunctionRule"
     message="Project files should not have methods"
     name="ProjectFileNoFunctionsRule">

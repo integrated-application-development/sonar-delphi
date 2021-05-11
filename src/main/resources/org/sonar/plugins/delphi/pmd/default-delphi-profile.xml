@@ -142,6 +142,10 @@
     name="EmptyMethodRule">
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.EmptyUnitRule"
+    name="EmptyUnitRule">
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.DprFunctionRule"
     name="ProjectFileNoFunctionsRule">
   </rule>

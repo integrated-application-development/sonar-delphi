@@ -18,6 +18,7 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import java.util.Objects;
@@ -40,20 +41,20 @@ class UnitNameRuleTest extends BasePmdRuleTest {
   void testValidRule() {
     execute(new DelphiTestUnitBuilder().unitName("PrefixTestUnits"));
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("UnitNameRule"));
   }
 
   @Test
   void testValidUnitUsingNameSpace() {
     execute(new DelphiTestUnitBuilder().unitName("Namespace.PrefixTestUnits"));
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("UnitNameRule"));
   }
 
   @Test
   void testInvalidUnit() {
     execute(new DelphiTestUnitBuilder().unitName("myUnit"));
 
-    assertIssues().hasSize(1).areExactly(1, ruleKeyAtLine("UnitNameRule", 1));
+    assertIssues().areExactly(1, ruleKeyAtLine("UnitNameRule", 1));
   }
 }

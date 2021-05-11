@@ -25,7 +25,7 @@ class CommentedOutCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("CommentedOutCodeRule"));
   }
 
   @Test
@@ -43,11 +43,9 @@ class CommentedOutCodeRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(3)
-        .are(ruleKey("CommentedOutCodeRule"))
-        .areExactly(1, atLine(builder.getOffsetDecl() + 2))
-        .areExactly(1, atLine(builder.getOffsetDecl() + 5))
-        .areExactly(1, atLine(builder.getOffsetDecl() + 7));
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffsetDecl() + 2))
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffsetDecl() + 5))
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffsetDecl() + 7));
   }
 
   @Test
@@ -67,13 +65,11 @@ class CommentedOutCodeRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(5)
-        .are(ruleKey("CommentedOutCodeRule"))
-        .areExactly(1, atLine(builder.getOffsetDecl() + 1))
-        .areExactly(1, atLine(builder.getOffsetDecl() + 3))
-        .areExactly(1, atLine(builder.getOffsetDecl() + 5))
-        .areExactly(1, atLine(builder.getOffsetDecl() + 7))
-        .areExactly(1, atLine(builder.getOffsetDecl() + 9));
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffsetDecl() + 1))
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffsetDecl() + 3))
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffsetDecl() + 5))
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffsetDecl() + 7))
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffsetDecl() + 9));
   }
 
   @Test
@@ -91,12 +87,10 @@ class CommentedOutCodeRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(4)
-        .are(ruleKey("CommentedOutCodeRule"))
-        .areExactly(1, atLine(builder.getOffsetDecl() + 1))
-        .areExactly(1, atLine(builder.getOffsetDecl() + 3))
-        .areExactly(1, atLine(builder.getOffsetDecl() + 5))
-        .areExactly(1, atLine(builder.getOffsetDecl() + 7));
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffsetDecl() + 1))
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffsetDecl() + 3))
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffsetDecl() + 5))
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffsetDecl() + 7));
   }
 
   @Test

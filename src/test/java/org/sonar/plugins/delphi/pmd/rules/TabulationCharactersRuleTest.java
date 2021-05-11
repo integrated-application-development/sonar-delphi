@@ -13,7 +13,7 @@ class TabulationCharactersRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("TabulationCharactersRule"));
   }
 
   @Test

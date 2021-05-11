@@ -4,6 +4,7 @@ import static org.sonar.plugins.delphi.pmd.rules.ForbiddenImportFilePatternRule.
 import static org.sonar.plugins.delphi.pmd.rules.ForbiddenImportFilePatternRule.FORBIDDEN_IMPORT_SYNTAX;
 import static org.sonar.plugins.delphi.pmd.rules.ForbiddenImportFilePatternRule.WHITELIST_PATTERN;
 import static org.sonar.plugins.delphi.pmd.rules.ForbiddenImportFilePatternRule.WHITELIST_SYNTAX;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +55,6 @@ class ForbiddenImportFilePatternRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
         .areExactly(
             1, ruleKeyAtLine("ForbiddenImportFilePatternRuleTest", builder.getOffsetDecl() + 3));
   }
@@ -74,7 +74,7 @@ class ForbiddenImportFilePatternRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("ForbiddenImportFilePatternRuleTest"));
   }
 
   @Test
@@ -92,6 +92,6 @@ class ForbiddenImportFilePatternRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("ForbiddenImportFilePatternRuleTest"));
   }
 }

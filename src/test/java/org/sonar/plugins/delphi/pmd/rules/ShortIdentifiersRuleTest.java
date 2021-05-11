@@ -53,6 +53,6 @@ class ShortIdentifiersRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("ShortIdentifiersRule"));
   }
 }
