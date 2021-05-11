@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.31.0] - 2021-05-12
+
 ### Added
 
 - `PlatformDependentTruncationRule` analysis rule, which flags places where an integer type may or
@@ -747,7 +749,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.30.1...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.31.0...HEAD
+[0.31.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.30.1...v0.31.0
 [0.30.1]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.30.0...v0.30.1
 [0.30.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.29.0...v0.30.0
 [0.29.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.28.0...v0.29.0
