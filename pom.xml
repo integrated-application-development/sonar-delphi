@@ -146,7 +146,7 @@
     <dependency-plugin.version>3.1.2</dependency-plugin.version>
     <javadoc-plugin.version>3.2.0</javadoc-plugin.version>
     <site-plugin.version>3.9.1</site-plugin.version>
-    <dependency-check-plugin.version>6.0.3</dependency-check-plugin.version>
+    <dependency-check-plugin.version>6.1.6</dependency-check-plugin.version>
     <jxr-plugin.version>3.0.0</jxr-plugin.version>
     <errorprone.version>2.4.0</errorprone.version>
     <project-info-reports-plugin.version>3.1.0</project-info-reports-plugin.version>
