@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Handle casts involving strings and arrays in `PlatformDependentCastRule`.
+
 ### Fixed
 
 - Parsing errors on label statements without any corresponding "marked statement".

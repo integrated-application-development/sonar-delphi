@@ -180,7 +180,7 @@ class PlatformDependentCastRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  void testStringCastsShouldNotAddIssue() {
+  void testTObjectStringCastsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -231,6 +231,82 @@ class PlatformDependentCastRuleTest extends BasePmdRuleTest {
             .appendImpl("  Rec: TRecord;")
             .appendImpl("begin")
             .appendImpl("  Rec := TRecord(Obj);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("PlatformDependentCastRule"));
+  }
+
+  @Test
+  void testIntegerStringCastsShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Foo;")
+            .appendImpl("var")
+            .appendImpl("  Int: Integer;")
+            .appendImpl("  Str: String;")
+            .appendImpl("begin")
+            .appendImpl("  Str := String(Int);")
+            .appendImpl("  Int := Integer(Str);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("PlatformDependentCastRule", builder.getOffset() + 6))
+        .areExactly(1, ruleKeyAtLine("PlatformDependentCastRule", builder.getOffset() + 7));
+  }
+
+  @Test
+  void testNativeIntStringCastsShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Foo;")
+            .appendImpl("var")
+            .appendImpl("  Str: String;")
+            .appendImpl("  Nat: NativeInt;")
+            .appendImpl("begin")
+            .appendImpl("  Str := String(Nat);")
+            .appendImpl("  Nat := NativeInt(Str);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("PlatformDependentCastRule"));
+  }
+
+  @Test
+  void testIntegerArrayCastsShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Foo;")
+            .appendImpl("var")
+            .appendImpl("  Int: Integer;")
+            .appendImpl("  Arr: TArray<Byte>;")
+            .appendImpl("begin")
+            .appendImpl("  Arr := TArray<Byte>(Int);")
+            .appendImpl("  Int := Integer(Arr);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("PlatformDependentCastRule", builder.getOffset() + 6))
+        .areExactly(1, ruleKeyAtLine("PlatformDependentCastRule", builder.getOffset() + 7));
+  }
+
+  @Test
+  void testNativeIntArrayCastsShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Foo;")
+            .appendImpl("var")
+            .appendImpl("  Arr: TArray<Byte>;")
+            .appendImpl("  Nat: NativeInt;")
+            .appendImpl("begin")
+            .appendImpl("  Arr := TArray<Byte>(Nat);")
+            .appendImpl("  Nat := NativeInt(Arr);")
             .appendImpl("end;");
 
     execute(builder);
