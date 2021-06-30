@@ -918,9 +918,13 @@ FreeAndNil(Foo); // Compliant
     <description>
       Reasons for a method not to have a method body:
       &lt;br&gt;
-      - It is an unintentional omission, and should be fixed.
+      - It is an unintentional omission, and should be fixed to prevent unexpected behavior.
       &lt;br&gt;
-      - It is an intentionally-blank override or virtual method. In this case, a nested comment should explain the reason for the blank method.
+      - It is an override or virtual method with a nested comment explaining why the method is
+      blank.
+      &lt;br&gt;
+      - It is an interface implementation method with a nested comment explaining why the method is
+      blank.
     </description>
     <properties>
       <property name="baseEffort" value="5min"/>
