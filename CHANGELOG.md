@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Parsing errors on label statements without any corresponding "marked statement".
+
 ## [0.31.0] - 2021-05-12
 
 ### Added

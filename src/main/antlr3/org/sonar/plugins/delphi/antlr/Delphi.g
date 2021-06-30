@@ -709,7 +709,7 @@ statementList                : delimitedStatements? -> ^(TkStatementList<Stateme
                              ;
 delimitedStatements          : (statement | ';')+
                              ;
-labelStatement               : label ':' statement -> ^(TkLabelStatement<LabelStatementNode> label statement)
+labelStatement               : label ':' statement? -> ^(TkLabelStatement<LabelStatementNode> label statement?)
                              ;
 assignmentStatement          : expression ':='<AssignmentStatementNode>^ expressionOrAnonymousMethod
                              ;
