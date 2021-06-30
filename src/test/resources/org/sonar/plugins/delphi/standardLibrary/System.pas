@@ -13,6 +13,8 @@ unit System;
 interface
 
 type
+  TArray<T> = array of T;
+
   TObject = class;
 
   TClass = class of TObject;

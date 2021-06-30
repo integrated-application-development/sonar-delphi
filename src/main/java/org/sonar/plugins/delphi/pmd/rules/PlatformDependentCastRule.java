@@ -3,7 +3,9 @@ package org.sonar.plugins.delphi.pmd.rules;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.ast.Node;
+import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.node.ArgumentListNode;
+import org.sonar.plugins.delphi.antlr.ast.node.CommonDelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
@@ -49,6 +51,11 @@ public class PlatformDependentCastRule extends AbstractDelphiRule {
       if (declaration instanceof TypeNameDeclaration) {
         return ((TypeNameDeclaration) declaration).getType();
       }
+    } else if (previous instanceof CommonDelphiNode) {
+      int tokenType = ((CommonDelphiNode) previous).getToken().getType();
+      if (tokenType == DelphiLexer.STRING) {
+        return argumentList.getTypeFactory().getIntrinsic(IntrinsicType.UNICODESTRING);
+      }
     }
     return DelphiType.unknownType();
   }
@@ -71,7 +78,7 @@ public class PlatformDependentCastRule extends AbstractDelphiRule {
   }
 
   private static boolean isPointerBasedType(Type type) {
-    if (type.isPointer()) {
+    if (type.isPointer() || type.isString() || type.isArray()) {
       return true;
     }
 

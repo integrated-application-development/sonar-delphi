@@ -50,7 +50,7 @@
   }, {
     "groupId" : "com.google.errorprone",
     "artifactId" : "error_prone_annotations",
-    "version" : "2.7.1",
+    "version" : "2.9.0",
     "scope" : "compile",
     "type" : "jar"
   }, {
@@ -110,31 +110,31 @@
   }, {
     "groupId" : "com.tngtech.archunit",
     "artifactId" : "archunit-junit5-api",
-    "version" : "0.20.1",
+    "version" : "0.21.0",
     "scope" : "test",
     "type" : "jar"
   }, {
     "groupId" : "com.tngtech.archunit",
     "artifactId" : "archunit-junit5-engine-api",
-    "version" : "0.20.1",
+    "version" : "0.21.0",
     "scope" : "test",
     "type" : "jar"
   }, {
     "groupId" : "com.tngtech.archunit",
     "artifactId" : "archunit-junit5-engine",
-    "version" : "0.20.1",
+    "version" : "0.21.0",
     "scope" : "test",
     "type" : "jar"
   }, {
     "groupId" : "com.tngtech.archunit",
     "artifactId" : "archunit-junit5",
-    "version" : "0.20.1",
+    "version" : "0.21.0",
     "scope" : "test",
     "type" : "jar"
   }, {
     "groupId" : "com.tngtech.archunit",
     "artifactId" : "archunit",
-    "version" : "0.20.1",
+    "version" : "0.21.0",
     "scope" : "test",
     "type" : "jar"
   }, {
@@ -170,13 +170,13 @@
   }, {
     "groupId" : "net.bytebuddy",
     "artifactId" : "byte-buddy-agent",
-    "version" : "1.11.3",
+    "version" : "1.11.13",
     "scope" : "test",
     "type" : "jar"
   }, {
     "groupId" : "net.bytebuddy",
     "artifactId" : "byte-buddy",
-    "version" : "1.11.3",
+    "version" : "1.11.13",
     "scope" : "test",
     "type" : "jar"
   }, {
@@ -448,7 +448,7 @@
   }, {
     "groupId" : "org.mockito",
     "artifactId" : "mockito-core",
-    "version" : "3.11.2",
+    "version" : "3.12.1",
     "scope" : "test",
     "type" : "jar"
   }, {
