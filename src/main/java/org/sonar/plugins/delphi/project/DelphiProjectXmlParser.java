@@ -68,6 +68,8 @@ public class DelphiProjectXmlParser extends DefaultHandler {
       SAXParserFactory factory = SAXParserFactory.newInstance();
       factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       SAXParser parser = factory.newSAXParser();
+      parser.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+      parser.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
       parser.parse(fileName, this);
     } catch (ParserConfigurationException | SAXException | IOException e) {
       LOG.error("{}: Error while parsing project file: ", fileName, e);

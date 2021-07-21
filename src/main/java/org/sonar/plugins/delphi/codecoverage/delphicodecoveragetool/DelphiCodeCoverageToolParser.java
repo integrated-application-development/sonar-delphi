@@ -97,6 +97,8 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser {
     try {
       DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
       docBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+      docBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+      docBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
       DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
       Document doc = docBuilder.parse(reportFile);
 
