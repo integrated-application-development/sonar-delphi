@@ -128,7 +128,7 @@ public class MemoryManagementRule extends AbstractDelphiRule {
     }
 
     List<ExpressionNode> arguments = ((ArgumentListNode) parent).getArguments();
-    int argumentIndex = arguments.indexOf((ExpressionNode) argument);
+    int argumentIndex = Iterables.indexOf(arguments, argument::equals);
 
     List<Type> parameters = ((ProceduralType) type).parameterTypes();
     Type parameterType =

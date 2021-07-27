@@ -65,8 +65,8 @@ public class FormatSettingsInitializationRule extends AbstractDelphiRule {
     }
 
     for (VarSectionNode section : node.findChildrenOfType(VarSectionNode.class)) {
-      for (VarDeclarationNode var : section.getDeclarations()) {
-        var.getNameDeclarationList().getDeclarations().stream()
+      for (VarDeclarationNode variable : section.getDeclarations()) {
+        variable.getNameDeclarationList().getDeclarations().stream()
             .map(NameDeclarationNode::getNameDeclaration)
             .filter(VariableNameDeclaration.class::isInstance)
             .map(VariableNameDeclaration.class::cast)
