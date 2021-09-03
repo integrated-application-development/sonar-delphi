@@ -163,6 +163,38 @@ class InvocationResolverTest {
   }
 
   @Test
+  void testMixedToFloatingPointTypes() {
+    assertResolved(
+        List.of(type(EXTENDED), type(INTEGER)),
+        List.of(type(EXTENDED), type(EXTENDED)),
+        List.of(type(SINGLE), type(SINGLE)));
+    assertResolved(
+        List.of(type(EXTENDED), type(INTEGER)),
+        List.of(type(EXTENDED), type(EXTENDED)),
+        List.of(type(DOUBLE), type(DOUBLE)));
+    assertResolved(
+        List.of(type(INTEGER), type(INTEGER)),
+        List.of(type(SINGLE), type(SINGLE)),
+        List.of(type(EXTENDED), type(EXTENDED)));
+  }
+
+  @Test
+  void testIntegerToFloatingPointTypes() {
+    assertResolved(
+        List.of(type(SHORTINT), type(SHORTINT)),
+        List.of(type(INTEGER), type(INTEGER)),
+        List.of(type(SINGLE), type(SINGLE)));
+    assertResolved(
+        List.of(type(SHORTINT), type(SHORTINT)),
+        List.of(type(INTEGER), type(INTEGER)),
+        List.of(type(DOUBLE), type(DOUBLE)));
+    assertResolved(
+        List.of(type(SHORTINT), type(SHORTINT)),
+        List.of(type(INTEGER), type(INTEGER)),
+        List.of(type(EXTENDED), type(EXTENDED)));
+  }
+
+  @Test
   void testTextTypes() {
     assertResolved(
         FACTORY.typeType("MyString", type(UNICODESTRING)), type(UNICODESTRING), type(SHORTSTRING));

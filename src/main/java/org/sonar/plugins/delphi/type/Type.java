@@ -39,7 +39,7 @@ public interface Type {
   Set<Type> parents();
 
   /**
-   * The size of this integer type
+   * The size of this type
    *
    * @return Size
    */

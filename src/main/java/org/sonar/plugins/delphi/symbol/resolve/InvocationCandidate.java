@@ -32,6 +32,7 @@ public final class InvocationCandidate {
   private int convertOperatorCount;
   private double ordinalDistance;
   private int signMismatchCount;
+  private int numericMismatchCount;
   private int structMismatchCount;
   private int proceduralDistance;
   private final List<VariantConversionType> variantConversions;
@@ -93,6 +94,14 @@ public final class InvocationCandidate {
 
   public void incrementSignMismatchCount() {
     ++this.signMismatchCount;
+  }
+
+  public int getNumericMismatchCount() {
+    return numericMismatchCount;
+  }
+
+  public void incrementNumericMismatchCount() {
+    ++this.numericMismatchCount;
   }
 
   public int getStructMismatchCount() {
