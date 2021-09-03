@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.32.0] - 2021-09-03
+
 ### Added
 
 - `MathFunctionSingleOverloadRule` analysis rule, which flags calls to the `Single` overloads of the
@@ -40,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     [documentation](https://docwiki.embarcadero.com/RADStudio/Rio/en/Delphi_Considerations_for_Multi-Device_Applications#The_Extended_Data_Type_is_different_on_different_platforms),
     8-byte `Extended` is not an alias to Double.
 
-## [0.31.1]
+## [0.31.1] - 2021-06-30
 
 ### Changed
 
@@ -793,7 +795,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.31.1...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.32.0...HEAD
+[0.32.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.31.1...v0.32.0
 [0.31.1]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.31.0...v0.31.1
 [0.31.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.30.1...v0.31.0
 [0.30.1]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.30.0...v0.30.1
