@@ -41,13 +41,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
-import org.sonar.plugins.delphi.symbol.declaration.parameter.FormalParameter;
-import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.ArrayOption;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
+import org.sonar.plugins.delphi.type.parameter.FormalParameter;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 import org.sonar.plugins.delphi.utils.types.TypeFactoryUtils;
 import org.sonar.plugins.delphi.utils.types.TypeMocker;
 

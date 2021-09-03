@@ -635,11 +635,15 @@ class TypeComparerTest {
   }
 
   private static ProceduralType procedure(List<Type> parameterTypes, Type returnType) {
-    return FACTORY.procedure(parameterTypes, returnType);
+    return FACTORY.procedure(
+        parameterTypes.stream().map(TypeMocker::parameter).collect(Collectors.toUnmodifiableList()),
+        returnType);
   }
 
   private static ProceduralType anonymous(List<Type> parameterTypes, Type returnType) {
-    return FACTORY.anonymous(parameterTypes, returnType);
+    return FACTORY.anonymous(
+        parameterTypes.stream().map(TypeMocker::parameter).collect(Collectors.toUnmodifiableList()),
+        returnType);
   }
 
   private static AnsiStringType ansiString(int codePage) {

@@ -13,6 +13,7 @@ import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.TypeUtils;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 
 public class PlatformDependentTruncationRule extends AbstractDelphiRule {
   @Override
@@ -36,10 +37,10 @@ public class PlatformDependentTruncationRule extends AbstractDelphiRule {
     }
 
     List<ExpressionNode> arguments = argumentList.getArguments();
-    List<Type> parameterTypes = procedural.parameterTypes();
-    for (int i = 0; i < arguments.size() && i < parameterTypes.size(); ++i) {
+    List<Parameter> parameters = procedural.parameters();
+    for (int i = 0; i < arguments.size() && i < parameters.size(); ++i) {
       ExpressionNode argument = arguments.get(i);
-      if (isViolation(argument.getType(), parameterTypes.get(i))) {
+      if (isViolation(argument.getType(), parameters.get(i).getType())) {
         addViolation(data, argument);
       }
     }

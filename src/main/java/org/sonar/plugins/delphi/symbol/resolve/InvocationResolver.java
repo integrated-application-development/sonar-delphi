@@ -35,7 +35,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.symbol.resolve.TypeConverter.TypeConversion;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.CollectionType;
@@ -46,6 +45,7 @@ import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType.ProceduralKind;
 import org.sonar.plugins.delphi.type.Type.StructType;
 import org.sonar.plugins.delphi.type.TypeUtils;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 
 /**
  * Resolves an invocation to the correct declaration. Based directly off of the tcallcandidates

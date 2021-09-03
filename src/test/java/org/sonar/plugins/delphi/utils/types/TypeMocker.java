@@ -10,6 +10,7 @@ import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
 import org.sonar.plugins.delphi.type.StructKind;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.StructType;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 
 public final class TypeMocker {
   private TypeMocker() {
@@ -42,5 +43,12 @@ public final class TypeMocker {
         .thenAnswer(invocation -> type.isSubTypeOf(((Type) invocation.getArgument(0)).getImage()));
     when(type.superType()).thenReturn(superType);
     return type;
+  }
+
+  public static Parameter parameter(Type type) {
+    Parameter parameter = mock(Parameter.class);
+    when(parameter.getImage()).thenReturn("_");
+    when(parameter.getType()).thenReturn(type);
+    return parameter;
   }
 }

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Improve modeling of intrinsic methods to include parameter specifiers. (`out`, `var`, `const`)
 - Clean up property names and descriptions.
 
 ## [0.31.1]

@@ -1,11 +1,8 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.sonar.plugins.delphi.type.DelphiType.unknownType;
-
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Iterables;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import net.sourceforge.pmd.RuleContext;
@@ -29,6 +26,7 @@ import org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Typed;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 
 public class MemoryManagementRule extends AbstractDelphiRule {
   @VisibleForTesting
@@ -130,11 +128,8 @@ public class MemoryManagementRule extends AbstractDelphiRule {
     List<ExpressionNode> arguments = ((ArgumentListNode) parent).getArguments();
     int argumentIndex = Iterables.indexOf(arguments, argument::equals);
 
-    List<Type> parameters = ((ProceduralType) type).parameterTypes();
-    Type parameterType =
-        Objects.requireNonNull(Iterables.get(parameters, argumentIndex, unknownType()));
-
-    return parameterType.isInterface();
+    Parameter parameter = ((ProceduralType) type).getParameter(argumentIndex);
+    return parameter.getType().isInterface();
   }
 
   private static boolean isExceptionRaise(PrimaryExpressionNode expression) {

@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 
 public interface Type {
 
@@ -484,11 +485,26 @@ public interface Type {
     Type returnType();
 
     /**
-     * The types of the parameters that this method expects
+     * The parameters that this method expects
      *
-     * @return Expected types of parameters
+     * @return Expected parameters
      */
-    List<Type> parameterTypes();
+    List<Parameter> parameters();
+
+    /**
+     * The number of parameters
+     *
+     * @return Number of parameters
+     */
+    int parametersCount();
+
+    /**
+     * Gets a parameter by index
+     *
+     * @param index The index of the parameter to get
+     * @return Parameter
+     */
+    Parameter getParameter(int index);
 
     /**
      * The kind of procedural type that this type is

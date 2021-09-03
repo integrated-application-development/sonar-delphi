@@ -1,9 +1,11 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
+import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.parameter.FormalParameter;
 
 public final class ProcedureReferenceTypeNode extends ProceduralTypeNode {
   public ProcedureReferenceTypeNode(Token token) {
@@ -18,6 +20,11 @@ public final class ProcedureReferenceTypeNode extends ProceduralTypeNode {
   @Override
   @NotNull
   public Type createType() {
-    return getTypeFactory().reference(getParameterTypes(), getReturnType());
+    return getTypeFactory()
+        .reference(
+            getParameters().stream()
+                .map(FormalParameter::create)
+                .collect(Collectors.toUnmodifiableList()),
+            getReturnType());
   }
 }

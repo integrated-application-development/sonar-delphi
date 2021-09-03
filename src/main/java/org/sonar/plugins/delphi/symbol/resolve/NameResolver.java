@@ -50,7 +50,6 @@ import org.sonar.plugins.delphi.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration;
-import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.symbol.scope.FileScope;
 import org.sonar.plugins.delphi.symbol.scope.MethodScope;
@@ -74,6 +73,7 @@ import org.sonar.plugins.delphi.type.generic.DelphiTypeParameterType;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicReturnType;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 
 public class NameResolver {
   private final TypeFactory typeFactory;
@@ -811,14 +811,14 @@ public class NameResolver {
       addResolvedDeclaration();
     }
 
-    List<Type> parameterTypes = proceduralType.parameterTypes();
-    int count = Math.min(argumentExpressions.size(), parameterTypes.size());
+    List<Parameter> parameters = proceduralType.parameters();
+    int count = Math.min(argumentExpressions.size(), parameters.size());
 
     for (int i = 0; i < count; ++i) {
       ExpressionNode argument = argumentExpressions.get(i);
       getNameResolutionHelper().resolveSubExpressions(argument);
       InvocationArgument invocationArgument = new InvocationArgument(argument);
-      invocationArgument.resolve(parameterTypes.get(i));
+      invocationArgument.resolve(parameters.get(i).getType());
     }
 
     updateType(proceduralType.returnType());

@@ -30,7 +30,6 @@ import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypeParameterNameDeclaration;
-import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ClassReferenceType;
@@ -42,6 +41,7 @@ import org.sonar.plugins.delphi.type.Typed;
 import org.sonar.plugins.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicReturnType;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 
 public final class ExpressionTypeResolver {
   private final TypeFactory typeFactory;

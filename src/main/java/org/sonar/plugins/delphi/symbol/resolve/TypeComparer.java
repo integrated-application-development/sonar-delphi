@@ -35,6 +35,7 @@ import org.sonar.plugins.delphi.type.Type.VariantType;
 import org.sonar.plugins.delphi.type.Type.VariantType.VariantKind;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 
 class TypeComparer {
   private TypeComparer() {
@@ -610,7 +611,7 @@ class TypeComparer {
 
   private static EqualityType procToProcVarEqual(ProceduralType from, ProceduralType to) {
     if (equals(from.returnType(), to.returnType())) {
-      var paramEquality = compareParameters(from.parameterTypes(), to.parameterTypes());
+      var paramEquality = compareParameters(from.parameters(), to.parameters());
       if (paramEquality == EXACT) {
         return EQUAL;
       } else if (paramEquality == EQUAL) {
@@ -620,7 +621,7 @@ class TypeComparer {
     return INCOMPATIBLE_TYPES;
   }
 
-  private static EqualityType compareParameters(List<Type> from, List<Type> to) {
+  private static EqualityType compareParameters(List<Parameter> from, List<Parameter> to) {
     if (from.size() != to.size()) {
       return INCOMPATIBLE_TYPES;
     }
@@ -628,7 +629,7 @@ class TypeComparer {
     EqualityType lowestEquality = EXACT;
 
     for (int i = 0; i < to.size(); ++i) {
-      EqualityType equality = compare(from.get(i), to.get(i));
+      EqualityType equality = compare(from.get(i).getType(), to.get(i).getType());
       if (equality.ordinal() < lowestEquality.ordinal()) {
         lowestEquality = equality;
       }
