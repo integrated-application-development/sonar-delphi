@@ -872,6 +872,61 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.MathFunctionSingleOverloadRule"
+    message="The Single overloads of the standard math functions should not be used"
+    name="MathFunctionSingleOverloadRule">
+    <priority>1</priority>
+    <description>
+      The &lt;code&gt;Single&lt;/code&gt; overloads of the standard math functions are less accurate in 64-bit due to the reduced precision of the &lt;code&gt;Extended&lt;/code&gt; type.
+      &lt;br&gt;
+      In 32-bit: Floating-point calculations use the x87 FPU, which gives 80 bits of precision.
+      &lt;br&gt;
+      In 64-bit: Floating-point calculations use SSE2 instructions. This only gives 64 bits of precision, but is faster.
+      &lt;br&gt;
+      &lt;br&gt;
+      These accuracy issues can produce incorrect results on 64-bit.
+      &lt;br&gt;
+      In 32-bit: &lt;code&gt;Power(10, 12)&lt;/code&gt; produces 1,000,000,000,000
+      &lt;br&gt;
+      In 64-bit: &lt;code&gt;Power(10, 12)&lt;/code&gt; produces 999,999,995,904
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='https://en.wikipedia.org/wiki/X87'&gt;x87&lt;/a&gt;
+      &lt;br&gt;
+      - &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/Delphi_Considerations_for_Multi-Device_Applications#The_Extended_Data_Type_is_different_on_different_platforms'&gt;
+      The Extended Data Type is different on different platforms
+      &lt;/a&gt;
+      &lt;br&gt;
+      - &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/About_Floating-Point_Arithmetic'&gt;
+      About Floating-Point Arithmetic
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+      <property name="type" value="BUG"/>
+    </properties>
+    <example>
+      <![CDATA[
+<b>procedure</b> Example(I: Integer; S: Single; D: Double; E: Extended);
+<b>begin</b>
+  Power(I, 2); // Noncompliant (Integer arguments cause the Single overload to be selected)
+  Power(S, 2); // Noncompliant
+
+  Power(D, 2); // Compliant
+  Power(E, 2); // Compliant
+
+  Power(Double(I), 2); // Compliant
+  Power(Double(S), 2); // Compliant
+
+  Power(10, 2); // Noncompliant (Integer literals cause the Single overload to be selected)
+  Power(10.0, 2); // Compliant (Floating-point literals cause the Extended overload to be selected)
+<b>end</b>;
+        ]]>
+    </example>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.ExplicitDefaultPropertyReferenceRule"
     message="Default array properties should not be explicitly referenced"
     name="ExplicitDefaultPropertyReferenceRule">
@@ -885,7 +940,6 @@ FreeAndNil(Foo); // Compliant
       <property name="baseEffort" value="2min"/>
     </properties>
     <example>
-      <![CDATA[
       <![CDATA[
 <b>procedure</b> Foo(Bar: TObjectList);
 <b>var</b>

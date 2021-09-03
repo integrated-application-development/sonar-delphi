@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `MathFunctionSingleOverloadRule` analysis rule, which flags calls to the `Single` overloads of the
+  standard math functions.
 - `TextFile` intrinsic type, which is an alias to `Text`.
 
 ### Changed
