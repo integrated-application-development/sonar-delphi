@@ -59,6 +59,9 @@ public class PlatformDependentTruncationRule extends AbstractDelphiRule {
   }
 
   private static boolean isViolation(Type from, Type to) {
+    from = TypeUtils.findBaseType(from);
+    to = TypeUtils.findBaseType(to);
+
     if (!from.isInteger() || !to.isInteger()) {
       return false;
     }
@@ -71,7 +74,6 @@ public class PlatformDependentTruncationRule extends AbstractDelphiRule {
   }
 
   private static boolean isNativeInteger(Type type) {
-    type = TypeUtils.findBaseType(type);
     return type.is(IntrinsicType.NATIVEINT) || type.is(IntrinsicType.NATIVEUINT);
   }
 }

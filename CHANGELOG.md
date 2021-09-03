@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve overload resolution around numeric type mismatches. (integer vs floating point)
 - Improve modeling of intrinsic methods to include parameter specifiers. (`out`, `var`, `const`)
 - Improve handling of `type` types in `PlatformDependentCastRule`.
+- Improve handling of `type` types in `PlatformDependentTruncationRule`.
 - Clean up property names and descriptions.
 
 ### Fixed
