@@ -78,10 +78,9 @@ class EmptyBracketsRuleTest extends BasePmdRuleTest {
   void testInvocationOfProcVarShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendDecl("procedure MyProcedure;")
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  ProcVar: procedure;")
+            .appendDecl("type")
+            .appendDecl("  TProc = procedure;")
+            .appendImpl("procedure Test(ProcVar: TProc);")
             .appendImpl("begin")
             .appendImpl("  ProcVar();")
             .appendImpl("end;");

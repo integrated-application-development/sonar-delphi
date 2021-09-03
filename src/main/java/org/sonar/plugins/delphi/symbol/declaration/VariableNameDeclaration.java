@@ -9,7 +9,10 @@ import org.sonar.plugins.delphi.antlr.ast.node.ForInStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ForLoopVarDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ForToStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode.DeclarationKind;
+import org.sonar.plugins.delphi.antlr.ast.node.RecordVariantItemNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
+import org.sonar.plugins.delphi.antlr.ast.node.VarDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.Visibility;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
@@ -28,10 +31,18 @@ public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
   private final Type type;
   private final VisibilityType visibility;
   private final boolean inline;
+  private final boolean field;
+  private final boolean union;
   private int hashCode;
 
   public VariableNameDeclaration(NameDeclarationNode node) {
-    this(new SymbolicNode(node), extractType(node), extractVisibility(node), extractInline(node));
+    this(
+        new SymbolicNode(node),
+        extractType(node),
+        extractVisibility(node),
+        extractInline(node),
+        extractField(node),
+        extractUnion(node));
   }
 
   private VariableNameDeclaration(String image, Type type, DelphiScope scope) {
@@ -39,14 +50,23 @@ public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
     this.type = type;
     this.visibility = VisibilityType.PUBLIC;
     this.inline = false;
+    this.field = false;
+    this.union = false;
   }
 
   private VariableNameDeclaration(
-      SymbolicNode location, Type type, VisibilityType visibility, boolean inline) {
+      SymbolicNode location,
+      Type type,
+      VisibilityType visibility,
+      boolean inline,
+      boolean field,
+      boolean union) {
     super(location);
     this.type = type;
     this.visibility = visibility;
     this.inline = inline;
+    this.field = field;
+    this.union = union;
   }
 
   public static VariableNameDeclaration compilerVariable(
@@ -155,6 +175,21 @@ public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
     }
   }
 
+  private static boolean extractField(NameDeclarationNode node) {
+    return node.getKind() == DeclarationKind.FIELD;
+  }
+
+  private static boolean extractUnion(NameDeclarationNode node) {
+    switch (node.getKind()) {
+      case FIELD:
+        return node.getNthParent(3) instanceof RecordVariantItemNode;
+      case VAR:
+        return ((VarDeclarationNode) node.getNthParent(2)).isAbsolute();
+      default:
+        return false;
+    }
+  }
+
   @Override
   @NotNull
   public Type getType() {
@@ -170,9 +205,18 @@ public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
     return inline;
   }
 
+  public boolean isField() {
+    return field;
+  }
+
+  public boolean isUnion() {
+    return union;
+  }
+
   @Override
   protected DelphiNameDeclaration doSpecialization(TypeSpecializationContext context) {
-    return new VariableNameDeclaration(getNode(), type.specialize(context), visibility, inline);
+    return new VariableNameDeclaration(
+        getNode(), type.specialize(context), visibility, inline, field, union);
   }
 
   @Override

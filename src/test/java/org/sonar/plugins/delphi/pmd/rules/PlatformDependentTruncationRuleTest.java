@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ class PlatformDependentTruncationRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("PlatformDependentTruncationRule"));
   }
 
   @Test
@@ -73,7 +74,7 @@ class PlatformDependentTruncationRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("PlatformDependentTruncationRule"));
   }
 
   @Test
@@ -90,7 +91,7 @@ class PlatformDependentTruncationRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("PlatformDependentTruncationRule"));
   }
 
   @Test
@@ -107,7 +108,7 @@ class PlatformDependentTruncationRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("PlatformDependentTruncationRule"));
   }
 
   @Test
@@ -160,7 +161,7 @@ class PlatformDependentTruncationRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("PlatformDependentTruncationRule"));
   }
 
   @Test
@@ -177,6 +178,6 @@ class PlatformDependentTruncationRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("PlatformDependentTruncationRule"));
   }
 }

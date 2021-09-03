@@ -663,24 +663,23 @@ Foo := Foo; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.FormatSettingsInitializationRule"
-    message="TFormatSettings must be initialized before being used"
-    name="FormatSettingsInitializationRule">
+  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableInitializationRule"
+    message="Variables must be initialized before being used"
+    name="VariableInitializationRule">
     <priority>3</priority>
     <description>
-      A &lt;code&gt;TFormatSettings&lt;/code&gt; record must be populated before use.
-      &lt;br&gt;
-      This can be done by calling &lt;code&gt;TFormatSettings.Create&lt;/code&gt; and specifying the desired locale.
-      &lt;br&gt;
-      Alternatively, &lt;code&gt;TFormatSettings.Invariant&lt;/code&gt; will set the record to predefined
-      standard values which correspond to the English locale but do not set any country/region.
+      Variables must be initialized before use.
       &lt;br&gt;
       &lt;br&gt;
-      &lt;b&gt;See:&lt;/b&gt;
+      The following Managed types are initialized by default:
       &lt;br&gt;
-      - &lt;a href='http://docwiki.embarcadero.com/Libraries/en/System.SysUtils.TFormatSettings'&gt;
-      System.SysUtils.TFormatSettings
-      &lt;/a&gt;
+      - Strings
+      &lt;br&gt;
+      - Dynamic Arrays
+      &lt;br&gt;
+      - Variants
+      &lt;br&gt;
+      - Interfaces
     </description>
     <properties>
       <property name="baseEffort" value="5min"/>

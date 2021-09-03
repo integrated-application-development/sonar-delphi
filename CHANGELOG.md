@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   procedural values via the address-of `@` operator.
 - `FreeAndNilTObjectRule` analysis rule, which flags `FreeAndNil` arguments that aren't `TObject`
   instances.
+- `VariableInitializationRule` analysis rule, which flags places where variables are used without
+  being initialized first.
 - `TextFile` intrinsic type, which is an alias to `Text`.
 
 ### Changed

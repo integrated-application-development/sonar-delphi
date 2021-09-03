@@ -213,7 +213,7 @@ typeDeclaration              : customAttribute? genericNameDeclaration '=' typeD
 varSection                   : ('var'<VarSectionNode>^ | 'threadvar'<VarSectionNode>^) varDeclaration varDeclaration*
                              ;
 varDeclaration               : customAttribute? nameDeclarationList ':' varType portabilityDirective* varValueSpec? portabilityDirective* ';'
-                             -> ^(TkVarDeclaration<VarDeclarationNode> nameDeclarationList varType customAttribute?)
+                             -> ^(TkVarDeclaration<VarDeclarationNode> nameDeclarationList varType varValueSpec? customAttribute?)
                              ;
 varValueSpec                 : 'absolute' constExpression
                              | '=' constExpression
