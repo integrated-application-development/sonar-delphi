@@ -841,14 +841,7 @@ public class NameResolver {
 
     InvocationResolver resolver = new InvocationResolver();
     argumentExpressions.stream().map(InvocationArgument::new).forEach(resolver::addArgument);
-    declarations.stream()
-        .map(Invocable.class::cast)
-        .map(InvocationCandidate::new)
-        .forEach(resolver::addCandidate);
-
-    if (names.isEmpty() || !getLast(names).isGeneric()) {
-      createImplicitSpecializationCandidates(resolver);
-    }
+    createCandidates(resolver);
 
     resolver.processCandidates();
     Set<InvocationCandidate> bestCandidate = resolver.chooseBest();
@@ -898,23 +891,34 @@ public class NameResolver {
     }
   }
 
-  private void createImplicitSpecializationCandidates(InvocationResolver resolver) {
-    List<Type> argumentTypes =
-        resolver.getArguments().stream()
-            .map(NameResolver::getArgumentTypeForImplicitSpecialization)
-            .collect(Collectors.toList());
+  private void createCandidates(InvocationResolver resolver) {
+    declarations.stream()
+        .map(Invocable.class::cast)
+        .forEach(invocable -> createCandidate(invocable, resolver));
+  }
 
-    for (NameDeclaration declaration : declarations) {
-      var specialized = InvocationCandidate.implicitSpecialization(declaration, argumentTypes);
-      if (specialized != null) {
-        resolver.addCandidate(specialized);
-      }
+  private void createCandidate(Invocable invocable, InvocationResolver resolver) {
+    InvocationCandidate candidate = null;
+    boolean couldBeImplicitSpecialization = names.isEmpty() || !getLast(names).isGeneric();
+
+    if (couldBeImplicitSpecialization) {
+      List<Type> argumentTypes =
+          resolver.getArguments().stream()
+              .map(NameResolver::getArgumentTypeForImplicitSpecialization)
+              .collect(Collectors.toList());
+      candidate = InvocationCandidate.implicitSpecialization(invocable, argumentTypes);
     }
+
+    if (candidate == null) {
+      candidate = new InvocationCandidate(invocable);
+    }
+
+    resolver.addCandidate(candidate);
   }
 
   private static Type getArgumentTypeForImplicitSpecialization(InvocationArgument argument) {
     Type type = argument.getType();
-    if (argument.looksLikeMethodReference()) {
+    if (argument.looksLikeProceduralReference()) {
       Type returnType = ((ProceduralType) type).returnType();
       if (!returnType.is(voidType())) {
         type = returnType;

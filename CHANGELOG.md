@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Overload resolution could get confused by similar generic specializations.
 - Treat 8-byte `Extended` as a unique type:
   - `Extended` is 8 bytes on `DCC64` and several other toolchains.
   - Contrary to the Embarcadero

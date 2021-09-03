@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.sonar.plugins.delphi.operator.OperatorIntrinsic;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypedDeclaration;
@@ -148,12 +147,12 @@ public final class InvocationCandidate {
   }
 
   public static InvocationCandidate implicitSpecialization(
-      NameDeclaration declaration, List<Type> argumentTypes) {
-    if (!(declaration instanceof MethodNameDeclaration)) {
+      Invocable invocable, List<Type> argumentTypes) {
+    if (!(invocable instanceof MethodNameDeclaration)) {
       return null;
     }
 
-    MethodNameDeclaration methodDeclaration = (MethodNameDeclaration) declaration;
+    MethodNameDeclaration methodDeclaration = (MethodNameDeclaration) invocable;
     if (!methodDeclaration.isGeneric()) {
       return null;
     }
@@ -189,9 +188,9 @@ public final class InvocationCandidate {
             .collect(Collectors.toUnmodifiableList());
 
     var context = new TypeSpecializationContext(methodDeclaration, typeArguments);
-    Invocable invocable = (Invocable) methodDeclaration.specialize(context);
+    Invocable specialized = (Invocable) methodDeclaration.specialize(context);
 
-    return new InvocationCandidate(invocable);
+    return new InvocationCandidate(specialized);
   }
 
   @Override
