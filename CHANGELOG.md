@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Improve type comparisons from integer to floating point types.
+- Improve type comparisons from `Currency` to integer types.
+- Improve type comparisons betweeen floating point types.
 - Improve name and overload resolution around "address of procedural value" expressions.
 - Improve overload resolution around numeric type mismatches. (integer vs floating point)
 - Improve modeling of intrinsic methods to include parameter specifiers. (`out`, `var`, `const`)
