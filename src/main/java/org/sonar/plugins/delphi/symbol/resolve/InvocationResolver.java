@@ -105,14 +105,14 @@ public class InvocationResolver {
       InvocationCandidate candidate, InvocationArgument argument, Parameter parameter) {
     Type argumentType = argument.getType();
     Type parameterType = parameter.getType();
-    boolean ambiguousMethodReference = false;
+    boolean ambiguousProceduralReference = false;
 
     // Convert ProceduralType to its returnType when not expecting a procedural type
     if (argumentType.isProcedural() && !parameterType.isProcedural()) {
       ProceduralType proceduralType = ((ProceduralType) argumentType);
       if (proceduralType.kind() != ProceduralKind.ANONYMOUS) {
         argumentType = proceduralType.returnType();
-        ambiguousMethodReference = argument.looksLikeMethodReference();
+        ambiguousProceduralReference = argument.looksLikeProceduralReference();
       }
     }
 
@@ -168,7 +168,7 @@ public class InvocationResolver {
     // downgraded to equal.
     // Ordinal distance is also increased.
     // This way an overload call with the procedural type is always chosen instead.
-    if (equality == EXACT && ambiguousMethodReference) {
+    if (equality == EXACT && ambiguousProceduralReference) {
       equality = EQUAL;
       candidate.increaseOrdinalDistance(1);
     }
