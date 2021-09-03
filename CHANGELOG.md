@@ -21,6 +21,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve modeling of intrinsic methods to include parameter specifiers. (`out`, `var`, `const`)
 - Clean up property names and descriptions.
 
+### Fixed
+
+- Treat 8-byte `Extended` as a unique type:
+  - `Extended` is 8 bytes on `DCC64` and several other toolchains.
+  - Contrary to the Embarcadero
+    [documentation](https://docwiki.embarcadero.com/RADStudio/Rio/en/Delphi_Considerations_for_Multi-Device_Applications#The_Extended_Data_Type_is_different_on_different_platforms),
+    8-byte `Extended` is not an alias to Double.
+
 ## [0.31.1]
 
 ### Changed

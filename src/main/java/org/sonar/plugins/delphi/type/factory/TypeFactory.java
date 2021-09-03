@@ -80,23 +80,6 @@ public class TypeFactory {
     return compilerVersion.compareTo(VERSION_4) < 0;
   }
 
-  private boolean isExtended16Bytes() {
-    // See: http://bit.ly/extended-on-different-platforms
-    switch (toolchain) {
-      case DCCOSX:
-      case DCCIOS32:
-      case DCCLINUX64:
-        return true;
-      default:
-        return false;
-    }
-  }
-
-  private boolean isExtended10Bytes() {
-    // See: http://bit.ly/extended-on-different-platforms
-    return toolchain.platform == Platform.WINDOWS && toolchain.architecture == Architecture.X86;
-  }
-
   private boolean isLong64Bit() {
     // See: http://bit.ly/long-on-different-platforms
     return compilerVersion.compareTo(VERSION_XE8) >= 0
@@ -114,6 +97,20 @@ public class TypeFactory {
       return x86;
     } else {
       return x64;
+    }
+  }
+
+  private int extendedSize() {
+    // See: http://bit.ly/extended-on-different-platforms
+    switch (toolchain) {
+      case DCCOSX:
+      case DCCIOS32:
+      case DCCLINUX64:
+        return 16;
+      case DCC32:
+        return 10;
+      default:
+        return 8;
     }
   }
 
@@ -186,19 +183,12 @@ public class TypeFactory {
     addDecimal(IntrinsicType.REAL48, 6);
     addDecimal(IntrinsicType.COMP, 8);
     addDecimal(IntrinsicType.CURRENCY, 8);
+    addDecimal(IntrinsicType.EXTENDED, extendedSize());
 
     if (isReal48Bit()) {
       addAlias(IntrinsicType.REAL, IntrinsicType.REAL48);
     } else {
       addAlias(IntrinsicType.REAL, IntrinsicType.DOUBLE);
-    }
-
-    if (isExtended16Bytes()) {
-      addDecimal(IntrinsicType.EXTENDED, 16);
-    } else if (isExtended10Bytes()) {
-      addDecimal(IntrinsicType.EXTENDED, 10);
-    } else {
-      addAlias(IntrinsicType.EXTENDED, IntrinsicType.DOUBLE);
     }
 
     addInteger(IntrinsicType.SHORTINT, 1, true);
