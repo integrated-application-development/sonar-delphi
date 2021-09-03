@@ -137,6 +137,13 @@ public interface Type {
   boolean isVoid();
 
   /**
+   * Check if this type is a class type
+   *
+   * @return true if the type is a class type
+   */
+  boolean isClass();
+
+  /**
    * Check if this type is an interface type
    *
    * @return true if the type is an interface type

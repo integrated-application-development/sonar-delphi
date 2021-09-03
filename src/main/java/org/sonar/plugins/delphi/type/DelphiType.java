@@ -121,6 +121,11 @@ public abstract class DelphiType implements Type {
   }
 
   @Override
+  public boolean isClass() {
+    return false;
+  }
+
+  @Override
   public boolean isInterface() {
     return false;
   }

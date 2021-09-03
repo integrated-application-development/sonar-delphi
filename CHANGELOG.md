@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   standard math functions.
 - `AddressOfNestedMethodRule` analysis rule, which flags instances where subroutines are treated as
   procedural values via the address-of `@` operator.
+- `FreeAndNilTObjectRule` analysis rule, which flags `FreeAndNil` arguments that aren't `TObject`
+  instances.
 - `TextFile` intrinsic type, which is an alias to `Text`.
 
 ### Changed

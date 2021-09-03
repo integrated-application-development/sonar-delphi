@@ -814,6 +814,30 @@ FreeAndNil(Foo); // Compliant
     </example>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.FreeAndNilTObjectRule"
+    message="FreeAndNil must only be passed an instance of a TObject descendant"
+    name="FreeAndNilTObjectRule">
+    <priority>1</priority>
+    <description>
+      The argument passed to &lt;code&gt;FreeAndNil&lt;/code&gt; must be an
+      instance of a TObject descendant.
+      &lt;br&gt;
+      Prior to Delphi 10.4, the &lt;code&gt;Obj&lt;/code&gt; parameter is untyped. This erroneously
+      loose contract allows any variable to be passed into &lt;code&gt;FreeAndNil&lt;/code&gt;.
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='https://docwiki.embarcadero.com/Libraries/en/System.SysUtils.FreeAndNil'&gt;
+      System.SysUtils.FreeAndNil
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min"/>
+      <property name="type" value="BUG"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.RedundantCastRule"
     message="Redundant casts should not be used"
     name="RedundantCastRule">

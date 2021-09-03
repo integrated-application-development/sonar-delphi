@@ -88,6 +88,11 @@ class DelphiStructType extends DelphiGenerifiableType implements StructType {
   }
 
   @Override
+  public boolean isClass() {
+    return kind == StructKind.CLASS;
+  }
+
+  @Override
   public boolean isInterface() {
     return kind == StructKind.INTERFACE;
   }
