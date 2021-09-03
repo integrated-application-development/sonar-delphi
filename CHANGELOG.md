@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `TextFile` intrinsic type, which is an alias to `Text`.
+
 ### Changed
 
 - Improve type comparisons from integer to floating point types.

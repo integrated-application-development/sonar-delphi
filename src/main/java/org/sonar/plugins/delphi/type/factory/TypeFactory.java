@@ -263,6 +263,7 @@ public class TypeFactory {
             return IntrinsicType.TEXT.fullyQualifiedName();
           }
         });
+    addAlias(IntrinsicType.TEXTFILE, IntrinsicType.TEXT);
   }
 
   private static List<ImagePart> createImageParts(TypeDeclarationNode declaration) {
