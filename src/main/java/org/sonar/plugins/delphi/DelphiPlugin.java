@@ -111,8 +111,8 @@ public class DelphiPlugin implements Plugin {
             .defaultValue(COMPILER_VERSION_DEFAULT.symbol())
             .description(
                 "The Delphi conditional symbol representing the compiler version."
-                    + "\nFormat is \"VER<nnn>\"."
-                    + "\nSee: http://docwiki.embarcadero.com/RADStudio/en/Compiler_Versions")
+                    + " Format is \"VER&lt;nnn&gt;\"."
+                    + " See: http://docwiki.embarcadero.com/RADStudio/en/Compiler_Versions")
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
         PropertyDefinition.builder(DelphiPlugin.CONDITIONAL_DEFINES_KEY)
@@ -122,7 +122,7 @@ public class DelphiPlugin implements Plugin {
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
         PropertyDefinition.builder(DelphiPlugin.CONDITIONAL_UNDEFINES_KEY)
-            .name("Conditional Defines")
+            .name("Conditional Undefines")
             .description(
                 "List of conditional defines to undefine before parsing the project. This is useful"
                     + " if you aggregate the defines from your project files, but still want to"
@@ -140,7 +140,7 @@ public class DelphiPlugin implements Plugin {
             .name("Unit Aliases")
             .description(
                 "List of Unit Aliases, used for unit import resolution."
-                    + "\nNOTE: Each Unit Alias should follow ths format: 'AliasName=UnitName'")
+                    + " NOTE: Each Unit Alias should follow this format: 'AliasName=UnitName'")
             .multiValues(true)
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
@@ -161,12 +161,12 @@ public class DelphiPlugin implements Plugin {
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
         PropertyDefinition.builder(DelphiPlugin.TEST_SUITE_TYPE_KEY)
-            .name("Test Suite Type)")
+            .name("Test Suite Type")
             .defaultValue("")
             .description(
                 "Rules can be configured not to apply to test code. Any type that inherits from the"
                     + " Test Suite type will have its methods considered as test code."
-                    + "\nNOTE: A fully qualified type name is expected.")
+                    + " NOTE: A fully qualified type name is expected.")
             .onQualifiers(Qualifiers.PROJECT)
             .build());
 

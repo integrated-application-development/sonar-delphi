@@ -2,8 +2,6 @@ package org.sonar.plugins.delphi.type.intrinsic;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import org.sonar.plugins.delphi.symbol.Qualifiable;
 import org.sonar.plugins.delphi.symbol.QualifiedName;
@@ -52,10 +50,17 @@ public class IntrinsicMethod implements Qualifiable {
 
   public static class IntrinsicParameterData {
     private final Type type;
+    private final boolean isOut;
+    private final boolean isVar;
+    private final boolean isConst;
     private final boolean hasDefaultValue;
 
-    private IntrinsicParameterData(Type type, boolean hasDefaultValue) {
+    private IntrinsicParameterData(
+        Type type, boolean isOut, boolean isVar, boolean isConst, boolean hasDefaultValue) {
       this.type = type;
+      this.isOut = isOut;
+      this.isVar = isVar;
+      this.isConst = isConst;
       this.hasDefaultValue = hasDefaultValue;
     }
 
@@ -63,34 +68,89 @@ public class IntrinsicMethod implements Qualifiable {
       return type;
     }
 
+    public boolean isOut() {
+      return isOut;
+    }
+
+    public boolean isVar() {
+      return isVar;
+    }
+
+    public boolean isConst() {
+      return isConst;
+    }
+
     public boolean hasDefaultValue() {
       return hasDefaultValue;
+    }
+
+    static class Builder {
+      private final Type type;
+      private final boolean isOut;
+      private final boolean isVar;
+      private final boolean isConst;
+      private boolean hasDefaultValue;
+
+      private Builder(Type type, boolean isOut, boolean isVar, boolean isConst) {
+        this.type = type;
+        this.isOut = isOut;
+        this.isVar = isVar;
+        this.isConst = isConst;
+      }
+
+      @CanIgnoreReturnValue
+      Builder hasDefaultValue(boolean hasDefaultValue) {
+        this.hasDefaultValue = hasDefaultValue;
+        return this;
+      }
+
+      IntrinsicParameterData build() {
+        return new IntrinsicParameterData(type, isOut, isVar, isConst, hasDefaultValue);
+      }
     }
   }
 
   static class Builder {
     private final String methodName;
-    private List<Type> parameterTypes;
-    private Type variadicParameter;
+    private List<IntrinsicParameterData.Builder> parameters;
+    private IntrinsicParameterData.Builder variadicParameter;
     private int requiredParameters;
     private Type returnType;
 
     private Builder(String methodName) {
       this.methodName = methodName;
-      this.parameterTypes = Collections.emptyList();
+      this.parameters = new ArrayList<>();
       this.requiredParameters = -1;
       this.returnType = DelphiType.voidType();
     }
 
     @CanIgnoreReturnValue
-    Builder parameters(Type... parameters) {
-      this.parameterTypes = Arrays.asList(parameters);
+    Builder param(Type type) {
+      this.parameters.add(new IntrinsicParameterData.Builder(type, false, false, false));
       return this;
     }
 
     @CanIgnoreReturnValue
-    Builder variadic(Type variadicType) {
-      this.variadicParameter = variadicType;
+    Builder outParam(Type type) {
+      this.parameters.add(new IntrinsicParameterData.Builder(type, true, false, false));
+      return this;
+    }
+
+    @CanIgnoreReturnValue
+    Builder varParam(Type type) {
+      this.parameters.add(new IntrinsicParameterData.Builder(type, false, true, false));
+      return this;
+    }
+
+    @CanIgnoreReturnValue
+    Builder constParam(Type type) {
+      this.parameters.add(new IntrinsicParameterData.Builder(type, false, false, true));
+      return this;
+    }
+
+    @CanIgnoreReturnValue
+    Builder variadic(Type type) {
+      this.variadicParameter = new IntrinsicParameterData.Builder(type, false, false, false);
       return this;
     }
 
@@ -112,18 +172,20 @@ public class IntrinsicMethod implements Qualifiable {
     }
 
     private List<IntrinsicParameterData> buildParameters() {
-      List<IntrinsicParameterData> parameters = new ArrayList<>();
-      for (int i = 0; i < parameterTypes.size(); ++i) {
-        Type type = parameterTypes.get(i);
-        boolean hasDefaultValue = requiredParameters != -1 && i >= requiredParameters;
-        parameters.add(new IntrinsicParameterData(type, hasDefaultValue));
+      List<IntrinsicParameterData> result = new ArrayList<>();
+
+      for (int i = 0; i < parameters.size(); ++i) {
+        IntrinsicParameterData.Builder paramBuilder = parameters.get(i);
+        paramBuilder.hasDefaultValue(requiredParameters != -1 && i >= requiredParameters);
+        result.add(paramBuilder.build());
       }
 
       if (variadicParameter != null) {
-        parameters.add(new IntrinsicParameterData(variadicParameter, true));
+        variadicParameter.hasDefaultValue(true);
+        result.add(variadicParameter.build());
       }
 
-      return parameters;
+      return result;
     }
   }
 }

@@ -1,4 +1,4 @@
-package org.sonar.plugins.delphi.symbol.declaration.parameter;
+package org.sonar.plugins.delphi.type.parameter;
 
 import org.sonar.plugins.delphi.type.Typed;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;

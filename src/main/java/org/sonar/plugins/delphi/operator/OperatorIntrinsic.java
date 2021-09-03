@@ -3,10 +3,10 @@ package org.sonar.plugins.delphi.operator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import org.sonar.plugins.delphi.symbol.declaration.parameter.IntrinsicParameter;
-import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.parameter.IntrinsicParameter;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 
 public final class OperatorIntrinsic implements Invocable {
   private final String name;

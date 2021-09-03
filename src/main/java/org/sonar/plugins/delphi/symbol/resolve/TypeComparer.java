@@ -23,7 +23,6 @@ import org.sonar.plugins.delphi.type.Type.ArrayConstructorType;
 import org.sonar.plugins.delphi.type.Type.BooleanType;
 import org.sonar.plugins.delphi.type.Type.ClassReferenceType;
 import org.sonar.plugins.delphi.type.Type.CollectionType;
-import org.sonar.plugins.delphi.type.Type.DecimalType;
 import org.sonar.plugins.delphi.type.Type.FileType;
 import org.sonar.plugins.delphi.type.Type.IntegerType;
 import org.sonar.plugins.delphi.type.Type.PointerType;
@@ -35,6 +34,7 @@ import org.sonar.plugins.delphi.type.Type.VariantType;
 import org.sonar.plugins.delphi.type.Type.VariantType.VariantKind;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 
 class TypeComparer {
   private TypeComparer() {
@@ -129,8 +129,6 @@ class TypeComparer {
         // Penalty for bad type conversion
         return CONVERT_LEVEL_3;
       }
-    } else if (from.is(IntrinsicType.CURRENCY)) {
-      return CONVERT_LEVEL_2;
     }
 
     return INCOMPATIBLE_TYPES;
@@ -138,25 +136,120 @@ class TypeComparer {
 
   private static EqualityType compareDecimal(Type from, Type to) {
     if (from.isInteger()) {
-      if (to.is(IntrinsicType.SINGLE)) {
-        // prefer single over others
-        return CONVERT_LEVEL_3;
-      } else {
-        return CONVERT_LEVEL_4;
-      }
+      return compareIntegerToDecimal(from, to);
     } else if (from.isDecimal()) {
-      DecimalType fromDecimal = (DecimalType) from;
-      DecimalType toDecimal = (DecimalType) to;
-      if (fromDecimal.size() == toDecimal.size()) {
-        return EQUAL;
-      } else if (toDecimal.size() < fromDecimal.size()) {
-        // Penalty for lost precision
-        return CONVERT_LEVEL_2;
-      } else {
-        return CONVERT_LEVEL_1;
-      }
+      return compareDecimalToDecimal(from, to);
     }
     return INCOMPATIBLE_TYPES;
+  }
+
+  private static EqualityType compareIntegerToDecimal(Type from, Type to) {
+    if (from.is(IntrinsicType.INT64) || from.is(IntrinsicType.UINT64)) {
+      if (to.is(IntrinsicType.EXTENDED)) {
+        return CONVERT_LEVEL_1;
+      } else if (to.is(IntrinsicType.DOUBLE)) {
+        return CONVERT_LEVEL_2;
+      } else if (to.is(IntrinsicType.REAL48)) {
+        return CONVERT_LEVEL_3;
+      } else if (to.is(IntrinsicType.SINGLE)) {
+        return CONVERT_LEVEL_4;
+      } else {
+        return CONVERT_LEVEL_5;
+      }
+    } else {
+      if (to.is(IntrinsicType.SINGLE)) {
+        return CONVERT_LEVEL_1;
+      } else if (to.is(IntrinsicType.REAL48)) {
+        return CONVERT_LEVEL_2;
+      } else if (to.is(IntrinsicType.DOUBLE)) {
+        return CONVERT_LEVEL_3;
+      } else if (to.is(IntrinsicType.EXTENDED)) {
+        return CONVERT_LEVEL_4;
+      } else {
+        return CONVERT_LEVEL_5;
+      }
+    }
+  }
+
+  @VisibleForTesting
+  static EqualityType compareDecimalToDecimal(Type from, Type to) {
+    if (from.is(to)) {
+      return EQUAL;
+    } else if (from.is(IntrinsicType.SINGLE)) {
+      return compareSingleToDecimal(to);
+    } else if (from.is(IntrinsicType.REAL48)) {
+      return compareReal48ToDecimal(to);
+    } else if (from.is(IntrinsicType.DOUBLE)) {
+      return compareDoubleToDecimal(to);
+    } else if (from.is(IntrinsicType.EXTENDED)) {
+      return compareExtendedToDecimal(to);
+    } else if (from.is(IntrinsicType.CURRENCY) || from.is(IntrinsicType.COMP)) {
+      return compareIntegerRealsToDecimal(to);
+    }
+
+    throw new AssertionError("Unhandled decimal type");
+  }
+
+  private static EqualityType compareSingleToDecimal(Type to) {
+    if (to.is(IntrinsicType.REAL48)) {
+      return CONVERT_LEVEL_1;
+    } else if (to.is(IntrinsicType.DOUBLE)) {
+      return CONVERT_LEVEL_2;
+    } else if (to.is(IntrinsicType.EXTENDED)) {
+      return CONVERT_LEVEL_3;
+    } else {
+      return CONVERT_LEVEL_6;
+    }
+  }
+
+  private static EqualityType compareReal48ToDecimal(Type to) {
+    if (to.is(IntrinsicType.DOUBLE)) {
+      return CONVERT_LEVEL_1;
+    } else if (to.is(IntrinsicType.EXTENDED)) {
+      return CONVERT_LEVEL_2;
+    } else if (to.is(IntrinsicType.SINGLE)) {
+      return CONVERT_LEVEL_5;
+    } else {
+      return CONVERT_LEVEL_6;
+    }
+  }
+
+  private static EqualityType compareDoubleToDecimal(Type to) {
+    if (to.is(IntrinsicType.EXTENDED)) {
+      return CONVERT_LEVEL_1;
+    } else if (to.is(IntrinsicType.REAL48)) {
+      return CONVERT_LEVEL_4;
+    } else if (to.is(IntrinsicType.SINGLE)) {
+      return CONVERT_LEVEL_5;
+    } else {
+      return CONVERT_LEVEL_6;
+    }
+  }
+
+  private static EqualityType compareExtendedToDecimal(Type to) {
+    if (to.is(IntrinsicType.DOUBLE)) {
+      return CONVERT_LEVEL_4;
+    } else if (to.is(IntrinsicType.REAL48)) {
+      return CONVERT_LEVEL_5;
+    } else if (to.is(IntrinsicType.SINGLE)) {
+      return CONVERT_LEVEL_6;
+    } else {
+      return CONVERT_LEVEL_7;
+    }
+  }
+
+  private static EqualityType compareIntegerRealsToDecimal(Type to) {
+    if (to.is(IntrinsicType.EXTENDED)) {
+      return CONVERT_LEVEL_1;
+    } else if (to.is(IntrinsicType.DOUBLE)) {
+      return CONVERT_LEVEL_2;
+    } else if (to.is(IntrinsicType.REAL48)) {
+      return CONVERT_LEVEL_3;
+    } else if (to.is(IntrinsicType.SINGLE)) {
+      return CONVERT_LEVEL_4;
+    } else {
+      return CONVERT_LEVEL_5;
+    }
   }
 
   private static EqualityType compareString(Type from, Type to) {
@@ -610,7 +703,7 @@ class TypeComparer {
 
   private static EqualityType procToProcVarEqual(ProceduralType from, ProceduralType to) {
     if (equals(from.returnType(), to.returnType())) {
-      var paramEquality = compareParameters(from.parameterTypes(), to.parameterTypes());
+      var paramEquality = compareParameters(from.parameters(), to.parameters());
       if (paramEquality == EXACT) {
         return EQUAL;
       } else if (paramEquality == EQUAL) {
@@ -620,7 +713,7 @@ class TypeComparer {
     return INCOMPATIBLE_TYPES;
   }
 
-  private static EqualityType compareParameters(List<Type> from, List<Type> to) {
+  private static EqualityType compareParameters(List<Parameter> from, List<Parameter> to) {
     if (from.size() != to.size()) {
       return INCOMPATIBLE_TYPES;
     }
@@ -628,7 +721,7 @@ class TypeComparer {
     EqualityType lowestEquality = EXACT;
 
     for (int i = 0; i < to.size(); ++i) {
-      EqualityType equality = compare(from.get(i), to.get(i));
+      EqualityType equality = compare(from.get(i).getType(), to.get(i).getType());
       if (equality.ordinal() < lowestEquality.ordinal()) {
         lowestEquality = equality;
       }

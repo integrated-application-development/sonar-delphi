@@ -34,6 +34,8 @@ import org.sonar.plugins.delphi.antlr.ast.node.SubRangeTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeReferenceNode;
+import org.sonar.plugins.delphi.antlr.ast.node.UnaryExpressionNode;
+import org.sonar.plugins.delphi.operator.UnaryOperator;
 import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
 import org.sonar.plugins.delphi.symbol.declaration.GenerifiableDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
@@ -46,7 +48,6 @@ import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
 import org.sonar.plugins.delphi.type.Type.TypeParameterType;
-import org.sonar.plugins.delphi.type.Typed;
 import org.sonar.plugins.delphi.type.factory.TypeFactory;
 
 public class NameResolutionHelper {
@@ -325,8 +326,16 @@ public class NameResolutionHelper {
 
   private boolean handleMethodReference(PrimaryExpressionNode expression, NameResolver resolver) {
     Node parent = expression.jjtGetParent();
+
+    if (parent instanceof UnaryExpressionNode) {
+      UnaryExpressionNode unary = (UnaryExpressionNode) parent;
+      if (unary.getOperator() == UnaryOperator.ADDRESS) {
+        parent = parent.jjtGetParent();
+      }
+    }
+
     if (parent instanceof AssignmentStatementNode) {
-      Typed assignee = ((AssignmentStatementNode) parent).getAssignee();
+      ExpressionNode assignee = ((AssignmentStatementNode) parent).getAssignee();
       if (expression == assignee) {
         return false;
       }
@@ -343,6 +352,7 @@ public class NameResolutionHelper {
       resolver.addToSymbolTable();
       return true;
     }
+
     return false;
   }
 

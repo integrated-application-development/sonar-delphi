@@ -67,7 +67,7 @@ class TypeComparerTest {
       return (Type) object;
     }
 
-    throw new AssertionError(object.toString() + " is convertible to Type.");
+    throw new AssertionError(object.toString() + " is not convertible to Type.");
   }
 
   private static void compare(Object from, Object to, EqualityType equality) {
@@ -83,21 +83,75 @@ class TypeComparerTest {
   void testToInteger() {
     compare(IntrinsicType.SMALLINT, IntrinsicType.INTEGER, CONVERT_LEVEL_1);
     compare(IntrinsicType.INTEGER, IntrinsicType.SMALLINT, CONVERT_LEVEL_3);
-    compare(IntrinsicType.CURRENCY, IntrinsicType.INTEGER, CONVERT_LEVEL_2);
     compare(IntrinsicType.VARIANT, IntrinsicType.INTEGER, CONVERT_LEVEL_7);
     compare(subRange("0..5", IntrinsicType.SHORTINT), IntrinsicType.SHORTINT, EQUAL);
     compare(subRange("-100..100", IntrinsicType.BYTE), IntrinsicType.SHORTINT, CONVERT_LEVEL_1);
+    compare(IntrinsicType.CURRENCY, IntrinsicType.INTEGER, INCOMPATIBLE_TYPES);
     compare(IntrinsicType.UNICODESTRING, IntrinsicType.INTEGER, INCOMPATIBLE_TYPES);
   }
 
   @Test
   void testToDecimal() {
-    compare(IntrinsicType.INTEGER, IntrinsicType.SINGLE, CONVERT_LEVEL_3);
-    compare(IntrinsicType.INTEGER, IntrinsicType.DOUBLE, CONVERT_LEVEL_4);
-    compare(IntrinsicType.DOUBLE, IntrinsicType.SINGLE, CONVERT_LEVEL_2);
-    compare(IntrinsicType.SINGLE, IntrinsicType.DOUBLE, CONVERT_LEVEL_1);
-    compare(IntrinsicType.DOUBLE, IntrinsicType.COMP, EQUAL);
+    compare(IntrinsicType.INTEGER, IntrinsicType.SINGLE, CONVERT_LEVEL_1);
+    compare(IntrinsicType.INTEGER, IntrinsicType.REAL48, CONVERT_LEVEL_2);
+    compare(IntrinsicType.INTEGER, IntrinsicType.DOUBLE, CONVERT_LEVEL_3);
+    compare(IntrinsicType.INTEGER, IntrinsicType.EXTENDED, CONVERT_LEVEL_4);
+    compare(IntrinsicType.INTEGER, IntrinsicType.COMP, CONVERT_LEVEL_5);
+
+    compare(IntrinsicType.INT64, IntrinsicType.EXTENDED, CONVERT_LEVEL_1);
+    compare(IntrinsicType.INT64, IntrinsicType.DOUBLE, CONVERT_LEVEL_2);
+    compare(IntrinsicType.INT64, IntrinsicType.REAL48, CONVERT_LEVEL_3);
+    compare(IntrinsicType.INT64, IntrinsicType.SINGLE, CONVERT_LEVEL_4);
+    compare(IntrinsicType.INT64, IntrinsicType.COMP, CONVERT_LEVEL_5);
+
     compare(IntrinsicType.UNICODESTRING, IntrinsicType.DOUBLE, INCOMPATIBLE_TYPES);
+  }
+
+  @Test
+  void testDecimalToDecimal() {
+    compare(IntrinsicType.SINGLE, typeType("Single_", IntrinsicType.SINGLE), EQUAL);
+    compare(IntrinsicType.SINGLE, IntrinsicType.REAL48, CONVERT_LEVEL_1);
+    compare(IntrinsicType.SINGLE, IntrinsicType.DOUBLE, CONVERT_LEVEL_2);
+    compare(IntrinsicType.SINGLE, IntrinsicType.EXTENDED, CONVERT_LEVEL_3);
+    compare(IntrinsicType.SINGLE, IntrinsicType.CURRENCY, CONVERT_LEVEL_6);
+    compare(IntrinsicType.SINGLE, IntrinsicType.COMP, CONVERT_LEVEL_6);
+
+    compare(IntrinsicType.REAL48, IntrinsicType.DOUBLE, CONVERT_LEVEL_1);
+    compare(IntrinsicType.REAL48, IntrinsicType.EXTENDED, CONVERT_LEVEL_2);
+    compare(IntrinsicType.REAL48, IntrinsicType.SINGLE, CONVERT_LEVEL_5);
+    compare(IntrinsicType.REAL48, IntrinsicType.CURRENCY, CONVERT_LEVEL_6);
+    compare(IntrinsicType.REAL48, IntrinsicType.COMP, CONVERT_LEVEL_6);
+
+    compare(IntrinsicType.DOUBLE, IntrinsicType.EXTENDED, CONVERT_LEVEL_1);
+    compare(IntrinsicType.DOUBLE, IntrinsicType.REAL48, CONVERT_LEVEL_4);
+    compare(IntrinsicType.DOUBLE, IntrinsicType.SINGLE, CONVERT_LEVEL_5);
+    compare(IntrinsicType.DOUBLE, IntrinsicType.CURRENCY, CONVERT_LEVEL_6);
+    compare(IntrinsicType.DOUBLE, IntrinsicType.COMP, CONVERT_LEVEL_6);
+
+    compare(IntrinsicType.EXTENDED, IntrinsicType.DOUBLE, CONVERT_LEVEL_4);
+    compare(IntrinsicType.EXTENDED, IntrinsicType.REAL48, CONVERT_LEVEL_5);
+    compare(IntrinsicType.EXTENDED, IntrinsicType.SINGLE, CONVERT_LEVEL_6);
+    compare(IntrinsicType.EXTENDED, IntrinsicType.CURRENCY, CONVERT_LEVEL_7);
+    compare(IntrinsicType.EXTENDED, IntrinsicType.COMP, CONVERT_LEVEL_7);
+
+    assertThatThrownBy(
+            () -> TypeComparer.compareDecimalToDecimal(unknownType(), toType(IntrinsicType.SINGLE)))
+        .isInstanceOf(AssertionError.class);
+  }
+
+  @Test
+  void testIntegerRealsToDecimal() {
+    compare(IntrinsicType.CURRENCY, IntrinsicType.EXTENDED, CONVERT_LEVEL_1);
+    compare(IntrinsicType.CURRENCY, IntrinsicType.DOUBLE, CONVERT_LEVEL_2);
+    compare(IntrinsicType.CURRENCY, IntrinsicType.REAL48, CONVERT_LEVEL_3);
+    compare(IntrinsicType.CURRENCY, IntrinsicType.SINGLE, CONVERT_LEVEL_4);
+    compare(IntrinsicType.CURRENCY, IntrinsicType.COMP, CONVERT_LEVEL_5);
+
+    compare(IntrinsicType.COMP, IntrinsicType.EXTENDED, CONVERT_LEVEL_1);
+    compare(IntrinsicType.COMP, IntrinsicType.DOUBLE, CONVERT_LEVEL_2);
+    compare(IntrinsicType.COMP, IntrinsicType.REAL48, CONVERT_LEVEL_3);
+    compare(IntrinsicType.COMP, IntrinsicType.SINGLE, CONVERT_LEVEL_4);
+    compare(IntrinsicType.COMP, IntrinsicType.CURRENCY, CONVERT_LEVEL_5);
   }
 
   @Test
@@ -635,11 +689,15 @@ class TypeComparerTest {
   }
 
   private static ProceduralType procedure(List<Type> parameterTypes, Type returnType) {
-    return FACTORY.procedure(parameterTypes, returnType);
+    return FACTORY.procedure(
+        parameterTypes.stream().map(TypeMocker::parameter).collect(Collectors.toUnmodifiableList()),
+        returnType);
   }
 
   private static ProceduralType anonymous(List<Type> parameterTypes, Type returnType) {
-    return FACTORY.anonymous(parameterTypes, returnType);
+    return FACTORY.anonymous(
+        parameterTypes.stream().map(TypeMocker::parameter).collect(Collectors.toUnmodifiableList()),
+        returnType);
   }
 
   private static AnsiStringType ansiString(int codePage) {

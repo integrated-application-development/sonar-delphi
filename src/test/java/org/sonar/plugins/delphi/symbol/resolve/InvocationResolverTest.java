@@ -41,13 +41,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
-import org.sonar.plugins.delphi.symbol.declaration.parameter.FormalParameter;
-import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.ArrayOption;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
+import org.sonar.plugins.delphi.type.parameter.FormalParameter;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 import org.sonar.plugins.delphi.utils.types.TypeFactoryUtils;
 import org.sonar.plugins.delphi.utils.types.TypeMocker;
 
@@ -160,6 +160,38 @@ class InvocationResolverTest {
     assertResolved(type(EXTENDED), type(REAL), type(SINGLE));
     assertResolved(type(DOUBLE), type(EXTENDED), type(SINGLE));
     assertResolved(type(REAL), type(EXTENDED), type(SINGLE));
+  }
+
+  @Test
+  void testMixedToFloatingPointTypes() {
+    assertResolved(
+        List.of(type(EXTENDED), type(INTEGER)),
+        List.of(type(EXTENDED), type(EXTENDED)),
+        List.of(type(SINGLE), type(SINGLE)));
+    assertResolved(
+        List.of(type(EXTENDED), type(INTEGER)),
+        List.of(type(EXTENDED), type(EXTENDED)),
+        List.of(type(DOUBLE), type(DOUBLE)));
+    assertResolved(
+        List.of(type(INTEGER), type(INTEGER)),
+        List.of(type(SINGLE), type(SINGLE)),
+        List.of(type(EXTENDED), type(EXTENDED)));
+  }
+
+  @Test
+  void testIntegerToFloatingPointTypes() {
+    assertResolved(
+        List.of(type(SHORTINT), type(SHORTINT)),
+        List.of(type(INTEGER), type(INTEGER)),
+        List.of(type(SINGLE), type(SINGLE)));
+    assertResolved(
+        List.of(type(SHORTINT), type(SHORTINT)),
+        List.of(type(INTEGER), type(INTEGER)),
+        List.of(type(DOUBLE), type(DOUBLE)));
+    assertResolved(
+        List.of(type(SHORTINT), type(SHORTINT)),
+        List.of(type(INTEGER), type(INTEGER)),
+        List.of(type(EXTENDED), type(EXTENDED)));
   }
 
   @Test

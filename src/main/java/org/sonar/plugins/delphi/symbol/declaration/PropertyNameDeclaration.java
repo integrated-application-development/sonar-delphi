@@ -14,11 +14,11 @@ import org.sonar.plugins.delphi.antlr.ast.node.PropertyReadSpecifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyWriteSpecifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
-import org.sonar.plugins.delphi.symbol.declaration.parameter.FormalParameter;
-import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
+import org.sonar.plugins.delphi.type.parameter.FormalParameter;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 
 public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
     implements TypedDeclaration, Invocable {

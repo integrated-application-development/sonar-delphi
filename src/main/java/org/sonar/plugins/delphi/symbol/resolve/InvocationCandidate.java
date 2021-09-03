@@ -6,14 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.sonar.plugins.delphi.operator.OperatorIntrinsic;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.TypedDeclaration;
-import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 
 /**
  * Stores information about an invocation candidate, used for overload resolution. Based directly
@@ -32,6 +31,7 @@ public final class InvocationCandidate {
   private int convertOperatorCount;
   private double ordinalDistance;
   private int signMismatchCount;
+  private int numericMismatchCount;
   private int structMismatchCount;
   private int proceduralDistance;
   private final List<VariantConversionType> variantConversions;
@@ -95,6 +95,14 @@ public final class InvocationCandidate {
     ++this.signMismatchCount;
   }
 
+  public int getNumericMismatchCount() {
+    return numericMismatchCount;
+  }
+
+  public void incrementNumericMismatchCount() {
+    ++this.numericMismatchCount;
+  }
+
   public int getStructMismatchCount() {
     return structMismatchCount;
   }
@@ -139,12 +147,12 @@ public final class InvocationCandidate {
   }
 
   public static InvocationCandidate implicitSpecialization(
-      NameDeclaration declaration, List<Type> argumentTypes) {
-    if (!(declaration instanceof MethodNameDeclaration)) {
+      Invocable invocable, List<Type> argumentTypes) {
+    if (!(invocable instanceof MethodNameDeclaration)) {
       return null;
     }
 
-    MethodNameDeclaration methodDeclaration = (MethodNameDeclaration) declaration;
+    MethodNameDeclaration methodDeclaration = (MethodNameDeclaration) invocable;
     if (!methodDeclaration.isGeneric()) {
       return null;
     }
@@ -180,9 +188,9 @@ public final class InvocationCandidate {
             .collect(Collectors.toUnmodifiableList());
 
     var context = new TypeSpecializationContext(methodDeclaration, typeArguments);
-    Invocable invocable = (Invocable) methodDeclaration.specialize(context);
+    Invocable specialized = (Invocable) methodDeclaration.specialize(context);
 
-    return new InvocationCandidate(invocable);
+    return new InvocationCandidate(specialized);
   }
 
   @Override

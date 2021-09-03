@@ -83,20 +83,18 @@ class NoSemicolonRuleTest extends BasePmdRuleTest {
   void testInsideRepeat() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure SemicolonTest;")
-            .appendImpl("var")
-            .appendImpl("  SomeNumber: Integer;")
+            .appendImpl("procedure SemicolonTest(Int: Integer);")
             .appendImpl("begin")
             .appendImpl("  repeat")
             .appendImpl("    WriteLn('test')")
-            .appendImpl("  until SomeNumber <> 0;")
+            .appendImpl("  until Int <> 0;")
             .appendImpl("end;");
 
     execute(builder);
 
     assertIssues()
         .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 6));
+        .areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 4));
   }
 
   @Test
@@ -170,11 +168,9 @@ class NoSemicolonRuleTest extends BasePmdRuleTest {
   void testOnEndOfWhile() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure SemicolonTest;")
-            .appendImpl("var")
-            .appendImpl("  SomeVar: Integer;")
+            .appendImpl("procedure SemicolonTest(Int: Integer);")
             .appendImpl("begin")
-            .appendImpl("  while SomeVar <> 0 do")
+            .appendImpl("  while Int <> 0 do")
             .appendImpl("  begin")
             .appendImpl("    WriteLn('test');")
             .appendImpl("  end")
@@ -184,7 +180,7 @@ class NoSemicolonRuleTest extends BasePmdRuleTest {
 
     assertIssues()
         .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 8));
+        .areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 6));
   }
 
   @Test

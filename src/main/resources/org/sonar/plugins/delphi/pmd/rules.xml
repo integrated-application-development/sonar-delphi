@@ -665,24 +665,23 @@ Foo := Foo; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.FormatSettingsInitializationRule"
-    message="TFormatSettings must be initialized before being used"
-    name="FormatSettingsInitializationRule">
+  <rule class="org.sonar.plugins.delphi.pmd.rules.VariableInitializationRule"
+    message="Variables must be initialized before being used"
+    name="VariableInitializationRule">
     <priority>3</priority>
     <description>
-      A &lt;code&gt;TFormatSettings&lt;/code&gt; record must be populated before use.
-      &lt;br&gt;
-      This can be done by calling &lt;code&gt;TFormatSettings.Create&lt;/code&gt; and specifying the desired locale.
-      &lt;br&gt;
-      Alternatively, &lt;code&gt;TFormatSettings.Invariant&lt;/code&gt; will set the record to predefined
-      standard values which correspond to the English locale but do not set any country/region.
+      Variables must be initialized before use.
       &lt;br&gt;
       &lt;br&gt;
-      &lt;b&gt;See:&lt;/b&gt;
+      The following Managed types are initialized by default:
       &lt;br&gt;
-      - &lt;a href='http://docwiki.embarcadero.com/Libraries/en/System.SysUtils.TFormatSettings'&gt;
-      System.SysUtils.TFormatSettings
-      &lt;/a&gt;
+      - Strings
+      &lt;br&gt;
+      - Dynamic Arrays
+      &lt;br&gt;
+      - Variants
+      &lt;br&gt;
+      - Interfaces
     </description>
     <properties>
       <property name="baseEffort" value="5min"/>
@@ -816,6 +815,30 @@ FreeAndNil(Foo); // Compliant
     </example>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.FreeAndNilTObjectRule"
+    message="FreeAndNil must only be passed an instance of a TObject descendant"
+    name="FreeAndNilTObjectRule">
+    <priority>1</priority>
+    <description>
+      The argument passed to &lt;code&gt;FreeAndNil&lt;/code&gt; must be an
+      instance of a TObject descendant.
+      &lt;br&gt;
+      Prior to Delphi 10.4, the &lt;code&gt;Obj&lt;/code&gt; parameter is untyped. This erroneously
+      loose contract allows any variable to be passed into &lt;code&gt;FreeAndNil&lt;/code&gt;.
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='https://docwiki.embarcadero.com/Libraries/en/System.SysUtils.FreeAndNil'&gt;
+      System.SysUtils.FreeAndNil
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min"/>
+      <property name="type" value="BUG"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.RedundantCastRule"
     message="Redundant casts should not be used"
     name="RedundantCastRule">
@@ -874,6 +897,61 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.MathFunctionSingleOverloadRule"
+    message="The Single overloads of the standard math functions should not be used"
+    name="MathFunctionSingleOverloadRule">
+    <priority>1</priority>
+    <description>
+      The &lt;code&gt;Single&lt;/code&gt; overloads of the standard math functions are less accurate in 64-bit due to the reduced precision of the &lt;code&gt;Extended&lt;/code&gt; type.
+      &lt;br&gt;
+      In 32-bit: Floating-point calculations use the x87 FPU, which gives 80 bits of precision.
+      &lt;br&gt;
+      In 64-bit: Floating-point calculations use SSE2 instructions. This only gives 64 bits of precision, but is faster.
+      &lt;br&gt;
+      &lt;br&gt;
+      These accuracy issues can produce incorrect results on 64-bit.
+      &lt;br&gt;
+      In 32-bit: &lt;code&gt;Power(10, 12)&lt;/code&gt; produces 1,000,000,000,000
+      &lt;br&gt;
+      In 64-bit: &lt;code&gt;Power(10, 12)&lt;/code&gt; produces 999,999,995,904
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='https://en.wikipedia.org/wiki/X87'&gt;x87&lt;/a&gt;
+      &lt;br&gt;
+      - &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/Delphi_Considerations_for_Multi-Device_Applications#The_Extended_Data_Type_is_different_on_different_platforms'&gt;
+      The Extended Data Type is different on different platforms
+      &lt;/a&gt;
+      &lt;br&gt;
+      - &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/About_Floating-Point_Arithmetic'&gt;
+      About Floating-Point Arithmetic
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+      <property name="type" value="BUG"/>
+    </properties>
+    <example>
+      <![CDATA[
+<b>procedure</b> Example(I: Integer; S: Single; D: Double; E: Extended);
+<b>begin</b>
+  Power(I, 2); // Noncompliant (Integer arguments cause the Single overload to be selected)
+  Power(S, 2); // Noncompliant
+
+  Power(D, 2); // Compliant
+  Power(E, 2); // Compliant
+
+  Power(Double(I), 2); // Compliant
+  Power(Double(S), 2); // Compliant
+
+  Power(10, 2); // Noncompliant (Integer literals cause the Single overload to be selected)
+  Power(10.0, 2); // Compliant (Floating-point literals cause the Extended overload to be selected)
+<b>end</b>;
+        ]]>
+    </example>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.ExplicitDefaultPropertyReferenceRule"
     message="Default array properties should not be explicitly referenced"
     name="ExplicitDefaultPropertyReferenceRule">
@@ -887,7 +965,6 @@ FreeAndNil(Foo); // Compliant
       <property name="baseEffort" value="2min"/>
     </properties>
     <example>
-      <![CDATA[
       <![CDATA[
 <b>procedure</b> Foo(Bar: TObjectList);
 <b>var</b>
@@ -1800,6 +1877,43 @@ Result := 123;; // Noncompliant
       &lt;br&gt;
       - &lt;a href='https://quality.embarcadero.com/browse/RSP-31864'&gt;
       RSP-31864
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="5min"/>
+      <property name="type" value="BUG"/>
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.AddressOfNestedMethodRule"
+    message="Nested methods must not be used as procedural values"
+    name="AddressOfNestedMethodRule">
+    <priority>1</priority>
+    <description>
+      Nested methods cannot be used as procedural values.
+      &lt;br&gt;
+      This will normally cause a compilation error, but such errors can be bypassed by using the
+      address of the nested method with &lt;code&gt;@&lt;/code&gt;.
+      &lt;br&gt;
+      In this scenario, the code generated by compiler will have undefined behavior.
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;See:&lt;/b&gt;
+      &lt;br&gt;
+      - &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/Procedural_Types_(Delphi)#Method_Pointers'&gt;
+      Method Pointers
+      &lt;/a&gt;
+      &lt;br&gt;
+      - &lt;a href='https://quality.embarcadero.com/browse/RSP-23569'&gt;
+      Code generation for is wrong for calling nested routines supplied as parameters
+      &lt;/a&gt;
+      &lt;br&gt;
+      - &lt;a href='https://quality.embarcadero.com/browse/RSP-28317'&gt;
+      Local values not properly compiled in Nested Function
+      &lt;/a&gt;
+      &lt;br&gt;
+      - &lt;a href='https://stackoverflow.com/questions/10162749/why-cannot-take-address-to-a-nested-local-function-in-64-bit-delphi/10162859'&gt;
+      Why cannot take address to a nested local function in 64 bit Delphi?
       &lt;/a&gt;
     </description>
     <properties>

@@ -35,17 +35,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.symbol.resolve.TypeConverter.TypeConversion;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.CollectionType;
-import org.sonar.plugins.delphi.type.Type.DecimalType;
 import org.sonar.plugins.delphi.type.Type.FileType;
 import org.sonar.plugins.delphi.type.Type.IntegerType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Type.ProceduralType.ProceduralKind;
 import org.sonar.plugins.delphi.type.Type.StructType;
 import org.sonar.plugins.delphi.type.TypeUtils;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 
 /**
  * Resolves an invocation to the correct declaration. Based directly off of the tcallcandidates
@@ -106,14 +105,14 @@ public class InvocationResolver {
       InvocationCandidate candidate, InvocationArgument argument, Parameter parameter) {
     Type argumentType = argument.getType();
     Type parameterType = parameter.getType();
-    boolean ambiguousMethodReference = false;
+    boolean ambiguousProceduralReference = false;
 
     // Convert ProceduralType to its returnType when not expecting a procedural type
     if (argumentType.isProcedural() && !parameterType.isProcedural()) {
       ProceduralType proceduralType = ((ProceduralType) argumentType);
       if (proceduralType.kind() != ProceduralKind.ANONYMOUS) {
         argumentType = proceduralType.returnType();
-        ambiguousMethodReference = argument.looksLikeMethodReference();
+        ambiguousProceduralReference = argument.looksLikeProceduralReference();
       }
     }
 
@@ -157,6 +156,7 @@ public class InvocationResolver {
       if (!equalTypeRequired(parameter)) {
         checkIntegerDistance(candidate, argumentType, parameterType);
         checkDecimalDistance(candidate, argumentType, parameterType);
+        checkNumericMismatch(candidate, argumentType, parameterType);
         checkStructTypes(candidate, argumentType, parameterType);
         checkProceduralDistance(candidate, argumentType, parameterType);
       }
@@ -168,7 +168,7 @@ public class InvocationResolver {
     // downgraded to equal.
     // Ordinal distance is also increased.
     // This way an overload call with the procedural type is always chosen instead.
-    if (equality == EXACT && ambiguousMethodReference) {
+    if (equality == EXACT && ambiguousProceduralReference) {
       equality = EQUAL;
       candidate.increaseOrdinalDistance(1);
     }
@@ -229,8 +229,8 @@ public class InvocationResolver {
   private static void checkDecimalDistance(
       InvocationCandidate candidate, Type argumentType, Type parameterType) {
     if (argumentType.isDecimal() && parameterType.isDecimal()) {
-      int argumentSize = ((DecimalType) argumentType).size();
-      int parameterSize = ((DecimalType) parameterType).size();
+      int argumentSize = argumentType.size();
+      int parameterSize = parameterType.size();
       int distance;
       if (argumentSize > parameterSize) {
         // Penalty for shrinking of precision
@@ -239,6 +239,13 @@ public class InvocationResolver {
         distance = parameterSize - argumentSize;
       }
       candidate.increaseOrdinalDistance(distance);
+    }
+  }
+
+  private static void checkNumericMismatch(
+      InvocationCandidate candidate, Type argumentType, Type parameterType) {
+    if (argumentType.isInteger() && parameterType.isDecimal()) {
+      candidate.incrementNumericMismatchCount();
     }
   }
 
@@ -379,11 +386,14 @@ public class InvocationResolver {
    * <ul>
    *   <li>Invalid flag
    *   <li>(Smaller) Number of convert operator parameters.
-   *   <li>(Smaller) Number of convertLevel[6..1] parameters.
+   *   <li>(Smaller) Number of numeric mismatches.
+   *   <li>(Smaller) Number of convertLevel[8..1] parameters.
    *   <li>(Bigger) Number of exact parameters.
    *   <li>(Smaller) Number of equal parameters.
    *   <li>(Smaller) Total of ordinal distance. For example, the distance of a word to a byte is
    *       65535-255=65280.
+   *   <li>(Smaller) Number of struct-kind mismatches.
+   *   <li>(Smaller) Total of procedural distance.
    * </ul>
    *
    * @param candidate Candidate we're checking
@@ -411,7 +421,9 @@ public class InvocationResolver {
             // Builtin operators will always lose to variant operators
             .compareTrueFirst(bestCandidate.isVariantOperator(), candidate.isVariantOperator())
             // Less Implicit operator arguments?
-            .compare(bestCandidate.getConvertOperatorCount(), candidate.getConvertOperatorCount());
+            .compare(bestCandidate.getConvertOperatorCount(), candidate.getConvertOperatorCount())
+            // Less numeric mismatches?
+            .compare(bestCandidate.getNumericMismatchCount(), candidate.getNumericMismatchCount());
 
     for (int i = InvocationCandidate.CONVERT_LEVELS; i > 0; --i) {
       // Less castLevel[8..1] parameters?

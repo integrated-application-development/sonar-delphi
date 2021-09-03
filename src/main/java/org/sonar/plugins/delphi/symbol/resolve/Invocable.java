@@ -3,8 +3,8 @@ package org.sonar.plugins.delphi.symbol.resolve;
 import static java.util.function.Predicate.not;
 
 import java.util.List;
-import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 
 public interface Invocable {
   String getName();

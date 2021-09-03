@@ -313,4 +313,26 @@ class PlatformDependentCastRuleTest extends BasePmdRuleTest {
 
     assertIssues().areNot(ruleKey("PlatformDependentCastRule"));
   }
+
+  @Test
+  void testTypeTypeCastsShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Foo;")
+            .appendImpl("type")
+            .appendImpl("  MyNativeInt = type NativeInt;")
+            .appendImpl("var")
+            .appendImpl("  Int: Integer;")
+            .appendImpl("  Nat: MyNativeInt;")
+            .appendImpl("begin")
+            .appendImpl("  Int := Integer(Nat);")
+            .appendImpl("  Nat := MyNativeInt(Int);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("PlatformDependentCastRule", builder.getOffset() + 8))
+        .areExactly(1, ruleKeyAtLine("PlatformDependentCastRule", builder.getOffset() + 9));
+  }
 }

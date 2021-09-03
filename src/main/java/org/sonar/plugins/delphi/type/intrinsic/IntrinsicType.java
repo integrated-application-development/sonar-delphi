@@ -41,7 +41,8 @@ public enum IntrinsicType implements Qualifiable {
   PCHAR("PChar"),
   VARIANT("Variant"),
   OLEVARIANT("OleVariant"),
-  TEXT("Text");
+  TEXT("Text"),
+  TEXTFILE("TextFile");
 
   private final QualifiedName qualifiedName;
 

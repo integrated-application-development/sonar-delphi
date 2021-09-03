@@ -2,6 +2,7 @@ package org.sonar.plugins.delphi.antlr.ast.node;
 
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Typed;
@@ -30,6 +31,10 @@ public final class VarDeclarationNode extends DelphiNode implements Typed {
 
   public TypeNode getTypeNode() {
     return (TypeNode) jjtGetChild(1);
+  }
+
+  public boolean isAbsolute() {
+    return getFirstChildWithId(DelphiLexer.ABSOLUTE) != null;
   }
 
   @NotNull

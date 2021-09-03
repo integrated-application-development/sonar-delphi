@@ -13,6 +13,7 @@ import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.TypeUtils;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 
 public class PlatformDependentTruncationRule extends AbstractDelphiRule {
   @Override
@@ -36,10 +37,10 @@ public class PlatformDependentTruncationRule extends AbstractDelphiRule {
     }
 
     List<ExpressionNode> arguments = argumentList.getArguments();
-    List<Type> parameterTypes = procedural.parameterTypes();
-    for (int i = 0; i < arguments.size() && i < parameterTypes.size(); ++i) {
+    List<Parameter> parameters = procedural.parameters();
+    for (int i = 0; i < arguments.size() && i < parameters.size(); ++i) {
       ExpressionNode argument = arguments.get(i);
-      if (isViolation(argument.getType(), parameterTypes.get(i))) {
+      if (isViolation(argument.getType(), parameters.get(i).getType())) {
         addViolation(data, argument);
       }
     }
@@ -58,6 +59,9 @@ public class PlatformDependentTruncationRule extends AbstractDelphiRule {
   }
 
   private static boolean isViolation(Type from, Type to) {
+    from = TypeUtils.findBaseType(from);
+    to = TypeUtils.findBaseType(to);
+
     if (!from.isInteger() || !to.isInteger()) {
       return false;
     }
@@ -70,7 +74,6 @@ public class PlatformDependentTruncationRule extends AbstractDelphiRule {
   }
 
   private static boolean isNativeInteger(Type type) {
-    type = TypeUtils.findBaseType(type);
     return type.is(IntrinsicType.NATIVEINT) || type.is(IntrinsicType.NATIVEUINT);
   }
 }

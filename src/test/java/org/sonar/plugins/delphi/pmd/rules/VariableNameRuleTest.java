@@ -47,9 +47,7 @@ class VariableNameRuleTest extends BasePmdRuleTest {
             .appendImpl("var")
             .appendImpl("  SomeVar: Integer;")
             .appendImpl("begin")
-            .appendImpl("  if SomeVar <> 0 then begin")
-            .appendImpl("    WriteLn('test');")
-            .appendImpl("  end;")
+            .appendImpl("  SomeVar := 0;")
             .appendImpl("end;");
 
     execute(builder);
@@ -65,9 +63,7 @@ class VariableNameRuleTest extends BasePmdRuleTest {
             .appendImpl("var")
             .appendImpl("  someVar: Integer;")
             .appendImpl("begin")
-            .appendImpl("  if someVar <> 0 then begin")
-            .appendImpl("    WriteLn('test');")
-            .appendImpl("  end;")
+            .appendImpl("  someVar := 0;")
             .appendImpl("end;");
 
     execute(builder);

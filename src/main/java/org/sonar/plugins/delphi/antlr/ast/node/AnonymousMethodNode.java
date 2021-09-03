@@ -1,12 +1,14 @@
 package org.sonar.plugins.delphi.antlr.ast.node;
 
 import java.util.Collections;
+import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.delphi.symbol.declaration.MethodKind;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.parameter.FormalParameter;
 
 public final class AnonymousMethodNode extends ExpressionNode {
   private String image;
@@ -70,7 +72,11 @@ public final class AnonymousMethodNode extends ExpressionNode {
 
     return getTypeFactory()
         .anonymous(
-            parameters == null ? Collections.emptyList() : parameters.getParameterTypes(),
+            parameters == null
+                ? Collections.emptyList()
+                : parameters.getParameters().stream()
+                    .map(FormalParameter::create)
+                    .collect(Collectors.toUnmodifiableList()),
             returnTypeNode == null
                 ? DelphiType.voidType()
                 : returnTypeNode.getTypeNode().getType());

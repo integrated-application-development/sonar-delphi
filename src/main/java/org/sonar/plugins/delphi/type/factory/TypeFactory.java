@@ -49,6 +49,7 @@ import org.sonar.plugins.delphi.type.Type.TypeType;
 import org.sonar.plugins.delphi.type.Type.VariantType.VariantKind;
 import org.sonar.plugins.delphi.type.factory.DelphiStructType.ImagePart;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 
 public class TypeFactory {
   private static final CompilerVersion VERSION_4 = CompilerVersion.fromVersionSymbol("VER120");
@@ -79,23 +80,6 @@ public class TypeFactory {
     return compilerVersion.compareTo(VERSION_4) < 0;
   }
 
-  private boolean isExtended16Bytes() {
-    // See: http://bit.ly/extended-on-different-platforms
-    switch (toolchain) {
-      case DCCOSX:
-      case DCCIOS32:
-      case DCCLINUX64:
-        return true;
-      default:
-        return false;
-    }
-  }
-
-  private boolean isExtended10Bytes() {
-    // See: http://bit.ly/extended-on-different-platforms
-    return toolchain.platform == Platform.WINDOWS && toolchain.architecture == Architecture.X86;
-  }
-
   private boolean isLong64Bit() {
     // See: http://bit.ly/long-on-different-platforms
     return compilerVersion.compareTo(VERSION_XE8) >= 0
@@ -113,6 +97,20 @@ public class TypeFactory {
       return x86;
     } else {
       return x64;
+    }
+  }
+
+  private int extendedSize() {
+    // See: http://bit.ly/extended-on-different-platforms
+    switch (toolchain) {
+      case DCCOSX:
+      case DCCIOS32:
+      case DCCLINUX64:
+        return 16;
+      case DCC32:
+        return 10;
+      default:
+        return 8;
     }
   }
 
@@ -185,19 +183,12 @@ public class TypeFactory {
     addDecimal(IntrinsicType.REAL48, 6);
     addDecimal(IntrinsicType.COMP, 8);
     addDecimal(IntrinsicType.CURRENCY, 8);
+    addDecimal(IntrinsicType.EXTENDED, extendedSize());
 
     if (isReal48Bit()) {
       addAlias(IntrinsicType.REAL, IntrinsicType.REAL48);
     } else {
       addAlias(IntrinsicType.REAL, IntrinsicType.DOUBLE);
-    }
-
-    if (isExtended16Bytes()) {
-      addDecimal(IntrinsicType.EXTENDED, 16);
-    } else if (isExtended10Bytes()) {
-      addDecimal(IntrinsicType.EXTENDED, 10);
-    } else {
-      addAlias(IntrinsicType.EXTENDED, IntrinsicType.DOUBLE);
     }
 
     addInteger(IntrinsicType.SHORTINT, 1, true);
@@ -262,6 +253,7 @@ public class TypeFactory {
             return IntrinsicType.TEXT.fullyQualifiedName();
           }
         });
+    addAlias(IntrinsicType.TEXTFILE, IntrinsicType.TEXT);
   }
 
   private static List<ImagePart> createImageParts(TypeDeclarationNode declaration) {
@@ -335,8 +327,13 @@ public class TypeFactory {
   }
 
   private ProceduralType createProcedural(
-      ProceduralKind kind, List<Type> parameterTypes, Type returnType) {
-    return new DelphiProceduralType(proceduralSize(kind), kind, parameterTypes, returnType);
+      ProceduralKind kind, List<Parameter> parameters, Type returnType) {
+    return createProcedural(kind, parameters, returnType, false);
+  }
+
+  private ProceduralType createProcedural(
+      ProceduralKind kind, List<Parameter> parameters, Type returnType, boolean variadic) {
+    return new DelphiProceduralType(proceduralSize(kind), kind, parameters, returnType, variadic);
   }
 
   public Type untypedType() {
@@ -413,24 +410,28 @@ public class TypeFactory {
     return new DelphiClassReferenceType(type, pointerSize());
   }
 
-  public ProceduralType procedure(List<Type> parameterTypes, Type returnType) {
-    return createProcedural(ProceduralKind.PROCEDURE, parameterTypes, returnType);
+  public ProceduralType procedure(List<Parameter> parameters, Type returnType) {
+    return createProcedural(ProceduralKind.PROCEDURE, parameters, returnType);
   }
 
-  public ProceduralType ofObject(List<Type> parameterTypes, Type returnType) {
-    return createProcedural(ProceduralKind.PROCEDURE_OF_OBJECT, parameterTypes, returnType);
+  public ProceduralType ofObject(List<Parameter> parameters, Type returnType) {
+    return createProcedural(ProceduralKind.PROCEDURE_OF_OBJECT, parameters, returnType);
   }
 
-  public ProceduralType reference(List<Type> parameterTypes, Type returnType) {
-    return createProcedural(ProceduralKind.REFERENCE, parameterTypes, returnType);
+  public ProceduralType reference(List<Parameter> parameters, Type returnType) {
+    return createProcedural(ProceduralKind.REFERENCE, parameters, returnType);
   }
 
-  public ProceduralType anonymous(List<Type> parameterTypes, Type returnType) {
-    return createProcedural(ProceduralKind.ANONYMOUS, parameterTypes, returnType);
+  public ProceduralType anonymous(List<Parameter> parameters, Type returnType) {
+    return createProcedural(ProceduralKind.ANONYMOUS, parameters, returnType);
   }
 
-  public ProceduralType method(List<Type> parameterTypes, Type returnType) {
-    return createProcedural(ProceduralKind.METHOD, parameterTypes, returnType);
+  public ProceduralType method(List<Parameter> parameters, Type returnType) {
+    return createProcedural(ProceduralKind.METHOD, parameters, returnType);
+  }
+
+  public ProceduralType method(List<Parameter> parameters, Type returnType, boolean variadic) {
+    return createProcedural(ProceduralKind.METHOD, parameters, returnType, variadic);
   }
 
   public TypeType typeType(String image, Type type) {

@@ -6,7 +6,7 @@ import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
-import org.sonar.plugins.delphi.symbol.declaration.parameter.Parameter;
+import org.sonar.plugins.delphi.type.parameter.Parameter;
 
 public class DateFormatSettingsRule extends AbstractDelphiRule {
   private static final String TFORMATSETTINGS = "System.SysUtils.TFormatSettings";

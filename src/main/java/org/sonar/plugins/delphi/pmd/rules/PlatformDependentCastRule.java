@@ -24,8 +24,8 @@ public class PlatformDependentCastRule extends AbstractDelphiRule {
     if (arguments.size() == 1) {
       ExpressionNode expression = arguments.get(0);
       if (!expression.isLiteral()) {
-        Type originalType = getOriginalType(expression);
-        Type castedType = getHardCastedType(argumentList);
+        Type originalType = TypeUtils.findBaseType(getOriginalType(expression));
+        Type castedType = TypeUtils.findBaseType(getHardCastedType(argumentList));
 
         if (isPlatformDependentCast(originalType, castedType)) {
           addViolation(data, argumentList);
@@ -71,7 +71,6 @@ public class PlatformDependentCastRule extends AbstractDelphiRule {
   }
 
   private static boolean isPlatformDependentType(Type type) {
-    type = TypeUtils.findBaseType(type);
     return isPointerBasedType(type)
         || type.is(IntrinsicType.NATIVEINT)
         || type.is(IntrinsicType.NATIVEUINT);
