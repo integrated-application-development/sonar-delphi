@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Improve name and overload resolution around "address of procedural value" expressions.
 - Improve overload resolution around numeric type mismatches. (integer vs floating point)
 - Improve modeling of intrinsic methods to include parameter specifiers. (`out`, `var`, `const`)
 - Clean up property names and descriptions.

@@ -8,31 +8,55 @@ import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.LiteralNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
-import org.sonar.plugins.delphi.type.DelphiType;
+import org.sonar.plugins.delphi.antlr.ast.node.UnaryExpressionNode;
+import org.sonar.plugins.delphi.operator.UnaryOperator;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
 import org.sonar.plugins.delphi.type.Typed;
 
 public class InvocationArgument implements Typed {
   private final ExpressionNode expression;
-  private Type type = DelphiType.unknownType();
-
-  // Null if the expression was not a PrimaryExpression.
-  // This is important because method references can only be bare PrimaryExpressions.
+  private Type type;
   @Nullable private NameResolver resolver;
 
   InvocationArgument(ExpressionNode expression) {
     this.expression = expression;
+    this.type = null;
 
-    if (expression instanceof PrimaryExpressionNode) {
-      resolver = new NameResolver(expression.getTypeFactory());
-      resolver.readPrimaryExpression((PrimaryExpressionNode) expression);
-      type = resolver.getApproximateType();
+    if (expression instanceof UnaryExpressionNode) {
+      this.initializeFromAddressOfProcedural((UnaryExpressionNode) expression);
+    } else if (expression instanceof PrimaryExpressionNode) {
+      this.initializeFromPrimaryExpression((PrimaryExpressionNode) expression);
     }
 
-    if (type.isUnknown()) {
-      type = expression.getType();
+    if (this.type == null) {
+      this.type = expression.getType();
     }
+  }
+
+  private void initializeFromAddressOfProcedural(UnaryExpressionNode unary) {
+    if (unary.getOperator() != UnaryOperator.ADDRESS) {
+      return;
+    }
+
+    if (!(unary.getOperand() instanceof PrimaryExpressionNode)) {
+      return;
+    }
+
+    NameResolver nameResolver = new NameResolver(unary.getTypeFactory());
+    nameResolver.readPrimaryExpression((PrimaryExpressionNode) unary.getOperand());
+
+    Type approximateType = nameResolver.getApproximateType();
+    if (!nameResolver.isExplicitInvocation() && approximateType.isProcedural()) {
+      this.resolver = nameResolver;
+      this.type = approximateType;
+    }
+  }
+
+  private void initializeFromPrimaryExpression(PrimaryExpressionNode primary) {
+    this.resolver = new NameResolver(primary.getTypeFactory());
+    resolver.readPrimaryExpression(primary);
+    this.type = resolver.getApproximateType();
   }
 
   void resolve(Type parameterType) {
@@ -43,18 +67,19 @@ public class InvocationArgument implements Typed {
         resolver.disambiguateImplicitEmptyArgumentList();
       }
       resolver.addToSymbolTable();
-      type = resolver.getApproximateType();
     }
   }
 
-  boolean looksLikeMethodReference() {
-    return resolver != null && !resolver.isExplicitInvocation() && type.isProcedural();
+  boolean looksLikeProceduralReference() {
+    return resolver != null
+        && !resolver.isExplicitInvocation()
+        && resolver.getApproximateType().isProcedural();
   }
 
   boolean isMethodReference(Type parameterType) {
     return resolver != null
         && !resolver.isExplicitInvocation()
-        && type.isProcedural()
+        && resolver.getApproximateType().isMethod()
         && parameterType.isProcedural();
   }
 
