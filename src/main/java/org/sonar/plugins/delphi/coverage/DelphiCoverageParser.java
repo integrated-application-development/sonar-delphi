@@ -20,10 +20,11 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.codecoverage;
+package org.sonar.plugins.delphi.coverage;
 
-public enum CodeCoverageTool {
-  NONE,
-  CODE_COVERAGE_TOOL,
-  AQ_TIME
+import java.io.File;
+import org.sonar.api.batch.sensor.SensorContext;
+
+public interface DelphiCoverageParser {
+  void parse(SensorContext context, File reportFile);
 }

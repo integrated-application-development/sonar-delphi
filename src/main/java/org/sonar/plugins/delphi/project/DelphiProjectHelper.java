@@ -270,11 +270,6 @@ public class DelphiProjectHelper {
     return fs.inputFiles(p.and(p.hasLanguage(DelphiLanguage.KEY), p.hasType(InputFile.Type.MAIN)));
   }
 
-  private Iterable<InputFile> testFiles() {
-    FilePredicates p = fs.predicates();
-    return fs.inputFiles(p.and(p.hasLanguage(DelphiLanguage.KEY), p.hasType(InputFile.Type.TEST)));
-  }
-
   public boolean shouldExecuteOnProject() {
     return fs.hasFiles(fs.predicates().hasLanguage(DelphiLanguage.KEY));
   }
@@ -287,30 +282,8 @@ public class DelphiProjectHelper {
     return fs.inputFile(fs.predicates().is(file));
   }
 
-  public InputFile findFileInDirectories(String fileName) {
-    for (InputFile inputFile : mainFiles()) {
-      if (inputFile.filename().equalsIgnoreCase(fileName)) {
-        return inputFile;
-      }
-    }
-    return null;
-  }
-
-  public InputFile findTestFileInDirectories(String fileName) {
-    String unitFileName = normalize(fileName);
-    for (InputFile inputFile : testFiles()) {
-      if (inputFile.filename().equalsIgnoreCase(unitFileName)) {
-        return inputFile;
-      }
-    }
-    return null;
-  }
-
-  private String normalize(String fileName) {
-    if (!fileName.contains(".")) {
-      return fileName + "." + DelphiLanguage.FILE_SOURCE_CODE_SUFFIX;
-    }
-    return fileName;
+  public InputFile getFileFromBasename(String basename) {
+    return fs.inputFile(fs.predicates().hasFilename(basename));
   }
 
   public String encoding() {

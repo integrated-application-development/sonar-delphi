@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="Windows-1252" standalone="no"?>
+<report>
+  <stats>
+    <packages value="1"/>
+    <classes value="2"/>
+    <methods value="3"/>
+    <srcfiles value="4"/>
+    <srclines value="5"/>
+    <totallines value="6"/>
+    <coveredlines value="7"/>
+    <coveredpercent value="8"/>
+  </stats>
+  <data>
+    <linehits>
+  </data>
+</report>
