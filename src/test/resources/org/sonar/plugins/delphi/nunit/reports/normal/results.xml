@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-run testcasecount="9" result="Passed" total="8" passed="5" failed="3" inconclusive="0" skipped="1"
+          duration="1.561">
+    <test-suite type="TestSuite" name="TopLevelParentSuite"
+                testcasecount="6" runstate="Runnable" result="Passed"
+                duration="1.235" total="5" passed="5" failed="0" skipped="1" inconclusive="0">
+        <test-suite type="TestSuite" name="PassingAndSkippedSuite"
+                    testcasecount="4" runstate="Runnable" result="Passed"
+                    duration="1.234" total="3" passed="3" failed="0" skipped="1" inconclusive="0">
+            <test-case name="Setup" classname="PassingAndSkippedClass"
+                       runstate="Runnable" result="Passed"
+                       duration="0.704">
+            </test-case>
+            <test-case name="SkippedTest"
+                       classname="PassingAndSkippedClass" runstate="Skipped" result="Skipped"
+                       duration="0.185">
+            </test-case>
+            <test-case name="PassedTest"
+                       classname="PassingAndSkippedClass" runstate="Runnable" result="Passed"
+                       duration="0.076">
+            </test-case>
+            <test-case name="Teardown" classname="PassingAndSkippedClass"
+                       runstate="Runnable" result="Passed" duration="0.269">
+            </test-case>
+        </test-suite>
+        <test-suite type="TestSuite" name="PassingSuite"
+                    testcasecount="2" runstate="Runnable" result="Passed"
+                    duration="0.001" total="2" passed="2" failed="0" skipped="0" inconclusive="0">
+            <test-case name="TestCase1"
+                       classname="TTestClass2" runstate="Runnable" result="Passed"
+                       duration="0.000">
+            </test-case>
+            <test-case name="TestCase1"
+                       classname="TTestClass2" runstate="Runnable" result="Passed"
+                       duration="0.001">
+            </test-case>
+        </test-suite>
+        <test-suite type="TestSuite" name="FailingSuite"
+                    testcasecount="3" runstate="Runnable" result="Failed"
+                    duration="0.326" total="3" passed="0" failed="3" skipped="0" inconclusive="0">
+            <test-case name="Setup" classname="FailingClass"
+                       runstate="Runnable" result="Failed"
+                       duration="0.102">
+            </test-case>
+            <test-case name="FailedCase"
+                       classname="FailingClass" runstate="Runnable" result="Failed"
+                       duration="0.092">
+            </test-case>
+            <test-case name="Teardown" classname="FailingClass"
+                       runstate="Runnable" result="Failed" duration="0.132">
+            </test-case>
+        </test-suite>
+    </test-suite>
+</test-run>

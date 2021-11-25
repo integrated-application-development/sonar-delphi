@@ -3,16 +3,11 @@ package org.sonar.plugins.delphi;
 import static org.sonar.plugins.delphi.utils.DelphiUtils.inputFilesToPaths;
 import static org.sonar.plugins.delphi.utils.DelphiUtils.stopProgressReport;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
@@ -20,8 +15,6 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.codecoverage.DelphiCodeCoverageParser;
-import org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
 import org.sonar.plugins.delphi.compiler.CompilerVersion;
 import org.sonar.plugins.delphi.compiler.Toolchain;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
@@ -70,7 +63,6 @@ public class DelphiSensor implements Sensor {
       executor.setup();
       executeOnFiles(context);
       executor.complete();
-      addCoverage(context);
     }
   }
 
@@ -133,30 +125,6 @@ public class DelphiSensor implements Sensor {
       success = true;
     } finally {
       stopProgressReport(progressReport, success);
-    }
-  }
-
-  private void addCoverage(SensorContext context) {
-    Optional<String> coverageTool = context.config().get(DelphiPlugin.CODECOVERAGE_TOOL_KEY);
-    if (coverageTool.isPresent() && coverageTool.get().equals("dcc")) {
-      Optional<String> coverageReport = context.config().get(DelphiPlugin.CODECOVERAGE_REPORT_KEY);
-
-      if (coverageReport.isPresent()) {
-        Path coverageReportDir = Paths.get(coverageReport.get());
-        try (Stream<Path> coverageReportStream = Files.walk(coverageReportDir)) {
-          coverageReportStream
-              .filter(Files::isRegularFile)
-              .filter(DelphiCodeCoverageToolParser::isCodeCoverageReport)
-              .forEach(
-                  path -> {
-                    DelphiCodeCoverageParser coverageParser =
-                        new DelphiCodeCoverageToolParser(path.toFile(), delphiProjectHelper);
-                    coverageParser.parse(context);
-                  });
-        } catch (IOException e) {
-          LOG.error("Error while parsing Coverage Reports:", e);
-        }
-      }
     }
   }
 

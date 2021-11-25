@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-run testcasecount="4" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="1"
+          duration="0.076">
+    <test-suite type="TestSuite" name=""
+                testcasecount="4" runstate="Runnable" result="Passed"
+                duration="1.234" total="3" passed="3" failed="0" skipped="1" inconclusive="0">
+        <test-case name="" filename="Malformed.pas"
+                   classname="" runstate="Runnable" result="Passed"
+                   duration="0.076">
+        </test-case>
+    </test-suite>
+    </test-suite>
+</test-run>

@@ -32,12 +32,16 @@ import org.sonar.api.resources.Qualifiers;
 import org.sonar.plugins.delphi.compiler.CompilerVersion;
 import org.sonar.plugins.delphi.compiler.Toolchain;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
+import org.sonar.plugins.delphi.coverage.DelphiCoverageParserFactory;
+import org.sonar.plugins.delphi.coverage.DelphiCoverageSensor;
+import org.sonar.plugins.delphi.coverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
 import org.sonar.plugins.delphi.executor.DelphiCpdExecutor;
 import org.sonar.plugins.delphi.executor.DelphiHighlightExecutor;
 import org.sonar.plugins.delphi.executor.DelphiMasterExecutor;
 import org.sonar.plugins.delphi.executor.DelphiMetricsExecutor;
 import org.sonar.plugins.delphi.executor.DelphiPmdExecutor;
 import org.sonar.plugins.delphi.executor.DelphiSymbolTableExecutor;
+import org.sonar.plugins.delphi.nunit.DelphiNUnitSensor;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConfiguration;
 import org.sonar.plugins.delphi.pmd.profile.DefaultDelphiProfile;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileExporter;
@@ -46,7 +50,6 @@ import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRulesDefinition;
 import org.sonar.plugins.delphi.pmd.violation.DelphiPmdViolationRecorder;
 import org.sonar.plugins.delphi.project.DelphiProjectHelper;
-import org.sonar.plugins.delphi.surefire.SurefireSensor;
 
 /** Main Sonar DelphiLanguage plugin class */
 public class DelphiPlugin implements Plugin {
@@ -58,8 +61,9 @@ public class DelphiPlugin implements Plugin {
   public static final String CONDITIONAL_UNDEFINES_KEY = "sonar.delphi.conditionalUndefines";
   public static final String UNIT_SCOPE_NAMES_KEY = "sonar.delphi.unitScopeNames";
   public static final String UNIT_ALIASES_KEY = "sonar.delphi.unitAliases";
-  public static final String CODECOVERAGE_TOOL_KEY = "sonar.delphi.codecoverage.tool";
-  public static final String CODECOVERAGE_REPORT_KEY = "sonar.delphi.codecoverage.report";
+  public static final String COVERAGE_TOOL_KEY = "sonar.delphi.coverage.tool";
+  public static final String COVERAGE_REPORT_KEY = "sonar.delphi.coverage.reportPaths";
+  public static final String NUNIT_REPORT_PATHS_PROPERTY = "sonar.delphi.nunit.reportPaths";
   public static final String GENERATE_PMD_REPORT_XML_KEY = "sonar.delphi.pmd.generateXml";
   public static final String TEST_SUITE_TYPE_KEY = "sonar.delphi.pmd.testSuiteType";
 
@@ -137,14 +141,23 @@ public class DelphiPlugin implements Plugin {
             .multiValues(true)
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
-        PropertyDefinition.builder(DelphiPlugin.CODECOVERAGE_TOOL_KEY)
-            .name("Code coverage tool")
-            .description("Used code coverage tool (AQTime or Delphi Code Coverage)")
+        PropertyDefinition.builder(DelphiPlugin.COVERAGE_TOOL_KEY)
+            .name("Coverage Tool")
+            .defaultValue(DelphiCodeCoverageToolParser.KEY)
+            .description(
+                "Used coverage tool. Options are: \"" + DelphiCodeCoverageToolParser.KEY + "\"")
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
-        PropertyDefinition.builder(DelphiPlugin.CODECOVERAGE_REPORT_KEY)
-            .name("Delphi Code Coverage report path")
-            .description("Path to code coverage report to be parsed by Delphi Code Coverage")
+        PropertyDefinition.builder(DelphiPlugin.COVERAGE_REPORT_KEY)
+            .name("Coverage Report Paths")
+            .description("List of paths containing coverage reports from the specified tool")
+            .multiValues(true)
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(DelphiPlugin.NUNIT_REPORT_PATHS_PROPERTY)
+            .name("NUnit Report Paths")
+            .description("List of paths to NUnit report directories")
+            .multiValues(true)
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
         PropertyDefinition.builder(DelphiPlugin.GENERATE_PMD_REPORT_XML_KEY)
@@ -166,7 +179,8 @@ public class DelphiPlugin implements Plugin {
     builder.add(
         // Sensors
         DelphiSensor.class,
-        SurefireSensor.class,
+        DelphiCoverageSensor.class,
+        DelphiNUnitSensor.class,
         // Executors
         DelphiMasterExecutor.class,
         DelphiCpdExecutor.class,
@@ -178,6 +192,7 @@ public class DelphiPlugin implements Plugin {
         DelphiLanguage.class,
         // Core helpers
         DelphiProjectHelper.class,
+        DelphiCoverageParserFactory.class,
         // PMD
         DelphiPmdConfiguration.class,
         DelphiPmdRulesDefinition.class,

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="Windows-1252" standalone="no"?>
+<report>
+  <stats>
+    <packages value="1"/>
+    <classes value="2"/>
+    <methods value="3"/>
+    <srcfiles value="4"/>
+    <srclines value="5"/>
+    <totallines value="6"/>
+    <coveredlines value="7"/>
+    <coveredpercent value="8"/>
+  </stats>
+  <data>
+    <linehits>
+      <file name="Globals.pas">16=1;27=3</file>
+      <file name="MainWindow.pas">53=1;52=2</file>
+      <file name="DoesNotExist.pas">32=1</file>
+    </linehits>
+  </data>
+</report>

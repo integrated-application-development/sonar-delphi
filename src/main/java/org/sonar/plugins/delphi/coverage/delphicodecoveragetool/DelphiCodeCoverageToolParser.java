@@ -20,10 +20,10 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.codecoverage.delphicodecoveragetool;
+package org.sonar.plugins.delphi.coverage.delphicodecoveragetool;
 
 import java.io.File;
-import java.nio.file.Path;
+import java.util.Arrays;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -32,7 +32,7 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.delphi.codecoverage.DelphiCodeCoverageParser;
+import org.sonar.plugins.delphi.coverage.DelphiCoverageParser;
 import org.sonar.plugins.delphi.project.DelphiProjectHelper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -40,60 +40,51 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser {
+public class DelphiCodeCoverageToolParser implements DelphiCoverageParser {
+  public static final String KEY = "dcc";
   private static final Logger LOG = Loggers.get(DelphiCodeCoverageToolParser.class);
-  private final File reportFile;
   private final DelphiProjectHelper delphiProjectHelper;
 
-  public DelphiCodeCoverageToolParser(File reportFile, DelphiProjectHelper delphiProjectHelper) {
-    this.reportFile = reportFile;
+  public DelphiCodeCoverageToolParser(DelphiProjectHelper delphiProjectHelper) {
     this.delphiProjectHelper = delphiProjectHelper;
   }
 
-  public static boolean isCodeCoverageReport(Path path) {
-    return "CodeCoverage_Summary.xml".equalsIgnoreCase(path.getFileName().toString());
-  }
-
-  private void parseLineHit(
-      String lineCoverage, int startPos, int endPos, NewCoverage newCoverage) {
-    String lineHit = lineCoverage.substring(startPos, endPos);
+  private void parseLineHit(String lineHit, int numLines, NewCoverage newCoverage) {
     int eq = lineHit.indexOf('=');
     if (eq > 0) {
       int lineNumber = Integer.parseInt(lineHit.substring(0, eq));
       int lineHits = Integer.parseInt(lineHit.substring(eq + 1));
-      newCoverage.lineHits(lineNumber, lineHits);
+      if (lineNumber > numLines) {
+        LOG.debug(
+            "skipping line hit on line {} because it's beyond the end of the file", lineNumber);
+      } else {
+        newCoverage.lineHits(lineNumber, lineHits);
+      }
     }
   }
 
-  private void parseValue(String lineCoverage, NewCoverage newCoverage) {
-    int pos = 0;
-    int end;
-    while ((end = lineCoverage.indexOf(';', pos)) >= 0) {
-      parseLineHit(lineCoverage, pos, end, newCoverage);
-      pos = end + 1;
-    }
-    if (lineCoverage.length() - 1 > pos) {
-      parseLineHit(lineCoverage, pos, lineCoverage.length(), newCoverage);
-    }
+  private void parseValue(String lineCoverage, NewCoverage newCoverage, int numLines) {
+    Arrays.stream(lineCoverage.split(";")).forEach(s -> parseLineHit(s, numLines, newCoverage));
   }
 
   private void parseFileNode(SensorContext sensorContext, Node srcFile) {
     String fileName = srcFile.getAttributes().getNamedItem("name").getTextContent();
-    InputFile sourceFile = delphiProjectHelper.findFileInDirectories(fileName);
+    InputFile sourceFile = delphiProjectHelper.getFileFromBasename(fileName);
 
     if (sourceFile == null) {
-      LOG.trace("File not found in project: {}", fileName);
+      LOG.debug("File not found in project: {}", fileName);
       return;
     }
+    LOG.debug("Parsing line hit information for file: {}", fileName);
 
     NewCoverage newCoverage = sensorContext.newCoverage();
     newCoverage.onFile(sourceFile);
 
-    parseValue(srcFile.getTextContent(), newCoverage);
+    parseValue(srcFile.getTextContent(), newCoverage, sourceFile.lines());
     newCoverage.save();
   }
 
-  private void parseReportFile(SensorContext sensorContext) {
+  private void parseReportFile(SensorContext sensorContext, File reportFile) {
     try {
       DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
       docBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
@@ -107,13 +98,15 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser {
 
       NodeList dataNodes = doc.getElementsByTagName("linehits");
       Element lineHits = (Element) dataNodes.item(0);
-      NodeList files = lineHits.getElementsByTagName("file");
-
-      for (int f = 0; f < files.getLength(); f++) {
-        Node srcFile = files.item(f);
-        parseFileNode(sensorContext, srcFile);
+      if (lineHits == null) {
+        LOG.warn("'linehits' element not found in coverage report: {}", reportFile);
+        return;
       }
 
+      NodeList files = lineHits.getElementsByTagName("file");
+      for (int f = 0; f < files.getLength(); f++) {
+        parseFileNode(sensorContext, files.item(f));
+      }
     } catch (SAXException e) {
       LOG.error("Failed to parse coverage report: ", e);
     } catch (Exception e) {
@@ -122,11 +115,13 @@ public class DelphiCodeCoverageToolParser implements DelphiCodeCoverageParser {
   }
 
   @Override
-  public void parse(SensorContext context) {
+  public void parse(SensorContext context, File reportFile) {
     if (!reportFile.exists()) {
+      LOG.warn("Report file '{}' does not exist", reportFile);
       return;
     }
 
-    parseReportFile(context);
+    LOG.info("Parsing coverage report: {}", reportFile);
+    parseReportFile(context, reportFile);
   }
 }

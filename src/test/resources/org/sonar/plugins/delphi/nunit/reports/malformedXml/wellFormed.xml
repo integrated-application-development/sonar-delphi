@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-run testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0"
+          duration="0.704">
+    <test-suite type="TestSuite" name="Test"
+                testcasecount="1" runstate="Runnable" result="Passed"
+                duration="0.704" total="1" passed="1" failed="0" skipped="0" inconclusive="0">
+        <test-case name="Setup" classname="TestClass"
+                   runstate="Runnable" result="Passed"
+                   duration="0.704">
+        </test-case>
+    </test-suite>
+</test-run>

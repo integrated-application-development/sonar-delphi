@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-run testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0">
+    <test-suite type="TestSuite" name="Suite"
+                testcasecount="2" runstate="Runnable" result="Passed"
+                total="2" passed="2" failed="0" skipped="0" inconclusive="0">
+        <test-case name="MissingDuration" classname="" runstate="Runnable" result="Passed">
+        </test-case>
+        <test-case name="InvalidDuration" classname="" runstate="Runnable" result="Passed" duration="not_a_number">
+        </test-case>
+    </test-suite>
+</test-run>
