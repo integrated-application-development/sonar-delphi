@@ -50,7 +50,6 @@ import org.sonar.plugins.delphi.surefire.SurefireSensor;
 
 /** Main Sonar DelphiLanguage plugin class */
 public class DelphiPlugin implements Plugin {
-  public static final String CC_EXCLUDED_KEY = "sonar.delphi.codecoverage.excluded";
   public static final String SEARCH_PATH_KEY = "sonar.delphi.sources.searchPath";
   public static final String STANDARD_LIBRARY_KEY = "sonar.delphi.sources.standardLibrarySource";
   public static final String COMPILER_TOOLCHAIN_KEY = "sonar.delphi.compiler.toolchain";
@@ -78,12 +77,6 @@ public class DelphiPlugin implements Plugin {
     ImmutableList.Builder<Object> builder = ImmutableList.builder();
 
     builder.add(
-        PropertyDefinition.builder(DelphiPlugin.CC_EXCLUDED_KEY)
-            .name("Code coverage excluded directories")
-            .description("List of directories which will not have code coverage calculated.")
-            .multiValues(true)
-            .onQualifiers(Qualifiers.PROJECT)
-            .build(),
         PropertyDefinition.builder(DelphiPlugin.SEARCH_PATH_KEY)
             .name("Search path")
             .description("Directories to search in for include files and unit imports.")

@@ -320,36 +320,4 @@ public class DelphiProjectHelper {
   public String testSuiteType() {
     return settings.get(DelphiPlugin.TEST_SUITE_TYPE_KEY).orElse("");
   }
-
-  /**
-   * Gets code coverage excluded directories
-   *
-   * @return List of excluded directories, empty list if none
-   */
-  public List<File> getCodeCoverageExcludedDirectories() {
-    List<File> list = new ArrayList<>();
-
-    String[] sources = settings.getStringArray(DelphiPlugin.CC_EXCLUDED_KEY);
-    if (sources == null || sources.length == 0) {
-      return list;
-    }
-    for (String path : sources) {
-      if (StringUtils.isEmpty(path)) {
-        continue;
-      }
-      File excluded = DelphiUtils.resolveAbsolutePath(fs.baseDir().getAbsolutePath(), path.trim());
-      if (!excluded.exists()) {
-        LOG.warn(
-            "{} {}", "Excluded code coverage path does not exist: ", excluded.getAbsolutePath());
-      } else if (!excluded.isDirectory()) {
-        LOG.warn(
-            "{} {}",
-            "Excluded code coverage path is not a directory: ",
-            excluded.getAbsolutePath());
-      } else {
-        list.add(excluded);
-      }
-    }
-    return list;
-  }
 }

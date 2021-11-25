@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Support for surefire report format.
+- `sonar.delphi.codecoverage.excluded` property.
 
 ## [0.32.0] - 2021-09-03
 
