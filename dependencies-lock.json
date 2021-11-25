@@ -24,18 +24,6 @@
     "scope" : "compile",
     "type" : "jar"
   }, {
-    "groupId" : "com.fasterxml.staxmate",
-    "artifactId" : "staxmate",
-    "version" : "2.4.0",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
-    "groupId" : "com.fasterxml.woodstox",
-    "artifactId" : "woodstox-core",
-    "version" : "5.2.0",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
     "groupId" : "com.google.code.findbugs",
     "artifactId" : "jsr305",
     "version" : "3.0.2",
@@ -170,13 +158,13 @@
   }, {
     "groupId" : "net.bytebuddy",
     "artifactId" : "byte-buddy-agent",
-    "version" : "1.12.1",
+    "version" : "1.12.4",
     "scope" : "test",
     "type" : "jar"
   }, {
     "groupId" : "net.bytebuddy",
     "artifactId" : "byte-buddy",
-    "version" : "1.12.1",
+    "version" : "1.12.4",
     "scope" : "test",
     "type" : "jar"
   }, {
@@ -195,15 +183,15 @@
     "groupId" : "net.sourceforge.saxon",
     "artifactId" : "saxon",
     "version" : "9.1.0.8",
-    "scope" : "compile",
-    "type" : "jar"
+    "scope" : "runtime",
+    "type" : "jar",
+    "classifier" : "dom"
   }, {
     "groupId" : "net.sourceforge.saxon",
     "artifactId" : "saxon",
     "version" : "9.1.0.8",
-    "scope" : "runtime",
-    "type" : "jar",
-    "classifier" : "dom"
+    "scope" : "compile",
+    "type" : "jar"
   }, {
     "groupId" : "org.antlr",
     "artifactId" : "antlr-runtime",
@@ -265,72 +253,6 @@
     "scope" : "compile",
     "type" : "jar"
   }, {
-    "groupId" : "org.codehaus.woodstox",
-    "artifactId" : "stax2-api",
-    "version" : "4.2.1",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.eclipse.jdt",
-    "artifactId" : "org.eclipse.jdt.core",
-    "version" : "3.26.0",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.eclipse.platform",
-    "artifactId" : "org.eclipse.core.commands",
-    "version" : "3.10.200",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.eclipse.platform",
-    "artifactId" : "org.eclipse.core.contenttype",
-    "version" : "3.8.200",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.eclipse.platform",
-    "artifactId" : "org.eclipse.core.jobs",
-    "version" : "3.13.100",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.eclipse.platform",
-    "artifactId" : "org.eclipse.core.resources",
-    "version" : "3.18.0",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.eclipse.platform",
-    "artifactId" : "org.eclipse.core.runtime",
-    "version" : "3.26.0",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.eclipse.platform",
-    "artifactId" : "org.eclipse.equinox.common",
-    "version" : "3.16.200",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.eclipse.platform",
-    "artifactId" : "org.eclipse.equinox.preferences",
-    "version" : "3.10.100",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.eclipse.platform",
-    "artifactId" : "org.eclipse.osgi",
-    "version" : "3.18.100",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.eclipse.platform",
-    "artifactId" : "org.eclipse.text",
-    "version" : "3.12.200",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
     "groupId" : "org.hamcrest",
     "artifactId" : "hamcrest-core",
     "version" : "1.3",
@@ -358,37 +280,37 @@
   }, {
     "groupId" : "org.junit.jupiter",
     "artifactId" : "junit-jupiter-api",
-    "version" : "5.8.1",
+    "version" : "5.8.2",
     "scope" : "test",
     "type" : "jar"
   }, {
     "groupId" : "org.junit.jupiter",
     "artifactId" : "junit-jupiter-engine",
-    "version" : "5.8.1",
+    "version" : "5.8.2",
     "scope" : "test",
     "type" : "jar"
   }, {
     "groupId" : "org.junit.jupiter",
     "artifactId" : "junit-jupiter-params",
-    "version" : "5.8.1",
+    "version" : "5.8.2",
     "scope" : "test",
     "type" : "jar"
   }, {
     "groupId" : "org.junit.jupiter",
     "artifactId" : "junit-jupiter",
-    "version" : "5.8.1",
+    "version" : "5.8.2",
     "scope" : "test",
     "type" : "jar"
   }, {
     "groupId" : "org.junit.platform",
     "artifactId" : "junit-platform-commons",
-    "version" : "1.8.1",
+    "version" : "1.8.2",
     "scope" : "test",
     "type" : "jar"
   }, {
     "groupId" : "org.junit.platform",
     "artifactId" : "junit-platform-engine",
-    "version" : "1.8.1",
+    "version" : "1.8.2",
     "scope" : "test",
     "type" : "jar"
   }, {
@@ -418,13 +340,13 @@
   }, {
     "groupId" : "org.junit.vintage",
     "artifactId" : "junit-vintage-engine",
-    "version" : "5.8.1",
+    "version" : "5.8.2",
     "scope" : "test",
     "type" : "jar"
   }, {
     "groupId" : "org.mockito",
     "artifactId" : "mockito-core",
-    "version" : "4.1.0",
+    "version" : "4.2.0",
     "scope" : "test",
     "type" : "jar"
   }, {
@@ -438,18 +360,6 @@
     "artifactId" : "opentest4j",
     "version" : "1.2.0",
     "scope" : "test",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.osgi",
-    "artifactId" : "org.osgi.service.prefs",
-    "version" : "1.1.2",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.osgi",
-    "artifactId" : "osgi.annotation",
-    "version" : "8.0.1",
-    "scope" : "compile",
     "type" : "jar"
   }, {
     "groupId" : "org.ow2.asm",
@@ -482,43 +392,6 @@
     "scope" : "compile",
     "type" : "jar"
   }, {
-    "groupId" : "org.sonarsource.analyzer-commons",
-    "artifactId" : "sonar-performance-measure",
-    "version" : "1.15.0.699",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.sonarsource.analyzer-commons",
-    "artifactId" : "sonar-regex-parsing",
-    "version" : "1.15.0.699",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.sonarsource.analyzer-commons",
-    "artifactId" : "sonar-xml-parsing",
-    "version" : "1.15.0.699",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.sonarsource.java",
-    "artifactId" : "java-frontend",
-    "version" : "7.1.0.26670",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.sonarsource.java",
-    "artifactId" : "java-surefire",
-    "version" : "7.1.0.26670",
-    "scope" : "compile",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.sonarsource.java",
-    "artifactId" : "jdt",
-    "version" : "7.1.0.26670",
-    "scope" : "compile",
-    "type" : "jar",
-    "classifier" : "shaded"
-  }, {
     "groupId" : "org.sonarsource.orchestrator",
     "artifactId" : "sonar-orchestrator",
     "version" : "3.35.1.2719",
@@ -535,12 +408,6 @@
     "artifactId" : "sonar-ws",
     "version" : "7.9",
     "scope" : "test",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.sonarsource.sslr",
-    "artifactId" : "sslr-core",
-    "version" : "1.24.0.633",
-    "scope" : "compile",
     "type" : "jar"
   } ]
 }
