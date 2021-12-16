@@ -47,7 +47,7 @@ class UnknownScopeTest {
   void testGetDeclarationsByClass() {
     var declaration = compilerVariable("Image", unknownType(), unknownScope());
     unknownScope.addDeclaration(declaration);
-    assertThat(unknownScope.getDeclarations(VariableNameDeclaration.class)).isNull();
+    assertThat(unknownScope.getDeclarations(VariableNameDeclaration.class)).isEmpty();
   }
 
   @Test
