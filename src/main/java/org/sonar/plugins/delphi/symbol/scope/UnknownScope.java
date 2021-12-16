@@ -38,7 +38,7 @@ public final class UnknownScope implements DelphiScope {
 
   @Override
   public <T extends NameDeclaration> Map<T, List<NameOccurrence>> getDeclarations(Class<T> clazz) {
-    return null;
+    return Collections.emptyMap();
   }
 
   @Override
