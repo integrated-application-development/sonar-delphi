@@ -77,17 +77,13 @@ public class DelphiCoverageSensor implements Sensor {
   }
 
   private void addCoverage(SensorContext context, String path, DelphiCoverageParser parser) {
-    try {
-      try (Stream<Path> coverageReportStream = Files.walk(Path.of(path))) {
-        coverageReportStream
-            .filter(Files::isRegularFile)
-            .map(Path::toFile)
-            .forEach(file -> parser.parse(context, file));
-      } catch (IOException e) {
-        LOG.error("Error while parsing coverage reports:", e);
-      }
-    } catch (InvalidPathException e) {
-      LOG.warn("Coverage path is invalid: {}", path);
+    try (Stream<Path> coverageReportStream = Files.walk(Path.of(path))) {
+      coverageReportStream
+          .filter(Files::isRegularFile)
+          .map(Path::toFile)
+          .forEach(file -> parser.parse(context, file));
+    } catch (IOException | InvalidPathException e) {
+      LOG.error("Error while parsing coverage reports:", e);
     }
   }
 

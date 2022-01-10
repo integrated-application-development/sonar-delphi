@@ -37,7 +37,7 @@ class DelphiNUnitSensorTest {
 
   @Test
   void testToString() {
-    assertThat(sensor.toString()).isEqualTo("DelphiNUnitSensor");
+    assertThat(sensor).hasToString("DelphiNUnitSensor");
   }
 
   @Test

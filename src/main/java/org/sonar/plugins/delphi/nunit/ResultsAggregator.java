@@ -6,12 +6,10 @@ import org.sonar.api.utils.log.Loggers;
 public final class ResultsAggregator {
   private static final Logger LOG = Loggers.get(ResultsAggregator.class);
 
-  private int failures = 0;
-  private int skipped = 0;
-  private int tests = 0;
-  private double durationSeconds = 0;
-
-  public ResultsAggregator() {}
+  private int failures;
+  private int skipped;
+  private int tests;
+  private double durationSeconds;
 
   public ResultsAggregator add(TestResult result) {
     this.tests++;

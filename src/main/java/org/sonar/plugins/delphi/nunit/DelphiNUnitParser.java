@@ -25,7 +25,7 @@ import org.xml.sax.SAXException;
 
 /** Parses NUnit test reports from XML files. */
 public class DelphiNUnitParser {
-  private static class MissingNodeException extends Exception {
+  private static class MissingNodeException extends RuntimeException {
     private MissingNodeException(String msg) {
       super(msg);
     }
@@ -109,8 +109,7 @@ public class DelphiNUnitParser {
       try {
         results.add(parseTestResult(testCase.getAttributes()));
       } catch (MissingNodeException e) {
-        LOG.warn(e.getMessage());
-        LOG.warn("Skipping this test case.");
+        LOG.warn("Skipping test case because of exception while parsing: {}", e);
       }
     }
   }
