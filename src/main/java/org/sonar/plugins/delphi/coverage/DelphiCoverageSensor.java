@@ -69,7 +69,7 @@ public class DelphiCoverageSensor implements Sensor {
   private void addCoverage(SensorContext context, DelphiCoverageParser parser) {
     String[] paths = context.config().getStringArray(DelphiPlugin.COVERAGE_REPORT_KEY);
     if (paths == null || paths.length == 0) {
-      LOG.warn(
+      LOG.info(
           "No coverage reports specified (see '{}' property)", DelphiPlugin.COVERAGE_REPORT_KEY);
     } else {
       Arrays.stream(paths).forEach(path -> addCoverage(context, path, parser));
