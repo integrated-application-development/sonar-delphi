@@ -1,7 +1,7 @@
 package org.sonar.plugins.delphi.compiler;
 
 import java.math.BigDecimal;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 public final class CompilerVersion implements Comparable<CompilerVersion> {
