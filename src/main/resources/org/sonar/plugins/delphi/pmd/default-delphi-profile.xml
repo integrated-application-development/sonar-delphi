@@ -118,10 +118,6 @@
     name="PublicFieldsRule">
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedArgumentsRule"
-    name="UnusedArgumentsRule">
-  </rule>
-
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     name="NoGuidRule">
   </rule>
