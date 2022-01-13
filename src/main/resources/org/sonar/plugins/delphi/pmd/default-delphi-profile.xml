@@ -226,6 +226,10 @@
     name="ShortIdentifiersRule">
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedLocalVariablesRule"
+    name="UnusedLocalVariablesRule">
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedImportsRule"
     name="UnusedImportsRule">
   </rule>
