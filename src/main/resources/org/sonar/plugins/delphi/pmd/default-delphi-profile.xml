@@ -238,6 +238,10 @@
     name="UnusedFieldsRule">
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedTypesRule"
+    name="UnusedTypesRule">
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedImportsRule"
     name="UnusedImportsRule">
   </rule>
