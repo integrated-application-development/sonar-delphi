@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `UnusedFieldsRule` analysis rule, which flags unused fields.
 - `UnusedConstantsRule` analysis rule, which flags unused constants.
 - `UnusedTypesRule` analysis rule, which flags unused types.
+- `UnusedPropertiesRule` analysis rule, which flags unused properties.
 
 ### Changed
 

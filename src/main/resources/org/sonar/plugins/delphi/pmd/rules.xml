@@ -1651,6 +1651,25 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedPropertiesRule"
+    message="Unused properties should be removed"
+    name="UnusedPropertiesRule">
+    <priority>3</priority>
+    <description>
+      Unused properties should be removed.
+      &lt;br&gt;
+      Leaving them in reduces the code's readability, since their presence can be confusing.
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;Exclusions:&lt;/b&gt;
+      &lt;br&gt;
+      - Published properties
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedTypesRule"
     message="Unused types should be removed"
     name="UnusedTypesRule">
