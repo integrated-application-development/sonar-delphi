@@ -1618,6 +1618,20 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedConstantsRule"
+    message="Unused constants should be removed"
+    name="UnusedConstantsRule">
+    <priority>3</priority>
+    <description>
+      Unused constants should be removed.
+      &lt;br&gt;
+      Leaving them in reduces the code's readability, since their presence can be confusing.
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedFieldsRule"
     message="Unused fields should be removed"
     name="UnusedFieldsRule">

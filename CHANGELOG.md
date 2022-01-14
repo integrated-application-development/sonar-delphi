@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `UnusedLocalVariablesRule` analysis rule, which flags unused local variables.
 - `UnusedFieldsRule` analysis rule, which flags unused fields.
+- `UnusedConstantsRule` analysis rule, which flags unused constants.
 
 ### Changed
 
