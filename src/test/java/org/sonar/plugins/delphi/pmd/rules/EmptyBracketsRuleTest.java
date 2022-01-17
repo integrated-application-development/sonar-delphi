@@ -18,9 +18,7 @@ class EmptyBracketsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("EmptyBracketsRule", builder.getOffsetDecl() + 3));
+    assertIssues().areExactly(1, ruleKeyAtLine("EmptyBracketsRule", builder.getOffsetDecl() + 3));
   }
 
   @Test
@@ -34,9 +32,7 @@ class EmptyBracketsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("EmptyBracketsRule", builder.getOffset() + 3));
+    assertIssues().areExactly(1, ruleKeyAtLine("EmptyBracketsRule", builder.getOffset() + 3));
   }
 
   @Test
@@ -51,9 +47,7 @@ class EmptyBracketsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("EmptyBracketsRule", builder.getOffset() + 3));
+    assertIssues().areExactly(1, ruleKeyAtLine("EmptyBracketsRule", builder.getOffset() + 3));
   }
 
   @Test
@@ -71,7 +65,7 @@ class EmptyBracketsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("EmptyBracketsRule"));
   }
 
   @Test
@@ -87,7 +81,7 @@ class EmptyBracketsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("EmptyBracketsRule"));
   }
 
   @Test
@@ -104,7 +98,7 @@ class EmptyBracketsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("EmptyBracketsRule"));
   }
 
   @Test

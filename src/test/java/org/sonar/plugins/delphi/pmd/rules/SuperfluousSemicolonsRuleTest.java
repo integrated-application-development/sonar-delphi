@@ -1,7 +1,7 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.sonar.plugins.delphi.utils.conditions.AtLine.atLine;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
@@ -22,7 +22,7 @@ class SuperfluousSemicolonsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("SuperfluousSemicolonsRule"));
   }
 
   @Test
@@ -42,11 +42,10 @@ class SuperfluousSemicolonsRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .are(ruleKey("SuperfluousSemicolonsRule"))
-        .areExactly(1, atLine(builder.getOffset() + 3))
-        .areExactly(3, atLine(builder.getOffset() + 4))
-        .areExactly(2, atLine(builder.getOffset() + 6))
-        .areExactly(1, atLine(builder.getOffset() + 7))
-        .areExactly(1, atLine(builder.getOffset() + 8));
+        .areExactly(1, ruleKeyAtLine("SuperfluousSemicolonsRule", builder.getOffset() + 3))
+        .areExactly(3, ruleKeyAtLine("SuperfluousSemicolonsRule", builder.getOffset() + 4))
+        .areExactly(2, ruleKeyAtLine("SuperfluousSemicolonsRule", builder.getOffset() + 6))
+        .areExactly(1, ruleKeyAtLine("SuperfluousSemicolonsRule", builder.getOffset() + 7))
+        .areExactly(1, ruleKeyAtLine("SuperfluousSemicolonsRule", builder.getOffset() + 8));
   }
 }

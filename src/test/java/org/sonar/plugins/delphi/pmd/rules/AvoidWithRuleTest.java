@@ -20,8 +20,6 @@ class AvoidWithRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("AvoidWithRule", builder.getOffset() + 3));
+    assertIssues().areExactly(1, ruleKeyAtLine("AvoidWithRule", builder.getOffset() + 3));
   }
 }

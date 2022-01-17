@@ -25,7 +25,7 @@ class VariableInitializationRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("VariableInitializationRule"));
   }
 
   @Test
@@ -71,7 +71,7 @@ class VariableInitializationRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("VariableInitializationRule"));
   }
 
   @Test
@@ -195,7 +195,7 @@ class VariableInitializationRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("VariableInitializationRule"));
   }
 
   @Test
@@ -260,7 +260,7 @@ class VariableInitializationRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("VariableInitializationRule"));
   }
 
   @Test

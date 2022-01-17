@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ class NoFunctionReturnTypeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("NoFunctionReturnTypeRule"));
   }
 
   @Test
@@ -31,7 +32,6 @@ class NoFunctionReturnTypeRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
         .areExactly(1, ruleKeyAtLine("NoFunctionReturnTypeRule", builder.getOffset() + 1));
   }
 }

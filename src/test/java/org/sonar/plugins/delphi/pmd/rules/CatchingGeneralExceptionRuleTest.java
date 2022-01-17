@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ class CatchingGeneralExceptionRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("CatchingGeneralExceptionRule"));
   }
 
   @Test
@@ -45,7 +46,6 @@ class CatchingGeneralExceptionRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
         .areExactly(1, ruleKeyAtLine("CatchingGeneralExceptionRule", builder.getOffset() + 6));
   }
 }

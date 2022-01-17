@@ -18,7 +18,7 @@ class VariableNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("VariableNameRule"));
   }
 
   @Test
@@ -33,7 +33,6 @@ class VariableNameRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(3)
         .areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 2))
         .areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 3))
         .areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 4));
@@ -52,7 +51,7 @@ class VariableNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("VariableNameRule"));
   }
 
   @Test
@@ -68,9 +67,7 @@ class VariableNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffset() + 3));
+    assertIssues().areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffset() + 3));
   }
 
   @Test
@@ -87,7 +84,6 @@ class VariableNameRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
         .areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 4))
         .areNot(ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 6));
   }
@@ -103,7 +99,7 @@ class VariableNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("VariableNameRule"));
   }
 
   @Test
@@ -117,9 +113,7 @@ class VariableNameRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffset() + 1));
+    assertIssues().areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffset() + 1));
   }
 
   @Test

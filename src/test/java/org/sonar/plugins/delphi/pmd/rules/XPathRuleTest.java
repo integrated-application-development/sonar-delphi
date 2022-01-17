@@ -2,6 +2,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TEMPLATE_XPATH_CLASS;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.TEMPLATE_XPATH_EXPRESSION_PARAM;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -37,9 +38,7 @@ class XPathRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("XPathTestRule", builder.getOffsetDecl() + 2));
+    assertIssues().areExactly(1, ruleKeyAtLine("XPathTestRule", builder.getOffsetDecl() + 2));
   }
 
   @Test
@@ -54,9 +53,7 @@ class XPathRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("XPathTestRule", builder.getOffsetDecl() + 2));
+    assertIssues().areExactly(1, ruleKeyAtLine("XPathTestRule", builder.getOffsetDecl() + 2));
   }
 
   @Test
@@ -71,7 +68,7 @@ class XPathRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("XPathTestRule"));
   }
 
   @Test
@@ -86,7 +83,7 @@ class XPathRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("XPathTestRule"));
   }
 
   @Test
@@ -101,7 +98,7 @@ class XPathRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("XPathTestRule"));
   }
 
   @Test
@@ -116,9 +113,7 @@ class XPathRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("XPathTestRule", builder.getOffsetDecl() + 2));
+    assertIssues().areExactly(1, ruleKeyAtLine("XPathTestRule", builder.getOffsetDecl() + 2));
   }
 
   @Test
@@ -133,7 +128,7 @@ class XPathRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("XPathTestRule"));
   }
 
   @Test
@@ -148,7 +143,7 @@ class XPathRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("XPathTestRule"));
   }
 
   @Test
@@ -163,9 +158,7 @@ class XPathRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("XPathTestRule", builder.getOffsetDecl() + 2));
+    assertIssues().areExactly(1, ruleKeyAtLine("XPathTestRule", builder.getOffsetDecl() + 2));
   }
 
   @Test
@@ -180,7 +173,7 @@ class XPathRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("XPathTestRule"));
   }
 
   @Test
@@ -195,6 +188,6 @@ class XPathRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("XPathTestRule"));
   }
 }

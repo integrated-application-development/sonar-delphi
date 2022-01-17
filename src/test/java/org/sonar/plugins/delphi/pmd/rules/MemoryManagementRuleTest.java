@@ -72,9 +72,7 @@ class MemoryManagementRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("MemoryManagementRule", builder.getOffset() + 9));
+    assertIssues().areExactly(1, ruleKeyAtLine("MemoryManagementRule", builder.getOffset() + 9));
   }
 
   @Test
@@ -134,7 +132,7 @@ class MemoryManagementRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("MemoryManagementRule"));
   }
 
   @Test
@@ -211,7 +209,7 @@ class MemoryManagementRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("MemoryManagementRule"));
   }
 
   @Test
@@ -235,7 +233,7 @@ class MemoryManagementRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("MemoryManagementRule"));
   }
 
   @Test
@@ -260,7 +258,7 @@ class MemoryManagementRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("MemoryManagementRule"));
   }
 
   @Test
@@ -282,7 +280,7 @@ class MemoryManagementRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("MemoryManagementRule"));
   }
 
   @Test
@@ -305,7 +303,7 @@ class MemoryManagementRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("MemoryManagementRule"));
   }
 
   @Test
@@ -325,7 +323,7 @@ class MemoryManagementRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("MemoryManagementRule"));
   }
 
   @Test
@@ -353,7 +351,7 @@ class MemoryManagementRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("MemoryManagementRule"));
   }
 
   @Test
@@ -374,8 +372,6 @@ class MemoryManagementRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("MemoryManagementRule", builder.getOffset() + 5));
+    assertIssues().areExactly(1, ruleKeyAtLine("MemoryManagementRule", builder.getOffset() + 5));
   }
 }

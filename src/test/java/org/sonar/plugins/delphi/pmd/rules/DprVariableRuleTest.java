@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,7 @@ class DprVariableRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("ProjectFileNoVariablesRule"));
   }
 
   @Test
@@ -29,7 +30,6 @@ class DprVariableRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(3)
         .areExactly(1, ruleKeyAtLine("ProjectFileNoVariablesRule", builder.getOffsetDecl() + 2))
         .areExactly(1, ruleKeyAtLine("ProjectFileNoVariablesRule", builder.getOffsetDecl() + 3))
         .areExactly(1, ruleKeyAtLine("ProjectFileNoVariablesRule", builder.getOffsetDecl() + 4));

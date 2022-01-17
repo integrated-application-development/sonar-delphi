@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +47,6 @@ class ForbiddenTypeRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(2)
         .areExactly(1, ruleKeyAtLine("ForbiddenTypeRuleTest", builder.getOffset() + 3))
         .areExactly(1, ruleKeyAtLine("ForbiddenTypeRuleTest", builder.getOffset() + 5));
   }
@@ -76,7 +76,6 @@ class ForbiddenTypeRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(4)
         .areExactly(1, ruleKeyAtLine("ForbiddenTypeRuleTest", builder.getOffset() + 3))
         .areExactly(1, ruleKeyAtLine("ForbiddenTypeRuleTest", builder.getOffset() + 4))
         .areExactly(1, ruleKeyAtLine("ForbiddenTypeRuleTest", builder.getOffset() + 6))
@@ -99,6 +98,6 @@ class ForbiddenTypeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("ForbiddenTypeRuleTest"));
   }
 }

@@ -42,7 +42,7 @@ class EmptyMethodRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("EmptyMethodRule"));
   }
 
   @Test
@@ -82,7 +82,6 @@ class EmptyMethodRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(5)
         .areExactly(1, ruleKeyAtLine("EmptyMethodRule", builder.getOffset() + 1))
         .areExactly(1, ruleKeyAtLine("EmptyMethodRule", builder.getOffset() + 5))
         .areExactly(1, ruleKeyAtLine("EmptyMethodRule", builder.getOffset() + 9))
@@ -118,7 +117,6 @@ class EmptyMethodRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(3)
         .areExactly(1, ruleKeyAtLine("EmptyMethodRule", builder.getOffset() + 1))
         .areExactly(1, ruleKeyAtLine("EmptyMethodRule", builder.getOffset() + 4))
         .areExactly(1, ruleKeyAtLine("EmptyMethodRule", builder.getOffset() + 7));
@@ -154,7 +152,7 @@ class EmptyMethodRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("EmptyMethodRule"));
   }
 
   @Test

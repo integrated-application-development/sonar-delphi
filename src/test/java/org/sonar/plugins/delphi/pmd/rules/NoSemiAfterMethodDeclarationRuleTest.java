@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
+import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
@@ -22,7 +23,7 @@ class NoSemiAfterMethodDeclarationRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("NoSemiAfterMethodDeclarationRule"));
   }
 
   @Test
@@ -40,6 +41,14 @@ class NoSemiAfterMethodDeclarationRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().hasSize(4).are(ruleKey("NoSemiAfterMethodDeclarationRule"));
+    assertIssues()
+        .areExactly(
+            1, ruleKeyAtLine("NoSemiAfterMethodDeclarationRule", builder.getOffsetDecl() + 4))
+        .areExactly(
+            1, ruleKeyAtLine("NoSemiAfterMethodDeclarationRule", builder.getOffsetDecl() + 5))
+        .areExactly(
+            1, ruleKeyAtLine("NoSemiAfterMethodDeclarationRule", builder.getOffsetDecl() + 6))
+        .areExactly(
+            1, ruleKeyAtLine("NoSemiAfterMethodDeclarationRule", builder.getOffsetDecl() + 7));
   }
 }

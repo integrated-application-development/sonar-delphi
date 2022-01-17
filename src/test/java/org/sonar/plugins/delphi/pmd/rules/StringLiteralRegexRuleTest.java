@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +36,7 @@ class StringLiteralRegexRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("IDRefStringLiteralRule"));
   }
 
   @Test
@@ -48,7 +49,6 @@ class StringLiteralRegexRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
         .areExactly(1, ruleKeyAtLine("IDRefStringLiteralRule", builder.getOffsetDecl() + 2));
   }
 
@@ -63,7 +63,7 @@ class StringLiteralRegexRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("IDRefStringLiteralRule"));
   }
 
   @Test
@@ -84,7 +84,7 @@ class StringLiteralRegexRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("IDRefStringLiteralRule"));
   }
 
   @Test
@@ -100,6 +100,6 @@ class StringLiteralRegexRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("IDRefStringLiteralRule"));
   }
 }

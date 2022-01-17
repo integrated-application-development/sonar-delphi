@@ -1,6 +1,5 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.sonar.plugins.delphi.utils.conditions.AtLine.atLine;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
@@ -105,7 +104,6 @@ class CommentedOutCodeRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
         .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffsetDecl() + 3));
   }
 
@@ -153,11 +151,9 @@ class CommentedOutCodeRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(3)
-        .are(ruleKey("CommentedOutCodeRule"))
-        .areExactly(1, atLine(builder.getOffset() + 3))
-        .areExactly(1, atLine(builder.getOffset() + 5))
-        .areExactly(1, atLine(builder.getOffset() + 7));
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffset() + 3))
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffset() + 5))
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffset() + 7));
   }
 
   @Test
@@ -177,11 +173,9 @@ class CommentedOutCodeRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(3)
-        .are(ruleKey("CommentedOutCodeRule"))
-        .areExactly(1, atLine(builder.getOffset() + 3))
-        .areExactly(1, atLine(builder.getOffset() + 5))
-        .areExactly(1, atLine(builder.getOffset() + 7));
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffset() + 3))
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffset() + 5))
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffset() + 7));
   }
 
   @Test
@@ -196,9 +190,7 @@ class CommentedOutCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffset() + 3));
+    assertIssues().areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffset() + 3));
   }
 
   @Test
@@ -222,10 +214,8 @@ class CommentedOutCodeRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(2)
-        .are(ruleKey("CommentedOutCodeRule"))
-        .areExactly(1, atLine(builder.getOffset() + 4))
-        .areExactly(1, atLine(builder.getOffset() + 10));
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffset() + 4))
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffset() + 10));
   }
 
   @Test
@@ -244,9 +234,7 @@ class CommentedOutCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffset() + 4));
+    assertIssues().areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffset() + 4));
   }
 
   @Test
@@ -264,10 +252,8 @@ class CommentedOutCodeRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(2)
-        .are(ruleKey("CommentedOutCodeRule"))
-        .areExactly(1, atLine(builder.getOffset() + 3))
-        .areExactly(1, atLine(builder.getOffset() + 5));
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffset() + 3))
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffset() + 5));
   }
 
   @Test
@@ -292,9 +278,7 @@ class CommentedOutCodeRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(2)
-        .are(ruleKey("CommentedOutCodeRule"))
-        .areExactly(1, atLine(builder.getOffset() + 4))
-        .areExactly(1, atLine(builder.getOffset() + 10));
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffset() + 4))
+        .areExactly(1, ruleKeyAtLine("CommentedOutCodeRule", builder.getOffset() + 10));
   }
 }
