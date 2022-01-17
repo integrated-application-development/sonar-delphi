@@ -242,6 +242,10 @@
     name="UnusedPropertiesRule">
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedMethodsRule"
+    name="UnusedMethodsRule">
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedTypesRule"
     name="UnusedTypesRule">
   </rule>

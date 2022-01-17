@@ -5,9 +5,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
-import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
-import org.sonar.plugins.delphi.type.Type;
-import org.sonar.plugins.delphi.type.Type.ScopedType;
 
 public class EmptyMethodRule extends AbstractDelphiRule {
   @Override
@@ -33,30 +30,6 @@ public class EmptyMethodRule extends AbstractDelphiRule {
 
     return !declaration.hasDirective(MethodDirective.OVERRIDE)
         && !declaration.hasDirective(MethodDirective.VIRTUAL)
-        && !implementsInterface(declaration);
-  }
-
-  private static boolean implementsInterface(MethodNameDeclaration declaration) {
-    TypeNameDeclaration type = declaration.getTypeDeclaration();
-    return type != null && hasInterfaceMethodDeclaration(type.getType(), declaration);
-  }
-
-  private static boolean hasInterfaceMethodDeclaration(
-      Type type, MethodNameDeclaration declaration) {
-    if (type.isInterface()
-        && ((ScopedType) type)
-            .typeScope().getMethodDeclarations().stream()
-                .anyMatch(overridden -> overridesMethodSignature(declaration, overridden))) {
-      return true;
-    }
-
-    return type.parents().stream()
-        .anyMatch(parent -> hasInterfaceMethodDeclaration(parent, declaration));
-  }
-
-  private static boolean overridesMethodSignature(
-      MethodNameDeclaration declaration, MethodNameDeclaration overridden) {
-    return declaration.getImage().equalsIgnoreCase(overridden.getImage())
-        && declaration.hasSameParameterTypes(overridden);
+        && !declaration.implementsInterface();
   }
 }
