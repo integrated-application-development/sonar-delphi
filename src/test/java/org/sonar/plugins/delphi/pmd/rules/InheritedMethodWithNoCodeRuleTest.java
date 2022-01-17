@@ -1,5 +1,6 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,6 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
         .areExactly(1, ruleKeyAtLine("InheritedMethodWithNoCodeRule", builder.getOffset() + 3));
   }
 
@@ -50,7 +50,7 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("InheritedMethodWithNoCodeRule"));
   }
 
   @Test
@@ -65,7 +65,7 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("InheritedMethodWithNoCodeRule"));
   }
 
   @Test
@@ -82,7 +82,7 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("InheritedMethodWithNoCodeRule"));
   }
 
   @Test
@@ -169,7 +169,7 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("InheritedMethodWithNoCodeRule"));
   }
 
   @Test
@@ -198,6 +198,6 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("InheritedMethodWithNoCodeRule"));
   }
 }

@@ -19,7 +19,7 @@ class EmptyInterfaceRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("EmptyInterfaceRule"));
   }
 
   @Test
@@ -78,6 +78,6 @@ class EmptyInterfaceRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("EmptyInterfaceRule"));
   }
 }

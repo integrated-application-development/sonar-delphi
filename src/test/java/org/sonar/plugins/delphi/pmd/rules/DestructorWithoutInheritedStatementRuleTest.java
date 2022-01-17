@@ -18,7 +18,6 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
-import static org.sonar.plugins.delphi.utils.conditions.AtLine.atLine;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
@@ -44,7 +43,7 @@ class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("DestructorWithoutInheritedStatementRule"));
   }
 
   @Test
@@ -64,7 +63,6 @@ class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
         .areExactly(
             1, ruleKeyAtLine("DestructorWithoutInheritedStatementRule", builder.getOffset() + 1));
   }
@@ -91,10 +89,10 @@ class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(2)
-        .are(ruleKey("DestructorWithoutInheritedStatementRule"))
-        .areExactly(1, atLine(builder.getOffset() + 1))
-        .areExactly(1, atLine(builder.getOffset() + 5));
+        .areExactly(
+            1, ruleKeyAtLine("DestructorWithoutInheritedStatementRule", builder.getOffset() + 1))
+        .areExactly(
+            1, ruleKeyAtLine("DestructorWithoutInheritedStatementRule", builder.getOffset() + 5));
   }
 
   @Test
@@ -118,7 +116,7 @@ class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("DestructorWithoutInheritedStatementRule"));
   }
 
   @Test
@@ -136,7 +134,7 @@ class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("DestructorWithoutInheritedStatementRule"));
   }
 
   @Test
@@ -155,6 +153,6 @@ class DestructorWithoutInheritedStatementRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("DestructorWithoutInheritedStatementRule"));
   }
 }

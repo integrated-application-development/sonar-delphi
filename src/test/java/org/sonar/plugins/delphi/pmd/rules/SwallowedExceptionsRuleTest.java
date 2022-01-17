@@ -22,7 +22,7 @@ class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("SwallowedExceptionsRule"));
   }
 
   @Test
@@ -42,7 +42,7 @@ class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("SwallowedExceptionsRule"));
   }
 
   @Test
@@ -65,9 +65,7 @@ class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("SwallowedExceptionsRule", builder.getOffset() + 9));
+    assertIssues().areExactly(1, ruleKeyAtLine("SwallowedExceptionsRule", builder.getOffset() + 9));
   }
 
   @Test
@@ -152,9 +150,7 @@ class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("SwallowedExceptionsRule", builder.getOffset() + 5));
+    assertIssues().areExactly(1, ruleKeyAtLine("SwallowedExceptionsRule", builder.getOffset() + 5));
   }
 
   @Test
@@ -174,9 +170,7 @@ class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("SwallowedExceptionsRule", builder.getOffset() + 6));
+    assertIssues().areExactly(1, ruleKeyAtLine("SwallowedExceptionsRule", builder.getOffset() + 6));
   }
 
   @Test
@@ -217,7 +211,7 @@ class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("SwallowedExceptionsRule"));
   }
 
   @Test
@@ -253,6 +247,6 @@ class SwallowedExceptionsRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("SwallowedExceptionsRule"));
   }
 }

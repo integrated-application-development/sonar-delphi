@@ -85,9 +85,7 @@ class AssignedAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
+    assertIssues().areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
   }
 
   @Test
@@ -103,9 +101,7 @@ class AssignedAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
+    assertIssues().areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
   }
 
   @Test
@@ -119,7 +115,7 @@ class AssignedAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("AssignedAndFreeRule"));
   }
 
   @Test
@@ -225,9 +221,7 @@ class AssignedAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
+    assertIssues().areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
   }
 
   @Test
@@ -243,9 +237,7 @@ class AssignedAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues()
-        .hasSize(1)
-        .areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
+    assertIssues().areExactly(1, ruleKeyAtLine("AssignedAndFreeRule", builder.getOffset() + 4));
   }
 
   @Test
@@ -259,7 +251,7 @@ class AssignedAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("AssignedAndFreeRule"));
   }
 
   @Test
@@ -324,7 +316,7 @@ class AssignedAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("AssignedAndFreeRule"));
   }
 
   @Test
@@ -340,7 +332,7 @@ class AssignedAndFreeRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("AssignedAndFreeRule"));
   }
 
   @Test

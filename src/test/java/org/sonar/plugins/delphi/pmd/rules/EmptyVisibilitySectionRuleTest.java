@@ -20,7 +20,7 @@ class EmptyVisibilitySectionRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("EmptyVisibilitySectionRule"));
   }
 
   @Test
@@ -52,7 +52,6 @@ class EmptyVisibilitySectionRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
         .areExactly(1, ruleKeyAtLine("EmptyVisibilitySectionRule", builder.getOffsetDecl() + 3));
   }
 }

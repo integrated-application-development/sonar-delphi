@@ -59,7 +59,7 @@ class EmptyBeginStatementRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("EmptyBeginStatementRule"));
   }
 
   @Test
@@ -103,7 +103,6 @@ class EmptyBeginStatementRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(2)
         .areExactly(1, ruleKeyAtLine("EmptyBeginStatementRule", builder.getOffset() + 13))
         .areExactly(1, ruleKeyAtLine("EmptyBeginStatementRule", builder.getOffset() + 23));
   }

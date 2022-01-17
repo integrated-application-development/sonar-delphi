@@ -18,7 +18,7 @@ class MultipleVariableDeclarationRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("MultipleVariableDeclarationRule"));
   }
 
   @Test
@@ -33,7 +33,7 @@ class MultipleVariableDeclarationRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("MultipleVariableDeclarationRule"));
   }
 
   @Test
@@ -58,7 +58,6 @@ class MultipleVariableDeclarationRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
         .areExactly(
             1, ruleKeyAtLine("MultipleVariableDeclarationRule", builder.getOffsetDecl() + 2));
   }
@@ -75,7 +74,6 @@ class MultipleVariableDeclarationRuleTest extends BasePmdRuleTest {
     execute(builder);
 
     assertIssues()
-        .hasSize(1)
         .areExactly(
             1, ruleKeyAtLine("MultipleVariableDeclarationRule", builder.getOffsetDecl() + 3));
   }

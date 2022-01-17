@@ -35,7 +35,7 @@ class EmptyUnitRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("EmptyUnitRule"));
   }
 
   @Test
@@ -62,7 +62,7 @@ class EmptyUnitRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("EmptyUnitRule"));
   }
 
   @Test
@@ -75,7 +75,7 @@ class EmptyUnitRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("EmptyUnitRule"));
   }
 
   @Test
@@ -88,6 +88,6 @@ class EmptyUnitRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().isEmpty();
+    assertIssues().areNot(ruleKey("EmptyUnitRule"));
   }
 }
