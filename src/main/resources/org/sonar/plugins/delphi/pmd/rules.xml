@@ -1670,6 +1670,27 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedMethodsRule"
+    message="Unused methods should be removed"
+    name="UnusedMethodsRule">
+    <priority>3</priority>
+    <description>
+      Unused methods should be removed.
+      &lt;br&gt;
+      Leaving them in reduces the code's readability, since their presence can be confusing.
+      &lt;br&gt;
+      &lt;br&gt;
+      &lt;b&gt;Exclusions:&lt;/b&gt;
+      &lt;br&gt;
+      - Override methods
+      &lt;br&gt;
+      - Published methods
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedTypesRule"
     message="Unused types should be removed"
     name="UnusedTypesRule">

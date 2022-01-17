@@ -22,6 +22,7 @@ import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ProceduralType;
+import org.sonar.plugins.delphi.type.Type.ScopedType;
 import org.sonar.plugins.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicMethod;
@@ -210,6 +211,25 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
 
   public Set<UnitNameDeclaration> getDependencies() {
     return dependencies;
+  }
+
+  public boolean implementsInterface() {
+    TypeNameDeclaration type = getTypeDeclaration();
+    return type != null && hasInterfaceMethodDeclaration(type.getType());
+  }
+
+  private boolean hasInterfaceMethodDeclaration(Type type) {
+    if (type.isInterface()
+        && ((ScopedType) type)
+            .typeScope().getMethodDeclarations().stream()
+                .anyMatch(this::overridesMethodSignature)) {
+      return true;
+    }
+    return type.parents().stream().anyMatch(this::hasInterfaceMethodDeclaration);
+  }
+
+  private boolean overridesMethodSignature(MethodNameDeclaration overridden) {
+    return getImage().equalsIgnoreCase(overridden.getImage()) && hasSameParameterTypes(overridden);
   }
 
   @Override

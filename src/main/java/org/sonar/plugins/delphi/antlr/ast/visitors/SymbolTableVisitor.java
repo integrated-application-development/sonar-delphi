@@ -367,6 +367,8 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       data.addDeclaration(methodDeclaration, nameNode);
     }
 
+    scope.setMethodNameDeclaration(methodDeclaration);
+
     data.addScope(scope, node);
 
     if (foundInterfaceDeclaration
