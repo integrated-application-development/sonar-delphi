@@ -10,6 +10,8 @@ import javax.annotation.Nullable;
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.sonar.plugins.delphi.antlr.ast.node.AnonymousMethodNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ArrayIndicesNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ArrayTypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.AssignmentStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
@@ -76,6 +78,16 @@ public class NameResolutionHelper {
       SubRangeTypeNode subrange = (SubRangeTypeNode) type;
       resolve(subrange.getLowExpression());
       resolve(subrange.getHighExpression());
+      return;
+    }
+
+    if (type instanceof ArrayTypeNode) {
+      ArrayTypeNode array = (ArrayTypeNode) type;
+      resolve(array.getElementTypeNode());
+      ArrayIndicesNode arrayIndices = array.getArrayIndices();
+      if (arrayIndices != null) {
+        arrayIndices.getTypeNodes().forEach(this::resolve);
+      }
       return;
     }
 
