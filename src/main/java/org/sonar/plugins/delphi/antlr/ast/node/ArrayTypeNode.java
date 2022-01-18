@@ -21,12 +21,12 @@ public final class ArrayTypeNode extends TypeNode {
   }
 
   @NotNull
-  private TypeNode getElementTypeNode() {
+  public TypeNode getElementTypeNode() {
     return (TypeNode) jjtGetChild(1);
   }
 
   @Nullable
-  private ArrayIndicesNode getArrayIndices() {
+  public ArrayIndicesNode getArrayIndices() {
     Node indices = jjtGetChild(2);
     return (indices instanceof ArrayIndicesNode) ? (ArrayIndicesNode) indices : null;
   }
