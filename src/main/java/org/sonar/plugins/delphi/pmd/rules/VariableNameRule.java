@@ -1,5 +1,7 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
+import static org.sonar.plugins.delphi.utils.VariableUtils.isGeneratedFormVariable;
+
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
@@ -9,9 +11,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarDeclarationNode;
-import org.sonar.plugins.delphi.antlr.ast.node.VarSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarStatementNode;
-import org.sonar.plugins.delphi.symbol.scope.FileScope;
 import org.sonar.plugins.delphi.symbol.scope.UnitScope;
 import org.sonar.plugins.delphi.utils.NameConventionUtils;
 
@@ -28,7 +28,7 @@ public class VariableNameRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(VarDeclarationNode varDeclaration, RuleContext data) {
-    if (isAutoCreateFormVar(varDeclaration)) {
+    if (isGeneratedFormVariable(varDeclaration)) {
       return data;
     }
 
@@ -64,14 +64,6 @@ public class VariableNameRule extends AbstractDelphiRule {
         .filter(name -> isViolation(name, false))
         .forEach(name -> addViolation(data, name));
     return data;
-  }
-
-  private static boolean isAutoCreateFormVar(VarDeclarationNode varDecl) {
-    VarSectionNode varSection = varDecl.getVarSection();
-    return varSection.isInterfaceSection()
-        && varSection.getScope() instanceof FileScope
-        && varSection.getDeclarations().size() == 1
-        && varSection.jjtGetChildIndex() == varSection.jjtGetParent().jjtGetNumChildren() - 1;
   }
 
   private boolean isViolation(NameDeclarationNode name, boolean globalVariable) {

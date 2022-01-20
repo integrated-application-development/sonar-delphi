@@ -74,18 +74,17 @@ class VariableNameRuleTest extends BasePmdRuleTest {
   void testAutoCreateFormVariableShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
+            .appendDecl("uses")
+            .appendDecl("  Vcl.Forms;")
+            .appendDecl("type")
+            .appendDecl("  TFooForm = class(TForm)")
+            .appendDecl("  end;")
             .appendDecl("var")
-            .appendDecl("  GMyChar: Char;")
-            .appendDecl("  GAnotherChar: Char;")
-            .appendDecl("  GlobalChar: Char;")
-            .appendDecl("var")
-            .appendDecl("  omForm: TForm;");
+            .appendDecl("  omForm: TFooForm;");
 
     execute(builder);
 
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 4))
-        .areNot(ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 6));
+    assertIssues().areNot(ruleKey("VariableNameRule"));
   }
 
   @Test
