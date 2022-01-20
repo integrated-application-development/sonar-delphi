@@ -230,6 +230,10 @@
     name="UnusedLocalVariablesRule">
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedGlobalVariablesRule"
+    name="UnusedGlobalVariablesRule">
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.UnusedConstantsRule"
     name="UnusedConstantsRule">
   </rule>
