@@ -11,11 +11,9 @@ class AddressOfNestedMethodRuleTest extends BasePmdRuleTest {
   void testAddressOfRegularMethodShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TTestProc = procedure(Str: String);")
             .appendDecl("var")
-            .appendDecl("  ProcVar: TTestProc;")
-            .appendDecl("function ProcMethod(ProcVar: TTestProc);")
+            .appendDecl("  ProcVar: Pointer;")
+            .appendDecl("function ProcMethod(ProcVar: Pointer);")
             .appendImpl("procedure RegularMethod(Str: String);")
             .appendImpl("begin")
             .appendImpl("  Exit;")
@@ -35,6 +33,8 @@ class AddressOfNestedMethodRuleTest extends BasePmdRuleTest {
   void testAddressOfVariableShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
+            .appendDecl("var")
+            .appendDecl("  ProcVar: Pointer;")
             .appendDecl("function ProcMethod(Ptr: Pointer);")
             .appendImpl("procedure Test;")
             .appendImpl("var")
@@ -69,11 +69,9 @@ class AddressOfNestedMethodRuleTest extends BasePmdRuleTest {
   void testAddressOfNestedMethodResultShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TTestProc = function(Str: String): String;")
             .appendDecl("var")
-            .appendDecl("  ProcVar: TTestProc;")
-            .appendDecl("function ProcMethod(ProcVar: TTestProc);")
+            .appendDecl("  ProcVar: Pointer;")
+            .appendDecl("function ProcMethod(ProcVar: Pointer);")
             .appendImpl("procedure Test;")
             .appendImpl("  function Nested(Str: String): String;")
             .appendImpl("  begin")
@@ -93,11 +91,9 @@ class AddressOfNestedMethodRuleTest extends BasePmdRuleTest {
   void testAddressOfNestedMethodShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TTestProc = procedure(Str: String);")
             .appendDecl("var")
-            .appendDecl("  ProcVar: TTestProc;")
-            .appendDecl("function ProcMethod(ProcVar: TTestProc);")
+            .appendDecl("  ProcVar: Pointer;")
+            .appendDecl("function ProcMethod(ProcVar: Pointer);")
             .appendImpl("procedure Test;")
             .appendImpl("  procedure Nested(Str: String);")
             .appendImpl("  begin")
