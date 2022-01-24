@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `UnusedArgumentsRule` analysis rule.
 
+### Fixed
+
+- Type resolution bugs around "address of procedural value" expressions.
+
 ## [0.33.0] - 2022-01-10
 
 ### Added

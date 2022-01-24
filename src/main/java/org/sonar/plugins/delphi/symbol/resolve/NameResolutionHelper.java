@@ -115,7 +115,9 @@ public class NameResolutionHelper {
     NameResolver resolver = createNameResolver();
     resolver.readPrimaryExpression(expression);
 
-    if (handleMethodReference(expression, resolver) || handlePascalReturn(expression, resolver)) {
+    if (handleMethodReference(expression, resolver)
+        || handleAddressOf(expression, resolver)
+        || handlePascalReturn(expression, resolver)) {
       return;
     }
 
@@ -334,6 +336,26 @@ public class NameResolutionHelper {
       }
     }
     return typeScope;
+  }
+
+  private boolean handleAddressOf(PrimaryExpressionNode expression, NameResolver resolver) {
+    Node parent = expression.jjtGetParent();
+
+    if (parent instanceof UnaryExpressionNode) {
+      UnaryExpressionNode unary = (UnaryExpressionNode) parent;
+      if (unary.getOperator() == UnaryOperator.ADDRESS) {
+        if (!resolver.isExplicitInvocation() && resolver.getApproximateType().isProcedural()) {
+          NameResolver clone = new NameResolver(resolver);
+          clone.disambiguateAddressOfMethodReference();
+          clone.addToSymbolTable();
+        } else {
+          resolver.addToSymbolTable();
+        }
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private boolean handleMethodReference(PrimaryExpressionNode expression, NameResolver resolver) {

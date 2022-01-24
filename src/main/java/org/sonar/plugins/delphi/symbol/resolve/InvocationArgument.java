@@ -35,7 +35,7 @@ public class InvocationArgument implements Typed {
   }
 
   private void initializeFromAddressOfProcedural(UnaryExpressionNode unary) {
-    if (unary.getOperator() != UnaryOperator.ADDRESS) {
+    if (!isAddressOfExpression()) {
       return;
     }
 
@@ -49,7 +49,7 @@ public class InvocationArgument implements Typed {
     Type approximateType = nameResolver.getApproximateType();
     if (!nameResolver.isExplicitInvocation() && approximateType.isProcedural()) {
       this.resolver = nameResolver;
-      this.type = approximateType;
+      this.type = unary.getTypeFactory().pointerTo(approximateType);
     }
   }
 
@@ -70,8 +70,14 @@ public class InvocationArgument implements Typed {
     }
   }
 
+  private boolean isAddressOfExpression() {
+    return expression instanceof UnaryExpressionNode
+        && ((UnaryExpressionNode) expression).getOperator() == UnaryOperator.ADDRESS;
+  }
+
   boolean looksLikeProceduralReference() {
-    return resolver != null
+    return expression instanceof PrimaryExpressionNode
+        && resolver != null
         && !resolver.isExplicitInvocation()
         && resolver.getApproximateType().isProcedural();
   }

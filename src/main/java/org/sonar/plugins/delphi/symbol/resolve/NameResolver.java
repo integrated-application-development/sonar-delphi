@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.symbol.resolve;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.getFirst;
 import static com.google.common.collect.Iterables.getLast;
 import static java.util.function.Predicate.not;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
@@ -948,6 +949,18 @@ public class NameResolver {
 
     if (bestDeclaration != null) {
       declarations.add(bestDeclaration);
+      getLast(names).setIsMethodReference();
+    }
+  }
+
+  void disambiguateAddressOfMethodReference() {
+    disambiguateInvocable();
+    disambiguateIsCallable();
+
+    NameDeclaration first = getFirst(declarations, null);
+    if (first != null) {
+      declarations.clear();
+      declarations.add(first);
       getLast(names).setIsMethodReference();
     }
   }
