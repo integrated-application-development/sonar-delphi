@@ -721,6 +721,7 @@ public class NameResolver {
           DelphiNameOccurrence implicitOccurrence = new DelphiNameOccurrence(accessor);
           implicitOccurrence.setNameDeclaration((PropertyNameDeclaration) propertyDeclaration);
           accessor.setImplicitNameOccurrence(implicitOccurrence);
+          propertyDeclaration.getScope().addNameOccurrence(implicitOccurrence);
           registerOccurrence(implicitOccurrence);
         }
 

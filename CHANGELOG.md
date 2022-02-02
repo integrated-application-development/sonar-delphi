@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Type resolution bugs around "address of procedural value" expressions.
+- Usages of default array properties would not be properly reflected in the symbol table.
 
 ## [0.33.0] - 2022-01-10
 
