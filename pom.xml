@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>sonar-delphi-plugin</artifactId>
-  <version>0.33.0</version>
+  <version>0.34.0</version>
   <groupId>org.delphi.plugin</groupId>
   <name>Sonar Delphi Plugin</name>
   <description>Code analyzer for Delphi</description>
@@ -135,19 +135,19 @@
     <commons-lang.version>3.12.0</commons-lang.version>
     <commons-io.version>2.11.0</commons-io.version>
     <junit.version>5.8.2</junit.version>
-    <assertj.version>3.21.0</assertj.version>
-    <mockito.version>4.2.0</mockito.version>
+    <assertj.version>3.22.0</assertj.version>
+    <mockito.version>4.3.1</mockito.version>
     <archunit.version>0.22.0</archunit.version>
-    <compiler-plugin.version>3.8.1</compiler-plugin.version>
+    <compiler-plugin.version>3.9.0</compiler-plugin.version>
     <cyclonedx-plugin.version>2.5.3</cyclonedx-plugin.version>
     <dependency-plugin.version>3.2.0</dependency-plugin.version>
     <javadoc-plugin.version>3.3.1</javadoc-plugin.version>
-    <site-plugin.version>3.9.1</site-plugin.version>
-    <dependency-check-plugin.version>6.5.1</dependency-check-plugin.version>
+    <site-plugin.version>3.10.0</site-plugin.version>
+    <dependency-check-plugin.version>6.5.3</dependency-check-plugin.version>
     <jxr-plugin.version>3.1.1</jxr-plugin.version>
-    <errorprone.version>2.10.0</errorprone.version>
+    <errorprone.version>2.11.0</errorprone.version>
     <project-info-reports-plugin.version>3.1.2</project-info-reports-plugin.version>
-    <versions-plugin.version>2.8.1</versions-plugin.version>
+    <versions-plugin.version>2.9.0</versions-plugin.version>
   </properties>
   <!-- this is important for sonar-packaging-maven-plugin -->
   <packaging>sonar-plugin</packaging>
