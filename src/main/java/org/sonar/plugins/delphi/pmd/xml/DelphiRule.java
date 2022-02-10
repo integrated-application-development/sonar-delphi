@@ -42,7 +42,9 @@ public final class DelphiRule {
 
   public DelphiRule() {}
 
-  /** @param clazz The class which implements this rule */
+  /**
+   * @param clazz The class which implements this rule
+   */
   public DelphiRule(String clazz) {
     this(clazz, null);
   }

@@ -45,7 +45,9 @@ public class DelphiLanguage extends AbstractLanguage {
     super(KEY, LANGUAGE_NAME);
   }
 
-  /** @return Delphi source code file suffixes */
+  /**
+   * @return Delphi source code file suffixes
+   */
   @Override
   public String[] getFileSuffixes() {
     return FILE_SUFFIXES;
