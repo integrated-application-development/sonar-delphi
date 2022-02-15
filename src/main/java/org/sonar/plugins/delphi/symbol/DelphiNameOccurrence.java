@@ -2,6 +2,7 @@ package org.sonar.plugins.delphi.symbol;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
@@ -100,17 +101,35 @@ public class DelphiNameOccurrence implements NameOccurrence {
   }
 
   @Override
-  public final boolean equals(Object o) {
-    if (o instanceof DelphiNameOccurrence) {
-      DelphiNameOccurrence n = (DelphiNameOccurrence) o;
-      return n.getImage().equalsIgnoreCase(getImage());
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-    return false;
+    if (!(o instanceof DelphiNameOccurrence)) {
+      return false;
+    }
+    DelphiNameOccurrence that = (DelphiNameOccurrence) o;
+    return isExplicitInvocation == that.isExplicitInvocation
+        && isMethodReference == that.isMethodReference
+        && isGeneric == that.isGeneric
+        && location.equals(that.location)
+        && Objects.equals(declaration, that.declaration)
+        && Objects.equals(qualifiedName, that.qualifiedName)
+        && image.equals(that.image)
+        && typeParameters.equals(that.typeParameters);
   }
 
   @Override
-  public final int hashCode() {
-    return getImage().hashCode();
+  public int hashCode() {
+    return Objects.hash(
+        location,
+        declaration,
+        qualifiedName,
+        image,
+        isExplicitInvocation,
+        isMethodReference,
+        isGeneric,
+        typeParameters);
   }
 
   @Override

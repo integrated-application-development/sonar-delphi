@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Include assigned variables in `UnusedLocalVariablesRule`.
+
 ## [0.34.0] - 2022-02-03
 
 ### Added

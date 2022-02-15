@@ -11,11 +11,47 @@ class UnusedLocalVariablesRuleTest extends BasePmdRuleTest {
   void testUsedInMethodShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
+            .appendDecl("procedure UseFoo(Foo: Integer);")
+            .appendImpl("procedure Test;")
+            .appendImpl("var")
+            .appendImpl("  Foo: Integer;")
+            .appendImpl("begin")
+            .appendImpl("  UseFoo(Foo)")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("UnusedLocalVariablesRule"));
+  }
+
+  @Test
+  void testUnusedAssignedInMethodShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
             .appendImpl("var")
             .appendImpl("  Foo: Integer;")
             .appendImpl("begin")
             .appendImpl("  Foo := 0;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("UnusedLocalVariablesRule", builder.getOffset() + 3));
+  }
+
+  @Test
+  void testUsedAssignedInMethodShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("procedure UseFoo(Foo: Integer);")
+            .appendImpl("procedure Test;")
+            .appendImpl("var")
+            .appendImpl("  Foo: Integer;")
+            .appendImpl("begin")
+            .appendImpl("  Foo := 0;")
+            .appendImpl("  UseFoo(Foo);")
             .appendImpl("end;");
 
     execute(builder);
@@ -44,10 +80,11 @@ class UnusedLocalVariablesRuleTest extends BasePmdRuleTest {
   void testUsedInlineVariableShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
+            .appendDecl("procedure UseFoo(Foo: Integer);")
             .appendImpl("procedure Test;")
             .appendImpl("begin")
             .appendImpl("  var Foo: Integer;")
-            .appendImpl("  Foo := 0;")
+            .appendImpl("  UseFoo(Foo);")
             .appendImpl("end;");
 
     execute(builder);
@@ -68,6 +105,39 @@ class UnusedLocalVariablesRuleTest extends BasePmdRuleTest {
 
     assertIssues()
         .areExactly(1, ruleKeyAtLine("UnusedLocalVariablesRule", builder.getOffset() + 3));
+  }
+
+  @Test
+  void testUnusedAssignedInlineVariableShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  var Foo: Integer;")
+            .appendImpl("  Foo := 0;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("UnusedLocalVariablesRule", builder.getOffset() + 3));
+  }
+
+  @Test
+  void testUsedAssignedInlineVariableShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("procedure UseFoo(Foo: Integer);")
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  var Foo: Integer;")
+            .appendImpl("  Foo := 0;")
+            .appendImpl("  UseFoo(Foo);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("UnusedLocalVariablesRule"));
   }
 
   @Test
