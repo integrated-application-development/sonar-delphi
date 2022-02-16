@@ -77,4 +77,95 @@ class UnusedPropertiesRuleTest extends BasePmdRuleTest {
 
     assertIssues().areNot(ruleKey("UnusedPropertiesRule"));
   }
+
+  @Test
+  void testUnusedRedeclaredPropertyShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type TFoo = class")
+            .appendDecl("private")
+            .appendDecl("  FBar: Integer;")
+            .appendDecl("private")
+            .appendDecl("  property Baz: Integer read FBar;")
+            .appendDecl("end;")
+            .appendDecl("type TBar = class(TFoo)")
+            .appendDecl("public")
+            .appendDecl("  property Baz;")
+            .appendDecl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("UnusedPropertiesRule", builder.getOffsetDecl() + 5))
+        .areExactly(1, ruleKeyAtLine("UnusedPropertiesRule", builder.getOffsetDecl() + 9));
+  }
+
+  @Test
+  void testUnusedRedeclaredPublishedPropertyShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type TFoo = class")
+            .appendDecl("private")
+            .appendDecl("  FBar: Integer;")
+            .appendDecl("private")
+            .appendDecl("  property Baz: Integer read FBar;")
+            .appendDecl("end;")
+            .appendDecl("type TBar = class(TFoo)")
+            .appendDecl("published")
+            .appendDecl("  property Baz;")
+            .appendDecl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("UnusedPropertiesRule"));
+  }
+
+  @Test
+  void testUsedRedeclaredPropertyShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type TFoo = class")
+            .appendDecl("private")
+            .appendDecl("  FBar: Integer;")
+            .appendDecl("private")
+            .appendDecl("  property Baz: Integer read FBar;")
+            .appendDecl("end;")
+            .appendDecl("type TBar = class(TFoo)")
+            .appendDecl("public")
+            .appendDecl("  property Baz;")
+            .appendDecl("end;")
+            .appendImpl("function Flarp(Bar: TBar): Integer;")
+            .appendImpl("begin")
+            .appendImpl("  Result := Bar.Baz;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("UnusedPropertiesRule"));
+  }
+
+  @Test
+  void testUnusedRedeclaredPropertyWithUsedConcretePropertyShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type TFoo = class")
+            .appendDecl("private")
+            .appendDecl("  FBar: Integer;")
+            .appendDecl("private")
+            .appendDecl("  property Baz: Integer read FBar;")
+            .appendDecl("end;")
+            .appendDecl("type TBar = class(TFoo)")
+            .appendDecl("public")
+            .appendDecl("  property Baz;")
+            .appendDecl("end;")
+            .appendImpl("function Flarp(Foo: TFoo): Integer;")
+            .appendImpl("begin")
+            .appendImpl("  Result := Bar.Baz;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("UnusedPropertiesRule", builder.getOffsetDecl() + 9));
+  }
 }

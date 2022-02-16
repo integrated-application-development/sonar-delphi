@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Include assigned variables in `UnusedLocalVariablesRule`.
+- Count usage of redeclared properties in `UnusedPropertiesRule`.
 
 ## [0.34.0] - 2022-02-03
 

@@ -1,6 +1,7 @@
 package org.sonar.plugins.delphi.symbol.declaration;
 
 import com.google.common.collect.ComparisonChain;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.PropertyNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyReadSpecifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PropertyWriteSpecifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeDeclarationNode;
+import org.sonar.plugins.delphi.antlr.ast.node.Visibility;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.symbol.resolve.Invocable;
 import org.sonar.plugins.delphi.type.Type;
@@ -21,7 +23,7 @@ import org.sonar.plugins.delphi.type.parameter.FormalParameter;
 import org.sonar.plugins.delphi.type.parameter.Parameter;
 
 public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
-    implements TypedDeclaration, Invocable {
+    implements TypedDeclaration, Invocable, Visibility {
 
   private final String fullyQualifiedName;
   private final List<Parameter> parameters;
@@ -30,6 +32,8 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
   private final Type type;
   private final DelphiNameDeclaration readDeclaration;
   private final DelphiNameDeclaration writeDeclaration;
+  private final VisibilityType visibility;
+  private final List<PropertyNameDeclaration> redeclarations;
   private int hashCode;
 
   public PropertyNameDeclaration(
@@ -42,7 +46,8 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
         node.isDefaultProperty(),
         extractType(node, concreteDeclaration),
         extractReadDeclaration(node, concreteDeclaration),
-        extractWriteDeclaration(node, concreteDeclaration));
+        extractWriteDeclaration(node, concreteDeclaration),
+        node.getVisibility());
   }
 
   private PropertyNameDeclaration(
@@ -53,7 +58,8 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
       boolean isDefaultProperty,
       Type type,
       DelphiNameDeclaration readDeclaration,
-      DelphiNameDeclaration writeDeclaration) {
+      DelphiNameDeclaration writeDeclaration,
+      VisibilityType visibility) {
     super(location);
     this.fullyQualifiedName = fullyQualifiedName;
     this.parameters = parameters;
@@ -62,6 +68,8 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
     this.type = type;
     this.readDeclaration = readDeclaration;
     this.writeDeclaration = writeDeclaration;
+    this.visibility = visibility;
+    this.redeclarations = new ArrayList<>();
   }
 
   private static String makeQualifiedName(PropertyNode propertyNode) {
@@ -167,12 +175,25 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
     return isClassInvocable;
   }
 
+  @Override
+  public VisibilityType getVisibility() {
+    return visibility;
+  }
+
   public boolean isArrayProperty() {
     return !parameters.isEmpty();
   }
 
   public boolean isDefaultProperty() {
     return isDefaultProperty;
+  }
+
+  public void addRedeclaration(PropertyNameDeclaration declaration) {
+    this.redeclarations.add(declaration);
+  }
+
+  public List<PropertyNameDeclaration> getRedeclarations() {
+    return redeclarations;
   }
 
   @Override
@@ -187,7 +208,8 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
         isDefaultProperty,
         type.specialize(context),
         specializeIfNotNull(readDeclaration, context),
-        specializeIfNotNull(writeDeclaration, context));
+        specializeIfNotNull(writeDeclaration, context),
+        visibility);
   }
 
   private static DelphiNameDeclaration specializeIfNotNull(

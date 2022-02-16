@@ -425,8 +425,14 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   public Data visit(PropertyNode node, Data data) {
     data.nameResolutionHelper.resolve(node);
 
-    var declaration = new PropertyNameDeclaration(node, findConcretePropertyDeclaration(node));
+    PropertyNameDeclaration concreteDeclaration = findConcretePropertyDeclaration(node);
+
+    var declaration = new PropertyNameDeclaration(node, concreteDeclaration);
     data.addDeclaration(declaration, node.getPropertyName());
+
+    if (concreteDeclaration != null) {
+      concreteDeclaration.addRedeclaration(declaration);
+    }
 
     return createDeclarationScope(node, data);
   }
