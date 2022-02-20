@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Include assigned variables in `UnusedLocalVariablesRule`.
 - Count usage of redeclared properties in `UnusedPropertiesRule`.
+- Improve type specialization for generics with generic type parameters.
 
 ## [0.34.0] - 2022-02-03
 

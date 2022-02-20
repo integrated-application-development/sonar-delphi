@@ -185,6 +185,10 @@ class DelphiStructType extends DelphiGenerifiableType implements StructType {
         if (parameter.isTypeParameter() && context.getArgument(parameter) != null) {
           return true;
         }
+
+        if (parameter.canBeSpecialized(context)) {
+          return true;
+        }
       }
     }
 
