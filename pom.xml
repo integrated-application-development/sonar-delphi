@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>sonar-delphi-plugin</artifactId>
-  <version>0.34.0</version>
+  <version>0.34.1</version>
   <groupId>org.delphi.plugin</groupId>
   <name>Sonar Delphi Plugin</name>
   <description>Code analyzer for Delphi</description>
@@ -121,7 +121,7 @@
     <javadoc.sourcepath>${project.basedir}/src/main/java</javadoc.sourcepath>
     <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
     <sonar.coverage.jacoco.xmlReportPaths>target/jacoco/report/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-    <sonar.dependencyCheck.reportPath>target/dependency-check-report.xml</sonar.dependencyCheck.reportPath>
+    <sonar.dependencyCheck.jsonReportPath>target/dependency-check-report.json</sonar.dependencyCheck.jsonReportPath>
     <sonar.dependencyCheck.htmlReportPath>target/dependency-check-report.html</sonar.dependencyCheck.htmlReportPath>
     <sonar.dependencyCheck.severity.blocker>9.0</sonar.dependencyCheck.severity.blocker>
     <sonar.dependencyCheck.severity.critical>7.0</sonar.dependencyCheck.severity.critical>
@@ -271,7 +271,7 @@
             <configuration>
               <formats>
                 <format>HTML</format>
-                <format>XML</format>
+                <format>JSON</format>
               </formats>
             </configuration>
           </execution>
