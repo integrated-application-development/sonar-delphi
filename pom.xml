@@ -86,7 +86,9 @@
     <jacoco.dataFile.it>${basedir}/target/jacoco/jacoco-it.exec</jacoco.dataFile.it>
     <jacoco.outputDirectory.it>${basedir}/target/jacoco/report-it/</jacoco.outputDirectory.it>
     <lint.flags>-serial,-processing,-classfile</lint.flags>
-    <errorprone.flags>-XepExcludedPaths:.*/generated-sources/.*</errorprone.flags>
+    <!-- The UnicodeInCode rule has FPs in this project for mysterious reasons. There really aren't
+          any unicode characters in code. -->
+    <errorprone.flags>-XepExcludedPaths:.*/generated-sources/.* -Xep:UnicodeInCode:OFF</errorprone.flags>
     <dependency-track.projectName>tools::sonar-delphi-prod</dependency-track.projectName>
     <!-- Sonar wants equals() and hashcode() overrides on a bunch of DelphiRules.
          The existing methods in PMD's AbstractRule already handle all the important data. -->
@@ -102,12 +104,11 @@
     <pmd.version>6.18.0</pmd.version>
     <jdom.version>1.1.3</jdom.version>
     <jetbrains-annotations.version>23.0.0</jetbrains-annotations.version>
-    <junit-platform.version>1.8.2</junit-platform.version>
+    <junit-platform-suite-engine.version>1.8.2</junit-platform-suite-engine.version>
     <!--Maven plugins-->
     <antlr3-plugin.version>3.5.2</antlr3-plugin.version>
     <jacoco-plugin.version>0.8.7</jacoco-plugin.version>
-    <!-- NOTE: Using Surefire M4 because M5 fails to find tests when surefire-platform-runner is present -->
-    <surefire-plugin.version>3.0.0-M4</surefire-plugin.version>
+    <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
     <failsafe-plugin.version>3.0.0-M5</failsafe-plugin.version>
     <sonar-packaging-plugin.version>1.21.0.505</sonar-packaging-plugin.version>
     <build-helper-plugin.version>3.3.0</build-helper-plugin.version>
@@ -232,15 +233,9 @@
       <version>${jetbrains-annotations.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.junit.vintage</groupId>
-      <artifactId>junit-vintage-engine</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.junit.platform</groupId>
-      <artifactId>junit-platform-runner</artifactId>
-      <version>${junit-platform.version}</version>
+      <artifactId>junit-platform-suite-engine</artifactId>
+      <version>${junit-platform-suite-engine.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
