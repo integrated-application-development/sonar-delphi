@@ -152,7 +152,7 @@
   }, {
     "groupId" : "junit",
     "artifactId" : "junit",
-    "version" : "4.13.2",
+    "version" : "4.12",
     "scope" : "test",
     "type" : "jar"
   }, {
@@ -321,12 +321,6 @@
     "type" : "jar"
   }, {
     "groupId" : "org.junit.platform",
-    "artifactId" : "junit-platform-runner",
-    "version" : "1.8.2",
-    "scope" : "test",
-    "type" : "jar"
-  }, {
-    "groupId" : "org.junit.platform",
     "artifactId" : "junit-platform-suite-api",
     "version" : "1.8.2",
     "scope" : "test",
@@ -338,9 +332,9 @@
     "scope" : "test",
     "type" : "jar"
   }, {
-    "groupId" : "org.junit.vintage",
-    "artifactId" : "junit-vintage-engine",
-    "version" : "5.8.2",
+    "groupId" : "org.junit.platform",
+    "artifactId" : "junit-platform-suite-engine",
+    "version" : "1.8.2",
     "scope" : "test",
     "type" : "jar"
   }, {
