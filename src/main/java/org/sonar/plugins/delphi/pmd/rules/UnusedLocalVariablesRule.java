@@ -3,7 +3,6 @@ package org.sonar.plugins.delphi.pmd.rules;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
@@ -23,11 +22,14 @@ public class UnusedLocalVariablesRule extends AbstractDelphiRule {
     Set<NameOccurrence> excludedOccurrences = new HashSet<>();
     for (var assignment : method.findDescendantsOfType(AssignmentStatementNode.class)) {
       ExpressionNode assigneee = assignment.getAssignee();
-      if (assigneee instanceof PrimaryExpressionNode) {
-        assigneee.findChildrenOfType(NameReferenceNode.class).stream()
-            .map(NameReferenceNode::getNameOccurrence)
-            .filter(Objects::nonNull)
-            .forEach(excludedOccurrences::add);
+      if (assigneee instanceof PrimaryExpressionNode
+          && assigneee.jjtGetNumChildren() == 1
+          && assigneee.jjtGetChild(0) instanceof NameReferenceNode) {
+        NameReferenceNode nameReference = (NameReferenceNode) assigneee.jjtGetChild(0);
+        NameOccurrence occurrence = nameReference.getNameOccurrence();
+        if (nameReference.nextName() == null && occurrence != null) {
+          excludedOccurrences.add(occurrence);
+        }
       }
     }
 
