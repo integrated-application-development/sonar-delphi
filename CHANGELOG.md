@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Assignment to a field or property of a variable would not be recognized as usage of that variable
+  in `UnusedLocalVariablesRule`.
+
 ## [0.34.1] - 2022-02-22
 
 ### Changed
