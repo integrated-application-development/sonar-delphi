@@ -100,12 +100,13 @@ public class DelphiNameOccurrence implements NameOccurrence {
     return "Self".equals(getImage());
   }
 
+  @SuppressWarnings("EqualsGetClass")
   @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof DelphiNameOccurrence)) {
+    if (o == null || getClass() != o.getClass()) {
       return false;
     }
     DelphiNameOccurrence that = (DelphiNameOccurrence) o;
