@@ -8,7 +8,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.type.Type;
 
-public class DelphiNameOccurrence implements NameOccurrence {
+public final class DelphiNameOccurrence implements NameOccurrence {
   private final SymbolicNode location;
   private DelphiNameDeclaration declaration;
   private DelphiNameOccurrence qualifiedName;
@@ -105,7 +105,7 @@ public class DelphiNameOccurrence implements NameOccurrence {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof DelphiNameOccurrence)) {
+    if (o == null || getClass() != o.getClass()) {
       return false;
     }
     DelphiNameOccurrence that = (DelphiNameOccurrence) o;
