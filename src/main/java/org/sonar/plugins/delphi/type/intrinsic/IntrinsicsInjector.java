@@ -225,6 +225,7 @@ public final class IntrinsicsInjector {
     method("SeekEof").varParam(type(TEXT)).required(0).returns(type(BOOLEAN));
     method("SeekEoln").varParam(type(TEXT)).required(0).returns(type(BOOLEAN));
     method("SetLength").varParam(type(UNICODESTRING)).param(type(INTEGER));
+    method("SetLength").varParam(type(ANSISTRING)).param(type(INTEGER));
     method("SetLength").varParam(ANY_DYNAMIC_ARRAY).param(type(INTEGER)).variadic(type(INTEGER));
     method("SetString").varParam(type(SHORTSTRING)).param(type(PANSICHAR)).param(type(INTEGER));
     method("SetString").varParam(type(ANSISTRING)).param(type(PANSICHAR)).param(type(INTEGER));

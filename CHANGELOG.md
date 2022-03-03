@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `AnsiString` overload for the `SetLength` intrinsic.
+
 ### Fixed
 
 - Assignment to a field or property of a variable would not be recognized as usage of that variable
