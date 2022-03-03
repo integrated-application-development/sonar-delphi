@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `AnsiString` overload for the `SetLength` intrinsic.
 
+### Changed
+
+- Improve name resolution around pointers to procedural variables.
+
 ### Fixed
 
 - Assignment to a field or property of a variable would not be recognized as usage of that variable

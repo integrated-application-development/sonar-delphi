@@ -344,7 +344,7 @@ public class NameResolutionHelper {
     if (parent instanceof UnaryExpressionNode) {
       UnaryExpressionNode unary = (UnaryExpressionNode) parent;
       if (unary.getOperator() == UnaryOperator.ADDRESS) {
-        if (!resolver.isExplicitInvocation() && resolver.getApproximateType().isProcedural()) {
+        if (!resolver.isExplicitInvocation() && resolver.getApproximateType().isMethod()) {
           NameResolver clone = new NameResolver(resolver);
           clone.disambiguateAddressOfMethodReference();
           clone.addToSymbolTable();

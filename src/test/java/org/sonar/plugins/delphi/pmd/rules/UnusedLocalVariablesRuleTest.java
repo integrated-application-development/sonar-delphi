@@ -163,6 +163,30 @@ class UnusedLocalVariablesRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  void testProcVariablePointerShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TFoo = class(TObject)")
+            .appendDecl("    procedure Bar;")
+            .appendDecl("    procedure Baz;")
+            .appendDecl("  end;")
+            .appendDecl("  TObjProc = procedure of object;")
+            .appendDecl("procedure UsePtr(Ptr: Pointer);")
+            .appendImpl("procedure TFoo.Bar;")
+            .appendImpl("var")
+            .appendImpl("  Proc: TObjProc;")
+            .appendImpl("begin")
+            .appendImpl("  Proc := Baz;")
+            .appendImpl("  UsePtr(@Proc)")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("UnusedLocalVariablesRule"));
+  }
+
+  @Test
   void testUnusedGlobalVariableShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder().appendDecl("var").appendDecl("  G_Foo: Integer;");
