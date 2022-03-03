@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Improve name resolution around pointers to procedural variables.
+- Improve overload resolution around overloaded method references.
 
 ### Fixed
 
