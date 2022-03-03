@@ -75,7 +75,7 @@ public class InvocationArgument implements Typed {
 
     NameResolver clone = new NameResolver(resolver);
     disambiguateMethodReference(clone, parameterType);
-    return resolver.getApproximateType();
+    return clone.getApproximateType();
   }
 
   private static void disambiguateMethodReference(NameResolver resolver, Type parameterType) {
