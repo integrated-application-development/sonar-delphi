@@ -50,7 +50,7 @@ import org.sonar.plugins.delphi.type.parameter.Parameter;
  * Resolves an invocation to the correct declaration. Based directly off of the tcallcandidates
  * class from the FreePascal compiler
  *
- * @see <a href="https://github.com/graemeg/freepascal/blob/master/compiler/htypechk.pas#L69">
+ * @see <a href="https://github.com/fpc/FPCSource/blob/main/compiler/htypechk.pas#L72">
  *     tcallcandidates</a>
  */
 public class InvocationResolver {
@@ -78,7 +78,7 @@ public class InvocationResolver {
    * Processes the invocation candidates and builds up information that we can use for picking the
    * best one.
    *
-   * @see <a href="https://github.com/graemeg/freepascal/blob/master/compiler/htypechk.pas#2858">
+   * @see <a href="https://github.com/fpc/FPCSource/blob/main/compiler/htypechk.pas#L2884">
    *     tcallcandidates.get_information</a>
    */
   public void processCandidates() {
@@ -98,7 +98,7 @@ public class InvocationResolver {
   /**
    * Checks a particular argument against the invocation candidate parameter.
    *
-   * @see <a href="https://github.com/graemeg/freepascal/blob/master/compiler/htypechk.pas#2858">
+   * @see <a href="https://github.com/fpc/FPCSource/blob/main/compiler/htypechk.pas#L2884">
    *     tcallcandidates.get_information</a>
    */
   private void processArgument(
@@ -344,7 +344,7 @@ public class InvocationResolver {
    * marked as invalid.
    *
    * @return The remaining candidates
-   * @see <a href="https://github.com/graemeg/freepascal/blob/master/compiler/htypechk.pas#3480">
+   * @see <a href="https://github.com/fpc/FPCSource/blob/main/compiler/htypechk.pas#L3511">
    *     tcallcandidates.choose_best</a>
    */
   public Set<InvocationCandidate> chooseBest() {
@@ -405,7 +405,8 @@ public class InvocationResolver {
    *       <li>= 0 when both are equal
    *     </ul>
    *
-   * @see <a href="https://github.com/graemeg/freepascal/blob/master/compiler/htypechk.pas#L3230" />
+   * @see <a href="https://github.com/fpc/FPCSource/blob/main/compiler/htypechk.pas#L3258">
+   *     is_better_candidate </a>
    */
   private int isBetterCandidate(InvocationCandidate candidate, InvocationCandidate bestCandidate) {
     checkState(!candidate.isInvalid());
@@ -505,7 +506,7 @@ public class InvocationResolver {
    *       <li>= 0 when both are equal
    *     </ul>
    *
-   * @see <a href="https://github.com/graemeg/freepascal/blob/master/compiler/htypechk.pas#L3339">
+   * @see <a href="https://github.com/fpc/FPCSource/blob/main/compiler/htypechk.pas#L3367">
    *     is_better_candidate_single_variant</a>
    */
   private int isBetterVariantConversion(

@@ -18,7 +18,7 @@ import org.sonar.plugins.delphi.type.parameter.Parameter;
  * Stores information about an invocation candidate, used for overload resolution. Based directly
  * off of the tcandidate record from the FreePascal compiler
  *
- * @see <a href="https://github.com/graemeg/freepascal/blob/master/compiler/htypechk.pas#L50">
+ * @see <a href="https://github.com/fpc/FPCSource/blob/main/compiler/htypechk.pas#L50">
  *     tcandidate</a>
  */
 public final class InvocationCandidate {
