@@ -6,7 +6,8 @@ package org.sonar.plugins.delphi.symbol.resolve;
  * <p>The order of this enum is from lowest to highest priority. Note: The ordinal values of this
  * enum are compared with {@code >} and {@code <}.
  *
- * @see <a href="http://bit.ly/sym_const_tequaltype">tequaltype</a>
+ * @see <a href="https://github.com/fpc/FPCSource/blob/main/compiler/symconst.pas#L817">tequaltype
+ *     </a>
  */
 enum EqualityType {
   INCOMPATIBLE_TYPES,

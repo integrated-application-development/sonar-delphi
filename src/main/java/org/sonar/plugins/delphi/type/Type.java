@@ -108,7 +108,7 @@ public interface Type {
   /**
    * Check if this type is untyped.
    *
-   * @see <a href="http://pages.cs.wisc.edu/~rkennedy/untyped">What is an untyped parameter?</a>
+   * @see <a href="https://bit.ly/untyped-parameters">Untyped Parameters</a>
    * @return true if type is untyped
    */
   boolean isUntyped();
