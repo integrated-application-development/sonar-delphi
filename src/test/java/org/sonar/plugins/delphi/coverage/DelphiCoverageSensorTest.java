@@ -95,7 +95,7 @@ class DelphiCoverageSensorTest {
 
     sensor.execute(context);
 
-    verify(coverageParser, times(4)).parse(any(), any());
+    verify(coverageParser, times(5)).parse(any(), any());
     verify(coverageParser, times(1))
         .parse(any(), eq(DelphiUtils.getResource(COVERAGE_REPORTS + "/InvalidLineHits.xml")));
     verify(coverageParser, times(1))
@@ -104,5 +104,7 @@ class DelphiCoverageSensorTest {
         .parse(any(), eq(DelphiUtils.getResource(COVERAGE_REPORTS + "/NoLineHits.xml")));
     verify(coverageParser, times(1))
         .parse(any(), eq(DelphiUtils.getResource(COVERAGE_REPORTS + "/NormalCoverage.xml")));
+    verify(coverageParser, times(1))
+        .parse(any(), eq(DelphiUtils.getResource(COVERAGE_REPORTS + "/NormalCoverage2.xml")));
   }
 }
