@@ -1,0 +1,8 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <ItemGroup>
+        <DCCReference Include="DoesNotExist.pas"/>
+        <DCCReference Include="./"/>
+        <DCCReference Include="../file/Empty.pas"/>
+        <DCCReference/>
+    </ItemGroup>
+</Project>

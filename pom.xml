@@ -103,6 +103,7 @@
     <sonar-analyzers-commons.version>1.25.0.1003</sonar-analyzers-commons.version>
     <sonar-orchestrator.version>3.37.0.87</sonar-orchestrator.version>
     <antlr-runtime.version>3.5.3</antlr-runtime.version>
+    <commons-text.version>1.9</commons-text.version>
     <pmd.version>6.18.0</pmd.version>
     <jdom.version>2.0.6.1</jdom.version>
     <jetbrains-annotations.version>23.0.0</jetbrains-annotations.version>
@@ -179,6 +180,11 @@
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>${commons-io.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-text</artifactId>
+      <version>${commons-text.version}</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>

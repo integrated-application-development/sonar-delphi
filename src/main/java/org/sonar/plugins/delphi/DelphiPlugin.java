@@ -35,12 +35,14 @@ import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.coverage.DelphiCoverageParserFactory;
 import org.sonar.plugins.delphi.coverage.DelphiCoverageSensor;
 import org.sonar.plugins.delphi.coverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
+import org.sonar.plugins.delphi.enviroment.DefaultEnvironmentVariableProvider;
 import org.sonar.plugins.delphi.executor.DelphiCpdExecutor;
 import org.sonar.plugins.delphi.executor.DelphiHighlightExecutor;
 import org.sonar.plugins.delphi.executor.DelphiMasterExecutor;
 import org.sonar.plugins.delphi.executor.DelphiMetricsExecutor;
 import org.sonar.plugins.delphi.executor.DelphiPmdExecutor;
 import org.sonar.plugins.delphi.executor.DelphiSymbolTableExecutor;
+import org.sonar.plugins.delphi.msbuild.DelphiProjectHelper;
 import org.sonar.plugins.delphi.nunit.DelphiNUnitSensor;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConfiguration;
 import org.sonar.plugins.delphi.pmd.profile.DefaultDelphiProfile;
@@ -49,12 +51,11 @@ import org.sonar.plugins.delphi.pmd.profile.DelphiPmdProfileImporter;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRulesDefinition;
 import org.sonar.plugins.delphi.pmd.violation.DelphiPmdViolationRecorder;
-import org.sonar.plugins.delphi.project.DelphiProjectHelper;
 
 /** Main Sonar DelphiLanguage plugin class */
 public class DelphiPlugin implements Plugin {
   public static final String SEARCH_PATH_KEY = "sonar.delphi.sources.searchPath";
-  public static final String STANDARD_LIBRARY_KEY = "sonar.delphi.sources.standardLibrarySource";
+  public static final String BDS_PATH_KEY = "sonar.delphi.bds.path";
   public static final String COMPILER_TOOLCHAIN_KEY = "sonar.delphi.compiler.toolchain";
   public static final String COMPILER_VERSION_KEY = "sonar.delphi.compiler.version";
   public static final String CONDITIONAL_DEFINES_KEY = "sonar.delphi.conditionalDefines";
@@ -87,9 +88,11 @@ public class DelphiPlugin implements Plugin {
             .multiValues(true)
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
-        PropertyDefinition.builder(DelphiPlugin.STANDARD_LIBRARY_KEY)
-            .name("Standard library path")
-            .description("Path to the Delphi RAD Studio 'source' folder.")
+        PropertyDefinition.builder(DelphiPlugin.BDS_PATH_KEY)
+            .name("BDS path")
+            .description(
+                "Path to the Delphi BDS folder."
+                    + "Example: C:\\Program Files (x86)\\Embarcadero\\Studio\\20.0")
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
         PropertyDefinition.builder(DelphiPlugin.COMPILER_TOOLCHAIN_KEY)
@@ -200,7 +203,9 @@ public class DelphiPlugin implements Plugin {
         DefaultDelphiProfile.class,
         DelphiPmdProfileExporter.class,
         DelphiPmdProfileImporter.class,
-        DelphiPmdViolationRecorder.class);
+        DelphiPmdViolationRecorder.class,
+        // Environment
+        DefaultEnvironmentVariableProvider.class);
 
     context.addExtensions(builder.build());
   }

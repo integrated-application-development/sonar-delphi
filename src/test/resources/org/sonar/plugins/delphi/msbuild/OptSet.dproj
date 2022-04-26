@@ -1,0 +1,6 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="GlobalSettings.optset" Condition="Exists('GlobalSettings.optset')"/>
+    <PropertyGroup>
+        <DCC_UnitAlias>WinTypes=Windows;$(DCC_UnitAlias)</DCC_UnitAlias>
+    </PropertyGroup>
+</Project>

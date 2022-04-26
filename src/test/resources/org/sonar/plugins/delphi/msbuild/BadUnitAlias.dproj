@@ -1,0 +1,5 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <DCC_UnitAlias>WinTypesWindows;WinProcs==Windows;ValidAlias=ValidUnit;$(DCC_UnitAlias)</DCC_UnitAlias>
+    </PropertyGroup>
+</Project>

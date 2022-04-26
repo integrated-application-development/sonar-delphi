@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Rewrite project file parsing from scratch:
+  - Support for property interpolation
+  - Support for MSBuild conditionals
 - Exclude case statements in `BeginEndRequiredRule`.
 
 ## [0.34.2] - 2022-03-03

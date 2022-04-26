@@ -5,7 +5,7 @@ import org.sonar.api.scanner.ScannerSide;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.coverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
-import org.sonar.plugins.delphi.project.DelphiProjectHelper;
+import org.sonar.plugins.delphi.msbuild.DelphiProjectHelper;
 
 @ScannerSide
 public class DelphiCoverageParserFactory {

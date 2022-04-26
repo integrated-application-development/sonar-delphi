@@ -33,7 +33,7 @@ import org.sonar.api.batch.sensor.coverage.NewCoverage;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.coverage.DelphiCoverageParser;
-import org.sonar.plugins.delphi.project.DelphiProjectHelper;
+import org.sonar.plugins.delphi.msbuild.DelphiProjectHelper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

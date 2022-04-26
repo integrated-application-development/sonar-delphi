@@ -24,7 +24,7 @@ import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultTextPointer;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
-import org.sonar.plugins.delphi.project.DelphiProjectHelper;
+import org.sonar.plugins.delphi.msbuild.DelphiProjectHelper;
 import org.sonar.plugins.delphi.symbol.SymbolTable;
 import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -33,7 +33,7 @@ import org.sonar.plugins.delphi.utils.types.TypeFactoryUtils;
 
 class DelphiSymbolTableExecutorTest {
   private static final String ROOT_PATH = "/org/sonar/plugins/delphi/symbol/";
-  private static final String STANDARD_LIBRARY = "/org/sonar/plugins/delphi/standardLibrary";
+  private static final String STANDARD_LIBRARY = "/org/sonar/plugins/delphi/bds/source";
 
   private DelphiInputFile mainFile;
   private SymbolTable symbolTable;
