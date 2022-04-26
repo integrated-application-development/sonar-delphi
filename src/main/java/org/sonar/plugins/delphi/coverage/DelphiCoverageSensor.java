@@ -14,7 +14,7 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
-import org.sonar.plugins.delphi.project.DelphiProjectHelper;
+import org.sonar.plugins.delphi.msbuild.DelphiProjectHelper;
 
 public class DelphiCoverageSensor implements Sensor {
   private static final Logger LOG = Loggers.get(DelphiCoverageSensor.class);

@@ -364,9 +364,7 @@ public class SymbolTableBuilder {
     }
     throw new SymbolTableConstructionException(
         String.format(
-            "%s unit could not be found. (Is '"
-                + DelphiPlugin.STANDARD_LIBRARY_KEY
-                + "' set correctly?))",
+            "%s unit could not be found. (Is '" + DelphiPlugin.BDS_PATH_KEY + "' set correctly?)",
             unit));
   }
 

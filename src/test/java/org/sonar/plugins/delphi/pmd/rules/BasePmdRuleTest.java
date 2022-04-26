@@ -31,6 +31,7 @@ import static org.sonar.plugins.delphi.utils.DelphiUtils.inputFileToPath;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
@@ -65,15 +66,15 @@ import org.sonar.plugins.delphi.pmd.violation.DelphiPmdViolationRecorder;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
-import org.sonar.plugins.delphi.project.DelphiProject;
-import org.sonar.plugins.delphi.project.DelphiProjectHelper;
+import org.sonar.plugins.delphi.msbuild.DelphiProject;
+import org.sonar.plugins.delphi.msbuild.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 import org.sonar.plugins.delphi.utils.PmdLevelUtils;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
 
 public abstract class BasePmdRuleTest {
   protected static final File ROOT_DIR = DelphiUtils.getResource("/org/sonar/plugins/delphi/pmd");
-  protected static final String STANDARD_LIBRARY = "/org/sonar/plugins/delphi/standardLibrary";
+  protected static final String STANDARD_LIBRARY = "/org/sonar/plugins/delphi/bds/source";
   protected static final String TEST_UNIT = "TestHarnessUnit";
 
   private DelphiSensor sensor;
@@ -127,8 +128,12 @@ public abstract class BasePmdRuleTest {
     when(delphiProjectHelper.getCompilerVersion())
         .thenReturn(DelphiPlugin.COMPILER_VERSION_DEFAULT);
 
-    DelphiProject delphiProject = DelphiProject.create("Default Project");
-    delphiProject.addSourceFile(inputFileToPath(inputFile));
+    DelphiProject delphiProject = mock(DelphiProject.class);
+    when(delphiProject.getSourceFiles()).thenReturn(List.of(inputFileToPath(inputFile)));
+    when(delphiProject.getConditionalDefines()).thenReturn(Collections.emptySet());
+    when(delphiProject.getUnitScopeNames()).thenReturn(Collections.emptySet());
+    when(delphiProject.getSearchDirectories()).thenReturn(Collections.emptyList());
+    when(delphiProject.getUnitAliases()).thenReturn(Collections.emptyMap());
 
     when(delphiProjectHelper.getFile(anyString())).thenReturn(inputFile);
     when(delphiProjectHelper.mainFiles()).thenReturn(List.of(inputFile));

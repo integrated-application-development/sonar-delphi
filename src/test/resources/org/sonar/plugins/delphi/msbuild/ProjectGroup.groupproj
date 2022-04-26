@@ -1,0 +1,13 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <ItemGroup>
+        <Projects Include="BadOptSet.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="BadSearchPath.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="BadSourceFile.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+</Project>

@@ -20,11 +20,12 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.project;
+package org.sonar.plugins.delphi.msbuild;
 
 import static org.apache.commons.lang3.ArrayUtils.nullToEmpty;
 import static org.sonar.plugins.delphi.utils.DelphiUtils.inputFilesToPaths;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Iterables;
 import java.io.File;
 import java.nio.charset.Charset;
@@ -51,6 +52,7 @@ import org.sonar.plugins.delphi.compiler.CompilerVersion;
 import org.sonar.plugins.delphi.compiler.PredefinedConditionals;
 import org.sonar.plugins.delphi.compiler.Toolchain;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
+import org.sonar.plugins.delphi.enviroment.EnvironmentVariableProvider;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 @ScannerSide
@@ -58,6 +60,7 @@ public class DelphiProjectHelper {
   private static final Logger LOG = Loggers.get(DelphiProjectHelper.class);
   private final Configuration settings;
   private final FileSystem fs;
+  private final EnvironmentVariableProvider environmentVariableProvider;
   private final List<DelphiProject> projects;
   private final Toolchain toolchain;
   private final CompilerVersion compilerVersion;
@@ -65,6 +68,7 @@ public class DelphiProjectHelper {
   private final Set<String> conditionalDefines;
   private final Set<String> unitScopeNames;
   private final Map<String, String> unitAliases;
+  private boolean indexedProjects;
 
   /**
    * Constructor
@@ -72,9 +76,13 @@ public class DelphiProjectHelper {
    * @param settings Project settings
    * @param fs Sonar FileSystem
    */
-  public DelphiProjectHelper(@NotNull Configuration settings, @NotNull FileSystem fs) {
+  public DelphiProjectHelper(
+      @NotNull Configuration settings,
+      @NotNull FileSystem fs,
+      @NotNull EnvironmentVariableProvider environmentVariableProvider) {
     this.settings = settings;
     this.fs = fs;
+    this.environmentVariableProvider = environmentVariableProvider;
     this.projects = new ArrayList<>();
     this.toolchain = getToolchainFromSettings();
     this.compilerVersion = getCompilerVersionFromSettings();
@@ -82,18 +90,6 @@ public class DelphiProjectHelper {
     this.conditionalDefines = getPredefinedConditionalDefines();
     this.unitScopeNames = getSetFromSettings(DelphiPlugin.UNIT_SCOPE_NAMES_KEY);
     this.unitAliases = getUnitAliasesFromSettings();
-
-    this.indexProjects();
-
-    for (DelphiProject project : projects) {
-      this.searchDirectories.addAll(project.getSearchDirectories());
-      this.conditionalDefines.addAll(project.getConditionalDefines());
-      this.unitScopeNames.addAll(project.getUnitScopeNames());
-      this.unitAliases.putAll(project.getUnitAliases());
-    }
-
-    this.conditionalDefines.addAll(getSetFromSettings(DelphiPlugin.CONDITIONAL_DEFINES_KEY));
-    this.conditionalDefines.removeAll(getSetFromSettings(DelphiPlugin.CONDITIONAL_UNDEFINES_KEY));
   }
 
   private Set<String> getSetFromSettings(String key) {
@@ -171,6 +167,10 @@ public class DelphiProjectHelper {
   }
 
   private void indexProjects() {
+    if (indexedProjects) {
+      return;
+    }
+
     FilePredicates p = fs.predicates();
     Iterable<InputFile> dprojFiles = fs.inputFiles(p.and(p.hasExtension("dproj")));
     Iterable<InputFile> gprojFiles = fs.inputFiles(p.and(p.hasExtension("groupproj")));
@@ -180,44 +180,83 @@ public class DelphiProjectHelper {
         Iterables.size(dprojFiles),
         Iterables.size(gprojFiles));
 
-    inputFilesToPaths(dprojFiles).forEach(this::indexDprojProject);
-    inputFilesToPaths(gprojFiles).forEach(this::indexGroupprojProject);
+    inputFilesToPaths(dprojFiles).forEach(this::indexProject);
+    inputFilesToPaths(gprojFiles).forEach(this::indexProjectGroup);
+
+    for (DelphiProject project : projects) {
+      searchDirectories.addAll(project.getSearchDirectories());
+      conditionalDefines.addAll(project.getConditionalDefines());
+      unitScopeNames.addAll(project.getUnitScopeNames());
+      unitAliases.putAll(project.getUnitAliases());
+    }
+
+    conditionalDefines.addAll(getSetFromSettings(DelphiPlugin.CONDITIONAL_DEFINES_KEY));
+    conditionalDefines.removeAll(getSetFromSettings(DelphiPlugin.CONDITIONAL_UNDEFINES_KEY));
+
+    indexedProjects = true;
   }
 
-  private void indexDprojProject(Path dprojFile) {
-    DelphiProject newProject = DelphiProject.parse(dprojFile);
+  @VisibleForTesting
+  Path environmentProjPath() {
+    Path bdsPath = bdsPath();
+    if (bdsPath.getNameCount() < 3) {
+      return null;
+    }
+
+    String appdata = environmentVariableProvider.getenv("APPDATA");
+    if (appdata == null) {
+      return null;
+    }
+
+    Path appdataPath = Path.of(appdata);
+    String companyName = bdsPath.getParent().getParent().getFileName().toString();
+    String productVersion = bdsPath.getFileName().toString();
+
+    return appdataPath
+        .resolve(companyName)
+        .resolve("BDS")
+        .resolve(productVersion)
+        .resolve("environment.proj");
+  }
+
+  private void indexProject(Path dprojFile) {
+    DelphiProjectParser parser =
+        new DelphiProjectParser(dprojFile, environmentVariableProvider, environmentProjPath());
+    DelphiProject newProject = parser.parse();
     projects.add(newProject);
   }
 
-  private void indexGroupprojProject(Path gprojFile) {
-    DelphiGroupProj workGroup = DelphiGroupProj.parse(gprojFile);
-    projects.addAll(workGroup.getProjects());
+  private void indexProjectGroup(Path projectGroup) {
+    DelphiProjectGroupParser parser =
+        new DelphiProjectGroupParser(
+            projectGroup, environmentVariableProvider, environmentProjPath());
+    projects.addAll(parser.parse());
   }
 
   /**
-   * Returns a path to the Delphi standard library, as specified in settings
+   * Returns a path to the Delphi BDS folder, as specified in settings
    *
-   * @return Path to standard library
+   * @return Path to the BDS folder
    */
-  public Path standardLibraryPath() {
+  public Path bdsPath() {
     String path =
         settings
-            .get(DelphiPlugin.STANDARD_LIBRARY_KEY)
+            .get(DelphiPlugin.BDS_PATH_KEY)
             .orElseThrow(
                 () ->
                     new RuntimeException(
-                        "Property '" + DelphiPlugin.STANDARD_LIBRARY_KEY + "' must be supplied."));
+                        "Property '" + DelphiPlugin.BDS_PATH_KEY + "' must be supplied."));
 
     return Path.of(path);
   }
 
   /**
-   * Gets the search directories specified in settings and project files
+   * Returns a path to the Delphi standard library, based on the BDS path specified in settings.
    *
-   * @return List of search path directories
+   * @return Path to standard library
    */
-  public List<Path> getSearchDirectories() {
-    return searchDirectories;
+  public Path standardLibraryPath() {
+    return bdsPath().resolve("source");
   }
 
   /**
@@ -239,11 +278,22 @@ public class DelphiProjectHelper {
   }
 
   /**
+   * Gets the search directories specified in settings and project files
+   *
+   * @return List of search path directories
+   */
+  public List<Path> getSearchDirectories() {
+    indexProjects();
+    return searchDirectories;
+  }
+
+  /**
    * Gets the set of conditional defines specified in settings and project files
    *
    * @return set of conditional defines
    */
   public Set<String> getConditionalDefines() {
+    indexProjects();
     return conditionalDefines;
   }
 
@@ -253,6 +303,7 @@ public class DelphiProjectHelper {
    * @return set of unit scope names
    */
   public Set<String> getUnitScopeNames() {
+    indexProjects();
     return unitScopeNames;
   }
 
@@ -262,6 +313,7 @@ public class DelphiProjectHelper {
    * @return map of unit aliases
    */
   public Map<String, String> getUnitAliases() {
+    indexProjects();
     return unitAliases;
   }
 

@@ -27,6 +27,7 @@ import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,8 @@ import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
-import org.sonar.plugins.delphi.project.DelphiProjectHelper;
+import org.sonar.plugins.delphi.enviroment.EnvironmentVariableProvider;
+import org.sonar.plugins.delphi.msbuild.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 class DelphiCoverageToolParserTest {
@@ -54,6 +56,7 @@ class DelphiCoverageToolParserTest {
   private static final String MAIN_WINDOW_FILE_KEY = ":" + MAIN_WINDOW_FILENAME;
 
   private SensorContextTester context;
+  private EnvironmentVariableProvider environmentVariableProvider;
   private File baseDir;
   private DelphiProjectHelper delphiProjectHelper;
   private DelphiCodeCoverageToolParser parser;
@@ -74,7 +77,14 @@ class DelphiCoverageToolParserTest {
   void setup() throws IOException {
     baseDir = DelphiUtils.getResource(ROOT_NAME);
     context = SensorContextTester.create(baseDir);
-    delphiProjectHelper = new DelphiProjectHelper(context.config(), context.fileSystem());
+
+    environmentVariableProvider = mock(EnvironmentVariableProvider.class);
+    when(environmentVariableProvider.getenv()).thenReturn(Collections.emptyMap());
+    when(environmentVariableProvider.getenv(anyString())).thenReturn(null);
+
+    delphiProjectHelper =
+        new DelphiProjectHelper(
+            context.config(), context.fileSystem(), environmentVariableProvider);
     parser = new DelphiCodeCoverageToolParser(delphiProjectHelper);
 
     addFile(ROOT_NAME + "/" + GLOBALS_FILENAME);

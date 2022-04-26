@@ -20,63 +20,62 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.project;
+package org.sonar.plugins.delphi.msbuild;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import java.io.File;
-import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Collections;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.delphi.enviroment.EnvironmentVariableProvider;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
-class DelphiProjectTest {
+class DelphiProjectParserTest {
 
   private static final String SIMPLE_PROJECT =
       "/org/sonar/plugins/delphi/projects/SimpleProject/dproj/SimpleDelphiProject.dproj";
-  private static final String BAD_UNIT_ALIAS_PROJECT =
-      "/org/sonar/plugins/delphi/dproj/BadUnitAlias.dproj";
-  private static final String OPT_SET_PROJECT = "/org/sonar/plugins/delphi/dproj/OptSet.dproj";
-  private static final String INC_DIR =
-      "/org/sonar/plugins/delphi/projects/SimpleProject/includes1";
 
-  private DelphiProject project;
+  private static final String OPT_SET_PROJECT = "/org/sonar/plugins/delphi/msbuild/OptSet.dproj";
+
+  private static final String BAD_OPT_SET_PROJECT =
+      "/org/sonar/plugins/delphi/msbuild/BadOptSet.dproj";
+
+  private static final String BAD_UNIT_ALIAS_PROJECT =
+      "/org/sonar/plugins/delphi/msbuild/BadUnitAlias.dproj";
+
+  private static final String BAD_SEARCH_PATH_PROJECT =
+      "/org/sonar/plugins/delphi/msbuild/BadSearchPath.dproj";
+
+  private static final String BAD_SOURCE_FILE_PROJECT =
+      "/org/sonar/plugins/delphi/msbuild/BadSourceFile.dproj";
+
+  private EnvironmentVariableProvider environmentVariableProvider;
+  private Path environmentProj;
+
+  private DelphiProject parse(String resource) {
+    Path dproj = DelphiUtils.getResource(resource).toPath();
+    DelphiProjectParser parser =
+        new DelphiProjectParser(dproj, environmentVariableProvider, environmentProj);
+    return parser.parse();
+  }
 
   @BeforeEach
   void init() {
-    project = DelphiProject.create("simple project");
-  }
-
-  @Test
-  void testSimpleProject() throws IOException {
-    File sourceFile = File.createTempFile("tempfile", ".pas");
-    sourceFile.deleteOnExit();
-
-    assertThat(project.getName()).isEqualTo("simple project");
-    assertThat(project.getConditionalDefines()).isEmpty();
-    assertThat(project.getSearchDirectories()).isEmpty();
-    assertThat(project.getSourceFiles()).isEmpty();
-
-    project.addDefinition("DEF");
-    assertThat(project.getConditionalDefines()).hasSize(1);
-    project.addUnitScopeName("System");
-    assertThat(project.getUnitScopeNames()).hasSize(1);
-    project.addSourceFile(DelphiUtils.getResource(SIMPLE_PROJECT).toPath());
-    assertThat(project.getSourceFiles()).isEmpty();
-    project.addSourceFile(sourceFile.toPath());
-    assertThat(project.getSourceFiles()).hasSize(1);
-    project.addSearchDirectory(DelphiUtils.getResource(INC_DIR).toPath());
-    assertThat(project.getSearchDirectories()).hasSize(1);
-    project.addUnitAlias("MyAlias", "MyUnit");
-    assertThat(project.getUnitAliases()).containsExactlyEntriesOf(Map.of("MyAlias", "MyUnit"));
+    environmentVariableProvider = mock(EnvironmentVariableProvider.class);
+    when(environmentVariableProvider.getenv()).thenReturn(Collections.emptyMap());
+    when(environmentVariableProvider.getenv(anyString())).thenReturn(null);
+    environmentProj = null;
   }
 
   @Test
   void testSimpleProjectFile() {
-    project = DelphiProject.parse(DelphiUtils.getResource(SIMPLE_PROJECT).toPath());
+    DelphiProject project = parse(SIMPLE_PROJECT);
 
-    assertThat(project.getName()).isEqualTo("Simple Delphi Project");
     assertThat(project.getSourceFiles()).hasSize(8);
 
     String[] fileNames = {
@@ -102,14 +101,7 @@ class DelphiProjectTest {
     }
 
     assertThat(project.getConditionalDefines())
-        .containsOnly(
-            "MSWINDOWS",
-            "CPUX86",
-            "DEBUG",
-            "GGMSGDEBUGx",
-            "LOGTOFILEx",
-            "FullDebugMode",
-            "RELEASE");
+        .containsOnly("MSWINDOWS", "CPUX86", "DEBUG", "GGMSGDEBUGx", "LOGTOFILEx", "FullDebugMode");
 
     assertThat(project.getUnitScopeNames()).containsOnly("Vcl", "System");
 
@@ -129,17 +121,40 @@ class DelphiProjectTest {
   }
 
   @Test
-  void testProjectWithOptSets() {
-    project = DelphiProject.parse(DelphiUtils.getResource(OPT_SET_PROJECT).toPath());
+  void testOptSetProject() {
+    DelphiProject project = parse(OPT_SET_PROJECT);
     assertThat(project.getUnitAliases())
         .containsExactlyInAnyOrderEntriesOf(Map.of("WinProcs", "Windows", "WinTypes", "Windows"));
   }
 
   @Test
-  void testBadUnitAliasFileShouldContainValidAliases() {
-    project = DelphiProject.parse(DelphiUtils.getResource(BAD_UNIT_ALIAS_PROJECT).toPath());
+  void testBadOptSetProjectShouldContainValidOptsetValues() {
+    DelphiProject project = parse(BAD_OPT_SET_PROJECT);
+    assertThat(project.getUnitAliases())
+        .containsExactlyInAnyOrderEntriesOf(Map.of("WinProcs", "Windows", "WinTypes", "Windows"));
+  }
+
+  @Test
+  void testBadUnitAliasProjectShouldContainValidAliases() {
+    DelphiProject project = parse(BAD_UNIT_ALIAS_PROJECT);
 
     assertThat(project.getUnitAliases())
         .containsExactlyInAnyOrderEntriesOf(Map.of("ValidAlias", "ValidUnit"));
+  }
+
+  @Test
+  void testBadSearchPathProjectShouldContainValidSearchPaths() {
+    DelphiProject project = parse(BAD_SEARCH_PATH_PROJECT);
+
+    assertThat(project.getSearchDirectories())
+        .containsOnly(DelphiUtils.getResource("/org/sonar/plugins/delphi/msbuild").toPath());
+  }
+
+  @Test
+  void testBadSourceFileProjectShouldContainValidSourceFiles() {
+    DelphiProject project = parse(BAD_SOURCE_FILE_PROJECT);
+
+    assertThat(project.getSourceFiles())
+        .containsOnly(DelphiUtils.getResource("/org/sonar/plugins/delphi/file/Empty.pas").toPath());
   }
 }

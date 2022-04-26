@@ -20,22 +20,21 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.delphi.project;
+package org.sonar.plugins.delphi.msbuild;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import org.junit.jupiter.api.Test;
-import org.sonar.plugins.delphi.utils.DelphiUtils;
+public interface DelphiProject {
+  Set<String> getConditionalDefines();
 
-class DelphiGroupProjTest {
+  Set<String> getUnitScopeNames();
 
-  private static final String XML_FILE =
-      "/org/sonar/plugins/delphi/projects/SimpleProject/workgroup/All.groupproj";
+  List<Path> getSourceFiles();
 
-  @Test
-  void testXmlWorkgroup() {
-    DelphiGroupProj workGroup = DelphiGroupProj.parse(DelphiUtils.getResource(XML_FILE).toPath());
-    assertThat(workGroup.getProjects()).hasSize(1);
-    assertThat(workGroup.getProjects().get(0).getName()).isEqualTo("Simple Delphi Project");
-  }
+  List<Path> getSearchDirectories();
+
+  Map<String, String> getUnitAliases();
 }

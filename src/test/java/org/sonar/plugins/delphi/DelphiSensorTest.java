@@ -41,11 +41,11 @@ import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.executor.DelphiMasterExecutor;
 import org.sonar.plugins.delphi.executor.ExecutorContext;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
-import org.sonar.plugins.delphi.project.DelphiProjectHelper;
+import org.sonar.plugins.delphi.msbuild.DelphiProjectHelper;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 class DelphiSensorTest {
-  private static final String STANDARD_LIBRARY = "/org/sonar/plugins/delphi/standardLibrary";
+  private static final String STANDARD_LIBRARY = "/org/sonar/plugins/delphi/bds/source";
   private static final String BASE_PATH = "/org/sonar/plugins/delphi/projects/";
   private static final File BASE_DIR = DelphiUtils.getResource(BASE_PATH);
   private static final String BAD_SYNTAX = BASE_PATH + "BadSyntaxProject/BadSyntax.Pas";

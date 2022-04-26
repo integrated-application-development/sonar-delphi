@@ -217,6 +217,12 @@
     "scope" : "compile",
     "type" : "jar"
   }, {
+    "groupId" : "org.apache.commons",
+    "artifactId" : "commons-text",
+    "version" : "1.9",
+    "scope" : "compile",
+    "type" : "jar"
+  }, {
     "groupId" : "org.apache.httpcomponents",
     "artifactId" : "httpclient",
     "version" : "4.5.13",

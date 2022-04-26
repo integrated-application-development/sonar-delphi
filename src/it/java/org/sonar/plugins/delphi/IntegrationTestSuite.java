@@ -22,8 +22,8 @@ import org.sonarqube.ws.client.measures.ComponentRequest;
 @SelectClasses({DelphiCpdExecutorIT.class})
 class IntegrationTestSuite {
   private static final String PROJECTS_PATH = "src/it/projects/";
-  private static final String STANDARD_LIBRARY_PATH =
-      DelphiUtils.getResource("/org/sonar/plugins/delphi/standardLibrary").getAbsolutePath();
+  private static final String BDS_PATH =
+      DelphiUtils.getResource("/org/sonar/plugins/delphi/bds").getAbsolutePath();
 
   @RegisterExtension static final OrchestratorExtension ORCHESTRATOR = new OrchestratorExtension();
 
@@ -64,7 +64,7 @@ class IntegrationTestSuite {
         .setProjectDir(projectDir)
         .setProjectKey(projectKey)
         .setProjectName(projectKey)
-        .setProperty(DelphiPlugin.STANDARD_LIBRARY_KEY, STANDARD_LIBRARY_PATH)
+        .setProperty(DelphiPlugin.BDS_PATH_KEY, BDS_PATH)
         .setProjectVersion("1.0")
         .setSourceDirs("src");
   }

@@ -1,0 +1,96 @@
+package org.sonar.plugins.delphi.msbuild.condition;
+
+import com.google.common.base.Splitter;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+import org.apache.commons.lang3.StringUtils;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
+
+public class FunctionCallExpression implements Expression {
+  private final String name;
+  private final List<Expression> arguments;
+
+  public FunctionCallExpression(String name, List<Expression> arguments) {
+    this.name = name;
+    this.arguments = arguments;
+  }
+
+  @Override
+  public Optional<Boolean> boolEvaluate(ExpressionEvaluator evaluator) {
+    if (name.equalsIgnoreCase("Exists")) {
+      return Optional.of(exists(evaluator));
+    } else if (name.equalsIgnoreCase("HasTrailingSlash")) {
+      return Optional.of(hasTrailingSlash(evaluator));
+    } else {
+      throw new UnknownFunctionException(name);
+    }
+  }
+
+  private boolean exists(ExpressionEvaluator evaluator) {
+    ensureOneArgument();
+    Expression argument = arguments.get(0);
+
+    String value = argument.getExpandedValue(evaluator).orElseThrow();
+    if (value.isBlank()) {
+      return false;
+    }
+
+    Path baseDir = evaluator.getEvaluationDirectory();
+    try {
+      return Stream.of(StringUtils.split(value, ";"))
+          .map(DelphiUtils::normalizeFileName)
+          .map(Path::of)
+          .map(path -> DelphiUtils.resolvePathFromBaseDir(baseDir, path))
+          .allMatch(Files::exists);
+    } catch (InvalidPathException e) {
+      // MSBuild will silently return false if the path contains invalid characters
+      return false;
+    }
+  }
+
+  private boolean hasTrailingSlash(ExpressionEvaluator evaluator) {
+    ensureOneArgument();
+    Expression argument = arguments.get(0);
+
+    String value = argument.getExpandedValue(evaluator).orElseThrow();
+    List<String> paths = Splitter.on(";").omitEmptyStrings().splitToList(value);
+
+    switch (paths.size()) {
+      case 0:
+        return false;
+      case 1:
+        return paths.get(0).endsWith("\\") || paths.get(0).endsWith("/");
+      default:
+        throw new ScalarFunctionWithMultipleItemsException(name, paths.size());
+    }
+  }
+
+  private void ensureOneArgument() {
+    if (arguments.size() != 1) {
+      throw new ArgumentCountMismatchException(name, arguments.size(), 1);
+    }
+  }
+
+  public static class ArgumentCountMismatchException extends RuntimeException {
+    private ArgumentCountMismatchException(String name, int actualCount, int expectedCount) {
+      super(
+          String.format("Expected %d arguments for %s, got %d.", expectedCount, name, actualCount));
+    }
+  }
+
+  public static class ScalarFunctionWithMultipleItemsException extends RuntimeException {
+    private ScalarFunctionWithMultipleItemsException(String name, int itemCount) {
+      super(String.format("Scalar function %s can only accept 1 item, got %d", name, itemCount));
+    }
+  }
+
+  public static class UnknownFunctionException extends RuntimeException {
+    private UnknownFunctionException(String name) {
+      super(String.format("Unknown function: %s", name));
+    }
+  }
+}

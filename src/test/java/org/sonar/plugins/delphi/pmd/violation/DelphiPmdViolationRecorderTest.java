@@ -21,6 +21,7 @@ package org.sonar.plugins.delphi.pmd.violation;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
@@ -30,6 +31,7 @@ import static org.mockito.Mockito.when;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.SCOPE;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.Optional;
 import net.sourceforge.pmd.Rule;
 import org.junit.jupiter.api.Test;
@@ -49,8 +51,9 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.RuleScope;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
+import org.sonar.plugins.delphi.enviroment.EnvironmentVariableProvider;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
-import org.sonar.plugins.delphi.project.DelphiProjectHelper;
+import org.sonar.plugins.delphi.msbuild.DelphiProjectHelper;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.symbol.scope.TypeScope;
 import org.sonar.plugins.delphi.type.Type;
@@ -62,7 +65,10 @@ class DelphiPmdViolationRecorderTest {
   private final File baseDir = new File("").getAbsoluteFile();
   private final DefaultFileSystem spiedFs = spy(new DefaultFileSystem(baseDir));
   private final Configuration configuration = mock(Configuration.class);
-  private final DelphiProjectHelper projectHelper = new DelphiProjectHelper(configuration, spiedFs);
+  private final EnvironmentVariableProvider environmentVariableProvider =
+      mock(EnvironmentVariableProvider.class);
+  private final DelphiProjectHelper projectHelper =
+      new DelphiProjectHelper(configuration, spiedFs, environmentVariableProvider);
   private final ActiveRules mockActiveRules = mock(ActiveRules.class);
   private final ActiveRule activeRule = mock(ActiveRule.class);
   private final SensorContext mockContext = mock(SensorContext.class);
@@ -71,6 +77,8 @@ class DelphiPmdViolationRecorderTest {
       new DelphiPmdViolationRecorder(projectHelper, mockActiveRules);
 
   DelphiPmdViolationRecorderTest() {
+    when(environmentVariableProvider.getenv()).thenReturn(Collections.emptyMap());
+    when(environmentVariableProvider.getenv(anyString())).thenReturn(null);
     RuleKey ruleKey = RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, RULE_KEY);
     when(mockActiveRules.find(ruleKey)).thenReturn(activeRule);
     when(activeRule.ruleKey()).thenReturn(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, RULE_KEY));

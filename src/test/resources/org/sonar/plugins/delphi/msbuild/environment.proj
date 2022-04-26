@@ -1,0 +1,13 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <FOO Condition="'$(FOO)'==''">foo</FOO>
+        <BAR Condition="'$(BAR)'==''">bar</BAR>
+        <BAZ Condition="'$(BAZ)'==''">baz</BAZ>
+    </PropertyGroup>
+    <ProjectExtensions>
+        <Borland.Personality/>
+        <Borland.ProjectType/>
+        <BorlandProject/>
+        <ProjectFileVersion>12</ProjectFileVersion>
+    </ProjectExtensions>
+</Project>
