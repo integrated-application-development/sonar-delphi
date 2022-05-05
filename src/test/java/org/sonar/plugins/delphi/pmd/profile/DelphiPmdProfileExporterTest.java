@@ -156,7 +156,7 @@ class DelphiPmdProfileExporterTest {
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
             + "<ruleset name=\"delph\">\n"
             + "  <description>Sonar Profile: delph</description>\n"
-            + "</ruleset>\n\n";
+            + "</ruleset>\n";
 
     assertThat(writer).hasToString(expected);
   }

@@ -104,7 +104,7 @@
     <sonar-orchestrator.version>3.37.0.87</sonar-orchestrator.version>
     <antlr-runtime.version>3.5.3</antlr-runtime.version>
     <pmd.version>6.18.0</pmd.version>
-    <jdom.version>1.1.3</jdom.version>
+    <jdom.version>2.0.6.1</jdom.version>
     <jetbrains-annotations.version>23.0.0</jetbrains-annotations.version>
     <junit-platform-suite-engine.version>1.9.0-M1</junit-platform-suite-engine.version>
     <!--Maven plugins-->
@@ -119,7 +119,7 @@
     <jacoco.coverageRequirement>0.9000</jacoco.coverageRequirement>
     <jacoco.dataFile>${basedir}/target/jacoco/jacoco.exec</jacoco.dataFile>
     <jacoco.outputDirectory>${basedir}/target/jacoco/report/</jacoco.outputDirectory>
-    <enforcer.mavenVersion>3.8.5</enforcer.mavenVersion>
+    <enforcer.mavenVersion>3.8.6</enforcer.mavenVersion>
     <javadoc.sourcepath>${project.basedir}/src/main/java</javadoc.sourcepath>
     <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
     <sonar.coverage.jacoco.xmlReportPaths>target/jacoco/report/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
@@ -137,19 +137,19 @@
     <guava.version>31.1-jre</guava.version>
     <commons-lang.version>3.12.0</commons-lang.version>
     <commons-io.version>2.11.0</commons-io.version>
-    <junit.version>5.9.0-M1</junit.version>
-    <assertj.version>3.22.0</assertj.version>
-    <mockito.version>4.5.1</mockito.version>
+    <junit.version>5.9.0-RC1</junit.version>
+    <assertj.version>3.23.1</assertj.version>
+    <mockito.version>4.6.1</mockito.version>
     <archunit.version>0.23.1</archunit.version>
     <compiler-plugin.version>3.10.1</compiler-plugin.version>
-    <cyclonedx-plugin.version>2.6.2</cyclonedx-plugin.version>
+    <cyclonedx-plugin.version>2.7.0</cyclonedx-plugin.version>
     <dependency-plugin.version>3.3.0</dependency-plugin.version>
     <javadoc-plugin.version>3.4.0</javadoc-plugin.version>
-    <site-plugin.version>4.0.0-M1</site-plugin.version>
-    <dependency-check-plugin.version>7.1.0</dependency-check-plugin.version>
+    <site-plugin.version>4.0.0-M2</site-plugin.version>
+    <dependency-check-plugin.version>7.1.1</dependency-check-plugin.version>
     <jxr-plugin.version>3.2.0</jxr-plugin.version>
-    <errorprone.version>2.13.1</errorprone.version>
-    <project-info-reports-plugin.version>3.3.0</project-info-reports-plugin.version>
+    <errorprone.version>2.14.0</errorprone.version>
+    <project-info-reports-plugin.version>3.4.0</project-info-reports-plugin.version>
     <versions-plugin.version>2.11.0</versions-plugin.version>
   </properties>
   <!-- this is important for sonar-packaging-maven-plugin -->
@@ -226,7 +226,7 @@
     </dependency>
     <dependency>
       <groupId>org.jdom</groupId>
-      <artifactId>jdom</artifactId>
+      <artifactId>jdom2</artifactId>
       <version>${jdom.version}</version>
     </dependency>
     <dependency>
