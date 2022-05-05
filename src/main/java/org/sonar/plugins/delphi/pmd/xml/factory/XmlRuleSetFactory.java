@@ -25,11 +25,12 @@ import java.io.Reader;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.Namespace;
-import org.jdom.input.SAXBuilder;
+import javax.xml.XMLConstants;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.input.SAXBuilder;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
@@ -40,7 +41,6 @@ import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 
 /** Factory class to create {@link DelphiRuleSet} out of XML. */
 public class XmlRuleSetFactory implements RuleSetFactory, Closeable {
-
   private static final Logger LOG = Loggers.get(XmlRuleSetFactory.class);
   private static final String INVALID_INPUT = "The PMD configuration file is not valid";
 
@@ -136,13 +136,16 @@ public class XmlRuleSetFactory implements RuleSetFactory, Closeable {
    */
   @Override
   public DelphiRuleSet create() {
-    final SAXBuilder parser = new SAXBuilder();
+    final SAXBuilder builder = new SAXBuilder();
+    builder.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+    builder.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+
     final Document dom;
     try {
-      dom = parser.build(source);
+      dom = builder.build(source);
     } catch (JDOMException | IOException e) {
       if (messages != null) {
-        messages.addErrorText(INVALID_INPUT + " : " + e.getMessage());
+        messages.addErrorText(INVALID_INPUT + ": " + e.getMessage());
       }
       LOG.debug(INVALID_INPUT, e);
       return new DelphiRuleSet();
@@ -171,6 +174,7 @@ public class XmlRuleSetFactory implements RuleSetFactory, Closeable {
       parseExample(eltRule, delphiRule, namespace);
       result.addRule(delphiRule);
     }
+
     return result;
   }
 }

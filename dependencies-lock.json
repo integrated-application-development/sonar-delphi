@@ -267,8 +267,8 @@
     "classifier" : "runtime"
   }, {
     "groupId" : "org.jdom",
-    "artifactId" : "jdom",
-    "version" : "1.1.3",
+    "artifactId" : "jdom2",
+    "version" : "2.0.6.1",
     "scope" : "compile",
     "type" : "jar"
   }, {
