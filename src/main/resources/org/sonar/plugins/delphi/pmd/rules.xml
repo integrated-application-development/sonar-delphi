@@ -1081,7 +1081,8 @@ FreeAndNil(Foo); // Compliant
     name="BeginEndRequiredRule">
     <priority>4</priority>
     <description>
-      All compound statements should use 'begin'..'end', except for repeat statements.
+      All compound statements should use &lt;code&gt;begin&lt;/code&gt;..&lt;code&gt;end&lt;/code&gt;,
+      except for &lt;code&gt;repeat&lt;/code&gt; and &lt;code&gt;case&lt;/code&gt; statements.
       &lt;br&gt;
       &lt;br&gt;
     </description>

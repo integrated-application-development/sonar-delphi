@@ -3,6 +3,7 @@ package org.sonar.plugins.delphi.pmd.rules;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.ast.Node;
 import org.sonar.plugins.delphi.antlr.ast.node.CaseItemStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.CaseStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.CompoundStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ElseBlockNode;
 import org.sonar.plugins.delphi.antlr.ast.node.IfStatementNode;
@@ -22,11 +23,13 @@ public class BeginEndRequiredRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(ElseBlockNode elseBlock, RuleContext data) {
-    StatementListNode statementList = elseBlock.getStatementList();
-    if (statementList.isEmpty()
-        || statementList.getStatements().size() > 1
-        || !(statementList.getStatements().get(0) instanceof CompoundStatementNode)) {
-      addViolation(data, elseBlock);
+    if (!(elseBlock.jjtGetParent() instanceof CaseStatementNode)) {
+      StatementListNode statementList = elseBlock.getStatementList();
+      if (statementList.isEmpty()
+          || statementList.getStatements().size() > 1
+          || !(statementList.getStatements().get(0) instanceof CompoundStatementNode)) {
+        addViolation(data, elseBlock);
+      }
     }
     return super.visit(elseBlock, data);
   }
@@ -41,6 +44,10 @@ public class BeginEndRequiredRule extends AbstractDelphiRule {
     }
 
     Node parent = statement.jjtGetParent();
+
+    if (parent instanceof CaseItemStatementNode) {
+      return false;
+    }
 
     if (statement instanceof IfStatementNode && parent instanceof IfStatementNode) {
       return ((IfStatementNode) parent).getElseStatement() != statement;
