@@ -69,7 +69,7 @@ class BeginEndRequiredRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  void testBareTryExceptShouldNotAddIssue() {
+  void testBareExceptShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo;")
@@ -78,6 +78,50 @@ class BeginEndRequiredRuleTest extends BasePmdRuleTest {
             .appendImpl("    WriteLn('test');")
             .appendImpl("  except")
             .appendImpl("    WriteLn('test');")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("BeginEndRequiredRule"));
+  }
+
+  @Test
+  void testBareExceptElseShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Foo;")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    WriteLn('test');")
+            .appendImpl("  except")
+            .appendImpl("    on Exception do begin")
+            .appendImpl("      WriteLn('Foo');")
+            .appendImpl("    end;")
+            .appendImpl("    else WriteLn('Bar');")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areExactly(1, ruleKeyAtLine("BeginEndRequiredRule", builder.getOffset() + 9));
+  }
+
+  @Test
+  void testExceptElseWithBeginEndShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Foo;")
+            .appendImpl("begin")
+            .appendImpl("  try")
+            .appendImpl("    WriteLn('test');")
+            .appendImpl("  except")
+            .appendImpl("    on Exception do begin")
+            .appendImpl("      WriteLn('Foo');")
+            .appendImpl("    end;")
+            .appendImpl("    else begin")
+            .appendImpl("      WriteLn('Bar');")
+            .appendImpl("    end;")
             .appendImpl("  end;")
             .appendImpl("end;");
 
@@ -121,7 +165,7 @@ class BeginEndRequiredRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  void testBareCaseItemShouldAddIssue() {
+  void testBareCaseItemShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Int: Integer);")
@@ -133,11 +177,11 @@ class BeginEndRequiredRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().areExactly(1, ruleKeyAtLine("BeginEndRequiredRule", builder.getOffset() + 4));
+    assertIssues().areNot(ruleKey("BeginEndRequiredRule"));
   }
 
   @Test
-  void testCaseElseShouldAddIssue() {
+  void testCaseElseShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Int: Integer);")
@@ -152,11 +196,11 @@ class BeginEndRequiredRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().areExactly(1, ruleKeyAtLine("BeginEndRequiredRule", builder.getOffset() + 7));
+    assertIssues().areNot(ruleKey("BeginEndRequiredRule"));
   }
 
   @Test
-  void testBareCaseElseShouldAddIssue() {
+  void testBareCaseElseShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Int: Integer);")
@@ -171,11 +215,11 @@ class BeginEndRequiredRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().areExactly(1, ruleKeyAtLine("BeginEndRequiredRule", builder.getOffset() + 7));
+    assertIssues().areNot(ruleKey("BeginEndRequiredRule"));
   }
 
   @Test
-  void testCaseElseBeginEndWithExtraStatementShouldAddIssue() {
+  void testCaseElseBeginEndWithExtraStatementShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Foo(Int: Integer);")
@@ -194,7 +238,7 @@ class BeginEndRequiredRuleTest extends BasePmdRuleTest {
 
     execute(builder);
 
-    assertIssues().areExactly(1, ruleKeyAtLine("BeginEndRequiredRule", builder.getOffset() + 7));
+    assertIssues().areNot(ruleKey("BeginEndRequiredRule"));
   }
 
   @Test
