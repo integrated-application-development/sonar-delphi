@@ -86,7 +86,8 @@
     <jacoco.dataFile.it>${basedir}/target/jacoco/jacoco-it.exec</jacoco.dataFile.it>
     <jacoco.outputDirectory.it>${basedir}/target/jacoco/report-it/</jacoco.outputDirectory.it>
     <compiler.languageLevel>11</compiler.languageLevel>
-    <lint.flags>-serial,-processing,-classfile</lint.flags>
+    <lint.flags>-serial,-processing,-classfile,-path</lint.flags>
+    <maven.compiler.release>11</maven.compiler.release>
     <!-- The UnicodeInCode rule has FPs in this project for mysterious reasons. There really aren't
           any unicode characters in code. -->
     <errorprone.flags>-XepExcludedPaths:.*/generated-sources/.* -Xep:UnicodeInCode:OFF</errorprone.flags>
@@ -463,8 +464,8 @@
         <configuration>
           <source>${compiler.languageLevel}</source>
           <target>${compiler.languageLevel}</target>
-          <showWarnings>false</showWarnings>
-          <showDeprecation>false</showDeprecation>
+          <showWarnings>true</showWarnings>
+          <showDeprecation>true</showDeprecation>
           <fork>true</fork>
           <compilerArgs>
             <arg>-XDcompilePolicy=simple</arg>
@@ -496,7 +497,7 @@
         <artifactId>cyclonedx-maven-plugin</artifactId>
         <version>${cyclonedx-plugin.version}</version>
         <configuration>
-          <schemaVersion>1.1</schemaVersion>
+          <schemaVersion>1.3</schemaVersion>
         </configuration>
       </plugin>
       <plugin>
