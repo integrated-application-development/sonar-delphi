@@ -38,7 +38,7 @@
   }, {
     "groupId" : "com.google.errorprone",
     "artifactId" : "error_prone_annotations",
-    "version" : "2.13.1",
+    "version" : "2.14.0",
     "scope" : "compile",
     "type" : "jar"
   }, {
@@ -158,13 +158,13 @@
   }, {
     "groupId" : "net.bytebuddy",
     "artifactId" : "byte-buddy-agent",
-    "version" : "1.12.9",
+    "version" : "1.12.10",
     "scope" : "test",
     "type" : "jar"
   }, {
     "groupId" : "net.bytebuddy",
     "artifactId" : "byte-buddy",
-    "version" : "1.12.9",
+    "version" : "1.12.10",
     "scope" : "test",
     "type" : "jar"
   }, {
@@ -243,7 +243,7 @@
   }, {
     "groupId" : "org.assertj",
     "artifactId" : "assertj-core",
-    "version" : "3.22.0",
+    "version" : "3.23.1",
     "scope" : "test",
     "type" : "jar"
   }, {
@@ -340,7 +340,7 @@
   }, {
     "groupId" : "org.mockito",
     "artifactId" : "mockito-core",
-    "version" : "4.5.1",
+    "version" : "4.6.1",
     "scope" : "test",
     "type" : "jar"
   }, {
