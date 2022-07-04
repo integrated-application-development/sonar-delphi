@@ -19,6 +19,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
@@ -114,12 +115,19 @@ public class SymbolTableBuilder {
       throw new SymbolTableConstructionException(
           String.format("Path to Delphi standard library is invalid: %s", absolutePath));
     }
-    this.processSearchPath(standardLibraryPath);
+    Path tools = standardLibraryPath.resolve("Tools");
+    this.processSearchPath(standardLibraryPath, (Path path) -> !path.startsWith(tools));
     return this;
   }
 
   private void processSearchPath(Path path) {
-    findDelphiFilesRecursively(path).forEach(file -> createUnitData(file, false));
+    processSearchPath(path, (Path p) -> true);
+  }
+
+  private void processSearchPath(Path path, Predicate<Path> predicate) {
+    findDelphiFilesRecursively(path).stream()
+        .filter(predicate)
+        .forEach(file -> createUnitData(file, false));
   }
 
   private static List<Path> findDelphiFilesRecursively(Path path) {
