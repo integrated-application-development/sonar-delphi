@@ -5,6 +5,8 @@ import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtL
 
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.delphi.pmd.FilePosition;
+import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder;
+import org.sonar.plugins.delphi.utils.builders.DelphiTestFileBuilder.ResourceBuilder;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 class EmptyUnitRuleTest extends BasePmdRuleTest {
@@ -85,6 +87,17 @@ class EmptyUnitRuleTest extends BasePmdRuleTest {
             .appendDecl("type")
             .appendDecl("  TFoo = class(TObject)")
             .appendDecl("  end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("EmptyUnitRule"));
+  }
+
+  @Test
+  void testIgnorePackage() {
+    String dpkResourcePath = "/org/sonar/plugins/delphi/projects/SimpleProject/dpk/TestLib.dpk";
+    DelphiTestFileBuilder<ResourceBuilder> builder =
+        DelphiTestFileBuilder.fromResource(dpkResourcePath);
 
     execute(builder);
 

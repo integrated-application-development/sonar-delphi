@@ -13,7 +13,7 @@ import org.sonar.plugins.delphi.pmd.FilePosition;
 public class EmptyUnitRule extends AbstractDelphiRule {
   @Override
   public RuleContext visit(DelphiAST ast, RuleContext data) {
-    if (!hasMeaningfulCode(ast)) {
+    if (!ast.isPackage() && !hasMeaningfulCode(ast)) {
       newViolation(data).atPosition(FilePosition.atFileLevel()).save();
     }
     return data;
