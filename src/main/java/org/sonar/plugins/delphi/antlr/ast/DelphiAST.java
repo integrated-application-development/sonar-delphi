@@ -29,6 +29,7 @@ import net.sourceforge.pmd.lang.ast.RootNode;
 import org.sonar.plugins.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FileHeaderNode;
+import org.sonar.plugins.delphi.antlr.ast.node.PackageDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ProgramDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnitDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.token.DelphiToken;
@@ -127,5 +128,9 @@ public class DelphiAST extends DelphiNode implements RootNode {
 
   public boolean isUnit() {
     return jjtGetNumChildren() > 0 && getFileHeader() instanceof UnitDeclarationNode;
+  }
+
+  public boolean isPackage() {
+    return jjtGetNumChildren() > 0 && getFileHeader() instanceof PackageDeclarationNode;
   }
 }
