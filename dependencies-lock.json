@@ -280,31 +280,31 @@
   }, {
     "groupId" : "org.junit.jupiter",
     "artifactId" : "junit-jupiter-api",
-    "version" : "5.9.0-M1",
+    "version" : "5.9.0-RC1",
     "scope" : "test",
     "type" : "jar"
   }, {
     "groupId" : "org.junit.jupiter",
     "artifactId" : "junit-jupiter-engine",
-    "version" : "5.9.0-M1",
+    "version" : "5.9.0-RC1",
     "scope" : "test",
     "type" : "jar"
   }, {
     "groupId" : "org.junit.jupiter",
     "artifactId" : "junit-jupiter-params",
-    "version" : "5.9.0-M1",
+    "version" : "5.9.0-RC1",
     "scope" : "test",
     "type" : "jar"
   }, {
     "groupId" : "org.junit.jupiter",
     "artifactId" : "junit-jupiter",
-    "version" : "5.9.0-M1",
+    "version" : "5.9.0-RC1",
     "scope" : "test",
     "type" : "jar"
   }, {
     "groupId" : "org.junit.platform",
     "artifactId" : "junit-platform-commons",
-    "version" : "1.9.0-M1",
+    "version" : "1.9.0-RC1",
     "scope" : "test",
     "type" : "jar"
   }, {
