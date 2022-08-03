@@ -47,7 +47,7 @@ public class TypeParameterNameDeclaration extends AbstractDelphiNameDeclaration
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), type.getImage().toLowerCase());
+    return Objects.hash(super.hashCode(), type);
   }
 
   @Override

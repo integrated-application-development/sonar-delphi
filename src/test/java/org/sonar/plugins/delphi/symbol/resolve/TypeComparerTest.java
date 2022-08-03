@@ -28,6 +28,7 @@ import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.A
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
 import static org.sonar.plugins.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_SET;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -104,6 +105,12 @@ class TypeComparerTest {
     compare(IntrinsicType.INT64, IntrinsicType.SINGLE, CONVERT_LEVEL_4);
     compare(IntrinsicType.INT64, IntrinsicType.COMP, CONVERT_LEVEL_5);
 
+    compare(IntrinsicType.UINT64, IntrinsicType.EXTENDED, CONVERT_LEVEL_1);
+    compare(IntrinsicType.UINT64, IntrinsicType.DOUBLE, CONVERT_LEVEL_2);
+    compare(IntrinsicType.UINT64, IntrinsicType.REAL48, CONVERT_LEVEL_3);
+    compare(IntrinsicType.UINT64, IntrinsicType.SINGLE, CONVERT_LEVEL_4);
+    compare(IntrinsicType.UINT64, IntrinsicType.COMP, CONVERT_LEVEL_5);
+
     compare(IntrinsicType.UNICODESTRING, IntrinsicType.DOUBLE, INCOMPATIBLE_TYPES);
   }
 
@@ -174,6 +181,7 @@ class TypeComparerTest {
     compare(IntrinsicType.ANSISTRING, typeType("_", IntrinsicType.ANSISTRING), EQUAL);
     compare(typeType("_", IntrinsicType.ANSISTRING), IntrinsicType.ANSISTRING, EQUAL);
     compare(IntrinsicType.ANSISTRING, ansiString(CodePages.CP_NONE), EQUAL);
+    compare(ansiString(CodePages.CP_NONE), typeType("_", ansiString(CodePages.CP_NONE)), EQUAL);
     compare(IntrinsicType.ANSISTRING, ansiString(CodePages.CP_UTF8), CONVERT_LEVEL_1);
     compare(ansiString(CodePages.CP_1252), IntrinsicType.ANSISTRING, CONVERT_LEVEL_2);
     compare(ansiString(CodePages.CP_NONE), IntrinsicType.ANSISTRING, CONVERT_LEVEL_2);
@@ -202,17 +210,21 @@ class TypeComparerTest {
     compare(ansiCharOpenArray, IntrinsicType.ANSISTRING, CONVERT_LEVEL_2);
     compare(ansiCharOpenArray, IntrinsicType.WIDESTRING, CONVERT_LEVEL_3);
     compare(ansiCharOpenArray, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_4);
+    compare(ansiCharOpenArray, IntrinsicType.INTEGER, INCOMPATIBLE_TYPES);
     compare(wideCharOpenArray, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_2);
     compare(wideCharOpenArray, IntrinsicType.WIDESTRING, CONVERT_LEVEL_3);
     compare(wideCharOpenArray, IntrinsicType.ANSISTRING, CONVERT_LEVEL_4);
+    compare(wideCharOpenArray, IntrinsicType.INTEGER, INCOMPATIBLE_TYPES);
     compare(openArray(null, unknownType()), IntrinsicType.ANSISTRING, INCOMPATIBLE_TYPES);
 
     compare(ansiCharFixedArray, IntrinsicType.ANSISTRING, CONVERT_LEVEL_2);
     compare(ansiCharFixedArray, IntrinsicType.WIDESTRING, CONVERT_LEVEL_3);
     compare(ansiCharFixedArray, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_4);
+    compare(ansiCharFixedArray, IntrinsicType.INTEGER, INCOMPATIBLE_TYPES);
     compare(wideCharFixedArray, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_2);
     compare(wideCharFixedArray, IntrinsicType.WIDESTRING, CONVERT_LEVEL_3);
     compare(wideCharFixedArray, IntrinsicType.ANSISTRING, CONVERT_LEVEL_4);
+    compare(wideCharFixedArray, IntrinsicType.INTEGER, INCOMPATIBLE_TYPES);
     compare(fixedArray(null, unknownType()), IntrinsicType.ANSISTRING, INCOMPATIBLE_TYPES);
 
     compare(
@@ -288,9 +300,12 @@ class TypeComparerTest {
     SubrangeType subrangeOfInteger = subRange("5..High(Integer)", IntrinsicType.INTEGER);
     SubrangeType subrangeOfEnum = subRange("5..6", enumeration("Enum"));
 
+    compare(subrangeOfShortInt, typeType("Foo", subrangeOfShortInt), CONVERT_LEVEL_1);
+    compare(IntrinsicType.VARIANT, subrangeOfShortInt, CONVERT_LEVEL_1);
     compare(subrangeOfShortInt, subrangeOfInteger, CONVERT_LEVEL_1);
     compare(subrangeOfInteger, subrangeOfShortInt, CONVERT_LEVEL_3);
     compare(subrangeOfShortInt, subrangeOfEnum, INCOMPATIBLE_TYPES);
+    compare(subrangeOfEnum, subrangeOfShortInt, INCOMPATIBLE_TYPES);
   }
 
   @Test
@@ -325,6 +340,10 @@ class TypeComparerTest {
         openArray(null, IntrinsicType.ANSICHAR),
         openArray(null, IntrinsicType.CHAR),
         CONVERT_LEVEL_5);
+    compare(
+        openArray(null, IntrinsicType.ANSICHAR),
+        openArray(null, IntrinsicType.INTEGER),
+        INCOMPATIBLE_TYPES);
 
     compare(fromOpenArray, toFixedArray, EQUAL);
     compare(fromIncompatibleOpenArray, toFixedArray, INCOMPATIBLE_TYPES);
@@ -345,6 +364,9 @@ class TypeComparerTest {
     compare(unknownType(), toOpenArray, INCOMPATIBLE_TYPES);
     compare(unknownType(), toDynamicArray, INCOMPATIBLE_TYPES);
     compare(unknownType(), toFixedArray, INCOMPATIBLE_TYPES);
+
+    assertThat(TypeComparer.compareOpenArray(set(IntrinsicType.INTEGER), toOpenArray))
+        .isEqualTo(INCOMPATIBLE_TYPES);
   }
 
   @Test
@@ -412,10 +434,12 @@ class TypeComparerTest {
   void testToArrayConstructor() {
     ArrayConstructorType byteConstructor = arrayConstructor(List.of(IntrinsicType.BYTE));
     ArrayConstructorType int64Constructor = arrayConstructor(List.of(IntrinsicType.INT64));
+    ArrayConstructorType emptyConstructor = arrayConstructor(Collections.emptyList());
 
     compare(byteConstructor, byteConstructor, EXACT);
     compare(byteConstructor, int64Constructor, CONVERT_LEVEL_1);
     compare(dynamicArray(null, IntrinsicType.INTEGER), byteConstructor, INCOMPATIBLE_TYPES);
+    compare(emptyConstructor, byteConstructor, INCOMPATIBLE_TYPES);
     compare(set(IntrinsicType.BYTE), byteConstructor, INCOMPATIBLE_TYPES);
   }
 
@@ -466,6 +490,7 @@ class TypeComparerTest {
     Type toRecord = TypeMocker.struct("Baz", RECORD);
     Type fromInterface = TypeMocker.struct("System.IInterface", INTERFACE);
     Type toGUID = TypeMocker.struct("System.TGUID", RECORD);
+    Type toNotGUID = TypeMocker.struct("System.TNotGUID", RECORD);
 
     compare(fromClass, toClass, CONVERT_LEVEL_1);
     compare(untypedPointer(), toClass, CONVERT_LEVEL_4);
@@ -475,6 +500,7 @@ class TypeComparerTest {
     compare(untypedPointer(), toRecord, INCOMPATIBLE_TYPES);
     compare(nilPointer(), toRecord, INCOMPATIBLE_TYPES);
     compare(pointerTo(toClass), toClass, INCOMPATIBLE_TYPES);
+    compare(classOf(fromInterface), toNotGUID, INCOMPATIBLE_TYPES);
     compare(fromInterface, toGUID, INCOMPATIBLE_TYPES);
     compare(fromInterface, toRecord, INCOMPATIBLE_TYPES);
     compare(classOf(fromInterface), toRecord, INCOMPATIBLE_TYPES);
@@ -530,6 +556,8 @@ class TypeComparerTest {
     compare(IntrinsicType.INTEGER, pointerTo(IntrinsicType.UNICODESTRING), CONVERT_LEVEL_6);
     compare(untypedPointer(), pointerTo(IntrinsicType.CHAR), CONVERT_LEVEL_2);
     compare(untypedPointer(), pointerTo(IntrinsicType.INTEGER), CONVERT_LEVEL_1);
+    compare(nilPointer(), pointerTo(IntrinsicType.CHAR), CONVERT_LEVEL_2);
+    compare(nilPointer(), pointerTo(IntrinsicType.INTEGER), CONVERT_LEVEL_1);
     compare(pointerTo(IntrinsicType.CHAR), untypedPointer(), CONVERT_LEVEL_2);
     compare(pointerTo(IntrinsicType.INTEGER), untypedPointer(), CONVERT_LEVEL_1);
     compare(arrayType, pointerTo(IntrinsicType.INTEGER), CONVERT_LEVEL_3);
@@ -540,6 +568,8 @@ class TypeComparerTest {
         pointerTo(IntrinsicType.UNICODESTRING),
         INCOMPATIBLE_TYPES);
     compare(IntrinsicType.UNICODESTRING, pointerTo(IntrinsicType.INTEGER), INCOMPATIBLE_TYPES);
+    compare(IntrinsicType.ANSISTRING, pointerTo(IntrinsicType.CHAR), INCOMPATIBLE_TYPES);
+    compare(IntrinsicType.ANSISTRING, pointerTo(IntrinsicType.ANSICHAR), INCOMPATIBLE_TYPES);
     compare(
         dynamicArray(null, IntrinsicType.STRING),
         pointerTo(IntrinsicType.INTEGER),
@@ -563,6 +593,7 @@ class TypeComparerTest {
     compare(IntrinsicType.INTEGER, IntrinsicType.VARIANT, CONVERT_LEVEL_1);
     compare(IntrinsicType.DOUBLE, IntrinsicType.VARIANT, CONVERT_LEVEL_1);
     compare(IntrinsicType.STRING, IntrinsicType.VARIANT, CONVERT_LEVEL_1);
+    compare(IntrinsicType.VARIANT, IntrinsicType.OLEVARIANT, CONVERT_LEVEL_1);
     compare(IntrinsicType.OLEVARIANT, IntrinsicType.VARIANT, CONVERT_LEVEL_1);
     compare(unknownType(), IntrinsicType.VARIANT, CONVERT_LEVEL_8);
   }
@@ -642,6 +673,10 @@ class TypeComparerTest {
 
   private static TypeType typeType(String image, IntrinsicType intrinsic) {
     return FACTORY.typeType(image, toType(intrinsic));
+  }
+
+  private static TypeType typeType(String image, Type type) {
+    return FACTORY.typeType(image, type);
   }
 
   private static EnumType enumeration(String image) {

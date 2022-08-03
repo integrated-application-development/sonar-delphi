@@ -1152,4 +1152,23 @@ class VariableInitializationRuleTest extends BasePmdRuleTest {
 
     assertIssues().areNot(ruleKey("VariableInitializationRule"));
   }
+
+  @Test
+  void testAssigningToImaginaryFieldOnUninitializedVariableShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("var")
+            .appendImpl("  Foo: Integer;")
+            .appendImpl("  Bar: Integer;")
+            .appendImpl("begin")
+            .appendImpl("  Foo := 123;")
+            .appendImpl("  Bar.Baz := Foo;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("VariableInitializationRule", builder.getOffset() + 7));
+  }
 }

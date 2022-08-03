@@ -27,7 +27,7 @@ public class EnumElementNameDeclaration extends AbstractDelphiNameDeclaration
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), type);
+    return Objects.hash(super.hashCode(), type.getImage().toLowerCase());
   }
 
   @Override
