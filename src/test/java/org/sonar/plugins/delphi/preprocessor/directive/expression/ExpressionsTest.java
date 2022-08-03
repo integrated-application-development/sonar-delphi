@@ -4,255 +4,308 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Expression.ConstExpressionType.UNKNOWN;
 import static org.sonar.plugins.delphi.preprocessor.directive.expression.Expressions.binary;
 import static org.sonar.plugins.delphi.preprocessor.directive.expression.Expressions.literal;
 import static org.sonar.plugins.delphi.preprocessor.directive.expression.Expressions.unary;
 import static org.sonar.plugins.delphi.preprocessor.directive.expression.Token.TokenType.INTEGER;
-import static org.sonar.plugins.delphi.preprocessor.directive.expression.Token.TokenType.UNKNOWN;
 
+import java.util.List;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.sonar.plugins.delphi.preprocessor.DelphiPreprocessor;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Expression;
-import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Expression.ConstExpressionType;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective.Expression.ExpressionValue;
+import org.sonar.plugins.delphi.preprocessor.directive.expression.Token.TokenType;
 import org.sonar.plugins.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
 import org.sonar.plugins.delphi.utils.types.TypeFactoryUtils;
 
 class ExpressionsTest {
+  static class IntegerMathArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return Stream.of(
+          Arguments.of("1 + 2", 3),
+          Arguments.of("1 - 2", -1),
+          Arguments.of("1 * 2", 2),
+          Arguments.of("10 / 2", 5),
+          Arguments.of("1 shl 2", 4),
+          Arguments.of("12 shr 1", 6),
+          Arguments.of("1 shl 1.0", UNKNOWN),
+          Arguments.of("1 shr 1.0", UNKNOWN),
+          Arguments.of("1 + 'foo'", UNKNOWN),
+          Arguments.of("'foo' + 1", UNKNOWN));
+    }
+  }
+
+  static class DecimalMathArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return Stream.of(
+          Arguments.of("1 + 2", 3.0),
+          Arguments.of("5 / 2", 2.5),
+          Arguments.of("5 div 2", 2.0),
+          Arguments.of("10 mod 3", 1.0),
+          Arguments.of("5.0 / 2.0", 2.5),
+          Arguments.of("1.0 shl 1", UNKNOWN),
+          Arguments.of("1.0 shr 1", UNKNOWN));
+    }
+  }
+
+  static class StringConcatenationArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return Stream.of(
+          Arguments.of("'abc' + '123", "abc123"),
+          Arguments.of("'abc' + '", "abc"),
+          Arguments.of("'abc' + 123", UNKNOWN));
+    }
+  }
+
+  static class EqualityArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return Stream.of(
+          Arguments.of("1 = 1", true),
+          Arguments.of("1 = 2", false),
+          Arguments.of("1 = 1.0", true),
+          Arguments.of("1.0 = 1.0", true),
+          Arguments.of("1.0 = 2.0", false),
+          Arguments.of("1.0 = '2.0'", false),
+          Arguments.of("'1.0' = 2.0", false),
+          Arguments.of("'my string' = 'my string'", true),
+          Arguments.of("'my string' = 'MY STRING'", false),
+          Arguments.of("'1' = 1", false),
+          Arguments.of("'1.0' = 1.0", false),
+          Arguments.of("[1, 2, 3] = [1, 2, 3]", true),
+          Arguments.of("[1, 2, 3] = [4, 5, 6]", false),
+          Arguments.of("UNKNOWN = 5", UNKNOWN),
+          Arguments.of("5 = UNKNOWN", UNKNOWN),
+          Arguments.of("UNKNOWN = UNKNOWN", UNKNOWN),
+          Arguments.of("1 <> 1", false),
+          Arguments.of("1 <> 2", true),
+          Arguments.of("1 <> 1.0", false),
+          Arguments.of("1.0 <> 1.0", false),
+          Arguments.of("1.0 <> 2.0", true),
+          Arguments.of("1.0 <> '2.0'", true),
+          Arguments.of("'1.0' <> 2.0", true),
+          Arguments.of("'my string' <> 'my string'", false),
+          Arguments.of("'my string' <> 'MY STRING'", true),
+          Arguments.of("'1' <> 1", true),
+          Arguments.of("'1.0' <> 1.0", true),
+          Arguments.of("[1, 2, 3] <> [1, 2, 3]", false),
+          Arguments.of("[1, 2, 3] <> [4, 5, 6]", true),
+          Arguments.of("UNKNOWN <> 5", UNKNOWN),
+          Arguments.of("5 <> UNKNOWN", UNKNOWN),
+          Arguments.of("UNKNOWN <> UNKNOWN", UNKNOWN));
+    }
+  }
+
+  static class ComparisonArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return Stream.of(
+          Arguments.of("1 > 1", false),
+          Arguments.of("2 > 1", true),
+          Arguments.of("1 > 1.0", false),
+          Arguments.of("1.0 > 1.0", false),
+          Arguments.of("2.0 > 1.0", true),
+          Arguments.of("'1.0' > 1.0", UNKNOWN),
+          Arguments.of("2.0 > '1.0'", UNKNOWN),
+          Arguments.of("'2.0' > '1.0'", UNKNOWN),
+          Arguments.of("1 < 1", false),
+          Arguments.of("1 < 2", true),
+          Arguments.of("1 < 1.0", false),
+          Arguments.of("1.0 < 1.0", false),
+          Arguments.of("1.0 < 2.0", true),
+          Arguments.of("'1.0' < 1.0", UNKNOWN),
+          Arguments.of("2.0 < '1.0'", UNKNOWN),
+          Arguments.of("'2.0' < '1.0'", UNKNOWN),
+          Arguments.of("1 >= 1", true),
+          Arguments.of("1 >= 2", false),
+          Arguments.of("1 >= 1.0", true),
+          Arguments.of("1.0 >= 1.0", true),
+          Arguments.of("1.0 >= 2.0", false),
+          Arguments.of("[1, 2, 3] >= [1, 2, 3]", true),
+          Arguments.of("[1, 2, 3, 4, 5, 6] >= [1, 2, 3]", true),
+          Arguments.of("[1, 2, 3] >= [1, 2, 3, 4, 5, 6]", false),
+          Arguments.of("'1.0' >= 1.0", UNKNOWN),
+          Arguments.of("2.0 >= '1.0'", UNKNOWN),
+          Arguments.of("'2.0' >= '1.0'", UNKNOWN),
+          Arguments.of("[1, 2, 3] >= '[1, 2, 3]'", UNKNOWN),
+          Arguments.of("'[1, 2, 3]' >= [1, 2, 3]", UNKNOWN),
+          Arguments.of("1 <= 1", true),
+          Arguments.of("2 <= 1", false),
+          Arguments.of("1 <= 1.0", true),
+          Arguments.of("1.0 <= 1.0", true),
+          Arguments.of("2.0 <= 1.0", false),
+          Arguments.of("[1, 2, 3] <= [1, 2, 3]", true),
+          Arguments.of("[1, 2, 3, 4, 5, 6] <= [1, 2, 3]", false),
+          Arguments.of("[1, 2, 3] <= [1, 2, 3, 4, 5, 6]", true),
+          Arguments.of("'1.0' <= 1.0", UNKNOWN),
+          Arguments.of("2.0 <= '1.0'", UNKNOWN),
+          Arguments.of("'2.0' <= '1.0'", UNKNOWN),
+          Arguments.of("[1, 2, 3] <= '[1, 2, 3]'", UNKNOWN),
+          Arguments.of("'[1, 2, 3]' <= [1, 2, 3]", UNKNOWN));
+    }
+  }
+
+  static class LogicalOperatorsArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return Stream.of(
+          Arguments.of("1 in [1, 2, 3]", true),
+          Arguments.of("1 in [2, 3]", false),
+          Arguments.of("1 in []", false),
+          Arguments.of("1 in 1", UNKNOWN),
+          Arguments.of("True and True", true),
+          Arguments.of("True and False", false),
+          Arguments.of("False and False", false),
+          Arguments.of("True and 1", UNKNOWN),
+          Arguments.of("1 and True", UNKNOWN),
+          Arguments.of("True or True", true),
+          Arguments.of("False or True", true),
+          Arguments.of("True or False", true),
+          Arguments.of("False or False", false),
+          Arguments.of("True or 1", UNKNOWN),
+          Arguments.of("1 or True", UNKNOWN),
+          Arguments.of("True xor True", false),
+          Arguments.of("True xor False", true),
+          Arguments.of("False xor True", true),
+          Arguments.of("False xor False", false),
+          Arguments.of("True xor 1", UNKNOWN),
+          Arguments.of("1 xor True", UNKNOWN));
+    }
+  }
+
+  static class UnaryEvaluationArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return Stream.of(
+          Arguments.of("+1", 1),
+          Arguments.of("-1", -1),
+          Arguments.of("+1.0", 1.0),
+          Arguments.of("-1.0", -1.0),
+          Arguments.of("not True", false),
+          Arguments.of("not False", true),
+          Arguments.of("+'my string'", UNKNOWN),
+          Arguments.of("+True", UNKNOWN),
+          Arguments.of("not 1", UNKNOWN));
+    }
+  }
+
+  static class DefinedArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return Stream.of(
+          Arguments.of("Defined(TEST_DEFINE)", true),
+          Arguments.of("Defined(NOT_DEFINED)", false),
+          Arguments.of("Defined()", UNKNOWN),
+          Arguments.of("Defined(123)", UNKNOWN));
+    }
+  }
+
+  static class SizeOfArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return Stream.of(
+          Arguments.of("SizeOf(Byte)", size(IntrinsicType.BYTE)),
+          Arguments.of("SizeOf(NativeInt)", size(IntrinsicType.NATIVEINT)),
+          Arguments.of("SizeOf(LongWord)", size(IntrinsicType.LONGWORD)),
+          Arguments.of("SizeOf(Double)", size(IntrinsicType.DOUBLE)),
+          Arguments.of("SizeOf(Boolean)", size(IntrinsicType.BOOLEAN)),
+          Arguments.of("SizeOf(String)", size(IntrinsicType.UNICODESTRING)),
+          Arguments.of("SizeOf(Pointer)", size(IntrinsicType.POINTER)),
+          Arguments.of("SizeOf(Variant)", size(IntrinsicType.VARIANT)),
+          Arguments.of("SizeOf(TObject)", size(IntrinsicType.POINTER)),
+          Arguments.of("SizeOf('Foo')", size(IntrinsicType.UNICODESTRING)),
+          Arguments.of("SizeOf(123)", size(IntrinsicType.BYTE)),
+          Arguments.of("SizeOf(123.456)", size(IntrinsicType.EXTENDED)),
+          Arguments.of("SizeOf(True)", size(IntrinsicType.BOOLEAN)),
+          Arguments.of("SizeOf([])", TYPE_FACTORY.emptySet().size()),
+          Arguments.of("SizeOf(String)", size(IntrinsicType.UNICODESTRING)));
+    }
+  }
+
   private static final TypeFactory TYPE_FACTORY = TypeFactoryUtils.defaultFactory();
   private DelphiPreprocessor preprocessor;
-  private ExpressionEvaluator evaluator;
 
   @BeforeEach
   void setup() {
     preprocessor = mock(DelphiPreprocessor.class);
     when(preprocessor.getTypeFactory()).thenReturn(TYPE_FACTORY);
-    evaluator = new ExpressionEvaluator(preprocessor);
-  }
-
-  @Test
-  void testMathematicEvaluation() {
-    assertInt("1 + 2", 3);
-    assertInt("1 - 2", -1);
-    assertInt("1 * 2", 2);
-    assertInt("10 / 2", 5);
-    assertInt("1 shl 2", 4);
-    assertInt("12 shr 1", 6);
-
-    assertUnknown("1 shl 1.0");
-    assertUnknown("1 shr 1.0");
-
-    assertDecimal("1 + 2", 3.0);
-    assertDecimal("5 / 2", 2.5);
-    assertDecimal("5 div 2", 2.0);
-    assertDecimal("10 mod 3", 1.0);
-    assertDecimal("5.0 / 2.0", 2.5);
-  }
-
-  @Test
-  void testStringConcatenation() {
-    assertString("'abc' + '123", "abc123");
-    assertString("'abc' + '", "abc");
-    assertUnknown("'abc' + 123");
-  }
-
-  @Test
-  void testEqualityEvaluation() {
-    assertBool("1 = 1", true);
-    assertBool("1 = 2", false);
-    assertBool("1 = 1.0", true);
-    assertBool("1.0 = 1.0", true);
-    assertBool("1.0 = 2.0", false);
-    assertBool("'my string' = 'my string'", true);
-    assertBool("'my string' = 'MY STRING'", false);
-    assertBool("'1' = 1", false);
-    assertBool("'1.0' = 1.0", false);
-    assertBool("[1, 2, 3] = [1, 2, 3]", true);
-    assertBool("[1, 2, 3] = [4, 5, 6]", false);
-    assertUnknown("UNKNOWN = 5");
-
-    assertBool("1 <> 1", false);
-    assertBool("1 <> 2", true);
-    assertBool("1 <> 1.0", false);
-    assertBool("1.0 <> 1.0", false);
-    assertBool("1.0 <> 2.0", true);
-    assertBool("'my string' <> 'my string'", false);
-    assertBool("'my string' <> 'MY STRING'", true);
-    assertBool("'1' <> 1", true);
-    assertBool("'1.0' <> 1.0", true);
-    assertBool("[1, 2, 3] <> [1, 2, 3]", false);
-    assertBool("[1, 2, 3] <> [4, 5, 6]", true);
-    assertUnknown("UNKNOWN <> 5");
-  }
-
-  @Test
-  void testComparisonEvaluation() {
-    assertBool("1 > 1", false);
-    assertBool("2 > 1", true);
-    assertBool("1 > 1.0", false);
-    assertBool("1.0 > 1.0", false);
-    assertBool("2.0 > 1.0", true);
-    assertUnknown("'my string' > 'my string'");
-
-    assertBool("1 < 1", false);
-    assertBool("2 < 1", false);
-    assertBool("1 < 1.0", false);
-    assertBool("1.0 < 1.0", false);
-    assertBool("2.0 < 1.0", false);
-    assertUnknown("'my string' < 'my string'");
-
-    assertBool("1 >= 1", true);
-    assertBool("2 >= 1", true);
-    assertBool("1 >= 1.0", true);
-    assertBool("1.0 >= 1.0", true);
-    assertBool("2.0 >= 1.0", true);
-    assertBool("[1, 2, 3] >= [1, 2, 3]", true);
-    assertBool("[1, 2, 3, 4, 5, 6] >= [1, 2, 3]", true);
-    assertBool("[1, 2, 3] >= [1, 2, 3, 4, 5, 6]", false);
-    assertUnknown("'my string' >= 'my string'");
-
-    assertBool("1 <= 1", true);
-    assertBool("2 <= 1", false);
-    assertBool("1 <= 1.0", true);
-    assertBool("1.0 <= 1.0", true);
-    assertBool("2.0 <= 1.0", false);
-    assertBool("[1, 2, 3] <= [1, 2, 3]", true);
-    assertBool("[1, 2, 3, 4, 5, 6] <= [1, 2, 3]", false);
-    assertBool("[1, 2, 3] <= [1, 2, 3, 4, 5, 6]", true);
-    assertUnknown("'my string' <= 'my string'");
-  }
-
-  @Test
-  void testLogicalOperators() {
-    assertBool("1 in [1, 2, 3]", true);
-    assertBool("1 in [2, 3]", false);
-    assertBool("1 in []", false);
-    assertUnknown("1 in 1");
-
-    assertBool("True and True", true);
-    assertBool("True and False", false);
-    assertBool("False and False", false);
-    assertUnknown("True and 1");
-
-    assertBool("True or True", true);
-    assertBool("True or False", true);
-    assertBool("False or False", false);
-    assertUnknown("True or 1");
-
-    assertBool("True xor True", false);
-    assertBool("True xor False", true);
-    assertBool("False xor True", true);
-    assertBool("False xor False", false);
-    assertUnknown("True xor 1");
-  }
-
-  @Test
-  void testUnaryEvaluation() {
-    assertInt("+1", 1);
-    assertInt("-1", -1);
-
-    assertDecimal("+1.0", 1.0);
-    assertDecimal("-1.0", -1.0);
-
-    assertBool("not True", false);
-    assertBool("not False", true);
-
-    assertUnknown("+'my string'");
-    assertUnknown("+True");
-    assertUnknown("not 1");
-  }
-
-  @Test
-  void testDefinedEvaluation() {
     when(preprocessor.isDefined("TEST_DEFINE")).thenReturn(true);
-
-    assertBool("Defined(TEST_DEFINE)", true);
-    assertBool("Defined(NOT_DEFINED)", false);
-
-    assertUnknown("Defined()");
-    assertUnknown("Defined(123)");
   }
 
-  private static int size(IntrinsicType type) {
-    return TYPE_FACTORY.getIntrinsic(type).size();
-  }
-
-  @Test
-  void testSizeOfEvaluation() {
-    assertInt("SizeOf(Byte)", size(IntrinsicType.BYTE));
-    assertInt("SizeOf(NativeInt)", size(IntrinsicType.NATIVEINT));
-    assertInt("SizeOf(LongWord)", size(IntrinsicType.LONGWORD));
-    assertInt("SizeOf(Double)", size(IntrinsicType.DOUBLE));
-    assertInt("SizeOf(Boolean)", size(IntrinsicType.BOOLEAN));
-    assertInt("SizeOf(String)", size(IntrinsicType.UNICODESTRING));
-    assertInt("SizeOf(Pointer)", size(IntrinsicType.POINTER));
-    assertInt("SizeOf(Variant)", size(IntrinsicType.VARIANT));
-    assertInt("SizeOf(TObject)", size(IntrinsicType.POINTER));
-    assertInt("SizeOf('Foo')", size(IntrinsicType.UNICODESTRING));
-    assertInt("SizeOf(123)", size(IntrinsicType.BYTE));
-    assertInt("SizeOf(123.456)", size(IntrinsicType.EXTENDED));
-    assertInt("SizeOf(True)", size(IntrinsicType.BOOLEAN));
-    assertInt("SizeOf([])", TYPE_FACTORY.emptySet().size());
-    assertInt("SizeOf(String)", size(IntrinsicType.UNICODESTRING));
+  @ParameterizedTest(name = "\"{0}\" should evaluate to: {1}")
+  @ArgumentsSource(IntegerMathArgumentsProvider.class)
+  @ArgumentsSource(DecimalMathArgumentsProvider.class)
+  @ArgumentsSource(StringConcatenationArgumentsProvider.class)
+  @ArgumentsSource(EqualityArgumentsProvider.class)
+  @ArgumentsSource(ComparisonArgumentsProvider.class)
+  @ArgumentsSource(LogicalOperatorsArgumentsProvider.class)
+  @ArgumentsSource(UnaryEvaluationArgumentsProvider.class)
+  @ArgumentsSource(DefinedArgumentsProvider.class)
+  @ArgumentsSource(SizeOfArgumentsProvider.class)
+  void testExpressionEvaluation(String input, Object expected) {
+    assertValue(input, expected);
   }
 
   @Test
   void testSizeOfUnknownShouldFailOnUpgrade() {
-    assertInt("SizeOf(SomeUnknownType)", size(IntrinsicType.POINTER));
+    assertValue("SizeOf(SomeUnknownType)", size(IntrinsicType.POINTER));
   }
 
   @Test
   void testBinaryExpressionWithUnhandledOperatorShouldThrow() {
-    Expression expression = binary(literal(INTEGER, "1"), UNKNOWN, literal(INTEGER, "1"));
+    Expression expression = binary(literal(INTEGER, "1"), TokenType.UNKNOWN, literal(INTEGER, "1"));
     assertThatThrownBy(() -> expression.evaluate(preprocessor))
         .isInstanceOf(NullPointerException.class);
   }
 
   @Test
   void testUnaryExpressionWithUnhandledOperatorShouldThrow() {
-    Expression expression = unary(UNKNOWN, literal(INTEGER, "1"));
+    Expression expression = unary(TokenType.UNKNOWN, literal(INTEGER, "1"));
     assertThatThrownBy(() -> expression.evaluate(preprocessor))
         .isInstanceOf(NullPointerException.class);
   }
 
   @Test
   void testUnhandledLiteralTypeShouldThrow() {
-    assertThatThrownBy(() -> literal(UNKNOWN, "value")).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(() -> literal(TokenType.UNKNOWN, "value"))
+        .isInstanceOf(AssertionError.class);
   }
 
-  private void assertUnknown(String data) {
-    assertThat(evaluator.evaluate(data).type()).isEqualTo(ConstExpressionType.UNKNOWN);
-  }
+  private void assertValue(String data, Object expected) {
+    ExpressionLexer lexer = new ExpressionLexer();
+    List<Token> tokens = lexer.lex(data);
 
-  private void assertInt(String data, int expected) {
-    assertThat(evaluator.evaluate(data).asInteger()).isEqualTo(expected);
-  }
+    ExpressionParser parser = new ExpressionParser();
+    Expression expression = parser.parse(tokens);
 
-  private void assertDecimal(String data, double expected) {
-    assertThat(evaluator.evaluate(data).asDecimal()).isEqualTo(expected);
-  }
+    ExpressionValue value = expression.evaluate(preprocessor);
 
-  private void assertString(String data, String expected) {
-    assertThat(evaluator.evaluate(data).asString()).isEqualTo(expected);
-  }
-
-  private void assertBool(String data, boolean expected) {
-    assertThat(evaluator.evaluate(data).asBoolean()).isEqualTo(expected);
-  }
-
-  private static class ExpressionEvaluator {
-    private static final ExpressionLexer LEXER = new ExpressionLexer();
-    private static final ExpressionParser PARSER = new ExpressionParser();
-    private final DelphiPreprocessor preprocessor;
-
-    ExpressionEvaluator(DelphiPreprocessor preprocessor) {
-      this.preprocessor = preprocessor;
+    if (expected == UNKNOWN) {
+      assertThat(value.type()).isEqualTo(UNKNOWN);
+    } else if (expected instanceof String) {
+      assertThat(value.asString()).isEqualTo(expected);
+    } else if (expected instanceof Integer) {
+      assertThat(value.asInteger()).isEqualTo(expected);
+    } else if (expected instanceof Double) {
+      assertThat(value.asDecimal()).isEqualTo(expected);
+    } else if (expected instanceof Boolean) {
+      assertThat(value.asBoolean()).isEqualTo(expected);
     }
+  }
 
-    ExpressionValue evaluate(String data) {
-      return PARSER.parse(LEXER.lex(data)).evaluate(preprocessor);
-    }
+  private static int size(IntrinsicType type) {
+    return TYPE_FACTORY.getIntrinsic(type).size();
   }
 }

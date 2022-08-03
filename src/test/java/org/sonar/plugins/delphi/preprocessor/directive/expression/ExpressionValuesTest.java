@@ -26,14 +26,19 @@ class ExpressionValuesTest {
     assertThat(value.asDecimal()).isZero();
     assertThat(value.asBoolean()).isFalse();
     assertThat(value.asSet()).isEmpty();
+  }
 
+  @Test
+  void testStringValueEquals() {
+    ExpressionValue value = createString("string");
     assertThat(value)
-        .isNotNull()
         .isNotEqualTo(createString("other"))
         .isNotEqualTo(unknownValue())
         .isEqualTo(value)
         .isEqualTo(createString("string"))
-        .hasSameHashCodeAs(createString("string"));
+        .hasSameHashCodeAs(createString("string"))
+        .isNotEqualTo(null)
+        .isNotEqualTo(new Object());
   }
 
   @Test
@@ -46,14 +51,19 @@ class ExpressionValuesTest {
     assertThat(value.asDecimal()).isEqualTo(1.0);
     assertThat(value.asBoolean()).isFalse();
     assertThat(value.asSet()).isEmpty();
+  }
 
+  @Test
+  void testIntegerValueEquals() {
+    ExpressionValue value = createInteger(1);
     assertThat(value)
-        .isNotNull()
         .isNotEqualTo(createInteger(2))
         .isNotEqualTo(unknownValue())
         .isEqualTo(value)
         .isEqualTo(createInteger(1))
-        .hasSameHashCodeAs(createInteger(1));
+        .hasSameHashCodeAs(createInteger(1))
+        .isNotEqualTo(null)
+        .isNotEqualTo(new Object());
   }
 
   @Test
@@ -66,14 +76,19 @@ class ExpressionValuesTest {
     assertThat(value.asDecimal()).isEqualTo(1.0);
     assertThat(value.asBoolean()).isFalse();
     assertThat(value.asSet()).isEmpty();
+  }
 
+  @Test
+  void testDecimalValueEquals() {
+    ExpressionValue value = createDecimal(1.0);
     assertThat(value)
-        .isNotNull()
         .isNotEqualTo(createDecimal(2.0))
         .isNotEqualTo(unknownValue())
         .isEqualTo(value)
         .isEqualTo(createDecimal(1.0))
-        .hasSameHashCodeAs(createDecimal(1.0));
+        .hasSameHashCodeAs(createDecimal(1.0))
+        .isNotEqualTo(null)
+        .isNotEqualTo(new Object());
   }
 
   @Test
@@ -86,14 +101,19 @@ class ExpressionValuesTest {
     assertThat(value.asDecimal()).isZero();
     assertThat(value.asBoolean()).isTrue();
     assertThat(value.asSet()).isEmpty();
+  }
 
+  @Test
+  void testBooleanValueEquals() {
+    ExpressionValue value = createBoolean(true);
     assertThat(value)
-        .isNotNull()
         .isNotEqualTo(createBoolean(false))
         .isNotEqualTo(unknownValue())
         .isEqualTo(value)
         .isEqualTo(createBoolean(true))
-        .hasSameHashCodeAs(createBoolean(true));
+        .hasSameHashCodeAs(createBoolean(true))
+        .isNotEqualTo(null)
+        .isNotEqualTo(new Object());
   }
 
   @Test
@@ -106,16 +126,21 @@ class ExpressionValuesTest {
     assertThat(value.asDecimal()).isZero();
     assertThat(value.asBoolean()).isFalse();
     assertThat(value.asSet()).hasSize(3);
+  }
 
+  @Test
+  void testSetValueEquals() {
+    ExpressionValue value = createSet(Set.of(createInteger(1), createInteger(2), createInteger(3)));
     ExpressionValue other = createSet(Set.of(createInteger(1), createInteger(2), createInteger(3)));
 
     assertThat(value)
-        .isNotNull()
         .isNotEqualTo(createInteger(123))
         .isNotEqualTo(createSet(Collections.emptySet()))
         .isEqualTo(value)
         .isEqualTo(other)
-        .hasSameHashCodeAs(other);
+        .hasSameHashCodeAs(other)
+        .isNotEqualTo(null)
+        .isNotEqualTo(new Object());
   }
 
   @Test

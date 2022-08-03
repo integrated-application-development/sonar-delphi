@@ -107,20 +107,18 @@ public class VariableInitializationRule extends AbstractDelphiRule {
   }
 
   private void visitStatements(Node node, RuleContext data) {
-    if (node != null) {
-      boolean visitChildrenFirst = node instanceof RepeatStatementNode;
+    boolean visitChildrenFirst = node instanceof RepeatStatementNode;
 
-      if (!visitChildrenFirst) {
-        visitStatement(node, data);
-      }
+    if (!visitChildrenFirst) {
+      visitStatement(node, data);
+    }
 
-      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-        visitStatements(node.jjtGetChild(i), data);
-      }
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      visitStatements(node.jjtGetChild(i), data);
+    }
 
-      if (visitChildrenFirst) {
-        visitStatement(node, data);
-      }
+    if (visitChildrenFirst) {
+      visitStatement(node, data);
     }
   }
 

@@ -115,7 +115,6 @@ public final class DelphiNameOccurrence implements NameOccurrence {
         && location.equals(that.location)
         && Objects.equals(declaration, that.declaration)
         && Objects.equals(qualifiedName, that.qualifiedName)
-        && image.equals(that.image)
         && typeParameters.equals(that.typeParameters);
   }
 
@@ -142,6 +141,6 @@ public final class DelphiNameOccurrence implements NameOccurrence {
         + "] "
         + "<"
         + location.getUnitName()
-        + "> ";
+        + ">";
   }
 }

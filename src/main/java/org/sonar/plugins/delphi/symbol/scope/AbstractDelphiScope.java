@@ -335,15 +335,6 @@ class AbstractDelphiScope implements DelphiScope {
     return helpersByType.get(type);
   }
 
-  protected <T> String glomNames(Set<T> s) {
-    StringBuilder result = new StringBuilder();
-    for (T t : s) {
-      result.append(t.toString());
-      result.append(',');
-    }
-    return result.length() == 0 ? "" : result.substring(0, result.length() - 1);
-  }
-
   private static DelphiNameDeclaration getDeclaration(NameDeclaration declaration) {
     DelphiNameDeclaration result = (DelphiNameDeclaration) declaration;
     while (result.isSpecializedDeclaration()) {

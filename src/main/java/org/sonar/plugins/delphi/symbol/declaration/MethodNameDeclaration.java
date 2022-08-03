@@ -2,6 +2,7 @@ package org.sonar.plugins.delphi.symbol.declaration;
 
 import static java.util.Collections.emptySet;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ComparisonChain;
 import java.util.Collections;
 import java.util.HashSet;
@@ -46,7 +47,8 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
   private final Set<UnitNameDeclaration> dependencies;
   private int hashCode;
 
-  private MethodNameDeclaration(
+  @VisibleForTesting
+  public MethodNameDeclaration(
       SymbolicNode location,
       String fullyQualifiedName,
       Type returnType,

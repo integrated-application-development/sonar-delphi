@@ -617,7 +617,8 @@ class TypeComparer {
     return INCOMPATIBLE_TYPES;
   }
 
-  private static EqualityType compareOpenArray(CollectionType from, CollectionType to) {
+  @VisibleForTesting
+  static EqualityType compareOpenArray(CollectionType from, CollectionType to) {
     if (equals(from.elementType(), to.elementType())) {
       if (from.isDynamicArray()) {
         if (from.elementType().is(to.elementType())) {

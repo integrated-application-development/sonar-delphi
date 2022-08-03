@@ -471,7 +471,7 @@ public class SymbolTableBuilder {
     }
   }
 
-  private static class SymbolTableConstructionException extends RuntimeException {
+  public static class SymbolTableConstructionException extends RuntimeException {
     SymbolTableConstructionException(String message) {
       super(message);
     }

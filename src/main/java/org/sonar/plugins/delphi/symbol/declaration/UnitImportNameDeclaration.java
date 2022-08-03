@@ -1,12 +1,12 @@
 package org.sonar.plugins.delphi.symbol.declaration;
 
+import java.util.Objects;
 import javax.annotation.Nullable;
 import org.sonar.plugins.delphi.antlr.ast.node.UnitImportNode;
 import org.sonar.plugins.delphi.symbol.scope.FileScope;
 
 public final class UnitImportNameDeclaration extends QualifiedDelphiNameDeclaration {
   private final UnitNameDeclaration originalDeclaration;
-  private int hashCode;
 
   public UnitImportNameDeclaration(
       UnitImportNode node, @Nullable UnitNameDeclaration originalDeclaration) {
@@ -28,27 +28,21 @@ public final class UnitImportNameDeclaration extends QualifiedDelphiNameDeclarat
   }
 
   @Override
-  public String toString() {
-    return "Import " + getName();
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+  public boolean equals(Object other) {
+    if (super.equals(other)) {
+      UnitImportNameDeclaration that = (UnitImportNameDeclaration) other;
+      return Objects.equals(originalDeclaration, that.originalDeclaration);
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    UnitImportNameDeclaration that = (UnitImportNameDeclaration) o;
-    return getImage().equalsIgnoreCase(that.getImage());
+    return false;
   }
 
   @Override
   public int hashCode() {
-    if (hashCode == 0) {
-      hashCode = getImage().toLowerCase().hashCode();
-    }
-    return hashCode;
+    return Objects.hash(super.hashCode(), originalDeclaration);
+  }
+
+  @Override
+  public String toString() {
+    return "Import " + getName();
   }
 }

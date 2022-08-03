@@ -27,6 +27,10 @@ public class MethodScope extends AbstractDelphiScope {
 
   @Override
   public String toString() {
-    return "<MethodScope>:" + glomNames(getVariableDeclarations());
+    String result = "<MethodScope>";
+    if (methodNameDeclaration != null) {
+      result = methodNameDeclaration.getImage() + " " + result;
+    }
+    return result;
   }
 }

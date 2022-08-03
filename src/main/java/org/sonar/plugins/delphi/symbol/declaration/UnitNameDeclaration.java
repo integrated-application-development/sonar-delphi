@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.node.FileHeaderNode;
 import org.sonar.plugins.delphi.symbol.scope.FileScope;
 
@@ -60,27 +61,34 @@ public final class UnitNameDeclaration extends QualifiedDelphiNameDeclaration {
   }
 
   @Override
-  public String toString() {
-    return "Unit " + getName();
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+  public boolean equals(Object other) {
+    if (super.equals(other)) {
+      UnitNameDeclaration that = (UnitNameDeclaration) other;
+      return path.equals(that.path);
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    UnitNameDeclaration that = (UnitNameDeclaration) o;
-    return getImage().equalsIgnoreCase(that.getImage()) && path.equals(that.path);
+    return false;
   }
 
   @Override
   public int hashCode() {
     if (hashCode == 0) {
-      hashCode = Objects.hash(getImage().toLowerCase(), path);
+      hashCode = Objects.hash(super.hashCode(), path);
     }
     return hashCode;
+  }
+
+  @Override
+  public int compareTo(@NotNull DelphiNameDeclaration other) {
+    int result = super.compareTo(other);
+    if (result == 0) {
+      UnitNameDeclaration that = (UnitNameDeclaration) other;
+      result = path.compareTo(that.path);
+    }
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "Unit " + getName();
   }
 }
