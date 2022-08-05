@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.35.0] - 2022-08-05
+
 ### Added
 
 - Support for merging coverage reports.
@@ -869,7 +871,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.34.2...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.35.0...HEAD
+[0.35.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.34.2...v0.35.0
 [0.34.2]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.34.1...v0.34.2
 [0.34.1]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.34.0...v0.34.1
 [0.34.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.33.0...v0.34.0
