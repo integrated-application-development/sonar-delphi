@@ -45,7 +45,7 @@ class DefaultDelphiProfileTest {
         context.profile(DelphiLanguage.KEY, DefaultDelphiProfile.DEFAULT_PROFILE_NAME);
 
     List<BuiltInActiveRule> activeRules = profile.rules();
-    assertThat(activeRules).hasSize(69);
+    assertThat(activeRules).hasSize(70);
     assertThat(profile.name()).isEqualTo(DefaultDelphiProfile.DEFAULT_PROFILE_NAME);
 
     // Check that we use severity from the read rule and not default one.

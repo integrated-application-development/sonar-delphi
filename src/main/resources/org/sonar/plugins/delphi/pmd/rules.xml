@@ -881,6 +881,21 @@ FreeAndNil(Foo); // Compliant
     </example>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.UnicodeToAnsiCastRule"
+    message="Unicode types should not be cast to ANSI types"
+    name="UnicodeToAnsiCastRule">
+    <priority>2</priority>
+    <description>
+        Casting a Unicode type like &lt;code&gt;String&lt;/code&gt; to an ANSI type like
+        &lt;code&gt;AnsiString&lt;/code&gt; can lead to data loss.
+        &lt;br&gt;
+        Only a small subset of Unicode characters can be represented in a given ANSI code page.
+    </description>
+    <properties>
+      <property name="baseEffort" value="20min"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.PlatformDependentCastRule"
     message="Platform-dependent casts should not be used"
     name="PlatformDependentCastRule">
