@@ -105,6 +105,10 @@
   <rule class="org.sonar.plugins.delphi.pmd.rules.CharacterToCharacterPointerCastRule"
     name="CharacterToCharacterPointerCastRule">
   </rule>
+  
+  <rule class="org.sonar.plugins.delphi.pmd.rules.UnicodeToAnsiCastRule"
+    name="UnicodeToAnsiCastRule">
+  </rule>
 
   <rule class="org.sonar.plugins.delphi.pmd.rules.PlatformDependentCastRule"
     name="PlatformDependentCastRule">
