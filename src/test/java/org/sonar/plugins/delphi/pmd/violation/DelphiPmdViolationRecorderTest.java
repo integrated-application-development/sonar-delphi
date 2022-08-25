@@ -70,7 +70,6 @@ class DelphiPmdViolationRecorderTest {
   private final DelphiProjectHelper projectHelper =
       new DelphiProjectHelper(configuration, spiedFs, environmentVariableProvider);
   private final ActiveRules mockActiveRules = mock(ActiveRules.class);
-  private final ActiveRule activeRule = mock(ActiveRule.class);
   private final SensorContext mockContext = mock(SensorContext.class);
 
   private final DelphiPmdViolationRecorder violationRecorder =
@@ -80,6 +79,7 @@ class DelphiPmdViolationRecorderTest {
     when(environmentVariableProvider.getenv()).thenReturn(Collections.emptyMap());
     when(environmentVariableProvider.getenv(anyString())).thenReturn(null);
     RuleKey ruleKey = RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, RULE_KEY);
+    ActiveRule activeRule = mock(ActiveRule.class);
     when(mockActiveRules.find(ruleKey)).thenReturn(activeRule);
     when(activeRule.ruleKey()).thenReturn(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, RULE_KEY));
   }
@@ -93,7 +93,8 @@ class DelphiPmdViolationRecorderTest {
     final NewIssueLocation issueLocation = mock(NewIssueLocation.class);
 
     when(mockContext.newIssue()).thenReturn(newIssue);
-    when(newIssue.forRule(activeRule.ruleKey())).thenReturn(newIssue);
+    when(newIssue.forRule(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, RULE_KEY)))
+        .thenReturn(newIssue);
     when(newIssue.newLocation()).thenReturn(issueLocation);
     when(newIssue.at(issueLocation)).thenReturn(newIssue);
     when(issueLocation.on(inputFile)).thenReturn(issueLocation);
@@ -122,7 +123,8 @@ class DelphiPmdViolationRecorderTest {
     final NewIssueLocation issueLocation = mock(NewIssueLocation.class);
 
     when(mockContext.newIssue()).thenReturn(newIssue);
-    when(newIssue.forRule(activeRule.ruleKey())).thenReturn(newIssue);
+    when(newIssue.forRule(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, RULE_KEY)))
+        .thenReturn(newIssue);
     when(newIssue.newLocation()).thenReturn(issueLocation);
     when(newIssue.at(issueLocation)).thenReturn(newIssue);
     when(issueLocation.on(inputFile)).thenReturn(issueLocation);
@@ -216,7 +218,8 @@ class DelphiPmdViolationRecorderTest {
     final NewIssue newIssue = mock(NewIssue.class);
 
     when(mockContext.newIssue()).thenReturn(newIssue);
-    when(newIssue.forRule(activeRule.ruleKey())).thenReturn(newIssue);
+    when(newIssue.forRule(RuleKey.of(DelphiPmdConstants.REPOSITORY_KEY, RULE_KEY)))
+        .thenReturn(newIssue);
 
     assertThatThrownBy(() -> violationRecorder.saveViolation(pmdViolation, mockContext))
         .isInstanceOf(RuntimeException.class)

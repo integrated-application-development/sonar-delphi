@@ -2,9 +2,6 @@ package org.sonar.plugins.delphi.executor;
 
 import static java.util.function.Predicate.not;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.sonar.plugins.delphi.utils.DelphiUtils.uriToAbsolutePath;
 
 import com.google.common.collect.Sets;
@@ -24,7 +21,6 @@ import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultTextPointer;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
-import org.sonar.plugins.delphi.msbuild.DelphiProjectHelper;
 import org.sonar.plugins.delphi.symbol.SymbolTable;
 import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -1208,14 +1204,6 @@ class DelphiSymbolTableExecutorTest {
       InputFile inputFile = DelphiTestFileBuilder.fromResource(path).delphiFile().getInputFile();
       inputFiles.put(uriToAbsolutePath(inputFile.uri()), inputFile);
     }
-
-    DelphiProjectHelper delphiProjectHelper = mock(DelphiProjectHelper.class);
-    when(delphiProjectHelper.getFile(anyString()))
-        .thenAnswer(
-            invocation -> {
-              String path = invocation.getArgument(0);
-              return inputFiles.get(path);
-            });
 
     symbolTable =
         SymbolTable.builder()

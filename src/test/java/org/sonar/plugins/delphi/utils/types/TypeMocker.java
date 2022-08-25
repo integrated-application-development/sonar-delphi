@@ -31,16 +31,16 @@ public final class TypeMocker {
     when(type.is(anyString()))
         .thenAnswer(invocation -> image.equalsIgnoreCase(invocation.getArgument(0)));
     when(type.is(any(Type.class)))
-        .thenAnswer(arguments -> type.is(((Type) arguments.getArgument(0)).getImage()));
+        .thenAnswer(
+            arguments -> image.equalsIgnoreCase(((Type) arguments.getArgument(0)).getImage()));
     when(type.kind()).thenReturn(kind);
     when(type.isSubTypeOf(anyString()))
-        .thenAnswer(
-            invocation -> {
-              String other = invocation.getArgument(0);
-              return type.is(other) || superType.is(other);
-            });
+        .thenAnswer(invocation -> isImageOrSuperType(invocation.getArgument(0), image, superType));
     when(type.isSubTypeOf(any(Type.class)))
-        .thenAnswer(invocation -> type.isSubTypeOf(((Type) invocation.getArgument(0)).getImage()));
+        .thenAnswer(
+            invocation ->
+                isImageOrSuperType(
+                    ((Type) invocation.getArgument(0)).getImage(), image, superType));
     when(type.superType()).thenReturn(superType);
     return type;
   }
@@ -50,5 +50,9 @@ public final class TypeMocker {
     when(parameter.getImage()).thenReturn("_");
     when(parameter.getType()).thenReturn(type);
     return parameter;
+  }
+
+  private static boolean isImageOrSuperType(String typeToCheck, String image, Type superType) {
+    return image.equalsIgnoreCase(typeToCheck) || superType.is(typeToCheck);
   }
 }

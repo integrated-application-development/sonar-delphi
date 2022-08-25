@@ -27,11 +27,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.delphi.utils.DelphiUtils.inputFileToPath;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
@@ -58,7 +56,6 @@ import org.sonar.plugins.delphi.executor.DelphiMasterExecutor;
 import org.sonar.plugins.delphi.executor.DelphiMetricsExecutor;
 import org.sonar.plugins.delphi.executor.DelphiPmdExecutor;
 import org.sonar.plugins.delphi.executor.DelphiSymbolTableExecutor;
-import org.sonar.plugins.delphi.msbuild.DelphiProject;
 import org.sonar.plugins.delphi.msbuild.DelphiProjectHelper;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConfiguration;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
@@ -127,13 +124,6 @@ public abstract class BasePmdRuleTest {
     when(delphiProjectHelper.getToolchain()).thenReturn(DelphiPlugin.COMPILER_TOOLCHAIN_DEFAULT);
     when(delphiProjectHelper.getCompilerVersion())
         .thenReturn(DelphiPlugin.COMPILER_VERSION_DEFAULT);
-
-    DelphiProject delphiProject = mock(DelphiProject.class);
-    when(delphiProject.getSourceFiles()).thenReturn(List.of(inputFileToPath(inputFile)));
-    when(delphiProject.getConditionalDefines()).thenReturn(Collections.emptySet());
-    when(delphiProject.getUnitScopeNames()).thenReturn(Collections.emptySet());
-    when(delphiProject.getSearchDirectories()).thenReturn(Collections.emptyList());
-    when(delphiProject.getUnitAliases()).thenReturn(Collections.emptyMap());
 
     when(delphiProjectHelper.getFile(anyString())).thenReturn(inputFile);
     when(delphiProjectHelper.mainFiles()).thenReturn(List.of(inputFile));
