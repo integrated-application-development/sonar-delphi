@@ -846,7 +846,7 @@ FreeAndNil(Foo); // Compliant
       versions of Delphi.
       &lt;br&gt;
       &lt;br&gt;
-      In Delphi 11, there's a significant breaking change in the code generation around
+      In Delphi 10.4, there's a significant breaking change in the code generation around
       Char/AnsiChar -> PChar/PAnsiChar casts.
       &lt;br&gt;
       Rather than taking the ordinal value of the character and converting it to a pointer, a new
