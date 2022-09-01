@@ -43,6 +43,16 @@ public abstract class ExpressionNode extends DelphiNode implements Typed {
     return literal != null && literal.isIntegerLiteral();
   }
 
+  public boolean isHexadecimalLiteral() {
+    LiteralNode literal = extractLiteral();
+    return literal != null && literal.isHexadecimalLiteral();
+  }
+
+  public boolean isBinaryLiteral() {
+    LiteralNode literal = extractLiteral();
+    return literal != null && literal.isBinaryLiteral();
+  }
+
   public boolean isStringLiteral() {
     LiteralNode literal = extractLiteral();
     return literal != null && literal.isTextLiteral();
@@ -51,11 +61,6 @@ public abstract class ExpressionNode extends DelphiNode implements Typed {
   public boolean isRealLiteral() {
     LiteralNode literal = extractLiteral();
     return literal != null && literal.isDecimalLiteral();
-  }
-
-  public boolean isHexadecimalLiteral() {
-    LiteralNode literal = extractLiteral();
-    return literal != null && literal.isHexadecimalLiteral();
   }
 
   public boolean isNilLiteral() {

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for Delphi 11 language features
+  - Binary literals
+  - Digit separators
+
 ## [0.36.0] - 2022-08-19
 
 ### Added

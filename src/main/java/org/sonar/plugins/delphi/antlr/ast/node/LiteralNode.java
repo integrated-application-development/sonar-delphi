@@ -26,7 +26,11 @@ public abstract class LiteralNode extends DelphiNode implements Typed {
   }
 
   public boolean isHexadecimalLiteral() {
-    return this instanceof HexLiteralNode;
+    return this instanceof IntegerLiteralNode && ((IntegerLiteralNode) this).getRadix() == 16;
+  }
+
+  public boolean isBinaryLiteral() {
+    return this instanceof IntegerLiteralNode && ((IntegerLiteralNode) this).getRadix() == 2;
   }
 
   public boolean isDecimalLiteral() {

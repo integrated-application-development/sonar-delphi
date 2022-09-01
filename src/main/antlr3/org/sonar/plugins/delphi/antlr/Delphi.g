@@ -866,11 +866,10 @@ extendedIdent                : ident
 // Literals
 //----------------------------------------------------------------------------
 intNum                       : TkIntNum<IntegerLiteralNode>
-                             | TkHexNum<HexLiteralNode>
+                             | TkHexNum<IntegerLiteralNode>
+                             | TkBinaryNum<IntegerLiteralNode>
                              ;
 realNum                      : TkRealNum<DecimalLiteralNode>
-                             ;
-asmHexNum                    : TkAsmHexNum<HexLiteralNode>
                              ;
 
 //----------------------------------------------------------------------------
@@ -1181,30 +1180,33 @@ TkIdentifier            : (Alpha | '_') (Alpha | Digit | '_')*
                         ;
                         // We use a lookahead here to avoid lexer failures on range operations like '1..2'
                         // or record helper invocations on Integer literals
-TkIntNum                : Digitseq (
+TkIntNum                : DigitSeq (
                             {input.LA(1) != '.' || Character.isDigit(input.LA(2))}? =>
                               (
-                                '.' Digitseq
+                                '.' DigitSeq
                                 {$type = TkRealNum;}
                               )?
                               (
-                                Exponent
+                                ScaleFactor
                                 {$type = TkRealNum;}
                               )?
                           )?
                         ;
-TkHexNum                : '$' Hexdigitseq
+TkHexNum                : '$' HexDigitSeq
+                        ;
+TkBinaryNum             : '%' BinaryDigitSeq
                         ;
 TkAsmId                 : { asmMode }? => '@' '@'? (Alpha | '_' | Digit)+
                         ;
-TkAsmHexNum             : { asmMode }? => Hexdigitseq ('h'|'H')
+TkAsmHexNum             : { asmMode }? => HexDigitSeq ('h'|'H')
                         ;
 TkQuotedString          : '\'' ('\'\'' | ~('\''))* '\''
                         ;
 TkAsmDoubleQuotedString : { asmMode }? => '"' (~('\"'))* '"'
                         ;
-TkCharacterEscapeCode   : '#' Digitseq
-                        | '#' '$' Hexdigitseq
+TkCharacterEscapeCode   : '#' DigitSeq
+                        | '#' '$' HexDigitSeq
+                        | '#' '%' BinaryDigitSeq
                         ;
 //----------------------------------------------------------------------------
 // Fragments
@@ -1218,16 +1220,22 @@ fragment
 Digit                   : '0'..'9'
                         ;
 fragment
-Digitseq                : Digit (Digit)*
+DigitSeq                : Digit (Digit | '_')*
                         ;
 fragment
-Exponent                : (('e'|'E') ('+'|'-')? Digitseq)
+ScaleFactor             : (('e'|'E') ('+'|'-')? DigitSeq)
                         ;
 fragment
-Hexdigit                : Digit | 'a'..'f' | 'A'..'F'
+HexDigit                : Digit | 'a'..'f' | 'A'..'F'
                         ;
 fragment
-Hexdigitseq		          : Hexdigit (Hexdigit)*
+HexDigitSeq		          : HexDigit (HexDigit | '_')*
+                        ;
+fragment
+BinaryDigit             : '0'..'1'
+                        ;
+fragment
+BinaryDigitSeq		      : BinaryDigit (BinaryDigit | '_')*
                         ;
 
 //----------------------------------------------------------------------------
