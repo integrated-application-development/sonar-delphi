@@ -168,10 +168,26 @@ class PlatformDependentCastRuleTest extends BasePmdRuleTest {
             .appendImpl("  Ptr: Pointer;")
             .appendImpl("  Nat: NativeInt;")
             .appendImpl("begin")
-            .appendImpl("  Ptr := Pointer(0);")
-            .appendImpl("  Nat := NativeInt(0);")
             .appendImpl("  Ptr := Pointer($0);")
             .appendImpl("  Nat := NativeInt($0);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("PlatformDependentCastRule"));
+  }
+
+  @Test
+  void testBinaryLiteralCastsShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Foo;")
+            .appendImpl("var")
+            .appendImpl("  Ptr: Pointer;")
+            .appendImpl("  Nat: NativeInt;")
+            .appendImpl("begin")
+            .appendImpl("  Ptr := Pointer(%0);")
+            .appendImpl("  Nat := Pointer(%0);")
             .appendImpl("end;");
 
     execute(builder);

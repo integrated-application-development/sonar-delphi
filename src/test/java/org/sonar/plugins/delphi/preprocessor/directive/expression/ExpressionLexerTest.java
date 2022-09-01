@@ -20,7 +20,15 @@ class ExpressionLexerTest {
     public Stream<Arguments> provideArguments(ExtensionContext context) {
       return Stream.of(
           Arguments.of("12345", TokenType.INTEGER),
+          Arguments.of("123_456_789", TokenType.INTEGER),
+          Arguments.of("%01101011", TokenType.INTEGER),
+          Arguments.of("$014FE89", TokenType.INTEGER),
           Arguments.of("123.45", TokenType.DECIMAL),
+          Arguments.of("5E5", TokenType.DECIMAL),
+          Arguments.of("5E+5", TokenType.DECIMAL),
+          Arguments.of("5E-5", TokenType.DECIMAL),
+          Arguments.of("123_45.6_789", TokenType.DECIMAL),
+          Arguments.of("12345____.6__78_9", TokenType.DECIMAL),
           Arguments.of("     123.45      ", TokenType.DECIMAL));
     }
   }
@@ -82,7 +90,7 @@ class ExpressionLexerTest {
   }
 
   @ParameterizedTest(name = "\"{0}\" should throw a lexer error")
-  @ValueSource(strings = {"123.45.67", "#"})
+  @ValueSource(strings = {"123.45.67", "#", "%001101.00101", "$FE.123", "123E$FE", "123E%011101"})
   void testInvalidTokens(String data) {
     assertThatThrownBy(() -> lexToken(data)).isInstanceOf(ExpressionLexerError.class);
   }

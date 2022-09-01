@@ -28,6 +28,21 @@ import org.sonar.plugins.delphi.type.intrinsic.IntrinsicType;
 import org.sonar.plugins.delphi.utils.types.TypeFactoryUtils;
 
 class ExpressionsTest {
+
+  static class NumericExpressionArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return Stream.of(
+          Arguments.of("$26E", 622),
+          Arguments.of("%10011_01110", 622),
+          Arguments.of("5E2", 500),
+          Arguments.of("5E+2", 500),
+          Arguments.of("5E-2", .05),
+          Arguments.of("123_456_789", 123456789),
+          Arguments.of("123_45.6_789", 12345.6789));
+    }
+  }
+
   static class IntegerMathArgumentsProvider implements ArgumentsProvider {
     @Override
     public Stream<Arguments> provideArguments(ExtensionContext context) {
@@ -245,6 +260,7 @@ class ExpressionsTest {
   }
 
   @ParameterizedTest(name = "\"{0}\" should evaluate to: {1}")
+  @ArgumentsSource(NumericExpressionArgumentsProvider.class)
   @ArgumentsSource(IntegerMathArgumentsProvider.class)
   @ArgumentsSource(DecimalMathArgumentsProvider.class)
   @ArgumentsSource(StringConcatenationArgumentsProvider.class)

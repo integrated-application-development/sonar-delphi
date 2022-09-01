@@ -77,7 +77,6 @@ import org.sonar.plugins.delphi.antlr.ast.node.GenericArgumentsNode;
 import org.sonar.plugins.delphi.antlr.ast.node.GenericDefinitionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.GotoStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.HelperTypeNode;
-import org.sonar.plugins.delphi.antlr.ast.node.HexLiteralNode;
 import org.sonar.plugins.delphi.antlr.ast.node.IdentifierNode;
 import org.sonar.plugins.delphi.antlr.ast.node.IfStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ImplementationSectionNode;
@@ -620,10 +619,6 @@ public interface DelphiParserVisitor<T> {
   }
 
   default T visit(DecimalLiteralNode node, T data) {
-    return visit((LiteralNode) node, data);
-  }
-
-  default T visit(HexLiteralNode node, T data) {
     return visit((LiteralNode) node, data);
   }
 

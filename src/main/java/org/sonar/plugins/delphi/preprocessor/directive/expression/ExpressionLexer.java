@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import org.sonar.plugins.delphi.preprocessor.directive.expression.Token.TokenType;
 
@@ -51,6 +52,7 @@ public class ExpressionLexer {
   private static final char END_OF_INPUT = '\0';
   private String data;
   private int position;
+  private final NumberReader numberReader = new NumberReader();
 
   public List<Token> lex(String data) {
     this.data = data;
@@ -94,7 +96,7 @@ public class ExpressionLexer {
     }
 
     if (character != END_OF_INPUT) {
-      if (Character.isDigit(character)) {
+      if (numberReader.isNumberStart(character)) {
         return readNumber();
       } else if (Character.isLetter(character) || character == '_') {
         return readIdentifier();
@@ -113,23 +115,7 @@ public class ExpressionLexer {
   }
 
   private Token readNumber() {
-    TokenType type = TokenType.INTEGER;
-    char character;
-    StringBuilder value = new StringBuilder();
-
-    while ((character = peekChar()) != END_OF_INPUT) {
-      if (character == '.') {
-        if (type == TokenType.DECIMAL) {
-          throw new ExpressionLexerError("Unexpected '.' in numeric literal");
-        }
-        type = TokenType.DECIMAL;
-      } else if (!Character.isDigit(character)) {
-        break;
-      }
-      value.append(getChar());
-    }
-
-    return new Token(type, value.toString());
+    return numberReader.read();
   }
 
   private Token readOperator() {
@@ -195,5 +181,95 @@ public class ExpressionLexer {
     }
 
     return new Token(TokenType.STRING, value.toString());
+  }
+
+  private static boolean isHexDigit(char character) {
+    character = Character.toLowerCase(character);
+    return Character.isDigit(character) || (character >= 'a' && character <= 'f');
+  }
+
+  private static boolean isBinaryDigit(char character) {
+    return character == '0' || character == '1';
+  }
+
+  private final class NumberReader {
+    TokenType type;
+    StringBuilder value = new StringBuilder();
+    private Predicate<Character> isDigitCharacter;
+    private boolean canBeDecimal;
+
+    private void init() {
+      type = TokenType.INTEGER;
+      value.setLength(0);
+      switch (peekChar()) {
+        case '$':
+          isDigitCharacter = ExpressionLexer::isHexDigit;
+          canBeDecimal = false;
+          value.append(getChar());
+          break;
+        case '%':
+          isDigitCharacter = ExpressionLexer::isBinaryDigit;
+          canBeDecimal = false;
+          value.append(getChar());
+          break;
+        default:
+          isDigitCharacter = Character::isDigit;
+          canBeDecimal = true;
+      }
+    }
+
+    private boolean readCharacter(char character) {
+      if (character == '.') {
+        if (type == TokenType.DECIMAL || !canBeDecimal) {
+          throw new ExpressionLexerError("Unexpected '.' in numeric literal");
+        }
+        type = TokenType.DECIMAL;
+        value.append(getChar());
+        return true;
+      }
+
+      if (canBeDecimal && Character.toLowerCase(character) == 'e') {
+        type = TokenType.DECIMAL;
+        value.append(getChar());
+        if (peekChar() == '+' || peekChar() == '-') {
+          value.append(getChar());
+        }
+        if (!readDigitSequence(Character::isDigit)) {
+          throw new ExpressionLexerError("Expected a digit sequence to follow E");
+        }
+        return false;
+      }
+
+      return readDigitSequence(isDigitCharacter);
+    }
+
+    private boolean readDigitSequence(Predicate<Character> isDigitCharacter) {
+      boolean result = false;
+      char character;
+      while ((character = peekChar()) != END_OF_INPUT) {
+        if (isDigitCharacter.test(character) || (value.length() > 0 && character == '_')) {
+          value.append(getChar());
+          result = true;
+        } else {
+          break;
+        }
+      }
+      return result;
+    }
+
+    public Token read() {
+      init();
+      char character;
+      while ((character = peekChar()) != END_OF_INPUT) {
+        if (!readCharacter(character)) {
+          break;
+        }
+      }
+      return new Token(type, value.toString());
+    }
+
+    public boolean isNumberStart(char character) {
+      return Character.isDigit(character) || character == '$' || character == '%';
+    }
   }
 }

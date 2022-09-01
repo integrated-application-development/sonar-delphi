@@ -138,12 +138,33 @@ public class Expressions {
       value = createValue(type, text);
     }
 
+    private static BigInteger bigIntegerFromTextWithDigitSeparatorsAndRadixPrefix(String text) {
+      int radix;
+      switch (text.charAt(0)) {
+        case '$':
+          text = StringUtils.removeStart(text, "$");
+          radix = 16;
+          break;
+        case '%':
+          text = StringUtils.removeStart(text, "%");
+          radix = 2;
+          break;
+        default:
+          radix = 10;
+      }
+      return new BigInteger(StringUtils.remove(text, '_'), radix);
+    }
+
+    private static double doubleFromTextWithDigitSeparators(String text) {
+      return Double.parseDouble(StringUtils.remove(text, '_'));
+    }
+
     private static ExpressionValue createValue(TokenType type, String text) {
       switch (type) {
         case INTEGER:
-          return createInteger(new BigInteger(text));
+          return createInteger(bigIntegerFromTextWithDigitSeparatorsAndRadixPrefix(text));
         case DECIMAL:
-          return createDecimal(Double.parseDouble(text));
+          return createDecimal(doubleFromTextWithDigitSeparators(text));
         case STRING:
           return createString(text);
         default:
