@@ -47,12 +47,18 @@ class VersionTest {
   }
 
   @Test
+  void testEqualToSameInstance() {
+    Version version = VersionUtils.parse("1.0.0.0").orElseThrow();
+    assertThat(version).isEqualTo(version);
+  }
+
+  @Test
   void testNotEqualToNull() {
-    assertThat(VersionUtils.parse("1.0.0.0")).isNotEqualTo(null);
+    assertThat(VersionUtils.parse("1.0.0.0").orElseThrow()).isNotEqualTo(null);
   }
 
   @Test
   void testNotEqualToUnrelatedObject() {
-    assertThat(VersionUtils.parse("1.0.0.0")).isNotEqualTo(new Object());
+    assertThat(VersionUtils.parse("1.0.0.0").orElseThrow()).isNotEqualTo(new Object());
   }
 }
