@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.37.0] - 2022-09-07
+
 ### Added
 
 - Support for Delphi 11 language features
@@ -884,7 +886,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.36.0...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.37.0...HEAD
+[0.37.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.36.0...v0.37.0
 [0.36.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.35.0...v0.36.0
 [0.35.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.34.2...v0.35.0
 [0.34.2]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.34.1...v0.34.2
