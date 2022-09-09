@@ -5,8 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 public final class CompilerVersion implements Comparable<CompilerVersion> {
-  private static final String VERSION_SYMBOL_REGEX = "VER[0-9]{2,3}";
-  private static final String VERSION_NUMBER_REGEX = "[0-9]{1,2}\\.[0-9]";
+  private static final String VERSION_SYMBOL_REGEX = "VER\\d{2,3}";
+  private static final String VERSION_NUMBER_REGEX = "\\d{1,2}\\.\\d";
   private final String symbol;
   private final BigDecimal number;
 
