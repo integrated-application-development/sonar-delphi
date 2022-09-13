@@ -339,6 +339,7 @@
               <goal>check</goal>
             </goals>
             <configuration>
+              <dataFile>${jacoco.dataFile}</dataFile>
               <haltOnFailure>true</haltOnFailure>
               <rules>
                 <rule>
@@ -355,6 +356,12 @@
             </configuration>
           </execution>
         </executions>
+        <configuration>
+          <excludes>
+            <exclude>**/antlr/DelphiParser**</exclude>
+            <exclude>**/antlr/DelphiLexer**</exclude>
+          </excludes>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
