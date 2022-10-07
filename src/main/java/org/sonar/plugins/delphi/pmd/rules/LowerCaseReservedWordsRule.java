@@ -18,13 +18,35 @@
  */
 package org.sonar.plugins.delphi.pmd.rules;
 
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import net.sourceforge.pmd.RuleContext;
+import net.sourceforge.pmd.properties.PropertyDescriptor;
+import net.sourceforge.pmd.properties.PropertyFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.delphi.antlr.ast.node.AsmStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.core.DelphiKeywords;
 
 public class LowerCaseReservedWordsRule extends AbstractDelphiRule {
+  public static final PropertyDescriptor<List<String>> EXCLUDED_KEYWORDS =
+      PropertyFactory.stringListProperty("excludedKeywords")
+          .desc("The list of keywords that this rule ignores (case-insensitive).")
+          .emptyDefaultValue()
+          .build();
+
+  private Set<String> excluded;
+
+  public LowerCaseReservedWordsRule() {
+    definePropertyDescriptor(EXCLUDED_KEYWORDS);
+  }
+
+  @Override
+  public void start(RuleContext data) {
+    excluded = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+    excluded.addAll(getProperty(EXCLUDED_KEYWORDS));
+  }
 
   @Override
   public RuleContext visit(DelphiNode node, RuleContext data) {
@@ -44,6 +66,8 @@ public class LowerCaseReservedWordsRule extends AbstractDelphiRule {
     if (!DelphiKeywords.KEYWORDS.contains(node.jjtGetId())) {
       return false;
     }
-    return !StringUtils.isAllLowerCase(node.getToken().getImage());
+
+    var image = node.getToken().getImage();
+    return !excluded.contains(image.toLowerCase()) && !StringUtils.isAllLowerCase(image);
   }
 }
