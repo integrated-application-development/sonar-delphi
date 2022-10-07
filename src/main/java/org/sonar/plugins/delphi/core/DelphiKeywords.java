@@ -133,6 +133,7 @@ public final class DelphiKeywords {
           DelphiLexer.STDCALL,
           DelphiLexer.STORED,
           DelphiLexer.STRICT,
+          DelphiLexer.STRING,
           DelphiLexer.THEN,
           DelphiLexer.THREADVAR,
           DelphiLexer.TO,
