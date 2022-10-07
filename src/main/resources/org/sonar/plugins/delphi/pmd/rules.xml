@@ -1165,6 +1165,10 @@ FreeAndNil(Foo); // Compliant
       Regardless, each statement should be terminated with a semicolon.
       &lt;br&gt;
       &lt;br&gt;
+      For more information, see the Embarcadero style guide page on
+      &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/Delphi_Statements'&gt;
+      Delphi Statements
+      &lt;/a&gt;
     </description>
     <properties>
       <property name="baseEffort" value="1min"/>
@@ -1506,6 +1510,10 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       Variables should be defined one per line of code.
       &lt;br&gt;
       &lt;br&gt;
+      For more information, see the Embarcadero style guide page on
+      &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/Delphi_Statements#Local_Variable_and_Constants_Declarations'&gt;
+      Delphi Statements
+      &lt;/a&gt;
     </description>
     <properties>
       <property name="baseEffort" value="1min"/>
@@ -1549,11 +1557,13 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     <priority>5</priority>
     <description>
       Developers should not need to configure the tab width of their text editors in order to be
-      able to read source code.
-      &lt;br&gt;
-      So the use of the tabulation character must be banned.
+      able to read source code, so the use of the tabulation character must be banned.
       &lt;br&gt;
       &lt;br&gt;
+      For more information, see the Embarcadero style guide page on
+      &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/White_Space_Usage#Indentation'&gt;
+      White Space Usage
+      &lt;/a&gt;
     </description>
     <properties>
       <property name="baseEffort" value="1min"/>
@@ -1883,6 +1893,12 @@ Result := 123;; // Noncompliant
       Assertions in main code should have an error message.
       &lt;br&gt;
       An error message will aid in debugging if the assertion fails in production.
+      &lt;br&gt;
+      &lt;br&gt;
+      For more information, see the Embarcadero style guide page on
+      &lt;a href='https://docwiki.embarcadero.com/en/Delphi_Statements#Assertions'&gt;
+      Delphi Statements
+      &lt;/a&gt;
     </description>
     <properties>
       <property name="baseEffort" value="3min"/>

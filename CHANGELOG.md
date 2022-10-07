@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `GroupedVariableDeclarationRule` analysis rule, which flags places where variables aren't declared
   individually.
 
+### Changed
+
+- Update various rule descriptions with references to the Embarcadero style guide.
+
 ### Removed
 
 - `MultipleVariableDeclarationRule` analysis rule.
