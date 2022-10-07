@@ -1393,6 +1393,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </description>
     <properties>
       <property name="baseEffort" value="1min"/>
+      <property name="excludedKeywords" value=""/>
     </properties>
   </rule>
 

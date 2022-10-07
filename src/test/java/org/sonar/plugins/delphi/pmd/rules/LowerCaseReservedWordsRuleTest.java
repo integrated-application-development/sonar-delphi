@@ -21,10 +21,22 @@ package org.sonar.plugins.delphi.pmd.rules;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKey.ruleKey;
 import static org.sonar.plugins.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
+import java.util.Objects;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 
 class LowerCaseReservedWordsRuleTest extends BasePmdRuleTest {
+
+  @BeforeEach
+  void setup() {
+    DelphiRuleProperty property =
+        Objects.requireNonNull(
+            getRule(LowerCaseReservedWordsRule.class)
+                .getProperty(LowerCaseReservedWordsRule.EXCLUDED_KEYWORDS.name()));
+    property.setValue("string");
+  }
 
   @Test
   void testUppercaseKeywordShouldAddIssue() {
@@ -49,6 +61,23 @@ class LowerCaseReservedWordsRuleTest extends BasePmdRuleTest {
             .appendImpl("procedure Bar;")
             .appendImpl("asm")
             .appendImpl("  SHR   eax, 16")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("LowerCaseReservedWordsRule"));
+  }
+
+  @Test
+  void testUppercaseExcludedKeywordShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("function Foo(")
+            .appendImpl("  VarA: String;")
+            .appendImpl("  VarB: string")
+            .appendImpl("): STRING;")
+            .appendImpl("begin")
+            .appendImpl("  Result := VarA + VarB;")
             .appendImpl("end;");
 
     execute(builder);

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Include `string` in `LowerCaseReservedWordsRule`.
+- Add `excludedKeywords` property to `LowerCaseReservedWordsRule`.
 
 ### Fixed
 
