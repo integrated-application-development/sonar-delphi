@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Include `string` in `LowerCaseReservedWordsRule`.
+
+### Fixed
+
+- The `string` keyword wasn't colorized in the SonarQube web interface.
+
 ## [0.37.1] - 2022-10-11
 
 ### Changed
