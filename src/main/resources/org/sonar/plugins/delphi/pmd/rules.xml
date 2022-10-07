@@ -1498,16 +1498,45 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
-  <rule class="org.sonar.plugins.delphi.pmd.rules.MultipleVariableDeclarationRule"
+  <rule class="org.sonar.plugins.delphi.pmd.rules.GroupedVariableDeclarationRule"
     message="Variables should be declared individually"
-    name="MultipleVariableDeclarationRule">
+    name="GroupedVariableDeclarationRule">
     <priority>4</priority>
     <description>
-      Variables and fields should be defined one per line of code.
-      &lt;br&gt;
-      Individual parameters should have their types explicitly declared.
+      Variables should be defined one per line of code.
       &lt;br&gt;
       &lt;br&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min"/>
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.GroupedFieldDeclarationRule"
+    message="Fields should be declared individually"
+    name="GroupedFieldDeclarationRule">
+    <priority>4</priority>
+    <description>
+      Fields should be defined one per line of code.
+      &lt;br&gt;
+      &lt;br&gt;
+      For more information, see the Embarcadero style guide page on
+      &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/Delphi_Statements#Local_Variable_and_Constants_Declarations'&gt;
+      Delphi Statements
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min"/>
+    </properties>
+  </rule>
+
+  <rule class="org.sonar.plugins.delphi.pmd.rules.GroupedParameterDeclarationRule"
+    message="Parameters should be declared individually"
+    name="GroupedParameterDeclarationRule">
+    <priority>4</priority>
+    <description>
+      Grouped parameters can be confusing to read and error-prone to modify, so individual
+      parameters should have their types explicitly declared.
     </description>
     <properties>
       <property name="baseEffort" value="1min"/>
