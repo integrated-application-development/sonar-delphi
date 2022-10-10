@@ -46,7 +46,8 @@ public final class InvocationCandidate {
   private int exactCount;
   private int equalCount;
   private final int[] convertLevelCount;
-  private int convertOperatorCount;
+  private int implicitConversionFromCount;
+  private int implicitConversionToCount;
   private double ordinalDistance;
   private int signMismatchCount;
   private int numericMismatchCount;
@@ -89,12 +90,20 @@ public final class InvocationCandidate {
     ++this.convertLevelCount[convertLevel - 1];
   }
 
-  public int getConvertOperatorCount() {
-    return convertOperatorCount;
+  public int getImplicitConversionFromCount() {
+    return implicitConversionFromCount;
   }
 
-  public void incrementConvertOperatorCount() {
-    ++this.convertOperatorCount;
+  public void incrementImplicitConversionFromCount() {
+    ++this.implicitConversionFromCount;
+  }
+
+  public int getImplicitConversionToCount() {
+    return implicitConversionToCount;
+  }
+
+  public void incrementImplicitConversionToCount() {
+    ++this.implicitConversionToCount;
   }
 
   public double getOrdinalDistance() {

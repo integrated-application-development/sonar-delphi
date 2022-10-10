@@ -21,6 +21,7 @@ package org.sonar.plugins.delphi.symbol.resolve;
 import static org.sonar.plugins.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
 
 import java.util.Set;
+import org.sonar.plugins.delphi.symbol.resolve.TypeConverter.TypeConversion.Source;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.StructType;
 
@@ -31,6 +32,7 @@ public final class TypeConverter {
 
   public static TypeConversion convert(Type from, Type to) {
     Type fromConversionType = null;
+
     EqualityType fromConversionEquality = INCOMPATIBLE_TYPES;
     if (from.isStruct()) {
       Set<Type> implicit = ((StructType) from).typesWithImplicitConversionsFromThis();
@@ -57,26 +59,38 @@ public final class TypeConverter {
     }
 
     EqualityType equality = INCOMPATIBLE_TYPES;
+    Source source = TypeConversion.Source.NONE;
+
     if (fromConversionEquality.ordinal() > toConversionEquality.ordinal()) {
       equality = fromConversionEquality;
       from = fromConversionType;
+      source = TypeConversion.Source.FROM;
     } else if (toConversionEquality != INCOMPATIBLE_TYPES) {
       equality = toConversionEquality;
       to = toConversionType;
+      source = TypeConversion.Source.TO;
     }
 
-    return new TypeConversion(from, to, equality);
+    return new TypeConversion(from, to, equality, source);
   }
 
   public static class TypeConversion {
+    public enum Source {
+      NONE,
+      FROM,
+      TO
+    }
+
     private final Type from;
     private final Type to;
     private final EqualityType equality;
+    private final Source source;
 
-    private TypeConversion(Type from, Type to, EqualityType equality) {
+    private TypeConversion(Type from, Type to, EqualityType equality, Source source) {
       this.from = from;
       this.to = to;
       this.equality = equality;
+      this.source = source;
     }
 
     public Type getFrom() {
@@ -89,6 +103,10 @@ public final class TypeConverter {
 
     public EqualityType getEquality() {
       return equality;
+    }
+
+    public Source getSource() {
+      return source;
     }
 
     public boolean isSuccessful() {

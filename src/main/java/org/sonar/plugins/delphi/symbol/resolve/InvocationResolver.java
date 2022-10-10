@@ -145,11 +145,22 @@ public class InvocationResolver {
     if (equality != EXACT) {
       if (equality == INCOMPATIBLE_TYPES) {
         TypeConversion conversion = TypeConverter.convert(argumentType, parameterType);
+
         if (conversion.isSuccessful()) {
           argumentType = conversion.getFrom();
           parameterType = conversion.getTo();
           equality = conversion.getEquality();
-          candidate.incrementConvertOperatorCount();
+        }
+
+        switch (conversion.getSource()) {
+          case FROM:
+            candidate.incrementImplicitConversionFromCount();
+            break;
+          case TO:
+            candidate.incrementImplicitConversionToCount();
+            break;
+          default:
+            // Do nothing
         }
       }
 
@@ -404,6 +415,7 @@ public class InvocationResolver {
    * <ul>
    *   <li>Invalid flag
    *   <li>(Smaller) Number of convert operator parameters.
+   *   <li>(Smaller) Number of implicit casts based on the argument type.
    *   <li>(Smaller) Number of numeric mismatches.
    *   <li>(Smaller) Number of convertLevel[8..1] parameters.
    *   <li>(Bigger) Number of exact parameters.
@@ -412,6 +424,7 @@ public class InvocationResolver {
    *       65535-255=65280.
    *   <li>(Smaller) Number of struct-kind mismatches.
    *   <li>(Smaller) Total of procedural distance.
+   *   <li>(Smaller) Number of implicit casts based on the parameter type.
    * </ul>
    *
    * @param candidate Candidate we're checking
@@ -439,8 +452,10 @@ public class InvocationResolver {
             .compareFalseFirst(bestCandidate.isOperatorIntrinsic(), candidate.isOperatorIntrinsic())
             // Builtin operators will always lose to variant operators
             .compareTrueFirst(bestCandidate.isVariantOperator(), candidate.isVariantOperator())
-            // Less Implicit operator arguments?
-            .compare(bestCandidate.getConvertOperatorCount(), candidate.getConvertOperatorCount())
+            // Less implicit conversions based on the argument type?
+            .compare(
+                bestCandidate.getImplicitConversionFromCount(),
+                candidate.getImplicitConversionFromCount())
             // Less numeric mismatches?
             .compare(bestCandidate.getNumericMismatchCount(), candidate.getNumericMismatchCount());
 
@@ -465,6 +480,10 @@ public class InvocationResolver {
             .compare(bestCandidate.getStructMismatchCount(), candidate.getStructMismatchCount())
             // Smaller procedural distance?
             .compare(bestCandidate.getProceduralDistance(), candidate.getProceduralDistance())
+            // Less implicit conversions based on the parameter type?
+            .compare(
+                bestCandidate.getImplicitConversionToCount(),
+                candidate.getImplicitConversionToCount())
             .result();
 
     if (result == 0) {
@@ -513,7 +532,7 @@ public class InvocationResolver {
    *   <li>shortstring > (char, int64)
    * </ul>
    *
-   * Relations not mentioned mean that they conflict: no decision possible
+   * <p>Relations not mentioned mean that they conflict: no decision possible
    *
    * @param currentVcl The conversion type we're checking
    * @param bestVcl The best conversion type so far
