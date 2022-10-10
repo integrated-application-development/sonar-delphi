@@ -1,0 +1,20 @@
+name: format-check
+
+on:
+  push:
+    branches:
+      - 'master'
+    paths:
+      - '**.java'
+  pull_request:
+    paths:
+      - '**.java'
+
+jobs:
+  java:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: axel-op/googlejavaformat-action@v3
+        with:
+          args: "--set-exit-if-changed --dry-run"
