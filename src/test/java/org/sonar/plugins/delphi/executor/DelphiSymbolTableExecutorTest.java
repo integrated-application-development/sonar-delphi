@@ -587,8 +587,14 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
-  void testImplicitOperatorShouldHaveLowestPriority() {
-    execute("operators/ImplicitOperatorLowestPriority.pas");
+  void testImplicitConversionTo() {
+    execute("operators/ImplicitConversionTo.pas");
+    verifyUsages(27, 10, reference(34, 2));
+  }
+
+  @Test
+  void testImplicitConversionFrom() {
+    execute("operators/ImplicitConversionFrom.pas");
     verifyUsages(33, 10, reference(40, 2));
   }
 
