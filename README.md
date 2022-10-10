@@ -1,12 +1,14 @@
 SonarDelphi
 ===========
 
+[![format-check](https://github.com/Integrated-Application-Development/sonar-delphi/actions/workflows/format-check.yml/badge.svg?branch=master&event=push)](https://github.com/Integrated-Application-Development/sonar-delphi/actions/workflows/format-check.yml)
+
 [SonarQube](https://www.sonarqube.org) is an open platform to manage code quality. This plugin adds Delphi support to
 SonarQube.
 
-The project was originally a [Sabre Airline Solutions](https://www.sabre.com) donation, and has been iterated on by 
+The project was originally a [Sabre Airline Solutions](https://www.sabre.com) donation, and has been iterated on by
 various open-source maintainers in the intervening years. In 2018, it was revived as a Monash University student
-project for [IntegraDev](https://www.integradev.com.au). 
+project for [IntegraDev](https://www.integradev.com.au).
 
 Since 2019, the plugin has been maintained by IntegraDev.
 
