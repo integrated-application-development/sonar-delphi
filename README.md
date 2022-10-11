@@ -1,5 +1,7 @@
-SonarDelphi [![Format Check](https://github.com/Integrated-Application-Development/sonar-delphi/actions/workflows/format-check.yml/badge.svg?branch=master&event=push)](https://github.com/Integrated-Application-Development/sonar-delphi/actions/workflows/format-check.yml)
+SonarDelphi
 ===========
+
+[![format-check](https://github.com/Integrated-Application-Development/sonar-delphi/actions/workflows/format-check.yml/badge.svg?branch=master&event=push)](https://github.com/Integrated-Application-Development/sonar-delphi/actions/workflows/format-check.yml)
 
 [SonarQube](https://www.sonarqube.org) is an open platform to manage code quality. This plugin adds Delphi support to
 SonarQube.
