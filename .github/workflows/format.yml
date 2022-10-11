@@ -1,4 +1,4 @@
-name: format-check
+name: Format
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
       - '**.java'
 
 jobs:
-  java:
+  check-format:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
