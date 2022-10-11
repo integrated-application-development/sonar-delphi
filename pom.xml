@@ -150,6 +150,7 @@
     <dependency-check-plugin.version>7.1.2</dependency-check-plugin.version>
     <jxr-plugin.version>3.3.0</jxr-plugin.version>
     <errorprone.version>2.15.0</errorprone.version>
+    <spotless-plugin.version>2.27.2</spotless-plugin.version>
     <project-info-reports-plugin.version>3.4.1</project-info-reports-plugin.version>
     <versions-plugin.version>2.11.0</versions-plugin.version>
   </properties>
@@ -531,6 +532,32 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>${versions-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <version>${spotless-plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>apply</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <java>
+            <googleJavaFormat>
+              <version>1.15.0</version>
+              <style>GOOGLE</style>
+            </googleJavaFormat>
+          </java>
+        </configuration>
       </plugin>
     </plugins>
   </build>
