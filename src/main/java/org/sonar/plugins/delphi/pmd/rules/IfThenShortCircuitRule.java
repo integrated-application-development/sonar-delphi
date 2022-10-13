@@ -39,7 +39,7 @@ public class IfThenShortCircuitRule extends AbstractDelphiRule {
   public RuleContext visit(NameReferenceNode nameReference, RuleContext data) {
     Node parent = nameReference.jjtGetParent();
     if (parent instanceof PrimaryExpressionNode
-        && nameReference.getLastName().getImage().equalsIgnoreCase("IfThen")) {
+        && nameReference.getLastName().getIdentifier().getImage().equalsIgnoreCase("IfThen")) {
       Node argumentList = parent.jjtGetChild(nameReference.jjtGetChildIndex() + 1);
       if (argumentList instanceof ArgumentListNode) {
         List<ExpressionNode> arguments = ((ArgumentListNode) argumentList).getArguments();
