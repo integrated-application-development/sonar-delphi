@@ -414,7 +414,6 @@ public class InvocationResolver {
    *
    * <ul>
    *   <li>Invalid flag
-   *   <li>(Smaller) Number of convert operator parameters.
    *   <li>(Smaller) Number of implicit casts based on the argument type.
    *   <li>(Smaller) Number of numeric mismatches.
    *   <li>(Smaller) Number of convertLevel[8..1] parameters.
