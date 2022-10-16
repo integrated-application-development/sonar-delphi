@@ -219,7 +219,7 @@
   }, {
     "groupId" : "org.apache.commons",
     "artifactId" : "commons-text",
-    "version" : "1.9",
+    "version" : "1.10.0",
     "scope" : "compile",
     "type" : "jar"
   }, {
