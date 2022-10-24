@@ -19,9 +19,13 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
+import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
+import org.sonar.plugins.delphi.antlr.ast.node.UnitImportNode;
 import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 
 public class MixedNamesRule extends AbstractDelphiRule {
   @Override
@@ -42,5 +46,29 @@ public class MixedNamesRule extends AbstractDelphiRule {
     }
 
     return super.visit(reference, data);
+  }
+
+  @Override
+  public RuleContext visit(UnitImportNode occurrence, RuleContext data) {
+    UnitImportNameDeclaration importDeclaration = occurrence.getImportNameDeclaration();
+    UnitNameDeclaration originalDeclaration = importDeclaration.getOriginalDeclaration();
+
+    if (originalDeclaration != null) {
+      String importName = importDeclaration.fullyQualifiedName();
+      String unitName = originalDeclaration.fullyQualifiedName();
+
+      // Only add violations on import names that are not aliases and do not match the original case
+      if (StringUtils.endsWithIgnoreCase(unitName, importName) && !unitName.endsWith(importName)) {
+        var matchingSegment = unitName.substring(unitName.length() - importName.length());
+
+        addViolationWithMessage(
+            data,
+            occurrence,
+            "Avoid mixing names (found: ''{0}'' expected: ''{1}'').",
+            new Object[] {importName, matchingSegment});
+      }
+    }
+
+    return super.visit(occurrence, data);
   }
 }
