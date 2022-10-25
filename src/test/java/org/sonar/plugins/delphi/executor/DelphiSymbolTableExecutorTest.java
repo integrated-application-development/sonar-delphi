@@ -587,6 +587,14 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testRoundTruncOperators() {
+    execute("operators/RoundTruncOperators.pas");
+    verifyUsages(23, 10, reference(40, 2), reference(41, 2));
+    verifyUsages(28, 10, reference(42, 2));
+    verifyUsages(33, 10, reference(43, 2));
+  }
+
+  @Test
   void testImplicitConversionTo() {
     execute("operators/ImplicitConversionTo.pas");
     verifyUsages(27, 10, reference(34, 2));

@@ -19,6 +19,8 @@
 package org.sonar.plugins.delphi.type.intrinsic;
 
 import java.util.List;
+import org.sonar.plugins.delphi.symbol.declaration.MethodKind;
+import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.factory.TypeFactory;
@@ -45,6 +47,14 @@ public abstract class IntrinsicReturnType extends DelphiType {
     return new HighLowReturnType(typeFactory);
   }
 
+  public static Type round(TypeFactory typeFactory) {
+    return new RoundTruncReturnType("Round", typeFactory);
+  }
+
+  public static Type trunc(TypeFactory typeFactory) {
+    return new RoundTruncReturnType("Trunc", typeFactory);
+  }
+
   public static Type classReferenceValue() {
     return new ClassReferenceValueType();
   }
@@ -69,6 +79,31 @@ public abstract class IntrinsicReturnType extends DelphiType {
       }
 
       return type;
+    }
+  }
+
+  private static class RoundTruncReturnType extends IntrinsicReturnType {
+    private final String name;
+    private final Type int64Type;
+
+    private RoundTruncReturnType(String name, TypeFactory typeFactory) {
+      this.name = name;
+      this.int64Type = typeFactory.getIntrinsic(IntrinsicType.INT64);
+    }
+
+    @Override
+    public Type getReturnType(List<Type> arguments) {
+      Type type = arguments.get(0);
+      if (type.isRecord()) {
+        return ((ScopedType) type)
+            .typeScope().getMethodDeclarations().stream()
+                .filter(method -> method.getMethodKind() == MethodKind.OPERATOR)
+                .filter(method -> method.getImage().equalsIgnoreCase(name))
+                .map(MethodNameDeclaration::getReturnType)
+                .findFirst()
+                .orElseGet(DelphiType::unknownType);
+      }
+      return int64Type;
     }
   }
 

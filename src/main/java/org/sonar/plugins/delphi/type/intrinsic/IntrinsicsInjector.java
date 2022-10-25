@@ -237,7 +237,9 @@ public final class IntrinsicsInjector {
     method("Rename").varParam(typeFactory.untypedFile()).param(type(UNICODESTRING));
     method("Reset").varParam(typeFactory.untypedFile()).param(type(INTEGER)).required(1);
     method("Rewrite").varParam(typeFactory.untypedFile()).param(type(INTEGER)).required(1);
-    method("Round").param(type(REAL)).returns(type(INT64));
+    method("Round")
+        .param(typeFactory.untypedType())
+        .returns(IntrinsicReturnType.round(typeFactory));
     method("RunError").param(type(BYTE)).required(0);
     method("Seek").varParam(typeFactory.untypedFile()).param(type(INTEGER));
     method("SeekEof").varParam(type(TEXT)).required(0).returns(type(BOOLEAN));
@@ -262,7 +264,9 @@ public final class IntrinsicsInjector {
     method("Str").constParam(typeFactory.untypedType()).varParam(type(UNICODESTRING));
     method("Succ").param(ANY_ORDINAL).returns(type(INTEGER));
     method("Swap").param(type(INTEGER)).returns(type(INTEGER));
-    method("Trunc").param(type(REAL)).returns(type(INT64));
+    method("Trunc")
+        .param(typeFactory.untypedType())
+        .returns(IntrinsicReturnType.trunc(typeFactory));
     method("Truncate").varParam(typeFactory.untypedFile());
     method("TypeHandle").param(typeFactory.untypedType()).returns(typeFactory.untypedPointer());
     method("TypeInfo").param(typeFactory.untypedType()).returns(typeFactory.untypedPointer());

@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support for `Round` operator overloads.
+- Support for `Trunc` operator overloads.
 - `GroupedFieldDeclarationRule` analysis rule, which flags places where fields aren't declared
   individually.
 - `GroupedParameterDeclarationRule` analysis rule, which flags places where parameters aren't
