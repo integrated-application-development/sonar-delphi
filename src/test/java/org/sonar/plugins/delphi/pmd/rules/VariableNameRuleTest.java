@@ -188,4 +188,38 @@ class VariableNameRuleTest extends BasePmdRuleTest {
 
     assertIssues().areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffset() + 3));
   }
+
+  @Test
+  void testBadPascalCaseInMethodImplementingGoodPascalCaseInterfaceShouldAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  IFoo = interface")
+            .appendDecl("    procedure Proc(MyStr: string; MyInt: Integer);")
+            .appendDecl("  end;")
+            .appendDecl("  TBar = class(TObject, IFoo)")
+            .appendDecl("    procedure Proc(myStr: string; myInt: Integer);")
+            .appendDecl("  end;");
+
+    execute(builder);
+
+    assertIssues().areExactly(2, ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 6));
+  }
+
+  @Test
+  void testBadPascalCaseInMethodImplementingBadPascalCaseInterfaceShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  IFoo = interface")
+            .appendDecl("    procedure Proc(myStr: string; myInt: Integer);")
+            .appendDecl("  end;")
+            .appendDecl("  TBar = class(TObject, IFoo)")
+            .appendDecl("    procedure Proc(myStr: string; myInt: Integer);")
+            .appendDecl("  end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 6));
+  }
 }

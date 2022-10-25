@@ -20,17 +20,24 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import static org.sonar.plugins.delphi.utils.VariableUtils.isGeneratedFormVariable;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
 import org.sonar.plugins.delphi.antlr.ast.node.ForLoopVarDeclarationNode;
-import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode;
+import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterListNode;
 import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.VarStatementNode;
+import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.scope.UnitScope;
+import org.sonar.plugins.delphi.utils.InterfaceUtils;
 import org.sonar.plugins.delphi.utils.NameConventionUtils;
 
 public class VariableNameRule extends AbstractDelphiRule {
@@ -76,12 +83,52 @@ public class VariableNameRule extends AbstractDelphiRule {
   }
 
   @Override
-  public RuleContext visit(FormalParameterNode parameter, RuleContext data) {
-    parameter.getParameters().stream()
-        .map(FormalParameterData::getNode)
-        .filter(name -> isViolation(name, false))
-        .forEach(name -> addViolation(data, name));
+  public RuleContext visit(FormalParameterListNode parameterListNode, RuleContext data) {
+    var parameterNodes =
+        parameterListNode.getParameters().stream()
+            .map(FormalParameterData::getNode)
+            .collect(Collectors.toUnmodifiableList());
+
+    var methodDeclarationNode = parameterListNode.getFirstParentOfType(MethodDeclarationNode.class);
+    var methodDeclaration =
+        methodDeclarationNode == null ? null : methodDeclarationNode.getMethodNameDeclaration();
+
+    getParametersToCheck(methodDeclaration, parameterNodes).stream()
+        .filter(param -> isViolation(param, false))
+        .forEach(param -> addViolation(data, param));
+
     return data;
+  }
+
+  private List<NameDeclarationNode> getParametersToCheck(
+      MethodNameDeclaration methodDeclaration, List<NameDeclarationNode> parameterNodes) {
+    if (methodDeclaration == null) {
+      return parameterNodes;
+    }
+
+    List<Set<String>> paramNamesFromInterfaces =
+        parameterNodes.stream()
+            .map(x -> new HashSet<String>())
+            .collect(Collectors.toUnmodifiableList());
+
+    InterfaceUtils.findImplementedInterfaceMethodDeclarations(methodDeclaration).stream()
+        .map(MethodNameDeclaration::getParameters)
+        .forEach(
+            params -> {
+              assert (params.size() == paramNamesFromInterfaces.size());
+              for (int i = 0; i < paramNamesFromInterfaces.size(); i++) {
+                paramNamesFromInterfaces.get(i).add(params.get(i).getImage());
+              }
+            });
+
+    return IntStream.range(0, parameterNodes.size())
+        .filter(
+            index -> {
+              var actualImage = parameterNodes.get(index).getImage();
+              return !paramNamesFromInterfaces.get(index).contains(actualImage);
+            })
+        .mapToObj(parameterNodes::get)
+        .collect(Collectors.toUnmodifiableList());
   }
 
   private boolean isViolation(NameDeclarationNode name, boolean globalVariable) {
