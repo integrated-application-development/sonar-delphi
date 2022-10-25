@@ -23,6 +23,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.DelphiNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.delphi.utils.InterfaceUtils;
 
 public class EmptyMethodRule extends AbstractDelphiRule {
   @Override
@@ -48,6 +49,6 @@ public class EmptyMethodRule extends AbstractDelphiRule {
 
     return !declaration.hasDirective(MethodDirective.OVERRIDE)
         && !declaration.hasDirective(MethodDirective.VIRTUAL)
-        && !declaration.implementsInterface();
+        && !InterfaceUtils.implementsMethodOnInterface(declaration);
   }
 }

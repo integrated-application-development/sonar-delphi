@@ -33,6 +33,7 @@ import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.scope.MethodScope;
 import org.sonar.plugins.delphi.symbol.scope.UnitScope;
+import org.sonar.plugins.delphi.utils.InterfaceUtils;
 
 public class UnusedMethodsRule extends AbstractDelphiRule {
   private final Set<MethodNameDeclaration> seenMethods = new HashSet<>();
@@ -83,7 +84,7 @@ public class UnusedMethodsRule extends AbstractDelphiRule {
       return false;
     }
 
-    if (methodDeclaration.implementsInterface()) {
+    if (InterfaceUtils.implementsMethodOnInterface(methodDeclaration)) {
       return false;
     }
 
