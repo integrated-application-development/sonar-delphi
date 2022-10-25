@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Include unit imports in `MixedNamesRule`.
+- Exclude parameters on methods implementing interfaces in `VariableNameRule`.
 
 ## [0.38.0] - 2022-11-07
 
