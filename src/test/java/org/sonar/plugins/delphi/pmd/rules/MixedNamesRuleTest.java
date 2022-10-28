@@ -248,4 +248,40 @@ class MixedNamesRuleTest extends BasePmdRuleTest {
 
     assertIssues().areNot(ruleKey("MixedNamesRule"));
   }
+
+  @Test
+  void testMatchingUnitNameWithoutUnitScopeShouldNotAddIssue() {
+    addUnitScopeName("System");
+
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder().appendDecl("uses").appendDecl("  SysUtils;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("MixedNamesRule"));
+  }
+
+  @Test
+  void testMismatchedUnitNameWithoutUnitScopeShouldAddIssue() {
+    addUnitScopeName("System");
+
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder().appendDecl("uses").appendDecl("  sysutils;");
+
+    execute(builder);
+
+    assertIssues().areExactly(1, ruleKeyAtLine("MixedNamesRule", builder.getOffsetDecl() + 2));
+  }
+
+  @Test
+  void testUnitAliasShouldNotAddIssue() {
+    addUnitAlias("Foo", "System.SysUtils");
+
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder().appendDecl("uses").appendDecl("  Foo;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("MixedNamesRule"));
+  }
 }

@@ -31,6 +31,10 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ListAssert;
@@ -81,6 +85,8 @@ public abstract class BasePmdRuleTest {
       new DelphiPmdRuleSetDefinitionProvider();
   private final DelphiRuleSet ruleSet = ruleProvider.getDefinition();
   private final List<DelphiRule> baseRules = List.copyOf(ruleSet.getRules());
+  private final Set<String> unitScopeNames = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+  private final Map<String, String> unitAliases = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
   @BeforeAll
   public static void setupIssueContainerFormatting() {
@@ -88,7 +94,9 @@ public abstract class BasePmdRuleTest {
   }
 
   @BeforeEach
-  public void setupRuleSet() {
+  public void beforeEach() {
+    unitScopeNames.clear();
+    unitAliases.clear();
     ruleSet.getRules().clear();
     ruleSet.getRules().addAll(baseRules);
   }
@@ -127,6 +135,8 @@ public abstract class BasePmdRuleTest {
 
     when(delphiProjectHelper.getFile(anyString())).thenReturn(inputFile);
     when(delphiProjectHelper.mainFiles()).thenReturn(List.of(inputFile));
+    when(delphiProjectHelper.getUnitScopeNames()).thenReturn(unitScopeNames);
+    when(delphiProjectHelper.getUnitAliases()).thenReturn(unitAliases);
 
     ActiveRules rulesProfile = makeActiveRules();
     Configuration config = sensorContext.config();
@@ -175,6 +185,14 @@ public abstract class BasePmdRuleTest {
 
   protected void addRule(DelphiRule rule) {
     ruleSet.addRule(rule);
+  }
+
+  protected void addUnitScopeName(String unitScope) {
+    unitScopeNames.add(unitScope);
+  }
+
+  protected void addUnitAlias(String alias, String name) {
+    unitAliases.put(alias, name);
   }
 
   protected DelphiRule getRule(
