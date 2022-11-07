@@ -94,6 +94,7 @@ class DelphiProjectParserTest {
     }
 
     assertThat(project.getSearchDirectories()).hasSize(2);
+    assertThat(project.getDebugSourceDirectories()).hasSize(1);
 
     String[] includeNames = {"includes1", "includes2"};
     for (int i = 0; i < includeNames.length; ++i) {

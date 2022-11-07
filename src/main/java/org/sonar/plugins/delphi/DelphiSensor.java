@@ -100,7 +100,11 @@ public class DelphiSensor implements Sensor {
     TypeFactory typeFactory = new TypeFactory(toolchain, compilerVersion);
     Iterable<InputFile> inputFiles = delphiProjectHelper.mainFiles();
     List<Path> sourceFiles = inputFilesToPaths(inputFiles);
-    SearchPath searchPath = SearchPath.create(delphiProjectHelper.getSearchDirectories());
+
+    List<Path> searchPathDirectories = new ArrayList<>();
+    searchPathDirectories.addAll(delphiProjectHelper.getSearchDirectories());
+    searchPathDirectories.addAll(delphiProjectHelper.getDebugSourceDirectories());
+    SearchPath searchPath = SearchPath.create(searchPathDirectories);
 
     SymbolTable symbolTable =
         SymbolTable.builder()

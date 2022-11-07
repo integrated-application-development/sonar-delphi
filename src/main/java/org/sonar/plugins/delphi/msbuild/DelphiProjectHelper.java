@@ -65,6 +65,7 @@ public class DelphiProjectHelper {
   private final Toolchain toolchain;
   private final CompilerVersion compilerVersion;
   private final List<Path> searchDirectories;
+  private final List<Path> debugSourceDirectories;
   private final Set<String> conditionalDefines;
   private final Set<String> unitScopeNames;
   private final Map<String, String> unitAliases;
@@ -87,6 +88,7 @@ public class DelphiProjectHelper {
     this.toolchain = getToolchainFromSettings();
     this.compilerVersion = getCompilerVersionFromSettings();
     this.searchDirectories = getSearchDirectoriesFromSettings();
+    this.debugSourceDirectories = new ArrayList<>();
     this.conditionalDefines = getPredefinedConditionalDefines();
     this.unitScopeNames = getSetFromSettings(DelphiPlugin.UNIT_SCOPE_NAMES_KEY);
     this.unitAliases = getUnitAliasesFromSettings();
@@ -185,6 +187,7 @@ public class DelphiProjectHelper {
 
     for (DelphiProject project : projects) {
       searchDirectories.addAll(project.getSearchDirectories());
+      debugSourceDirectories.addAll(project.getDebugSourceDirectories());
       conditionalDefines.addAll(project.getConditionalDefines());
       unitScopeNames.addAll(project.getUnitScopeNames());
       unitAliases.putAll(project.getUnitAliases());
@@ -285,6 +288,16 @@ public class DelphiProjectHelper {
   public List<Path> getSearchDirectories() {
     indexProjects();
     return searchDirectories;
+  }
+
+  /**
+   * Gets the debug source directories specified in project files
+   *
+   * @return List of debug source directorie
+   */
+  public List<Path> getDebugSourceDirectories() {
+    indexProjects();
+    return debugSourceDirectories;
   }
 
   /**

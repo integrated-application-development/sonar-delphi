@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Detect user-created `IfThen` functions more effectively in `IfThenShortCircuitRule`.
 - Update various rule descriptions with references to the Embarcadero style guide.
+- Include `Debugger_DebugSourcePath` in the analysis search path.
 
 ### Removed
 

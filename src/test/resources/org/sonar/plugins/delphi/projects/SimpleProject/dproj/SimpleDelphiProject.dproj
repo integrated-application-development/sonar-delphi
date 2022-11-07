@@ -30,6 +30,7 @@
 			<DCC_Define>MSWINDOWS;CPUX86;GGMSGDEBUGx;LOGTOFILEx;FullDebugMode;$(DCC_Define)</DCC_Define>
 			<DCC_ImageBase>00400000</DCC_ImageBase>
 			<DCC_WriteableConstants>true</DCC_WriteableConstants>
+			<Debugger_DebugSourcePath>..\includes1;$(Debugger_DebugSourcePath)</Debugger_DebugSourcePath>
 			<DCC_UsePackage>vcl;rtl;dbrtl;adortl;vcldb;vclx;bdertl;ibxpress;dsnap;cds;bdecds;qrpt;teeui;teedb;tee;vcldbx;dss;teeqr;dsnapcrba;dsnapcon;VclSmp;vclshlctrls;inetdb;inet;nmfast;vclie;dbexpress;dbxcds;indy;DRBLib;xmlrtl;inetdbbde;inetdbxpress;webdsnap;websnap;soaprtl;dclOffice2k</DCC_UsePackage>
 			<DCC_RangeChecking>true</DCC_RangeChecking>
 			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;$(DCC_UnitAlias)</DCC_UnitAlias>
@@ -62,14 +63,14 @@
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
 			<DCCReference Include="..\Globals.pas"/>
-			<DCCReference Include="..\MainWindow.pas">	
+			<DCCReference Include="..\MainWindow.pas">
 				<Form>frmMainWindow</Form>
 			</DCCReference>
 			<DCCReference Include="..\branch\OverloadTest.pas"/>
-			<DCCReference Include="..\branch\StatementTest.pas"/>			
-			<DCCReference Include="..\tools\CommentsTest.pas"/>			
-			<DCCReference Include="..\tools\AccessorsTest.Pas"/>			
-			<DCCReference Include="..\tools\FunctionTest.pas"/>						
+			<DCCReference Include="..\branch\StatementTest.pas"/>
+			<DCCReference Include="..\tools\CommentsTest.pas"/>
+			<DCCReference Include="..\tools\AccessorsTest.Pas"/>
+			<DCCReference Include="..\tools\FunctionTest.pas"/>
 			<DCCReference Include="..\tools\GlobalsTest.pas"/>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>

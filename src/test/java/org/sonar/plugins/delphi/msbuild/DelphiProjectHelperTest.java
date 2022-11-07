@@ -104,6 +104,8 @@ class DelphiProjectHelperTest {
         new DelphiProjectHelper(settings, fs, environmentVariableProvider);
 
     assertThat(delphiProjectHelper.getSearchDirectories()).hasSize(3);
+    assertThat(delphiProjectHelper.getDebugSourceDirectories()).hasSize(1);
+
     assertThat(delphiProjectHelper.getConditionalDefines())
         .containsExactlyInAnyOrder(
             "ASSEMBLER",
