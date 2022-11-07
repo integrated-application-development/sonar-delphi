@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.38.0] - 2022-11-07
+
 ### Added
 
 - Support for `Round` operator overloads.
@@ -922,7 +924,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.37.1...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.38.0...HEAD
+[0.38.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.37.1...v0.38.0
 [0.37.1]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.37.0...v0.37.1
 [0.37.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.36.0...v0.37.0
 [0.36.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.35.0...v0.36.0
