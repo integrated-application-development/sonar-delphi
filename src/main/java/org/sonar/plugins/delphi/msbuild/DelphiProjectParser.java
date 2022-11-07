@@ -61,6 +61,7 @@ final class DelphiProjectParser {
     project.setDefinitions(createDefinitions(result.getProperties()));
     project.setUnitScopeNames(createUnitScopeNames(result.getProperties()));
     project.setSearchDirectories(createSearchDirectories(result.getProperties()));
+    project.setDebugSourceDirectories(createDebugSourceDirectories(result.getProperties()));
     project.setUnitAliases(createUnitAliases(result.getProperties()));
     project.setSourceFiles(result.getSourceFiles());
 
@@ -76,12 +77,20 @@ final class DelphiProjectParser {
   }
 
   private List<Path> createSearchDirectories(ProjectProperties properties) {
-    return propertyList(properties.get("DCC_UnitSearchPath")).stream()
+    return createPathList(properties, "DCC_UnitSearchPath");
+  }
+
+  private List<Path> createDebugSourceDirectories(ProjectProperties properties) {
+    return createPathList(properties, "Debugger_DebugSourcePath");
+  }
+
+  private List<Path> createPathList(ProjectProperties properties, String propertyName) {
+    return propertyList(properties.get(propertyName)).stream()
         .map(this::resolvePath)
         .filter(
             directory -> {
               if (!Files.exists(directory) || !Files.isDirectory(directory)) {
-                LOG.warn("Invalid search path directory: {}", directory);
+                LOG.warn("Invalid {} directory: {}", propertyName, directory);
                 return false;
               }
               return true;
@@ -127,6 +136,7 @@ final class DelphiProjectParser {
     private Set<String> unitScopeNames = Collections.emptySet();
     private List<Path> sourceFiles = Collections.emptyList();
     private List<Path> searchDirectories = Collections.emptyList();
+    private List<Path> debugSourceDirectories = Collections.emptyList();
     private Map<String, String> unitAliases = Collections.emptyMap();
 
     private void setDefinitions(Set<String> definitions) {
@@ -144,6 +154,10 @@ final class DelphiProjectParser {
 
     private void setSearchDirectories(List<Path> searchDirectories) {
       this.searchDirectories = List.copyOf(searchDirectories);
+    }
+
+    private void setDebugSourceDirectories(List<Path> debugSourceDirectories) {
+      this.debugSourceDirectories = List.copyOf(debugSourceDirectories);
     }
 
     private void setUnitAliases(Map<String, String> unitAliases) {
@@ -168,6 +182,11 @@ final class DelphiProjectParser {
     @Override
     public List<Path> getSearchDirectories() {
       return searchDirectories;
+    }
+
+    @Override
+    public List<Path> getDebugSourceDirectories() {
+      return debugSourceDirectories;
     }
 
     @Override

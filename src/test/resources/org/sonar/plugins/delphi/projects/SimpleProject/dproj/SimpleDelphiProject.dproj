@@ -40,6 +40,7 @@
         <DCC_TYPEINFO_IMPLICITLY_ADDED>false</DCC_TYPEINFO_IMPLICITLY_ADDED>
         <DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;$(DCC_UnitAlias)</DCC_UnitAlias>
         <DCC_UnitSearchPath>..\includes1;..\includes2;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <Debugger_DebugSourcePath>..\includes1;$(Debugger_DebugSourcePath)</Debugger_DebugSourcePath>
         <DCC_UsePackage>vcl;rtl;dbrtl;adortl;vcldb;vclx;bdertl;ibxpress;dsnap;cds;bdecds;qrpt;teeui;teedb;tee;vcldbx;dss;teeqr;dsnapcrba;dsnapcon;VclSmp;vclshlctrls;inetdb;inet;nmfast;vclie;dbexpress;dbxcds;indy;DRBLib;xmlrtl;inetdbbde;inetdbxpress;webdsnap;websnap;soaprtl;dclOffice2k</DCC_UsePackage>
         <DCC_WriteableConstants>true</DCC_WriteableConstants>
     </PropertyGroup>
