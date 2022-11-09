@@ -159,6 +159,9 @@ type
 
   TClassHelperBaseClass = class of TClassHelperBase;
 
+  TCustomAttribute = class(TObject)
+  end;
+
 implementation
 
 end.

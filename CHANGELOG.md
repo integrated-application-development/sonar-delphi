@@ -7,10 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `AttributeNameRule` analysis rule, which flags custom attribute types that don't match an expected
+  naming convention.
+
 ### Changed
 
 - Include unit imports in `MixedNamesRule`.
 - Exclude parameters on methods implementing interfaces in `VariableNameRule`.
+- Exclude custom attribute types in `ClassNameRule`.
 
 ## [0.38.0] - 2022-11-07
 
