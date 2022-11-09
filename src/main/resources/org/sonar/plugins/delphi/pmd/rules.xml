@@ -511,6 +511,22 @@ Foo(1, 2, 3); // Compliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.AttributeNameRule"
+  message="Attribute names should comply with a naming convention"
+  name="AttributeNameRule">
+  <priority>4</priority>
+  <description>
+    Attribute names should follow Pascal case and possess an &lt;code&gt;Attribute&lt;/code&gt; suffix.
+    &lt;br&gt;
+    &lt;code&gt;attributeSuffix&lt;/code&gt; can be &lt;code&gt;allowed&lt;/code&gt; for an optional
+    suffix, &lt;code&gt;required&lt;/code&gt;, or &lt;code&gt;forbidden&lt;/code&gt;.
+  </description>
+  <properties>
+    <property name="attributeSuffix" value="allowed"/>
+    <property name="baseEffort" value="15min"/>
+  </properties>
+</rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.ConstructorCreateRule"
     message="Constructor names should comply with a naming convention"
     name="ConstructorCreateRule">
