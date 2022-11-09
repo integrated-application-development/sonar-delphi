@@ -27,7 +27,7 @@ import org.sonar.plugins.delphi.utils.builders.DelphiTestUnitBuilder;
 class ClassNameRuleTest extends BasePmdRuleTest {
 
   @Test
-  void testAcceptT() {
+  void testClassNameWithPrefixShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TType = class(TObject)");
@@ -39,7 +39,7 @@ class ClassNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  void testNotAcceptLowercaseT() {
+  void testClassNameWithWrongCasePrefixShouldAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  tType = class(TObject)");
@@ -51,7 +51,7 @@ class ClassNameRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  void testNestedType() {
+  void testNestedClassesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
     builder.appendDecl("type");
     builder.appendDecl("  TOuterClass = class(TObject)");
@@ -61,6 +61,19 @@ class ClassNameRuleTest extends BasePmdRuleTest {
     builder.appendDecl("      end;");
     builder.appendDecl("      TInnerClass2 = class(TObject)");
     builder.appendDecl("      end;");
+    builder.appendDecl("  end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("ClassNameRule"));
+  }
+
+  @Test
+  void testAttributeClassNameShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+    builder.appendDecl("uses System;");
+    builder.appendDecl("type");
+    builder.appendDecl("  my_attribute = class(TCustomAttribute)");
     builder.appendDecl("  end;");
 
     execute(builder);

@@ -38,10 +38,16 @@ public class ClassNameRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(TypeDeclarationNode type, RuleContext data) {
-    if (type.isClass()
-        && !NameConventionUtils.compliesWithPrefix(type.simpleName(), getProperty(PREFIXES))) {
+    if (isViolation(type)) {
       addViolation(data, type.getTypeNameNode());
     }
+
     return super.visit(type, data);
+  }
+
+  private boolean isViolation(TypeDeclarationNode type) {
+    return type.isClass()
+        && !type.getType().isSubTypeOf("System.TCustomAttribute")
+        && !NameConventionUtils.compliesWithPrefix(type.simpleName(), getProperty(PREFIXES));
   }
 }
