@@ -84,7 +84,7 @@ class DelphiProjectParserTest {
       "OverloadTest.pas",
       "StatementTest.pas",
       "CommentsTest.pas",
-      "AccessorsTest.Pas",
+      "AccessorsTest.pas",
       "FunctionTest.pas",
       "GlobalsTest.pas"
     };
