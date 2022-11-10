@@ -233,7 +233,7 @@ class GrammarTest {
 
   @Test
   void testEmptyFileShouldThrow() {
-    assertThatThrownBy(() -> DelphiTestFileBuilder.fromResource(BASE_DIR + "Emptyfile.pas").parse())
+    assertThatThrownBy(() -> DelphiTestFileBuilder.fromResource(BASE_DIR + "EmptyFile.pas").parse())
         .isInstanceOf(DelphiFileConstructionException.class);
   }
 }

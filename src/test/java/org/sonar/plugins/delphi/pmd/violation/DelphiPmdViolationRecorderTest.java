@@ -228,7 +228,7 @@ class DelphiPmdViolationRecorderTest {
 
   @Test
   void testShouldIgnoreViolationOnUnknownRule() {
-    final File file = new File("src/FileWithUnknownViolations.Pas");
+    final File file = new File("src/FileWithUnknownViolations.pas");
     addToFileSystem(file);
 
     final String ruleName = "UNKNOWN";

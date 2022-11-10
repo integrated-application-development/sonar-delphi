@@ -48,8 +48,8 @@ class DelphiSensorTest {
   private static final String STANDARD_LIBRARY = "/org/sonar/plugins/delphi/bds/source";
   private static final String BASE_PATH = "/org/sonar/plugins/delphi/projects/";
   private static final File BASE_DIR = DelphiUtils.getResource(BASE_PATH);
-  private static final String BAD_SYNTAX = BASE_PATH + "BadSyntaxProject/BadSyntax.Pas";
-  private static final String GLOBALS = BASE_PATH + "SimpleProject/Globals.Pas";
+  private static final String BAD_SYNTAX = BASE_PATH + "BadSyntaxProject/BadSyntax.pas";
+  private static final String GLOBALS = BASE_PATH + "SimpleProject/Globals.pas";
 
   private final DelphiMasterExecutor executor = mock(DelphiMasterExecutor.class);
   private final DefaultFileSystem fileSystem = new DefaultFileSystem(BASE_DIR);
