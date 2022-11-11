@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Exclude parameters on methods implementing interfaces in `VariableNameRule`.
 - Exclude custom attribute types in `ClassNameRule`.
 
+### Fixed
+
+- Allow const expressions in record alignment syntax.
+
 ## [0.38.0] - 2022-11-07
 
 ### Added

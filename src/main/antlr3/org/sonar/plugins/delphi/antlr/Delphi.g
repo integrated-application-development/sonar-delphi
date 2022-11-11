@@ -364,7 +364,7 @@ interfaceItem                : methodInterface
                              ;
 objectType                   : 'object'<ObjectTypeNode>^ classParent? visibilitySection* 'end' // Obselete, kept for backwards compatibility with Turbo Pascal
                              ;                                                                 // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re192.html
-recordType                   : 'record'<RecordTypeNode>^ visibilitySection* recordVariantSection? 'end' ('align' intNum)?
+recordType                   : 'record'<RecordTypeNode>^ visibilitySection* recordVariantSection? 'end' ('align' constExpression)?
                              ;
 recordVariantSection         : 'case'<RecordVariantSectionNode>^ recordVariantTag 'of' recordVariant+
                              ;
