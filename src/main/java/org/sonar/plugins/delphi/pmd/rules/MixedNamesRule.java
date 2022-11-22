@@ -19,6 +19,7 @@
 package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
+import net.sourceforge.pmd.lang.ast.Node;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnitImportNode;
@@ -28,20 +29,60 @@ import org.sonar.plugins.delphi.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 
 public class MixedNamesRule extends AbstractDelphiRule {
-  @Override
-  public RuleContext visit(NameReferenceNode reference, RuleContext data) {
-    DelphiNameOccurrence occurrence = reference.getNameOccurrence();
-    DelphiNameDeclaration declaration = reference.getNameDeclaration();
+  private void checkNameOccurrenceForViolations(
+      Node node, RuleContext data, DelphiNameOccurrence occurrence) {
+    DelphiNameDeclaration declaration = occurrence.getNameDeclaration();
 
-    if (occurrence != null && declaration != null && !occurrence.isSelf()) {
+    if (declaration != null && !occurrence.isSelf()) {
       String actual = occurrence.getImage();
       String expected = declaration.getImage();
+
       if (!expected.equals(actual)) {
         addViolationWithMessage(
             data,
-            reference.getIdentifier(),
+            node,
             "Avoid mixing names (found: ''{0}'' expected: ''{1}'').",
             new Object[] {actual, expected});
+      }
+    }
+  }
+
+  private void checkUnitReferenceForViolations(
+      Node node, RuleContext data, String importName, UnitImportNameDeclaration importDeclaration) {
+    UnitNameDeclaration originalDeclaration = importDeclaration.getOriginalDeclaration();
+
+    if (originalDeclaration != null) {
+      String unitName = originalDeclaration.fullyQualifiedName();
+
+      // Only add violations on import names that are not aliases and do not match the original case
+      if (StringUtils.endsWithIgnoreCase(unitName, importName) && !unitName.endsWith(importName)) {
+        String matchingSegment = unitName.substring(unitName.length() - importName.length());
+
+        addViolationWithMessage(
+            data,
+            node,
+            "Avoid mixing names (found: ''{0}'' expected: ''{1}'').",
+            new Object[] {importName, matchingSegment});
+      }
+    }
+  }
+
+  @Override
+  public RuleContext visit(NameReferenceNode reference, RuleContext data) {
+    DelphiNameDeclaration declaration = reference.getNameDeclaration();
+    DelphiNameOccurrence occurrence = reference.getNameOccurrence();
+
+    if (occurrence != null) {
+      if (declaration instanceof UnitImportNameDeclaration) {
+        // Checks the occurrence against the original unit declaration instead of the import
+        // declaration
+        checkUnitReferenceForViolations(
+            reference.getIdentifier(),
+            data,
+            occurrence.getImage(),
+            (UnitImportNameDeclaration) declaration);
+      } else {
+        checkNameOccurrenceForViolations(reference.getIdentifier(), data, occurrence);
       }
     }
 
@@ -49,26 +90,10 @@ public class MixedNamesRule extends AbstractDelphiRule {
   }
 
   @Override
-  public RuleContext visit(UnitImportNode occurrence, RuleContext data) {
-    UnitImportNameDeclaration importDeclaration = occurrence.getImportNameDeclaration();
-    UnitNameDeclaration originalDeclaration = importDeclaration.getOriginalDeclaration();
-
-    if (originalDeclaration != null) {
-      String importName = importDeclaration.fullyQualifiedName();
-      String unitName = originalDeclaration.fullyQualifiedName();
-
-      // Only add violations on import names that are not aliases and do not match the original case
-      if (StringUtils.endsWithIgnoreCase(unitName, importName) && !unitName.endsWith(importName)) {
-        var matchingSegment = unitName.substring(unitName.length() - importName.length());
-
-        addViolationWithMessage(
-            data,
-            occurrence,
-            "Avoid mixing names (found: ''{0}'' expected: ''{1}'').",
-            new Object[] {importName, matchingSegment});
-      }
-    }
-
-    return super.visit(occurrence, data);
+  public RuleContext visit(UnitImportNode importNode, RuleContext data) {
+    UnitImportNameDeclaration declaration = importNode.getImportNameDeclaration();
+    checkUnitReferenceForViolations(
+        importNode.getNameNode(), data, declaration.fullyQualifiedName(), declaration);
+    return super.visit(importNode, data);
   }
 }
