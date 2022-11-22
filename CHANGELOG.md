@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Compare unit references to original name in `MixedNamesRule`.
+
 ## [0.39.1] - 2022-11-22
 
 ### Changed

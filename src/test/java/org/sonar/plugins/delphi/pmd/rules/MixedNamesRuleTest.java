@@ -284,4 +284,66 @@ class MixedNamesRuleTest extends BasePmdRuleTest {
 
     assertIssues().areNot(ruleKey("MixedNamesRule"));
   }
+
+  @Test
+  void testMatchingUnitReferenceShouldNotAddIssue() {
+    addUnitScopeName("System");
+
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("uses SysUtils;")
+            .appendImpl("procedure Proc;")
+            .appendImpl("var")
+            .appendImpl("  MyObject: TObject;")
+            .appendImpl("begin")
+            .appendImpl("  MyObject := TObject.Create;")
+            .appendImpl("  SysUtils.FreeAndNil(MyObject);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("MixedNamesRule"));
+  }
+
+  @Test
+  void testUnitReferenceMatchingDeclarationAndNotMatchingImportShouldNotAddIssue() {
+    addUnitScopeName("System");
+
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("uses sysutils;")
+            .appendImpl("procedure Proc;")
+            .appendImpl("var")
+            .appendImpl("  MyObject: TObject;")
+            .appendImpl("begin")
+            .appendImpl("  MyObject := TObject.Create;")
+            .appendImpl("  SysUtils.FreeAndNil(MyObject);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKeyAtLine("MixedNamesRule", builder.getOffset() + 6));
+  }
+
+  @Test
+  void testMismatchedUnitReferenceShouldAddIssue() {
+    addUnitScopeName("System");
+
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("uses sysutils;")
+            .appendImpl("procedure Proc;")
+            .appendImpl("var")
+            .appendImpl("  MyObject: TObject;")
+            .appendImpl("begin")
+            .appendImpl("  MyObject := TObject.Create;")
+            .appendImpl("  sysutils.FreeAndNil(MyObject);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues()
+        .areExactly(1, ruleKeyAtLine("MixedNamesRule", builder.getOffsetDecl() + 1))
+        .areExactly(1, ruleKeyAtLine("MixedNamesRule", builder.getOffset() + 6));
+  }
 }
