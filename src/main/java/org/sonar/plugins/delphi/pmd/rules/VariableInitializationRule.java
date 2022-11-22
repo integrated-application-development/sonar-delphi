@@ -23,6 +23,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.ast.Node;
@@ -746,6 +747,7 @@ public class VariableInitializationRule extends AbstractDelphiRule {
     public RecordInitializationState(StructType type) {
       type.typeScope().getVariableDeclarations().stream()
           .filter(VariableNameDeclaration::isField)
+          .filter(Predicate.not(VariableNameDeclaration::isClassVariable))
           .filter(VariableInitializationRule::isUnmanagedVariable)
           .forEach(
               declaration -> {
