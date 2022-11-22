@@ -1189,4 +1189,52 @@ class VariableInitializationRuleTest extends BasePmdRuleTest {
     assertIssues()
         .areExactly(1, ruleKeyAtLine("VariableInitializationRule", builder.getOffset() + 7));
   }
+
+  @Test
+  void testRecordClassVariableShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TBar = record")
+            .appendDecl("  private class var")
+            .appendDecl("      Baz: TBar;")
+            .appendDecl("  public")
+            .appendDecl("    Flarp: Integer;")
+            .appendDecl("  end;")
+            .appendDecl("procedure Foo(Bar: TBar);")
+            .appendImpl("procedure Test;")
+            .appendImpl("var")
+            .appendImpl("  Bar: TBar;")
+            .appendImpl("begin")
+            .appendImpl("  Bar.Flarp := 123;")
+            .appendImpl("  Foo(Bar);")
+            .appendImpl("end;");
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("VariableInitializationRule"));
+  }
+
+  @Test
+  void testRecordSelfReferentialClassVariableShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TBar = record")
+            .appendDecl("  private class var")
+            .appendDecl("      Baz: TBar;")
+            .appendDecl("  public")
+            .appendDecl("    Flarp: Integer;")
+            .appendDecl("  end;")
+            .appendDecl("procedure Foo(Bar: TBar);")
+            .appendImpl("procedure Test;")
+            .appendImpl("var")
+            .appendImpl("  Bar: TBar;")
+            .appendImpl("begin")
+            .appendImpl("  Bar.Flarp := 123;")
+            .appendImpl("  Foo(Bar);")
+            .appendImpl("end;");
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("VariableInitializationRule"));
+  }
 }

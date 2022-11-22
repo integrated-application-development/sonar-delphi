@@ -23,6 +23,7 @@ import java.util.Objects;
 import net.sourceforge.pmd.lang.ast.Node;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.antlr.ast.node.ConstStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.FieldSectionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ForInStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ForLoopVarDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ForToStatementNode;
@@ -50,6 +51,7 @@ public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
   private final VisibilityType visibility;
   private final boolean inline;
   private final boolean field;
+  private final boolean classVar;
   private final boolean union;
   private int hashCode;
 
@@ -60,6 +62,7 @@ public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
         extractVisibility(node),
         extractInline(node),
         extractField(node),
+        extractClassVar(node),
         extractUnion(node));
   }
 
@@ -69,6 +72,7 @@ public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
     this.visibility = VisibilityType.PUBLIC;
     this.inline = false;
     this.field = false;
+    this.classVar = false;
     this.union = false;
   }
 
@@ -78,12 +82,14 @@ public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
       VisibilityType visibility,
       boolean inline,
       boolean field,
+      boolean classVar,
       boolean union) {
     super(location);
     this.type = type;
     this.visibility = visibility;
     this.inline = inline;
     this.field = field;
+    this.classVar = classVar;
     this.union = union;
   }
 
@@ -197,6 +203,15 @@ public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
     return node.getKind() == DeclarationKind.FIELD;
   }
 
+  private static boolean extractClassVar(NameDeclarationNode node) {
+    if (node.getKind() == DeclarationKind.FIELD) {
+      Node ancestor = node.getNthParent(3);
+      return ancestor instanceof FieldSectionNode
+          && ((FieldSectionNode) ancestor).isClassFieldSection();
+    }
+    return false;
+  }
+
   private static boolean extractUnion(NameDeclarationNode node) {
     switch (node.getKind()) {
       case FIELD:
@@ -227,6 +242,10 @@ public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
     return field;
   }
 
+  public boolean isClassVariable() {
+    return classVar;
+  }
+
   public boolean isUnion() {
     return union;
   }
@@ -234,7 +253,7 @@ public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
   @Override
   protected DelphiNameDeclaration doSpecialization(TypeSpecializationContext context) {
     return new VariableNameDeclaration(
-        getNode(), type.specialize(context), visibility, inline, field, union);
+        getNode(), type.specialize(context), visibility, inline, field, classVar, union);
   }
 
   @Override
