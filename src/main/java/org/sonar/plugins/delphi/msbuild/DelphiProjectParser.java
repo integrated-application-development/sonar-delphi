@@ -86,6 +86,7 @@ final class DelphiProjectParser {
 
   private List<Path> createPathList(ProjectProperties properties, String propertyName) {
     return propertyList(properties.get(propertyName)).stream()
+        .map(DelphiUtils::normalizeFileName)
         .map(this::resolvePath)
         .filter(
             directory -> {

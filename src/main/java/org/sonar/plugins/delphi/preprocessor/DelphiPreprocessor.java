@@ -50,6 +50,7 @@ import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirective;
 import org.sonar.plugins.delphi.preprocessor.directive.CompilerDirectiveType;
 import org.sonar.plugins.delphi.preprocessor.directive.EndIfDirective;
 import org.sonar.plugins.delphi.type.factory.TypeFactory;
+import org.sonar.plugins.delphi.utils.DelphiUtils;
 
 public class DelphiPreprocessor {
   private static final Logger LOG = Loggers.get(DelphiPreprocessor.class);
@@ -155,7 +156,9 @@ public class DelphiPreprocessor {
   }
 
   public void resolveInclude(Token insertionToken, String includeFilePath) {
-    includeFilePath = includeFilePath.replace("*", getBaseName(lexer.getSourceName()));
+    includeFilePath =
+        DelphiUtils.normalizeFileName(
+            includeFilePath.replace("*", getBaseName(lexer.getSourceName())));
 
     String currentParentPath = Path.of(lexer.getSourceName()).getParent().toString();
     Path includeFile = Path.of(includeFilePath);
