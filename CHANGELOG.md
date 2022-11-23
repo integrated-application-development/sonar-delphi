@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Compare unit references to original name in `MixedNamesRule`.
 
+### Fixed
+
+- Clean up some internal assumptions about windows paths.
+
 ## [0.39.1] - 2022-11-22
 
 ### Changed
