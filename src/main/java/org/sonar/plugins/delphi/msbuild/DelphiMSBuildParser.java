@@ -185,7 +185,7 @@ public class DelphiMSBuildParser {
   private Path resolvePathFromElementAttribute(Element element, String attribute) {
     String include = element.getAttributeValue(attribute);
     if (include != null) {
-      include = properties.substitutor().replace(include);
+      include = DelphiUtils.normalizeFileName(properties.substitutor().replace(include));
       try {
         return DelphiUtils.resolvePathFromBaseDir(evaluationDirectory(), Path.of(include));
       } catch (InvalidPathException e) {
