@@ -98,14 +98,13 @@ public final class DelphiUtils {
    * @return Resolved file
    */
   public static File resolveAbsolutePath(String root, String path) {
-    File file = new File(normalizeFileName(path));
+    File file = new File(path);
 
     if (!file.isAbsolute()) {
-      String rootPath = normalizeFileName(root);
-      if (!rootPath.endsWith("/")) {
-        rootPath = rootPath.concat("/");
+      if (!root.endsWith(File.separator)) {
+        root = root.concat(File.separator);
       }
-      file = new File(rootPath + path);
+      file = new File(root + path);
     }
 
     return file;
@@ -157,10 +156,14 @@ public final class DelphiUtils {
     pathB = pathB.normalize();
 
     Path common = null;
-    if (pathA.isAbsolute() && pathB.isAbsolute() && pathA.getRoot().equals(pathB.getRoot())) {
-      common = pathA.getRoot();
-    } else if (!pathA.isAbsolute() && !pathB.isAbsolute()) {
-      common = Paths.get("");
+    if (pathA.isAbsolute() == pathB.isAbsolute()) {
+      if (!pathA.isAbsolute()) {
+        common = Paths.get("");
+      } else if (pathA.getRoot() == null || pathB.getRoot() == null) {
+        common = Paths.get("/");
+      } else if (pathA.getRoot().equals(pathB.getRoot())) {
+        common = pathA.getRoot();
+      }
     }
 
     if (common != null) {
