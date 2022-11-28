@@ -669,6 +669,29 @@ Foo := Foo; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.MemberDeclarationOrderRule"
+    message="Declarations in visibility sections should follow an expected order"
+    name="MemberDeclarationOrderRule">
+    <priority>4</priority>
+    <description>
+      Visibility sections within the body of a class, interface, or record declaration should be
+      organized in the following order:
+      &lt;br&gt;
+      1. Field declarations
+      2. Method declarations
+      3. Property declarations
+      &lt;br&gt;
+      &lt;br&gt;
+      For more information, see the Class Body Organization section of the Embarcadero style guide page on
+      &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/Type_Declarations#Class_Body_Organization'&gt;
+      Type Declarations
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="3min"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.VariableInitializationRule"
     message="Variables must be initialized before being used"
     name="VariableInitializationRule">
