@@ -313,6 +313,7 @@ enumType                     : '('<EnumTypeNode>^ (enumTypeElement (',')?)* ')'!
 enumTypeElement              : nameDeclaration ('=' expression)? -> ^(TkEnumElement<EnumElementNode> nameDeclaration expression?)
                              ;
 typeReference                : stringType
+                             | 'file'<FileTypeNode>^
                              | nameReference -> ^(TkTypeReference<TypeReferenceNode> nameReference)
                              ;
 
