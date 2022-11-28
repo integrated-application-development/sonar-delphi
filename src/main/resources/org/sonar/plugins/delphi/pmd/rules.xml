@@ -527,6 +527,23 @@ Foo(1, 2, 3); // Compliant
   </properties>
 </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.HelperNameRule"
+    message="Helper names should comply with a naming convention"
+    name="HelperNameRule">
+    <priority>4</priority>
+    <description>
+      Helper names should follow Pascal case, begin with an acceptable prefix, contain the
+      name of the extended class, and end with a &lt;code&gt;Helper&lt;/code&gt; suffix.
+      &lt;br&gt;
+      &lt;br&gt;
+    </description>
+    <properties>
+      <property name="helperPrefixes" value="T"/>
+      <property name="extendedTypePrefixes" value="T|E"/>
+      <property name="baseEffort" value="15min"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.ConstructorCreateRule"
     message="Constructor names should comply with a naming convention"
     name="ConstructorCreateRule">
