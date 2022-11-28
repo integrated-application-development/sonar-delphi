@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `HelperNameRule` analysis rule, which flags helper types that don't match an expected naming
+  convention.
+
 ### Changed
 
 - Compare unit references to original name in `MixedNamesRule`.
