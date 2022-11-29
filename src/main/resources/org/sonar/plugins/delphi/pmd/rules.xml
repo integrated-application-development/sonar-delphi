@@ -499,7 +499,7 @@ Foo(1, 2, 3); // Compliant
     name="EnumNameRule">
     <priority>4</priority>
     <description>
-      Enumeration names should begin with 'T' and follow Pascal case.
+      Enumeration names should begin with an acceptable prefix and follow Pascal case.
       &lt;br&gt;
       &lt;br&gt;
     </description>

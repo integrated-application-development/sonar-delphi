@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Compare unit references to original name in `MixedNamesRule`.
+- Update description for `EnumNameRule`.
 
 ### Fixed
 
