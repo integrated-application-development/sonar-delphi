@@ -2239,6 +2239,29 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.UnitLevelKeywordIndentationRule"
+    message="Unit-level keywords should not be indented"
+    name="UnitLevelKeywordIndentationRule">
+    <priority>3</priority>
+    <description>
+      Unit-level keywords should never be indented, as they are all top-level and indentation
+      indicates a form of scope.
+      &lt;br&gt;
+      This includes 'unit', 'program', 'package', and 'library' file headings, 'interface',
+      'implementation', 'initialization', and 'finalization' section headings, top-level 'type' and
+      'uses' keywords, and the final 'end.'.
+      &lt;br&gt;
+      &lt;br&gt;
+      For more information, see the Indentation section of the Embarcadero style guide page on
+      &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/White_Space_Usage#Indentation'&gt;
+      White Space Usage
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="Empty type sections should be removed"
     name="EmptyTypeSectionRule">
