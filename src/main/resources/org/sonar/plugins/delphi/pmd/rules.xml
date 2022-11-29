@@ -2265,6 +2265,28 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.VisibilityKeywordIndentationRule"
+    message="Visibility specifiers should be indented to the level of the containing type"
+    name="VisibilityKeywordIndentationRule">
+    <priority>3</priority>
+    <description>
+      Visibility specifier directives (&lt;code&gt;private&lt;/code&gt;,
+      &lt;code&gt;public&lt;/code&gt;, etc.) should use the same indentation as the type name that
+      they are declared under. They should not be indented in the same way as a field, method, or
+      property.
+      &lt;br&gt;
+      &lt;br&gt;
+      For more information, see the Class and Record Declarations section of the Embarcadero style
+      guide page on
+      &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/Type_Declarations#Class_.28and_Record.29_Declarations'&gt;
+      Type Declarations
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="1min"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.XPathBuiltinRule"
     message="Empty type sections should be removed"
     name="EmptyTypeSectionRule">
