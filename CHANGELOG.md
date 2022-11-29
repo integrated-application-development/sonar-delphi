@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   guide's instructions on [Class Body Organization](https://docwiki.embarcadero.com/RADStudio/Alexandria/en/Type_Declarations#Class_Body_Organization).
 - `VisibilitySectionOrderRule` analysis rule, which flags visibility sections that aren't in
   ascending order of accessibility.
+- `UnitLevelKeywordIndentationRule` analysis rule, which flags unit-level keywords that aren't flush
+  with the margin.
 
 ### Changed
 
