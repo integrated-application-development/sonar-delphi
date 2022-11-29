@@ -707,6 +707,36 @@ Foo := Foo; // Noncompliant
     </properties>
   </rule>
 
+  <rule class="org.sonar.plugins.delphi.pmd.rules.VisibilitySectionOrderRule"
+    message="Access specifiers should be in ascending order of accessibility"
+    name="VisibilitySectionOrderRule">
+    <priority>3</priority>
+    <description>
+      Access specifiers should be declared in ascending order of accessibility:
+      &lt;br&gt;
+      1. strict private
+      &lt;br&gt;
+      2. private
+      &lt;br&gt;
+      3. strict protected
+      &lt;br&gt;
+      4. protected
+      &lt;br&gt;
+      5. public
+      &lt;br&gt;
+      6. published
+      &lt;br&gt;
+      &lt;br&gt;
+      For more information, see the Embarcadero style guide page on
+      &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/Type_Declarations#Class_.28and_Record.29_Declarations'&gt;
+      Type Declarations
+      &lt;/a&gt;
+    </description>
+    <properties>
+      <property name="baseEffort" value="3min"/>
+    </properties>
+  </rule>
+
   <rule class="org.sonar.plugins.delphi.pmd.rules.VariableInitializationRule"
     message="Variables must be initialized before being used"
     name="VariableInitializationRule">

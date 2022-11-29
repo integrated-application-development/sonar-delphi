@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   convention.
 - `MemberDeclarationOrderRule` analysis rule, which flags visibility sections that violate the style
   guide's instructions on [Class Body Organization](https://docwiki.embarcadero.com/RADStudio/Alexandria/en/Type_Declarations#Class_Body_Organization).
+- `VisibilitySectionOrderRule` analysis rule, which flags visibility sections that aren't in
+  ascending order of accessibility.
 
 ### Changed
 
