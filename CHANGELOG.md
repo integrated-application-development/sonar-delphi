@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ascending order of accessibility.
 - `UnitLevelKeywordIndentationRule` analysis rule, which flags unit-level keywords that aren't flush
   with the margin.
+- `VisibilityKeywordIndentationRule` analysis rule, which flags visibility specifier directives that
+  don't use the same indentation as the type they're declared under.
 
 ### Changed
 
