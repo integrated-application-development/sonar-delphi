@@ -63,8 +63,8 @@ public class MetricsVisitor implements DelphiParserVisitor<Data> {
       return statements;
     }
 
-    public int getCodeLines() {
-      return codeLines.size();
+    public Set<Integer> getCodeLines() {
+      return codeLines;
     }
   }
 

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support for `NCLOC_DATA` metric to record which lines contain code.
 - `HelperNameRule` analysis rule, which flags helper types that don't match an expected naming
   convention.
 - `MemberDeclarationOrderRule` analysis rule, which flags visibility sections that violate the style
