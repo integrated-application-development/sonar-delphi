@@ -19,14 +19,21 @@
 package org.sonar.plugins.delphi.executor;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.measures.FileLinesContext;
+import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.measures.Metric;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.symbol.SymbolTable;
@@ -44,12 +51,17 @@ class DelphiMetricsExecutorTest {
 
   private DelphiMetricsExecutor executor;
   private SensorContextTester sensorContext;
+  private FileLinesContext fileLinesContext;
   private ExecutorContext context;
   private String componentKey;
 
   @BeforeEach
   void setup() {
-    executor = new DelphiMetricsExecutor();
+    FileLinesContextFactory fileLinesContextFactory = mock(FileLinesContextFactory.class);
+    fileLinesContext = mock(FileLinesContext.class);
+    when(fileLinesContextFactory.createFor(any(InputFile.class))).thenReturn(fileLinesContext);
+
+    executor = new DelphiMetricsExecutor(fileLinesContextFactory);
     sensorContext = SensorContextTester.create(ROOT_DIR);
     context = new ExecutorContext(sensorContext, mock(SymbolTable.class));
   }
@@ -64,6 +76,11 @@ class DelphiMetricsExecutorTest {
     checkMetric(CoreMetrics.STATEMENTS, 1);
     checkMetric(CoreMetrics.NCLOC, 28);
     checkMetric(CoreMetrics.COGNITIVE_COMPLEXITY, 0);
+    checkCodeLines(
+        Set.of(
+            1, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 18, 20, 21, 22, 23, 25, 26, 27, 29, 30, 31,
+            33, 34, 35, 37),
+        37);
   }
 
   @Test
@@ -76,6 +93,7 @@ class DelphiMetricsExecutorTest {
     checkMetric(CoreMetrics.STATEMENTS, 0);
     checkMetric(CoreMetrics.NCLOC, 15);
     checkMetric(CoreMetrics.COGNITIVE_COMPLEXITY, 0);
+    checkCodeLines(Set.of(1, 3, 6, 7, 8, 11, 14, 15, 16, 17, 21, 23, 24, 38, 42), 42);
   }
 
   @Test
@@ -88,6 +106,12 @@ class DelphiMetricsExecutorTest {
     checkMetric(CoreMetrics.STATEMENTS, 12);
     checkMetric(CoreMetrics.NCLOC, 54);
     checkMetric(CoreMetrics.COGNITIVE_COMPLEXITY, 3);
+    checkCodeLines(
+        Set.of(
+            1, 3, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 22, 24, 26, 27, 28, 29, 30,
+            31, 32, 33, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 48, 49, 50, 51, 52, 53, 55,
+            56, 57, 58, 59, 60, 62, 63, 65, 67),
+        67);
   }
 
   @Test
@@ -100,6 +124,7 @@ class DelphiMetricsExecutorTest {
     checkMetric(CoreMetrics.STATEMENTS, 3);
     checkMetric(CoreMetrics.NCLOC, 18);
     checkMetric(CoreMetrics.COGNITIVE_COMPLEXITY, 0);
+    checkCodeLines(Set.of(1, 3, 5, 6, 7, 8, 9, 10, 12, 14, 15, 20, 21, 22, 23, 24, 25, 27), 27);
   }
 
   private void execute(String filename) {
@@ -112,5 +137,12 @@ class DelphiMetricsExecutorTest {
     assertThat(sensorContext.measure(componentKey, metric).value())
         .as(metric.getDescription())
         .isEqualTo(value);
+  }
+
+  void checkCodeLines(Set<Integer> codeLines, int totalLines) {
+    for (int i = 1; i <= totalLines; i++) {
+      verify(fileLinesContext)
+          .setIntValue(CoreMetrics.NCLOC_DATA_KEY, i, codeLines.contains(i) ? 1 : 0);
+    }
   }
 }
