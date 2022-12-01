@@ -80,4 +80,16 @@ class ClassNameRuleTest extends BasePmdRuleTest {
 
     assertIssues().areNot(ruleKey("ClassNameRule"));
   }
+
+  @Test
+  void testClassHelperNameShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
+    builder.appendDecl("type");
+    builder.appendDecl("  my_helper = class helper for TObject");
+    builder.appendDecl("  end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("ClassNameRule"));
+  }
 }
