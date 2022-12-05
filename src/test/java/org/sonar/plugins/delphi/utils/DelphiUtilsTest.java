@@ -26,7 +26,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 class DelphiUtilsTest {
@@ -59,16 +58,5 @@ class DelphiUtilsTest {
     assertThat(DelphiUtils.acceptFile("Unit.Pas")).isTrue();
     assertThat(DelphiUtils.acceptFile("Project.dPr")).isTrue();
     assertThat(DelphiUtils.acceptFile("Package.DPK")).isTrue();
-  }
-
-  @Test
-  void testCommonPath() {
-    assertCommonPath("a/b/c", "a/b/d", "a/b");
-    assertCommonPath("a/", "a/b/d", "a");
-    assertCommonPath("a/b", "a/f/../b/g", "a/b");
-  }
-
-  private static void assertCommonPath(String pathA, String pathB, String expected) {
-    assertThat(DelphiUtils.commonPath(Path.of(pathA), Path.of(pathB))).isEqualTo(Path.of(expected));
   }
 }

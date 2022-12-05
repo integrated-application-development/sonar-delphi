@@ -18,6 +18,8 @@
  */
 package org.sonar.plugins.delphi.preprocessor.search;
 
+import static org.assertj.core.api.Assertions.*;
+
 import java.nio.file.Path;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
@@ -27,6 +29,6 @@ class SearchPathTest {
   void testSearchWithInvalidPathShouldNotThrowException() {
     SearchPath searchPath = SearchPath.create(Collections.emptyList());
     Path invalidPath = Path.of("C:/MY/INVALID/PATH");
-    searchPath.search("file", invalidPath);
+    assertThatCode(() -> searchPath.search("file", invalidPath)).doesNotThrowAnyException();
   }
 }

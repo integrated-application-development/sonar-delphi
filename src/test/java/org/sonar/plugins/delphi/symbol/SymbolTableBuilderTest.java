@@ -48,9 +48,11 @@ class SymbolTableBuilderTest {
 
   @Test
   void testNonexistentStandardLibraryPath(@TempDir Path tempDir) {
-    SymbolTableBuilder builder = SymbolTable.builder();
-    assertThatThrownBy(() -> builder.standardLibraryPath(tempDir.resolve("nonexistent")))
-        .isInstanceOf(SymbolTableConstructionException.class);
+    SymbolTableBuilder builder =
+        SymbolTable.builder()
+            .typeFactory(TypeFactoryUtils.defaultFactory())
+            .standardLibraryPath(tempDir.resolve("nonexistent"));
+    assertThatThrownBy(builder::build).isInstanceOf(SymbolTableConstructionException.class);
   }
 
   @Test
@@ -70,14 +72,15 @@ class SymbolTableBuilderTest {
     SearchPath searchPath = mock(SearchPath.class);
     when(searchPath.getRootDirectories()).thenReturn(Set.of(path));
 
-    assertThatThrownBy(() -> builder.searchPath(searchPath))
-        .isInstanceOf(SymbolTableConstructionException.class);
+    builder.searchPath(searchPath);
+
+    assertThatThrownBy(builder::build).isInstanceOf(SymbolTableConstructionException.class);
   }
 
   @Test
   void testBuildWithoutTypeFactory() {
-    assertThatThrownBy(() -> SymbolTable.builder().build())
-        .isInstanceOf(SymbolTableConstructionException.class);
+    SymbolTableBuilder builder = SymbolTable.builder();
+    assertThatThrownBy(builder::build).isInstanceOf(SymbolTableConstructionException.class);
   }
 
   @Test

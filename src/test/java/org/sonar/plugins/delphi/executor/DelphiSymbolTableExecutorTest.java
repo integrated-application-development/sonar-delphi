@@ -20,25 +20,26 @@ package org.sonar.plugins.delphi.executor;
 
 import static java.util.function.Predicate.not;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.sonar.plugins.delphi.utils.DelphiUtils.uriToAbsolutePath;
 
 import com.google.common.collect.Sets;
+import java.io.File;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextPointer;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultTextPointer;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
+import org.sonar.plugins.delphi.preprocessor.search.SearchPath;
 import org.sonar.plugins.delphi.symbol.SymbolTable;
 import org.sonar.plugins.delphi.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
@@ -825,10 +826,7 @@ class DelphiSymbolTableExecutorTest {
 
   @Test
   void testImportedOverloads() {
-    execute(
-        "overloads/Imports.pas",
-        "overloads/imports/IntegerFoo.pas",
-        "overloads/imports/StringFoo.pas");
+    execute("overloads/Imports.pas", "overloads/imports/");
     verifyUsages(13, 10, reference(30, 2), reference(31, 2));
     verifyUsages(24, 2, reference(28, 6));
     verifyUsages(25, 2, reference(29, 6));
@@ -837,7 +835,7 @@ class DelphiSymbolTableExecutorTest {
 
   @Test
   void testDisambiguationOfOverloadsByDistanceFromCallSite() {
-    execute("overloads/Distance.pas", "overloads/imports/DistantFoo.pas");
+    execute("overloads/Distance.pas", "overloads/imports");
     verifyUsages(8, 10, reference(53, 2));
     verifyUsages(12, 16, reference(56, 14));
     verifyUsages(13, 14, reference(58, 6), reference(64, 2));
@@ -848,7 +846,7 @@ class DelphiSymbolTableExecutorTest {
 
   @Test
   void testOverriddenOverloads() {
-    execute("overloads/Overrides.pas", "overloads/imports/BaseFoo.pas");
+    execute("overloads/Overrides.pas", "overloads/imports");
     verifyUsages(31, 2, reference(35, 10));
     verifyUsages(32, 2, reference(36, 10));
     verifyUsages(33, 2, reference(37, 10));
@@ -984,12 +982,7 @@ class DelphiSymbolTableExecutorTest {
 
   @Test
   void testImports() {
-    execute(
-        "imports/source/Unit1.pas",
-        "imports/Unit2.pas",
-        "imports/source/Unit3.pas",
-        "imports/ignored/Unit2.pas",
-        "imports/ignored/Unit3.pas");
+    execute("imports/source/Unit1.pas", "imports/", "imports/source/", "imports/ignored/");
     verifyUsages(1, 5, reference(23, 2), reference(26, 18));
     verifyUsages(6, 2, reference(26, 2));
     verifyUsages(9, 2, reference(26, 24), reference(27, 12));
@@ -999,13 +992,7 @@ class DelphiSymbolTableExecutorTest {
 
   @Test
   void testNamespaces() {
-    execute(
-        "namespaces/Namespaced.Unit1.pas",
-        "namespaces/Unit1.pas",
-        "namespaces/Namespaced.Unit2.pas",
-        "namespaces/Unit3.pas",
-        "namespaces/UnitScopeName.Unit2.pas",
-        "namespaces/UnitScopeName.ScopedUnit3.pas");
+    execute("namespaces/Namespaced.Unit1.pas", "namespaces/");
 
     verifyUsages(1, 5, reference(23, 2), reference(26, 18));
     verifyUsages(6, 2, reference(30, 2));
@@ -1019,13 +1006,7 @@ class DelphiSymbolTableExecutorTest {
   void testUnitScopeNames() {
     unitScopeNames = Set.of("NonexistentUnitScope", "UnitScopeName", "ABCUnitScopeXYZ");
 
-    execute(
-        "namespaces/UnitScopeNameTest.pas",
-        "namespaces/UnitScopeName.Unit2.pas",
-        "namespaces/UnitScopeName.ScopedUnit3.pas",
-        "namespaces/Namespaced.Unit1.pas",
-        "namespaces/Namespaced.Unit2.pas",
-        "namespaces/Unit3.pas");
+    execute("namespaces/UnitScopeNameTest.pas", "namespaces/");
 
     verifyUsages(1, 5, reference(23, 2), reference(26, 30));
     verifyUsages(6, 2, reference(26, 2));
@@ -1039,7 +1020,7 @@ class DelphiSymbolTableExecutorTest {
     unitAliases.put("UnitX", "Unit2");
     unitAliases.put("UnitY", "Unit3");
 
-    execute("unitAliases/Unit1.pas", "unitAliases/Unit2.pas", "unitAliases/Unit3.pas");
+    execute("unitAliases/Unit1.pas", "unitAliases/");
 
     verifyUsages(1, 5, reference(23, 2), reference(26, 18));
     verifyUsages(6, 2, reference(26, 2));
@@ -1146,11 +1127,7 @@ class DelphiSymbolTableExecutorTest {
 
   @Test
   void testHelperImports() {
-    execute(
-        "helpers/imports/Unit1.pas",
-        "helpers/imports/Unit2.pas",
-        "helpers/imports/Unit3.pas",
-        "helpers/imports/Unit4.pas");
+    execute("helpers/imports/Unit1.pas", "helpers/imports/");
     verifyUsages(17, 10, reference(24, 2));
   }
 
@@ -1205,46 +1182,38 @@ class DelphiSymbolTableExecutorTest {
   @Test
   void testDependencyRequiredForInlineMethodExpansionViaDefaultArrayProperties() {
     execute(
-        "dependencies/InlineMethodExpansionViaDefaultArrayProperty.pas",
-        "dependencies/imports/UnitWithDefaultArrayPropertyBackedByInlineMethod.pas");
+        "dependencies/InlineMethodExpansionViaDefaultArrayProperty.pas", "dependencies/imports/");
     verifyDependencies("UnitWithDefaultArrayPropertyBackedByInlineMethod", "System.SysUtils");
   }
 
   @Test
   void testDependencyShouldNotBeIntroducedForImplementationMethods() {
-    execute(
-        "dependencies/ImplementationVisibility.pas",
-        "dependencies/imports/UnitWithImplementationMethod.pas");
+    execute("dependencies/ImplementationVisibility.pas", "dependencies/imports/");
     verifyDependencies("System.SysUtils");
   }
 
   @Test
   void testDependencyRequiredForImplicitInvocationOfGetEnumerator() {
-    execute(
-        "dependencies/Enumerator.pas", "dependencies/imports/UnitWithGetEnumeratorForTObject.pas");
+    execute("dependencies/Enumerator.pas", "dependencies/imports/");
     verifyDependencies("UnitWithGetEnumeratorForTObject");
   }
 
-  private void execute(String filename, String... include) {
+  private void execute(String filename, String... searchPaths) {
     mainFile = DelphiTestFileBuilder.fromResource(ROOT_PATH + filename).delphiFile();
-    Map<String, InputFile> inputFiles = new HashMap<>();
-
-    inputFiles.put(uriToAbsolutePath(mainFile.getInputFile().uri()), mainFile.getInputFile());
-
-    for (String name : include) {
-      String path = ROOT_PATH + name;
-      InputFile inputFile = DelphiTestFileBuilder.fromResource(path).delphiFile().getInputFile();
-      inputFiles.put(uriToAbsolutePath(inputFile.uri()), inputFile);
-    }
+    List<Path> sourceFiles = List.of(Path.of(mainFile.getInputFile().uri()));
+    SearchPath searchPath =
+        SearchPath.create(
+            Arrays.stream(searchPaths)
+                .map(relativePath -> ROOT_PATH + relativePath)
+                .map(DelphiUtils::getResource)
+                .map(File::toPath)
+                .collect(Collectors.toList()));
 
     symbolTable =
         SymbolTable.builder()
             .typeFactory(TypeFactoryUtils.defaultFactory())
-            .sourceFiles(
-                inputFiles.values().stream()
-                    .map(InputFile::uri)
-                    .map(Path::of)
-                    .collect(Collectors.toList()))
+            .sourceFiles(sourceFiles)
+            .searchPath(searchPath)
             .standardLibraryPath(DelphiUtils.getResource(STANDARD_LIBRARY).toPath())
             .unitScopeNames(unitScopeNames)
             .unitAliases(unitAliases)
