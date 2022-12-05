@@ -19,6 +19,7 @@
 package org.sonar.plugins.delphi.preprocessor.search;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
 
@@ -28,7 +29,7 @@ public interface SearchPath {
 
   Set<Path> getRootDirectories();
 
-  static SearchPath create(Iterable<Path> searchDirectories) {
+  static SearchPath create(List<Path> searchDirectories) {
     return new DefaultSearchPath(searchDirectories);
   }
 }

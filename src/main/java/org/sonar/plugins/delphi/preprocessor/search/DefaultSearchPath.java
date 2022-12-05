@@ -21,13 +21,15 @@ package org.sonar.plugins.delphi.preprocessor.search;
 import static java.util.Comparator.comparingInt;
 
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.SetMultimap;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
 import org.sonar.api.utils.log.Logger;
@@ -39,8 +41,8 @@ public class DefaultSearchPath implements SearchPath {
   private final SetMultimap<Path, Path> filesByDirectory;
   private final Set<Path> indexedPaths;
 
-  DefaultSearchPath(Iterable<Path> searchDirectories) {
-    this.rootDirectories = ImmutableSet.copyOf(searchDirectories);
+  DefaultSearchPath(List<Path> searchDirectories) {
+    this.rootDirectories = Collections.unmodifiableSet(new LinkedHashSet<>(searchDirectories));
     this.filesByDirectory = HashMultimap.create();
     this.indexedPaths = new HashSet<>();
 

@@ -35,7 +35,6 @@ import java.util.Objects;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputPath;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
@@ -148,35 +147,6 @@ public final class DelphiUtils {
       path = Path.of(baseDir.toAbsolutePath().toString(), path.toString());
     }
     return path.toAbsolutePath().normalize();
-  }
-
-  @Nullable
-  public static Path commonPath(Path pathA, Path pathB) {
-    pathA = pathA.normalize();
-    pathB = pathB.normalize();
-
-    Path common = null;
-    if (pathA.isAbsolute() == pathB.isAbsolute()) {
-      if (!pathA.isAbsolute()) {
-        common = Paths.get("");
-      } else if (pathA.getRoot() == null || pathB.getRoot() == null) {
-        common = Paths.get("/");
-      } else if (pathA.getRoot().equals(pathB.getRoot())) {
-        common = pathA.getRoot();
-      }
-    }
-
-    if (common != null) {
-      int nameCount = Math.min(pathA.getNameCount(), pathB.getNameCount());
-      for (int i = 0; i < nameCount; i++) {
-        if (!pathA.getName(i).equals(pathB.getName(i))) {
-          break;
-        }
-        common = common.resolve(pathA.getName(i));
-      }
-    }
-
-    return common;
   }
 
   public static void stopProgressReport(ProgressReport progressReport, boolean success) {

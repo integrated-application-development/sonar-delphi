@@ -18,18 +18,14 @@
  */
 package org.sonar.plugins.delphi.symbol;
 
-import static com.google.common.collect.Iterables.getFirst;
 import static org.apache.commons.io.FilenameUtils.getBaseName;
-import static org.sonar.plugins.delphi.utils.DelphiUtils.commonPath;
 import static org.sonar.plugins.delphi.utils.DelphiUtils.stopProgressReport;
 
-import com.google.common.collect.ComparisonChain;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.SetMultimap;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +33,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
@@ -72,12 +67,13 @@ public class SymbolTableBuilder {
 
   private final SymbolTable symbolTable = new SymbolTable();
   private final Set<UnitData> sourceFileUnits = new HashSet<>();
-  private final SetMultimap<String, UnitData> allUnitsByName = HashMultimap.create();
+  private final HashMap<String, UnitData> allUnitsByName = new HashMap<>();
   private final Set<Path> unitPaths = new HashSet<>();
-
   private String encoding;
   private TypeFactory typeFactory;
+  private Path standardLibraryPath;
   private SearchPath searchPath = SearchPath.create(Collections.emptyList());
+  private List<Path> sourceFiles = Collections.emptyList();
   private Set<String> conditionalDefines = Collections.emptySet();
   private Set<String> unitScopeNames = Collections.emptySet();
   private Map<String, String> unitAliases = Collections.emptyMap();
@@ -95,8 +91,8 @@ public class SymbolTableBuilder {
     return this;
   }
 
-  public SymbolTableBuilder sourceFiles(@NotNull Iterable<Path> sourceFiles) {
-    sourceFiles.forEach(file -> this.createUnitData(file, true));
+  public SymbolTableBuilder sourceFiles(@NotNull List<Path> sourceFiles) {
+    this.sourceFiles = sourceFiles;
     return this;
   }
 
@@ -112,7 +108,6 @@ public class SymbolTableBuilder {
 
   public SymbolTableBuilder searchPath(@NotNull SearchPath searchPath) {
     this.searchPath = searchPath;
-    this.searchPath.getRootDirectories().forEach(this::processSearchPath);
     return this;
   }
 
@@ -128,37 +123,50 @@ public class SymbolTableBuilder {
   }
 
   public SymbolTableBuilder standardLibraryPath(@NotNull Path standardLibraryPath) {
+    this.standardLibraryPath = standardLibraryPath;
+    return this;
+  }
+
+  private void processStandardLibrarySearchPaths() {
+    if (standardLibraryPath == null) {
+      return;
+    }
+
     if (!Files.exists(standardLibraryPath)) {
       Path absolutePath = standardLibraryPath.toAbsolutePath();
       throw new SymbolTableConstructionException(
           String.format("Path to Delphi standard library is invalid: %s", absolutePath));
     }
+
     Path tools = standardLibraryPath.resolve("Tools");
-    this.processSearchPath(standardLibraryPath, (Path path) -> !path.startsWith(tools));
-    return this;
+
+    try (Stream<Path> fileStream =
+        Files.find(
+            standardLibraryPath,
+            Integer.MAX_VALUE,
+            (filePath, attributes) -> attributes.isRegularFile())) {
+      fileStream
+          .filter(DelphiUtils::acceptFile)
+          .filter(path -> !path.startsWith(tools))
+          .forEach(file -> createUnitData(file, false));
+    } catch (IOException e) {
+      throw new SymbolTableConstructionException(e);
+    }
   }
 
   private void processSearchPath(Path path) {
-    processSearchPath(path, (Path p) -> true);
-  }
-
-  private void processSearchPath(Path path, Predicate<Path> predicate) {
-    findDelphiFilesRecursively(path).stream()
-        .filter(predicate)
-        .forEach(file -> createUnitData(file, false));
-  }
-
-  private static List<Path> findDelphiFilesRecursively(Path path) {
-    try (Stream<Path> fileStream =
-        Files.find(path, Integer.MAX_VALUE, (filePath, attributes) -> attributes.isRegularFile())) {
-      return fileStream.filter(DelphiUtils::acceptFile).collect(Collectors.toList());
+    try (Stream<Path> fileStream = Files.list(path)) {
+      fileStream
+          .filter(Files::isRegularFile)
+          .filter(DelphiUtils::acceptFile)
+          .forEach(file -> createUnitData(file, false));
     } catch (IOException e) {
       throw new SymbolTableConstructionException(e);
     }
   }
 
   private void createUnitData(Path unitPath, boolean isSourceFile) {
-    if (!unitPaths.contains(unitPath)) {
+    if (unitPaths.add(unitPath) || isSourceFile) {
       String unitName = getBaseName(unitPath.toString());
       UnitData unitData = new UnitData(unitPath, isSourceFile);
 
@@ -166,8 +174,10 @@ public class SymbolTableBuilder {
         sourceFileUnits.add(unitData);
       }
 
-      allUnitsByName.put(unitName.toLowerCase(), unitData);
-      unitPaths.add(unitPath);
+      UnitData existing = allUnitsByName.get(unitName.toLowerCase());
+      if (existing == null || existing.unitFile.equals(unitPath)) {
+        allUnitsByName.put(unitName.toLowerCase(), unitData);
+      }
     }
   }
 
@@ -226,26 +236,7 @@ public class SymbolTableBuilder {
     if (unit.getImage().equalsIgnoreCase(importName)) {
       return null;
     }
-
-    return allUnitsByName.get(importName.toLowerCase()).stream()
-        .max(
-            (o1, o2) ->
-                ComparisonChain.start()
-                    .compare(
-                        commonPathNameCount(unit.getPath(), o1.unitFile),
-                        commonPathNameCount(unit.getPath(), o2.unitFile))
-                    .compare(o2.unitFile.getNameCount(), o1.unitFile.getNameCount())
-                    .compare(o1.unitFile, o2.unitFile)
-                    .result())
-        .orElse(null);
-  }
-
-  private static int commonPathNameCount(Path pathA, Path pathB) {
-    Path commonPath = commonPath(pathA, pathB);
-    if (commonPath != null) {
-      return commonPath.getNameCount();
-    }
-    return -1;
+    return allUnitsByName.get(importName.toLowerCase());
   }
 
   private DelphiFileConfig createFileConfig(UnitData unit, boolean shouldSkipImplementation) {
@@ -384,7 +375,7 @@ public class SymbolTableBuilder {
 
   @NotNull
   private UnitData getRequiredUnit(String unit) {
-    UnitData data = getFirst(allUnitsByName.get(unit.toLowerCase()), null);
+    UnitData data = allUnitsByName.get(unit.toLowerCase());
     if (data != null) {
       return data;
     }
@@ -437,6 +428,10 @@ public class SymbolTableBuilder {
     if (typeFactory == null) {
       throw new SymbolTableConstructionException("TypeFactory was not supplied.");
     }
+
+    processStandardLibrarySearchPaths();
+    searchPath.getRootDirectories().forEach(this::processSearchPath);
+    sourceFiles.forEach(file -> this.createUnitData(file, true));
 
     ProgressReport progressReport =
         new ProgressReport(
