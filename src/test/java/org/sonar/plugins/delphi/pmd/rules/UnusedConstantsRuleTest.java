@@ -122,4 +122,46 @@ class UnusedConstantsRuleTest extends BasePmdRuleTest {
 
     assertIssues().areNot(ruleKeyAtLine("UnusedConstantsRule", builder.getOffsetDecl() + 2));
   }
+
+  @Test
+  void testUsedConstSetsWithSubrangeShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("type TAlias = set of AnsiChar;")
+            .appendImpl("procedure Bar(const CharSet: TAlias);")
+            .appendImpl("begin")
+            .appendImpl("  // do nothing")
+            .appendImpl("end;")
+            .appendImpl("procedure Foo(const Str: String);")
+            .appendImpl("const")
+            .appendImpl("  C_Foo = ['A'..'Z'];")
+            .appendImpl("begin")
+            .appendImpl("  Bar(C_Foo);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("UnusedConstantsRule"));
+  }
+
+  @Test
+  void testUsedConstSetsShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("type TAlias = set of AnsiChar;")
+            .appendImpl("procedure Bar(const CharSet: TAlias);")
+            .appendImpl("begin")
+            .appendImpl("  // do nothing")
+            .appendImpl("end;")
+            .appendImpl("procedure Foo(const Str: String);")
+            .appendImpl("const")
+            .appendImpl("  C_Foo = ['A','Z'];")
+            .appendImpl("begin")
+            .appendImpl("  Bar(C_Foo);")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("UnusedConstantsRule"));
+  }
 }
