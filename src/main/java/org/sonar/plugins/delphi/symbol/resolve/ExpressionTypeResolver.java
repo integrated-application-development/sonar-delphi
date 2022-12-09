@@ -289,7 +289,7 @@ public final class ExpressionTypeResolver {
 
       if (declaration instanceof TypeNameDeclaration
           || declaration instanceof TypeParameterNameDeclaration) {
-        type = typeFactory.classOf(type);
+        type = typeFactory.classOf(null, type);
       }
 
       if (type.isProcedural() && occurrence.isExplicitInvocation()) {
@@ -311,10 +311,10 @@ public final class ExpressionTypeResolver {
         return TypeUtils.dereference(type);
 
       case DelphiLexer.STRING:
-        return typeFactory.classOf(typeFactory.getIntrinsic(IntrinsicType.UNICODESTRING));
+        return typeFactory.classOf(null, typeFactory.getIntrinsic(IntrinsicType.UNICODESTRING));
 
       case DelphiLexer.FILE:
-        return typeFactory.classOf(typeFactory.untypedFile());
+        return typeFactory.classOf(null, typeFactory.untypedFile());
 
       default:
         // Do nothing

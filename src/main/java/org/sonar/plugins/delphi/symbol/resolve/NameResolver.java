@@ -228,7 +228,7 @@ public class NameResolver {
     } else {
       result = declaration.getType();
       if (isTypeIdentifier(declaration)) {
-        result = typeFactory.classOf(result);
+        result = typeFactory.classOf(null, result);
       }
     }
 
@@ -298,11 +298,12 @@ public class NameResolver {
         break;
 
       case DelphiLexer.STRING:
-        updateType(typeFactory.classOf(typeFactory.getIntrinsic(IntrinsicType.UNICODESTRING)));
+        updateType(
+            typeFactory.classOf(null, typeFactory.getIntrinsic(IntrinsicType.UNICODESTRING)));
         break;
 
       case DelphiLexer.FILE:
-        updateType(typeFactory.classOf(typeFactory.untypedFile()));
+        updateType(typeFactory.classOf(null, typeFactory.untypedFile()));
         break;
 
       default:

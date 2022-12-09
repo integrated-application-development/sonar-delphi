@@ -40,7 +40,11 @@ public final class ClassReferenceTypeNode extends TypeNode {
   @Override
   @NotNull
   public Type createType() {
+    String image = null;
+    if (parent instanceof TypeDeclarationNode) {
+      image = ((TypeDeclarationNode) parent).fullyQualifiedName();
+    }
     Type classType = getClassOfTypeNode().getType();
-    return getTypeFactory().classOf(classType);
+    return getTypeFactory().classOf(image, classType);
   }
 }

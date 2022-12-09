@@ -85,7 +85,7 @@ class IntrinsicArgumentMatcherTest {
   void testAnyClassReference() {
     Type type = TypeMocker.struct("TFoo", StructKind.CLASS);
     assertThat(matches(ANY_CLASS_REFERENCE, type)).isFalse();
-    assertThat(matches(ANY_CLASS_REFERENCE, FACTORY.classOf(type))).isTrue();
+    assertThat(matches(ANY_CLASS_REFERENCE, FACTORY.classOf(null, type))).isTrue();
   }
 
   @Test

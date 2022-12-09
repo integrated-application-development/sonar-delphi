@@ -778,7 +778,9 @@ class TypeComparer {
     if (from.isClassReference()) {
       Type fromReference = ((ClassReferenceType) from).classType();
       Type toReference = ((ClassReferenceType) to).classType();
-      if (fromReference.isSubTypeOf(toReference)) {
+      if (fromReference.is(toReference)) {
+        return EQUAL;
+      } else if (fromReference.isSubTypeOf(toReference)) {
         return CONVERT_LEVEL_1;
       }
     } else if (from.isPointer()) {

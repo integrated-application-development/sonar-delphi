@@ -20,7 +20,9 @@ package org.sonar.plugins.delphi.type.factory;
 
 import static org.sonar.plugins.delphi.symbol.scope.DelphiScope.unknownScope;
 
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
@@ -28,17 +30,19 @@ import org.sonar.plugins.delphi.type.Type.ClassReferenceType;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
 
 class DelphiClassReferenceType extends DelphiType implements ClassReferenceType, ScopedType {
+  private final String image;
   private Type classType;
   private final int size;
 
-  DelphiClassReferenceType(Type classType, int size) {
+  DelphiClassReferenceType(@Nullable String image, Type classType, int size) {
+    this.image = image;
     this.classType = classType;
     this.size = size;
   }
 
   @Override
   public String getImage() {
-    return "class of " + classType.getImage();
+    return Objects.requireNonNullElse(image, "class of " + classType.getImage());
   }
 
   @Override
