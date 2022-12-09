@@ -527,20 +527,22 @@ class TypeComparerTest {
 
   @Test
   void testToClassReference() {
-    var toObject = TypeMocker.struct("Foo", CLASS);
-    var fromObject = TypeMocker.struct("Bar", CLASS, toObject);
-    var otherObject = TypeMocker.struct("Baz", CLASS);
+    Type foo = TypeMocker.struct("Foo", CLASS);
+    Type bar = TypeMocker.struct("Bar", CLASS, foo);
+    Type baz = TypeMocker.struct("Baz", CLASS);
 
-    Type fromReference = classOf(fromObject);
-    Type toReference = classOf(toObject);
-    Type otherReference = classOf(otherObject);
+    Type fooReference = classOf(foo);
+    Type namedFooReference = classOf("Flarp.Flimflam", foo);
+    Type barReference = classOf(bar);
+    Type bazReference = classOf(baz);
 
-    compare(fromReference, toReference, CONVERT_LEVEL_1);
-    compare(otherReference, toReference, INCOMPATIBLE_TYPES);
-    compare(untypedPointer(), toReference, CONVERT_LEVEL_5);
-    compare(nilPointer(), toReference, CONVERT_LEVEL_4);
-    compare(pointerTo(toObject), toReference, INCOMPATIBLE_TYPES);
-    compare(unknownType(), toReference, INCOMPATIBLE_TYPES);
+    compare(fooReference, namedFooReference, EQUAL);
+    compare(barReference, fooReference, CONVERT_LEVEL_1);
+    compare(bazReference, fooReference, INCOMPATIBLE_TYPES);
+    compare(untypedPointer(), fooReference, CONVERT_LEVEL_5);
+    compare(nilPointer(), fooReference, CONVERT_LEVEL_4);
+    compare(pointerTo(foo), fooReference, INCOMPATIBLE_TYPES);
+    compare(unknownType(), fooReference, INCOMPATIBLE_TYPES);
   }
 
   @Test
@@ -561,6 +563,7 @@ class TypeComparerTest {
     var barType = TypeMocker.struct("Bar", CLASS, fooType);
     var arrayType = dynamicArray(null, IntrinsicType.INTEGER);
 
+    compare(pointerTo("Baz", fooType), pointerTo(fooType), EQUAL);
     compare(pointerTo(IntrinsicType.NATIVEINT), pointerTo(IntrinsicType.INTEGER), EQUAL);
     compare(pointerTo(barType), pointerTo(fooType), CONVERT_LEVEL_1);
     compare(IntrinsicType.UNICODESTRING, pointerTo(IntrinsicType.CHAR), CONVERT_LEVEL_2);
@@ -710,11 +713,15 @@ class TypeComparerTest {
   }
 
   private static PointerType pointerTo(Type type) {
-    return FACTORY.pointerTo(type);
+    return FACTORY.pointerTo(null, type);
   }
 
   private static PointerType pointerTo(IntrinsicType intrinsic) {
     return pointerTo(toType(intrinsic));
+  }
+
+  private static PointerType pointerTo(String image, Type type) {
+    return FACTORY.pointerTo(image, type);
   }
 
   private static PointerType untypedPointer() {
@@ -738,7 +745,11 @@ class TypeComparerTest {
   }
 
   private static ClassReferenceType classOf(Type type) {
-    return FACTORY.classOf(type);
+    return FACTORY.classOf(null, type);
+  }
+
+  private static ClassReferenceType classOf(String image, Type type) {
+    return FACTORY.classOf(image, type);
   }
 
   private static ProceduralType procedure(List<Type> parameterTypes, Type returnType) {

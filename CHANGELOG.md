@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Clean up some internal assumptions about windows paths.
 - Import name-collision issues, by ensuring search paths are traversed in order of declaration.
+- Type identity issues around implicit forwarded types.
 
 ## [0.39.1] - 2022-11-22
 

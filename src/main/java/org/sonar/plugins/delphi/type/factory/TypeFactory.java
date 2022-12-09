@@ -87,7 +87,7 @@ public class TypeFactory {
     this.toolchain = toolchain;
     this.compilerVersion = compilerVersion;
     this.intrinsicTypes = new EnumMap<>(IntrinsicType.class);
-    this.nilPointer = pointerTo(DelphiType.voidType());
+    this.nilPointer = pointerTo("nil", DelphiType.voidType());
     this.untypedFile = fileOf(DelphiType.untypedType());
     this.emptySet = new DelphiSetType(DelphiType.voidType());
     createIntrinsicTypes();
@@ -178,7 +178,9 @@ public class TypeFactory {
 
   private void addPointer(
       IntrinsicType intrinsic, Type dereferenced, int size, boolean pointerMath) {
-    intrinsicTypes.put(intrinsic, new DelphiPointerType(dereferenced, size, pointerMath));
+    intrinsicTypes.put(
+        intrinsic,
+        new DelphiPointerType(intrinsic.fullyQualifiedName(), dereferenced, size, pointerMath));
   }
 
   private void addVariant(IntrinsicType intrinsic, int size, VariantKind kind) {
@@ -404,8 +406,8 @@ public class TypeFactory {
     return new DelphiSubrangeType(image, type);
   }
 
-  public PointerType pointerTo(Type type) {
-    return new DelphiPointerType(type, pointerSize(), false);
+  public PointerType pointerTo(@Nullable String image, Type type) {
+    return new DelphiPointerType(image, type, pointerSize(), false);
   }
 
   public PointerType untypedPointer() {
@@ -424,8 +426,8 @@ public class TypeFactory {
     return untypedFile;
   }
 
-  public ClassReferenceType classOf(Type type) {
-    return new DelphiClassReferenceType(type, pointerSize());
+  public ClassReferenceType classOf(@Nullable String image, Type type) {
+    return new DelphiClassReferenceType(image, type, pointerSize());
   }
 
   public ProceduralType procedure(List<Parameter> parameters, Type returnType) {

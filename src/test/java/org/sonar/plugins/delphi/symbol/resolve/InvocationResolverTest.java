@@ -255,7 +255,8 @@ class InvocationResolverTest {
     assertResolvedVar(dynamicArray, openArray);
     assertResolvedVar(type(INTEGER), openArray);
     assertResolvedVar(FACTORY.untypedPointer(), FACTORY.untypedPointer());
-    assertResolvedVar(FACTORY.pointerTo(type(INTEGER)), FACTORY.pointerTo(type(SHORTINT)));
+    assertResolvedVar(
+        FACTORY.pointerTo(null, type(INTEGER)), FACTORY.pointerTo(null, type(SHORTINT)));
     assertResolvedVar(FACTORY.fileOf(type(INTEGER)), FACTORY.untypedFile());
   }
 

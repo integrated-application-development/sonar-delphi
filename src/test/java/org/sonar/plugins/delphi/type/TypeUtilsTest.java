@@ -45,7 +45,7 @@ class TypeUtilsTest {
     Type dereferenced = FACTORY.getIntrinsic(IntrinsicType.INTEGER);
     assertThat(TypeUtils.dereference(dereferenced)).isEqualTo(dereferenced);
 
-    Type pointer = FACTORY.pointerTo(dereferenced);
+    Type pointer = FACTORY.pointerTo(null, dereferenced);
     assertThat(TypeUtils.dereference(pointer)).isEqualTo(dereferenced);
   }
 

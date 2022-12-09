@@ -18,6 +18,7 @@
  */
 package org.sonar.plugins.delphi.type.factory;
 
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.delphi.type.DelphiType;
 import org.sonar.plugins.delphi.type.Type;
@@ -25,11 +26,13 @@ import org.sonar.plugins.delphi.type.Type.PointerType;
 import org.sonar.plugins.delphi.type.generic.TypeSpecializationContext;
 
 class DelphiPointerType extends DelphiType implements PointerType {
+  private final String image;
   private Type dereferencedType;
   private final int size;
   private boolean allowsPointerMath;
 
-  DelphiPointerType(Type dereferencedType, int size, boolean allowsPointerMath) {
+  DelphiPointerType(String image, Type dereferencedType, int size, boolean allowsPointerMath) {
+    this.image = image;
     this.dereferencedType = dereferencedType;
     this.size = size;
     this.allowsPointerMath = allowsPointerMath;
@@ -42,7 +45,7 @@ class DelphiPointerType extends DelphiType implements PointerType {
 
   @Override
   public String getImage() {
-    return "^" + dereferencedType.getImage();
+    return Objects.requireNonNullElse(image, "^" + dereferencedType.getImage());
   }
 
   @Override
@@ -84,7 +87,8 @@ class DelphiPointerType extends DelphiType implements PointerType {
   @Override
   public Type specialize(TypeSpecializationContext context) {
     if (dereferencedType().isTypeParameter()) {
-      return new DelphiPointerType(dereferencedType().specialize(context), size, allowsPointerMath);
+      return new DelphiPointerType(
+          null, dereferencedType().specialize(context), size, allowsPointerMath);
     }
     return this;
   }

@@ -430,7 +430,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
         selfType = ((HelperType) selfType).extendedType();
       }
       if (node.isClassMethod()) {
-        selfType = data.typeFactory.classOf(selfType);
+        selfType = data.typeFactory.classOf(null, selfType);
         if (declaration != null && declaration.hasDirective(MethodDirective.STATIC)) {
           selfType = null;
         }

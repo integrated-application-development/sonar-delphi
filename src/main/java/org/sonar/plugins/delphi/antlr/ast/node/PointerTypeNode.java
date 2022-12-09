@@ -40,6 +40,10 @@ public final class PointerTypeNode extends TypeNode {
   @NotNull
   @Override
   public Type createType() {
-    return getTypeFactory().pointerTo(getDereferencedTypeNode().getType());
+    String image = null;
+    if (parent instanceof TypeDeclarationNode) {
+      image = ((TypeDeclarationNode) parent).fullyQualifiedName();
+    }
+    return getTypeFactory().pointerTo(image, getDereferencedTypeNode().getType());
   }
 }
