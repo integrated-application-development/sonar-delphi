@@ -128,6 +128,8 @@ public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
       TypeFactory typeFactory = node.getTypeFactory();
       if (elementType.isInteger()) {
         elementType = typeFactory.getIntrinsic(IntrinsicType.BYTE);
+      } else if (elementType.isChar()) {
+        elementType = typeFactory.getIntrinsic(IntrinsicType.ANSICHAR);
       }
       type = typeFactory.set(elementType);
     }
