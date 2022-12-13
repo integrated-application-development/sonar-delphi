@@ -210,7 +210,8 @@ public class VariableInitializationRule extends AbstractDelphiRule {
 
   private static boolean isRecordInvocation(NameReferenceNode name) {
     NameDeclaration declaration = name.getNameDeclaration();
-    if (!((TypedDeclaration) declaration).getType().isRecord()) {
+    if (!(declaration instanceof TypedDeclaration
+        && ((TypedDeclaration) declaration).getType().isRecord())) {
       return false;
     }
 

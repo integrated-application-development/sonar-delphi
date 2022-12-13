@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Type identity issues around implicit forwarded types.
 - Parsing errors on `record helper for file`.
 - Type resolution issues around `set of AnsiChar` literals.
+- NPE in `VariableInitializationRule`.
 
 ## [0.39.1] - 2022-11-22
 
