@@ -20,8 +20,10 @@ package org.sonar.plugins.delphi.enviroment;
 
 import java.util.Map;
 import org.sonar.api.scanner.ScannerSide;
+import org.sonarsource.api.sonarlint.SonarLintSide;
 
 @ScannerSide
+@SonarLintSide
 public interface EnvironmentVariableProvider {
   Map<String, String> getenv();
 
