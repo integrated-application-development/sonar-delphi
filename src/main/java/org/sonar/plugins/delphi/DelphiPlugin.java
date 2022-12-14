@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.Plugin;
+import org.sonar.api.SonarProduct;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.plugins.delphi.compiler.CompilerVersion;
@@ -182,20 +183,14 @@ public class DelphiPlugin implements Plugin {
     builder.add(
         // Sensors
         DelphiSensor.class,
-        DelphiCoverageSensor.class,
-        DelphiNUnitSensor.class,
         // Executors
         DelphiMasterExecutor.class,
-        DelphiCpdExecutor.class,
-        DelphiHighlightExecutor.class,
-        DelphiMetricsExecutor.class,
         DelphiSymbolTableExecutor.class,
         DelphiPmdExecutor.class,
         // Core
         DelphiLanguage.class,
         // Core helpers
         DelphiProjectHelper.class,
-        DelphiCoverageParserFactory.class,
         // PMD
         DelphiPmdConfiguration.class,
         DelphiPmdRulesDefinition.class,
@@ -206,6 +201,19 @@ public class DelphiPlugin implements Plugin {
         DelphiPmdViolationRecorder.class,
         // Environment
         DefaultEnvironmentVariableProvider.class);
+
+    if (context.getRuntime().getProduct() == SonarProduct.SONARQUBE) {
+      builder.add(
+          // Sensors
+          DelphiCoverageSensor.class,
+          DelphiNUnitSensor.class,
+          // Executors
+          DelphiCpdExecutor.class,
+          DelphiHighlightExecutor.class,
+          DelphiMetricsExecutor.class,
+          // Core helpers
+          DelphiCoverageParserFactory.class);
+    }
 
     context.addExtensions(builder.build());
   }
