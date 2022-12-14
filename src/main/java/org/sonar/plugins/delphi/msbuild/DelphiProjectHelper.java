@@ -55,8 +55,10 @@ import org.sonar.plugins.delphi.compiler.Toolchain;
 import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.enviroment.EnvironmentVariableProvider;
 import org.sonar.plugins.delphi.utils.DelphiUtils;
+import org.sonarsource.api.sonarlint.SonarLintSide;
 
 @ScannerSide
+@SonarLintSide
 public class DelphiProjectHelper {
   private static final Logger LOG = Loggers.get(DelphiProjectHelper.class);
   private final Configuration settings;

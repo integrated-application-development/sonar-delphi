@@ -38,8 +38,10 @@ import org.sonar.plugins.delphi.symbol.scope.DelphiScope;
 import org.sonar.plugins.delphi.symbol.scope.TypeScope;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
+import org.sonarsource.api.sonarlint.SonarLintSide;
 
 @ScannerSide
+@SonarLintSide
 public class DelphiPmdViolationRecorder {
   private final DelphiProjectHelper delphiProjectHelper;
   private final ActiveRules activeRules;
