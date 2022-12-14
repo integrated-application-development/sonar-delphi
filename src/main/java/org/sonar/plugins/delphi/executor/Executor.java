@@ -24,8 +24,10 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.scanner.ScannerSide;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.symbol.SymbolTable;
+import org.sonarsource.api.sonarlint.SonarLintSide;
 
 @ScannerSide
+@SonarLintSide
 public interface Executor {
   default void setup() {}
 

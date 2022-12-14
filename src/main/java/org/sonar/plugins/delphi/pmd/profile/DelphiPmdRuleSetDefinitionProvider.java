@@ -28,9 +28,11 @@ import org.sonar.api.server.ServerSide;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConstants;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSetHelper;
+import org.sonarsource.api.sonarlint.SonarLintSide;
 
 @ScannerSide
 @ServerSide
+@SonarLintSide
 public class DelphiPmdRuleSetDefinitionProvider {
 
   private DelphiRuleSet definition;

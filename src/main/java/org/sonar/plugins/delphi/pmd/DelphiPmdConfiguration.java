@@ -39,8 +39,10 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
+import org.sonarsource.api.sonarlint.SonarLintSide;
 
 @ScannerSide
+@SonarLintSide
 public class DelphiPmdConfiguration extends PMDConfiguration {
   private static final Logger LOG = Loggers.get(DelphiPmdConfiguration.class);
   private static final String PMD_RESULT_XML = "pmd-result.xml";
