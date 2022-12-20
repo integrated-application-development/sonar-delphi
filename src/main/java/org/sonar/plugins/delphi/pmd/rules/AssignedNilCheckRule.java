@@ -20,15 +20,32 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.delphi.antlr.ast.node.BinaryExpressionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.ExpressionNode;
+import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.operator.BinaryOperator;
+import org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration;
 
 public class AssignedNilCheckRule extends AbstractDelphiRule {
+
+  private boolean isRuleViolated(ExpressionNode a, ExpressionNode b) {
+    return a.skipParentheses().hasDescendantOfType(NameReferenceNode.class)
+        && a.skipParentheses()
+                .getFirstDescendantOfType(NameReferenceNode.class)
+                .getLastName()
+                .getNameDeclaration()
+            instanceof VariableNameDeclaration
+        && b.isNilLiteral();
+  }
+
+  private boolean isEitherSideViolating(ExpressionNode left, ExpressionNode right) {
+    return isRuleViolated(left, right) || isRuleViolated(right, left);
+  }
 
   @Override
   public RuleContext visit(BinaryExpressionNode expression, RuleContext data) {
     BinaryOperator operator = expression.getOperator();
     if ((operator == BinaryOperator.EQUAL || operator == BinaryOperator.NOT_EQUAL)
-        && (expression.getLeft().isNilLiteral() || expression.getRight().isNilLiteral())) {
+        && isEitherSideViolating(expression.getLeft(), expression.getRight())) {
       addViolation(data, expression);
     }
     return super.visit(expression, data);
