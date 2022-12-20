@@ -43,6 +43,32 @@ class AssignedNilCheckRuleTest extends BasePmdRuleTest {
   }
 
   @Test
+  void testNonVariablesShouldNotAddIssues() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TBaz = class(TObject)")
+            .appendDecl("    function Baz: String;")
+            .appendDecl("  end;")
+            .appendImpl("function Bar: TObject;")
+            .appendImpl("begin")
+            .appendImpl("end;")
+            .appendImpl("procedure Test(BazVar: TBaz);")
+            .appendImpl("begin")
+            .appendImpl("  if BazVar.Baz = nil then begin")
+            .appendImpl("    Exit;")
+            .appendImpl("  end;")
+            .appendImpl("  if Bar = nil then begin")
+            .appendImpl("    Exit;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("AssignedNilCheckRule"));
+  }
+
+  @Test
   void testRegularComparisonsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
@@ -65,8 +91,15 @@ class AssignedNilCheckRuleTest extends BasePmdRuleTest {
   void testNilComparisonsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TBar = class(TObject)")
+            .appendDecl("    class var FBar: TObject")
+            .appendDecl("  end;")
             .appendImpl("procedure Test(Foo: TObject);")
             .appendImpl("begin")
+            .appendImpl("  if TBar.FBar = nil then begin")
+            .appendImpl("    Exit;")
+            .appendImpl("  end;")
             .appendImpl("  if Foo = nil then begin")
             .appendImpl("    Exit;")
             .appendImpl("  end;")
@@ -87,6 +120,7 @@ class AssignedNilCheckRuleTest extends BasePmdRuleTest {
         .areExactly(1, ruleKeyAtLine("AssignedNilCheckRule", builder.getOffset() + 3))
         .areExactly(1, ruleKeyAtLine("AssignedNilCheckRule", builder.getOffset() + 6))
         .areExactly(1, ruleKeyAtLine("AssignedNilCheckRule", builder.getOffset() + 9))
-        .areExactly(1, ruleKeyAtLine("AssignedNilCheckRule", builder.getOffset() + 12));
+        .areExactly(1, ruleKeyAtLine("AssignedNilCheckRule", builder.getOffset() + 12))
+        .areExactly(1, ruleKeyAtLine("AssignedNilCheckRule", builder.getOffset() + 15));
   }
 }
