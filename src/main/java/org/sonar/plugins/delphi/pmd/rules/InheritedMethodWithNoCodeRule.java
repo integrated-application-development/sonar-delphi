@@ -20,6 +20,11 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.ast.Node;
 import org.sonar.plugins.delphi.antlr.ast.node.ArgumentListNode;
@@ -34,6 +39,10 @@ import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.StatementNode;
+import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
+import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.delphi.type.Type;
+import org.sonar.plugins.delphi.type.Type.ScopedType;
 
 public class InheritedMethodWithNoCodeRule extends AbstractDelphiRule {
 
@@ -70,11 +79,61 @@ public class InheritedMethodWithNoCodeRule extends AbstractDelphiRule {
       }
     }
 
-    if (isInheritedCall(method, expr)) {
+    if (isInheritedCall(method, expr)
+        && !isVisibilityChanged(method)
+        && !isAddingMeaningfulDirectives(method)) {
       return statement;
     }
 
     return null;
+  }
+
+  private static Stream<Type> streamAllConcreteParentTypes(Type type) {
+    Optional<Type> classTypeParent = type.parents().stream().filter(Type::isClass).findFirst();
+    return classTypeParent
+        .map(value -> Stream.concat(Stream.of(value), streamAllConcreteParentTypes(value)))
+        .orElseGet(Stream::empty);
+  }
+
+  private static List<MethodNameDeclaration> getParentMethodDeclarations(
+      MethodImplementationNode method) {
+    var typeDeclaration = method.getTypeDeclaration();
+    var nameDeclaration = method.getMethodNameDeclaration();
+    if (typeDeclaration == null || nameDeclaration == null) {
+      return Collections.emptyList();
+    }
+
+    return streamAllConcreteParentTypes(typeDeclaration.getType())
+        .map(ScopedType.class::cast)
+        .flatMap(type -> type.typeScope().getMethodDeclarations().stream())
+        .filter(methodDeclaration -> isOverriddenMethod(methodDeclaration, nameDeclaration))
+        .collect(Collectors.toUnmodifiableList());
+  }
+
+  private static boolean isVisibilityChanged(MethodImplementationNode method) {
+    var parentMethods = getParentMethodDeclarations(method);
+    if (parentMethods.isEmpty() || method.getMethodNameDeclaration() == null) {
+      return true;
+    }
+
+    MethodNameDeclaration parentMethod = parentMethods.get(0);
+    return parentMethod.getVisibility().ordinal()
+        != method.getMethodNameDeclaration().getVisibility().ordinal();
+  }
+
+  private static boolean isAddingMeaningfulDirectives(MethodImplementationNode method) {
+    var parentMethods = getParentMethodDeclarations(method);
+    if (parentMethods.isEmpty() || method.getMethodNameDeclaration() == null) {
+      return false;
+    }
+
+    MethodNameDeclaration parentMethod = parentMethods.get(0);
+    Set<MethodDirective> newDirectives =
+        method.getMethodNameDeclaration().getDirectives().stream()
+            .filter(Predicate.not(parentMethod.getDirectives()::contains))
+            .collect(Collectors.toSet());
+    return newDirectives.contains(MethodDirective.REINTRODUCE)
+        || newDirectives.contains(MethodDirective.VIRTUAL);
   }
 
   private static boolean isInheritedCall(MethodImplementationNode method, ExpressionNode expr) {
@@ -121,5 +180,11 @@ public class InheritedMethodWithNoCodeRule extends AbstractDelphiRule {
     }
 
     return true;
+  }
+
+  private static boolean isOverriddenMethod(
+      MethodNameDeclaration parent, MethodNameDeclaration child) {
+    return parent.getName().equalsIgnoreCase(child.getName())
+        && parent.getParameters().equals(child.getParameters());
   }
 }
