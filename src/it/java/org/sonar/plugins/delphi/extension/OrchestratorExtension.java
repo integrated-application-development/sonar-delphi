@@ -31,6 +31,7 @@ public class OrchestratorExtension implements BeforeAllCallback, AfterAllCallbac
 
   private final Orchestrator orchestrator =
       Orchestrator.builderEnv()
+          .useDefaultAdminCredentialsForBuilds(true)
           .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE"))
           .addPlugin(PLUGIN_LOCATION)
           .build();
