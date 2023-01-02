@@ -43,7 +43,7 @@ class AssignedNilCheckRuleTest extends BasePmdRuleTest {
   }
 
   @Test
-  void testNonVariablesShouldNotAddIssues() {
+  void testNonVariablesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
