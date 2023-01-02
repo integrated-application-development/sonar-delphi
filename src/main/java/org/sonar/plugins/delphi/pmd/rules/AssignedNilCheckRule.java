@@ -27,7 +27,7 @@ import org.sonar.plugins.delphi.symbol.declaration.VariableNameDeclaration;
 
 public class AssignedNilCheckRule extends AbstractDelphiRule {
 
-  private boolean isRuleViolated(ExpressionNode a, ExpressionNode b) {
+  private static boolean isVariableComparedToNil(ExpressionNode a, ExpressionNode b) {
     return a.skipParentheses().hasDescendantOfType(NameReferenceNode.class)
         && a.skipParentheses()
                 .getFirstDescendantOfType(NameReferenceNode.class)
@@ -37,15 +37,18 @@ public class AssignedNilCheckRule extends AbstractDelphiRule {
         && b.isNilLiteral();
   }
 
-  private boolean isEitherSideViolating(ExpressionNode left, ExpressionNode right) {
-    return isRuleViolated(left, right) || isRuleViolated(right, left);
+  private static boolean isViolation(BinaryExpressionNode expression) {
+    BinaryOperator operator = expression.getOperator();
+    ExpressionNode left = expression.getLeft();
+    ExpressionNode right = expression.getRight();
+
+    return (operator == BinaryOperator.EQUAL || operator == BinaryOperator.NOT_EQUAL)
+        && (isVariableComparedToNil(left, right) || isVariableComparedToNil(right, left));
   }
 
   @Override
   public RuleContext visit(BinaryExpressionNode expression, RuleContext data) {
-    BinaryOperator operator = expression.getOperator();
-    if ((operator == BinaryOperator.EQUAL || operator == BinaryOperator.NOT_EQUAL)
-        && isEitherSideViolating(expression.getLeft(), expression.getRight())) {
+    if (isViolation(expression)) {
       addViolation(data, expression);
     }
     return super.visit(expression, data);
