@@ -559,9 +559,10 @@ class TypeComparerTest {
 
   @Test
   void testToPointer() {
-    var fooType = TypeMocker.struct("Foo", CLASS);
-    var barType = TypeMocker.struct("Bar", CLASS, fooType);
-    var arrayType = dynamicArray(null, IntrinsicType.INTEGER);
+    Type fooType = TypeMocker.struct("Foo", CLASS);
+    Type barType = TypeMocker.struct("Bar", CLASS, fooType);
+    Type bazType = TypeMocker.struct("Baz", RECORD);
+    Type arrayType = dynamicArray(null, IntrinsicType.INTEGER);
 
     compare(pointerTo("Baz", fooType), pointerTo(fooType), EQUAL);
     compare(pointerTo(IntrinsicType.NATIVEINT), pointerTo(IntrinsicType.INTEGER), EQUAL);
@@ -574,6 +575,7 @@ class TypeComparerTest {
     compare(IntrinsicType.ANSICHAR, pointerTo(IntrinsicType.ANSICHAR), CONVERT_LEVEL_2);
     compare(IntrinsicType.ANSICHAR, pointerTo(IntrinsicType.INTEGER), INCOMPATIBLE_TYPES);
     compare(fooType, untypedPointer(), CONVERT_LEVEL_5);
+    compare(classOf(fooType), untypedPointer(), CONVERT_LEVEL_5);
     compare(IntrinsicType.INTEGER, pointerTo(IntrinsicType.UNICODESTRING), CONVERT_LEVEL_6);
     compare(untypedPointer(), pointerTo(IntrinsicType.CHAR), CONVERT_LEVEL_2);
     compare(untypedPointer(), pointerTo(IntrinsicType.INTEGER), CONVERT_LEVEL_1);
@@ -595,6 +597,7 @@ class TypeComparerTest {
         dynamicArray(null, IntrinsicType.STRING),
         pointerTo(IntrinsicType.INTEGER),
         INCOMPATIBLE_TYPES);
+    compare(bazType, untypedPointer(), INCOMPATIBLE_TYPES);
     compare(unknownType(), untypedPointer(), INCOMPATIBLE_TYPES);
   }
 
