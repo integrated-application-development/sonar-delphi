@@ -20,7 +20,6 @@ package org.sonar.plugins.delphi.pmd.rules;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -41,6 +40,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.PrimaryExpressionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.StatementNode;
 import org.sonar.plugins.delphi.symbol.declaration.MethodDirective;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.delphi.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.delphi.type.Type;
 import org.sonar.plugins.delphi.type.Type.ScopedType;
 
@@ -88,22 +88,23 @@ public class InheritedMethodWithNoCodeRule extends AbstractDelphiRule {
     return null;
   }
 
-  private static Stream<Type> streamAllConcreteParentTypes(Type type) {
-    Optional<Type> classTypeParent = type.parents().stream().filter(Type::isClass).findFirst();
-    return classTypeParent
-        .map(value -> Stream.concat(Stream.of(value), streamAllConcreteParentTypes(value)))
+  private static Stream<Type> concreteParentTypesStream(Type type) {
+    return type.parents().stream()
+        .filter(Type::isClass)
+        .findFirst()
+        .map(value -> Stream.concat(Stream.of(value), concreteParentTypesStream(value)))
         .orElseGet(Stream::empty);
   }
 
   private static List<MethodNameDeclaration> getParentMethodDeclarations(
       MethodImplementationNode method) {
-    var typeDeclaration = method.getTypeDeclaration();
-    var nameDeclaration = method.getMethodNameDeclaration();
+    TypeNameDeclaration typeDeclaration = method.getTypeDeclaration();
+    MethodNameDeclaration nameDeclaration = method.getMethodNameDeclaration();
     if (typeDeclaration == null || nameDeclaration == null) {
       return Collections.emptyList();
     }
 
-    return streamAllConcreteParentTypes(typeDeclaration.getType())
+    return concreteParentTypesStream(typeDeclaration.getType())
         .map(ScopedType.class::cast)
         .flatMap(type -> type.typeScope().getMethodDeclarations().stream())
         .filter(methodDeclaration -> isOverriddenMethod(methodDeclaration, nameDeclaration))
@@ -111,7 +112,7 @@ public class InheritedMethodWithNoCodeRule extends AbstractDelphiRule {
   }
 
   private static boolean isVisibilityChanged(MethodImplementationNode method) {
-    var parentMethods = getParentMethodDeclarations(method);
+    List<MethodNameDeclaration> parentMethods = getParentMethodDeclarations(method);
     if (parentMethods.isEmpty() || method.getMethodNameDeclaration() == null) {
       return true;
     }
@@ -122,7 +123,7 @@ public class InheritedMethodWithNoCodeRule extends AbstractDelphiRule {
   }
 
   private static boolean isAddingMeaningfulDirectives(MethodImplementationNode method) {
-    var parentMethods = getParentMethodDeclarations(method);
+    List<MethodNameDeclaration> parentMethods = getParentMethodDeclarations(method);
     if (parentMethods.isEmpty() || method.getMethodNameDeclaration() == null) {
       return false;
     }
