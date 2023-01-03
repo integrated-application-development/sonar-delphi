@@ -818,7 +818,9 @@ class TypeComparer {
       return compareStringToPointer((StringType) from, pointerTo);
     } else if (from.isChar()) {
       return compareCharToPointer(pointerTo);
-    } else if (from.isStruct() && pointerTo.isUntypedPointer()) {
+    } else if (from.isStruct() && !from.isRecord() && pointerTo.isUntypedPointer()) {
+      return CONVERT_LEVEL_5;
+    } else if (from.isClassReference() && pointerTo.isUntypedPointer()) {
       return CONVERT_LEVEL_5;
     } else if (from.isInteger()) {
       return CONVERT_LEVEL_6;
