@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Compare unit references to original name in `MixedNamesRule`.
 - Only raise issues on variables in `AssignedNilCheckRule`.
+- Handle cases where the visibility of a method changes in `InheritedMethodWithNoCodeRule`.
+- Handle `reintroduce`/`virtual` in `InheritedMethodWithNoCodeRule`.
 - Update description for `EnumNameRule`.
 - Improve type comparisons between class references and pointers.
 - Improve type comparisons between records and pointers.
