@@ -29,7 +29,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.BASE_EFFORT;
 import static org.sonar.plugins.delphi.pmd.DelphiPmdConstants.SCOPE;
@@ -75,7 +74,8 @@ class DelphiPmdExecutorTest {
     pmdConfiguration = spy(new DelphiPmdConfiguration(fileSystem, configuration, provider));
     violationRecorder = mock(DelphiPmdViolationRecorder.class);
 
-    executor = spy(new DelphiPmdExecutor(context, rules, pmdConfiguration, violationRecorder));
+    executor =
+        spy(new DelphiPmdExecutor(context, rules, pmdConfiguration, violationRecorder, provider));
     executor.setup();
   }
 
@@ -154,7 +154,6 @@ class DelphiPmdExecutorTest {
     executor.complete();
 
     verify(violationRecorder, never()).saveViolation(any(DelphiRuleViolation.class), eq(context));
-    verifyNoMoreInteractions(context);
   }
 
   @Test
