@@ -44,11 +44,13 @@ import net.sourceforge.pmd.lang.LanguageRegistry;
 import net.sourceforge.pmd.lang.LanguageVersion;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.plugins.delphi.pmd.DelphiLanguageModule;
 import org.sonar.plugins.delphi.pmd.DelphiPmdConfiguration;
+import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
 import org.sonar.plugins.delphi.pmd.violation.DelphiPmdViolationRecorder;
 import org.sonar.plugins.delphi.pmd.violation.DelphiRuleViolation;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
@@ -63,6 +65,7 @@ public class DelphiPmdExecutor implements Executor {
   private final DelphiPmdViolationRecorder violationRecorder;
   private final Language language;
   private final RuleContext ctx;
+  private final DelphiPmdRuleSetDefinitionProvider pmdRuleSetDefinitionProvider;
   private RuleSets ruleSets;
 
   /**
@@ -77,11 +80,13 @@ public class DelphiPmdExecutor implements Executor {
       SensorContext context,
       ActiveRules rulesProfile,
       DelphiPmdConfiguration pmdConfiguration,
-      DelphiPmdViolationRecorder violationRecorder) {
+      DelphiPmdViolationRecorder violationRecorder,
+      DelphiPmdRuleSetDefinitionProvider pmdRuleSetDefinitionProvider) {
     this.sensorContext = context;
     this.rulesProfile = rulesProfile;
     this.pmdConfiguration = pmdConfiguration;
     this.violationRecorder = violationRecorder;
+    this.pmdRuleSetDefinitionProvider = pmdRuleSetDefinitionProvider;
     this.language = LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME);
     this.ctx = new RuleContext();
   }
@@ -149,7 +154,12 @@ public class DelphiPmdExecutor implements Executor {
 
   private String dumpXml(ActiveRules rulesProfile) {
     final StringWriter writer = new StringWriter();
-    final DelphiRuleSet ruleSet = DelphiRuleSetHelper.createFrom(rulesProfile, REPOSITORY_KEY);
+    final DelphiRuleSet ruleSet =
+        DelphiRuleSetHelper.createFrom(
+            rulesProfile,
+            REPOSITORY_KEY,
+            sensorContext.runtime().getProduct(),
+            pmdRuleSetDefinitionProvider);
 
     addBuiltinProperties(ruleSet);
 
@@ -200,7 +210,6 @@ public class DelphiPmdExecutor implements Executor {
   private void removeUnusedRules(final RuleSet ruleSet) {
     ruleSet
         .getRules()
-        .removeIf(
-            rule -> rulesProfile.findByInternalKey(REPOSITORY_KEY, rule.getRuleClass()) == null);
+        .removeIf(rule -> rulesProfile.find(RuleKey.of(REPOSITORY_KEY, rule.getName())) == null);
   }
 }

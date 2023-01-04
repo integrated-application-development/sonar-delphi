@@ -23,11 +23,13 @@ package org.sonar.plugins.delphi.pmd.xml;
 import java.io.IOException;
 import java.io.Reader;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.api.SonarProduct;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
 import org.sonar.plugins.delphi.pmd.xml.factory.ActiveRulesRuleSetFactory;
 import org.sonar.plugins.delphi.pmd.xml.factory.RuleSetFactory;
 import org.sonar.plugins.delphi.pmd.xml.factory.RulesProfileRuleSetFactory;
@@ -70,11 +72,19 @@ public class DelphiRuleSetHelper {
    *
    * @param activeRules The currently active rules.
    * @param repositoryKey The key identifier of the rule repository.
+   * @param sonarProduct The sonar product that analysis is running on.
+   * @param pmdRuleSetDefinitionProvider Provider for the pmd ruleset definition.
    * @return instance of DelphiRuleSet. Empty if an error occurs.
    */
   @NotNull
-  public static DelphiRuleSet createFrom(ActiveRules activeRules, String repositoryKey) {
-    return create(new ActiveRulesRuleSetFactory(activeRules, repositoryKey));
+  public static DelphiRuleSet createFrom(
+      ActiveRules activeRules,
+      String repositoryKey,
+      SonarProduct sonarProduct,
+      DelphiPmdRuleSetDefinitionProvider pmdRuleSetDefinitionProvider) {
+    return create(
+        new ActiveRulesRuleSetFactory(
+            activeRules, repositoryKey, sonarProduct, pmdRuleSetDefinitionProvider));
   }
 
   /**
