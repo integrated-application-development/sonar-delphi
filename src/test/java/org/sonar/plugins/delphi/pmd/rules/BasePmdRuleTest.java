@@ -144,7 +144,9 @@ public abstract class BasePmdRuleTest {
     DelphiPmdConfiguration pmdConfig = new DelphiPmdConfiguration(fs, config, ruleProvider);
 
     var violationRecorder = new DelphiPmdViolationRecorder(delphiProjectHelper, rulesProfile);
-    var executor = new DelphiPmdExecutor(sensorContext, rulesProfile, pmdConfig, violationRecorder);
+    var executor =
+        new DelphiPmdExecutor(
+            sensorContext, rulesProfile, pmdConfig, violationRecorder, ruleProvider);
 
     DelphiMasterExecutor masterExecutor =
         new DelphiMasterExecutor(

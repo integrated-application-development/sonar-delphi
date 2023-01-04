@@ -21,8 +21,10 @@ package org.sonar.plugins.delphi.pmd.xml.factory;
 
 import java.util.Collection;
 import java.util.Map;
+import org.sonar.api.SonarProduct;
 import org.sonar.api.batch.rule.ActiveRule;
 import org.sonar.api.batch.rule.ActiveRules;
+import org.sonar.plugins.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRule;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleProperty;
 import org.sonar.plugins.delphi.pmd.xml.DelphiRuleSet;
@@ -36,10 +38,18 @@ public class ActiveRulesRuleSetFactory implements RuleSetFactory {
 
   private final ActiveRules activeRules;
   private final String repositoryKey;
+  private final SonarProduct sonarProduct;
+  private final DelphiPmdRuleSetDefinitionProvider pmdRuleSetDefinitionProvider;
 
-  public ActiveRulesRuleSetFactory(ActiveRules activeRules, String repositoryKey) {
+  public ActiveRulesRuleSetFactory(
+      ActiveRules activeRules,
+      String repositoryKey,
+      SonarProduct sonarProduct,
+      DelphiPmdRuleSetDefinitionProvider pmdRuleSetDefinitionProvider) {
     this.activeRules = activeRules;
     this.repositoryKey = repositoryKey;
+    this.sonarProduct = sonarProduct;
+    this.pmdRuleSetDefinitionProvider = pmdRuleSetDefinitionProvider;
   }
 
   @Override
@@ -50,8 +60,8 @@ public class ActiveRulesRuleSetFactory implements RuleSetFactory {
     ruleset.setDescription(String.format("Sonar Profile: %s", repositoryKey));
 
     for (ActiveRule rule : rules) {
-      String configKey = rule.internalKey();
-      DelphiRule delphiRule = new DelphiRule(configKey, PmdLevelUtils.toLevel(rule.severity()));
+      String pmdClassName = getFullyQualifiedRuleClassName(rule);
+      DelphiRule delphiRule = new DelphiRule(pmdClassName, getPmdLevel(rule));
       delphiRule.setName(rule.ruleKey().rule());
       delphiRule.setTemplateName(rule.templateRuleKey());
       addRuleProperties(rule, delphiRule);
@@ -59,6 +69,38 @@ public class ActiveRulesRuleSetFactory implements RuleSetFactory {
     }
 
     return ruleset;
+  }
+
+  private String getFullyQualifiedRuleClassName(ActiveRule activeRule) {
+    var pmdRule =
+        pmdRuleSetDefinitionProvider.getDefinition().getRules().stream()
+            .filter(r -> activeRuleMatchesPmdRule(activeRule, r))
+            .findFirst();
+
+    if (pmdRule.isEmpty()) {
+      throw new RuntimeException(
+          "Rule name "
+              + activeRule.ruleKey().toString()
+              + " (template name "
+              + activeRule.templateRuleKey()
+              + ") does not correspond to PMD rule class");
+    } else {
+      return pmdRule.get().getClazz();
+    }
+  }
+
+  private boolean activeRuleMatchesPmdRule(ActiveRule activeRule, DelphiRule pmdRule) {
+    String templateRuleKey = activeRule.templateRuleKey();
+    return (templateRuleKey != null && templateRuleKey.equals(pmdRule.getName()))
+        || activeRule.ruleKey().rule().equals(pmdRule.getName());
+  }
+
+  private Integer getPmdLevel(ActiveRule rule) {
+    if (sonarProduct == SonarProduct.SONARLINT) {
+      // SonarLint doesn't implement ActiveRule::severity
+      return 3;
+    }
+    return PmdLevelUtils.toLevel(rule.severity());
   }
 
   private void addRuleProperties(ActiveRule activeRule, DelphiRule pmdRule) {
