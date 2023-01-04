@@ -30,7 +30,14 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   void testShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
+            .appendDecl("type")
+            .appendDecl("  TBase = class(TObject)")
+            .appendDecl("    procedure MyProcedure;")
+            .appendDecl("  end;")
+            .appendDecl("  TChild = class(TBase)")
+            .appendDecl("    procedure MyProcedure;")
+            .appendDecl("  end;")
+            .appendImpl("procedure TChild.MyProcedure;")
             .appendImpl("begin")
             .appendImpl("  inherited;")
             .appendImpl("end;");
@@ -45,7 +52,14 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   void testNoSemicolonShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
+            .appendDecl("type")
+            .appendDecl("  TBase = class(TObject)")
+            .appendDecl("    procedure MyProcedure;")
+            .appendDecl("  end;")
+            .appendDecl("  TChild = class(TBase)")
+            .appendDecl("    procedure MyProcedure;")
+            .appendDecl("  end;")
+            .appendImpl("procedure TChild.MyProcedure;")
             .appendImpl("begin")
             .appendImpl("  inherited")
             .appendImpl("end;");
@@ -60,7 +74,14 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   void testImplementationShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
+            .appendDecl("type")
+            .appendDecl("  TBase = class(TObject)")
+            .appendDecl("    procedure MyProcedure;")
+            .appendDecl("  end;")
+            .appendDecl("  TChild = class(TBase)")
+            .appendDecl("    procedure MyProcedure;")
+            .appendDecl("  end;")
+            .appendImpl("procedure TChild.MyProcedure;")
             .appendImpl("begin")
             .appendImpl("  inherited;")
             .appendImpl("  FMyField := 5;")
@@ -75,7 +96,14 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   void testImplementationWithInheritedAtEndShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
+            .appendDecl("type")
+            .appendDecl("  TBase = class(TObject)")
+            .appendDecl("    procedure MyProcedure;")
+            .appendDecl("  end;")
+            .appendDecl("  TChild = class(TBase)")
+            .appendDecl("    procedure MyProcedure;")
+            .appendDecl("  end;")
+            .appendImpl("procedure TChild.MyProcedure;")
             .appendImpl("begin")
             .appendImpl("  FMyField := 5;")
             .appendImpl("  inherited;")
@@ -90,7 +118,14 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   void testFalsePositiveImplementationShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
+            .appendDecl("type")
+            .appendDecl("  TBase = class(TObject)")
+            .appendDecl("    procedure MyProcedure;")
+            .appendDecl("  end;")
+            .appendDecl("  TChild = class(TBase)")
+            .appendDecl("    procedure MyProcedure;")
+            .appendDecl("  end;")
+            .appendImpl("procedure TChild.MyProcedure;")
             .appendImpl("begin")
             .appendImpl("  FMyField := 5;")
             .appendImpl("  if MyBoolean then begin")
@@ -107,7 +142,14 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   void testExplicitInheritedShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
+            .appendDecl("type")
+            .appendDecl("  TBase = class(TObject)")
+            .appendDecl("    procedure MyProcedure;")
+            .appendDecl("  end;")
+            .appendDecl("  TChild = class(TBase)")
+            .appendDecl("    procedure MyProcedure;")
+            .appendDecl("  end;")
+            .appendImpl("procedure TChild.MyProcedure;")
             .appendImpl("begin")
             .appendImpl("  inherited MyProcedure;")
             .appendImpl("end;");
@@ -122,7 +164,14 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   void testExplicitInheritedWithArgumentsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure(X, Y);")
+            .appendDecl("type")
+            .appendDecl("  TBase = class(TObject)")
+            .appendDecl("    procedure MyProcedure(X, Y);")
+            .appendDecl("  end;")
+            .appendDecl("  TChild = class(TBase)")
+            .appendDecl("    procedure MyProcedure(X, Y);")
+            .appendDecl("  end;")
+            .appendImpl("procedure TChild.MyProcedure(X, Y);")
             .appendImpl("begin")
             .appendImpl("  inherited MyProcedure(X, Y);")
             .appendImpl("end;");
@@ -137,7 +186,14 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   void testExplicitInheritedWithMismatchedArgumentSizesShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure(X, Y);")
+            .appendDecl("type")
+            .appendDecl("  TBase = class(TObject)")
+            .appendDecl("    procedure MyProcedure(X, Y);")
+            .appendDecl("  end;")
+            .appendDecl("  TChild = class(TBase)")
+            .appendDecl("    procedure MyProcedure(X, Y);")
+            .appendDecl("  end;")
+            .appendImpl("procedure TChild.MyProcedure(X, Y);")
             .appendImpl("begin")
             .appendImpl("  inherited MyProcedure(X);")
             .appendImpl("end;");
@@ -151,7 +207,14 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   void testExplicitInheritedWithMismatchedArgumentsShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure(X, Y);")
+            .appendDecl("type")
+            .appendDecl("  TBase = class(TObject)")
+            .appendDecl("    procedure MyProcedure(X, Y);")
+            .appendDecl("  end;")
+            .appendDecl("  TChild = class(TBase)")
+            .appendDecl("    procedure MyProcedure(X, Y);")
+            .appendDecl("  end;")
+            .appendImpl("procedure TChild.MyProcedure(X, Y);")
             .appendImpl("begin")
             .appendImpl("  inherited MyProcedure(True, False);")
             .appendImpl("end;");
@@ -165,7 +228,14 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   void testExplicitInheritedWithEmptyBracketsShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
+            .appendDecl("type")
+            .appendDecl("  TBase = class(TObject)")
+            .appendDecl("    procedure MyProcedure;")
+            .appendDecl("  end;")
+            .appendDecl("  TChild = class(TBase)")
+            .appendDecl("    procedure MyProcedure;")
+            .appendDecl("  end;")
+            .appendImpl("procedure TChild.MyProcedure;")
             .appendImpl("begin")
             .appendImpl("  inherited MyProcedure();")
             .appendImpl("end;");
@@ -180,7 +250,14 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   void testWrongExplicitInheritedShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
+            .appendDecl("type")
+            .appendDecl("  TBase = class(TObject)")
+            .appendDecl("    procedure MyProcedure;")
+            .appendDecl("  end;")
+            .appendDecl("  TChild = class(TBase)")
+            .appendDecl("    procedure MyProcedure;")
+            .appendDecl("  end;")
+            .appendImpl("procedure TChild.MyProcedure;")
             .appendImpl("begin")
             .appendImpl("  inherited SomeOtherProcedure;")
             .appendImpl("end;");
@@ -194,7 +271,14 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   void testFunctionInheritedShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("function MyFunction: Integer;")
+            .appendDecl("type")
+            .appendDecl("  TBase = class(TObject)")
+            .appendDecl("    function MyFunction: Integer;")
+            .appendDecl("  end;")
+            .appendDecl("  TChild = class(TBase)")
+            .appendDecl("    function MyFunction: Integer;")
+            .appendDecl("  end;")
+            .appendImpl("function TChild.MyFunction: Integer;")
             .appendImpl("begin")
             .appendImpl("  Result := inherited MyFunction;")
             .appendImpl("end;");
@@ -209,9 +293,52 @@ class InheritedMethodWithNoCodeRuleTest extends BasePmdRuleTest {
   void testFunctionQualifiedInheritedShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("function MyFunction: Integer;")
+            .appendDecl("type")
+            .appendDecl("  TBase = class(TObject)")
+            .appendDecl("    function MyFunction: Integer;")
+            .appendDecl("  end;")
+            .appendDecl("  TChild = class(TBase)")
+            .appendDecl("    function MyFunction: Integer;")
+            .appendDecl("  end;")
+            .appendImpl("function TChild.MyFunction: Integer;")
             .appendImpl("begin")
             .appendImpl("  Result := inherited MyFunction[0].GetValue;")
+            .appendImpl("end;");
+
+    execute(builder);
+
+    assertIssues().areNot(ruleKey("InheritedMethodWithNoCodeRule"));
+  }
+
+  @Test
+  void testIncreasedVisibilityShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder()
+            .appendDecl("type")
+            .appendDecl("  TBase = class(TObject)")
+            .appendDecl("  protected")
+            .appendDecl("    procedure IncreaseVisibilityProc;")
+            .appendDecl("  public")
+            .appendDecl("    procedure NotVirtualProc;")
+            .appendDecl("    procedure VirtualProc; virtual;")
+            .appendDecl("  end;")
+            .appendDecl("  TChild = class(TBase)")
+            .appendDecl("  public")
+            .appendDecl("    procedure IncreaseVisibilityProc;")
+            .appendDecl("    procedure NotVirtualProc; virtual;")
+            .appendDecl("    procedure VirtualProc; reintroduce;")
+            .appendDecl("  end;")
+            .appendImpl("procedure TChild.IncreaseVisibilityProc;")
+            .appendImpl("begin")
+            .appendImpl("  inherited;")
+            .appendImpl("end;")
+            .appendImpl("procedure TChild.NotVirtualProc;")
+            .appendImpl("begin")
+            .appendImpl("  inherited;")
+            .appendImpl("end;")
+            .appendImpl("procedure TChild.VirtualProc;")
+            .appendImpl("begin")
+            .appendImpl("  inherited;")
             .appendImpl("end;");
 
     execute(builder);
