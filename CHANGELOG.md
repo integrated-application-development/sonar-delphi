@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parsing errors on `record helper for file`.
 - Type resolution issues around `set of AnsiChar` literals.
 - NPE in `VariableInitializationRule`.
+- Exception when no dproj or groupproj files are supplied.
 
 ## [0.39.1] - 2022-11-22
 
