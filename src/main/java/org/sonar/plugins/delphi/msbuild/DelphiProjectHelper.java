@@ -32,6 +32,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -176,6 +177,14 @@ public class DelphiProjectHelper {
     FilePredicates p = fs.predicates();
     Iterable<InputFile> dprojFiles = fs.inputFiles(p.and(p.hasExtension("dproj")));
     Iterable<InputFile> gprojFiles = fs.inputFiles(p.and(p.hasExtension("groupproj")));
+
+    if (dprojFiles == null) {
+      dprojFiles = Collections.emptyList();
+    }
+
+    if (gprojFiles == null) {
+      gprojFiles = Collections.emptyList();
+    }
 
     LOG.info(
         "Indexing {} dproj file(s) and {} groupproj file(s)...",
