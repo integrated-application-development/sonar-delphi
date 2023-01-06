@@ -1,0 +1,5 @@
+# Convert to and from CRLF and LF automatically
+* text=auto
+
+# Line endings may be important for test resources
+src/test/resources/**/* -text
