@@ -2273,6 +2273,11 @@ Result := 123;; // Noncompliant
       property should be.
       &lt;br&gt;
       &lt;br&gt;
+      Please note:
+      &lt;br&gt;
+      - This rule checks for an exact match on trailing whitespace - mixed indentation may yield unexpected results. 
+      &lt;br&gt;
+      &lt;br&gt;
       For more information, see the Class and Record Declarations section of the Embarcadero style
       guide page on
       &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/Type_Declarations#Class_.28and_Record.29_Declarations'&gt;
