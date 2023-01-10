@@ -340,11 +340,11 @@ public class DelphiProjectHelper {
   }
 
   public InputFile getFile(String path) {
-    return getFile(new File(path));
+    return fs.inputFile(fs.predicates().hasPath(path));
   }
 
   public InputFile getFile(File file) {
-    return fs.inputFile(fs.predicates().is(file));
+    return getFile(file.getPath());
   }
 
   public InputFile getFileFromBasename(String basename) {
