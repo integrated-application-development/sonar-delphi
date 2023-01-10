@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.40.0] - 2023-01-10
+
 ### Added
 
 - Support for `NCLOC_DATA` metric to record which lines contain code.
@@ -981,7 +983,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.39.1...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.40.0...HEAD
+[0.40.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.39.1...v0.40.0
 [0.39.1]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.39.0...v0.39.1
 [0.39.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.38.0...v0.39.0
 [0.38.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.37.1...v0.38.0
