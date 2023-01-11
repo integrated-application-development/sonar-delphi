@@ -50,7 +50,6 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.batch.sensor.issue.IssueLocation;
 import org.sonar.api.config.Configuration;
-import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.delphi.DelphiPlugin;
 import org.sonar.plugins.delphi.DelphiSensor;
@@ -58,7 +57,6 @@ import org.sonar.plugins.delphi.core.DelphiLanguage;
 import org.sonar.plugins.delphi.executor.DelphiCpdExecutor;
 import org.sonar.plugins.delphi.executor.DelphiHighlightExecutor;
 import org.sonar.plugins.delphi.executor.DelphiMasterExecutor;
-import org.sonar.plugins.delphi.executor.DelphiMetricsExecutor;
 import org.sonar.plugins.delphi.executor.DelphiPmdExecutor;
 import org.sonar.plugins.delphi.executor.DelphiSymbolTableExecutor;
 import org.sonar.plugins.delphi.msbuild.DelphiProjectHelper;
@@ -152,7 +150,6 @@ public abstract class BasePmdRuleTest {
         new DelphiMasterExecutor(
             new DelphiHighlightExecutor(),
             new DelphiCpdExecutor(),
-            new DelphiMetricsExecutor(mock(FileLinesContextFactory.class)),
             new DelphiSymbolTableExecutor(),
             executor);
 
