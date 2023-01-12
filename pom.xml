@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>sonar-delphi-plugin</artifactId>
   <version>0.40.0</version>
-  <groupId>org.delphi.plugin</groupId>
+  <groupId>au.com.integradev.delphi</groupId>
   <name>Sonar Delphi Plugin</name>
   <description>Code analyzer for Delphi</description>
   <inceptionYear>2011</inceptionYear>
