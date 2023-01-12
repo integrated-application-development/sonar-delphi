@@ -147,7 +147,7 @@
     <dependency-plugin.version>3.3.0</dependency-plugin.version>
     <javadoc-plugin.version>3.4.1</javadoc-plugin.version>
     <site-plugin.version>4.0.0-M3</site-plugin.version>
-    <dependency-check-plugin.version>7.1.2</dependency-check-plugin.version>
+    <dependency-check-plugin.version>7.4.4</dependency-check-plugin.version>
     <jxr-plugin.version>3.3.0</jxr-plugin.version>
     <errorprone.version>2.15.0</errorprone.version>
     <spotless-plugin.version>2.27.2</spotless-plugin.version>
