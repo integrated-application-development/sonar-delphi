@@ -7,10 +7,12 @@
   <name>Sonar Delphi Plugin</name>
   <description>Code analyzer for Delphi</description>
   <inceptionYear>2011</inceptionYear>
+
   <organization>
     <name>IntegraDev</name>
     <url>https://www.integradev.com.au/</url>
   </organization>
+
   <licenses>
     <license>
       <name>GNU LGPL 3</name>
@@ -18,6 +20,7 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+
   <developers>
     <developer>
       <id>jej</id>
@@ -74,12 +77,14 @@
       <timezone>+1</timezone>
     </developer>
   </developers>
+
   <distributionManagement>
     <site>
       <id>doc</id>
       <url>file://${java.io.tmpdir}/sonar-delphi-plugin-docs</url>
     </site>
   </distributionManagement>
+
   <properties>
     <sonar.pluginName>Delphi</sonar.pluginName>
     <sonar.pluginClass>org.sonar.plugins.delphi.DelphiPlugin</sonar.pluginClass>
@@ -154,8 +159,9 @@
     <project-info-reports-plugin.version>3.4.1</project-info-reports-plugin.version>
     <versions-plugin.version>2.11.0</versions-plugin.version>
   </properties>
-  <!-- this is important for sonar-packaging-maven-plugin -->
+
   <packaging>sonar-plugin</packaging>
+
   <dependencies>
     <dependency>
       <groupId>javax.annotation</groupId>
