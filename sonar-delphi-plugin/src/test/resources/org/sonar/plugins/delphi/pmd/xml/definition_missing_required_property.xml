@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="delph">
+  <description>Sonar Profile: delph</description>
+  <rule class="org.sonar.plugins.communitydelphi.pmd.rules.InterfaceNameRule" message="Interface Name doesn't comply with a naming convention" name="InterfaceNameRule" language="delph">
+    <description>Interface name should begin with "I"</description>
+  </rule>
+</ruleset>
