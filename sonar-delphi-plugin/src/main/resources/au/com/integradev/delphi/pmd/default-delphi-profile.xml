@@ -1,0 +1,288 @@
+<?xml version="1.0"?>
+<ruleset name="PMD extensions"
+  xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+  <description>All default rules</description>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.ClassPerFileRule"
+    name="ClassPerFileRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.InheritedMethodWithNoCodeRule"
+    name="InheritedMethodWithNoCodeRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.SwallowedExceptionsRule"
+    name="SwallowedExceptionsRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.ObjectInvokedConstructorRule"
+    name="ObjectInvokedConstructorRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.MethodResultAssignedRule"
+    name="MethodResultAssignedRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.XPathBuiltinRule"
+    name="EmptyFinallyBlockRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.XPathBuiltinRule"
+    name="EmptyInterfaceRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.XPathBuiltinRule"
+    name="NoSemiAfterMethodDeclarationRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.XPathBuiltinRule"
+    name="NoSemiAfterFieldDeclarationRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.TooLargeMethodRule"
+    name="TooLargeMethodRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.TooManyArgumentsRule"
+    name="TooManyArgumentsRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.TooManyVariablesRule"
+    name="TooManyVariablesRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.NoFunctionReturnTypeRule"
+    name="NoFunctionReturnTypeRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.InterfaceNameRule"
+    name="InterfaceNameRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.ClassNameRule"
+    name="ClassNameRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.RecordNameRule"
+    name="RecordNameRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.PointerNameRule"
+    name="PointerNameRule">
+    <priority>4</priority>
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.MethodNameRule"
+    name="MethodNameRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.FieldNameRule"
+    name="FieldNameRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.UnitNameRule"
+    name="UnitNameRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.CatchingGeneralExceptionRule"
+    name="CatchingGeneralExceptionRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.RaisingGeneralExceptionRule"
+    name="RaisingGeneralExceptionRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.RedundantBooleanRule"
+    name="RedundantBooleanRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.RedundantCastRule"
+    name="RedundantCastRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.CharacterToCharacterPointerCastRule"
+    name="CharacterToCharacterPointerCastRule">
+  </rule>
+  
+  <rule class="au.com.integradev.delphi.pmd.rules.UnicodeToAnsiCastRule"
+    name="UnicodeToAnsiCastRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.PlatformDependentCastRule"
+    name="PlatformDependentCastRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.PlatformDependentTruncationRule"
+    name="PlatformDependentTruncationRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.RedundantAssignmentRule"
+    name="RedundantAssignmentRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.PublicFieldsRule"
+    name="PublicFieldsRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.XPathBuiltinRule"
+    name="NoGuidRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.AssignedAndFreeRule"
+    name="AssignedAndFreeRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.IfThenShortCircuitRule"
+    name="IfThenShortCircuitRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.EmptyBeginStatementRule"
+    name="EmptyBeginStatementRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.EmptyMethodRule"
+    name="EmptyMethodRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.EmptyUnitRule"
+    name="EmptyUnitRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.DprFunctionRule"
+    name="ProjectFileNoFunctionsRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.DprVariableRule"
+    name="ProjectFileNoVariablesRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.TypeAliasRule"
+    name="TypeAliasRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.MixedNamesRule"
+    name="MixedNamesRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.NoInheritedStatementRule"
+    name="ConstructorWithoutInheritedStatementRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.NoInheritedStatementRule"
+    name="DestructorWithoutInheritedStatementRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.BeginEndRequiredRule"
+    name="BeginEndRequiredRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.NoSemicolonRule"
+    name="NoSemicolonRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.CastAndFreeRule"
+    name="CastAndFreeRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.CyclomaticComplexityRule"
+    name="MethodCyclomaticComplexityRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.CognitiveComplexityRule"
+    name="MethodCognitiveComplexityRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.ConstantNotationRule"
+    name="ConstantNotationRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.TooManySubProceduresRule"
+    name="TooManySubProceduresRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.AvoidWithRule"
+    name="AvoidWithRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.TooLongLineRule"
+    name="TooLongLineRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.ConstructorCreateRule"
+    name="ConstructorCreateRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.ReRaiseExceptionRule"
+    name="ReRaiseExceptionRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.EmptyBracketsRule"
+    name="EmptyBracketsRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.DuplicatesRule"
+    name="DuplicatesRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.VariableNameRule"
+    name="VariableNameRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.ShortIdentifiersRule"
+    name="ShortIdentifiersRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.UnusedLocalVariablesRule"
+    name="UnusedLocalVariablesRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.UnusedGlobalVariablesRule"
+    name="UnusedGlobalVariablesRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.UnusedConstantsRule"
+    name="UnusedConstantsRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.UnusedFieldsRule"
+    name="UnusedFieldsRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.UnusedPropertiesRule"
+    name="UnusedPropertiesRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.UnusedMethodsRule"
+    name="UnusedMethodsRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.UnusedTypesRule"
+    name="UnusedTypesRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.UnusedImportsRule"
+    name="UnusedImportsRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.ImportSpecificityRule"
+    name="ImportSpecificityRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.CompilerHintsRule"
+    name="CompilerHintsRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.CompilerWarningsRule"
+    name="CompilerWarningsRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.LegacyInitializationSectionRule"
+    name="LegacyInitializationSectionRule">
+  </rule>
+
+  <rule class="au.com.integradev.delphi.pmd.rules.VariableInitializationRule"
+    name="FormatSettingsInitializationRule">
+  </rule>
+</ruleset>

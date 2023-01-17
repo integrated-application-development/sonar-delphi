@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="delph">
+  <description>Sonar Profile: delph</description>
+  <rule class="au.com.integradev.delphi.pmd.rules.TooLongLineRule" message="Line too long" name="TooLongLineRule" language="delph">
+    <priority>3</priority>
+    <description>Code lines should not be too long.</description>
+    <properties>
+      <property name="baseEffort" value="1min" />
+      <property name="scope" value="MAIN" />
+      <property name="type" value="CODE_SMELL" />
+      <property name="limit" value="" />
+    </properties>
+  </rule>
+</ruleset>

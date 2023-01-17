@@ -27,6 +27,55 @@
   </scm>
 
   <dependencies>
+    <!-- TODO
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>delphi-frontend</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>delphi-checks</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.sonarsource.analyzer-commons</groupId>
+      <artifactId>sonar-analyzer-commons</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.sonarsource.api.plugin</groupId>
+      <artifactId>sonar-plugin-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.sonarsource.analyzer-commons</groupId>
+      <artifactId>sonar-analyzer-test-commons</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-plugin-api-impl</artifactId>
+      <scope>test</scope>
+    </dependency>
+-->
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
@@ -110,7 +159,7 @@
         <configuration>
           <pluginName>Delphi</pluginName>
           <skipDependenciesPackaging>true</skipDependenciesPackaging>
-          <pluginClass>org.sonar.plugins.communitydelphi.DelphiPlugin</pluginClass>
+          <pluginClass>au.com.integradev.delphi.DelphiPlugin</pluginClass>
           <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
           <jreMinVersion>11</jreMinVersion>
         </configuration>
@@ -161,10 +210,10 @@
         <configuration>
           <includes>
             <include>
-              ${project.build.directory}/generated-sources/antlr3/org/sonar/plugins/delphi/antlr/DelphiLexer.java
+              ${project.build.directory}/generated-sources/antlr3/au/com/integradev/delphi/antlr/DelphiLexer.java
             </include>
             <include>
-              ${project.build.directory}/generated-sources/antlr3/org/sonar/plugins/delphi/antlr/DelphiParser.java
+              ${project.build.directory}/generated-sources/antlr3/au/com/integradev/delphi/antlr/DelphiParser.java
             </include>
           </includes>
           <regexFlags>MULTILINE</regexFlags>
@@ -214,6 +263,14 @@
                     <exclude>NOTICE*</exclude>
                   </excludes>
                 </filter>
+                <!-- TODO
+                  <filter>
+                    <artifact>au.com.integradev.delphi:delphi-frontend</artifact>
+                    <includes>
+                      <include>**</include>
+                    </includes>
+                  </filter>
+                -->
                 <filter>
                   <artifact>org.sonarsource.analyzer-commons:*</artifact>
                   <excludes>
