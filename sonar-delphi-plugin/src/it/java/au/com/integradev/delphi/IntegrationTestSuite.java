@@ -82,7 +82,7 @@ class IntegrationTestSuite {
         .setProjectDir(projectDir)
         .setProjectKey(projectKey)
         .setProjectName(projectKey)
-        .setProperty(DelphiPlugin.BDS_PATH_KEY, BDS_PATH)
+        .setProperty(DelphiProperties.BDS_PATH_KEY, BDS_PATH)
         .setProjectVersion("1.0")
         .setSourceDirs("src");
   }

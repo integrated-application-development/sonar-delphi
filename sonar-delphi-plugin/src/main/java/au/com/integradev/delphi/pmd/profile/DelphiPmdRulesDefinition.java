@@ -26,7 +26,6 @@ import static au.com.integradev.delphi.pmd.DelphiPmdConstants.SECURITY_STANDARD_
 import static au.com.integradev.delphi.pmd.DelphiPmdConstants.TEMPLATE;
 import static au.com.integradev.delphi.pmd.DelphiPmdConstants.TYPE;
 import static java.util.function.Predicate.not;
-import static org.apache.commons.lang3.StringUtils.isNumeric;
 
 import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.pmd.DelphiPmdConstants;
@@ -39,6 +38,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.rule.RuleScope;
 import org.sonar.api.rule.Severity;
 import org.sonar.api.rules.RuleType;
@@ -146,7 +146,10 @@ public class DelphiPmdRulesDefinition implements RulesDefinition {
       sonarRule
           .createParam(property.getName())
           .setDefaultValue(property.getValue())
-          .setType(isNumeric(property.getValue()) ? RuleParamType.INTEGER : RuleParamType.STRING)
+          .setType(
+              StringUtils.isNumeric(property.getValue())
+                  ? RuleParamType.INTEGER
+                  : RuleParamType.STRING)
           .setDescription(property.getName());
     }
   }

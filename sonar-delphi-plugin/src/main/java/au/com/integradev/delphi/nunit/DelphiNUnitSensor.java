@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.nunit;
 
 import au.com.integradev.delphi.DelphiPlugin;
+import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.File;
@@ -56,12 +57,12 @@ public class DelphiNUnitSensor implements Sensor {
   @Override
   public void execute(@NotNull SensorContext context) {
     LOG.info("NUnit sensor execute...");
-    String[] paths = configuration.getStringArray(DelphiPlugin.NUNIT_REPORT_PATHS_PROPERTY);
+    String[] paths = configuration.getStringArray(DelphiProperties.NUNIT_REPORT_PATHS_PROPERTY);
 
     if (paths == null || paths.length == 0) {
       LOG.info(
           "No NUnit report directories specified (see '{}' property)",
-          DelphiPlugin.NUNIT_REPORT_PATHS_PROPERTY);
+          DelphiProperties.NUNIT_REPORT_PATHS_PROPERTY);
       return;
     }
 

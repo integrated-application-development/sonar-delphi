@@ -25,6 +25,7 @@ import static org.mockito.Mockito.verify;
 import static org.sonar.api.measures.CoreMetrics.*;
 
 import au.com.integradev.delphi.DelphiPlugin;
+import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.util.UUID;
@@ -72,7 +73,7 @@ class DelphiNUnitSensorTest {
   @Test
   void testExecute() {
     assertAllMeasuresEmpty();
-    settings.setProperty(DelphiPlugin.NUNIT_REPORT_PATHS_PROPERTY, "./reports/normal");
+    settings.setProperty(DelphiProperties.NUNIT_REPORT_PATHS_PROPERTY, "./reports/normal");
     sensor.execute(context);
 
     assertThat(context.measure(context.project().key(), TESTS).value()).isEqualTo(8);
@@ -90,7 +91,7 @@ class DelphiNUnitSensorTest {
 
   @Test
   void testExecuteWithInvalidReportPath() {
-    settings.setProperty(DelphiPlugin.NUNIT_REPORT_PATHS_PROPERTY, UUID.randomUUID().toString());
+    settings.setProperty(DelphiProperties.NUNIT_REPORT_PATHS_PROPERTY, UUID.randomUUID().toString());
     sensor.execute(context);
     assertAllMeasuresEmpty();
   }

@@ -41,7 +41,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class DelphiCodeCoverageToolParser implements DelphiCoverageParser {
-  public static final String KEY = "dcc";
   private static final Logger LOG = Loggers.get(DelphiCodeCoverageToolParser.class);
   private final DelphiProjectHelper delphiProjectHelper;
 

@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.coverage;
 
-import au.com.integradev.delphi.DelphiPlugin;
+import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import java.io.IOException;
@@ -70,7 +70,7 @@ public class DelphiCoverageSensor implements Sensor {
     LOG.info("Adding coverage reports.");
     context
         .config()
-        .get(DelphiPlugin.COVERAGE_TOOL_KEY)
+        .get(DelphiProperties.COVERAGE_TOOL_KEY)
         .flatMap(
             key -> {
               LOG.info("Coverage tool: '{}'.", key);
@@ -81,14 +81,14 @@ public class DelphiCoverageSensor implements Sensor {
             () ->
                 LOG.info(
                     "No coverage tool specified (see '{}' property)",
-                    DelphiPlugin.COVERAGE_TOOL_KEY));
+                    DelphiProperties.COVERAGE_TOOL_KEY));
   }
 
   private void addCoverage(SensorContext context, DelphiCoverageParser parser) {
-    String[] paths = context.config().getStringArray(DelphiPlugin.COVERAGE_REPORT_KEY);
+    String[] paths = context.config().getStringArray(DelphiProperties.COVERAGE_REPORT_KEY);
     if (paths == null || paths.length == 0) {
       LOG.info(
-          "No coverage reports specified (see '{}' property)", DelphiPlugin.COVERAGE_REPORT_KEY);
+          "No coverage reports specified (see '{}' property)", DelphiProperties.COVERAGE_REPORT_KEY);
     } else {
       Arrays.stream(paths).forEach(path -> addCoverage(context, path, parser));
     }

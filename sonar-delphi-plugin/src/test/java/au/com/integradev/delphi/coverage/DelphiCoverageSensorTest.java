@@ -21,9 +21,14 @@ package au.com.integradev.delphi.coverage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.DelphiPlugin;
+import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.coverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
@@ -61,7 +66,9 @@ class DelphiCoverageSensorTest {
 
     context
         .settings()
-        .setProperty(DelphiPlugin.COVERAGE_TOOL_KEY, DelphiCodeCoverageToolParser.KEY);
+        .setProperty(
+            DelphiProperties.COVERAGE_TOOL_KEY,
+            DelphiProperties.COVERAGE_TOOL_DELPHI_CODE_COVERAGE);
   }
 
   @Test
@@ -83,13 +90,15 @@ class DelphiCoverageSensorTest {
 
   @Test
   void testWhenBadCoverageReportDoNotInvokeParser() {
-    context.settings().setProperty(DelphiPlugin.COVERAGE_REPORT_KEY, UUID.randomUUID().toString());
+    context
+        .settings()
+        .setProperty(DelphiProperties.COVERAGE_REPORT_KEY, UUID.randomUUID().toString());
 
     sensor.execute(context);
 
     verify(coverageParser, never()).parse(any(), any());
 
-    context.settings().setProperty(DelphiPlugin.COVERAGE_REPORT_KEY, "</invalidPath");
+    context.settings().setProperty(DelphiProperties.COVERAGE_REPORT_KEY, "</invalidPath");
 
     sensor.execute(context);
 
@@ -98,7 +107,7 @@ class DelphiCoverageSensorTest {
 
   @Test
   void testWhenNoCoverageToolDoNotInvokeParser() {
-    context.settings().removeProperty(DelphiPlugin.COVERAGE_TOOL_KEY);
+    context.settings().removeProperty(DelphiProperties.COVERAGE_TOOL_KEY);
     sensor.execute(context);
 
     verify(coverageParser, never()).parse(any(), any());
@@ -109,7 +118,8 @@ class DelphiCoverageSensorTest {
     context
         .settings()
         .setProperty(
-            DelphiPlugin.COVERAGE_REPORT_KEY, DelphiUtils.getResource(COVERAGE_REPORTS).toString());
+            DelphiProperties.COVERAGE_REPORT_KEY,
+            DelphiUtils.getResource(COVERAGE_REPORTS).toString());
 
     sensor.execute(context);
 

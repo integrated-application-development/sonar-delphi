@@ -25,11 +25,11 @@ package au.com.integradev.delphi.pmd.xml;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import au.com.integradev.delphi.pmd.rules.AbstractDelphiRule;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.io.StringWriter;
-import java.net.URL;
 import net.sourceforge.pmd.RuleSet;
 import net.sourceforge.pmd.RuleSetFactory;
 import org.apache.commons.io.FileUtils;
@@ -72,12 +72,20 @@ class DelphiRuleSetTest {
   @Test
   void testWriteToIsValidPmdRuleSetSyntax() throws Exception {
     StringWriter writer = new StringWriter();
-    String rulesXmlPath = "au/com/integradev/delphi/pmd/rules.xml";
-    URL url = getClass().getClassLoader().getResource(rulesXmlPath);
-    assertThat(url).isNotNull();
-    InputStreamReader stream = new InputStreamReader(new FileInputStream(url.getPath()), UTF_8);
+    Reader reader =
+        new StringReader(
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<ruleset name=\"delph\">\n"
+                + "  <description>delph</description>\n"
+                + String.format(
+                    "  <rule class=\"%s\" message=\"Foo\" name=\"Bar\">\n",
+                    TestRule.class.getName())
+                + "    <priority>1</priority>\n"
+                + "    <description>Flarp</description>\n"
+                + "  </rule>\n"
+                + "</ruleset>");
 
-    DelphiRuleSet ruleSet = DelphiRuleSetHelper.createFrom(stream);
+    DelphiRuleSet ruleSet = DelphiRuleSetHelper.createFrom(reader);
     ruleSet.writeTo(writer);
     String rulesXml = writer.toString();
 
@@ -87,6 +95,8 @@ class DelphiRuleSetTest {
     RuleSetFactory ruleSetFactory = new RuleSetFactory();
     RuleSet parsedRuleSet = ruleSetFactory.createRuleSet(ruleSetFile.getAbsolutePath());
 
-    assertThat(parsedRuleSet.getRules()).hasSize(ruleSet.getRules().size());
+    assertThat(parsedRuleSet.getRules()).hasSize(1);
   }
+
+  public static final class TestRule extends AbstractDelphiRule {}
 }

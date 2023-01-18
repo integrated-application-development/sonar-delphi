@@ -16,31 +16,19 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.sonarsource.analyzer-commons</groupId>
-      <artifactId>sonar-analyzer-commons</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.sonarsource.api.plugin</groupId>
-      <artifactId>sonar-plugin-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.sonarsource.sonarqube</groupId>
-      <artifactId>sonar-plugin-api-impl</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <!-- TODO
-    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>delphi-frontend</artifactId>
       <version>${project.version}</version>
     </dependency>
+
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>delphi-checks-testkit</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
+      <groupId>org.sonarsource.analyzer-commons</groupId>
+      <artifactId>sonar-analyzer-commons</artifactId>
     </dependency>
- -->
+    <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-plugin-api</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -55,6 +43,14 @@
       <artifactId>pmd-core</artifactId>
     </dependency>
 
+    <!-- TODO
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>delphi-checks-testkit</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+-->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>

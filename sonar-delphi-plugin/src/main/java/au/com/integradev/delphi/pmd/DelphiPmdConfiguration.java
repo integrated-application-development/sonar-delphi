@@ -19,7 +19,7 @@
  */
 package au.com.integradev.delphi.pmd;
 
-import au.com.integradev.delphi.DelphiPlugin;
+import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
 import au.com.integradev.delphi.pmd.xml.DelphiRule;
 import java.io.File;
@@ -110,7 +110,7 @@ public class DelphiPmdConfiguration extends PMDConfiguration {
    * @return Path to the report
    */
   public Path dumpXmlReport(Report report) {
-    if (!settings.getBoolean(DelphiPlugin.GENERATE_PMD_REPORT_XML_KEY).orElse(false)) {
+    if (!settings.getBoolean(DelphiProperties.GENERATE_PMD_REPORT_XML_KEY).orElse(false)) {
       return null;
     }
 

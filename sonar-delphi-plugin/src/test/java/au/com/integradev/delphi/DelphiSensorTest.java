@@ -62,9 +62,9 @@ class DelphiSensorTest {
   void setupSensor() {
     sensor = new DelphiSensor(delphiProjectHelper, executor);
     when(delphiProjectHelper.shouldExecuteOnProject()).thenReturn(true);
-    when(delphiProjectHelper.getToolchain()).thenReturn(DelphiPlugin.COMPILER_TOOLCHAIN_DEFAULT);
+    when(delphiProjectHelper.getToolchain()).thenReturn(DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT);
     when(delphiProjectHelper.getCompilerVersion())
-        .thenReturn(DelphiPlugin.COMPILER_VERSION_DEFAULT);
+        .thenReturn(DelphiProperties.COMPILER_VERSION_DEFAULT);
   }
 
   @Test

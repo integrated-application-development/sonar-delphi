@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.coverage;
 
+import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.coverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import java.util.Optional;
@@ -30,7 +31,7 @@ public class DelphiCoverageParserFactory {
   private static final Logger LOG = Loggers.get(DelphiCoverageParserFactory.class);
 
   public Optional<DelphiCoverageParser> getParser(String key, DelphiProjectHelper helper) {
-    if (DelphiCodeCoverageToolParser.KEY.equals(key)) {
+    if (DelphiProperties.COVERAGE_TOOL_DELPHI_CODE_COVERAGE.equals(key)) {
       return Optional.of(new DelphiCodeCoverageToolParser(helper));
     } else {
       LOG.warn("Unsupported coverage tool '{}'", key);

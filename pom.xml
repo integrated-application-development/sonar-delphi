@@ -83,10 +83,11 @@
   </developers>
 
   <modules>
-    <!--<module>delphi-frontend</module>
-    <module>delphi-checks-testkit</module>
-    <module>delphi-checks</module>-->
+    <!--<module>delphi-frontend</module>-->
+    <!--<module>delphi-checks-testkit</module>-->
+    <module>delphi-checks</module>
     <module>sonar-delphi-plugin</module>
+    <module>delphi-frontend</module>
     <!--<module>its</module>-->
   </modules>
 
@@ -139,6 +140,17 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>org.sonarsource.sonarqube</groupId>
+        <artifactId>sonar-plugin-api</artifactId>
+        <version>${sonar.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.sonarsource.analyzer-commons</groupId>
+        <artifactId>sonar-analyzer-commons</artifactId>
+        <version>${sonar-analyzers-commons.version}</version>
+      </dependency>
+      <dependency>
         <groupId>com.google.code.findbugs</groupId>
         <artifactId>jsr305</artifactId>
         <version>${jsr305.version}</version>
@@ -147,6 +159,11 @@
         <groupId>com.google.errorprone</groupId>
         <artifactId>error_prone_annotations</artifactId>
         <version>${errorprone.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jetbrains</groupId>
+        <artifactId>annotations</artifactId>
+        <version>${jetbrains-annotations.version}</version>
       </dependency>
       <dependency>
         <groupId>com.google.guava</groupId>
@@ -169,35 +186,6 @@
         <version>${commons-text.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter</artifactId>
-        <version>${junit.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.assertj</groupId>
-        <artifactId>assertj-core</artifactId>
-        <version>${assertj.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <version>${mockito.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.sonarsource.sonarqube</groupId>
-        <artifactId>sonar-plugin-api</artifactId>
-        <version>${sonar.version}</version>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.sonarsource.analyzer-commons</groupId>
-        <artifactId>sonar-analyzer-commons</artifactId>
-        <version>${sonar-analyzers-commons.version}</version>
-      </dependency>
-      <dependency>
         <groupId>org.antlr</groupId>
         <artifactId>antlr-runtime</artifactId>
         <version>${antlr-runtime.version}</version>
@@ -213,9 +201,16 @@
         <version>${jdom.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.jetbrains</groupId>
-        <artifactId>annotations</artifactId>
-        <version>${jetbrains-annotations.version}</version>
+        <groupId>org.sonarsource.analyzer-commons</groupId>
+        <artifactId>sonar-analyzer-test-commons</artifactId>
+        <version>${sonar-analyzers-commons.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.junit.platform</groupId>
@@ -224,10 +219,22 @@
         <scope>test</scope>
       </dependency>
       <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>${assertj.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>${mockito.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
         <groupId>com.tngtech.archunit</groupId>
         <artifactId>archunit-junit5</artifactId>
-        <scope>test</scope>
         <version>${archunit.version}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.sonarsource.sonarqube</groupId>

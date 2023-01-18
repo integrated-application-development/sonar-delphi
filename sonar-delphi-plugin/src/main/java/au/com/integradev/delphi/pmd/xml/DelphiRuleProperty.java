@@ -20,10 +20,10 @@
 package au.com.integradev.delphi.pmd.xml;
 
 import static au.com.integradev.delphi.pmd.DelphiPmdConstants.BASE_EFFORT;
+import static au.com.integradev.delphi.pmd.DelphiPmdConstants.BUILTIN_XPATH;
 import static au.com.integradev.delphi.pmd.DelphiPmdConstants.SCOPE;
 import static au.com.integradev.delphi.pmd.DelphiPmdConstants.TEMPLATE;
 import static au.com.integradev.delphi.pmd.DelphiPmdConstants.TYPE;
-import static au.com.integradev.delphi.pmd.rules.XPathBuiltinRule.BUILTIN_XPATH;
 
 import au.com.integradev.delphi.pmd.DelphiPmdConstants;
 import java.util.Set;

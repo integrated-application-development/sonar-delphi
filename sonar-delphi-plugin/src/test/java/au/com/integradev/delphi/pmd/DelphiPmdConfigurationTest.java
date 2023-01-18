@@ -26,7 +26,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.DelphiPlugin;
+import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
 import java.io.File;
 import java.io.IOException;
@@ -99,7 +99,7 @@ class DelphiPmdConfigurationTest {
   void testShouldDumpXmlReport() throws IOException {
     when(fs.workDir()).thenReturn(WORK_DIR);
 
-    settings.setProperty(DelphiPlugin.GENERATE_PMD_REPORT_XML_KEY, true);
+    settings.setProperty(DelphiProperties.GENERATE_PMD_REPORT_XML_KEY, true);
     Path reportFile = configuration.dumpXmlReport(new Report());
 
     assertThat(reportFile.toFile()).isEqualTo(new File(WORK_DIR, "pmd-result.xml"));
@@ -112,7 +112,7 @@ class DelphiPmdConfigurationTest {
   void testShouldFailToDumpXmlReport() {
     when(fs.workDir()).thenReturn(new File("xxx"));
 
-    settings.setProperty(DelphiPlugin.GENERATE_PMD_REPORT_XML_KEY, true);
+    settings.setProperty(DelphiProperties.GENERATE_PMD_REPORT_XML_KEY, true);
 
     final Throwable thrown = catchThrowable(() -> configuration.dumpXmlReport(new Report()));
 
