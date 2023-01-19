@@ -18,18 +18,12 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
+import static au.com.integradev.delphi.pmd.DelphiPmdConstants.BUILTIN_XPATH;
+
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.properties.PropertyDescriptor;
-import net.sourceforge.pmd.properties.PropertyFactory;
 import org.apache.commons.lang3.StringUtils;
 
 public class XPathBuiltinRule extends AbstractXPathRule {
-  public static final PropertyDescriptor<String> BUILTIN_XPATH =
-      PropertyFactory.stringProperty("builtinXPath")
-          .desc("The xpath expression")
-          .defaultValue("")
-          .build();
-
   public XPathBuiltinRule() {
     definePropertyDescriptor(BUILTIN_XPATH);
   }
