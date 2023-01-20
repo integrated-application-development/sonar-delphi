@@ -24,11 +24,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTableBuilder.SymbolTableConstructionException;
 import au.com.integradev.delphi.utils.DelphiUtils;
-import au.com.integradev.delphi.utils.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import java.io.IOException;
 import java.nio.file.FileSystem;
@@ -96,11 +94,12 @@ class SymbolTableBuilderTest {
   @Test
   void testStandardLibraryWithInvalidSystemUnit(@TempDir Path standardLibraryPath)
       throws IOException {
-    DelphiFile sysInit = new DelphiTestUnitBuilder().unitName("SysInit").delphiFile();
-    Files.move(sysInit.getSourceCodeFile().toPath(), standardLibraryPath.resolve("SysInit.pas"));
+    Files.writeString(
+        standardLibraryPath.resolve("SysInit.pas"),
+        "unit SysInit;\ninterface\nimplementation\nend.");
 
-    DelphiFile system = new DelphiTestUnitBuilder().unitName("System").delphiFile();
-    Files.move(system.getSourceCodeFile().toPath(), standardLibraryPath.resolve("System.pas"));
+    Files.writeString(
+        standardLibraryPath.resolve("System.pas"), "unit System;\ninterface\nimplementation\nend.");
 
     SymbolTableBuilder builder =
         SymbolTable.builder()
@@ -111,18 +110,23 @@ class SymbolTableBuilderTest {
   }
 
   @Test
-  void testStandardLibrarySearchPathShouldExcludeToolsUnits() {
-    DelphiFile sourceFile =
-        new DelphiTestUnitBuilder()
-            .appendDecl("uses")
-            .appendDecl("  ShouldBeExcludedFromSearchPath;")
-            .delphiFile();
+  void testStandardLibrarySearchPathShouldExcludeToolsUnits(@TempDir Path tempDir)
+      throws IOException {
+    Path sourceFilePath = tempDir.resolve("SourceFile.pas");
+    Files.writeString(
+        sourceFilePath,
+        "unit SourceFile;\n"
+            + "interface\n"
+            + "uses\n"
+            + "  ShouldBeExcludedFromSearchPath;"
+            + "implementation\n"
+            + "end.");
 
     SymbolTable symbolTable =
         SymbolTable.builder()
             .typeFactory(TypeFactoryUtils.defaultFactory())
             .standardLibraryPath(STANDARD_LIBRARY)
-            .sourceFiles(List.of(sourceFile.getSourceCodeFile().toPath()))
+            .sourceFiles(List.of(sourceFilePath))
             .build();
 
     assertThat(

@@ -32,16 +32,21 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
 import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
+import au.com.integradev.delphi.file.DelphiFileConfig;
+import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTable;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.utils.DelphiUtils;
-import au.com.integradev.delphi.utils.files.DelphiFileUtils;
 import com.google.common.collect.Range;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -212,13 +217,23 @@ class DelphiTokenExecutorTest {
 
       InputFile inputFile =
           TestInputFileBuilder.create("moduleKey", ROOT_DIR, srcFile)
-              .setModuleBaseDir(ROOT_DIR.toPath())
               .setContents(DelphiUtils.readFileContent(srcFile, UTF_8.name()))
               .setLanguage(DelphiLanguage.KEY)
               .setType(InputFile.Type.MAIN)
               .build();
 
-      return DelphiInputFile.from(inputFile, DelphiFileUtils.mockConfig());
+      TypeFactory typeFactory =
+          new TypeFactory(
+              DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT,
+              DelphiProperties.COMPILER_VERSION_DEFAULT);
+
+      DelphiFileConfig fileConfig = mock(DelphiFileConfig.class);
+      when(fileConfig.getEncoding()).thenReturn(StandardCharsets.UTF_8.name());
+      when(fileConfig.getTypeFactory()).thenReturn(typeFactory);
+      when(fileConfig.getSearchPath()).thenReturn(SearchPath.create(Collections.emptyList()));
+      when(fileConfig.getDefinitions()).thenReturn(Collections.emptySet());
+
+      return DelphiInputFile.from(inputFile, fileConfig);
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }

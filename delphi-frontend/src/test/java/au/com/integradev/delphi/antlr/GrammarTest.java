@@ -28,7 +28,7 @@ import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.file.DelphiFile.DelphiFileConstructionException;
 import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
-import au.com.integradev.delphi.utils.builders.DelphiTestFileBuilder;
+import au.com.integradev.delphi.utils.DelphiUtils;
 import au.com.integradev.delphi.utils.files.DelphiFileUtils;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import java.io.File;
@@ -62,7 +62,7 @@ class GrammarTest {
     try {
       String path = BASE_DIR + fileName;
       LOG.info("Parsing file: " + path);
-      DelphiFile delphiFile = DelphiTestFileBuilder.fromResource(path).delphiFile(fileConfig);
+      DelphiFile delphiFile = DelphiFile.from(DelphiUtils.getResource(path), fileConfig);
 
       Source source = new DOMSource(delphiFile.getAst().getAsDocument());
       String prefix = "AST_" + StringUtils.removeEnd(fileName, ".pas");
@@ -233,7 +233,11 @@ class GrammarTest {
 
   @Test
   void testEmptyFileShouldThrow() {
-    assertThatThrownBy(() -> DelphiTestFileBuilder.fromResource(BASE_DIR + "EmptyFile.pas").parse())
+    assertThatThrownBy(
+            () ->
+                DelphiFile.from(
+                    DelphiUtils.getResource(BASE_DIR + "EmptyFile.pas"),
+                    DelphiFileUtils.mockConfig()))
         .isInstanceOf(DelphiFileConstructionException.class);
   }
 }

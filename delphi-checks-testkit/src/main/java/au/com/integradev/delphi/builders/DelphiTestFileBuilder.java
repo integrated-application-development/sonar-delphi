@@ -16,17 +16,21 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.utils.builders;
+package au.com.integradev.delphi.builders;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.antlr.ast.DelphiAST;
 import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.file.DelphiFileConfig;
+import au.com.integradev.delphi.preprocessor.search.SearchPath;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.utils.DelphiUtils;
-import au.com.integradev.delphi.utils.files.DelphiFileUtils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
@@ -34,6 +38,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import org.apache.commons.io.FileUtils;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
@@ -72,7 +78,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
   }
 
   public DelphiAST parse() {
-    DelphiFile file = DelphiInputFile.from(inputFile(), DelphiFileUtils.mockConfig());
+    DelphiFile file = DelphiInputFile.from(inputFile(), mockConfig());
     return file.getAst();
   }
 
@@ -91,7 +97,6 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
 
       inputFile =
           TestInputFileBuilder.create("moduleKey", baseDir, file)
-              .setModuleBaseDir(baseDir.toPath())
               .setContents(DelphiUtils.readFileContent(file, UTF_8.name()))
               .setLanguage(DelphiLanguage.KEY)
               .setType(InputFile.Type.MAIN)
@@ -104,7 +109,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
   }
 
   public DelphiInputFile delphiFile() {
-    return DelphiInputFile.from(inputFile(), DelphiFileUtils.mockConfig());
+    return DelphiInputFile.from(inputFile(), mockConfig());
   }
 
   public DelphiInputFile delphiFile(DelphiFileConfig fileConfig) {
@@ -179,7 +184,6 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
         File baseDir = resource.getParentFile();
         inputFile =
             TestInputFileBuilder.create("moduleKey", baseDir, resource)
-                .setModuleBaseDir(baseDir.toPath())
                 .setContents(DelphiUtils.readFileContent(resource, UTF_8.name()))
                 .setLanguage(DelphiLanguage.KEY)
                 .setType(InputFile.Type.MAIN)
@@ -219,5 +223,17 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
     protected String getFileExtension() {
       throw new UnsupportedOperationException("Not supported for ResourceBuilder");
     }
+  }
+
+  private static DelphiFileConfig mockConfig() {
+    TypeFactory typeFactory =
+        new TypeFactory(
+            DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT, DelphiProperties.COMPILER_VERSION_DEFAULT);
+    DelphiFileConfig mock = mock(DelphiFileConfig.class);
+    when(mock.getEncoding()).thenReturn(StandardCharsets.UTF_8.name());
+    when(mock.getTypeFactory()).thenReturn(typeFactory);
+    when(mock.getSearchPath()).thenReturn(SearchPath.create(Collections.emptyList()));
+    when(mock.getDefinitions()).thenReturn(Collections.emptySet());
+    return mock;
   }
 }

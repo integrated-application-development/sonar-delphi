@@ -1,10 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2011 Sabre Airline Solutions and Fabricio Colombo
- * Author(s):
- * Przemyslaw Kociolek (przemyslaw.kociolek@sabre.com)
- * Michal Wojcik (michal.wojcik@sabre.com)
- * Fabricio Colombo (fabricio.colombo.mva@gmail.com)
+ * Copyright (C) 2019-2022 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,25 +16,24 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.utils.builders;
+package au.com.integradev.delphi.builders;
 
-public class DelphiTestUnitBuilder extends DelphiTestFileBuilder<DelphiTestUnitBuilder> {
-
-  private String unitName = "Test";
+public class DelphiTestProgramBuilder extends DelphiTestFileBuilder<DelphiTestProgramBuilder> {
+  private String programName = "omTestProgram";
 
   @Override
-  protected DelphiTestUnitBuilder getThis() {
+  protected DelphiTestProgramBuilder getThis() {
     return this;
   }
 
   @Override
   public int getOffsetDecl() {
-    return 4;
+    return 2;
   }
 
   @Override
   public int getOffset() {
-    int offset = getDeclCount() + getOffsetDecl() + 2;
+    int offset = getDeclCount() + getOffsetDecl() + 1;
     if (!getDeclaration().isEmpty()) {
       ++offset;
     }
@@ -47,11 +42,15 @@ public class DelphiTestUnitBuilder extends DelphiTestFileBuilder<DelphiTestUnitB
   }
 
   @Override
+  public DelphiTestProgramBuilder appendImpl(String value) {
+    // Just adding a tab for pretty-printing.
+    return super.appendImpl("  " + value);
+  }
+
+  @Override
   protected StringBuilder generateSourceCode() {
     StringBuilder source = new StringBuilder();
-    source.append(String.format("unit %s;\n", this.unitName));
-    source.append("\n");
-    source.append("interface\n");
+    source.append(String.format("program %s;\n", this.programName));
     source.append("\n");
 
     if (!getDeclaration().isEmpty()) {
@@ -59,12 +58,10 @@ public class DelphiTestUnitBuilder extends DelphiTestFileBuilder<DelphiTestUnitB
       source.append("\n");
     }
 
-    source.append("implementation\n");
-    source.append("\n");
+    source.append("begin\n");
 
     if (!getImplementation().isEmpty()) {
       source.append(this.getImplementation());
-      source.append("\n");
     }
 
     source.append("end.\n");
@@ -74,16 +71,16 @@ public class DelphiTestUnitBuilder extends DelphiTestFileBuilder<DelphiTestUnitB
 
   @Override
   protected String getFilenamePrefix() {
-    return "unit";
+    return "program";
   }
 
   @Override
   protected String getFileExtension() {
-    return "pas";
+    return "dpr";
   }
 
-  public DelphiTestUnitBuilder unitName(String unitName) {
-    this.unitName = unitName;
+  public DelphiTestProgramBuilder programName(String programName) {
+    this.programName = programName;
     return getThis();
   }
 }

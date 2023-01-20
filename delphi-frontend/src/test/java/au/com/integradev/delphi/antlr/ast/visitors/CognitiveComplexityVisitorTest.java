@@ -22,12 +22,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import au.com.integradev.delphi.antlr.ast.DelphiAST;
 import au.com.integradev.delphi.antlr.ast.visitors.CognitiveComplexityVisitor.Data;
-import au.com.integradev.delphi.utils.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.file.DelphiFile;
+import au.com.integradev.delphi.utils.files.DelphiFileUtils;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class CognitiveComplexityVisitorTest {
   private CognitiveComplexityVisitor visitor;
+
+  @TempDir Path tempDir;
 
   @BeforeEach
   void setup() {
@@ -36,98 +44,98 @@ class CognitiveComplexityVisitorTest {
 
   @Test
   void testSimpleMethod() {
-    DelphiAST ast =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function Foo: Integer;")
-            .appendImpl("begin")
-            .appendImpl("  if Foo then Bar;") // <1> 1
-            .appendImpl("end;")
-            .parse();
-
-    assertThat(getComplexity(ast)).isEqualTo(1);
+    assertThat(
+            getComplexity(
+                "function Foo: Integer;\n"
+                    + "begin\n"
+                    + "  if Foo then Bar;\n" // <1> 1
+                    + "end;\n"))
+        .isEqualTo(1);
   }
 
   @Test
   void testTooComplexMethod() {
-    DelphiAST ast =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function Foo: Integer;")
-            .appendImpl("begin")
-            .appendImpl("  if SomeCondition then begin") // <1> 1
-            .appendImpl("    while SomeCondition do begin") // <3> 2 [+1 for nesting]
-            .appendImpl("      SomeCondition := False;")
-            .appendImpl("      Break;")
-            .appendImpl("    end;")
-            .appendImpl("    if not SomeCondition then begin") // <5> 2 [+1 for nesting]
-            .appendImpl("      try")
-            .appendImpl("        repeat") // <8> 3 [+2 for nesting]
-            .appendImpl("          if SomeCondition then begin") // <12> 4 [+3 for nesting]
-            .appendImpl("            // Do nothing")
-            .appendImpl("          end;")
-            .appendImpl("        until SomeCondition;")
-            .appendImpl("      except")
-            .appendImpl("        on E : Exception do begin") // <15> 3 [+2 for nesting]
-            .appendImpl("          for Index := 10 downto 0 do begin") // <19> 4 [+3 for nesting]
-            .appendImpl("             Log('Self destruct in: ' + Index);")
-            .appendImpl("          end;")
-            .appendImpl("        end;")
-            .appendImpl("      end;")
-            .appendImpl("    end;")
-            .appendImpl("  end")
-            .appendImpl("  else if SomeOtherCondition then begin") // <20> 1
-            .appendImpl("    case MyEnum of") // <22> 2 [+1 for nesting]
-            .appendImpl("      someEnum: DoSomething;")
-            .appendImpl("      someOtherEnum: DoSomethingElse;")
-            .appendImpl("    else")
-            .appendImpl("      DoThirdThing;")
-            .appendImpl("    end;")
-            .appendImpl("  end")
-            .appendImpl("  else begin") // <23> 1
-            .appendImpl("    MyAnonymousProc := procedure")
-            .appendImpl("    begin")
-            .appendImpl("      if SpookyError then begin") // <26> 3 [+2 for nesting]
-            .appendImpl("        raise SpookyErrorException.Create('A spooky error has occurred');")
-            .appendImpl("      end;")
-            .appendImpl("      if Nevermind then;") // <29> 3 [+2 for nesting]
-            .appendImpl("    end;")
-            .appendImpl("  end;")
-            .appendImpl("  Result := 42;")
-            .appendImpl("end;")
-            .parse();
-
-    assertThat(getComplexity(ast)).isEqualTo(29);
+    assertThat(
+            getComplexity(
+                "function Foo: Integer;\n"
+                    + "begin\n"
+                    + "  if SomeCondition then begin\n" // <1> 1
+                    + "    while SomeCondition do begin\n" // <3> 2 [+1 for nesting]
+                    + "      SomeCondition := False;\n"
+                    + "      Break;\n"
+                    + "    end;\n"
+                    + "    if not SomeCondition then begin\n" // <5> 2 [+1 for nesting]
+                    + "      try\n"
+                    + "        repeat\n" // <8> 3 [+2 for nesting]
+                    + "          if SomeCondition then begin\n" // <12> 4 [+3 for nesting]
+                    + "            // Do nothing\n"
+                    + "          end;\n"
+                    + "        until SomeCondition;\n"
+                    + "      except\n"
+                    + "        on E : Exception do begin\n" // <15> 3 [+2 for nesting]
+                    + "          for Index := 10 downto 0 do begin\n" // <19> 4 [+3 for nesting]
+                    + "             Log('Self destruct in: ' + Index);\n"
+                    + "          end;\n"
+                    + "        end;\n"
+                    + "      end;\n"
+                    + "    end;\n"
+                    + "  end\n"
+                    + "  else if SomeOtherCondition then begin\n" // <20> 1
+                    + "    case MyEnum of\n" // <22> 2 [+1 for nesting]
+                    + "      someEnum: DoSomething;\n"
+                    + "      someOtherEnum: DoSomethingElse;\n"
+                    + "    else\n"
+                    + "      DoThirdThing;\n"
+                    + "    end;\n"
+                    + "  end\n"
+                    + "  else begin\n" // <23> 1
+                    + "    MyAnonymousProc := procedure\n"
+                    + "    begin\n"
+                    + "      if SpookyError then begin\n" // <26> 3 [+2 for nesting]
+                    + "        raise SpookyErrorException.Create('A spooky error has occurred');\n"
+                    + "      end;\n"
+                    + "      if Nevermind then;\n" // <29> 3 [+2 for nesting]
+                    + "    end;\n"
+                    + "  end;\n"
+                    + "  Result := 42;\n"
+                    + "end;\n"))
+        .isEqualTo(29);
   }
 
   @Test
   void testSimpleBinaryExpression() {
-    DelphiAST ast =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function Foo: Integer;")
-            .appendImpl("begin")
-            .appendImpl("  Result := Foo and Bar and Baz;") // 1
-            .appendImpl("end;")
-            .parse();
-
-    assertThat(getComplexity(ast)).isEqualTo(1);
+    assertThat(
+            getComplexity(
+                "function Foo: Integer;\n"
+                    + "begin\n"
+                    + "  Result := Foo and Bar and Baz;\n" // 1
+                    + "end;\n"))
+        .isEqualTo(1);
   }
 
   @Test
   void testComplexBinaryExpression() {
-    DelphiAST ast =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function Foo: Integer;")
-            .appendImpl("begin")
-            .appendImpl("  Result := ((Foo and (Bar and Baz)) and") // 1
-            .appendImpl("    ((X or (Y)) or Z)) or") // 2
-            .appendImpl("    (A and ") // 3
-            .appendImpl("      (B or C));") // 4
-            .appendImpl("end;")
-            .parse();
-
-    assertThat(getComplexity(ast)).isEqualTo(4);
+    assertThat(
+            getComplexity(
+                "function Foo: Integer;\n"
+                    + "begin\n"
+                    + "  Result := ((Foo and (Bar and Baz)) and\n" // 1
+                    + "    ((X or (Y)) or Z)) or\n" // 2
+                    + "    (A and\n" // 3
+                    + "      (B or C));\n" // 4
+                    + "end;\n"))
+        .isEqualTo(4);
   }
 
-  private int getComplexity(DelphiAST ast) {
+  private int getComplexity(String function) {
+    Path path = tempDir.resolve("SourceFile.pas");
+    try {
+      Files.writeString(path, "unit SourceFile;\ninterface\nimplementation\n" + function + "end.");
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+    DelphiFile delphiFile = DelphiFile.from(path.toFile(), DelphiFileUtils.mockConfig());
+    DelphiAST ast = delphiFile.getAst();
     return visitor.visit(ast, new Data()).getComplexity();
   }
 }

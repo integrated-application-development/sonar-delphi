@@ -28,14 +28,17 @@ import static org.mockito.Mockito.verify;
 
 import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.utils.builders.DelphiTestFileBuilder;
+import au.com.integradev.delphi.file.DelphiFile;
+import au.com.integradev.delphi.utils.DelphiUtils;
+import au.com.integradev.delphi.utils.files.DelphiFileUtils;
 import net.sourceforge.pmd.lang.ast.Node;
 import org.junit.jupiter.api.Test;
 
 class DelphiASTTest {
 
   private static final String TEST_FILE = "/au/com/integradev/delphi/grammar/GrammarTest.pas";
-  private final DelphiAST ast = DelphiTestFileBuilder.fromResource(TEST_FILE).parse();
+  private final DelphiAST ast =
+      DelphiFile.from(DelphiUtils.getResource(TEST_FILE), DelphiFileUtils.mockConfig()).getAst();
 
   @Test
   void testAcceptImplemented() {

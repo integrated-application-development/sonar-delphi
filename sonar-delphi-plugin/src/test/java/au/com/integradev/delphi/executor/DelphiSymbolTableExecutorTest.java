@@ -18,21 +18,28 @@
  */
 package au.com.integradev.delphi.executor;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.function.Predicate.not;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import au.com.integradev.delphi.DelphiProperties;
+import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
+import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTable;
 import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.utils.DelphiUtils;
-import au.com.integradev.delphi.utils.builders.DelphiTestFileBuilder;
-import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import com.google.common.collect.Sets;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -41,9 +48,11 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextPointer;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultTextPointer;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 
 class DelphiSymbolTableExecutorTest {
@@ -1199,7 +1208,26 @@ class DelphiSymbolTableExecutorTest {
   }
 
   private void execute(String filename, String... searchPaths) {
-    mainFile = DelphiTestFileBuilder.fromResource(ROOT_PATH + filename).delphiFile();
+    File baseDir = DelphiUtils.getResource(ROOT_PATH);
+    File file = DelphiUtils.getResource(ROOT_PATH + filename);
+    InputFile inputFile =
+        TestInputFileBuilder.create("moduleKey", baseDir, file)
+            .setContents(DelphiUtils.readFileContent(file, UTF_8.name()))
+            .setLanguage(DelphiLanguage.KEY)
+            .setType(InputFile.Type.MAIN)
+            .build();
+
+    TypeFactory typeFactory =
+        new TypeFactory(
+            DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT, DelphiProperties.COMPILER_VERSION_DEFAULT);
+
+    DelphiFileConfig fileConfig = mock(DelphiFileConfig.class);
+    when(fileConfig.getEncoding()).thenReturn(StandardCharsets.UTF_8.name());
+    when(fileConfig.getTypeFactory()).thenReturn(typeFactory);
+    when(fileConfig.getSearchPath()).thenReturn(SearchPath.create(Collections.emptyList()));
+    when(fileConfig.getDefinitions()).thenReturn(Collections.emptySet());
+
+    mainFile = DelphiInputFile.from(inputFile, fileConfig);
     List<Path> sourceFiles = List.of(Path.of(mainFile.getInputFile().uri()));
     SearchPath searchPath =
         SearchPath.create(
@@ -1211,7 +1239,7 @@ class DelphiSymbolTableExecutorTest {
 
     symbolTable =
         SymbolTable.builder()
-            .typeFactory(TypeFactoryUtils.defaultFactory())
+            .typeFactory(typeFactory)
             .sourceFiles(sourceFiles)
             .searchPath(searchPath)
             .standardLibraryPath(DelphiUtils.getResource(STANDARD_LIBRARY).toPath())

@@ -83,11 +83,10 @@
   </developers>
 
   <modules>
-    <!--<module>delphi-frontend</module>-->
-    <!--<module>delphi-checks-testkit</module>-->
+    <module>delphi-checks-testkit</module>
     <module>delphi-checks</module>
-    <module>sonar-delphi-plugin</module>
     <module>delphi-frontend</module>
+    <module>sonar-delphi-plugin</module>
     <!--<module>its</module>-->
   </modules>
 
