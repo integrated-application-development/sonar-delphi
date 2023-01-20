@@ -120,6 +120,7 @@
     <assertj.version>3.23.1</assertj.version>
     <mockito.version>4.7.0</mockito.version>
     <archunit.version>0.23.1</archunit.version>
+    <slf4j.version>1.7.30</slf4j.version>
     <errorprone.version>2.15.0</errorprone.version>
     <!-- Plugin versions -->
     <compiler-plugin.version>3.10.1</compiler-plugin.version>
@@ -233,6 +234,12 @@
         <groupId>com.tngtech.archunit</groupId>
         <artifactId>archunit-junit5</artifactId>
         <version>${archunit.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-nop</artifactId>
+        <version>${slf4j.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
