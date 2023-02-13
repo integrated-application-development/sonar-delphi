@@ -21,8 +21,10 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.util.List;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 
-public final class ArgumentListNodeImpl extends AbstractDelphiNode implements ArgumentListNode {
+public final class ArgumentListNodeImpl extends DelphiNodeImpl implements ArgumentListNode {
   private String image;
   private List<ExpressionNode> arguments;
 

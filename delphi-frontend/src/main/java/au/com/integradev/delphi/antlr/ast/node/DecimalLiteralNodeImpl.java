@@ -23,6 +23,7 @@ import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.ast.DecimalLiteralNode;
 
 public final class DecimalLiteralNodeImpl extends LiteralNodeImpl implements DecimalLiteralNode {
   public DecimalLiteralNodeImpl(Token token) {

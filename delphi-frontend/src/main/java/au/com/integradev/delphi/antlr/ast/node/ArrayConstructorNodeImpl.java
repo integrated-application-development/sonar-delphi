@@ -25,10 +25,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
-import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.ast.ArrayConstructorNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 
-public final class ArrayConstructorNodeImpl extends ExpressionNodeImpl implements
-    ArrayConstructorNode {
+public final class ArrayConstructorNodeImpl extends ExpressionNodeImpl
+    implements ArrayConstructorNode {
   private String image;
 
   public ArrayConstructorNodeImpl(Token token) {

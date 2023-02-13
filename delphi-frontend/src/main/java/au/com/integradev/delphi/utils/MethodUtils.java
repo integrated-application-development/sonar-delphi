@@ -20,11 +20,11 @@ package au.com.integradev.delphi.utils;
 
 import static au.com.integradev.delphi.utils.StatementUtils.isMethodInvocation;
 
-import au.com.integradev.delphi.antlr.ast.node.AssignmentStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodBodyNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodImplementationNode;
-import au.com.integradev.delphi.antlr.ast.node.RaiseStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.StatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodBodyNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RaiseStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 
 public class MethodUtils {
   private MethodUtils() {

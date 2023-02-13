@@ -20,8 +20,9 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.FinallyBlockNode;
 
-public final class FinallyBlockNodeImpl extends AbstractDelphiNode implements FinallyBlockNode {
+public final class FinallyBlockNodeImpl extends DelphiNodeImpl implements FinallyBlockNode {
   public FinallyBlockNodeImpl(Token token) {
     super(token);
   }

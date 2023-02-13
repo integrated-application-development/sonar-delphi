@@ -20,8 +20,10 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.MethodReturnTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 
-public final class MethodReturnTypeNodeImpl extends AbstractDelphiNode
+public final class MethodReturnTypeNodeImpl extends DelphiNodeImpl
     implements MethodReturnTypeNode {
   public MethodReturnTypeNodeImpl(Token token) {
     super(token);

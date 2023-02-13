@@ -21,8 +21,10 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.util.List;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ArrayIndicesNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 
-public final class ArrayIndicesNodeImpl extends AbstractDelphiNode implements ArrayIndicesNode {
+public final class ArrayIndicesNodeImpl extends DelphiNodeImpl implements ArrayIndicesNode {
   public ArrayIndicesNodeImpl(Token token) {
     super(token);
   }

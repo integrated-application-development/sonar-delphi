@@ -18,8 +18,8 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.MethodParametersNode;
-import au.com.integradev.delphi.antlr.ast.node.NameDeclarationListNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodParametersNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
 
 public class GroupedParameterDeclarationRule extends AbstractGroupedDeclarationRule {
   @Override

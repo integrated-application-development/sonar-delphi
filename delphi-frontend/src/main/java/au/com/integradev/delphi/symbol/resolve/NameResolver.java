@@ -25,20 +25,20 @@ import static au.com.integradev.delphi.type.DelphiType.voidType;
 import static java.util.function.Predicate.not;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.node.ArgumentListNode;
-import au.com.integradev.delphi.antlr.ast.node.ArrayAccessorNode;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.ExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.GenericArgumentsNode;
-import au.com.integradev.delphi.antlr.ast.node.IdentifierNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodImplementationNode;
-import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.GenericArgumentsNode;
+import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNodeImpl;
-import au.com.integradev.delphi.antlr.ast.node.Node;
-import au.com.integradev.delphi.antlr.ast.node.ParenthesizedExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
+import org.sonar.plugins.communitydelphi.api.ast.ParenthesizedExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 import au.com.integradev.delphi.symbol.DelphiNameOccurrence;
 import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.NameOccurrence;
@@ -587,7 +587,7 @@ public class NameResolver {
   private boolean isExplicitArrayConstructorInvocation(NameReferenceNode reference) {
     return Iterables.getLast(resolvedDeclarations, null) instanceof TypeNameDeclaration
         && isDynamicArrayReference(currentType)
-        && reference.getLastName().hasImageEqualTo("Create");
+        && reference.getLastName().getImage().equalsIgnoreCase("Create");
   }
 
   private static boolean isDynamicArrayReference(Type type) {
@@ -634,7 +634,7 @@ public class NameResolver {
     }
 
     for (int i = 0; i < declarationParts.size(); ++i) {
-      if (!references.get(i).getIdentifier().hasImageEqualTo(declarationParts.get(i))) {
+      if (!references.get(i).getIdentifier().getImage().equalsIgnoreCase(declarationParts.get(i))) {
         return false;
       }
     }

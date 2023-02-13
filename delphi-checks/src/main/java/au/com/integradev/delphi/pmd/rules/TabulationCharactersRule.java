@@ -20,7 +20,7 @@ package au.com.integradev.delphi.pmd.rules;
 
 import static org.apache.commons.lang3.StringUtils.countMatches;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
 import au.com.integradev.delphi.pmd.FilePosition;
 import net.sourceforge.pmd.RuleContext;

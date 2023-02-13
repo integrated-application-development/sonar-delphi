@@ -29,9 +29,15 @@ import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.pmd.FilePosition;
 import java.util.List;
 import java.util.Set;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
+import org.sonar.plugins.communitydelphi.api.ast.PackageDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.ProgramDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.UnitDeclarationNode;
 
 /** DelphiLanguage AST tree. */
-public class DelphiAstImpl extends AbstractDelphiNode implements DelphiAst {
+public class DelphiAstImpl extends DelphiNodeImpl implements DelphiAst {
   private final DelphiFile delphiFile;
 
   /**

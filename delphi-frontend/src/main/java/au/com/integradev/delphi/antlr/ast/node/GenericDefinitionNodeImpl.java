@@ -27,8 +27,12 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeParameterNode;
 
-public final class GenericDefinitionNodeImpl extends AbstractDelphiNode
+public final class GenericDefinitionNodeImpl extends DelphiNodeImpl
     implements GenericDefinitionNode {
   private String image;
   private List<TypeParameter> typeParameters;

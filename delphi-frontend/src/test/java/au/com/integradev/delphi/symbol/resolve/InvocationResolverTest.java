@@ -51,7 +51,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import au.com.integradev.delphi.symbol.scope.DelphiScope;
 import au.com.integradev.delphi.type.ArrayOption;
 import au.com.integradev.delphi.type.Type;

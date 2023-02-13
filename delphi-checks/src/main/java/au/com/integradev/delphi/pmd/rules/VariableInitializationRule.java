@@ -19,27 +19,27 @@
 package au.com.integradev.delphi.pmd.rules;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.node.ArgumentListNode;
-import au.com.integradev.delphi.antlr.ast.node.AssignmentStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.BlockDeclarationSectionNode;
-import au.com.integradev.delphi.antlr.ast.node.CommonDelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.CompoundStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.ConstStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.ExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.ForLoopVarNode;
-import au.com.integradev.delphi.antlr.ast.node.ForLoopVarReferenceNode;
-import au.com.integradev.delphi.antlr.ast.node.ForStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodImplementationNode;
-import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
-import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.RepeatStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.StatementNode;
-import au.com.integradev.delphi.antlr.ast.node.UnaryExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.VarDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.VarSectionNode;
-import au.com.integradev.delphi.antlr.ast.node.VarStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.BlockDeclarationSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarNode;
+import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.ForStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.RepeatStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarStatementNode;
 import au.com.integradev.delphi.operator.UnaryOperator;
 import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
@@ -61,7 +61,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import net.sourceforge.pmd.RuleContext;
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 
 public class VariableInitializationRule extends AbstractDelphiRule {
   private final IdentityHashMap<NameDeclaration, InitializationState> initializationStateMap =

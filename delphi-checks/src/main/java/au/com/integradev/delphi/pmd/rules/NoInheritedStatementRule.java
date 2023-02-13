@@ -22,10 +22,10 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.CompoundStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.ExpressionStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodImplementationNode;
-import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 
 public abstract class NoInheritedStatementRule extends AbstractDelphiRule {
 

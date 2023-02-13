@@ -24,9 +24,9 @@ package au.com.integradev.delphi.antlr.ast;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.node.CommonDelphiNodeImpl;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
-import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.MutableDelphiNode;
 import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
 import com.google.common.base.Preconditions;
 import java.lang.reflect.Constructor;

@@ -23,10 +23,9 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
-import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

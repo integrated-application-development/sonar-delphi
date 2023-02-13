@@ -21,8 +21,10 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.util.List;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.AncestorListNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 
-public final class AncestorListNodeImpl extends AbstractDelphiNode implements AncestorListNode {
+public final class AncestorListNodeImpl extends DelphiNodeImpl implements AncestorListNode {
   public AncestorListNodeImpl(Token token) {
     super(token);
   }

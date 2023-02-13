@@ -18,14 +18,14 @@
  */
 package au.com.integradev.delphi.symbol.declaration;
 
-import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
-import au.com.integradev.delphi.antlr.ast.node.Node;
-import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.PropertyNode;
-import au.com.integradev.delphi.antlr.ast.node.PropertyReadSpecifierNode;
-import au.com.integradev.delphi.antlr.ast.node.PropertyWriteSpecifierNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.Visibility;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyReadSpecifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyWriteSpecifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.Visibility;
 import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.resolve.Invocable;

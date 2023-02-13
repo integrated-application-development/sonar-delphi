@@ -23,6 +23,9 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
 
 public final class MethodDeclarationNodeImpl extends MethodNodeImpl
     implements MethodDeclarationNode {

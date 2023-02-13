@@ -20,8 +20,10 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ElseBlockNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 
-public final class ElseBlockNodeImpl extends AbstractDelphiNode implements ElseBlockNode {
+public final class ElseBlockNodeImpl extends DelphiNodeImpl implements ElseBlockNode {
   public ElseBlockNodeImpl(Token token) {
     super(token);
   }

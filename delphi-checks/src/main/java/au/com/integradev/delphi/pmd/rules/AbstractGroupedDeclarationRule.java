@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.NameDeclarationListNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
 import net.sourceforge.pmd.RuleContext;
 
 public abstract class AbstractGroupedDeclarationRule extends AbstractDelphiRule {

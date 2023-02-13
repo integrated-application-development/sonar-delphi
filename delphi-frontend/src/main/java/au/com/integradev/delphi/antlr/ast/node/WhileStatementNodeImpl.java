@@ -20,8 +20,9 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.WhileStatementNode;
 
-public final class WhileStatementNodeImpl extends AbstractDelphiNode implements WhileStatementNode {
+public final class WhileStatementNodeImpl extends DelphiNodeImpl implements WhileStatementNode {
   public WhileStatementNodeImpl(Token token) {
     super(token);
   }

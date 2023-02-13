@@ -20,8 +20,10 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.MethodResolutionClauseNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 
-public final class MethodResolutionClauseNodeImpl extends AbstractDelphiNode
+public final class MethodResolutionClauseNodeImpl extends DelphiNodeImpl
     implements MethodResolutionClauseNode {
   public MethodResolutionClauseNodeImpl(Token token) {
     super(token);

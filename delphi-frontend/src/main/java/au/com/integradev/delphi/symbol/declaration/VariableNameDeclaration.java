@@ -18,19 +18,19 @@
  */
 package au.com.integradev.delphi.symbol.declaration;
 
-import au.com.integradev.delphi.antlr.ast.node.ConstStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.FieldSectionNode;
-import au.com.integradev.delphi.antlr.ast.node.ForInStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.ForLoopVarDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.ForToStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode.DeclarationKind;
-import au.com.integradev.delphi.antlr.ast.node.Node;
-import au.com.integradev.delphi.antlr.ast.node.RecordVariantItemNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeNode;
-import au.com.integradev.delphi.antlr.ast.node.VarDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.VarStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.Visibility;
+import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.FieldSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.ForToStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode.DeclarationKind;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
+import org.sonar.plugins.communitydelphi.api.ast.RecordVariantItemNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.Visibility;
 import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.resolve.TypeInferrer;

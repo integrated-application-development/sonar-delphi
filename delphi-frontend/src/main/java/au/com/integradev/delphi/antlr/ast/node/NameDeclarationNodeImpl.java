@@ -23,8 +23,11 @@ import au.com.integradev.delphi.symbol.NameOccurrence;
 import java.util.Collections;
 import java.util.List;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 
-public abstract class NameDeclarationNodeImpl extends AbstractDelphiNode
+public abstract class NameDeclarationNodeImpl extends DelphiNodeImpl
     implements NameDeclarationNode {
   private NameDeclaration declaration;
   private List<NameOccurrence> usages;

@@ -20,6 +20,7 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.UsesClauseNode;
 
 public final class UsesClauseNodeImpl extends ImportClauseNodeImpl implements UsesClauseNode {
   public UsesClauseNodeImpl(Token token) {

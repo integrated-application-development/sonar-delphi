@@ -21,8 +21,11 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.util.List;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeParameterNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 
-public final class TypeParameterNodeImpl extends AbstractDelphiNode implements TypeParameterNode {
+public final class TypeParameterNodeImpl extends DelphiNodeImpl implements TypeParameterNode {
   public TypeParameterNodeImpl(Token token) {
     super(token);
   }

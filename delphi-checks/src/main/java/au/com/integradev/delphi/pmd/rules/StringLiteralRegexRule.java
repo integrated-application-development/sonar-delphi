@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.TextLiteralNode;
+import org.sonar.plugins.communitydelphi.api.ast.TextLiteralNode;
 import java.util.regex.Pattern;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.PropertyDescriptor;

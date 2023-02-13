@@ -18,12 +18,12 @@
  */
 package au.com.integradev.delphi.symbol.scope;
 
-import au.com.integradev.delphi.antlr.ast.node.ArrayAccessorNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodNameNode;
-import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
+import org.sonar.plugins.communitydelphi.api.ast.MutableDelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;

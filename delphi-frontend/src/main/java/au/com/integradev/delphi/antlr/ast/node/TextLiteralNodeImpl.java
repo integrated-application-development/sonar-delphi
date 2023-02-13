@@ -24,6 +24,8 @@ import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.TextLiteralNode;
 
 public final class TextLiteralNodeImpl extends LiteralNodeImpl implements TextLiteralNode {
   private String image;

@@ -25,7 +25,7 @@ import au.com.integradev.delphi.type.DelphiType;
 import au.com.integradev.delphi.type.Type;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
-import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.ast.ConstArraySubTypeNode;
 
 public final class ConstArraySubTypeNodeImpl extends TypeNodeImpl implements ConstArraySubTypeNode {
   public ConstArraySubTypeNodeImpl(Token token) {

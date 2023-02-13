@@ -18,9 +18,9 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.FileHeaderNode;
-import au.com.integradev.delphi.antlr.ast.node.InterfaceSectionNode;
-import au.com.integradev.delphi.antlr.ast.node.UnitImportNode;
+import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
+import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import au.com.integradev.delphi.symbol.declaration.UnitImportNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;
 import com.google.common.base.Preconditions;

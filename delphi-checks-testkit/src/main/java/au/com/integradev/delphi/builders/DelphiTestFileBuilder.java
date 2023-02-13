@@ -23,7 +23,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.DelphiProperties;
-import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;

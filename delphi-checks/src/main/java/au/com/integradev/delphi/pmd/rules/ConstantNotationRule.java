@@ -18,8 +18,8 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.ConstDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.ConstStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
 import au.com.integradev.delphi.utils.NameConventionUtils;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;

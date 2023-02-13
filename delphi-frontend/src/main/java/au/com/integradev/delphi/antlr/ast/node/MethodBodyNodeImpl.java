@@ -20,8 +20,13 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.AsmStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.BlockDeclarationSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodBodyNode;
 
-public final class MethodBodyNodeImpl extends AbstractDelphiNode implements MethodBodyNode {
+public final class MethodBodyNodeImpl extends DelphiNodeImpl implements MethodBodyNode {
   private BlockDeclarationSectionNode declarationSection;
   private DelphiNode block;
   private CompoundStatementNode statementBlock;

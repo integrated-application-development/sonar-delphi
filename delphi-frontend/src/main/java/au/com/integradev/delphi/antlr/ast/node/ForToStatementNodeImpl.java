@@ -20,6 +20,9 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.ForToStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 
 public final class ForToStatementNodeImpl extends ForStatementNodeImpl
     implements ForToStatementNode {

@@ -19,8 +19,10 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarNode;
+import org.sonar.plugins.communitydelphi.api.ast.ForStatementNode;
 
-public abstract class ForStatementNodeImpl extends AbstractDelphiNode implements
+public abstract class ForStatementNodeImpl extends DelphiNodeImpl implements
     ForStatementNode {
   protected ForStatementNodeImpl(Token token) {
     super(token);

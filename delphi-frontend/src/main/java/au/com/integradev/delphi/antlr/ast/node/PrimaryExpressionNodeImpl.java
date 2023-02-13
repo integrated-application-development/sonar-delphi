@@ -24,6 +24,8 @@ import au.com.integradev.delphi.symbol.resolve.ExpressionTypeResolver;
 import au.com.integradev.delphi.type.Type;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 
 public final class PrimaryExpressionNodeImpl extends ExpressionNodeImpl
     implements PrimaryExpressionNode {

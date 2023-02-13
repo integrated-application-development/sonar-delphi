@@ -18,8 +18,8 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import au.com.integradev.delphi.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.scope.DelphiScope;
 import au.com.integradev.delphi.symbol.scope.MethodScope;

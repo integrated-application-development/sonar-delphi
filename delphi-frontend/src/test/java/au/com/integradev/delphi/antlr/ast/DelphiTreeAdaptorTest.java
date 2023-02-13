@@ -22,8 +22,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodDeclarationNodeImpl;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;

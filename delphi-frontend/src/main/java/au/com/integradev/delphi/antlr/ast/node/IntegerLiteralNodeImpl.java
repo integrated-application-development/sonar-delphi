@@ -25,6 +25,7 @@ import java.math.BigInteger;
 import org.antlr.runtime.Token;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
 
 public final class IntegerLiteralNodeImpl extends LiteralNodeImpl implements IntegerLiteralNode {
   private String image;

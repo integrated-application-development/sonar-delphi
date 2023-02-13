@@ -22,6 +22,8 @@ import au.com.integradev.delphi.type.Type;
 import java.util.List;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.StructTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
 
 public abstract class StructTypeNodeImpl extends TypeNodeImpl implements StructTypeNode {
   protected StructTypeNodeImpl(Token token) {

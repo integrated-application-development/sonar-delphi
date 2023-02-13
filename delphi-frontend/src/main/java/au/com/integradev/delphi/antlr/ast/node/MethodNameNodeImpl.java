@@ -27,8 +27,14 @@ import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.GenericArgumentsNode;
+import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.SimpleNameDeclarationNode;
 
-public final class MethodNameNodeImpl extends AbstractDelphiNode implements MethodNameNode {
+public final class MethodNameNodeImpl extends DelphiNodeImpl implements MethodNameNode {
   private QualifiedName qualifiedName;
   private MethodNameDeclaration methodNameDeclaration;
   private List<NameOccurrence> usages;

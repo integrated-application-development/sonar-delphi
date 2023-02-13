@@ -20,10 +20,10 @@ package au.com.integradev.delphi.pmd.rules;
 
 import static au.com.integradev.delphi.pmd.DelphiPmdConstants.LIMIT;
 
-import au.com.integradev.delphi.antlr.ast.node.BlockDeclarationSectionNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodImplementationNode;
-import au.com.integradev.delphi.antlr.ast.node.VarDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.VarSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.BlockDeclarationSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarSectionNode;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 

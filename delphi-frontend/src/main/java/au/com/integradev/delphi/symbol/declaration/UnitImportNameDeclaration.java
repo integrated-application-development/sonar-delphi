@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.symbol.declaration;
 
-import au.com.integradev.delphi.antlr.ast.node.UnitImportNode;
+import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import au.com.integradev.delphi.symbol.scope.FileScope;
 import java.util.Objects;
 import javax.annotation.Nullable;

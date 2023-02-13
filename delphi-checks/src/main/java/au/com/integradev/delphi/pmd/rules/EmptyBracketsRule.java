@@ -18,16 +18,16 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.ArgumentListNode;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodParametersNode;
-import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
-import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodParametersNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
 import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.Typed;
 import net.sourceforge.pmd.RuleContext;
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 
 public class EmptyBracketsRule extends AbstractDelphiRule {
   private static final String SYSTEM_ASSIGNED_IMAGE = "System.Assigned";

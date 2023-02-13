@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.MethodDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
 import net.sourceforge.pmd.RuleContext;
 
 public class DestructorDestroyRule extends AbstractDelphiRule {

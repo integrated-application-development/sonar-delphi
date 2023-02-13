@@ -24,8 +24,10 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterListNode;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode;
 
-public final class FormalParameterListNodeImpl extends AbstractDelphiNode
+public final class FormalParameterListNodeImpl extends DelphiNodeImpl
     implements FormalParameterListNode {
   private List<FormalParameterNode.FormalParameterData> parameters;
   private List<Type> parameterTypes;

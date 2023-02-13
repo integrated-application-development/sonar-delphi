@@ -22,8 +22,10 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.util.List;
 import java.util.stream.Stream;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 
-public final class StatementListNodeImpl extends AbstractDelphiNode implements StatementListNode {
+public final class StatementListNodeImpl extends DelphiNodeImpl implements StatementListNode {
   private List<StatementNode> statements;
   private List<StatementNode> descendantStatements;
 

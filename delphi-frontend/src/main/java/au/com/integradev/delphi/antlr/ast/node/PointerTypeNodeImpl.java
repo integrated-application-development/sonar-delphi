@@ -22,6 +22,9 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.type.Type;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.PointerTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 
 public final class PointerTypeNodeImpl extends TypeNodeImpl implements PointerTypeNode {
   public PointerTypeNodeImpl(Token token) {

@@ -20,11 +20,10 @@ package au.com.integradev.delphi.pmd.rules;
 
 import static au.com.integradev.delphi.utils.MethodUtils.isMethodStubWithStackUnwinding;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
-import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
-import au.com.integradev.delphi.antlr.ast.node.MethodDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodImplementationNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodNode;
 import au.com.integradev.delphi.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.declaration.MethodDirective;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;

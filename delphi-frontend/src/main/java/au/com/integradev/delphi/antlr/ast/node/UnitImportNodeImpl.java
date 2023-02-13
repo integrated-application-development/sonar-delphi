@@ -21,8 +21,10 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.symbol.declaration.UnitImportNameDeclaration;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.QualifiedNameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 
-public final class UnitImportNodeImpl extends AbstractDelphiNode implements UnitImportNode {
+public final class UnitImportNodeImpl extends DelphiNodeImpl implements UnitImportNode {
   public UnitImportNodeImpl(Token token) {
     super(token);
   }

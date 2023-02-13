@@ -18,9 +18,9 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.BinaryExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.ExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import au.com.integradev.delphi.operator.BinaryOperator;
 import au.com.integradev.delphi.symbol.declaration.VariableNameDeclaration;
 import net.sourceforge.pmd.RuleContext;

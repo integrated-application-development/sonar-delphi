@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.symbol.declaration;
 
-import au.com.integradev.delphi.antlr.ast.node.FileHeaderNode;
+import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
 import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.scope.FileScope;
 import java.nio.file.Path;

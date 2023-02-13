@@ -21,7 +21,7 @@ package au.com.integradev.delphi.symbol.scope;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-import au.com.integradev.delphi.antlr.ast.node.Visibility.VisibilityType;
+import org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.declaration.MethodKind;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;

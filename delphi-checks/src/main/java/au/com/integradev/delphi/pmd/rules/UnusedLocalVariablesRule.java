@@ -18,15 +18,15 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.AssignmentStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.ExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodImplementationNode;
-import au.com.integradev.delphi.antlr.ast.node.NameDeclarationListNode;
-import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
-import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.VarDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.VarStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarStatementNode;
 import au.com.integradev.delphi.symbol.NameOccurrence;
 import java.util.ArrayList;
 import java.util.HashSet;

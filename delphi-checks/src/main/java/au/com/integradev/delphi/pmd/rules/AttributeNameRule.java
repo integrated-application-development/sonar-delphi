@@ -1,6 +1,6 @@
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.utils.NameConventionUtils;
 import java.util.Map;

@@ -18,12 +18,12 @@
  */
 package au.com.integradev.delphi.symbol.declaration;
 
-import au.com.integradev.delphi.antlr.ast.node.GenericDefinitionNode.TypeParameter;
-import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeAliasNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode.TypeParameter;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeAliasNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.type.Type;

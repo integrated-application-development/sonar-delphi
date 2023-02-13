@@ -21,8 +21,11 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.util.List;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.GenericArgumentsNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 
-public final class GenericArgumentsNodeImpl extends AbstractDelphiNode
+public final class GenericArgumentsNodeImpl extends DelphiNodeImpl
     implements GenericArgumentsNode {
   private String image;
 

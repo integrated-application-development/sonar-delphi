@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
 import com.google.common.base.Preconditions;
 import java.io.Serializable;

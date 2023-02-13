@@ -20,14 +20,14 @@ package au.com.integradev.delphi.symbol.scope;
 
 import static java.util.function.Predicate.not;
 
-import au.com.integradev.delphi.antlr.ast.node.ArrayAccessorNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodNameNode;
-import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
+import org.sonar.plugins.communitydelphi.api.ast.MutableDelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNodeImpl;
-import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNodeImpl;
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;

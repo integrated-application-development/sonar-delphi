@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.symbol.declaration;
 
-import au.com.integradev.delphi.antlr.ast.node.EnumElementNode;
+import org.sonar.plugins.communitydelphi.api.ast.EnumElementNode;
 import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.type.Type;
 import java.util.Objects;

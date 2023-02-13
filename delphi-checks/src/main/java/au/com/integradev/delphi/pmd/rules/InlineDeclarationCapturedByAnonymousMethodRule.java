@@ -18,8 +18,8 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.AnonymousMethodNode;
-import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import au.com.integradev.delphi.symbol.declaration.VariableNameDeclaration;
 import au.com.integradev.delphi.symbol.scope.DelphiScope;
 import net.sourceforge.pmd.RuleContext;

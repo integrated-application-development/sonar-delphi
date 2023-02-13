@@ -20,7 +20,7 @@ package au.com.integradev.delphi.antlr.ast.visitors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import au.com.integradev.delphi.antlr.ast.visitors.CognitiveComplexityVisitor.Data;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.utils.files.DelphiFileUtils;

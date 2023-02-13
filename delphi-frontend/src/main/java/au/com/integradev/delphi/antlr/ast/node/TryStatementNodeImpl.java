@@ -20,8 +20,12 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ExceptBlockNode;
+import org.sonar.plugins.communitydelphi.api.ast.FinallyBlockNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
+import org.sonar.plugins.communitydelphi.api.ast.TryStatementNode;
 
-public final class TryStatementNodeImpl extends AbstractDelphiNode implements TryStatementNode {
+public final class TryStatementNodeImpl extends DelphiNodeImpl implements TryStatementNode {
   private ExceptBlockNode exceptBlock;
   private FinallyBlockNode finallyBlock;
 

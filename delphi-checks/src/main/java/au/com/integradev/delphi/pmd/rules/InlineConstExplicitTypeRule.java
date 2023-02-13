@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.ConstStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
 import net.sourceforge.pmd.RuleContext;
 
 public class InlineConstExplicitTypeRule extends AbstractDelphiRule {

@@ -22,8 +22,11 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ElseBlockNode;
 
-public final class CaseStatementNodeImpl extends AbstractDelphiNode implements CaseStatementNode {
+public final class CaseStatementNodeImpl extends DelphiNodeImpl implements CaseStatementNode {
   public CaseStatementNodeImpl(Token token) {
     super(token);
   }

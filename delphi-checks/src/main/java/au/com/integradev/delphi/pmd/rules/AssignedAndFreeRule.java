@@ -22,18 +22,18 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.ArgumentListNode;
-import au.com.integradev.delphi.antlr.ast.node.BinaryExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.CompoundStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.ExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.ExpressionStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.IfStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.StatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import au.com.integradev.delphi.operator.BinaryOperator;
 import net.sourceforge.pmd.RuleContext;
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.jetbrains.annotations.Nullable;
 
 public class AssignedAndFreeRule extends AbstractDelphiRule {

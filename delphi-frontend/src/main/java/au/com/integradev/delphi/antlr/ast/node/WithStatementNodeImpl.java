@@ -22,8 +22,11 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.WithStatementNode;
 
-public final class WithStatementNodeImpl extends AbstractDelphiNode implements WithStatementNode {
+public final class WithStatementNodeImpl extends DelphiNodeImpl implements WithStatementNode {
   public WithStatementNodeImpl(Token token) {
     super(token);
   }

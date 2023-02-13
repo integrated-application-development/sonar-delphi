@@ -20,8 +20,9 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.LabelStatementNode;
 
-public final class LabelStatementNodeImpl extends AbstractDelphiNode implements LabelStatementNode {
+public final class LabelStatementNodeImpl extends DelphiNodeImpl implements LabelStatementNode {
   public LabelStatementNodeImpl(Token token) {
     super(token);
   }

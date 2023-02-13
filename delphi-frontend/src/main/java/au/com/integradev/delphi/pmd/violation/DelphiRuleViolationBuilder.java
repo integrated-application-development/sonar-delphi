@@ -18,10 +18,10 @@
  */
 package au.com.integradev.delphi.pmd.violation;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.FileHeaderNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodImplementationNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import au.com.integradev.delphi.pmd.FilePosition;
 import au.com.integradev.delphi.pmd.rules.DelphiRule;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;

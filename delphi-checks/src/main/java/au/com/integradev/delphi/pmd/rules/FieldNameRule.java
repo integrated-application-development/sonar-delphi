@@ -18,8 +18,8 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.FieldDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.FieldDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import au.com.integradev.delphi.utils.NameConventionUtils;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;

@@ -20,13 +20,13 @@ package au.com.integradev.delphi.symbol.declaration;
 
 import static java.util.Collections.emptySet;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.GenericDefinitionNode.TypeParameter;
-import au.com.integradev.delphi.antlr.ast.node.MethodNameNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodNode;
-import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.SimpleNameDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.Visibility;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode.TypeParameter;
+import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.SimpleNameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.Visibility;
 import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.resolve.Invocable;

@@ -20,8 +20,8 @@ package au.com.integradev.delphi.pmd.rules;
 
 import static au.com.integradev.delphi.pmd.DelphiPmdConstants.LIMIT;
 
-import au.com.integradev.delphi.antlr.ast.node.MethodBodyNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodBodyNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import au.com.integradev.delphi.antlr.ast.visitors.CyclomaticComplexityVisitor;
 import au.com.integradev.delphi.antlr.ast.visitors.CyclomaticComplexityVisitor.Data;
 import net.sourceforge.pmd.RuleContext;

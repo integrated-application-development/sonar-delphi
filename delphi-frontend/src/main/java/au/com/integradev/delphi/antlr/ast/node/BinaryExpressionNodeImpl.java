@@ -24,7 +24,8 @@ import au.com.integradev.delphi.symbol.resolve.ExpressionTypeResolver;
 import au.com.integradev.delphi.type.Type;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
-import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 
 public final class BinaryExpressionNodeImpl extends ExpressionNodeImpl implements
     BinaryExpressionNode {

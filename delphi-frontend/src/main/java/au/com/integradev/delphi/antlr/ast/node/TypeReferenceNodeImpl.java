@@ -27,6 +27,8 @@ import au.com.integradev.delphi.type.Typed;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 
 public final class TypeReferenceNodeImpl extends TypeNodeImpl implements TypeReferenceNode {
   public TypeReferenceNodeImpl(Token token) {

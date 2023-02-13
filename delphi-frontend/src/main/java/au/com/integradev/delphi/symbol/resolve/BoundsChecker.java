@@ -18,10 +18,10 @@
  */
 package au.com.integradev.delphi.symbol.resolve;
 
-import au.com.integradev.delphi.antlr.ast.node.ArrayConstructorNode;
-import au.com.integradev.delphi.antlr.ast.node.ExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.LiteralNode;
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.ArrayConstructorNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.LiteralNode;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.Type.CollectionType;
 import au.com.integradev.delphi.type.Type.IntegerType;

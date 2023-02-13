@@ -19,10 +19,10 @@
 package au.com.integradev.delphi.pmd.rules;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.node.ArgumentListNode;
-import au.com.integradev.delphi.antlr.ast.node.CommonDelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.ExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
 import au.com.integradev.delphi.type.DelphiType;
@@ -33,7 +33,7 @@ import au.com.integradev.delphi.type.TypeUtils;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 
 public class PlatformDependentCastRule extends AbstractDelphiRule {
   @Override

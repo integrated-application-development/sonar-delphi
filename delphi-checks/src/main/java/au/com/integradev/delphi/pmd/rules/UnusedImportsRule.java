@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.UnitImportNode;
+import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;
 
 public class UnusedImportsRule extends AbstractImportRule {

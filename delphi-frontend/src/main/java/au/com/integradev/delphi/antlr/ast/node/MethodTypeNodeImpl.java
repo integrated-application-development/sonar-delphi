@@ -24,6 +24,7 @@ import au.com.integradev.delphi.type.parameter.FormalParameter;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.MethodTypeNode;
 
 public final class MethodTypeNodeImpl extends ProceduralTypeNodeImpl implements MethodTypeNode {
   public MethodTypeNodeImpl(Token token) {

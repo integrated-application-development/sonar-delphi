@@ -18,13 +18,13 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
-import au.com.integradev.delphi.antlr.ast.node.ConstDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodNode;
-import au.com.integradev.delphi.antlr.ast.node.StatementNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.VarDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import au.com.integradev.delphi.pmd.FilePosition;
 import net.sourceforge.pmd.RuleContext;
 

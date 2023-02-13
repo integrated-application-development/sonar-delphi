@@ -18,8 +18,8 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.IdentifierNode;
-import au.com.integradev.delphi.antlr.ast.node.UnitDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.UnitDeclarationNode;
 import au.com.integradev.delphi.utils.NameConventionUtils;
 import com.google.common.collect.Iterables;
 import java.util.List;

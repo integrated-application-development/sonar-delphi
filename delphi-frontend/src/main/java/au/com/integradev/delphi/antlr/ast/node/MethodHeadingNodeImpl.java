@@ -19,7 +19,8 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.symbol.declaration.MethodDirective;
@@ -30,8 +31,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodHeadingNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodParametersNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodReturnTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 
-public final class MethodHeadingNodeImpl extends AbstractDelphiNode implements MethodHeadingNode {
+public final class MethodHeadingNodeImpl extends DelphiNodeImpl implements MethodHeadingNode {
   private String image;
   private Boolean isClassMethod;
   private String typeName;

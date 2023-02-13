@@ -18,19 +18,20 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
-import static au.com.integradev.delphi.antlr.ast.node.Visibility.VisibilityType.PRIVATE;
-import static au.com.integradev.delphi.antlr.ast.node.Visibility.VisibilityType.PROTECTED;
-import static au.com.integradev.delphi.antlr.ast.node.Visibility.VisibilityType.PUBLIC;
-import static au.com.integradev.delphi.antlr.ast.node.Visibility.VisibilityType.PUBLISHED;
-import static au.com.integradev.delphi.antlr.ast.node.Visibility.VisibilityType.STRICT_PRIVATE;
-import static au.com.integradev.delphi.antlr.ast.node.Visibility.VisibilityType.STRICT_PROTECTED;
+import static org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType.PRIVATE;
+import static org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType.PROTECTED;
+import static org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType.PUBLIC;
+import static org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType.PUBLISHED;
+import static org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType.STRICT_PRIVATE;
+import static org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType.STRICT_PROTECTED;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.DelphiParser;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.VisibilityNode;
 
-public final class VisibilityNodeImpl extends AbstractDelphiNode implements VisibilityNode {
+public final class VisibilityNodeImpl extends DelphiNodeImpl implements VisibilityNode {
   public VisibilityNodeImpl(Token token) {
     super(token);
   }

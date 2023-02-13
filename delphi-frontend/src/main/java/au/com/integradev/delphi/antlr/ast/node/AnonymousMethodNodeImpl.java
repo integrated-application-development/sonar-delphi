@@ -27,6 +27,9 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodParametersNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodReturnTypeNode;
 
 public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
     implements AnonymousMethodNode {

@@ -19,21 +19,21 @@
 package au.com.integradev.delphi.pmd.rules;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
-import au.com.integradev.delphi.antlr.ast.node.CompoundStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.ConstSectionNode;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.FinalizationSectionNode;
-import au.com.integradev.delphi.antlr.ast.node.ImplementationSectionNode;
-import au.com.integradev.delphi.antlr.ast.node.InitializationSectionNode;
-import au.com.integradev.delphi.antlr.ast.node.InterfaceSectionNode;
-import au.com.integradev.delphi.antlr.ast.node.LibraryDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.PackageDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.ProgramDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeSectionNode;
-import au.com.integradev.delphi.antlr.ast.node.UnitDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.UsesClauseNode;
-import au.com.integradev.delphi.antlr.ast.node.VarSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConstSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.FinalizationSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.ImplementationSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.InitializationSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.LibraryDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.PackageDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.ProgramDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.UnitDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.UsesClauseNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarSectionNode;
 import au.com.integradev.delphi.utils.IndentationUtils;
 import net.sourceforge.pmd.RuleContext;
 

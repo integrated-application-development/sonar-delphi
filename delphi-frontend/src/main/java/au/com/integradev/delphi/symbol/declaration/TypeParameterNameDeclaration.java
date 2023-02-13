@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.symbol.declaration;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.type.Type;

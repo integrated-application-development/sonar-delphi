@@ -23,6 +23,9 @@ import java.util.Map;
 import java.util.Objects;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode;
+import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.SimpleNameDeclarationNode;
 
 public final class SimpleNameDeclarationNodeImpl extends NameDeclarationNodeImpl
     implements SimpleNameDeclarationNode {

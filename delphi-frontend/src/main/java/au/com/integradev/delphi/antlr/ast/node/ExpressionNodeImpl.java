@@ -23,8 +23,14 @@ import au.com.integradev.delphi.type.Type;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.LiteralNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.ParenthesizedExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 
-public abstract class ExpressionNodeImpl extends AbstractDelphiNode implements ExpressionNode {
+public abstract class ExpressionNodeImpl extends DelphiNodeImpl implements ExpressionNode {
   private Type type;
 
   protected ExpressionNodeImpl(Token token) {
@@ -136,7 +142,7 @@ public abstract class ExpressionNodeImpl extends AbstractDelphiNode implements E
   @Nullable
   public NameReferenceNode extractSimpleNameReference() {
     ExpressionNode expression = skipParentheses();
-    if (expression instanceof PrimaryExpressionNodeImpl && expression.jjtGetNumChildren() == 1) {
+    if (expression instanceof PrimaryExpressionNode && expression.jjtGetNumChildren() == 1) {
       DelphiNode child = expression.jjtGetChild(0);
       if (child instanceof NameReferenceNode) {
         NameReferenceNode nameReference = (NameReferenceNode) child;

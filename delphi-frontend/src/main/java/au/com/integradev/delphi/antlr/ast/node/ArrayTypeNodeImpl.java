@@ -27,6 +27,13 @@ import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.sonar.plugins.communitydelphi.api.ast.ArrayIndicesNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArrayTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConstArraySubTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 
 public final class ArrayTypeNodeImpl extends TypeNodeImpl implements ArrayTypeNode {
   public ArrayTypeNodeImpl(Token token) {

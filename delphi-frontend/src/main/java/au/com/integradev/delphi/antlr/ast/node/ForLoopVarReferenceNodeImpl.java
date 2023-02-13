@@ -20,6 +20,8 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 
 public final class ForLoopVarReferenceNodeImpl extends ForLoopVarNodeImpl
     implements ForLoopVarReferenceNode {

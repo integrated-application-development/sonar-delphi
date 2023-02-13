@@ -22,8 +22,11 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.util.List;
 import java.util.stream.Stream;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 
-public final class CompoundStatementNodeImpl extends AbstractDelphiNode
+public final class CompoundStatementNodeImpl extends DelphiNodeImpl
     implements CompoundStatementNode {
   public CompoundStatementNodeImpl(Token token) {
     super(token);

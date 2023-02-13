@@ -24,6 +24,8 @@ import au.com.integradev.delphi.symbol.resolve.ExpressionTypeResolver;
 import au.com.integradev.delphi.type.Type;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
 
 public final class UnaryExpressionNodeImpl extends ExpressionNodeImpl implements
     UnaryExpressionNode {

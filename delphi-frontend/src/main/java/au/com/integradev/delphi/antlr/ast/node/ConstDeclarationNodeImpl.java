@@ -22,8 +22,14 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.type.Type;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConstSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 
-public final class ConstDeclarationNodeImpl extends AbstractDelphiNode
+public final class ConstDeclarationNodeImpl extends DelphiNodeImpl
     implements ConstDeclarationNode {
   public ConstDeclarationNodeImpl(Token token) {
     super(token);

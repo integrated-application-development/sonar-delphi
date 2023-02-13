@@ -18,12 +18,12 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.FileTypeNode;
-import au.com.integradev.delphi.antlr.ast.node.HelperTypeNode;
-import au.com.integradev.delphi.antlr.ast.node.StringTypeNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.FileTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.HelperTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.StringTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 import au.com.integradev.delphi.utils.NameConventionUtils;
 import com.google.common.annotations.VisibleForTesting;
 import java.util.ArrayList;

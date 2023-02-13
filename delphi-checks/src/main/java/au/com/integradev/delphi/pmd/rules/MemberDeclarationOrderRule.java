@@ -18,16 +18,16 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.FieldDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.FieldSectionNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.PropertyNode;
-import au.com.integradev.delphi.antlr.ast.node.VisibilitySectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.FieldDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.FieldSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyNode;
+import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
 import java.util.ArrayList;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 
 public class MemberDeclarationOrderRule extends AbstractDelphiRule {
   private enum BodySegment {

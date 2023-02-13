@@ -23,6 +23,7 @@ import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.StringTypeNode;
 
 public final class StringTypeNodeImpl extends TypeNodeImpl implements StringTypeNode {
   public StringTypeNodeImpl(Token token) {

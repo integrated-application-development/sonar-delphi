@@ -18,14 +18,14 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.BinaryExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.UnaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
 import au.com.integradev.delphi.operator.BinaryOperator;
 import au.com.integradev.delphi.operator.UnaryOperator;
 import au.com.integradev.delphi.type.Type;
 import net.sourceforge.pmd.RuleContext;
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 
 public class RedundantBooleanRule extends AbstractDelphiRule {
 

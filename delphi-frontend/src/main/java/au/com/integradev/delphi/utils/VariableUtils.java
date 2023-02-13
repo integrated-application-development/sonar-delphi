@@ -18,9 +18,9 @@
  */
 package au.com.integradev.delphi.utils;
 
-import au.com.integradev.delphi.antlr.ast.node.InterfaceSectionNode;
-import au.com.integradev.delphi.antlr.ast.node.VarDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.VarSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarSectionNode;
 import au.com.integradev.delphi.symbol.scope.FileScope;
 
 public class VariableUtils {

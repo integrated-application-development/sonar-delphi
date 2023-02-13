@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;

@@ -21,8 +21,10 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.RaiseStatementNode;
 
-public final class RaiseStatementNodeImpl extends AbstractDelphiNode implements RaiseStatementNode {
+public final class RaiseStatementNodeImpl extends DelphiNodeImpl implements RaiseStatementNode {
   public RaiseStatementNodeImpl(Token token) {
     super(token);
   }

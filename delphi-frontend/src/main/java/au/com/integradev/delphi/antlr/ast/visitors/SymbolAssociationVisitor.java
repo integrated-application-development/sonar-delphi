@@ -18,18 +18,19 @@
  */
 package au.com.integradev.delphi.antlr.ast.visitors;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
-import au.com.integradev.delphi.antlr.ast.node.ArrayAccessorNode;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodNameNode;
-import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
+import org.sonar.plugins.communitydelphi.api.ast.MutableDelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import au.com.integradev.delphi.antlr.ast.visitors.SymbolAssociationVisitor.Data;
 import au.com.integradev.delphi.symbol.SymbolTable;
 import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;
 import au.com.integradev.delphi.symbol.scope.FileScope;
 import com.google.common.base.Preconditions;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAstImpl;
 
 /**
  * Visitor for symbol association.
@@ -64,7 +65,7 @@ public class SymbolAssociationVisitor implements DelphiParserVisitor<Data> {
         declaration, "Expected unit '%s' to exist in global scope.", unitName);
 
     data.fileScope = declaration.getFileScope();
-    node.setScope(data.fileScope);
+    ((DelphiAstImpl) node).setScope(data.fileScope);
 
     return node.childrenAccept(this, data);
   }

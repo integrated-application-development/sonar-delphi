@@ -20,8 +20,9 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.RecordVariantSectionNode;
 
-public final class RecordVariantSectionNodeImpl extends AbstractDelphiNode
+public final class RecordVariantSectionNodeImpl extends DelphiNodeImpl
     implements RecordVariantSectionNode {
   public RecordVariantSectionNodeImpl(Token token) {
     super(token);

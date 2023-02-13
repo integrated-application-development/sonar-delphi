@@ -20,8 +20,13 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import java.math.BigInteger;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.DecimalLiteralNode;
+import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
+import org.sonar.plugins.communitydelphi.api.ast.LiteralNode;
+import org.sonar.plugins.communitydelphi.api.ast.NilLiteralNode;
+import org.sonar.plugins.communitydelphi.api.ast.TextLiteralNode;
 
-public abstract class LiteralNodeImpl extends AbstractDelphiNode implements LiteralNode {
+public abstract class LiteralNodeImpl extends DelphiNodeImpl implements LiteralNode {
   protected LiteralNodeImpl(Token token) {
     super(token);
   }

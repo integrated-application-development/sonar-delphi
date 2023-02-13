@@ -26,7 +26,8 @@ import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
-import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.ast.ArrayExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 
 public final class ArrayExpressionNodeImpl extends ExpressionNodeImpl implements
     ArrayExpressionNode {

@@ -20,8 +20,9 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.InterfaceGuidNode;
 
-public final class InterfaceGuidNodeImpl extends AbstractDelphiNode implements InterfaceGuidNode {
+public final class InterfaceGuidNodeImpl extends DelphiNodeImpl implements InterfaceGuidNode {
   public InterfaceGuidNodeImpl(Token token) {
     super(token);
   }

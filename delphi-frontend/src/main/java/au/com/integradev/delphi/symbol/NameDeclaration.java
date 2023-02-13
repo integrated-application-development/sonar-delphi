@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.symbol;
 
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 import au.com.integradev.delphi.symbol.scope.DelphiScope;
 import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
 import org.jetbrains.annotations.Nullable;

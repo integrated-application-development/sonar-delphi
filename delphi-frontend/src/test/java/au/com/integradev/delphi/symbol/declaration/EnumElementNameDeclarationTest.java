@@ -24,11 +24,10 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
-import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
-import au.com.integradev.delphi.antlr.ast.node.EnumElementNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.EnumElementNode;
 import au.com.integradev.delphi.antlr.ast.node.EnumElementNodeImpl;
-import au.com.integradev.delphi.antlr.ast.node.EnumTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.EnumTypeNode;
 import au.com.integradev.delphi.antlr.ast.node.EnumTypeNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.SimpleNameDeclarationNodeImpl;

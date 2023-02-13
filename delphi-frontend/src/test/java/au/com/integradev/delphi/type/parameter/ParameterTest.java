@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import au.com.integradev.delphi.symbol.declaration.GenerifiableDeclaration;
 import au.com.integradev.delphi.symbol.declaration.TypedDeclaration;
 import au.com.integradev.delphi.type.DelphiType;

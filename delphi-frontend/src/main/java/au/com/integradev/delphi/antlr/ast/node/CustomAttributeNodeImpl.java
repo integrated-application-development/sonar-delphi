@@ -20,8 +20,9 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
 
-public final class CustomAttributeNodeImpl extends AbstractDelphiNode
+public final class CustomAttributeNodeImpl extends DelphiNodeImpl
     implements CustomAttributeNode {
   public CustomAttributeNodeImpl(Token token) {
     super(token);

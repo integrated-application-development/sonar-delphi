@@ -24,6 +24,8 @@ import au.com.integradev.delphi.type.Type;
 import java.util.List;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.RecordExpressionItemNode;
+import org.sonar.plugins.communitydelphi.api.ast.RecordExpressionNode;
 
 public final class RecordExpressionNodeImpl extends ExpressionNodeImpl
     implements RecordExpressionNode {

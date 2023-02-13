@@ -20,8 +20,10 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionStatementNode;
 
-public final class ExpressionStatementNodeImpl extends AbstractDelphiNode
+public final class ExpressionStatementNodeImpl extends DelphiNodeImpl
     implements ExpressionStatementNode {
   public ExpressionStatementNodeImpl(Token token) {
     super(token);

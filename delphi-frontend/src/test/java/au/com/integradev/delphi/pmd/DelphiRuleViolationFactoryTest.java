@@ -22,14 +22,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
-import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
-import au.com.integradev.delphi.antlr.ast.node.AbstractDelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.FileHeaderNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
 import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
-import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.QualifiedNameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.MutableDelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.QualifiedNameDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.QualifiedNameDeclarationNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.UnitDeclarationNodeImpl;
 import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
@@ -136,7 +135,7 @@ class DelphiRuleViolationFactoryTest {
 
   private static DelphiNode createNode(Token token) {
     MutableDelphiNode result =
-        new AbstractDelphiNode(token) {
+        new DelphiNodeImpl(token) {
           @Override
           public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
             return null;

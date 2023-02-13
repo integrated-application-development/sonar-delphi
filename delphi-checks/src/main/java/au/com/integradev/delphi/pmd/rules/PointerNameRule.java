@@ -18,10 +18,10 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.PointerTypeNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.PointerTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 import net.sourceforge.pmd.RuleContext;
 
 public class PointerNameRule extends AbstractDelphiRule {

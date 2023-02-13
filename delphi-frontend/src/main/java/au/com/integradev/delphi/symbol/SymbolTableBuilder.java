@@ -21,7 +21,7 @@ package au.com.integradev.delphi.symbol;
 import static au.com.integradev.delphi.utils.DelphiUtils.stopProgressReport;
 
 import au.com.integradev.delphi.DelphiProperties;
-import au.com.integradev.delphi.antlr.ast.node.UnitImportNode;
+import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import au.com.integradev.delphi.antlr.ast.visitors.DependencyAnalysisVisitor;
 import au.com.integradev.delphi.antlr.ast.visitors.SymbolTableVisitor;
 import au.com.integradev.delphi.file.DelphiFile;

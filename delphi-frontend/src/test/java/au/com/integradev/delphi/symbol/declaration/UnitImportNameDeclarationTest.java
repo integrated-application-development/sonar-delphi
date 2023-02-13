@@ -23,13 +23,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
-import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
-import au.com.integradev.delphi.antlr.ast.node.FileHeaderNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
 import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
-import au.com.integradev.delphi.antlr.ast.node.QualifiedNameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.QualifiedNameDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.QualifiedNameDeclarationNodeImpl;
-import au.com.integradev.delphi.antlr.ast.node.UnitImportNode;
+import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import au.com.integradev.delphi.antlr.ast.node.UnitImportNodeImpl;
 import org.antlr.runtime.CommonToken;
 import org.junit.jupiter.api.Test;

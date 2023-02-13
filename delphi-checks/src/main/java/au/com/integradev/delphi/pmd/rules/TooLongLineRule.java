@@ -20,7 +20,7 @@ package au.com.integradev.delphi.pmd.rules;
 
 import static au.com.integradev.delphi.pmd.DelphiPmdConstants.LIMIT;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import au.com.integradev.delphi.pmd.FilePosition;
 import net.sourceforge.pmd.RuleContext;
 

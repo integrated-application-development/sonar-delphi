@@ -22,8 +22,8 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.MethodDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.VarDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import net.sourceforge.pmd.RuleContext;
 
 /** Rule class searching for variables in a .dpr file */

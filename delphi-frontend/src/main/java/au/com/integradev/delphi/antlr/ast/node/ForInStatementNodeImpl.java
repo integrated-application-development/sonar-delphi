@@ -30,6 +30,9 @@ import com.google.common.base.Suppliers;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 
 public final class ForInStatementNodeImpl extends ForStatementNodeImpl implements
     ForInStatementNode {

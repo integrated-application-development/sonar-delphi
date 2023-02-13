@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import au.com.integradev.delphi.symbol.DelphiNameOccurrence;
 import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.NameOccurrence;

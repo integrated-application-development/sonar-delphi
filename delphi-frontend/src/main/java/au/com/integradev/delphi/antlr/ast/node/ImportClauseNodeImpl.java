@@ -19,8 +19,9 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ImportClauseNode;
 
-public abstract class ImportClauseNodeImpl extends AbstractDelphiNode implements ImportClauseNode {
+public abstract class ImportClauseNodeImpl extends DelphiNodeImpl implements ImportClauseNode {
   protected ImportClauseNodeImpl(Token token) {
     super(token);
   }

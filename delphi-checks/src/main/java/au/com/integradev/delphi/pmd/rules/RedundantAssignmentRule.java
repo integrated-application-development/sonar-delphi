@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.AssignmentStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import net.sourceforge.pmd.RuleContext;
 
 public class RedundantAssignmentRule extends AbstractDelphiRule {

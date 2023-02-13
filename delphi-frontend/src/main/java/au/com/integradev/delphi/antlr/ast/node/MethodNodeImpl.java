@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
-import au.com.integradev.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import au.com.integradev.delphi.symbol.declaration.MethodDirective;
 import au.com.integradev.delphi.symbol.declaration.MethodKind;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
@@ -28,8 +28,12 @@ import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.MethodHeadingNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodReturnTypeNode;
 
-public abstract class MethodNodeImpl extends AbstractDelphiNode implements MethodNode {
+public abstract class MethodNodeImpl extends DelphiNodeImpl implements MethodNode {
   protected MethodNodeImpl(Token token) {
     super(token);
   }

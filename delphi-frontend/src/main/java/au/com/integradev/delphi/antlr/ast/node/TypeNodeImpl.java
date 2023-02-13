@@ -25,8 +25,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.AncestorListNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 
-public abstract class TypeNodeImpl extends AbstractDelphiNode implements TypeNode {
+public abstract class TypeNodeImpl extends DelphiNodeImpl implements TypeNode {
   private Type type;
   private List<TypeReferenceNode> parentTypeNodes;
   private Set<Type> parentTypes;
@@ -42,7 +46,7 @@ public abstract class TypeNodeImpl extends AbstractDelphiNode implements TypeNod
   @Override
   public AncestorListNode getAncestorListNode() {
     DelphiNode child = jjtGetChild(0);
-    return child instanceof AncestorListNodeImpl ? (AncestorListNode) child : null;
+    return child instanceof AncestorListNode ? (AncestorListNode) child : null;
   }
 
   @Override

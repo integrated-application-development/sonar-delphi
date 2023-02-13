@@ -21,6 +21,8 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.type.Type;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.HelperTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 
 public abstract class HelperTypeNodeImpl extends StructTypeNodeImpl implements HelperTypeNode {
   protected HelperTypeNodeImpl(Token token) {

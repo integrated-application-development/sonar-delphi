@@ -22,6 +22,7 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.type.Type;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.ast.NilLiteralNode;
 
 public final class NilLiteralNodeImpl extends LiteralNodeImpl implements NilLiteralNode {
   public NilLiteralNodeImpl(Token token) {

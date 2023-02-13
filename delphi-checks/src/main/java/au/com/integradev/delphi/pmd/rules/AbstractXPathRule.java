@@ -18,9 +18,9 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import java.util.Set;
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 import net.sourceforge.pmd.lang.rule.XPathRule;
 
 public abstract class AbstractXPathRule extends XPathRule implements DelphiRule {

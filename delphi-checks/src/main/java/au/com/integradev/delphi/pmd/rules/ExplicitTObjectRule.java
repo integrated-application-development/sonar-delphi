@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import net.sourceforge.pmd.RuleContext;
 
 public class ExplicitTObjectRule extends AbstractDelphiRule {

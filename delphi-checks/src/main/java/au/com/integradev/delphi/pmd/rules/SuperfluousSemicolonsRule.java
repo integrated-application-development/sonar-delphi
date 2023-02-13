@@ -19,10 +19,10 @@
 package au.com.integradev.delphi.pmd.rules;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.node.StatementListNode;
-import au.com.integradev.delphi.antlr.ast.node.StatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import net.sourceforge.pmd.RuleContext;
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 
 public class SuperfluousSemicolonsRule extends AbstractDelphiRule {
 

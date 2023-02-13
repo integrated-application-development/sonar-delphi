@@ -20,8 +20,11 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ConstSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
 
-public final class ConstSectionNodeImpl extends AbstractDelphiNode implements ConstSectionNode {
+public final class ConstSectionNodeImpl extends DelphiNodeImpl implements ConstSectionNode {
   public ConstSectionNodeImpl(Token token) {
     super(token);
   }

@@ -22,17 +22,17 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.ArgumentListNode;
-import au.com.integradev.delphi.antlr.ast.node.BinaryExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.ExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
-import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import au.com.integradev.delphi.operator.BinaryOperator;
 import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.Type.PointerType;
 import net.sourceforge.pmd.RuleContext;
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 
 /** Don't cast an object only to free it. */
 public class CastAndFreeRule extends AbstractDelphiRule {
@@ -55,7 +55,7 @@ public class CastAndFreeRule extends AbstractDelphiRule {
   }
 
   private static boolean isHardCast(ExpressionNode expr) {
-    return expr instanceof PrimaryExpressionNodeImpl
+    return expr instanceof PrimaryExpressionNode
         && expr.jjtGetChild(0) instanceof NameReferenceNode
         && expr.jjtGetChild(1) instanceof ArgumentListNode
         && expr.jjtGetNumChildren() < 6;
@@ -81,7 +81,7 @@ public class CastAndFreeRule extends AbstractDelphiRule {
   private static boolean isFree(ExpressionNode node) {
     boolean result =
         (node instanceof PrimaryExpressionNode
-            && node.jjtGetChild(node.jjtGetNumChildren() - 1).hasImageEqualTo("Free"));
+            && node.jjtGetChild(node.jjtGetNumChildren() - 1).getImage().equalsIgnoreCase("Free"));
 
     if (!result) {
       ExpressionNode parenthesized = node.findParentheses();
@@ -101,6 +101,6 @@ public class CastAndFreeRule extends AbstractDelphiRule {
 
     return argList instanceof ArgumentListNode
         && freeAndNil instanceof NameReferenceNode
-        && freeAndNil.hasImageEqualTo("FreeAndNil");
+        && freeAndNil.getImage().equalsIgnoreCase("FreeAndNil");
   }
 }

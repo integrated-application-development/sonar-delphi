@@ -23,6 +23,10 @@ import au.com.integradev.delphi.type.CodePages;
 import au.com.integradev.delphi.type.Type;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.AnsiStringTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.LiteralNode;
 
 public final class AnsiStringTypeNodeImpl extends TypeNodeImpl implements AnsiStringTypeNode {
   public AnsiStringTypeNodeImpl(Token token) {

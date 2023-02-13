@@ -22,8 +22,13 @@ import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.Nullable;
+import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 
-public final class IfStatementNodeImpl extends AbstractDelphiNode implements IfStatementNode {
+public final class IfStatementNodeImpl extends DelphiNodeImpl implements IfStatementNode {
   public IfStatementNodeImpl(Token token) {
     super(token);
   }

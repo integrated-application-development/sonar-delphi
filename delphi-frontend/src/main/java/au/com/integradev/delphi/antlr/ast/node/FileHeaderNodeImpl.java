@@ -19,8 +19,10 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
+import org.sonar.plugins.communitydelphi.api.ast.QualifiedNameDeclarationNode;
 
-public abstract class FileHeaderNodeImpl extends AbstractDelphiNode implements FileHeaderNode {
+public abstract class FileHeaderNodeImpl extends DelphiNodeImpl implements FileHeaderNode {
   private String namespace;
 
   FileHeaderNodeImpl(Token token) {

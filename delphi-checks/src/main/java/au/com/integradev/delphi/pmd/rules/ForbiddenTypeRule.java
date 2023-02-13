@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.MethodNameNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
 import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
 import java.util.List;

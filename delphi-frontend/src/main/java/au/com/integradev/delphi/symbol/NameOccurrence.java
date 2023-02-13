@@ -1,6 +1,6 @@
 package au.com.integradev.delphi.symbol;
 
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 import au.com.integradev.delphi.type.Type;
 import java.util.List;
 

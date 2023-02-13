@@ -20,11 +20,11 @@ package au.com.integradev.delphi.pmd.rules;
 
 import static java.util.function.Predicate.not;
 
-import au.com.integradev.delphi.antlr.ast.node.AssignmentStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodBodyNode;
-import au.com.integradev.delphi.antlr.ast.node.StatementListNode;
+import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodBodyNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 import net.sourceforge.pmd.RuleContext;
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 
 public class DuplicatesRule extends AbstractDelphiRule {
 

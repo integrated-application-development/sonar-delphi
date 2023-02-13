@@ -22,6 +22,9 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.type.Type;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeTypeNode;
 
 public final class TypeTypeNodeImpl extends TypeNodeImpl implements TypeTypeNode {
   public TypeTypeNodeImpl(Token token) {

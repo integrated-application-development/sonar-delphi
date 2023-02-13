@@ -18,12 +18,16 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
-import au.com.integradev.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import au.com.integradev.delphi.type.DelphiType;
 import au.com.integradev.delphi.type.Type;
 import java.util.Collections;
 import java.util.List;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.MethodParametersNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodReturnTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.ProceduralTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.ProcedureTypeHeadingNode;
 
 public abstract class ProceduralTypeNodeImpl extends TypeNodeImpl implements ProceduralTypeNode {
   protected ProceduralTypeNodeImpl(Token token) {

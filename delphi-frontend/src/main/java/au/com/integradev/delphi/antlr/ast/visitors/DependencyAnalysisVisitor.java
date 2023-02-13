@@ -18,17 +18,17 @@
  */
 package au.com.integradev.delphi.antlr.ast.visitors;
 
-import au.com.integradev.delphi.antlr.ast.node.ArrayAccessorNode;
-import au.com.integradev.delphi.antlr.ast.node.FinalizationSectionNode;
-import au.com.integradev.delphi.antlr.ast.node.ForInStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.ImplementationSectionNode;
-import au.com.integradev.delphi.antlr.ast.node.InitializationSectionNode;
-import au.com.integradev.delphi.antlr.ast.node.InterfaceSectionNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodImplementationNode;
-import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
-import au.com.integradev.delphi.antlr.ast.node.Node;
-import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
+import org.sonar.plugins.communitydelphi.api.ast.FinalizationSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ImplementationSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.InitializationSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.visitors.DependencyAnalysisVisitor.Data;
 import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.NameOccurrence;

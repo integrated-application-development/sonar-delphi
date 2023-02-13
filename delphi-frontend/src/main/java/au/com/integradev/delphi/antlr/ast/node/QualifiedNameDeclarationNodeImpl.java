@@ -25,6 +25,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
+import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.QualifiedNameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 
 public final class QualifiedNameDeclarationNodeImpl extends NameDeclarationNodeImpl
     implements QualifiedNameDeclarationNode {

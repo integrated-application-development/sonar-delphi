@@ -24,6 +24,10 @@ import com.google.common.collect.Iterables;
 import java.util.List;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.EnumElementNode;
+import org.sonar.plugins.communitydelphi.api.ast.EnumTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 
 public final class EnumTypeNodeImpl extends TypeNodeImpl implements EnumTypeNode {
   public EnumTypeNodeImpl(Token token) {

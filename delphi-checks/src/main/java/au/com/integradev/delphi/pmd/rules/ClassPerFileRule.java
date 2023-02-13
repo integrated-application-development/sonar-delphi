@@ -24,8 +24,8 @@ package au.com.integradev.delphi.pmd.rules;
 
 import static au.com.integradev.delphi.pmd.DelphiPmdConstants.LIMIT;
 
-import au.com.integradev.delphi.antlr.ast.node.StructTypeNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.StructTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import au.com.integradev.delphi.pmd.FilePosition;
 import net.sourceforge.pmd.RuleContext;
 

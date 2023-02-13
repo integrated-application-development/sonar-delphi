@@ -18,14 +18,14 @@
  */
 package au.com.integradev.delphi.antlr.ast.visitors;
 
-import au.com.integradev.delphi.antlr.ast.node.AnonymousMethodNode;
-import au.com.integradev.delphi.antlr.ast.node.BinaryExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.CaseItemStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.ForStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.IfStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodImplementationNode;
-import au.com.integradev.delphi.antlr.ast.node.RepeatStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.WhileStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
+import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ForStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RepeatStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.WhileStatementNode;
 import au.com.integradev.delphi.antlr.ast.visitors.CyclomaticComplexityVisitor.Data;
 import au.com.integradev.delphi.operator.BinaryOperator;
 

@@ -18,12 +18,12 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.CompoundStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.ElseBlockNode;
-import au.com.integradev.delphi.antlr.ast.node.ExceptBlockNode;
-import au.com.integradev.delphi.antlr.ast.node.ExceptItemNode;
-import au.com.integradev.delphi.antlr.ast.node.StatementListNode;
-import au.com.integradev.delphi.antlr.ast.node.StatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ElseBlockNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExceptBlockNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExceptItemNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 

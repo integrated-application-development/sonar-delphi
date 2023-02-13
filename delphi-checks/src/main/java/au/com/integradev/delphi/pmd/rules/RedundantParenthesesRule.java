@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.ParenthesizedExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.ParenthesizedExpressionNode;
 import net.sourceforge.pmd.RuleContext;
 
 public class RedundantParenthesesRule extends AbstractDelphiRule {

@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.MethodDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
 import au.com.integradev.delphi.utils.NameConventionUtils;
 import net.sourceforge.pmd.RuleContext;
 

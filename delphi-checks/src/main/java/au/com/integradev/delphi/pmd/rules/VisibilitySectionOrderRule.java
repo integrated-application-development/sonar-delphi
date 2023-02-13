@@ -18,16 +18,16 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.StructTypeNode;
-import au.com.integradev.delphi.antlr.ast.node.Visibility.VisibilityType;
-import au.com.integradev.delphi.antlr.ast.node.VisibilityNode;
-import au.com.integradev.delphi.antlr.ast.node.VisibilitySectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.StructTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType;
+import org.sonar.plugins.communitydelphi.api.ast.VisibilityNode;
+import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
 import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import net.sourceforge.pmd.RuleContext;
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 
 public class VisibilitySectionOrderRule extends AbstractDelphiRule {
   private static final Map<VisibilityType, Integer> VISIBILITY_ORDER =

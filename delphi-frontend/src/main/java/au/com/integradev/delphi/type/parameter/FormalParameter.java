@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.type.parameter;
 
-import au.com.integradev.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
 

@@ -21,8 +21,10 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.util.List;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 
-public final class NameDeclarationListNodeImpl extends AbstractDelphiNode
+public final class NameDeclarationListNodeImpl extends DelphiNodeImpl
     implements NameDeclarationListNode {
   private List<NameDeclarationNode> declarations;
 

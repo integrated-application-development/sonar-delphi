@@ -18,19 +18,17 @@
  */
 package au.com.integradev.delphi.antlr.ast.visitors;
 
-import au.com.integradev.delphi.antlr.ast.node.AnonymousMethodNode;
-import au.com.integradev.delphi.antlr.ast.node.BinaryExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.BinaryExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.CaseStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.ExceptBlockNode;
-import au.com.integradev.delphi.antlr.ast.node.ExpressionNode;
-import au.com.integradev.delphi.antlr.ast.node.ForStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.IfStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.IfStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.RepeatStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.StatementNode;
-import au.com.integradev.delphi.antlr.ast.node.WhileStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
+import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExceptBlockNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.ForStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.RepeatStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.WhileStatementNode;
 import au.com.integradev.delphi.antlr.ast.visitors.CognitiveComplexityVisitor.Data;
 import au.com.integradev.delphi.operator.BinaryOperator;
 import java.util.HashSet;

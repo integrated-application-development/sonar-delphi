@@ -18,8 +18,8 @@
  */
 package au.com.integradev.delphi.pmd.violation;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 import au.com.integradev.delphi.pmd.FilePosition;
 import au.com.integradev.delphi.pmd.rules.DelphiRule;
 import net.sourceforge.pmd.Rule;

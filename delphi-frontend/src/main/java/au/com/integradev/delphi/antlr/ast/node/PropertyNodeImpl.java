@@ -19,7 +19,9 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterListNode;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.type.DelphiType;
 import au.com.integradev.delphi.type.Type;
@@ -28,8 +30,14 @@ import java.util.List;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyReadSpecifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyWriteSpecifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
 
-public final class PropertyNodeImpl extends AbstractDelphiNode implements PropertyNode {
+public final class PropertyNodeImpl extends DelphiNodeImpl implements PropertyNode {
   private VisibilityType visibility;
   private Type type;
 

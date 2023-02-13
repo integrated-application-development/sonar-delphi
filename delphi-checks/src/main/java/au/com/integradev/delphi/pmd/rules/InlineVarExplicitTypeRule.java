@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.VarStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarStatementNode;
 import net.sourceforge.pmd.RuleContext;
 
 public class InlineVarExplicitTypeRule extends AbstractDelphiRule {

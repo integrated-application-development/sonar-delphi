@@ -21,8 +21,12 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarStatementNode;
 
-public final class VarStatementNodeImpl extends AbstractDelphiNode implements VarStatementNode {
+public final class VarStatementNodeImpl extends DelphiNodeImpl implements VarStatementNode {
   public VarStatementNodeImpl(Token token) {
     super(token);
   }

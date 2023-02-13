@@ -21,8 +21,12 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodParametersNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodReturnTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.ProcedureTypeHeadingNode;
 
-public final class ProcedureTypeHeadingNodeImpl extends AbstractDelphiNode
+public final class ProcedureTypeHeadingNodeImpl extends DelphiNodeImpl
     implements ProcedureTypeHeadingNode {
   public ProcedureTypeHeadingNodeImpl(Token token) {
     super(token);

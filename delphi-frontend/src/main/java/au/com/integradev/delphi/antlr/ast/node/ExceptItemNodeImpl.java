@@ -23,8 +23,13 @@ import au.com.integradev.delphi.type.Type;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExceptItemNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 
-public final class ExceptItemNodeImpl extends AbstractDelphiNode implements ExceptItemNode {
+public final class ExceptItemNodeImpl extends DelphiNodeImpl implements ExceptItemNode {
   public ExceptItemNodeImpl(Token token) {
     super(token);
   }

@@ -23,20 +23,15 @@
 package au.com.integradev.delphi.pmd.rules;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.node.CaseItemStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.ExceptItemNodeImpl;
-import au.com.integradev.delphi.antlr.ast.node.StatementListNode;
-import au.com.integradev.delphi.antlr.ast.node.StatementNode;
-import java.util.Set;
+import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExceptItemNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import net.sourceforge.pmd.RuleContext;
-import au.com.integradev.delphi.antlr.ast.node.Node;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 
 public class NoSemicolonRule extends AbstractDelphiRule {
-
-  private static final Set<Class<?>> VALID_PARENTS =
-      Set.of(CaseItemStatementNode.class, ExceptItemNodeImpl.class, StatementListNode.class);
-
   @Override
   public RuleContext visit(StatementNode node, RuleContext data) {
     if (shouldVisit(node)) {
@@ -51,7 +46,10 @@ public class NoSemicolonRule extends AbstractDelphiRule {
   }
 
   private boolean shouldVisit(DelphiNode node) {
-    return VALID_PARENTS.contains(node.jjtGetParent().getClass());
+    DelphiNode parent = node.jjtGetParent();
+    return parent instanceof CaseItemStatementNode
+        || parent instanceof ExceptItemNode
+        || parent instanceof StatementListNode;
   }
 
   private DelphiNode findViolationNode(DelphiNode node) {

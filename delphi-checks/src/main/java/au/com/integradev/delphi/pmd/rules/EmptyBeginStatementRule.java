@@ -18,15 +18,15 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.CaseItemStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.CaseStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.CompoundStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.ElseBlockNode;
-import au.com.integradev.delphi.antlr.ast.node.ExceptBlockNode;
-import au.com.integradev.delphi.antlr.ast.node.ExceptItemNode;
-import au.com.integradev.delphi.antlr.ast.node.MethodBodyNode;
-import au.com.integradev.delphi.antlr.ast.node.StatementListNode;
+import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ElseBlockNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExceptBlockNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExceptItemNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodBodyNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 import net.sourceforge.pmd.RuleContext;
 
 public class EmptyBeginStatementRule extends AbstractDelphiRule {

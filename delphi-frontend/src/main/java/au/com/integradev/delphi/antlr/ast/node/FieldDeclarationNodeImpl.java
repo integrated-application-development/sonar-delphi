@@ -22,8 +22,13 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.type.Type;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.FieldDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.FieldSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 
-public final class FieldDeclarationNodeImpl extends AbstractDelphiNode
+public final class FieldDeclarationNodeImpl extends DelphiNodeImpl
     implements FieldDeclarationNode {
   public FieldDeclarationNodeImpl(Token token) {
     super(token);

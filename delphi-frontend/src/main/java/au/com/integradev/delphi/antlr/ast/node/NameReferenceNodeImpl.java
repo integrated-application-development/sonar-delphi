@@ -31,8 +31,12 @@ import java.util.ArrayList;
 import java.util.List;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.GenericArgumentsNode;
+import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 
-public final class NameReferenceNodeImpl extends AbstractDelphiNode implements NameReferenceNode {
+public final class NameReferenceNodeImpl extends DelphiNodeImpl implements NameReferenceNode {
   private NameDeclaration declaration;
   private NameOccurrence occurrence;
   private List<NameReferenceNode> names;

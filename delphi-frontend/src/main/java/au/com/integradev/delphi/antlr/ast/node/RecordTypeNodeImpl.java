@@ -20,6 +20,7 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.RecordTypeNode;
 
 public final class RecordTypeNodeImpl extends StructTypeNodeImpl implements RecordTypeNode {
   public RecordTypeNodeImpl(Token token) {

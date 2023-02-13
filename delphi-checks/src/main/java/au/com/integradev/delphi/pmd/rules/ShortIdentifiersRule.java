@@ -20,9 +20,9 @@ package au.com.integradev.delphi.pmd.rules;
 
 import static au.com.integradev.delphi.pmd.DelphiPmdConstants.LIMIT;
 
-import au.com.integradev.delphi.antlr.ast.node.GenericDefinitionNode;
-import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.UnitImportNode;
+import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;

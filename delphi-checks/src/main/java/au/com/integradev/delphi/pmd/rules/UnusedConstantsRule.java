@@ -18,9 +18,9 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.ConstDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.ConstStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import net.sourceforge.pmd.RuleContext;
 
 public class UnusedConstantsRule extends AbstractDelphiRule {

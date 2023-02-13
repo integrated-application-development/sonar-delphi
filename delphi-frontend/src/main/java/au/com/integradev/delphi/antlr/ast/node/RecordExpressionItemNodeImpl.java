@@ -20,8 +20,11 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.RecordExpressionItemNode;
 
-public final class RecordExpressionItemNodeImpl extends AbstractDelphiNode
+public final class RecordExpressionItemNodeImpl extends DelphiNodeImpl
     implements RecordExpressionItemNode {
   public RecordExpressionItemNodeImpl(Token token) {
     super(token);

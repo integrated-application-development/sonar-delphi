@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.ForLoopVarDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarDeclarationNode;
 import net.sourceforge.pmd.RuleContext;
 
 public class InlineLoopVarExplicitTypeRule extends AbstractDelphiRule {

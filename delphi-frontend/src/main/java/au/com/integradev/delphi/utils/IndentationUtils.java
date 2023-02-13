@@ -1,6 +1,6 @@
 package au.com.integradev.delphi.utils;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
 public class IndentationUtils {
   private IndentationUtils() {

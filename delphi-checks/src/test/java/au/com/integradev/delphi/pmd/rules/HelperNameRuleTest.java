@@ -22,8 +22,8 @@ import static au.com.integradev.delphi.utils.conditions.RuleKey.ruleKey;
 import static au.com.integradev.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
-import au.com.integradev.delphi.antlr.ast.node.SetTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.SetTypeNode;
 import java.util.Objects;
 import org.junit.jupiter.api.Test;
 

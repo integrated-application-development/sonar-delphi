@@ -20,7 +20,7 @@ package au.com.integradev.delphi.pmd.rules;
 
 import static au.com.integradev.delphi.pmd.DelphiPmdConstants.LIMIT;
 
-import au.com.integradev.delphi.antlr.ast.node.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import net.sourceforge.pmd.RuleContext;
 
 /**

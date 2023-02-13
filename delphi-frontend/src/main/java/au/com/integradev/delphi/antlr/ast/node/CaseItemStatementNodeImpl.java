@@ -20,8 +20,9 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
 
-public final class CaseItemStatementNodeImpl extends AbstractDelphiNode
+public final class CaseItemStatementNodeImpl extends DelphiNodeImpl
     implements CaseItemStatementNode {
   public CaseItemStatementNodeImpl(Token token) {
     super(token);

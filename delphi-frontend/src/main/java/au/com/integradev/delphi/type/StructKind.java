@@ -18,13 +18,13 @@
  */
 package au.com.integradev.delphi.type;
 
-import au.com.integradev.delphi.antlr.ast.node.ClassHelperTypeNode;
-import au.com.integradev.delphi.antlr.ast.node.ClassTypeNode;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.InterfaceTypeNode;
-import au.com.integradev.delphi.antlr.ast.node.ObjectTypeNode;
-import au.com.integradev.delphi.antlr.ast.node.RecordHelperTypeNode;
-import au.com.integradev.delphi.antlr.ast.node.RecordTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.ClassHelperTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.ClassTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.InterfaceTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.ObjectTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.RecordHelperTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.RecordTypeNode;
 
 public enum StructKind {
   CLASS(ClassTypeNode.class),

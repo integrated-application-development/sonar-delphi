@@ -22,8 +22,12 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ElseBlockNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExceptBlockNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExceptItemNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 
-public final class ExceptBlockNodeImpl extends AbstractDelphiNode implements ExceptBlockNode {
+public final class ExceptBlockNodeImpl extends DelphiNodeImpl implements ExceptBlockNode {
   private List<ExceptItemNode> handlers;
 
   public ExceptBlockNodeImpl(Token token) {

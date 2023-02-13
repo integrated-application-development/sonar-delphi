@@ -20,13 +20,13 @@ package au.com.integradev.delphi.pmd.rules;
 
 import static au.com.integradev.delphi.utils.VariableUtils.isGeneratedFormVariable;
 
-import au.com.integradev.delphi.antlr.ast.node.ForLoopVarDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.FormalParameterListNode;
-import au.com.integradev.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
-import au.com.integradev.delphi.antlr.ast.node.MethodDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.VarDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.VarStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterListNode;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
+import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarStatementNode;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
 import au.com.integradev.delphi.symbol.scope.UnitScope;
 import au.com.integradev.delphi.utils.InterfaceUtils;
